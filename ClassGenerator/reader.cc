@@ -42,7 +42,7 @@ static bool isInterfaceLine(const std::string &line)
       {
         return true;
       }
-      char c12 = line[8];
+      char c12 = line[12];
       if (c12 == '(' || c12 == ' ' || c12 == '\t' || c12 == ';')
       {
         return true;

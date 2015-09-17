@@ -297,6 +297,7 @@ int perform (const char *in_filename, const char *in_prefix, const char *in_outp
 
   if (reader.GetNumberOfClasses() == 0)
   {
+    printf("No classes in: %s\n", in_filename);
     return 0;
   }
   printf("GenRefl for %s\n", in_filename);
