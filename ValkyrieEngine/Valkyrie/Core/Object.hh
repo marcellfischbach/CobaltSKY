@@ -1,0 +1,138 @@
+
+#ifndef __VALKYRIE_CORE_OBJECT_H__
+#define __VALKYRIE_CORE_OBJECT_H__
+
+#define VK_CLASS(...)
+#define VK_INTERFACE(...)
+#define VK_PROPERTY(...) public: 
+#define VK_CLASS_GEN public: \
+    virtual const vkClass *GetClass () const;\
+    static const vkClass *GetStaticClass (); \
+    void *QueryClass(const vkClass *clazz); \
+    const void *QueryClass(const vkClass *clazz) const
+
+#define VK_WEAK_OBJECT(Super) \
+  public: void AddRef () { Super::AddRef (); }\
+          void Release () { Super::Release (); }
+
+#include <string>
+#include <vector>
+#include <Valkyrie/Export.hh>
+#include <Valkyrie/Types.hh>
+
+class vkClass;
+
+struct iObject
+{
+  virtual const vkClass *GetClass() const = 0;
+
+  virtual void AddRef() = 0;
+
+  virtual void Release() = 0;
+
+  virtual void *QueryClass(const vkClass *clazz) = 0;
+  virtual const void *QueryClass(const vkClass *clazz) const = 0;
+};
+
+template<typename T>
+T* vkQueryClass(iObject *object)
+{
+  return reinterpret_cast<T*>(object->QueryClass(T::GetStaticClass()));
+}
+
+template<typename T>
+const T* vkQueryClass(const iObject *object)
+{
+  return reinterpret_cast<const T*>(object->QueryClass(T::GetStaticClass()));
+}
+
+
+class vkProperty
+{
+public:
+  const std::string &GetName() const;
+  const std::string &GetTypeName() const;
+
+  template<typename T>
+  void Set(iObject *object, T& t) const
+  {
+    void *value = reinterpret_cast<void*>(&t);
+    SetValue(object, value);
+  }
+
+  template<typename T>
+  const T &Get(iObject *object) const
+  {
+    const void *data = GetValue(object);
+    return *reinterpret_cast<const T*>(data);
+  }
+
+protected:
+  vkProperty(const std::string &typeName, const std::string &name);
+
+  virtual void SetValue(iObject *object, void *data) const = 0;
+  virtual const void *GetValue(const iObject *object) const = 0;
+
+
+private:
+  std::string m_typeName;
+  std::string m_name;
+
+};
+
+
+class vkClass
+{
+public:
+  virtual void *CreateInstance() const = 0;
+
+  size_t GetNumberOfProperties() const;
+  const vkProperty *GetProperty(size_t idx) const;
+  const vkProperty *GetProperty(const std::string &propName) const;
+
+  size_t GetNumberOfSuperClasses() const;
+  const vkClass *GetSuperClass(size_t idx) const;
+
+  const std::string &GetName() const;
+
+protected:
+  vkClass(const std::string &name);
+
+  void AddSuperClass(vkClass *parentClass);
+  void AddProperty(vkProperty *prop);
+
+private:
+  std::string m_name;
+  std::vector<vkClass*> m_superClasses;
+  std::vector<vkProperty*> m_properties;
+
+};
+
+template<typename T>
+T* vkClassInstance(const vkClass *clazz)
+{
+  return reinterpret_cast<T*>(clazz->CreateInstance());
+}
+
+#include <Valkyrie/Core/Object.refl.hh>
+
+VK_CLASS();
+class VKE_API vkObject : public virtual iObject
+{
+  VK_CLASS_GEN;
+
+public:
+  vkObject();
+
+  void AddRef();
+  void Release();
+
+private:
+  int m_refCount;
+
+
+};
+
+
+#endif /* ! __VALKYRIE_CORE_OBJECT_H__ */
+
