@@ -11,6 +11,24 @@
     void *QueryClass(const vkClass *clazz); \
     const void *QueryClass(const vkClass *clazz) const
 
+#define VK_CLASS_GEN_OBJECT \
+    VK_CLASS_GEN; \
+    virtual void AddRef() \
+    { \
+      m_refCount++; \
+    } \
+    virtual void Release() \
+    { \
+      --m_refCount; \
+      if (m_refCount <= 0) \
+      { \
+          delete this;\
+      } \
+    } \
+    private: \
+      int m_refCount
+    
+
 #define VK_WEAK_OBJECT(Super) \
   public: void AddRef () { Super::AddRef (); }\
           void Release () { Super::Release (); }
@@ -85,6 +103,11 @@ class vkClass
 {
 public:
   virtual void *CreateInstance() const = 0;
+  template<typename T>
+  T *CreateInstance() const
+  {
+    return reinterpret_cast<T*>(CreateInstance());
+  }
 
   size_t GetNumberOfProperties() const;
   const vkProperty *GetProperty(size_t idx) const;
@@ -109,7 +132,7 @@ private:
 };
 
 template<typename T>
-T* vkClassInstance(const vkClass *clazz)
+T* vkNewClassInstance(const vkClass *clazz)
 {
   return reinterpret_cast<T*>(clazz->CreateInstance());
 }

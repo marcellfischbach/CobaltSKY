@@ -29,6 +29,11 @@ function(VK_INSTALL_MOCCER target prefix inlist)
 										)
 endfunction(VK_INSTALL_MOCCER)
 
+if (WIN32)
+add_definitions(-DVK_WIN32)
+else()
+add_definitions(-DVK_LINUX)
+endif()
 
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)

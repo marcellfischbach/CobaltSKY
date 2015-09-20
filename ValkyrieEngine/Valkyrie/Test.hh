@@ -9,10 +9,9 @@
 
 
 VK_CLASS()
-class VKE_API vkTest : public vkObject, public iTestInterface
+class VKE_API vkTest : public iTestInterface
 {
-  VK_CLASS_GEN;
-  VK_WEAK_OBJECT(vkObject)
+  VK_CLASS_GEN_OBJECT;
 
 };
 

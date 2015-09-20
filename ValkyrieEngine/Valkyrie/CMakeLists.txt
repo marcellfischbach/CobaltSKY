@@ -14,8 +14,12 @@ source_group(
 	)
 
 set(SOURCE_CORE
+  Core/Library.cc
+  Core/Library.hh
 	Core/Object.cc
 	Core/Object.hh
+  Core/Thread.cc
+  Core/Thread.hh
 	)
 
 source_group(

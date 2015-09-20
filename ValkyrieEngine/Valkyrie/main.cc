@@ -1,11 +1,9 @@
 
 
 #include <stdio.h>
-
-
+#include <Valkyrie/Test.hh>
 
 int main(int argc, char **argv)
 {
-  printf("Hello World!\n");
   return 0;
 }
