@@ -1,10 +1,9 @@
 
 
 set(SOURCE
-  Test.hh
-  TestInterface.hh
+  Engine.hh
+  Engine.cc
   Types.hh
-  main.cc
   )
 
 source_group(
@@ -28,9 +27,21 @@ source_group(
 	${SOURCE_CORE}
 	)
 
+set(SOURCE_WINDOW
+  Window/IWindow.hh
+	)
+
+source_group(
+	"ValkyrieEngine\\Window"
+	FILES
+	${SOURCE_WINDOW}
+	)
+
+
 set(ALL_SOURCES
   ${SOURCE}
 	${SOURCE_CORE}
+  ${SOURCE_WINDOW}
 	)
 
 VK_MOC(Valkyrie ALL_SOURCES MOC_SOURCES)
@@ -42,7 +53,7 @@ source_group(
 	${MOC_SOURCES}
 	)
 
-add_executable(ValkyrieEngine
+add_library(ValkyrieEngine SHARED
 	${ALL_SOURCES}
 	${MOC_SOURCES}
 	)
