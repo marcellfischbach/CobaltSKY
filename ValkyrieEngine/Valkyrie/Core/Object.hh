@@ -28,10 +28,14 @@
     private: \
       int m_refCount
     
+#define VK_CLASS_GEN_CONSTR m_refCount = 0
 
 #define VK_WEAK_OBJECT(Super) \
   public: void AddRef () { Super::AddRef (); }\
           void Release () { Super::Release (); }
+
+
+#define VK_SET(oo, no) if (no) no->AddRef(); if (oo) oo->Release(); oo = no
 
 #include <string>
 #include <vector>
@@ -40,7 +44,7 @@
 
 class vkClass;
 
-struct iObject
+struct VKE_API IObject
 {
   virtual const vkClass *GetClass() const = 0;
 
@@ -53,33 +57,33 @@ struct iObject
 };
 
 template<typename T>
-T* vkQueryClass(iObject *object)
+T* vkQueryClass(IObject *object)
 {
   return reinterpret_cast<T*>(object->QueryClass(T::GetStaticClass()));
 }
 
 template<typename T>
-const T* vkQueryClass(const iObject *object)
+const T* vkQueryClass(const IObject *object)
 {
   return reinterpret_cast<const T*>(object->QueryClass(T::GetStaticClass()));
 }
 
 
-class vkProperty
+class VKE_API vkProperty
 {
 public:
   const std::string &GetName() const;
   const std::string &GetTypeName() const;
 
   template<typename T>
-  void Set(iObject *object, T& t) const
+  void Set(IObject *object, T& t) const
   {
     void *value = reinterpret_cast<void*>(&t);
     SetValue(object, value);
   }
 
   template<typename T>
-  const T &Get(iObject *object) const
+  const T &Get(IObject *object) const
   {
     const void *data = GetValue(object);
     return *reinterpret_cast<const T*>(data);
@@ -88,8 +92,8 @@ public:
 protected:
   vkProperty(const std::string &typeName, const std::string &name);
 
-  virtual void SetValue(iObject *object, void *data) const = 0;
-  virtual const void *GetValue(const iObject *object) const = 0;
+  virtual void SetValue(IObject *object, void *data) const = 0;
+  virtual const void *GetValue(const IObject *object) const = 0;
 
 
 private:
@@ -99,7 +103,7 @@ private:
 };
 
 
-class vkClass
+class VKE_API vkClass
 {
 public:
   virtual void *CreateInstance() const = 0;
@@ -140,7 +144,7 @@ T* vkNewClassInstance(const vkClass *clazz)
 #include <Valkyrie/Core/Object.refl.hh>
 
 VK_CLASS();
-class VKE_API vkObject : public virtual iObject
+class VKE_API vkObject : public virtual IObject
 {
   VK_CLASS_GEN;
 

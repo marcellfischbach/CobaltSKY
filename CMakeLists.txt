@@ -4,10 +4,22 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ValkyrieEngine)
 
-function(VK_MOC prefix inlist outlist)
+
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
+
+
+function(VK_MOC prefix api inlist outlist)
 	set(out)
 	foreach(file ${${inlist}})
-		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${CMAKE_CURRENT_BINARY_DIR} ${file} 
+		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}  ${file} 
 										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										RESULT_VARIABLE output)
 		if(${output} EQUAL 1)
@@ -21,10 +33,10 @@ function(VK_MOC prefix inlist outlist)
 	set(${outlist} ${out} PARENT_SCOPE)
 endfunction(VK_MOC)
 
-function(VK_INSTALL_MOCCER target prefix inlist)
+function(VK_INSTALL_MOCCER target prefix api inlist)
 
 	add_custom_command (TARGET ${target} PRE_BUILD 
-										COMMAND ClassGenerator "--list" ${prefix} ${CMAKE_CURRENT_BINARY_DIR} ${${inlist}}
+										COMMAND ClassGenerator "--list" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${${inlist}}
 										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										)
 endfunction(VK_INSTALL_MOCCER)
@@ -35,6 +47,14 @@ else()
 add_definitions(-DVK_LINUX)
 endif()
 
+find_package(OpenGL)
+
+
+
+include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
+include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
+
+include_directories(${SDL_INCLUDE_DIR})
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)
 

@@ -14,7 +14,7 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-VK_MOC(Runner ALL_SOURCES MOC_SOURCES)
+VK_MOC(Runner " " ALL_SOURCES MOC_SOURCES)
 
 
 source_group(
@@ -30,8 +30,10 @@ add_executable(ValkyrieRunner
 
 target_link_libraries(ValkyrieRunner
   ValkyrieEngine
-  ValkyrieEngine-SDLWindow)
+  ValkyrieEngine-SDLWindow
+  ValkyrieEngine-RenderGL4
+  )
 
 
-VK_INSTALL_MOCCER(ValkyrieRunner Runner ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieRunner Runner " " ALL_SOURCES)
 

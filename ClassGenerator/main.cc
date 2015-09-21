@@ -8,13 +8,13 @@
 
 std::string prefix;
 
-std::string CreateHeaderFile(Class *clazz)
+std::string CreateHeaderFile(Class *clazz, const std::string &api)
 {
   std::string className = clazz->GetName() + std::string("Class");
   std::string result = "";
   result += "\n";
   result += "\n";
-  result += "class " + className + " : public vkClass\n";
+  result += "class " + api + " " + className + " : public vkClass\n";
   result += "{\n";
   result += "public:\n";
   result += "  " + className + "();\n";
@@ -31,7 +31,7 @@ std::string CreateHeaderFile(Class *clazz)
 }
 
 
-std::string CreateSourceFile(Class *clazz)
+std::string CreateSourceFile(Class *clazz, const std::string &api)
 {
   std::string className = clazz->GetName() + std::string("Class");
   std::string result = "";
@@ -43,7 +43,7 @@ std::string CreateSourceFile(Class *clazz)
   {
     Property prop = clazz->GetProperty(i);
     std::string propClassName = className + "_" + prop.GetPropertyName();
-    result += "class " + propClassName + " : public vkProperty\n";
+    result += "class " + api + " " + propClassName + " : public vkProperty\n";
     result += "{\n";
     result += "public:\n";
     result += "  " + propClassName + "() \n";
@@ -229,7 +229,7 @@ bool equals(FILETIME &ftA, FILETIME &ftB)
     ftA.dwLowDateTime == ftB.dwLowDateTime;
 }
 
-int perform (const char *in_filename, const char *in_prefix, const char *in_outputDirectory)
+int perform (const char *in_filename, const char *in_prefix, const char* api, const char *in_outputDirectory)
 {
   std::string inputHeaderFileName = std::string(in_filename);
   size_t dotPos = inputHeaderFileName.find_last_of('.');
@@ -316,14 +316,15 @@ int perform (const char *in_filename, const char *in_prefix, const char *in_outp
   sourceSource += "\n";
 
 
+
   for (size_t i = 0, in = reader.GetNumberOfClasses(); i < in; ++i)
   {
     Class *clazz = reader.GetClass(i);
     if (clazz)
     {
       //clazz->Debug();
-      headerSource += CreateHeaderFile(clazz);
-      sourceSource += CreateSourceFile(clazz);
+      headerSource += CreateHeaderFile(clazz, api);
+      sourceSource += CreateSourceFile(clazz, api);
     }
   }
 
@@ -354,7 +355,7 @@ int main(int argc, char **argv)
 {
   if (argc < 5)
   {
-    printf("Usage %s <mode> <prefix> <outputpath> <input> [...<input>]\n", argv[0]);
+    printf("Usage %s <mode> <prefix> <api> <outputpath> <input> [...<input>]\n", argv[0]);
     for (int i = 0; i < argc; ++i)
     {
       printf("  arg: '%s'\n", argv[i]);
@@ -363,15 +364,15 @@ int main(int argc, char **argv)
   }
   if (std::string(argv[1]) == std::string("--list"))
   {
-    for (int i = 4; i < argc; ++i)
+    for (int i = 5; i < argc; ++i)
     {
-      perform(argv[i], argv[2], argv[3]);
+      perform(argv[i], argv[2], argv[3], argv[4]);
     }
     return 0;
   }
   else if (std::string(argv[1]) == std::string("--file"))
   {
-    return perform(argv[4], argv[2], argv[3]);
+    return perform(argv[5], argv[2], argv[3], argv[4]);
   }
 
   return -1;
