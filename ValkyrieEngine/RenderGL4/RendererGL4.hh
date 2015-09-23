@@ -13,6 +13,8 @@ class VKGL4_API RendererGL4 : public IRenderer
 public:
   RendererGL4();
 
+  virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
+  virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
 
 };
 

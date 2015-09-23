@@ -1,17 +1,17 @@
 #pragma once
 
 #include <RenderGL4/Export.hh>
-#include <Valkyrie/Graphics/IVertexBuffer.hh>
-#include <RenderGL4/VertexBufferGL4.refl.hh>
+#include <Valkyrie/Graphics/IIndexBuffer.hh>
+#include <RenderGL4/IndexBufferGL4.refl.hh>
 #include <GL/glew.h>
 
 VK_CLASS();
-class VertexBufferGL4 : public IVertexBuffer
+class IndexBufferGL4 : public IIndexBuffer
 {
   VK_CLASS_GEN_OBJECT;
 public:
-  VertexBufferGL4();
-  virtual ~VertexBufferGL4();
+  IndexBufferGL4();
+  virtual ~IndexBufferGL4();
 
   bool CreateBuffer(vkSize size, const void *data, vkBufferDataMode dataMode);
 

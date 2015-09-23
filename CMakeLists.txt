@@ -50,12 +50,13 @@ endif()
 find_package(OpenGL)
 
 
-
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
 
 include_directories(${SDL_INCLUDE_DIR})
+include_directories(${ValkyrieEngine_SOURCE_DIR}/3rdparty)
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)
 
+add_subdirectory(3rdparty)
 add_subdirectory(ValkyrieEngine)

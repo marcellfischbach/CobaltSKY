@@ -1,22 +1,22 @@
 
-#include <RenderGL4/VertexBufferGL4.hh>
+#include <RenderGL4/IndexBufferGL4.hh>
 #include <RenderGL4/DefinesGL4.hh>
 #include <RenderGL4/MappingGL4.hh>
 
 static GLuint current_mapped_buffer;
 
-VertexBufferGL4::VertexBufferGL4()
+IndexBufferGL4::IndexBufferGL4()
   : m_name(0)
 {
 }
 
-VertexBufferGL4::~VertexBufferGL4()
+IndexBufferGL4::~IndexBufferGL4()
 {
 
 }
 
 
-bool VertexBufferGL4::CreateBuffer(vkSize size, const void *data, vkBufferDataMode dataMode)
+bool IndexBufferGL4::CreateBuffer(vkSize size, const void *data, vkBufferDataMode dataMode)
 {
   glGenBuffers(1, &m_name);
   if (m_name == 0)
@@ -34,36 +34,36 @@ bool VertexBufferGL4::CreateBuffer(vkSize size, const void *data, vkBufferDataMo
   return true;
 }
 
-vkSize VertexBufferGL4::GetSize() const
+vkSize IndexBufferGL4::GetSize() const
 {
   return m_size;
 }
 
-void VertexBufferGL4::Bind()
+void IndexBufferGL4::Bind()
 {
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
 }
 
-void VertexBufferGL4::Unbind()
+void IndexBufferGL4::Unbind()
 {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-bool VertexBufferGL4::Copy (unsigned offset, vkSize size, const void* data)
+bool IndexBufferGL4::Copy(unsigned offset, vkSize size, const void* data)
 {
-	if (m_name == 0)
-	{
-		return false;
-	}
+  if (m_name == 0)
+  {
+    return false;
+  }
 
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
   glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
-	VK_GL_FLUSH;
+  VK_GL_FLUSH;
   VK_CHECK_GL_ERROR;
   return true;
 }
 
-bool VertexBufferGL4::Lock(unsigned offset, void **data, vkBufferAccessMode mode)
+bool IndexBufferGL4::Lock(unsigned offset, void **data, vkBufferAccessMode mode)
 {
   if (m_name == 0 || current_mapped_buffer != 0)
   {
@@ -88,7 +88,7 @@ bool VertexBufferGL4::Lock(unsigned offset, void **data, vkBufferAccessMode mode
 }
 
 
-bool VertexBufferGL4::Unlock()
+bool IndexBufferGL4::Unlock()
 {
   if (m_name == 0 || current_mapped_buffer != m_name)
   {
@@ -105,7 +105,7 @@ bool VertexBufferGL4::Unlock()
 }
 
 
-GLuint VertexBufferGL4::GetGLName() const
+GLuint IndexBufferGL4::GetGLName() const
 {
   return m_name;
 }

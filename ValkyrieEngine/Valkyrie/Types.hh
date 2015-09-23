@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 
 #define null ((void*)0)
 
@@ -16,6 +17,9 @@ typedef signed __int32 vkInt32;
 typedef signed __int64 vkInt64;
 
 #endif
+
+
+typedef std::string vkString;
 
 typedef size_t vkSize;
 

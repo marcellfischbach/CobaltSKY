@@ -2,11 +2,11 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Graphics/IVertexBuffer.refl.hh>
+#include <Valkyrie/Graphics/IIndexBuffer.refl.hh>
 #include <Valkyrie/Enums.hh>
 
 VK_INTERFACE();
-struct VKE_API IVertexBuffer : public IObject
+struct VKE_API IIndexBuffer : public IObject
 {
   VK_CLASS_GEN;
 

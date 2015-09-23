@@ -4,12 +4,17 @@ add_definitions(-DVKGL4_EXPORT)
 
 set(SOURCE
   Export.hh
+  IndexBufferGL4.cc
+  IndexBufferGL4.hh
   MappingGL4.hh
   RendererGL4.cc
   RendererGL4.hh
   VertexBufferGL4.cc
   VertexBufferGL4.hh
+  VertexDeclarationGL4.cc
+  VertexDeclarationGL4.hh
   )
+
 
 source_group(
 	"ValkyrieEngine-RenderGL4"

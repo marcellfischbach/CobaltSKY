@@ -1,0 +1,14 @@
+<settings>
+  <group name="vfs">
+    <string name="rootPath" value="." />
+    
+  </group>
+
+
+  <vfs>
+    <rootPath>.</rootPath>
+    <shaders>shaders/gl4</shaders>
+    <fonts>fonts</fonts>
+    <gui
+  </vfs>
+</settings>
