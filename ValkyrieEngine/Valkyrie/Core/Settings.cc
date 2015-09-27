@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include <string.h>
 
-csSettings* csSettings::static_instances = 0;
+vkSettings* vkSettings::static_instances = 0;
 
-csSettings::csSettings()
+vkSettings::vkSettings()
 {
 }
 
-bool csSettings::Initialize(int argc, char** argv)
+bool vkSettings::Initialize(int argc, char** argv)
 {
   for (int i=1; i<argc; i++)
   {
@@ -35,15 +35,15 @@ static vkString strip_path (const vkString &path)
   return std::string(p.c_str());
 }
 
-bool csSettings::Initialize(const char *configFileName)
+bool vkSettings::Initialize(const char *configFileName)
 {
-  if (csSettings::static_instances)
+  if (vkSettings::static_instances)
   {
-    delete csSettings::static_instances;
-    csSettings::static_instances = 0;
+    delete vkSettings::static_instances;
+    vkSettings::static_instances = 0;
   }
 
-  csSettings* settings = new csSettings ();
+  vkSettings* settings = new vkSettings ();
   settings->m_document = new TiXmlDocument();
   if (!settings->m_document->LoadFile(configFileName))
   {
@@ -53,23 +53,23 @@ bool csSettings::Initialize(const char *configFileName)
   }
   settings->_rootPath = strip_path(configFileName);
 
-  csSettings::static_instances = settings;
+  vkSettings::static_instances = settings;
   return true;
 }
 
 
 
-csSettings* csSettings::Get()
+vkSettings* vkSettings::Get()
 {
-  return csSettings::static_instances;
+  return vkSettings::static_instances;
 }
 
-const char* csSettings::GetRootPath () const
+const char* vkSettings::GetRootPath () const
 {
   return _rootPath.c_str();
 }
 
-TiXmlElement *csSettings::GetElement(const char *group, const char *entry)
+TiXmlElement *vkSettings::GetElement(const char *group, const char *entry)
 {
   TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
   if (!groupElement)
@@ -80,13 +80,13 @@ TiXmlElement *csSettings::GetElement(const char *group, const char *entry)
   return groupElement->FirstChildElement(entry);
 }
 
-bool csSettings::HasGroup (const char* group)
+bool vkSettings::HasGroup (const char* group)
 {
   TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
   return groupElement != 0;
 }
 
-bool csSettings::HasValue(const char *group, const char *entry)
+bool vkSettings::HasValue(const char *group, const char *entry)
 {
   TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
   if (!groupElement)
@@ -97,49 +97,52 @@ bool csSettings::HasValue(const char *group, const char *entry)
   return groupElement->FirstChildElement(entry) != 0;
 }
 
-TiXmlElement *csSettings::GetGroup (const char* group)
+TiXmlElement *vkSettings::GetGroup (const char* group)
 {
   return m_document->RootElement()->FirstChildElement(group);
 }
 
-const char* csSettings::GetStringValue(const char *group, const char *entry)
+const char* vkSettings::GetStringValue(const char *group, const char *entry)
 {
   TiXmlElement *element = GetElement(group, entry);
   if (element)
   {
-    return element->V
+    return element->GetText();
   }
   return 0;
 }
 
 
-int csSettings::GetIntValue(const char *group, const char *entry, int defaultValue)
+int vkSettings::GetIntValue(const char *group, const char *entry, int defaultValue)
 {
-  csiElement *element = GetElement(group, entry);
-  if (element)
+  const char *text = GetStringValue(group, entry);
+  if (!text)
   {
-    return element->GetInt();
+    return defaultValue;
   }
-  return defaultValue;
+
+  return atoi(text);
 }
 
-float csSettings::GetFloatValue(const char *group, const char *entry, float defaultValue)
+float vkSettings::GetFloatValue(const char *group, const char *entry, float defaultValue)
 {
-  csiElement *element = GetElement(group, entry);
-  if (element)
+  const char *text = GetStringValue(group, entry);
+  if (!text)
   {
-    return element->GetFloat();
+    return defaultValue;
   }
-  return defaultValue;
+
+  return (float)atof(text);
 }
 
 
-bool csSettings::GetBoolValue(const char *group, const char *entry, bool defaultValue)
+bool vkSettings::GetBoolValue(const char *group, const char *entry, bool defaultValue)
 {
-  csiElement *element = GetElement(group, entry);
-  if (element)
+  const char *text = GetStringValue(group, entry);
+  if (!text)
   {
-    return element->GetBool();
+    return defaultValue;
   }
-  return defaultValue;
+  vkString tStr(text);
+  return tStr == vkString("true");
 }

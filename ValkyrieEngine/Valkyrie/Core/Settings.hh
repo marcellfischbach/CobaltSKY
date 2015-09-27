@@ -7,14 +7,14 @@
 #include <tixml/tinyxml.h>
 
 
-class VKE_API csSettings
+class VKE_API vkSettings
 {
 
 public:
 
   static bool Initialize (int argc, char** argv);
   static bool Initialize (const char* configFileName);
-  static csSettings* Get ();
+  static vkSettings* Get ();
 
   const char* GetRootPath () const;
 
@@ -27,11 +27,11 @@ public:
   bool GetBoolValue (const char* group, const char* entry = 0, bool defaultValue = false);
 
 protected:
-  csSettings();
+  vkSettings();
 
 private:
   TiXmlDocument     *m_document;
-  static csSettings*  static_instances;
+  static vkSettings*  static_instances;
   std::string         _rootPath;
 
   TiXmlElement *GetElement(const char* group, const char* entry);

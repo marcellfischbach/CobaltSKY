@@ -2,12 +2,17 @@
 #include <RenderGL4/RendererGL4.hh>
 #include <RenderGL4/IndexBufferGL4.hh>
 #include <RenderGL4/VertexBufferGL4.hh>
+#include <RenderGL4/ShaderLoader.hh>
 #include <GL/glew.h>
+
 
 RendererGL4::RendererGL4()
 {
   VK_CLASS_GEN_CONSTR;
   glewInit();
+
+
+  vkResourceManager::Get()->RegisterLoader(new vkShaderLoader());
 }
 
 

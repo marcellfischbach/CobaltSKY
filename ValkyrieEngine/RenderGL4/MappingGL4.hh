@@ -14,3 +14,13 @@ static GLenum bufferAccessModeMap[] = {
   GL_WRITE_ONLY,
   GL_READ_WRITE
 };
+
+
+static GLenum shaderTypeMap[] = {
+  GL_VERTEX_SHADER,
+  GL_TESS_CONTROL_SHADER,
+  GL_TESS_EVALUATION_SHADER,
+  GL_GEOMETRY_SHADER,
+  GL_FRAGMENT_SHADER,
+  GL_COMPUTE_SHADER
+};

@@ -38,6 +38,8 @@ set(SOURCE_CORE
   Core/Library.hh
 	Core/Object.cc
 	Core/Object.hh
+  Core/ResourceManager.cc
+  Core/ResourceManager.hh
   Core/Settings.cc
   Core/Settings.hh
   Core/String.hh

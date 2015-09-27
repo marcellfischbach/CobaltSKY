@@ -144,4 +144,3 @@ enum vkDataType
   eDT_Float,
   eDT_Double
 };
-

@@ -1,0 +1,14 @@
+<shader>
+
+	<techniques>
+	
+		<technique name="Default">
+			<vertex>${shaders}/solid_gbuffer.vert</vertex>
+			<fragment>${shaders}/solid_gbuffer.frag</vertex>
+		</technique>
+		
+	</techniques>
+	
+	<uniforms>
+	</uniforms>
+</shader>

@@ -2,11 +2,16 @@
 
 #include <stdio.h>
 #include <Valkyrie/Engine.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Core/Settings.hh>
+#include <Valkyrie/Core/VFS.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <RenderGL4/RendererGL4.hh>
 
 int main(int argc, char **argv)
 {
+  vkSettings::Initialize(argc, argv);
+  vkVFS::Get()->Initialize(argc, argv);
   vkEngine *engine = vkEngine::Get();
 
   // initialize the window
@@ -21,8 +26,6 @@ int main(int argc, char **argv)
 
   RendererGL4 *renderGL4 = new RendererGL4();
   engine->SetRenderer(renderGL4);
-
-
 
   return engine->Run();
 }

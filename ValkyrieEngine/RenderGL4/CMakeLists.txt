@@ -3,12 +3,17 @@
 add_definitions(-DVKGL4_EXPORT)
 
 set(SOURCE
+  Enums.hh
   Export.hh
   IndexBufferGL4.cc
   IndexBufferGL4.hh
   MappingGL4.hh
   RendererGL4.cc
   RendererGL4.hh
+  Shader.cc
+  Shader.hh
+  ShaderLoader.cc
+  ShaderLoader.hh
   VertexBufferGL4.cc
   VertexBufferGL4.hh
   VertexDeclarationGL4.cc
