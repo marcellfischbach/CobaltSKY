@@ -27,15 +27,27 @@ bool vkFileStd::Open (const char *filename, vkOpenMode mode, vkTextMode textMode
   switch (mode)
   {
   case eOM_Read:
+#if VK_WIN32
+    fopen_s(&m_file, filename, textMode == eTM_Text ? "rt" : "rb");
+#else
     m_file = fopen (filename, textMode == eTM_Text ? "rt" : "rb");
+#endif
     m_read = true;
     break;
   case eOM_Write:
-    m_file = fopen (filename, textMode == eTM_Text ? "wt" : "wb");
+#if VK_WIN32
+    fopen_s(&m_file, filename, textMode == eTM_Text ? "wt" : "wb");
+#else
+    m_file = fopen(filename, textMode == eTM_Text ? "wt" : "wb");
+#endif
     m_write = true;
     break;
   case eOM_ReadWrite:
-    m_file = fopen (filename, textMode == eTM_Text ? "a+t" : "a+b");
+#if VK_WIN32
+    fopen_s(&m_file, filename, textMode == eTM_Text ? "a+t" : "a+b");
+#else
+    m_file = fopen(filename, textMode == eTM_Text ? "a+t" : "a+b");
+#endif
     m_read = true;
     m_write = true;
     break;

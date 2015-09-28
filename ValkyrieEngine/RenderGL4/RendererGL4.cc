@@ -12,7 +12,8 @@ RendererGL4::RendererGL4()
   glewInit();
 
 
-  vkResourceManager::Get()->RegisterLoader(new vkShaderLoader());
+  vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
+  vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
 }
 
 

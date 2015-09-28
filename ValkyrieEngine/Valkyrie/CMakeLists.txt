@@ -17,17 +17,6 @@ source_group(
 	)
 
 
-set(SOURCE_ASSETS
-  Assets/AssetManager.cc
-  Assets/AssetManager.hh
-	)
-
-source_group(
-	"ValkyrieEngine\\Assets"
-	FILES
-	${SOURCE_ASSETS}
-	)
-
 set(SOURCE_CORE
   Core/FileInfo.cc
   Core/FileInfo.hh
@@ -64,6 +53,8 @@ set(SOURCE_GRAPHICS
   Graphics/IShader.hh
   Graphics/IVertexBuffer.hh
   Graphics/IVertexDeclaration.hh
+  Graphics/ShaderID.cc
+  Graphics/ShaderID.hh
   )
 
   
@@ -87,7 +78,6 @@ source_group(
 
 set(ALL_SOURCES
   ${SOURCE}
-	${SOURCE_ASSETS}
 	${SOURCE_CORE}
   ${SOURCE_GRAPHICS}
   ${SOURCE_WINDOW}

@@ -2,6 +2,18 @@
 
 #include <GL/glew.h>
 
+
+static GLenum dataTypeMap[] = {
+  GL_BYTE,
+  GL_UNSIGNED_BYTE,
+  GL_SHORT,
+  GL_UNSIGNED_SHORT,
+  GL_INT,
+  GL_UNSIGNED_INT,
+  GL_FLOAT,
+  GL_DOUBLE
+};
+
 static GLenum bufferDataModeMap[] = {
   GL_DYNAMIC_DRAW,	// BDM_Dynamic
   GL_STATIC_DRAW,		// BDM_Static

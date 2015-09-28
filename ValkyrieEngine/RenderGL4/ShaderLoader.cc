@@ -4,16 +4,16 @@
 #include <RenderGL4/Shader.hh>
 
 
-vkShaderLoader::vkShaderLoader()
+vkShaderGL4Loader::vkShaderGL4Loader()
 {
   VK_CLASS_GEN_CONSTR;
 }
 
-vkShaderLoader::~vkShaderLoader()
+vkShaderGL4Loader::~vkShaderGL4Loader()
 {
 }
 
-bool vkShaderLoader::CanLoad(IFile *file, const vkResourceLocator &locator) const
+bool vkShaderGL4Loader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *) const
 {
   vkString ext = file->GetExtension();
   return
@@ -25,7 +25,7 @@ bool vkShaderLoader::CanLoad(IFile *file, const vkResourceLocator &locator) cons
     ext == vkString("comp");
 }
 
-IObject *vkShaderLoader::Load(IFile *file, const vkResourceLocator &locator) const
+IObject *vkShaderGL4Loader::Load(IFile *file, const vkResourceLocator &locator, IObject *) const
 {
   vkString ext = file->GetExtension();
 
@@ -79,10 +79,10 @@ IObject *vkShaderLoader::Load(IFile *file, const vkResourceLocator &locator) con
   vkString source(buffer);
   delete[] buffer;
 
-  vkShader *shader = new vkShader();
+  vkShaderGL4 *shader = new vkShaderGL4();
   shader->SetSource(source);
   shader->SetShaderType(type);
-    
+
   if (!shader->Compile())
   {
     vkString log = shader->GetCompileErrorLog();
@@ -93,4 +93,101 @@ IObject *vkShaderLoader::Load(IFile *file, const vkResourceLocator &locator) con
   }
 
   return shader;
+}
+
+
+
+vkProgramGL4Loader::vkProgramGL4Loader()
+  : vkBaseXMLLoader()
+{
+}
+
+vkProgramGL4Loader::~vkProgramGL4Loader()
+{
+
+}
+
+
+bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkString tagName(element->Value());
+
+  return tagName == vkString("program") || tagName == vkString("programs");
+}
+
+
+
+
+IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  TiXmlElement *programElement = FindElement(element, "program", locator.GetResourceName());
+  if (!programElement)
+  {
+    return 0;
+  }
+
+  TiXmlElement *technique = FindTechnique(programElement);
+  if (!technique)
+  {
+    return 0;
+  }
+
+  vkResourceManager *resourceManager = vkResourceManager::Get();
+
+  vkProgramGL4 *program = new vkProgramGL4();
+  for (TiXmlElement *shaderElement = technique->FirstChildElement("shader");
+  shaderElement;
+    shaderElement = shaderElement->NextSiblingElement("shader"))
+  {
+    vkResourceLocator locator(vkString(shaderElement->GetText()));
+    vkShaderGL4 *shader = resourceManager->GetOrLoad<vkShaderGL4>(locator);
+    if (!shader)
+    {
+      program->Release();
+      return 0;
+    }
+    program->AttachShader(shader);
+  }
+
+  if (!program->Link())
+  {
+    printf("Unable to link program: %s\n%s\n", locator.GetResourceFile().c_str(), program->GetLinkErrorLog().c_str());
+    program->Release();
+    return 0;
+  }
+
+
+  return program;
+}
+
+TiXmlElement *vkProgramGL4Loader::FindTechnique(TiXmlElement *element) const
+{
+  if (!element)
+  {
+    return 0;
+  }
+  vkString elementName(element->Value());
+  if (elementName == vkString("program"))
+  {
+    return FindTechnique(element->FirstChildElement("techniques"));
+  }
+  else if (elementName == vkString("techniques"))
+  {
+    for (TiXmlElement *techniqueElement = element->FirstChildElement("technique");
+    techniqueElement;
+      techniqueElement = techniqueElement->NextSiblingElement("technique"))
+    {
+      TiXmlElement *technique = FindTechnique(techniqueElement);
+      if (technique)
+      {
+        return technique;
+      }
+    }
+  }
+  else if (elementName == vkString("technique"))
+  {
+    // do technique validation later.. for now just return the first technique 
+    return element;
+  }
+  return 0;
 }

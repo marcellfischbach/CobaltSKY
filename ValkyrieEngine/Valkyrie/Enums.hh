@@ -85,6 +85,8 @@ enum vkVertexStreamType
 
   eVST_BoneIndex,
   eVST_BoneWeight,
+
+  eVST_COUNT
 };
 
 enum vkVertexAttributeType
@@ -114,7 +116,9 @@ enum vkVertexAttributeType
   eVAT_Texture6,
   eVAT_Texture7,
 
-  eVAT_Blend
+  eVAT_Blend,
+
+  eVAT_COUNT
 };
 
 enum vkMatrixType

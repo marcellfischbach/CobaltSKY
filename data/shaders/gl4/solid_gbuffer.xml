@@ -1,14 +1,16 @@
-<shader>
+<programs>
+	<program name="GBuffer">
 
-	<techniques>
-	
-		<technique name="Default">
-			<vertex>${shaders}/solid_gbuffer.vert</vertex>
-			<fragment>${shaders}/solid_gbuffer.frag</vertex>
-		</technique>
+		<techniques>
 		
-	</techniques>
-	
-	<uniforms>
-	</uniforms>
-</shader>
+			<technique name="Default">
+				<shader>${shaders}/solid_gbuffer.vert</shader>
+				<shader>${shaders}/solid_gbuffer.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+		<uniforms>
+		</uniforms>
+	</program>
+</programs>

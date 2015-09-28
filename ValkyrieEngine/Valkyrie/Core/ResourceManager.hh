@@ -7,6 +7,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
 #include <tixml\tinyxml.h>
+#include <map>
 #include <vector>
 #include <Valkyrie/Core/ResourceManager.refl.hh>
 
@@ -31,8 +32,8 @@ struct VKE_API IFileLoader : public IObject
 {
   VK_CLASS_GEN;
 
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator) const = 0;
-  virtual IObject *Load(IFile *file, const vkResourceLocator &locator) const = 0;
+  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
 
@@ -41,8 +42,8 @@ struct VKE_API IXMLLoader : public IObject
 {
   VK_CLASS_GEN;
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator) const = 0;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator) const = 0;
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
 VK_CLASS();
@@ -52,8 +53,20 @@ class VKE_API vkXMLFileLoader : public IFileLoader
 public:
   vkXMLFileLoader();
   virtual ~vkXMLFileLoader();
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator) const;
-  IObject *Load(IFile *file, const vkResourceLocator &locator) const;
+  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+};
+
+VK_INTERFACE();
+class VKE_API vkBaseXMLLoader : public IXMLLoader
+{
+  VK_CLASS_GEN_OBJECT;
+protected:
+  vkBaseXMLLoader();
+  virtual ~vkBaseXMLLoader();
+
+  TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
 
 };
 
@@ -64,14 +77,48 @@ class VKE_API vkResourceManager
 public:
   static vkResourceManager *Get();
 
-  IObject *Load(const vkResourceLocator &locator) const;
-  IObject *Load(IFile *file, const vkResourceLocator &locator) const;
-  IObject *Load(TiXmlElement *element, const vkResourceLocator &locator) const;
+  /**
+   * \brief Load an object from the \a locator.
+   * 
+   * IMPORTANT: The caller is the owner of the returned object.
+   *
+   * \param locator The location from where the resource should be loaded
+   * \param userData An optional user data that the loader can use.
+   *
+   * \return The object
+   */
+  IObject *Load(const vkResourceLocator &locator, IObject *userData = 0) const;
+
+  /**
+  * \brief Load an object from the \a file.
+  *
+  * IMPORTANT: The caller is the owner of the returned object.
+  *
+  * \param file The file where resource should be read from
+  * \param locator The origin location from where the resource should be loaded
+  * \param userData An optional user data that the loader can use.
+  *
+  * \return The object
+  */
+  IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+  /**
+  * \brief Load an object from the \a file.
+  *
+  * IMPORTANT: The caller is the owner of the returned object.
+  *
+  * \param element The XML-element where resource should be read from
+  * \param locator The origin location from where the resource should be loaded
+  * \param userData An optional user data that the loader can use.
+  *
+  * \return The object
+  */
+  IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   template<typename T>
-  T *Load(IFile *file, const vkResourceLocator &locator) const
+  T *Load(const vkResourceLocator &locator, IObject *userData = 0) const
   {
-    IObject *object = Load(file, locator);
+    IObject *object = Load(locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -85,12 +132,87 @@ public:
   }
 
   template<typename T>
-  T *Load(TiXmlElement *element, const vkResourceLocator &locator) const
+  T *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const
   {
-    IObject *object = Load(element, locator);
+    IObject *object = Load(file, locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const
+  {
+    IObject *object = Load(element, locator, userData);
+    if (object)
+    {
+      T* t_instance = vkQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  /**
+   * \brief Get the object from the resource cache.
+   * 
+   * IMPORTANT: The caller is not owner of the returned object. When the caller stores the object
+   *            he must take ownership via \AddRef on the returned object.
+   *
+   * \param resourceLocator The internal name of the resource
+   * 
+   * \return The object or \a null if there is no such object registered.
+   */
+  IObject *Get(const vkResourceLocator &resourceLocator) const;
+
+  /**
+  * \brief Get the object from the resource cache. 
+  * If the object is not in the cache it is loaded and than put into cache.
+  *
+  * IMPORTANT: The caller is not owner of the returned object. When the caller stores the object
+  *            he must take ownership via \AddRef on the returned object.
+  *
+  * \param resourceLocator The internal name of the resource
+  *
+  * \return The object or \a null if there is no such object registered.
+  */
+  IObject *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0);
+
+
+
+  template<typename T>
+  T *Get(const vkResourceLocator &resourceLocator) const
+  {
+    IObject *object = Get(resourceLocator);
+    if (object)
+    {
+      T *t_instance = vkQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0)
+  {
+    IObject *object = GetOrLoad(resourceLocator, userData);
+    if (object)
+    {
+      T *t_instance = vkQueryClass<T>(object);
       if (!t_instance)
       {
         object->Release();
@@ -103,11 +225,17 @@ public:
   void RegisterLoader(IXMLLoader *loader);
   void RegisterLoader(IFileLoader *loader);
 
+  bool RegisterObject(const vkResourceLocator &locator, IObject *object);
+  void DeregisterObject(const vkResourceLocator &locator);
+
 private:
   vkResourceManager();
 
   std::vector<IXMLLoader*> m_xmlLoaders;
   std::vector<IFileLoader*> m_fileLoaders;
 
+  std::map<vkResourceLocator, IObject*> m_objects;
 
 };
+
+

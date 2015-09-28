@@ -3,20 +3,20 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Core/String.hh>
 #include <Valkyrie/Graphics/IShader.refl.hh>
+#include <Valkyrie/Graphics/ShaderID.hh>
 #include <Valkyrie/Enums.hh>
-#include <string>
-
 using std::string;
 
 VK_INTERFACE();
-struct IShaderAttribute : public virtual IObject
+struct VKE_API IShaderAttribute : public virtual IObject
 {
   VK_CLASS_GEN;
 
   virtual ~IShaderAttribute() {}
 
-  virtual const string &GetName() const = 0;
+  virtual const vkString &GetName() const = 0;
 
   virtual void SetArrayIndex(vkUInt32 idx) = 0;
 
@@ -35,13 +35,13 @@ struct IShaderAttribute : public virtual IObject
 };
 
 VK_INTERFACE();
-struct IShaderStream : public virtual IObject
+struct VKE_API IShaderStream : public virtual IObject
 {
   VK_CLASS_GEN;
 
   virtual ~IShaderStream() { }
 
-  virtual const string &GetName() const = 0;
+  virtual const vkString &GetName() const = 0;
 
   virtual void SetArrayIndex(vkUInt32 idx) = 0;
 
@@ -62,15 +62,14 @@ struct VKE_API IShader : public virtual IObject
 
   virtual ~IShader() { }
 
+  virtual void RegisterAttribute(vkShaderAttributeID &id) = 0;
+  virtual void RegisterStream(vkShaderStreamID &id) = 0;
+
   virtual vkUInt32 GetNumberOfAttributes() const = 0;
-  virtual IShaderAttribute *GetAttribute(vkUInt32 idx) = 0;
-  virtual IShaderAttribute *GetAttribute(const string &name) = 0;
-  virtual IShaderAttribute *GetAttribute(vkVertexAttributeType attr) = 0;
+  virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id) = 0;
 
   virtual vkUInt16 GetNumberOfStreams() const = 0;
-  virtual IShaderStream *getStream(vkUInt16 idx) = 0;
-  virtual IShaderStream *GetStream(const string &name) = 0;
-  virtual IShaderStream *GetStream(vkVertexStreamType stream) = 0;
+  virtual IShaderStream *GetStream(const vkShaderStreamID &id) = 0;
 
 };
 
