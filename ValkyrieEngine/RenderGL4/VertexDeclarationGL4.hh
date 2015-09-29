@@ -5,7 +5,7 @@
 #include <RenderGL4/VertexDeclarationGL4.refl.hh>
 
 
-class ProgramGL4;
+class vkProgramGL4;
 VK_CLASS();
 class vkVertexDeclarationGL4 : public IVertexDeclaration
 {
@@ -19,8 +19,8 @@ public:
   unsigned GetNumberOfStreams() const;
   const vkVertexElement* GetElements(vkUInt8 stream) const;
   const vkVertexElement* GetElement(vkVertexStreamType streamDefinition, vkUInt8 stream) const;
-  void BindStream(ProgramGL4* program, vkUInt8 stream, void* ptr);
-  void UnbindStream(ProgramGL4* shader, vkUInt8 stream);
+  void BindStream(vkProgramGL4* program, vkUInt8 stream, void* ptr);
+  void UnbindStream(vkProgramGL4* program, vkUInt8 stream);
   virtual vkSize GetTotalSize() const;
   virtual vkSize GetStride(vkUInt8 stream) const;
 

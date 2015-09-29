@@ -1,4 +1,6 @@
+
 #include <RenderGL4/VertexDeclarationGL4.hh>
+#include <RenderGL4/Shader.hh>
 #include <assert.h>
 #include <map>
 
@@ -126,18 +128,17 @@ const vkVertexElement* vkVertexDeclarationGL4::GetElement(vkVertexStreamType str
   return 0;
 }
 
-void vkVertexDeclarationGL4::BindStream(ProgramGL4* shader, vkUInt8 stream, void* ptr)
+void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, void* ptr)
 {
-  /*
-  assert(stream < _streams);
+  assert(stream < m_streams);
 
-  vkVertexElement* elements = _elements[stream];
+  vkVertexElement* elements = m_elements[stream];
 
   if (shader)
   {
     while (elements && elements->Valid)
     {
-      iShaderStream *s = shader->GetStream(elements->StreamParam);
+      IShaderStream *s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         s->Set(elements->Size,
@@ -149,10 +150,9 @@ void vkVertexDeclarationGL4::BindStream(ProgramGL4* shader, vkUInt8 stream, void
       elements++;
     }
   }
-  */
 }
 
-void vkVertexDeclarationGL4::UnbindStream(ProgramGL4* shader, vkUInt8 stream)
+void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
 {
   /*
   assert(stream < _streams);

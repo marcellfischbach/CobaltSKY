@@ -113,6 +113,8 @@ public:
   vkProgramGL4();
   virtual ~vkProgramGL4();
 
+  void Bind();
+
   virtual void RegisterAttribute(vkShaderAttributeID &id);
   virtual void RegisterStream(vkShaderStreamID &id);
 

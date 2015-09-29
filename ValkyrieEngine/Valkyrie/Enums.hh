@@ -62,6 +62,13 @@ enum vkKey
   eK_COUNT,
 };
 
+enum vkPrimitiveType
+{
+  ePT_Points,
+  ePT_Lines,
+  ePT_Triangles,
+};
+
 enum vkVertexStreamType
 {
   eVST_Position,

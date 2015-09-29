@@ -273,6 +273,11 @@ vkProgramGL4::~vkProgramGL4()
 }
 
 
+void vkProgramGL4::Bind()
+{
+  glUseProgram(m_name);
+}
+
 void vkProgramGL4::RegisterAttribute(vkShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
