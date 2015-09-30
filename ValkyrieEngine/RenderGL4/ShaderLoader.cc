@@ -1,7 +1,8 @@
 
 #include <RenderGL4/ShaderLoader.hh>
-#include <RenderGL4/Enums.hh>
 #include <RenderGL4/Shader.hh>
+#include <RenderGL4/Enums.hh>
+#include <RenderGL4/DefinesGL4.hh>
 
 
 vkShaderGL4Loader::vkShaderGL4Loader()
@@ -120,6 +121,7 @@ bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator 
 
 IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
+  VK_CHECK_GL_ERROR;
   TiXmlElement *programElement = FindElement(element, "program", locator.GetResourceName());
   if (!programElement)
   {
@@ -154,6 +156,17 @@ IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
     printf("Unable to link program: %s\n%s\n", locator.GetResourceFile().c_str(), program->GetLinkErrorLog().c_str());
     program->Release();
     return 0;
+  }
+
+  TiXmlElement *uniformsElement = programElement->FirstChildElement("uniforms");
+  if (uniformsElement)
+  {
+    for (TiXmlElement *uniformElement = uniformsElement->FirstChildElement("uniform");
+    uniformElement;
+      uniformElement = uniformElement->NextSiblingElement("uniform"))
+    {
+      program->RegisterAttribute(vkShaderAttributeID(vkString(uniformElement->GetText())));
+    }
   }
 
 

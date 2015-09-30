@@ -8,6 +8,7 @@ static GLuint current_mapped_buffer;
 VertexBufferGL4::VertexBufferGL4()
   : m_name(0)
 {
+  VK_CLASS_GEN_CONSTR;
 }
 
 VertexBufferGL4::~VertexBufferGL4()
@@ -18,12 +19,15 @@ VertexBufferGL4::~VertexBufferGL4()
 
 bool VertexBufferGL4::CreateBuffer(vkSize size, const void *data, vkBufferDataMode dataMode)
 {
+  VK_CHECK_GL_ERROR;
   glGenBuffers(1, &m_name);
   if (m_name == 0)
   {
     return false;
   }
+  VK_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
+  VK_CHECK_GL_ERROR;
   glBufferData(GL_ARRAY_BUFFER, size, data, bufferDataModeMap[dataMode]);
 
   VK_GL_FLUSH;

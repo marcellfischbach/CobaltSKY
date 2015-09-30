@@ -26,6 +26,8 @@ public:
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
   virtual void SetShader(IShader *shader);
 
+  virtual void Clear();
+  virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
 

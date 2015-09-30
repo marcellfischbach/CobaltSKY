@@ -123,11 +123,13 @@ private:
     m_nullString = "";
     m_map["Position"] = eVST_Position;
     m_map["Normal"] = eVST_Normal;
+    m_map["Color"] = eVST_Color;
     m_map["Tangent"] = eVST_Tangent;
     m_map["BiNormal"] = eVST_BiNormal;
 
     m_map["Position1"] = eVST_Position1;
     m_map["Normal1"] = eVST_Normal1;
+    m_map["Color1"] = eVST_Color1;
     m_map["Tangent1"] = eVST_Tangent1;
     m_map["BiNormal1"] = eVST_BiNormal1;
 

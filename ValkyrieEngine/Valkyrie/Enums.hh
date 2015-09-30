@@ -73,11 +73,13 @@ enum vkVertexStreamType
 {
   eVST_Position,
   eVST_Normal,
+  eVST_Color,
   eVST_Tangent,
   eVST_BiNormal,
 
   eVST_Position1,
   eVST_Normal1,
+  eVST_Color1,
   eVST_Tangent1,
   eVST_BiNormal1,
 

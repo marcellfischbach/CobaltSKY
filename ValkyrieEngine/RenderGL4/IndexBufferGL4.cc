@@ -8,6 +8,7 @@ static GLuint current_mapped_buffer;
 IndexBufferGL4::IndexBufferGL4()
   : m_name(0)
 {
+  VK_CLASS_GEN_CONSTR;
 }
 
 IndexBufferGL4::~IndexBufferGL4()
@@ -23,8 +24,8 @@ bool IndexBufferGL4::CreateBuffer(vkSize size, const void *data, vkBufferDataMod
   {
     return false;
   }
-  glBindBuffer(GL_ARRAY_BUFFER, m_name);
-  glBufferData(GL_ARRAY_BUFFER, size, data, bufferDataModeMap[dataMode]);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_name);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, bufferDataModeMap[dataMode]);
 
   VK_GL_FLUSH;
   VK_CHECK_GL_ERROR;
@@ -41,12 +42,12 @@ vkSize IndexBufferGL4::GetSize() const
 
 void IndexBufferGL4::Bind()
 {
-  glBindBuffer(GL_ARRAY_BUFFER, m_name);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_name);
 }
 
 void IndexBufferGL4::Unbind()
 {
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 bool IndexBufferGL4::Copy(unsigned offset, vkSize size, const void* data)
@@ -56,8 +57,8 @@ bool IndexBufferGL4::Copy(unsigned offset, vkSize size, const void* data)
     return false;
   }
 
-  glBindBuffer(GL_ARRAY_BUFFER, m_name);
-  glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_name);
+  glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
   VK_GL_FLUSH;
   VK_CHECK_GL_ERROR;
   return true;
@@ -71,8 +72,8 @@ bool IndexBufferGL4::Lock(unsigned offset, void **data, vkBufferAccessMode mode)
   }
 
   void *res = 0;
-  glBindBuffer(GL_ARRAY_BUFFER, m_name);
-  res = glMapBuffer(GL_ARRAY_BUFFER, bufferAccessModeMap[mode]);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_name);
+  res = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferAccessModeMap[mode]);
   VK_CHECK_GL_ERROR;
   if (!res)
   {
@@ -96,7 +97,7 @@ bool IndexBufferGL4::Unlock()
     return false;
   }
 
-  glUnmapBuffer(GL_ARRAY_BUFFER);
+  glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 
   current_mapped_buffer = 0;
   VK_GL_FLUSH;

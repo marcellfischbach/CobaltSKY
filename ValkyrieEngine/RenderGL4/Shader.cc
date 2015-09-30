@@ -283,7 +283,8 @@ void vkProgramGL4::RegisterAttribute(vkShaderAttributeID &id)
   ResizeAttributes(id.GetID());
 
   
-  GLint loc = glGetUniformLocation(m_name, id.ResolveName().c_str());
+  vkString uniformName = vkString("vk_") + id.ResolveName();
+  GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   vkShaderAttributeGL4 &attribute = m_attributes[id.GetID()];
   attribute.SetLocation(loc);
   attribute.SetName(id.GetName());
@@ -293,8 +294,8 @@ void vkProgramGL4::RegisterStream(vkShaderStreamID &id)
 {
   ResizeStreams(id.GetID());
 
-
-  GLint loc = glGetAttribLocation(m_name, id.ResolveName().c_str());
+  vkString attribName = vkString("vk_") + id.ResolveName();
+  GLint loc = glGetAttribLocation(m_name, attribName.c_str());
   vkShaderStreamGL4 &stream = m_streams[id.GetID()];
   stream.SetLocation(loc);
   stream.SetName(id.GetName());
@@ -403,6 +404,11 @@ bool vkProgramGL4::Link()
   if (param == GL_FALSE)
   {
     return false;
+  }
+
+  for (int i = 0; i < eVST_COUNT; ++i)
+  {
+    RegisterStream(vkShaderStreamID(i));
   }
 
   return true;

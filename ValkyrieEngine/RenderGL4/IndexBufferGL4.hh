@@ -23,8 +23,8 @@ public:
 
   virtual bool Unlock();
 
-  virtual void Bind();
-  virtual void Unbind();
+  void Bind();
+  static void Unbind();
 
   GLuint GetGLName() const;
 

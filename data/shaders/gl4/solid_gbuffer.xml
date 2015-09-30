@@ -11,6 +11,8 @@
 		</techniques>
 		
 		<uniforms>
+			<uniform type="vec2">Alt</uniform>
 		</uniforms>
+		
 	</program>
 </programs>

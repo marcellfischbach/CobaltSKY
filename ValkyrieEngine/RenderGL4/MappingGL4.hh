@@ -36,3 +36,10 @@ static GLenum shaderTypeMap[] = {
   GL_FRAGMENT_SHADER,
   GL_COMPUTE_SHADER
 };
+
+
+static GLenum primitiveTypeMap[] = {
+  GL_POINTS,
+  GL_LINES,
+  GL_TRIANGLES
+};

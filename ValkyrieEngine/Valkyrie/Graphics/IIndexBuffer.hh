@@ -18,6 +18,4 @@ struct VKE_API IIndexBuffer : public IObject
 
   virtual bool Unlock() = 0;
 
-  virtual void Bind() = 0;
-  virtual void Unbind() = 0;
 };

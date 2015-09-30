@@ -116,8 +116,6 @@ bool SDLWindow::UpdateEvents()
 
 bool SDLWindow::Present()
 {
-  glClearColor(0.0f, 0.0f, 0.5, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   SDL_GL_SwapWindow(m_window);
   return true;

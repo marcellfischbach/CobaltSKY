@@ -39,6 +39,8 @@ struct VKE_API IRenderer : public IObject
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
   virtual void SetShader(IShader *shader) = 0;
 
+  virtual void Clear() = 0;
+  virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;
   virtual void Render(vkPrimitiveType type, vkUInt32 count) = 0;
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType) = 0;
   /**

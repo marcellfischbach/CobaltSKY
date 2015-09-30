@@ -154,16 +154,15 @@ void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, vo
 
 void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
 {
-  /*
-  assert(stream < _streams);
+  assert(stream < m_streams);
 
-  vkVertexElement* elements = _elements[stream];
+  vkVertexElement* elements = m_elements[stream];
 
   if (shader)
   {
     while (elements && elements->Valid)
     {
-      iShaderStream* s = shader->GetStream(elements->StreamParam);
+      IShaderStream* s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         s->Disable();
@@ -171,7 +170,6 @@ void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
       elements++;
     }
   }
-  */
 }
 
 vkSize vkVertexDeclarationGL4::GetTotalSize() const
