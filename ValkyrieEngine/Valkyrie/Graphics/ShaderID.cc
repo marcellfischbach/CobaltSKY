@@ -188,6 +188,10 @@ const vkString &vkShaderAttributeID::ResolveName()
   return m_name;
 }
 
+bool vkShaderAttributeID::operator<(const vkShaderAttributeID &other) const
+{
+  return m_id < other.m_id;
+}
 
 
 vkShaderStreamID::vkShaderStreamID(const vkString &name)
@@ -223,4 +227,9 @@ const vkString &vkShaderStreamID::ResolveName()
   return m_name;
 }
 
+
+bool vkShaderStreamID::operator<(const vkShaderStreamID &other) const
+{
+  return m_id < other.m_id;
+}
 

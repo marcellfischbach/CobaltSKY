@@ -157,3 +157,25 @@ enum vkDataType
   eDT_Float,
   eDT_Double
 };
+
+enum vkShaderParameterType
+{
+  eSPT_Float,
+  eSPT_Vector2,
+  eSPT_Vector3,
+  eSPT_Vector4,
+  eSPT_Int,
+  eSPT_IVector2,
+  eSPT_IVector3,
+  eSPT_IVector4,
+  eSPT_Matrix3,
+  eSPT_Matrix4,
+  eSPT_Texture,
+};
+
+
+enum vkRenderPass
+{
+  eRP_GBuffer,
+  eRP_COUNT,
+};

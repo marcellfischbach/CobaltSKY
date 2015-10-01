@@ -28,7 +28,7 @@
     private: \
       int m_refCount
     
-#define VK_CLASS_GEN_CONSTR m_refCount = 0
+#define VK_CLASS_GEN_CONSTR m_refCount = 1
 
 #define VK_WEAK_OBJECT(Super) \
   public: void AddRef () { Super::AddRef (); }\

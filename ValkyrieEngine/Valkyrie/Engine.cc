@@ -6,6 +6,8 @@
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IShader.hh>
+#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <math.h>
 
@@ -73,8 +75,16 @@ int vkEngine::Run()
   IIndexBuffer *ib = m_renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = m_renderer->CreateVertexDeclaration(elements);
 
+  vkMesh *mesh = new vkMesh();
+  mesh->SetIndexType(eDT_UnsignedShort);
+  mesh->SetPrimitiveType(ePT_Triangles);
+  mesh->SetVertexDeclaration(vd);
+  mesh->AddVertexBuffer(vb);
+  mesh->AddVertexBuffer(cb);
+  mesh->AddIndexBuffer(ib, 12);
 
-
+  vkMaterial *material = new vkMaterial();
+  material->SetShader(eRP_GBuffer, shader);
 
   const IKeyboard *keyboard = m_window->GetKeyboard();
 
@@ -91,19 +101,19 @@ int vkEngine::Run()
 
     m_renderer->Clear();
 
-    m_renderer->SetIndexBuffer(ib);
-    m_renderer->SetVertexBuffer(0, vb);
-    m_renderer->SetVertexBuffer(1, cb);
-    m_renderer->SetVertexDeclaration(vd);
-    m_renderer->SetShader(shader);
-    IShaderAttribute *a = shader->GetAttribute(attrib);
-    if (a)
+    if (material->Bind(m_renderer, eRP_GBuffer))
     {
-      shader->GetAttribute(attrib)->Set((float)cos(v) * 0.1f, (float)sin(v) * 0.1f);
+      /*
+      m_renderer->SetShader(shader);
+      IShaderAttribute *a = shader->GetAttribute(attrib);
+      if (a)
+      {
+        shader->GetAttribute(attrib)->Set((float)cos(v) * 0.1f, (float)sin(v) * 0.1f);
+      }
+      v += 0.01f;
+      */
+      mesh->Render(m_renderer);
     }
-    v += 0.01f;
-    m_renderer->RenderIndexed(ePT_Triangles, 12, eDT_UnsignedShort);
-
     m_window->Present();
 
   }

@@ -53,6 +53,10 @@ set(SOURCE_GRAPHICS
   Graphics/IShader.hh
   Graphics/IVertexBuffer.hh
   Graphics/IVertexDeclaration.hh
+  Graphics/Material.cc
+  Graphics/Material.hh
+  Graphics/Mesh.cc
+  Graphics/Mesh.hh
   Graphics/ShaderID.cc
   Graphics/ShaderID.hh
   )
