@@ -146,7 +146,15 @@ vkResourceLocator::vkResourceLocator(const vkString &resourceFile, const vkStrin
   : m_resourceFile(resourceFile)
   , m_resourceName(resourceName)
 {
-
+  if (resourceName.length() == 0)
+  {
+    size_t idx = m_resourceFile.find(':');
+    if (idx != std::string::npos)
+    {
+      m_resourceName = m_resourceFile.substr(idx + 1);
+      m_resourceFile = m_resourceFile.substr(0, idx);
+    }
+  }
 }
 
 const vkString &vkResourceLocator::GetResourceFile() const

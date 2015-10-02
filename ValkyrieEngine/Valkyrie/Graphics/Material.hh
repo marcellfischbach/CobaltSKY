@@ -8,7 +8,7 @@
 #include <Valkyrie/Enums.hh>
 
 #include <Valkyrie/Graphics/Material.refl.hh>
-#include <map>
+#include <vector>
 
 #define vkInvalidShaderParamIndex (~0x00)
 
@@ -25,14 +25,50 @@ public:
   IShader *GetShader(vkRenderPass pass);
   const IShader *GetShader(vkRenderPass pass) const;
 
+  vkSize GetNumberOfParameters() const;
+  const vkShaderAttributeID &GetParamID(vkSize idx) const;
+  vkShaderParameterType GetParamType(vkSize idx) const;
+  void RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type);
+
+  IShader *Bind(IRenderer *renderer, vkRenderPass pass);
+
+
+private:
+  struct Param
+  {
+    vkShaderAttributeID id;
+    vkShaderParameterType type;
+    Param(const vkShaderAttributeID &id, vkShaderParameterType type);
+  };
+
+  std::vector<Param> m_params;
+
+  IShader *m_shaders[eRP_COUNT];
+
+};
+
+
+VK_CLASS();
+class VKE_API vkMaterialInstance : public vkObject
+{
+  VK_CLASS_GEN;
+
+public:
+  vkMaterialInstance();
+  virtual ~vkMaterialInstance();
+
+  void SetMaterial(vkMaterial *material);
+  vkMaterial *GetMaterial();
+  const vkMaterial  *GetMaterial() const;
+
   bool Bind(IRenderer *renderer, vkRenderPass pass);
 
   vkUInt16 GetIndex(const vkShaderAttributeID &id) const;
-
-  void Set(const vkShaderAttributeID &id, float v);
+  const vkShaderAttributeID &GetID(vkUInt16 idx) const;
   void Set(vkUInt16 idx, float v);
 
 private:
+  vkMaterial *m_material;
 
   struct ShaderParameter
   {
@@ -51,6 +87,6 @@ private:
   std::vector<ShaderParameter> m_parameters;
   ShaderParameter &GetParameter(const vkShaderAttributeID &id);
 
-  IShader *m_shaders[eRP_COUNT];
 
 };
+

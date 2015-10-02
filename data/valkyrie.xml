@@ -1,7 +1,8 @@
 <settings>
   <vfs>
     <rootPath>.</rootPath>
-    <shaders>shaders/gl4</shaders>
+    <shaders>materials/gl4</shaders>
+    <materials>materials</materials>
     <fonts>fonts</fonts>
   </vfs>
 </settings>

@@ -7,6 +7,7 @@
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <math.h>
@@ -42,8 +43,9 @@ int vkEngine::Run()
     return -1;
   }
 
+  RegisterLoaders();
 
-  IShader *shader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/solid_gbuffer.xml"));
+
 
   float vertexBuffer[] = {
     -0.5f, +0.5f, 0.0f, 1.0f,
@@ -83,13 +85,18 @@ int vkEngine::Run()
   mesh->AddVertexBuffer(cb);
   mesh->AddIndexBuffer(ib, 12);
 
-  vkMaterial *material = new vkMaterial();
-  material->SetShader(eRP_GBuffer, shader);
+  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/mat_solid.xml", "Solid"));
+  printf("material: %p\n", material);
+
+  vkMaterialInstance *materialInstance = new vkMaterialInstance();
+  materialInstance->SetMaterial(material);
+
+  vkUInt16 idxX = materialInstance->GetIndex(vkShaderAttributeID("AltX"));
+  vkUInt16 idxY = materialInstance->GetIndex(vkShaderAttributeID("AltY"));
 
   const IKeyboard *keyboard = m_window->GetKeyboard();
 
-  vkShaderAttributeID attrib("Alt");
-
+  
   float v = 0.0f;
   while (true)
   {
@@ -101,7 +108,12 @@ int vkEngine::Run()
 
     m_renderer->Clear();
 
-    if (material->Bind(m_renderer, eRP_GBuffer))
+
+    materialInstance->Set(idxX, (float)cos(v) * 0.1f);
+    materialInstance->Set(idxY, (float)sin(v) * 0.1f);
+    v += 0.01f;
+
+    if (materialInstance->Bind(m_renderer, eRP_GBuffer))
     {
       /*
       m_renderer->SetShader(shader);
@@ -119,4 +131,12 @@ int vkEngine::Run()
   }
 
   return 0;
+}
+
+
+
+void vkEngine::RegisterLoaders()
+{
+  vkResourceManager *mgr = vkResourceManager::Get();
+  mgr->RegisterLoader(new vkMaterialLoader());
 }

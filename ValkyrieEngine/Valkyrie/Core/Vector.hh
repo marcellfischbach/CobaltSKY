@@ -206,6 +206,12 @@ public:
     this->z = z;
   }
 
+  VK_FORCEINLINE void Set(const vkVector3f &v)
+  {
+    x = v.x;
+    y = v.y;
+    z = v.z;
+  }
 
   VK_FORCEINLINE vkVector2f AsVector2f() const
   {

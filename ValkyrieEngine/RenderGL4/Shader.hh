@@ -115,8 +115,8 @@ public:
 
   void Bind();
 
-  virtual void RegisterAttribute(vkShaderAttributeID &id);
-  virtual void RegisterStream(vkShaderStreamID &id);
+  virtual void RegisterAttribute(const vkShaderAttributeID &id);
+  virtual void RegisterStream(const vkShaderStreamID &id);
 
   virtual vkUInt32 GetNumberOfAttributes() const;
   virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id);

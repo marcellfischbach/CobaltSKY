@@ -14,10 +14,10 @@ public:
   vkShaderAttributeID(const vkString &attribute);
   vkShaderAttributeID(vkUInt32 id);
 
-  const vkString &ResolveName();
   const vkString &GetName() const;
   vkUInt32 GetID() const;
 
+  bool operator== (const vkShaderAttributeID &other) const;
   bool operator< (const vkShaderAttributeID &other) const;
 private:
   vkString m_name;
@@ -30,10 +30,10 @@ public:
   vkShaderStreamID(const vkString &attribute);
   vkShaderStreamID(vkUInt32 id);
 
-  const vkString &ResolveName();
   const vkString &GetName() const;
   vkUInt32 GetID() const;
 
+  bool operator== (const vkShaderStreamID &other) const;
   bool operator< (const vkShaderStreamID &other) const;
 private:
   vkString m_name;

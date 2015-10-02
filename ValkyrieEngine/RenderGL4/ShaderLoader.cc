@@ -158,16 +158,6 @@ IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
     return 0;
   }
 
-  TiXmlElement *uniformsElement = programElement->FirstChildElement("uniforms");
-  if (uniformsElement)
-  {
-    for (TiXmlElement *uniformElement = uniformsElement->FirstChildElement("uniform");
-    uniformElement;
-      uniformElement = uniformElement->NextSiblingElement("uniform"))
-    {
-      program->RegisterAttribute(vkShaderAttributeID(vkString(uniformElement->GetText())));
-    }
-  }
 
 
   return program;

@@ -62,8 +62,8 @@ struct VKE_API IShader : public virtual IObject
 
   virtual ~IShader() { }
 
-  virtual void RegisterAttribute(vkShaderAttributeID &id) = 0;
-  virtual void RegisterStream(vkShaderStreamID &id) = 0;
+  virtual void RegisterAttribute(const vkShaderAttributeID &id) = 0;
+  virtual void RegisterStream(const vkShaderStreamID &id) = 0;
 
   virtual vkUInt32 GetNumberOfAttributes() const = 0;
   virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id) = 0;

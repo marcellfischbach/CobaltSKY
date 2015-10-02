@@ -1,0 +1,16 @@
+<materials>
+
+	<material name="Solid">
+	
+		<passes>
+			<pass name="GBuffer">${shaders}/solid_gbuffer.xml:GBuffer</pass>
+		</passes>
+		
+		<parameters>
+			<parameter type="float">AltX</parameter>
+			<parameter type="float">AltY</parameter>
+		</parameters>
+		
+	</material>
+	
+</materials>

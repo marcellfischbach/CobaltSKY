@@ -14,6 +14,9 @@ public:
 
   int Run();
 
+protected:
+  void RegisterLoaders();
+
 private:
   vkEngine();
 

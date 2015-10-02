@@ -18,6 +18,8 @@ source_group(
 
 
 set(SOURCE_CORE
+  Core/BoundingVolume.cc
+  Core/BoundingVolume.hh
   Core/FileInfo.cc
   Core/FileInfo.hh
   Core/FileStd.cc
@@ -25,6 +27,7 @@ set(SOURCE_CORE
   Core/IFile.hh
   Core/Library.cc
   Core/Library.hh
+  Core/Matrix.hh
 	Core/Object.cc
 	Core/Object.hh
   Core/ResourceManager.cc
@@ -34,6 +37,7 @@ set(SOURCE_CORE
   Core/String.hh
   Core/Thread.cc
   Core/Thread.hh
+  Core/Vector.hh
   Core/VFS.cc
   Core/VFS.hh
   Core/Xml.cc
@@ -55,6 +59,8 @@ set(SOURCE_GRAPHICS
   Graphics/IVertexDeclaration.hh
   Graphics/Material.cc
   Graphics/Material.hh
+  Graphics/MaterialLoader.cc
+  Graphics/MaterialLoader.hh
   Graphics/Mesh.cc
   Graphics/Mesh.hh
   Graphics/ShaderID.cc
@@ -66,6 +72,17 @@ source_group(
 	"ValkyrieEngine\\Graphics"
 	FILES
 	${SOURCE_GRAPHICS}
+	)
+	
+set(SOURCE_GRAPHICS_SCENE
+	Graphics/Scene/Node.cc
+	Graphics/Scene/Node.hh
+	)
+	
+source_group(
+	"ValkyrieEngine\\Graphics\\Scene"
+	FILES
+	${SOURCE_GRAPHICS_SCENE}
 	)
 
 set(SOURCE_WINDOW
@@ -84,6 +101,7 @@ set(ALL_SOURCES
   ${SOURCE}
 	${SOURCE_CORE}
   ${SOURCE_GRAPHICS}
+	${SOURCE_GRAPHICS_SCENE}
   ${SOURCE_WINDOW}
 	)
 

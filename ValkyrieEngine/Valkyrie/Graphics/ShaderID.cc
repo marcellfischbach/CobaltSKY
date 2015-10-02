@@ -162,7 +162,7 @@ vkShaderAttributeID::vkShaderAttributeID(const vkString &name)
 }
 
 vkShaderAttributeID::vkShaderAttributeID(vkUInt32 id)
-  : m_name("")
+  : m_name(vkShaderAttributeIDManager::Get()->Get(id))
   , m_id(id)
 {
 
@@ -179,15 +179,11 @@ vkUInt32 vkShaderAttributeID::GetID() const
 }
 
 
-const vkString &vkShaderAttributeID::ResolveName()
-{
-  if (m_name.length() == 0)
-  {
-    m_name = vkShaderAttributeIDManager::Get()->Get(m_id);
-  }
-  return m_name;
-}
 
+bool vkShaderAttributeID::operator==(const vkShaderAttributeID &other) const
+{
+  return m_id == other.m_id;
+}
 bool vkShaderAttributeID::operator<(const vkShaderAttributeID &other) const
 {
   return m_id < other.m_id;
@@ -201,7 +197,7 @@ vkShaderStreamID::vkShaderStreamID(const vkString &name)
 }
 
 vkShaderStreamID::vkShaderStreamID(vkUInt32 id)
-  : m_name("")
+  : m_name(vkShaderStreamIDManager::Get()->Get(id))
   , m_id(id)
 {
 
@@ -218,13 +214,9 @@ vkUInt32 vkShaderStreamID::GetID() const
 }
 
 
-const vkString &vkShaderStreamID::ResolveName()
+bool vkShaderStreamID::operator==(const vkShaderStreamID &other) const
 {
-  if (m_name.length() == 0)
-  {
-    m_name = vkShaderStreamIDManager::Get()->Get(m_id);
-  }
-  return m_name;
+  return m_id == other.m_id;
 }
 
 
