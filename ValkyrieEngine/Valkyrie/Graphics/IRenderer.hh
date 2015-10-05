@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
+#include <Valkyrie/Core/Matrix.hh>
 #include <Valkyrie/Graphics/IRenderer.refl.hh>
 #include <Valkyrie/Enums.hh>
 
@@ -29,6 +30,17 @@ struct VKE_API IRenderer : public IObject
    * @}
    */
 
+
+  /**
+   * \name Transformation handling
+   * @{
+   */
+  virtual void SetProjectionMatrix(const vkMatrix4f &matrix) = 0;
+  virtual void SetViewMatrix(const vkMatrix4f &matrix) = 0;
+  virtual void SetModelMatrix(const vkMatrix4f &matrix) = 0;
+  /**
+   * @}
+   */
 
   /**
    * \name The rendering API

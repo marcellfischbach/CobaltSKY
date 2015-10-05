@@ -144,6 +144,7 @@ enum vkMatrixType
   eMT_MatModelViewInv,
   eMT_MatModelViewProj,
   eMT_MatModelViewProjInv,
+  eMT_COUNT
 };
 
 enum vkDataType

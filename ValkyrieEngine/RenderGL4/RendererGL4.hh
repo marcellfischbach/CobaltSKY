@@ -21,6 +21,11 @@ public:
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
 
+
+  virtual void SetProjectionMatrix(const vkMatrix4f &matrix);
+  virtual void SetViewMatrix(const vkMatrix4f &matrix);
+  virtual void SetModelMatrix(const vkMatrix4f &matrix);
+
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
@@ -36,11 +41,15 @@ private:
   void UnbindVertexDeclaration();
 
 private:
+  void RecalculateMatrix(vkMatrixType type);
 
   vkVertexDeclarationGL4 *m_vertexDeclaration;
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
+
+  vkMatrix4f m_matrices[eMT_COUNT];
+  bool m_matrixNeedsRecalculation[eMT_COUNT];
 
 };
 

@@ -77,6 +77,8 @@ source_group(
 set(SOURCE_GRAPHICS_SCENE
 	Graphics/Scene/Node.cc
 	Graphics/Scene/Node.hh
+  Graphics/Scene/SpatialNode.cc
+  Graphics/Scene/SpatialNode.hh
 	)
 	
 source_group(

@@ -32,6 +32,12 @@ RendererGL4::RendererGL4()
     m_vertexBuffer[i] = 0;
   }
 
+  for (unsigned i = 0; i < eMT_COUNT; i++)
+  {
+    m_matrices[i].SetIdentity();
+    m_matrixNeedsRecalculation[i] = false;
+  }
+
   GLuint vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -81,6 +87,85 @@ IVertexDeclaration *RendererGL4::CreateVertexDeclaration(const vkVertexElement *
   return decl;
 }
 
+void RendererGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatProj] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatProjInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatViewProj] = true;
+  m_matrixNeedsRecalculation[eMT_MatViewProjInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProj] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProjInv] = true;
+}
+
+void RendererGL4::SetViewMatrix(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatView] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatViewInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatViewProj] = true;
+  m_matrixNeedsRecalculation[eMT_MatViewProjInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelView] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProj] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProjInv] = true;
+
+}
+
+void RendererGL4::SetModelMatrix(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatModel] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatModelInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelView] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewInv] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProj] = true;
+  m_matrixNeedsRecalculation[eMT_MatModelViewProjInv] = true;
+}
+
+void RendererGL4::RecalculateMatrix(vkMatrixType type)
+{
+  if (!m_matrixNeedsRecalculation[type])
+  {
+    return;
+  }
+
+  m_matrixNeedsRecalculation[type] = false;
+
+
+  switch (type)
+  {
+  case eMT_MatProjInv:
+    vkMatrix4f::Invert(m_matrices[eMT_MatProj], m_matrices[eMT_MatProjInv]);
+    break;
+  case eMT_MatViewInv:
+    vkMatrix4f::Invert(m_matrices[eMT_MatView], m_matrices[eMT_MatViewInv]);
+    break;
+  case eMT_MatModelInv:
+    vkMatrix4f::Invert(m_matrices[eMT_MatModel], m_matrices[eMT_MatModelInv]);
+    break;
+
+  case eMT_MatViewProjInv:
+    RecalculateMatrix(eMT_MatViewProj);
+    vkMatrix4f::Invert(m_matrices[eMT_MatViewProj], m_matrices[eMT_MatViewProjInv]);
+    break;
+  case eMT_MatModelViewInv:
+    RecalculateMatrix(eMT_MatModelView);
+    vkMatrix4f::Invert(m_matrices[eMT_MatModelView], m_matrices[eMT_MatModelViewInv]);
+    break;
+  case eMT_MatModelViewProjInv:
+    RecalculateMatrix(eMT_MatModelViewProj);
+    vkMatrix4f::Invert(m_matrices[eMT_MatModelViewProj], m_matrices[eMT_MatModelViewProjInv]);
+    break;
+
+  case eMT_MatViewProj:
+    vkMatrix4f::Mult(m_matrices[eMT_MatProj], m_matrices[eMT_MatView], m_matrices[eMT_MatViewProj);
+    break;
+
+  case eMT_MatProj:
+  case eMT_MatView:
+  case eMT_MatModel:
+  default:
+    break;
+  }
+}
 
 void RendererGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
 {
