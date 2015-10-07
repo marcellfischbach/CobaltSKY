@@ -390,7 +390,7 @@ public:
     return r;
   }
 
-  VK_FORCEINLINE vkVector3f &Cross(const vkVector3f &v0, const vkVector3f &v1, vkVector3f &r)
+  VK_FORCEINLINE static vkVector3f &Cross(const vkVector3f &v0, const vkVector3f &v1, vkVector3f &r)
   {
     r.Set(v0.y*v1.z - v0.z*v1.y, v0.z*v1.x - v0.x*v1.z, v0.x*v1.y - v0.y*v1.x);
     return r;

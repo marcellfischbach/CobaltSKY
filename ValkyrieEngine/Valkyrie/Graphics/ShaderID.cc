@@ -49,12 +49,12 @@ private:
     m_map["MatViewInv"] = eVAT_MatViewInv;
     m_map["MatModel"] = eVAT_MatModel;
     m_map["MatModelInv"] = eVAT_MatModelInv;
-    m_map["MatViewProj"] = eVAT_MatViewProj;
-    m_map["MatViewProjInv"] = eVAT_MatViewProjInv;
-    m_map["MatModelView"] = eVAT_MatModelView;
-    m_map["MatModelViewInv"] = eVAT_MatModelViewInv;
-    m_map["MatModelViewProj"] = eVAT_MatModelViewProj;
-    m_map["MatModelViewProjInv"] = eVAT_MatModelViewProjInv;
+    m_map["MatProjView"] = eVAT_MatProjView;
+    m_map["MatProjViewInv"] = eVAT_MatProjViewInv;
+    m_map["MatViewModel"] = eVAT_MatViewModel;
+    m_map["MatViewModelInv"] = eVAT_MatViewModelInv;
+    m_map["MatProjViewModel"] = eVAT_MatProjViewModel;
+    m_map["MatProjViewModelInv"] = eVAT_MatProjViewModelInv;
 
     m_map["MatsSkeleton"] = eVAT_MatsSkeleton;
 

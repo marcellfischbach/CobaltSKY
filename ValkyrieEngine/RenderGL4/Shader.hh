@@ -60,6 +60,14 @@ public:
   virtual void Set(vkInt32 x, vkInt32 y, vkInt32 z);
   virtual void Set(vkInt32 x, vkInt32 y, vkInt32 z, vkInt32 w);
 
+  virtual void Set(const vkVector2f &v);
+  virtual void Set(const vkVector3f &v);
+  virtual void Set(const vkVector4f &v);
+
+  virtual void Set(const vkMatrix3f &m);
+  virtual void Set(const vkMatrix4f &m);
+
+
   void SetLocation(GLint location);
   GLint GetLocation() const;
 
@@ -119,6 +127,7 @@ public:
   virtual void RegisterStream(const vkShaderStreamID &id);
 
   virtual vkUInt32 GetNumberOfAttributes() const;
+  virtual IShaderAttribute *GetAttribute(vkUInt32 idx);
   virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id);
 
   virtual vkUInt16 GetNumberOfStreams() const;
@@ -134,6 +143,9 @@ private:
   GLuint m_name;
 
   std::vector<vkShaderGL4*> m_shaders;
+
+  void InitializeSystemStreams();
+  void InitializeSystemAttributes();
 
   void ResizeAttributes(vkUInt32 id);
   void ResizeStreams(vkUInt32 id);

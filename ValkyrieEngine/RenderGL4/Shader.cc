@@ -177,8 +177,31 @@ void vkShaderAttributeGL4::Set(vkInt32 x, vkInt32 y, vkInt32 z, vkInt32 w)
   glUniform4i(m_absLocation, x, y, z, w);
 }
 
+void vkShaderAttributeGL4::Set(const vkVector2f &v)
+{
+  glUniform2f(m_absLocation, v.x, v.y);
+}
+
+void vkShaderAttributeGL4::Set(const vkVector3f &v)
+{
+  glUniform3f(m_absLocation, v.x, v.y, v.z);
+}
+
+void vkShaderAttributeGL4::Set(const vkVector4f &v)
+{
+  glUniform4f(m_absLocation, v.x, v.y, v.z, v.w);
+}
 
 
+void vkShaderAttributeGL4::Set(const vkMatrix3f &m)
+{
+  glUniformMatrix3fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
+}
+
+void vkShaderAttributeGL4::Set(const vkMatrix4f &m)
+{
+  glUniformMatrix4fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
+}
 
 vkShaderStreamGL4::vkShaderStreamGL4()
   : m_name("")
@@ -278,6 +301,23 @@ void vkProgramGL4::Bind()
   glUseProgram(m_name);
 }
 
+void vkProgramGL4::InitializeSystemAttributes()
+{
+  for (vkUInt32 i = 0; i < eVAT_COUNT; ++i)
+  {
+    RegisterAttribute(vkShaderAttributeID(i));
+  }
+}
+
+void vkProgramGL4::InitializeSystemStreams()
+{
+  for (vkUInt32 i = 0; i < eVST_COUNT; ++i)
+  {
+    RegisterStream(vkShaderStreamID(i));
+  }
+
+}
+
 void vkProgramGL4::RegisterAttribute(const vkShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
@@ -305,6 +345,21 @@ void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
 vkUInt32 vkProgramGL4::GetNumberOfAttributes() const
 {
   return (vkUInt32)m_attributes.size();
+}
+
+IShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
+{
+  if (idx >= m_attributes.size())
+  {
+    return 0;
+  }
+  vkShaderAttributeGL4 &attr = m_attributes[idx];
+  if (attr.GetLocation() == -1)
+  {
+    return 0;
+  }
+
+  return &attr;
 }
 
 IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
@@ -406,10 +461,8 @@ bool vkProgramGL4::Link()
     return false;
   }
 
-  for (int i = 0; i < eVST_COUNT; ++i)
-  {
-    RegisterStream(vkShaderStreamID(i));
-  }
+  InitializeSystemAttributes();
+  InitializeSystemStreams();
 
   return true;
 

@@ -37,6 +37,7 @@ public:
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
 
 private:
+  void BindMatrices();
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();
 

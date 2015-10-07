@@ -12,7 +12,7 @@ class VKE_API vkShaderAttributeID
 {
 public:
   vkShaderAttributeID(const vkString &attribute);
-  vkShaderAttributeID(vkUInt32 id);
+  explicit vkShaderAttributeID(vkUInt32 id);
 
   const vkString &GetName() const;
   vkUInt32 GetID() const;

@@ -106,12 +106,12 @@ enum vkVertexAttributeType
   eVAT_MatViewInv,
   eVAT_MatModel,
   eVAT_MatModelInv,
-  eVAT_MatViewProj,
-  eVAT_MatViewProjInv,
-  eVAT_MatModelView,
-  eVAT_MatModelViewInv,
-  eVAT_MatModelViewProj,
-  eVAT_MatModelViewProjInv,
+  eVAT_MatProjView,
+  eVAT_MatProjViewInv,
+  eVAT_MatViewModel,
+  eVAT_MatViewModelInv,
+  eVAT_MatProjViewModel,
+  eVAT_MatProjViewModelInv,
 
   eVAT_MatsSkeleton,
 
@@ -138,12 +138,12 @@ enum vkMatrixType
   eMT_MatViewInv,
   eMT_MatModel,
   eMT_MatModelInv,
-  eMT_MatViewProj,
-  eMT_MatViewProjInv,
-  eMT_MatModelView,
-  eMT_MatModelViewInv,
-  eMT_MatModelViewProj,
-  eMT_MatModelViewProjInv,
+  eMT_MatProjView,
+  eMT_MatProjViewInv,
+  eMT_MatViewModel,
+  eMT_MatViewModelInv,
+  eMT_MatProjViewModel,
+  eMT_MatProjViewModelInv,
   eMT_COUNT
 };
 

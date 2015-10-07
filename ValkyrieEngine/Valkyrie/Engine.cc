@@ -48,10 +48,10 @@ int vkEngine::Run()
 
 
   float vertexBuffer[] = {
-    -0.5f, +0.5f, 0.0f, 1.0f,
-    +0.5f, +0.5f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.0f, 1.0f,
-    +0.5f, -0.5f, 0.0f, 1.0f,
+    -10.0f, +10.0f, 0.0f, 1.0f,
+    +10.0f, +10.0f, 0.0f, 1.0f,
+    -10.0f, -10.0f, 0.0f, 1.0f,
+    +10.0f, -10.0f, 0.0f, 1.0f,
   };
 
   float colorBuffer[] = {
@@ -86,18 +86,24 @@ int vkEngine::Run()
   mesh->AddIndexBuffer(ib, 12);
 
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/mat_solid.xml", "Solid"));
-  printf("material: %p\n", material);
 
   vkMaterialInstance *materialInstance = new vkMaterialInstance();
   materialInstance->SetMaterial(material);
 
-  vkUInt16 idxX = materialInstance->GetIndex(vkShaderAttributeID("AltX"));
-  vkUInt16 idxY = materialInstance->GetIndex(vkShaderAttributeID("AltY"));
+
+  float asp = 768.0f / 1366.0f;
+  vkMatrix4f projMatrix;
+  projMatrix.SetPerspective(-1.0f, 1.0f, -asp, asp, 1.0f, 1024.0f);
+  m_renderer->SetProjectionMatrix(projMatrix);
+
+  vkMatrix4f viewMatrix;
+  vkMatrix4f modelMatrix;
+
+  float v = 0.0f;
+  float m = 0.0f;
 
   const IKeyboard *keyboard = m_window->GetKeyboard();
 
-  
-  float v = 0.0f;
   while (true)
   {
     m_window->UpdateEvents();
@@ -109,9 +115,17 @@ int vkEngine::Run()
     m_renderer->Clear();
 
 
-    materialInstance->Set(idxX, (float)cos(v) * 0.1f);
-    materialInstance->Set(idxY, (float)sin(v) * 0.1f);
-    v += 0.01f;
+    viewMatrix.SetLookAt(vkVector3f(100.0f * (float)cos(v), 100.0f * (float)sin(v), 100.0f), 
+                         vkVector3f(0.0f, 0.0f, 0.0f), 
+                         vkVector3f(0.0f, 0.0f, 1.0f));
+    v += 0.001f;
+
+
+    m_renderer->SetViewMatrix(viewMatrix);
+
+    modelMatrix.SetRotationX(m);
+    m_renderer->SetModelMatrix(modelMatrix);
+    m += 0.0005f;
 
     if (materialInstance->Bind(m_renderer, eRP_GBuffer))
     {

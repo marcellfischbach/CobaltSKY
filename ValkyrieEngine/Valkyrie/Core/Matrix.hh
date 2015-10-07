@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Defs.hh>
+#include <Valkyrie/Core/Vector.hh>
 
 
 struct VKE_API vkMatrix3f
@@ -101,7 +102,7 @@ public:
     this->m33 = m33;
   }
 
-  void Set(const vkMatrix4f &matrix)
+  VK_FORCEINLINE void Set(const vkMatrix4f &matrix)
   {
     m00 = matrix.m00;
     m01 = matrix.m01;
@@ -121,58 +122,340 @@ public:
     m33 = matrix.m33;
   }
 
-  VK_FORCEINLINE static vkMatrix4f &Invert(const vkMatrix4f &m, vkMatrix4f &res)
+  VK_FORCEINLINE void SetXAxis(float x, float y, float z)
   {
-    float v0 = m.m20 * m.m31 - m.m21 * m.m30;
-    float v1 = m.m20 * m.m32 - m.m22 * m.m30;
-    float v2 = m.m20 * m.m33 - m.m23 * m.m30;
-    float v3 = m.m21 * m.m32 - m.m22 * m.m31;
-    float v4 = m.m21 * m.m33 - m.m23 * m.m31;
-    float v5 = m.m22 * m.m33 - m.m23 * m.m32;
+    m00 = x;
+    m01 = y;
+    m02 = z;
+    m03 = 0.0f;
+  }
 
-    float t00 = +(v5 * m.m11 - v4 * m.m12 + v3 * m.m13);
-    float t10 = -(v5 * m.m10 - v2 * m.m12 + v1 * m.m13);
-    float t20 = +(v4 * m.m10 - v2 * m.m11 + v0 * m.m13);
-    float t30 = -(v3 * m.m10 - v1 * m.m11 + v0 * m.m12);
+  VK_FORCEINLINE void SetXAxis(const vkVector3f &v)
+  {
+    m00 = v.x;
+    m01 = v.y;
+    m02 = v.z;
+    m03 = 0.0f;
+  }
 
-    float invDet = 1.0f / (t00 * m.m00 + t10 * m.m01 + t20 * m.m02 + t30 * m.m03);
+  VK_FORCEINLINE void SetYAxis(float x, float y, float z)
+  {
+    m10 = x;
+    m11 = y;
+    m12 = z;
+    m13 = 0.0f;
+  }
 
-    res.m00 = t00 * invDet;
-    res.m10 = t10 * invDet;
-    res.m20 = t20 * invDet;
-    res.m30 = t30 * invDet;
+  VK_FORCEINLINE void SetYAxis(const vkVector3f &v)
+  {
+    m10 = v.x;
+    m11 = v.y;
+    m12 = v.z;
+    m13 = 0.0f;
+  }
 
-    res.m01 = -(v5 * m.m01 - v4 * m.m02 + v3 * m.m03) * invDet;
-    res.m11 = +(v5 * m.m00 - v2 * m.m02 + v1 * m.m03) * invDet;
-    res.m21 = -(v4 * m.m00 - v2 * m.m01 + v0 * m.m03) * invDet;
-    res.m31 = +(v3 * m.m00 - v1 * m.m01 + v0 * m.m02) * invDet;
 
-    v0 = m.m10 * m.m31 - m.m11 * m.m30;
-    v1 = m.m10 * m.m32 - m.m12 * m.m30;
-    v2 = m.m10 * m.m33 - m.m13 * m.m30;
-    v3 = m.m11 * m.m32 - m.m12 * m.m31;
-    v4 = m.m11 * m.m33 - m.m13 * m.m31;
-    v5 = m.m12 * m.m33 - m.m13 * m.m32;
+  VK_FORCEINLINE void SetZAxis(float x, float y, float z)
+  {
+    m20 = x;
+    m21 = y;
+    m22 = z;
+    m23 = 0.0f;
+  }
 
-    res.m02 = +(v5 * m.m01 - v4 * m.m02 + v3 * m.m03) * invDet;
-    res.m12 = -(v5 * m.m00 - v2 * m.m02 + v1 * m.m03) * invDet;
-    res.m22 = +(v4 * m.m00 - v2 * m.m01 + v0 * m.m03) * invDet;
-    res.m32 = -(v3 * m.m00 - v1 * m.m01 + v0 * m.m02) * invDet;
+  VK_FORCEINLINE void SetZAxis(const vkVector3f &v)
+  {
+    m20 = v.x;
+    m21 = v.y;
+    m22 = v.z;
+    m23 = 0.0f;
+  }
 
-    v0 = m.m21 * m.m10 - m.m20 * m.m11;
-    v1 = m.m22 * m.m10 - m.m20 * m.m12;
-    v2 = m.m23 * m.m10 - m.m20 * m.m13;
-    v3 = m.m22 * m.m11 - m.m21 * m.m12;
-    v4 = m.m23 * m.m11 - m.m21 * m.m13;
-    v5 = m.m23 * m.m12 - m.m22 * m.m13;
+  VK_FORCEINLINE vkVector3f &GetXAxis(vkVector3f &res)
+  {
+    res.x = m00;
+    res.y = m01;
+    res.z = m02;
+    return res;
+  }
 
-    res.m03 = -(v5 * m.m01 - v4 * m.m02 + v3 * m.m03) * invDet;
-    res.m13 = +(v5 * m.m00 - v2 * m.m02 + v1 * m.m03) * invDet;
-    res.m23 = -(v4 * m.m00 - v2 * m.m01 + v0 * m.m03) * invDet;
-    res.m33 = +(v3 * m.m00 - v1 * m.m01 + v0 * m.m02) * invDet;
+
+  VK_FORCEINLINE vkVector3f &GetYAxis(vkVector3f &res)
+  {
+    res.x = m10;
+    res.y = m11;
+    res.z = m12;
+    return res;
+  }
+
+
+  VK_FORCEINLINE vkVector3f &GetZAxis(vkVector3f &res)
+  {
+    res.x = m20;
+    res.y = m21;
+    res.z = m22;
+    return res;
+  }
+
+  VK_FORCEINLINE void SetTranslation(float x, float y, float z, float w = 1.0f)
+  {
+    m30 = x;
+    m31 = y;
+    m32 = z;
+    m33 = w;
+  }
+
+  VK_FORCEINLINE void SetTranslation(const vkVector3f &tr, float w = 1.0f)
+  {
+    m30 = tr.x;
+    m31 = tr.y;
+    m32 = tr.z;
+    m33 = w;
+  }
+
+  VK_FORCEINLINE vkVector3f &GetTranslation(vkVector3f &res)
+  {
+    res.x = m30;
+    res.y = m31;
+    res.z = m32;
+    return res;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetRotationX(float angle)
+  {
+    float c = (float)cos(angle);
+    float s = (float)sin(angle);
+    m11 = c;
+    m12 = s;
+    m21 = -s;
+    m22 = c;
+
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetRotationY(float angle)
+  {
+    float c = (float)cos(angle);
+    float s = (float)sin(angle);
+    m00 = c;
+    m02 = -s;
+    m20 = s;
+    m22 = c;
+
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetRotationZ(float angle)
+  {
+    float c = (float)cos(angle);
+    float s = (float)sin(angle);
+    m00 = c;
+    m01 = s;
+    m10 = -s;
+    m11 = c;
+
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &Inverted(vkMatrix4f &res) const
+  {
+    float v0 = m20 * m31 - m21 * m30;
+    float v1 = m20 * m32 - m22 * m30;
+    float v2 = m20 * m33 - m23 * m30;
+    float v3 = m21 * m32 - m22 * m31;
+    float v4 = m21 * m33 - m23 * m31;
+    float v5 = m22 * m33 - m23 * m32;
+
+    float t00 = +(v5 * m11 - v4 * m12 + v3 * m13);
+    float t10 = -(v5 * m10 - v2 * m12 + v1 * m13);
+    float t20 = +(v4 * m10 - v2 * m11 + v0 * m13);
+    float t30 = -(v3 * m10 - v1 * m11 + v0 * m12);
+
+    float invDet = 1.0f / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
+
+    float lm00 = t00 * invDet;
+    float lm10 = t10 * invDet;
+    float lm20 = t20 * invDet;
+    float lm30 = t30 * invDet;
+
+    float lm01 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm11 = +(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm21 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm31 = +(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    v0 = m10 * m31 - m11 * m30;
+    v1 = m10 * m32 - m12 * m30;
+    v2 = m10 * m33 - m13 * m30;
+    v3 = m11 * m32 - m12 * m31;
+    v4 = m11 * m33 - m13 * m31;
+    v5 = m12 * m33 - m13 * m32;
+
+    float lm02 = +(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm12 = -(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm22 = +(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm32 = -(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    v0 = m21 * m10 - m20 * m11;
+    v1 = m22 * m10 - m20 * m12;
+    v2 = m23 * m10 - m20 * m13;
+    v3 = m22 * m11 - m21 * m12;
+    v4 = m23 * m11 - m21 * m13;
+    v5 = m23 * m12 - m22 * m13;
+
+    float lm03 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm13 = +(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm23 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm33 = +(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    res.m00 = lm00;
+    res.m01 = lm01;
+    res.m02 = lm02;
+    res.m03 = lm03;
+
+    res.m10 = lm10;
+    res.m11 = lm11;
+    res.m12 = lm12;
+    res.m13 = lm13;
+
+    res.m20 = lm20;
+    res.m21 = lm21;
+    res.m22 = lm22;
+    res.m23 = lm23;
+
+    res.m30 = lm30;
+    res.m31 = lm31;
+    res.m32 = lm32;
+    res.m33 = lm33;
+
 
     return res;
   }
+
+  VK_FORCEINLINE vkMatrix4f &Invert()
+  {
+    float v0 = m20 * m31 - m21 * m30;
+    float v1 = m20 * m32 - m22 * m30;
+    float v2 = m20 * m33 - m23 * m30;
+    float v3 = m21 * m32 - m22 * m31;
+    float v4 = m21 * m33 - m23 * m31;
+    float v5 = m22 * m33 - m23 * m32;
+
+    float t00 = +(v5 * m11 - v4 * m12 + v3 * m13);
+    float t10 = -(v5 * m10 - v2 * m12 + v1 * m13);
+    float t20 = +(v4 * m10 - v2 * m11 + v0 * m13);
+    float t30 = -(v3 * m10 - v1 * m11 + v0 * m12);
+
+    float invDet = 1.0f / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
+
+    float lm00 = t00 * invDet;
+    float lm10 = t10 * invDet;
+    float lm20 = t20 * invDet;
+    float lm30 = t30 * invDet;
+
+    float lm01 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm11 = +(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm21 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm31 = +(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    v0 = m10 * m31 - m11 * m30;
+    v1 = m10 * m32 - m12 * m30;
+    v2 = m10 * m33 - m13 * m30;
+    v3 = m11 * m32 - m12 * m31;
+    v4 = m11 * m33 - m13 * m31;
+    v5 = m12 * m33 - m13 * m32;
+
+    float lm02 = +(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm12 = -(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm22 = +(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm32 = -(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    v0 = m21 * m10 - m20 * m11;
+    v1 = m22 * m10 - m20 * m12;
+    v2 = m23 * m10 - m20 * m13;
+    v3 = m22 * m11 - m21 * m12;
+    v4 = m23 * m11 - m21 * m13;
+    v5 = m23 * m12 - m22 * m13;
+
+    float lm03 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+    float lm13 = +(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+    float lm23 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+    float lm33 = +(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+
+    m00 = lm00;
+    m01 = lm01;
+    m02 = lm02;
+    m03 = lm03;
+
+    m10 = lm10;
+    m11 = lm11;
+    m12 = lm12;
+    m13 = lm13;
+
+    m20 = lm20;
+    m21 = lm21;
+    m22 = lm22;
+    m23 = lm23;
+
+    m30 = lm30;
+    m31 = lm31;
+    m32 = lm32;
+    m33 = lm33;
+
+
+    return *this;
+  }
+
+  vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  {
+    vkVector3f xAxis, yAxis, zAxis;
+    vkVector3f::Sub(eye, spot, zAxis).Normalize();
+    vkVector3f::Cross(up, zAxis, xAxis).Normalize();
+    vkVector3f::Cross(zAxis, xAxis, yAxis);
+
+    SetXAxis(xAxis.x, yAxis.x, zAxis.x);
+    SetYAxis(xAxis.y, yAxis.y, zAxis.y);
+    SetZAxis(xAxis.z, yAxis.z, zAxis.z);
+
+    SetTranslation(-xAxis.Dot(eye), -yAxis.Dot(eye), -zAxis.Dot(eye));
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetLookAtInv(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  {
+    vkVector3f xAxis, yAxis, zAxis;
+
+    vkVector3f::Sub(eye, spot, zAxis).Normalize();
+    vkVector3f::Cross(up, zAxis, xAxis).Normalize();
+    vkVector3f::Cross(zAxis, xAxis, yAxis);
+
+    SetXAxis(xAxis);
+    SetYAxis(yAxis);
+    SetZAxis(zAxis);
+
+    SetTranslation(eye);
+
+    return *this;
+  }
+
+
+  VK_FORCEINLINE vkMatrix4f &SetPerspective(float l, float r, float b, float t, float n, float f)
+  {
+
+    float z2 = 2.0f * n;
+    float dx = r - l;
+    float dy = t - b;
+    float dz = f - n;
+    float sx = r + l;
+    float sy = t + b;
+    float sz = n + f;
+
+    m00 = z2 / dx; m10 = 0.0f;    m20 = sx / dx;  m30 = 0.0f;
+    m01 = 0.0f;    m11 = z2 / dy; m21 = sy / dy;  m31 = 0.0f;
+    m02 = 0.0f;    m12 = 0.0f;    m22 = -sz / dz; m32 = -2.0f*n*f / dz;
+    m03 = 0.0f;    m13 = 0.0f;    m23 = -1.0f;    m33 = 0.0f;
+    return *this;
+  }
+
 
   VK_FORCEINLINE static vkMatrix4f &Mult(const vkMatrix4f &m0, const vkMatrix4f &m1, vkMatrix4f &r)
   {
@@ -214,4 +497,7 @@ public:
     r.m33 = m33;
     return r;
   }
+
+
+
 };

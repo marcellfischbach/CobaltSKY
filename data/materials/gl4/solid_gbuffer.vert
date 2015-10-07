@@ -4,13 +4,15 @@
 attribute vec4 vk_Position;
 attribute vec4 vk_Color;
 
-uniform float vk_AltX;
-uniform float vk_AltY;
+uniform mat4 vk_MatView;
+uniform mat4 vk_MatModel;
+uniform mat4 vk_MatProjViewModel;
+
 
 varying vec4 color;
 
 void main ()
 {
-	gl_Position = vk_Position + vec4(vk_AltX, vk_AltY, 0.0, 0.0);
+	gl_Position = vk_MatProjViewModel * vk_Position;
 	color = vk_Color;
 }

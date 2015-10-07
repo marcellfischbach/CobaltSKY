@@ -7,8 +7,6 @@
 		</passes>
 		
 		<parameters>
-			<parameter type="float">AltX</parameter>
-			<parameter type="float">AltY</parameter>
 		</parameters>
 		
 	</material>
