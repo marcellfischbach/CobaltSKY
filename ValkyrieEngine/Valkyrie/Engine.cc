@@ -9,6 +9,7 @@
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/Scene/GeometryNode.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <math.h>
 
@@ -90,6 +91,9 @@ int vkEngine::Run()
   vkMaterialInstance *materialInstance = new vkMaterialInstance();
   materialInstance->SetMaterial(material);
 
+  vkGeometryNode *geometryNode = new vkGeometryNode();
+  geometryNode->SetMesh(mesh);
+  geometryNode->SetMaterial(materialInstance);
 
   float asp = 768.0f / 1366.0f;
   vkMatrix4f projMatrix;
@@ -115,31 +119,22 @@ int vkEngine::Run()
     m_renderer->Clear();
 
 
-    viewMatrix.SetLookAt(vkVector3f(100.0f * (float)cos(v), 100.0f * (float)sin(v), 100.0f), 
+    viewMatrix.SetLookAt(vkVector3f(20.0f * (float)cos(v), 20.0f * (float)sin(v), 20.0f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
-    v += 0.001f;
+    v += 0.005f;
 
 
     m_renderer->SetViewMatrix(viewMatrix);
 
-    modelMatrix.SetRotationX(m);
-    m_renderer->SetModelMatrix(modelMatrix);
-    m += 0.0005f;
+    vkMatrix4f mm = geometryNode->GetMatrix();
+    mm.SetRotationX(m);
+    geometryNode->SetMatrix(mm);
+    m += 0.00f;
 
-    if (materialInstance->Bind(m_renderer, eRP_GBuffer))
-    {
-      /*
-      m_renderer->SetShader(shader);
-      IShaderAttribute *a = shader->GetAttribute(attrib);
-      if (a)
-      {
-        shader->GetAttribute(attrib)->Set((float)cos(v) * 0.1f, (float)sin(v) * 0.1f);
-      }
-      v += 0.01f;
-      */
-      mesh->Render(m_renderer);
-    }
+    geometryNode->UpdateStates();
+
+    geometryNode->Render(m_renderer, eRP_GBuffer);
     m_window->Present();
 
   }

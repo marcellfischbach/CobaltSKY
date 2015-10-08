@@ -75,6 +75,10 @@ source_group(
 	)
 	
 set(SOURCE_GRAPHICS_SCENE
+  Graphics/Scene/GeometryNode.cc
+  Graphics/Scene/GeometryNode.hh
+  Graphics/Scene/GroupNode.cc
+  Graphics/Scene/GroupNode.hh
 	Graphics/Scene/Node.cc
 	Graphics/Scene/Node.hh
   Graphics/Scene/SpatialNode.cc
