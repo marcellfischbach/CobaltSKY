@@ -18,8 +18,6 @@ source_group(
 
 
 set(SOURCE_CORE
-  Core/BoundingVolume.cc
-  Core/BoundingVolume.hh
   Core/FileInfo.cc
   Core/FileInfo.hh
   Core/FileStd.cc
@@ -27,7 +25,6 @@ set(SOURCE_CORE
   Core/IFile.hh
   Core/Library.cc
   Core/Library.hh
-  Core/Matrix.hh
 	Core/Object.cc
 	Core/Object.hh
   Core/ResourceManager.cc
@@ -37,7 +34,6 @@ set(SOURCE_CORE
   Core/String.hh
   Core/Thread.cc
   Core/Thread.hh
-  Core/Vector.hh
   Core/VFS.cc
   Core/VFS.hh
   Core/Xml.cc
@@ -81,6 +77,7 @@ set(SOURCE_GRAPHICS_SCENE
   Graphics/Scene/GroupNode.hh
 	Graphics/Scene/Node.cc
 	Graphics/Scene/Node.hh
+  Graphics/Scene/Scan.hh
   Graphics/Scene/SpatialNode.cc
   Graphics/Scene/SpatialNode.hh
 	)
@@ -89,6 +86,22 @@ source_group(
 	"ValkyrieEngine\\Graphics\\Scene"
 	FILES
 	${SOURCE_GRAPHICS_SCENE}
+	)
+	
+set(SOURCE_MATH
+  Math/Clipper.cc
+  Math/Clipper.hh
+	Math/BoundingVolume.cc
+	Math/BoundingVolume.hh
+	Math/Matrix.hh
+  Math/Plane.hh
+	Math/Vector.hh
+	)
+	
+source_group(
+	"ValkyrieEngine\\Math"
+	FILES
+	${SOURCE_MATH}
 	)
 
 set(SOURCE_WINDOW
@@ -108,6 +121,7 @@ set(ALL_SOURCES
 	${SOURCE_CORE}
   ${SOURCE_GRAPHICS}
 	${SOURCE_GRAPHICS_SCENE}
+	${SOURCE_MATH}
   ${SOURCE_WINDOW}
 	)
 

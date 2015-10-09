@@ -87,8 +87,8 @@ void vkMesh::Render(IRenderer *renderer, vkUInt8 lod)
   renderer->SetIndexBuffer(index.m_indexBuffer);
   for (vkSize i = 0, in = m_vertexBuffer.size(); i < in; ++i)
   {
-    renderer->SetVertexBuffer(i, m_vertexBuffer[i]);
+    renderer->SetVertexBuffer((vkUInt16)i, m_vertexBuffer[i]);
   }
   renderer->SetVertexDeclaration(m_vertexDeclaration);
-  renderer->RenderIndexed(m_primitiveType, index.m_count, m_indexType);
+  renderer->RenderIndexed(m_primitiveType, (vkUInt32)index.m_count, m_indexType);
 }

@@ -2,12 +2,12 @@
 
 
 #include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Matrix.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Core/Vector.hh>
 #include <Valkyrie/Graphics/IShader.refl.hh>
 #include <Valkyrie/Graphics/ShaderID.hh>
+#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Enums.hh>
 using std::string;
 

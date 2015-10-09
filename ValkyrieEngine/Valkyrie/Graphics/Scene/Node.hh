@@ -2,14 +2,16 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/BoundingVolume.hh>
+#include <Valkyrie/Graphics/Scene/Scan.hh>
+#include <Valkyrie/Math/BoundingVolume.hh>
+#include <Valkyrie/Math/Clipper.hh>
 #include <Valkyrie/Graphics/Scene/Node.refl.hh>
 
 
 class vkGroupNode;
 
 
-VK_CLASS();
+VK_INTERFACE();
 class VKE_API vkNode : public vkObject
 {
   friend class vkGroupNode;
@@ -21,7 +23,6 @@ public:
   };
 
 public:
-  vkNode();
   virtual ~vkNode();
 
 
@@ -48,9 +49,13 @@ public:
   bool AttachTo(vkGroupNode *parent);
   void DetachFromParent();
 
+  virtual void Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback) = 0;
+
   virtual void UpdateStates();
 
 protected:
+  vkNode();
+
   void FlagUpdateBoundingBox();
 
 private:

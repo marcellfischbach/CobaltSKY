@@ -2,7 +2,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Defs.hh>
-#include <Valkyrie/Core/Vector.hh>
+#include <Valkyrie/Math/Vector.hh>
 
 
 struct VKE_API vkMatrix3f

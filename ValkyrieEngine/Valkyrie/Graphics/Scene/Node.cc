@@ -75,3 +75,4 @@ void vkNode::UpdateStates()
     UpdateBoundingBox();
   }
 }
+

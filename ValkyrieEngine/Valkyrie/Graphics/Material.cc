@@ -144,7 +144,7 @@ bool vkMaterialInstance::Bind(IRenderer *renderer, vkRenderPass pass)
     return false;
   }
 
-  for (vkUInt16 i = 0, in = m_parameters.size(); i < in; ++i)
+  for (vkUInt16 i = 0, in = (vkUInt16)m_parameters.size(); i < in; ++i)
   {
     ShaderParameter &param = m_parameters[i];
     IShaderAttribute *attr = shader->GetAttribute(param.m_id);

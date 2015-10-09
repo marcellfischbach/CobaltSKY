@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Vector.hh>
+#include <Valkyrie/Math/Vector.hh>
 
 
 class VKE_API vkBoundingBox
@@ -33,6 +33,11 @@ public:
   VK_FORCEINLINE const vkVector3f &GetCenter() const
   {
     return m_center;
+  }
+
+  VK_FORCEINLINE const vkVector3f *GetPoints() const
+  {
+    return m_points;
   }
 
 private:

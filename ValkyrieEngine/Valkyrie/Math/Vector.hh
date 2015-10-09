@@ -381,7 +381,7 @@ public:
     return *this;
   }
 
-  VK_FORCEINLINE vkVector3f &Normalized(vkVector3f &r)
+  VK_FORCEINLINE vkVector3f &Normalized(vkVector3f &r) const
   {
     float l = Length();
     r.x = x / l;
