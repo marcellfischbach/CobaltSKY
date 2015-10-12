@@ -3,6 +3,8 @@
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
+#include <Valkyrie/Graphics/Image.hh>
+#include <Valkyrie/Graphics/ImageLoader.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IShader.hh>
@@ -46,6 +48,9 @@ int vkEngine::Run()
 
   RegisterLoaders();
 
+
+  vkImage* image = vkResourceManager::Get()->Load<vkImage>(vkResourceLocator("${textures}/fieldstone_diffuse.png"));
+  printf("image: %p\n", image);
 
 
   float vertexBuffer[] = {
@@ -148,4 +153,5 @@ void vkEngine::RegisterLoaders()
 {
   vkResourceManager *mgr = vkResourceManager::Get();
   mgr->RegisterLoader(new vkMaterialLoader());
+  mgr->RegisterLoader(new vkPNGImageLoader());
 }

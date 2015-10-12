@@ -48,12 +48,14 @@ add_definitions(-DVK_LINUX)
 endif()
 
 find_package(OpenGL)
+find_package(PNG)
 
 
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
 
 include_directories(${SDL_INCLUDE_DIR})
+include_directories(${PNG_INCLUDE_DIRS})
 include_directories(${ValkyrieEngine_SOURCE_DIR}/3rdparty)
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)

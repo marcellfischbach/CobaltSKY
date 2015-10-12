@@ -49,7 +49,7 @@ public:
   bool AttachTo(vkGroupNode *parent);
   void DetachFromParent();
 
-  virtual void Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback) = 0;
+//  virtual void Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback) = 0;
 
   virtual void UpdateStates();
 

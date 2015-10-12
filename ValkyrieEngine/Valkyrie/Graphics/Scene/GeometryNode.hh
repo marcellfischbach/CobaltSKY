@@ -29,7 +29,7 @@ public:
 
   void Render(IRenderer *renderer, vkRenderPass renderPass, vkUInt8 lod = 0);
 
-  virtual void Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
+  //virtual void Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
 
 private:
   vkMesh *m_mesh;

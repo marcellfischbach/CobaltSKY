@@ -49,6 +49,10 @@ source_group(
 
 set(SOURCE_GRAPHICS
   Graphics/IIndexBuffer.hh
+  Graphics/Image.cc
+  Graphics/Image.hh
+  Graphics/ImageLoader.cc
+  Graphics/ImageLoader.hh
   Graphics/IRenderer.hh
   Graphics/IShader.hh
   Graphics/IVertexBuffer.hh
@@ -141,6 +145,7 @@ add_library(ValkyrieEngine SHARED
 
 target_link_libraries(ValkyrieEngine
   TiXml
+  ${PNG_LIBRARIES}
   )
 
 VK_INSTALL_MOCCER(ValkyrieEngine Valkyrie VKE_API ALL_SOURCES)
