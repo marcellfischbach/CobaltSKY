@@ -671,5 +671,14 @@ public:
   }
 
 
+  VK_FORCEINLINE bool operator== (const vkVector4f &o) const
+  {
+    return x == o.x && y == o.y && z == o.z && w == o.w;
+  }
+
+  VK_FORCEINLINE bool operator!= (const vkVector4f &o) const
+  {
+    return !(x == o.x && y == o.y && z == o.z && w == o.w);
+  }
 
 };

@@ -7,6 +7,8 @@
 
 class IndexBufferGL4;
 class vkProgramGL4;
+class vkSamplerGL4;
+class vkTexture2DGL4;
 class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
@@ -30,6 +32,8 @@ public:
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
   virtual void SetShader(IShader *shader);
+  virtual void SetTexture(vkTextureUnit unit, ITexture *texture);
+  virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
 
   virtual void Clear();
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
@@ -48,6 +52,8 @@ private:
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
+
+  vkSamplerGL4 *m_samplers[eTU_COUNT];
 
   vkMatrix4f m_matrices[eMT_COUNT];
   bool m_matrixNeedsRecalculation[eMT_COUNT];

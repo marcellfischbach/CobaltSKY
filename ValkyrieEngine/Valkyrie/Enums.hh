@@ -159,6 +159,53 @@ enum vkDataType
   eDT_Double
 };
 
+enum vkFilterMode
+{
+  eFM_MinMagMipNearest,
+  eFM_MinMagNearestMipLinear,
+  eFM_MinNearestMagLinearMipNearest,
+  eFM_MinNearestMagMipLinear,
+  eFM_MinLinearMagMipNearest,
+  eFM_MinLinearMagNearestMipLinear,
+  eFM_MinMagLinearMipNearest,
+  eFM_MinMagMipLinear,
+  eFM_Anisotropic,
+};
+
+enum vkTextureAddressMode
+{
+  eTAM_Repeat,
+  eTAM_RepeatMirror,
+  eTAM_Clamp,
+  eTAM_ClampBorder,
+  eTAM_MirrowOnce,
+};
+
+enum vkTextureUnit
+{
+  eTU_TextureUnit0,
+  eTU_TextureUnit1,
+  eTU_TextureUnit2,
+  eTU_TextureUnit3,
+  eTU_TextureUnit4,
+  eTU_TextureUnit5,
+  eTU_TextureUnit6,
+  eTU_TextureUnit7,
+  eTU_TextureUnit8,
+  eTU_TextureUnit9,
+  eTU_COUNT
+};
+
+enum vkTextureType
+{
+  eTT_Texture1D,
+  eTT_Texture2D,
+  eTT_Texture3D,
+  eTT_TextureCube,
+  eTT_Texture1DArray,
+  eTT_Texture2DArray,
+};
+
 enum vkShaderParameterType
 {
   eSPT_Float,
@@ -174,6 +221,30 @@ enum vkShaderParameterType
   eSPT_Texture,
 };
 
+enum vkPixelFormat
+{
+  ePF_R32G32B32A32F,
+  ePF_R32G32B32A32I,
+  ePF_R32G32B32F,
+  ePF_R32G32B32I,
+  ePF_R32G32F,
+  ePF_R32G32I,
+  ePF_R32F,
+  ePF_R32I,
+  ePF_R16G16B16A16F,
+  ePF_R16G16B16A16I,
+  ePF_R16G16B16F,
+  ePF_R16G16B16I,
+  ePF_R16G16F,
+  ePF_R16G16I,
+  ePF_R16F,
+  ePF_R16I,
+  ePF_R8G8B8A8I,
+  ePF_R8G8B8I,
+  ePF_R8G8I,
+  ePF_R8I,
+  ePF_D24S8,
+};
 
 enum vkRenderPass
 {

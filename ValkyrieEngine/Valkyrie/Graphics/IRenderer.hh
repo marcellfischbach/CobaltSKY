@@ -10,7 +10,9 @@
 struct IIndexBuffer;
 struct IVertexBuffer;
 struct IVertexDeclaration;
+struct ISampler;
 struct IShader;
+struct ITexture;
 struct vkVertexElement;
 
 VK_INTERFACE()
@@ -50,6 +52,8 @@ struct VKE_API IRenderer : public IObject
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
   virtual void SetShader(IShader *shader) = 0;
+  virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;
+  virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
 
   virtual void Clear() = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;

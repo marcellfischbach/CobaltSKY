@@ -14,6 +14,8 @@ set(SOURCE
   Shader.hh
   ShaderLoader.cc
   ShaderLoader.hh
+  TextureGL4.cc
+  TextureGL4.hh
   VertexBufferGL4.cc
   VertexBufferGL4.hh
   VertexDeclarationGL4.cc

@@ -43,3 +43,11 @@ static GLenum primitiveTypeMap[] = {
   GL_LINES,
   GL_TRIANGLES
 };
+
+static GLenum textureAddressModeMap[] = {
+  GL_REPEAT,                  // eTAM_Repeat,
+  GL_MIRRORED_REPEAT,         // eTAM_RepeatMirror,
+  GL_CLAMP_TO_EDGE,           // eTAM_Clamp,
+  GL_CLAMP_TO_BORDER,         // eTAM_ClampBorder,
+  GL_MIRROR_CLAMP_TO_EDGE_EXT //eTAM_MirrowOnce,
+};

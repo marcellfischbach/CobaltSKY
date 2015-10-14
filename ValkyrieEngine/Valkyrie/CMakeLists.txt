@@ -55,6 +55,7 @@ set(SOURCE_GRAPHICS
   Graphics/ImageLoader.hh
   Graphics/IRenderer.hh
   Graphics/IShader.hh
+  Graphics/ITexture.hh
   Graphics/IVertexBuffer.hh
   Graphics/IVertexDeclaration.hh
   Graphics/Material.cc
