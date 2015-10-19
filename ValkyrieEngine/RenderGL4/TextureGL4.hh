@@ -55,24 +55,38 @@ private:
 };
 
 VK_INTERFACE();
-class VKGL4_API vkTextureGL4 : public virtual IObject
+class VKGL4_API vkTextureGL4 : public virtual ITexture
 {
+  VK_CLASS_GEN;
 public:
-  vkTextureGL4(GLenum target);
   virtual ~vkTextureGL4();
+
+  virtual bool Initialize();
+
+  virtual vkTextureType GetType() const ;
+
+  virtual void SetSampler(ISampler *sampler);
+  virtual ISampler *GetSampler();
+  virtual const ISampler *GetSampler() const;
+
 
   void Bind();
 
 protected:
+  vkTextureGL4(vkTextureType type);
+
   GLuint m_name;
+  GLenum m_target;
 
 private:
-  GLenum m_target;
+  vkTextureType m_type;
+
+  ISampler *m_sampler;
 
 };
 
 VK_CLASS();
-class VKGL4_API vkTexture2DGL4 : public ITexture2D
+class VKGL4_API vkTexture2DGL4 : public virtual vkTextureGL4, public virtual ITexture2D
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -80,30 +94,21 @@ public:
   vkTexture2DGL4();
   virtual ~vkTexture2DGL4();
 
-  void Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
+  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
 
-  // Implementation of the ITexture interface
-  vkTextureType GetType() const;
-
-  virtual void SetSampler(ISampler *sampler);
-  virtual ISampler* GetSampler();
-  virtual const ISampler* GetSampler() const;
 
   // Implementation of the ITexture2D interface
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
 
-  virtual void CopyData(vkUInt8 layer, vkSize size, const void *data);
-
+  virtual bool CopyData(vkUInt8 layer, vkPixelFormat format, const void *data);
 
 private:
-  ISampler *m_sampler;
+  vkPixelFormat m_format;
 
+  vkUInt16 m_width;
+  vkUInt16 m_height;
 };
 
 
-vkTextureType vkTexture2DGL4::GetType() const
-{
-  return eTT_Texture2D;
-}
 

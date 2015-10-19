@@ -174,3 +174,122 @@ const vkVector4f &vkSamplerGL4::GetBorderColor() const
 {
   return m_borderColor;
 }
+
+
+
+
+
+vkTextureGL4::vkTextureGL4(vkTextureType type)
+  : ITexture()
+  , m_name(0)
+  , m_type(type)
+  , m_target(textureTypeMap[type])
+  , m_sampler(0)
+{
+
+}
+
+vkTextureGL4::~vkTextureGL4()
+{
+  if (m_name)
+  {
+    glDeleteTextures(1, &m_name);
+    m_name = 0;
+  }
+}
+
+bool vkTextureGL4::Initialize()
+{
+  glGenTextures(1, &m_name);
+  return m_name != 0;
+}
+
+void vkTextureGL4::SetSampler(ISampler *sampler)
+{
+  VK_SET(m_sampler, sampler);
+}
+
+ISampler *vkTextureGL4::GetSampler()
+{
+  return m_sampler;
+}
+
+const ISampler *vkTextureGL4::GetSampler() const
+{
+  return m_sampler;
+}
+
+void vkTextureGL4::Bind()
+{
+  glBindTexture(m_target, m_name);
+}
+
+vkTextureType vkTextureGL4::GetType() const
+{
+  return m_type;
+}
+
+
+vkTexture2DGL4::vkTexture2DGL4()
+  : vkTextureGL4(eTT_Texture2D)
+  , ITexture2D()
+{
+
+}
+
+vkTexture2DGL4::~vkTexture2DGL4()
+{
+
+}
+
+bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
+{
+  if (!vkTextureGL4::Initialize())
+  {
+    return false;
+  }
+
+  m_format = format;
+  m_width = width;
+  m_height = height;
+
+  Bind();
+  glTexImage2D(m_target, 0, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
+
+  return true;
+}
+
+bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *data)
+{
+  vkUInt16 layerWidth = m_width << layer;
+  vkUInt16 layerHeight = m_height << layer;
+  if (layerWidth == 0 && layerHeight == 0)
+  {
+    return false;
+  }
+  if (layerWidth == 0)
+  {
+    layerWidth = 1;
+  }
+  if (layerHeight == 0)
+  {
+    layerHeight = 1;
+  }
+
+  Bind();
+  glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
+
+  return true;
+}
+
+
+vkUInt16 vkTexture2DGL4::GetWidth() const
+{
+  return m_width;
+}
+
+vkUInt16 vkTexture2DGL4::GetHeight() const
+{
+  return m_height;
+}
+

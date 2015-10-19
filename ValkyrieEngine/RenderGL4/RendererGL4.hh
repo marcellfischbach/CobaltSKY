@@ -8,7 +8,7 @@
 class IndexBufferGL4;
 class vkProgramGL4;
 class vkSamplerGL4;
-class vkTexture2DGL4;
+class vkTextureGL4;
 class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
@@ -54,9 +54,16 @@ private:
   vkProgramGL4 *m_program;
 
   vkSamplerGL4 *m_samplers[eTU_COUNT];
+  bool m_samplerChanged[eTU_COUNT];
+
+  vkTextureGL4 *m_textures[eTU_COUNT];
+  bool m_textureChanged[eTU_COUNT];
 
   vkMatrix4f m_matrices[eMT_COUNT];
   bool m_matrixNeedsRecalculation[eMT_COUNT];
+
+  void InvalidateSamplers();
+  void InvalidateTextures();
 
 };
 

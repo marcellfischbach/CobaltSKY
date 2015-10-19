@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable: 4250)
+
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Enums.hh>
@@ -54,13 +56,13 @@ struct VKE_API ITexture : public virtual IObject
 };
 
 VK_INTERFACE();
-struct VKE_API ITexture2D : public ITexture
+struct VKE_API ITexture2D : public virtual ITexture
 {
   VK_CLASS_GEN;
 
   virtual vkUInt16 GetWidth() const = 0;
   virtual vkUInt16 GetHeight() const = 0;
 
-  virtual void CopyData(vkUInt8 layer, vkSize size, const void *data) = 0;
+  virtual bool CopyData(vkUInt8 layer, vkPixelFormat format, const void *data) = 0;
 
 };

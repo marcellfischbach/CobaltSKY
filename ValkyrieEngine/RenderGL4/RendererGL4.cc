@@ -5,6 +5,7 @@
 #include <RenderGL4/VertexDeclarationGL4.hh>
 #include <RenderGL4/Shader.hh>
 #include <RenderGL4/ShaderLoader.hh>
+#include <RenderGL4/TextureGL4.hh>
 #include <RenderGL4/MappingGL4.hh>
 #include <RenderGL4/DefinesGL4.hh>
 #include <GL/glew.h>
@@ -42,9 +43,14 @@ RendererGL4::RendererGL4()
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
 
+  memset(m_samplers, 0, sizeof(m_samplers));
+  memset(m_textures, 0, sizeof(m_textures));
+  InvalidateSamplers();
+  InvalidateTextures();
 
   vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
   vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
+
 }
 
 
@@ -218,12 +224,38 @@ void RendererGL4::SetIndexBuffer(IIndexBuffer *indexBuffer)
 void RendererGL4::SetShader(IShader *shader)
 {
   vkProgramGL4 *prog = static_cast<vkProgramGL4*>(shader);
-  VK_SET(m_program, prog);
-
-  if (prog)
+  if (prog != m_program)
   {
-    // we use the new program
-    prog->Bind();
+    VK_SET(m_program, prog);
+
+    if (prog)
+    {
+      // we use the new program
+      prog->Bind();
+    }
+
+    InvalidateSamplers();
+    InvalidateTextures();
+  }
+}
+
+void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
+{
+  vkTextureGL4 *textureGL = texture ? vkQueryClass<vkTextureGL4>(texture) : 0;
+  if (m_textures[unit] != textureGL)
+  {
+    VK_SET(m_textures[unit], textureGL);
+    m_textureChanged[unit] = true;
+  }
+}
+
+void RendererGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
+{
+  vkSamplerGL4 *samplerGL = sampler ? vkQueryClass<vkSamplerGL4>(sampler) : 0;
+  if (m_samplers[unit] != samplerGL)
+  {
+    VK_SET(m_samplers[unit], samplerGL);
+    m_samplerChanged[unit] = true;
   }
 }
 
@@ -293,3 +325,21 @@ void RendererGL4::UnbindVertexDeclaration()
 
 }
 
+
+
+void RendererGL4::InvalidateSamplers()
+{
+  for (int i = 0; i < eTU_COUNT; ++i)
+  {
+    m_samplerChanged[i] = true;
+  }
+}
+
+
+void RendererGL4::InvalidateTextures()
+{
+  for (int i = 0; i < eTU_COUNT; ++i)
+  {
+    m_textureChanged[i] = true;
+  }
+}
