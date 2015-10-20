@@ -13,6 +13,7 @@ struct IVertexDeclaration;
 struct ISampler;
 struct IShader;
 struct ITexture;
+struct ITexture2D;
 struct vkVertexElement;
 
 VK_INTERFACE()
@@ -28,6 +29,8 @@ struct VKE_API IRenderer : public IObject
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements) = 0;
+  virtual ISampler *CreateSampler() = 0;
+  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height) = 0;
   /**
    * @}
    */
@@ -52,6 +55,7 @@ struct VKE_API IRenderer : public IObject
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
   virtual void SetShader(IShader *shader) = 0;
+  virtual vkTextureUnit BindTexture(ITexture *texture) = 0;
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
 

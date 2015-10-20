@@ -12,6 +12,8 @@
 
 #define vkInvalidShaderParamIndex (~0x00)
 
+struct ITexture;
+
 VK_CLASS();
 class VKE_API vkMaterial : public vkObject
 {
@@ -66,6 +68,7 @@ public:
   vkUInt16 GetIndex(const vkShaderAttributeID &id) const;
   const vkShaderAttributeID &GetID(vkUInt16 idx) const;
   void Set(vkUInt16 idx, float v);
+  void Set(vkUInt16 idx, ITexture *texture);
 
 private:
   vkMaterial *m_material;
@@ -78,6 +81,7 @@ private:
     {
       float m_float[16];
       int m_int[16];
+      ITexture *m_texture;
       // Add Texture later.
     };
     vkShaderAttributeID m_id;

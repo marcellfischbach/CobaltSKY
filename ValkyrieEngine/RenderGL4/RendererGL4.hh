@@ -22,6 +22,9 @@ public:
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
+  virtual ISampler *CreateSampler();
+  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
+
 
 
   virtual void SetProjectionMatrix(const vkMatrix4f &matrix);
@@ -32,6 +35,7 @@ public:
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
   virtual void SetShader(IShader *shader);
+  virtual vkTextureUnit BindTexture(ITexture *texture);
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture);
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
 
@@ -52,6 +56,8 @@ private:
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
+
+  vkTextureUnit m_nextTextureUnit;
 
   vkSamplerGL4 *m_samplers[eTU_COUNT];
   bool m_samplerChanged[eTU_COUNT];

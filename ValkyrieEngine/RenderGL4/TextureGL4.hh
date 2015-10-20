@@ -17,6 +17,8 @@ public:
 
   bool Initialize();
 
+  void Bind(GLuint unit);
+
   virtual void SetFilter(vkFilterMode filter);
   virtual vkFilterMode GetFilter() const;
 
@@ -57,7 +59,7 @@ private:
 VK_INTERFACE();
 class VKGL4_API vkTextureGL4 : public virtual ITexture
 {
-  VK_CLASS_GEN;
+  VK_CLASS_GEN_OBJECT;
 public:
   virtual ~vkTextureGL4();
 
@@ -88,7 +90,7 @@ private:
 VK_CLASS();
 class VKGL4_API vkTexture2DGL4 : public virtual vkTextureGL4, public virtual ITexture2D
 {
-  VK_CLASS_GEN_OBJECT;
+  VK_CLASS_GEN;
 public:
 
   vkTexture2DGL4();

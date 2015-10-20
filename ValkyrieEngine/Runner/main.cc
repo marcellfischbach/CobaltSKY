@@ -16,7 +16,11 @@ int main(int argc, char **argv)
 
   // initialize the window
   SDLWindow *window = new SDLWindow();
-  if (!window->InitializeOpenGL("ValkyrieEngine Runner", 1366, 768, 100, 100, false, 4, 4))
+  vkInt16 posX = 100;
+  vkInt16 posY = 100;
+
+  posX = -1500;
+  if (!window->InitializeOpenGL("ValkyrieEngine Runner", 1366, 768, posX, posY, false, 4, 4))
   {
     delete window;
     return -1;

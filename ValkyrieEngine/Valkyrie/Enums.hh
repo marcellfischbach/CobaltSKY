@@ -193,7 +193,8 @@ enum vkTextureUnit
   eTU_TextureUnit7,
   eTU_TextureUnit8,
   eTU_TextureUnit9,
-  eTU_COUNT
+  eTU_COUNT,
+  eTU_Invalid = eTU_COUNT,
 };
 
 enum vkTextureType

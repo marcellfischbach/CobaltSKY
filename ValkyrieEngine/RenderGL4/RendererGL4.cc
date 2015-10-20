@@ -93,6 +93,31 @@ IVertexDeclaration *RendererGL4::CreateVertexDeclaration(const vkVertexElement *
   return decl;
 }
 
+ISampler *RendererGL4::CreateSampler()
+{
+  vkSamplerGL4 *sampler = new vkSamplerGL4();
+  if (!sampler->Initialize())
+  {
+    sampler->Release();
+    sampler = 0;
+  }
+
+  return sampler;
+}
+
+ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
+{
+  vkTexture2DGL4 *texture = new vkTexture2DGL4();
+  if (!texture->Initialize(format, width, height))
+  {
+    texture->Release();
+    texture = 0;
+  }
+  return texture;
+}
+
+
+
 void RendererGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatProj] = matrix;
@@ -234,9 +259,26 @@ void RendererGL4::SetShader(IShader *shader)
       prog->Bind();
     }
 
-    InvalidateSamplers();
-    InvalidateTextures();
   }
+  InvalidateTextures();
+}
+
+vkTextureUnit RendererGL4::BindTexture(ITexture *texture)
+{
+  if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
+  {
+    return eTU_Invalid;
+  }
+
+  vkTextureUnit unit = m_nextTextureUnit;
+  m_nextTextureUnit = static_cast<vkTextureUnit>(m_nextTextureUnit + 1);
+  glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
+  VK_CHECK_GL_ERROR;
+  SetSampler(unit, texture->GetSampler());
+  SetTexture(unit, texture);
+
+
+  return unit;
 }
 
 void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
@@ -246,6 +288,7 @@ void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
   {
     VK_SET(m_textures[unit], textureGL);
     m_textureChanged[unit] = true;
+    textureGL->Bind();
   }
 }
 
@@ -256,6 +299,7 @@ void RendererGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
   {
     VK_SET(m_samplers[unit], samplerGL);
     m_samplerChanged[unit] = true;
+    samplerGL->Bind(unit);
   }
 }
 
@@ -338,6 +382,7 @@ void RendererGL4::InvalidateSamplers()
 
 void RendererGL4::InvalidateTextures()
 {
+  m_nextTextureUnit = eTU_TextureUnit0;
   for (int i = 0; i < eTU_COUNT; ++i)
   {
     m_textureChanged[i] = true;

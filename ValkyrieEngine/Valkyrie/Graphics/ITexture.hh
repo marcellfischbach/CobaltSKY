@@ -46,6 +46,8 @@ VK_INTERFACE();
 struct VKE_API ITexture : public virtual IObject
 {
   VK_CLASS_GEN;
+  ITexture() : IObject() { }
+  virtual ~ITexture() { }
 
   virtual vkTextureType GetType() const = 0;
 
@@ -59,6 +61,9 @@ VK_INTERFACE();
 struct VKE_API ITexture2D : public virtual ITexture
 {
   VK_CLASS_GEN;
+  ITexture2D() : ITexture() { }
+
+  virtual ~ITexture2D() { }
 
   virtual vkUInt16 GetWidth() const = 0;
   virtual vkUInt16 GetHeight() const = 0;

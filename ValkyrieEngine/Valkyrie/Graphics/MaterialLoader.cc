@@ -134,6 +134,10 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
       {
         paramType = eSPT_Matrix4;
       }
+      else if (type == vkString("texture"))
+      {
+        paramType = eSPT_Texture;
+      }
       else
       {
         continue;

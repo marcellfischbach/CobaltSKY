@@ -7,6 +7,8 @@
 		</passes>
 		
 		<parameters>
+			<parameter type="texture">Diffuse</parameter>
+			<parameter type="float">Mult</parameter>
 		</parameters>
 		
 	</material>

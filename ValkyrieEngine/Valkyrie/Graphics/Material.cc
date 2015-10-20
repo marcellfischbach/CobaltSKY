@@ -1,6 +1,7 @@
 
 
 #include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 
 
 vkMaterial::vkMaterial()
@@ -104,6 +105,7 @@ void vkMaterialInstance::SetMaterial(vkMaterial *material)
       vkShaderParameterType type = material->GetParamType(i);
       ShaderParameter param(id);
       param.m_paramType = type;
+      param.m_texture = 0;
       m_parameters.push_back(param);
     }
   }
@@ -131,6 +133,17 @@ void vkMaterialInstance::Set(vkUInt16 idx, float v)
   param.m_float[0] = v;
 }
 
+void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  VK_SET(param.m_texture, texture);
+}
 
 bool vkMaterialInstance::Bind(IRenderer *renderer, vkRenderPass pass)
 {
@@ -175,6 +188,15 @@ bool vkMaterialInstance::Bind(IRenderer *renderer, vkRenderPass pass)
         break;
       case eSPT_IVector4:
         attr->Set(param.m_int[0], param.m_int[1], param.m_int[2], param.m_int[3]);
+        break;
+      case eSPT_Texture:
+        {
+          vkTextureUnit unit = renderer->BindTexture(param.m_texture);
+          if (unit != eTU_Invalid)
+          {
+            attr->Set((vkInt32)unit);
+          }
+        }
         break;
       }
     }

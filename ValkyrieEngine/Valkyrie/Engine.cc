@@ -8,6 +8,7 @@
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IShader.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
@@ -50,7 +51,6 @@ int vkEngine::Run()
 
 
   vkImage* image = vkResourceManager::Get()->Load<vkImage>(vkResourceLocator("${textures}/fieldstone_diffuse.png"));
-  printf("image: %p\n", image);
 
 
   float vertexBuffer[] = {
@@ -67,19 +67,29 @@ int vkEngine::Run()
     0.75f, 0.25f, 0.0f, 1.0f,
   };
 
+  float texCoordBuffer[] = {
+    0.0f, 0.0f,
+    2.0f, 0.0f,
+    0.0f, 2.0f,
+    2.0f, 2.0f,
+  };
+
   unsigned short indexBuffer[] = {
     0, 1, 2, 1, 3, 2,
     0, 2, 1, 1, 2, 3,
   };
 
+
   vkVertexElement elements[] = {
     vkVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
     vkVertexElement(eVST_Color, eDT_Float, 4, 0, sizeof(float) * 4, 1),
+    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 2),
     vkVertexElement()
   };
 
   IVertexBuffer *vb = m_renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
   IVertexBuffer *cb = m_renderer->CreateVertexBuffer(sizeof(colorBuffer), colorBuffer, eBDM_Static);
+  IVertexBuffer *tb = m_renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
   IIndexBuffer *ib = m_renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = m_renderer->CreateVertexDeclaration(elements);
 
@@ -89,12 +99,38 @@ int vkEngine::Run()
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(cb);
+  mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, 12);
+
+  ISampler *sampler = m_renderer->CreateSampler();
+  //sampler->SetFilter(eFM_MinMagLinearMipNearest);
+  ITexture2D *texture = m_renderer->CreateTexture2D(ePF_RGBA, image->GetWidth(), image->GetHeight());
+
+  vkUInt8 pixels0[] = {
+    0xff, 0xff, 0xff, 0xff,
+    0x00, 0x00, 0x00, 0xff,
+    0x00, 0x00, 0x00, 0xff,
+    0xff, 0xff, 0xff, 0xff,
+  };
+  texture->CopyData(0, image->GetPixelFormat(), image->GetData());
+
+  /*
+  vkUInt8 pixels1[] = {
+    0xff, 0x00, 0x00, 0xff,
+    0xff, 0x00, 0x00, 0xff,
+  };
+  texture->CopyData(1, ePF_R8G8B8A8U, pixels1);
+  */
+
+  texture->SetSampler(sampler);
+
 
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/mat_solid.xml", "Solid"));
 
   vkMaterialInstance *materialInstance = new vkMaterialInstance();
   materialInstance->SetMaterial(material);
+  materialInstance->Set(materialInstance->GetIndex(vkShaderAttributeID("Diffuse")), texture);
+  materialInstance->Set(materialInstance->GetIndex(vkShaderAttributeID("Mult")), 1.0f);
 
   vkGeometryNode *geometryNode = new vkGeometryNode();
   geometryNode->SetMesh(mesh);
@@ -127,7 +163,7 @@ int vkEngine::Run()
     viewMatrix.SetLookAt(vkVector3f(20.0f * (float)cos(v), 20.0f * (float)sin(v), 20.0f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
-    v += 0.005f;
+    v += 0.0001f;
 
 
     m_renderer->SetViewMatrix(viewMatrix);

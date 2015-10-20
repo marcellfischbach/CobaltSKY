@@ -46,3 +46,5 @@ void vkImage::SetDepth(vkUInt16 depth)
   m_depth = depth > 0 ? depth : 1;
 }
 
+
+

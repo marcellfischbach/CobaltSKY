@@ -34,7 +34,6 @@ void read_data_from_input_stream(png_structp png_ptr,
     return;
   }
 
-  printf("PNGImageLoader::Load(%d)\n", byteCountToRead);
   IFile *file = static_cast<IFile*>(io);
   file->Read(outBytes, byteCountToRead);
 }
@@ -85,19 +84,24 @@ IObject *vkPNGImageLoader::Load(IFile *file, const vkResourceLocator &locator, I
 
   vkUInt8 *buffer = 0;
   vkSize bufferSize = 0;
+  vkPixelFormat pixelFormat = ePF_R8G8B8A8U;
   switch (colorType)
   {
   case PNG_COLOR_TYPE_RGB:
     bufferSize = width * height * 3;
+    pixelFormat = ePF_R8G8B8U;
     break;
   case PNG_COLOR_TYPE_RGBA:
     bufferSize = width * height * 4;
+    pixelFormat = ePF_R8G8B8A8U;
     break;
   case PNG_COLOR_TYPE_GRAY:
     bufferSize = width * height * 1;
+    pixelFormat = ePF_R8U;
     break;
   case PNG_COLOR_TYPE_GA:
     bufferSize = width * height * 2;
+    pixelFormat = ePF_R8G8U;
     break;
   default:
     break;
@@ -115,6 +119,7 @@ IObject *vkPNGImageLoader::Load(IFile *file, const vkResourceLocator &locator, I
   image->SetWidth(width);
   image->SetHeight(height);
   image->SetDepth(1);
+  image->SetPixelFormat(pixelFormat);
   image->SetData(bufferSize, buffer);
   delete[] buffer;
 
