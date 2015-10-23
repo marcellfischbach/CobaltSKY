@@ -51,6 +51,10 @@ int vkEngine::Run()
 
 
   vkImage* image = vkResourceManager::Get()->Load<vkImage>(vkResourceLocator("${textures}/fieldstone_diffuse.png"));
+  if (image->GenerateMipMaps())
+  {
+    printf("Successfully created mip maps\n");
+  }
 
 
   float vertexBuffer[] = {
@@ -103,24 +107,16 @@ int vkEngine::Run()
   mesh->AddIndexBuffer(ib, 12);
 
   ISampler *sampler = m_renderer->CreateSampler();
-  //sampler->SetFilter(eFM_MinMagLinearMipNearest);
+  sampler->SetFilter(eFM_MinMagMipLinear);
+  sampler->SetFilter(eFM_Anisotropic);
+  sampler->SetAnisotropy(16);
   ITexture2D *texture = m_renderer->CreateTexture2D(ePF_RGBA, image->GetWidth(), image->GetHeight());
 
-  vkUInt8 pixels0[] = {
-    0xff, 0xff, 0xff, 0xff,
-    0x00, 0x00, 0x00, 0xff,
-    0x00, 0x00, 0x00, 0xff,
-    0xff, 0xff, 0xff, 0xff,
-  };
-  texture->CopyData(0, image->GetPixelFormat(), image->GetData());
+  for (vkUInt8 lvl = 0; lvl < image->GetNumberOfLevels(); ++ lvl)
+  {
+    texture->CopyData(lvl, image->GetPixelFormat(), image->GetData(lvl));
 
-  /*
-  vkUInt8 pixels1[] = {
-    0xff, 0x00, 0x00, 0xff,
-    0xff, 0x00, 0x00, 0xff,
-  };
-  texture->CopyData(1, ePF_R8G8B8A8U, pixels1);
-  */
+  }
 
   texture->SetSampler(sampler);
 
@@ -160,7 +156,7 @@ int vkEngine::Run()
     m_renderer->Clear();
 
 
-    viewMatrix.SetLookAt(vkVector3f(20.0f * (float)cos(v), 20.0f * (float)sin(v), 20.0f),
+    viewMatrix.SetLookAt(vkVector3f(10.0f * (float)cos(v), 10.0f * (float)sin(v), 0.5f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
     v += 0.0001f;

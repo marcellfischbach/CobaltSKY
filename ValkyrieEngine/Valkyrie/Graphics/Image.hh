@@ -5,7 +5,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Graphics/Image.refl.hh>
 #include <Valkyrie/Enums.hh>
-
+#include <vector>
 
 
 VK_CLASS();
@@ -19,49 +19,34 @@ public:
 
 
   void SetData(vkSize size, const void *data);
-  const void *GetData() const;
+  const void *GetData(vkUInt16 level = 0) const;
 
   void SetWidth(vkUInt16 width);
   void SetHeight(vkUInt16 height);
   void SetDepth(vkUInt16 depth);
   void SetPixelFormat(vkPixelFormat pixelFormat);
 
-  vkUInt16 GetWidth() const;
-  vkUInt16 GetHeight() const;
-  vkUInt16 GetDepth() const;
+  vkUInt16 GetWidth(vkUInt16 level = 0) const;
+  vkUInt16 GetHeight(vkUInt16 level = 0) const;
+  vkUInt16 GetDepth(vkUInt16 level = 0) const;
+  vkUInt8 GetNumberOfLevels() const;
   vkPixelFormat GetPixelFormat() const;
 
+  bool GenerateMipMaps();
+
 private:
+  void Delete();
+
   vkUInt16 m_width;
   vkUInt16 m_height;
   vkUInt16 m_depth;
   vkPixelFormat m_pixelFormat;
 
-  vkUInt8 *m_data;
+  std::vector<vkUInt8*> m_data;
 };
 
 
 
-VK_FORCEINLINE vkUInt16 vkImage::GetWidth() const 
-{
-  return m_width;
-}
-
-VK_FORCEINLINE vkUInt16 vkImage::GetHeight() const
-{
-  return m_height;
-}
-
-VK_FORCEINLINE vkUInt16 vkImage::GetDepth() const
-{
-  return m_depth;
-}
-
-
-VK_FORCEINLINE const void *vkImage::GetData() const
-{
-  return m_data;
-}
 
 VK_FORCEINLINE void vkImage::SetPixelFormat(vkPixelFormat pixelFormat)
 {
@@ -74,3 +59,7 @@ VK_FORCEINLINE vkPixelFormat vkImage::GetPixelFormat() const
   return m_pixelFormat;
 }
 
+VK_FORCEINLINE vkUInt8 vkImage::GetNumberOfLevels() const
+{
+  return (vkUInt8)m_data.size();
+}
