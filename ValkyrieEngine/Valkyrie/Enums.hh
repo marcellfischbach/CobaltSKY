@@ -268,3 +268,12 @@ enum vkRenderPass
   eRP_GBuffer,
   eRP_COUNT,
 };
+
+
+
+enum vkResourceLoadingMode
+{
+  eRLM_Shared,
+  eRLM_Instance,
+  eRLM_Inline,
+};

@@ -1,0 +1,8 @@
+<textures>
+
+	<texture name="FieldStone" type="texture2D">
+		<sampler resourceMode="shared">${materials}/samplers.xml:Default</sampler>
+		<image mipmap="true">${textures}/fieldstone_diffuse.png</image>
+	</texture>
+
+</textures>

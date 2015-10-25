@@ -1,19 +1,18 @@
 
 
 #include <Valkyrie/Engine.hh>
-#include <Valkyrie/Window/IKeyboard.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
 #include <Valkyrie/Graphics/Image.hh>
-#include <Valkyrie/Graphics/ImageLoader.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/Material.hh>
-#include <Valkyrie/Graphics/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Loaders/Loaders.hh>
+#include <Valkyrie/Window/IKeyboard.hh>
 #include <math.h>
 
 
@@ -49,14 +48,7 @@ int vkEngine::Run()
 
   RegisterLoaders();
 
-
-  vkImage* image = vkResourceManager::Get()->Load<vkImage>(vkResourceLocator("${textures}/fieldstone_diffuse.png"));
-  if (image->GenerateMipMaps())
-  {
-    printf("Successfully created mip maps\n");
-  }
-
-
+  
   float vertexBuffer[] = {
     -10.0f, +10.0f, 0.0f, 1.0f,
     +10.0f, +10.0f, 0.0f, 1.0f,
@@ -106,19 +98,7 @@ int vkEngine::Run()
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, 12);
 
-  ISampler *sampler = m_renderer->CreateSampler();
-  sampler->SetFilter(eFM_MinMagMipLinear);
-  sampler->SetFilter(eFM_Anisotropic);
-  sampler->SetAnisotropy(16);
-  ITexture2D *texture = m_renderer->CreateTexture2D(ePF_RGBA, image->GetWidth(), image->GetHeight());
-
-  for (vkUInt8 lvl = 0; lvl < image->GetNumberOfLevels(); ++ lvl)
-  {
-    texture->CopyData(lvl, image->GetPixelFormat(), image->GetData(lvl));
-
-  }
-
-  texture->SetSampler(sampler);
+  ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator("${materials}/textures.xml", "FieldStone"));
 
 
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/mat_solid.xml", "Solid"));
@@ -159,7 +139,7 @@ int vkEngine::Run()
     viewMatrix.SetLookAt(vkVector3f(10.0f * (float)cos(v), 10.0f * (float)sin(v), 0.5f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
-    v += 0.0001f;
+    v += 0.00001f;
 
 
     m_renderer->SetViewMatrix(viewMatrix);
@@ -184,6 +164,7 @@ int vkEngine::Run()
 void vkEngine::RegisterLoaders()
 {
   vkResourceManager *mgr = vkResourceManager::Get();
-  mgr->RegisterLoader(new vkMaterialLoader());
-  mgr->RegisterLoader(new vkPNGImageLoader());
+  vkLoaders::Register(mgr);
+
+
 }

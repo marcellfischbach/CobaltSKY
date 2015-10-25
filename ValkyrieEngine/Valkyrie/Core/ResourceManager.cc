@@ -273,3 +273,26 @@ TiXmlElement *vkBaseXMLLoader::FindElement(TiXmlElement *root, const vkString &e
 
   return 0;
 }
+
+
+vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode) const
+{
+  vkResourceLoadingMode mode = defaultMode;
+  if (element->Attribute("resourceMode"))
+  {
+    vkString modeString(element->Attribute("resourceMode"));
+    if (modeString == vkString("shared"))
+    {
+      mode = eRLM_Shared;
+    }
+    else if (modeString == vkString("instance"))
+    {
+      mode = eRLM_Instance;
+    }
+    else if (modeString == vkString("inline"))
+    {
+      mode = eRLM_Inline;
+    }
+  }
+  return mode;
+}

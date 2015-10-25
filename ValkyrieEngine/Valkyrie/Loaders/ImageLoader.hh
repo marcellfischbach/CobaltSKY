@@ -3,7 +3,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
-#include <Valkyrie/Graphics/ImageLoader.refl.hh>
+#include <Valkyrie/Loaders/ImageLoader.refl.hh>
 
 
 VK_CLASS();

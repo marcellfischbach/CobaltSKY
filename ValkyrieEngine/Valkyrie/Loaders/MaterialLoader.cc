@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Graphics/MaterialLoader.hh>
+#include <Valkyrie/Loaders/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Material.hh>
 
 

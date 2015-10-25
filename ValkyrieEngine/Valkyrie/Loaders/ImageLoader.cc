@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Graphics/ImageLoader.hh>
+#include <Valkyrie/Loaders/ImageLoader.hh>
 #include <Valkyrie/Graphics/Image.hh>
 #include <png.h>
 

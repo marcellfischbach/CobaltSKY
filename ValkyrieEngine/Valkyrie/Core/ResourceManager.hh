@@ -3,6 +3,7 @@
 
 
 #include <Valkyrie/Export.hh>
+#include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/IFile.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
@@ -68,6 +69,7 @@ protected:
 
   TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
 
+  vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared) const;
 };
 
 

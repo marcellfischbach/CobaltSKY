@@ -12,6 +12,9 @@ public:
   void SetWindow(IWindow *window);
   void SetRenderer(IRenderer *renderer);
 
+  IWindow *GetWindow() const;
+  IRenderer *GetRenderer() const;
+
   int Run();
 
 protected:
@@ -23,3 +26,14 @@ private:
   IWindow *m_window;  
   IRenderer *m_renderer;
 };
+
+
+VK_FORCEINLINE IWindow *vkEngine::GetWindow() const
+{
+  return m_window;
+}
+
+VK_FORCEINLINE IRenderer *vkEngine::GetRenderer() const
+{
+  return m_renderer;
+}
