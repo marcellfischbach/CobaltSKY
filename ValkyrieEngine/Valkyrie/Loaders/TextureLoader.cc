@@ -163,8 +163,9 @@ IObject  *vkTextureLoader::Load(TiXmlElement *element, const vkResourceLocator &
 
 IObject *vkTextureLoader::LoadTexture2D(TiXmlElement *element) const
 {
-
-  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"));
+  bool release = false;
+  TiXmlElement *samplerElement = element->FirstChildElement("sampler");
+  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), release);
   vkImage *image = LoadImage(element->FirstChildElement("image"));
   if (!image)
   {
@@ -175,8 +176,11 @@ IObject *vkTextureLoader::LoadTexture2D(TiXmlElement *element) const
                                                                         image->GetWidth(),
                                                                         image->GetHeight());
   texture->SetSampler(sampler);
+  if (sampler && release)
+  {
+    sampler->Release();
+  }
 
-  printf("Load texture: %u %u => %d\n", image->GetWidth(), image->GetHeight(), image->GetNumberOfLevels());
   for (vkUInt8 lvl = 0; lvl < image->GetNumberOfLevels(); ++lvl)
   {
     texture->CopyData(lvl, image->GetPixelFormat(), image->GetData(lvl));
@@ -186,7 +190,7 @@ IObject *vkTextureLoader::LoadTexture2D(TiXmlElement *element) const
   return texture;
 }
 
-ISampler *vkTextureLoader::LoadSampler(TiXmlElement *element) const
+ISampler *vkTextureLoader::LoadSampler(TiXmlElement *element, bool &release) const
 {
   if (!element)
   {
@@ -200,6 +204,7 @@ ISampler *vkTextureLoader::LoadSampler(TiXmlElement *element) const
   case eRLM_Shared:
     return vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator(samplerName));
   case eRLM_Instance:
+    release = true;
     return vkResourceManager::Get()->Load<ISampler>(vkResourceLocator(samplerName));
   case eRLM_Inline:
     return 0;

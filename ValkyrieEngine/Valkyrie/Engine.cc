@@ -98,15 +98,8 @@ int vkEngine::Run()
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, 12);
 
-  ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator("${materials}/textures.xml", "FieldStone"));
 
-
-  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/mat_solid.xml", "Solid"));
-
-  vkMaterialInstance *materialInstance = new vkMaterialInstance();
-  materialInstance->SetMaterial(material);
-  materialInstance->Set(materialInstance->GetIndex(vkShaderAttributeID("Diffuse")), texture);
-  materialInstance->Set(materialInstance->GetIndex(vkShaderAttributeID("Mult")), 1.0f);
+  vkMaterialInstance *materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
 
   vkGeometryNode *geometryNode = new vkGeometryNode();
   geometryNode->SetMesh(mesh);

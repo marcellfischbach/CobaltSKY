@@ -1,6 +1,8 @@
 
 #include <Valkyrie/Loaders/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Engine.hh>
 
 
 
@@ -153,4 +155,125 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
 
 
   return material;
+}
+
+vkMaterialInstanceLoader::vkMaterialInstanceLoader()
+  : vkBaseXMLLoader()
+{
+}
+
+vkMaterialInstanceLoader::~vkMaterialInstanceLoader()
+{
+
+}
+
+
+bool vkMaterialInstanceLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkString tagName(element->Value());
+
+  return tagName == vkString("materialinstance") || tagName == vkString("materialinstances");
+}
+
+
+namespace 
+{
+vkShaderParameterType get_shader_parameter_type(const vkString &name)
+{
+  if (name == vkString("float")) return eSPT_Float;
+  else if (name == vkString("vec2")) return eSPT_Vector2;
+  else if (name == vkString("vec3")) return eSPT_Vector3;
+  else if (name == vkString("vec4")) return eSPT_Vector4;
+  else if (name == vkString("int")) return eSPT_Int;
+  else if (name == vkString("ivec2")) return eSPT_IVector2;
+  else if (name == vkString("ivec3")) return eSPT_IVector3;
+  else if (name == vkString("ivec4")) return eSPT_IVector4;
+  else if (name == vkString("mat3")) return eSPT_Matrix3;
+  else if (name == vkString("mat4")) return eSPT_Matrix4;
+  else if (name == vkString("texture")) return eSPT_Texture;
+  return eSPT_Float;
+}
+}
+
+IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  TiXmlElement *materialInstanceElement = FindElement(element, "materialinstance", locator.GetResourceName());
+  if (!materialInstanceElement)
+  {
+    return 0;
+  }
+
+  TiXmlElement *materialElement = materialInstanceElement->FirstChildElement("material");
+  if (!materialElement)
+  {
+    printf("No material defined\n");
+    return 0;
+  }
+
+  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator(materialElement->GetText()));
+  if (!material)
+  {
+    printf("No valid material found\n");
+    return 0;
+  }
+
+  vkMaterialInstance *instance = new vkMaterialInstance();
+  instance->SetMaterial(material);
+
+
+  TiXmlElement *parametersElement = materialInstanceElement->FirstChildElement("parameters");
+  if (parametersElement)
+  {
+    for (TiXmlElement *parameterElement = parametersElement->FirstChildElement("parameter");
+    parameterElement;
+      parameterElement = parameterElement->NextSiblingElement("parameter"))
+    {
+      if (!parameterElement->Attribute("type") || !parameterElement->Attribute("name"))
+      {
+        continue;
+      }
+
+      vkString typeName(parameterElement->Attribute("type"));
+      vkString name(parameterElement->Attribute("name"));
+
+      vkInt16 idx = instance->GetIndex(vkShaderAttributeID(name));
+      if (idx == -1)
+      {
+        continue;
+      }
+
+      vkShaderParameterType type = ::get_shader_parameter_type(typeName);
+      switch (type)
+      {
+      case eSPT_Float:
+        {
+          float f = atoi(parameterElement->GetText());
+          instance->Set(idx, f);
+        }
+        break;
+      case eSPT_Texture:
+        {
+          vkResourceLoadingMode rlm = GetResourceLoadingMode(parameterElement);
+          ITexture *texture = 0;
+          switch (rlm)
+          {
+          case eRLM_Shared:
+            texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            instance->Set(idx, texture);
+            break;
+          case eRLM_Instance:
+            texture = vkResourceManager::Get()->Load<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            instance->Set(idx, texture);
+            if (texture) texture->Release();
+            break;
+          default:
+            printf("not implemented yet.");
+
+          }
+        }
+      }
+    }
+  }
+
+  return instance;
 }

@@ -1,10 +1,10 @@
 <materialinstances>
 
 	<materialinstance name="FieldStone">
-		<material resourceMode="shared">${materials}/mat_solid.xml:Solid</material>
+		<material>${materials}/mat_solid.xml:Solid</material>
 		<parameters>
 			<parameter name="Diffuse" type="texture" >${materials}/textures.xml:FieldStone</parameter>
-			<parameter name="Mult" type="float">1.0</parameter>
+			<parameter name="Mult" type="float">10.0</parameter>
 		</parameters>
 	</materialinstance>
 

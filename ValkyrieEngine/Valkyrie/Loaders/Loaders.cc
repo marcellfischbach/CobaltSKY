@@ -15,6 +15,7 @@ vkLoaders::vkLoaders()
 void vkLoaders::Register(vkResourceManager *mgr)
 {
   mgr->RegisterLoader(new vkMaterialLoader());
+  mgr->RegisterLoader(new vkMaterialInstanceLoader());
   mgr->RegisterLoader(new vkPNGImageLoader());
   mgr->RegisterLoader(new vkTextureLoader());
   mgr->RegisterLoader(new vkSamplerLoader());

@@ -41,6 +41,6 @@ private:
 
   IObject *LoadTexture2D(TiXmlElement *element) const;
   vkImage *LoadImage(TiXmlElement *element) const;
-  ISampler *LoadSampler(TiXmlElement *element) const;
+  ISampler *LoadSampler(TiXmlElement *element, bool &release) const;
 };
 
