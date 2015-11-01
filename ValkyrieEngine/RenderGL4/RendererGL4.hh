@@ -7,6 +7,7 @@
 
 class IndexBufferGL4;
 class vkProgramGL4;
+class vkRenderTargetGL4;
 class vkSamplerGL4;
 class vkTextureGL4;
 class VertexBufferGL4;
@@ -22,8 +23,10 @@ public:
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
+  virtual IRenderTarget *CreateRenderTarget();
   virtual ISampler *CreateSampler();
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
+  virtual IFrameProcessor *CreateDeferredFrameProcessor();
 
 
 
@@ -38,11 +41,14 @@ public:
   virtual vkTextureUnit BindTexture(ITexture *texture);
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture);
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
+  virtual void SetRenderTarget(IRenderTarget *renderTarget);
 
   virtual void Clear();
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
+
+  virtual void RenderFullScreenFrame(ITexture2D *texture);
 
 private:
   void BindMatrices();
@@ -56,6 +62,7 @@ private:
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
+  vkRenderTargetGL4 *m_renderTarget;
 
   vkTextureUnit m_nextTextureUnit;
 
@@ -71,5 +78,16 @@ private:
   void InvalidateSamplers();
   void InvalidateTextures();
 
+  /**
+   * \name Render a full screen frame
+   * @{
+   */
+  void InitFullScreenData();
+  VertexBufferGL4 *m_fullScreenVertexBuffer;
+  vkVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
+  vkProgramGL4 *m_fullScreenProgram;
+  /**
+   * @}
+   */
 };
 

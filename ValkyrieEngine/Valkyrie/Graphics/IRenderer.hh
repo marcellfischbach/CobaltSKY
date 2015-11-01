@@ -7,6 +7,8 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Enums.hh>
 
+struct IFrameProcessor;
+struct IRenderTarget;
 struct IIndexBuffer;
 struct IVertexBuffer;
 struct IVertexDeclaration;
@@ -29,8 +31,10 @@ struct VKE_API IRenderer : public IObject
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements) = 0;
+  virtual IRenderTarget *CreateRenderTarget() = 0;
   virtual ISampler *CreateSampler() = 0;
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height) = 0;
+  virtual IFrameProcessor *CreateDeferredFrameProcessor() = 0;
   /**
    * @}
    */
@@ -58,11 +62,13 @@ struct VKE_API IRenderer : public IObject
   virtual vkTextureUnit BindTexture(ITexture *texture) = 0;
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
+  virtual void SetRenderTarget(IRenderTarget *renderTarget) = 0;
 
   virtual void Clear() = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;
   virtual void Render(vkPrimitiveType type, vkUInt32 count) = 0;
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType) = 0;
+  virtual void RenderFullScreenFrame(ITexture2D* textureColor) = 0;
   /**
    * @}
    */

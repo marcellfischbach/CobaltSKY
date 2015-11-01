@@ -73,6 +73,7 @@ public:
 
 
   void Bind();
+  GLuint GetName() const;
 
 protected:
   vkTextureGL4(vkTextureType type);
@@ -113,4 +114,9 @@ private:
 };
 
 
+
+VK_FORCEINLINE GLuint vkTextureGL4::GetName() const
+{
+  return m_name;
+}
 

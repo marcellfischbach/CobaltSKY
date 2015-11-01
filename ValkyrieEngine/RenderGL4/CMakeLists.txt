@@ -10,6 +10,8 @@ set(SOURCE
   MappingGL4.hh
   RendererGL4.cc
   RendererGL4.hh
+  RenderTargetGL4.cc
+  RenderTargetGL4.hh
   Shader.cc
   Shader.hh
   ShaderLoader.cc
@@ -22,15 +24,28 @@ set(SOURCE
   VertexDeclarationGL4.hh
   )
 
-
 source_group(
 	"ValkyrieEngine-RenderGL4"
 	FILES
 	${SOURCE}
 	)
 
+
+set(SOURCE_DEFERRED
+  Deferred/DeferredFrameProcessor.cc
+  Deferred/DeferredFrameProcessor.hh
+  )
+  
+source_group(
+	"ValkyrieEngine-RenderGL4\\Deferred"
+	FILES
+	${SOURCE_DEFERRED}
+	)
+
+
 set(ALL_SOURCES
 	${SOURCE}
+  ${SOURCE_DEFERRED}
 	)
 
 VK_MOC(RenderGL4 VKGL4_API ALL_SOURCES MOC_SOURCES)

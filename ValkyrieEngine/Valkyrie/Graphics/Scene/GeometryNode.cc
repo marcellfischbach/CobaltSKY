@@ -47,3 +47,8 @@ void vkGeometryNode::Render(IRenderer *renderer, vkRenderPass pass, vkUInt8 lod)
   }
 }
 
+void vkGeometryNode::PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)
+{
+  callback->ScanGeometryNode(this);
+}
+

@@ -59,6 +59,10 @@ struct VKE_API IObject
 template<typename T>
 T* vkQueryClass(IObject *object)
 {
+  if (!object)
+  {
+    return 0;
+  }
   return reinterpret_cast<T*>(object->QueryClass(T::GetStaticClass()));
 }
 

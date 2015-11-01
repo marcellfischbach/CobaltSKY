@@ -6,6 +6,7 @@
 #include <Valkyrie/Graphics/Image.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
+#include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/Material.hh>
@@ -98,6 +99,19 @@ int vkEngine::Run()
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, 12);
 
+  ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
+  IRenderTarget *rt = m_renderer->CreateRenderTarget();
+  rt->Initialize();
+  rt->AddColorTexture(color0);
+  rt->SetDepthBuffer(1366, 768);
+  if (!rt->Finilize())
+  {
+    printf("Unable to create render target!!!\n");
+  }
+
+  ISampler *sampler = m_renderer->CreateSampler();
+  sampler->SetFilter(eFM_MinMagNearest);
+  color0->SetSampler(sampler);
 
   vkMaterialInstance *materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
 
@@ -125,6 +139,9 @@ int vkEngine::Run()
     {
       break;
     }
+    //
+    // render to the render target
+    m_renderer->SetRenderTarget(rt);
 
     m_renderer->Clear();
 
@@ -145,6 +162,13 @@ int vkEngine::Run()
     geometryNode->UpdateStates();
 
     geometryNode->Render(m_renderer, eRP_GBuffer);
+
+
+    // no render this image onscreen
+    m_renderer->SetRenderTarget(0);
+    m_renderer->Clear();
+    m_renderer->RenderFullScreenFrame(color0);
+
     m_window->Present();
 
   }

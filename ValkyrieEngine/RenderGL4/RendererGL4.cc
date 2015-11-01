@@ -1,5 +1,6 @@
 
 #include <RenderGL4/RendererGL4.hh>
+#include <RenderGL4/RenderTargetGL4.hh>
 #include <RenderGL4/IndexBufferGL4.hh>
 #include <RenderGL4/VertexBufferGL4.hh>
 #include <RenderGL4/VertexDeclarationGL4.hh>
@@ -8,6 +9,7 @@
 #include <RenderGL4/TextureGL4.hh>
 #include <RenderGL4/MappingGL4.hh>
 #include <RenderGL4/DefinesGL4.hh>
+#include <RenderGL4/Deferred/DeferredFrameProcessor.hh>
 #include <GL/glew.h>
 #include <assert.h>
 
@@ -17,6 +19,7 @@ RendererGL4::RendererGL4()
   , m_vertexDeclaration(0)
   , m_indexBuffer(0)
   , m_program(0)
+  , m_renderTarget(0)
 {
   VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
@@ -51,6 +54,7 @@ RendererGL4::RendererGL4()
   vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
   vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
 
+  InitFullScreenData();
 }
 
 
@@ -93,6 +97,11 @@ IVertexDeclaration *RendererGL4::CreateVertexDeclaration(const vkVertexElement *
   return decl;
 }
 
+IRenderTarget *RendererGL4::CreateRenderTarget()
+{
+  return new vkRenderTargetGL4();
+}
+
 ISampler *RendererGL4::CreateSampler()
 {
   vkSamplerGL4 *sampler = new vkSamplerGL4();
@@ -114,6 +123,11 @@ ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, v
     texture = 0;
   }
   return texture;
+}
+
+IFrameProcessor *RendererGL4::CreateDeferredFrameProcessor()
+{
+  return vkDeferredFrameProcessor();
 }
 
 
@@ -258,7 +272,10 @@ void RendererGL4::SetShader(IShader *shader)
       // we use the new program
       prog->Bind();
     }
-
+    else
+    {
+      glUseProgram(0);
+    }
   }
   InvalidateTextures();
 }
@@ -288,7 +305,11 @@ void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
   {
     VK_SET(m_textures[unit], textureGL);
     m_textureChanged[unit] = true;
-    textureGL->Bind();
+    if (texture)
+    {
+      glActiveTexture(GL_TEXTURE0 + unit);
+      textureGL->Bind();
+    }
   }
 }
 
@@ -303,6 +324,23 @@ void RendererGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
   }
 }
 
+void RendererGL4::SetRenderTarget(IRenderTarget *renderTarget)
+{
+  vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
+  if (m_renderTarget != rtGL4)
+  {
+    VK_SET(m_renderTarget, rtGL4);
+    if (m_renderTarget)
+    {
+      m_renderTarget->Bind();
+    }
+    else
+    {
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+  }
+
+}
 
 void RendererGL4::Clear()
 {
@@ -316,10 +354,15 @@ void RendererGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 hei
 }
 
 
+
 void RendererGL4::Render(vkPrimitiveType primType, vkUInt32 count)
 {
+  BindMatrices();
+  VK_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
+    m_indexBuffer->Bind();
+    glDrawArrays(primitiveTypeMap[primType], 0, count);
 
     UnbindVertexDeclaration();
   }
@@ -336,6 +379,18 @@ void RendererGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkData
 
     UnbindVertexDeclaration();
   }
+}
+
+void RendererGL4::RenderFullScreenFrame(ITexture2D *texture)
+{
+  static vkShaderAttributeID diffuse("Diffuse");
+
+  SetShader(m_fullScreenProgram);
+  SetVertexBuffer(0, m_fullScreenVertexBuffer);
+  SetVertexDeclaration(m_fullScreenVertexDeclaration);
+  vkTextureUnit tu = BindTexture(texture);
+  m_fullScreenProgram->GetAttribute(diffuse)->Set(tu);
+  Render(ePT_Triangles, 6);
 }
 
 
@@ -387,4 +442,29 @@ void RendererGL4::InvalidateTextures()
   {
     m_textureChanged[i] = true;
   }
+}
+
+
+void RendererGL4::InitFullScreenData()
+{
+  float vertexData[] = {
+    -1, -1, 0, 1,     0, 0,
+    -1,  1, 0, 1,     0, 1,
+     1,  1, 0, 1,     1, 1,
+
+    -1, -1, 0, 1,     0, 0,
+     1,  1, 0, 1,     1, 1, 
+     1, -1, 0, 1,     1, 0,
+  };
+  m_fullScreenVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexData), vertexData, eBDM_Static));
+
+  vkVertexElement elements[] = {
+    vkVertexElement(eVST_Position, eDT_Float, 4, 0, 6 * sizeof(float), 0),
+    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(float), 6 * sizeof(float), 0),
+    vkVertexElement(),
+  };
+
+  m_fullScreenVertexDeclaration = static_cast<vkVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
+
+  m_fullScreenProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/renderer.xml:SimplePresent"));
 }

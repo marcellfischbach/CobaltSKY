@@ -76,3 +76,15 @@ void vkNode::UpdateStates()
   }
 }
 
+void vkNode::Scan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)
+{
+  //
+  // TODO: handle the clipping of the bounding box here
+
+  PrivScan(clipper, renderer, callback);
+}
+
+void vkNode::PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)
+{
+
+}

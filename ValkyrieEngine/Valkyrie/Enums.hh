@@ -161,6 +161,10 @@ enum vkDataType
 
 enum vkFilterMode
 {
+  eFM_MinMagNearest,
+  eFM_MinNearestMagLinear,
+  eFM_MinLinearMagNearest,
+  eFM_MinMagLinear,
   eFM_MinMagMipNearest,
   eFM_MinMagNearestMipLinear,
   eFM_MinNearestMagLinearMipNearest,

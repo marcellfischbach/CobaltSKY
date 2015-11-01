@@ -56,6 +56,23 @@ void vkSamplerGL4::SetFilter(vkFilterMode filterMode)
     m_filterMode = filterMode;
     switch (filterMode)
     {
+    case eFM_MinMagNearest:
+      glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      break;
+    case eFM_MinNearestMagLinear:
+      glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      break;
+    case eFM_MinLinearMagNearest:
+      glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      break;
+    case eFM_MinMagLinear:
+      glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      break;
+
     case eFM_MinMagMipNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -89,10 +106,12 @@ void vkSamplerGL4::SetFilter(vkFilterMode filterMode)
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
+
     case eFM_Anisotropic:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
+
     }
     VK_CHECK_GL_ERROR;
   }

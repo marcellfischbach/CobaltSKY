@@ -1,0 +1,14 @@
+<programs>
+	<program name="SimplePresent">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/renderer/simple_present.vert</shader>
+				<shader>${shaders}/renderer/simple_present.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+</programs>

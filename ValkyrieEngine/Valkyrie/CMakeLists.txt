@@ -48,10 +48,12 @@ source_group(
 	)
 
 set(SOURCE_GRAPHICS
+  Graphics/IFrameProcessor.hh
 	Graphics/IIndexBuffer.hh
 	Graphics/Image.cc
 	Graphics/Image.hh
 	Graphics/IRenderer.hh
+  Graphics/IRenderTarget.hh
 	Graphics/IShader.hh
 	Graphics/ITexture.hh
 	Graphics/IVertexBuffer.hh
@@ -63,7 +65,6 @@ set(SOURCE_GRAPHICS
 	Graphics/ShaderID.cc
 	Graphics/ShaderID.hh
 	)
-
   
 source_group(
 	"ValkyrieEngine\\Graphics"

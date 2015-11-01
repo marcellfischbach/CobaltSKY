@@ -15,6 +15,9 @@ public:
   vkGroupNode();
   virtual ~vkGroupNode();
 
+protected:
+  virtual void PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
+
 private:
 
   bool AddChild(vkNode *child);

@@ -247,7 +247,7 @@ IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceL
       {
       case eSPT_Float:
         {
-          float f = atoi(parameterElement->GetText());
+          float f = (float)atof(parameterElement->GetText());
           instance->Set(idx, f);
         }
         break;
