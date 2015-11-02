@@ -46,6 +46,7 @@ class vkClass;
 
 struct VKE_API IObject
 {
+  IObject () { }
   virtual const vkClass *GetClass() const = 0;
 
   virtual void AddRef() = 0;

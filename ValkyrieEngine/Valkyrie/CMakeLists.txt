@@ -18,6 +18,7 @@ source_group(
 
 
 set(SOURCE_CORE
+  Core/Collection.hh
 	Core/FileInfo.cc
 	Core/FileInfo.hh
 	Core/FileStd.cc

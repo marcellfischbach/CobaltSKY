@@ -132,6 +132,8 @@ int vkEngine::Run()
 
   const IKeyboard *keyboard = m_window->GetKeyboard();
 
+  IFrameProcessor* fp = m_renderer->CreateDeferredFrameProcessor();
+
   while (true)
   {
     m_window->UpdateEvents();

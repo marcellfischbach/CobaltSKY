@@ -127,7 +127,7 @@ ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, v
 
 IFrameProcessor *RendererGL4::CreateDeferredFrameProcessor()
 {
-  return vkDeferredFrameProcessor();
+  return new vkDeferredFrameProcessor(this);
 }
 
 

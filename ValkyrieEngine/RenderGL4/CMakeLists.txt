@@ -34,6 +34,8 @@ source_group(
 set(SOURCE_DEFERRED
   Deferred/DeferredFrameProcessor.cc
   Deferred/DeferredFrameProcessor.hh
+  Deferred/GBuffer.cc
+  Deferred/GBuffer.hh
   )
   
 source_group(

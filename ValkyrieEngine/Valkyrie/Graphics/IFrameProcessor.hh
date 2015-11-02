@@ -13,6 +13,7 @@ VK_INTERFACE();
 struct VKE_API IFrameProcessor : public virtual IObject
 {
   VK_CLASS_GEN;
+  IFrameProcessor() : IObject() { }
 
   virtual void Render(vkNode *root, IRenderTarget *target = 0) = 0;
 

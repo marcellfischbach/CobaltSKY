@@ -102,7 +102,8 @@ static GLenum internalFormatMap[] = {
   GL_RGB,
   GL_RG,
   GL_R,
-  GL_DEPTH32F_STENCIL8
+  GL_DEPTH32F_STENCIL8,
+  GL_RGB10_A2,
 };
 
 static GLenum externalFormatMap[] = {
@@ -142,7 +143,8 @@ static GLenum externalFormatMap[] = {
   GL_RGB,
   GL_RG,
   GL_R,
-  0
+  0,
+  GL_RGBA,
 };
 
 static GLenum externalFormatTypeMap[] = {
@@ -182,5 +184,6 @@ static GLenum externalFormatTypeMap[] = {
   GL_UNSIGNED_BYTE,
   GL_UNSIGNED_BYTE,
   GL_UNSIGNED_BYTE,
-  0
+  0,
+  GL_UNSIGNED_BYTE,
 };

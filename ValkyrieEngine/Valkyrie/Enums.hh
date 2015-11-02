@@ -265,6 +265,7 @@ enum vkPixelFormat
   ePF_RG,
   ePF_R,
   ePF_D24S8,
+  ePF_R10G10B10A2,
 };
 
 enum vkRenderPass
