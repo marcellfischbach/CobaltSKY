@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
 #include <Valkyrie/Graphics/Image.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
@@ -57,11 +58,11 @@ int vkEngine::Run()
     +10.0f, -10.0f, 0.0f, 1.0f,
   };
 
-  float colorBuffer[] = {
-    0.25f, 0.75f, 0.0f, 1.0f,
-    0.75f, 0.75f, 0.0f, 1.0f,
-    0.25f, 0.25f, 0.0f, 1.0f,
-    0.75f, 0.25f, 0.0f, 1.0f,
+  float normalBuffer[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
   };
 
   float texCoordBuffer[] = {
@@ -79,13 +80,13 @@ int vkEngine::Run()
 
   vkVertexElement elements[] = {
     vkVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
-    vkVertexElement(eVST_Color, eDT_Float, 4, 0, sizeof(float) * 4, 1),
+    vkVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
     vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 2),
     vkVertexElement()
   };
 
   IVertexBuffer *vb = m_renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  IVertexBuffer *cb = m_renderer->CreateVertexBuffer(sizeof(colorBuffer), colorBuffer, eBDM_Static);
+  IVertexBuffer *nb = m_renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
   IVertexBuffer *tb = m_renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
   IIndexBuffer *ib = m_renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = m_renderer->CreateVertexDeclaration(elements);
@@ -95,7 +96,7 @@ int vkEngine::Run()
   mesh->SetPrimitiveType(ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
-  mesh->AddVertexBuffer(cb);
+  mesh->AddVertexBuffer(nb);
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, 12);
 
@@ -163,8 +164,7 @@ int vkEngine::Run()
 
     geometryNode->UpdateStates();
 
-    geometryNode->Render(m_renderer, eRP_GBuffer);
-
+    fp->Render(geometryNode, rt);
 
     // no render this image onscreen
     m_renderer->SetRenderTarget(0);

@@ -8,12 +8,10 @@ class vkCollection
 public:
   vkCollection(vkSize initialSize = 64, vkSize resizeStep = 16)
   {
-    /*
     data = new T[initialSize];
     length = 0;
     capacity = initialSize;
     this->resizeStep = resizeStep;
-    */
   }
 
 

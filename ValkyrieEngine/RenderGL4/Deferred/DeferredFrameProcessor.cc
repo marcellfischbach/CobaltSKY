@@ -51,6 +51,9 @@ private:
 
 void vkDeferredFrameProcessor::Render(vkNode *node, IRenderTarget *target)
 {
-  //Collector collector(m_geometries);
-  //node->Scan(0, m_renderer, &collector);
+  m_geometries.Clear();
+  Collector collector(m_geometries);
+  node->Scan(0, m_renderer, &collector);
+
+  printf("Number of nodes: %llu\n", m_geometries.length);
 }

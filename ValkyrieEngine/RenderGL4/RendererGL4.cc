@@ -361,7 +361,6 @@ void RendererGL4::Render(vkPrimitiveType primType, vkUInt32 count)
   VK_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
-    m_indexBuffer->Bind();
     glDrawArrays(primitiveTypeMap[primType], 0, count);
 
     UnbindVertexDeclaration();
