@@ -134,6 +134,11 @@ int vkEngine::Run()
   const IKeyboard *keyboard = m_window->GetKeyboard();
 
   IFrameProcessor* fp = m_renderer->CreateDeferredFrameProcessor();
+  if (!fp->Initialize(1366, 768))
+  {
+    printf("Unable to initialize frame processor\n");
+    return -1;
+  }
 
   while (true)
   {
@@ -144,15 +149,15 @@ int vkEngine::Run()
     }
     //
     // render to the render target
-    m_renderer->SetRenderTarget(rt);
+    // m_renderer->SetRenderTarget(rt);
 
-    m_renderer->Clear();
+    //m_renderer->Clear();
 
 
     viewMatrix.SetLookAt(vkVector3f(10.0f * (float)cos(v), 10.0f * (float)sin(v), 0.5f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
-    v += 0.00001f;
+    v += 0.0001f;
 
 
     m_renderer->SetViewMatrix(viewMatrix);

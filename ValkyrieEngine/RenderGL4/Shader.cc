@@ -325,9 +325,9 @@ void vkProgramGL4::RegisterAttribute(const vkShaderAttributeID &id)
   
   vkString uniformName = vkString("vk_") + id.GetName();
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
-  vkShaderAttributeGL4 &attribute = m_attributes[id.GetID()];
-  attribute.SetLocation(loc);
-  attribute.SetName(id.GetName());
+  vkShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
+  attribute->SetLocation(loc);
+  attribute->SetName(id.GetName());
 }
 
 void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
@@ -336,9 +336,9 @@ void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
 
   vkString attribName = vkString("vk_") + id.GetName();
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
-  vkShaderStreamGL4 &stream = m_streams[id.GetID()];
-  stream.SetLocation(loc);
-  stream.SetName(id.GetName());
+  vkShaderStreamGL4 *stream = m_streams[id.GetID()];
+  stream->SetLocation(loc);
+  stream->SetName(id.GetName());
 }
 
 
@@ -353,13 +353,13 @@ IShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
   {
     return 0;
   }
-  vkShaderAttributeGL4 &attr = m_attributes[idx];
-  if (attr.GetLocation() == -1)
+  vkShaderAttributeGL4 *attr = m_attributes[idx];
+  if (attr->GetLocation() == -1)
   {
     return 0;
   }
 
-  return &attr;
+  return attr;
 }
 
 IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
@@ -369,13 +369,13 @@ IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
     RegisterAttribute(id);
   }
 
-  vkShaderAttributeGL4 &attr = m_attributes[id.GetID()];
-  if (attr.GetLocation() == -1)
+  vkShaderAttributeGL4 *attr = m_attributes[id.GetID()];
+  if (attr->GetLocation() == -1)
   {
     return 0;
   }
   
-  return &attr;
+  return attr;
 }
 
 
@@ -392,13 +392,13 @@ IShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
     RegisterStream(id);
   }
 
-  vkShaderStreamGL4 &stream = m_streams[id.GetID()];
-  if (stream.GetLocation() == -1)
+  vkShaderStreamGL4 *stream = m_streams[id.GetID()];
+  if (stream->GetLocation() == -1)
   {
     return 0;
   }
 
-  return &stream;
+  return stream;
 }
 
 void vkProgramGL4::AttachShader(vkShaderGL4 *shader)
@@ -488,7 +488,7 @@ void vkProgramGL4::ResizeAttributes(vkUInt32 id)
   vkInt32 missing = (vkInt32)(id - m_attributes.size() + 1);
   for (vkInt16 i = 0; i < missing; ++i)
   {
-    m_attributes.push_back(vkShaderAttributeGL4());
+    m_attributes.push_back(new vkShaderAttributeGL4());
   }
 }
 
@@ -498,6 +498,6 @@ void vkProgramGL4::ResizeStreams(vkUInt32 id)
   vkInt32 missing = (vkInt32)(id - m_streams.size() + 1);
   for (vkInt16 i = 0; i < missing; ++i)
   {
-    m_streams.push_back(vkShaderStreamGL4());
+    m_streams.push_back(new vkShaderStreamGL4());
   }
 }

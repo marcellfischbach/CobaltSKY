@@ -200,10 +200,10 @@ IObject *vkXMLFileLoader::Load(IFile *file, const vkResourceLocator &locator, IO
   }
 
   // save the current position (we will reset this possition at the end)
-  long currentPos = file->Tell();
+  vkSize currentPos = file->Tell();
 
   // get the length of the file
-  long length = file->GetLength();
+  vkSize length = file->GetLength();
   file->Seek(eSP_Set, 0);
 
   // create a buffer with an appropriet size and read all

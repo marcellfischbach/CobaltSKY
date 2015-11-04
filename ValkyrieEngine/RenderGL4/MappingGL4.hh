@@ -102,7 +102,7 @@ static GLenum internalFormatMap[] = {
   GL_RGB,
   GL_RG,
   GL_R,
-  GL_DEPTH32F_STENCIL8,
+  GL_DEPTH24_STENCIL8,
   GL_RGB10_A2,
 };
 
@@ -143,7 +143,7 @@ static GLenum externalFormatMap[] = {
   GL_RGB,
   GL_RG,
   GL_R,
-  0,
+  GL_DEPTH_STENCIL,
   GL_RGBA,
 };
 
@@ -184,6 +184,22 @@ static GLenum externalFormatTypeMap[] = {
   GL_UNSIGNED_BYTE,
   GL_UNSIGNED_BYTE,
   GL_UNSIGNED_BYTE,
-  0,
+  GL_UNSIGNED_INT_24_8,
   GL_UNSIGNED_BYTE,
+};
+
+static GLenum textureCompareModeMap[] = {
+  GL_COMPARE_REF_TO_TEXTURE,
+  GL_NONE,
+};
+
+static GLenum textureCompareFuncMap[] = {
+  GL_LEQUAL,
+  GL_GEQUAL,
+  GL_LESS,
+  GL_GREATER,
+  GL_EQUAL,
+  GL_NOTEQUAL,
+  GL_ALWAYS,
+  GL_NEVER,
 };

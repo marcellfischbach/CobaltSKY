@@ -39,6 +39,11 @@ struct VKE_API ISampler : public IObject
   virtual void SetBorderColor(const vkVector4f &color) = 0;
   virtual const vkVector4f &GetBorderColor() const = 0;
 
+  virtual void SetTextureCompareMode(vkTextureCompareMode mode) = 0;
+  virtual vkTextureCompareMode GetTextureCompareMode() const = 0;
+
+  virtual void SetTextureCompareFunc(vkTextureCompareFunc func) = 0;
+  virtual vkTextureCompareFunc GetTextureCompareFunc() const = 0;
 
 };
 

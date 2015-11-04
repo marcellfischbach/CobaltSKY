@@ -5,6 +5,7 @@
 vkRenderTargetGL4::vkRenderTargetGL4()
   : IRenderTarget ()
   , m_name(0)
+  , m_depthTexture(0)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -56,7 +57,7 @@ void vkRenderTargetGL4::SetDepthTexture(ITexture2D *depth)
   VK_SET(m_depthTexture, depthGL4);
   if (depthGL4)
   {
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthGL4->GetName(), 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
   }
 }
 

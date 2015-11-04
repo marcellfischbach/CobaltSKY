@@ -37,14 +37,14 @@ public:
 
 	virtual bool Seek (vkSeekPos pos, long num);
 
-	virtual long Tell ();
+	virtual vkSize Tell ();
 
-	virtual long GetLength();
+	virtual vkSize GetLength();
 
-	virtual long Read (void* buffer, long size);
-  virtual long ReadLine (char* buffer, long maxSize);
+	virtual vkSize Read (void* buffer, vkSize size);
+  virtual vkSize ReadLine (char* buffer, vkSize maxSize);
 
-	virtual long Write (const void* buffer, long size);
+	virtual vkSize Write (const void* buffer, vkSize size);
 
   virtual const vkString& GetLocation () const;
 

@@ -35,7 +35,7 @@ void read_data_from_input_stream(png_structp png_ptr,
   }
 
   IFile *file = static_cast<IFile*>(io);
-  file->Read(outBytes, byteCountToRead);
+  file->Read(outBytes, (long)byteCountToRead);
 }
 }
 

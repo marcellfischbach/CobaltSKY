@@ -27,6 +27,8 @@ bool vkSamplerGL4::Initialize()
   glSamplerParameteri(m_name, GL_TEXTURE_WRAP_R, GL_REPEAT);
   glSamplerParameteri(m_name, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glSamplerParameteri(m_name, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+  glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_FUNC, GL_ALWAYS);
 
   GLfloat color[] = { 0.0f, 0.0f, 0.0f, 0.0f };
   glSamplerParameterfv(m_name, GL_TEXTURE_BORDER_COLOR, color);
@@ -39,6 +41,8 @@ bool vkSamplerGL4::Initialize()
   m_maxLOD = -1000;
   m_anisotropy = 1.0f;
   m_borderColor = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  m_textureCompareMode = eTCM_CompareToR;
+  m_textureCompareFunc = eTCF_Always;
 
   VK_CHECK_GL_ERROR;
   return m_name != 0;
@@ -228,6 +232,36 @@ const vkVector4f &vkSamplerGL4::GetBorderColor() const
   return m_borderColor;
 }
 
+void vkSamplerGL4::SetTextureCompareMode(vkTextureCompareMode compareMode)
+{
+  if (m_textureCompareMode != compareMode)
+  {
+    m_textureCompareMode = compareMode;
+    glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_MODE, textureCompareModeMap[compareMode]);
+    VK_CHECK_GL_ERROR;
+  }
+}
+
+vkTextureCompareMode vkSamplerGL4::GetTextureCompareMode() const
+{
+  return m_textureCompareMode;
+}
+
+void vkSamplerGL4::SetTextureCompareFunc(vkTextureCompareFunc compareFunc)
+{
+  if (m_textureCompareFunc != compareFunc)
+  {
+    m_textureCompareFunc = compareFunc;
+    glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_FUNC, textureCompareFuncMap[compareFunc]);
+    VK_CHECK_GL_ERROR;
+  }
+}
+
+vkTextureCompareFunc vkSamplerGL4::GetTextureCompareFunc() const
+{
+  return m_textureCompareFunc;
+}
+
 
 
 
@@ -314,6 +348,7 @@ bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 h
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  printf("glTexImage2D(%d, %d, 0x%08x, %d, %d, %d, 0x%08x, 0x%08x, %p);\n", m_target, 0, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
   glTexImage2D(m_target, 0, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
   VK_CHECK_GL_ERROR;
 

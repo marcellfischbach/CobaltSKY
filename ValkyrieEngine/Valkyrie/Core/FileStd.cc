@@ -164,28 +164,28 @@ bool vkFileStd::Seek (vkSeekPos pos, long num)
   return true;
 }
 
-long vkFileStd::Tell ()
+vkSize vkFileStd::Tell ()
 {
   assert (m_file);
   return ftell (m_file);
 }
 
-long vkFileStd::GetLength ()
+vkSize vkFileStd::GetLength ()
 {
-  long cp = Tell ();
+  vkSize cp = Tell ();
   Seek (eSP_End, 0);
-  long size = Tell ();
-  Seek (eSP_Set, cp);
+  vkSize size = Tell ();
+  Seek (eSP_Set, (long)cp);
   return size;
 }
 
-long vkFileStd::Read (void *buffer, long size)
+vkSize vkFileStd::Read (void *buffer, vkSize size)
 {
   assert (m_file);
-  return (long)fread (buffer, sizeof(char), size, m_file);
+  return fread (buffer, sizeof(char), size, m_file);
 }
 
-long vkFileStd::ReadLine (char *buffer, long maxSize)
+vkSize vkFileStd::ReadLine (char *buffer, vkSize maxSize)
 {
   assert (m_file);
   unsigned p = 0;
@@ -227,10 +227,10 @@ long vkFileStd::ReadLine (char *buffer, long maxSize)
   return p - 1;
 }
 
-long vkFileStd::Write (const void *buffer, long size)
+vkSize vkFileStd::Write (const void *buffer, vkSize size)
 {
   assert (m_file);
-  return (long)fwrite (buffer, sizeof(char), size, m_file);
+  return fwrite (buffer, sizeof(char), size, m_file);
 }
 
 const std::string& vkFileStd::GetExtension () const

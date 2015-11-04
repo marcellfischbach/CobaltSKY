@@ -111,7 +111,7 @@ struct VKE_API IFile : public virtual IObject
    *
    * @return The current absolute position within the file.
    */
-	virtual long Tell () = 0;
+	virtual vkSize Tell () = 0;
 
 	/**
 	 * @brief Returns the length of the opened file.
@@ -121,11 +121,11 @@ struct VKE_API IFile : public virtual IObject
 	 *
 	 * @return The length of the opened file or -1 if the file has no random access.
 	 */
-	virtual long GetLength () = 0;
+	virtual vkSize GetLength () = 0;
 
   /**
    */
-	virtual long Read (void* buffer, long size) = 0;
+	virtual vkSize Read (void* buffer, vkSize size) = 0;
 
   /**
    * @brief Read a single line from the buffer
@@ -135,9 +135,9 @@ struct VKE_API IFile : public virtual IObject
    *
    * @return The number of characters in the output buffer
    */
-  virtual long ReadLine (char *buffer, long maxSize) = 0;
+  virtual vkSize ReadLine (char *buffer, vkSize maxSize) = 0;
 
-	virtual long Write (const void* buffer, long size) = 0;
+	virtual vkSize Write (const void* buffer, vkSize size) = 0;
 
   /**
    * @brief Returns the location where the file was located.

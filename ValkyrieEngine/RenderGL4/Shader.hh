@@ -149,8 +149,8 @@ private:
 
   void ResizeAttributes(vkUInt32 id);
   void ResizeStreams(vkUInt32 id);
-  std::vector<vkShaderAttributeGL4> m_attributes;
-  std::vector<vkShaderStreamGL4> m_streams;
+  std::vector<vkShaderAttributeGL4*> m_attributes;
+  std::vector<vkShaderStreamGL4*> m_streams;
 
 };
 

@@ -268,6 +268,25 @@ enum vkPixelFormat
   ePF_R10G10B10A2,
 };
 
+enum vkTextureCompareMode
+{
+  eTCM_CompareToR,
+  eTCM_None,
+};
+
+enum vkTextureCompareFunc
+{
+  eTCF_LessOrEqual,
+  eTCF_GreaterOrEqual,
+  eTCF_Less,
+  eTCF_Greater,
+  eTCF_Equal,
+  eTCF_NotEqual,
+  eTCF_Always,
+  eTCF_Never,
+
+};
+
 enum vkRenderPass
 {
   eRP_GBuffer,

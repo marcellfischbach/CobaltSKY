@@ -48,6 +48,7 @@ public:
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
 
+  virtual void RenderFullScreenFrame();
   virtual void RenderFullScreenFrame(ITexture2D *texture);
 
 private:

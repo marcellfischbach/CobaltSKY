@@ -43,6 +43,12 @@ public:
   virtual void SetBorderColor(const vkVector4f &color);
   virtual const vkVector4f &GetBorderColor() const;
 
+  virtual void SetTextureCompareMode(vkTextureCompareMode mode);
+  virtual vkTextureCompareMode GetTextureCompareMode() const;
+
+  virtual void SetTextureCompareFunc(vkTextureCompareFunc func);
+  virtual vkTextureCompareFunc GetTextureCompareFunc() const;
+
 private:
   GLuint m_name;
 
@@ -54,6 +60,8 @@ private:
   vkTextureAddressMode m_addressV;
   vkTextureAddressMode m_addressW;
   vkVector4f m_borderColor;
+  vkTextureCompareMode m_textureCompareMode;
+  vkTextureCompareFunc m_textureCompareFunc;
 };
 
 VK_INTERFACE();

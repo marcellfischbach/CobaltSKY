@@ -1,0 +1,17 @@
+<programs>
+
+
+	<program name="SimplePresent">
+
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/deferred/deferred_simple_present.vert</shader>
+				<shader>${shaders}/deferred/deferred_simple_present.frag</shader>
+			</technique>
+		</techniques>
+		
+	</program>
+	
+	
+	
+</programs>

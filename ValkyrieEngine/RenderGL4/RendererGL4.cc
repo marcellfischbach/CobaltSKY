@@ -23,6 +23,12 @@ RendererGL4::RendererGL4()
 {
   VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
+  glDepthMask(true);
+  //glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
+  glClearDepth(1.0);
+  VK_CHECK_GL_ERROR;
+
   glewExperimental = true;
   if (glewInit() != GLEW_OK)
   {
@@ -384,11 +390,28 @@ void RendererGL4::RenderFullScreenFrame(ITexture2D *texture)
 {
   static vkShaderAttributeID diffuse("Diffuse");
 
+  glDepthMask(true);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+  glClearDepth(1.0);
+
   SetShader(m_fullScreenProgram);
   SetVertexBuffer(0, m_fullScreenVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   vkTextureUnit tu = BindTexture(texture);
   m_fullScreenProgram->GetAttribute(diffuse)->Set(tu);
+  Render(ePT_Triangles, 6);
+}
+
+void RendererGL4::RenderFullScreenFrame()
+{
+  glDepthMask(true);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+  glClearDepth(1.0);
+
+  SetVertexBuffer(0, m_fullScreenVertexBuffer);
+  SetVertexDeclaration(m_fullScreenVertexDeclaration);
   Render(ePT_Triangles, 6);
 }
 
