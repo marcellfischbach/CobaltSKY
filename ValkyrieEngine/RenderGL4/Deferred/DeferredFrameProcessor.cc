@@ -36,8 +36,16 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
     return false;
   }
 
-  m_simplePresentShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "SimplePresent"));
+  vkResourceManager *mgr = vkResourceManager::Get();
+
+  m_simplePresentShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "SimplePresent"));
   if (!m_simplePresentShader)
+  {
+    return false;
+  }
+
+  m_directionLightShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
+  if (!m_directionLightShader)
   {
     return false;
   }
@@ -120,7 +128,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, IRenderTarget *target)
 
 
   // now simply present the scene
-  RenderSimplePresent(target);
+  RenderDirectionalLight(target);
 
 }
 
@@ -174,3 +182,57 @@ void vkDeferredFrameProcessor::RenderSimplePresent(IRenderTarget *target)
   m_renderer->RenderFullScreenFrame();
 
 }
+
+
+void vkDeferredFrameProcessor::RenderDirectionalLight(IRenderTarget *target)
+{
+  m_renderer->SetRenderTarget(target);
+  m_renderer->Clear();
+  GLenum buffers[] = {
+    GL_COLOR_ATTACHMENT0, // Diffuse / Roughness
+  };
+  glDrawBuffers(1, buffers);
+
+  static vkShaderAttributeID diffuseRoughnessAttr("DiffuseRoughness");
+  static vkShaderAttributeID normalLightModeAttr("NormalLightMode");
+  static vkShaderAttributeID emissiveMetallicAttr("EmissiveMetallic");
+  static vkShaderAttributeID sssSpecularAttr("SSSSpecular");
+  static vkShaderAttributeID depthAttr("Depth");
+
+  m_renderer->SetShader(m_directionLightShader);
+
+  IShaderAttribute *attrDiffuseRoughness = m_directionLightShader->GetAttribute(diffuseRoughnessAttr);
+  IShaderAttribute *attrNormalLightMode = m_directionLightShader->GetAttribute(normalLightModeAttr);
+  IShaderAttribute *attrEmissiveMetallic = m_directionLightShader->GetAttribute(emissiveMetallicAttr);
+  IShaderAttribute *attrSSSSpecular = m_directionLightShader->GetAttribute(sssSpecularAttr);
+  IShaderAttribute *attrDepth = m_directionLightShader->GetAttribute(depthAttr);
+
+  if (attrDiffuseRoughness)
+  {
+    vkTextureUnit tuDiffuseRoughness = m_renderer->BindTexture(m_gbuffer->GetDiffuseRoughness());
+    attrDiffuseRoughness->Set(tuDiffuseRoughness);
+  }
+  if (attrNormalLightMode)
+  {
+    vkTextureUnit tuNormalLightMode = m_renderer->BindTexture(m_gbuffer->GetNormalLightMode());
+    attrNormalLightMode->Set(tuNormalLightMode);
+  }
+  if (attrEmissiveMetallic)
+  {
+    vkTextureUnit tuEmissiveMetallic = m_renderer->BindTexture(m_gbuffer->GetEmissiveMetallic());
+    attrEmissiveMetallic->Set(tuEmissiveMetallic);
+  }
+  if (attrSSSSpecular)
+  {
+    vkTextureUnit tuSSSSpecular = m_renderer->BindTexture(m_gbuffer->GetSSSSpec());
+    attrSSSSpecular->Set(tuSSSSpecular);
+  }
+  if (attrDepth)
+  {
+    vkTextureUnit tuDepth = m_renderer->BindTexture(m_gbuffer->GetDepth());
+    attrDepth->Set(tuDepth);
+  }
+  m_renderer->RenderFullScreenFrame();
+
+}
+

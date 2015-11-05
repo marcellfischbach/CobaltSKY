@@ -2,16 +2,22 @@
 
 
 	<program name="SimplePresent">
-
 		<techniques>
 			<technique name="Default">
 				<shader>${shaders}/deferred/deferred_simple_present.vert</shader>
 				<shader>${shaders}/deferred/deferred_simple_present.frag</shader>
 			</technique>
 		</techniques>
-		
 	</program>
 	
+	<program name="DirectionalLight">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/deferred/directional_light.vert</shader>
+				<shader>${shaders}/deferred/directional_light.frag</shader>
+			</technique>
+		</techniques>
+	</program>
 	
 	
 </programs>

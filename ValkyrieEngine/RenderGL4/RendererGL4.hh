@@ -43,7 +43,7 @@ public:
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
   virtual void SetRenderTarget(IRenderTarget *renderTarget);
 
-  virtual void Clear();
+  virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
@@ -51,10 +51,16 @@ public:
   virtual void RenderFullScreenFrame();
   virtual void RenderFullScreenFrame(ITexture2D *texture);
 
+
+
 private:
   void BindMatrices();
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();
+
+  void SetClearColorValue(const vkVector4f &clearColorValue);
+  void SetClearDepthValue(float clearDepthValue);
+  void SetClearStencilValue(vkUInt8 clearStencilValue);
 
 private:
   void RecalculateMatrix(vkMatrixType type);
@@ -64,6 +70,10 @@ private:
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
   vkRenderTargetGL4 *m_renderTarget;
+
+  vkVector4f m_clearColor;
+  float m_clearDepth;
+  vkUInt8 m_clearStencil;
 
   vkTextureUnit m_nextTextureUnit;
 

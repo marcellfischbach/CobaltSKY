@@ -154,7 +154,7 @@ int vkEngine::Run()
     //m_renderer->Clear();
 
 
-    viewMatrix.SetLookAt(vkVector3f(10.0f * (float)cos(v), 10.0f * (float)sin(v), 0.5f),
+    viewMatrix.SetLookAt(vkVector3f(20.0f * (float)cos(v), 20.0f * (float)sin(v), 20.0f),
                          vkVector3f(0.0f, 0.0f, 0.0f), 
                          vkVector3f(0.0f, 0.0f, 1.0f));
     v += 0.0001f;

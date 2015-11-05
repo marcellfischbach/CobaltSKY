@@ -26,6 +26,7 @@ public:
 private:
   void RenderGBuffer(vkNode *rootNode);
 
+  void RenderDirectionalLight(IRenderTarget *target);
   void RenderSimplePresent(IRenderTarget *target);
 
 private:
@@ -35,5 +36,5 @@ private:
   vkGBuffer *m_gbuffer;
 
   IShader *m_simplePresentShader;
-
+  IShader *m_directionLightShader;
 };

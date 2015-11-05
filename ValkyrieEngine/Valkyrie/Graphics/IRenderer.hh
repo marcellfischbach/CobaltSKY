@@ -64,7 +64,7 @@ struct VKE_API IRenderer : public IObject
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
   virtual void SetRenderTarget(IRenderTarget *renderTarget) = 0;
 
-  virtual void Clear() = 0;
+  virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0) = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;
   virtual void Render(vkPrimitiveType type, vkUInt32 count) = 0;
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType) = 0;

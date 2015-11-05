@@ -348,10 +348,64 @@ void RendererGL4::SetRenderTarget(IRenderTarget *renderTarget)
 
 }
 
-void RendererGL4::Clear()
+
+void RendererGL4::SetClearColorValue(const vkVector4f &colorValue)
 {
-  glClearColor(0.0f, 0.0f, 0.5, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  if (colorValue != m_clearColor)
+  {
+    m_clearColor = colorValue;
+    glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.w);
+  }
+}
+
+void RendererGL4::SetClearDepthValue(float depthValue)
+{
+  if (depthValue != m_clearDepth)
+  {
+    m_clearDepth = depthValue;
+    glClearDepth(m_clearDepth);
+  }
+}
+
+void RendererGL4::SetClearStencilValue(vkUInt8 stencilValue)
+{
+  if (stencilValue != m_clearStencil)
+  {
+    m_clearStencil = stencilValue;
+    glClearStencil(m_clearStencil);
+  }
+}
+
+
+void RendererGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDepth, float depth, bool clearStencil, vkUInt8 stencil)
+{
+  GLbitfield clear = 0;
+  if (clearColor)
+  {
+    clear |= GL_COLOR_BUFFER_BIT;
+    SetClearColorValue(color);
+  }
+
+  if (clearDepth)
+  {
+    clear |= GL_DEPTH_BUFFER_BIT;
+    SetClearDepthValue(clearDepth);
+  }
+
+  if (clearStencil)
+  {
+    clear |= GL_STENCIL_BUFFER_BIT;
+    SetClearStencilValue(stencil);
+  }
+
+  if (clear == 0)
+  {
+    return;
+  }
+
+  glClear(clear);
+  VK_CHECK_GL_ERROR;
+
 }
 
 void RendererGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
