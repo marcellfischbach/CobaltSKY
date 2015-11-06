@@ -59,6 +59,8 @@ set(SOURCE_GRAPHICS
 	Graphics/ITexture.hh
 	Graphics/IVertexBuffer.hh
 	Graphics/IVertexDeclaration.hh
+  Graphics/Light.cc
+  Graphics/Light.hh
 	Graphics/Material.cc
 	Graphics/Material.hh
 	Graphics/Mesh.cc
@@ -78,6 +80,8 @@ set(SOURCE_GRAPHICS_SCENE
 	Graphics/Scene/GeometryNode.hh
 	Graphics/Scene/GroupNode.cc
 	Graphics/Scene/GroupNode.hh
+  Graphics/Scene/LightNode.cc
+  Graphics/Scene/LightNode.hh
 	Graphics/Scene/Node.cc
 	Graphics/Scene/Node.hh
 	Graphics/Scene/Scan.hh
@@ -111,6 +115,7 @@ source_group(
 set(SOURCE_MATH
 	Math/Clipper.cc
 	Math/Clipper.hh
+  Math/Color.hh
 	Math/BoundingVolume.cc
 	Math/BoundingVolume.hh
 	Math/Matrix.hh

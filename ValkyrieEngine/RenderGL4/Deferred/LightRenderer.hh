@@ -11,7 +11,7 @@ private:
 };
 
 
-class vkDirectionalLightRendererGL4
+class vkDirectionalLightRendererGL4 : public vkLightRendererGL4
 {
 
 };

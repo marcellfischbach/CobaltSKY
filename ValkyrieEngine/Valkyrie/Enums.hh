@@ -301,3 +301,11 @@ enum vkResourceLoadingMode
   eRLM_Instance,
   eRLM_Inline,
 };
+
+
+enum vkLightType
+{
+  eLT_PointLight,
+  eLT_DirectionalLight,
+};
+

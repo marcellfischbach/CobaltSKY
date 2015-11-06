@@ -36,6 +36,8 @@ set(SOURCE_DEFERRED
   Deferred/DeferredFrameProcessor.hh
   Deferred/GBuffer.cc
   Deferred/GBuffer.hh
+  Deferred/LightRenderer.cc
+  Deferred/LightRenderer.hh
   )
   
 source_group(
