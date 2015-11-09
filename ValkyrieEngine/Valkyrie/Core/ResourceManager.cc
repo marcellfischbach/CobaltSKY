@@ -211,7 +211,7 @@ IObject *vkXMLFileLoader::Load(IFile *file, const vkResourceLocator &locator, IO
   file->Read(buffer, length);
   buffer[length] = '\0';
 
-  file->Seek(eSP_Set, currentPos);
+  file->Seek(eSP_Set, (long)currentPos);
 
 
   TiXmlDocument document;

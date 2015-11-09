@@ -80,7 +80,7 @@ IObject *vkPNGImageLoader::Load(IFile *file, const vkResourceLocator &locator, I
     return 0;
   }
 
-  const png_uint_32 bytesPerRow = png_get_rowbytes(png_ptr, info_ptr);
+  const png_size_t bytesPerRow = png_get_rowbytes(png_ptr, info_ptr);
 
   vkUInt8 *buffer = 0;
   vkSize bufferSize = 0;

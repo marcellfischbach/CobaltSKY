@@ -63,6 +63,7 @@ public:
   virtual void Set(const vkVector2f &v);
   virtual void Set(const vkVector3f &v);
   virtual void Set(const vkVector4f &v);
+  virtual void Set(const vkColor4f &v);
 
   virtual void Set(const vkMatrix3f &m);
   virtual void Set(const vkMatrix4f &m);

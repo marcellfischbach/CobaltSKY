@@ -2,6 +2,7 @@
 #pragma once
 
 #include <RenderGL4/Export.hh>
+#include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <RenderGL4/Deferred/DeferredFrameProcessor.refl.hh>
@@ -9,7 +10,9 @@
 struct IShader;
 class vkGBuffer;
 class vkGeometryNode;
+class vkLightNode;
 class RendererGL4;
+class vkLightRendererGL4;
 
 VK_INTERFACE();
 class VKGL4_API vkDeferredFrameProcessor : public virtual IFrameProcessor
@@ -31,10 +34,13 @@ private:
 
 private:
   vkCollection<vkGeometryNode*> m_geometries;
+  vkCollection<vkLightNode*> m_lights;
   RendererGL4 *m_renderer;
 
   vkGBuffer *m_gbuffer;
 
   IShader *m_simplePresentShader;
   IShader *m_directionLightShader;
+
+  vkLightRendererGL4 *m_lightRenderers[eLT_Count];
 };

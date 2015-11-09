@@ -13,7 +13,8 @@ uniform sampler2D vk_Depth;
 
 uniform vec4 vk_LightColor;
 uniform float vk_LightEnergy; 
-uniform vec3 vk_LightDirection;
+uniform vec3 vk_LightPosition;
+uniform float vk_LightRadius;
 
 in vec2 texCoord;
 in vec2 xyPlane;
@@ -36,11 +37,15 @@ void main ()
 	vec3 normal = texture(vk_NormalLightMode, texCoord).xyz * 2.0 - 1.0;
 	vec3 diffuse = texture(vk_DiffuseRoughness, texCoord).xyz;
 
+
+	vec3 lightDir = vk_LightPosition - world;
+	float lightDistance = length(lightDir);
+	lightDir /= lightDistance;
 	
-	float lamb = dot (-vk_LightDirection, normal);
+	float lamb = dot (lightDir, normal);
+	float lightIntensity = clamp (1.0f - lightDistance / vk_LightRadius, 0.0, 1.0);
 	
 	
 	
-	
-	vk_FragColor = vec4 (diffuse * lamb * vk_LightColor.rgb * vk_LightEnergy, 1.0);
+	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * lamb * lightIntensity * vk_LightEnergy, 1.0);
 }

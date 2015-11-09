@@ -19,5 +19,14 @@
 		</techniques>
 	</program>
 	
+	<program name="PointLight">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/deferred/point_light.vert</shader>
+				<shader>${shaders}/deferred/point_light.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+	
 	
 </programs>

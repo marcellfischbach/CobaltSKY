@@ -10,9 +10,12 @@
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
+#include <Valkyrie/Graphics/Scene/GroupNode.hh>
+#include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <math.h>
@@ -116,9 +119,26 @@ int vkEngine::Run()
 
   vkMaterialInstance *materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
 
+  vkGroupNode *groupNode = new vkGroupNode();
+
   vkGeometryNode *geometryNode = new vkGeometryNode();
   geometryNode->SetMesh(mesh);
   geometryNode->SetMaterial(materialInstance);
+  geometryNode->AttachTo(groupNode);
+
+
+  vkPointLight *pointLight = new vkPointLight();
+  pointLight->SetColor(vkColor4f(1.0f, 0.75f, 0.25f));
+  pointLight->SetEnergy(1.0f);
+  pointLight->SetPosition(vkVector3f(0.0f, 0.0f, 10.0f));
+  pointLight->SetRadius(20.0f);
+
+  vkLightNode *lightNode = new vkLightNode();
+  lightNode->SetLight(pointLight);
+  lightNode->AttachTo(groupNode);
+
+
+  
 
   float asp = 768.0f / 1366.0f;
   vkMatrix4f projMatrix;
@@ -140,6 +160,7 @@ int vkEngine::Run()
     return -1;
   }
 
+  float l = 0.0f;
   while (true)
   {
     m_window->UpdateEvents();
@@ -147,11 +168,6 @@ int vkEngine::Run()
     {
       break;
     }
-    //
-    // render to the render target
-    // m_renderer->SetRenderTarget(rt);
-
-    //m_renderer->Clear();
 
 
     viewMatrix.SetLookAt(vkVector3f(20.0f * (float)cos(v), 20.0f * (float)sin(v), 20.0f),
@@ -167,9 +183,11 @@ int vkEngine::Run()
     geometryNode->SetMatrix(mm);
     m += 0.00f;
 
-    geometryNode->UpdateStates();
+    pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 10.0f + cos(2.0f*l) * 5.0f));
+    l += 0.001f;
+    groupNode->UpdateStates();
 
-    fp->Render(geometryNode, rt);
+    fp->Render(groupNode, rt);
 
     // no render this image onscreen
     m_renderer->SetRenderTarget(0);

@@ -23,12 +23,15 @@ public:
   void SetColor(const vkColor4f &color);
   const vkColor4f &GetColor() const;
 
+  void SetEnergy(float energy);
+  float GetEnergy() const;
+
 
 private:
 
   vkLightType m_lightType;
   vkColor4f m_color;
-
+  float m_energy;
 
 };
 
@@ -61,6 +64,7 @@ public:
   vkDirectionalLight();
   virtual ~vkDirectionalLight();
 
+  void SetArbDirection(const vkVector3f &arbDirection);
   void SetDirection(const vkVector3f &direction);
   const vkVector3f &GetDirection() const;
 
@@ -68,4 +72,6 @@ private:
   vkVector3f m_direction;
 
 };
+
+
 

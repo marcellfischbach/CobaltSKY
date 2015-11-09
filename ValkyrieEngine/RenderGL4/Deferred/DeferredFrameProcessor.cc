@@ -1,14 +1,17 @@
 
 #include <RenderGL4/Deferred/DeferredFrameProcessor.hh>
+#include <RenderGL4/Deferred/LightRenderer.hh>
 #include <RenderGL4/RendererGL4.hh>
 #include <RenderGL4/TextureGL4.hh>
 #include <RenderGL4/Deferred/GBuffer.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
+#include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <GL/glew.h>
 
 
@@ -20,7 +23,8 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(RendererGL4 *renderer)
 {
   VK_CLASS_GEN_CONSTR;
 
-
+  m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightRendererGL4();
+  m_lightRenderers[eLT_PointLight] = new vkPointLightRendererGL4();
 }
 
 vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
@@ -57,8 +61,9 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
 class Collector : public IScanCallback
 {
 public:
-  Collector(vkCollection<vkGeometryNode*> &geometrieNodes)
+  Collector(vkCollection<vkGeometryNode*> &geometrieNodes, vkCollection<vkLightNode*> &lightNodes)
     : m_geometryNodes(geometrieNodes)
+    , m_lightNodes(lightNodes)
   {
 
   }
@@ -71,12 +76,14 @@ public:
 
   virtual bool ScanLightNode(vkLightNode *lightNode)
   {
+    m_lightNodes.Add(lightNode);
     return true;
   }
 
 
 private:
   vkCollection<vkGeometryNode*> &m_geometryNodes;
+  vkCollection<vkLightNode*> &m_lightNodes;
 };
 
 
@@ -120,15 +127,34 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkNode *rootNode)
 void vkDeferredFrameProcessor::Render(vkNode *node, IRenderTarget *target)
 {
   m_geometries.Clear();
-  Collector collector(m_geometries);
+  m_lights.Clear();
+  Collector collector(m_geometries, m_lights);
   node->Scan(0, m_renderer, &collector);
 
 
+
+  // render to the main GBuffer this buffer will be used to assemble the final image
   RenderGBuffer(node);
 
 
+  m_renderer->SetRenderTarget(target);
+  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
+
+  for (vkSize i = 0; i < m_lights.length; ++i)
+  {
+    vkLightNode *lightNode = m_lights[i];
+    vkLight* light = lightNode->GetLight();
+
+    vkLightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
+    if (lightRenderer)
+    {
+      lightRenderer->Render(m_renderer, light, m_gbuffer, target);
+    }
+
+  }
+
   // now simply present the scene
-  RenderDirectionalLight(target);
+  //RenderDirectionalLight(target);
 
 }
 
@@ -189,7 +215,7 @@ void vkDeferredFrameProcessor::RenderDirectionalLight(IRenderTarget *target)
   m_renderer->SetRenderTarget(target);
   m_renderer->Clear();
   GLenum buffers[] = {
-    GL_COLOR_ATTACHMENT0, // Diffuse / Roughness
+    GL_COLOR_ATTACHMENT0, 
   };
   glDrawBuffers(1, buffers);
 

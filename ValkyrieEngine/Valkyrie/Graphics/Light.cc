@@ -6,6 +6,7 @@ vkLight::vkLight(vkLightType type)
   : vkObject()
   , m_lightType(type)
   , m_color(1.0f, 1.0f, 1.0f, 1.0f)
+  , m_energy(1.0f)
 {
 
 }
@@ -30,8 +31,15 @@ const vkColor4f &vkLight::GetColor() const
   return m_color;
 }
 
+void vkLight::SetEnergy(float energy)
+{
+  m_energy = energy;
+}
 
-
+float vkLight::GetEnergy() const
+{
+  return m_energy;
+}
 
 
 vkPointLight::vkPointLight()
@@ -79,6 +87,11 @@ vkDirectionalLight::vkDirectionalLight()
 vkDirectionalLight::~vkDirectionalLight()
 {
 
+}
+
+void vkDirectionalLight::SetArbDirection(const vkVector3f &arbDirection)
+{
+  arbDirection.Normalized(m_direction);
 }
 
 void vkDirectionalLight::SetDirection(const vkVector3f &direction)

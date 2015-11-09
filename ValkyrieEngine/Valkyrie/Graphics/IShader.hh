@@ -6,6 +6,7 @@
 #include <Valkyrie/Core/String.hh>
 #include <Valkyrie/Graphics/IShader.refl.hh>
 #include <Valkyrie/Graphics/ShaderID.hh>
+#include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Enums.hh>
@@ -35,6 +36,7 @@ struct VKE_API IShaderAttribute : public virtual IObject
   virtual void Set(const vkVector2f &v) = 0;
   virtual void Set(const vkVector3f &v) = 0;
   virtual void Set(const vkVector4f &v) = 0;
+  virtual void Set(const vkColor4f &v) = 0;
 
   virtual void Set(const vkMatrix4f &m) = 0;
 

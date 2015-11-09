@@ -307,5 +307,6 @@ enum vkLightType
 {
   eLT_PointLight,
   eLT_DirectionalLight,
+  eLT_Count,
 };
 
