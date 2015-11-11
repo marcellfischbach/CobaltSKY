@@ -49,6 +49,23 @@ void vkEngine::SetRenderer(IRenderer *renderer)
 vkMesh* createPlaneMesh(IRenderer *renderer, float size);
 vkMesh* createCubeMesh(IRenderer *renderer, float size);
 
+
+vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vkVector3f &up)
+{
+  vkMatrix4f M;
+  vkVector3f x, y, z;
+  vkVector3f::Sub(spot, eye, y).Normalize();
+  vkVector3f::Cross(y, up, x).Normalize();
+  vkVector3f::Cross(x, y, z);
+
+  M.SetXAxis(x);
+  M.SetYAxis(y);
+  M.SetZAxis(z);
+  M.SetTranslation(eye);
+  M.Debug("CreateMatrix");
+  return M;
+}
+
 int vkEngine::Run()
 {
   if (!m_window)
@@ -137,12 +154,10 @@ int vkEngine::Run()
       break;
     }
 
-    vkMatrix4f MM;
-    printf("Start\n");
-    MM.SetLookAt(vkVector3f((float)cos(v) * 25.0f, (float)sin(v) * 25.0f, 25.0f), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
-    printf("End\n");
+    vkMatrix4f MM = create_matrix(vkVector3f((float)cos(v) * 25.0f, (float)sin(v) * 25.0f, 25.0f), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
     cameraNode->SetMatrix(MM);
     v += 0.001f;
+    MM = create_matrix(vkVector3f(0, 0, 0), vkVector3f(0, 1, 0), vkVector3f(0, 0, 1));
 
     vkMatrix4f mm = planeGeometryNode->GetMatrix();
     mm.SetRotationX(m);

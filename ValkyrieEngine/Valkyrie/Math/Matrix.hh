@@ -405,7 +405,7 @@ public:
     return *this;
   }
 
-  vkMatrix4f &SetLookAtInv(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  VK_FORCEINLINE vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
   {
     vkVector3f xAxis, yAxis, zAxis;
     vkVector3f::Sub(eye, spot, zAxis).Normalize();
@@ -417,29 +417,22 @@ public:
     SetYAxis(xAxis.y, yAxis.y, zAxis.y);
     SetZAxis(xAxis.z, yAxis.z, zAxis.z);
     SetTranslation(-xAxis.Dot(eye), -yAxis.Dot(eye), -zAxis.Dot(eye));
+
     return *this;
   }
 
-  VK_FORCEINLINE vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  VK_FORCEINLINE vkMatrix4f &SetLookAtInv(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
   {
     vkVector3f xAxis, yAxis, zAxis;
-
-    vkVector3f::Sub(spot, eye, zAxis).Normalize();
-    vkVector3f::Cross(zAxis, up, xAxis).Normalize();
-    vkVector3f::Cross(xAxis, zAxis, yAxis);
+    vkVector3f::Sub(eye, spot, zAxis).Normalize();
+    vkVector3f::Cross(up, zAxis, xAxis).Normalize();
+    vkVector3f::Cross(zAxis, xAxis, yAxis);
 
     SetXAxis(xAxis);
     SetYAxis(yAxis);
     SetZAxis(zAxis);
+    SetTranslation(eye);
 
-    SetTranslation(vkVector3f(-eye.x, -eye.y, -eye.z));
-
-    printf("LookAt:\n");
-    printf("  Eye  : %.2f %.2f %.2f\n", eye.x, eye.y, eye.z);
-    printf("  xAxis: %.2f %.2f %.2f\n", xAxis.x, xAxis.y, xAxis.z);
-    printf("  yAxis: %.2f %.2f %.2f\n", yAxis.x, yAxis.y, yAxis.z);
-    printf("  zAxis: %.2f %.2f %.2f\n", zAxis.x, zAxis.y, zAxis.z);
-    printf("  trans: %.2f %.2f %.2f\n", -eye.x, -eye.y, -eye.z);
 
     return *this;
   }
