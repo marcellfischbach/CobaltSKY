@@ -31,8 +31,11 @@ public:
 
 
   virtual void SetProjectionMatrix(const vkMatrix4f &matrix);
+  virtual void SetProjectionMatrixInv(const vkMatrix4f &matrix);
   virtual void SetViewMatrix(const vkMatrix4f &matrix);
+  virtual void SetViewMatrixInv(const vkMatrix4f &matrix);
   virtual void SetModelMatrix(const vkMatrix4f &matrix);
+  virtual void SetModelMatrixInv(const vkMatrix4f &matrix);
 
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);

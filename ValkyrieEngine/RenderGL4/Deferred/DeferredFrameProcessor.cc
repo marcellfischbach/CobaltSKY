@@ -6,6 +6,7 @@
 #include <RenderGL4/Deferred/GBuffer.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
@@ -124,14 +125,14 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkNode *rootNode)
 
 }
 
-void vkDeferredFrameProcessor::Render(vkNode *node, IRenderTarget *target)
+void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRenderTarget *target)
 {
   m_geometries.Clear();
   m_lights.Clear();
   Collector collector(m_geometries, m_lights);
   node->Scan(0, m_renderer, &collector);
 
-
+  camera->Apply(m_renderer);
 
   // render to the main GBuffer this buffer will be used to assemble the final image
   RenderGBuffer(node);

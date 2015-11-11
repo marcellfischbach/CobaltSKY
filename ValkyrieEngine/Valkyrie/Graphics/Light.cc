@@ -42,6 +42,17 @@ float vkLight::GetEnergy() const
 }
 
 
+void vkLight::SetCastShadow(bool castShadow)
+{
+  m_castShadow = castShadow;
+}
+
+bool vkLight::IsCastingShadow() const
+{
+  return m_castShadow;
+}
+
+
 vkPointLight::vkPointLight()
   : vkLight(eLT_PointLight)
   , m_position(0.0f, 0.0f, 0.0f)

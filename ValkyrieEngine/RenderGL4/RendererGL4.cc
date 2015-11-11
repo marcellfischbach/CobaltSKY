@@ -61,6 +61,9 @@ RendererGL4::RendererGL4()
   vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
 
   InitFullScreenData();
+
+  glFrontFace(GL_CW);
+  glEnable(GL_CULL_FACE);
 }
 
 
@@ -148,6 +151,12 @@ void RendererGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
+void RendererGL4::SetProjectionMatrixInv(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatProjInv] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatProjInv] = false;
+}
+
 void RendererGL4::SetViewMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatView] = matrix;
@@ -161,6 +170,12 @@ void RendererGL4::SetViewMatrix(const vkMatrix4f &matrix)
 
 }
 
+void RendererGL4::SetViewMatrixInv(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatViewInv] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatViewInv] = false;
+}
+
 void RendererGL4::SetModelMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatModel] = matrix;
@@ -171,6 +186,11 @@ void RendererGL4::SetModelMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
+void RendererGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
+{
+  m_matrices[eMT_MatModelInv] = matrix;
+  m_matrixNeedsRecalculation[eMT_MatModelInv] = false;
+}
 void RendererGL4::RecalculateMatrix(vkMatrixType type)
 {
   if (!m_matrixNeedsRecalculation[type])

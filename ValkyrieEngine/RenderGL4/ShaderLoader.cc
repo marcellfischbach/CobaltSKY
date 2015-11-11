@@ -62,20 +62,13 @@ IObject *vkShaderGL4Loader::Load(IFile *file, const vkResourceLocator &locator, 
 
 
 
-  // save the current position (we will reset this possition at the end)
-  long currentPos = file->Tell();
-
-  // get the length of the file
-  file->Seek(eSP_End, 0);
-  long length = file->Tell();
-  file->Seek(eSP_Set, 0);
+  vkSize length = file->GetLength();
 
   // create a buffer with an appropriet size and read all
   char *buffer = new char[length + 1];
   file->Read(buffer, length);
   buffer[length] = '\0';
 
-  file->Seek(eSP_Set, currentPos);
 
   vkString source(buffer);
   delete[] buffer;

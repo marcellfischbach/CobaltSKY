@@ -171,7 +171,7 @@ public:
     m23 = 0.0f;
   }
 
-  VK_FORCEINLINE vkVector3f &GetXAxis(vkVector3f &res)
+  VK_FORCEINLINE vkVector3f &GetXAxis(vkVector3f &res) const
   {
     res.x = m00;
     res.y = m01;
@@ -180,7 +180,7 @@ public:
   }
 
 
-  VK_FORCEINLINE vkVector3f &GetYAxis(vkVector3f &res)
+  VK_FORCEINLINE vkVector3f &GetYAxis(vkVector3f &res) const
   {
     res.x = m10;
     res.y = m11;
@@ -189,7 +189,7 @@ public:
   }
 
 
-  VK_FORCEINLINE vkVector3f &GetZAxis(vkVector3f &res)
+  VK_FORCEINLINE vkVector3f &GetZAxis(vkVector3f &res) const
   {
     res.x = m20;
     res.y = m21;
@@ -213,7 +213,7 @@ public:
     m33 = w;
   }
 
-  VK_FORCEINLINE vkVector3f &GetTranslation(vkVector3f &res)
+  VK_FORCEINLINE vkVector3f &GetTranslation(vkVector3f &res) const
   {
     res.x = m30;
     res.y = m31;
@@ -405,34 +405,41 @@ public:
     return *this;
   }
 
-  vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  vkMatrix4f &SetLookAtInv(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
   {
     vkVector3f xAxis, yAxis, zAxis;
     vkVector3f::Sub(eye, spot, zAxis).Normalize();
     vkVector3f::Cross(up, zAxis, xAxis).Normalize();
     vkVector3f::Cross(zAxis, xAxis, yAxis);
+
 
     SetXAxis(xAxis.x, yAxis.x, zAxis.x);
     SetYAxis(xAxis.y, yAxis.y, zAxis.y);
     SetZAxis(xAxis.z, yAxis.z, zAxis.z);
-
     SetTranslation(-xAxis.Dot(eye), -yAxis.Dot(eye), -zAxis.Dot(eye));
     return *this;
   }
 
-  VK_FORCEINLINE vkMatrix4f &SetLookAtInv(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
+  VK_FORCEINLINE vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
   {
     vkVector3f xAxis, yAxis, zAxis;
 
-    vkVector3f::Sub(eye, spot, zAxis).Normalize();
-    vkVector3f::Cross(up, zAxis, xAxis).Normalize();
-    vkVector3f::Cross(zAxis, xAxis, yAxis);
+    vkVector3f::Sub(spot, eye, zAxis).Normalize();
+    vkVector3f::Cross(zAxis, up, xAxis).Normalize();
+    vkVector3f::Cross(xAxis, zAxis, yAxis);
 
     SetXAxis(xAxis);
     SetYAxis(yAxis);
     SetZAxis(zAxis);
 
-    SetTranslation(eye);
+    SetTranslation(vkVector3f(-eye.x, -eye.y, -eye.z));
+
+    printf("LookAt:\n");
+    printf("  Eye  : %.2f %.2f %.2f\n", eye.x, eye.y, eye.z);
+    printf("  xAxis: %.2f %.2f %.2f\n", xAxis.x, xAxis.y, xAxis.z);
+    printf("  yAxis: %.2f %.2f %.2f\n", yAxis.x, yAxis.y, yAxis.z);
+    printf("  zAxis: %.2f %.2f %.2f\n", zAxis.x, zAxis.y, zAxis.z);
+    printf("  trans: %.2f %.2f %.2f\n", -eye.x, -eye.y, -eye.z);
 
     return *this;
   }
@@ -453,6 +460,60 @@ public:
     m01 = 0.0f;    m11 = z2 / dy; m21 = sy / dy;  m31 = 0.0f;
     m02 = 0.0f;    m12 = 0.0f;    m22 = -sz / dz; m32 = -2.0f*n*f / dz;
     m03 = 0.0f;    m13 = 0.0f;    m23 = -1.0f;    m33 = 0.0f;
+    return *this;
+  }
+  VK_FORCEINLINE vkMatrix4f &SetPerspectiveInv(float l, float r, float b, float t, float n, float f)
+  {
+
+    float z2 = 2.0f * n;
+    float dx = r - l;
+    float dy = t - b;
+    float dz = f - n;
+    float sx = r + l;
+    float sy = t + b;
+    float sz = n + f;
+    float nf2 = z2 * f;
+
+    m00 = dx / z2; m10 = 0.0f;    m20 = 0.0f;      m30 = sx / z2;
+    m01 = 0.0f;    m11 = dy / z2; m21 = 0.0f;      m31 = sy / z2;
+    m02 = 0.0f;    m12 = 0.0f;    m22 = 0.0f;      m32 = -1.0f;
+    m03 = 0.0f;    m13 = 0.0f;    m23 = -dz / nf2; m33 = sz / nf2;
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetOrthographic(float l, float r, float b, float t, float n, float f)
+  {
+
+    float z2 = 2.0f * n;
+    float dx = r - l;
+    float dy = t - b;
+    float dz = f - n;
+    float sx = r + l;
+    float sy = t + b;
+    float sz = n + f;
+
+    m00 = 2.0f / dx; m10 = 0.0f;      m20 = 0.0f;       m30 = sx / dx;
+    m01 = 0.0f;      m11 = 2.0f / dy; m21 = 0.0f;       m31 = sy / dy;
+    m02 = 0.0f;      m12 = 0.0f;      m22 = -2.0f / dz; m32 = sz / dz;
+    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;       m33 = 1.0;
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetOrthographicInv(float l, float r, float b, float t, float n, float f)
+  {
+
+    float z2 = 2.0f * n;
+    float dx = r - l;
+    float dy = t - b;
+    float dz = f - n;
+    float sx = r + l;
+    float sy = t + b;
+    float sz = n + f;
+
+    m00 = dx / 2.0f; m10 = 0.0f;      m20 = 0.0f;       m30 = sx / 2.0f;
+    m01 = 0.0f;      m11 = dy / 2.0f; m21 = 0.0f;       m31 = sy / 2.0f;
+    m02 = 0.0f;      m12 = 0.0f;      m22 = dz / -2.0f; m32 = sz / 2.0f;
+    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;       m33 = 1.0;
     return *this;
   }
 
@@ -498,6 +559,23 @@ public:
     return r;
   }
 
+
+  VK_FORCEINLINE void Debug(const char *message = 0) const
+  {
+    if (message) 
+    {
+      printf("vkMatrix: %s\n", message);
+    }
+    else
+    {
+      printf("vkMatrix:\n");
+    }
+
+    printf("  %.2f %.2f %.2f %.2f\n", m00, m01, m02, m03);
+    printf("  %.2f %.2f %.2f %.2f\n", m10, m11, m12, m13);
+    printf("  %.2f %.2f %.2f %.2f\n", m20, m21, m22, m23);
+    printf("  %.2f %.2f %.2f %.2f\n", m30, m31, m32, m33);
+  }
 
 
 };

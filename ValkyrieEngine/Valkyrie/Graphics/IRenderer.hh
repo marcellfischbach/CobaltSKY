@@ -45,8 +45,11 @@ struct VKE_API IRenderer : public IObject
    * @{
    */
   virtual void SetProjectionMatrix(const vkMatrix4f &matrix) = 0;
+  virtual void SetProjectionMatrixInv(const vkMatrix4f &matrix) = 0;
   virtual void SetViewMatrix(const vkMatrix4f &matrix) = 0;
+  virtual void SetViewMatrixInv(const vkMatrix4f &matrix) = 0;
   virtual void SetModelMatrix(const vkMatrix4f &matrix) = 0;
+  virtual void SetModelMatrixInv(const vkMatrix4f &matrix) = 0;
   /**
    * @}
    */

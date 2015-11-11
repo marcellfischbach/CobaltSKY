@@ -61,6 +61,8 @@ void vkNode::FlagUpdateBoundingBox()
   }
 }
 
+
+
 void vkNode::UpdateBoundingBox()
 {
   m_boundingBox.Clear();

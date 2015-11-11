@@ -26,13 +26,15 @@ public:
   void SetEnergy(float energy);
   float GetEnergy() const;
 
+  void SetCastShadow(bool castShadow);
+  bool IsCastingShadow() const;
 
 private:
 
   vkLightType m_lightType;
   vkColor4f m_color;
   float m_energy;
-
+  bool m_castShadow;
 };
 
 

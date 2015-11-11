@@ -310,3 +310,9 @@ enum vkLightType
   eLT_Count,
 };
 
+enum vkProjectionMode
+{
+  ePM_Perspective,
+  ePM_Orthographic,
+};
+

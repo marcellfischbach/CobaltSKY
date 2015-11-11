@@ -49,6 +49,8 @@ source_group(
 	)
 
 set(SOURCE_GRAPHICS
+  Graphics/Camera.cc
+  Graphics/Camera.hh
   Graphics/IFrameProcessor.hh
 	Graphics/IIndexBuffer.hh
 	Graphics/Image.cc
@@ -76,6 +78,8 @@ source_group(
 	)
 	
 set(SOURCE_GRAPHICS_SCENE
+  Graphics/Scene/CameraNode.cc
+  Graphics/Scene/CameraNode.hh
 	Graphics/Scene/GeometryNode.cc
 	Graphics/Scene/GeometryNode.hh
 	Graphics/Scene/GroupNode.cc

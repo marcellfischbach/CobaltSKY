@@ -6,6 +6,7 @@
 #include <Valkyrie/Graphics/IFrameProcessor.refl.hh>
 
 
+class vkCamera;
 class vkNode;
 struct IRenderTarget;
 
@@ -17,6 +18,6 @@ struct VKE_API IFrameProcessor : public virtual IObject
 
   virtual bool Initialize(vkUInt16 width, vkUInt16 height) = 0;
 
-  virtual void Render(vkNode *root, IRenderTarget *target = 0) = 0;
+  virtual void Render(vkNode *root, const vkCamera *camera, IRenderTarget *target = 0) = 0;
 
 };

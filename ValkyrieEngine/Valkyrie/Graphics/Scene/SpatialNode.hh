@@ -21,6 +21,9 @@ public:
     return m_matrix;
   }
 
+protected:
+  virtual void TransformationChanged();
+
 
 private:
 
