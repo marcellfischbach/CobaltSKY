@@ -42,6 +42,8 @@ public:
 
   void Apply(IRenderer *renderer) const;
 
+  void GetPlanePoints(float distance, vkVector3f points[4]);
+
 private:
   vkVector3f m_eye;
   vkVector3f m_spot;
@@ -52,8 +54,17 @@ private:
   vkMatrix4f m_projectionMatrix;
   vkMatrix4f m_projectionMatrixInv;
 
+  float m_left;
+  float m_right;
+  float m_bottom;
+  float m_top;
   float m_near;
   float m_far;
+
+  vkVector3f m_topLeft;
+  vkVector3f m_topRight;
+  vkVector3f m_bottomLeft;
+  vkVector3f m_bottomRight;
 
   vkProjectionMode m_projectionMode;
 

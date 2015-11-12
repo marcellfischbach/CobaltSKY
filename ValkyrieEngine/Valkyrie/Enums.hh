@@ -316,3 +316,16 @@ enum vkProjectionMode
   ePM_Orthographic,
 };
 
+enum vkBlendMode
+{
+  eBM_Zero,
+  eBM_One,
+  eBM_SrcColor,
+  eBM_InvSrcColor,
+  eBM_SrcAlpha,
+  eBM_InvSrcAlpha,
+  eBM_DstColor,
+  eBM_InvDstColor,
+  eBM_DstAlpha,
+  eBM_InvDstAlpha,
+};

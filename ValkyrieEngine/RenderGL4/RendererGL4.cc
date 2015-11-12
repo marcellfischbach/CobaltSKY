@@ -48,6 +48,10 @@ RendererGL4::RendererGL4()
     m_matrixNeedsRecalculation[i] = false;
   }
 
+  m_blendEnabled = false;
+  m_blendModeSrcColor = m_blendModeSrcAlpha = eBM_One;
+  m_blendModeDstColor = m_blendModeDstAlpha = eBM_Zero;
+
   GLuint vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -368,6 +372,44 @@ void RendererGL4::SetRenderTarget(IRenderTarget *renderTarget)
 
 }
 
+
+void RendererGL4::SetBlendEnabled(bool enable)
+{
+  if (m_blendEnabled != enable)
+  {
+    m_blendEnabled = enable;
+    if (enable)
+    {
+      glEnable(GL_BLEND);
+    }
+    else
+    {
+      glDisable(GL_BLEND);
+    }
+  }
+}
+
+void RendererGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
+{
+  if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
+  {
+    m_blendModeSrcColor = m_blendModeSrcAlpha = blendSrc;
+    m_blendModeDstColor = m_blendModeDstAlpha = blendDst;
+    glBlendFunc(blendModeMap[blendSrc], blendModeMap[blendDst]);
+  }
+}
+
+void RendererGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstColor, vkBlendMode blendDstAlpha)
+{
+  if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
+  {
+    m_blendModeSrcColor = blendSrcColor;
+    m_blendModeSrcAlpha = blendSrcAlpha;
+    m_blendModeDstColor = blendDstColor;
+    m_blendModeDstAlpha = blendDstAlpha;
+    glBlendFuncSeparate(blendModeMap[blendSrcColor], blendModeMap[blendSrcAlpha], blendModeMap[blendDstColor], blendModeMap[blendDstAlpha]);
+  }
+}
 
 void RendererGL4::SetClearColorValue(const vkVector4f &colorValue)
 {

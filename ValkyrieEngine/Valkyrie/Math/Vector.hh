@@ -3,7 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Defs.hh>
 #include <math.h>
-
+#include <stdio.h>
 
 
 struct VKE_API vkVector2f
@@ -396,6 +396,15 @@ public:
     return r;
   }
 
+  VK_FORCEINLINE void Debug(const char *message)
+  {
+    printf("vkVector3f ");
+    if (message)
+    {
+      printf("%s ", message);
+    }
+    printf("<%.2f %.2f %.2f>\n", x, y, z);
+  }
 };
 
 

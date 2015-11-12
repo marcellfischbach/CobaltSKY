@@ -203,3 +203,17 @@ static GLenum textureCompareFuncMap[] = {
   GL_ALWAYS,
   GL_NEVER,
 };
+
+
+static GLenum blendModeMap[] = {
+  GL_ZERO, // eBM_Zero,
+  GL_ONE,  // eBM_One,
+  GL_SRC_COLOR, // eBM_SrcColor,
+  GL_ONE_MINUS_SRC_COLOR, // eBM_InvSrcColor,
+  GL_SRC_ALPHA, // eBM_SrcAlpha,
+  GL_ONE_MINUS_SRC_ALPHA, // eBM_InvSrcAlpha,
+  GL_DST_COLOR, // eBM_DstColor,
+  GL_ONE_MINUS_DST_COLOR, // eBM_InvDstColor,
+  GL_DST_ALPHA, // eBM_DstAlpha,
+  GL_ONE_MINUS_DST_ALPHA, // eBM_InvDstAlpha,
+};

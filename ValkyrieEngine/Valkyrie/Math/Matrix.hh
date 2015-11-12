@@ -197,6 +197,29 @@ public:
     return res;
   }
 
+  VK_FORCEINLINE vkVector3f &GetAxis(vkUInt8 axis, vkVector3f &res) const
+  {
+    switch (axis)
+    {
+    case 0:
+      res.x = m00;
+      res.y = m01;
+      res.z = m02;
+      break;
+    case 1:
+      res.x = m10;
+      res.y = m11;
+      res.z = m12;
+      break;
+    case 2:
+      res.x = m20;
+      res.y = m21;
+      res.z = m22;
+      break;
+    }
+    return res;
+  }
+
   VK_FORCEINLINE void SetTranslation(float x, float y, float z, float w = 1.0f)
   {
     m30 = x;
@@ -552,6 +575,42 @@ public:
     return r;
   }
 
+
+  static vkVector3f &Mult(const vkMatrix4f &m, const vkVector3f &v, vkVector3f &res)
+  {
+    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z;
+    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z;
+    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z;
+    res.x = x;
+    res.y = y;
+    res.z = z;
+    return res;
+  }
+
+  static vkVector3f &Transform(const vkMatrix4f &m, const vkVector3f &v, vkVector3f &res)
+  {
+    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30;
+    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31;
+    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z + m.m32;
+    res.x = x;
+    res.y = y;
+    res.z = z;
+    return res;
+  }
+
+
+  static vkVector4f &Mult(const vkMatrix4f &m, const vkVector4f &v, vkVector4f &res)
+  {
+    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z * m.m30 * v.w;
+    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z * m.m31 * v.w;
+    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z * m.m32 * v.w;
+    float w = m.m03 * v.x + m.m13 * v.y + m.m23 * v.z * m.m33 * v.w;
+    res.x = x;
+    res.y = y;
+    res.z = z;
+    res.w = w;
+    return res;
+  }
 
   VK_FORCEINLINE void Debug(const char *message = 0) const
   {

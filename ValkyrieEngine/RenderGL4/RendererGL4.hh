@@ -46,6 +46,11 @@ public:
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
   virtual void SetRenderTarget(IRenderTarget *renderTarget);
 
+  virtual void SetBlendEnabled(bool enabled);
+  virtual void SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst);
+  virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha);
+
+
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
@@ -73,6 +78,12 @@ private:
   VertexBufferGL4 *m_vertexBuffer[16];
   vkProgramGL4 *m_program;
   vkRenderTargetGL4 *m_renderTarget;
+
+  bool m_blendEnabled;
+  vkBlendMode m_blendModeSrcColor;
+  vkBlendMode m_blendModeSrcAlpha;
+  vkBlendMode m_blendModeDstColor;
+  vkBlendMode m_blendModeDstAlpha;
 
   vkVector4f m_clearColor;
   float m_clearDepth;
