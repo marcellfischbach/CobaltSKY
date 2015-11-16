@@ -100,6 +100,7 @@ vkShaderAttributeGL4::vkShaderAttributeGL4()
   , m_location(-1)
   , m_arrayIndex(0)
   , m_absLocation(-1)
+  , m_valid(false)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -118,6 +119,16 @@ void vkShaderAttributeGL4::SetName(const vkString &name)
 const vkString &vkShaderAttributeGL4::GetName() const
 {
   return m_name;
+}
+
+void vkShaderAttributeGL4::SetValid(bool valid)
+{
+  m_valid = valid;
+}
+
+bool vkShaderAttributeGL4::IsValid() const
+{
+  return m_valid;
 }
 
 void vkShaderAttributeGL4::SetLocation(GLint location)
@@ -224,6 +235,7 @@ vkShaderStreamGL4::vkShaderStreamGL4()
   , m_location(-1)
   , m_arrayIndex(0)
   , m_absLocation(-1)
+  , m_valid(false)
 {
 
 }
@@ -243,6 +255,15 @@ const vkString &vkShaderStreamGL4::GetName() const
   return m_name;
 }
 
+void vkShaderStreamGL4::SetValid(bool valid)
+{
+  m_valid = valid;
+}
+
+bool vkShaderStreamGL4::IsValid() const
+{
+  return m_valid;
+}
 
 void vkShaderStreamGL4::SetLocation(GLint location)
 {
@@ -338,12 +359,12 @@ void vkProgramGL4::RegisterAttribute(const vkShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
 
-  
   vkString uniformName = vkString("vk_") + id.GetName();
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   vkShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
   attribute->SetLocation(loc);
   attribute->SetName(id.GetName());
+  attribute->SetValid(true);
 }
 
 void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
@@ -355,6 +376,7 @@ void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
   vkShaderStreamGL4 *stream = m_streams[id.GetID()];
   stream->SetLocation(loc);
   stream->SetName(id.GetName());
+  stream->SetValid(true);
 }
 
 
@@ -382,10 +404,14 @@ IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
 {
   if (id.GetID() >= m_attributes.size())
   {
-    RegisterAttribute(id);
+    ResizeAttributes(id.GetID());
   }
 
   vkShaderAttributeGL4 *attr = m_attributes[id.GetID()];
+  if (!attr->IsValid())
+  {
+    RegisterAttribute(id);
+  }
   if (attr->GetLocation() == -1)
   {
     return 0;
@@ -405,10 +431,14 @@ IShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
 {
   if (id.GetID() >= m_streams.size())
   {
-    RegisterStream(id);
+    ResizeStreams(id.GetID());
   }
 
   vkShaderStreamGL4 *stream = m_streams[id.GetID()];
+  if (!stream->IsValid())
+  {
+    RegisterStream(id);
+  }
   if (stream->GetLocation() == -1)
   {
     return 0;

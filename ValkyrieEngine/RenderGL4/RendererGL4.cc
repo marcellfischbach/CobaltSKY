@@ -287,7 +287,7 @@ void RendererGL4::BindMatrices()
     }
   }
 
-  static vkShaderAttributeID ShadowMatricesAttribID("ShadowMatsProjView");
+  static vkShaderAttributeID ShadowMatricesAttribID("ShadowMapMatProjView");
   IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesAttribID);
   if (attrib)
   {
@@ -560,6 +560,38 @@ void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, f
   Render(ePT_Triangles, 6);
 }
 
+void RendererGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
+{
+  RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture, layer);
+}
+
+void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer)
+{
+  static vkShaderAttributeID attrDiffuseID("Diffuse");
+  static vkShaderAttributeID attrLayerID("Layer");
+  static vkShaderAttributeID attrLeftBottomID("LeftBottom");
+  static vkShaderAttributeID attrDeltaID("Delta");
+
+  float x0 = -1.0f + left * 2.0f;
+  float y0 = -1.0f + bottom * 2.0f;
+  float x1 = -1.0f + right * 2.0f;
+  float y1 = -1.0f + top * 2.0f;
+
+  glDepthMask(true);
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_ALWAYS);
+  glClearDepth(1.0);
+
+  SetShader(m_fullScreenArrayProgram);
+  SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
+  SetVertexDeclaration(m_fullScreenVertexDeclaration);
+  vkTextureUnit tu = BindTexture(texture);
+  m_fullScreenArrayProgram->GetAttribute(attrDiffuseID)->Set(tu);
+  m_fullScreenArrayProgram->GetAttribute(attrLeftBottomID)->Set(vkVector2f(x0, y0));
+  m_fullScreenArrayProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
+  m_fullScreenArrayProgram->GetAttribute(attrLayerID)->Set(layer);
+  Render(ePT_Triangles, 6);
+}
 void RendererGL4::RenderFullScreenFrame()
 {
   glDepthMask(true);
@@ -657,4 +689,5 @@ void RendererGL4::InitFullScreenData()
   m_fullScreenVertexDeclaration = static_cast<vkVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
 
   m_fullScreenProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/renderer.xml:SimplePresent"));
+  m_fullScreenArrayProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/renderer.xml:ArrayPresent"));
 }

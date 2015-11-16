@@ -2,6 +2,7 @@
 #include <RenderGL4/Deferred/DeferredFrameProcessor.hh>
 #include <RenderGL4/Deferred/LightRenderer.hh>
 #include <RenderGL4/RendererGL4.hh>
+#include <RenderGL4/RenderTargetGL4.hh>
 #include <RenderGL4/TextureGL4.hh>
 #include <RenderGL4/Deferred/GBuffer.hh>
 #include <Valkyrie/Core/Collection.hh>
@@ -10,6 +11,7 @@
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
 #include <Valkyrie/Graphics/Scene/LightNode.hh>
@@ -129,62 +131,13 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
     }
 
   }
+  m_renderer->SetBlendEnabled(false);
+
+  ITexture2DArray *txt = vkQueryClass<ITexture2DArray>(m_lightRenderers[eLT_DirectionalLight]->GetShadowBuffer()->GetColorBuffer(0));
+  m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0f, 0.25f, txt, 0);
+  m_renderer->RenderFullScreenFrame(0.25f, 0.5, 0.0f, 0.25f, txt, 1);
+  m_renderer->RenderFullScreenFrame(0.5f, 0.75, 0.0f, 0.25f, txt, 2);
 
   m_renderer->SetBlendEnabled(false);
 
 }
-
-
-
-void vkDeferredFrameProcessor::RenderDirectionalLight(IRenderTarget *target)
-{
-  m_renderer->SetRenderTarget(target);
-  m_renderer->Clear();
-  GLenum buffers[] = {
-    GL_COLOR_ATTACHMENT0, 
-  };
-  glDrawBuffers(1, buffers);
-
-  static vkShaderAttributeID diffuseRoughnessAttr("DiffuseRoughness");
-  static vkShaderAttributeID normalLightModeAttr("NormalLightMode");
-  static vkShaderAttributeID emissiveMetallicAttr("EmissiveMetallic");
-  static vkShaderAttributeID sssSpecularAttr("SSSSpecular");
-  static vkShaderAttributeID depthAttr("Depth");
-
-  m_renderer->SetShader(m_directionLightShader);
-
-  IShaderAttribute *attrDiffuseRoughness = m_directionLightShader->GetAttribute(diffuseRoughnessAttr);
-  IShaderAttribute *attrNormalLightMode = m_directionLightShader->GetAttribute(normalLightModeAttr);
-  IShaderAttribute *attrEmissiveMetallic = m_directionLightShader->GetAttribute(emissiveMetallicAttr);
-  IShaderAttribute *attrSSSSpecular = m_directionLightShader->GetAttribute(sssSpecularAttr);
-  IShaderAttribute *attrDepth = m_directionLightShader->GetAttribute(depthAttr);
-
-  if (attrDiffuseRoughness)
-  {
-    vkTextureUnit tuDiffuseRoughness = m_renderer->BindTexture(m_gbuffer->GetDiffuseRoughness());
-    attrDiffuseRoughness->Set(tuDiffuseRoughness);
-  }
-  if (attrNormalLightMode)
-  {
-    vkTextureUnit tuNormalLightMode = m_renderer->BindTexture(m_gbuffer->GetNormalLightMode());
-    attrNormalLightMode->Set(tuNormalLightMode);
-  }
-  if (attrEmissiveMetallic)
-  {
-    vkTextureUnit tuEmissiveMetallic = m_renderer->BindTexture(m_gbuffer->GetEmissiveMetallic());
-    attrEmissiveMetallic->Set(tuEmissiveMetallic);
-  }
-  if (attrSSSSpecular)
-  {
-    vkTextureUnit tuSSSSpecular = m_renderer->BindTexture(m_gbuffer->GetSSSSpec());
-    attrSSSSpecular->Set(tuSSSSpecular);
-  }
-  if (attrDepth)
-  {
-    vkTextureUnit tuDepth = m_renderer->BindTexture(m_gbuffer->GetDepth());
-    attrDepth->Set(tuDepth);
-  }
-  m_renderer->RenderFullScreenFrame();
-
-}
-

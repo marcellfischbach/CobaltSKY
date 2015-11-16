@@ -26,6 +26,8 @@ public:
 
   virtual void Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
 
+  vkRenderTargetGL4 *GetShadowBuffer();
+
 protected:
 
   struct GBufferAttribs
@@ -104,3 +106,8 @@ private:
   LightProgram m_programWithoutShadow;
   LightProgram m_programWithShadow;
 };
+
+VK_FORCEINLINE vkRenderTargetGL4 *vkLightRendererGL4::GetShadowBuffer()
+{
+  return m_shadowBuffer;
+}

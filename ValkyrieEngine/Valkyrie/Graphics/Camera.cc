@@ -45,14 +45,16 @@ void vkCamera::UpdateProjectionMatrices()
       m_bottom = -m_top;
       m_projectionMatrix.SetPerspective(m_left, m_right, m_bottom, m_top, m_near, m_far);
       m_projectionMatrixInv.SetPerspectiveInv(m_left, m_right, m_bottom, m_top, m_near, m_far);
-      m_topLeft.Set(m_left, m_top, -m_near);
-      m_topRight.Set(m_right, m_top, -m_near);
-      m_bottomLeft.Set(m_left, m_bottom, -m_near);
-      m_bottomRight.Set(m_right, m_bottom, -m_near);
-      m_topLeft.Normalize();
-      m_topRight.Normalize();
-      m_bottomLeft.Normalize();
-      m_bottomRight.Normalize();
+      m_topLeft.Set(m_left / m_near, m_top / m_near, -1.0f);
+      m_topRight.Set(m_right / m_near, m_top / m_near, -1.0f);
+      m_bottomLeft.Set(m_left / m_near, m_bottom / m_near, -1.0f);
+      m_bottomRight.Set(m_right / m_near, m_bottom / m_near, -1.0f);
+      printf("Perspective:\n");
+      printf("   TopLeft    : <%.2f %.2f %.2f>\n", m_topLeft.x, m_topLeft.y, m_topLeft.z);
+      printf("   TopRight   : <%.2f %.2f %.2f>\n", m_topRight.x, m_topRight.y, m_topRight.z);
+      printf("   BottomLeft : <%.2f %.2f %.2f>\n", m_bottomLeft.x, m_bottomLeft.y, m_bottomLeft.z);
+      printf("   BottomRight: <%.2f %.2f %.2f>\n", m_bottomRight.x, m_bottomRight.y, m_bottomRight.z);
+
     }
     break;
   case ePM_Orthographic:
@@ -61,6 +63,7 @@ void vkCamera::UpdateProjectionMatrices()
       m_left = -m_right;
       m_top = m_orthographicViewport.y;
       m_bottom = -m_top;
+      printf("Ortho: %.2f %.2f %.2f %.2f\n", m_left, m_right, m_bottom, m_top);
       m_projectionMatrix.SetOrthographic(m_left, m_right, m_bottom, m_top, m_near, m_far);
       m_projectionMatrixInv.SetOrthographicInv(m_left, m_right, m_bottom, m_top, m_near, m_far);
     }
@@ -110,4 +113,12 @@ void vkCamera::GetPlanePoints(float distance, vkVector3f *points) const
   vkMatrix4f::Transform(m_cameraMatrixInv, points[1], points[1]);
   vkMatrix4f::Transform(m_cameraMatrixInv, points[2], points[2]);
   vkMatrix4f::Transform(m_cameraMatrixInv, points[3], points[3]);
+
+  /*
+  printf("GetPlanePoints: %f <%.2f %.2f %.2f> <%.2f %.2f %.2f>\n", distance, m_eye.x, m_eye.y, m_eye.z, m_spot.x, m_spot.y, m_spot.z);
+  printf("    <%.2f %.2f %.2f>\n", points[0].x, points[0].y, points[0].z);
+  printf("    <%.2f %.2f %.2f>\n", points[1].x, points[1].y, points[1].z);
+  printf("    <%.2f %.2f %.2f>\n", points[2].x, points[2].y, points[2].z);
+  printf("    <%.2f %.2f %.2f>\n", points[3].x, points[3].y, points[3].z);
+  */
 }

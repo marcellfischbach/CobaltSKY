@@ -101,7 +101,7 @@ int vkEngine::Run()
   planeGeometryNode->AttachTo(groupNode);
 
   vkMatrix4f MM;
-  MM.SetTranslation(0.0f, 0.0f, 3.0f);
+  MM.SetTranslation(10.0f, 10.0f, 3.0f);
   vkMesh *cubeMesh = createCubeMesh(m_renderer, 3.0f);
   vkGeometryNode *cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(cubeMesh);

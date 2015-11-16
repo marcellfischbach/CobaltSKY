@@ -30,9 +30,6 @@ public:
 private:
   void RenderGBuffer(vkNode *rootNode);
 
-  void RenderDirectionalLight(IRenderTarget *target);
-  void RenderSimplePresent(IRenderTarget *target);
-
 private:
   vkCollection<vkGeometryNode*> m_geometries;
   vkCollection<vkLightNode*> m_lights;

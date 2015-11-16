@@ -501,18 +501,17 @@ public:
   VK_FORCEINLINE vkMatrix4f &SetOrthographic(float l, float r, float b, float t, float n, float f)
   {
 
-    float z2 = 2.0f * n;
     float dx = r - l;
     float dy = t - b;
     float dz = f - n;
     float sx = r + l;
     float sy = t + b;
-    float sz = n + f;
+    float sz = f + n;
 
-    m00 = 2.0f / dx; m10 = 0.0f;      m20 = 0.0f;       m30 = sx / dx;
-    m01 = 0.0f;      m11 = 2.0f / dy; m21 = 0.0f;       m31 = sy / dy;
-    m02 = 0.0f;      m12 = 0.0f;      m22 = -2.0f / dz; m32 = sz / dz;
-    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;       m33 = 1.0;
+    m00 = 2.0f / dx; m10 = 0.0f;      m20 = 0.0f;      m30 = sx / dx;
+    m01 = 0.0f;      m11 = 2.0f / dy; m21 = 0.0f;      m31 = sy / dy;
+    m02 = 0.0f;      m12 = 0.0f;      m22 = 2.0f / dz; m32 = sz / dz;
+    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;      m33 = 1.0;
     return *this;
   }
 
@@ -529,7 +528,7 @@ public:
 
     m00 = dx / 2.0f; m10 = 0.0f;      m20 = 0.0f;       m30 = sx / 2.0f;
     m01 = 0.0f;      m11 = dy / 2.0f; m21 = 0.0f;       m31 = sy / 2.0f;
-    m02 = 0.0f;      m12 = 0.0f;      m22 = dz / -2.0f; m32 = sz / 2.0f;
+    m02 = 0.0f;      m12 = 0.0f;      m22 = dz / 2.0f; m32 = sz / 2.0f;
     m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;       m33 = 1.0;
     return *this;
   }

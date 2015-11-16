@@ -45,6 +45,9 @@ public:
     return m_depth;
   }
 
+  static vkSamplerGL4 *GetColorSampler(RendererGL4 *renderer);
+  static vkSamplerGL4 *GetDepthSampler(RendererGL4 *renderer);
+
 private:
   vkTexture2DGL4 *m_diffuseRoughness;
   vkTexture2DGL4 *m_normalLightMode;
@@ -53,6 +56,4 @@ private:
   vkTexture2DGL4 *m_depth;
   vkRenderTargetGL4 *m_renderTarget;
 
-  static vkSamplerGL4 *GetColorSampler(RendererGL4 *renderer);
-  static vkSamplerGL4 *GetDepthSampler(RendererGL4 *renderer);
 };

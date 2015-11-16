@@ -74,12 +74,14 @@ public:
   void SetLocation(GLint location);
   GLint GetLocation() const;
 
+  void SetValid(bool valid);
+  bool IsValid()const;
 private:
   vkString m_name;
   GLint m_location;
   vkUInt32 m_arrayIndex;
   GLint m_absLocation;
-
+  bool m_valid;
 };
 
 
@@ -107,11 +109,14 @@ public:
   virtual void Enable();
   virtual void Disable();
 
+  void SetValid(bool valid);
+  bool IsValid()const;
 private:
   vkString m_name;
   GLint m_location;
   vkUInt32 m_arrayIndex;
   GLint m_absLocation;
+  bool m_valid;
 };
 
 

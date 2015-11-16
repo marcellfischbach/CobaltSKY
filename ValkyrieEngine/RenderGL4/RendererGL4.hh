@@ -62,6 +62,8 @@ public:
   virtual void RenderFullScreenFrame(ITexture2D *texture);
   virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture);
 
+  virtual void RenderFullScreenFrame(ITexture2DArray *texture, int layer);
+  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer);
 
 
 private:
@@ -118,6 +120,7 @@ private:
   VertexBufferGL4 *m_fullScreenParamVertexBuffer;
   vkVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
   vkProgramGL4 *m_fullScreenProgram;
+  vkProgramGL4 *m_fullScreenArrayProgram;
   /**
    * @}
    */

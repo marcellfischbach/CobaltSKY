@@ -98,6 +98,9 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
   ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
   ITexture2DArray *depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 3);
 
+  colorBuffer->SetSampler(vkGBuffer::GetColorSampler(renderer));
+  depthBuffer->SetSampler(vkGBuffer::GetDepthSampler(renderer));
+
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize();
   m_shadowBuffer->AddColorTexture(colorBuffer);
@@ -120,7 +123,7 @@ void vkDirectionalLightRendererGL4::Render(vkNode *node, const vkCamera *camera,
 
   if (directionalLight->IsCastingShadow())
   {
-    //RenderShadow(node, camera, directionalLight);
+    RenderShadow(node, camera, directionalLight);
   }
 
 
@@ -160,6 +163,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 {
   CalcPSSMMatrices(light, camera);
 
+
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
   m_geometries.Clear();
@@ -167,14 +171,14 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
-  m_renderer->Clear();
-  m_renderer->SetShadowMatrices(m_shadowProjView, 3);
-  m_renderer->SetBlendEnabled(false);
-
   GLenum buffers[] = {
     GL_COLOR_ATTACHMENT0, // Color
   };
   glDrawBuffers(1, buffers);
+  m_renderer->Clear();
+  m_renderer->SetShadowMatrices(m_shadowProjView, 3);
+  m_renderer->SetBlendEnabled(false);
+
 
   // render all geometries
   for (vkSize i = 0; i < m_geometries.length; ++i)
@@ -182,7 +186,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
     vkGeometryNode *geometryNode = m_geometries[i];
     if (geometryNode)
     {
-      geometryNode->Render(m_renderer, eRP_GBuffer);
+      geometryNode->Render(m_renderer, eRP_ShadowPSSM);
     }
   }
 
@@ -190,14 +194,15 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 
 void vkDirectionalLightRendererGL4::CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera)
 {
-  float dists[] = { 1.0f, 15.0f, 30.0f, 100.0f };
+  float dists[] = { 70.7f, 100.0f, 200.0f };
   vkVector3f points[8];
 
+  printf("Calc\n");
   for (vkSize i = 0; i < 3; ++i)
   {
-    camera->GetPlanePoints(dists[i], &points[0]);
-    camera->GetPlanePoints(dists[i+1], &points[4]);
-    CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowCam[i]);
+    camera->GetPlanePoints(0, &points[0]);
+    camera->GetPlanePoints(dists[i], &points[4]);
+    CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowProj[i]);
     vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
   }
 }
@@ -209,6 +214,8 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
   {
     vkVector3f::Add(spot, points[i], spot);
   }
+  vkVector3f::Div(spot, (float)numPoints, spot);
+  printf("   Spots: <%.2f %.2f %.2f>\n", spot.x, spot.y, spot.z);
 
   vkVector3f eye;
   vkVector3f::Mul(dir, -100.0f, eye);
@@ -233,25 +240,28 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
   {
     vkVector3f &p = points[i];
     vkMatrix4f::Transform(cam, p, t);
-    if (min.x > p.x)
+    if (min.x > t.x)
     {
-      min.x = p.x;
+      min.x = t.x;
     }
-    if (min.y > p.y)
+    if (min.y > t.y)
     {
-      min.y = p.y;
+      min.y = t.y;
     }
-    if (max.x < p.x)
+    if (max.x < t.x)
     {
-      max.x = p.x;
+      max.x = t.x;
     }
-    if (max.y < p.y)
+    if (max.y < t.y)
     {
-      max.y = p.y;
+      max.y = t.y;
     }
   }
-  proj.SetOrthographic(min.x, max.x, min.y, max.y, 1.0f, 1024.0f);
 
+  min = vkVector2f(-20, -20);
+  max = vkVector2f(20, 20);
+
+  proj.SetOrthographic(min.x, max.x, min.y, max.y, 1.0f, 1024.0f);
 }
 
 

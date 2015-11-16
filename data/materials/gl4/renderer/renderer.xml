@@ -11,4 +11,16 @@
 		</techniques>
 		
 	</program>
+	<program name="ArrayPresent">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/renderer/array_present.vert</shader>
+				<shader>${shaders}/renderer/array_present.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
 </programs>

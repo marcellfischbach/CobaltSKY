@@ -61,6 +61,10 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     {
       renderPass = eRP_GBuffer;
     }
+    else if (passName == vkString("ShadowPSSM"))
+    {
+      renderPass = eRP_ShadowPSSM;
+    }
     else
     {
       material->Release();

@@ -9,5 +9,5 @@ uniform sampler2D vk_Diffuse;
 
 void main ()
 {
-	vk_Color = texture(vk_Diffuse, texCoord).rgb;
+	vk_Color = texture(vk_Diffuse, inFragTexCoord);
 }

@@ -4,6 +4,7 @@
 	
 		<passes>
 			<pass name="GBuffer">${shaders}/solid.xml:GBuffer</pass>
+			<pass name="ShadowPSSM">${shaders}/solid.xml:ShadowPSSM</pass>
 		</passes>
 		
 		<parameters>
