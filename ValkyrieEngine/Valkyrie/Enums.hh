@@ -290,6 +290,7 @@ enum vkTextureCompareFunc
 enum vkRenderPass
 {
   eRP_GBuffer,
+  eRP_ShadowPSSM,
   eRP_COUNT,
 };
 

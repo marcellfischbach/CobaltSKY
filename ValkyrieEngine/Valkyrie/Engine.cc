@@ -113,11 +113,12 @@ int vkEngine::Run()
   pointLight->SetColor(vkColor4f(1.0f, 0.75f, 0.25f));
   pointLight->SetEnergy(1.0f);
   pointLight->SetPosition(vkVector3f(0.0f, 0.0f, 10.0f));
-  pointLight->SetRadius(5.0f);
+  pointLight->SetRadius(10.0f);
 
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
+  directionalLight->SetCastShadow(true);
 
   vkLightNode *lightNode = new vkLightNode();
   lightNode->SetLight(pointLight);

@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <RenderGL4/RenderTargetGL4.refl.hh>
 
-class vkTexture2DGL4;
+class vkTextureGL4;
 
 VK_CLASS();
 class VKGL4_API vkRenderTargetGL4 : public IRenderTarget
@@ -20,20 +20,20 @@ public:
   void Bind();
 
 
-  void AddColorTexture(ITexture2D *color);
-  void SetDepthTexture(ITexture2D *depth);
+  void AddColorTexture(ITexture *color);
+  void SetDepthTexture(ITexture *depth);
   void SetDepthBuffer(vkUInt16 width, vkUInt16 height);
   void Initialize();
   bool Finilize();
 
 
-  virtual ITexture2D *GetColorBuffer(vkUInt8 buffer) const;
-  virtual ITexture2D *GetDepthBuffer() const;
+  virtual ITexture *GetColorBuffer(vkUInt8 buffer) const;
+  virtual ITexture *GetDepthBuffer() const;
 
 private:
 
-  std::vector<vkTexture2DGL4*> m_colorTextures;
-  vkTexture2DGL4 *m_depthTexture;
+  std::vector<vkTextureGL4*> m_colorTextures;
+  vkTextureGL4 *m_depthTexture;
   GLuint m_depthBuffer;
   GLuint m_name;
 };

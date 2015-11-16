@@ -204,9 +204,19 @@ void vkShaderAttributeGL4::Set(const vkMatrix3f &m)
   glUniformMatrix3fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
 }
 
+void vkShaderAttributeGL4::Set(const vkMatrix3f *ms, vkSize num)
+{
+  glUniformMatrix3fv(m_absLocation, num, false, reinterpret_cast<const GLfloat*>(ms));
+}
+
 void vkShaderAttributeGL4::Set(const vkMatrix4f &m)
 {
   glUniformMatrix4fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
+}
+
+void vkShaderAttributeGL4::Set(const vkMatrix4f *ms, vkSize num)
+{
+  glUniformMatrix4fv(m_absLocation, num, false, reinterpret_cast<const GLfloat*>(ms));
 }
 
 vkShaderStreamGL4::vkShaderStreamGL4()

@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Defs.hh>
+#include <Valkyrie/Types.hh>
 #include <Valkyrie/Math/Vector.hh>
 
 

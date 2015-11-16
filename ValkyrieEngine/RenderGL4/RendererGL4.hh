@@ -26,6 +26,7 @@ public:
   virtual IRenderTarget *CreateRenderTarget();
   virtual ISampler *CreateSampler();
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
+  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers);
   virtual IFrameProcessor *CreateDeferredFrameProcessor();
 
 
@@ -36,6 +37,7 @@ public:
   virtual void SetViewMatrixInv(const vkMatrix4f &matrix);
   virtual void SetModelMatrix(const vkMatrix4f &matrix);
   virtual void SetModelMatrixInv(const vkMatrix4f &matrix);
+  virtual void SetShadowMatrices(const vkMatrix4f *matrix, vkSize numberOfMatrices);
 
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
@@ -58,6 +60,7 @@ public:
 
   virtual void RenderFullScreenFrame();
   virtual void RenderFullScreenFrame(ITexture2D *texture);
+  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture);
 
 
 
@@ -100,6 +103,9 @@ private:
   vkMatrix4f m_matrices[eMT_COUNT];
   bool m_matrixNeedsRecalculation[eMT_COUNT];
 
+  vkSize m_numberOfShadowMatrices;
+  vkMatrix4f m_shadowMatrices[6];
+
   void InvalidateSamplers();
   void InvalidateTextures();
 
@@ -109,6 +115,7 @@ private:
    */
   void InitFullScreenData();
   VertexBufferGL4 *m_fullScreenVertexBuffer;
+  VertexBufferGL4 *m_fullScreenParamVertexBuffer;
   vkVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
   vkProgramGL4 *m_fullScreenProgram;
   /**

@@ -66,7 +66,9 @@ public:
   virtual void Set(const vkColor4f &v);
 
   virtual void Set(const vkMatrix3f &m);
+  virtual void Set(const vkMatrix3f *ms, vkSize num);
   virtual void Set(const vkMatrix4f &m);
+  virtual void Set(const vkMatrix4f *ms, vkSize num);
 
 
   void SetLocation(GLint location);

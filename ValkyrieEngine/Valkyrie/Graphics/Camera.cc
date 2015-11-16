@@ -88,7 +88,7 @@ void vkCamera::SetOrthographic(const vkVector2f &viewport)
 }
 
 
-void vkCamera::GetPlanePoints(float distance, vkVector3f points[4])
+void vkCamera::GetPlanePoints(float distance, vkVector3f *points) const
 {
   switch (m_projectionMode)
   {

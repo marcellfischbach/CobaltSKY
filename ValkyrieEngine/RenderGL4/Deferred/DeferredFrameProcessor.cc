@@ -24,8 +24,8 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(RendererGL4 *renderer)
 {
   VK_CLASS_GEN_CONSTR;
 
-  m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightRendererGL4();
-  m_lightRenderers[eLT_PointLight] = new vkPointLightRendererGL4();
+  m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightRendererGL4(renderer);
+  m_lightRenderers[eLT_PointLight] = new vkPointLightRendererGL4(renderer);
 }
 
 vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
@@ -59,33 +59,6 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
 }
 
 
-class Collector : public IScanCallback
-{
-public:
-  Collector(vkCollection<vkGeometryNode*> &geometrieNodes, vkCollection<vkLightNode*> &lightNodes)
-    : m_geometryNodes(geometrieNodes)
-    , m_lightNodes(lightNodes)
-  {
-
-  }
-
-  virtual bool ScanGeometryNode(vkGeometryNode *geometryNode)
-  {
-    m_geometryNodes.Add(geometryNode);
-    return true;
-  }
-
-  virtual bool ScanLightNode(vkLightNode *lightNode)
-  {
-    m_lightNodes.Add(lightNode);
-    return true;
-  }
-
-
-private:
-  vkCollection<vkGeometryNode*> &m_geometryNodes;
-  vkCollection<vkLightNode*> &m_lightNodes;
-};
 
 
 void vkDeferredFrameProcessor::RenderGBuffer(vkNode *rootNode)
@@ -130,7 +103,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
 {
   m_geometries.Clear();
   m_lights.Clear();
-  Collector collector(m_geometries, m_lights);
+  vkDefaultCollector collector(&m_geometries, &m_lights);
   node->Scan(0, m_renderer, &collector);
 
   camera->Apply(m_renderer);
@@ -152,7 +125,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
     vkLightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
     {
-      lightRenderer->Render(m_renderer, light, m_gbuffer, target);
+      lightRenderer->Render(node, camera, light, m_gbuffer, target);
     }
 
   }

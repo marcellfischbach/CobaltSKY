@@ -42,7 +42,7 @@ public:
 
   void Apply(IRenderer *renderer) const;
 
-  void GetPlanePoints(float distance, vkVector3f points[4]);
+  void GetPlanePoints(float distance, vkVector3f *points) const;
 
 private:
   vkVector3f m_eye;

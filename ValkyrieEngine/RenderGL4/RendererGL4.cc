@@ -138,6 +138,19 @@ ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, v
   return texture;
 }
 
+
+ITexture2DArray *RendererGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers)
+{
+  vkTexture2DArrayGL4 *texture = new vkTexture2DArrayGL4();
+  if (!texture->Initialize(format, width, height, layers))
+  {
+    texture->Release();
+    texture = 0;
+  }
+  return texture;
+}
+
+
 IFrameProcessor *RendererGL4::CreateDeferredFrameProcessor()
 {
   return new vkDeferredFrameProcessor(this);
@@ -195,6 +208,13 @@ void RendererGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
   m_matrices[eMT_MatModelInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = false;
 }
+
+void RendererGL4::SetShadowMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
+{
+  m_numberOfShadowMatrices = numberOfMatrices;
+  memcpy(m_shadowMatrices, matrices, sizeof(vkMatrix4f) * numberOfMatrices);
+}
+
 void RendererGL4::RecalculateMatrix(vkMatrixType type)
 {
   if (!m_matrixNeedsRecalculation[type])
@@ -265,6 +285,13 @@ void RendererGL4::BindMatrices()
       RecalculateMatrix((vkMatrixType)i);
       attrib->Set(m_matrices[i]);
     }
+  }
+
+  static vkShaderAttributeID ShadowMatricesAttribID("ShadowMatsProjView");
+  IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesAttribID);
+  if (attrib)
+  {
+    attrib->Set(m_shadowMatrices, m_numberOfShadowMatrices);
   }
 }
 
@@ -504,7 +531,19 @@ void RendererGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkData
 
 void RendererGL4::RenderFullScreenFrame(ITexture2D *texture)
 {
-  static vkShaderAttributeID diffuse("Diffuse");
+  RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture);
+}
+
+void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture)
+{
+  static vkShaderAttributeID attrDiffuseID("Diffuse");
+  static vkShaderAttributeID attrLeftBottomID("LeftBottom");
+  static vkShaderAttributeID attrDeltaID("Delta");
+
+  float x0 = -1.0f + left * 2.0f;
+  float y0 = -1.0f + bottom * 2.0f;
+  float x1 = -1.0f + right * 2.0f;
+  float y1 = -1.0f + top * 2.0f;
 
   glDepthMask(true);
   glEnable(GL_DEPTH_TEST);
@@ -512,10 +551,12 @@ void RendererGL4::RenderFullScreenFrame(ITexture2D *texture)
   glClearDepth(1.0);
 
   SetShader(m_fullScreenProgram);
-  SetVertexBuffer(0, m_fullScreenVertexBuffer);
+  SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   vkTextureUnit tu = BindTexture(texture);
-  m_fullScreenProgram->GetAttribute(diffuse)->Set(tu);
+  m_fullScreenProgram->GetAttribute(attrDiffuseID)->Set(tu);
+  m_fullScreenProgram->GetAttribute(attrLeftBottomID)->Set(vkVector2f(x0, y0));
+  m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
   Render(ePT_Triangles, 6);
 }
 
@@ -585,13 +626,24 @@ void RendererGL4::InvalidateTextures()
 
 void RendererGL4::InitFullScreenData()
 {
+  float vertexDataParam[] = {
+    0, 0, 0, 1,     0, 0,
+    0, 1, 0, 1,     0, 1,
+    1, 1, 0, 1,     1, 1,
+
+    0, 0, 0, 1,     0, 0,
+    1, 1, 0, 1,     1, 1, 
+    1, 0, 0, 1,     1, 0,
+  };
+  m_fullScreenParamVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexDataParam), vertexDataParam, eBDM_Static));
+
   float vertexData[] = {
     -1, -1, 0, 1,     0, 0,
-    -1,  1, 0, 1,     0, 1,
-     1,  1, 0, 1,     1, 1,
+    -1, 1, 0, 1,     0, 1,
+     1, 1, 0, 1,     1, 1,
 
     -1, -1, 0, 1,     0, 0,
-     1,  1, 0, 1,     1, 1, 
+     1, 1, 0, 1,     1, 1,
      1, -1, 0, 1,     1, 0,
   };
   m_fullScreenVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexData), vertexData, eBDM_Static));

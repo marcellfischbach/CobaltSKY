@@ -21,7 +21,7 @@ vkRenderTargetGL4::~vkRenderTargetGL4()
     m_depthTexture->Release();
     m_depthTexture = 0;
   }
-  for (vkTexture2DGL4 *txt : m_colorTextures)
+  for (vkTextureGL4 *txt : m_colorTextures)
   {
     txt->Release();
   }
@@ -39,9 +39,9 @@ void vkRenderTargetGL4::Initialize()
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
 
-void vkRenderTargetGL4::AddColorTexture(ITexture2D *color)
+void vkRenderTargetGL4::AddColorTexture(ITexture *color)
 {
-  vkTexture2DGL4 *coloGL4 = vkQueryClass<vkTexture2DGL4>(color);
+  vkTextureGL4 *coloGL4 = vkQueryClass<vkTextureGL4>(color);
   if (coloGL4)
   {
     color->AddRef();
@@ -51,15 +51,16 @@ void vkRenderTargetGL4::AddColorTexture(ITexture2D *color)
   }
 }
 
-void vkRenderTargetGL4::SetDepthTexture(ITexture2D *depth)
+void vkRenderTargetGL4::SetDepthTexture(ITexture *depth)
 {
-  vkTexture2DGL4 *depthGL4 = vkQueryClass<vkTexture2DGL4>(depth);
+  vkTextureGL4 *depthGL4 = vkQueryClass<vkTextureGL4>(depth);
   VK_SET(m_depthTexture, depthGL4);
   if (depthGL4)
   {
     glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
   }
 }
+
 
 void vkRenderTargetGL4::SetDepthBuffer(vkUInt16 width, vkUInt16 height)
 {
@@ -78,7 +79,7 @@ bool vkRenderTargetGL4::Finilize()
   return r == GL_FRAMEBUFFER_COMPLETE;
 }
 
-ITexture2D *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
+ITexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
 {
   if (idx >= m_colorTextures.size())
   {
@@ -88,7 +89,7 @@ ITexture2D *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
   return m_colorTextures[idx];
 }
 
-ITexture2D *vkRenderTargetGL4::GetDepthBuffer() const
+ITexture *vkRenderTargetGL4::GetDepthBuffer() const
 {
   return m_depthTexture;
 }

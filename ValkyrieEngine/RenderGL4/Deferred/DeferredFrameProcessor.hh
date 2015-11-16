@@ -5,6 +5,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
+#include <RenderGL4/Deferred/DefaultCollector.hh>
 #include <RenderGL4/Deferred/DeferredFrameProcessor.refl.hh>
 
 struct IShader;

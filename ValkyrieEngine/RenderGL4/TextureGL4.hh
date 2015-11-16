@@ -121,6 +121,33 @@ private:
   vkUInt16 m_height;
 };
 
+VK_CLASS();
+class VKGL4_API vkTexture2DArrayGL4 : public virtual vkTextureGL4, public virtual ITexture2DArray
+{
+  VK_CLASS_GEN;
+public:
+
+  vkTexture2DArrayGL4();
+  virtual ~vkTexture2DArrayGL4();
+
+  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers);
+
+
+  // Implementation of the ITexture2DArray interface
+  virtual vkUInt16 GetWidth() const;
+  virtual vkUInt16 GetHeight() const;
+  virtual vkUInt16 GetLayers() const;
+
+  virtual bool CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat format, const void *data);
+
+private:
+  vkPixelFormat m_format;
+
+  vkUInt16 m_width;
+  vkUInt16 m_height;
+  vkUInt16 m_layers;
+};
+
 
 
 VK_FORCEINLINE GLuint vkTextureGL4::GetName() const

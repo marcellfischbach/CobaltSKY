@@ -16,6 +16,7 @@ struct ISampler;
 struct IShader;
 struct ITexture;
 struct ITexture2D;
+struct ITexture2DArray;
 struct vkVertexElement;
 
 VK_INTERFACE()
@@ -34,6 +35,7 @@ struct VKE_API IRenderer : public IObject
   virtual IRenderTarget *CreateRenderTarget() = 0;
   virtual ISampler *CreateSampler() = 0;
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height) = 0;
+  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers) = 0;
   virtual IFrameProcessor *CreateDeferredFrameProcessor() = 0;
   /**
    * @}

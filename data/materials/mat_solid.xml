@@ -3,7 +3,7 @@
 	<material name="Solid">
 	
 		<passes>
-			<pass name="GBuffer">${shaders}/solid_gbuffer.xml:GBuffer</pass>
+			<pass name="GBuffer">${shaders}/solid.xml:GBuffer</pass>
 		</passes>
 		
 		<parameters>

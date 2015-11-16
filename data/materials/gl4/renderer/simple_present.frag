@@ -2,7 +2,8 @@
 #version 330
 
 uniform sampler2D vk_Diffuse;
-varying vec2 texCoord;
+in vec2 texCoord;
+
 
 void main ()
 {

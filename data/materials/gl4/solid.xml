@@ -1,0 +1,28 @@
+<programs>
+	<program name="GBuffer">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/gbuffer.vert</shader>
+				<shader>${shaders}/solid/gbuffer.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
+	<program name="ShadowPSSM">
+	
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/shadow_pssm.vert</shader>
+				<shader>${shaders}/solid/shadow_pssm.geom</shader>
+				<shader>${shaders}/solid/shadow_pssm.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+</programs>
