@@ -115,6 +115,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
 
 
   m_renderer->SetRenderTarget(target);
+  m_renderer->SetViewport(target);
   m_renderer->SetBlendEnabled(true);
   m_renderer->SetBlendMode(eBM_One, eBM_One);
   m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
@@ -138,6 +139,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
   m_renderer->RenderFullScreenFrame(0.25f, 0.5, 0.0f, 0.25f, txt, 1);
   m_renderer->RenderFullScreenFrame(0.5f, 0.75, 0.0f, 0.25f, txt, 2);
 
+  
   m_renderer->SetBlendEnabled(false);
 
 }

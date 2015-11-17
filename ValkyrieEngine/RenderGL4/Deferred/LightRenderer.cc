@@ -102,7 +102,7 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
   depthBuffer->SetSampler(vkGBuffer::GetDepthSampler(renderer));
 
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
-  m_shadowBuffer->Initialize();
+  m_shadowBuffer->Initialize(bufferSize, bufferSize);
   m_shadowBuffer->AddColorTexture(colorBuffer);
   m_shadowBuffer->SetDepthTexture(depthBuffer);
   m_shadowBuffer->Finilize();
@@ -130,6 +130,7 @@ void vkDirectionalLightRendererGL4::Render(vkNode *node, const vkCamera *camera,
 
   // now the final image will be assembled
   m_renderer->SetRenderTarget(target);
+  m_renderer->SetViewport(target);
 
   // from now on we will only render to the single color buffer
   GLenum buffers[] = {
@@ -171,6 +172,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
+  m_renderer->SetViewport(m_shadowBuffer);
   GLenum buffers[] = {
     GL_COLOR_ATTACHMENT0, // Color
   };
@@ -194,10 +196,9 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 
 void vkDirectionalLightRendererGL4::CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera)
 {
-  float dists[] = { 70.7f, 100.0f, 200.0f };
+  float dists[] = { 15.0f, 60.0f, 240.0f };
   vkVector3f points[8];
 
-  printf("Calc\n");
   for (vkSize i = 0; i < 3; ++i)
   {
     camera->GetPlanePoints(0, &points[0]);
@@ -215,7 +216,6 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
     vkVector3f::Add(spot, points[i], spot);
   }
   vkVector3f::Div(spot, (float)numPoints, spot);
-  printf("   Spots: <%.2f %.2f %.2f>\n", spot.x, spot.y, spot.z);
 
   vkVector3f eye;
   vkVector3f::Mul(dir, -100.0f, eye);
@@ -258,8 +258,6 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
     }
   }
 
-  min = vkVector2f(-20, -20);
-  max = vkVector2f(20, 20);
 
   proj.SetOrthographic(min.x, max.x, min.y, max.y, 1.0f, 1024.0f);
 }
@@ -290,6 +288,7 @@ void vkPointLightRendererGL4::Render(vkNode *node, const vkCamera *camera, vkLig
   vkPointLight *pointLight = static_cast<vkPointLight*>(light);
   // no the final image will be assembled
   m_renderer->SetRenderTarget(target);
+  m_renderer->SetViewport(target);
 
   // from now on we will only render to the single color buffer
   GLenum buffers[] = {

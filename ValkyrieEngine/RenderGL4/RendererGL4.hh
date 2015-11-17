@@ -54,7 +54,9 @@ public:
 
 
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
+  virtual void SetViewport(vkUInt16 width, vkUInt16 height);
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
+  virtual void SetViewport(IRenderTarget *viewport);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
 

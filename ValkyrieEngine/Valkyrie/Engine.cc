@@ -78,7 +78,7 @@ int vkEngine::Run()
 
   ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
   IRenderTarget *rt = m_renderer->CreateRenderTarget();
-  rt->Initialize();
+  rt->Initialize(1366, 768);
   rt->AddColorTexture(color0);
   rt->SetDepthBuffer(1366, 768);
   if (!rt->Finilize())
@@ -136,8 +136,14 @@ int vkEngine::Run()
   cameraNode->SetCamera(camera);
   cameraNode->AttachTo(groupNode);
 
-  
-  
+  vkMesh *smallCube = createCubeMesh(m_renderer, 1.0f);
+  cubeGeometryNode = new vkGeometryNode();
+  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMaterial(materialInstance);
+  cubeGeometryNode->AttachTo(groupNode);
+
+
+
   float v = 0.0f;
   float m = 0.0f;
 
@@ -171,12 +177,16 @@ int vkEngine::Run()
 
     pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 2.0f + cos(2.0f*l) * 1.0f));
     l += 0.001f;
+
+
     groupNode->UpdateStates();
 
     fp->Render(groupNode, camera, rt);
 
+
     // no render this image onscreen
     m_renderer->SetRenderTarget(0);
+    m_renderer->SetViewport(1366, 768);
     m_renderer->Clear();
     m_renderer->RenderFullScreenFrame(color0);
 

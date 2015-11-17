@@ -33,8 +33,20 @@ void vkRenderTargetGL4::Bind()
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
 
-void vkRenderTargetGL4::Initialize()
+vkUInt16 vkRenderTargetGL4::GetWidth() const
 {
+  return m_width;
+}
+
+vkUInt16 vkRenderTargetGL4::GetHeight() const
+{
+  return m_height;
+}
+
+void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)
+{
+  m_width = width;
+  m_height = height;
   glGenFramebuffers(1, &m_name);
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
@@ -45,7 +57,7 @@ void vkRenderTargetGL4::AddColorTexture(ITexture *color)
   if (coloGL4)
   {
     color->AddRef();
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + m_colorTextures.size(), coloGL4->GetName(), 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + m_colorTextures.size()), coloGL4->GetName(), 0);
     m_colorTextures.push_back(coloGL4);
 
   }

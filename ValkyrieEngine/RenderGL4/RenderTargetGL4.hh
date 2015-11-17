@@ -20,10 +20,14 @@ public:
   void Bind();
 
 
+  vkUInt16 GetWidth() const;
+  vkUInt16 GetHeight() const;
+
+
   void AddColorTexture(ITexture *color);
   void SetDepthTexture(ITexture *depth);
   void SetDepthBuffer(vkUInt16 width, vkUInt16 height);
-  void Initialize();
+  void Initialize(vkUInt16 width, vkUInt16 height);
   bool Finilize();
 
 
@@ -31,6 +35,8 @@ public:
   virtual ITexture *GetDepthBuffer() const;
 
 private:
+  vkUInt16 m_width;
+  vkUInt16 m_height;
 
   std::vector<vkTextureGL4*> m_colorTextures;
   vkTextureGL4 *m_depthTexture;

@@ -497,9 +497,19 @@ void RendererGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDept
 
 }
 
+void RendererGL4::SetViewport(vkUInt16 width, vkUInt16 height)
+{
+  SetViewport(0, 0, width, height);
+}
+
 void RendererGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
 {
   glViewport(x, y, width, height);
+}
+
+void RendererGL4::SetViewport(IRenderTarget *renderTarget)
+{
+  SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
 }
 
 

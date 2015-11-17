@@ -25,7 +25,7 @@ vkGBuffer::vkGBuffer(RendererGL4 *renderer, vkUInt16 width, vkUInt16 height)
 
 
   m_renderTarget = vkQueryClass<vkRenderTargetGL4>(renderer->CreateRenderTarget());
-  m_renderTarget->Initialize();
+  m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(m_diffuseRoughness);
   m_renderTarget->AddColorTexture(m_normalLightMode);
   m_renderTarget->AddColorTexture(m_emissiveMetallic);
@@ -59,6 +59,7 @@ bool vkGBuffer::Bind(RendererGL4 *renderer)
   }
 
   renderer->SetRenderTarget(m_renderTarget);
+  renderer->SetViewport(m_renderTarget);
 
   return true;
 }
