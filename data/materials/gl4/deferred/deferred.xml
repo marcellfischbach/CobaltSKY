@@ -15,10 +15,21 @@
 			<technique name="Default">
 				<shader>${shaders}/deferred/directional_light.vert</shader>
 				<shader>${shaders}/deferred/directional_light.frag</shader>
+				<shader>${shaders}/deferred/directional_light_no_shadow.frag</shader>
 			</technique>
 		</techniques>
 	</program>
-	
+
+	<program name="DirectionalLightPSSM">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/deferred/directional_light.vert</shader>
+				<shader>${shaders}/deferred/directional_light.frag</shader>
+				<shader>${shaders}/deferred/directional_light_pssm.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+
 	<program name="PointLight">
 		<techniques>
 			<technique name="Default">

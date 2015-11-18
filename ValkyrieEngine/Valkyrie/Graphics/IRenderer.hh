@@ -64,14 +64,17 @@ struct VKE_API IRenderer : public IObject
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
   virtual void SetShader(IShader *shader) = 0;
+  virtual void InvalidateTextures() = 0;
   virtual vkTextureUnit BindTexture(ITexture *texture) = 0;
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
   virtual void SetRenderTarget(IRenderTarget *renderTarget) = 0;
 
   virtual void SetBlendEnabled(bool enabled) = 0;
+  virtual bool IsBlendEnabled() const = 0;
   virtual void SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst) = 0;
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha) = 0;
+  virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const = 0;
 
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0) = 0;
   virtual void SetViewport(vkUInt16 width, vkUInt16 height) = 0;

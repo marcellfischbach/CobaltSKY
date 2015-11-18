@@ -135,10 +135,10 @@ void vkDeferredFrameProcessor::Render(vkNode *node, const vkCamera *camera, IRen
   m_renderer->SetBlendEnabled(false);
 
   ITexture2DArray *txt = vkQueryClass<ITexture2DArray>(m_lightRenderers[eLT_DirectionalLight]->GetShadowBuffer()->GetColorBuffer(0));
-  m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0f, 0.25f, txt, 0);
-  m_renderer->RenderFullScreenFrame(0.25f, 0.5, 0.0f, 0.25f, txt, 1);
-  m_renderer->RenderFullScreenFrame(0.5f, 0.75, 0.0f, 0.25f, txt, 2);
-
+  //m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0f, 0.25f, txt, 0);
+  //m_renderer->RenderFullScreenFrame(0.0, 0.5, 0.0, 0.5, txt, 1);
+  //m_renderer->RenderFullScreenFrame(0.5f, 0.75, 0.0f, 0.25f, txt, 2);
+  //m_renderer->RenderFullScreenFrame(txt, 1);
   
   m_renderer->SetBlendEnabled(false);
 

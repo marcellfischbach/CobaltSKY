@@ -416,6 +416,11 @@ void RendererGL4::SetBlendEnabled(bool enable)
   }
 }
 
+bool RendererGL4::IsBlendEnabled() const
+{
+  return m_blendEnabled;
+}
+
 void RendererGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
 {
   if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
@@ -436,6 +441,14 @@ void RendererGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAl
     m_blendModeDstAlpha = blendDstAlpha;
     glBlendFuncSeparate(blendModeMap[blendSrcColor], blendModeMap[blendSrcAlpha], blendModeMap[blendDstColor], blendModeMap[blendDstAlpha]);
   }
+}
+
+void RendererGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const
+{
+  blendSrcColor = m_blendModeSrcColor;
+  blendSrcAlpha = m_blendModeSrcAlpha;
+  blendDstColor = m_blendModeDstColor;
+  blendDstAlpha = m_blendModeDstAlpha;
 }
 
 void RendererGL4::SetClearColorValue(const vkVector4f &colorValue)

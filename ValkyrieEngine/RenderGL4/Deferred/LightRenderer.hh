@@ -6,7 +6,9 @@
 
 struct IRenderer;
 struct IRenderTarget;
+struct ISampler;
 struct IShaderAttribute;
+struct ITexture2DArray;
 class vkCamera;
 class vkDirectionalLight;
 class vkGBuffer;
@@ -18,6 +20,8 @@ class vkProgramGL4;
 class RendererGL4;
 class vkRenderTargetGL4;
 class vkResourceLocator;
+
+
 class vkLightRendererGL4
 {
 public:
@@ -60,6 +64,7 @@ protected:
   // shadow buffer
   vkRenderTargetGL4 *m_shadowBuffer;
 
+  ISampler *m_depthSampler;
 };
 
 
@@ -80,11 +85,22 @@ private:
   vkMatrix4f m_shadowProj[3];
   vkMatrix4f m_shadowProjView[3];
 
-  IShaderAttribute *m_attrLightDirection;
-  void BindDirectionalLight(vkDirectionalLight *directionalLight);
+  vkVector3f m_distances;
+  float m_mapBias;
 
-  LightProgram m_programWithoutShadow;
-  LightProgram m_programWithShadow;
+  LightProgram m_programNoShadow;
+  IShaderAttribute *m_attrLightDirectionNoShadow;
+  void BindDirectionalLightNoShadow(vkDirectionalLight *directionalLight);
+
+  LightProgram m_programPSSM;
+  IShaderAttribute *m_attrLightDirectionPSSM;
+  IShaderAttribute *m_attrDisancesPSSM;
+  IShaderAttribute *m_attrShadowMats;
+  IShaderAttribute *m_attrShadowMap;
+  IShaderAttribute *m_attrMapBias;
+  ITexture2DArray *m_depthBuffer;
+  void BindDirectionalLightPSSM(vkDirectionalLight *directionalLight);
+
 };
 
 

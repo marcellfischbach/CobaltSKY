@@ -8,4 +8,12 @@
 		</parameters>
 	</materialinstance>
 
+	<materialinstance name="Dirt">
+		<material>${materials}/mat_solid.xml:Solid</material>
+		<parameters>
+			<parameter name="Diffuse" type="texture" >${materials}/textures.xml:Dirt</parameter>
+			<parameter name="Mult" type="float">10.0</parameter>
+		</parameters>
+	</materialinstance>
+	
 </materialinstances>

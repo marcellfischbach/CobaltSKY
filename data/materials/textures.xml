@@ -5,4 +5,9 @@
 		<image mipmap="true">${textures}/fieldstone_diffuse.png</image>
 	</texture>
 
+	<texture name="Dirt" type="texture2D">
+		<sampler resourceMode="shared">${materials}/samplers.xml:Default</sampler>
+		<image mipmap="true">${textures}/dirt_diffuse.png</image>
+	</texture>
+
 </textures>

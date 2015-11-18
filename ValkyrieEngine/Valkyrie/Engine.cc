@@ -90,14 +90,15 @@ int vkEngine::Run()
   sampler->SetFilter(eFM_MinMagNearest);
   color0->SetSampler(sampler);
 
-  vkMaterialInstance *materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
+  vkMaterialInstance *materialFieldstone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
+  vkMaterialInstance *materialDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "Dirt"));
 
   vkGroupNode *groupNode = new vkGroupNode();
 
   vkMesh *planeMesh = createPlaneMesh(m_renderer, 20.0f);
   vkGeometryNode *planeGeometryNode = new vkGeometryNode();
   planeGeometryNode->SetMesh(planeMesh);
-  planeGeometryNode->SetMaterial(materialInstance);
+  planeGeometryNode->SetMaterial(materialFieldstone);
   planeGeometryNode->AttachTo(groupNode);
 
   vkMatrix4f MM;
@@ -105,7 +106,7 @@ int vkEngine::Run()
   vkMesh *cubeMesh = createCubeMesh(m_renderer, 3.0f);
   vkGeometryNode *cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(cubeMesh);
-  cubeGeometryNode->SetMaterial(materialInstance);
+  cubeGeometryNode->SetMaterial(materialFieldstone);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
 
@@ -136,10 +137,12 @@ int vkEngine::Run()
   cameraNode->SetCamera(camera);
   cameraNode->AttachTo(groupNode);
 
+  MM.SetTranslation(0, 0, -1);
   vkMesh *smallCube = createCubeMesh(m_renderer, 1.0f);
   cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(cubeMesh);
-  cubeGeometryNode->SetMaterial(materialInstance);
+  cubeGeometryNode->SetMaterial(materialDirt);
+  cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
 
 
@@ -157,6 +160,7 @@ int vkEngine::Run()
   }
 
   float l = 0.0f;
+  float cd = 0.0f;
   while (true)
   {
     m_window->UpdateEvents();
@@ -165,8 +169,11 @@ int vkEngine::Run()
       break;
     }
 
-    vkMatrix4f MM = create_matrix(vkVector3f((float)cos(v) * 25.0f, (float)sin(v) * 25.0f, 25.0f), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
-    MM.SetLookAtInv(vkVector3f((float)cos(v) * 25.0f, (float)sin(v) * 25.0f, 25.0f), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
+
+    float camDistance = 25.0f + sin(cd) * 15.0f;
+    cd += 0.002f;
+    vkMatrix4f MM;
+    MM.SetLookAtInv(vkVector3f((float)cos(v) * camDistance, (float)sin(v) * camDistance, camDistance), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
     cameraNode->SetMatrix(MM);
     v += 0.001f;
 
@@ -381,7 +388,7 @@ vkMesh* createCubeMesh(IRenderer *renderer, float size)
     8, 9, 11, 8, 11, 10,
     12, 13, 15, 12, 15, 14,
     16, 17, 19, 16, 19, 18,
-    20, 21, 23, 20, 23, 22,
+    20, 23, 23, 20, 23, 22,
   };
 
 

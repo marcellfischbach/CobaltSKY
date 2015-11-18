@@ -43,14 +43,17 @@ public:
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
   virtual void SetShader(IShader *shader);
+  virtual void InvalidateTextures();
   virtual vkTextureUnit BindTexture(ITexture *texture);
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture);
   virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
   virtual void SetRenderTarget(IRenderTarget *renderTarget);
 
   virtual void SetBlendEnabled(bool enabled);
+  virtual bool IsBlendEnabled() const;
   virtual void SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst);
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha);
+  virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const;
 
 
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
@@ -111,7 +114,6 @@ private:
   vkMatrix4f m_shadowMatrices[6];
 
   void InvalidateSamplers();
-  void InvalidateTextures();
 
   /**
    * \name Render a full screen frame
