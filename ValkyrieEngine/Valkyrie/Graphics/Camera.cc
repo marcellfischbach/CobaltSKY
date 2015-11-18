@@ -45,10 +45,10 @@ void vkCamera::UpdateProjectionMatrices()
       m_bottom = -m_top;
       m_projectionMatrix.SetPerspective(m_left, m_right, m_bottom, m_top, m_near, m_far);
       m_projectionMatrixInv.SetPerspectiveInv(m_left, m_right, m_bottom, m_top, m_near, m_far);
-      m_topLeft.Set(m_left / m_near, m_top / m_near, -1.0f);
-      m_topRight.Set(m_right / m_near, m_top / m_near, -1.0f);
-      m_bottomLeft.Set(m_left / m_near, m_bottom / m_near, -1.0f);
-      m_bottomRight.Set(m_right / m_near, m_bottom / m_near, -1.0f);
+      m_topLeft.Set(-m_left / m_near, -m_top / m_near, -1.0f);
+      m_topRight.Set(-m_right / m_near,- m_top / m_near, -1.0f);
+      m_bottomLeft.Set(-m_left / m_near, -m_bottom / m_near, -1.0f);
+      m_bottomRight.Set(-m_right / m_near, -m_bottom / m_near, -1.0f);
       printf("Perspective:\n");
       printf("   TopLeft    : <%.2f %.2f %.2f>\n", m_topLeft.x, m_topLeft.y, m_topLeft.z);
       printf("   TopRight   : <%.2f %.2f %.2f>\n", m_topRight.x, m_topRight.y, m_topRight.z);

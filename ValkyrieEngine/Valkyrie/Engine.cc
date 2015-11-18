@@ -159,6 +159,7 @@ int vkEngine::Run()
     return -1;
   }
 
+  bool anim = true;
   float l = 0.0f;
   float cd = 0.0f;
   while (true)
@@ -168,14 +169,18 @@ int vkEngine::Run()
     {
       break;
     }
+    if (keyboard->IsKeyPressed(eK_Space))
+      anim = !anim;
 
 
     float camDistance = 25.0f + sin(cd) * 15.0f;
-    cd += 0.002f;
+    if (anim)
+      cd += 0.002f;
     vkMatrix4f MM;
     MM.SetLookAtInv(vkVector3f((float)cos(v) * camDistance, (float)sin(v) * camDistance, camDistance), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
     cameraNode->SetMatrix(MM);
-    v += 0.001f;
+    if (anim)
+      v += 0.001f;
 
     vkMatrix4f mm = planeGeometryNode->GetMatrix();
     mm.SetRotationX(m);

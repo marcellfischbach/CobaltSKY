@@ -43,4 +43,5 @@ keyMap[SDL_SCANCODE_LSHIFT] = eK_LShift;
 keyMap[SDL_SCANCODE_RSHIFT] = eK_RShift;
 keyMap[SDL_SCANCODE_LCTRL] = eK_LCtrl;
 keyMap[SDL_SCANCODE_RCTRL] = eK_RCtrl;
+keyMap[SDL_SCANCODE_SPACE] = eK_Space;
 

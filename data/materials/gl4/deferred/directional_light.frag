@@ -19,7 +19,7 @@ uniform vec3 vk_LightDirection;
 in vec2 texCoord;
 in vec2 xyPlane;
 
-float calculate_shadow (vec4 world, vec3 cam);
+float calculate_shadow(vec4 world, vec3 cam);
 
 
 void main ()

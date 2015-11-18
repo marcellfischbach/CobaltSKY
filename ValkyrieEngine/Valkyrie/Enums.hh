@@ -59,6 +59,7 @@ enum vkKey
   eK_RShift,
   eK_LCtrl,
   eK_RCtrl,
+  eK_Space,
   eK_COUNT,
 };
 

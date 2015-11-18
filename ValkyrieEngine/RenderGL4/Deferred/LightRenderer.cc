@@ -107,9 +107,9 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
   m_attrShadowMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMap"));
   m_attrMapBias = m_programPSSM.program->GetAttribute(vkShaderAttributeID("MapBias"));
 
-  m_distances = vkVector3f(15.0f, 60.0f, 240.0f);
+  m_distances = vkVector3f(30.0f, 60.0f, 240.0f);
   m_mapBias = 0.001f;
-  vkUInt16 bufferSize = 1024;
+  vkUInt16 bufferSize = 2048;
   ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 3);
   
@@ -280,7 +280,7 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
   vkVector3f::Div(spot, (float)numPoints, spot);
 
   vkVector3f eye;
-  vkVector3f::Mul(dir, -50.0f, eye);
+  vkVector3f::Mul(dir, -100.0f, eye);
   vkVector3f::Add(eye, spot, eye);
 
   vkVector3f up(0.0f, 0.0f, 1.0f);
@@ -328,7 +328,19 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
     }
   }
 
-  proj.SetOrthographic(min.x, max.x, min.y, max.y, min.z, max.z);
+  float dx = abs(min.x);
+  float dX = abs(max.x);
+  float dy = abs(min.y);
+  float dY = abs(max.y);
+  float dz = abs(min.z);
+  float dZ = abs(max.z);
+  dx = dx > dX ? dx : dX;
+  dy = dy > dY ? dy : dY;
+  dz = dz > dZ ? dz : dZ;
+
+
+
+  proj.SetOrthographic(-dx, dx, -dy, dy, -dz, dz);
 }
 
 

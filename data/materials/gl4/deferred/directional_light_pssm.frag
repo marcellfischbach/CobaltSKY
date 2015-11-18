@@ -7,7 +7,23 @@ uniform float vk_MapBias;
 
 uniform sampler2DArray vk_ShadowMap;
 
-float calculate_shadow (vec4 world, vec3 cam)
+float calc(vec3 ref, int layer)
+{
+	float shadowMapDepth = texture(vk_ShadowMap, vec3 (ref.xy, layer)).r;
+	if (shadowMapDepth == 1.0)
+	{
+		return 1.0;
+	}
+	
+	if ((shadowMapDepth + vk_MapBias) < ref.z)
+	{
+		return 0.5;
+	}
+	return 1.0;
+
+}
+
+float calculate_shadow(vec4 world, vec3 cam)
 {
 	int layer = 0;
 	float d = -cam.z;
@@ -31,10 +47,25 @@ float calculate_shadow (vec4 world, vec3 cam)
 	// transform into final depth buffer space and performce perspective division
 	vec4 depthBufferSpace = vk_ShadowMats[layer] * world;
 	depthBufferSpace /= depthBufferSpace.w;
-	
+
 	// shift from [-1, 1] -> [0, 1]
 	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;
+
+	if (   depthBufferSpace.x < 0.0 || depthBufferSpace.x >= 1.0 ||
+		depthBufferSpace.y < 0.0 || depthBufferSpace.y >= 1.0 ||
+		depthBufferSpace.z < 0.0 || depthBufferSpace.z >= 1.0)
+	{
+		return 1.0;
+	}
 	
+	vec2 sh = vec2(1.0 / 2048.0, 1.0 / 2048.0);
+	
+	return calc(depthBufferSpace.xyz, layer); 
+	/*
+		+calc(depthBufferSpace.xyz + vec3(sh.x, 0, 0), layer) * 0.125 
+		+calc(depthBufferSpace.xyz + vec3(-sh.x, 0, 0), layer) * 0.125 
+		+calc(depthBufferSpace.xyz + vec3(0, sh.y, 0), layer) * 0.125 
+		+calc(depthBufferSpace.xyz + vec3(0, -sh.y, 0), layer) * 0.125;
 	float shadowMapDepth = texture(vk_ShadowMap, vec3 (depthBufferSpace.xy, layer)).r;
 	if (shadowMapDepth == 1.0)
 	{
@@ -46,4 +77,5 @@ float calculate_shadow (vec4 world, vec3 cam)
 		return 0.5;
 	}
 	return 1.0;
+	*/
 }
