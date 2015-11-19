@@ -26,6 +26,26 @@ bool vkMaterialLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &l
 
 
 
+namespace
+{
+vkShaderParameterType get_shader_parameter_type(const vkString &name)
+{
+  if (name == vkString("float")) return eSPT_Float;
+  else if (name == vkString("vec2")) return eSPT_Vector2;
+  else if (name == vkString("vec3")) return eSPT_Vector3;
+  else if (name == vkString("vec4")) return eSPT_Vector4;
+  else if (name == vkString("int")) return eSPT_Int;
+  else if (name == vkString("ivec2")) return eSPT_IVector2;
+  else if (name == vkString("ivec3")) return eSPT_IVector3;
+  else if (name == vkString("ivec4")) return eSPT_IVector4;
+  else if (name == vkString("col")) return eSPT_Color4;
+  else if (name == vkString("mat3")) return eSPT_Matrix3;
+  else if (name == vkString("mat4")) return eSPT_Matrix4;
+  else if (name == vkString("texture")) return eSPT_Texture;
+  return eSPT_Float;
+}
+}
+
 
 IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
@@ -132,6 +152,10 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
       {
         paramType = eSPT_IVector4;
       }
+      else if (type == vkString("col"))
+      {
+        paramType = eSPT_Color4;
+      }
       else if (type == vkString("mat3"))
       {
         paramType = eSPT_Matrix3;
@@ -180,25 +204,6 @@ bool vkMaterialInstanceLoader::CanLoad(TiXmlElement *element, const vkResourceLo
 }
 
 
-namespace 
-{
-vkShaderParameterType get_shader_parameter_type(const vkString &name)
-{
-  if (name == vkString("float")) return eSPT_Float;
-  else if (name == vkString("vec2")) return eSPT_Vector2;
-  else if (name == vkString("vec3")) return eSPT_Vector3;
-  else if (name == vkString("vec4")) return eSPT_Vector4;
-  else if (name == vkString("int")) return eSPT_Int;
-  else if (name == vkString("ivec2")) return eSPT_IVector2;
-  else if (name == vkString("ivec3")) return eSPT_IVector3;
-  else if (name == vkString("ivec4")) return eSPT_IVector4;
-  else if (name == vkString("mat3")) return eSPT_Matrix3;
-  else if (name == vkString("mat4")) return eSPT_Matrix4;
-  else if (name == vkString("texture")) return eSPT_Texture;
-  return eSPT_Float;
-}
-}
-
 IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   TiXmlElement *materialInstanceElement = FindElement(element, "materialinstance", locator.GetResourceName());
@@ -232,27 +237,53 @@ IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceL
     parameterElement;
       parameterElement = parameterElement->NextSiblingElement("parameter"))
     {
-      if (!parameterElement->Attribute("type") || !parameterElement->Attribute("name"))
+      if (!parameterElement->Attribute("name"))
       {
+        printf("no name\n");
         continue;
       }
 
-      vkString typeName(parameterElement->Attribute("type"));
       vkString name(parameterElement->Attribute("name"));
 
       vkInt16 idx = instance->GetIndex(vkShaderAttributeID(name));
       if (idx == -1)
       {
+        printf("name not defined %s\n", name.c_str());
         continue;
       }
 
-      vkShaderParameterType type = ::get_shader_parameter_type(typeName);
+      vkShaderParameterType type = material->GetParamType(idx);
       switch (type)
       {
       case eSPT_Float:
         {
-          float f = (float)atof(parameterElement->GetText());
+          float f = LoadFloat(parameterElement->GetText());
           instance->Set(idx, f);
+        }
+        break;
+      case eSPT_Vector2:
+        {
+          vkVector2f v = LoadVector2f(parameterElement->GetText());
+          instance->Set(idx, v);
+        }
+        break;
+      case eSPT_Vector3:
+        {
+          vkVector3f v = LoadVector3f(parameterElement->GetText());
+          instance->Set(idx, v);
+        }
+        break;
+      case eSPT_Vector4:
+        {
+          vkVector4f v = LoadVector4f(parameterElement->GetText());
+          instance->Set(idx, v);
+        }
+        break;
+      case eSPT_Color4:
+        {
+          vkColor4f v = LoadColor4f(parameterElement->GetText());
+          printf("Load color: %.2f %.2f %.2f %.2f\n", v.r, v.g, v.b, v.a);
+          instance->Set(idx, v);
         }
         break;
       case eSPT_Texture:

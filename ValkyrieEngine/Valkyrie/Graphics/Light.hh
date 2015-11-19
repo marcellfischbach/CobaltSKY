@@ -29,12 +29,17 @@ public:
   void SetCastShadow(bool castShadow);
   bool IsCastingShadow() const;
 
+  void SetShadowIntensity(float shadowIntensity);
+  float GetShadowIntensity() const;
+
 private:
 
   vkLightType m_lightType;
   vkColor4f m_color;
   float m_energy;
+
   bool m_castShadow;
+  float m_shadowIntensity;
 };
 
 

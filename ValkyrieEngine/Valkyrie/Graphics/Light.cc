@@ -7,6 +7,8 @@ vkLight::vkLight(vkLightType type)
   , m_lightType(type)
   , m_color(1.0f, 1.0f, 1.0f, 1.0f)
   , m_energy(1.0f)
+  , m_castShadow(false)
+  , m_shadowIntensity(0.0f)
 {
 
 }
@@ -50,6 +52,16 @@ void vkLight::SetCastShadow(bool castShadow)
 bool vkLight::IsCastingShadow() const
 {
   return m_castShadow;
+}
+
+void vkLight::SetShadowIntensity(float shadowIntensity)
+{
+  m_shadowIntensity = shadowIntensity;
+}
+
+float vkLight::GetShadowIntensity() const
+{
+  return m_shadowIntensity;
 }
 
 

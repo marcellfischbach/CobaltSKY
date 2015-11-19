@@ -10,11 +10,12 @@ in vec2 texCoord;
 in vec3 normal;
 
 uniform sampler2D vk_Diffuse;
+uniform vec4 vk_Color;
 
 void main ()
 {
 	vec3 diffuse = texture(vk_Diffuse, texCoord).rgb;
-	
+	diffuse *= vk_Color.rgb;
 	vk_DiffuseRoughness = vec4(diffuse, 0.0);
 	vk_NormalLightMode = vec4 (normal * 0.5 + 0.5, 0.0);
 	vk_EmissivMetallic = vec4(0, 0, 0, 0);

@@ -133,6 +133,66 @@ void vkMaterialInstance::Set(vkUInt16 idx, float v)
   param.m_float[0] = v;
 }
 
+void vkMaterialInstance::Set(vkUInt16 idx, const vkVector2f &v)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  param.m_float[0] = v.x;
+  param.m_float[1] = v.y;
+}
+
+
+void vkMaterialInstance::Set(vkUInt16 idx, const vkVector3f &v)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  param.m_float[0] = v.x;
+  param.m_float[1] = v.y;
+  param.m_float[2] = v.z;
+}
+
+
+void vkMaterialInstance::Set(vkUInt16 idx, const vkVector4f &v)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  param.m_float[0] = v.x;
+  param.m_float[1] = v.y;
+  param.m_float[2] = v.z;
+  param.m_float[3] = v.w;
+}
+
+
+void vkMaterialInstance::Set(vkUInt16 idx, const vkColor4f &c)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  param.m_float[0] = c.r;
+  param.m_float[1] = c.g;
+  param.m_float[2] = c.b;
+  param.m_float[3] = c.a;
+}
+
 void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
 {
   if (idx >= m_parameters.size())
@@ -188,6 +248,9 @@ bool vkMaterialInstance::Bind(IRenderer *renderer, vkRenderPass pass)
         break;
       case eSPT_IVector4:
         attr->Set(param.m_int[0], param.m_int[1], param.m_int[2], param.m_int[3]);
+        break;
+      case eSPT_Color4:
+        attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
         break;
       case eSPT_Texture:
         {

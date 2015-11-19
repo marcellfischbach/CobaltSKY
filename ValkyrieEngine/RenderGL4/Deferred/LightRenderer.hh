@@ -87,6 +87,7 @@ private:
 
   vkVector3f m_distances;
   float m_mapBias;
+  vkVector2f m_shadowIntensity;
 
   LightProgram m_programNoShadow;
   IShaderAttribute *m_attrLightDirectionNoShadow;
@@ -98,6 +99,7 @@ private:
   IShaderAttribute *m_attrShadowMats;
   IShaderAttribute *m_attrShadowMap;
   IShaderAttribute *m_attrMapBias;
+  IShaderAttribute *m_attrShadowIntensity;
   ITexture2DArray *m_depthBuffer;
   void BindDirectionalLightPSSM(vkDirectionalLight *directionalLight);
 

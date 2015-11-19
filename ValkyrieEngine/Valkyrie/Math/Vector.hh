@@ -20,6 +20,12 @@ public:
 
   }
 
+  VK_FORCEINLINE void Set(float x, float y)
+  {
+    this->x = x;
+    this->y = y;
+  }
+
   VK_FORCEINLINE vkVector2f &operator+=(const vkVector2f &v)
   {
     x += v.x;

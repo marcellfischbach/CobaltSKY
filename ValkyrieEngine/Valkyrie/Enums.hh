@@ -222,6 +222,7 @@ enum vkShaderParameterType
   eSPT_IVector2,
   eSPT_IVector3,
   eSPT_IVector4,
+  eSPT_Color4,
   eSPT_Matrix3,
   eSPT_Matrix4,
   eSPT_Texture,

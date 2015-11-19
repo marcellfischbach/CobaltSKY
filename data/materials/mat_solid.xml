@@ -9,7 +9,7 @@
 		
 		<parameters>
 			<parameter type="texture">Diffuse</parameter>
-			<parameter type="float">Mult</parameter>
+			<parameter type="col">Color</parameter>
 		</parameters>
 		
 	</material>

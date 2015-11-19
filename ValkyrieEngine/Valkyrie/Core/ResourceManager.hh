@@ -7,6 +7,8 @@
 #include <Valkyrie/Core/IFile.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
+#include <Valkyrie/Math/Color.hh>
+#include <Valkyrie/Math/Vector.hh>
 #include <tixml\tinyxml.h>
 #include <map>
 #include <vector>
@@ -70,6 +72,12 @@ protected:
   TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
 
   vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared) const;
+
+  float LoadFloat(const char *str) const;
+  vkVector2f LoadVector2f(const char *str) const;
+  vkVector3f LoadVector3f(const char *str) const;
+  vkVector4f LoadVector4f(const char *str) const;
+  vkColor4f LoadColor4f(const char *str) const;
 };
 
 

@@ -47,10 +47,11 @@ bool SDLWindow::InitializeOpenGL(
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
 
+  /*
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, openGLMajor);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, openGLMinor);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
+   */
   Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
   if (fullscreen)
   {

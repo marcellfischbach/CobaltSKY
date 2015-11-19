@@ -296,3 +296,88 @@ vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *elem
   }
   return mode;
 }
+
+float vkBaseXMLLoader::LoadFloat(const char *str) const
+{
+  return (float) atof(str);
+}
+
+
+vkVector2f vkBaseXMLLoader::LoadVector2f(const char *str) const
+{
+  size_t l = strlen(str);
+  char *s = new char[l + 1];
+  memcpy(s, str, l);
+  s[l] = '\0';
+
+  char *sx = strtok(s, " ;,");
+  char *sy = strtok(0, " ;,");
+
+  float x = (float)atof(sx);
+  float y = (float)atof(sy);
+  delete[] s;
+
+  return vkVector2f(x, y);
+}
+
+vkVector3f vkBaseXMLLoader::LoadVector3f(const char *str) const
+{
+  size_t l = strlen(str);
+  char *s = new char[l + 1];
+  memcpy(s, str, l);
+  s[l] = '\0';
+
+  char *sx = strtok(s, " ;,");
+  char *sy = strtok(0, " ;,");
+  char *sz = strtok(0, " ;,");
+
+  float x = (float)atof(sx);
+  float y = (float)atof(sy);
+  float z = (float)atof(sz);
+  delete[] s;
+
+  return vkVector3f(x, y, z);
+}
+
+vkVector4f vkBaseXMLLoader::LoadVector4f(const char *str) const
+{
+  size_t l = strlen(str);
+  char *s = new char[l + 1];
+  memcpy(s, str, l);
+  s[l] = '\0';
+
+  char *sx = strtok(s, " ;,");
+  char *sy = strtok(0, " ;,");
+  char *sz = strtok(0, " ;,");
+  char *sw = strtok(0, " ;,");
+
+  float x = (float)atof(sx);
+  float y = (float)atof(sy);
+  float z = (float)atof(sz);
+  float w = (float)atof(sw);
+  delete[] s;
+
+  return vkVector4f(x, y, z, w);
+}
+
+vkColor4f vkBaseXMLLoader::LoadColor4f(const char *str) const
+{
+  size_t l = strlen(str);
+  char *s = new char[l + 1];
+  memcpy(s, str, l);
+  s[l] = '\0';
+
+  char *sr = strtok(s, " ;,");
+  char *sg = strtok(0, " ;,");
+  char *sb = strtok(0, " ;,");
+  char *sa = strtok(0, " ;,");
+
+  float r = (float)atof(sr);
+  float g = (float)atof(sg);
+  float b = (float)atof(sb);
+  float a = (float)atof(sa);
+  delete[] s;
+
+  return vkColor4f(r, g, b, a);
+}
+

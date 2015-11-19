@@ -68,6 +68,20 @@ RendererGL4::RendererGL4()
 
   glFrontFace(GL_CW);
   glEnable(GL_CULL_FACE);
+
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glOrtho(10, 20, -1, 1, -1, 1);
+
+  vkMatrix4f glMat;
+  glGetFloatv(GL_PROJECTION_MATRIX, &glMat.m00);
+
+  vkMatrix4f proj;
+  proj.SetOrthographic(10, 20, -1, 1, -1, 1);
+
+  glMat.Debug("OpenGL Ortho");
+  proj.Debug("Valkyrie Ortho");
 }
 
 

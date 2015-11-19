@@ -18,11 +18,11 @@ vkLightRendererGL4::vkLightRendererGL4(RendererGL4 *renderer)
   : m_renderer(renderer)
 {
   m_depthSampler = m_renderer->CreateSampler();
-  m_depthSampler->SetFilter(eFM_MinMagNearest);
+  m_depthSampler->SetFilter(eFM_MinMagLinear);
   m_depthSampler->SetAddressU(eTAM_ClampBorder);
   m_depthSampler->SetAddressV(eTAM_ClampBorder);
   m_depthSampler->SetAddressW(eTAM_ClampBorder);
-  m_depthSampler->SetTextureCompareMode(eTCM_None);
+  m_depthSampler->SetTextureCompareMode(eTCM_CompareToR);
   m_depthSampler->SetTextureCompareFunc(eTCF_Less);
 }
 
@@ -106,10 +106,12 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
   m_attrShadowMats = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMats"));
   m_attrShadowMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMap"));
   m_attrMapBias = m_programPSSM.program->GetAttribute(vkShaderAttributeID("MapBias"));
+  m_attrShadowIntensity = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowIntensity"));
 
-  m_distances = vkVector3f(30.0f, 60.0f, 240.0f);
-  m_mapBias = 0.001f;
-  vkUInt16 bufferSize = 2048;
+  m_distances = vkVector3f(15.0f, 45.0f, 135.0f);
+  m_mapBias = 0.99f;
+
+  vkUInt16 bufferSize = 1024;
   ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 3);
   
@@ -118,7 +120,7 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
 
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
-  m_shadowBuffer->AddColorTexture(colorBuffer);
+  //m_shadowBuffer->AddColorTexture(colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();
 
@@ -214,6 +216,10 @@ void vkDirectionalLightRendererGL4::BindDirectionalLightPSSM(vkDirectionalLight 
   {
     m_attrMapBias->Set(m_mapBias);
   }
+  if (m_attrShadowIntensity)
+  {
+    m_attrShadowIntensity->Set(m_shadowIntensity);
+  }
 }
 
 
@@ -221,6 +227,8 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 {
   CalcPSSMMatrices(light, camera);
 
+  float shadowIntensity = light->GetShadowIntensity();
+  m_shadowIntensity.Set(1.0 - shadowIntensity, shadowIntensity);
 
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
@@ -238,6 +246,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
+  glColorMask(false, false, false, false);
   //glDisable(GL_CULL_FACE);
 
   m_renderer->Clear();
@@ -253,18 +262,19 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
       geometryNode->Render(m_renderer, eRP_ShadowPSSM);
     }
   }
+  glColorMask(true, true, true, true);
 
 }
 
 void vkDirectionalLightRendererGL4::CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera)
 {
-  float dists[] = { m_distances.x, m_distances.y, m_distances.z };
+  float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
   vkVector3f points[8];
 
   for (vkSize i = 0; i < 3; ++i)
   {
-    camera->GetPlanePoints(0, &points[0]);
-    camera->GetPlanePoints(dists[i], &points[4]);
+    camera->GetPlanePoints(0, &points[i]);
+    camera->GetPlanePoints(dists[i+1], &points[4]);
     CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowProj[i]);
     vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
   }
@@ -328,19 +338,7 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
     }
   }
 
-  float dx = abs(min.x);
-  float dX = abs(max.x);
-  float dy = abs(min.y);
-  float dY = abs(max.y);
-  float dz = abs(min.z);
-  float dZ = abs(max.z);
-  dx = dx > dX ? dx : dX;
-  dy = dy > dY ? dy : dY;
-  dz = dz > dZ ? dz : dZ;
-
-
-
-  proj.SetOrthographic(-dx, dx, -dy, dy, -dz, dz);
+  proj.SetOrthographic(min.x, max.x, min.y, max.y, max.z, min.z);
 }
 
 

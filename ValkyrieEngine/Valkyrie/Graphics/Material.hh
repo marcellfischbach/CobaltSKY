@@ -3,6 +3,8 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Math/Color.hh>
+#include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/IRenderer.hh>
 #include <Valkyrie/Enums.hh>
@@ -68,6 +70,10 @@ public:
   vkUInt16 GetIndex(const vkShaderAttributeID &id) const;
   const vkShaderAttributeID &GetID(vkUInt16 idx) const;
   void Set(vkUInt16 idx, float v);
+  void Set(vkUInt16 idx, const vkVector2f &v);
+  void Set(vkUInt16 idx, const vkVector3f &v);
+  void Set(vkUInt16 idx, const vkVector4f &v);
+  void Set(vkUInt16 idx, const vkColor4f &c);
   void Set(vkUInt16 idx, ITexture *texture);
 
 private:

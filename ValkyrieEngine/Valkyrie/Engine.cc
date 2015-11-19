@@ -91,7 +91,9 @@ int vkEngine::Run()
   color0->SetSampler(sampler);
 
   vkMaterialInstance *materialFieldstone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
-  vkMaterialInstance *materialDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "Dirt"));
+  vkMaterialInstance *materialFieldstoneRed = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
+  vkMaterialInstance *materialFieldstoneGreen = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
+  vkMaterialInstance *materialFieldstoneBlue = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
 
   vkGroupNode *groupNode = new vkGroupNode();
 
@@ -102,13 +104,15 @@ int vkEngine::Run()
   planeGeometryNode->AttachTo(groupNode);
 
   vkMatrix4f MM;
-  MM.SetTranslation(10.0f, 10.0f, 3.0f);
+  MM.SetTranslation(0.0f, 0.0f, 3.0f);
   vkMesh *cubeMesh = createCubeMesh(m_renderer, 3.0f);
   vkGeometryNode *cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(cubeMesh);
   cubeGeometryNode->SetMaterial(materialFieldstone);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
+
+  vkSpatialNode *cubeSpatialNode = cubeGeometryNode;
 
   vkPointLight *pointLight = new vkPointLight();
   pointLight->SetColor(vkColor4f(1.0f, 0.75f, 0.25f));
@@ -120,6 +124,13 @@ int vkEngine::Run()
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
   directionalLight->SetCastShadow(true);
+  directionalLight->SetShadowIntensity(0.0f);
+
+  vkDirectionalLight *directionalLightContra = new vkDirectionalLight();
+  directionalLightContra->SetColor(vkColor4f(1.0f, 0.8f, 0.6f));
+  directionalLightContra->SetEnergy(0.2f);
+  directionalLightContra->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
+  directionalLightContra->SetCastShadow(false);
 
   vkLightNode *lightNode = new vkLightNode();
   lightNode->SetLight(pointLight);
@@ -127,6 +138,10 @@ int vkEngine::Run()
 
   lightNode = new vkLightNode();
   lightNode->SetLight(directionalLight);
+  lightNode->AttachTo(groupNode);
+
+  lightNode = new vkLightNode();
+  lightNode->SetLight(directionalLightContra);
   lightNode->AttachTo(groupNode);
 
 
@@ -137,14 +152,28 @@ int vkEngine::Run()
   cameraNode->SetCamera(camera);
   cameraNode->AttachTo(groupNode);
 
-  MM.SetTranslation(0, 0, -1);
   vkMesh *smallCube = createCubeMesh(m_renderer, 1.0f);
+
+  MM.SetTranslation(-10, -10, -1);
   cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(cubeMesh);
-  cubeGeometryNode->SetMaterial(materialDirt);
+  cubeGeometryNode->SetMaterial(materialFieldstoneRed);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
 
+  MM.SetTranslation(-10,  10, -1);
+  cubeGeometryNode = new vkGeometryNode();
+  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMaterial(materialFieldstoneGreen);
+  cubeGeometryNode->SetMatrix(MM);
+  cubeGeometryNode->AttachTo(groupNode);
+
+  MM.SetTranslation( 10, -10, -1);
+  cubeGeometryNode = new vkGeometryNode();
+  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMaterial(materialFieldstoneBlue);
+  cubeGeometryNode->SetMatrix(MM);
+  cubeGeometryNode->AttachTo(groupNode);
 
 
   float v = 0.0f;
@@ -162,6 +191,7 @@ int vkEngine::Run()
   bool anim = true;
   float l = 0.0f;
   float cd = 0.0f;
+  float ct = 0.0f;
   while (true)
   {
     m_window->UpdateEvents();
@@ -190,6 +220,15 @@ int vkEngine::Run()
     pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 2.0f + cos(2.0f*l) * 1.0f));
     l += 0.001f;
 
+    vkMatrix4f MMCX, MMCY, MMCZ, MMC;
+    MMCX.SetRotationX(ct);
+    MMCY.SetRotationY(ct);
+    MMCZ.SetRotationZ(ct);
+    vkMatrix4f::Mult(MMCX, MMCY, MMC);
+    vkMatrix4f::Mult(MMC, MMCZ, MMC);
+
+    cubeSpatialNode->SetMatrix(MMC);
+    ct += 0.001f;
 
     groupNode->UpdateStates();
 
