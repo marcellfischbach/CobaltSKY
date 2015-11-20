@@ -70,18 +70,6 @@ RendererGL4::RendererGL4()
   glEnable(GL_CULL_FACE);
 
 
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(10, 20, -1, 1, -1, 1);
-
-  vkMatrix4f glMat;
-  glGetFloatv(GL_PROJECTION_MATRIX, &glMat.m00);
-
-  vkMatrix4f proj;
-  proj.SetOrthographic(10, 20, -1, 1, -1, 1);
-
-  glMat.Debug("OpenGL Ortho");
-  proj.Debug("Valkyrie Ortho");
 }
 
 
@@ -222,6 +210,100 @@ void RendererGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
   m_matrices[eMT_MatModelInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = false;
 }
+
+void RendererGL4::GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+{
+  float z2 = 2.0f * n;
+  float dx = r - l;
+  float dy = t - b;
+  float dz = f - n;
+  float sx = r + l;
+  float sy = t + b;
+  float sz = n + f;
+
+  /*
+  m.m00 = z2 / dx; m.m10 = 0.0f;    m.m20 = sx / dx;  m.m30 = 0.0f;
+  m.m01 = 0.0f;    m.m11 = z2 / dy; m.m21 = sy / dy;  m.m31 = 0.0f;
+  m.m02 = 0.0f;    m.m12 = 0.0f;    m.m22 = -sz / dz; m.m32 = -2.0f*n*f / dz;
+  m.m03 = 0.0f;    m.m13 = 0.0f;    m.m23 = -1.0f;    m.m33 = 0.0f;
+  */
+  m.m00 = z2 / dx; m.m10 = sx / dx; m.m20 = 0.0f;    m.m30 = 0.0f;
+  m.m01 = 0.0f;    m.m11 = sy / dy; m.m21 = z2 / dy; m.m31 = 0.0f;
+  m.m02 = 0.0f;    m.m12 = sz / dz; m.m22 = 0.0f;    m.m32 = -2.0f*n*f / dz;
+  m.m03 = 0.0f;    m.m13 = 1.0f;    m.m23 = 0.0f;    m.m33 = 0.0f;
+
+}
+
+void RendererGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+{
+  float z2 = 2.0f * n;
+  float dx = r - l;
+  float dy = t - b;
+  float dz = f - n;
+  float sx = r + l;
+  float sy = t + b;
+  float sz = n + f;
+  float nf2 = z2 * f;
+
+  /*
+  m.m00 = dx / z2; m.m10 = 0.0f;    m.m20 = 0.0f;      m.m30 = sx / z2;
+  m.m01 = 0.0f;    m.m11 = dy / z2; m.m21 = 0.0f;      m.m31 = sy / z2;
+  m.m02 = 0.0f;    m.m12 = 0.0f;    m.m22 = 0.0f;      m.m32 = -1.0f;
+  m.m03 = 0.0f;    m.m13 = 0.0f;    m.m23 = -dz / nf2; m.m33 = sz / nf2;
+  */
+
+  m.m00 = dx / z2; m.m10 = 0.0f;    m.m20 = 0.0f;      m.m30 = sx / z2;
+  m.m01 = 0.0f;    m.m11 = 0.0f;    m.m21 = 0.0f;      m.m31 = 1.0f;
+  m.m02 = 0.0f;    m.m12 = dy / z2; m.m22 = 0.0f;      m.m32 = sy / z2;
+  m.m03 = 0.0f;    m.m13 = 0.0f;    m.m23 = -dz / nf2; m.m33 = sz / nf2;
+
+}
+
+void RendererGL4::GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+{
+  float dx = r - l;
+  float dy = t - b;
+  float dz = f - n;
+  float sx = r + l;
+  float sy = t + b;
+  float sz = f + n;
+ 
+  /*
+  m.m00 = 2.0f / dx; m.m10 = 0.0f;      m.m20 = 0.0f;      m.m30 = -sx / dx;
+  m.m01 = 0.0f;      m.m11 = 2.0f / dy; m.m21 = 0.0f;      m.m31 = -sy / dy;
+  m.m02 = 0.0f;      m.m12 = 0.0f;      m.m22 = 2.0f / dz; m.m32 = -sz / dz;
+  m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;      m.m33 = 1.0;
+  */
+
+  m.m00 = 2.0f / dx; m.m10 = 0.0f;      m.m20 = 0.0f;      m.m30 = -sx / dx;
+  m.m01 = 0.0f;      m.m11 = 0.0f;      m.m21 = 2.0f / dy; m.m31 = -sy / dy;
+  m.m02 = 0.0f;      m.m12 = 2.0f / dz; m.m22 = 0.0f;      m.m32 = -sz / dz;
+  m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;      m.m33 = 1.0;
+}
+
+void RendererGL4::GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+{
+  float dx = r - l;
+  float dy = t - b;
+  float dz = f - n;
+  float sx = r + l;
+  float sy = t + b;
+  float sz = n + f;
+
+  /*
+  m.m00 = dx / 2.0f; m.m10 = 0.0f;      m.m20 = 0.0f;       m.m30 = sx / 2.0f;
+  m.m01 = 0.0f;      m.m11 = dy / 2.0f; m.m21 = 0.0f;       m.m31 = sy / 2.0f;
+  m.m02 = 0.0f;      m.m12 = 0.0f;      m.m22 = dz / 2.0f;  m.m32 = sz / 2.0f;
+  m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;       m.m33 = 1.0;
+  */
+
+  m.m00 = dx / 2.0f; m.m10 = 0.0f;      m.m20 = 0.0f;       m.m30 = sx / 2.0f;
+  m.m01 = 0.0f;      m.m11 = 0.0f;      m.m21 = dz / 2.0f;  m.m31 = sz / 2.0f;
+  m.m02 = 0.0f;      m.m12 = dy / 2.0f; m.m22 = 0.0f;       m.m32 = sy / 2.0f;
+  m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;       m.m33 = 1.0;
+
+}
+
 
 void RendererGL4::SetShadowMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
 {

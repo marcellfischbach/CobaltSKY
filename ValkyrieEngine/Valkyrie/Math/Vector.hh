@@ -696,4 +696,13 @@ public:
     return !(x == o.x && y == o.y && z == o.z && w == o.w);
   }
 
-};
+
+  VK_FORCEINLINE void Debug(const char *message)
+  {
+    printf("vkVector3f ");
+    if (message)
+    {
+      printf("%s ", message);
+    }
+    printf("<%f %f %f %f>\n", x, y, z, w);
+  }};

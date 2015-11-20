@@ -30,10 +30,10 @@ void vkCameraNode::TransformationChanged()
     const vkMatrix4f &m = GetMatrix();
 
     vkVector3f e, v;
-    m_camera->SetUp(m.GetYAxis(v));
+    m_camera->SetUp(m.GetZAxis(v));
     m_camera->SetEye(m.GetTranslation(e));
-    m.GetZAxis(v);
-    vkVector3f::Sub(e, v, e);
+    m.GetYAxis(v);
+    vkVector3f::Add(e, v, e);
     m_camera->SetSpot(e);
     /*
     printf("%.2f %.2f %.2f    %.2f %.2f %.2f   %.2f %.2f %.2f\n",

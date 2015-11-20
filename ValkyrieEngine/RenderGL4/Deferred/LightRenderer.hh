@@ -28,7 +28,7 @@ public:
   vkLightRendererGL4(RendererGL4 *renderer);
   virtual ~vkLightRendererGL4();
 
-  virtual void Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
+  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
 
   vkRenderTargetGL4 *GetShadowBuffer();
 
@@ -74,7 +74,7 @@ public:
   vkDirectionalLightRendererGL4(RendererGL4 *renderer);
   virtual ~vkDirectionalLightRendererGL4();
 
-  virtual void Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
   void RenderShadow(vkNode *node, const vkCamera *camera, const vkDirectionalLight *light);
@@ -114,7 +114,7 @@ public:
   vkPointLightRendererGL4(RendererGL4 *renderer);
   virtual ~vkPointLightRendererGL4();
 
-  virtual void Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
   IShaderAttribute *m_attrLightPosition;

@@ -16,7 +16,8 @@ float calc(vec3 ref, int layer)
 float calculate_shadow(vec4 world, vec3 cam)
 {
 	int layer = 0;
-	float d = -cam.z;
+
+	float d = cam.y;
 	if (d < vk_Distances.x)
 	{
 		layer = 0;
@@ -36,7 +37,6 @@ float calculate_shadow(vec4 world, vec3 cam)
 	
 	// transform into final depth buffer space and performce perspective division
 	vec4 depthBufferSpace = vk_ShadowMats[layer] * world;
-	depthBufferSpace /= depthBufferSpace.w;
 
 	// shift from [-1, 1] -> [0, 1]
 	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;

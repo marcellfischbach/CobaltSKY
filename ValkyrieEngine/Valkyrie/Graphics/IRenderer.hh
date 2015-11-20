@@ -52,6 +52,10 @@ struct VKE_API IRenderer : public IObject
   virtual void SetViewMatrixInv(const vkMatrix4f &matrix) = 0;
   virtual void SetModelMatrix(const vkMatrix4f &matrix) = 0;
   virtual void SetModelMatrixInv(const vkMatrix4f &matrix) = 0;
+  virtual void GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
+  virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
+  virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
+  virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
   /**
    * @}
    */

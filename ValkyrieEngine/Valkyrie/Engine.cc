@@ -74,7 +74,7 @@ int vkEngine::Run()
 
   RegisterLoaders();
 
-  
+
 
   ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
   IRenderTarget *rt = m_renderer->CreateRenderTarget();

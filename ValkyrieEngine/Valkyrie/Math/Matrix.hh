@@ -436,6 +436,9 @@ public:
     vkVector3f::Cross(up, zAxis, xAxis).Normalize();
     vkVector3f::Cross(zAxis, xAxis, yAxis);
 
+    vkVector3f::Sub(spot, eye, yAxis).Normalize();
+    vkVector3f::Cross(yAxis, up, xAxis).Normalize();
+    vkVector3f::Cross(xAxis, yAxis, zAxis);
 
     SetXAxis(xAxis.x, yAxis.x, zAxis.x);
     SetYAxis(xAxis.y, yAxis.y, zAxis.y);
@@ -452,6 +455,10 @@ public:
     vkVector3f::Cross(up, zAxis, xAxis).Normalize();
     vkVector3f::Cross(zAxis, xAxis, yAxis);
 
+    vkVector3f::Sub(spot, eye, yAxis).Normalize();
+    vkVector3f::Cross(yAxis, up, xAxis).Normalize();
+    vkVector3f::Cross(xAxis, yAxis, zAxis);
+
     SetXAxis(xAxis);
     SetYAxis(yAxis);
     SetZAxis(zAxis);
@@ -462,78 +469,7 @@ public:
   }
 
 
-  VK_FORCEINLINE vkMatrix4f &SetPerspective(float l, float r, float b, float t, float n, float f)
-  {
 
-    float z2 = 2.0f * n;
-    float dx = r - l;
-    float dy = t - b;
-    float dz = f - n;
-    float sx = r + l;
-    float sy = t + b;
-    float sz = n + f;
-
-    m00 = z2 / dx; m10 = 0.0f;    m20 = sx / dx;  m30 = 0.0f;
-    m01 = 0.0f;    m11 = z2 / dy; m21 = sy / dy;  m31 = 0.0f;
-    m02 = 0.0f;    m12 = 0.0f;    m22 = -sz / dz; m32 = -2.0f*n*f / dz;
-    m03 = 0.0f;    m13 = 0.0f;    m23 = -1.0f;    m33 = 0.0f;
-    return *this;
-  }
-  VK_FORCEINLINE vkMatrix4f &SetPerspectiveInv(float l, float r, float b, float t, float n, float f)
-  {
-
-    float z2 = 2.0f * n;
-    float dx = r - l;
-    float dy = t - b;
-    float dz = f - n;
-    float sx = r + l;
-    float sy = t + b;
-    float sz = n + f;
-    float nf2 = z2 * f;
-
-    m00 = dx / z2; m10 = 0.0f;    m20 = 0.0f;      m30 = sx / z2;
-    m01 = 0.0f;    m11 = dy / z2; m21 = 0.0f;      m31 = sy / z2;
-    m02 = 0.0f;    m12 = 0.0f;    m22 = 0.0f;      m32 = -1.0f;
-    m03 = 0.0f;    m13 = 0.0f;    m23 = -dz / nf2; m33 = sz / nf2;
-    return *this;
-  }
-
-  VK_FORCEINLINE vkMatrix4f &SetOrthographic(float l, float r, float b, float t, float n, float f)
-  {
-
-    float dx = r - l;
-    float dy = t - b;
-    float dz = f - n;
-    float sx = r + l;
-    float sy = t + b;
-    float sz = f + n;
-
-
-    m00 = 2.0f / dx; m10 = 0.0f;      m20 = 0.0f;      m30 = -sx / dx;
-    m01 = 0.0f;      m11 = 2.0f / dy; m21 = 0.0f;      m31 = -sy / dy;
-    m02 = 0.0f;      m12 = 0.0f;      m22 = 2.0f / dz; m32 = -sz / dz;
-    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;      m33 = 1.0;
-
-    return *this;
-  }
-
-  VK_FORCEINLINE vkMatrix4f &SetOrthographicInv(float l, float r, float b, float t, float n, float f)
-  {
-
-    float z2 = 2.0f * n;
-    float dx = r - l;
-    float dy = t - b;
-    float dz = f - n;
-    float sx = r + l;
-    float sy = t + b;
-    float sz = n + f;
-
-    m00 = dx / 2.0f; m10 = 0.0f;      m20 = 0.0f;       m30 = sx / 2.0f;
-    m01 = 0.0f;      m11 = dy / 2.0f; m21 = 0.0f;       m31 = sy / 2.0f;
-    m02 = 0.0f;      m12 = 0.0f;      m22 = dz / 2.0f;  m32 = sz / 2.0f;
-    m03 = 0.0f;      m13 = 0.0f;      m23 = 0.0f;       m33 = 1.0;
-    return *this;
-  }
 
 
   VK_FORCEINLINE static vkMatrix4f &Mult(const vkMatrix4f &m0, const vkMatrix4f &m1, vkMatrix4f &r)
@@ -603,10 +539,10 @@ public:
 
   static vkVector4f &Mult(const vkMatrix4f &m, const vkVector4f &v, vkVector4f &res)
   {
-    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z * m.m30 * v.w;
-    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z * m.m31 * v.w;
-    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z * m.m32 * v.w;
-    float w = m.m03 * v.x + m.m13 * v.y + m.m23 * v.z * m.m33 * v.w;
+    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30 * v.w;
+    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31 * v.w;
+    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z + m.m32 * v.w;
+    float w = m.m03 * v.x + m.m13 * v.y + m.m23 * v.z + m.m33 * v.w;
     res.x = x;
     res.y = y;
     res.z = z;
@@ -625,10 +561,10 @@ public:
       printf("vkMatrix:\n");
     }
 
-    printf("  %.2f %.2f %.2f %.2f\n", m00, m01, m02, m03);
-    printf("  %.2f %.2f %.2f %.2f\n", m10, m11, m12, m13);
-    printf("  %.2f %.2f %.2f %.2f\n", m20, m21, m22, m23);
-    printf("  %.2f %.2f %.2f %.2f\n", m30, m31, m32, m33);
+    printf("  %f %f %f %f\n", m00, m01, m02, m03);
+    printf("  %f %f %f %f\n", m10, m11, m12, m13);
+    printf("  %f %f %f %f\n", m20, m21, m22, m23);
+    printf("  %f %f %f %f\n", m30, m31, m32, m33);
   }
 
 

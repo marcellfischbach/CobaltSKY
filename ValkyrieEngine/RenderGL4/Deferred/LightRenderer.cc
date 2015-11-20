@@ -120,7 +120,7 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
 
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
-  //m_shadowBuffer->AddColorTexture(colorBuffer);
+  m_shadowBuffer->AddColorTexture(colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();
 
@@ -134,7 +134,7 @@ vkDirectionalLightRendererGL4::~vkDirectionalLightRendererGL4()
 
 
 
-void vkDirectionalLightRendererGL4::Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkDirectionalLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -246,7 +246,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
-  glColorMask(false, false, false, false);
+  glColorMask(true, true, true, true);
   //glDisable(GL_CULL_FACE);
 
   m_renderer->Clear();
@@ -303,7 +303,7 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
     up.Set(-1.0f, 0.0f, 0.0f);
   }
 
-  cam.SetLookAt(eye, spot, up);
+  cam.SetLookAt(vkVector3f(0, 0, 0), dir, up);
 
   vkVector3f min(FLT_MAX, FLT_MAX, FLT_MAX);
   vkVector3f max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
@@ -337,8 +337,8 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
       max.z = t.z;
     }
   }
-
-  proj.SetOrthographic(min.x, max.x, min.y, max.y, max.z, min.z);
+  m_renderer->GetOrthographicProjection(min.x, max.x, min.z, max.z, min.y, max.y, proj);
+  // proj.SetOrthographic(min.x, max.x, min.y, max.y, max.z, min.z);
 }
 
 
@@ -362,7 +362,7 @@ vkPointLightRendererGL4::~vkPointLightRendererGL4()
 
 
 
-void vkPointLightRendererGL4::Render(vkNode *node, const vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkPointLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkPointLight *pointLight = static_cast<vkPointLight*>(light);
   // no the final image will be assembled

@@ -36,15 +36,17 @@ public:
   void SetPerspective(float angle, float aspect);
   void SetOrthographic(const vkVector2f &viewport);
 
-  void UpdateCameraMatrices();
-  void UpdateProjectionMatrices();
 
-
-  void Apply(IRenderer *renderer) const;
+  void Apply(IRenderer *renderer);
 
   void GetPlanePoints(float distance, vkVector3f *points) const;
 
+  void UpdateCameraMatrices();
+
 private:
+  void UpdateProjectionValues();
+  void UpdateProjectionMatrices(IRenderer *renderer);
+
   vkVector3f m_eye;
   vkVector3f m_spot;
   vkVector3f m_up;
@@ -53,6 +55,7 @@ private:
   vkMatrix4f m_cameraMatrixInv;
   vkMatrix4f m_projectionMatrix;
   vkMatrix4f m_projectionMatrixInv;
+  bool m_projectionChanged;
 
   float m_left;
   float m_right;

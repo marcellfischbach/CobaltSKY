@@ -37,6 +37,11 @@ public:
   virtual void SetViewMatrixInv(const vkMatrix4f &matrix);
   virtual void SetModelMatrix(const vkMatrix4f &matrix);
   virtual void SetModelMatrixInv(const vkMatrix4f &matrix);
+  virtual void GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
+  virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
+  virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
+  virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
+
   virtual void SetShadowMatrices(const vkMatrix4f *matrix, vkSize numberOfMatrices);
 
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);

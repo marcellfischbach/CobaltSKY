@@ -7,6 +7,7 @@ vkCamera::vkCamera()
   : vkObject()
   , m_near(1.0f)
   , m_far(1024.0f)
+  , m_projectionChanged(false)
 {
   m_cameraMatrix.SetIdentity();
   m_cameraMatrixInv.SetIdentity();
@@ -19,10 +20,15 @@ vkCamera::~vkCamera()
 
 }
 
-void vkCamera::Apply(IRenderer *renderer) const
+void vkCamera::Apply(IRenderer *renderer) 
 {
   renderer->SetViewMatrix(m_cameraMatrix);
   renderer->SetViewMatrixInv(m_cameraMatrixInv);
+
+  if (m_projectionChanged)
+  {
+    UpdateProjectionMatrices(renderer);
+  }
   renderer->SetProjectionMatrix(m_projectionMatrix);
   renderer->SetProjectionMatrixInv(m_projectionMatrixInv);
 }
@@ -33,7 +39,23 @@ void vkCamera::UpdateCameraMatrices()
   m_cameraMatrixInv.SetLookAtInv(m_eye, m_spot, m_up);
 }
 
-void vkCamera::UpdateProjectionMatrices()
+void vkCamera::UpdateProjectionMatrices(IRenderer *renderer)
+{
+  switch (m_projectionMode)
+  {
+    case ePM_Perspective:
+      renderer->GetPerspectiveProjection(m_left, m_right, m_bottom, m_top, m_near, m_far, m_projectionMatrix);
+      renderer->GetPerspectiveProjectionInv(m_left, m_right, m_bottom, m_top, m_near, m_far, m_projectionMatrixInv);
+      break;
+    case ePM_Orthographic:
+      renderer->GetOrthographicProjection(m_left, m_right, m_bottom, m_top, m_near, m_far, m_projectionMatrix);
+      renderer->GetOrthographicProjectionInv(m_left, m_right, m_bottom, m_top, m_near, m_far, m_projectionMatrixInv);
+      break;
+  }
+  m_projectionChanged = false;
+}
+
+void vkCamera::UpdateProjectionValues()
 {
   switch (m_projectionMode)
   {
@@ -43,18 +65,10 @@ void vkCamera::UpdateProjectionMatrices()
       m_left = -m_right;
       m_top = m_perspectiveAspect * m_right;
       m_bottom = -m_top;
-      m_projectionMatrix.SetPerspective(m_left, m_right, m_bottom, m_top, m_near, m_far);
-      m_projectionMatrixInv.SetPerspectiveInv(m_left, m_right, m_bottom, m_top, m_near, m_far);
-      m_topLeft.Set(-m_left / m_near, -m_top / m_near, -1.0f);
-      m_topRight.Set(-m_right / m_near,- m_top / m_near, -1.0f);
-      m_bottomLeft.Set(-m_left / m_near, -m_bottom / m_near, -1.0f);
-      m_bottomRight.Set(-m_right / m_near, -m_bottom / m_near, -1.0f);
-      printf("Perspective:\n");
-      printf("   TopLeft    : <%.2f %.2f %.2f>\n", m_topLeft.x, m_topLeft.y, m_topLeft.z);
-      printf("   TopRight   : <%.2f %.2f %.2f>\n", m_topRight.x, m_topRight.y, m_topRight.z);
-      printf("   BottomLeft : <%.2f %.2f %.2f>\n", m_bottomLeft.x, m_bottomLeft.y, m_bottomLeft.z);
-      printf("   BottomRight: <%.2f %.2f %.2f>\n", m_bottomRight.x, m_bottomRight.y, m_bottomRight.z);
-
+      m_topLeft.Set(m_left / m_near, 1.0f, m_top / m_near);
+      m_topRight.Set(m_right / m_near, 1.0f, m_top / m_near);
+      m_bottomLeft.Set(m_left / m_near, 1.0f, m_bottom / m_near);
+      m_bottomRight.Set(m_right / m_near, 1.0f, m_bottom / m_near);
     }
     break;
   case ePM_Orthographic:
@@ -63,14 +77,11 @@ void vkCamera::UpdateProjectionMatrices()
       m_left = -m_right;
       m_top = m_orthographicViewport.y;
       m_bottom = -m_top;
-      printf("Ortho: %.2f %.2f %.2f %.2f\n", m_left, m_right, m_bottom, m_top);
-      m_projectionMatrix.SetOrthographic(m_left, m_right, m_bottom, m_top, m_near, m_far);
-      m_projectionMatrixInv.SetOrthographicInv(m_left, m_right, m_bottom, m_top, m_near, m_far);
     }
     break;
   }
 
-
+  m_projectionChanged = true;
 }
 
 void vkCamera::SetPerspective(float angle, float aspect)
@@ -79,7 +90,7 @@ void vkCamera::SetPerspective(float angle, float aspect)
   m_perspectiveAspect = aspect;
   m_projectionMode = ePM_Perspective;
 
-  UpdateProjectionMatrices();
+  UpdateProjectionValues();
 }
 
 void vkCamera::SetOrthographic(const vkVector2f &viewport)
@@ -87,7 +98,7 @@ void vkCamera::SetOrthographic(const vkVector2f &viewport)
   m_orthographicViewport = viewport;
   m_projectionMode = ePM_Orthographic;
 
-  UpdateProjectionMatrices();
+  UpdateProjectionValues();
 }
 
 
@@ -102,10 +113,10 @@ void vkCamera::GetPlanePoints(float distance, vkVector3f *points) const
     vkVector3f::Mul(m_topRight, distance, points[3]);
     break;
   case ePM_Orthographic:
-    points[0].Set(-m_orthographicViewport.x, -m_orthographicViewport.y, -distance);
-    points[1].Set(m_orthographicViewport.x, -m_orthographicViewport.y, -distance);
-    points[2].Set(-m_orthographicViewport.x, m_orthographicViewport.y, -distance);
-    points[3].Set(m_orthographicViewport.x, m_orthographicViewport.y, -distance);
+    points[0].Set(-m_orthographicViewport.x, distance, -m_orthographicViewport.y);
+    points[1].Set(m_orthographicViewport.x, distance, -m_orthographicViewport.y);
+    points[2].Set(-m_orthographicViewport.x, distance, m_orthographicViewport.y);
+    points[3].Set(m_orthographicViewport.x, distance, m_orthographicViewport.y);
     break;
   }
 

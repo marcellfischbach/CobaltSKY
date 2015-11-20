@@ -25,7 +25,7 @@ public:
 
   bool Initialize(vkUInt16 width, vkUInt16 height);
 
-  void Render(vkNode *node, const vkCamera *camera, IRenderTarget *target);
+  void Render(vkNode *node, vkCamera *camera, IRenderTarget *target);
 
 private:
   void RenderGBuffer(vkNode *rootNode);
