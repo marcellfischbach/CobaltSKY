@@ -45,6 +45,10 @@ void vkGeometryNode::Render(IRenderer *renderer, vkRenderPass pass, vkUInt8 lod)
     renderer->SetModelMatrix(GetMatrix());
     m_mesh->Render(renderer, lod);
   }
+  else
+  {
+    printf("No pass: %d\n", pass);
+  }
 }
 
 void vkGeometryNode::PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)

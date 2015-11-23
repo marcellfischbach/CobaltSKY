@@ -8,10 +8,6 @@ uniform vec2 vk_ShadowIntensity;
 
 uniform sampler2DArrayShadow vk_ShadowMap;
 
-float calc(vec3 ref, int layer)
-{
-	return texture(vk_ShadowMap, vec4 (ref.xy, layer, ref.z * vk_MapBias));
-}
 
 float calculate_shadow(vec4 world, vec3 cam)
 {
@@ -49,6 +45,5 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
-	
-	return calc(depthBufferSpace.xyz, layer) * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
+	return texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias));
 }

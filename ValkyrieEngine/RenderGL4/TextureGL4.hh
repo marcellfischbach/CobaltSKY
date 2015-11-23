@@ -149,6 +149,35 @@ private:
 };
 
 
+VK_CLASS();
+class VKGL4_API vkTextureCubeGL4 : public virtual vkTextureGL4, public virtual ITextureCube
+{
+  VK_CLASS_GEN;
+public:
+
+  vkTextureCubeGL4();
+  virtual ~vkTextureCubeGL4();
+
+  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
+
+
+  // Implementation of the ITexture2DArray interface
+  virtual vkUInt16 GetWidth() const;
+  virtual vkUInt16 GetHeight() const;
+  virtual vkUInt16 GetDepth() const;
+
+  virtual bool CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelFormat format, const void *data);
+
+private:
+  vkPixelFormat m_format;
+
+  vkUInt16 m_width;
+  vkUInt16 m_height;
+  vkUInt16 m_depth;
+};
+
+
+
 
 VK_FORCEINLINE GLuint vkTextureGL4::GetName() const
 {

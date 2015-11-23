@@ -27,6 +27,7 @@ public:
   virtual ISampler *CreateSampler();
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
   virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers);
+  virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
   virtual IFrameProcessor *CreateDeferredFrameProcessor();
 
 

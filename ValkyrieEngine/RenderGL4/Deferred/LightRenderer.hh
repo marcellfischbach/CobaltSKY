@@ -58,11 +58,14 @@ protected:
   void BindLight(LightProgram &lightProgram, vkLight *light);
 
 protected:
+  void CalcShadowIntensity(const vkLight *light);
   vkCollection<vkGeometryNode*> m_geometries;
   RendererGL4 *m_renderer;
+  float m_mapBias;
 
   // shadow buffer
   vkRenderTargetGL4 *m_shadowBuffer;
+  vkVector2f m_shadowIntensity;
 
   ISampler *m_depthSampler;
 };
@@ -86,8 +89,6 @@ private:
   vkMatrix4f m_shadowProjView[3];
 
   vkVector3f m_distances;
-  float m_mapBias;
-  vkVector2f m_shadowIntensity;
 
   LightProgram m_programNoShadow;
   IShaderAttribute *m_attrLightDirectionNoShadow;
@@ -117,12 +118,29 @@ public:
   virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
-  IShaderAttribute *m_attrLightPosition;
-  IShaderAttribute *m_attrLightRange;
-  void BindPointLight(vkPointLight *pointLight);
+  void RenderShadow(vkNode *node, const vkPointLight *light);
+  void CalcCubeMatrices(const vkPointLight *light);
 
-  LightProgram m_programWithoutShadow;
-  LightProgram m_programWithShadow;
+  vkMatrix4f m_shadowCam[6];
+  vkMatrix4f m_shadowProj[6];
+  vkMatrix4f m_shadowProjView[6];
+
+  LightProgram m_programNoShadow;
+  IShaderAttribute *m_attrLightPositionNoShadow;
+  IShaderAttribute *m_attrLightRangeNoShadow;
+  void BindPointLightNo(vkPointLight *pointLight);
+
+
+  LightProgram m_programCubeShadow;
+  IShaderAttribute *m_attrLightPositionCubeShadow;
+  IShaderAttribute *m_attrLightRangeCubeShadow;
+  IShaderAttribute *m_attrShadowMats;
+  IShaderAttribute *m_attrShadowMap;
+  IShaderAttribute *m_attrMapBias;
+  IShaderAttribute *m_attrShadowIntensity;
+  ITexture2DArray *m_depthBuffer;
+  void BindPointLightCubeShadow(vkPointLight *pointLight);
+
 };
 
 VK_FORCEINLINE vkRenderTargetGL4 *vkLightRendererGL4::GetShadowBuffer()

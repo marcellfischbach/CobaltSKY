@@ -152,6 +152,16 @@ ITexture2DArray *RendererGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt1
   return texture;
 }
 
+ITextureCube *RendererGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
+{
+  vkTextureCubeGL4 *texture = new vkTextureCubeGL4();
+  if (!texture->Initialize(format, width, height, depth))
+  {
+    texture->Release();
+    texture = 0;
+  }
+  return texture;
+}
 
 IFrameProcessor *RendererGL4::CreateDeferredFrameProcessor()
 {

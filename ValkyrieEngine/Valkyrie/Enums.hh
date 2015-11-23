@@ -212,6 +212,16 @@ enum vkTextureType
   eTT_Texture2DArray,
 };
 
+enum vkTextureCubeFace
+{
+  eTCF_PositiveX,
+  eTCF_NegativeX,
+  eTCF_PositiveY,
+  eTCF_NegativeY,
+  eTCF_PositiveZ,
+  eTCF_NegativeZ,
+};
+
 enum vkShaderParameterType
 {
   eSPT_Float,
@@ -293,6 +303,7 @@ enum vkRenderPass
 {
   eRP_GBuffer,
   eRP_ShadowPSSM,
+  eRP_ShadowCube,
   eRP_COUNT,
 };
 

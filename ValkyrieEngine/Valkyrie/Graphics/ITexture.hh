@@ -93,3 +93,21 @@ struct VKE_API ITexture2DArray : public virtual ITexture
   virtual bool CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat format, const void *data) = 0;
 
 };
+
+
+
+VK_INTERFACE();
+struct VKE_API ITextureCube : public virtual ITexture
+{
+  VK_CLASS_GEN;
+  ITextureCube() : ITexture() { }
+
+  virtual ~ITextureCube() { }
+
+  virtual vkUInt16 GetWidth() const = 0;
+  virtual vkUInt16 GetHeight() const = 0;
+  virtual vkUInt16 GetDepth() const = 0;
+
+  virtual bool CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelFormat format, const void *data) = 0;
+
+};

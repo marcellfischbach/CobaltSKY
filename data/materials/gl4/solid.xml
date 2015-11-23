@@ -17,12 +17,27 @@
 		<techniques>
 		
 			<technique name="Default">
-				<shader>${shaders}/solid/shadow_pssm.vert</shader>
+				<shader>${shaders}/solid/shadow.vert</shader>
 				<shader>${shaders}/solid/shadow_pssm.geom</shader>
-				<shader>${shaders}/solid/shadow_pssm.frag</shader>
+				<shader>${shaders}/solid/shadow.frag</shader>
 			</technique>
 			
 		</techniques>
 		
 	</program>
+
+	<program name="ShadowCube">
+	
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/shadow.vert</shader>
+				<shader>${shaders}/solid/shadow_cube.geom</shader>
+				<shader>${shaders}/solid/shadow.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
 </programs>

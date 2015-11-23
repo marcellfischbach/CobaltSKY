@@ -85,6 +85,10 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     {
       renderPass = eRP_ShadowPSSM;
     }
+    else if (passName == vkString("ShadowCube"))
+    {
+      renderPass = eRP_ShadowCube;
+    }
     else
     {
       material->Release();

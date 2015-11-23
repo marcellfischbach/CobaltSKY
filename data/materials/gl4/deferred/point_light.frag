@@ -19,6 +19,9 @@ uniform float vk_LightRadius;
 in vec2 texCoord;
 in vec2 xyPlane;
 
+vec4 calculate_shadow(vec3 world);
+
+
 void main ()
 {
 	// 
@@ -48,4 +51,7 @@ void main ()
 	
 	
 	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * lamb * lightIntensity * vk_LightEnergy, 1.0);
+	
+	vec4 shadow = calculate_shadow (world);
+	vk_FragColor *= shadow;
 }
