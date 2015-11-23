@@ -1,12 +1,12 @@
 
-#include <RenderGL4/Deferred/GBuffer.hh>
-#include <RenderGL4/RendererGL4.hh>
-#include <RenderGL4/RenderTargetGL4.hh>
-#include <RenderGL4/TextureGL4.hh>
+#include <GraphicsGL4/Deferred/GBuffer.hh>
+#include <GraphicsGL4/GraphicsGL4.hh>
+#include <GraphicsGL4/RenderTargetGL4.hh>
+#include <GraphicsGL4/TextureGL4.hh>
 #include <stdio.h>
 
 
-vkGBuffer::vkGBuffer(RendererGL4 *renderer, vkUInt16 width, vkUInt16 height)
+vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height)
 {
   m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_RGBA, width, height));
   m_normalLightMode = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_R10G10B10A2, width, height));
@@ -51,7 +51,7 @@ bool vkGBuffer::IsValid() const
   return m_renderTarget != 0;
 }
 
-bool vkGBuffer::Bind(RendererGL4 *renderer)
+bool vkGBuffer::Bind(vkGraphicsGL4 *renderer)
 {
   if (!m_renderTarget)
   {
@@ -66,7 +66,7 @@ bool vkGBuffer::Bind(RendererGL4 *renderer)
 
 
 
-vkSamplerGL4 *vkGBuffer::GetColorSampler(RendererGL4 *renderer)
+vkSamplerGL4 *vkGBuffer::GetColorSampler(vkGraphicsGL4 *renderer)
 {
   static vkSamplerGL4 *sampler = 0;
   if (!sampler)
@@ -82,7 +82,7 @@ vkSamplerGL4 *vkGBuffer::GetColorSampler(RendererGL4 *renderer)
 }
 
 
-vkSamplerGL4 *vkGBuffer::GetDepthSampler(RendererGL4 *renderer)
+vkSamplerGL4 *vkGBuffer::GetDepthSampler(vkGraphicsGL4 *renderer)
 {
   static vkSamplerGL4 *sampler = 0;
   if (!sampler)

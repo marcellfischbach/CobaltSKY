@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/Export.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Window/IWindow.hh>
 
 class VKE_API vkEngine
@@ -10,10 +10,10 @@ public:
   static vkEngine *Get();
 
   void SetWindow(IWindow *window);
-  void SetRenderer(IRenderer *renderer);
+  void SetRenderer(IGraphics *renderer);
 
   IWindow *GetWindow() const;
-  IRenderer *GetRenderer() const;
+  IGraphics *GetRenderer() const;
 
   int Run();
 
@@ -24,7 +24,7 @@ private:
   vkEngine();
 
   IWindow *m_window;  
-  IRenderer *m_renderer;
+  IGraphics *m_renderer;
 };
 
 
@@ -33,7 +33,7 @@ VK_FORCEINLINE IWindow *vkEngine::GetWindow() const
   return m_window;
 }
 
-VK_FORCEINLINE IRenderer *vkEngine::GetRenderer() const
+VK_FORCEINLINE IGraphics *vkEngine::GetRenderer() const
 {
   return m_renderer;
 }

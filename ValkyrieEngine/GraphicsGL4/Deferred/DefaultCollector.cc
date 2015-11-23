@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <RenderGL4/Deferred/DefaultCollector.hh>
+#include <GraphicsGL4/Deferred/DefaultCollector.hh>
 
 vkDefaultCollector::vkDefaultCollector(vkCollection<vkGeometryNode*> *geometrieNodes, vkCollection<vkLightNode*> *lightNodes)
   : m_geometryNodes(geometrieNodes)

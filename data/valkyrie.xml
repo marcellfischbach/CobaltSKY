@@ -1,9 +1,10 @@
 <settings>
-	  <vfs>
+	<vfs>
 		<rootPath>.</rootPath>
 		<shaders>materials/gl4</shaders>
 		<materials>materials</materials>
 		<textures>materials/textures</textures>
 		<fonts>fonts</fonts>
-	  </vfs>
+	</vfs>
+	
 </settings>

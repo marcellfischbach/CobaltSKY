@@ -52,10 +52,10 @@ set(SOURCE_GRAPHICS
   Graphics/Camera.cc
   Graphics/Camera.hh
   Graphics/IFrameProcessor.hh
+	Graphics/IGraphics.hh
 	Graphics/IIndexBuffer.hh
 	Graphics/Image.cc
 	Graphics/Image.hh
-	Graphics/IRenderer.hh
   Graphics/IRenderTarget.hh
 	Graphics/IShader.hh
 	Graphics/ITexture.hh

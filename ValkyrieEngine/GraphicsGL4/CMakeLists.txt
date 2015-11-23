@@ -5,11 +5,11 @@ add_definitions(-DVKGL4_EXPORT)
 set(SOURCE
   Enums.hh
   Export.hh
+  GraphicsGL4.cc
+  GraphicsGL4.hh
   IndexBufferGL4.cc
   IndexBufferGL4.hh
   MappingGL4.hh
-  RendererGL4.cc
-  RendererGL4.hh
   RenderTargetGL4.cc
   RenderTargetGL4.hh
   Shader.cc
@@ -24,8 +24,9 @@ set(SOURCE
   VertexDeclarationGL4.hh
   )
 
+
 source_group(
-	"ValkyrieEngine-RenderGL4"
+	"GraphicsGL4"
 	FILES
 	${SOURCE}
 	)
@@ -43,7 +44,7 @@ set(SOURCE_DEFERRED
   )
   
 source_group(
-	"ValkyrieEngine-RenderGL4\\Deferred"
+	"GraphicsGL4\\Deferred"
 	FILES
 	${SOURCE_DEFERRED}
 	)
@@ -54,25 +55,25 @@ set(ALL_SOURCES
   ${SOURCE_DEFERRED}
 	)
 
-VK_MOC(RenderGL4 VKGL4_API ALL_SOURCES MOC_SOURCES)
+VK_MOC(GraphicsGL4 VKGL4_API ALL_SOURCES MOC_SOURCES)
 
 
 source_group(
-	"ValkyrieEngine-RenderGL4\\MOC_sources"
+	"GraphicsGL4\\MOC_sources"
 	FILES
 	${MOC_SOURCES}
 	)
 
-add_library(ValkyrieEngine-RenderGL4 SHARED
+add_library(ValkyrieEngine-GraphicsGL4 SHARED
 	${ALL_SOURCES}
 	${MOC_SOURCES}
 	)
 
-target_link_libraries(ValkyrieEngine-RenderGL4
+target_link_libraries(ValkyrieEngine-GraphicsGL4
   ValkyrieEngine
 	${OPENGL_LIBRARIES}
 	${GLEW_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-RenderGL4 RenderGL4 VKGL4_API ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieEngine-GraphicsGL4 GraphicsGL4 VKGL4_API ALL_SOURCES)
 

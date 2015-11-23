@@ -1,8 +1,8 @@
 #pragma once
 
-#include <RenderGL4/Export.hh>
+#include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
-#include <RenderGL4/IndexBufferGL4.refl.hh>
+#include <GraphicsGL4/IndexBufferGL4.refl.hh>
 #include <GL/glew.h>
 
 VK_CLASS();

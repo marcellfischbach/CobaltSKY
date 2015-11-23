@@ -8,7 +8,7 @@
 #include <Valkyrie/Graphics/Camera.refl.hh>
 
 
-struct IRenderer;
+struct IGraphics;
 
 VK_CLASS();
 class VKE_API vkCamera : public vkObject
@@ -37,7 +37,7 @@ public:
   void SetOrthographic(const vkVector2f &viewport);
 
 
-  void Apply(IRenderer *renderer);
+  void Apply(IGraphics *renderer);
 
   void GetPlanePoints(float distance, vkVector3f *points) const;
 
@@ -45,7 +45,7 @@ public:
 
 private:
   void UpdateProjectionValues();
-  void UpdateProjectionMatrices(IRenderer *renderer);
+  void UpdateProjectionMatrices(IGraphics *renderer);
 
   vkVector3f m_eye;
   vkVector3f m_spot;

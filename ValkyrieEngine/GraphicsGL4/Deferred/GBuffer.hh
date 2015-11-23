@@ -1,11 +1,11 @@
 #pragma once
 
-#include <RenderGL4/Export.hh>
+#include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <RenderGL4/TextureGL4.hh>
-#include <RenderGL4/Deferred/GBuffer.refl.hh>
+#include <GraphicsGL4/TextureGL4.hh>
+#include <GraphicsGL4/Deferred/GBuffer.refl.hh>
 
-class RendererGL4;
+class vkGraphicsGL4;
 class vkTexture2DGL4;
 class vkRenderTargetGL4;
 
@@ -14,9 +14,9 @@ class VKGL4_API vkGBuffer : public vkObject
 {
   VK_CLASS_GEN;
 public:
-  vkGBuffer(RendererGL4 *renderer, vkUInt16 width, vkUInt16 height);
+  vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height);
 
-  bool Bind(RendererGL4 *renderer);
+  bool Bind(vkGraphicsGL4 *renderer);
 
   bool IsValid() const;
 
@@ -45,8 +45,8 @@ public:
     return m_depth;
   }
 
-  static vkSamplerGL4 *GetColorSampler(RendererGL4 *renderer);
-  static vkSamplerGL4 *GetDepthSampler(RendererGL4 *renderer);
+  static vkSamplerGL4 *GetColorSampler(vkGraphicsGL4 *renderer);
+  static vkSamplerGL4 *GetDepthSampler(vkGraphicsGL4 *renderer);
 
 private:
   vkTexture2DGL4 *m_diffuseRoughness;

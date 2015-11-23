@@ -31,7 +31,7 @@ add_executable(ValkyrieRunner
 target_link_libraries(ValkyrieRunner
   ValkyrieEngine
   ValkyrieEngine-SDLWindow
-  ValkyrieEngine-RenderGL4
+  ValkyrieEngine-GraphicsGL4
   )
 
 

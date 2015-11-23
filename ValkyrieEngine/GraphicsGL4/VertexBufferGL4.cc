@@ -1,7 +1,7 @@
 
-#include <RenderGL4/VertexBufferGL4.hh>
-#include <RenderGL4/DefinesGL4.hh>
-#include <RenderGL4/MappingGL4.hh>
+#include <GraphicsGL4/VertexBufferGL4.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
+#include <GraphicsGL4/MappingGL4.hh>
 
 static GLuint current_mapped_buffer;
 

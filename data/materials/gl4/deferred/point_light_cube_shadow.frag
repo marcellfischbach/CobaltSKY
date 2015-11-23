@@ -9,7 +9,7 @@ uniform vec3 vk_LightPosition;
 uniform sampler2DArrayShadow vk_ShadowMap;
 
 
-vec4 calculate_shadow(vec3 world)
+float calculate_shadow(vec3 world)
 {
 	int layer = 0;
 	
@@ -65,9 +65,8 @@ vec4 calculate_shadow(vec3 world)
 	    depthBufferSpace.y < 0.0 || depthBufferSpace.y >= 1.0 ||
 	    depthBufferSpace.z < 0.0 || depthBufferSpace.z >= 1.0)
 	{
-		return vec4(1.0, 0.0, 1.0, 1.0);
+		return 1.0;
 	}
 	
-	float f = texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias));
-	return vec4 (f, f, f, 1.0);
+	return texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias)) * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
 }

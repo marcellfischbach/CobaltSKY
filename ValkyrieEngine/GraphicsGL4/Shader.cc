@@ -1,6 +1,6 @@
 
-#include <RenderGL4/Shader.hh>
-#include <RenderGL4/MappingGL4.hh>
+#include <GraphicsGL4/Shader.hh>
+#include <GraphicsGL4/MappingGL4.hh>
 
 
 #define VK_GL_OFFSET(offset)  ((const GLvoid*)((unsigned long)offset))

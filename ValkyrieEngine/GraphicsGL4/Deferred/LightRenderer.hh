@@ -4,7 +4,7 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Core/Collection.hh>
 
-struct IRenderer;
+struct IGraphics;
 struct IRenderTarget;
 struct ISampler;
 struct IShaderAttribute;
@@ -17,16 +17,16 @@ class vkLight;
 class vkNode;
 class vkPointLight;
 class vkProgramGL4;
-class RendererGL4;
+class vkGraphicsGL4;
 class vkRenderTargetGL4;
 class vkResourceLocator;
 
 
-class vkLightRendererGL4
+class vkLightvkGraphicsGL4
 {
 public:
-  vkLightRendererGL4(RendererGL4 *renderer);
-  virtual ~vkLightRendererGL4();
+  vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
+  virtual ~vkLightvkGraphicsGL4();
 
   virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
 
@@ -60,7 +60,7 @@ protected:
 protected:
   void CalcShadowIntensity(const vkLight *light);
   vkCollection<vkGeometryNode*> m_geometries;
-  RendererGL4 *m_renderer;
+  vkGraphicsGL4 *m_renderer;
   float m_mapBias;
 
   // shadow buffer
@@ -71,11 +71,11 @@ protected:
 };
 
 
-class vkDirectionalLightRendererGL4 : public vkLightRendererGL4
+class vkDirectionalLightvkGraphicsGL4 : public vkLightvkGraphicsGL4
 {
 public:
-  vkDirectionalLightRendererGL4(RendererGL4 *renderer);
-  virtual ~vkDirectionalLightRendererGL4();
+  vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
+  virtual ~vkDirectionalLightvkGraphicsGL4();
 
   virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
@@ -109,11 +109,11 @@ private:
 
 
 
-class vkPointLightRendererGL4 : public vkLightRendererGL4
+class vkPointLightvkGraphicsGL4 : public vkLightvkGraphicsGL4
 {
 public:
-  vkPointLightRendererGL4(RendererGL4 *renderer);
-  virtual ~vkPointLightRendererGL4();
+  vkPointLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
+  virtual ~vkPointLightvkGraphicsGL4();
 
   virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
@@ -143,7 +143,7 @@ private:
 
 };
 
-VK_FORCEINLINE vkRenderTargetGL4 *vkLightRendererGL4::GetShadowBuffer()
+VK_FORCEINLINE vkRenderTargetGL4 *vkLightvkGraphicsGL4::GetShadowBuffer()
 {
   return m_shadowBuffer;
 }

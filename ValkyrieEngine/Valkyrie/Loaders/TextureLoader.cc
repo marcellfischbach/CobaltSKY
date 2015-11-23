@@ -1,7 +1,7 @@
 
 #include <Valkyrie/Loaders/TextureLoader.hh>
 #include <Valkyrie/Graphics/Image.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Engine.hh>
 

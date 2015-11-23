@@ -41,13 +41,13 @@ void vkEngine::SetWindow(IWindow *window)
   VK_SET(m_window, window);
 }
 
-void vkEngine::SetRenderer(IRenderer *renderer)
+void vkEngine::SetRenderer(IGraphics *renderer)
 {
   VK_SET(m_renderer, renderer);
 }
 
-vkMesh* createPlaneMesh(IRenderer *renderer, float size);
-vkMesh* createCubeMesh(IRenderer *renderer, float size);
+vkMesh* createPlaneMesh(IGraphics *renderer, float size);
+vkMesh* createCubeMesh(IGraphics *renderer, float size);
 
 
 vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vkVector3f &up)
@@ -116,9 +116,10 @@ int vkEngine::Run()
 
   vkPointLight *pointLight = new vkPointLight();
   pointLight->SetColor(vkColor4f(1.0f, 0.75f, 0.25f));
-  pointLight->SetEnergy(1.0f);
+  pointLight->SetEnergy(2.0f);
   pointLight->SetPosition(vkVector3f(0.0f, 0.0f, 10.0f));
-  pointLight->SetRadius(120.0f);
+  pointLight->SetRadius(240.0f);
+  pointLight->SetShadowIntensity(0.5f);
   pointLight->SetCastShadow(true);
 
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
@@ -139,11 +140,11 @@ int vkEngine::Run()
 
   lightNode = new vkLightNode();
   lightNode->SetLight(directionalLight);
-  lightNode->AttachTo(groupNode);
+  //lightNode->AttachTo(groupNode);
 
   lightNode = new vkLightNode();
   lightNode->SetLight(directionalLightContra);
-  lightNode->AttachTo(groupNode);
+  //lightNode->AttachTo(groupNode);
 
 
   vkCamera *camera = new vkCamera();
@@ -218,7 +219,7 @@ int vkEngine::Run()
     planeGeometryNode->SetMatrix(mm);
     m += 0.00f;
 
-    pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 2.0f + cos(2.0f*l) * 1.0f));
+    pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 10.0f + cos(2.0f*l) * 5.0f));
     l += 0.001f;
 
     vkMatrix4f MMCX, MMCY, MMCZ, MMC;
@@ -258,7 +259,7 @@ void vkEngine::RegisterLoaders()
 }
 
 
-vkMesh* createPlaneMesh(IRenderer *renderer, float size)
+vkMesh* createPlaneMesh(IGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -325,7 +326,7 @@ vkMesh* createPlaneMesh(IRenderer *renderer, float size)
   return mesh;
 }
 
-vkMesh* createCubeMesh(IRenderer *renderer, float size)
+vkMesh* createCubeMesh(IGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {

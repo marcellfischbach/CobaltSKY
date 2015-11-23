@@ -1,12 +1,12 @@
 #pragma once
 
 
-#include <RenderGL4/Export.hh>
-#include <RenderGL4/Enums.hh>
+#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <GL/glew.h>
-#include <RenderGL4/Shader.refl.hh>
+#include <GraphicsGL4/Shader.refl.hh>
 #include <vector>
 
 VK_CLASS();

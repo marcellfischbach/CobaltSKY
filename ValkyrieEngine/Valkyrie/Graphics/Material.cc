@@ -44,7 +44,7 @@ const IShader *vkMaterial::GetShader(vkRenderPass pass) const
   return m_shaders[pass];
 }
 
-IShader *vkMaterial::Bind(IRenderer *renderer, vkRenderPass pass)
+IShader *vkMaterial::Bind(IGraphics *renderer, vkRenderPass pass)
 {
   IShader *shader = m_shaders[pass];
   if (!shader)
@@ -205,7 +205,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
   VK_SET(param.m_texture, texture);
 }
 
-bool vkMaterialInstance::Bind(IRenderer *renderer, vkRenderPass pass)
+bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
 {
   if (!m_material)
   {

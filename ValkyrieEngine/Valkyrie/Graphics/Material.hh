@@ -6,7 +6,7 @@
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Graphics/IShader.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Enums.hh>
 
 #include <Valkyrie/Graphics/Material.refl.hh>
@@ -34,7 +34,7 @@ public:
   vkShaderParameterType GetParamType(vkSize idx) const;
   void RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type);
 
-  IShader *Bind(IRenderer *renderer, vkRenderPass pass);
+  IShader *Bind(IGraphics *renderer, vkRenderPass pass);
 
 
 private:
@@ -65,7 +65,7 @@ public:
   vkMaterial *GetMaterial();
   const vkMaterial  *GetMaterial() const;
 
-  bool Bind(IRenderer *renderer, vkRenderPass pass);
+  bool Bind(IGraphics *renderer, vkRenderPass pass);
 
   vkUInt16 GetIndex(const vkShaderAttributeID &id) const;
   const vkShaderAttributeID &GetID(vkUInt16 idx) const;

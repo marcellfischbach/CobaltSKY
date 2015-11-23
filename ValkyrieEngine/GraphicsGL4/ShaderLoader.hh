@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <RenderGL4/Export.hh>
+#include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
-#include <RenderGL4/ShaderLoader.refl.hh>
+#include <GraphicsGL4/ShaderLoader.refl.hh>
 
 
 VK_CLASS();

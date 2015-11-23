@@ -6,7 +6,7 @@
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.refl.hh>
 
-struct IRenderer;
+struct IGraphics;
 class vkMaterialInstance;
 class vkMesh;
 
@@ -27,10 +27,10 @@ public:
   vkMaterialInstance *GetMaterial();
   const vkMaterialInstance *GetMaterial() const;
 
-  void Render(IRenderer *renderer, vkRenderPass renderPass, vkUInt8 lod = 0);
+  void Render(IGraphics *renderer, vkRenderPass renderPass, vkUInt8 lod = 0);
 
 protected:
-  virtual void PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
+  virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
 
 private:
   vkMesh *m_mesh;

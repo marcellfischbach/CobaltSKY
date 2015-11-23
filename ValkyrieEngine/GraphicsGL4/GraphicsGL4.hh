@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include <RenderGL4/Export.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
-#include <RenderGL4/RendererGL4.refl.hh>
+#include <GraphicsGL4/Export.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
+#include <GraphicsGL4/GraphicsGL4.refl.hh>
 
 class IndexBufferGL4;
 class vkProgramGL4;
@@ -14,11 +14,11 @@ class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
 VK_CLASS();
-class VKGL4_API RendererGL4 : public IRenderer
+class VKGL4_API vkGraphicsGL4 : public IGraphics
 {
   VK_CLASS_GEN_OBJECT;
 public:
-  RendererGL4();
+  vkGraphicsGL4();
 
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);

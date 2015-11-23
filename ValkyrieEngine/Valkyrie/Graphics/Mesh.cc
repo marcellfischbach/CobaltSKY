@@ -2,7 +2,7 @@
 
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 
@@ -76,7 +76,7 @@ void vkMesh::AddIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offs
 }
 
 
-void vkMesh::Render(IRenderer *renderer, vkUInt8 lod)
+void vkMesh::Render(IGraphics *renderer, vkUInt8 lod)
 {
   if (lod >= m_indices.size())
   {

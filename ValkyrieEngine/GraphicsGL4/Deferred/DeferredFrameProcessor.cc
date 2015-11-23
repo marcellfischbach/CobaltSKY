@@ -1,10 +1,10 @@
 
-#include <RenderGL4/Deferred/DeferredFrameProcessor.hh>
-#include <RenderGL4/Deferred/LightRenderer.hh>
-#include <RenderGL4/RendererGL4.hh>
-#include <RenderGL4/RenderTargetGL4.hh>
-#include <RenderGL4/TextureGL4.hh>
-#include <RenderGL4/Deferred/GBuffer.hh>
+#include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
+#include <GraphicsGL4/Deferred/LightRenderer.hh>
+#include <GraphicsGL4/GraphicsGL4.hh>
+#include <GraphicsGL4/RenderTargetGL4.hh>
+#include <GraphicsGL4/TextureGL4.hh>
+#include <GraphicsGL4/Deferred/GBuffer.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Camera.hh>
@@ -18,7 +18,7 @@
 #include <GL/glew.h>
 
 
-vkDeferredFrameProcessor::vkDeferredFrameProcessor(RendererGL4 *renderer)
+vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
   : IFrameProcessor()
   , m_renderer(renderer)
   , m_geometries(64, 16)
@@ -26,8 +26,8 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(RendererGL4 *renderer)
 {
   VK_CLASS_GEN_CONSTR;
 
-  m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightRendererGL4(renderer);
-  m_lightRenderers[eLT_PointLight] = new vkPointLightRendererGL4(renderer);
+  m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightvkGraphicsGL4(renderer);
+  m_lightRenderers[eLT_PointLight] = new vkPointLightvkGraphicsGL4(renderer);
 }
 
 vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
@@ -125,7 +125,7 @@ void vkDeferredFrameProcessor::Render(vkNode *node, vkCamera *camera, IRenderTar
     vkLightNode *lightNode = m_lights[i];
     vkLight* light = lightNode->GetLight();
 
-    vkLightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
+    vkLightvkGraphicsGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
     {
       lightRenderer->Render(node, camera, light, m_gbuffer, target);

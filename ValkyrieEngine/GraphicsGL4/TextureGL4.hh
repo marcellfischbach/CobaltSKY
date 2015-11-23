@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include <RenderGL4/Export.hh>
+#include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <GL/glew.h>
-#include <RenderGL4/TextureGL4.refl.hh>
+#include <GraphicsGL4/TextureGL4.refl.hh>
 
 VK_CLASS();
 class VKGL4_API vkSamplerGL4 : public ISampler

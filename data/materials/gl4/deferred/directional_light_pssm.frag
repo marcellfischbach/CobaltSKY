@@ -45,5 +45,5 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
-	return texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias));
+	return texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias)) * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
 }

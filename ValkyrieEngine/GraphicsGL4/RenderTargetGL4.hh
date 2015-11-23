@@ -1,10 +1,10 @@
 #pragma once
 
-#include <RenderGL4/Export.hh>
+#include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <vector>
 #include <GL/glew.h>
-#include <RenderGL4/RenderTargetGL4.refl.hh>
+#include <GraphicsGL4/RenderTargetGL4.refl.hh>
 
 class vkTextureGL4;
 

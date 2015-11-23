@@ -1,21 +1,21 @@
 
-#include <RenderGL4/RendererGL4.hh>
-#include <RenderGL4/RenderTargetGL4.hh>
-#include <RenderGL4/IndexBufferGL4.hh>
-#include <RenderGL4/VertexBufferGL4.hh>
-#include <RenderGL4/VertexDeclarationGL4.hh>
-#include <RenderGL4/Shader.hh>
-#include <RenderGL4/ShaderLoader.hh>
-#include <RenderGL4/TextureGL4.hh>
-#include <RenderGL4/MappingGL4.hh>
-#include <RenderGL4/DefinesGL4.hh>
-#include <RenderGL4/Deferred/DeferredFrameProcessor.hh>
+#include <GraphicsGL4/GraphicsGL4.hh>
+#include <GraphicsGL4/RenderTargetGL4.hh>
+#include <GraphicsGL4/IndexBufferGL4.hh>
+#include <GraphicsGL4/VertexBufferGL4.hh>
+#include <GraphicsGL4/VertexDeclarationGL4.hh>
+#include <GraphicsGL4/Shader.hh>
+#include <GraphicsGL4/ShaderLoader.hh>
+#include <GraphicsGL4/TextureGL4.hh>
+#include <GraphicsGL4/MappingGL4.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
+#include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
 #include <GL/glew.h>
 #include <assert.h>
 
 
-RendererGL4::RendererGL4()
-  : IRenderer()
+vkGraphicsGL4::vkGraphicsGL4()
+  : IGraphics()
   , m_vertexDeclaration(0)
   , m_indexBuffer(0)
   , m_program(0)
@@ -74,7 +74,7 @@ RendererGL4::RendererGL4()
 
 
 
-IIndexBuffer *RendererGL4::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+IIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
 {
   IndexBufferGL4 *indexBuffer = new IndexBufferGL4();
   if (!indexBuffer->CreateBuffer(size, data, mode))
@@ -88,7 +88,7 @@ IIndexBuffer *RendererGL4::CreateIndexBuffer(vkSize size, const void *data, vkBu
 
 
 
-IVertexBuffer *RendererGL4::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+IVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
 {
   VertexBufferGL4 *vertexBuffer = new VertexBufferGL4();
   if (!vertexBuffer->CreateBuffer(size, data, mode))
@@ -100,7 +100,7 @@ IVertexBuffer *RendererGL4::CreateVertexBuffer(vkSize size, const void *data, vk
   return vertexBuffer;
 }
 
-IVertexDeclaration *RendererGL4::CreateVertexDeclaration(const vkVertexElement *elements)
+IVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement *elements)
 {
   vkVertexDeclarationGL4 *decl = new vkVertexDeclarationGL4();
   if (!decl->Create(elements))
@@ -112,12 +112,12 @@ IVertexDeclaration *RendererGL4::CreateVertexDeclaration(const vkVertexElement *
   return decl;
 }
 
-IRenderTarget *RendererGL4::CreateRenderTarget()
+IRenderTarget *vkGraphicsGL4::CreateRenderTarget()
 {
   return new vkRenderTargetGL4();
 }
 
-ISampler *RendererGL4::CreateSampler()
+ISampler *vkGraphicsGL4::CreateSampler()
 {
   vkSamplerGL4 *sampler = new vkSamplerGL4();
   if (!sampler->Initialize())
@@ -129,7 +129,7 @@ ISampler *RendererGL4::CreateSampler()
   return sampler;
 }
 
-ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
+ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
 {
   vkTexture2DGL4 *texture = new vkTexture2DGL4();
   if (!texture->Initialize(format, width, height))
@@ -141,7 +141,7 @@ ITexture2D *RendererGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, v
 }
 
 
-ITexture2DArray *RendererGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers)
+ITexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers)
 {
   vkTexture2DArrayGL4 *texture = new vkTexture2DArrayGL4();
   if (!texture->Initialize(format, width, height, layers))
@@ -152,7 +152,7 @@ ITexture2DArray *RendererGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt1
   return texture;
 }
 
-ITextureCube *RendererGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
+ITextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
 {
   vkTextureCubeGL4 *texture = new vkTextureCubeGL4();
   if (!texture->Initialize(format, width, height, depth))
@@ -163,14 +163,14 @@ ITextureCube *RendererGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 widt
   return texture;
 }
 
-IFrameProcessor *RendererGL4::CreateDeferredFrameProcessor()
+IFrameProcessor *vkGraphicsGL4::CreateDeferredFrameProcessor()
 {
   return new vkDeferredFrameProcessor(this);
 }
 
 
 
-void RendererGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatProj] = matrix;
   m_matrixNeedsRecalculation[eMT_MatProjInv] = true;
@@ -180,13 +180,13 @@ void RendererGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
-void RendererGL4::SetProjectionMatrixInv(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetProjectionMatrixInv(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatProjInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatProjInv] = false;
 }
 
-void RendererGL4::SetViewMatrix(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetViewMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatView] = matrix;
   m_matrixNeedsRecalculation[eMT_MatViewInv] = true;
@@ -199,13 +199,13 @@ void RendererGL4::SetViewMatrix(const vkMatrix4f &matrix)
 
 }
 
-void RendererGL4::SetViewMatrixInv(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetViewMatrixInv(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatViewInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatViewInv] = false;
 }
 
-void RendererGL4::SetModelMatrix(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetModelMatrix(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatModel] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = true;
@@ -215,13 +215,13 @@ void RendererGL4::SetModelMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
-void RendererGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
+void vkGraphicsGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
 {
   m_matrices[eMT_MatModelInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = false;
 }
 
-void RendererGL4::GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void vkGraphicsGL4::GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
 {
   float z2 = 2.0f * n;
   float dx = r - l;
@@ -244,7 +244,7 @@ void RendererGL4::GetPerspectiveProjection(float l, float r, float b, float t, f
 
 }
 
-void RendererGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void vkGraphicsGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
 {
   float z2 = 2.0f * n;
   float dx = r - l;
@@ -269,7 +269,7 @@ void RendererGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t
 
 }
 
-void RendererGL4::GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void vkGraphicsGL4::GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
 {
   float dx = r - l;
   float dy = t - b;
@@ -291,7 +291,7 @@ void RendererGL4::GetOrthographicProjection(float l, float r, float b, float t, 
   m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;      m.m33 = 1.0;
 }
 
-void RendererGL4::GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
 {
   float dx = r - l;
   float dy = t - b;
@@ -315,13 +315,13 @@ void RendererGL4::GetOrthographicProjectionInv(float l, float r, float b, float 
 }
 
 
-void RendererGL4::SetShadowMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
+void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
 {
   m_numberOfShadowMatrices = numberOfMatrices;
   memcpy(m_shadowMatrices, matrices, sizeof(vkMatrix4f) * numberOfMatrices);
 }
 
-void RendererGL4::RecalculateMatrix(vkMatrixType type)
+void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
 {
   if (!m_matrixNeedsRecalculation[type])
   {
@@ -377,7 +377,7 @@ void RendererGL4::RecalculateMatrix(vkMatrixType type)
   }
 }
 
-void RendererGL4::BindMatrices()
+void vkGraphicsGL4::BindMatrices()
 {
   if (!m_program)
   {
@@ -401,14 +401,14 @@ void RendererGL4::BindMatrices()
   }
 }
 
-void RendererGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
+void vkGraphicsGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
 {
   vkVertexDeclarationGL4 *decl = static_cast<vkVertexDeclarationGL4*>(vertexDeclaration);
   VK_SET(m_vertexDeclaration, decl);
 }
 
 
-void RendererGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer)
+void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer)
 {
   assert(streamIdx < 16);
 
@@ -416,14 +416,14 @@ void RendererGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffe
   VK_SET(m_vertexBuffer[streamIdx], vb);
 }
 
-void RendererGL4::SetIndexBuffer(IIndexBuffer *indexBuffer)
+void vkGraphicsGL4::SetIndexBuffer(IIndexBuffer *indexBuffer)
 {
   IndexBufferGL4 *ib = static_cast<IndexBufferGL4*>(indexBuffer);
   VK_SET(m_indexBuffer, ib);
 }
 
 
-void RendererGL4::SetShader(IShader *shader)
+void vkGraphicsGL4::SetShader(IShader *shader)
 {
   vkProgramGL4 *prog = static_cast<vkProgramGL4*>(shader);
   if (prog != m_program)
@@ -443,7 +443,7 @@ void RendererGL4::SetShader(IShader *shader)
   InvalidateTextures();
 }
 
-vkTextureUnit RendererGL4::BindTexture(ITexture *texture)
+vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
 {
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
   {
@@ -461,7 +461,7 @@ vkTextureUnit RendererGL4::BindTexture(ITexture *texture)
   return unit;
 }
 
-void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
+void vkGraphicsGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
 {
   vkTextureGL4 *textureGL = texture ? vkQueryClass<vkTextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL)
@@ -476,7 +476,7 @@ void RendererGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
   }
 }
 
-void RendererGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
+void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
 {
   vkSamplerGL4 *samplerGL = sampler ? vkQueryClass<vkSamplerGL4>(sampler) : 0;
   if (m_samplers[unit] != samplerGL)
@@ -487,7 +487,7 @@ void RendererGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
   }
 }
 
-void RendererGL4::SetRenderTarget(IRenderTarget *renderTarget)
+void vkGraphicsGL4::SetRenderTarget(IRenderTarget *renderTarget)
 {
   vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
   if (m_renderTarget != rtGL4)
@@ -506,7 +506,7 @@ void RendererGL4::SetRenderTarget(IRenderTarget *renderTarget)
 }
 
 
-void RendererGL4::SetBlendEnabled(bool enable)
+void vkGraphicsGL4::SetBlendEnabled(bool enable)
 {
   if (m_blendEnabled != enable)
   {
@@ -522,12 +522,12 @@ void RendererGL4::SetBlendEnabled(bool enable)
   }
 }
 
-bool RendererGL4::IsBlendEnabled() const
+bool vkGraphicsGL4::IsBlendEnabled() const
 {
   return m_blendEnabled;
 }
 
-void RendererGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
+void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
 {
   if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
   {
@@ -537,7 +537,7 @@ void RendererGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
   }
 }
 
-void RendererGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstColor, vkBlendMode blendDstAlpha)
+void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstColor, vkBlendMode blendDstAlpha)
 {
   if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
   {
@@ -549,7 +549,7 @@ void RendererGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAl
   }
 }
 
-void RendererGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const
+void vkGraphicsGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const
 {
   blendSrcColor = m_blendModeSrcColor;
   blendSrcAlpha = m_blendModeSrcAlpha;
@@ -557,7 +557,7 @@ void RendererGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDst
   blendDstAlpha = m_blendModeDstAlpha;
 }
 
-void RendererGL4::SetClearColorValue(const vkVector4f &colorValue)
+void vkGraphicsGL4::SetClearColorValue(const vkVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
   {
@@ -566,7 +566,7 @@ void RendererGL4::SetClearColorValue(const vkVector4f &colorValue)
   }
 }
 
-void RendererGL4::SetClearDepthValue(float depthValue)
+void vkGraphicsGL4::SetClearDepthValue(float depthValue)
 {
   if (depthValue != m_clearDepth)
   {
@@ -575,7 +575,7 @@ void RendererGL4::SetClearDepthValue(float depthValue)
   }
 }
 
-void RendererGL4::SetClearStencilValue(vkUInt8 stencilValue)
+void vkGraphicsGL4::SetClearStencilValue(vkUInt8 stencilValue)
 {
   if (stencilValue != m_clearStencil)
   {
@@ -585,7 +585,7 @@ void RendererGL4::SetClearStencilValue(vkUInt8 stencilValue)
 }
 
 
-void RendererGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDepth, float depth, bool clearStencil, vkUInt8 stencil)
+void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDepth, float depth, bool clearStencil, vkUInt8 stencil)
 {
   GLbitfield clear = 0;
   if (clearColor)
@@ -616,24 +616,24 @@ void RendererGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDept
 
 }
 
-void RendererGL4::SetViewport(vkUInt16 width, vkUInt16 height)
+void vkGraphicsGL4::SetViewport(vkUInt16 width, vkUInt16 height)
 {
   SetViewport(0, 0, width, height);
 }
 
-void RendererGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
+void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
 {
   glViewport(x, y, width, height);
 }
 
-void RendererGL4::SetViewport(IRenderTarget *renderTarget)
+void vkGraphicsGL4::SetViewport(IRenderTarget *renderTarget)
 {
   SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
 }
 
 
 
-void RendererGL4::Render(vkPrimitiveType primType, vkUInt32 count)
+void vkGraphicsGL4::Render(vkPrimitiveType primType, vkUInt32 count)
 {
   BindMatrices();
   VK_CHECK_GL_ERROR;
@@ -645,7 +645,7 @@ void RendererGL4::Render(vkPrimitiveType primType, vkUInt32 count)
   }
 }
 
-void RendererGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDataType indexType)
+void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDataType indexType)
 {
   BindMatrices();
   VK_CHECK_GL_ERROR;
@@ -658,12 +658,12 @@ void RendererGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkData
   }
 }
 
-void RendererGL4::RenderFullScreenFrame(ITexture2D *texture)
+void vkGraphicsGL4::RenderFullScreenFrame(ITexture2D *texture)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture);
 }
 
-void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture)
+void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture)
 {
   static vkShaderAttributeID attrDiffuseID("Diffuse");
   static vkShaderAttributeID attrLeftBottomID("LeftBottom");
@@ -689,12 +689,12 @@ void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, f
   Render(ePT_Triangles, 6);
 }
 
-void RendererGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
+void vkGraphicsGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture, layer);
 }
 
-void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer)
+void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer)
 {
   static vkShaderAttributeID attrDiffuseID("Diffuse");
   static vkShaderAttributeID attrLayerID("Layer");
@@ -721,7 +721,7 @@ void RendererGL4::RenderFullScreenFrame(float left, float right, float bottom, f
   m_fullScreenArrayProgram->GetAttribute(attrLayerID)->Set(layer);
   Render(ePT_Triangles, 6);
 }
-void RendererGL4::RenderFullScreenFrame()
+void vkGraphicsGL4::RenderFullScreenFrame()
 {
   glDepthMask(true);
   glEnable(GL_DEPTH_TEST);
@@ -734,7 +734,7 @@ void RendererGL4::RenderFullScreenFrame()
 }
 
 
-bool RendererGL4::BindVertexDeclaration()
+bool vkGraphicsGL4::BindVertexDeclaration()
 {
   if (!(m_vertexDeclaration && m_program))
   {
@@ -754,7 +754,7 @@ bool RendererGL4::BindVertexDeclaration()
   return true;
 }
 
-void RendererGL4::UnbindVertexDeclaration()
+void vkGraphicsGL4::UnbindVertexDeclaration()
 {
   VertexBufferGL4::Unbind();
   for (unsigned i = 0, in = m_vertexDeclaration->GetNumberOfStreams(); i < in; ++i)
@@ -766,7 +766,7 @@ void RendererGL4::UnbindVertexDeclaration()
 
 
 
-void RendererGL4::InvalidateSamplers()
+void vkGraphicsGL4::InvalidateSamplers()
 {
   for (int i = 0; i < eTU_COUNT; ++i)
   {
@@ -775,7 +775,7 @@ void RendererGL4::InvalidateSamplers()
 }
 
 
-void RendererGL4::InvalidateTextures()
+void vkGraphicsGL4::InvalidateTextures()
 {
   m_nextTextureUnit = eTU_TextureUnit0;
   for (int i = 0; i < eTU_COUNT; ++i)
@@ -785,7 +785,7 @@ void RendererGL4::InvalidateTextures()
 }
 
 
-void RendererGL4::InitFullScreenData()
+void vkGraphicsGL4::InitFullScreenData()
 {
   float vertexDataParam[] = {
     0, 0, 0, 1,     0, 0,

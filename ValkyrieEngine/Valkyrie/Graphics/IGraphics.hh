@@ -3,7 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Graphics/IRenderer.refl.hh>
+#include <Valkyrie/Graphics/IGraphics.refl.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Enums.hh>
 
@@ -21,7 +21,7 @@ struct ITextureCube;
 struct vkVertexElement;
 
 VK_INTERFACE()
-struct VKE_API IRenderer : public IObject
+struct VKE_API IGraphics : public IObject
 {
   VK_CLASS_GEN;
 

@@ -6,7 +6,7 @@
 #include <Valkyrie/Core/Settings.hh>
 #include <Valkyrie/Core/VFS.hh>
 #include <SDLWindow/SDLWindow.hh>
-#include <RenderGL4/RendererGL4.hh>
+#include <GraphicsGL4/GraphicsGL4.hh>
 
 int main(int argc, char **argv)
 {
@@ -28,8 +28,8 @@ int main(int argc, char **argv)
 
   engine->SetWindow(window);
 
-  RendererGL4 *renderGL4 = new RendererGL4();
-  engine->SetRenderer(renderGL4);
+  vkGraphicsGL4 *GraphicsGL4 = new vkGraphicsGL4();
+  engine->SetRenderer(GraphicsGL4);
 
 
   return engine->Run();

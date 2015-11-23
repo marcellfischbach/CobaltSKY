@@ -1,12 +1,12 @@
 
 
-#include <RenderGL4/Deferred/LightRenderer.hh>
-#include <RenderGL4/Deferred/DefaultCollector.hh>
-#include <RenderGL4/Deferred/GBuffer.hh>
-#include <RenderGL4/DefinesGL4.hh>
-#include <RenderGL4/RendererGL4.hh>
-#include <RenderGL4/RenderTargetGL4.hh>
-#include <RenderGL4/Shader.hh>
+#include <GraphicsGL4/Deferred/LightRenderer.hh>
+#include <GraphicsGL4/Deferred/DefaultCollector.hh>
+#include <GraphicsGL4/Deferred/GBuffer.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
+#include <GraphicsGL4/GraphicsGL4.hh>
+#include <GraphicsGL4/RenderTargetGL4.hh>
+#include <GraphicsGL4/Shader.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
@@ -14,7 +14,7 @@
 #include <Valkyrie/Graphics/Scene/Node.hh>
 
 
-vkLightRendererGL4::vkLightRendererGL4(RendererGL4 *renderer)
+vkLightvkGraphicsGL4::vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
   : m_renderer(renderer)
 {
   m_depthSampler = m_renderer->CreateSampler();
@@ -27,12 +27,12 @@ vkLightRendererGL4::vkLightRendererGL4(RendererGL4 *renderer)
 }
 
 
-vkLightRendererGL4::~vkLightRendererGL4()
+vkLightvkGraphicsGL4::~vkLightvkGraphicsGL4()
 {
 }
 
 
-void vkLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const vkResourceLocator &locator)
+void vkLightvkGraphicsGL4::InitializeLightProgram(LightProgram *lightProgram, const vkResourceLocator &locator)
 {
   lightProgram->program = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(locator);
   if (lightProgram->program)
@@ -49,7 +49,7 @@ void vkLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, cons
 }
 
 
-void vkLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, vkGBuffer *gbuffer)
+void vkLightvkGraphicsGL4::BindGBuffer(GBufferAttribs &attribs, vkGBuffer *gbuffer)
 {
   if (attribs.attrDiffuseRoughness)
   {
@@ -78,7 +78,7 @@ void vkLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, vkGBuffer *gbuffer
   }
 }
 
-void vkLightRendererGL4::BindLight(LightProgram &lightProgram, vkLight *light)
+void vkLightvkGraphicsGL4::BindLight(LightProgram &lightProgram, vkLight *light)
 {
   if (lightProgram.attrColor)
   {
@@ -94,14 +94,14 @@ void vkLightRendererGL4::BindLight(LightProgram &lightProgram, vkLight *light)
 
 
 
-void vkLightRendererGL4::CalcShadowIntensity(const vkLight *light)
+void vkLightvkGraphicsGL4::CalcShadowIntensity(const vkLight *light)
 {
   float shadowIntensity = light->GetShadowIntensity();
   m_shadowIntensity.Set(1.0 - shadowIntensity, shadowIntensity);
 }
 
-vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *renderer)
-  : vkLightRendererGL4(renderer)
+vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
+  : vkLightvkGraphicsGL4(renderer)
 {
   InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
   m_attrLightDirectionNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightDirection"));
@@ -132,7 +132,7 @@ vkDirectionalLightRendererGL4::vkDirectionalLightRendererGL4(RendererGL4 *render
 
 }
 
-vkDirectionalLightRendererGL4::~vkDirectionalLightRendererGL4()
+vkDirectionalLightvkGraphicsGL4::~vkDirectionalLightvkGraphicsGL4()
 {
 
 }
@@ -140,7 +140,7 @@ vkDirectionalLightRendererGL4::~vkDirectionalLightRendererGL4()
 
 
 
-void vkDirectionalLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkDirectionalLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -188,7 +188,7 @@ void vkDirectionalLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLig
 }
 
 
-void vkDirectionalLightRendererGL4::BindDirectionalLightNoShadow(vkDirectionalLight *directionalLight)
+void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightNoShadow(vkDirectionalLight *directionalLight)
 {
   if (m_attrLightDirectionNoShadow)
   {
@@ -199,7 +199,7 @@ void vkDirectionalLightRendererGL4::BindDirectionalLightNoShadow(vkDirectionalLi
 
 
 
-void vkDirectionalLightRendererGL4::BindDirectionalLightPSSM(vkDirectionalLight *directionalLight)
+void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLight *directionalLight)
 {
   if (m_attrLightDirectionPSSM)
   {
@@ -229,7 +229,7 @@ void vkDirectionalLightRendererGL4::BindDirectionalLightPSSM(vkDirectionalLight 
 }
 
 
-void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *camera, const vkDirectionalLight *light)
+void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkCamera *camera, const vkDirectionalLight *light)
 {
   CalcPSSMMatrices(light, camera);
 
@@ -271,7 +271,7 @@ void vkDirectionalLightRendererGL4::RenderShadow(vkNode *node, const vkCamera *c
 
 }
 
-void vkDirectionalLightRendererGL4::CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera)
+void vkDirectionalLightvkGraphicsGL4::CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera)
 {
   float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
   vkVector3f points[8];
@@ -285,7 +285,7 @@ void vkDirectionalLightRendererGL4::CalcPSSMMatrices(const vkDirectionalLight *l
   }
 }
 
-void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const
+void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const
 {
   vkVector3f spot;
   for (vkSize i = 0; i < numPoints; i++)
@@ -350,8 +350,8 @@ void vkDirectionalLightRendererGL4::CalcMatrix(const vkVector3f &dir, vkSize num
 
 
 
-vkPointLightRendererGL4::vkPointLightRendererGL4(RendererGL4 *renderer)
-  : vkLightRendererGL4(renderer)
+vkPointLightvkGraphicsGL4::vkPointLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
+  : vkLightvkGraphicsGL4(renderer)
 {
   InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "PointLight"));
   m_attrLightPositionNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightPosition"));
@@ -384,7 +384,7 @@ vkPointLightRendererGL4::vkPointLightRendererGL4(RendererGL4 *renderer)
 
 }
 
-vkPointLightRendererGL4::~vkPointLightRendererGL4()
+vkPointLightvkGraphicsGL4::~vkPointLightvkGraphicsGL4()
 {
 
 }
@@ -392,7 +392,7 @@ vkPointLightRendererGL4::~vkPointLightRendererGL4()
 
 
 
-void vkPointLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkPointLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -441,7 +441,7 @@ void vkPointLightRendererGL4::Render(vkNode *node, vkCamera *camera, vkLight *li
 
 
 
-void vkPointLightRendererGL4::BindPointLightNo(vkPointLight *pointLight)
+void vkPointLightvkGraphicsGL4::BindPointLightNo(vkPointLight *pointLight)
 {
   if (m_attrLightPositionNoShadow)
   {
@@ -454,7 +454,7 @@ void vkPointLightRendererGL4::BindPointLightNo(vkPointLight *pointLight)
 }
 
 
-void vkPointLightRendererGL4::BindPointLightCubeShadow(vkPointLight *pointLight)
+void vkPointLightvkGraphicsGL4::BindPointLightCubeShadow(vkPointLight *pointLight)
 {
   if (m_attrLightPositionCubeShadow)
   {
@@ -483,7 +483,7 @@ void vkPointLightRendererGL4::BindPointLightCubeShadow(vkPointLight *pointLight)
   }
 
 }
-void vkPointLightRendererGL4::RenderShadow(vkNode *node, const vkPointLight *light)
+void vkPointLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkPointLight *light)
 {
   CalcCubeMatrices(light);
 
@@ -525,7 +525,7 @@ void vkPointLightRendererGL4::RenderShadow(vkNode *node, const vkPointLight *lig
 
 }
 
-void vkPointLightRendererGL4::CalcCubeMatrices(const vkPointLight *light)
+void vkPointLightvkGraphicsGL4::CalcCubeMatrices(const vkPointLight *light)
 {
   float radius = light->GetRadius();
 

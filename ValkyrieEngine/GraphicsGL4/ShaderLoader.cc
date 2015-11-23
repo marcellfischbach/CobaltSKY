@@ -1,8 +1,8 @@
 
-#include <RenderGL4/ShaderLoader.hh>
-#include <RenderGL4/Shader.hh>
-#include <RenderGL4/Enums.hh>
-#include <RenderGL4/DefinesGL4.hh>
+#include <GraphicsGL4/ShaderLoader.hh>
+#include <GraphicsGL4/Shader.hh>
+#include <GraphicsGL4/Enums.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
 
 
 vkShaderGL4Loader::vkShaderGL4Loader()

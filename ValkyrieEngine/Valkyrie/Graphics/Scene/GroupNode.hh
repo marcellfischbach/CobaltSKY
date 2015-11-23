@@ -16,7 +16,7 @@ public:
   virtual ~vkGroupNode();
 
 protected:
-  virtual void PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
+  virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
 
 private:
 

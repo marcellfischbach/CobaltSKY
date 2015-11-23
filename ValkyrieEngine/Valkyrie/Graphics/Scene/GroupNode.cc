@@ -36,7 +36,7 @@ bool vkGroupNode::RemoveChild(vkNode *node)
   return false;
 }
 
-void vkGroupNode::PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)
+void vkGroupNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback)
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {

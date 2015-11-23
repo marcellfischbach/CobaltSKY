@@ -1,8 +1,8 @@
 
 
-#include <RenderGL4/TextureGL4.hh>
-#include <RenderGL4/MappingGL4.hh>
-#include <RenderGL4/DefinesGL4.hh>
+#include <GraphicsGL4/TextureGL4.hh>
+#include <GraphicsGL4/MappingGL4.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
 
 
 vkSamplerGL4::vkSamplerGL4()

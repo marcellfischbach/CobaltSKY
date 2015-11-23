@@ -1,6 +1,6 @@
 
 #include <Valkyrie/Graphics/Camera.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 
 
 vkCamera::vkCamera()
@@ -20,7 +20,7 @@ vkCamera::~vkCamera()
 
 }
 
-void vkCamera::Apply(IRenderer *renderer) 
+void vkCamera::Apply(IGraphics *renderer) 
 {
   renderer->SetViewMatrix(m_cameraMatrix);
   renderer->SetViewMatrixInv(m_cameraMatrixInv);
@@ -39,7 +39,7 @@ void vkCamera::UpdateCameraMatrices()
   m_cameraMatrixInv.SetLookAtInv(m_eye, m_spot, m_up);
 }
 
-void vkCamera::UpdateProjectionMatrices(IRenderer *renderer)
+void vkCamera::UpdateProjectionMatrices(IGraphics *renderer)
 {
   switch (m_projectionMode)
   {

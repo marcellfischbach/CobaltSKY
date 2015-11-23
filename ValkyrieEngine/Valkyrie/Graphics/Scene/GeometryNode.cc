@@ -1,7 +1,7 @@
 
 
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
-#include <Valkyrie/Graphics/IRenderer.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 
@@ -33,7 +33,7 @@ void vkGeometryNode::SetMaterial(vkMaterialInstance *material)
 }
 
 
-void vkGeometryNode::Render(IRenderer *renderer, vkRenderPass pass, vkUInt8 lod)
+void vkGeometryNode::Render(IGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {
@@ -51,7 +51,7 @@ void vkGeometryNode::Render(IRenderer *renderer, vkRenderPass pass, vkUInt8 lod)
   }
 }
 
-void vkGeometryNode::PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback)
+void vkGeometryNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback)
 {
   callback->ScanGeometryNode(this);
 }

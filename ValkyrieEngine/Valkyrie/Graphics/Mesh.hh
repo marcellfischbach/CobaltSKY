@@ -7,7 +7,7 @@
 #include <Valkyrie/Graphics/Mesh.refl.hh>
 
 struct IIndexBuffer;
-struct IRenderer;
+struct IGraphics;
 struct IVertexBuffer;
 struct IVertexDeclaration;
 
@@ -21,7 +21,7 @@ public:
   vkMesh();
   virtual ~vkMesh();
 
-  void Render(IRenderer *renderer, vkUInt8 lod = 0);
+  void Render(IGraphics *renderer, vkUInt8 lod = 0);
 
   void SetPrimitiveType(vkPrimitiveType type);
   void SetIndexType(vkDataType indexType);

@@ -6,7 +6,7 @@
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
 #include <Valkyrie/Graphics/Scene/LightNode.refl.hh>
 
-struct IRenderer;
+struct IGraphics;
 class vkLight;
 VK_CLASS();
 class VKE_API vkLightNode : public vkSpatialNode
@@ -21,7 +21,7 @@ public:
   const vkLight *GetLight() const;
 
 protected:
-  virtual void PrivScan(const vkClipper *clipper, IRenderer *renderer, IScanCallback *callback);
+  virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
 
 private:
   vkLight *m_light;
