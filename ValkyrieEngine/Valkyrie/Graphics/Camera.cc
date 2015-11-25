@@ -8,6 +8,7 @@ vkCamera::vkCamera()
   , m_near(1.0f)
   , m_far(1024.0f)
   , m_projectionChanged(false)
+  , m_clipper(new vkPlaneClipper())
 {
   m_cameraMatrix.SetIdentity();
   m_cameraMatrixInv.SetIdentity();
@@ -101,6 +102,42 @@ void vkCamera::SetOrthographic(const vkVector2f &viewport)
   UpdateProjectionValues();
 }
 
+
+vkClipper *vkCamera::GetClipper()
+{
+  switch (m_projectionMode)
+  {
+  case ePM_Perspective:
+    {
+      vkVector3f tl, tr, bl, br, l, r, b, t;
+      vkMatrix4f::Transform(m_cameraMatrix, m_topLeft, tl);
+      vkMatrix4f::Transform(m_cameraMatrix, m_topRight, tr);
+      vkMatrix4f::Transform(m_cameraMatrix, m_bottomLeft, bl);
+      vkMatrix4f::Transform(m_cameraMatrix, m_bottomRight, br);
+      vkVector3f::Sub(tl, m_eye, tl);
+      vkVector3f::Sub(tr, m_eye, tr);
+      vkVector3f::Sub(bl, m_eye, bl);
+      vkVector3f::Sub(br, m_eye, br);
+      vkVector3f::Cross(tl, bl, l).Normalize();
+      vkVector3f::Cross(br, tr, r).Normalize();
+      vkVector3f::Cross(tr, tl, t).Normalize();
+      vkVector3f::Cross(bl, br, b).Normalize();
+      m_clipper->AddPlane(vkPlane(m_eye, t));
+      m_clipper->AddPlane(vkPlane(m_eye, l));
+      m_clipper->AddPlane(vkPlane(m_eye, b));
+      m_clipper->AddPlane(vkPlane(m_eye, r));
+      l.Debug("left");
+      r.Debug("right");
+      b.Debug("bottom");
+      t.Debug("top");
+    }
+    break;
+
+  case ePM_Orthographic:
+    break;
+  }
+  return m_clipper;
+}
 
 void vkCamera::GetPlanePoints(float distance, vkVector3f *points) const
 {

@@ -82,6 +82,19 @@ void vkNode::Scan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *
 {
   //
   // TODO: handle the clipping of the bounding box here
+  if (clipper)
+  {
+    vkClipper::ClipResult rc = clipper->Test(m_boundingBox);
+    //rc = vkClipper::eCR_Intermediate;
+    switch (rc)
+    {
+    case vkClipper::eCR_In:
+      clipper = 0;
+      break;
+    case vkClipper::eCR_Out:
+      return;
+    }
+  }
 
   PrivScan(clipper, renderer, callback);
 }

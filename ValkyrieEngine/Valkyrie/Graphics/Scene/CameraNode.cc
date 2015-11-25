@@ -35,18 +35,6 @@ void vkCameraNode::TransformationChanged()
     m.GetYAxis(v);
     vkVector3f::Add(e, v, e);
     m_camera->SetSpot(e);
-    /*
-    printf("%.2f %.2f %.2f    %.2f %.2f %.2f   %.2f %.2f %.2f\n",
-           m_camera->GetEye().x,
-           m_camera->GetEye().y,
-           m_camera->GetEye().z,
-           m_camera->GetSpot().x,
-           m_camera->GetSpot().y,
-           m_camera->GetSpot().z,
-           m_camera->GetUp().x,
-           m_camera->GetUp().y,
-           m_camera->GetUp().z);
-    */
     m_camera->UpdateCameraMatrices();
   }
 }

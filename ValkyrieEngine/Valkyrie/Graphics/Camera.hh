@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Math/Clipper.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Graphics/Camera.refl.hh>
@@ -36,6 +37,7 @@ public:
   void SetPerspective(float angle, float aspect);
   void SetOrthographic(const vkVector2f &viewport);
 
+  vkClipper *GetClipper();
 
   void Apply(IGraphics *renderer);
 
@@ -75,6 +77,8 @@ private:
   float m_perspectiveAspect;
 
   vkVector2f m_orthographicViewport;
+
+  vkPlaneClipper *m_clipper;
 };
 
 VK_FORCEINLINE void vkCamera::SetEye(const vkVector3f &eye)

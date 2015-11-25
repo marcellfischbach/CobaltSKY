@@ -106,7 +106,8 @@ void vkDeferredFrameProcessor::Render(vkNode *node, vkCamera *camera, IRenderTar
   m_geometries.Clear();
   m_lights.Clear();
   vkDefaultCollector collector(&m_geometries, &m_lights);
-  node->Scan(0, m_renderer, &collector);
+  vkClipper *clipper = camera->GetClipper();
+  node->Scan(clipper, m_renderer, &collector);
 
   camera->Apply(m_renderer);
 

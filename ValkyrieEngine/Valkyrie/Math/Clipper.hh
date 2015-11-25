@@ -35,6 +35,8 @@ public:
   vkPlaneClipper();
   virtual ~vkPlaneClipper();
 
+  void Clear();
+
   virtual ClipResult Test(const vkVector3f &pos) const;
   virtual ClipResult Test(const vkBoundingBox &bbox) const;
 

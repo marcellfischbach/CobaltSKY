@@ -28,7 +28,7 @@ public:
     x = nn.x;
     y = nn.y;
     z = nn.z;
-    d = -pos.Dot(nn);
+    d = pos.Dot(nn);
   }
 
   VK_FORCEINLINE float Distance(const vkVector3f &pos) const

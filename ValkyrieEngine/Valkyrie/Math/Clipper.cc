@@ -23,6 +23,10 @@ vkPlaneClipper::~vkPlaneClipper()
   m_planes.clear();
 }
 
+void vkPlaneClipper::Clear()
+{
+  m_planes.clear();
+}
 
 void vkPlaneClipper::AddPlane(const vkPlane &plane)
 {
@@ -55,7 +59,7 @@ vkClipper::ClipResult vkPlaneClipper::Test(const vkBoundingBox &bbox) const
     int out = 0;
     for (size_t j = 0; j < 8; ++j)
     {
-      if (plane.Distance(points[j]))
+      if (plane.Distance(points[j]) < 0.0f)
       {
         out++;
       }
