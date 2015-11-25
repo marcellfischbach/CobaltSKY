@@ -43,3 +43,25 @@ void vkGroupNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanC
     m_children[i]->Scan(clipper, renderer, callback);
   }
 }
+
+void vkGroupNode::UpdateStates()
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->UpdateStates();
+  }
+
+  vkNode::UpdateStates();
+
+}
+
+void vkGroupNode::UpdateBoundingBox(vkBoundingBox &bbox)
+{
+  vkNode::UpdateBoundingBox(bbox);
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    bbox.Add(m_children[i]->GetBoundingBox());
+  }
+  bbox.Finish();
+
+}

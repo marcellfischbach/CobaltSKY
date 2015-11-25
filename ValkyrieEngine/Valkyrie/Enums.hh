@@ -14,6 +14,13 @@ enum vkBufferDataMode
   eBDM_Stream
 };
 
+enum vkButton
+{
+  eB_Left,
+  eB_Middle,
+  eB_Right,
+  eB_COUNT
+};
 
 enum vkKey
 {

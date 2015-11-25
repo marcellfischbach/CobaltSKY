@@ -2,12 +2,14 @@
 
 #include <SDLWindow/SDLWindow.hh>
 #include <SDLWindow/SDLKeyboard.hh>
+#include <SDLWindow/SDLMouse.hh>
 #include <Windows.h>
 #include <GL/GL.h>
 
 SDLWindow::SDLWindow()
   : m_window(0)
   , m_keyboard(new SDLKeyboard())
+  , m_mouse(new SDLMouse())
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -76,6 +78,8 @@ bool SDLWindow::InitializeOpenGL(
   {
     printf("Set swap interval: %s\n", SDL_GetError());
   }
+
+  SDL_SetRelativeMouseMode(SDL_TRUE);
   glViewport(0, 0, 1366, 768);
 
 
@@ -88,6 +92,12 @@ const IKeyboard *SDLWindow::GetKeyboard() const
   return m_keyboard;
 }
 
+
+const IMouse *SDLWindow::GetMouse() const
+{
+  return m_mouse;
+}
+
 bool SDLWindow::UpdateEvents()
 {
   if (!m_window)
@@ -96,6 +106,8 @@ bool SDLWindow::UpdateEvents()
     return false;
   }
   m_keyboard->UpdateKeys();
+  m_mouse->UpdateButtons();
+  m_mouse->UpdateMotion();
 
   SDL_Event evt;
   while (SDL_PollEvent(&evt))
@@ -109,6 +121,17 @@ bool SDLWindow::UpdateEvents()
       break;
     case SDL_KEYUP:
       m_keyboard->SetKeyUp(evt.key.keysym.scancode);
+      break;
+
+    case SDL_MOUSEBUTTONDOWN:
+      m_mouse->SetButtonDown(evt.button.button);
+      break;
+    case SDL_MOUSEBUTTONUP:
+      m_mouse->SetButtonUp(evt.button.button);
+      break;
+
+    case SDL_MOUSEMOTION:
+      m_mouse->SetMotion(evt.motion.x, evt.motion.y, evt.motion.xrel, evt.motion.yrel);
       break;
     }
   }

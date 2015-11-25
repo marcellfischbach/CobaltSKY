@@ -15,9 +15,12 @@ public:
   vkGroupNode();
   virtual ~vkGroupNode();
 
+  virtual void UpdateStates();
+
 protected:
   virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
 
+  virtual void UpdateBoundingBox(vkBoundingBox &bbox);
 private:
 
   bool AddChild(vkNode *child);

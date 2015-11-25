@@ -25,6 +25,15 @@ public:
 public:
   virtual ~vkNode();
 
+  VK_FORCEINLINE void SetName(const vkString &name)
+  {
+    m_name = name;
+  }
+
+  VK_FORCEINLINE const vkString &GetName() const
+  {
+    return m_name;
+  }
 
   VK_FORCEINLINE vkBoundingBox &GetBoundingBox()
   {
@@ -60,14 +69,16 @@ protected:
 
   void FlagUpdateBoundingBox();
 
+  virtual void UpdateBoundingBox(vkBoundingBox &bbox);
+
 private:
   void SetParent(vkGroupNode *parent);
-
-  virtual void UpdateBoundingBox();
 
   vkUInt32 m_updateFlags;
 
   vkBoundingBox m_boundingBox;
 
   vkGroupNode *m_parent;
+
+  vkString m_name;
 };

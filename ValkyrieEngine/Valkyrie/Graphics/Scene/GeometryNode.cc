@@ -56,3 +56,13 @@ void vkGeometryNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, ISc
   callback->ScanGeometryNode(this);
 }
 
+void vkGeometryNode::UpdateBoundingBox(vkBoundingBox &bbox)
+{
+  vkSpatialNode::UpdateBoundingBox(bbox);
+
+  if (m_mesh)
+  {
+    bbox.Add(GetMatrix(), m_mesh->GetBoundingBox());
+  }
+  bbox.Finish();
+}

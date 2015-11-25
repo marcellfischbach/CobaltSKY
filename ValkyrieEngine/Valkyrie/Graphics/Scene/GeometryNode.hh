@@ -32,6 +32,8 @@ public:
 protected:
   virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
 
+  virtual void UpdateBoundingBox(vkBoundingBox &bbox);
+
 private:
   vkMesh *m_mesh;
   vkMaterialInstance *m_material;

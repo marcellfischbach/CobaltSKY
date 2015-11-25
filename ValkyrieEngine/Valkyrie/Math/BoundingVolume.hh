@@ -2,6 +2,7 @@
 
 
 #include <Valkyrie/Export.hh>
+#include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 
 
@@ -12,6 +13,10 @@ public:
   ~vkBoundingBox();
 
   void Add(const vkVector3f &pos);
+  void Add(const vkBoundingBox &bbox);
+
+  void Add(const vkMatrix4f &M, const vkVector3f &pos);
+  void Add(const vkMatrix4f &M, const vkBoundingBox &bbox);
 
   void Clear();
   void Finish();
@@ -39,6 +44,8 @@ public:
   {
     return m_points;
   }
+
+  void Debug(const char *message = 0) const;
 
 private:
   bool m_valid;

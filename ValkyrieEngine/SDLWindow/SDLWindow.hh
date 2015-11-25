@@ -8,6 +8,7 @@
 #include <SDLWindow/SDLWindow.refl.hh>
 
 class SDLKeyboard;
+class SDLMouse;
 
 VK_CLASS()
 class VKSDL_API SDLWindow : public IWindow
@@ -29,6 +30,7 @@ public:
     vkUInt8 openGLMinor);
 
   virtual const IKeyboard *GetKeyboard() const;
+  virtual const IMouse *GetMouse() const;
 
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
@@ -49,5 +51,6 @@ private:
   SDL_GLContext m_context;
 
   SDLKeyboard *m_keyboard;
+  SDLMouse *m_mouse;
 };
 

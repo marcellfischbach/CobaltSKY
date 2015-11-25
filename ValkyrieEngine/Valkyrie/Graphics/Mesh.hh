@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Math/BoundingVolume.hh>
 #include <vector>
 #include <Valkyrie/Graphics/Mesh.refl.hh>
 
@@ -29,6 +30,9 @@ public:
   void AddVertexBuffer(IVertexBuffer *vertexBuffer);
   void AddIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset = 0);
 
+  void SetBoundingBox(const vkBoundingBox &bbox);
+  const vkBoundingBox& GetBoundingBox() const;
+
 private:
 
   struct Index
@@ -44,5 +48,7 @@ private:
 
   vkDataType m_indexType;
   vkPrimitiveType m_primitiveType;
+  
+  vkBoundingBox m_boundingBox;
 };
 

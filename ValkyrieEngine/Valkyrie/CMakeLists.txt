@@ -135,6 +135,7 @@ source_group(
 
 set(SOURCE_WINDOW
 	Window/IKeyboard.hh
+  Window/IMouse.hh
 	Window/IWindow.hh
 	)
 

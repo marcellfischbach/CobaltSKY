@@ -12,7 +12,7 @@ vkMesh::vkMesh()
   , m_indexType(eDT_UnsignedShort)
   , m_primitiveType(ePT_Triangles)
 {
-
+  m_boundingBox.Clear();
 }
 
 vkMesh::~vkMesh()
@@ -73,6 +73,16 @@ void vkMesh::AddIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offs
   index.m_count = count;
   index.m_offset = offset;
   m_indices.push_back(index);
+}
+
+void vkMesh::SetBoundingBox(const vkBoundingBox &bbox)
+{
+  m_boundingBox = bbox;
+}
+
+const vkBoundingBox &vkMesh::GetBoundingBox() const
+{
+  return m_boundingBox;
 }
 
 

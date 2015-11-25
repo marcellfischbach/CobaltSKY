@@ -20,6 +20,7 @@
 #include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
+#include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
 
 
@@ -48,6 +49,8 @@ void vkEngine::SetRenderer(IGraphics *renderer)
 
 vkMesh* createPlaneMesh(IGraphics *renderer, float size);
 vkMesh* createCubeMesh(IGraphics *renderer, float size);
+
+void UpdateCamera(vkCameraNode *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 
 
 vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vkVector3f &up)
@@ -96,12 +99,14 @@ int vkEngine::Run()
   vkMaterialInstance *materialFieldstoneBlue = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
 
   vkGroupNode *groupNode = new vkGroupNode();
+  groupNode->SetName("GroupNode");
 
   vkMesh *planeMesh = createPlaneMesh(m_renderer, 20.0f);
   vkGeometryNode *planeGeometryNode = new vkGeometryNode();
   planeGeometryNode->SetMesh(planeMesh);
   planeGeometryNode->SetMaterial(materialFieldstone);
   planeGeometryNode->AttachTo(groupNode);
+  planeGeometryNode->SetName("PlaneGeometryNode");
 
   vkMatrix4f MM;
   MM.SetTranslation(0.0f, 0.0f, 3.0f);
@@ -111,6 +116,7 @@ int vkEngine::Run()
   cubeGeometryNode->SetMaterial(materialFieldstone);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
+  cubeGeometryNode->SetName("CenterCube 6");
 
   vkSpatialNode *cubeSpatialNode = cubeGeometryNode;
 
@@ -137,14 +143,17 @@ int vkEngine::Run()
   vkLightNode *lightNode = new vkLightNode();
   lightNode->SetLight(pointLight);
   lightNode->AttachTo(groupNode);
+  lightNode->SetName("LightNode PointLight");
 
   lightNode = new vkLightNode();
   lightNode->SetLight(directionalLight);
-  //lightNode->AttachTo(groupNode);
+  lightNode->AttachTo(groupNode);
+  lightNode->SetName("LightNode DirectionLight(main)");
 
   lightNode = new vkLightNode();
   lightNode->SetLight(directionalLightContra);
-  //lightNode->AttachTo(groupNode);
+  lightNode->AttachTo(groupNode);
+  lightNode->SetName("LightNode DirectionLight(contra)");
 
 
   vkCamera *camera = new vkCamera();
@@ -153,6 +162,7 @@ int vkEngine::Run()
   vkCameraNode *cameraNode = new vkCameraNode();
   cameraNode->SetCamera(camera);
   cameraNode->AttachTo(groupNode);
+  cameraNode->SetName("CameraNode");
 
   vkMesh *smallCube = createCubeMesh(m_renderer, 1.0f);
 
@@ -162,6 +172,7 @@ int vkEngine::Run()
   cubeGeometryNode->SetMaterial(materialFieldstoneRed);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
+  cubeGeometryNode->SetName("RedCube 2");
 
   MM.SetTranslation(-10,  10, -1);
   cubeGeometryNode = new vkGeometryNode();
@@ -169,6 +180,7 @@ int vkEngine::Run()
   cubeGeometryNode->SetMaterial(materialFieldstoneGreen);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
+  cubeGeometryNode->SetName("GreenCube 2");
 
   MM.SetTranslation( 10, -10, -1);
   cubeGeometryNode = new vkGeometryNode();
@@ -176,6 +188,7 @@ int vkEngine::Run()
   cubeGeometryNode->SetMaterial(materialFieldstoneBlue);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
+  cubeGeometryNode->SetName("BlueCube 2");
 
 
   float v = 0.0f;
@@ -189,6 +202,8 @@ int vkEngine::Run()
     printf("Unable to initialize frame processor\n");
     return -1;
   }
+
+  const IMouse *mouse = m_window->GetMouse();
 
   bool anim = true;
   float l = 0.0f;
@@ -205,14 +220,8 @@ int vkEngine::Run()
       anim = !anim;
 
 
-    float camDistance = 25.0f + sin(cd) * 15.0f;
-    if (anim)
-      cd += 0.002f;
-    vkMatrix4f MM;
-    MM.SetLookAtInv(vkVector3f((float)cos(v) * camDistance, (float)sin(v) * camDistance, camDistance), vkVector3f(0.0f, 0.0f, 0.0f), vkVector3f(0.0f, 0.0f, 1.0f));
-    cameraNode->SetMatrix(MM);
-    if (anim)
-      v += 0.001f;
+
+    UpdateCamera(cameraNode, mouse, keyboard);
 
     vkMatrix4f mm = planeGeometryNode->GetMatrix();
     mm.SetRotationX(m);
@@ -245,7 +254,9 @@ int vkEngine::Run()
 
     m_window->Present();
 
+
   }
+
 
   return 0;
 }
@@ -314,6 +325,11 @@ vkMesh* createPlaneMesh(IGraphics *renderer, float size)
   IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
+  vkBoundingBox bbox;
+  bbox.Add(vkVector3f(-s, -s, 0));
+  bbox.Add(vkVector3f(s, s, 0));
+  bbox.Finish();
+
   vkMesh *mesh = new vkMesh();
   mesh->SetIndexType(eDT_UnsignedShort);
   mesh->SetPrimitiveType(ePT_Triangles);
@@ -322,6 +338,7 @@ vkMesh* createPlaneMesh(IGraphics *renderer, float size)
   mesh->AddVertexBuffer(nb);
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
+  mesh->SetBoundingBox(bbox);
 
   return mesh;
 }
@@ -451,6 +468,12 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
   IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
+  vkBoundingBox bbox;
+  bbox.Add(vkVector3f(-s, -s, -s));
+  bbox.Add(vkVector3f(s, s, s));
+  bbox.Finish();
+  bbox.Debug("CreateCube");
+
   vkMesh *mesh = new vkMesh();
   mesh->SetIndexType(eDT_UnsignedShort);
   mesh->SetPrimitiveType(ePT_Triangles);
@@ -459,8 +482,60 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
   mesh->AddVertexBuffer(nb);
   mesh->AddVertexBuffer(tb);
   mesh->AddIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
+  mesh->SetBoundingBox(bbox);
 
   return mesh;
 }
 
 
+void UpdateCamera(vkCameraNode *cam, const IMouse *mouse, const IKeyboard *keyboard)
+{
+  static float rotH = 0.0f, rotV = 0.0f;
+  rotH -= (float)mouse->GetRelX() * 0.001f;
+  rotV -= (float)mouse->GetRelY() * 0.001f;
+  if (rotV > 3.14f) rotV = 3.14f;
+  if (rotV < -3.14f) rotV = -3.14f;
+
+  vkMatrix4f TX, TZ, T;
+  TZ.SetRotationZ(rotH);
+  TX.SetRotationX(rotV);
+  vkMatrix4f::Mult(TZ, TX, T);
+
+  float speed = 0.01f;
+  if (keyboard->IsKeyDown(eK_LShift) || keyboard->IsKeyDown(eK_RShift))
+  {
+    speed *= 2.0f;
+  }
+  float sx = 0.0f;
+  float sy = 0.0f;
+  
+  if (keyboard->IsKeyDown(eK_W))
+  {
+    sy += speed;
+  }
+  if (keyboard->IsKeyDown(eK_S))
+  {
+    sy -= speed;
+  }
+  if (keyboard->IsKeyDown(eK_D))
+  {
+    sx += speed;
+  }
+  if (keyboard->IsKeyDown(eK_A))
+  {
+    sx -= speed;
+  }
+
+  vkVector3f dx = T.GetXAxis(dx);
+  vkVector3f dy = T.GetYAxis(dy);
+  vkVector3f::Mul(dx, sx, dx);
+  vkVector3f::Mul(dy, sy, dy);
+  vkVector3f d = vkVector3f::Add(dx, dy, d);
+
+  vkVector3f c = cam->GetMatrix().GetTranslation(c);
+  vkVector3f::Add(c, d, c);
+  T.SetTranslation(c);
+
+  cam->SetMatrix(T);
+
+}

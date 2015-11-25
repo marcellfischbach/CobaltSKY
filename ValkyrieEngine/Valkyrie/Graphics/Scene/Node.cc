@@ -63,9 +63,9 @@ void vkNode::FlagUpdateBoundingBox()
 
 
 
-void vkNode::UpdateBoundingBox()
+void vkNode::UpdateBoundingBox(vkBoundingBox &bbox)
 {
-  m_boundingBox.Clear();
+  bbox.Clear();
 }
 
 
@@ -74,7 +74,7 @@ void vkNode::UpdateStates()
   if (m_updateFlags & eUF_UpdateBoundingBox)
   {
     m_updateFlags &= ~eUF_UpdateBoundingBox;
-    UpdateBoundingBox();
+    UpdateBoundingBox(m_boundingBox);
   }
 }
 

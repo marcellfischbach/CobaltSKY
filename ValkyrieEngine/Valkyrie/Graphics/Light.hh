@@ -40,6 +40,7 @@ private:
 
   bool m_castShadow;
   float m_shadowIntensity;
+
 };
 
 

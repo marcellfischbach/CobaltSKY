@@ -4,8 +4,12 @@ add_definitions(-DVKSDL_EXPORT)
 
 set(SOURCE
   Export.hh
+  SDLButtonMap.hh
+  SDLKeyMap.hh
   SDLKeyboard.cc
   SDLKeyboard.hh
+  SDLMouse.cc
+  SDLMouse.hh
   SDLWindow.hh
   SDLWindow.cc
   )
