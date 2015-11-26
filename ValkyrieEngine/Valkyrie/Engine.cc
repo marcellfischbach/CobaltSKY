@@ -126,7 +126,7 @@ int vkEngine::Run()
   pointLight->SetPosition(vkVector3f(0.0f, 0.0f, 10.0f));
   pointLight->SetRadius(240.0f);
   pointLight->SetShadowIntensity(0.5f);
-  pointLight->SetCastShadow(true);
+  pointLight->SetCastShadow(false);
 
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
@@ -142,7 +142,7 @@ int vkEngine::Run()
 
   vkLightNode *lightNode = new vkLightNode();
   lightNode->SetLight(pointLight);
-  lightNode->AttachTo(groupNode);
+  //lightNode->AttachTo(groupNode);
   lightNode->SetName("LightNode PointLight");
 
   lightNode = new vkLightNode();
@@ -166,25 +166,28 @@ int vkEngine::Run()
 
   vkMesh *smallCube = createCubeMesh(m_renderer, 1.0f);
 
-  MM.SetTranslation(-10, -10, -1);
+  //MM.SetIdentity();
+  MM.SetTranslation(-10, -10, 1);
   cubeGeometryNode = new vkGeometryNode();
-  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMesh(smallCube);
   cubeGeometryNode->SetMaterial(materialFieldstoneRed);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
   cubeGeometryNode->SetName("RedCube 2");
+  cubeGeometryNode->UpdateStates();
+  cubeGeometryNode->GetBoundingBox().Debug("Red Cube 2");
 
-  MM.SetTranslation(-10,  10, -1);
+  MM.SetTranslation(-10,  10, 1);
   cubeGeometryNode = new vkGeometryNode();
-  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMesh(smallCube);
   cubeGeometryNode->SetMaterial(materialFieldstoneGreen);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
   cubeGeometryNode->SetName("GreenCube 2");
 
-  MM.SetTranslation( 10, -10, -1);
+  MM.SetTranslation( 10, -10, 1);
   cubeGeometryNode = new vkGeometryNode();
-  cubeGeometryNode->SetMesh(cubeMesh);
+  cubeGeometryNode->SetMesh(smallCube);
   cubeGeometryNode->SetMaterial(materialFieldstoneBlue);
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
@@ -209,6 +212,8 @@ int vkEngine::Run()
   float l = 0.0f;
   float cd = 0.0f;
   float ct = 0.0f;
+  vkUInt32 fps = 0;
+  vkUInt32 nextFPS = m_window->GetTicks() + 1000;
   while (true)
   {
     m_window->UpdateEvents();
@@ -253,7 +258,14 @@ int vkEngine::Run()
     m_renderer->RenderFullScreenFrame(color0);
 
     m_window->Present();
-
+    fps++;
+    vkUInt32 time = m_window->GetTicks();
+    if (time >= nextFPS)
+    {
+      printf("FPS: %d\n", fps);
+      fps = 0;
+      nextFPS += 1000;
+    }
 
   }
 
@@ -472,7 +484,6 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
   bbox.Add(vkVector3f(-s, -s, -s));
   bbox.Add(vkVector3f(s, s, s));
   bbox.Finish();
-  bbox.Debug("CreateCube");
 
   vkMesh *mesh = new vkMesh();
   mesh->SetIndexType(eDT_UnsignedShort);

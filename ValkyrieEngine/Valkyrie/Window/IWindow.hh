@@ -24,6 +24,7 @@ struct VKE_API IWindow : public IObject
   virtual bool UpdateEvents() = 0;
   virtual bool Present() = 0;
 
+  virtual vkUInt32 GetTicks() const = 0;
 };
 
 

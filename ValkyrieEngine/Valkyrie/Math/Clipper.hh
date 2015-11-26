@@ -19,7 +19,7 @@ public:
   virtual ~vkClipper();
 
   virtual ClipResult Test(const vkVector3f &pos) const = 0;
-  virtual ClipResult Test(const vkBoundingBox &bbox) const = 0;
+  virtual ClipResult Test(const vkBoundingBox &bbox, bool debug = false) const = 0;
 
 
 protected:
@@ -38,7 +38,7 @@ public:
   void Clear();
 
   virtual ClipResult Test(const vkVector3f &pos) const;
-  virtual ClipResult Test(const vkBoundingBox &bbox) const;
+  virtual ClipResult Test(const vkBoundingBox &bbox, bool debug = false) const;
 
   void AddPlane(const vkPlane &plane);
 

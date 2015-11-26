@@ -75,6 +75,7 @@ void vkNode::UpdateStates()
   {
     m_updateFlags &= ~eUF_UpdateBoundingBox;
     UpdateBoundingBox(m_boundingBox);
+    //m_boundingBox.Debug(m_name.c_str());
   }
 }
 
@@ -85,7 +86,6 @@ void vkNode::Scan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *
   if (clipper)
   {
     vkClipper::ClipResult rc = clipper->Test(m_boundingBox);
-    //rc = vkClipper::eCR_Intermediate;
     switch (rc)
     {
     case vkClipper::eCR_In:

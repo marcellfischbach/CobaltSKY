@@ -164,3 +164,8 @@ vkInt16 SDLWindow::GetPosY() const
 {
   return m_posY;
 }
+
+vkUInt32 SDLWindow::GetTicks() const
+{
+  return SDL_GetTicks();
+}

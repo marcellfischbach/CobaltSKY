@@ -38,6 +38,8 @@ public:
   virtual vkInt16 GetPosX() const;
   virtual vkInt16 GetPosY() const;
 
+  virtual vkUInt32 GetTicks() const;
+
   virtual bool UpdateEvents();
   virtual bool Present();
 private:

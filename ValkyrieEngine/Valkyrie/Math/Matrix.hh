@@ -527,12 +527,11 @@ public:
 
   static vkVector3f &Transform(const vkMatrix4f &m, const vkVector3f &v, vkVector3f &res)
   {
-    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30;
-    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31;
-    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z + m.m32;
-    res.x = x;
-    res.y = y;
-    res.z = z;
+    res.Set(
+      m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30,
+      m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31,
+      m.m02 * v.x + m.m12 * v.y + m.m22 * v.z + m.m32
+      );
     return res;
   }
 
