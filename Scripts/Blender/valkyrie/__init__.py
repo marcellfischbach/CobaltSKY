@@ -9,6 +9,7 @@ from valkyrie.trigon import Trigon
 from valkyrie.unique_list import UniqueList
 from valkyrie.vertex import Vertex
 from valkyrie.mesh import Mesh
+from valkyrie.mesh import MeshData
 
 
 

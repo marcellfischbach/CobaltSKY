@@ -4,11 +4,31 @@ import valkyrie
 
 class MeshData:
 
-	def __init__(self, material_index):
+	def __init__(self, unique, material_index):
 		self.material_index = material_index
-		self.vertices = valkyrie.UniqueList(True)
-		self.trigons = valkyrie.UniqueList(True)
+		self.vertices = valkyrie.UniqueList(unique)
+		self.trigons = valkyrie.UniqueList(unique)
 	
+	def merge_mesh(self, mesh, matrix):
+		for trig in mesh.trigons.list:
+			v0 = mesh.vertices.list[trig.v0].clone()
+			v1 = mesh.vertices.list[trig.v1].clone()
+			v2 = mesh.vertices.list[trig.v2].clone()
+			
+			
+			v0.mult_by_matrix(matrix)
+			v1.mult_by_matrix(matrix)
+			v2.mult_by_matrix(matrix)
+			
+			i0 = self.vertices.add(v0)
+			i1 = self.vertices.add(v1)
+			i2 = self.vertices.add(v2)
+			
+			trig = valkyrie.Trigon()
+			trig.i0 = i0
+			trig.i1 = i1
+			trig.i2 = i2
+			self.trigons.add(trig)
 	
 
 class Mesh:
@@ -23,6 +43,9 @@ class Mesh:
 			print ("  Data: ", md.material_index)
 			
 			print ("    Vertices: ", len(md.vertices.list))
+			for v in md.vertices.list:
+				print ("    Co: %.2f %.2f %.2f  Norm: %.2f %.2f %.2f" % (v.x, v.y, v.z, v.nx, v.ny, v.nz))
+				
 			print ("    Trigon: ", len(md.trigons.list))
 			
 	
@@ -55,7 +78,7 @@ class Mesh:
 			if md.material_index == material_index:
 				return md
 		
-		md = MeshData(material_index)
+		md = MeshData(True, material_index)
 		self.mesh_datas.append(md)
 		return md
 
