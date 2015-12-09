@@ -48,6 +48,23 @@ source_group(
 	${SOURCE_CORE}
 	)
 
+set(SOURCE_ENTITY
+  Entity/Entity.cc
+  Entity/Entity.hh
+  Entity/EntityState.cc
+  Entity/EntityState.hh
+  Entity/GeometryState.cc
+  Entity/GeometryState.hh
+  Entity/SpatialState.cc
+  Entity/SpatialState.hh
+  )
+
+source_group(
+  "ValkyrieEngine\\Entity"
+  FILES
+  ${SOURCE_ENTITY}
+  )
+
 set(SOURCE_GRAPHICS
   Graphics/Camera.cc
   Graphics/Camera.hh
@@ -149,6 +166,7 @@ source_group(
 set(ALL_SOURCES
 	${SOURCE}
 	${SOURCE_CORE}
+  ${SOURCE_ENTITY}
 	${SOURCE_GRAPHICS}
 	${SOURCE_GRAPHICS_SCENE}
 	${SOURCE_LOADERS}
