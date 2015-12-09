@@ -52,3 +52,31 @@ private:
   vkBoundingBox m_boundingBox;
 };
 
+
+
+
+VK_CLASS()
+class VKE_API vkMultiMesh : public vkObject
+{
+  VK_CLASS_GEN;
+public:
+  vkMultiMesh();
+  virtual ~vkMultiMesh();
+
+  void AddMesh(vkMesh *instance, vkSize materialIndex = 0, const vkString &name = "");
+  vkSize GetNumberOfMeshes() const;
+  vkMesh *GetMesh(vkSize idx = 0);
+  const vkMesh *GetMesh(vkSize idx = 0) const;
+
+  vkSize GetMaterialIndex(vkSize idx = 0) const;
+
+private:
+  struct Data
+  {
+    vkMesh *m_mesh;
+    vkSize m_materialIndex;
+    vkString m_name;
+  };
+  std::vector<Data> m_meshes;
+
+};

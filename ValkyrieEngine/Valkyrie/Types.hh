@@ -19,6 +19,7 @@ typedef signed __int64 vkInt64;
 #endif
 
 
+typedef unsigned long vkID;
 typedef std::string vkString;
 
 typedef size_t vkSize;

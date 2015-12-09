@@ -4,10 +4,17 @@
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 
+vkID nextID = 1;
+
+vkID vkEntity::GetNextID()
+{
+  return nextID++;
+}
 
 vkEntity::vkEntity()
   : vkObject ()
   , m_rootState(0)
+  , m_id(vkEntity::GetNextID())
 {
 
 }
@@ -17,7 +24,6 @@ vkEntity::~vkEntity()
 {
 
 }
-
 
 
 void vkEntity::AddState(vkEntityState *state)
@@ -43,3 +49,10 @@ void vkEntity::AddState(vkSpatialState *state, vkSpatialState *parentState)
   }
 }
 
+void vkEntity::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+{
+  if (m_rootState)
+  {
+    m_rootState->Scan(clipper, graphics, entityScan);
+  }
+}

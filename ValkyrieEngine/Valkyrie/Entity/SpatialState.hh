@@ -16,6 +16,11 @@ public:
   vkSpatialState();
   virtual ~vkSpatialState();
 
+  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+
+protected:
+  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+
 private:
   void AddSpatialState(vkSpatialState *state);
   void RemoveSpatialState(vkSpatialState *state);

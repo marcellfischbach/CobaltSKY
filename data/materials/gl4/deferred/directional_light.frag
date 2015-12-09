@@ -45,7 +45,7 @@ void main ()
 
 	
 	float lamb = dot (-vk_LightDirection, normal);
-	//lamb = lamb * 0.5 + 0.5;
+	lamb = lamb * 0.5 + 0.5;
 	
 	
 	

@@ -38,3 +38,13 @@ void vkSpatialState::RemoveSpatialState(vkSpatialState *state)
 }
 
 
+
+void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+{
+  PrivScan(clipper, graphics, entityScan);
+}
+
+void vkSpatialState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+{
+
+}

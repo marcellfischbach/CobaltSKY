@@ -117,7 +117,7 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_distances = vkVector3f(15.0f, 45.0f, 135.0f);
   m_mapBias = 0.99f;
 
-  vkUInt16 bufferSize = 1024;
+  vkUInt16 bufferSize = 2024;
   ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 3);
 

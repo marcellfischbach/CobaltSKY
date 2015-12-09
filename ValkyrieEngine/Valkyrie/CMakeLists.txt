@@ -3,6 +3,7 @@
 add_definitions(-DVKE_EXPORT)
 
 set(SOURCE
+  Defs.hh
 	Engine.hh
 	Engine.cc
 	Enums.hh
@@ -53,8 +54,13 @@ set(SOURCE_ENTITY
   Entity/Entity.hh
   Entity/EntityState.cc
   Entity/EntityState.hh
+  Entity/Geometry.cc
+  Entity/Geometry.hh
   Entity/GeometryState.cc
   Entity/GeometryState.hh
+  Entity/LightState.cc
+  Entity/LightState.hh
+  Entity/Scan.hh
   Entity/SpatialState.cc
   Entity/SpatialState.hh
   )

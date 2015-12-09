@@ -102,3 +102,56 @@ void vkMesh::Render(IGraphics *renderer, vkUInt8 lod)
   renderer->SetVertexDeclaration(m_vertexDeclaration);
   renderer->RenderIndexed(m_primitiveType, (vkUInt32)index.m_count, m_indexType);
 }
+
+
+
+
+vkMultiMesh::vkMultiMesh()
+  : vkObject()
+{
+
+}
+
+vkMultiMesh::~vkMultiMesh()
+{
+  for (vkSize i = 0, in = m_meshes.size(); i < in; ++i)
+  {
+    m_meshes[i].m_mesh->Release();
+  }
+  m_meshes.clear();
+}
+
+
+
+void vkMultiMesh::AddMesh(vkMesh *mesh, vkSize materialIndex, const vkString &name)
+{
+  if (mesh)
+  {
+    mesh->AddRef();
+    Data data;
+    data.m_mesh = mesh;
+    data.m_materialIndex = materialIndex;
+    data.m_name = name;
+    m_meshes.push_back(data);
+  }
+}
+
+vkSize vkMultiMesh::GetNumberOfMeshes() const
+{
+  return m_meshes.size();
+}
+
+vkMesh *vkMultiMesh::GetMesh(vkSize idx)
+{
+  return m_meshes[idx].m_mesh;
+}
+
+const vkMesh *vkMultiMesh::GetMesh(vkSize idx) const
+{
+  return m_meshes[idx].m_mesh;
+}
+
+vkSize vkMultiMesh::GetMaterialIndex(vkSize idx) const
+{
+  return m_meshes[idx].m_materialIndex;
+}

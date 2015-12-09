@@ -124,7 +124,7 @@ int vkEngine::Run()
   pointLight->SetColor(vkColor4f(1.0f, 0.75f, 0.25f));
   pointLight->SetEnergy(2.0f);
   pointLight->SetPosition(vkVector3f(0.0f, 0.0f, 10.0f));
-  pointLight->SetRadius(240.0f);
+  pointLight->SetRadius(10.0f);
   pointLight->SetShadowIntensity(0.5f);
   pointLight->SetCastShadow(false);
 
@@ -142,7 +142,7 @@ int vkEngine::Run()
 
   vkLightNode *lightNode = new vkLightNode();
   lightNode->SetLight(pointLight);
-  //lightNode->AttachTo(groupNode);
+  lightNode->AttachTo(groupNode);
   lightNode->SetName("LightNode PointLight");
 
   lightNode = new vkLightNode();
@@ -177,7 +177,7 @@ int vkEngine::Run()
   cubeGeometryNode->UpdateStates();
   cubeGeometryNode->GetBoundingBox().Debug("Red Cube 2");
 
-  MM.SetTranslation(-10,  10, 1);
+  MM.SetTranslation(-10,  10, 0);
   cubeGeometryNode = new vkGeometryNode();
   cubeGeometryNode->SetMesh(smallCube);
   cubeGeometryNode->SetMaterial(materialFieldstoneGreen);
@@ -463,7 +463,7 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
     8, 9, 11, 8, 11, 10,
     12, 13, 15, 12, 15, 14,
     16, 17, 19, 16, 19, 18,
-    20, 23, 23, 20, 23, 22,
+    20, 21, 23, 20, 23, 22,
   };
 
 

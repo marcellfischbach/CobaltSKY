@@ -100,3 +100,21 @@ private:
 
 };
 
+VK_CLASS()
+class VKE_API vkMultiMaterial : public vkObject
+{
+  VK_CLASS_GEN;
+public:
+  vkMultiMaterial();
+  vkMultiMaterial(vkMaterialInstance *instance);
+  virtual ~vkMultiMaterial();
+
+  void AddMaterialInstance(vkMaterialInstance *instance);
+  vkSize GetNumberOfInstances() const;
+  vkMaterialInstance *GetMaterialInstance(vkSize idx = 0);
+  const vkMaterialInstance *GetMaterialInstance(vkSize idx = 0) const;
+
+private:
+  std::vector<vkMaterialInstance *> m_instances;
+
+};
