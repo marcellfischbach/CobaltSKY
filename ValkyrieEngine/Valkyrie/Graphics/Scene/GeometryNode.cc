@@ -43,7 +43,7 @@ void vkGeometryNode::Render(IGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
   if (m_material->Bind(renderer, pass))
   {
     renderer->SetModelMatrix(GetMatrix());
-    m_mesh->Render(renderer, lod);
+    m_mesh->Render(renderer);
   }
   else
   {

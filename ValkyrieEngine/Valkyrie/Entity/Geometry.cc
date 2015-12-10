@@ -1,6 +1,7 @@
 
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/Scan.hh>
+#include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Math/Clipper.hh>
@@ -50,7 +51,7 @@ const vkMatrix4f &vkGeometryData::GetLocalTransform() const
   return m_localTransform;
 }
 
-void vkGeometryData::UpdateTransform(const vkMatrix4f &parentTransform)
+void vkGeometryData::UpdateTransformation(const vkMatrix4f &parentTransform)
 {
   vkMatrix4f::Mult(parentTransform, m_localTransform, m_globalTransform);
 }
@@ -71,3 +72,15 @@ void vkGeometryData::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *
 {
   entityScan->ScanGeometry(this);
 }
+
+void vkGeometryData::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
+{
+  if (!m_material || !m_mesh)
+  {
+    return;
+  }
+
+  graphics->SetModelMatrix(m_globalTransform);
+  m_mesh->Render(graphics, pass, m_material, lod);
+}
+

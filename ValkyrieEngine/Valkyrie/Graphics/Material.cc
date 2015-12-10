@@ -351,10 +351,18 @@ vkSize vkMultiMaterial::GetNumberOfInstances() const
 
 vkMaterialInstance *vkMultiMaterial::GetMaterialInstance(vkSize idx)
 {
+  if (idx >= m_instances.size())
+  {
+    return 0;
+  }
   return m_instances[idx];
 }
 
 const vkMaterialInstance *vkMultiMaterial::GetMaterialInstance(vkSize idx) const
 {
+  if (idx >= m_instances.size())
+  {
+    return 0;
+  }
   return m_instances[idx];
 }

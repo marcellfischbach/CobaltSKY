@@ -10,10 +10,10 @@
 
 struct IShader;
 class vkGBuffer;
-class vkGeometryNode;
-class vkLightNode;
 class vkGraphicsGL4;
+class vkLight;
 class vkLightvkGraphicsGL4;
+class vkGeometryData;
 
 VK_INTERFACE();
 class VKGL4_API vkDeferredFrameProcessor : public virtual IFrameProcessor
@@ -25,14 +25,14 @@ public:
 
   bool Initialize(vkUInt16 width, vkUInt16 height);
 
-  void Render(vkNode *node, vkCamera *camera, IRenderTarget *target);
+  void Render(vkEntity *root, vkCamera *camera, IRenderTarget *target);
 
 private:
-  void RenderGBuffer(vkNode *rootNode);
+  void RenderGBuffer(vkEntity *root);
 
 private:
-  vkCollection<vkGeometryNode*> m_geometries;
-  vkCollection<vkLightNode*> m_lights;
+  vkCollection<vkGeometryData*> m_geometries;
+  vkCollection<vkLight*> m_lights;
   vkGraphicsGL4 *m_renderer;
 
   vkGBuffer *m_gbuffer;

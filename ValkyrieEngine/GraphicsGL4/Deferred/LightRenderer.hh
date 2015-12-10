@@ -11,10 +11,10 @@ struct IShaderAttribute;
 struct ITexture2DArray;
 class vkCamera;
 class vkDirectionalLight;
+class vkEntity;
 class vkGBuffer;
-class vkGeometryNode;
+class vkGeometryData;
 class vkLight;
-class vkNode;
 class vkPointLight;
 class vkProgramGL4;
 class vkGraphicsGL4;
@@ -28,7 +28,7 @@ public:
   vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
   virtual ~vkLightvkGraphicsGL4();
 
-  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
+  virtual void Render(vkEntity *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
 
   vkRenderTargetGL4 *GetShadowBuffer();
 
@@ -59,7 +59,7 @@ protected:
 
 protected:
   void CalcShadowIntensity(const vkLight *light);
-  vkCollection<vkGeometryNode*> m_geometries;
+  vkCollection<vkGeometryData*> m_geometries;
   vkGraphicsGL4 *m_renderer;
   float m_mapBias;
 
@@ -77,10 +77,10 @@ public:
   vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
   virtual ~vkDirectionalLightvkGraphicsGL4();
 
-  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
-  void RenderShadow(vkNode *node, const vkCamera *camera, const vkDirectionalLight *light);
+  void RenderShadow(vkEntity *root, const vkCamera *camera, const vkDirectionalLight *light);
   void CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera);
   void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const;
 
@@ -115,10 +115,10 @@ public:
   vkPointLightvkGraphicsGL4(vkGraphicsGL4 *renderer);
   virtual ~vkPointLightvkGraphicsGL4();
 
-  virtual void Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
-  void RenderShadow(vkNode *node, const vkPointLight *light);
+  void RenderShadow(vkEntity *root, const vkPointLight *light);
   void CalcCubeMatrices(const vkPointLight *light);
 
   vkMatrix4f m_shadowCam[6];

@@ -2,6 +2,7 @@
 
 
 #include <Valkyrie/Export.hh>
+#include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Entity/Geometry.refl.hh>
@@ -28,13 +29,14 @@ public:
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan) = 0;
 
+  virtual void UpdateTransformation(const vkMatrix4f &parentTransformation) = 0;
+
 protected:
   vkGeometryBase();
 
 private:
   vkID m_id;
   vkString m_name;
-
 };
 
 
@@ -58,9 +60,11 @@ public:
   void SetLocalTransorm(const vkMatrix4f &localTransform);
   const vkMatrix4f &GetLocalTransform() const;
 
-  void UpdateTransform(const vkMatrix4f &parentTransform);
+  void UpdateTransformation(const vkMatrix4f &parentTransform);
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+
+  void Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod = 0);
 private:
   vkMatrix4f m_localTransform;
   vkMatrix4f m_globalTransform;

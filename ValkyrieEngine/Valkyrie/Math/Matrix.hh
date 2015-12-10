@@ -221,6 +221,12 @@ public:
     return res;
   }
 
+  VK_FORCEINLINE void ClearRotation()
+  {
+    m00 = m11 = m22 = 1.0f;
+    m01 = m02 = m10 = m12 = m20 = m21 = 0.0f;
+  }
+
   VK_FORCEINLINE void SetTranslation(float x, float y, float z, float w = 1.0f)
   {
     m30 = x;
@@ -277,6 +283,29 @@ public:
     m01 = s;
     m10 = -s;
     m11 = c;
+
+    return *this;
+  }
+
+  VK_FORCEINLINE vkMatrix4f &SetRotation(const vkVector3f &axis, float angle)
+  {
+    float c = cosf(angle);
+    float s = sinf(angle);
+
+    float x = axis.x;
+    float y = axis.y;
+    float z = axis.z;
+
+    float ic = 1.0f - c;
+    m00 = x * x * ic + c;
+    m10 = x * y * ic - z * s;
+    m20 = x * z * ic + y * s;
+    m01 = y * x * ic + z * s;
+    m11 = y * y * ic + c;
+    m21 = y * z * ic - x * s;
+    m02 = z * x * ic - y * s;
+    m12 = z * y * ic + x * s;
+    m22 = z * z * ic + c;
 
     return *this;
   }

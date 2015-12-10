@@ -8,10 +8,11 @@
 #include <GraphicsGL4/RenderTargetGL4.hh>
 #include <GraphicsGL4/Shader.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Entity/Entity.hh>
+#include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
-#include <Valkyrie/Graphics/Scene/GeometryNode.hh>
-#include <Valkyrie/Graphics/Scene/Node.hh>
+
 
 
 vkLightvkGraphicsGL4::vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
@@ -140,7 +141,7 @@ vkDirectionalLightvkGraphicsGL4::~vkDirectionalLightvkGraphicsGL4()
 
 
 
-void vkDirectionalLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkDirectionalLightvkGraphicsGL4::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -151,7 +152,7 @@ void vkDirectionalLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkL
   bool shadow = directionalLight->IsCastingShadow();
   if (shadow)
   {
-    RenderShadow(node, camera, directionalLight);
+    RenderShadow(root, camera, directionalLight);
   }
 
 
@@ -229,7 +230,7 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
 }
 
 
-void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkCamera *camera, const vkDirectionalLight *light)
+void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamera *camera, const vkDirectionalLight *light)
 {
   CalcPSSMMatrices(light, camera);
 
@@ -238,7 +239,7 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkCamera 
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
   m_geometries.Clear();
-  node->Scan(0, m_renderer, &collector);
+  root->Scan(0, m_renderer, &collector);
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
@@ -261,10 +262,10 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkCamera 
   // render all geometries
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryNode *geometryNode = m_geometries[i];
-    if (geometryNode)
+    vkGeometryData *geometryData = m_geometries[i];
+    if (geometryData)
     {
-      geometryNode->Render(m_renderer, eRP_ShadowPSSM);
+      geometryData->Render(m_renderer, eRP_ShadowPSSM);
     }
   }
   glColorMask(true, true, true, true);
@@ -392,7 +393,7 @@ vkPointLightvkGraphicsGL4::~vkPointLightvkGraphicsGL4()
 
 
 
-void vkPointLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkPointLightvkGraphicsGL4::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -404,7 +405,7 @@ void vkPointLightvkGraphicsGL4::Render(vkNode *node, vkCamera *camera, vkLight *
   bool shadow = pointLight->IsCastingShadow();
   if (shadow)
   {
-    RenderShadow(node, pointLight);
+    RenderShadow(root, pointLight);
   }
 
   // no the final image will be assembled
@@ -483,7 +484,7 @@ void vkPointLightvkGraphicsGL4::BindPointLightCubeShadow(vkPointLight *pointLigh
   }
 
 }
-void vkPointLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkPointLight *light)
+void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight *light)
 {
   CalcCubeMatrices(light);
 
@@ -492,7 +493,7 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkPointLight *l
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
   m_geometries.Clear();
-  node->Scan(0, m_renderer, &collector);
+  root->Scan(0, m_renderer, &collector);
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
@@ -515,10 +516,10 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkNode *node, const vkPointLight *l
   // render all geometries
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryNode *geometryNode = m_geometries[i];
-    if (geometryNode)
+    vkGeometryData *geometryData = m_geometries[i];
+    if (geometryData)
     {
-      geometryNode->Render(m_renderer, eRP_ShadowCube);
+      geometryData->Render(m_renderer, eRP_ShadowCube);
     }
   }
   glColorMask(true, true, true, true);

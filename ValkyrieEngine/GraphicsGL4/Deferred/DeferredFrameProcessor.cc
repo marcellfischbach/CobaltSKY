@@ -7,14 +7,13 @@
 #include <GraphicsGL4/Deferred/GBuffer.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Entity/Entity.hh>
+#include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
-#include <Valkyrie/Graphics/Scene/Node.hh>
-#include <Valkyrie/Graphics/Scene/GeometryNode.hh>
-#include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <GL/glew.h>
 
 
@@ -63,7 +62,7 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
 
 
 
-void vkDeferredFrameProcessor::RenderGBuffer(vkNode *rootNode)
+void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 {
 
   // render the scene to the GBuffer
@@ -92,27 +91,27 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkNode *rootNode)
 
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryNode *geometryNode = m_geometries[i];
-    if (geometryNode)
+    vkGeometryData *geometryData = m_geometries[i];
+    if (geometryData)
     {
-      geometryNode->Render(m_renderer, eRP_GBuffer);
+      geometryData->Render(m_renderer, eRP_GBuffer);
     }
   }
 
 }
 
-void vkDeferredFrameProcessor::Render(vkNode *node, vkCamera *camera, IRenderTarget *target)
+void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
   m_geometries.Clear();
   m_lights.Clear();
   vkDefaultCollector collector(&m_geometries, &m_lights);
   vkClipper *clipper = camera->GetClipper();
-  node->Scan(clipper, m_renderer, &collector);
+  root->Scan(clipper, m_renderer, &collector);
 
   camera->Apply(m_renderer);
 
   // render to the main GBuffer this buffer will be used to assemble the final image
-  RenderGBuffer(node);
+  RenderGBuffer(root);
 
 
   m_renderer->SetRenderTarget(target);
@@ -123,13 +122,12 @@ void vkDeferredFrameProcessor::Render(vkNode *node, vkCamera *camera, IRenderTar
 
   for (vkSize i = 0; i < m_lights.length; ++i)
   {
-    vkLightNode *lightNode = m_lights[i];
-    vkLight* light = lightNode->GetLight();
+    vkLight* light = m_lights[i];
 
     vkLightvkGraphicsGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
     {
-      lightRenderer->Render(node, camera, light, m_gbuffer, target);
+      lightRenderer->Render(root, camera, light, m_gbuffer, target);
     }
 
   }

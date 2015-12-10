@@ -1,16 +1,19 @@
 
 
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
+#include <algorithm>
 
 vkMesh::vkMesh()
   : vkObject()
   , m_vertexDeclaration(0)
   , m_indexType(eDT_UnsignedShort)
   , m_primitiveType(ePT_Triangles)
+  , m_indexBuffer(0)
 {
   m_boundingBox.Clear();
 }
@@ -22,12 +25,9 @@ vkMesh::~vkMesh()
     m_vertexDeclaration->Release();
   }
 
-  for (Index& index : m_indices)
+  if (m_indexBuffer)
   {
-    if (index.m_indexBuffer)
-    {
-      index.m_indexBuffer->Release();
-    }
+    m_indexBuffer->Release();
   }
 
   for (IVertexBuffer *vertexBuffer : m_vertexBuffer)
@@ -60,19 +60,12 @@ void vkMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
   m_vertexBuffer.push_back(vertexBuffer);
 }
 
-void vkMesh::AddIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset)
+void vkMesh::SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset)
 {
-  if (!indexBuffer)
-  {
-    return;
-  }
-  indexBuffer->AddRef();
+  VK_SET(m_indexBuffer, indexBuffer);
 
-  Index index;
-  index.m_indexBuffer =  indexBuffer;
-  index.m_count = count;
-  index.m_offset = offset;
-  m_indices.push_back(index);
+  m_count = count;
+  m_offset = offset;
 }
 
 void vkMesh::SetBoundingBox(const vkBoundingBox &bbox)
@@ -86,21 +79,15 @@ const vkBoundingBox &vkMesh::GetBoundingBox() const
 }
 
 
-void vkMesh::Render(IGraphics *renderer, vkUInt8 lod)
+void vkMesh::Render(IGraphics *renderer)
 {
-  if (lod >= m_indices.size())
-  {
-    return;
-  }
-
-  Index &index = m_indices[lod];
-  renderer->SetIndexBuffer(index.m_indexBuffer);
+  renderer->SetIndexBuffer(m_indexBuffer);
   for (vkSize i = 0, in = m_vertexBuffer.size(); i < in; ++i)
   {
     renderer->SetVertexBuffer((vkUInt16)i, m_vertexBuffer[i]);
   }
   renderer->SetVertexDeclaration(m_vertexDeclaration);
-  renderer->RenderIndexed(m_primitiveType, (vkUInt32)index.m_count, m_indexType);
+  renderer->RenderIndexed(m_primitiveType, (vkUInt32)m_count, m_indexType);
 }
 
 
@@ -114,44 +101,122 @@ vkMultiMesh::vkMultiMesh()
 
 vkMultiMesh::~vkMultiMesh()
 {
-  for (vkSize i = 0, in = m_meshes.size(); i < in; ++i)
+  for (vkSize i = 0, in = m_lods.size(); i < in; ++i)
   {
-    m_meshes[i].m_mesh->Release();
+    LOD &lod = m_lods[i];
+    for (vkSize j = 0, jn = lod.m_meshes.size(); j < jn; ++j)
+    {
+      lod.m_meshes[j].m_mesh->Release();
+    }
+    lod.m_meshes.clear();
   }
-  m_meshes.clear();
+  m_lods.clear();
 }
 
 
 
-void vkMultiMesh::AddMesh(vkMesh *mesh, vkSize materialIndex, const vkString &name)
+void vkMultiMesh::AddMesh(vkMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, const vkString &name)
 {
   if (mesh)
   {
+    LOD &lod = GetLOD(lodIdx);
+
     mesh->AddRef();
     Data data;
     data.m_mesh = mesh;
     data.m_materialIndex = materialIndex;
     data.m_name = name;
-    m_meshes.push_back(data);
+    lod.m_meshes.push_back(data);
   }
 }
 
-vkSize vkMultiMesh::GetNumberOfMeshes() const
+void vkMultiMesh::OptimizeDataStruct()
 {
-  return m_meshes.size();
+  for (vkSize i = 0, in = m_lods.size(); i < in; ++i)
+  {
+    LOD &lod = m_lods[i];
+
+    std::sort(lod.m_meshes.begin(), lod.m_meshes.end(), [](Data &a, Data &b) {
+      return a.m_materialIndex < b.m_materialIndex;
+    });
+  }
 }
 
-vkMesh *vkMultiMesh::GetMesh(vkSize idx)
+vkUInt8 vkMultiMesh::GetNumberOfLODs() const
 {
-  return m_meshes[idx].m_mesh;
+  return (vkUInt8)m_lods.size();
 }
 
-const vkMesh *vkMultiMesh::GetMesh(vkSize idx) const
+vkSize vkMultiMesh::GetNumberOfMeshes(vkUInt8 lod) const
 {
-  return m_meshes[idx].m_mesh;
+  return m_lods[lod].m_meshes.size();
 }
 
-vkSize vkMultiMesh::GetMaterialIndex(vkSize idx) const
+vkMesh *vkMultiMesh::GetMesh(vkUInt8 lod, vkSize idx)
 {
-  return m_meshes[idx].m_materialIndex;
+  return m_lods[lod].m_meshes[idx].m_mesh;
 }
+
+const vkMesh *vkMultiMesh::GetMesh(vkUInt8 lod, vkSize idx) const
+{
+  return m_lods[lod].m_meshes[idx].m_mesh;
+}
+
+vkSize vkMultiMesh::GetMaterialIndex(vkUInt8 lod, vkSize idx) const
+{
+  return m_lods[lod].m_meshes[idx].m_materialIndex;
+}
+
+
+vkMultiMesh::LOD &vkMultiMesh::GetLOD(vkUInt8 lod)
+{
+  if (m_lods.size() <= lod)
+  {
+    vkUInt8 missing = lod - (vkUInt8)m_lods.size() + 1;
+    for (vkUInt8 i = 0; i < missing; ++i)
+    {
+      LOD lod;
+      lod.m_meshes.clear();
+      m_lods.push_back(lod);
+    }
+  }
+  return m_lods[lod];
+}
+
+void vkMultiMesh::Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lodIdx)
+{
+  if (lodIdx >= m_lods.size())
+  {
+    return;
+  }
+
+  vkMaterialInstance *activeInstance = 0;
+
+  LOD &lod = m_lods[lodIdx];
+  for (vkSize i = 0, in = lod.m_meshes.size(); i < in; ++i)
+  {
+    Data &data = lod.m_meshes[i];
+    if (data.m_mesh)
+    {
+      vkMaterialInstance *nextInstance = material->GetMaterialInstance(data.m_materialIndex);
+      if (nextInstance == 0)
+      {
+        continue;
+      }
+
+      if (nextInstance != activeInstance)
+      {
+        activeInstance = nextInstance;
+        if (!activeInstance->Bind(renderer, pass))
+        {
+          continue;
+        }
+      }
+
+      data.m_mesh->Render(renderer);
+    }
+  }
+
+}
+
+

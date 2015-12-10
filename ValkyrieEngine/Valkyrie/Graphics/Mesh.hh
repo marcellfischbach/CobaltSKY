@@ -13,6 +13,8 @@ struct IVertexBuffer;
 struct IVertexDeclaration;
 
 
+class vkMultiMaterial;
+
 VK_CLASS()
 class VKE_API vkMesh : public vkObject
 {
@@ -22,29 +24,25 @@ public:
   vkMesh();
   virtual ~vkMesh();
 
-  void Render(IGraphics *renderer, vkUInt8 lod = 0);
+  void Render(IGraphics *renderer);
 
   void SetPrimitiveType(vkPrimitiveType type);
   void SetIndexType(vkDataType indexType);
   void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
   void AddVertexBuffer(IVertexBuffer *vertexBuffer);
-  void AddIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset = 0);
+  void SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset = 0);
 
   void SetBoundingBox(const vkBoundingBox &bbox);
   const vkBoundingBox& GetBoundingBox() const;
 
 private:
 
-  struct Index
-  {
-    IIndexBuffer *m_indexBuffer;
-    vkSize        m_offset;
-    vkSize        m_count;
-  };
+  IIndexBuffer *m_indexBuffer;
+  vkSize        m_offset;
+  vkSize        m_count;
 
   IVertexDeclaration *m_vertexDeclaration;
   std::vector<IVertexBuffer*> m_vertexBuffer;
-  std::vector<Index> m_indices;
 
   vkDataType m_indexType;
   vkPrimitiveType m_primitiveType;
@@ -63,12 +61,17 @@ public:
   vkMultiMesh();
   virtual ~vkMultiMesh();
 
-  void AddMesh(vkMesh *instance, vkSize materialIndex = 0, const vkString &name = "");
-  vkSize GetNumberOfMeshes() const;
-  vkMesh *GetMesh(vkSize idx = 0);
-  const vkMesh *GetMesh(vkSize idx = 0) const;
+  void AddMesh(vkMesh *instance, vkSize materialIndex = 0, vkUInt8 lod = 0, const vkString &name = "");
+  vkUInt8 GetNumberOfLODs() const;
+  vkSize GetNumberOfMeshes(vkUInt8 lod = 0) const;
+  vkMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0);
+  const vkMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0) const;
 
-  vkSize GetMaterialIndex(vkSize idx = 0) const;
+  vkSize GetMaterialIndex(vkUInt8 lod = 0, vkSize idx = 0) const;
+  void OptimizeDataStruct();
+
+  void Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lod = 0);
+
 
 private:
   struct Data
@@ -77,6 +80,13 @@ private:
     vkSize m_materialIndex;
     vkString m_name;
   };
-  std::vector<Data> m_meshes;
 
+  struct LOD
+  {
+    std::vector<Data> m_meshes;
+  };
+
+  std::vector<LOD> m_lods;
+
+  LOD &GetLOD(vkUInt8 lod);
 };

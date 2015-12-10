@@ -3,6 +3,7 @@
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/Entity/Transformation.hh>
 
 vkID nextID = 1;
 
@@ -25,6 +26,28 @@ vkEntity::~vkEntity()
 
 }
 
+vkTransformation vkEntity::GetTransformation()
+{
+  if (m_rootState)
+  {
+    return m_rootState->GetTransformation();
+  }
+
+  return vkTransformation();
+}
+
+void vkEntity::FinishTransformation()
+{
+  if (m_rootState)
+  {
+    m_rootState->FinishTransformation();
+  }
+}
+
+void vkEntity::SetRootState(vkSpatialState *rootState)
+{
+  VK_SET(m_rootState, rootState);
+}
 
 void vkEntity::AddState(vkEntityState *state)
 {
@@ -39,11 +62,7 @@ void vkEntity::AddState(vkSpatialState *state, vkSpatialState *parentState)
 {
   AddState(state);
 
-  if (!parentState)
-  {
-    VK_SET(m_rootState, state);
-  }
-  else
+  if (parentState)
   {
     parentState->AddSpatialState(state);
   }

@@ -1,17 +1,19 @@
 #pragma once
 
-#include <Valkyrie/Graphics/Scene/Scan.hh>
 #include <Valkyrie/Core/Collection.hh>
+#include <Valkyrie/Entity/Scan.hh>
 
-class vkDefaultCollector : public IScanCallback
+class vkDefaultCollector : public IEntityScan
 {
 public:
-  vkDefaultCollector(vkCollection<vkGeometryNode*> *geometrieNodes, vkCollection<vkLightNode*> *lightNodes);
+  vkDefaultCollector(vkCollection<vkGeometryData*> *geometrieDatas, vkCollection<vkLight*> *lights);
 
-  virtual bool ScanGeometryNode(vkGeometryNode *geometryNode);
-  virtual bool ScanLightNode(vkLightNode *lightNode);
+  virtual void ScanGeometry(vkGeometryData *geometry);
+
+  virtual void ScanLight(vkLight *light);
+
 
 private:
-  vkCollection<vkGeometryNode*> *m_geometryNodes;
-  vkCollection<vkLightNode*> *m_lightNodes;
+  vkCollection<vkGeometryData*> *m_geometryDatas;
+  vkCollection<vkLight*> *m_lights;
 };

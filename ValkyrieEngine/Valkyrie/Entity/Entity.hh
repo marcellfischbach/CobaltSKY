@@ -9,6 +9,7 @@
 class vkClipper;
 class vkEntityState;
 class vkSpatialState;
+class vkTransformation;
 
 struct IEntityScan;
 struct IGraphics;
@@ -26,8 +27,12 @@ public:
   void SetName(const vkString &name);
   const vkString &GetName() const;
 
+  void SetRootState(vkSpatialState *rootState);
   void AddState(vkEntityState *state);
   void AddState(vkSpatialState *state, vkSpatialState *parentState);
+
+  vkTransformation GetTransformation();
+  void FinishTransformation();
 
   static vkID GetNextID();
 

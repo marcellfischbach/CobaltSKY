@@ -3,27 +3,25 @@
 
 #include <GraphicsGL4/Deferred/DefaultCollector.hh>
 
-vkDefaultCollector::vkDefaultCollector(vkCollection<vkGeometryNode*> *geometrieNodes, vkCollection<vkLightNode*> *lightNodes)
-  : m_geometryNodes(geometrieNodes)
-  , m_lightNodes(lightNodes)
+vkDefaultCollector::vkDefaultCollector(vkCollection<vkGeometryData*> *geometrieDatas, vkCollection<vkLight*> *lights)
+  : m_geometryDatas(geometrieDatas)
+  , m_lights(lights)
 {
 
 }
 
-bool vkDefaultCollector::ScanGeometryNode(vkGeometryNode *geometryNode)
+void vkDefaultCollector::ScanGeometry(vkGeometryData *geometry)
 {
-  if (m_geometryNodes)
+  if (m_geometryDatas)
   {
-    m_geometryNodes->Add(geometryNode);
+    m_geometryDatas->Add(geometry);
   }
-  return true;
 }
 
-bool vkDefaultCollector::ScanLightNode(vkLightNode *lightNode)
+void vkDefaultCollector::ScanLight(vkLight *light)
 {
-  if (m_lightNodes)
+  if (m_lights)
   {
-    m_lightNodes->Add(lightNode);
+    m_lights->Add(light);
   }
-  return true;
 }

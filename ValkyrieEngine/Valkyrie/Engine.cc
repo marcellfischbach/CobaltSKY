@@ -2,6 +2,10 @@
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Entity/Entity.hh>
+#include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/Entity/GeometryState.hh>
+#include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
@@ -22,6 +26,12 @@
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
+
+vkEntity *create_scene(IGraphics *graphics);
+vkMesh* createPlaneMesh(IGraphics *renderer, float size);
+vkMesh* createCubeMesh(IGraphics *renderer, float size);
+void UpdateCamera(vkCameraNode *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
+
 
 
 vkEngine::vkEngine()
@@ -46,11 +56,6 @@ void vkEngine::SetRenderer(IGraphics *renderer)
 {
   VK_SET(m_renderer, renderer);
 }
-
-vkMesh* createPlaneMesh(IGraphics *renderer, float size);
-vkMesh* createCubeMesh(IGraphics *renderer, float size);
-
-void UpdateCamera(vkCameraNode *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 
 
 vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vkVector3f &up)
@@ -93,6 +98,10 @@ int vkEngine::Run()
   sampler->SetFilter(eFM_MinMagNearest);
   color0->SetSampler(sampler);
 
+
+  vkEntity *root = create_scene(m_renderer);
+
+  /*
   vkMaterialInstance *materialFieldstone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
   vkMaterialInstance *materialFieldstoneRed = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
   vkMaterialInstance *materialFieldstoneGreen = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
@@ -154,11 +163,16 @@ int vkEngine::Run()
   lightNode->SetLight(directionalLightContra);
   lightNode->AttachTo(groupNode);
   lightNode->SetName("LightNode DirectionLight(contra)");
-
+  */
 
   vkCamera *camera = new vkCamera();
   camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
+  camera->SetEye(vkVector3f(100, 100, 100));
+  camera->SetSpot(vkVector3f(0, 0, 0));
+  camera->SetUp(vkVector3f(0, 0, 1));
+  camera->UpdateCameraMatrices();
 
+  /*
   vkCameraNode *cameraNode = new vkCameraNode();
   cameraNode->SetCamera(camera);
   cameraNode->AttachTo(groupNode);
@@ -192,7 +206,7 @@ int vkEngine::Run()
   cubeGeometryNode->SetMatrix(MM);
   cubeGeometryNode->AttachTo(groupNode);
   cubeGeometryNode->SetName("BlueCube 2");
-
+  */
 
   float v = 0.0f;
   float m = 0.0f;
@@ -226,6 +240,7 @@ int vkEngine::Run()
 
 
 
+    /*
     UpdateCamera(cameraNode, mouse, keyboard);
 
     vkMatrix4f mm = planeGeometryNode->GetMatrix();
@@ -247,8 +262,10 @@ int vkEngine::Run()
     ct += 0.001f;
 
     groupNode->UpdateStates();
+    */
 
-    fp->Render(groupNode, camera, rt);
+    fp->Render(root, camera, rt);
+    //fp->Render(groupNode, camera, rt);
 
 
     // no render this image onscreen
@@ -349,7 +366,7 @@ vkMesh* createPlaneMesh(IGraphics *renderer, float size)
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
   mesh->AddVertexBuffer(tb);
-  mesh->AddIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
+  mesh->SetIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
   mesh->SetBoundingBox(bbox);
 
   return mesh;
@@ -492,7 +509,7 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
   mesh->AddVertexBuffer(tb);
-  mesh->AddIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
+  mesh->SetIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
   mesh->SetBoundingBox(bbox);
 
   return mesh;
@@ -549,4 +566,86 @@ void UpdateCamera(vkCameraNode *cam, const IMouse *mouse, const IKeyboard *keybo
 
   cam->SetMatrix(T);
 
+}
+
+
+
+
+
+vkEntity *create_scene(IGraphics *graphics)
+{
+  vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
+  vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
+  vkMaterialInstance *materialFieldstoneGreenInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
+  vkMaterialInstance *materialFieldstoneBlueInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
+
+
+  vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
+  vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
+  vkMultiMaterial *materialFieldStoneGreen = new vkMultiMaterial(materialFieldstoneGreenInst);
+  vkMultiMaterial *materialFieldStoneBlue = new vkMultiMaterial(materialFieldstoneBlueInst);
+
+
+  vkEntity *rootEntity = new vkEntity();
+  vkSpatialState *parentState = new vkSpatialState();
+  rootEntity->SetRootState(parentState);
+  rootEntity->AddState(parentState, 0);
+
+
+
+
+  /* create the plane mesh */
+  vkMesh *planeMeshInst = createPlaneMesh(graphics, 20.0f);
+  vkMultiMesh *planeMesh = new vkMultiMesh();
+  planeMesh->AddMesh(planeMeshInst);
+
+  vkGeometryData *planeGeometryData = new vkGeometryData();
+  planeGeometryData->SetMesh(planeMesh);
+  planeGeometryData->SetMaterial(materialFieldStone);
+
+  vkGeometryState *planeGeometryState = new vkGeometryState();
+  planeGeometryState->SetGeometry(planeGeometryData);
+
+
+  vkEntity *planeEntity = new vkEntity();
+  planeEntity->SetRootState(planeGeometryState);
+  planeEntity->AddState(planeGeometryState, parentState);
+
+  /* create the red cube mesh */
+  vkMesh *smallCubeMeshInst = createCubeMesh(graphics, 1.0f);
+  vkMultiMesh *smallCubeMesh = new vkMultiMesh();
+  smallCubeMesh->AddMesh(smallCubeMeshInst);
+
+  vkGeometryData *redCubeGeometryData = new vkGeometryData();
+  redCubeGeometryData->SetMesh(smallCubeMesh);
+  redCubeGeometryData->SetMaterial(materialFieldStoneRed);
+
+  vkGeometryState *redCubeGeometryState = new vkGeometryState();
+  redCubeGeometryState->SetGeometry(redCubeGeometryData);
+
+
+  vkEntity *redCubeEntity = new vkEntity();
+  redCubeEntity->SetRootState(redCubeGeometryState);
+  redCubeEntity->AddState(redCubeGeometryState, parentState);
+  redCubeEntity->GetTransformation().SetTranslation(vkVector3f(10, 10, 0));
+  redCubeEntity->FinishTransformation();
+
+
+
+
+  vkDirectionalLight *directionalLight = new vkDirectionalLight();
+  directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
+  directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
+  directionalLight->SetCastShadow(true);
+  directionalLight->SetShadowIntensity(0.0f);
+
+  vkLightState *directionalLightState = new vkLightState();
+  directionalLightState->SetLight(directionalLight);
+
+  vkEntity *directionalLightEntity = new vkEntity();
+  directionalLightEntity->SetRootState(directionalLightState);
+  directionalLightEntity->AddState(directionalLightState, parentState);
+
+
+  return rootEntity;
 }

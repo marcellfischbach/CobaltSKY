@@ -19,6 +19,8 @@ public:
   vkGeometryBase *GetGeometry();
   const vkGeometryBase *GetGeometry() const;
 
+  virtual void FinishTransformation();
+
 protected:
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
 

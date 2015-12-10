@@ -63,6 +63,8 @@ set(SOURCE_ENTITY
   Entity/Scan.hh
   Entity/SpatialState.cc
   Entity/SpatialState.hh
+  Entity/Transformation.cc
+  Entity/Transformation.hh
   )
 
 source_group(

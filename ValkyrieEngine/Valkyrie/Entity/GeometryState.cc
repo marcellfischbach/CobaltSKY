@@ -31,3 +31,14 @@ void vkGeometryState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityS
     m_geometry->Scan(clipper, graphics, entityScan);
   }
 }
+
+
+void vkGeometryState::FinishTransformation()
+{
+  vkSpatialState::FinishTransformation();
+
+  if (m_geometry)
+  {
+    m_geometry->UpdateTransformation(m_globalMatrix);
+  }
+}
