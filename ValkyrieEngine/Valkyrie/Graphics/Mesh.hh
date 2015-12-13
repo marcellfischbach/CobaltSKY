@@ -16,13 +16,13 @@ struct IVertexDeclaration;
 class vkMultiMaterial;
 
 VK_CLASS()
-class VKE_API vkMesh : public vkObject
+class VKE_API vkSubMesh : public vkObject
 {
   VK_CLASS_GEN;
 
 public:
-  vkMesh();
-  virtual ~vkMesh();
+  vkSubMesh();
+  virtual ~vkSubMesh();
 
   void Render(IGraphics *renderer);
 
@@ -54,18 +54,18 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkMultiMesh : public vkObject
+class VKE_API vkMesh : public vkObject
 {
   VK_CLASS_GEN;
 public:
-  vkMultiMesh();
-  virtual ~vkMultiMesh();
+  vkMesh();
+  virtual ~vkMesh();
 
-  void AddMesh(vkMesh *instance, vkSize materialIndex = 0, vkUInt8 lod = 0, const vkString &name = "");
+  void AddMesh(vkSubMesh *instance, vkSize materialIndex = 0, vkUInt8 lod = 0, const vkString &name = "");
   vkUInt8 GetNumberOfLODs() const;
   vkSize GetNumberOfMeshes(vkUInt8 lod = 0) const;
-  vkMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0);
-  const vkMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0) const;
+  vkSubMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0);
+  const vkSubMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0) const;
 
   vkSize GetMaterialIndex(vkUInt8 lod = 0, vkSize idx = 0) const;
   void OptimizeDataStruct();
@@ -76,7 +76,7 @@ public:
 private:
   struct Data
   {
-    vkMesh *m_mesh;
+    vkSubMesh *m_mesh;
     vkSize m_materialIndex;
     vkString m_name;
   };

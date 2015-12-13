@@ -7,9 +7,16 @@
 #include <Valkyrie/Core/VFS.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
+  FILE *file = fopen("d:/test.mesh", "rb");
+  unsigned version;
+  fread(&version, sizeof(unsigned), 1, file);
+  printf("Version: %d\n", version);
+
+
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
   vkEngine *engine = vkEngine::Get();

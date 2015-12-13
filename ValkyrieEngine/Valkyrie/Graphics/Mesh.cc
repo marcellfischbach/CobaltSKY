@@ -8,7 +8,7 @@
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <algorithm>
 
-vkMesh::vkMesh()
+vkSubMesh::vkSubMesh()
   : vkObject()
   , m_vertexDeclaration(0)
   , m_indexType(eDT_UnsignedShort)
@@ -18,7 +18,7 @@ vkMesh::vkMesh()
   m_boundingBox.Clear();
 }
 
-vkMesh::~vkMesh()
+vkSubMesh::~vkSubMesh()
 {
   if (m_vertexDeclaration)
   {
@@ -36,22 +36,22 @@ vkMesh::~vkMesh()
   }
 }
 
-void vkMesh::SetPrimitiveType(vkPrimitiveType type)
+void vkSubMesh::SetPrimitiveType(vkPrimitiveType type)
 {
   m_primitiveType = type;
 }
 
-void vkMesh::SetIndexType(vkDataType indexType)
+void vkSubMesh::SetIndexType(vkDataType indexType)
 {
   m_indexType = indexType;
 }
 
-void vkMesh::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
+void vkSubMesh::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
 {
   VK_SET(m_vertexDeclaration, vertexDeclaration);
 }
 
-void vkMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
+void vkSubMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
 {
   if (vertexBuffer)
   {
@@ -60,7 +60,7 @@ void vkMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
   m_vertexBuffer.push_back(vertexBuffer);
 }
 
-void vkMesh::SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset)
+void vkSubMesh::SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset)
 {
   VK_SET(m_indexBuffer, indexBuffer);
 
@@ -68,18 +68,18 @@ void vkMesh::SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offs
   m_offset = offset;
 }
 
-void vkMesh::SetBoundingBox(const vkBoundingBox &bbox)
+void vkSubMesh::SetBoundingBox(const vkBoundingBox &bbox)
 {
   m_boundingBox = bbox;
 }
 
-const vkBoundingBox &vkMesh::GetBoundingBox() const
+const vkBoundingBox &vkSubMesh::GetBoundingBox() const
 {
   return m_boundingBox;
 }
 
 
-void vkMesh::Render(IGraphics *renderer)
+void vkSubMesh::Render(IGraphics *renderer)
 {
   renderer->SetIndexBuffer(m_indexBuffer);
   for (vkSize i = 0, in = m_vertexBuffer.size(); i < in; ++i)
@@ -93,13 +93,13 @@ void vkMesh::Render(IGraphics *renderer)
 
 
 
-vkMultiMesh::vkMultiMesh()
+vkMesh::vkMesh()
   : vkObject()
 {
 
 }
 
-vkMultiMesh::~vkMultiMesh()
+vkMesh::~vkMesh()
 {
   for (vkSize i = 0, in = m_lods.size(); i < in; ++i)
   {
@@ -115,7 +115,7 @@ vkMultiMesh::~vkMultiMesh()
 
 
 
-void vkMultiMesh::AddMesh(vkMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, const vkString &name)
+void vkMesh::AddMesh(vkSubMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, const vkString &name)
 {
   if (mesh)
   {
@@ -130,7 +130,7 @@ void vkMultiMesh::AddMesh(vkMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, co
   }
 }
 
-void vkMultiMesh::OptimizeDataStruct()
+void vkMesh::OptimizeDataStruct()
 {
   for (vkSize i = 0, in = m_lods.size(); i < in; ++i)
   {
@@ -142,33 +142,33 @@ void vkMultiMesh::OptimizeDataStruct()
   }
 }
 
-vkUInt8 vkMultiMesh::GetNumberOfLODs() const
+vkUInt8 vkMesh::GetNumberOfLODs() const
 {
   return (vkUInt8)m_lods.size();
 }
 
-vkSize vkMultiMesh::GetNumberOfMeshes(vkUInt8 lod) const
+vkSize vkMesh::GetNumberOfMeshes(vkUInt8 lod) const
 {
   return m_lods[lod].m_meshes.size();
 }
 
-vkMesh *vkMultiMesh::GetMesh(vkUInt8 lod, vkSize idx)
+vkSubMesh *vkMesh::GetMesh(vkUInt8 lod, vkSize idx)
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
 
-const vkMesh *vkMultiMesh::GetMesh(vkUInt8 lod, vkSize idx) const
+const vkSubMesh *vkMesh::GetMesh(vkUInt8 lod, vkSize idx) const
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
 
-vkSize vkMultiMesh::GetMaterialIndex(vkUInt8 lod, vkSize idx) const
+vkSize vkMesh::GetMaterialIndex(vkUInt8 lod, vkSize idx) const
 {
   return m_lods[lod].m_meshes[idx].m_materialIndex;
 }
 
 
-vkMultiMesh::LOD &vkMultiMesh::GetLOD(vkUInt8 lod)
+vkMesh::LOD &vkMesh::GetLOD(vkUInt8 lod)
 {
   if (m_lods.size() <= lod)
   {
@@ -183,7 +183,7 @@ vkMultiMesh::LOD &vkMultiMesh::GetLOD(vkUInt8 lod)
   return m_lods[lod];
 }
 
-void vkMultiMesh::Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lodIdx)
+void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {

@@ -40,15 +40,17 @@ void vkGeometryNode::Render(IGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
     return;
   }
 
+  /*
   if (m_material->Bind(renderer, pass))
   {
     renderer->SetModelMatrix(GetMatrix());
-    m_mesh->Render(renderer);
+    m_mesh->Render(renderer, );
   }
   else
   {
     printf("No pass: %d\n", pass);
   }
+  */
 }
 
 void vkGeometryNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback)
@@ -62,7 +64,7 @@ void vkGeometryNode::UpdateBoundingBox(vkBoundingBox &bbox)
 
   if (m_mesh)
   {
-    bbox.Add(GetMatrix(), m_mesh->GetBoundingBox());
+//    bbox.Add(GetMatrix(), m_mesh->GetBoundingBox());
   }
   bbox.Finish();
 }

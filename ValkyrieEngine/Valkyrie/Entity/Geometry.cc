@@ -57,7 +57,7 @@ void vkGeometryData::UpdateTransformation(const vkMatrix4f &parentTransform)
 }
 
 
-void vkGeometryData::SetMesh(vkMultiMesh *mesh)
+void vkGeometryData::SetMesh(vkMesh *mesh)
 {
   VK_SET(m_mesh, mesh);
 }

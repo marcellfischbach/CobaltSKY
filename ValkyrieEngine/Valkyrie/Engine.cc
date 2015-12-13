@@ -28,8 +28,8 @@
 #include <math.h>
 
 vkEntity *create_scene(IGraphics *graphics);
-vkMesh* createPlaneMesh(IGraphics *renderer, float size);
-vkMesh* createCubeMesh(IGraphics *renderer, float size);
+vkSubMesh* createPlaneMesh(IGraphics *renderer, float size);
+vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
 void UpdateCamera(vkCameraNode *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 
 
@@ -299,7 +299,7 @@ void vkEngine::RegisterLoaders()
 }
 
 
-vkMesh* createPlaneMesh(IGraphics *renderer, float size)
+vkSubMesh* createPlaneMesh(IGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -359,7 +359,7 @@ vkMesh* createPlaneMesh(IGraphics *renderer, float size)
   bbox.Add(vkVector3f(s, s, 0));
   bbox.Finish();
 
-  vkMesh *mesh = new vkMesh();
+  vkSubMesh *mesh = new vkSubMesh();
   mesh->SetIndexType(eDT_UnsignedShort);
   mesh->SetPrimitiveType(ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
@@ -372,7 +372,7 @@ vkMesh* createPlaneMesh(IGraphics *renderer, float size)
   return mesh;
 }
 
-vkMesh* createCubeMesh(IGraphics *renderer, float size)
+vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -502,7 +502,7 @@ vkMesh* createCubeMesh(IGraphics *renderer, float size)
   bbox.Add(vkVector3f(s, s, s));
   bbox.Finish();
 
-  vkMesh *mesh = new vkMesh();
+  vkSubMesh *mesh = new vkSubMesh();
   mesh->SetIndexType(eDT_UnsignedShort);
   mesh->SetPrimitiveType(ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
@@ -595,8 +595,8 @@ vkEntity *create_scene(IGraphics *graphics)
 
 
   /* create the plane mesh */
-  vkMesh *planeMeshInst = createPlaneMesh(graphics, 20.0f);
-  vkMultiMesh *planeMesh = new vkMultiMesh();
+  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 20.0f);
+  vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeMeshInst);
 
   vkGeometryData *planeGeometryData = new vkGeometryData();
@@ -612,8 +612,8 @@ vkEntity *create_scene(IGraphics *graphics)
   planeEntity->AddState(planeGeometryState, parentState);
 
   /* create the red cube mesh */
-  vkMesh *smallCubeMeshInst = createCubeMesh(graphics, 1.0f);
-  vkMultiMesh *smallCubeMesh = new vkMultiMesh();
+  vkSubMesh *smallCubeMeshInst = createCubeMesh(graphics, 1.0f);
+  vkMesh *smallCubeMesh = new vkMesh();
   smallCubeMesh->AddMesh(smallCubeMeshInst);
 
   vkGeometryData *redCubeGeometryData = new vkGeometryData();

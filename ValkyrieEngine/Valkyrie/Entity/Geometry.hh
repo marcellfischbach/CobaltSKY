@@ -9,7 +9,7 @@
 
 class vkClipper;
 class vkMultiMaterial;
-class vkMultiMesh;
+class vkMesh;
 
 struct IGraphics;
 struct IEntityScan;
@@ -49,9 +49,9 @@ public:
   vkGeometryData();
   virtual ~vkGeometryData();
 
-  void SetMesh(vkMultiMesh *mesh);
-  vkMultiMesh *GetMesh();
-  const vkMultiMesh *GetMesh() const;
+  void SetMesh(vkMesh *mesh);
+  vkMesh *GetMesh();
+  const vkMesh *GetMesh() const;
 
   void SetMaterial(vkMultiMaterial *material);
   vkMultiMaterial *GetMaterial();
@@ -69,7 +69,7 @@ private:
   vkMatrix4f m_localTransform;
   vkMatrix4f m_globalTransform;
 
-  vkMultiMesh *m_mesh;
+  vkMesh *m_mesh;
   vkMultiMaterial *m_material;
 
 };
@@ -98,12 +98,12 @@ VK_FORCEINLINE const vkString &vkGeometryBase::GetName() const
 
 
 
-VK_FORCEINLINE vkMultiMesh *vkGeometryData::GetMesh()
+VK_FORCEINLINE vkMesh *vkGeometryData::GetMesh()
 {
   return m_mesh;
 }
 
-VK_FORCEINLINE const vkMultiMesh *vkGeometryData::GetMesh() const
+VK_FORCEINLINE const vkMesh *vkGeometryData::GetMesh() const
 {
   return m_mesh;
 }
