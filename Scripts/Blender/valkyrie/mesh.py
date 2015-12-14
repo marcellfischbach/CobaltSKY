@@ -290,6 +290,15 @@ class MultiMeshWriter:
 		self.stream += struct.pack('<I', len(mesh_data.vertices.list))
 		# only export into 1 stream
 		self.stream += struct.pack('<I', 1)
+		stride = 0
+		if mesh_data.has_position:
+			stride += 3 * 4
+		if mesh_data.has_normal:
+			stride += 3 * 4
+		if mesh_data.has_texture:
+			stride += 2 * 4
+		
+		self.stream += struct.pack('<I', stride)
 		
 		for vert in mesh_data.vertices.list:
 			if mesh_data.has_position:
@@ -334,6 +343,6 @@ class MultiMeshWriter:
 	
 	def _write_string(self, string):
 		_string = bytes(string, 'latin1')
-		self.stream += struct.pack("<I%dsb" % (len(_string)), len(_string), _string, 0)
+		self.stream += struct.pack("<I%dsb" % (len(_string)), len(_string)+1, _string, 0)
 		
 	

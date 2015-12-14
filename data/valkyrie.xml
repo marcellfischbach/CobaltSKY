@@ -5,6 +5,7 @@
 		<materials>materials</materials>
 		<textures>materials/textures</textures>
 		<fonts>fonts</fonts>
+		<models>models</models>
 	</vfs>
 	
 </settings>

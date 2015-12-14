@@ -131,6 +131,8 @@ set(SOURCE_LOADERS
 	Loaders/ImageLoader.hh
 	Loaders/MaterialLoader.cc
 	Loaders/MaterialLoader.hh
+  Loaders/StaticMeshLoader.cc
+  Loaders/StaticMeshLoader.hh
 	Loaders/TextureLoader.cc
 	Loaders/TextureLoader.hh
 	)

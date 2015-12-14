@@ -11,11 +11,6 @@
 
 int main(int argc, char **argv)
 {
-  FILE *file = fopen("d:/test.mesh", "rb");
-  unsigned version;
-  fread(&version, sizeof(unsigned), 1, file);
-  printf("Version: %d\n", version);
-
 
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);

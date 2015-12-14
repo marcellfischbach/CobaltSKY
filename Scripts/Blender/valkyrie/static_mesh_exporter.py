@@ -9,10 +9,11 @@ import collections
 		
 class Entry:
 	
-	ET_Mesh = 0
-	ET_CollisionShape = 1
-	ET_Skeleton = 2
-	ET_Geometry = 3
+	ET_Geometry = 0
+	ET_Mesh = 1
+	ET_CollisionShape = 2
+	ET_Skeleton = 3
+	ET_SkeletonAnimation = 4
 	
 	def __init__(self):
 		self.name = ""
@@ -27,6 +28,10 @@ class Entry:
 
 		
 class StaticMeshExporter:
+
+	MAGIC_NUMBER = 0x4853454D
+
+	VERSION = 1
 	
 	def __init__(self):
 		self.entries = []
@@ -34,7 +39,8 @@ class StaticMeshExporter:
 	def export (self, filename):
 		self.mesh_stream = ""
 		self.file = open(filename, 'wb')
-		self.file.write(struct.pack('<I', StaticMeshExporterBin.VERSION))
+		self.file.write(struct.pack('<I', StaticMeshExporter.MAGIC_NUMBER))
+		self.file.write(struct.pack('<I', StaticMeshExporter.VERSION))
 		
 		self._prepare_headers ()
 		self._export_headers ()
@@ -44,7 +50,7 @@ class StaticMeshExporter:
 		
 	def _prepare_headers(self):
 		# header offset
-		offset = 4 + 4
+		offset = 4 + 4 + 4
 		for entry in self.entries:
 			offset += entry.get_size()
 			
@@ -80,6 +86,6 @@ class StaticMeshExporter:
 		
 	def _export_string(self, string):
 		_string = bytes(string, 'latin1')
-		self.file.write(struct.pack("<I%dsb" % (len(_string)), len(_string), _string, 0))
+		self.file.write(struct.pack("<I%dsb" % (len(_string)), len(_string)+1, _string, 0))
 		
 	
