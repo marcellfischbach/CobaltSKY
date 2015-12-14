@@ -13,7 +13,7 @@ class vkGBuffer;
 class vkGraphicsGL4;
 class vkLight;
 class vkLightvkGraphicsGL4;
-class vkGeometryData;
+class vkGeometryMesh;
 
 VK_INTERFACE();
 class VKGL4_API vkDeferredFrameProcessor : public virtual IFrameProcessor
@@ -31,7 +31,7 @@ private:
   void RenderGBuffer(vkEntity *root);
 
 private:
-  vkCollection<vkGeometryData*> m_geometries;
+  vkCollection<vkGeometryMesh*> m_geometries;
   vkCollection<vkLight*> m_lights;
   vkGraphicsGL4 *m_renderer;
 

@@ -5,7 +5,7 @@
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/GeometryState.refl.hh>
 
-class vkGeometryBase;
+class vkGeometryData;
 
 VK_CLASS()
 class VKE_API vkGeometryState : public vkSpatialState
@@ -15,9 +15,9 @@ public:
   vkGeometryState();
   virtual ~vkGeometryState();
 
-  void SetGeometry(vkGeometryBase *geometry);
-  vkGeometryBase *GetGeometry();
-  const vkGeometryBase *GetGeometry() const;
+  void SetGeometry(vkGeometryData *geometry);
+  vkGeometryData *GetGeometry();
+  const vkGeometryData *GetGeometry() const;
 
   virtual void FinishTransformation();
 
@@ -26,17 +26,17 @@ protected:
 
 
 private:
-  vkGeometryBase *m_geometry;
+  vkGeometryData *m_geometry;
 };
 
 
 
-VK_FORCEINLINE vkGeometryBase *vkGeometryState::GetGeometry()
+VK_FORCEINLINE vkGeometryData *vkGeometryState::GetGeometry()
 {
   return m_geometry;
 }
 
-VK_FORCEINLINE const vkGeometryBase *vkGeometryState::GetGeometry() const
+VK_FORCEINLINE const vkGeometryData *vkGeometryState::GetGeometry() const
 {
   return m_geometry;
 }

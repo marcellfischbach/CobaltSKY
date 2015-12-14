@@ -6,14 +6,14 @@
 class vkDefaultCollector : public IEntityScan
 {
 public:
-  vkDefaultCollector(vkCollection<vkGeometryData*> *geometrieDatas, vkCollection<vkLight*> *lights);
+  vkDefaultCollector(vkCollection<vkGeometryMesh*> *geometrieMeshes, vkCollection<vkLight*> *lights);
 
-  virtual void ScanGeometry(vkGeometryData *geometry);
+  virtual void ScanGeometry(vkGeometryMesh *geometry);
 
   virtual void ScanLight(vkLight *light);
 
 
 private:
-  vkCollection<vkGeometryData*> *m_geometryDatas;
+  vkCollection<vkGeometryMesh*> *m_geometryMeshes;
   vkCollection<vkLight*> *m_lights;
 };

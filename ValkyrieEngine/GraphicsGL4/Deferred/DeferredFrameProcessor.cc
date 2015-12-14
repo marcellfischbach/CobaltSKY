@@ -91,10 +91,10 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryData *geometryData = m_geometries[i];
-    if (geometryData)
+    vkGeometryMesh *geometryMesh = m_geometries[i];
+    if (geometryMesh)
     {
-      geometryData->Render(m_renderer, eRP_GBuffer);
+      geometryMesh->Render(m_renderer, eRP_GBuffer);
     }
   }
 

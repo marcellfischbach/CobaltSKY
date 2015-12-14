@@ -17,8 +17,18 @@ vkGeometryState::~vkGeometryState()
 
 
 
-void vkGeometryState::SetGeometry(vkGeometryBase *geometry)
+void vkGeometryState::SetGeometry(vkGeometryData *geometry)
 {
+  if (geometry)
+  {
+    if (geometry->IsAttached())
+    {
+      // make a copy of the geometry prior to attaching
+      m_geometry = geometry->Clone();
+      return;
+    }
+  }
+
   VK_SET(m_geometry, geometry);
 }
 

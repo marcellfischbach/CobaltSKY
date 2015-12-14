@@ -30,7 +30,7 @@
 vkEntity *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
-void UpdateCamera(vkCameraNode *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
+void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 
 
 
@@ -82,7 +82,6 @@ int vkEngine::Run()
 
   RegisterLoaders();
 
-  IObject *obj = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
 
   ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
   IRenderTarget *rt = m_renderer->CreateRenderTarget();
@@ -240,8 +239,8 @@ int vkEngine::Run()
 
 
 
+    UpdateCamera(camera, mouse, keyboard);
     /*
-    UpdateCamera(cameraNode, mouse, keyboard);
 
     vkMatrix4f mm = planeGeometryNode->GetMatrix();
     mm.SetRotationX(m);
@@ -516,9 +515,10 @@ vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
 }
 
 
-void UpdateCamera(vkCameraNode *cam, const IMouse *mouse, const IKeyboard *keyboard)
+void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
-  static float rotH = 0.0f, rotV = 0.0f;
+  static float rotH = -3.91f, rotV = -0.58f;
+
   rotH -= (float)mouse->GetRelX() * 0.001f;
   rotV -= (float)mouse->GetRelY() * 0.001f;
   if (rotV > 3.14f) rotV = 3.14f;
@@ -529,7 +529,7 @@ void UpdateCamera(vkCameraNode *cam, const IMouse *mouse, const IKeyboard *keybo
   TX.SetRotationX(rotV);
   vkMatrix4f::Mult(TZ, TX, T);
 
-  float speed = 0.01f;
+  float speed = 0.02f;
   if (keyboard->IsKeyDown(eK_LShift) || keyboard->IsKeyDown(eK_RShift))
   {
     speed *= 2.0f;
@@ -556,16 +556,19 @@ void UpdateCamera(vkCameraNode *cam, const IMouse *mouse, const IKeyboard *keybo
 
   vkVector3f dx = T.GetXAxis(dx);
   vkVector3f dy = T.GetYAxis(dy);
+  vkVector3f camdir = dy;
   vkVector3f::Mul(dx, sx, dx);
   vkVector3f::Mul(dy, sy, dy);
   vkVector3f d = vkVector3f::Add(dx, dy, d);
 
-  vkVector3f c = cam->GetMatrix().GetTranslation(c);
-  vkVector3f::Add(c, d, c);
-  T.SetTranslation(c);
-
-  cam->SetMatrix(T);
-
+  vkVector3f e = cam->GetEye();
+  vkVector3f::Add(e, d, e);
+  vkVector3f s;
+  vkVector3f::Add(e, camdir, s);
+  cam->SetEye(e);
+  cam->SetSpot(s);
+  cam->SetUp(vkVector3f(0, 0, 1));
+  cam->UpdateCameraMatrices();
 }
 
 
@@ -584,6 +587,9 @@ vkEntity *create_scene(IGraphics *graphics)
   vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
   vkMultiMaterial *materialFieldStoneGreen = new vkMultiMaterial(materialFieldstoneGreenInst);
   vkMultiMaterial *materialFieldStoneBlue = new vkMultiMaterial(materialFieldstoneBlueInst);
+  vkMultiMaterial *mineMaterial = new vkMultiMaterial();
+  mineMaterial->AddMaterialInstance(materialFieldstoneInst);
+  mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
 
 
   vkEntity *rootEntity = new vkEntity();
@@ -599,7 +605,7 @@ vkEntity *create_scene(IGraphics *graphics)
   vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeMeshInst);
 
-  vkGeometryData *planeGeometryData = new vkGeometryData();
+  vkGeometryMesh *planeGeometryData = new vkGeometryMesh();
   planeGeometryData->SetMesh(planeMesh);
   planeGeometryData->SetMaterial(materialFieldStone);
 
@@ -612,16 +618,17 @@ vkEntity *create_scene(IGraphics *graphics)
   planeEntity->AddState(planeGeometryState, parentState);
 
   /* create the red cube mesh */
-  vkSubMesh *smallCubeMeshInst = createCubeMesh(graphics, 1.0f);
-  vkMesh *smallCubeMesh = new vkMesh();
-  smallCubeMesh->AddMesh(smallCubeMeshInst);
+  vkMesh *smallCubeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
 
-  vkGeometryData *redCubeGeometryData = new vkGeometryData();
+
+  vkGeometryMesh *redCubeGeometryData = new vkGeometryMesh();
   redCubeGeometryData->SetMesh(smallCubeMesh);
-  redCubeGeometryData->SetMaterial(materialFieldStoneRed);
+  redCubeGeometryData->SetMaterial(mineMaterial);
+
+  vkGeometryMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkGeometryMesh>(vkResourceLocator("${models}/mine.staticmesh", "Geometry"));
 
   vkGeometryState *redCubeGeometryState = new vkGeometryState();
-  redCubeGeometryState->SetGeometry(redCubeGeometryData);
+  redCubeGeometryState->SetGeometry(mineMesh);
 
 
   vkEntity *redCubeEntity = new vkEntity();

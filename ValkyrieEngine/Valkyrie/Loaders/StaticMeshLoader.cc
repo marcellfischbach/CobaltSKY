@@ -1,6 +1,10 @@
 
 #include <Valkyrie/Loaders/StaticMeshLoader.hh>
+#include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/IIndexBuffer.hh>
+#include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Engine.hh>
@@ -26,6 +30,13 @@ enum EntryType
   eET_SkeletonAnimation
 };
 
+enum GeometryType
+{
+  eGT_GeometryMesh,
+  eGT_GeometryCollection,
+  eGT_GeometryLOD
+};
+
 vkStaticMeshLoader::vkStaticMeshLoader()
   : IFileLoader()
 {
@@ -42,6 +53,8 @@ bool vkStaticMeshLoader::CanLoad(IFile *file, const vkResourceLocator &locator, 
 {
   return file->GetExtension() == vkString("staticmesh");
 }
+
+
 
 
 IObject *vkStaticMeshLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
@@ -65,42 +78,78 @@ IObject *vkStaticMeshLoader::Load(IFile *file, const vkResourceLocator &locator,
     return 0;
   }
 
+  std::map<vkString, HeaderEntry> entries;
+
+  vkString entryToLoad;
+
   vkUInt32 numberOfEntries;
   file->Read(&numberOfEntries, sizeof(vkUInt32));
   for (vkUInt32 i = 0; i < numberOfEntries; ++i)
   {
-    vkString entryName = ReadString(file);
-    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == entryName)
+    HeaderEntry entry;
+    entry.name = ReadString(file);
+    entry.obj = 0;
+    file->Read(&entry.type, sizeof(vkUInt32));
+    file->Read(&entry.position, sizeof(vkUInt32));
+    file->Read(&entry.size, sizeof(vkUInt32));
+
+
+    entries[entry.name] = entry;
+
+    if (entryToLoad.length() == 0)
     {
-      vkUInt32 header[3];
-      file->Read(header, sizeof(vkUInt32) * 3);
-
-      EntryType type = (EntryType)header[eHE_Type];
-      vkUInt32 pos = header[eHE_Position];
-
-      file->Seek(eSP_Set, (long)pos);
-      switch (type)
-      {
-      case eET_Geometry:
-        printf("Cannot reader GeometryData. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-        return 0;
-
-      case eET_Mesh:
-        return ReadMesh(fileVersion, file, locator, userData);
-
-      case eET_Collision:
-        printf("Cannot reader Collision. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-        return 0;
-      case eET_Skeleton:
-        printf("Cannot reader Skeleton. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-        return 0;
-      case eET_SkeletonAnimation:
-        printf("Cannot reader SkeletonAnimation. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-        return 0;
-      }
-
+      entryToLoad = entry.name;
     }
   }
+
+
+  if (locator.GetResourceName().length() != 0)
+  {
+    entryToLoad = locator.GetResourceName();
+  }
+
+  return ReadEntry(entries, entryToLoad, fileVersion, file, locator, userData);
+
+}
+
+IObject *vkStaticMeshLoader::ReadEntry(std::map<vkString, HeaderEntry> &entries, const vkString &entryName, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  std::map<vkString, HeaderEntry>::iterator it = entries.find(entryName);
+  if (it == entries.end())
+  {
+    return 0;
+  }
+
+  HeaderEntry &he = it->second;
+  if (he.obj)
+  {
+    // who ever gets the object back is the owner of the object
+    he.obj->AddRef();
+    return he.obj;
+  }
+
+  vkUInt32 pos = he.position;
+
+  file->Seek(eSP_Set, (long)pos);
+  switch (he.type)
+  {
+  case eET_Geometry:
+    return ReadGeometry(entries, fileVersion, file, locator, userData);
+
+  case eET_Mesh:
+    return ReadMesh(fileVersion, file, locator, userData);
+
+  case eET_Collision:
+    printf("Cannot reader Collision. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    return 0;
+  case eET_Skeleton:
+    printf("Cannot reader Skeleton. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    return 0;
+  case eET_SkeletonAnimation:
+    printf("Cannot reader SkeletonAnimation. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    return 0;
+  }
+
   return 0;
 }
 
@@ -113,33 +162,34 @@ vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vk
   vkUInt32 numMaterials;
   file->Read(&numMaterials, sizeof(vkUInt32));
 
-  printf("Materials:");
   for (vkUInt32 i = 0; i < numMaterials; ++i)
   {
     vkString materialName = ReadString(file);
     materialIDs[materialName] = i;
     materialNames[i] = materialName;
-    printf("  '%s' @ %u\n", materialName.c_str(), i);
   }
 
-
+  vkMesh *mesh = new vkMesh();
   vkUInt32 numSubMeshes;
   file->Read(&numSubMeshes, sizeof(vkUInt32));
 
   for (vkUInt32 i = 0; i < numSubMeshes; ++i)
   {
-    vkSubMesh *subMesh = ReadSubMesh(fileVersion, file, locator, userData);
-
-
-
+    if (!ReadSubMesh(mesh, fileVersion, file, locator, userData))
+    {
+      mesh->Release();
+      return 0;
+    }
   }
 
-  return 0;
+  return mesh;
 }
 
 
-vkSubMesh *vkStaticMeshLoader::ReadSubMesh(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
+  IGraphics *graphics = vkEngine::Get()->GetRenderer();
+
   vkSubMesh *subMesh = new vkSubMesh();
 
   vkUInt32 materialIndex, LOD;
@@ -151,10 +201,11 @@ vkSubMesh *vkStaticMeshLoader::ReadSubMesh(vkUInt32 fileVersion, IFile *file, co
   if (!decl)
   {
     subMesh->Release();
-    return 0;
+    return false;
   }
 
   subMesh->SetVertexDeclaration(decl);
+  decl->Release();
 
 
 
@@ -169,13 +220,62 @@ vkSubMesh *vkStaticMeshLoader::ReadSubMesh(vkUInt32 fileVersion, IFile *file, co
     unsigned char *buffer = new unsigned char[numVertices * stride];
     file->Read(buffer, numVertices * stride);
 
-    IVertexBuffer *vb = vkEngine::Get()->GetRenderer()->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
+    IVertexBuffer *vb = graphics->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
+    delete[] buffer;
+    if (!vb)
+    {
+      printf ("Vertex stream could not be generated: %d %s:%s\n", i, locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+      subMesh->Release();
+      return false;
+    }
     subMesh->AddVertexBuffer(vb);
+    vb->Release();
   }
 
 
   vkUInt32 numIndices, indexType;
   file->Read(&numIndices, sizeof(vkUInt32));
+  file->Read(&indexType, sizeof(vkUInt32));
+
+  vkUInt32 idxSize = 0;
+  switch (indexType)
+  {
+  case eDT_UnsignedShort:
+    idxSize = sizeof(vkUInt16);
+    break;
+  case eDT_UnsignedInt:
+    idxSize = sizeof(vkUInt32);
+    break;
+  default:
+    printf("Invalid index data type: %d %s:%s\n", indexType, locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    subMesh->Release();
+    return false;
+  }
+  unsigned char *buffer = new unsigned char[numIndices * idxSize];
+  file->Read(buffer, numIndices * idxSize);
+  IIndexBuffer *ib = graphics->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
+  delete[] buffer;
+  if (!ib)
+  {
+    subMesh->Release();
+    return false;
+  }
+
+  subMesh->SetIndexBuffer(ib, numIndices, 0);
+
+  vkVector3f bboxMin;
+  vkVector3f bboxMax;
+  file->Read(&bboxMin, sizeof(float) * 3);
+  file->Read(&bboxMax, sizeof(float) * 3);
+  vkBoundingBox bbox;
+  bbox.Add(bboxMin);
+  bbox.Add(bboxMax);
+  bbox.Finish();
+  subMesh->SetBoundingBox(bbox);
+
+  mesh->AddMesh(subMesh, materialIndex, LOD);
+
+  return true;
 }
 
 
@@ -206,6 +306,107 @@ IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
   return decl;
 }
 
+
+
+vkGeometryData* vkStaticMeshLoader::ReadGeometry(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkUInt32 type;
+  file->Read(&type, sizeof(vkUInt32));
+
+  switch (type)
+  {
+  case eGT_GeometryMesh:
+    return ReadGeometryMesh(entries, fileVersion, file, locator, userData);
+
+  case eGT_GeometryCollection:
+    printf("Cannot reader geometry collection. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    return 0;
+
+  case eGT_GeometryLOD:
+    printf("Cannot reader geometry lod. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
+    return 0;
+
+  }
+
+  return 0;
+}
+
+
+vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  enum ReadMode
+  {
+    eRM_Internal,
+    eRM_External
+  };
+  vkMatrix4f localTransformation;
+  file->Read(&localTransformation, sizeof(float) * 16);
+
+  vkUInt32 readMode;
+  file->Read(&readMode, sizeof(vkUInt32));
+
+  IObject *meshObj = 0;
+  switch (readMode)
+  {
+  case eRM_Internal:
+    {
+      vkString name = ReadString(file);
+      meshObj = ReadEntry(entries, name, fileVersion, file, locator, userData);
+    }
+    break;
+  case eRM_External:
+    {
+      vkString resourceFile = ReadString(file);
+      vkString resourceName = ReadString(file);
+      meshObj = vkResourceManager::Get()->GetOrLoad(vkResourceLocator(resourceFile, resourceName), userData);
+      if (meshObj)
+      {
+        // make me the owner, otherwise there is a difference between GetOrLoad and ReadEntry
+        meshObj->AddRef();
+      }
+    }
+    break;
+  }
+
+  if (!meshObj)
+  {
+    return 0;
+  }
+
+  vkMesh *mesh = vkQueryClass<vkMesh>(meshObj);
+  if (!mesh)
+  {
+    meshObj->Release();
+    return 0;
+  }
+
+  vkMultiMaterial *material = ReadMultiMaterial(file);
+
+
+  vkGeometryMesh *geometryMesh = new vkGeometryMesh();
+  geometryMesh->SetMesh(mesh);
+  geometryMesh->SetMaterial(material);
+
+}
+
+vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(IFile *file) const
+{
+  vkUInt32 numberOfMaterials;
+  file->Read(&numberOfMaterials, sizeof(vkUInt32));
+
+  vkResourceManager *mgr = vkResourceManager::Get();
+  vkMultiMaterial *multiMaterial = new vkMultiMaterial();
+  for (vkUInt32 i = 0; i < numberOfMaterials; ++i)
+  {
+    vkString name = ReadString(file);
+    vkMaterialInstance *inst = mgr->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", name));
+    if (inst)
+    {
+      multiMaterial->AddMaterialInstance(inst);
+    }
+  }
+  return multiMaterial;
+}
 
 vkString vkStaticMeshLoader::ReadString(IFile *file) const
 {

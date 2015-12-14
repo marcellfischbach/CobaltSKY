@@ -262,10 +262,10 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   // render all geometries
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryData *geometryData = m_geometries[i];
-    if (geometryData)
+    vkGeometryMesh *geometryMesh = m_geometries[i];
+    if (geometryMesh)
     {
-      geometryData->Render(m_renderer, eRP_ShadowPSSM);
+      geometryMesh->Render(m_renderer, eRP_ShadowPSSM);
     }
   }
   glColorMask(true, true, true, true);
@@ -516,10 +516,10 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
   // render all geometries
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
-    vkGeometryData *geometryData = m_geometries[i];
-    if (geometryData)
+    vkGeometryMesh *geometryMesh = m_geometries[i];
+    if (geometryMesh)
     {
-      geometryData->Render(m_renderer, eRP_ShadowCube);
+      geometryMesh->Render(m_renderer, eRP_ShadowCube);
     }
   }
   glColorMask(true, true, true, true);

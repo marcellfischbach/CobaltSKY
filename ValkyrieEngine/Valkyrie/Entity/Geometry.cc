@@ -6,33 +6,11 @@
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Math/Clipper.hh>
 
-vkGeometryBase::vkGeometryBase()
-  : vkObject()
-{
-
-}
-
-vkGeometryBase::~vkGeometryBase()
-{
-
-}
-
-
-
-
-
-
-
-
-
-
 vkGeometryData::vkGeometryData()
-  : vkGeometryBase()
-  , m_mesh(0)
-  , m_material(0)
+  : vkObject()
+  , m_attached(false)
 {
-  m_localTransform.SetIdentity();
-  m_globalTransform.SetIdentity();
+
 }
 
 vkGeometryData::~vkGeometryData()
@@ -41,39 +19,62 @@ vkGeometryData::~vkGeometryData()
 }
 
 
-void vkGeometryData::SetLocalTransorm(const vkMatrix4f &localTransform)
+
+
+
+
+
+
+
+
+vkGeometryMesh::vkGeometryMesh()
+  : vkGeometryData()
+  , m_mesh(0)
+  , m_material(0)
+{
+  m_localTransform.SetIdentity();
+  m_globalTransform.SetIdentity();
+}
+
+vkGeometryMesh::~vkGeometryMesh()
+{
+
+}
+
+
+void vkGeometryMesh::SetLocalTransorm(const vkMatrix4f &localTransform)
 {
   m_localTransform = localTransform;
 }
 
-const vkMatrix4f &vkGeometryData::GetLocalTransform() const
+const vkMatrix4f &vkGeometryMesh::GetLocalTransform() const
 {
   return m_localTransform;
 }
 
-void vkGeometryData::UpdateTransformation(const vkMatrix4f &parentTransform)
+void vkGeometryMesh::UpdateTransformation(const vkMatrix4f &parentTransform)
 {
   vkMatrix4f::Mult(parentTransform, m_localTransform, m_globalTransform);
 }
 
 
-void vkGeometryData::SetMesh(vkMesh *mesh)
+void vkGeometryMesh::SetMesh(vkMesh *mesh)
 {
   VK_SET(m_mesh, mesh);
 }
 
-void vkGeometryData::SetMaterial(vkMultiMaterial *material)
+void vkGeometryMesh::SetMaterial(vkMultiMaterial *material)
 {
   VK_SET(m_material, material);
 }
 
 
-void vkGeometryData::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkGeometryMesh::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
 {
   entityScan->ScanGeometry(this);
 }
 
-void vkGeometryData::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
+void vkGeometryMesh::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {
@@ -84,3 +85,15 @@ void vkGeometryData::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
   m_mesh->Render(graphics, pass, m_material, lod);
 }
 
+
+
+vkGeometryData *vkGeometryMesh::Clone()
+{
+  vkGeometryMesh *mesh = new vkGeometryMesh();
+  mesh->SetAttached(false);
+  mesh->SetLocalTransorm(m_localTransform);
+  mesh->SetMesh(m_mesh);
+  mesh->SetMaterial(m_material);
+  mesh->SetName(GetName());
+  return mesh;
+}

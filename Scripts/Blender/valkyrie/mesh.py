@@ -2,7 +2,7 @@
 import valkyrie
 import bpy
 import struct
-
+import sys
 
 class MeshData:
 
@@ -11,6 +11,8 @@ class MeshData:
 		self.material_name = material_name
 		self.vertices = valkyrie.UniqueList(unique)
 		self.trigons = valkyrie.UniqueList(unique)
+		self.bboxMin = [sys.float_info.max, sys.float_info.max, sys.float_info.max]
+		self.bboxMax = [-sys.float_info.max, -sys.float_info.max, -sys.float_info.max]
 		
 		self.has_position = True
 		self.has_normal = True
@@ -25,6 +27,13 @@ class MeshData:
 		
 		for vert in mesh.vertices.list:
 			nv = vert.mult_by_matrix(matrix)
+			
+			self.bboxMin[0] = min(self.bboxMin[0], nv.x)
+			self.bboxMin[1] = min(self.bboxMin[1], nv.y)
+			self.bboxMin[2] = min(self.bboxMin[2], nv.z)
+			self.bboxMax[0] = max(self.bboxMax[0], nv.x)
+			self.bboxMax[1] = max(self.bboxMax[1], nv.y)
+			self.bboxMax[2] = max(self.bboxMax[2], nv.z)
 			
 			ni = self.vertices.add(nv)
 			mmap[i] = ni
@@ -42,9 +51,9 @@ class MeshData:
 			trig.v2 = ni2
 			self.trigons.add(trig)
 			
-			
-			
 
+
+		
 			
 			
 	def debug(self):
@@ -88,8 +97,11 @@ class Mesh:
 				
 				trig = valkyrie.Trigon()
 				trig.v0 = i0
-				trig.v1 = i1
-				trig.v2 = i2
+				trig.v1 = i2
+				trig.v2 = i1
+				
+				current_md.trigons.add(trig)
+
 				
 				current_md.trigons.add(trig)
 				
@@ -259,6 +271,7 @@ class MultiMeshWriter:
 		self._write_vertex_declaration(mesh_data)
 		self._write_vertices (mesh_data)
 		self._write_indices (mesh_data)
+		self._write_bounding_box(mesh_data)
 		
 	def _write_vertex_declaration(self, mesh_data):
 		num_decl = 0
@@ -325,6 +338,10 @@ class MultiMeshWriter:
 			else:
 				self.stream += struct.pack('<HHH', trig.v0, trig.v1, trig.v2)
 
+	def _write_bounding_box(self, multi_mesh):
+		self.stream += struct.pack('<ffffff', multi_mesh.bboxMin[0], multi_mesh.bboxMin[1], multi_mesh.bboxMin[2], multi_mesh.bboxMax[0], multi_mesh.bboxMax[1], multi_mesh.bboxMax[2])
+		
+		
 	def _prepare_material_map(self, multi_mesh):
 		
 		i = 0

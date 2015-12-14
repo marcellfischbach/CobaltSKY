@@ -15,12 +15,12 @@ struct IGraphics;
 struct IEntityScan;
 
 VK_INTERFACE()
-class VKE_API vkGeometryBase : public vkObject
+class VKE_API vkGeometryData : public vkObject
 {
   VK_CLASS_GEN;
 
 public:
-  virtual ~vkGeometryBase();
+  virtual ~vkGeometryData();
 
   vkID GetID() const;
 
@@ -31,23 +31,31 @@ public:
 
   virtual void UpdateTransformation(const vkMatrix4f &parentTransformation) = 0;
 
+  virtual vkGeometryData *Clone()  = 0;
+
+  void SetAttached(bool attached);
+  bool IsAttached() const;
+
+
 protected:
-  vkGeometryBase();
+  vkGeometryData();
 
 private:
   vkID m_id;
   vkString m_name;
+
+  bool m_attached;
 };
 
 
 VK_CLASS()
-class VKE_API vkGeometryData : public vkGeometryBase
+class VKE_API vkGeometryMesh : public vkGeometryData
 {
   VK_CLASS_GEN;
 
 public:
-  vkGeometryData();
-  virtual ~vkGeometryData();
+  vkGeometryMesh();
+  virtual ~vkGeometryMesh();
 
   void SetMesh(vkMesh *mesh);
   vkMesh *GetMesh();
@@ -64,6 +72,8 @@ public:
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
 
+  virtual vkGeometryData *Clone();
+
   void Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod = 0);
 private:
   vkMatrix4f m_localTransform;
@@ -75,21 +85,30 @@ private:
 };
 
 
+VK_FORCEINLINE void vkGeometryData::SetAttached(bool attached)
+{
+  m_attached = true;
+}
+
+VK_FORCEINLINE bool vkGeometryData::IsAttached() const
+{
+  return m_attached;
+}
 
 
-VK_FORCEINLINE vkID vkGeometryBase::GetID() const
+VK_FORCEINLINE vkID vkGeometryData::GetID() const
 {
   return m_id;
 }
 
 
 
-VK_FORCEINLINE void vkGeometryBase::SetName(const vkString &name)
+VK_FORCEINLINE void vkGeometryData::SetName(const vkString &name)
 {
   m_name = name;
 }
 
-VK_FORCEINLINE const vkString &vkGeometryBase::GetName() const
+VK_FORCEINLINE const vkString &vkGeometryData::GetName() const
 {
   return m_name;
 }
@@ -98,23 +117,23 @@ VK_FORCEINLINE const vkString &vkGeometryBase::GetName() const
 
 
 
-VK_FORCEINLINE vkMesh *vkGeometryData::GetMesh()
+VK_FORCEINLINE vkMesh *vkGeometryMesh::GetMesh()
 {
   return m_mesh;
 }
 
-VK_FORCEINLINE const vkMesh *vkGeometryData::GetMesh() const
+VK_FORCEINLINE const vkMesh *vkGeometryMesh::GetMesh() const
 {
   return m_mesh;
 }
 
 
-VK_FORCEINLINE vkMultiMaterial *vkGeometryData::GetMaterial()
+VK_FORCEINLINE vkMultiMaterial *vkGeometryMesh::GetMaterial()
 {
   return m_material;
 }
 
-VK_FORCEINLINE const vkMultiMaterial *vkGeometryData::GetMaterial() const
+VK_FORCEINLINE const vkMultiMaterial *vkGeometryMesh::GetMaterial() const
 {
   return m_material;
 }

@@ -1,5 +1,6 @@
 
 import mathutils
+import valkyrie.geometry
 import valkyrie.mesh
 import bpy
 import struct
@@ -36,11 +37,17 @@ class StaticMeshExporter:
 	def __init__(self):
 		self.entries = []
 	
-	def export (self, filename):
+	def export (self, filename, num_lods):
+		
+		mm = self._prepare_meshes(num_lods)
+		self._prepare_geometry(mm)
+		
 		self.mesh_stream = ""
 		self.file = open(filename, 'wb')
 		self.file.write(struct.pack('<I', StaticMeshExporter.MAGIC_NUMBER))
 		self.file.write(struct.pack('<I', StaticMeshExporter.VERSION))
+		
+		self.entries = sorted(self.entries, key=lambda entry: entry.type)   
 		
 		self._prepare_headers ()
 		self._export_headers ()
@@ -68,7 +75,7 @@ class StaticMeshExporter:
 		for entry in self.entries:
 			self.file.write (bytes(entry.data))
 		
-	def prepare_meshes(self, num_lods):
+	def _prepare_meshes(self, num_lods):
 		mm = valkyrie.MultiMesh()
 		mm.prepare_meshes(num_lods)
 		
@@ -83,6 +90,20 @@ class StaticMeshExporter:
 
 		self.entries.append(e)
 		
+		return mm
+		
+	def _prepare_geometry(self, multi_mesh):
+		
+		geom_writer = valkyrie.geometry.GeometryWriter()
+		geom_writer.write(multi_mesh)
+		
+		e = Entry()
+		e.name = "Geometry"
+		e.type = Entry.ET_Geometry
+		e.size = len(geom_writer.stream)
+		e.data = geom_writer.stream
+		
+		self.entries.append(e)
 		
 	def _export_string(self, string):
 		_string = bytes(string, 'latin1')

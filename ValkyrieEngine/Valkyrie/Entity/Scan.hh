@@ -1,12 +1,12 @@
 #pragma once
 
-class vkGeometryData;
+class vkGeometryMesh;
 class vkLight;
 
 struct IEntityScan
 {
 
-  virtual void ScanGeometry(vkGeometryData *geometry) = 0;
+  virtual void ScanGeometry(vkGeometryMesh *geometry) = 0;
 
   virtual void ScanLight(vkLight *light) = 0;
 
