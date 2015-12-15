@@ -17,7 +17,7 @@ public:
   vkLight *GetLight();
   const vkLight *GetLight() const;
 
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 private:
   vkLight *m_light;

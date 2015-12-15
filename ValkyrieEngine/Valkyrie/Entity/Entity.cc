@@ -68,10 +68,10 @@ void vkEntity::AddState(vkSpatialState *state, vkSpatialState *parentState)
   }
 }
 
-void vkEntity::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkEntity::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
   if (m_rootState)
   {
-    m_rootState->Scan(clipper, graphics, entityScan);
+    m_rootState->Scan(clipper, graphics, entityScan, config);
   }
 }

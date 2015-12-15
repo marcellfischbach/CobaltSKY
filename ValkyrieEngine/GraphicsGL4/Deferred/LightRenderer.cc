@@ -236,10 +236,13 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
 
   CalcShadowIntensity(light);
 
+  vkScanConfig config;
+  config.ScanShadowCasters = true;
+  config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
   m_geometries.Clear();
-  root->Scan(0, m_renderer, &collector);
+  root->Scan(0, m_renderer, &collector, config);
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
@@ -490,10 +493,13 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
 
   CalcShadowIntensity(light);
 
+  vkScanConfig config;
+  config.ScanShadowCasters = true;
+  config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_geometries, 0);
   m_geometries.Clear();
-  root->Scan(0, m_renderer, &collector);
+  root->Scan(0, m_renderer, &collector, config);
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);

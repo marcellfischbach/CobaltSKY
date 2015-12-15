@@ -69,7 +69,7 @@ void vkGeometryMesh::SetMaterial(vkMultiMaterial *material)
 }
 
 
-void vkGeometryMesh::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkGeometryMesh::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
   entityScan->ScanGeometry(this);
 }

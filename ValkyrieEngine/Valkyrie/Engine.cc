@@ -166,7 +166,7 @@ int vkEngine::Run()
 
   vkCamera *camera = new vkCamera();
   camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
-  camera->SetEye(vkVector3f(100, 100, 100));
+  camera->SetEye(vkVector3f(86.36f, 87.43f, 10.32f));
   camera->SetSpot(vkVector3f(0, 0, 0));
   camera->SetUp(vkVector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
@@ -517,7 +517,7 @@ vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
 
 void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
-  static float rotH = -3.91f, rotV = -0.58f;
+  static float rotH = -3.978001f, rotV = -0.117000f;
 
   rotH -= (float)mouse->GetRelX() * 0.001f;
   rotV -= (float)mouse->GetRelY() * 0.001f;
@@ -529,7 +529,7 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
   TX.SetRotationX(rotV);
   vkMatrix4f::Mult(TZ, TX, T);
 
-  float speed = 0.02f;
+  float speed = 0.1f;
   if (keyboard->IsKeyDown(eK_LShift) || keyboard->IsKeyDown(eK_RShift))
   {
     speed *= 2.0f;
@@ -569,6 +569,7 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
   cam->SetSpot(s);
   cam->SetUp(vkVector3f(0, 0, 1));
   cam->UpdateCameraMatrices();
+
 }
 
 
@@ -601,7 +602,7 @@ vkEntity *create_scene(IGraphics *graphics)
 
 
   /* create the plane mesh */
-  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 20.0f);
+  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f);
   vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeMeshInst);
 
@@ -618,24 +619,28 @@ vkEntity *create_scene(IGraphics *graphics)
   planeEntity->AddState(planeGeometryState, parentState);
 
   /* create the red cube mesh */
-  vkMesh *smallCubeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
-
-
-  vkGeometryMesh *redCubeGeometryData = new vkGeometryMesh();
-  redCubeGeometryData->SetMesh(smallCubeMesh);
-  redCubeGeometryData->SetMaterial(mineMaterial);
-
   vkGeometryMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkGeometryMesh>(vkResourceLocator("${models}/mine.staticmesh", "Geometry"));
 
-  vkGeometryState *redCubeGeometryState = new vkGeometryState();
-  redCubeGeometryState->SetGeometry(mineMesh);
+
+  srand(4567898768);
+  for (int i = 0; i < 500; ++i)
+  {
+    float x = (float)rand() / (float)RAND_MAX;
+    float y = (float)rand() / (float)RAND_MAX;
+    float z = (float)rand() / (float)RAND_MAX;
+
+    vkGeometryState *redCubeGeometryState = new vkGeometryState();
+    redCubeGeometryState->SetGeometry(mineMesh);
+    redCubeGeometryState->SetCastShadow(true);
 
 
-  vkEntity *redCubeEntity = new vkEntity();
-  redCubeEntity->SetRootState(redCubeGeometryState);
-  redCubeEntity->AddState(redCubeGeometryState, parentState);
-  redCubeEntity->GetTransformation().SetTranslation(vkVector3f(10, 10, 0));
-  redCubeEntity->FinishTransformation();
+    vkEntity *redCubeEntity = new vkEntity();
+    redCubeEntity->SetRootState(redCubeGeometryState);
+    redCubeEntity->AddState(redCubeGeometryState, parentState);
+    redCubeEntity->GetTransformation().SetTranslation(vkVector3f(-100.0f + x * 200.0f, -100.0f + y * 200.0f, -2.0f + z * 4.0f));
+    redCubeEntity->FinishTransformation();
+
+  }
 
 
 
@@ -643,7 +648,7 @@ vkEntity *create_scene(IGraphics *graphics)
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
-  directionalLight->SetCastShadow(true);
+  directionalLight->SetCastShadow(false);
   directionalLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalLightState = new vkLightState();
@@ -653,6 +658,19 @@ vkEntity *create_scene(IGraphics *graphics)
   directionalLightEntity->SetRootState(directionalLightState);
   directionalLightEntity->AddState(directionalLightState, parentState);
 
+
+  vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
+  directionalBackLight->SetColor(vkColor4f(0.1f, 0.1f, 0.1f));
+  directionalBackLight->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
+  directionalBackLight->SetCastShadow(false);
+  directionalBackLight->SetShadowIntensity(0.0f);
+
+  vkLightState *directionalBackLightState = new vkLightState();
+  directionalBackLightState->SetLight(directionalBackLight);
+
+  vkEntity *directionalBackLightEntity = new vkEntity();
+  directionalBackLightEntity->SetRootState(directionalBackLightState);
+  directionalBackLightEntity->AddState(directionalBackLightState, parentState);
 
   return rootEntity;
 }

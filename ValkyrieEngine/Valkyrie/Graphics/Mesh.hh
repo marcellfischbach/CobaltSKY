@@ -69,6 +69,7 @@ public:
 
   vkSize GetMaterialIndex(vkUInt8 lod = 0, vkSize idx = 0) const;
   void OptimizeDataStruct();
+  void UpdateBoundingBox();
 
   void Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lod = 0);
 
@@ -89,4 +90,6 @@ private:
   std::vector<LOD> m_lods;
 
   LOD &GetLOD(vkUInt8 lod);
+
+  vkBoundingBox m_boundingBox;
 };

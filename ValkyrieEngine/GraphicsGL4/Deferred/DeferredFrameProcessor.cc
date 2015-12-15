@@ -11,10 +11,15 @@
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <GL/glew.h>
+#include <algorithm>
+
+GLuint queries[10];
 
 
 vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
@@ -27,6 +32,7 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
 
   m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightvkGraphicsGL4(renderer);
   m_lightRenderers[eLT_PointLight] = new vkPointLightvkGraphicsGL4(renderer);
+  glGenQueries(10, queries);
 }
 
 vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
@@ -60,6 +66,25 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
 }
 
 
+struct Data
+{
+  const vkMatrix4f *matrix;
+  vkMaterialInstance *material;
+  vkSubMesh *mesh;
+  Data(const vkMatrix4f *matrix, vkMaterialInstance *material, vkSubMesh *mesh)
+    : matrix(matrix)
+    , material(material)
+    , mesh(mesh)
+  {
+
+  }
+
+  bool operator< (const Data& o)
+  {
+    return material < o.material;
+  }
+};
+
 
 
 void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
@@ -89,6 +114,7 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   glDrawBuffers(4, buffers);
 
 
+#if 1
   for (vkSize i = 0; i < m_geometries.length; ++i)
   {
     vkGeometryMesh *geometryMesh = m_geometries[i];
@@ -97,23 +123,69 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
       geometryMesh->Render(m_renderer, eRP_GBuffer);
     }
   }
+#else
 
+  std::vector<Data> datas;
+  datas.reserve(2000);
+  for (vkSize i = 0; i < m_geometries.length; ++i)
+  {
+    vkGeometryMesh *geometryMesh = m_geometries[i];
+    if (geometryMesh)
+    {
+      vkMultiMaterial *multiMat = geometryMesh->GetMaterial();
+      vkMesh *mesh = geometryMesh->GetMesh();
+      for (unsigned i = 0, in = mesh->GetNumberOfMeshes(0); i < in; ++i)
+      {
+        vkSubMesh *subMesh = mesh->GetMesh(0, i);
+        vkUInt32 matIdx = mesh->GetMaterialIndex(0, i);
+
+        datas.push_back(Data(&geometryMesh->GetGlobalTransform(), multiMat->GetMaterialInstance(matIdx), subMesh));
+      }
+    }
+  }
+
+  std::sort(datas.begin(), datas.end());
+
+  vkMaterialInstance *mat = 0;
+  for (vkUInt32 i = 0, in = datas.size(); i < in; ++i)
+  {
+    Data &data = datas[i];
+    if (mat == 0 || mat != data.material)
+    {
+      mat = data.material;
+      if (!mat->Bind(m_renderer, eRP_GBuffer))
+      {
+        continue;
+      }
+    }
+    m_renderer->SetModelMatrix(*data.matrix);
+    datas[i].mesh->Render(m_renderer);
+
+  }
+#endif
 }
 
 void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
   m_geometries.Clear();
   m_lights.Clear();
+
+  vkScanConfig config;
+  config.ScanNonShadowCasters = true;
+  config.ScanShadowCasters = true;
   vkDefaultCollector collector(&m_geometries, &m_lights);
   vkClipper *clipper = camera->GetClipper();
-  root->Scan(clipper, m_renderer, &collector);
+  root->Scan(clipper, m_renderer, &collector, config);
 
   camera->Apply(m_renderer);
 
+  glBeginQuery(GL_TIME_ELAPSED, queries[0]);
   // render to the main GBuffer this buffer will be used to assemble the final image
   RenderGBuffer(root);
+  glEndQuery(GL_TIME_ELAPSED);
 
 
+  glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
   m_renderer->SetBlendEnabled(true);
@@ -131,6 +203,14 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
     }
 
   }
+
+  glEndQuery(GL_TIME_ELAPSED);
+
+  GLuint time0, time1;
+  glGetQueryObjectuiv(queries[0], GL_QUERY_RESULT, &time0);
+  glGetQueryObjectuiv(queries[1], GL_QUERY_RESULT, &time1);
+  printf("Times: %.2f %.2f\n", (float)(time0 / 1000) / 1000.0f, (float)(time1 / 1000.0f) / 1000.0f);
+
   m_renderer->SetBlendEnabled(false);
 
   ITexture2DArray *txt = vkQueryClass<ITexture2DArray>(m_lightRenderers[eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));

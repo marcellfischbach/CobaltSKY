@@ -11,3 +11,11 @@ struct IEntityScan
   virtual void ScanLight(vkLight *light) = 0;
 
 };
+
+struct vkScanConfig
+{
+
+  bool ScanShadowCasters;
+  bool ScanNonShadowCasters;
+
+};

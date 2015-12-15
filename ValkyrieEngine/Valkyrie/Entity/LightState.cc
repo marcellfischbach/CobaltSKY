@@ -24,7 +24,7 @@ void vkLightState::SetLight(vkLight *light)
 }
 
 
-void vkLightState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkLightState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
   if (m_light)
   {

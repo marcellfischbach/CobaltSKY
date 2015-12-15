@@ -19,14 +19,19 @@ public:
   vkGeometryData *GetGeometry();
   const vkGeometryData *GetGeometry() const;
 
+  void SetCastShadow(bool castShadow);
+  bool IsCastShadow() const;
+
   virtual void FinishTransformation();
 
 protected:
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 
 private:
   vkGeometryData *m_geometry;
+
+  bool m_castShadow;
 };
 
 
@@ -39,4 +44,14 @@ VK_FORCEINLINE vkGeometryData *vkGeometryState::GetGeometry()
 VK_FORCEINLINE const vkGeometryData *vkGeometryState::GetGeometry() const
 {
   return m_geometry;
+}
+
+VK_FORCEINLINE void vkGeometryState::SetCastShadow(bool castShadow)
+{
+  m_castShadow = castShadow;
+}
+
+VK_FORCEINLINE bool vkGeometryState::IsCastShadow() const
+{
+  return m_castShadow;
 }

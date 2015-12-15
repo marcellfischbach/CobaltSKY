@@ -11,6 +11,7 @@ class vkClipper;
 class vkMultiMaterial;
 class vkMesh;
 
+struct vkScanConfig;
 struct IGraphics;
 struct IEntityScan;
 
@@ -27,7 +28,7 @@ public:
   void SetName(const vkString &name);
   const vkString &GetName() const;
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan) = 0;
+  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config) = 0;
 
   virtual void UpdateTransformation(const vkMatrix4f &parentTransformation) = 0;
 
@@ -68,9 +69,11 @@ public:
   void SetLocalTransorm(const vkMatrix4f &localTransform);
   const vkMatrix4f &GetLocalTransform() const;
 
+  const vkMatrix4f &GetGlobalTransform() const;
+
   void UpdateTransformation(const vkMatrix4f &parentTransform);
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
   virtual vkGeometryData *Clone();
 
@@ -136,5 +139,11 @@ VK_FORCEINLINE vkMultiMaterial *vkGeometryMesh::GetMaterial()
 VK_FORCEINLINE const vkMultiMaterial *vkGeometryMesh::GetMaterial() const
 {
   return m_material;
+}
+
+
+VK_FORCEINLINE const vkMatrix4f &vkGeometryMesh::GetGlobalTransform() const
+{
+  return m_globalTransform;
 }
 

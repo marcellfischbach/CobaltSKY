@@ -11,6 +11,7 @@ class vkEntityState;
 class vkSpatialState;
 class vkTransformation;
 
+struct vkScanConfig;
 struct IEntityScan;
 struct IGraphics;
 
@@ -36,7 +37,7 @@ public:
 
   static vkID GetNextID();
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 private:
   vkID m_id;

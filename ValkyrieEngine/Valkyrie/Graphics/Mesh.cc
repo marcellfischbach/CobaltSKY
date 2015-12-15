@@ -127,6 +127,8 @@ void vkMesh::AddMesh(vkSubMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, cons
     data.m_materialIndex = materialIndex;
     data.m_name = name;
     lod.m_meshes.push_back(data);
+
+    m_boundingBox.Add(mesh->GetBoundingBox());
   }
 }
 
@@ -140,6 +142,11 @@ void vkMesh::OptimizeDataStruct()
       return a.m_materialIndex < b.m_materialIndex;
     });
   }
+}
+
+void vkMesh::UpdateBoundingBox()
+{
+  m_boundingBox.Finish();
 }
 
 vkUInt8 vkMesh::GetNumberOfLODs() const

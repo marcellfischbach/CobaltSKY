@@ -40,7 +40,7 @@ enum GeometryType
 vkStaticMeshLoader::vkStaticMeshLoader()
   : IFileLoader()
 {
-
+  VK_CLASS_GEN_CONSTR;
 }
 
 vkStaticMeshLoader::~vkStaticMeshLoader()
@@ -181,6 +181,9 @@ vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vk
       return 0;
     }
   }
+
+  mesh->OptimizeDataStruct();
+  mesh->UpdateBoundingBox();
 
   return mesh;
 }
@@ -351,7 +354,9 @@ vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEn
   case eRM_Internal:
     {
       vkString name = ReadString(file);
+      vkSize currentPosition = file->Tell();
       meshObj = ReadEntry(entries, name, fileVersion, file, locator, userData);
+      file->Seek(eSP_Set, currentPosition);
     }
     break;
   case eRM_External:
@@ -387,6 +392,7 @@ vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEn
   geometryMesh->SetMesh(mesh);
   geometryMesh->SetMaterial(material);
 
+  return geometryMesh;
 }
 
 vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(IFile *file) const

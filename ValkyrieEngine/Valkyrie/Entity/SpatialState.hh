@@ -6,6 +6,7 @@
 #include <Valkyrie/Entity/Transformation.hh>
 #include <vector>
 
+struct vkScanConfig;
 
 VK_CLASS()
 class VKE_API vkSpatialState : public vkEntityState
@@ -24,10 +25,10 @@ public:
   const vkMatrix4f &GetGlobalTransformation() const;
 
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 protected:
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan);
+  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 
   vkMatrix4f m_localMatrix;

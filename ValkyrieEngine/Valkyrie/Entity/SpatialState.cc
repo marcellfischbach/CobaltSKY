@@ -1,5 +1,6 @@
 
 #include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/Entity/Scan.hh>
 
 vkSpatialState::vkSpatialState()
   : vkEntityState()
@@ -74,17 +75,17 @@ void vkSpatialState::RemoveSpatialState(vkSpatialState *state)
 
 
 
-void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
-  PrivScan(clipper, graphics, entityScan);
+  PrivScan(clipper, graphics, entityScan, config);
 
   for (vkSize i = 0, in = m_childStates.size(); i < in; ++i)
   {
-    m_childStates[i]->Scan(clipper, graphics, entityScan);
+    m_childStates[i]->Scan(clipper, graphics, entityScan, config);
   }
 }
 
-void vkSpatialState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan)
+void vkSpatialState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
 
 }
