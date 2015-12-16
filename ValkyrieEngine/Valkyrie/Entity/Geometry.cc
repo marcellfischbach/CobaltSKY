@@ -71,7 +71,7 @@ void vkGeometryMesh::SetMaterial(vkMultiMaterial *material)
 
 void vkGeometryMesh::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
-  entityScan->ScanGeometry(this);
+  //entityScan->ScanGeometry(this);
 }
 
 void vkGeometryMesh::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
@@ -82,7 +82,7 @@ void vkGeometryMesh::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
   }
 
   graphics->SetModelMatrix(m_globalTransform);
-  m_mesh->Render(graphics, pass, m_material, lod);
+  //m_mesh->Render(graphics, pass, m_material, lod);
 }
 
 

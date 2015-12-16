@@ -13,7 +13,7 @@ struct IVertexBuffer;
 struct IVertexDeclaration;
 
 
-class vkMultiMaterial;
+class vkMaterialInstance;
 
 VK_CLASS()
 class VKE_API vkSubMesh : public vkObject
@@ -67,11 +67,16 @@ public:
   vkSubMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0);
   const vkSubMesh *GetMesh(vkUInt8 lod = 0, vkSize idx = 0) const;
 
+  const vkBoundingBox &GetBoundingBox() const;
+
   vkSize GetMaterialIndex(vkUInt8 lod = 0, vkSize idx = 0) const;
   void OptimizeDataStruct();
   void UpdateBoundingBox();
 
-  void Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lod = 0);
+
+  vkUInt32 GetNumberOfMaterials() const;
+
+  void Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
 
 
 private:
@@ -88,8 +93,21 @@ private:
   };
 
   std::vector<LOD> m_lods;
+  vkUInt32 m_numberOfMaterials;
 
   LOD &GetLOD(vkUInt8 lod);
 
   vkBoundingBox m_boundingBox;
 };
+
+
+VK_FORCEINLINE vkUInt32 vkMesh::GetNumberOfMaterials() const
+{
+  return m_numberOfMaterials;
+}
+
+VK_FORCEINLINE const vkBoundingBox &vkMesh::GetBoundingBox() const
+{
+  return m_boundingBox;
+}
+

@@ -3,17 +3,18 @@
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Entity/Scan.hh>
 
+class vkRenderState;
 class vkDefaultCollector : public IEntityScan
 {
 public:
-  vkDefaultCollector(vkCollection<vkGeometryMesh*> *geometrieMeshes, vkCollection<vkLight*> *lights);
+  vkDefaultCollector(vkCollection<vkRenderState*> *renderStates, vkCollection<vkLight*> *lights);
 
-  virtual void ScanGeometry(vkGeometryMesh *geometry);
+  virtual void ScanGeometry(vkRenderState *geometry);
 
   virtual void ScanLight(vkLight *light);
 
 
 private:
-  vkCollection<vkGeometryMesh*> *m_geometryMeshes;
+  vkCollection<vkRenderState*> *m_renderStates;
   vkCollection<vkLight*> *m_lights;
 };

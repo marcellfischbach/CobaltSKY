@@ -10,6 +10,7 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
 
@@ -98,7 +99,7 @@ void vkLightvkGraphicsGL4::BindLight(LightProgram &lightProgram, vkLight *light)
 void vkLightvkGraphicsGL4::CalcShadowIntensity(const vkLight *light)
 {
   float shadowIntensity = light->GetShadowIntensity();
-  m_shadowIntensity.Set(1.0 - shadowIntensity, shadowIntensity);
+  m_shadowIntensity.Set(1.0f - shadowIntensity, shadowIntensity);
 }
 
 vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
@@ -240,8 +241,8 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_geometries, 0);
-  m_geometries.Clear();
+  vkDefaultCollector collector(&m_renderStates, 0);
+  m_renderStates.Clear();
   root->Scan(0, m_renderer, &collector, config);
 
   // setup the rendering 
@@ -263,12 +264,12 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
-  for (vkSize i = 0; i < m_geometries.length; ++i)
+  for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
-    vkGeometryMesh *geometryMesh = m_geometries[i];
-    if (geometryMesh)
+    vkRenderState *renderState= m_renderStates[i];
+    if (renderState)
     {
-      geometryMesh->Render(m_renderer, eRP_ShadowPSSM);
+      renderState->Render(m_renderer, eRP_ShadowPSSM);
     }
   }
   glColorMask(true, true, true, true);
@@ -497,8 +498,8 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_geometries, 0);
-  m_geometries.Clear();
+  vkDefaultCollector collector(&m_renderStates, 0);
+  m_renderStates.Clear();
   root->Scan(0, m_renderer, &collector, config);
 
   // setup the rendering 
@@ -520,12 +521,12 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
-  for (vkSize i = 0; i < m_geometries.length; ++i)
+  for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
-    vkGeometryMesh *geometryMesh = m_geometries[i];
-    if (geometryMesh)
+    vkRenderState *renderState = m_renderStates[i];
+    if (renderState)
     {
-      geometryMesh->Render(m_renderer, eRP_ShadowCube);
+      renderState->Render(m_renderer, eRP_ShadowCube);
     }
   }
   glColorMask(true, true, true, true);

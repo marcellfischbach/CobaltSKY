@@ -95,6 +95,7 @@ void vkSubMesh::Render(IGraphics *renderer)
 
 vkMesh::vkMesh()
   : vkObject()
+  , m_numberOfMaterials(0)
 {
 
 }
@@ -129,6 +130,11 @@ void vkMesh::AddMesh(vkSubMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, cons
     lod.m_meshes.push_back(data);
 
     m_boundingBox.Add(mesh->GetBoundingBox());
+
+    if (materialIndex >= m_numberOfMaterials)
+    {
+      m_numberOfMaterials = materialIndex + 1;
+    }
   }
 }
 
@@ -190,7 +196,7 @@ vkMesh::LOD &vkMesh::GetLOD(vkUInt8 lod)
   return m_lods[lod];
 }
 
-void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *material, vkUInt8 lodIdx)
+void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {
@@ -205,15 +211,21 @@ void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkMultiMaterial *mat
     Data &data = lod.m_meshes[i];
     if (data.m_mesh)
     {
-      vkMaterialInstance *nextInstance = material->GetMaterialInstance(data.m_materialIndex);
-      if (nextInstance == 0)
+      
+      
+      if (data.m_materialIndex >= numberOfMaterials)
+      {
+        continue;
+      }
+      vkMaterialInstance *nextMaterial = materials[data.m_materialIndex];
+      if (nextMaterial == 0)
       {
         continue;
       }
 
-      if (nextInstance != activeInstance)
+      if (nextMaterial != activeInstance)
       {
-        activeInstance = nextInstance;
+        activeInstance = nextMaterial;
         if (!activeInstance->Bind(renderer, pass))
         {
           continue;

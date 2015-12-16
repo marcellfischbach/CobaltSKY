@@ -3,18 +3,18 @@
 
 #include <GraphicsGL4/Deferred/DefaultCollector.hh>
 
-vkDefaultCollector::vkDefaultCollector(vkCollection<vkGeometryMesh*> *geometrieDatas, vkCollection<vkLight*> *lights)
-  : m_geometryMeshes(geometrieDatas)
+vkDefaultCollector::vkDefaultCollector(vkCollection<vkRenderState*> *renderState, vkCollection<vkLight*> *lights)
+  : m_renderStates(renderState)
   , m_lights(lights)
 {
 
 }
 
-void vkDefaultCollector::ScanGeometry(vkGeometryMesh *geometry)
+void vkDefaultCollector::ScanGeometry(vkRenderState *renderState)
 {
-  if (m_geometryMeshes)
+  if (m_renderStates)
   {
-    m_geometryMeshes->Add(geometry);
+    m_renderStates->Add(renderState);
   }
 }
 

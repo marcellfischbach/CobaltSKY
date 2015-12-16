@@ -3,6 +3,7 @@
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/Scan.hh>
 
+
 vkGeometryState::vkGeometryState()
   : vkSpatialState()
   , m_geometry(0)

@@ -60,6 +60,10 @@ set(SOURCE_ENTITY
   Entity/GeometryState.hh
   Entity/LightState.cc
   Entity/LightState.hh
+  Entity/MeshState.cc
+  Entity/MeshState.hh
+  Entity/RenderState.cc
+  Entity/RenderState.hh
   Entity/Scan.hh
   Entity/SpatialState.cc
   Entity/SpatialState.hh

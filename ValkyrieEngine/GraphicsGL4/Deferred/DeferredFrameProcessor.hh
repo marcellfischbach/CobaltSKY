@@ -31,7 +31,7 @@ private:
   void RenderGBuffer(vkEntity *root);
 
 private:
-  vkCollection<vkGeometryMesh*> m_geometries;
+  vkCollection<vkRenderState*> m_renderStates;
   vkCollection<vkLight*> m_lights;
   vkGraphicsGL4 *m_renderer;
 

@@ -6,6 +6,8 @@
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/GeometryState.hh>
 #include <Valkyrie/Entity/LightState.hh>
+#include <Valkyrie/Entity/MeshState.hh>
+#include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
@@ -606,20 +608,15 @@ vkEntity *create_scene(IGraphics *graphics)
   vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeMeshInst);
 
-  vkGeometryMesh *planeGeometryData = new vkGeometryMesh();
-  planeGeometryData->SetMesh(planeMesh);
-  planeGeometryData->SetMaterial(materialFieldStone);
-
-  vkGeometryState *planeGeometryState = new vkGeometryState();
-  planeGeometryState->SetGeometry(planeGeometryData);
-
+  vkStaticMeshState *planeState = new vkStaticMeshState();
+  planeState->SetMesh(planeMesh);
+  planeState->SetMaterial(materialFieldstoneInst, 0);
 
   vkEntity *planeEntity = new vkEntity();
-  planeEntity->SetRootState(planeGeometryState);
-  planeEntity->AddState(planeGeometryState, parentState);
+  planeEntity->SetRootState(planeState);
+  planeEntity->AddState(planeState, parentState);
 
-  /* create the red cube mesh */
-  vkGeometryMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkGeometryMesh>(vkResourceLocator("${models}/mine.staticmesh", "Geometry"));
+  vkMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
 
 
   srand(4567898768);
@@ -629,14 +626,14 @@ vkEntity *create_scene(IGraphics *graphics)
     float y = (float)rand() / (float)RAND_MAX;
     float z = (float)rand() / (float)RAND_MAX;
 
-    vkGeometryState *redCubeGeometryState = new vkGeometryState();
-    redCubeGeometryState->SetGeometry(mineMesh);
-    redCubeGeometryState->SetCastShadow(true);
-
+    vkStaticMeshState *staticMeshState = new vkStaticMeshState();
+    staticMeshState->SetMesh(mineMesh);
+    staticMeshState->SetMaterial(materialFieldstoneInst, 0);
+    staticMeshState->SetMaterial(materialFieldstoneRedInst, 1);
 
     vkEntity *redCubeEntity = new vkEntity();
-    redCubeEntity->SetRootState(redCubeGeometryState);
-    redCubeEntity->AddState(redCubeGeometryState, parentState);
+    redCubeEntity->SetRootState(staticMeshState);
+    redCubeEntity->AddState(staticMeshState, parentState);
     redCubeEntity->GetTransformation().SetTranslation(vkVector3f(-100.0f + x * 200.0f, -100.0f + y * 200.0f, -2.0f + z * 4.0f));
     redCubeEntity->FinishTransformation();
 

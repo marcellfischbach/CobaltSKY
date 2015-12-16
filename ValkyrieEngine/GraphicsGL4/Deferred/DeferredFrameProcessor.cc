@@ -9,6 +9,7 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
@@ -25,7 +26,7 @@ GLuint queries[10];
 vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
   : IFrameProcessor()
   , m_renderer(renderer)
-  , m_geometries(64, 16)
+  , m_renderStates(64, 16)
   , m_gbuffer(0)
 {
   VK_CLASS_GEN_CONSTR;
@@ -115,12 +116,12 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
 
 #if 1
-  for (vkSize i = 0; i < m_geometries.length; ++i)
+  for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
-    vkGeometryMesh *geometryMesh = m_geometries[i];
-    if (geometryMesh)
+    vkRenderState *renderState = m_renderStates[i];
+    if (renderState)
     {
-      geometryMesh->Render(m_renderer, eRP_GBuffer);
+      renderState->Render(m_renderer, eRP_GBuffer);
     }
   }
 #else
@@ -167,13 +168,13 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
 void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
-  m_geometries.Clear();
+  m_renderStates.Clear();
   m_lights.Clear();
 
   vkScanConfig config;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
-  vkDefaultCollector collector(&m_geometries, &m_lights);
+  vkDefaultCollector collector(&m_renderStates, &m_lights);
   vkClipper *clipper = camera->GetClipper();
   root->Scan(clipper, m_renderer, &collector, config);
 

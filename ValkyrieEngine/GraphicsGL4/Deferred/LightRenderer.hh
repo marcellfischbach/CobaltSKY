@@ -13,11 +13,11 @@ class vkCamera;
 class vkDirectionalLight;
 class vkEntity;
 class vkGBuffer;
-class vkGeometryMesh;
 class vkLight;
 class vkPointLight;
 class vkProgramGL4;
 class vkGraphicsGL4;
+class vkRenderState;
 class vkRenderTargetGL4;
 class vkResourceLocator;
 
@@ -59,7 +59,7 @@ protected:
 
 protected:
   void CalcShadowIntensity(const vkLight *light);
-  vkCollection<vkGeometryMesh*> m_geometries;
+  vkCollection<vkRenderState*> m_renderStates;
   vkGraphicsGL4 *m_renderer;
   float m_mapBias;
 
