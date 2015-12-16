@@ -4,7 +4,6 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
-#include <Valkyrie/Entity/GeometryState.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
@@ -637,6 +636,7 @@ vkEntity *create_scene(IGraphics *graphics)
     redCubeEntity->GetTransformation().SetTranslation(vkVector3f(-100.0f + x * 200.0f, -100.0f + y * 200.0f, -2.0f + z * 4.0f));
     redCubeEntity->FinishTransformation();
 
+    redCubeEntity->GetBoundingBox().Debug();
   }
 
 
@@ -645,7 +645,7 @@ vkEntity *create_scene(IGraphics *graphics)
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
-  directionalLight->SetCastShadow(false);
+  directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalLightState = new vkLightState();
@@ -657,9 +657,10 @@ vkEntity *create_scene(IGraphics *graphics)
 
 
   vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
-  directionalBackLight->SetColor(vkColor4f(0.1f, 0.1f, 0.1f));
+  directionalBackLight->SetColor(vkColor4f(1.0f, 0.8f, 0.2f));
   directionalBackLight->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
   directionalBackLight->SetCastShadow(false);
+  directionalBackLight->SetEnergy(0.25f);
   directionalBackLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalBackLightState = new vkLightState();

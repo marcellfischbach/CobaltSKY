@@ -3,14 +3,14 @@
 
 #include <GraphicsGL4/Deferred/DefaultCollector.hh>
 
-vkDefaultCollector::vkDefaultCollector(vkCollection<vkRenderState*> *renderState, vkCollection<vkLight*> *lights)
-  : m_renderStates(renderState)
-  , m_lights(lights)
+vkDefaultCollector::vkDefaultCollector(vkCollection<vkRenderState*> *renderStates, vkCollection<vkLightState*> *lightStates)
+  : m_renderStates(renderStates)
+  , m_lightStates(lightStates)
 {
 
 }
 
-void vkDefaultCollector::ScanGeometry(vkRenderState *renderState)
+void vkDefaultCollector::ScanRenderState(vkRenderState *renderState)
 {
   if (m_renderStates)
   {
@@ -18,10 +18,10 @@ void vkDefaultCollector::ScanGeometry(vkRenderState *renderState)
   }
 }
 
-void vkDefaultCollector::ScanLight(vkLight *light)
+void vkDefaultCollector::ScanLightState(vkLightState *lightState)
 {
-  if (m_lights)
+  if (m_lightStates)
   {
-    m_lights->Add(light);
+    m_lightStates->Add(lightState);
   }
 }

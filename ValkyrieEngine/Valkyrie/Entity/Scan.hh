@@ -1,14 +1,14 @@
 #pragma once
 
 class vkRenderState;
-class vkLight;
+class vkLightState;
 
 struct IEntityScan
 {
 
-  virtual void ScanGeometry(vkRenderState *geometry) = 0;
+  virtual void ScanRenderState(vkRenderState *renderState) = 0;
 
-  virtual void ScanLight(vkLight *light) = 0;
+  virtual void ScanLightState(vkLightState *lightState) = 0;
 
 };
 

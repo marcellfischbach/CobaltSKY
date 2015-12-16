@@ -37,6 +37,8 @@ void vkStaticMeshState::SetMesh(vkMesh *mesh)
   VK_SET(m_mesh, mesh);
 
   UpdateMaterialSlots();
+
+  UpdateBoundingBox();
 }
 
 void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkUInt32 slot)
@@ -48,6 +50,15 @@ void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkUInt32 slot)
 
   VK_SET(m_materials[slot], material);
 }
+
+
+void vkStaticMeshState::FinishTransformation()
+{
+  vkRenderState::FinishTransformation();
+
+  UpdateBoundingBox();
+}
+
 
 void vkStaticMeshState::UpdateMaterialSlots()
 {
@@ -78,11 +89,22 @@ void vkStaticMeshState::UpdateMaterialSlots()
   m_numberOfMaterialSlots = numberOfSlots;
 }
 
+void vkStaticMeshState::UpdateBoundingBox()
+{
+  m_boundingBox.Clear();
+  if (m_mesh)
+  {
+    m_boundingBox.Add(m_globalMatrix, m_mesh->GetBoundingBox());
+    m_boundingBox.Finish();
+  }
+
+}
 
 void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
 {
   if (m_mesh)
   {
+    graphics->SetModelMatrix(GetGlobalTransformation());
     m_mesh->Render(graphics, pass, m_numberOfMaterialSlots, m_materials);
   }
 }
@@ -90,5 +112,8 @@ void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
 
 void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
-  entityScan->ScanGeometry(this);
+  if (m_materials && m_mesh)
+  {
+    entityScan->ScanRenderState(this);
+  }
 }

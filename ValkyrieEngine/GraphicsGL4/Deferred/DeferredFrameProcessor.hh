@@ -32,7 +32,7 @@ private:
 
 private:
   vkCollection<vkRenderState*> m_renderStates;
-  vkCollection<vkLight*> m_lights;
+  vkCollection<vkLightState*> m_lightStates;
   vkGraphicsGL4 *m_renderer;
 
   vkGBuffer *m_gbuffer;

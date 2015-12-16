@@ -75,3 +75,9 @@ void vkEntity::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entity
     m_rootState->Scan(clipper, graphics, entityScan, config);
   }
 }
+
+const vkBoundingBox& vkEntity::GetBoundingBox() const
+{
+  return m_rootState->GetBoundingBox();
+}
+

@@ -9,6 +9,7 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
@@ -115,7 +116,6 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   glDrawBuffers(4, buffers);
 
 
-#if 1
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState = m_renderStates[i];
@@ -124,57 +124,17 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
       renderState->Render(m_renderer, eRP_GBuffer);
     }
   }
-#else
-
-  std::vector<Data> datas;
-  datas.reserve(2000);
-  for (vkSize i = 0; i < m_geometries.length; ++i)
-  {
-    vkGeometryMesh *geometryMesh = m_geometries[i];
-    if (geometryMesh)
-    {
-      vkMultiMaterial *multiMat = geometryMesh->GetMaterial();
-      vkMesh *mesh = geometryMesh->GetMesh();
-      for (unsigned i = 0, in = mesh->GetNumberOfMeshes(0); i < in; ++i)
-      {
-        vkSubMesh *subMesh = mesh->GetMesh(0, i);
-        vkUInt32 matIdx = mesh->GetMaterialIndex(0, i);
-
-        datas.push_back(Data(&geometryMesh->GetGlobalTransform(), multiMat->GetMaterialInstance(matIdx), subMesh));
-      }
-    }
-  }
-
-  std::sort(datas.begin(), datas.end());
-
-  vkMaterialInstance *mat = 0;
-  for (vkUInt32 i = 0, in = datas.size(); i < in; ++i)
-  {
-    Data &data = datas[i];
-    if (mat == 0 || mat != data.material)
-    {
-      mat = data.material;
-      if (!mat->Bind(m_renderer, eRP_GBuffer))
-      {
-        continue;
-      }
-    }
-    m_renderer->SetModelMatrix(*data.matrix);
-    datas[i].mesh->Render(m_renderer);
-
-  }
-#endif
 }
 
 void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
   m_renderStates.Clear();
-  m_lights.Clear();
+  m_lightStates.Clear();
 
   vkScanConfig config;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
-  vkDefaultCollector collector(&m_renderStates, &m_lights);
+  vkDefaultCollector collector(&m_renderStates, &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
   root->Scan(clipper, m_renderer, &collector, config);
 
@@ -193,9 +153,14 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
   m_renderer->SetBlendMode(eBM_One, eBM_One);
   m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
 
-  for (vkSize i = 0; i < m_lights.length; ++i)
+  for (vkSize i = 0; i < m_lightStates.length; ++i)
   {
-    vkLight* light = m_lights[i];
+    vkLightState *lightState = m_lightStates[i];
+    if (!lightState)
+    {
+      continue;
+    }
+    vkLight* light = lightState->GetLight();
 
     vkLightvkGraphicsGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
@@ -207,10 +172,12 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
 
   glEndQuery(GL_TIME_ELAPSED);
 
+#if 0
   GLuint time0, time1;
   glGetQueryObjectuiv(queries[0], GL_QUERY_RESULT, &time0);
   glGetQueryObjectuiv(queries[1], GL_QUERY_RESULT, &time1);
   printf("Times: %.2f %.2f\n", (float)(time0 / 1000) / 1000.0f, (float)(time1 / 1000.0f) / 1000.0f);
+#endif
 
   m_renderer->SetBlendEnabled(false);
 

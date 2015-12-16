@@ -56,8 +56,6 @@ set(SOURCE_ENTITY
   Entity/EntityState.hh
   Entity/Geometry.cc
   Entity/Geometry.hh
-  Entity/GeometryState.cc
-  Entity/GeometryState.hh
   Entity/LightState.cc
   Entity/LightState.hh
   Entity/MeshState.cc

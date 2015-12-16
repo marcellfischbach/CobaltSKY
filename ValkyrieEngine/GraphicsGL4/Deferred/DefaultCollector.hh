@@ -7,14 +7,14 @@ class vkRenderState;
 class vkDefaultCollector : public IEntityScan
 {
 public:
-  vkDefaultCollector(vkCollection<vkRenderState*> *renderStates, vkCollection<vkLight*> *lights);
+  vkDefaultCollector(vkCollection<vkRenderState*> *renderStates, vkCollection<vkLightState*> *lightStates);
 
-  virtual void ScanGeometry(vkRenderState *geometry);
+  virtual void ScanRenderState(vkRenderState *renderState);
 
-  virtual void ScanLight(vkLight *light);
+  virtual void ScanLightState(vkLightState *lightState);
 
 
 private:
   vkCollection<vkRenderState*> *m_renderStates;
-  vkCollection<vkLight*> *m_lights;
+  vkCollection<vkLightState*> *m_lightStates;
 };

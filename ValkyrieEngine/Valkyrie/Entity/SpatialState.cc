@@ -35,16 +35,6 @@ void vkSpatialState::FinishTransformation()
   }
 }
 
-const vkMatrix4f &vkSpatialState::GetLocalTransformation() const
-{
-  return m_localMatrix;
-}
-
-const vkMatrix4f &vkSpatialState::GetGlobalTransformation() const
-{
-  return m_globalMatrix;
-}
-
 
 
 void vkSpatialState::AddSpatialState(vkSpatialState *state)

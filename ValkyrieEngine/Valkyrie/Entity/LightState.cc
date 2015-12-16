@@ -28,6 +28,6 @@ void vkLightState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan
 {
   if (m_light)
   {
-    entityScan->ScanLight(m_light);
+    entityScan->ScanLightState(this);
   }
 }

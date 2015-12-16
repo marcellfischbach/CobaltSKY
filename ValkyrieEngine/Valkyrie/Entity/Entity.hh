@@ -6,6 +6,7 @@
 #include <vector>
 #include <Valkyrie/Entity/Entity.refl.hh>
 
+class vkBoundingBox;
 class vkClipper;
 class vkEntityState;
 class vkSpatialState;
@@ -32,6 +33,7 @@ public:
   void AddState(vkEntityState *state);
   void AddState(vkSpatialState *state, vkSpatialState *parentState);
 
+  const vkBoundingBox &GetBoundingBox() const;
   vkTransformation GetTransformation();
   void FinishTransformation();
 

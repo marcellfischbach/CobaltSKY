@@ -93,7 +93,13 @@ void vkBoundingBox::Debug(const char *message) const
   }
   if (m_valid)
   {
-    printf("<%.2f %.2f %.2f>  -  <%.2f %.2f %.2f>\n",
+    printf("<%.2f %.2f %.2f>  <%.2f %.2f %.2f>  <%.2f %.2f %.2f>  -  <%.2f %.2f %.2f>\n",
+           m_center.x,
+           m_center.y,
+           m_center.z,
+           m_max.x - m_min.x,
+           m_max.y - m_min.y,
+           m_max.z - m_min.z,
            m_min.x,
            m_min.y,
            m_min.z,

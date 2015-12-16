@@ -26,6 +26,7 @@ public:
   vkMaterialInstance *GetMaterial(vkUInt32 slot = 0);
   const vkMaterialInstance *GetMaterial(vkUInt32 slot = 0) const;
 
+  virtual void FinishTransformation();
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
 protected:
@@ -34,11 +35,13 @@ protected:
 private:
 
   void UpdateMaterialSlots();
+  void UpdateBoundingBox();
 
   vkMesh* m_mesh;
 
   vkUInt32 m_numberOfMaterialSlots;
   vkMaterialInstance **m_materials;
+
 };
 
 VK_FORCEINLINE vkMesh *vkStaticMeshState::GetMesh()
