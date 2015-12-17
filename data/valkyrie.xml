@@ -6,6 +6,7 @@
 		<textures>materials/textures</textures>
 		<fonts>fonts</fonts>
 		<models>models</models>
+		<entities>entities</entities>
 	</vfs>
 	
 </settings>

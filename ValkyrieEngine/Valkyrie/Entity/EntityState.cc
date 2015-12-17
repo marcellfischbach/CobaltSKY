@@ -13,3 +13,14 @@ vkEntityState::~vkEntityState()
 
 }
 
+
+vkSpatialState *vkEntityState::ToSpatialState()
+{
+  return 0;
+}
+
+const vkSpatialState *vkEntityState::ToSpatialState() const
+{
+  return 0;
+}
+

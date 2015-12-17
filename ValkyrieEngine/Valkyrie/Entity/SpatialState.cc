@@ -13,6 +13,18 @@ vkSpatialState::~vkSpatialState()
 
 }
 
+vkSpatialState *vkSpatialState::ToSpatialState()
+{
+  return this;
+}
+
+const vkSpatialState *vkSpatialState::ToSpatialState() const
+{
+  return this;
+}
+
+
+
 vkTransformation vkSpatialState::GetTransformation()
 {
   return vkTransformation(m_localMatrix, m_globalMatrix, 0);

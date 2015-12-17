@@ -603,6 +603,8 @@ vkEntity *create_scene(IGraphics *graphics)
   mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
 
 
+  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
+
   vkEntity *rootEntity = new vkEntity();
   vkSpatialState *parentState = new vkSpatialState();
   rootEntity->SetRootState(parentState);

@@ -7,6 +7,7 @@
 #include <Valkyrie/Types.hh>
 
 class vkClipper;
+class vkSpatialState;
 struct IEntityScan;
 struct IGraphics;
 
@@ -23,6 +24,9 @@ public:
 
   void SetName(const vkString &name);
   const vkString &GetName() const;
+
+  virtual vkSpatialState *ToSpatialState();
+  virtual const vkSpatialState *ToSpatialState() const;
 
 protected:
   vkEntityState();

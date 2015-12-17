@@ -26,6 +26,8 @@ public:
   const vkMatrix4f &GetGlobalTransformation() const;
   const vkBoundingBox &GetBoundingBox() const;
 
+  virtual vkSpatialState *ToSpatialState();
+  virtual const vkSpatialState *ToSpatialState() const;
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
