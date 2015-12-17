@@ -19,7 +19,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
 function(VK_MOC prefix api inlist outlist)
 	set(out)
 	foreach(file ${${inlist}})
-		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}  ${file} 
+		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${file} 
 										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										RESULT_VARIABLE output)
 		if(${output} EQUAL 1)

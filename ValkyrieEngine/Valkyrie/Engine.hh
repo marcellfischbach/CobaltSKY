@@ -19,6 +19,7 @@ public:
 
 protected:
   void RegisterLoaders();
+  void RegisterClasses();
 
 private:
   vkEngine();

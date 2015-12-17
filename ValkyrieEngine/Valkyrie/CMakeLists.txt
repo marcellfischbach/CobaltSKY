@@ -19,6 +19,8 @@ source_group(
 
 
 set(SOURCE_CORE
+  Core/ClassRegistry.cc
+  Core/ClassRegistry.hh
   Core/Collection.hh
 	Core/FileInfo.cc
 	Core/FileInfo.hh
@@ -60,6 +62,8 @@ set(SOURCE_ENTITY
   Entity/LightState.hh
   Entity/MeshState.cc
   Entity/MeshState.hh
+  Entity/Module.cc
+  Entity/Module.hh
   Entity/RenderState.cc
   Entity/RenderState.hh
   Entity/Scan.hh
@@ -127,6 +131,8 @@ source_group(
 	)
 	
 set(SOURCE_LOADERS
+  Loaders/EntityLoader.cc
+  Loaders/EntityLoader.hh
 	Loaders/Loaders.cc
 	Loaders/Loaders.hh
 	Loaders/ImageLoader.cc

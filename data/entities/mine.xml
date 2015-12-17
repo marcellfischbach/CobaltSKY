@@ -1,0 +1,11 @@
+<entity name="MyEntityName">
+	<entityClass>vkEntity</entityClass>
+	
+	<entitystate>
+		<entitystateClass>vkStaticMeshState<entitystateClass>
+		
+		
+		
+	</entitystate>
+		
+</entity>

@@ -1,12 +1,14 @@
 
 
 #include <Valkyrie/Engine.hh>
+#include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/Entity/Module.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
@@ -82,7 +84,7 @@ int vkEngine::Run()
   }
 
   RegisterLoaders();
-
+  RegisterClasses();
 
   ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
   IRenderTarget *rt = m_renderer->CreateRenderTarget();
@@ -296,6 +298,13 @@ void vkEngine::RegisterLoaders()
 {
   vkResourceManager *mgr = vkResourceManager::Get();
   vkLoaders::Register(mgr);
+}
+
+
+
+void vkEngine::RegisterClasses()
+{
+  vkEntityModule::Initialize();
 }
 
 
