@@ -8,6 +8,9 @@
 class vkImage;
 struct ISampler;
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkSamplerLoader : public vkBaseXMLLoader
 {
@@ -24,6 +27,9 @@ public:
 
 
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkTextureLoader : public vkBaseXMLLoader
 {

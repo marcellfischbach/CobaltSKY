@@ -7,6 +7,9 @@
 #include <Valkyrie/Entity/RenderState.refl.hh>
 
 struct IGraphics;
+/**
+* \ingroup entity
+*/
 
 VK_INTERFACE()
 class VKE_API vkRenderState : public vkSpatialState

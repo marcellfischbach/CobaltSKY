@@ -275,7 +275,7 @@ TiXmlElement *vkBaseXMLLoader::FindElement(TiXmlElement *root, const vkString &e
 }
 
 
-vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode) const
+vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode, vkResourceLoadingMode alterInline) const
 {
   vkResourceLoadingMode mode = defaultMode;
   if (element->Attribute("resourceMode"))
@@ -291,7 +291,7 @@ vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *elem
     }
     else if (modeString == vkString("inline"))
     {
-      mode = eRLM_Inline;
+      mode = alterInline;
     }
   }
   return mode;

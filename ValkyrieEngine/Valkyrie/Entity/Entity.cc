@@ -81,3 +81,45 @@ const vkBoundingBox& vkEntity::GetBoundingBox() const
   return m_rootState->GetBoundingBox();
 }
 
+
+
+void vkEntity::AttachEntity(vkEntity *entity, vkSpatialState *parentState)
+{
+  if (!entity)
+  {
+    return;
+  }
+  if (!parentState)
+  {
+    parentState = m_rootState;
+  }
+  if (!parentState)
+  {
+    return;
+  }
+  parentState->AddSpatialState(entity->m_rootState);
+
+  entity->AddRef();
+  m_children.push_back(entity);
+  entity->m_parentEntity = this;
+}
+
+void vkEntity::AttachEntity(vkEntity *entity, const vkString &parentStateName)
+{
+  if (!m_rootState)
+  {
+    return;
+  }
+  vkSpatialState *parentState = m_rootState->FindState(parentStateName);
+  AttachEntity(entity, parentState);
+}
+
+void vkEntity::DetachEntity(vkEntity *entity)
+{
+  if (!entity)
+  {
+    return;
+  }
+
+
+}

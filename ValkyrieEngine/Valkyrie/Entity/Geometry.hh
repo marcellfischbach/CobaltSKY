@@ -14,6 +14,9 @@ class vkMesh;
 struct vkScanConfig;
 struct IGraphics;
 struct IEntityScan;
+/**
+* \ingroup entity
+*/
 
 VK_INTERFACE()
 class VKE_API vkGeometryData : public vkObject
@@ -48,6 +51,9 @@ private:
   bool m_attached;
 };
 
+/**
+* \ingroup entity
+*/
 
 VK_CLASS()
 class VKE_API vkGeometryMesh : public vkGeometryData

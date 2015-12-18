@@ -603,13 +603,13 @@ vkEntity *create_scene(IGraphics *graphics)
   mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
 
 
-  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
 
   vkEntity *rootEntity = new vkEntity();
   vkSpatialState *parentState = new vkSpatialState();
   rootEntity->SetRootState(parentState);
   rootEntity->AddState(parentState, 0);
 
+  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
 
 
 
@@ -630,7 +630,7 @@ vkEntity *create_scene(IGraphics *graphics)
 
 
   srand(4567898768);
-  for (int i = 0; i < 500; ++i)
+  for (int i = 0; i < 0; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;

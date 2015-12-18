@@ -5,6 +5,9 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Loaders/MaterialLoader.refl.hh>
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkMaterialLoader : public vkBaseXMLLoader
 {
@@ -20,6 +23,9 @@ public:
 };
 
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkMaterialInstanceLoader : public vkBaseXMLLoader
 {

@@ -4,6 +4,9 @@
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/LightState.refl.hh>
 class vkLight;
+/**
+* \ingroup entity
+*/
 
 VK_CLASS()
 class VKE_API vkLightState : public vkSpatialState

@@ -8,21 +8,9 @@
 
 
 VK_CLASS();
-class VKE_API vkEntityLoader: public vkBaseXMLLoader
-{
-  VK_CLASS_GEN;
-public:
-  vkEntityLoader();
-  virtual ~vkEntityLoader();
-
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-  virtual const vkClass *GetLoadingClass() const;
-};
-
-VK_CLASS();
+/**
+* \ingroup loading
+*/
 class VKE_API vkEntityMasterLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
@@ -40,23 +28,9 @@ public:
 
 
 VK_CLASS();
-class VKE_API vkEntityStateLoader : public vkBaseXMLLoader
-{
-  VK_CLASS_GEN;
-public:
-  vkEntityStateLoader();
-  virtual ~vkEntityStateLoader();
-
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-  virtual const vkClass *GetLoadingClass() const;
-
-};
-
-
-VK_CLASS();
+/**
+* \ingroup loading
+*/
 class VKE_API vkEntityStateMasterLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
@@ -73,6 +47,101 @@ public:
 };
 
 
+VK_CLASS();
+/**
+* \ingroup loading
+*/
+class VKE_API vkEntityLoader: public vkBaseXMLLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkEntityLoader();
+  virtual ~vkEntityLoader();
+
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+  virtual const vkClass *GetLoadingClass() const;
+};
+
+
+VK_CLASS();
+/**
+* \ingroup loading
+*/
+class VKE_API vkEntityStateLoader : public vkBaseXMLLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkEntityStateLoader();
+  virtual ~vkEntityStateLoader();
+
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+/**
+* \ingroup loading
+*/
+class VKE_API vkSpatialStateLoader : public vkEntityStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkSpatialStateLoader();
+  virtual ~vkSpatialStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+/**
+* \ingroup loading
+*/
+class VKE_API vkRenderStateLoader : public vkSpatialStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkRenderStateLoader();
+  virtual ~vkRenderStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+/**
+* \ingroup loading
+*/
+class VKE_API vkStaticMeshStateLoader : public vkRenderStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkStaticMeshStateLoader();
+  virtual ~vkStaticMeshStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+
+
+/**
+* \ingroup loading
+*/
 class VKE_API vkEntityLoaderRegistry
 {
 public:

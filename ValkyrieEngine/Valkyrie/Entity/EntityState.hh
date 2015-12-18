@@ -11,6 +11,10 @@ class vkSpatialState;
 struct IEntityScan;
 struct IGraphics;
 
+/**
+* \ingroup entity
+*/
+
 VK_INTERFACE()
 class VKE_API vkEntityState : public vkObject
 {

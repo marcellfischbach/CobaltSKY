@@ -71,7 +71,7 @@ protected:
 
   TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
 
-  vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared) const;
+  vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared, vkResourceLoadingMode alterInline = eRLM_Inline) const;
 
   float LoadFloat(const char *str) const;
   vkVector2f LoadVector2f(const char *str) const;
@@ -198,6 +198,19 @@ public:
   */
   IObject *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0);
 
+  VK_FORCEINLINE IObject *Aquire(const vkResourceLocator &resourceLocator, IObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
+  {
+    switch (mode)
+    {
+    case eRLM_Shared:
+      return GetOrLoad(resourceLocator, userData);
+    case eRLM_Instance:
+      return Load(resourceLocator, userData);
+    }
+    return 0;
+  }
+
+
 
 
   template<typename T>
@@ -220,6 +233,22 @@ public:
   T *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0)
   {
     IObject *object = GetOrLoad(resourceLocator, userData);
+    if (object)
+    {
+      T *t_instance = vkQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *Aquire(const vkResourceLocator &resourceLocator, IObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
+  {
+    IObject *object = Aquire(resourceLocator, userData, mode);
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);

@@ -13,6 +13,9 @@ class vkMultiMaterial;
 class vkSubMesh;
 struct IVertexDeclaration;
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkStaticMeshLoader : public IFileLoader
 {

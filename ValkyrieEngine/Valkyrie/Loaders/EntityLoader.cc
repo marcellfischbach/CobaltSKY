@@ -4,7 +4,18 @@
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
+#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Core/ClassRegistry.hh>
+
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkEntityMasterLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
 
 vkEntityMasterLoader::vkEntityMasterLoader()
   : vkBaseXMLLoader()
@@ -49,6 +60,69 @@ IObject *vkEntityMasterLoader::Load(TiXmlElement *element, const vkResourceLocat
   return loader->Load(element, locator, entity);
 }
 
+
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkEntityStateMasterLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
+
+
+vkEntityStateMasterLoader::vkEntityStateMasterLoader()
+  : vkBaseXMLLoader()
+{
+
+}
+
+
+vkEntityStateMasterLoader::~vkEntityStateMasterLoader()
+{
+
+}
+
+
+bool vkEntityStateMasterLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return std::string(element->Value()) == std::string("entityState");
+}
+
+
+IObject *vkEntityStateMasterLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!element->Attribute("class"))
+  {
+    return 0;
+  }
+  vkString className(element->Attribute("class"));
+  const vkClass *entityStateClass = vkClassRegistry::Get()->GetClass(className);
+  if (!entityStateClass)
+  {
+    return 0;
+  }
+
+  const vkEntityStateLoader *loader = vkEntityLoaderRegistry::Get()->GetEntityStateLoader(entityStateClass);
+  if (!loader)
+  {
+    return 0;
+  }
+
+  vkEntityState *entityState = entityStateClass->CreateInstance<vkEntityState>();
+
+  return loader->Load(element, locator, entityState);
+}
+
+
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkEntityLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
 
 
 vkEntityLoader::vkEntityLoader()
@@ -130,51 +204,13 @@ const vkClass *vkEntityLoader::GetLoadingClass() const
 
 
 
-
-
-vkEntityStateMasterLoader::vkEntityStateMasterLoader()
-  : vkBaseXMLLoader()
-{
-
-}
-
-
-vkEntityStateMasterLoader::~vkEntityStateMasterLoader()
-{
-
-}
-
-
-bool vkEntityStateMasterLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
-{
-  return std::string(element->Value()) == std::string("entityState");
-}
-
-
-IObject *vkEntityStateMasterLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
-{
-  if (!element->Attribute("class"))
-  {
-    return 0;
-  }
-  vkString className(element->Attribute("class"));
-  const vkClass *entityStateClass = vkClassRegistry::Get()->GetClass(className);
-  if (!entityStateClass)
-  {
-    return 0;
-  }
-
-  const vkEntityStateLoader *loader = vkEntityLoaderRegistry::Get()->GetEntityStateLoader(entityStateClass);
-  if (!loader)
-  {
-    return 0;
-  }
-
-  vkEntityState *entityState = entityStateClass->CreateInstance<vkEntityState>();
-
-  return loader->Load(element, locator, entityState);
-}
-
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkEntityStateLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
 
 
 
@@ -200,7 +236,23 @@ bool vkEntityStateLoader::CanLoad(TiXmlElement *element, const vkResourceLocator
 
 IObject *vkEntityStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
+  if (!userData || !element)
+  {
+    return userData;
+  }
 
+  vkEntityState *entityState = vkQueryClass<vkEntityState>(userData);
+  if (entityState)
+  {
+    if (element->Attribute("name"))
+    {
+      entityState->SetName(vkString(element->Attribute("name")));
+    }
+    else
+    {
+      entityState->SetName(entityState->GetClass()->GetName());
+    }
+  }
   return userData;
 }
 
@@ -211,6 +263,203 @@ const vkClass *vkEntityStateLoader::GetLoadingClass() const
 
 
 
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkSpatialStateLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
+
+
+
+
+vkSpatialStateLoader::vkSpatialStateLoader()
+  : vkEntityStateLoader()
+{
+
+}
+
+
+vkSpatialStateLoader::~vkSpatialStateLoader()
+{
+
+}
+
+
+
+IObject *vkSpatialStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+  vkSpatialState *spatialState = vkQueryClass<vkSpatialState>(userData);
+  if (spatialState)
+  {
+
+
+    TiXmlElement *transformationElement = element->FirstChildElement("transformation");
+    if (transformationElement)
+    {
+      vkTransformation trans = spatialState->GetTransformation();
+
+      TiXmlElement *translationElement = transformationElement->FirstChildElement("translation");
+      if (translationElement)
+      {
+        const char *txt = translationElement->GetText();
+        if (txt)
+        {
+          vkVector3f translation = LoadVector3f(txt);
+          trans.SetTranslation(translation);
+        }
+      }
+
+      TiXmlElement *axisAngleElement = transformationElement->FirstChildElement("axisAngle");
+      if (axisAngleElement)
+      {
+        const char *txt = axisAngleElement->GetText();
+        if (txt)
+        {
+          vkVector4f axisAngle = LoadVector4f(txt);
+          trans.SetRotation(axisAngle.AsVector3f(), axisAngle.w);
+        }
+      }
+
+    }
+  }
+  return vkEntityStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkSpatialStateLoader::GetLoadingClass() const
+{
+  return vkSpatialStateClass::Get();
+}
+
+
+
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkRenderStateLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
+
+
+
+
+vkRenderStateLoader::vkRenderStateLoader()
+  : vkSpatialStateLoader()
+{
+
+}
+
+
+vkRenderStateLoader::~vkRenderStateLoader()
+{
+
+}
+
+
+IObject *vkRenderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkSpatialStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkRenderStateLoader::GetLoadingClass() const
+{
+  return vkRenderStateClass::Get();
+}
+
+
+
+
+// ***********************************************************************************************
+// ***********************************************************************************************
+//
+//                   vkStaticMeshStateLoader
+//
+// ***********************************************************************************************
+// ***********************************************************************************************
+
+
+
+
+vkStaticMeshStateLoader::vkStaticMeshStateLoader()
+  : vkRenderStateLoader()
+{
+
+}
+
+
+vkStaticMeshStateLoader::~vkStaticMeshStateLoader()
+{
+
+}
+
+
+IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+  vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(userData);
+  if (staticMeshState)
+  {
+    TiXmlElement *meshElement = element->FirstChildElement("mesh");
+    if (meshElement && meshElement->GetText())
+    {
+      const char *txt = meshElement->GetText();
+      vkResourceLoadingMode loadingMode = GetResourceLoadingMode(meshElement, eRLM_Shared, eRLM_Instance);
+      vkMesh *mesh = vkResourceManager::Get()->Aquire<vkMesh>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+      staticMeshState->SetMesh(mesh);
+    }
+    TiXmlElement *materialsElement = element->FirstChildElement("materials");
+    if (materialsElement)
+    {
+      for (TiXmlElement *materialElement = materialsElement->FirstChildElement("material");
+      materialElement;
+        materialElement = materialElement->NextSiblingElement("material"))
+      {
+        const char *txt = materialElement->GetText();
+        vkResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
+        vkMaterialInstance *material = vkResourceManager::Get()->Aquire<vkMaterialInstance>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+        int slot = 0;
+        if (materialElement->Attribute("slot"))
+        {
+          slot = atoi(materialElement->Attribute("slot"));
+        }
+        staticMeshState->SetMaterial(material, slot);
+      }
+    }
+    else
+    {
+      TiXmlElement *materialElement = element->FirstChildElement("material");
+      if (materialElement)
+      {
+        const char *txt = materialElement->GetText();
+        vkResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
+        vkMaterialInstance *material = vkResourceManager::Get()->Aquire<vkMaterialInstance>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+        staticMeshState->SetMaterial(material, 0);
+      }
+    }
+
+
+  }
+
+  return vkRenderStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkStaticMeshStateLoader::GetLoadingClass() const
+{
+  return vkStaticMeshStateClass::Get();
+}
 
 
 

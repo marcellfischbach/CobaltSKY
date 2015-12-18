@@ -28,4 +28,7 @@ void vkLoaders::Register(vkResourceManager *mgr)
   vkEntityLoaderRegistry *reg = vkEntityLoaderRegistry::Get();
   reg->RegisterLoader(new vkEntityLoader());
   reg->RegisterLoader(new vkEntityStateLoader());
+  reg->RegisterLoader(new vkSpatialStateLoader());
+  reg->RegisterLoader(new vkRenderStateLoader());
+  reg->RegisterLoader(new vkStaticMeshStateLoader());
 }

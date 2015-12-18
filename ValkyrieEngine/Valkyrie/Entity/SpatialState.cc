@@ -75,6 +75,41 @@ void vkSpatialState::RemoveSpatialState(vkSpatialState *state)
   }
 }
 
+vkSpatialState *vkSpatialState::FindState(const vkString &stateName)
+{
+  if (stateName == GetName())
+  {
+    return this;
+  }
+
+  for (size_t i = 0, in = m_childStates.size(); i < in; ++i)
+  {
+    vkSpatialState *state = m_childStates[i]->FindState(stateName);
+    if (state)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
+const vkSpatialState *vkSpatialState::FindState(const vkString &stateName) const
+{
+  if (stateName == GetName())
+  {
+    return this;
+  }
+
+  for (size_t i = 0, in = m_childStates.size(); i < in; ++i)
+  {
+    vkSpatialState *state = m_childStates[i]->FindState(stateName);
+    if (state)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
 
 
 void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)

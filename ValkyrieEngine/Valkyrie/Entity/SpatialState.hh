@@ -9,6 +9,9 @@
 
 struct vkScanConfig;
 
+/**
+* \ingroup entity
+*/
 VK_CLASS()
 class VKE_API vkSpatialState : public vkEntityState
 {
@@ -28,6 +31,9 @@ public:
 
   virtual vkSpatialState *ToSpatialState();
   virtual const vkSpatialState *ToSpatialState() const;
+
+  vkSpatialState *FindState(const vkString &stateName);
+  const vkSpatialState *FindState(const vkString &stateName) const;
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 

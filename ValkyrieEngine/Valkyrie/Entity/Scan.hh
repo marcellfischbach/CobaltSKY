@@ -3,6 +3,10 @@
 class vkRenderState;
 class vkLightState;
 
+/**
+* \ingroup entity
+*/
+
 struct IEntityScan
 {
 
@@ -11,6 +15,10 @@ struct IEntityScan
   virtual void ScanLightState(vkLightState *lightState) = 0;
 
 };
+
+/**
+* \ingroup entity
+*/
 
 struct vkScanConfig
 {

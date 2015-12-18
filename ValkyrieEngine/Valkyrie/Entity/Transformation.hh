@@ -4,6 +4,10 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Math/Matrix.hh>
 
+/**
+* \ingroup entity
+*/
+
 class VKE_API vkTransformation
 {
 public:

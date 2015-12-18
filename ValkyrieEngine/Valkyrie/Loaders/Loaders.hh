@@ -3,6 +3,9 @@
 
 class vkResourceManager;
 
+/**
+* \ingroup loading
+*/
 class vkLoaders
 {
 public:

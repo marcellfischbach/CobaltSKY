@@ -8,6 +8,9 @@
 
 class vkMesh;
 class vkMaterialInstance;
+/**
+* \ingroup entity
+*/
 
 VK_CLASS()
 class VKE_API vkStaticMeshState : public vkRenderState

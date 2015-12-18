@@ -1,5 +1,8 @@
 #pragma once
 
+/**
+* \ingroup entity
+*/
 
 class vkEntityModule
 {

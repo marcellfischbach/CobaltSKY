@@ -6,6 +6,9 @@
 #include <Valkyrie/Loaders/ImageLoader.refl.hh>
 
 
+/**
+* \ingroup loading
+*/
 VK_CLASS();
 class VKE_API vkPNGImageLoader : public IFileLoader
 {

@@ -16,6 +16,9 @@ struct vkScanConfig;
 struct IEntityScan;
 struct IGraphics;
 
+/**
+ * \ingroup entity
+ */
 VK_CLASS()
 class VKE_API vkEntity : public vkObject
 {
@@ -41,13 +44,20 @@ public:
 
   virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
+  void AttachEntity(vkEntity *entity, vkSpatialState *parentState = 0);
+  void AttachEntity(vkEntity *entity, const vkString &parentStateName);
+  void DetachEntity(vkEntity *entity);
+
 private:
   vkID m_id;
   vkString m_name;
 
   vkSpatialState *m_rootState;
-
   std::vector<vkEntityState*> m_states;
+
+
+  vkEntity *m_parentEntity;
+  std::vector<vkEntity*> m_children;
 };
 
 VK_FORCEINLINE vkID vkEntity::GetID() const
