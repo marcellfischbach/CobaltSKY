@@ -78,10 +78,17 @@ void vkCamera::UpdateProjectionValues()
       m_left = -m_right;
       m_top = m_orthographicViewport.y;
       m_bottom = -m_top;
+
+      m_topLeft.Set(m_left, m_near, m_top);
+      m_topRight.Set(m_right, m_near, m_top);
+      m_bottomLeft.Set(m_left, m_near, m_bottom);
+      m_bottomRight.Set(m_right, m_near, m_bottom);
     }
     break;
   }
 
+  m_frontNear.Set(0.0f, m_near, 0.0f);
+  m_frontFar.Set(0.0f, m_far, 0.0f);
   m_projectionChanged = true;
 }
 
@@ -110,15 +117,19 @@ vkClipper *vkCamera::GetClipper()
   {
   case ePM_Perspective:
     {
-      vkVector3f tl, tr, bl, br, l, r, b, t;
+      vkVector3f tl, tr, bl, br, l, r, b, t, n, f, dir;
+
       vkMatrix4f::Transform(m_cameraMatrixInv, m_topLeft, tl);
       vkMatrix4f::Transform(m_cameraMatrixInv, m_topRight, tr);
       vkMatrix4f::Transform(m_cameraMatrixInv, m_bottomLeft, bl);
       vkMatrix4f::Transform(m_cameraMatrixInv, m_bottomRight, br);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_frontNear, n);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_frontFar, f);
       vkVector3f::Sub(tl, m_eye, tl);
       vkVector3f::Sub(tr, m_eye, tr);
       vkVector3f::Sub(bl, m_eye, bl);
       vkVector3f::Sub(br, m_eye, br);
+      vkVector3f::Sub(f, n, dir);
       vkVector3f::Cross(tl, tr, t);
       vkVector3f::Cross(bl, tl, l);
       vkVector3f::Cross(br, bl, b);
@@ -127,10 +138,36 @@ vkClipper *vkCamera::GetClipper()
       m_clipper->AddPlane(vkPlane(m_eye, l));
       m_clipper->AddPlane(vkPlane(m_eye, b));
       m_clipper->AddPlane(vkPlane(m_eye, r));
+      m_clipper->AddPlane(vkPlane(n, dir));
     }
     break;
 
   case ePM_Orthographic:
+    {
+      vkVector3f tl, tr, bl, br, l, r, b, t, n, f, dir;
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_topLeft, tl);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_topRight, tr);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_bottomLeft, bl);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_bottomRight, br);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_frontNear, n);
+      vkMatrix4f::Transform(m_cameraMatrixInv, m_frontFar, f);
+      vkVector3f::Sub(tl, bl, l);
+      vkVector3f::Sub(tr, tl, t);
+      vkVector3f::Sub(br, tr, r);
+      vkVector3f::Sub(bl, br, b);
+      vkVector3f::Sub(f, n, dir);
+      vkVector3f::Cross(dir, l, l);
+      vkVector3f::Cross(dir, r, r);
+      vkVector3f::Cross(dir, b, b);
+      vkVector3f::Cross(dir, t, t);
+      m_clipper->AddPlane(vkPlane(bl, l));
+      m_clipper->AddPlane(vkPlane(tl, t));
+      m_clipper->AddPlane(vkPlane(tr, r));
+      m_clipper->AddPlane(vkPlane(br, b));
+
+
+
+    }
     break;
   }
   return m_clipper;

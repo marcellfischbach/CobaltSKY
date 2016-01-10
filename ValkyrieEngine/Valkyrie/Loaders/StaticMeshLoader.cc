@@ -162,14 +162,15 @@ vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vk
   vkUInt32 numMaterials;
   file->Read(&numMaterials, sizeof(vkUInt32));
 
+  vkMesh *mesh = new vkMesh();
   for (vkUInt32 i = 0; i < numMaterials; ++i)
   {
     vkString materialName = ReadString(file);
     materialIDs[materialName] = i;
     materialNames[i] = materialName;
+    mesh->AddMaterialName(materialName);
   }
 
-  vkMesh *mesh = new vkMesh();
   vkUInt32 numSubMeshes;
   file->Read(&numSubMeshes, sizeof(vkUInt32));
 

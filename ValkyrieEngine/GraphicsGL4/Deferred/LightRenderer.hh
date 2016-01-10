@@ -80,7 +80,7 @@ public:
   virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
 
 private:
-  void RenderShadow(vkEntity *root, const vkCamera *camera, const vkDirectionalLight *light);
+  void RenderShadow(vkEntity *root, vkCamera *camera, const vkDirectionalLight *light);
   void CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera);
   void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const;
 

@@ -6,6 +6,7 @@
 			<technique name="Default">
 				<shader>${shaders}/solid/gbuffer.vert</shader>
 				<shader>${shaders}/solid/gbuffer.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
 			</technique>
 			
 		</techniques>
@@ -20,6 +21,7 @@
 				<shader>${shaders}/solid/shadow.vert</shader>
 				<shader>${shaders}/solid/shadow_pssm.geom</shader>
 				<shader>${shaders}/solid/shadow.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
 			</technique>
 			
 		</techniques>
@@ -34,6 +36,7 @@
 				<shader>${shaders}/solid/shadow.vert</shader>
 				<shader>${shaders}/solid/shadow_cube.geom</shader>
 				<shader>${shaders}/solid/shadow.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
 			</technique>
 			
 		</techniques>

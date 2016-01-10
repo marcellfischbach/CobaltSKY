@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Valkyrie/Math/Vector.hh>
+
 class vkRenderState;
 class vkLightState;
 
@@ -26,4 +28,5 @@ struct vkScanConfig
   bool ScanShadowCasters;
   bool ScanNonShadowCasters;
 
+  vkVector3f MainCameraPosition;
 };

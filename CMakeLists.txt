@@ -53,12 +53,15 @@ find_package(PNG)
 
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
+include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindPhysX3.cmake)
+include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindBullet.cmake)
 
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PNG_INCLUDE_DIRS})
 include_directories(${ValkyrieEngine_SOURCE_DIR}/3rdparty)
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)
+
 
 add_subdirectory(3rdparty)
 add_subdirectory(ValkyrieEngine)

@@ -7,6 +7,7 @@
 #include <Valkyrie/Core/VFS.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
+#include <PhysicsBullet/BulletSystem.hh>
 #include <stdio.h>
 
 int main(int argc, char **argv)
@@ -32,6 +33,10 @@ int main(int argc, char **argv)
 
   vkGraphicsGL4 *GraphicsGL4 = new vkGraphicsGL4();
   engine->SetRenderer(GraphicsGL4);
+
+  vkBulletSystem *bulletSystem = new vkBulletSystem();
+  bulletSystem->Initialize();
+  engine->SetPhysicsSystem(bulletSystem);
 
 
   return engine->Run();

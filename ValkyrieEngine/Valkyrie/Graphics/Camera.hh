@@ -70,6 +70,13 @@ private:
   vkVector3f m_topRight;
   vkVector3f m_bottomLeft;
   vkVector3f m_bottomRight;
+  vkVector3f m_frontNear;
+  vkVector3f m_frontFar;
+
+  vkVector3f m_topLeftFar;
+  vkVector3f m_topRightFar;
+  vkVector3f m_bottomLeftFar;
+  vkVector3f m_bottomRightFar;
 
   vkProjectionMode m_projectionMode;
 

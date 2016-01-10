@@ -68,6 +68,13 @@ private:
     m_map["Texture6"] = eVAT_Texture6;
     m_map["Texture7"] = eVAT_Texture7;
 
+    m_map["ViewportSize"] = eVAT_ViewportSize;
+    m_map["ViewportSizeInv"] = eVAT_ViewportSizeInv;
+
+    m_map["BinaryGradient"] = eVAT_BinaryGradient;
+    m_map["BinaryGradientToScreen"] = eVAT_BinaryGradientToScreen;
+    m_map["FadeInOutDist"] = eVAT_FadeInOutDist;
+    m_map["FadeInOutValue"] = eVAT_FadeInOutValue;
 
     m_map["Blend"] = eVAT_Blend;
     m_nextID = eVAT_COUNT;

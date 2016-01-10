@@ -31,3 +31,17 @@ void vkLightState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan
     entityScan->ScanLightState(this);
   }
 }
+
+void vkLightState::FillBoundingBox(vkBoundingBox &bbox)
+{
+  if (m_light)
+  {
+    switch (m_light->GetLightType())
+    {
+    case eLT_DirectionalLight:
+      bbox.Add(vkVector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX));
+      bbox.Add(vkVector3f(FLT_MAX, FLT_MAX, FLT_MAX));
+      break;
+    }
+  }
+}

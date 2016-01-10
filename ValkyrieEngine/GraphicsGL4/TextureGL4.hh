@@ -138,6 +138,7 @@ public:
   virtual vkUInt16 GetHeight() const;
   virtual vkUInt16 GetLayers() const;
 
+  virtual bool CopyData(vkUInt8 lod, vkPixelFormat format, const void *data);
   virtual bool CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat format, const void *data);
 
 private:

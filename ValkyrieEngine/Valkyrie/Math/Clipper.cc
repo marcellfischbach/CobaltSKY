@@ -75,6 +75,7 @@ vkClipper::ClipResult vkPlaneClipper::Test(const vkBoundingBox &bbox, bool debug
 
     if (out == 8)
     {
+      if (debug) printf("      out\n");
       return eCR_Out;
     }
     if (out > 0)

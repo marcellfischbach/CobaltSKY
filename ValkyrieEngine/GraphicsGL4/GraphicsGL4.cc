@@ -10,6 +10,7 @@
 #include <GraphicsGL4/MappingGL4.hh>
 #include <GraphicsGL4/DefinesGL4.hh>
 #include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
+#include <Valkyrie/Graphics/BinaryGradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
 
@@ -401,6 +402,7 @@ void vkGraphicsGL4::BindMatrices()
   }
 }
 
+
 void vkGraphicsGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
 {
   vkVertexDeclarationGL4 *decl = static_cast<vkVertexDeclarationGL4*>(vertexDeclaration);
@@ -557,6 +559,16 @@ void vkGraphicsGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendD
   blendDstAlpha = m_blendModeDstAlpha;
 }
 
+void vkGraphicsGL4::SetRenderFadeInOut(float near, float far)
+{
+  m_fadeInOutDistances.Set(near, far, far - near);
+}
+
+void vkGraphicsGL4::SetRenderFadeInOutValue(vkUInt8 value)
+{
+  m_fadeInOutValue = value;
+}
+
 void vkGraphicsGL4::SetClearColorValue(const vkVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
@@ -619,23 +631,79 @@ void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDe
 void vkGraphicsGL4::SetViewport(vkUInt16 width, vkUInt16 height)
 {
   SetViewport(0, 0, width, height);
+  m_viewportWidth = width;
+  m_viewportHeight = height;
 }
 
 void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
 {
   glViewport(x, y, width, height);
+  m_viewportWidth = width;
+  m_viewportHeight = height;
 }
 
 void vkGraphicsGL4::SetViewport(IRenderTarget *renderTarget)
 {
   SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
+  m_viewportWidth = renderTarget->GetWidth();
+  m_viewportHeight = renderTarget->GetHeight();
 }
 
+
+void vkGraphicsGL4::BindValues()
+{
+  BindMatrices();
+
+  /* ******************************************* */
+  /*    Bind data for the fading gradient        */
+  /* ******************************************* */
+  IShaderAttribute *attribBinaryGradient = m_program->GetAttribute(eVAT_BinaryGradient);
+  if (attribBinaryGradient)
+  {
+    vkTextureUnit tu = BindTexture(vkBinaryGradient::GetBinaryGradient());
+    if (tu != eTU_Invalid)
+    {
+      attribBinaryGradient->Set(tu);
+    }
+  }
+
+  IShaderAttribute *attributeBinaryGradientToScreen = m_program->GetAttribute(eVAT_BinaryGradientToScreen);
+  if (attributeBinaryGradientToScreen)
+  {
+    attributeBinaryGradientToScreen->Set((float)m_viewportWidth / 8.0f, (float)m_viewportHeight / 8.0f);
+  }
+
+  IShaderAttribute *attributeFadeInOutValue = m_program->GetAttribute(eVAT_FadeInOutValue);
+  if (attributeFadeInOutValue)
+  {
+    attributeFadeInOutValue->Set(m_fadeInOutValue);
+  }
+  IShaderAttribute *attributeFadeInOutDist = m_program->GetAttribute(eVAT_FadeInOutDist);
+  if (attributeFadeInOutDist)
+  {
+    attributeFadeInOutDist->Set(m_fadeInOutDistances);
+  }
+
+  /* ******************************************* */
+  /*    Bind other data                          */
+  /* ******************************************* */
+  IShaderAttribute *attributeViewportSize = m_program->GetAttribute(eVAT_ViewportSize);
+  if (attributeViewportSize)
+  {
+    attributeViewportSize->Set((float)m_viewportWidth, (float)m_viewportHeight);
+  }
+
+  IShaderAttribute *attributeViewportSizeInv = m_program->GetAttribute(eVAT_ViewportSizeInv);
+  if (attributeViewportSizeInv)
+  {
+    attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
+  }
+}
 
 
 void vkGraphicsGL4::Render(vkPrimitiveType primType, vkUInt32 count)
 {
-  BindMatrices();
+  BindValues();
   VK_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
@@ -647,7 +715,7 @@ void vkGraphicsGL4::Render(vkPrimitiveType primType, vkUInt32 count)
 
 void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDataType indexType)
 {
-  BindMatrices();
+  BindValues();
   VK_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {

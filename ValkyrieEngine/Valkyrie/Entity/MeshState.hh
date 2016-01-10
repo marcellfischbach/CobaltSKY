@@ -29,16 +29,20 @@ public:
   vkMaterialInstance *GetMaterial(vkUInt32 slot = 0);
   const vkMaterialInstance *GetMaterial(vkUInt32 slot = 0) const;
 
-  virtual void FinishTransformation();
+  void SetCastShadow(bool castShadow);
+  bool IsCastShadow() const;
+
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
 protected:
+  virtual void FillBoundingBox(vkBoundingBox &bbox);
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
 private:
 
   void UpdateMaterialSlots();
-  void UpdateBoundingBox();
+
+  bool m_castShadow;
 
   vkMesh* m_mesh;
 
@@ -80,3 +84,12 @@ VK_FORCEINLINE const vkMaterialInstance *vkStaticMeshState::GetMaterial(vkUInt32
   return m_materials[slot];
 }
 
+VK_FORCEINLINE void vkStaticMeshState::SetCastShadow(bool castShadow)
+{
+  m_castShadow = castShadow;
+}
+
+VK_FORCEINLINE bool vkStaticMeshState::IsCastShadow() const
+{
+  return m_castShadow;
+}

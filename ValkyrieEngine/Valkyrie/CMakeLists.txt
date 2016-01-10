@@ -8,6 +8,8 @@ set(SOURCE
 	Engine.cc
 	Enums.hh
 	Export.hh
+  Time.cc
+  Time.hh
 	Types.hh
 	)
 
@@ -80,6 +82,8 @@ source_group(
   )
 
 set(SOURCE_GRAPHICS
+  Graphics/BinaryGradient.cc
+  Graphics/BinaryGradient.hh
   Graphics/Camera.cc
   Graphics/Camera.hh
   Graphics/IFrameProcessor.hh
@@ -152,11 +156,12 @@ source_group(
 	)
 	
 set(SOURCE_MATH
+	Math/BoundingVolume.cc
+	Math/BoundingVolume.hh
 	Math/Clipper.cc
 	Math/Clipper.hh
   Math/Color.hh
-	Math/BoundingVolume.cc
-	Math/BoundingVolume.hh
+  Math/Hysteresis.hh
 	Math/Matrix.hh
 	Math/Plane.hh
 	Math/Vector.hh
@@ -167,6 +172,19 @@ source_group(
 	FILES
 	${SOURCE_MATH}
 	)
+
+set(SOURCE_PHYSICS
+  Physics/IPhysicsBody.hh
+  Physics/IPhysicsScene.hh
+  Physics/IPhysicsShape.hh
+  Physics/IPhysicsSystem.hh
+  )
+
+source_group(
+  "ValkyrieEngine\\Physics"
+  FILES
+  ${SOURCE_PHYSICS}
+  )
 
 set(SOURCE_WINDOW
 	Window/IKeyboard.hh
@@ -189,6 +207,7 @@ set(ALL_SOURCES
 	${SOURCE_GRAPHICS_SCENE}
 	${SOURCE_LOADERS}
 	${SOURCE_MATH}
+  ${SOURCE_PHYSICS}
 	${SOURCE_WINDOW}
 	)
 

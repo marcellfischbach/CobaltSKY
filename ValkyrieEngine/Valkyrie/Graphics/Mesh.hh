@@ -52,6 +52,7 @@ private:
 
 
 
+const vkUInt32 vkInvalidMaterialIndex = ~0x00;
 
 VK_CLASS()
 class VKE_API vkMesh : public vkObject
@@ -75,6 +76,9 @@ public:
 
 
   vkUInt32 GetNumberOfMaterials() const;
+  void AddMaterialName(const vkString &materialName);
+  const vkString &GetMaterialName(vkUInt32 idx) const;
+  vkUInt32 GetMaterialIndex(const vkString &materialName) const;
 
   void Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
 
@@ -94,6 +98,8 @@ private:
 
   std::vector<LOD> m_lods;
   vkUInt32 m_numberOfMaterials;
+  std::vector<vkString> m_materialNames
+    ;
 
   LOD &GetLOD(vkUInt8 lod);
 

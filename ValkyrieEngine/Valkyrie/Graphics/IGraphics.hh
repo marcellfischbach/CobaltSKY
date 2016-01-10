@@ -82,6 +82,9 @@ struct VKE_API IGraphics : public IObject
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha) = 0;
   virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const = 0;
 
+  virtual void SetRenderFadeInOut(float near, float far) = 0;
+  virtual void SetRenderFadeInOutValue(vkUInt8 value) = 0;
+
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0) = 0;
   virtual void SetViewport(vkUInt16 width, vkUInt16 height) = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;

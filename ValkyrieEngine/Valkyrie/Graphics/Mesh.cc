@@ -138,6 +138,35 @@ void vkMesh::AddMesh(vkSubMesh *mesh, vkSize materialIndex, vkUInt8 lodIdx, cons
   }
 }
 
+void vkMesh::AddMaterialName(const vkString &materialName)
+{
+  m_materialNames.push_back(materialName);
+}
+
+const vkString &vkMesh::GetMaterialName(vkUInt32 idx) const
+{
+  if (idx >= m_materialNames.size())
+  {
+    static vkString undef("<undef>");
+    return undef;
+  }
+
+  return m_materialNames[idx];
+}
+
+vkUInt32 vkMesh::GetMaterialIndex(const vkString &materialName) const
+{
+  for (vkUInt32 i = 0, in = m_materialNames.size(); i < in; ++i)
+  {
+    if (m_materialNames[i] == materialName)
+    {
+      return i;
+    }
+  }
+  return ~0x00;
+}
+
+
 void vkMesh::OptimizeDataStruct()
 {
   for (vkSize i = 0, in = m_lods.size(); i < in; ++i)

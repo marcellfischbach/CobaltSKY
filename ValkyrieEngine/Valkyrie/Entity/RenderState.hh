@@ -19,8 +19,12 @@ public:
   vkRenderState();
   virtual ~vkRenderState();
 
+  void SetFadeOut(float start, float end);
 
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const = 0;
+  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
+private:
+  float m_renderStartFade;
+  float m_renderEndFade;
 };
 

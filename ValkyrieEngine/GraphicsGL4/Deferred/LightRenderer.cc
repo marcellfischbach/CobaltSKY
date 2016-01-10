@@ -231,7 +231,7 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
 }
 
 
-void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamera *camera, const vkDirectionalLight *light)
+void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *camera, const vkDirectionalLight *light)
 {
   CalcPSSMMatrices(light, camera);
 
@@ -240,10 +240,13 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   vkScanConfig config;
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
+  config.MainCameraPosition = camera->GetEye();
   // collect the shadow casting objects
   vkDefaultCollector collector(&m_renderStates, 0);
   m_renderStates.Clear();
-  root->Scan(0, m_renderer, &collector, config);
+
+  vkClipper *clipper = camera->GetClipper();
+  root->Scan(clipper, m_renderer, &collector, config);
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
@@ -256,7 +259,8 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
-  glColorMask(true, true, true, true);
+  //glColorMask(true, true, true, true);
+  glColorMask(false, false, false, false);
   //glDisable(GL_CULL_FACE);
 
   m_renderer->Clear();
@@ -264,6 +268,7 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkCamer
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
+  //printf("Shadow casters: %d\n", m_renderStates.length);
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState= m_renderStates[i];

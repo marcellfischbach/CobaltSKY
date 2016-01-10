@@ -10,6 +10,7 @@ vkStaticMeshState::vkStaticMeshState()
   , m_mesh (0)
   , m_materials(0)
   , m_numberOfMaterialSlots(0)
+  , m_castShadow(true)
 {
 
 }
@@ -52,14 +53,6 @@ void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkUInt32 slot)
 }
 
 
-void vkStaticMeshState::FinishTransformation()
-{
-  vkRenderState::FinishTransformation();
-
-  UpdateBoundingBox();
-}
-
-
 void vkStaticMeshState::UpdateMaterialSlots()
 {
   vkUInt32 numberOfSlots = m_mesh->GetNumberOfMaterials();
@@ -89,13 +82,11 @@ void vkStaticMeshState::UpdateMaterialSlots()
   m_numberOfMaterialSlots = numberOfSlots;
 }
 
-void vkStaticMeshState::UpdateBoundingBox()
+void vkStaticMeshState::FillBoundingBox(vkBoundingBox &bbox)
 {
-  m_boundingBox.Clear();
   if (m_mesh)
   {
-    m_boundingBox.Add(m_globalMatrix, m_mesh->GetBoundingBox());
-    m_boundingBox.Finish();
+    bbox.Add(m_globalMatrix, m_mesh->GetBoundingBox());
   }
 
 }
@@ -104,7 +95,9 @@ void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
 {
   if (m_mesh)
   {
+    vkRenderState::Render(graphics, pass);
     graphics->SetModelMatrix(GetGlobalTransformation());
+    graphics->SetRenderFadeInOutValue(m_distanceState.GetFadeValue());
     m_mesh->Render(graphics, pass, m_numberOfMaterialSlots, m_materials);
   }
 }
@@ -114,6 +107,9 @@ void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntit
 {
   if (m_materials && m_mesh)
   {
-    entityScan->ScanRenderState(this);
+    if (m_castShadow && config.ScanShadowCasters || !m_castShadow && config.ScanNonShadowCasters)
+    {
+      entityScan->ScanRenderState(this);
+    }
   }
 }

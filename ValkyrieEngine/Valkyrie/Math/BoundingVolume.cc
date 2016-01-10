@@ -71,14 +71,14 @@ void vkBoundingBox::Finish()
   m_center += m_max;
   m_center *= 0.5f;
 
-  m_points[0] = vkVector3f(m_min.x, m_max.y, m_max.z);
-  m_points[1] = vkVector3f(m_min.x, m_max.y, m_max.z);
-  m_points[2] = vkVector3f(m_min.x, m_min.y, m_min.z);
-  m_points[3] = vkVector3f(m_min.x, m_min.y, m_min.z);
-  m_points[4] = vkVector3f(m_max.x, m_max.y, m_max.z);
-  m_points[5] = vkVector3f(m_max.x, m_max.y, m_max.z);
-  m_points[6] = vkVector3f(m_max.x, m_min.y, m_min.z);
-  m_points[7] = vkVector3f(m_max.x, m_min.y, m_min.z);
+  m_points[0] = vkVector3f(m_min.x, m_min.y, m_min.z);
+  m_points[1] = vkVector3f(m_min.x, m_min.y, m_max.z);
+  m_points[2] = vkVector3f(m_min.x, m_max.y, m_min.z);
+  m_points[3] = vkVector3f(m_min.x, m_max.y, m_max.z);
+  m_points[4] = vkVector3f(m_max.x, m_min.y, m_min.z);
+  m_points[5] = vkVector3f(m_max.x, m_min.y, m_max.z);
+  m_points[6] = vkVector3f(m_max.x, m_max.y, m_min.z);
+  m_points[7] = vkVector3f(m_max.x, m_max.y, m_max.z);
 
   m_valid = true;
 }

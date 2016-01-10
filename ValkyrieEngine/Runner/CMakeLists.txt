@@ -32,6 +32,7 @@ target_link_libraries(ValkyrieRunner
   ValkyrieEngine
   ValkyrieEngine-SDLWindow
   ValkyrieEngine-GraphicsGL4
+  ValkyrieEngine-PhysicsBullet
   )
 
 

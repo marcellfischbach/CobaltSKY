@@ -144,6 +144,7 @@ IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
     program->AttachShader(shader);
   }
 
+  printf("Link shader: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
   if (!program->Link())
   {
     printf("Unable to link program: %s\n%s\n", locator.GetResourceFile().c_str(), program->GetLinkErrorLog().c_str());

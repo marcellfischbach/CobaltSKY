@@ -133,6 +133,13 @@ enum vkVertexAttributeType
   eVAT_Texture6,
   eVAT_Texture7,
 
+
+  eVAT_ViewportSize,
+  eVAT_ViewportSizeInv,
+  eVAT_BinaryGradient,
+  eVAT_BinaryGradientToScreen,
+  eVAT_FadeInOutValue,
+  eVAT_FadeInOutDist,
   eVAT_Blend,
 
   eVAT_COUNT
@@ -350,3 +357,5 @@ enum vkBlendMode
   eBM_DstAlpha,
   eBM_InvDstAlpha,
 };
+
+

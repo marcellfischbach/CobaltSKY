@@ -44,6 +44,14 @@ void vkEntity::FinishTransformation()
   }
 }
 
+void vkEntity::UpdateBoundingBox()
+{
+  if (m_rootState)
+  {
+    m_rootState->UpdateBoundingBox();
+  }
+}
+
 void vkEntity::SetRootState(vkSpatialState *rootState)
 {
   VK_SET(m_rootState, rootState);
@@ -121,5 +129,21 @@ void vkEntity::DetachEntity(vkEntity *entity)
     return;
   }
 
+  if (entity->m_parentEntity == this && entity->m_rootState)
+  {
+    vkSpatialState *parentState = entity->m_rootState->GetParentState();
+    if (parentState)
+    {
+      parentState->RemoveSpatialState(entity->m_rootState);
+    }
+  }
 
+}
+
+void vkEntity::SetClippingRange(float min, float max)
+{
+  if (m_rootState)
+  {
+    m_rootState->SetClippingRange(min, max);
+  }
 }

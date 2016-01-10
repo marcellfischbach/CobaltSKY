@@ -367,6 +367,18 @@ vkRenderStateLoader::~vkRenderStateLoader()
 
 IObject *vkRenderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
+  vkRenderState *renderState = vkQueryClass<vkRenderState>(userData);
+  if (!renderState)
+  {
+    return userData;
+  }
+  TiXmlElement *fadeOutElement = element->FirstChildElement("fadeOut");
+  if (fadeOutElement && fadeOutElement->Attribute("near") && fadeOutElement->Attribute("far"))
+  {
+    float near = atof(fadeOutElement->Attribute("near"));
+    float far= atof(fadeOutElement->Attribute("far"));
+    renderState->SetFadeOut(near, far);
+  }
   return vkSpatialStateLoader::Load(element, locator, userData);
 }
 
@@ -434,6 +446,15 @@ IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLo
         if (materialElement->Attribute("slot"))
         {
           slot = atoi(materialElement->Attribute("slot"));
+        }
+        if (materialElement->Attribute("slotName"))
+        {
+          vkString slotName(materialElement->Attribute("slotName"));
+          vkUInt32 meshSlot = staticMeshState->GetMesh()->GetMaterialIndex(slotName);
+          if (meshSlot != vkInvalidMaterialIndex)
+          {
+            slot = meshSlot;
+          }
         }
         staticMeshState->SetMaterial(material, slot);
       }

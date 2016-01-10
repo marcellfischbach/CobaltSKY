@@ -5,16 +5,16 @@
 
 			<mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh>
 			<materials>
-				<material slot="0">${materials}/materials.xml:FieldStone</material>
-				<material slot="0">${materials}/materials.xml:FieldStoneRed</material>
+				<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>
+				<material slot="1" slotName="MinePin">${materials}/materials.xml:FieldStoneRed</material>
 			</materials>
 
 
-			<transformation>
-				<translation>10.0;0.0;20.0</translation>
+			<!--transformation>
+				<translation>10.0;20.0;0.0</translation>
 				<axisAngle>0.0;0.0;1.0;0.78539816339744830961566084581988</axisAngle>
-			</transformation>
-			
+				<axisAngle>0.0;0.0;1.0;0.0</axisAngle>
+			</transformation-->
 			
 			
 		</entityState>

@@ -61,6 +61,8 @@ public:
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha);
   virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const;
 
+  virtual void SetRenderFadeInOut(float near, float far);
+  virtual void SetRenderFadeInOutValue(vkUInt8 value);
 
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
   virtual void SetViewport(vkUInt16 width, vkUInt16 height);
@@ -78,6 +80,7 @@ public:
 
 
 private:
+  void BindValues();
   void BindMatrices();
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();
@@ -131,6 +134,10 @@ private:
   vkVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
   vkProgramGL4 *m_fullScreenProgram;
   vkProgramGL4 *m_fullScreenArrayProgram;
+  vkUInt16 m_viewportWidth;
+  vkUInt16 m_viewportHeight;
+  vkVector3f m_fadeInOutDistances;
+  vkUInt8 m_fadeInOutValue;
   /**
    * @}
    */

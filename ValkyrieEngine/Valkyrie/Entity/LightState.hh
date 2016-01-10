@@ -21,6 +21,8 @@ public:
   const vkLight *GetLight() const;
 
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+protected:
+  virtual void FillBoundingBox(vkBoundingBox &bbox);
 
 private:
   vkLight *m_light;

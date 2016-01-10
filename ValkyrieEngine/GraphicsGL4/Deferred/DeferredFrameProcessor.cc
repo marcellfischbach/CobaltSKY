@@ -115,7 +115,7 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   };
   glDrawBuffers(4, buffers);
 
-
+  //printf ("Num Meshes: %d\n", m_renderStates.length);
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState = m_renderStates[i];
@@ -134,6 +134,7 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
   vkScanConfig config;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
+  config.MainCameraPosition = camera->GetEye();
   vkDefaultCollector collector(&m_renderStates, &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
   root->Scan(clipper, m_renderer, &collector, config);

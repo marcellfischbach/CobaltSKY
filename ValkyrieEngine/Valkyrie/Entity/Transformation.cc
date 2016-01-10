@@ -20,6 +20,19 @@ vkTransformation::vkTransformation(vkMatrix4f &matrix,
 
 }
 
+void vkTransformation::Debug(const char *msg)
+{
+  if (IsValid())
+  {
+    m_matrix->Debug(msg);
+  }
+  else
+  {
+    printf("%s invalid\n", msg);
+  }
+}
+
+
 
 void vkTransformation::SetTransformation(const vkMatrix4f &transformation)
 {

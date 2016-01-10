@@ -25,6 +25,7 @@ public:
   void SetRotationZ(float rads);
   void SetRotation(const vkVector3f &axis, float rads);
 
+  void Debug(const char *msg);
 
 private:
   vkMatrix4f *m_matrix;

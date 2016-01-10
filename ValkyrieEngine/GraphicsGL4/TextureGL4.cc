@@ -431,6 +431,31 @@ bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUIn
   return true;
 }
 
+bool vkTexture2DArrayGL4::CopyData(vkUInt8 lod, vkPixelFormat format, const void *data)
+{
+  vkUInt16 layerWidth = m_width >> lod;
+  vkUInt16 layerHeight = m_height >> lod;
+  if (layerWidth == 0 && layerHeight == 0)
+  {
+    return false;
+  }
+  if (layerWidth == 0)
+  {
+    layerWidth = 1;
+  }
+  if (layerHeight == 0)
+  {
+    layerHeight = 1;
+  }
+
+  Bind();
+  VK_CHECK_GL_ERROR;
+  glTexImage3D(m_target, lod, internalFormatMap[m_format], layerWidth, layerHeight, m_layers, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
+  VK_CHECK_GL_ERROR;
+
+  return true;
+}
+
 bool vkTexture2DArrayGL4::CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat format, const void *data)
 {
   vkUInt16 layerWidth = m_width >> lod;
@@ -449,7 +474,9 @@ bool vkTexture2DArrayGL4::CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat fo
   }
 
   Bind();
-  glTexImage3D(m_target, lod, internalFormatMap[m_format], layerWidth, layerHeight, layer, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
+  VK_CHECK_GL_ERROR;
+  printf("Format array: 0x%08x, 0x%08x\n", externalFormatMap[format], externalFormatTypeMap[format]);
+  glTexSubImage3D(m_target, lod, 0, 0, layer, layerWidth, layerHeight, 1, externalFormatMap[format], externalFormatTypeMap[format], data);
   VK_CHECK_GL_ERROR;
 
   return true;

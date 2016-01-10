@@ -35,10 +35,13 @@ public:
   void SetRootState(vkSpatialState *rootState);
   void AddState(vkEntityState *state);
   void AddState(vkSpatialState *state, vkSpatialState *parentState);
+  vkSpatialState *GetRootState();
+  const vkSpatialState *GetRootState() const;
 
   const vkBoundingBox &GetBoundingBox() const;
   vkTransformation GetTransformation();
   void FinishTransformation();
+  void UpdateBoundingBox();
 
   static vkID GetNextID();
 
@@ -47,6 +50,8 @@ public:
   void AttachEntity(vkEntity *entity, vkSpatialState *parentState = 0);
   void AttachEntity(vkEntity *entity, const vkString &parentStateName);
   void DetachEntity(vkEntity *entity);
+
+  void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 
 private:
   vkID m_id;
@@ -77,3 +82,13 @@ VK_FORCEINLINE const vkString &vkEntity::GetName() const
   return m_name;
 }
 
+
+VK_FORCEINLINE vkSpatialState *vkEntity::GetRootState()
+{
+  return m_rootState;
+}
+
+VK_FORCEINLINE const vkSpatialState *vkEntity::GetRootState() const
+{
+  return m_rootState;
+}
