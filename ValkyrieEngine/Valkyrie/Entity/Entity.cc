@@ -4,6 +4,7 @@
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/Physics/IPhysicsBody.hh>
 
 vkID nextID = 1;
 
@@ -41,6 +42,17 @@ void vkEntity::FinishTransformation()
   if (m_rootState)
   {
     m_rootState->FinishTransformation();
+
+
+    // update the physics system (if one is attached)
+    if (m_collisionBody)
+    {
+      m_collisionBody->SetTransform(m_rootState->GetGlobalTransformation());
+    }
+    if (m_triggerBody)
+    {
+      m_triggerBody->SetTransform(m_rootState->GetGlobalTransformation());
+    }
   }
 }
 

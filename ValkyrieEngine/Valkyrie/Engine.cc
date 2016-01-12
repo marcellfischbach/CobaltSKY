@@ -555,7 +555,7 @@ vkEntity *create_scene(IGraphics *graphics)
   vkMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
 
 
-  for (int i = 0; i < 5000; ++i)
+  for (int i = 0; i < 500; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;

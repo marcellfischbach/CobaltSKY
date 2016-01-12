@@ -10,11 +10,11 @@ vkTransformation::vkTransformation()
    
 }
 
-vkTransformation::vkTransformation(vkMatrix4f &matrix,
-                                   vkMatrix4f &matrixGlobal,
+vkTransformation::vkTransformation(vkMatrix4f *matrix,
+                                   vkMatrix4f *matrixGlobal,
                                    const vkMatrix4f *parentMatrixGlobal)
-  : m_matrix(&matrix)
-  , m_matrixGlobal(&matrixGlobal)
+  : m_matrix(matrix)
+  , m_matrixGlobal(matrixGlobal)
   , m_parentMatrixGlobal(parentMatrixGlobal)
 {
 

@@ -15,6 +15,7 @@ class vkTransformation;
 struct vkScanConfig;
 struct IEntityScan;
 struct IGraphics;
+struct IPhysicsBody;
 
 /**
  * \ingroup entity
@@ -56,6 +57,9 @@ public:
 private:
   vkID m_id;
   vkString m_name;
+
+  IPhysicsBody *m_collisionBody;
+  IPhysicsBody *m_triggerBody;
 
   vkSpatialState *m_rootState;
   std::vector<vkEntityState*> m_states;

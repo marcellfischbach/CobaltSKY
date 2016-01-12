@@ -32,7 +32,7 @@ const vkSpatialState *vkSpatialState::ToSpatialState() const
 
 vkTransformation vkSpatialState::GetTransformation()
 {
-  return vkTransformation(m_localMatrix, m_globalMatrix, 0);
+  return vkTransformation(&m_localMatrix, &m_globalMatrix, 0);
 }
 
 void vkSpatialState::FinishTransformation()

@@ -40,7 +40,6 @@ static void create_pattern0(void *colors)
     "########",
     colors
     );
-  printf("Pattern0: %f\n", factor);
 }
 
 static void create_pattern1(void *colors)
@@ -56,7 +55,6 @@ static void create_pattern1(void *colors)
     "########",
     colors
     );
-  printf("Pattern1: %f\n", factor);
 }
 
 
@@ -73,7 +71,6 @@ static void create_pattern2(void *colors)
     "########",
     colors
     );
-  printf("Pattern2: %f\n", factor);
 }
 
 
@@ -90,7 +87,6 @@ static void create_pattern3(void *colors)
     "########",
     colors
     );
-  printf("Pattern3: %f\n", factor);
 }
 
 
@@ -107,7 +103,6 @@ static void create_pattern4(void *colors)
     "########",
     colors
     );
-  printf("Pattern4: %f\n", factor);
 }
 
 
@@ -124,7 +119,6 @@ static void create_pattern5(void *colors)
     "### ### ",
     colors
     );
-  printf("Pattern5: %f\n", factor);
 }
 
 static void create_pattern6(void *colors)
@@ -140,7 +134,6 @@ static void create_pattern6(void *colors)
     "### ### ",
     colors
     );
-  printf("Pattern6: %f\n", factor);
 }
 
 static void create_pattern7(void *colors)
@@ -156,7 +149,6 @@ static void create_pattern7(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern7: %f\n", factor);
 }
 
 
@@ -173,7 +165,6 @@ static void create_pattern8(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern8: %f\n", factor);
 }
 
 static void create_pattern9(void *colors)
@@ -189,7 +180,6 @@ static void create_pattern9(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern9: %f\n", factor);
 }
 
 static void create_pattern10(void *colors)
@@ -205,7 +195,6 @@ static void create_pattern10(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern10: %f\n", factor);
 }
 
 
@@ -223,7 +212,6 @@ static void create_pattern11(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern11: %f\n", factor);
 }
 
 
@@ -240,7 +228,6 @@ static void create_pattern12(void *colors)
     "# # # # ",
     colors
     );
-  printf("Pattern12: %f\n", factor);
 }
 
 static void create_pattern13(void *colors)
@@ -256,7 +243,6 @@ static void create_pattern13(void *colors)
     "  #   # ",
     colors
     );
-  printf("Pattern13: %f\n", factor);
 }
 
 
@@ -273,7 +259,6 @@ static void create_pattern14(void *colors)
     "  #   # ",
     colors
     );
-  printf("Pattern14: %f\n", factor);
 }
 
 static void create_pattern15(void *colors)
@@ -289,7 +274,6 @@ static void create_pattern15(void *colors)
     "        ",
     colors
     );
-  printf("Pattern15: %f\n", factor);
 }
 
 static void create_pattern16(void *colors)
@@ -305,7 +289,6 @@ static void create_pattern16(void *colors)
     "        ",
     colors
     );
-  printf("Pattern16: %f\n", factor);
 }
 
 vkBinaryGradient::vkBinaryGradient()

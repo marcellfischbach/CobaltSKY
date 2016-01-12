@@ -359,3 +359,24 @@ enum vkBlendMode
 };
 
 
+enum vkPhysGeometryType
+{
+  ePGT_Sphere,
+  ePGT_CylinderX,
+  ePGT_CylinderY,
+  ePGT_CylinderZ,
+  ePGT_CapsuleX,
+  ePGT_CapsuleY,
+  ePGT_CapsuleZ,
+  ePGT_Box,
+  ePGT_Plane,
+  ePGT_HeightField,
+  ePGT_TriMesh,
+};
+
+enum vkPhysBodyMode
+{
+  ePBM_Static,
+  ePBM_Kinematic,
+  ePBM_Dynamic,
+};

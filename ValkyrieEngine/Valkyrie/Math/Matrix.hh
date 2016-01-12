@@ -596,4 +596,24 @@ public:
   }
 
 
+  VK_FORCEINLINE bool IsIdentity() const
+  {
+    return VK_FLOAT_IS_ONE(m00) &&
+      VK_FLOAT_IS_ONE(m11) &&
+      VK_FLOAT_IS_ONE(m22) &&
+      VK_FLOAT_IS_ONE(m33) &&
+      VK_FLOAT_IS_ZERO(m01) &&
+      VK_FLOAT_IS_ZERO(m02) &&
+      VK_FLOAT_IS_ZERO(m03) &&
+      VK_FLOAT_IS_ZERO(m10) &&
+      VK_FLOAT_IS_ZERO(m12) &&
+      VK_FLOAT_IS_ZERO(m13) &&
+      VK_FLOAT_IS_ZERO(m20) &&
+      VK_FLOAT_IS_ZERO(m21) &&
+      VK_FLOAT_IS_ZERO(m23) &&
+      VK_FLOAT_IS_ZERO(m30) &&
+      VK_FLOAT_IS_ZERO(m31) &&
+      VK_FLOAT_IS_ZERO(m32);
+  }
+
 };

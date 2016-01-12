@@ -19,5 +19,7 @@ public:
   virtual void Initialize();
 
   virtual IPhysicsScene *CreateScene();
+
+  virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
 };
 

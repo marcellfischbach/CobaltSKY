@@ -12,8 +12,8 @@ class VKE_API vkTransformation
 {
 public:
   vkTransformation();
-  vkTransformation(vkMatrix4f &matrix, 
-                   vkMatrix4f &globalMatrix,
+  vkTransformation(vkMatrix4f *matrix, 
+                   vkMatrix4f *globalMatrix,
                    const vkMatrix4f *parentGlobal);
 
   bool IsValid() const;
