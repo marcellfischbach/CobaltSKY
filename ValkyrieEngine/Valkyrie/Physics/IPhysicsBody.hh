@@ -9,7 +9,7 @@
 #include <Valkyrie/Entity/Transformation.hh>
 
 
-struct IPhysShape;
+struct IPhysicsShape;
 class vkEntity;
 
 VK_INTERFACE()
@@ -31,10 +31,14 @@ struct VKE_API IPhysicsBody : public IObject
   virtual void SetInertia(const vkVector3f &inertia) = 0;
   virtual const vkVector3f &GetInertia() const = 0;
 
+  virtual void UpdateInertia() = 0;
+
+  virtual const vkMatrix4f &GetMatrix() const = 0;
   virtual vkTransformation GetTransform() = 0;
   virtual void FinishTransformation() = 0;
 
-  virtual void AttachShape(IPhysShape *shape) = 0;
-  virtual void DetachShape(IPhysShape *shape) = 0;
+
+  virtual void AttachShape(IPhysicsShape *shape) = 0;
+  virtual void DetachShape(IPhysicsShape *shape) = 0;
 
 };

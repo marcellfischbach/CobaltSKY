@@ -28,13 +28,16 @@
 #include <Valkyrie/Graphics/Scene/GroupNode.hh>
 #include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
+#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsScene.hh>
+#include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/IPhysicsSystem.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
 
-vkEntity *create_scene(IGraphics *graphics);
-vkSubMesh* createPlaneMesh(IGraphics *renderer, float size);
+vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysicsScene *scene);
+vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 
@@ -109,8 +112,10 @@ int vkEngine::Run()
   sampler->SetFilter(eFM_MinMagNearest);
   color0->SetSampler(sampler);
 
+  IPhysicsScene *physScene = m_physicsSystem->CreateScene();
 
-  vkEntity *root = create_scene(m_renderer);
+
+  vkEntity *root = create_scene(m_renderer, m_physicsSystem, physScene);
 
 
   vkCamera *camera = new vkCamera();
@@ -202,6 +207,8 @@ int vkEngine::Run()
       nextFPS += 1000;
     }
 
+    physScene->StepSimulation();
+    physScene->UpdateEntityTransformation();
   }
 
 
@@ -224,18 +231,18 @@ void vkEngine::RegisterClasses()
 }
 
 
-vkSubMesh* createPlaneMesh(IGraphics *renderer, float size)
+vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
 {
   float s = size;
   float vertexBuffer[] = {
-    -s, -s, 0.0f, 1.0f,
-    -s,  s, 0.0f, 1.0f,
-     s, -s, 0.0f, 1.0f,
-     s,  s, 0.0f, 1.0f,
-     s, -s, 0.0f, 1.0f,
-     s,  s, 0.0f, 1.0f,
-    -s, -s, 0.0f, 1.0f,
-    -s,  s, 0.0f, 1.0f,
+    -s, -s, height, 1.0f,
+    -s,  s, height, 1.0f,
+     s, -s, height, 1.0f,
+     s,  s, height, 1.0f,
+     s, -s, height, 1.0f,
+     s,  s, height, 1.0f,
+    -s, -s, height, 1.0f,
+    -s,  s, height, 1.0f,
   };
 
   float normalBuffer[] = {
@@ -502,7 +509,7 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 
 
 
-vkEntity *create_scene(IGraphics *graphics)
+vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysicsScene *scene)
 {
   vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
   vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
@@ -538,7 +545,7 @@ vkEntity *create_scene(IGraphics *graphics)
 
 
   /* create the plane mesh */
-  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f);
+  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
   vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeMeshInst);
   planeMesh->OptimizeDataStruct();
@@ -552,10 +559,25 @@ vkEntity *create_scene(IGraphics *graphics)
   planeEntity->SetRootState(planeState);
   planeEntity->AddState(planeState, parentState);
 
+  vkPhysGeometry boxGeometry;
+  boxGeometry.Type = ePGT_Box;
+  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
+  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
+
+  IPhysicsBody *boxBody = physSystem->CreateBody();
+  boxBody->AttachShape(boxShape);
+  boxBody->SetMode(ePBM_Static);
+  boxBody->SetMass(0.0f);
+  
+  scene->AddBody(boxBody);
+
+
   vkMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
 
 
-  for (int i = 0; i < 500; ++i)
+
+
+  for (int i = 0; i < 100; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;
@@ -563,10 +585,50 @@ vkEntity *create_scene(IGraphics *graphics)
     float t = (float)rand() / (float)RAND_MAX;
 
     mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
-    mineEntity->GetTransformation().SetTranslation(vkVector3f(-100.0f + x * 200.0f, -100.0f + y * 200.0f, -2.0f + z * 4.0f));
     mineEntity->SetClippingRange(-FLT_MAX, 150.0f);
     mineEntity->FinishTransformation();
     rootEntity->AttachEntity(mineEntity);
+
+
+    char buffer[256];
+    sprintf(buffer, "Mine %d", i);
+    mineEntity->SetName(vkString(buffer));
+
+
+    IPhysicsBody *boxBody = physSystem->CreateBody();
+    boxBody->SetMode(ePBM_Dynamic);
+    boxBody->SetMass(100.0f);
+
+    vkPhysGeometry boxGeometryM;
+    boxGeometryM.Type = ePGT_Box;
+    boxGeometryM.Dimensions.Set(2.0f, 2.0f, 2.0f);
+    boxBody->AttachShape(physSystem->CreateShape(boxGeometryM));
+
+    vkPhysGeometry boxGeometryS1;
+    boxGeometryS1.Type = ePGT_Box;
+    boxGeometryS1.Dimensions.Set(4.0f, 0.6f, 0.6f);
+    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS1));
+
+    vkPhysGeometry boxGeometryS2;
+    boxGeometryS2.Type = ePGT_Box;
+    boxGeometryS2.Dimensions.Set(0.6f, 4.0f, 0.6f);
+    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS2));
+
+    vkPhysGeometry boxGeometryS3;
+    boxGeometryS3.Type = ePGT_Box;
+    boxGeometryS3.Dimensions.Set(0.6f, 0.6f, 4.0f);
+    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS3));
+
+
+
+    boxBody->UpdateInertia();
+    mineEntity->SetCollisionBody(boxBody);
+    boxBody->SetEntity(mineEntity);
+    scene->AddBody(boxBody);
+
+    mineEntity->GetTransformation().SetTranslation(vkVector3f(-20.0f + x * 40.0f, -20.0f + y * 40.0f, 10.0f + z * 20.0f));
+    mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);
+    mineEntity->FinishTransformation();
 
   }
 

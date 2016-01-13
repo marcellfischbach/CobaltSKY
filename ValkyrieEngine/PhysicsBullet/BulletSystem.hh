@@ -20,6 +20,8 @@ public:
 
   virtual IPhysicsScene *CreateScene();
 
+  virtual IPhysicsBody *CreateBody();
+
   virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
 };
 

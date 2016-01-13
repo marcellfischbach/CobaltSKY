@@ -1,6 +1,7 @@
 
 
 #include <PhysicsBullet/BulletBody.hh>
+#include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <Valkyrie/Entity/Transformation.hh>
@@ -9,6 +10,8 @@ vkBulletBody::vkBulletBody()
   : IPhysicsBody()
   , m_bodyMode(ePBM_Static)
   , m_entity(0)
+  , m_scene(0)
+  , m_mass(0.0f)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -62,13 +65,28 @@ float vkBulletBody::GetMass() const
 
 void vkBulletBody::SetInertia(const vkVector3f &inertia)
 {
-  m_inertia = inertia;
+  for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
+  {
+    m_bodies[i]->SetInertia(inertia);
+  }
   UpdateBodies();
 }
 
 const vkVector3f &vkBulletBody::GetInertia() const
 {
-  return m_inertia;
+  if (m_bodies.size() == 1)
+  {
+    return m_bodies[0]->GetInertia();
+  }
+  return vkVector3f (0, 0, 0);
+}
+
+void vkBulletBody::UpdateInertia()
+{
+  for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
+  {
+    m_bodies[i]->UpdateInertia();
+  }
 }
 
 void vkBulletBody::UpdateBodies()
@@ -92,13 +110,8 @@ void vkBulletBody::FinishTransformation()
   }
 }
 
-const vkMatrix4f &vkBulletBody::GetTransform() const
-{
-  return m_transform;
-}
 
-
-void vkBulletBody::AttachShape(IPhysShape *shape)
+void vkBulletBody::AttachShape(IPhysicsShape *shape)
 {
   vkBulletShape *btShape = reinterpret_cast<vkBulletShape*>(shape);
   if (!btShape)
@@ -133,7 +146,7 @@ void vkBulletBody::AttachShape(IPhysShape *shape)
   }
 }
 
-void vkBulletBody::DetachShape(IPhysShape *shape)
+void vkBulletBody::DetachShape(IPhysicsShape *shape)
 {
   vkBulletShape *btShape = reinterpret_cast<vkBulletShape*>(shape);
   if (!btShape)
@@ -166,16 +179,31 @@ void vkBulletBody::DynamicallyChanged(const vkMatrix4f &transform)
 {
   if (m_bodyMode == ePBM_Dynamic)
   {
-    if (m_entity)
+    if (m_entity && m_scene)
     {
-      m_entity->GetTransformation().SetTransformation(transform);
-      m_entity->FinishTransformation();
+      m_transform.Set(transform);
+      m_scene->BodyChanged(this);
     }
   }
 }
 
+void vkBulletBody::AttachToScene(vkBulletScene *scene)
+{
+  m_scene = scene;
+  for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
+  {
+    m_bodies[i]->AttachToScene(scene);
+  }
+}
 
-
+void vkBulletBody::DetachFromScene(vkBulletScene *scene)
+{
+  m_scene = 0;
+  for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
+  {
+    m_bodies[i]->DetachFromScene(scene);
+  }
+}
 
 
 vkBulletBodyImpl::vkBulletBodyImpl(vkBulletBody *body)
@@ -200,7 +228,7 @@ void vkBulletBodyImpl::AttachShape(vkBulletShape *shape)
     return;
   }
 
-  if (!m_collisionShape && !shape->IsTransformed())
+  if (!m_collisionShape && !shape->IsTransformed() && !m_compoundShape)
   {
     m_collisionShape = shape->GetBulletShape();
   }
@@ -254,8 +282,7 @@ void vkBulletBodyImpl::UpdateRigidBody()
     return;
   }
   float mass = m_bulletBody->GetMass();
-  vkVector3f l_inertia = m_bulletBody->GetInertia();
-  btVector3 inertia(l_inertia.x, l_inertia.y, l_inertia.z);
+  btVector3 inertia(m_inertia.x, m_inertia.y, m_inertia.z);
 
 
   if (!m_rigidBody)
@@ -269,6 +296,8 @@ void vkBulletBodyImpl::UpdateRigidBody()
     m_rigidBody->setMassProps(mass, inertia);
     m_rigidBody->updateInertiaTensor();
   }
+  m_rigidBody->setFriction(10.0f);
+  m_rigidBody->setRestitution(0.5f);
 }
 
 void vkBulletBodyImpl::UpdateTransform(const vkMatrix4f &transform)
@@ -286,7 +315,7 @@ void vkBulletBodyImpl::UpdateTransform(const vkMatrix4f &transform)
 
 void vkBulletBodyImpl::getWorldTransform(btTransform& worldTrans) const
 {
-  worldTrans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_bulletBody->GetTransform().m00));
+  worldTrans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_bulletBody->GetMatrix().m00));
 }
 
 void vkBulletBodyImpl::setWorldTransform(const btTransform &worldTrans)
@@ -297,3 +326,46 @@ void vkBulletBodyImpl::setWorldTransform(const btTransform &worldTrans)
   m_bulletBody->DynamicallyChanged(trans);
 }
 
+
+
+void vkBulletBodyImpl::AttachToScene(vkBulletScene *scene)
+{
+  if (m_rigidBody)
+  {
+    scene->GetBulletScene()->addRigidBody(m_rigidBody);
+  }
+}
+
+void vkBulletBodyImpl::DetachFromScene(vkBulletScene *scene)
+{
+  if (m_rigidBody)
+  {
+    scene->GetBulletScene()->removeRigidBody(m_rigidBody);
+  }
+}
+
+
+void vkBulletBodyImpl::SetInertia(const vkVector3f &inertia)
+{
+  m_inertia = inertia;
+}
+
+const vkVector3f &vkBulletBodyImpl::GetInertia() const
+{
+  return m_inertia;
+}
+
+void vkBulletBodyImpl::UpdateInertia()
+{
+  btCollisionShape *shape = m_collisionShape ? m_collisionShape : m_compoundShape;
+  if (!shape)
+  {
+    return;
+  }
+
+  btVector3 inertia;
+  shape->calculateLocalInertia(m_bulletBody->GetMass(), inertia);
+  m_inertia.Set(inertia.x(), inertia.y(), inertia.z());
+
+  UpdateRigidBody();
+}

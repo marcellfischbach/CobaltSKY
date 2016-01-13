@@ -9,4 +9,8 @@
 		<entities>entities</entities>
 	</vfs>
 	
+	<bullet>
+		<broadphase>dbvt</broadphase>
+	</bullet>
+	
 </settings>

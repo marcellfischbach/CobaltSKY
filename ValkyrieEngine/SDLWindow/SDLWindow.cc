@@ -49,6 +49,7 @@ bool SDLWindow::InitializeOpenGL(
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
 
+
   /*
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, openGLMajor);
   SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, openGLMinor);

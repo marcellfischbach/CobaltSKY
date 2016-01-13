@@ -26,9 +26,22 @@ void vkBulletSystem::Initialize()
 
 IPhysicsScene *vkBulletSystem::CreateScene()
 {
-  return new vkBulletScene(); 
+  vkBulletScene *scene = new vkBulletScene(); 
+  if (!scene->Initialize(false))
+  {
+    delete scene;
+    scene = 0;
+  }
+  return scene;
 }
 
+
+IPhysicsBody *vkBulletSystem::CreateBody()
+{
+  vkBulletBody *body = new vkBulletBody();
+
+  return body;
+}
 
 
 IPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)

@@ -42,6 +42,7 @@ public:
   const vkBoundingBox &GetBoundingBox() const;
   vkTransformation GetTransformation();
   void FinishTransformation();
+  void UpdatePhysicsTransformation();
   void UpdateBoundingBox();
 
   static vkID GetNextID();
@@ -51,6 +52,11 @@ public:
   void AttachEntity(vkEntity *entity, vkSpatialState *parentState = 0);
   void AttachEntity(vkEntity *entity, const vkString &parentStateName);
   void DetachEntity(vkEntity *entity);
+
+  void SetCollisionBody(IPhysicsBody *body)
+  {
+    m_collisionBody = body;
+  }
 
   void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 

@@ -10,6 +10,7 @@
 class btCollisionShape;
 class btCompoundShape;
 class vkBulletShape;
+class vkBulletScene;
 
 class vkBulletBody;
 class vkBulletBodyImpl : public btMotionState
@@ -21,7 +22,14 @@ public:
   void AttachShape(vkBulletShape *shape);
   bool DetachShape(vkBulletShape *shape);
 
+  void AttachToScene(vkBulletScene *scene);
+  void DetachFromScene(vkBulletScene *scene);
+
   bool HasShape() const;
+
+  void SetInertia(const vkVector3f &inertia);
+  const vkVector3f &GetInertia() const;
+  void UpdateInertia();
 
   void UpdateRigidBody();
   void UpdateTransform(const vkMatrix4f &transform);
@@ -37,6 +45,7 @@ private:
   btCollisionShape *m_collisionShape;
   btCompoundShape *m_compoundShape;
   btRigidBody *m_rigidBody;
+  vkVector3f m_inertia;
 
   std::vector<vkBulletShape*> m_shapes;
 };
@@ -63,17 +72,23 @@ public:
   virtual void SetInertia(const vkVector3f &inertia);
   virtual const vkVector3f &GetInertia() const;
 
+  virtual void UpdateInertia();
+
+  const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
 
-  virtual void AttachShape(IPhysShape *shape);
-  virtual void DetachShape(IPhysShape *shape);
+  virtual void AttachShape(IPhysicsShape *shape);
+  virtual void DetachShape(IPhysicsShape *shape);
+
+  void AttachToScene(vkBulletScene *scene);
+  void DetachFromScene(vkBulletScene *scene);
 
 private:
+  vkBulletScene *m_scene;
   vkEntity *m_entity;
   vkPhysBodyMode m_bodyMode;
   float m_mass;
-  vkVector3f m_inertia;
   vkMatrix4f m_transform;
 
   void DynamicallyChanged(const vkMatrix4f &transform);
@@ -83,4 +98,10 @@ private:
 
 
 };
+
+VK_FORCEINLINE const vkMatrix4f &vkBulletBody::GetMatrix() const
+{
+  return m_transform;
+}
+
 
