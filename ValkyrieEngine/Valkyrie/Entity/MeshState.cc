@@ -1,15 +1,18 @@
 
 #include <Valkyrie/Entity/MeshState.hh>
+#include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scan.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Physics/IPhysicsBody.hh>
 
 vkStaticMeshState::vkStaticMeshState()
   : vkRenderState()
   , m_mesh (0)
   , m_materials(0)
   , m_numberOfMaterialSlots(0)
+  , m_collision(0)
   , m_castShadow(true)
 {
 
@@ -82,6 +85,11 @@ void vkStaticMeshState::UpdateMaterialSlots()
   m_numberOfMaterialSlots = numberOfSlots;
 }
 
+void vkStaticMeshState::SetCollision(vkPhysicsShapeContainer *collision)
+{
+  VK_SET(m_collision, collision);
+}
+
 void vkStaticMeshState::FillBoundingBox(vkBoundingBox &bbox)
 {
   if (m_mesh)
@@ -113,3 +121,14 @@ void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntit
     }
   }
 }
+
+void vkStaticMeshState::OnAttachedToEntity(vkEntity *entity)
+{
+  vkSpatialState::OnAttachedToEntity(entity);
+
+  if (m_collision)
+  {
+    entity->AcquireCollisionBody()->AttachShape(m_collision);
+  }
+}
+

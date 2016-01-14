@@ -1,23 +1,27 @@
 <entity name="MyEntityName" class="vkEntity">
 	
 	<entityStates>
+	
 		<entityState id="0" class="vkStaticMeshState">
-
+			<transformation>
+				<translation>0.0;0.0;0.0</translation>
+				<axisAngle>0.0;0.0;1.0;0.0</axisAngle>
+			</transformation>
 			<mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh>
 			<materials>
 				<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>
 				<material slot="1" slotName="MinePin">${materials}/materials.xml:FieldStoneRed</material>
 			</materials>
-
-
-			<!--transformation>
-				<translation>10.0;20.0;0.0</translation>
-				<axisAngle>0.0;0.0;1.0;0.78539816339744830961566084581988</axisAngle>
-				<axisAngle>0.0;0.0;1.0;0.0</axisAngle>
-			</transformation-->
-			
-			
+			<collision resourceMode="shared">${models}/mine.staticmesh:Collision</collision>
 		</entityState>
+	
+		<entityState id="1" class="vkRigidBodyState">
+			<dynamic>true</dynamic>
+			<mass>1.0</mass>
+			<friction>10.0</friction>
+			<restitution>0.0</restitution>
+		</entityState>
+
 	</entityStates>
 	
 	<rootState id="0" />

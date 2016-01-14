@@ -5,6 +5,7 @@
 #include <PhysicsBullet/BulletShape.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 
 vkBulletBody::vkBulletBody()
   : IPhysicsBody()
@@ -12,6 +13,10 @@ vkBulletBody::vkBulletBody()
   , m_entity(0)
   , m_scene(0)
   , m_mass(0.0f)
+  , m_inertia(0.0f, 0.0f, 0.0f)
+  , m_dynamicInertia(false)
+  , m_friction(0.5f)
+  , m_restitution(0.5f)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -41,7 +46,6 @@ void vkBulletBody::SetMode(vkPhysBodyMode mode)
 {
   if (m_bodies.size() > 0)
   {
-    // ones the first body is created it is not possible to change the mode
     return;
   }
   m_bodyMode = mode;
@@ -63,8 +67,33 @@ float vkBulletBody::GetMass() const
   return m_mass;
 }
 
+void vkBulletBody::SetFriction(float friction)
+{
+  m_friction = friction;
+  UpdateBodies();
+}
+
+float vkBulletBody::GetFriction() const
+{
+  return m_friction;
+}
+
+
+void vkBulletBody::SetRestitution(float restitution)
+{
+  m_restitution = restitution;
+  UpdateBodies();
+}
+
+float vkBulletBody::GetRestitution() const
+{
+  return m_restitution;
+}
+
 void vkBulletBody::SetInertia(const vkVector3f &inertia)
 {
+  m_inertia = inertia;
+  m_dynamicInertia = false;
   for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
   {
     m_bodies[i]->SetInertia(inertia);
@@ -78,11 +107,12 @@ const vkVector3f &vkBulletBody::GetInertia() const
   {
     return m_bodies[0]->GetInertia();
   }
-  return vkVector3f (0, 0, 0);
+  return vkVector3f(0, 0, 0);
 }
 
 void vkBulletBody::UpdateInertia()
 {
+  m_dynamicInertia = true;
   for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
   {
     m_bodies[i]->UpdateInertia();
@@ -113,37 +143,51 @@ void vkBulletBody::FinishTransformation()
 
 void vkBulletBody::AttachShape(IPhysicsShape *shape)
 {
-  vkBulletShape *btShape = reinterpret_cast<vkBulletShape*>(shape);
-  if (!btShape)
+  if (shape)
   {
-    return;
+    shape->AddRef();
+    m_shapes.push_back(static_cast<vkBulletShape*>(shape));
   }
+}
 
-  btCollisionShape *collShape = btShape->GetBulletShape();
-  if (!collShape)
-  {
-    return;
-  }
 
-  if (m_bodyMode == ePBM_Dynamic)
+void vkBulletBody::CreateBodies()
+{
+  for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
-    // in dynamic mode we must work with one single rigid body 
-    if (m_bodies.size() == 0)
+    vkBulletShape *btShape = m_shapes[i];
+    if (!btShape)
     {
-      vkBulletBodyImpl *impl = new vkBulletBodyImpl(this);
-      m_bodies.push_back(impl);
+      return;
     }
 
-    m_bodies[0]->AttachShape(btShape);
+    btCollisionShape *collShape = btShape->GetBulletShape();
+    if (!collShape)
+    {
+      return;
+    }
+
+    if (m_bodyMode == ePBM_Dynamic)
+    {
+      // in dynamic mode we must work with one single rigid body 
+      if (m_bodies.size() == 0)
+      {
+        vkBulletBodyImpl *impl = new vkBulletBodyImpl(this);
+        m_bodies.push_back(impl);
+      }
+
+      m_bodies[0]->AttachShape(btShape);
+    }
+    else
+    {
+      // in static or kinematic mode we can work with multiple rigid bodies that are transformed
+      // simultaniously
+      vkBulletBodyImpl *impl = new vkBulletBodyImpl(this);
+      m_bodies.push_back(impl);
+      impl->AttachShape(btShape);
+    }
   }
-  else
-  {
-    // in static or kinematic mode we can work with multiple rigid bodies that are transformed
-    // simultaniously
-    vkBulletBodyImpl *impl = new vkBulletBodyImpl(this);
-    m_bodies.push_back(impl);
-    impl->AttachShape(btShape);
-  }
+  FinishTransformation();
 }
 
 void vkBulletBody::DetachShape(IPhysicsShape *shape)
@@ -160,6 +204,15 @@ void vkBulletBody::DetachShape(IPhysicsShape *shape)
     return;
   }
 
+  for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
+  {
+    if (m_shapes[i] == btShape)
+    {
+      m_shapes.erase(m_shapes.begin() + i);
+      break;
+    }
+  }
+
   for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
   {
     vkBulletBodyImpl *impl = m_bodies[i];
@@ -174,6 +227,21 @@ void vkBulletBody::DetachShape(IPhysicsShape *shape)
   }
 }
 
+void vkBulletBody::AttachShape(vkPhysicsShapeContainer *shapes)
+{
+  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  {
+    AttachShape(shapes->GetShape(i));
+  }
+}
+
+void vkBulletBody::DetachShape(vkPhysicsShapeContainer *shapes)
+{
+  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  {
+    DetachShape(shapes->GetShape(i));
+  }
+}
 
 void vkBulletBody::DynamicallyChanged(const vkMatrix4f &transform)
 {
@@ -187,9 +255,16 @@ void vkBulletBody::DynamicallyChanged(const vkMatrix4f &transform)
   }
 }
 
+
+
 void vkBulletBody::AttachToScene(vkBulletScene *scene)
 {
   m_scene = scene;
+  if (m_bodies.size () == 0)
+  {
+    CreateBodies();
+  }
+
   for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
   {
     m_bodies[i]->AttachToScene(scene);
@@ -206,6 +281,33 @@ void vkBulletBody::DetachFromScene(vkBulletScene *scene)
 }
 
 
+
+void vkBulletBody::RearrangeBodies()
+{
+  std::vector<IPhysicsShape*> shapes;
+  for (size_t i = 0, in = m_bodies.size(); i < in; ++i)
+  {
+    vkBulletBodyImpl *body = m_bodies[i];
+    for (size_t j = 0, jn = body->m_shapes.size(); j < jn; ++j)
+    {
+      shapes.push_back(body->m_shapes[j]);
+    }
+
+    body->DetachFromScene(m_scene);
+    delete body;
+  }
+  m_bodies.clear();
+
+  for (size_t i = 0, in = shapes.size(); i < in; ++i)
+  {
+    IPhysicsShape *shape = shapes[i];
+    AttachShape(shape);
+  }
+
+  UpdateInertia();
+}
+
+
 vkBulletBodyImpl::vkBulletBodyImpl(vkBulletBody *body)
   : m_collisionShape(0)
   , m_compoundShape(0)
@@ -217,6 +319,15 @@ vkBulletBodyImpl::vkBulletBodyImpl(vkBulletBody *body)
 
 vkBulletBodyImpl::~vkBulletBodyImpl()
 {
+  if (m_rigidBody)
+  {
+    delete m_rigidBody;
+    m_rigidBody = 0;
+  }
+
+  m_collisionShape = 0;
+  m_compoundShape = 0;
+  m_bulletBody = 0;
 
 }
 
@@ -228,9 +339,20 @@ void vkBulletBodyImpl::AttachShape(vkBulletShape *shape)
     return;
   }
 
+  m_shapes.push_back(shape);
+  shape->AddRef();
+
+  btCollisionShape *btShape = shape->GetBulletShape();
   if (!m_collisionShape && !shape->IsTransformed() && !m_compoundShape)
   {
-    m_collisionShape = shape->GetBulletShape();
+    if (btShape->isCompound())
+    {
+      m_compoundShape = static_cast<btCompoundShape*>(btShape);
+    }
+    else
+    {
+      m_collisionShape = btShape;
+    }
   }
   else
   {
@@ -247,8 +369,31 @@ void vkBulletBodyImpl::AttachShape(vkBulletShape *shape)
       m_collisionShape = 0;
     }
 
-    trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&shape->GetLocalTransform().m00));
-    m_compoundShape->addChildShape(trans, shape->GetBulletShape());
+    if (btShape->isCompound())
+    {
+      vkMatrix4f compoundMatrix = shape->GetLocalTransform();
+      btCompoundShape *compoundShape = static_cast<btCompoundShape*>(btShape);
+      for (int i = 0, in = compoundShape->getNumChildShapes(); i < in; ++i)
+      {
+        btCollisionShape *childShape = compoundShape->getChildShape(i);
+        const btTransform &childTrans = compoundShape->getChildTransform(i);
+
+        vkMatrix4f childMatrix;
+        childTrans.getOpenGLMatrix(&childMatrix.m00);
+
+        vkMatrix4f shapeMatrix;
+        vkMatrix4f::Mult(compoundMatrix, childMatrix, shapeMatrix);
+
+        btTransform shapeTransform;
+        shapeTransform.setFromOpenGLMatrix(static_cast<const btScalar*>(&shapeMatrix.m00));
+        m_compoundShape->addChildShape(shapeTransform, childShape);
+      }
+    }
+    else
+    {
+      trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&shape->GetLocalTransform().m00));
+      m_compoundShape->addChildShape(trans, btShape);
+    }
   }
 
   UpdateRigidBody();
@@ -262,6 +407,8 @@ bool vkBulletBodyImpl::DetachShape(vkBulletShape *shape)
     vkBulletShape *myShape = m_shapes[i];
     if (myShape == shape)
     {
+      shape->Release();
+      m_shapes.erase(m_shapes.begin() + i);
       return true;
     }
   }
@@ -282,7 +429,11 @@ void vkBulletBodyImpl::UpdateRigidBody()
     return;
   }
   float mass = m_bulletBody->GetMass();
-  btVector3 inertia(m_inertia.x, m_inertia.y, m_inertia.z);
+  btVector3 inertia(m_bulletBody->m_inertia.x, m_bulletBody->m_inertia.y, m_bulletBody->m_inertia.z);
+  if (m_bulletBody->m_dynamicInertia)
+  {
+    shape->calculateLocalInertia(mass, inertia);
+  }
 
 
   if (!m_rigidBody)
@@ -296,8 +447,8 @@ void vkBulletBodyImpl::UpdateRigidBody()
     m_rigidBody->setMassProps(mass, inertia);
     m_rigidBody->updateInertiaTensor();
   }
-  m_rigidBody->setFriction(10.0f);
-  m_rigidBody->setRestitution(0.5f);
+  m_rigidBody->setFriction(m_bulletBody->m_friction);
+  m_rigidBody->setRestitution(m_bulletBody->m_restitution);
 }
 
 void vkBulletBodyImpl::UpdateTransform(const vkMatrix4f &transform)
@@ -330,7 +481,7 @@ void vkBulletBodyImpl::setWorldTransform(const btTransform &worldTrans)
 
 void vkBulletBodyImpl::AttachToScene(vkBulletScene *scene)
 {
-  if (m_rigidBody)
+  if (m_rigidBody && scene)
   {
     scene->GetBulletScene()->addRigidBody(m_rigidBody);
   }
@@ -338,7 +489,7 @@ void vkBulletBodyImpl::AttachToScene(vkBulletScene *scene)
 
 void vkBulletBodyImpl::DetachFromScene(vkBulletScene *scene)
 {
-  if (m_rigidBody)
+  if (m_rigidBody && scene)
   {
     scene->GetBulletScene()->removeRigidBody(m_rigidBody);
   }

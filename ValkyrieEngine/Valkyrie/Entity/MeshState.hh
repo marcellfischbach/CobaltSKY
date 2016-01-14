@@ -5,6 +5,7 @@
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Entity/MeshState.refl.hh>
+#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 
 class vkMesh;
 class vkMaterialInstance;
@@ -29,10 +30,16 @@ public:
   vkMaterialInstance *GetMaterial(vkUInt32 slot = 0);
   const vkMaterialInstance *GetMaterial(vkUInt32 slot = 0) const;
 
+  void SetCollision(vkPhysicsShapeContainer *collision);
+  vkPhysicsShapeContainer *GetCollision();
+  const vkPhysicsShapeContainer *GetCollision() const;
+
   void SetCastShadow(bool castShadow);
   bool IsCastShadow() const;
 
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
+
+  virtual void OnAttachedToEntity(vkEntity *entity);
 
 protected:
   virtual void FillBoundingBox(vkBoundingBox &bbox);
@@ -48,6 +55,7 @@ private:
 
   vkUInt32 m_numberOfMaterialSlots;
   vkMaterialInstance **m_materials;
+  vkPhysicsShapeContainer *m_collision;
 
 };
 
@@ -82,6 +90,16 @@ VK_FORCEINLINE const vkMaterialInstance *vkStaticMeshState::GetMaterial(vkUInt32
     return 0;
   }
   return m_materials[slot];
+}
+
+VK_FORCEINLINE vkPhysicsShapeContainer *vkStaticMeshState::GetCollision()
+{
+  return m_collision;
+}
+
+VK_FORCEINLINE const vkPhysicsShapeContainer *vkStaticMeshState::GetCollision() const
+{
+  return m_collision;
 }
 
 VK_FORCEINLINE void vkStaticMeshState::SetCastShadow(bool castShadow)

@@ -73,6 +73,7 @@ protected:
 
   vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared, vkResourceLoadingMode alterInline = eRLM_Inline) const;
 
+  bool LoadBool(const char *str) const;
   float LoadFloat(const char *str) const;
   vkVector2f LoadVector2f(const char *str) const;
   vkVector3f LoadVector3f(const char *str) const;

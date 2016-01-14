@@ -5,6 +5,7 @@
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 #include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Engine.hh>
 
 vkID nextID = 1;
 
@@ -96,6 +97,7 @@ void vkEntity::AddState(vkEntityState *state)
   {
     state->AddRef();
     m_states.push_back(state);
+    state->OnAttachedToEntity(this);
   }
 }
 
@@ -179,4 +181,14 @@ void vkEntity::SetClippingRange(float min, float max)
   {
     m_rootState->SetClippingRange(min, max);
   }
+}
+
+IPhysicsBody *vkEntity::AcquireCollisionBody()
+{
+  if (!m_collisionBody)
+  {
+    m_collisionBody = vkEngine::Get()->GetPhysicsSystem()->CreateBody();
+    m_collisionBody->SetEntity(this);
+  }
+  return m_collisionBody;
 }

@@ -590,41 +590,14 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
     rootEntity->AttachEntity(mineEntity);
 
 
-    char buffer[256];
-    sprintf(buffer, "Mine %d", i);
-    mineEntity->SetName(vkString(buffer));
 
-
-    IPhysicsBody *boxBody = physSystem->CreateBody();
-    boxBody->SetMode(ePBM_Dynamic);
-    boxBody->SetMass(100.0f);
-
-    vkPhysGeometry boxGeometryM;
-    boxGeometryM.Type = ePGT_Box;
-    boxGeometryM.Dimensions.Set(2.0f, 2.0f, 2.0f);
-    boxBody->AttachShape(physSystem->CreateShape(boxGeometryM));
-
-    vkPhysGeometry boxGeometryS1;
-    boxGeometryS1.Type = ePGT_Box;
-    boxGeometryS1.Dimensions.Set(4.0f, 0.6f, 0.6f);
-    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS1));
-
-    vkPhysGeometry boxGeometryS2;
-    boxGeometryS2.Type = ePGT_Box;
-    boxGeometryS2.Dimensions.Set(0.6f, 4.0f, 0.6f);
-    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS2));
-
-    vkPhysGeometry boxGeometryS3;
-    boxGeometryS3.Type = ePGT_Box;
-    boxGeometryS3.Dimensions.Set(0.6f, 0.6f, 4.0f);
-    boxBody->AttachShape(physSystem->CreateShape(boxGeometryS3));
-
-
-
-    boxBody->UpdateInertia();
-    mineEntity->SetCollisionBody(boxBody);
-    boxBody->SetEntity(mineEntity);
-    scene->AddBody(boxBody);
+    /*
+    mineBody->SetMode(ePBM_Dynamic);
+    mineBody->SetMass(100.0f);
+    mineBody->UpdateInertia();
+    */
+    IPhysicsBody *mineBody = mineEntity->GetCollisionBody();
+    scene->AddBody(mineBody);
 
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-20.0f + x * 40.0f, -20.0f + y * 40.0f, 10.0f + z * 20.0f));
     mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);

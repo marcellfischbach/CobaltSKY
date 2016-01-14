@@ -3,6 +3,7 @@ import valkyrie.trigon
 import valkyrie.unique_list
 import valkyrie.vertex
 import valkyrie.mesh
+import valkyrie.collision
 import valkyrie.static_mesh_exporter
 
 
@@ -14,6 +15,7 @@ imp.reload(valkyrie.unique_list)
 imp.reload(valkyrie.vertex)
 
 imp.reload(valkyrie.mesh)
+imp.reload(valkyrie.collision)
 imp.reload(valkyrie.static_mesh_exporter)
 
 
@@ -24,5 +26,6 @@ from valkyrie.vertex import Vertex
 from valkyrie.mesh import Mesh
 from valkyrie.mesh import MeshData
 from valkyrie.mesh import MultiMesh
+from valkyrie.collision import Collision
 
 

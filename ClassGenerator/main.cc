@@ -51,7 +51,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "  {\n";
     result += "  }\n";
     result += "  \n";
-    result += "  virtual void SetValue(iObject *object, void *data) const\n";
+    result += "  virtual void SetValue(IObject *object, void *data) const\n";
     result += "  {\n";
     result += "    " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (d)\n";
@@ -61,7 +61,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "    }\n";
     result += "  }\n";
     result += "  \n";
-    result += "  virtual const void *GetValue(const iObject *object) const\n";
+    result += "  virtual const void *GetValue(const IObject *object) const\n";
     result += "  {\n";
     result += "    const " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (!d) return 0;\n";

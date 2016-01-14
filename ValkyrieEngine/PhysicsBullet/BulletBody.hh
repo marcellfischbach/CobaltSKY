@@ -15,6 +15,7 @@ class vkBulletScene;
 class vkBulletBody;
 class vkBulletBodyImpl : public btMotionState
 {
+  friend class vkBulletBody;
 public:
   vkBulletBodyImpl(vkBulletBody *body);
   ~vkBulletBodyImpl();
@@ -74,12 +75,23 @@ public:
 
   virtual void UpdateInertia();
 
+
+  virtual void SetFriction(float friction);
+  virtual float GetFriction() const;
+
+  virtual void SetRestitution(float restitution);
+  virtual float GetRestitution() const;
+
   const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
 
   virtual void AttachShape(IPhysicsShape *shape);
   virtual void DetachShape(IPhysicsShape *shape);
+
+  virtual void AttachShape(vkPhysicsShapeContainer *shapes);
+  virtual void DetachShape(vkPhysicsShapeContainer *shapes);
+
 
   void AttachToScene(vkBulletScene *scene);
   void DetachFromScene(vkBulletScene *scene);
@@ -89,11 +101,18 @@ private:
   vkEntity *m_entity;
   vkPhysBodyMode m_bodyMode;
   float m_mass;
+  vkVector3f m_inertia;
+  bool m_dynamicInertia;
+  float m_friction;
+  float m_restitution;
   vkMatrix4f m_transform;
 
+  void CreateBodies();
+  void RearrangeBodies();
   void DynamicallyChanged(const vkMatrix4f &transform);
 
   void UpdateBodies();
+  std::vector<vkBulletShape*> m_shapes;
   std::vector<vkBulletBodyImpl*> m_bodies;
 
 

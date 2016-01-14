@@ -68,6 +68,8 @@ set(SOURCE_ENTITY
   Entity/Module.hh
   Entity/RenderState.cc
   Entity/RenderState.hh
+  Entity/RigidBodyState.cc
+  Entity/RigidBodyState.hh
   Entity/Scan.hh
   Entity/SpatialState.cc
   Entity/SpatialState.hh
@@ -178,6 +180,8 @@ set(SOURCE_PHYSICS
   Physics/IPhysicsScene.hh
   Physics/IPhysicsShape.hh
   Physics/IPhysicsSystem.hh
+  Physics/PhysicsShapeContainer.cc
+  Physics/PhysicsShapeContainer.hh
   )
 
 source_group(

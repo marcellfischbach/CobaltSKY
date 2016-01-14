@@ -7,9 +7,12 @@
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Engine.hh>
+#include <Valkyrie/Enums.hh>
 #include <map>
 #include <vector>
+
 #define VK_STATIC_MESH_LOADER_VERSION 1
 #define VK_STATIC_MESH_LOADER_MAGIC_NUMBER 0x4853454D
 
@@ -140,8 +143,8 @@ IObject *vkStaticMeshLoader::ReadEntry(std::map<vkString, HeaderEntry> &entries,
     return ReadMesh(fileVersion, file, locator, userData);
 
   case eET_Collision:
-    printf("Cannot reader Collision. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-    return 0;
+    return ReadCollision(fileVersion, file, locator, userData);
+
   case eET_Skeleton:
     printf("Cannot reader Skeleton. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
     return 0;
@@ -310,6 +313,42 @@ IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
   return decl;
 }
 
+
+vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
+
+  vkPhysicsShapeContainer *container = new vkPhysicsShapeContainer();
+  vkUInt32 numShapes;
+  file->Read(&numShapes, sizeof(vkUInt32));
+  for (vkUInt32 i = 0; i < numShapes; ++i)
+  {
+    vkUInt32 shapeTypeI;
+    file->Read(&shapeTypeI, sizeof(vkUInt32));
+    vkMatrix4f trans;
+    file->Read(&trans, sizeof(vkMatrix4f));
+    vkPhysGeometryType type = static_cast<vkPhysGeometryType>(shapeTypeI);
+    switch (type)
+    {
+    case ePGT_Box:
+      {
+        vkPhysGeometry geom;
+        memset(&geom, 0, sizeof(geom));
+        geom.Type = type;
+        file->Read(&geom.Dimensions, sizeof(vkVector3f));
+        IPhysicsShape *shape = physSystem->CreateShape(geom);
+        shape->SetLocalTransform(trans);
+        container->AddShape(shape);
+      }
+      break;
+    default:
+      printf("Reading physics of type %d not implemented yet.\n", type);
+      break;
+    }
+  }
+
+  return container;
+}
 
 
 vkGeometryData* vkStaticMeshLoader::ReadGeometry(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const

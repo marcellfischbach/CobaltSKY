@@ -48,3 +48,5 @@ struct VKE_API IPhysicsShape : public IObject
   virtual void SetLocalTransform(const vkMatrix4f &localTransform) = 0;
   virtual const vkMatrix4f &GetLocalTransform() const = 0;
 };
+
+

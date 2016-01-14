@@ -31,4 +31,5 @@ void vkLoaders::Register(vkResourceManager *mgr)
   reg->RegisterLoader(new vkSpatialStateLoader());
   reg->RegisterLoader(new vkRenderStateLoader());
   reg->RegisterLoader(new vkStaticMeshStateLoader());
+  reg->RegisterLoader(new vkRigidBodyStateLoader());
 }

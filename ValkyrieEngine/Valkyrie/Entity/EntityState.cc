@@ -4,6 +4,7 @@
 
 vkEntityState::vkEntityState()
   : vkObject()
+  , m_entity(0)
 {
 
 }
@@ -22,5 +23,20 @@ vkSpatialState *vkEntityState::ToSpatialState()
 const vkSpatialState *vkEntityState::ToSpatialState() const
 {
   return 0;
+}
+
+
+
+void vkEntityState::OnAttachedToEntity(vkEntity *entity)
+{
+  m_entity = entity;
+}
+
+void vkEntityState::OnDetachedFromEntity(vkEntity *entity)
+{
+  if (m_entity == entity)
+  {
+    m_entity = 0;
+  }
 }
 

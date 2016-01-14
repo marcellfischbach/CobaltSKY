@@ -53,10 +53,9 @@ public:
   void AttachEntity(vkEntity *entity, const vkString &parentStateName);
   void DetachEntity(vkEntity *entity);
 
-  void SetCollisionBody(IPhysicsBody *body)
-  {
-    m_collisionBody = body;
-  }
+  IPhysicsBody *AcquireCollisionBody();
+  IPhysicsBody *GetCollisionBody();
+  const IPhysicsBody *GetCollisionBody() const;
 
   void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 
@@ -101,4 +100,14 @@ VK_FORCEINLINE vkSpatialState *vkEntity::GetRootState()
 VK_FORCEINLINE const vkSpatialState *vkEntity::GetRootState() const
 {
   return m_rootState;
+}
+
+VK_FORCEINLINE IPhysicsBody *vkEntity::GetCollisionBody()
+{
+  return m_collisionBody;
+}
+
+VK_FORCEINLINE const IPhysicsBody *vkEntity::GetCollisionBody() const
+{
+  return m_collisionBody;
 }

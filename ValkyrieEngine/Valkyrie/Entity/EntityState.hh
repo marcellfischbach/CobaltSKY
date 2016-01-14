@@ -7,6 +7,7 @@
 #include <Valkyrie/Types.hh>
 
 class vkClipper;
+class vkEntity;
 class vkSpatialState;
 struct IEntityScan;
 struct IGraphics;
@@ -32,13 +33,22 @@ public:
   virtual vkSpatialState *ToSpatialState();
   virtual const vkSpatialState *ToSpatialState() const;
 
+  virtual void OnAttachedToEntity(vkEntity *entity);
+  virtual void OnDetachedFromEntity(vkEntity *entity);
+
+  vkEntity *GetEntity();
+  const vkEntity *GetEntity() const;
+
 protected:
   vkEntityState();
+
 
 
 private:
   vkID m_id;
   vkString m_name;
+
+  vkEntity *m_entity;
 };
 
 
@@ -57,5 +67,15 @@ VK_FORCEINLINE void vkEntityState::SetName(const vkString &name)
 VK_FORCEINLINE const vkString &vkEntityState::GetName() const
 {
   return m_name;
+}
+
+VK_FORCEINLINE vkEntity *vkEntityState::GetEntity()
+{
+  return m_entity;
+}
+
+VK_FORCEINLINE const vkEntity *vkEntityState::GetEntity() const
+{
+  return m_entity;
 }
 

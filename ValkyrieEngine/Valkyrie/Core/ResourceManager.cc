@@ -297,6 +297,11 @@ vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *elem
   return mode;
 }
 
+bool vkBaseXMLLoader::LoadBool(const char *str) const
+{
+  return str == std::string("true");
+}
+
 float vkBaseXMLLoader::LoadFloat(const char *str) const
 {
   return (float) atof(str);

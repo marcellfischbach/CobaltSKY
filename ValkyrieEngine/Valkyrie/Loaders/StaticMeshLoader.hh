@@ -10,6 +10,7 @@ class vkGeometryData;
 class vkGeometryMesh;
 class vkMesh;
 class vkMultiMaterial;
+class vkPhysicsShapeContainer;
 class vkSubMesh;
 struct IVertexDeclaration;
 
@@ -43,6 +44,7 @@ private:
   vkGeometryMesh *ReadGeometryMesh(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   vkMultiMaterial *ReadMultiMaterial(IFile *file) const;
   vkMesh *ReadMesh (vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  vkPhysicsShapeContainer *ReadCollision(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   bool ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   IVertexDeclaration *ReadVertexDeclaration(IFile *file) const;
 

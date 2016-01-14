@@ -177,6 +177,9 @@ class MultiMesh:
 		
 		for obj in bpy.context.scene.objects:
 			data = obj.data
+			if obj.name[0:2] == "PX":
+				continue
+				
 			if isinstance(data, bpy.types.Mesh):
 				for lID in range(num_lods):
 					# check if the object is visible in the given LOD-layer

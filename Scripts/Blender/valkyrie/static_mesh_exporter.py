@@ -12,7 +12,7 @@ class Entry:
 	
 	ET_Geometry = 0
 	ET_Mesh = 1
-	ET_CollisionShape = 2
+	ET_Collision = 2
 	ET_Skeleton = 3
 	ET_SkeletonAnimation = 4
 	
@@ -41,6 +41,7 @@ class StaticMeshExporter:
 		
 		mm = self._prepare_meshes(num_lods)
 		self._prepare_geometry(mm)
+		self._prepare_collision()
 		
 		self.mesh_stream = ""
 		self.file = open(filename, 'wb')
@@ -104,6 +105,19 @@ class StaticMeshExporter:
 		e.data = geom_writer.stream
 		
 		self.entries.append(e)
+		
+	def _prepare_collision(self):
+		collision = valkyrie.collision.Collision ()
+		collision.prepare()
+		
+		e = Entry()
+		e.name = "Collision"
+		e.type = Entry.ET_Collision
+		e.size = len(collision.stream)
+		e.data = collision.stream
+		
+		self.entries.append(e)
+		
 		
 	def _export_string(self, string):
 		_string = bytes(string, 'latin1')
