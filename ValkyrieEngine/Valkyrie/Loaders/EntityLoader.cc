@@ -521,11 +521,22 @@ IObject *vkRigidBodyStateLoader::Load(TiXmlElement *element, const vkResourceLoc
   vkRigidBodyState *rigidBodyState = vkQueryClass<vkRigidBodyState>(userData);
   if (rigidBodyState)
   {
-    TiXmlElement *dynamicElement = element->FirstChildElement("dynamic");
-    if (dynamicElement && dynamicElement->GetText())
+    TiXmlElement *modeElement = element->FirstChildElement("mode");
+    if (modeElement && modeElement->GetText())
     {
-      bool dyn = LoadBool(dynamicElement->GetText());
-      rigidBodyState->SetDynamic(dyn);
+      std::string modeStr(modeElement->GetText());
+      if (modeStr == std::string("dynamic"))
+      {
+        rigidBodyState->SetMode(ePBM_Dynamic);
+      }
+      else if (modeStr == std::string("kinematic"))
+      {
+        rigidBodyState->SetMode(ePBM_Kinematic);
+      }
+      else
+      {
+        rigidBodyState->SetMode(ePBM_Static);
+      }
     }
 
     TiXmlElement *massElement = element->FirstChildElement("mass");

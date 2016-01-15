@@ -21,6 +21,7 @@ public:
   ~vkBulletBodyImpl();
 
   void AttachShape(vkBulletShape *shape);
+  void AttachShapes(std::vector<vkBulletShape*> &shapes);
   bool DetachShape(vkBulletShape *shape);
 
   void AttachToScene(vkBulletScene *scene);
@@ -28,11 +29,7 @@ public:
 
   bool HasShape() const;
 
-  void SetInertia(const vkVector3f &inertia);
-  const vkVector3f &GetInertia() const;
-  void UpdateInertia();
-
-  void UpdateRigidBody();
+  void CreateRigidBody();
   void UpdateTransform(const vkMatrix4f &transform);
 
   virtual void	getWorldTransform(btTransform& worldTrans) const;
@@ -46,8 +43,7 @@ private:
   btCollisionShape *m_collisionShape;
   btCompoundShape *m_compoundShape;
   btRigidBody *m_rigidBody;
-  vkVector3f m_inertia;
-
+  btCollisionObject *m_collisionObject;
   std::vector<vkBulletShape*> m_shapes;
 };
 
@@ -72,15 +68,15 @@ public:
 
   virtual void SetInertia(const vkVector3f &inertia);
   virtual const vkVector3f &GetInertia() const;
-
-  virtual void UpdateInertia();
-
+  virtual void SetAutoInertia(bool autoInertia);
 
   virtual void SetFriction(float friction);
   virtual float GetFriction() const;
 
   virtual void SetRestitution(float restitution);
   virtual float GetRestitution() const;
+
+  virtual void Update();
 
   const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
@@ -102,16 +98,15 @@ private:
   vkPhysBodyMode m_bodyMode;
   float m_mass;
   vkVector3f m_inertia;
-  bool m_dynamicInertia;
+  bool m_autoInertia;
   float m_friction;
   float m_restitution;
   vkMatrix4f m_transform;
+  bool m_bodiesDirty;
 
   void CreateBodies();
-  void RearrangeBodies();
   void DynamicallyChanged(const vkMatrix4f &transform);
 
-  void UpdateBodies();
   std::vector<vkBulletShape*> m_shapes;
   std::vector<vkBulletBodyImpl*> m_bodies;
 

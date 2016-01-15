@@ -3,6 +3,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Entity/EntityState.hh>
+#include <Valkyrie/Enums.hh>
 
 #include <Valkyrie/Entity/RigidBodyState.refl.hh>
 
@@ -15,8 +16,8 @@ public:
   vkRigidBodyState();
   virtual ~vkRigidBodyState();
 
-  void SetDynamic(bool dynamic);
-  bool IsDynamic() const;
+  void SetMode(vkPhysBodyMode mode);
+  vkPhysBodyMode GetMode() const;
 
   void SetMass(float mass);
   float GetMass() const;
@@ -34,7 +35,7 @@ public:
 public:
 
   VK_PROPERTY()
-    bool m_dynamic;
+    vkPhysBodyMode m_mode;
   VK_PROPERTY()
     float m_mass;
 
@@ -46,14 +47,14 @@ public:
 };
 
 
-VK_FORCEINLINE void vkRigidBodyState::SetDynamic(bool dynamic)
+VK_FORCEINLINE void vkRigidBodyState::SetMode(vkPhysBodyMode mode)
 {
-  m_dynamic = dynamic;
+  m_mode = mode;
 }
 
-VK_FORCEINLINE bool vkRigidBodyState::IsDynamic() const
+VK_FORCEINLINE vkPhysBodyMode vkRigidBodyState::GetMode() const
 {
-  return m_dynamic;
+  return m_mode;
 }
 
 VK_FORCEINLINE void vkRigidBodyState::SetMass(float mass)

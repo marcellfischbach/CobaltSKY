@@ -16,7 +16,7 @@
 		</entityState>
 	
 		<entityState id="1" class="vkRigidBodyState">
-			<dynamic>true</dynamic>
+			<mode>dynamic</mode>
 			<mass>1.0</mass>
 			<friction>10.0</friction>
 			<restitution>0.0</restitution>

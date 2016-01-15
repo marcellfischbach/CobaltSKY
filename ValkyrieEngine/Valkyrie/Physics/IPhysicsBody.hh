@@ -31,14 +31,15 @@ struct VKE_API IPhysicsBody : public IObject
 
   virtual void SetInertia(const vkVector3f &inertia) = 0;
   virtual const vkVector3f &GetInertia() const = 0;
-
-  virtual void UpdateInertia() = 0;
+  virtual void SetAutoInertia(bool autoInertia) = 0;
 
   virtual void SetFriction(float friction) = 0;
   virtual float GetFriction() const = 0;
 
   virtual void SetRestitution(float restitution) = 0;
   virtual float GetRestitution() const = 0;
+
+  virtual void Update() = 0;
 
   virtual const vkMatrix4f &GetMatrix() const = 0;
   virtual vkTransformation GetTransform() = 0;
