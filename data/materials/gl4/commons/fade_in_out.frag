@@ -11,7 +11,7 @@ void fade_in_out_test()
 	{
 		discard;
 	}
-	else if (vk_FadeInOutValue < 16)
+	else if (vk_FadeInOutValue < 17)
 	{
 		vec2 gradientCoord = gl_FragCoord.xy / 8.0;
 		

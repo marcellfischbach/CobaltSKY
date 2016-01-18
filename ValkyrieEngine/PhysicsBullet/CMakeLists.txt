@@ -6,10 +6,14 @@ set(SOURCE
   Export.hh
   BulletBody.cc
   BulletBody.hh
+  BulletDynamicCollider.cc
+  BulletDynamicCollider.hh
   BulletScene.cc
   BulletScene.hh
   BulletShape.cc
   BulletShape.hh
+  BulletStaticCollider.cc
+  BulletStaticCollider.hh
   BulletSystem.cc
   BulletSystem.hh
   )

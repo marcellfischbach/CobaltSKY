@@ -1,6 +1,8 @@
 
 
 #include <PhysicsBullet/BulletSystem.hh>
+#include <PhysicsBullet/BulletDynamicCollider.hh>
+#include <PhysicsBullet/BulletStaticCollider.hh>
 #include <PhysicsBullet/BulletBody.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
@@ -41,6 +43,23 @@ IPhysicsBody *vkBulletSystem::CreateBody()
   vkBulletBody *body = new vkBulletBody();
 
   return body;
+}
+
+IPhysicsDynamicCollider *vkBulletSystem::CreateDynamicCollider()
+{
+  vkBulletDynamicCollider *dyn = new vkBulletDynamicCollider();
+  return dyn;
+}
+
+IPhysicsStaticCollider *vkBulletSystem::CreateStaticCollider()
+{
+  vkBulletStaticCollider *stat = new vkBulletStaticCollider();
+  return stat;
+}
+
+IPhysicsTriggerCollider *vkBulletSystem::CreateTriggerCollider()
+{
+  return 0;
 }
 
 

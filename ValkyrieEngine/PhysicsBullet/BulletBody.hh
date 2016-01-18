@@ -113,6 +113,8 @@ private:
 
 };
 
+
+
 VK_FORCEINLINE const vkMatrix4f &vkBulletBody::GetMatrix() const
 {
   return m_transform;

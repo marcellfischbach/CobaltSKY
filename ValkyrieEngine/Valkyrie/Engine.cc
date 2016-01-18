@@ -585,7 +585,7 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
     float t = (float)rand() / (float)RAND_MAX;
 
     mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
-    mineEntity->SetClippingRange(-FLT_MAX, 150.0f);
+    mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
     mineEntity->FinishTransformation();
     rootEntity->AttachEntity(mineEntity);
 

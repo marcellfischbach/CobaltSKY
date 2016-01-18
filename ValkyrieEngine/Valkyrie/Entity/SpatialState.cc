@@ -264,11 +264,11 @@ void vkSpatialState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntitySc
 
 
 
-#define VK_NUM_FADE_VALUES 17
+#define VK_NUM_FADE_VALUES 18
 #define VK_FADE_VALUE_OUT 0
 #define VK_FADE_VALUE_FIRST_IN 1
-#define VK_FADE_VALUE_IN 16
-#define VK_FADE_VALUE_FIRST_OUT 15
+#define VK_FADE_VALUE_IN 17
+#define VK_FADE_VALUE_FIRST_OUT 16
 
 
 vkDistanceState::vkDistanceState()
@@ -276,7 +276,7 @@ vkDistanceState::vkDistanceState()
   , m_max (FLT_MAX)
   , m_state(eInitial)
 {
-  SetFadeTime(250L);
+  SetFadeTime(2500L);
 }
 
 void vkDistanceState::SetupDistance(float min, float max)

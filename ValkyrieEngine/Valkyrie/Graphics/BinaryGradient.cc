@@ -167,17 +167,32 @@ static void create_pattern8(void *colors)
     );
 }
 
+static void create_pattern8a(void *colors)
+{
+  float factor = assign_pattern(
+    "# # # # "
+    " # # # #"
+    "# # # # "
+    " # # # #"
+    "# # # # "
+    " # # # #"
+    "# # # # "
+    " # # # #",
+    colors
+    );
+}
+
 static void create_pattern9(void *colors)
 {
   float factor = assign_pattern(
-    " #   #  "
-    "# # # # "
-    " # # # #"
     "# # # # "
     " #   #  "
     "# # # # "
     " # # # #"
-    "# # # # ",
+    "# # # # "
+    " #   #  "
+    "# # # # "
+    " # # # #",
     colors
     );
 }
@@ -185,14 +200,14 @@ static void create_pattern9(void *colors)
 static void create_pattern10(void *colors)
 {
   float factor = assign_pattern(
-    " #   #  "
-    "# # # # "
-    "   #   #"
     "# # # # "
     " #   #  "
     "# # # # "
     "   #   #"
-    "# # # # ",
+    "# # # # "
+    " #   #  "
+    "# # # # "
+    "   #   #",
     colors
     );
 }
@@ -202,14 +217,14 @@ static void create_pattern10(void *colors)
 static void create_pattern11(void *colors)
 {
   float factor = assign_pattern(
-    "        "
-    "# # # # "
-    "   #   #"
     "# # # # "
     "        "
     "# # # # "
     "   #   #"
-    "# # # # ",
+    "# # # # "
+    "        "
+    "# # # # "
+    "   #   #",
     colors
     );
 }
@@ -218,14 +233,14 @@ static void create_pattern11(void *colors)
 static void create_pattern12(void *colors)
 {
   float factor = assign_pattern(
-    "        "
     "# # # # "
     "        "
     "# # # # "
     "        "
     "# # # # "
     "        "
-    "# # # # ",
+    "# # # # "
+    "        ",
     colors
     );
 }
@@ -233,14 +248,14 @@ static void create_pattern12(void *colors)
 static void create_pattern13(void *colors)
 {
   float factor = assign_pattern(
-    "        "
     "# # # # "
     "        "
     "  #   # "
     "        "
     "# # # # "
     "        "
-    "  #   # ",
+    "  #   # "
+    "        ",
     colors
     );
 }
@@ -249,14 +264,14 @@ static void create_pattern13(void *colors)
 static void create_pattern14(void *colors)
 {
   float factor = assign_pattern(
-    "        "
     "#   #   "
     "        "
     "  #   # "
     "        "
     "#   #   "
     "        "
-    "  #   # ",
+    "  #   # "
+    "        ",
     colors
     );
 }
@@ -264,12 +279,12 @@ static void create_pattern14(void *colors)
 static void create_pattern15(void *colors)
 {
   float factor = assign_pattern(
-    "        "
     "#   #   "
     "        "
     "        "
     "        "
     "#   #   "
+    "        "
     "        "
     "        ",
     colors
@@ -314,27 +329,29 @@ ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
   if (!static_textureArray)
   {
     IGraphics *graphics = vkEngine::Get()->GetRenderer();
-    if (static_textureArray = graphics->CreateTexture2DArray(ePF_RGBA, 8, 8, 17))
+    if (static_textureArray = graphics->CreateTexture2DArray(ePF_RGBA, 8, 8, 18))
     {
       vkPixelFormat format = ePF_RGBA;
-      vkUInt32 colors[8 * 8 * 17];
-      create_pattern0(&colors[0 * 64]);
-      create_pattern1(&colors[1 * 64]);
-      create_pattern2(&colors[2 * 64]);
-      create_pattern3(&colors[3 * 64]);
-      create_pattern4(&colors[4 * 64]);
-      create_pattern5(&colors[5 * 64]);
-      create_pattern6(&colors[6 * 64]);
-      create_pattern7(&colors[7 * 64]);
-      create_pattern8(&colors[8 * 64]);
-      create_pattern9(&colors[9 * 64]);
-      create_pattern10(&colors[10 * 64]);
-      create_pattern11(&colors[11 * 64]);
-      create_pattern12(&colors[12 * 64]);
-      create_pattern13(&colors[13 * 64]);
-      create_pattern14(&colors[14 * 64]);
-      create_pattern15(&colors[15 * 64]);
-      create_pattern16(&colors[16 * 64]);
+      vkUInt32 colors[8 * 8 * 18];
+      int i = 0;
+      create_pattern0(&colors[i++ * 64]);
+      create_pattern1(&colors[i++ * 64]);
+      create_pattern2(&colors[i++ * 64]);
+      create_pattern3(&colors[i++ * 64]);
+      create_pattern4(&colors[i++ * 64]);
+      create_pattern5(&colors[i++ * 64]);
+      create_pattern6(&colors[i++ * 64]);
+      create_pattern7(&colors[i++ * 64]);
+      create_pattern8(&colors[i++ * 64]);
+      create_pattern8a(&colors[i++ * 64]);
+      create_pattern9(&colors[i++ * 64]);
+      create_pattern10(&colors[i++ * 64]);
+      create_pattern11(&colors[i++ * 64]);
+      create_pattern12(&colors[i++ * 64]);
+      create_pattern13(&colors[i++ * 64]);
+      create_pattern14(&colors[i++ * 64]);
+      create_pattern15(&colors[i++ * 64]);
+      create_pattern16(&colors[i++ * 64]);
       static_textureArray->CopyData(0, format, colors);
 
       ISampler *sampler = graphics->CreateSampler();

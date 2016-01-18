@@ -8,6 +8,9 @@
 
 struct IPhysicsBody;
 struct IPhysicsScene;
+struct IPhysicsDynamicCollider;
+struct IPhysicsStaticCollider;
+struct IPhysicsTriggerCollider;
 
 VK_INTERFACE()
 struct VKE_API IPhysicsSystem : public IObject
@@ -22,5 +25,9 @@ struct VKE_API IPhysicsSystem : public IObject
   virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry) = 0;
 
   virtual IPhysicsBody *CreateBody() = 0;
+
+  virtual IPhysicsDynamicCollider *CreateDynamicCollider() = 0;
+  virtual IPhysicsStaticCollider *CreateStaticCollider() = 0;
+  virtual IPhysicsTriggerCollider *CreateTriggerCollider() = 0;
 
 };
