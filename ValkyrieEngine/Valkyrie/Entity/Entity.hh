@@ -42,7 +42,6 @@ public:
   const vkBoundingBox &GetBoundingBox() const;
   vkTransformation GetTransformation();
   void FinishTransformation();
-  void UpdatePhysicsTransformation();
   void UpdateBoundingBox();
 
   static vkID GetNextID();

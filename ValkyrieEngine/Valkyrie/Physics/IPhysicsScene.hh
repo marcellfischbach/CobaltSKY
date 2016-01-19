@@ -5,6 +5,8 @@
 #include <Valkyrie/Physics/IPhysicsScene.refl.hh>
 
 struct IPhysicsBody;
+struct IPhysicsDynamicCollider;
+struct IPhysicsStaticCollider;
 
 VK_INTERFACE()
 struct VKE_API IPhysicsScene : public IObject
@@ -16,10 +18,16 @@ public:
   virtual void AddBody(IPhysicsBody *body) = 0;
   virtual void RemoveBody(IPhysicsBody *body) = 0;
 
+  virtual void AddStaticCollider(IPhysicsStaticCollider *collider) = 0;
+  virtual void RemoveStaticCollider(IPhysicsStaticCollider *collider) = 0;
+
+  virtual void AddDynamicCollider(IPhysicsDynamicCollider *collider) = 0;
+  virtual void RemoveDynamicCollider(IPhysicsDynamicCollider *collider) = 0;
+
   //virtual void AddCollider(IPhysicsCollider *collider) = 0;
 
 
   virtual void StepSimulation(float tpf = 1.0f / 60.0f) = 0;
-  virtual void UpdateEntityTransformation() = 0;
+  virtual void UpdateColliders() = 0;
 
 };

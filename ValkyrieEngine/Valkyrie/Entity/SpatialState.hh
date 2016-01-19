@@ -90,6 +90,7 @@ protected:
   virtual void FillBoundingBox (vkBoundingBox &bbox);
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
+  void PerformTransformation();
 
   vkMatrix4f m_localMatrix;
   vkMatrix4f m_globalMatrix;

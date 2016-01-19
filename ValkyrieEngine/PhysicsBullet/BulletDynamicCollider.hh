@@ -9,6 +9,7 @@
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
+class vkBulletScene;
 
 
 VK_CLASS()
@@ -57,6 +58,8 @@ public:
     * \name IPhysicsDynamicCollider interface
     * @{
     */
+  virtual void SetDynamicColliderState(vkDynamicColliderState *colliderState);
+
   virtual void SetKinematic(bool kinematic);
   virtual bool IsKinematic() const;
 
@@ -74,6 +77,10 @@ public:
    */
 
 
+  void AttachToScene(vkBulletScene *scene);
+  void DetachFromScene(vkBulletScene *scene);
+
+  void UpdateColliderState();
 
 private:
   class MotionState : public btMotionState
@@ -91,6 +98,7 @@ private:
   void UpdateInertia();
   std::vector<IPhysicsShape*> m_shapes;
 
+  vkDynamicColliderState *m_dynamicColliderState;
   vkMatrix4f m_transformation;
 
   float m_friction;
@@ -102,6 +110,7 @@ private:
   vkVector3f m_inertia;
 
 
+  vkBulletScene *m_scene;
   btRigidBody *m_body;
   btCollisionShape *m_shape;
   btCompoundShape *m_compoundShape;
@@ -141,5 +150,6 @@ VK_FORCEINLINE bool vkBulletDynamicCollider::IsAutoInertia() const
 {
   return m_autoInertia;
 }
+
 
 

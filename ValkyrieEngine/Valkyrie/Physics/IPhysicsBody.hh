@@ -9,6 +9,7 @@
 #include <Valkyrie/Entity/Transformation.hh>
 
 
+class vkDynamicColliderState;
 class vkPhysicsShapeContainer;
 struct IPhysicsShape;
 class vkEntity;
@@ -102,6 +103,8 @@ struct VKE_API IPhysicsDynamicCollider  : public IPhysicsBaseCollider
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsDynamicCollider () { }
+
+  virtual void SetDynamicColliderState(vkDynamicColliderState *colliderState) = 0;
 
   virtual void SetKinematic(bool kinematic) = 0;
   virtual bool IsKinematic() const = 0;

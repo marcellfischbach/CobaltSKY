@@ -8,6 +8,7 @@
 #include <bullet/btBulletDynamicsCommon.h>
 
 class vkBulletBody;
+class vkBulletDynamicCollider;
 
 VK_CLASS()
 class VKBULLET_API vkBulletScene : public IPhysicsScene
@@ -23,11 +24,18 @@ public:
   virtual void AddBody(IPhysicsBody *body);
   virtual void RemoveBody(IPhysicsBody *body);
 
+  virtual void AddStaticCollider(IPhysicsStaticCollider *collider);
+  virtual void RemoveStaticCollider(IPhysicsStaticCollider *collider);
+
+  virtual void AddDynamicCollider(IPhysicsDynamicCollider *collider);
+  virtual void RemoveDynamicCollider(IPhysicsDynamicCollider *collider);
+
   virtual void StepSimulation(float tpf = 1.0f / 60.0f);
-  virtual void UpdateEntityTransformation();
+  virtual void UpdateColliders();
 
 
   void BodyChanged(vkBulletBody *body);
+  void DynamicColliderChanged(vkBulletDynamicCollider *dynamicCollider);
 
   btDiscreteDynamicsWorld *GetBulletScene();
 
@@ -39,6 +47,7 @@ private:
   btDiscreteDynamicsWorld *m_world;
 
   vkCollection<vkBulletBody*> m_changedBodies;
+  vkCollection<vkBulletDynamicCollider*> m_changedDynamicColliders;
 };
 
 VK_FORCEINLINE btDiscreteDynamicsWorld *vkBulletScene::GetBulletScene()

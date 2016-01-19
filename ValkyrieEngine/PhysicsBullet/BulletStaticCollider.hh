@@ -6,6 +6,7 @@
 #include <vector>
 #include <PhysicsBullet/BulletStaticCollider.refl.hh>
 
+class vkBulletScene;
 class vkBulletShape;
 class btRigidBody;
 class btCollisionShape;
@@ -54,6 +55,9 @@ public:
   * @}
   */
 
+  void AttachToScene(vkBulletScene *scene);
+  void DetachFromScene(vkBulletScene *scene);
+
 
 private:
 
@@ -75,6 +79,7 @@ private:
   };
 
   std::vector<Data> m_shapes;
+  vkBulletScene *m_scene;
 
 };
 

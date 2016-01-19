@@ -2,6 +2,8 @@
 
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletBody.hh>
+#include <PhysicsBullet/BulletDynamicCollider.hh>
+#include <PhysicsBullet/BulletStaticCollider.hh>
 
 vkBulletScene::vkBulletScene()
   : IPhysicsScene()
@@ -90,24 +92,63 @@ void vkBulletScene::RemoveBody(IPhysicsBody *body)
   }
 }
 
+void vkBulletScene::AddDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
+{
+  vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
+  if (btCollider)
+  {
+    btCollider->AttachToScene(this);
+  }
+}
+
+void vkBulletScene::RemoveDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
+{
+  vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
+  if (btCollider)
+  {
+    btCollider->DetachFromScene(this);
+  }
+}
+
+void vkBulletScene::AddStaticCollider(IPhysicsStaticCollider *staticCollider)
+{
+  vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
+  if (btCollider)
+  {
+    btCollider->AttachToScene(this);
+  }
+}
+
+void vkBulletScene::RemoveStaticCollider(IPhysicsStaticCollider *staticCollider)
+{
+  vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
+  if (btCollider)
+  {
+    btCollider->DetachFromScene(this);
+  }
+}
 
 void vkBulletScene::BodyChanged(vkBulletBody *body)
 {
   m_changedBodies.Add(body);
 }
 
+void vkBulletScene::DynamicColliderChanged(vkBulletDynamicCollider *dynamicCollider)
+{
+  m_changedDynamicColliders.Add(dynamicCollider);
+}
 
 void vkBulletScene::StepSimulation(float tpf)
 {
   m_changedBodies.Clear();
+  m_changedDynamicColliders.Clear();
   m_world->stepSimulation(tpf);
 }
 
-void vkBulletScene::UpdateEntityTransformation()
+void vkBulletScene::UpdateColliders()
 {
-  for (size_t i = 0; i < m_changedBodies.length; ++i)
+  for (size_t i = 0; i < m_changedDynamicColliders.length; ++i)
   {
-    m_changedBodies[i]->GetEntity()->UpdatePhysicsTransformation();
+    m_changedDynamicColliders[i]->UpdateColliderState();
   }
 }
-

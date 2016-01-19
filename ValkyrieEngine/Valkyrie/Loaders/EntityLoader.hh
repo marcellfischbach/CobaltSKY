@@ -154,6 +154,60 @@ public:
 
 };
 
+VK_CLASS()
+class VKE_API vkColliderStateLoader : public vkSpatialStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkColliderStateLoader();
+  virtual ~vkColliderStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+class VKE_API vkBaseColliderStateLoader : public vkColliderStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkBaseColliderStateLoader();
+  virtual ~vkBaseColliderStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+class VKE_API vkDynamicColliderStateLoader : public vkBaseColliderStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkDynamicColliderStateLoader();
+  virtual ~vkDynamicColliderStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
+
+
+VK_CLASS()
+class VKE_API vkStaticColliderStateLoader : public vkBaseColliderStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkStaticColliderStateLoader();
+  virtual ~vkStaticColliderStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
 
 
 

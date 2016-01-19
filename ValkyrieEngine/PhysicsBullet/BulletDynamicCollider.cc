@@ -1,11 +1,14 @@
 
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 #include <PhysicsBullet/BulletShape.hh>
+#include <PhysicsBullet/BulletScene.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/Entity/RigidBodyState.hh>
 
 vkBulletDynamicCollider::vkBulletDynamicCollider()
   : IPhysicsDynamicCollider()
+  , m_dynamicColliderState(0)
   , m_kinematic(true)
   , m_friction(0.0f)
   , m_restitution(0.0f)
@@ -122,6 +125,11 @@ void vkBulletDynamicCollider::FinishTransformation()
   m_body->setWorldTransform(trans);
 }
 
+void vkBulletDynamicCollider::SetDynamicColliderState(vkDynamicColliderState *colliderState)
+{
+  m_dynamicColliderState = colliderState;
+}
+
 void vkBulletDynamicCollider::SetKinematic(bool kinematic)
 {
   m_kinematic = kinematic;
@@ -193,6 +201,26 @@ void vkBulletDynamicCollider::UpdateInertia()
 }
 
 
+void vkBulletDynamicCollider::AttachToScene(vkBulletScene *scene)
+{
+  m_scene = scene;
+  if (m_scene && m_scene->GetBulletScene())
+  {
+    m_scene->GetBulletScene()->addRigidBody(m_body);
+  }
+}
+
+void vkBulletDynamicCollider::DetachFromScene(vkBulletScene *scene)
+{
+;
+  if (m_scene && m_scene->GetBulletScene())
+  {
+    m_scene->GetBulletScene()->removeRigidBody(m_body);
+  }
+  m_scene = 0;
+}
+
+
 
 void vkBulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldTrans) const
 {
@@ -202,5 +230,18 @@ void vkBulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldT
 void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& worldTrans)
 {
   worldTrans.getOpenGLMatrix(static_cast<btScalar*>(&m_parent->m_transformation.m00));
+
+  if (m_parent->m_scene)
+  {
+    m_parent->m_scene->DynamicColliderChanged(m_parent);
+  }
   // inform bullet system that this dynamic collider has changed
+}
+
+void vkBulletDynamicCollider::UpdateColliderState()
+{
+  if (m_dynamicColliderState)
+  {
+    m_dynamicColliderState->DynamicTransformationChanged(m_transformation);
+  }
 }

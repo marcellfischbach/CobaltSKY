@@ -571,6 +571,158 @@ const vkClass *vkRigidBodyStateLoader::GetLoadingClass() const
 }
 
 
+
+vkColliderStateLoader::vkColliderStateLoader()
+  : vkSpatialStateLoader()
+{
+
+}
+
+
+vkColliderStateLoader::~vkColliderStateLoader()
+{
+
+}
+
+
+IObject *vkColliderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+  vkColliderState *collider = vkQueryClass<vkColliderState>(userData);
+  TiXmlElement *shapeElement = element->FirstChildElement("shape");
+  if (shapeElement)
+  {
+    const char *txt = shapeElement->GetText();
+    vkResourceLoadingMode loadingMode = GetResourceLoadingMode(shapeElement, eRLM_Shared, eRLM_Instance);
+    vkPhysicsShapeContainer *shapes = vkResourceManager::Get()->Aquire<vkPhysicsShapeContainer>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+    collider->AttachShape(shapes);
+  }
+
+  return vkSpatialStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkColliderStateLoader::GetLoadingClass() const
+{
+  return vkColliderStateClass::Get();
+}
+
+
+
+
+vkBaseColliderStateLoader::vkBaseColliderStateLoader()
+  : vkColliderStateLoader()
+{
+
+}
+
+
+vkBaseColliderStateLoader::~vkBaseColliderStateLoader()
+{
+
+}
+
+
+IObject *vkBaseColliderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+  vkBaseColliderState *baseCollider = vkQueryClass<vkBaseColliderState>(userData);
+  if (baseCollider)
+  {
+    TiXmlElement *frictionElement = element->FirstChildElement("friction");
+    if (frictionElement)
+    { 
+      baseCollider->SetFriction(LoadFloat(frictionElement->GetText()));
+    }
+    TiXmlElement *restitutionElement = element->FirstChildElement("restitution");
+    if (restitutionElement)
+    {
+      baseCollider->SetRestitution(LoadFloat(restitutionElement->GetText()));
+    }
+  }
+  
+
+  return vkColliderStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkBaseColliderStateLoader::GetLoadingClass() const
+{
+  return vkBaseColliderStateClass::Get();
+}
+
+
+
+vkStaticColliderStateLoader::vkStaticColliderStateLoader()
+  : vkBaseColliderStateLoader()
+{
+
+}
+
+
+vkStaticColliderStateLoader::~vkStaticColliderStateLoader()
+{
+
+}
+
+
+IObject *vkStaticColliderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+  
+  return vkBaseColliderStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkStaticColliderStateLoader::GetLoadingClass() const
+{
+  return vkStaticColliderStateClass::Get();
+}
+
+
+
+
+vkDynamicColliderStateLoader::vkDynamicColliderStateLoader()
+  : vkBaseColliderStateLoader()
+{
+
+}
+
+
+vkDynamicColliderStateLoader::~vkDynamicColliderStateLoader()
+{
+
+}
+
+
+IObject *vkDynamicColliderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  if (!userData || !element)
+  {
+    return userData;
+  }
+
+
+
+  return vkBaseColliderStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkDynamicColliderStateLoader::GetLoadingClass() const
+{
+  return vkDynamicColliderStateClass::Get();
+}
+
+
+
 vkEntityLoaderRegistry::vkEntityLoaderRegistry()
 {
 }

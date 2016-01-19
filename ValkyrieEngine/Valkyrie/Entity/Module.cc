@@ -25,4 +25,6 @@ void vkEntityModule::Initialize()
   cr->RegisterClass(vkRenderState::GetStaticClass());
   cr->RegisterClass(vkSpatialState::GetStaticClass());
   cr->RegisterClass(vkRigidBodyState::GetStaticClass());
+  cr->RegisterClass(vkDynamicColliderState::GetStaticClass());
+  cr->RegisterClass(vkStaticColliderState::GetStaticClass());
 }

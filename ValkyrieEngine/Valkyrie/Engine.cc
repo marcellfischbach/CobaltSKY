@@ -208,7 +208,7 @@ int vkEngine::Run()
     }
 
     physScene->StepSimulation();
-    physScene->UpdateEntityTransformation();
+    physScene->UpdateColliders();
   }
 
 

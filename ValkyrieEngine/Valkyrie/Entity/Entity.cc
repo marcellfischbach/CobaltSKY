@@ -45,36 +45,6 @@ void vkEntity::FinishTransformation()
   if (m_rootState)
   {
     m_rootState->FinishTransformation();
-
-
-    // update the physics system (if one is attached)
-    if (m_collisionBody)
-    {
-      m_collisionBody->GetTransform().SetTransformation(m_rootState->GetGlobalTransformation());
-      m_collisionBody->FinishTransformation();
-    }
-    if (m_triggerBody)
-    {
-      m_triggerBody->GetTransform().SetTransformation(m_rootState->GetGlobalTransformation());
-      m_triggerBody->FinishTransformation();
-    }
-  }
-}
-
-void vkEntity::UpdatePhysicsTransformation()
-{
-  if (m_rootState)
-  {
-    if (m_collisionBody)
-    {
-      m_rootState->GetTransformation().SetTransformation(m_collisionBody->GetMatrix());
-      m_rootState->FinishTransformation();
-      
-      if (m_triggerBody)
-      {
-        m_triggerBody->GetTransform().SetTransformation(m_rootState->GetGlobalTransformation());
-      }
-    }
   }
 }
 

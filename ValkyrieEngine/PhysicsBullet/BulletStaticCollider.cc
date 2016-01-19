@@ -1,5 +1,6 @@
 
 #include <PhysicsBullet/BulletStaticCollider.hh>
+#include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
@@ -126,4 +127,34 @@ void vkBulletStaticCollider::SetRestitution(float restitution)
     Data &data = m_shapes[i];
     data.object->setRestitution(restitution);
   }
+}
+
+
+
+void vkBulletStaticCollider::AttachToScene(vkBulletScene *scene)
+{
+  m_scene = scene;
+  if (m_scene && m_scene->GetBulletScene())
+  {
+    btDiscreteDynamicsWorld *world = m_scene->GetBulletScene();
+    for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
+    {
+      Data &data = m_shapes[i];
+      world->addCollisionObject(data.object);
+    }
+  }
+}
+
+void vkBulletStaticCollider::DetachFromScene(vkBulletScene *scene)
+{
+  if (m_scene && m_scene->GetBulletScene())
+  {
+    btDiscreteDynamicsWorld *world = m_scene->GetBulletScene();
+    for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
+    {
+      Data &data = m_shapes[i];
+      world->removeCollisionObject(data.object);
+    }
+  }
+  m_scene = 0;
 }

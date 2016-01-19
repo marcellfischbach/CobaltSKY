@@ -37,6 +37,12 @@ vkTransformation vkSpatialState::GetTransformation()
 
 void vkSpatialState::FinishTransformation()
 {
+  PerformTransformation();
+}
+
+
+void vkSpatialState::PerformTransformation()
+{
   // make propagate the transformation to the children
   // this will also update the bounding box of all those child states (incl. this one)
   UpdateTransformation();
@@ -47,7 +53,6 @@ void vkSpatialState::FinishTransformation()
     m_parentState->FlagBoundingBoxDirty();
   }
 }
-
 
 void vkSpatialState::UpdateTransformation()
 {
