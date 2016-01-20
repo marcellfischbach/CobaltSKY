@@ -32,4 +32,6 @@ void vkLoaders::Register(vkResourceManager *mgr)
   reg->RegisterLoader(new vkRenderStateLoader());
   reg->RegisterLoader(new vkStaticMeshStateLoader());
   reg->RegisterLoader(new vkRigidBodyStateLoader());
+  reg->RegisterLoader(new vkStaticColliderStateLoader());
+  reg->RegisterLoader(new vkDynamicColliderStateLoader());
 }

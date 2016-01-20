@@ -8,6 +8,7 @@
 
 class vkClipper;
 class vkEntity;
+class vkEntityScene;
 class vkSpatialState;
 struct IEntityScan;
 struct IGraphics;
@@ -33,6 +34,8 @@ public:
   virtual vkSpatialState *ToSpatialState();
   virtual const vkSpatialState *ToSpatialState() const;
 
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
   virtual void OnAttachedToEntity(vkEntity *entity);
   virtual void OnDetachedFromEntity(vkEntity *entity);
 

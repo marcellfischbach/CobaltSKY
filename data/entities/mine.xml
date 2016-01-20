@@ -2,11 +2,12 @@
 	
 	<entityStates>
 	
-		<entityState id="0" class="vkDynamicColliderState" root="true">
-			<shape resourceMode="shared">${models}/mine.staticmesh:Collision</collision>
+		<entityState id="0" class="vkDynamicColliderState" >
+			<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
+			<kinematic>false</kinematic>
 			<mass>1.0</mass>
 			<friction>10.0</friction>
-			<restitution>0.0</restitution>
+			<restitution>0.5</restitution>
 		</entityState>
 	
 		<entityState id="1" class="vkStaticMeshState" parentID="0">
@@ -15,11 +16,14 @@
 				<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>
 				<material slot="1" slotName="MinePin">${materials}/materials.xml:FieldStoneRed</material>
 			</materials>
+			<clippingRange max="50.0"/>
 		</entityState>
+
 	
 
 	</entityStates>
 	
+	<rootState>0</rootState>
 
 	
 </entity>

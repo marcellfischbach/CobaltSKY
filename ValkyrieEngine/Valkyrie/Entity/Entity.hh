@@ -8,6 +8,7 @@
 
 class vkBoundingBox;
 class vkClipper;
+class vkEntityScene;
 class vkEntityState;
 class vkSpatialState;
 class vkTransformation;
@@ -29,6 +30,10 @@ public:
   virtual ~vkEntity();
 
   vkID GetID() const;
+
+  void SetScene(vkEntityScene *scene);
+  vkEntityScene *GetScene();
+  const vkEntityScene *GetScene() const;
 
   void SetName(const vkString &name);
   const vkString &GetName() const;
@@ -62,13 +67,14 @@ private:
   vkID m_id;
   vkString m_name;
 
+
   IPhysicsBody *m_collisionBody;
   IPhysicsBody *m_triggerBody;
 
   vkSpatialState *m_rootState;
   std::vector<vkEntityState*> m_states;
 
-
+  vkEntityScene *m_scene;
   vkEntity *m_parentEntity;
   std::vector<vkEntity*> m_children;
 };
@@ -78,6 +84,15 @@ VK_FORCEINLINE vkID vkEntity::GetID() const
   return m_id;
 }
 
+VK_FORCEINLINE vkEntityScene *vkEntity::GetScene()
+{
+  return m_scene;
+}
+
+VK_FORCEINLINE const vkEntityScene *vkEntity::GetScene() const
+{
+  return m_scene;
+}
 
 
 VK_FORCEINLINE void vkEntity::SetName(const vkString &name)

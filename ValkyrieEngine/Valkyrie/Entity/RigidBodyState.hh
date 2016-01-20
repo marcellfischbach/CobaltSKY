@@ -123,6 +123,9 @@ public:
   IPhysicsStaticCollider *GetStaticCollider ();
   const IPhysicsStaticCollider *GetStaticCollider () const;
 
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
+
 private:
   IPhysicsStaticCollider *m_staticCollider;
 
@@ -153,6 +156,10 @@ public:
   virtual bool IsAutoInertia() const;
 
   virtual void DynamicTransformationChanged(const vkMatrix4f &transformation);
+
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
+
 private:
   IPhysicsDynamicCollider *m_dynamicCollider;
 };

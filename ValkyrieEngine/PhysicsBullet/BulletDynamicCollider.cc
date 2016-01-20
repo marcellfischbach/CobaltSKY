@@ -78,36 +78,38 @@ void vkBulletDynamicCollider::AttachShape(IPhysicsShape *shape)
     trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&shape->GetLocalTransform().m00));
     m_compoundShape->addChildShape(trans, btShape->GetBulletShape());
   }
-}
+
+  UpdateInertia();
+ }
 
 void vkBulletDynamicCollider::DetachShape(IPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void vkBulletDynamicCollider::AttachShape(vkPhysicsShapeContainer *shape)
+void vkBulletDynamicCollider::AttachShape(vkPhysicsShapeContainer *shapes)
 {
-  if (!shape)
+  if (!shapes)
   {
     return;
   }
 
-  for (vkSize i = 0, in = shape->GetNumberOfShapes(); i < in; ++i)
+  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
-    AttachShape(shape);
+    AttachShape(shapes->GetShape(i));
   }
 }
 
-void vkBulletDynamicCollider::DetachShape(vkPhysicsShapeContainer *shape)
+void vkBulletDynamicCollider::DetachShape(vkPhysicsShapeContainer *shapes)
 {
-  if (!shape)
+  if (!shapes)
   {
     return;
   }
 
-  for (vkSize i = 0, in = shape->GetNumberOfShapes(); i < in; ++i)
+  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
-    DetachShape(shape);
+    DetachShape(shapes->GetShape(i));
   }
 }
 
@@ -184,7 +186,7 @@ void vkBulletDynamicCollider::UpdateInertia()
   if (m_autoInertia)
   {
     btCollisionShape *shape = m_shape ? m_shape : m_compoundShape;
-    if (!shape)
+    if (shape)
     {
       btVector3 btInertia;
       shape->calculateLocalInertia(m_mass, btInertia);

@@ -40,3 +40,14 @@ void vkEntityState::OnDetachedFromEntity(vkEntity *entity)
   }
 }
 
+void vkEntityState::OnAttachedToScene(vkEntityScene *scene)
+{
+
+}
+
+void vkEntityState::OnDetachedFromScene(vkEntityScene *scene)
+{
+
+}
+
+

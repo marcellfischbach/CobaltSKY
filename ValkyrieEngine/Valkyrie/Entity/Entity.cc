@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/EntityState.hh>
+#include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 #include <Valkyrie/Physics/IPhysicsBody.hh>
@@ -17,6 +18,7 @@ vkID vkEntity::GetNextID()
 vkEntity::vkEntity()
   : vkObject ()
   , m_rootState(0)
+  , m_scene(0)
   , m_id(vkEntity::GetNextID())
   , m_collisionBody(0)
   , m_triggerBody(0)
@@ -28,6 +30,19 @@ vkEntity::vkEntity()
 vkEntity::~vkEntity()
 {
 
+}
+
+void vkEntity::SetScene(vkEntityScene *scene)
+{
+  m_scene = scene;
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->SetScene(scene);
+  }
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->OnAttachedToScene(m_scene);
+  }
 }
 
 vkTransformation vkEntity::GetTransformation()
@@ -115,6 +130,7 @@ void vkEntity::AttachEntity(vkEntity *entity, vkSpatialState *parentState)
   entity->AddRef();
   m_children.push_back(entity);
   entity->m_parentEntity = this;
+  entity->SetScene(m_scene);
 }
 
 void vkEntity::AttachEntity(vkEntity *entity, const vkString &parentStateName)

@@ -99,6 +99,7 @@ void vkSpatialState::FlagBoundingBoxDirty()
 void vkSpatialState::SetClippingRange(float min, float max)
 {
   m_distanceState.SetupDistance(min, max);
+
 }
 
 void vkSpatialState::UpdateBoundingBox()
@@ -281,7 +282,7 @@ vkDistanceState::vkDistanceState()
   , m_max (FLT_MAX)
   , m_state(eInitial)
 {
-  SetFadeTime(2500L);
+  SetFadeTime(500L);
 }
 
 void vkDistanceState::SetupDistance(float min, float max)

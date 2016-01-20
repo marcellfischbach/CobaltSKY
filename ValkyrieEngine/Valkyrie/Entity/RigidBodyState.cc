@@ -1,8 +1,10 @@
 
 #include <Valkyrie/Entity/RigidBodyState.hh>
 #include <Valkyrie/Entity/Entity.hh>
+#include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Physics/IPhysicsBody.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
+#include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <Valkyrie/Engine.hh>
 
 vkRigidBodyState::vkRigidBodyState()
@@ -183,6 +185,23 @@ vkStaticColliderState::~vkStaticColliderState()
 
 
 
+void vkStaticColliderState::OnAttachedToScene(vkEntityScene *scene)
+{
+  if (scene)
+  {
+    scene->GetPhysicsScene()->AddStaticCollider(m_staticCollider);
+  }
+}
+
+void vkStaticColliderState::OnDetachedFromScene(vkEntityScene *scene)
+{
+  if (scene)
+  {
+    scene->GetPhysicsScene()->RemoveStaticCollider(m_staticCollider);
+  }
+
+}
+
 
 
 
@@ -193,6 +212,7 @@ vkDynamicColliderState::vkDynamicColliderState()
   , m_dynamicCollider(0)
 {
   m_dynamicCollider = vkEngine::Get()->GetPhysicsSystem()->CreateDynamicCollider();
+  m_dynamicCollider->SetDynamicColliderState(this);
   SetBaseCollider(m_dynamicCollider);
 }
 
@@ -264,4 +284,22 @@ void vkDynamicColliderState::DynamicTransformationChanged(const vkMatrix4f &tran
 {
   GetTransformation().SetTransformation(transformation);
   PerformTransformation();
+}
+
+
+void vkDynamicColliderState::OnAttachedToScene(vkEntityScene *scene)
+{
+  if (scene)
+  {
+    scene->GetPhysicsScene()->AddDynamicCollider(m_dynamicCollider);
+  }
+}
+
+void vkDynamicColliderState::OnDetachedFromScene(vkEntityScene *scene)
+{
+  if (scene)
+  {
+    scene->GetPhysicsScene()->RemoveDynamicCollider(m_dynamicCollider);
+  }
+
 }

@@ -71,6 +71,8 @@ set(SOURCE_ENTITY
   Entity/RigidBodyState.cc
   Entity/RigidBodyState.hh
   Entity/Scan.hh
+  Entity/Scene.cc
+  Entity/Scene.hh
   Entity/SpatialState.cc
   Entity/SpatialState.hh
   Entity/Transformation.cc

@@ -9,7 +9,9 @@
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/Entity/RigidBodyState.hh>
 #include <Valkyrie/Entity/Module.hh>
+#include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/BinaryGradient.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
@@ -36,7 +38,7 @@
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
 
-vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysicsScene *scene);
+vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
@@ -112,10 +114,7 @@ int vkEngine::Run()
   sampler->SetFilter(eFM_MinMagNearest);
   color0->SetSampler(sampler);
 
-  IPhysicsScene *physScene = m_physicsSystem->CreateScene();
-
-
-  vkEntity *root = create_scene(m_renderer, m_physicsSystem, physScene);
+  vkEntityScene *scene = create_scene(m_renderer);
 
 
   vkCamera *camera = new vkCamera();
@@ -186,8 +185,8 @@ int vkEngine::Run()
     groupNode->UpdateStates();
     */
 
-    root->UpdateBoundingBox();
-    fp->Render(root, camera, rt);
+    scene->GetRoot()->UpdateBoundingBox();
+    fp->Render(scene->GetRoot(), camera, rt);
     //fp->Render(groupNode, camera, rt);
 
 
@@ -207,8 +206,8 @@ int vkEngine::Run()
       nextFPS += 1000;
     }
 
-    physScene->StepSimulation();
-    physScene->UpdateColliders();
+    scene->GetPhysicsScene()->StepSimulation();
+    scene->GetPhysicsScene()->UpdateColliders();
   }
 
 
@@ -509,7 +508,7 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 
 
 
-vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysicsScene *scene)
+vkEntityScene *create_scene(IGraphics *graphics)
 {
   vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
   vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
@@ -525,25 +524,27 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
   mineMaterial->AddMaterialInstance(materialFieldstoneInst);
   mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
 
+  vkEntityScene *entityScene = new vkEntityScene();
 
-
-  vkEntity *rootEntity = new vkEntity();
-  vkSpatialState *parentState = new vkSpatialState();
-  rootEntity->SetRootState(parentState);
-  rootEntity->AddState(parentState, 0);
 
   srand(4567898);
   float x = (float)rand() / (float)RAND_MAX;
   float y = (float)rand() / (float)RAND_MAX;
   float z = (float)rand() / (float)RAND_MAX;
 
-  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
-  //mineEntity->GetTransformation().SetTranslation(vkVector3f(-100.0f + x * 200.0f, -100.0f + y * 200.0f, -2.0f + z * 4.0f));
-  mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
-  mineEntity->FinishTransformation();
-  rootEntity->AttachEntity(mineEntity);
 
+  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
 
+  vkPhysGeometry boxGeometry;
+  boxGeometry.Type = ePGT_Box;
+  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
+  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
+
+  vkStaticColliderState *staticState = new vkStaticColliderState();
+  staticState->AttachShape(boxShape);
+  staticState->SetFriction(10.0f);
+  staticState->SetRestitution(0.5f);
+  
   /* create the plane mesh */
   vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
   vkMesh *planeMesh = new vkMesh();
@@ -556,20 +557,11 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
   planeState->SetMaterial(materialFieldstoneInst, 0);
 
   vkEntity *planeEntity = new vkEntity();
-  planeEntity->SetRootState(planeState);
-  planeEntity->AddState(planeState, parentState);
+  planeEntity->SetRootState(staticState);
+  planeEntity->AddState(staticState);
+  planeEntity->AddState(planeState, staticState);
 
-  vkPhysGeometry boxGeometry;
-  boxGeometry.Type = ePGT_Box;
-  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
-  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
-
-  IPhysicsBody *boxBody = physSystem->CreateBody();
-  boxBody->AttachShape(boxShape);
-  boxBody->SetMode(ePBM_Static);
-  boxBody->SetMass(0.0f);
-  
-  scene->AddBody(boxBody);
+  entityScene->AddEntity(planeEntity);
 
 
   vkMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
@@ -584,24 +576,15 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
     float z = (float)rand() / (float)RAND_MAX;
     float t = (float)rand() / (float)RAND_MAX;
 
-    mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
+    vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
-    mineEntity->FinishTransformation();
-    rootEntity->AttachEntity(mineEntity);
-
-
-
-    /*
-    mineBody->SetMode(ePBM_Dynamic);
-    mineBody->SetMass(100.0f);
-    mineBody->UpdateInertia();
-    */
-    IPhysicsBody *mineBody = mineEntity->GetCollisionBody();
-    scene->AddBody(mineBody);
-
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-20.0f + x * 40.0f, -20.0f + y * 40.0f, 10.0f + z * 20.0f));
     mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);
     mineEntity->FinishTransformation();
+    entityScene->AddEntity(mineEntity);
+
+
+
 
   }
 
@@ -618,8 +601,8 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
 
   vkEntity *directionalLightEntity = new vkEntity();
   directionalLightEntity->SetRootState(directionalLightState);
-  directionalLightEntity->AddState(directionalLightState, parentState);
-
+  directionalLightEntity->AddState(directionalLightState);
+  entityScene->AddEntity(directionalLightEntity);
 
   vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
   directionalBackLight->SetColor(vkColor4f(1.0f, 0.8f, 0.2f));
@@ -633,15 +616,12 @@ vkEntity *create_scene(IGraphics *graphics, IPhysicsSystem *physSystem, IPhysics
 
   vkEntity *directionalBackLightEntity = new vkEntity();
   directionalBackLightEntity->SetRootState(directionalBackLightState);
-  directionalBackLightEntity->AddState(directionalBackLightState, parentState);
+  directionalBackLightEntity->AddState(directionalBackLightState);
+  entityScene->AddEntity(directionalBackLightEntity);
 
-  rootEntity->FinishTransformation();
+  entityScene->GetRoot()->FinishTransformation();
 
-  rootEntity->UpdateBoundingBox();
+  entityScene->GetRoot()->UpdateBoundingBox();
 
-  const vkBoundingBox &bbox = rootEntity->GetBoundingBox();
-  bbox.Debug("root");
-  mineEntity->GetTransformation().Debug("MineTransform");
-  mineEntity->GetBoundingBox().Debug("MineEntity");
-  return rootEntity;
+  return entityScene;
 }

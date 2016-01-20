@@ -171,20 +171,38 @@ IObject *vkEntityLoader::Load(TiXmlElement *element, const vkResourceLocator &lo
       vkEntityState *entityState = vkResourceManager::Get()->Load<vkEntityState>(stateElement, locator, 0);
       if (entityState)
       {
-        entity->AddState(entityState);
+        bool addedToEntity = false;
         vkSpatialState *spatialState = entityState->ToSpatialState();
-        if (stateElement->Attribute("id") && spatialState)
+        if (spatialState)
         {
-          spatialStates[vkString(stateElement->Attribute("id"))] = spatialState;
+          if (stateElement->Attribute("id"))
+          {
+            spatialStates[vkString(stateElement->Attribute("id"))] = spatialState;
+          }
+
+          if (stateElement->Attribute("parentID"))
+          {
+            vkSpatialState *parentState = spatialStates[vkString(stateElement->Attribute("parentID"))];
+            if (parentState)
+            {
+              entity->AddState(spatialState, parentState);
+              addedToEntity = true;
+            }
+          }
+        }
+
+        if (!addedToEntity)
+        {
+          entity->AddState(entityState);
         }
       }
     }
   }
 
   TiXmlElement *rootElement = element->FirstChildElement("rootState");
-  if (rootElement && rootElement->Attribute("id"))
+  if (rootElement)
   {
-    vkSpatialState *rootState = spatialStates[vkString(rootElement->Attribute("id"))];
+    vkSpatialState *rootState = spatialStates[vkString(rootElement->GetText())];
     if (rootState)
     {
       entity->SetRootState(rootState);
@@ -328,7 +346,21 @@ IObject *vkSpatialStateLoader::Load(TiXmlElement *element, const vkResourceLocat
           trans.SetRotation(axisAngle.AsVector3f(), axisAngle.w);
         }
       }
-
+    }
+    TiXmlElement *clippingRangeElement = element->FirstChildElement("clippingRange");
+    if (clippingRangeElement)
+    {
+      float min = -FLT_MAX;
+      float max = FLT_MAX;
+      if (clippingRangeElement->Attribute("min"))
+      {
+        min = LoadFloat(clippingRangeElement->Attribute("min"));
+      }
+      if (clippingRangeElement->Attribute("max"))
+      {
+        max = LoadFloat(clippingRangeElement->Attribute("max"));
+      }
+      spatialState->SetClippingRange(min, max);
     }
   }
   return vkEntityStateLoader::Load(element, locator, userData);
@@ -711,7 +743,34 @@ IObject *vkDynamicColliderStateLoader::Load(TiXmlElement *element, const vkResou
     return userData;
   }
 
+  vkDynamicColliderState *dynCollider = vkQueryClass<vkDynamicColliderState>(userData);
+  if (dynCollider)
+  {
+    TiXmlElement *massElement = element->FirstChildElement("mass");
+    if (massElement)
+    {
+      float mass = LoadFloat(massElement->GetText());
+      dynCollider->SetMass(mass);
+    }
 
+    TiXmlElement *inertiaElement = element->FirstChildElement("inertia");
+    if (inertiaElement)
+    {
+      vkVector3f inertia = LoadVector3f(inertiaElement->GetText());
+      dynCollider->SetInertia(inertia);
+    }
+    else
+    {
+      dynCollider->SetAutoInertia(true);
+    }
+
+    TiXmlElement *kinematicElement = element->FirstChildElement("kinematic");
+    if (kinematicElement)
+    {
+      bool kinematic = LoadBool(kinematicElement->GetText());
+      dynCollider->SetKinematic(kinematic);
+    }
+  }
 
   return vkBaseColliderStateLoader::Load(element, locator, userData);
 }
