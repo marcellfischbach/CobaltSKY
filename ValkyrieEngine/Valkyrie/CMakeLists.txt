@@ -179,6 +179,7 @@ source_group(
 
 set(SOURCE_PHYSICS
   Physics/IPhysicsBody.hh
+  PHysics/IPhysicsCharacterController.hh
   Physics/IPhysicsScene.hh
   Physics/IPhysicsShape.hh
   Physics/IPhysicsSystem.hh

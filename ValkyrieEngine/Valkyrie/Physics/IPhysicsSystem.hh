@@ -8,6 +8,7 @@
 
 struct IPhysicsBody;
 struct IPhysicsScene;
+struct IPhysicsCapsuleCharacterController;
 struct IPhysicsDynamicCollider;
 struct IPhysicsStaticCollider;
 struct IPhysicsTriggerCollider;
@@ -30,4 +31,5 @@ struct VKE_API IPhysicsSystem : public IObject
   virtual IPhysicsStaticCollider *CreateStaticCollider() = 0;
   virtual IPhysicsTriggerCollider *CreateTriggerCollider() = 0;
 
+  virtual IPhysicsCapsuleCharacterController *CreateCapsulseCharacterController() = 0;
 };

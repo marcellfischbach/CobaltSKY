@@ -6,6 +6,8 @@ set(SOURCE
   Export.hh
   BulletBody.cc
   BulletBody.hh
+  BulletCharacterController.cc
+  BulletCharacterController.hh
   BulletDynamicCollider.cc
   BulletDynamicCollider.hh
   BulletScene.cc
