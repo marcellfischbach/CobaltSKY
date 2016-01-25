@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
 #include <PhysicsBullet/BulletDynamicCollider.refl.hh>
@@ -28,6 +28,7 @@ public:
   virtual const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
+  virtual void SetTransformationCallback(ITransformationCallback *callback);
 
 
   virtual void AttachShape(IPhysicsShape *shape);
@@ -58,7 +59,6 @@ public:
     * \name IPhysicsDynamicCollider interface
     * @{
     */
-  virtual void SetDynamicColliderState(vkDynamicColliderState *colliderState);
 
   virtual void SetKinematic(bool kinematic);
   virtual bool IsKinematic() const;
@@ -80,7 +80,7 @@ public:
   void AttachToScene(vkBulletScene *scene);
   void DetachFromScene(vkBulletScene *scene);
 
-  void UpdateColliderState();
+  void PropagateTransformation();
 
 private:
   class MotionState : public btMotionState
@@ -98,7 +98,8 @@ private:
   void UpdateInertia();
   std::vector<IPhysicsShape*> m_shapes;
 
-  vkDynamicColliderState *m_dynamicColliderState;
+  ITransformationCallback *m_transformationCallback;
+  //vkDynamicColliderState *m_dynamicColliderState;
   vkMatrix4f m_transformation;
 
   float m_friction;

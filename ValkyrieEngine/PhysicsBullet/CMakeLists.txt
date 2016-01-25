@@ -4,8 +4,6 @@ add_definitions(-DVKBULLET_EXPORT)
 
 set(SOURCE
   Export.hh
-  BulletBody.cc
-  BulletBody.hh
   BulletCharacterController.cc
   BulletCharacterController.hh
   BulletDynamicCollider.cc
@@ -26,7 +24,6 @@ source_group(
 	FILES
 	${SOURCE}
 	)
-
 
 
 

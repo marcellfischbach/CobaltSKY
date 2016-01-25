@@ -4,7 +4,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Physics/IPhysicsScene.refl.hh>
 
-struct IPhysicsBody;
+struct IPhysicsCharacterController;
 struct IPhysicsDynamicCollider;
 struct IPhysicsStaticCollider;
 
@@ -15,14 +15,16 @@ struct VKE_API IPhysicsScene : public IObject
 public:
   virtual ~IPhysicsScene () { }
 
-  virtual void AddBody(IPhysicsBody *body) = 0;
-  virtual void RemoveBody(IPhysicsBody *body) = 0;
 
   virtual void AddStaticCollider(IPhysicsStaticCollider *collider) = 0;
   virtual void RemoveStaticCollider(IPhysicsStaticCollider *collider) = 0;
 
   virtual void AddDynamicCollider(IPhysicsDynamicCollider *collider) = 0;
   virtual void RemoveDynamicCollider(IPhysicsDynamicCollider *collider) = 0;
+
+
+  virtual void AddCharacterController(IPhysicsCharacterController *controller) = 0;
+  virtual void RemoveCharacterController(IPhysicsCharacterController *controller) = 0;
 
   //virtual void AddCollider(IPhysicsCollider *collider) = 0;
 

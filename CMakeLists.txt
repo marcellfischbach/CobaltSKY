@@ -58,6 +58,7 @@ include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindBullet.cmake)
 
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PNG_INCLUDE_DIRS})
+include_directories(${BULLET_INCLUDE_DIRS})
 include_directories(${ValkyrieEngine_SOURCE_DIR}/3rdparty)
 include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
 include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)

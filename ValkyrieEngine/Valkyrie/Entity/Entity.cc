@@ -5,7 +5,7 @@
 #include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
-#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Engine.hh>
 
 vkID nextID = 1;
@@ -20,8 +20,6 @@ vkEntity::vkEntity()
   , m_rootState(0)
   , m_scene(0)
   , m_id(vkEntity::GetNextID())
-  , m_collisionBody(0)
-  , m_triggerBody(0)
 {
 
 }
@@ -34,7 +32,11 @@ vkEntity::~vkEntity()
 
 void vkEntity::SetScene(vkEntityScene *scene)
 {
-  m_scene = scene;
+  if (m_scene != scene)
+  {
+    m_scene = scene;
+    UpdateScene(m_scene);
+  }
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
     m_children[i]->SetScene(scene);
@@ -60,6 +62,14 @@ void vkEntity::FinishTransformation()
   if (m_rootState)
   {
     m_rootState->FinishTransformation();
+  }
+}
+
+void vkEntity::PerformTransformation()
+{
+  if (m_rootState)
+  {
+    m_rootState->PerformTransformation();
   }
 }
 
@@ -169,12 +179,3 @@ void vkEntity::SetClippingRange(float min, float max)
   }
 }
 
-IPhysicsBody *vkEntity::AcquireCollisionBody()
-{
-  if (!m_collisionBody)
-  {
-    m_collisionBody = vkEngine::Get()->GetPhysicsSystem()->CreateBody();
-    m_collisionBody->SetEntity(this);
-  }
-  return m_collisionBody;
-}

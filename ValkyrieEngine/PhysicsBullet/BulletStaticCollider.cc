@@ -109,6 +109,7 @@ void vkBulletStaticCollider::FinishTransformation()
 }
 
 
+
 void vkBulletStaticCollider::SetFriction(float friction)
 {
   m_friction = friction;

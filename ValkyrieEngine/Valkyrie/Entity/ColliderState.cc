@@ -1,44 +1,12 @@
 
-#include <Valkyrie/Entity/RigidBodyState.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scene.hh>
-#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <Valkyrie/Engine.hh>
 
-vkRigidBodyState::vkRigidBodyState()
-  : vkEntityState ()
-  , m_mode(ePBM_Static)
-  , m_mass(0.0)
-  , m_friction (0.5f)
-  , m_restitution(0.5f)
-{
-
-}
-
-vkRigidBodyState::~vkRigidBodyState()
-{
-
-}
-
-void vkRigidBodyState::UpdateBody()
-{
-  IPhysicsBody *body = GetEntity()->AcquireCollisionBody();
-  body->SetMode(m_mode);
-  body->SetMass(m_mass);
-  body->SetFriction(m_friction);
-  body->SetRestitution(m_restitution);
-  body->SetAutoInertia(true);
-  body->Update();
-}
-
-void vkRigidBodyState::OnAttachedToEntity(vkEntity *entity)
-{
-  vkEntityState::OnAttachedToEntity(entity);
-
-  UpdateBody();
-}
 
 
 
@@ -206,13 +174,32 @@ void vkStaticColliderState::OnDetachedFromScene(vkEntityScene *scene)
 
 
 
+class vkDynamicColliderStateTransformationCallback : public ITransformationCallback
+{
+public:
+  vkDynamicColliderStateTransformationCallback(vkDynamicColliderState *state)
+    : m_state(state)
+  {
+
+  }
+
+  virtual void TransformationChanged(const vkMatrix4f &transformation)
+  {
+    m_state->DynamicTransformationChanged(transformation);
+  }
+
+
+private:
+  vkDynamicColliderState *m_state;
+};
 
 vkDynamicColliderState::vkDynamicColliderState()
   : vkBaseColliderState()
   , m_dynamicCollider(0)
 {
+  m_callback = new vkDynamicColliderStateTransformationCallback(this);
   m_dynamicCollider = vkEngine::Get()->GetPhysicsSystem()->CreateDynamicCollider();
-  m_dynamicCollider->SetDynamicColliderState(this);
+  m_dynamicCollider->SetTransformationCallback(m_callback);
   SetBaseCollider(m_dynamicCollider);
 }
 

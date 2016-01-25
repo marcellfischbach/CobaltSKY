@@ -4,7 +4,8 @@
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
-#include <Valkyrie/Entity/RigidBodyState.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
+#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Core/ClassRegistry.hh>
@@ -466,14 +467,6 @@ IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLo
       staticMeshState->SetMesh(mesh);
     }
 
-    TiXmlElement *collisionElement = element->FirstChildElement("collision");
-    if (collisionElement && collisionElement->GetText())
-    {
-      const char *txt = collisionElement->GetText();
-      vkResourceLoadingMode loadingMode = GetResourceLoadingMode(collisionElement, eRLM_Shared, eRLM_Instance);
-      vkPhysicsShapeContainer *shapes = vkResourceManager::Get()->Aquire<vkPhysicsShapeContainer> (vkResourceLocator(vkString(txt)), 0, loadingMode);
-      staticMeshState->SetCollision(shapes);
-    }
     TiXmlElement *materialsElement = element->FirstChildElement("materials");
     if (materialsElement)
     {
@@ -528,79 +521,6 @@ const vkClass *vkStaticMeshStateLoader::GetLoadingClass() const
 
 
 
-
-
-vkRigidBodyStateLoader::vkRigidBodyStateLoader()
-  : vkEntityStateLoader()
-{
-
-}
-
-
-vkRigidBodyStateLoader::~vkRigidBodyStateLoader()
-{
-
-}
-
-
-IObject *vkRigidBodyStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
-{
-   if (!userData || !element)
-  {
-    return userData;
-  }
-
-  vkRigidBodyState *rigidBodyState = vkQueryClass<vkRigidBodyState>(userData);
-  if (rigidBodyState)
-  {
-    TiXmlElement *modeElement = element->FirstChildElement("mode");
-    if (modeElement && modeElement->GetText())
-    {
-      std::string modeStr(modeElement->GetText());
-      if (modeStr == std::string("dynamic"))
-      {
-        rigidBodyState->SetMode(ePBM_Dynamic);
-      }
-      else if (modeStr == std::string("kinematic"))
-      {
-        rigidBodyState->SetMode(ePBM_Kinematic);
-      }
-      else
-      {
-        rigidBodyState->SetMode(ePBM_Static);
-      }
-    }
-
-    TiXmlElement *massElement = element->FirstChildElement("mass");
-    if (massElement && massElement->GetText())
-    {
-      float mass = LoadFloat(massElement->GetText());
-      rigidBodyState->SetMass(mass);
-    }
-
-    TiXmlElement *frictionElement = element->FirstChildElement("friction");
-    if (frictionElement && frictionElement->GetText())
-    {
-      float friction = LoadFloat(frictionElement->GetText());
-      rigidBodyState->SetFriction(friction);
-    }
-
-    TiXmlElement *restitutionElement = element->FirstChildElement("restitution");
-    if (restitutionElement && restitutionElement->GetText())
-    {
-      float restitution = LoadFloat(restitutionElement->GetText());
-      rigidBodyState->SetRestitution(restitution);
-    }
-  }
-
-
-  return vkEntityStateLoader::Load(element, locator, userData);
-}
-
-const vkClass *vkRigidBodyStateLoader::GetLoadingClass() const
-{
-  return vkRigidBodyStateClass::Get();
-}
 
 
 

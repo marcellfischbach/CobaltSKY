@@ -1,9 +1,9 @@
 
 
 #include <PhysicsBullet/BulletSystem.hh>
+#include <PhysicsBullet/BulletCharacterController.hh>
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 #include <PhysicsBullet/BulletStaticCollider.hh>
-#include <PhysicsBullet/BulletBody.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
 
@@ -38,13 +38,6 @@ IPhysicsScene *vkBulletSystem::CreateScene()
 }
 
 
-IPhysicsBody *vkBulletSystem::CreateBody()
-{
-  vkBulletBody *body = new vkBulletBody();
-
-  return body;
-}
-
 IPhysicsDynamicCollider *vkBulletSystem::CreateDynamicCollider()
 {
   vkBulletDynamicCollider *dyn = new vkBulletDynamicCollider();
@@ -75,3 +68,8 @@ IPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
   return shape;
 }
 
+IPhysicsCapsuleCharacterController *vkBulletSystem::CreateCapsulseCharacterController()
+{
+  vkBulletCapsuleCharacterController *controller = new vkBulletCapsuleCharacterController();
+  return controller;
+}

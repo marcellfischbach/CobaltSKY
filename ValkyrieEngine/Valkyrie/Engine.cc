@@ -4,12 +4,13 @@
 #include <Valkyrie/Time.hh>
 #include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Entity/Character.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
-#include <Valkyrie/Entity/RigidBodyState.hh>
 #include <Valkyrie/Entity/Module.hh>
 #include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Graphics/Camera.hh>
@@ -30,7 +31,7 @@
 #include <Valkyrie/Graphics/Scene/GroupNode.hh>
 #include <Valkyrie/Graphics/Scene/LightNode.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
-#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/IPhysicsSystem.hh>
@@ -42,7 +43,7 @@ vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
-
+void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
 
 
 vkEngine::vkEngine()
@@ -90,6 +91,9 @@ vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vk
   return M;
 }
 
+
+
+
 int vkEngine::Run()
 {
   if (!m_window)
@@ -127,6 +131,18 @@ int vkEngine::Run()
 
   vkBinaryGradient::GetBinaryGradient();
 
+  // Setup the character 
+  vkCharacterEntity *character = new vkCharacterEntity();
+  vkStaticMeshState *characterMesh = new vkStaticMeshState();
+  characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
+  characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
+  character->SetRootState(characterMesh);
+  character->AddState(characterMesh);
+  character->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 20.0f));
+  character->FinishTransformation();
+
+  scene->AddEntity(character);
+
   float v = 0.0f;
   float m = 0.0f;
 
@@ -162,28 +178,8 @@ int vkEngine::Run()
 
 
     UpdateCamera(camera, mouse, keyboard);
-    /*
+    UpdateCharacter(character, mouse, keyboard);
 
-    vkMatrix4f mm = planeGeometryNode->GetMatrix();
-    mm.SetRotationX(m);
-    planeGeometryNode->SetMatrix(mm);
-    m += 0.00f;
-
-    pointLight->SetPosition(vkVector3f(sin(l) * 10.0f, cos(l) * 10.0f, 10.0f + cos(2.0f*l) * 5.0f));
-    l += 0.001f;
-
-    vkMatrix4f MMCX, MMCY, MMCZ, MMC;
-    MMCX.SetRotationX(ct);
-    MMCY.SetRotationY(ct);
-    MMCZ.SetRotationZ(ct);
-    vkMatrix4f::Mult(MMCX, MMCY, MMC);
-    vkMatrix4f::Mult(MMC, MMCZ, MMC);
-
-    cubeSpatialNode->SetMatrix(MMC);
-    ct += 0.001f;
-
-    groupNode->UpdateStates();
-    */
 
     scene->GetRoot()->UpdateBoundingBox();
     fp->Render(scene->GetRoot(), camera, rt);
@@ -505,6 +501,41 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 }
 
 
+void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard)
+{
+  float sx = 0.0f;
+  float sy = 0.0f;
+  float speed = 0.1f;
+  if (keyboard->IsKeyDown(eK_LShift))
+  {
+    speed *= 2.0f;
+  }
+  if (keyboard->IsKeyDown(eK_Left))
+  {
+    sx += speed;
+  }
+  if (keyboard->IsKeyDown(eK_Right))
+  {
+    sx -= speed;
+  }
+  if (keyboard->IsKeyDown(eK_Up))
+  {
+    sy -= speed;
+  }
+  if (keyboard->IsKeyDown(eK_Down))
+  {
+    sy += speed;
+  }
+  if (keyboard->IsKeyPressed(eK_Space))
+  {
+    character->Jump();
+  }
+
+  character->SetWalkDirection(vkVector3f(sx, sy, 0.0f));
+}
+
+
+
 
 
 
@@ -564,7 +595,11 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(planeEntity);
 
 
-  vkMesh *mineMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/mine.staticmesh", "Mesh"));
+  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
+  mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
+  mineEntity->GetTransformation().SetTranslation(vkVector3f(5.0f, 5.0f, 5.0f));
+  mineEntity->FinishTransformation();
+  entityScene->AddEntity(mineEntity);
 
 
 

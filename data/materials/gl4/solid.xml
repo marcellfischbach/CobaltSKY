@@ -13,6 +13,20 @@
 		
 	</program>
 	
+	<program name="GBufferColor">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/gbuffer.vert</shader>
+				<shader>${shaders}/solid/gbuffer_color.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
 	<program name="ShadowPSSM">
 	
 		<techniques>

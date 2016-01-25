@@ -67,6 +67,10 @@ enum vkKey
   eK_LCtrl,
   eK_RCtrl,
   eK_Space,
+  eK_Left,
+  eK_Right,
+  eK_Up,
+  eK_Down,
   eK_COUNT,
 };
 

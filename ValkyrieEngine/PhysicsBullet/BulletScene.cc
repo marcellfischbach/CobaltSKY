@@ -1,7 +1,7 @@
 
 
 #include <PhysicsBullet/BulletScene.hh>
-#include <PhysicsBullet/BulletBody.hh>
+#include <PhysicsBullet/BulletCharacterController.hh>
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 #include <PhysicsBullet/BulletStaticCollider.hh>
 
@@ -74,24 +74,6 @@ bool vkBulletScene::Initialize(bool softBody)
 }
 
 
-void vkBulletScene::AddBody(IPhysicsBody *body)
-{
-  vkBulletBody *btBody = static_cast<vkBulletBody*>(body);
-  if (btBody)
-  {
-    btBody->AttachToScene(this);
-  }
-}
-
-void vkBulletScene::RemoveBody(IPhysicsBody *body)
-{
-  vkBulletBody *btBody = static_cast<vkBulletBody*>(body);
-  if (btBody)
-  {
-    btBody->DetachFromScene(this);
-  }
-}
-
 void vkBulletScene::AddDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
 {
   vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
@@ -128,6 +110,34 @@ void vkBulletScene::RemoveStaticCollider(IPhysicsStaticCollider *staticCollider)
   }
 }
 
+void vkBulletScene::AddCharacterController(IPhysicsCharacterController *controller)
+{
+  vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
+  if (capsController)
+  {
+    m_characterControllers.push_back(capsController);
+    capsController->AttachToScene(this);
+  }
+}
+
+void vkBulletScene::RemoveCharacterController(IPhysicsCharacterController *controller)
+{
+  vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
+  if (capsController)
+  {
+    for (size_t i = 0, in = m_characterControllers.size(); i < in; ++i)
+    {
+      if (m_characterControllers[i] == capsController)
+      {
+        m_characterControllers.erase(m_characterControllers.begin() + i);
+        break;
+      }
+    }
+    capsController->DetachFromScene(this);
+  }
+}
+
+
 void vkBulletScene::BodyChanged(vkBulletBody *body)
 {
   m_changedBodies.Add(body);
@@ -149,6 +159,11 @@ void vkBulletScene::UpdateColliders()
 {
   for (size_t i = 0; i < m_changedDynamicColliders.length; ++i)
   {
-    m_changedDynamicColliders[i]->UpdateColliderState();
+    m_changedDynamicColliders[i]->PropagateTransformation();
+  }
+
+  for (size_t i = 0, in= m_characterControllers.size(); i < in; ++i)
+  {
+    m_characterControllers[i]->UpdateCallbacks();
   }
 }

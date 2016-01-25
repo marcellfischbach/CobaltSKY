@@ -6,7 +6,6 @@
 #include <Valkyrie/Physics/IPhysicsSystem.refl.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 
-struct IPhysicsBody;
 struct IPhysicsScene;
 struct IPhysicsCapsuleCharacterController;
 struct IPhysicsDynamicCollider;
@@ -24,8 +23,6 @@ struct VKE_API IPhysicsSystem : public IObject
   virtual IPhysicsScene *CreateScene() = 0;
 
   virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry) = 0;
-
-  virtual IPhysicsBody *CreateBody() = 0;
 
   virtual IPhysicsDynamicCollider *CreateDynamicCollider() = 0;
   virtual IPhysicsStaticCollider *CreateStaticCollider() = 0;

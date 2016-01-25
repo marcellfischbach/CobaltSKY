@@ -4,11 +4,10 @@
 #include <PhysicsBullet/BulletScene.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Entity/Transformation.hh>
-#include <Valkyrie/Entity/RigidBodyState.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
 
 vkBulletDynamicCollider::vkBulletDynamicCollider()
   : IPhysicsDynamicCollider()
-  , m_dynamicColliderState(0)
   , m_kinematic(true)
   , m_friction(0.0f)
   , m_restitution(0.0f)
@@ -18,6 +17,7 @@ vkBulletDynamicCollider::vkBulletDynamicCollider()
   , m_body(0)
   , m_shape(0)
   , m_compoundShape(0)
+  , m_transformationCallback(0)
 {
   VK_CLASS_GEN_CONSTR;
 
@@ -127,9 +127,9 @@ void vkBulletDynamicCollider::FinishTransformation()
   m_body->setWorldTransform(trans);
 }
 
-void vkBulletDynamicCollider::SetDynamicColliderState(vkDynamicColliderState *colliderState)
+void vkBulletDynamicCollider::SetTransformationCallback(ITransformationCallback *callback)
 {
-  m_dynamicColliderState = colliderState;
+  m_transformationCallback = callback;
 }
 
 void vkBulletDynamicCollider::SetKinematic(bool kinematic)
@@ -240,10 +240,10 @@ void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& 
   // inform bullet system that this dynamic collider has changed
 }
 
-void vkBulletDynamicCollider::UpdateColliderState()
+void vkBulletDynamicCollider::PropagateTransformation()
 {
-  if (m_dynamicColliderState)
+  if (m_transformationCallback)
   {
-    m_dynamicColliderState->DynamicTransformationChanged(m_transformation);
+    m_transformationCallback->TransformationChanged(m_transformation);
   }
 }

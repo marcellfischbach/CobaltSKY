@@ -139,22 +139,6 @@ public:
 
 
 VK_CLASS()
-/**
-* \ingroup loading
-*/
-class VKE_API vkRigidBodyStateLoader : public vkEntityStateLoader
-{
-  VK_CLASS_GEN;
-public:
-  vkRigidBodyStateLoader();
-  virtual ~vkRigidBodyStateLoader();
-
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *GetLoadingClass() const;
-
-};
-
-VK_CLASS()
 class VKE_API vkColliderStateLoader : public vkSpatialStateLoader
 {
   VK_CLASS_GEN;

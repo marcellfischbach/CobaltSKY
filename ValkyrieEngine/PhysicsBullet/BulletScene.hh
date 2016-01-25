@@ -9,6 +9,7 @@
 
 class vkBulletBody;
 class vkBulletDynamicCollider;
+class vkBulletCapsuleCharacterController;
 
 VK_CLASS()
 class VKBULLET_API vkBulletScene : public IPhysicsScene
@@ -21,14 +22,14 @@ public:
   bool Initialize(bool softBody);
 
 
-  virtual void AddBody(IPhysicsBody *body);
-  virtual void RemoveBody(IPhysicsBody *body);
-
   virtual void AddStaticCollider(IPhysicsStaticCollider *collider);
   virtual void RemoveStaticCollider(IPhysicsStaticCollider *collider);
 
   virtual void AddDynamicCollider(IPhysicsDynamicCollider *collider);
   virtual void RemoveDynamicCollider(IPhysicsDynamicCollider *collider);
+
+  virtual void AddCharacterController(IPhysicsCharacterController *controller);
+  virtual void RemoveCharacterController(IPhysicsCharacterController *controller);
 
   virtual void StepSimulation(float tpf = 1.0f / 60.0f);
   virtual void UpdateColliders();
@@ -48,6 +49,7 @@ private:
 
   vkCollection<vkBulletBody*> m_changedBodies;
   vkCollection<vkBulletDynamicCollider*> m_changedDynamicColliders;
+  std::vector<vkBulletCapsuleCharacterController*> m_characterControllers;
 };
 
 VK_FORCEINLINE btDiscreteDynamicsWorld *vkBulletScene::GetBulletScene()

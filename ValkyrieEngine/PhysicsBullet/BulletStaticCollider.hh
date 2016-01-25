@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/Physics/IPhysicsBody.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
 #include <PhysicsBullet/BulletStaticCollider.refl.hh>
@@ -11,7 +11,6 @@ class vkBulletShape;
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
-
 
 VK_CLASS()
 class VKBULLET_API vkBulletStaticCollider : public IPhysicsStaticCollider
@@ -29,7 +28,6 @@ public:
   virtual const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
-
 
   virtual void AttachShape(IPhysicsShape *shape);
   virtual void DetachShape(IPhysicsShape *shape);

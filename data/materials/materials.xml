@@ -56,4 +56,20 @@
 		</parameters>
 	</materialinstance>
 
+	<materialinstance name="MinePin">
+		<material>${materials}/mat_solid.xml:Solid</material>
+		<parameters>
+			<parameter name="Diffuse">${materials}/textures.xml:FieldStone</parameter>
+			<parameter name="Color">1.0;0.0;0.0;1.0</parameter>
+		</parameters>
+	</materialinstance>
+
+
+	<materialinstance name="White">
+		<material>${materials}/mat_solid.xml:SolidColor</material>
+		<parameters>
+			<parameter name="Color">1.0;1.0;1.0;1.0</parameter>
+		</parameters>
+	</materialinstance>
+
 </materialinstances>

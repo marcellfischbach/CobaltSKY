@@ -2,12 +2,8 @@
 	
 	<entityStates>
 	
-		<entityState id="0" class="vkDynamicColliderState" >
+		<entityState id="0" class="vkStaticColliderState" >
 			<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
-			<kinematic>false</kinematic>
-			<mass>0.001</mass>
-			<friction>10.0</friction>
-			<restitution>0.5</restitution>
 		</entityState>
 	
 		<entityState id="1" class="vkStaticMeshState" parentID="0">

@@ -15,4 +15,18 @@
 		
 	</material>
 	
+	<material name="SolidColor">
+	
+		<passes>
+			<pass name="GBuffer">${shaders}/solid.xml:GBufferColor</pass>
+			<pass name="ShadowPSSM">${shaders}/solid.xml:ShadowPSSM</pass>
+			<pass name="ShadowCube">${shaders}/solid.xml:ShadowCube</pass>
+		</passes>
+		
+		<parameters>
+			<parameter type="col">Color</parameter>
+		</parameters>
+		
+	</material>
+	
 </materials>

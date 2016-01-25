@@ -54,6 +54,10 @@ source_group(
 	)
 
 set(SOURCE_ENTITY
+  Entity/Character.cc
+  Entity/Character.hh
+  Entity/ColliderState.cc
+  Entity/ColliderState.hh
   Entity/Entity.cc
   Entity/Entity.hh
   Entity/EntityState.cc
@@ -68,8 +72,6 @@ set(SOURCE_ENTITY
   Entity/Module.hh
   Entity/RenderState.cc
   Entity/RenderState.hh
-  Entity/RigidBodyState.cc
-  Entity/RigidBodyState.hh
   Entity/Scan.hh
   Entity/Scene.cc
   Entity/Scene.hh
@@ -178,8 +180,8 @@ source_group(
 	)
 
 set(SOURCE_PHYSICS
-  Physics/IPhysicsBody.hh
   PHysics/IPhysicsCharacterController.hh
+  Physics/IPhysicsCollider.hh
   Physics/IPhysicsScene.hh
   Physics/IPhysicsShape.hh
   Physics/IPhysicsSystem.hh

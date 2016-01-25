@@ -8,7 +8,7 @@
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/Module.hh>
 #include <Valkyrie/Entity/RenderState.hh>
-#include <Valkyrie/Entity/RigidBodyState.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 
 
@@ -24,7 +24,6 @@ void vkEntityModule::Initialize()
   cr->RegisterClass(vkStaticMeshState::GetStaticClass());
   cr->RegisterClass(vkRenderState::GetStaticClass());
   cr->RegisterClass(vkSpatialState::GetStaticClass());
-  cr->RegisterClass(vkRigidBodyState::GetStaticClass());
   cr->RegisterClass(vkDynamicColliderState::GetStaticClass());
   cr->RegisterClass(vkStaticColliderState::GetStaticClass());
 }
