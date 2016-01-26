@@ -4,6 +4,7 @@ add_definitions(-DVKE_EXPORT)
 
 set(SOURCE
   Defs.hh
+  Diamond.hh
 	Engine.hh
 	Engine.cc
 	Enums.hh
@@ -182,6 +183,7 @@ source_group(
 set(SOURCE_PHYSICS
   PHysics/IPhysicsCharacterController.hh
   Physics/IPhysicsCollider.hh
+  Physics/IPhysicsJoints.hh
   Physics/IPhysicsScene.hh
   Physics/IPhysicsShape.hh
   Physics/IPhysicsSystem.hh

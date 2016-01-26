@@ -25,6 +25,8 @@ public:
    * \name IPhysicsCollider interface
    * @{
    */
+  virtual vkPhysicsColliderType GetType() const;
+
   virtual const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
@@ -82,6 +84,9 @@ public:
 
   void PropagateTransformation();
 
+  btRigidBody *GetRigidBody();
+  const btRigidBody *GetRigidBody() const;
+
 private:
   class MotionState : public btMotionState
   {
@@ -116,6 +121,11 @@ private:
   btCollisionShape *m_shape;
   btCompoundShape *m_compoundShape;
 };
+
+VK_FORCEINLINE vkPhysicsColliderType vkBulletDynamicCollider::GetType() const
+{
+  return ePCT_Dynamic;
+}
 
 VK_FORCEINLINE const vkMatrix4f &vkBulletDynamicCollider::GetMatrix() const
 {
@@ -154,3 +164,12 @@ VK_FORCEINLINE bool vkBulletDynamicCollider::IsAutoInertia() const
 
 
 
+VK_FORCEINLINE btRigidBody *vkBulletDynamicCollider::GetRigidBody()
+{
+  return m_body;
+}
+
+VK_FORCEINLINE const btRigidBody *vkBulletDynamicCollider::GetRigidBody() const
+{
+  return m_body;
+}

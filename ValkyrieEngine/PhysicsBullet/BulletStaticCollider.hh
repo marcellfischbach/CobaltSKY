@@ -25,6 +25,8 @@ public:
   * \name IPhysicsCollider interface
   * @{
   */
+  virtual vkPhysicsColliderType GetType() const;
+
   virtual const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
@@ -80,6 +82,12 @@ private:
   vkBulletScene *m_scene;
 
 };
+
+
+VK_FORCEINLINE vkPhysicsColliderType vkBulletStaticCollider::GetType() const
+{
+  return ePCT_Static;
+}
 
 VK_FORCEINLINE const vkMatrix4f &vkBulletStaticCollider::GetMatrix() const
 {

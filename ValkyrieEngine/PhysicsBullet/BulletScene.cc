@@ -3,6 +3,7 @@
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletCharacterController.hh>
 #include <PhysicsBullet/BulletDynamicCollider.hh>
+#include <PhysicsBullet/BulletJoints.hh>
 #include <PhysicsBullet/BulletStaticCollider.hh>
 
 vkBulletScene::vkBulletScene()
@@ -137,6 +138,26 @@ void vkBulletScene::RemoveCharacterController(IPhysicsCharacterController *contr
   }
 }
 
+
+void vkBulletScene::AddJoint(IPhysicsJoint *joint)
+{
+  vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
+  if (j)
+  {
+    j->AttachToScene(this);
+  }
+}
+
+
+void vkBulletScene::RemoveJoint(IPhysicsJoint *joint)
+{
+  vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
+  if (j)
+  {
+    j->DetachFromScene(this);
+  }
+
+}
 
 void vkBulletScene::BodyChanged(vkBulletBody *body)
 {

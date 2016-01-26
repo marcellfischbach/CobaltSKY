@@ -3,6 +3,7 @@
 #include <PhysicsBullet/BulletSystem.hh>
 #include <PhysicsBullet/BulletCharacterController.hh>
 #include <PhysicsBullet/BulletDynamicCollider.hh>
+#include <PhysicsBullet/BulletJoints.hh>
 #include <PhysicsBullet/BulletStaticCollider.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
@@ -72,4 +73,26 @@ IPhysicsCapsuleCharacterController *vkBulletSystem::CreateCapsulseCharacterContr
 {
   vkBulletCapsuleCharacterController *controller = new vkBulletCapsuleCharacterController();
   return controller;
+}
+
+
+IPhysicsJoint *vkBulletSystem::CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB)
+{
+  vkBulletDynamicCollider *colA = vkQueryClass<vkBulletDynamicCollider>(colliderA);
+  vkBulletDynamicCollider *colB = vkQueryClass<vkBulletDynamicCollider>(colliderB);
+  switch (type)
+  {
+  case ePJT_Hinge:
+    {
+      vkBulletHingeJoint *hingeJoint = new vkBulletHingeJoint();
+      if (!hingeJoint->Initialize(colA, colB))
+      {
+        delete hingeJoint;
+        hingeJoint = 0;
+      }
+      return hingeJoint;
+    }
+  }
+
+  return 0;
 }

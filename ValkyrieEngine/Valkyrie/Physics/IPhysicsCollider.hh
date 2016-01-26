@@ -22,6 +22,8 @@ struct VKE_API IPhysicsCollider : public IObject
 
   virtual ~IPhysicsCollider () { }
 
+  virtual vkPhysicsColliderType GetType() const = 0;
+
   virtual const vkMatrix4f &GetMatrix() const = 0;
   virtual vkTransformation GetTransform() = 0;
   virtual void FinishTransformation() = 0;

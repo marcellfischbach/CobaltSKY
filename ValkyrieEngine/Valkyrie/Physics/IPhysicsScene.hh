@@ -6,6 +6,7 @@
 
 struct IPhysicsCharacterController;
 struct IPhysicsDynamicCollider;
+struct IPhysicsJoint;
 struct IPhysicsStaticCollider;
 
 VK_INTERFACE()
@@ -26,7 +27,8 @@ public:
   virtual void AddCharacterController(IPhysicsCharacterController *controller) = 0;
   virtual void RemoveCharacterController(IPhysicsCharacterController *controller) = 0;
 
-  //virtual void AddCollider(IPhysicsCollider *collider) = 0;
+  virtual void AddJoint(IPhysicsJoint *joint) = 0;
+  virtual void RemoveJoint(IPhysicsJoint *joint) = 0;
 
 
   virtual void StepSimulation(float tpf = 1.0f / 60.0f) = 0;

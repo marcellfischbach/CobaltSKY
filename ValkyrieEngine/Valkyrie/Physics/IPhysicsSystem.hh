@@ -11,6 +11,7 @@ struct IPhysicsCapsuleCharacterController;
 struct IPhysicsDynamicCollider;
 struct IPhysicsStaticCollider;
 struct IPhysicsTriggerCollider;
+struct IPhysicsJoint;
 
 VK_INTERFACE()
 struct VKE_API IPhysicsSystem : public IObject
@@ -29,4 +30,8 @@ struct VKE_API IPhysicsSystem : public IObject
   virtual IPhysicsTriggerCollider *CreateTriggerCollider() = 0;
 
   virtual IPhysicsCapsuleCharacterController *CreateCapsulseCharacterController() = 0;
+
+
+  virtual IPhysicsJoint *CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB) = 0;
+
 };

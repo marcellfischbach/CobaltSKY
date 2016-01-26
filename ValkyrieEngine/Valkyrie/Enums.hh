@@ -378,9 +378,16 @@ enum vkPhysGeometryType
   ePGT_TriMesh,
 };
 
-enum vkPhysBodyMode
+enum vkPhysicsColliderType
 {
-  ePBM_Static,
-  ePBM_Kinematic,
-  ePBM_Dynamic,
+  ePCT_Static,
+  ePCT_Kinematic,
+  ePCT_Dynamic,
+  ePCT_Trigger,
+};
+
+
+enum vkPhysicsJointType
+{
+  ePJT_Hinge,
 };

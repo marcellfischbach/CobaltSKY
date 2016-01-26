@@ -26,5 +26,8 @@ public:
   virtual IPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
 
   virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
+
+  virtual IPhysicsJoint *CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB);
+
 };
 

@@ -31,6 +31,9 @@ public:
   virtual void AddCharacterController(IPhysicsCharacterController *controller);
   virtual void RemoveCharacterController(IPhysicsCharacterController *controller);
 
+  virtual void AddJoint(IPhysicsJoint *joint);
+  virtual void RemoveJoint(IPhysicsJoint *joint);
+
   virtual void StepSimulation(float tpf = 1.0f / 60.0f);
   virtual void UpdateColliders();
 

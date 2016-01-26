@@ -8,6 +8,8 @@ set(SOURCE
   BulletCharacterController.hh
   BulletDynamicCollider.cc
   BulletDynamicCollider.hh
+  BulletJoints.cc
+  BulletJoints.hh
   BulletScene.cc
   BulletScene.hh
   BulletShape.cc
