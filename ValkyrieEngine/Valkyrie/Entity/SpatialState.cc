@@ -32,7 +32,14 @@ const vkSpatialState *vkSpatialState::ToSpatialState() const
 
 vkTransformation vkSpatialState::GetTransformation()
 {
-  return vkTransformation(&m_localMatrix, &m_globalMatrix, 0);
+  if (m_parentState)
+  {
+    return vkTransformation(&m_localMatrix, &m_globalMatrix, &m_parentState->m_globalMatrix, &m_parentState->m_globalMatrixInv);
+  }
+  else
+  {
+    return vkTransformation(&m_localMatrix, &m_globalMatrix, 0, 0);
+  }
 }
 
 void vkSpatialState::FinishTransformation()
@@ -64,6 +71,8 @@ void vkSpatialState::UpdateTransformation()
   {
     m_globalMatrix = m_localMatrix;
   }
+
+  m_globalMatrix.Inverted(m_globalMatrixInv);
 
   m_boundingBoxDirty = true;
 

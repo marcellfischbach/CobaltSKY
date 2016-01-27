@@ -30,6 +30,81 @@ vkEntity::~vkEntity()
 
 }
 
+vkEntityState *vkEntity::GetState(vkID id)
+{
+  if (id == vkID_Undefined)
+  {
+    return 0;
+  }
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    vkEntityState *state = m_states[i];
+    if (state && state->GetID() == id)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
+
+const vkEntityState *vkEntity::GetState(vkID id) const
+{
+  if (id == vkID_Undefined)
+  {
+    return 0;
+  }
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    vkEntityState *state = m_states[i];
+    if (state && state->GetID() == id)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
+vkEntityState *vkEntity::GetState(const vkString &name)
+{
+  if (name == "")
+  {
+    return 0;
+  }
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    vkEntityState *state = m_states[i];
+    if (state && state->GetName() == name)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
+
+const vkEntityState *vkEntity::GetState(const vkString &name) const
+{
+  if (name == "")
+  {
+    return 0;
+  }
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    vkEntityState *state = m_states[i];
+    if (state && state->GetName() == name)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
+
 void vkEntity::SetScene(vkEntityScene *scene)
 {
   if (m_scene != scene)

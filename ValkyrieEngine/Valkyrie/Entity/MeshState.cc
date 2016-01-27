@@ -2,16 +2,23 @@
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scan.hh>
+#include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Physics/IPhysicsScene.hh>
+#include <Valkyrie/Engine.hh>
 
 vkStaticMeshState::vkStaticMeshState()
   : vkRenderState()
-  , m_mesh (0)
+  , m_mesh(0)
   , m_materials(0)
   , m_numberOfMaterialSlots(0)
   , m_castShadow(true)
+  , m_staticCollider(0)
+  , m_shapes(0)
+  , m_friction(0.5)
+  , m_restitution(0.5)
 {
 
 }
@@ -81,6 +88,85 @@ void vkStaticMeshState::UpdateMaterialSlots()
   delete[] m_materials;
   m_materials = materials;
   m_numberOfMaterialSlots = numberOfSlots;
+}
+
+void vkStaticMeshState::SetColliderShape(vkPhysicsShapeContainer *shapes)
+{
+  if (shapes == m_shapes)
+  {
+    return;
+  }
+  if (!m_staticCollider)
+  {
+    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider->SetFriction(m_friction);
+    m_staticCollider->SetRestitution(m_restitution);
+  }
+  if (m_shapes)
+  {
+    m_staticCollider->DetachShape(m_shapes);
+  }
+  if (shapes)
+  {
+    m_staticCollider->AttachShape(shapes);
+  }
+
+  VK_SET(m_shapes, shapes);
+}
+
+void vkStaticMeshState::SetFriction(float friction)
+{
+  if (!m_staticCollider)
+  {
+    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider->AttachShape(m_shapes);
+    m_staticCollider->SetRestitution(m_restitution);
+  }
+
+  m_friction = friction;
+  m_staticCollider->SetFriction(m_friction);
+}
+
+
+void vkStaticMeshState::SetRestitution(float restitution)
+{
+  if (!m_staticCollider)
+  {
+    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider->AttachShape(m_shapes);
+    m_staticCollider->SetFriction(m_friction);
+  }
+
+  m_restitution = restitution;
+  m_staticCollider->SetRestitution(m_restitution);
+}
+
+void vkStaticMeshState::UpdateTransformation()
+{
+  vkSpatialState::UpdateTransformation();
+
+  if (m_staticCollider)
+  {
+    m_staticCollider->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
+    m_staticCollider->FinishTransformation();
+  }
+
+}
+
+void vkStaticMeshState::OnAttachedToScene(vkEntityScene *scene)
+{
+  if (m_staticCollider && scene)
+  {
+    scene->GetPhysicsScene()->AddStaticCollider(m_staticCollider);
+  }
+}
+
+void vkStaticMeshState::OnDetachedFromScene(vkEntityScene *scene)
+{
+  if (m_staticCollider && scene)
+  {
+    scene->GetPhysicsScene()->RemoveStaticCollider(m_staticCollider);
+  }
 }
 
 void vkStaticMeshState::FillBoundingBox(vkBoundingBox &bbox)

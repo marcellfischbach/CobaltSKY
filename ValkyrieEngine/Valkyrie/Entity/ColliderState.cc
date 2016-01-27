@@ -63,17 +63,17 @@ void vkColliderState::DetachShape(vkPhysicsShapeContainer *shapes)
   }
 }
 
-void vkColliderState::FinishTransformation()
+void vkColliderState::UpdateTransformation()
 {
+
+  // don't perform cyclic update with dynmaic bodies
+  vkSpatialState::UpdateTransformation();
+
   if (m_updateTransformationGuard)
   {
     return;
   }
-
-  // don't perform cyclic update with dynmaic bodies
   m_updateTransformationGuard = true;
-  vkSpatialState::FinishTransformation();
-
   if (m_collider)
   {
     m_collider->GetTransform().SetTransformation(GetGlobalTransformation());
@@ -269,8 +269,10 @@ bool vkDynamicColliderState::IsAutoInertia() const
 
 void vkDynamicColliderState::DynamicTransformationChanged(const vkMatrix4f &transformation)
 {
-  GetTransformation().SetTransformation(transformation);
+  m_updateTransformationGuard = true;
+  GetTransformation().SetGlobalTransformation(transformation);
   PerformTransformation();
+  m_updateTransformationGuard = false;
 }
 
 

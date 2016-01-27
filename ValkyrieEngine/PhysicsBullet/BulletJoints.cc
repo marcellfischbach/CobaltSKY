@@ -117,10 +117,34 @@ bool vkBulletHingeJoint::Initialize(vkBulletDynamicCollider *colliderA, vkBullet
 void vkBulletHingeJoint::SetFrameA(const vkMatrix4f &frameA)
 {
   m_frameA = frameA;
+  btTransform transA, transB;
+  transA.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameA.m00));
+  transB.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameB.m00));
+
+  m_hingeConstraints->setFrames(transA, transB);
 }
 
 void vkBulletHingeJoint::SetFrameB(const vkMatrix4f &frameB)
 {
   m_frameB = frameB;
+
+  btTransform transA, transB;
+  transA.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameA.m00));
+  transB.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameB.m00));
+
+  m_hingeConstraints->setFrames(transA, transB);
+}
+
+
+void vkBulletHingeJoint::SetFrames(const vkMatrix4f &frameA, const vkMatrix4f &frameB)
+{
+  m_frameA = frameA;
+  m_frameB = frameB;
+
+  btTransform transA, transB;
+  transA.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameA.m00));
+  transB.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_frameB.m00));
+
+  m_hingeConstraints->setFrames(transA, transB);
 }
 

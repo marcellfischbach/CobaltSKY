@@ -91,7 +91,7 @@ void vkBulletStaticCollider::DetachShape(vkPhysicsShapeContainer *shapes)
 
 vkTransformation vkBulletStaticCollider::GetTransform()
 {
-  return vkTransformation(&m_transformation, 0, 0);
+  return vkTransformation(&m_transformation, 0, 0, 0);
 }
 
 

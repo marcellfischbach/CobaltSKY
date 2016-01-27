@@ -14,10 +14,12 @@ public:
   vkTransformation();
   vkTransformation(vkMatrix4f *matrix, 
                    vkMatrix4f *globalMatrix,
-                   const vkMatrix4f *parentGlobal);
+                   const vkMatrix4f *parentGlobal,
+                   const vkMatrix4f *parentGlobalInv);
 
   bool IsValid() const;
 
+  void SetGlobalTransformation(const vkMatrix4f &transformation);
   void SetTransformation(const vkMatrix4f &transformation);
   void SetTranslation(const vkVector3f &translation);
   void SetRotationX(float rads);
@@ -31,7 +33,7 @@ private:
   vkMatrix4f *m_matrix;
   vkMatrix4f *m_matrixGlobal;
   const vkMatrix4f *m_parentMatrixGlobal;
-
+  const vkMatrix4f *m_parentMatrixGlobalInv;
 
 
 };

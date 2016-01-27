@@ -34,6 +34,7 @@ struct VKE_API IPhysicsHingeJoint : public virtual IPhysicsJoint
   virtual void SetFrameB(const vkMatrix4f &frame) = 0;
   virtual const vkMatrix4f &GetFrameB() const = 0;
 
+  virtual void SetFrames(const vkMatrix4f &frameA, const vkMatrix4f &frameB) = 0;
 };
 
 

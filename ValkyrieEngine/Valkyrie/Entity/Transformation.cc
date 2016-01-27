@@ -6,16 +6,19 @@ vkTransformation::vkTransformation()
   : m_matrix(0)
   , m_matrixGlobal(0)
   , m_parentMatrixGlobal(0)
+  , m_parentMatrixGlobalInv(0)
 {
    
 }
 
 vkTransformation::vkTransformation(vkMatrix4f *matrix,
                                    vkMatrix4f *matrixGlobal,
-                                   const vkMatrix4f *parentMatrixGlobal)
+                                   const vkMatrix4f *parentMatrixGlobal,
+                                   const vkMatrix4f *parentMatrixGlobalInv)
   : m_matrix(matrix)
   , m_matrixGlobal(matrixGlobal)
   , m_parentMatrixGlobal(parentMatrixGlobal)
+  , m_parentMatrixGlobalInv(parentMatrixGlobalInv)
 {
 
 }
@@ -33,6 +36,20 @@ void vkTransformation::Debug(const char *msg)
 }
 
 
+void vkTransformation::SetGlobalTransformation(const vkMatrix4f &transformation)
+{
+  if (m_matrix)
+  {
+    if (m_parentMatrixGlobalInv)
+    {
+      vkMatrix4f::Mult(*m_parentMatrixGlobalInv, transformation, *m_matrix);
+    }
+    else
+    {
+      m_matrix->Set(transformation);
+    }
+  }
+}
 
 void vkTransformation::SetTransformation(const vkMatrix4f &transformation)
 {

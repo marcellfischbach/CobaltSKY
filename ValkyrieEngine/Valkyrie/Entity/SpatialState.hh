@@ -63,6 +63,7 @@ public:
 
   const vkMatrix4f &GetLocalTransformation() const;
   const vkMatrix4f &GetGlobalTransformation() const;
+  const vkMatrix4f &GetGlobalTransformationInv() const;
   const vkBoundingBox &GetBoundingBox() const;
 
   virtual vkSpatialState *ToSpatialState();
@@ -94,6 +95,7 @@ protected:
 
   vkMatrix4f m_localMatrix;
   vkMatrix4f m_globalMatrix;
+  vkMatrix4f m_globalMatrixInv;
 
   bool m_boundingBoxDirty;
   vkBoundingBox m_boundingBox;
@@ -123,6 +125,12 @@ VK_FORCEINLINE const vkMatrix4f &vkSpatialState::GetLocalTransformation() const
 VK_FORCEINLINE const vkMatrix4f &vkSpatialState::GetGlobalTransformation() const
 {
   return m_globalMatrix;
+}
+
+
+VK_FORCEINLINE const vkMatrix4f &vkSpatialState::GetGlobalTransformationInv() const
+{
+  return m_globalMatrixInv;
 }
 
 VK_FORCEINLINE const vkBoundingBox &vkSpatialState::GetBoundingBox() const

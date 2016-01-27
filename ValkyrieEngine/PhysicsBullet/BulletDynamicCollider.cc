@@ -116,7 +116,7 @@ void vkBulletDynamicCollider::DetachShape(vkPhysicsShapeContainer *shapes)
 
 vkTransformation vkBulletDynamicCollider::GetTransform()
 {
-  return vkTransformation(&m_transformation, 0, 0);
+  return vkTransformation(&m_transformation, 0, 0, 0);
 }
 
 
@@ -233,7 +233,7 @@ void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& 
 {
   worldTrans.getOpenGLMatrix(static_cast<btScalar*>(&m_parent->m_transformation.m00));
 
-  if (m_parent->m_scene)
+  if (m_parent->m_scene && !m_parent->IsKinematic())
   {
     m_parent->m_scene->DynamicColliderChanged(m_parent);
   }

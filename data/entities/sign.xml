@@ -1,0 +1,50 @@
+<entity name="MyEntityName" class="vkEntity">
+	
+	<entityStates>
+	
+		<entityState id="0" class="vkStaticMeshState">
+			<mesh resourceMode="shared">${models}/sign_pole.staticmesh:Mesh</mesh>
+			<materials>
+				<material slot="0" slotName="White">${materials}/materials.xml:White</material>
+			</materials>
+			<collider>
+				<shape resourceMode="shared">${models}/sign_pole.staticmesh:Collision</shape>
+				<friction>10.0</friction>
+				<restitution>0.5</restitution>
+			</collider>
+			<clippingRange max="50.0"/>
+		</entityState>
+		
+		<entityState id="1" class="vkDynamicColliderState" parentID="0">
+			<transformation>
+				<translation>-0.65;0.0;1.7</translation>
+			</transformation>
+			
+			<shape resourceMode="shared">${models}/sign_sign.staticmesh:Collision</shape>
+			<kinematic>false</kinematic>
+			<mass>1.0</mass>
+			<friction>10.0</friction>
+			<restitution>0.5</restitution>
+		</entityState>
+		
+		<entityState id="2" class="vkStaticMeshState" parentID="1">
+			<mesh resourceMode="shared">${models}/sign_sign.staticmesh:Mesh</mesh>
+			<materials>
+				<material slot="0" slotName="White">${materials}/materials.xml:White</material>
+			</materials>
+		</entityState>
+		
+		<entityState id="3" class="vkHingeJointState" parentID="0">
+			<transformation>
+				<translation>0.0;0.0;2.0</translation>
+			</transformation>
+			
+			<colliderA id="1" />
+		</entityState>
+		
+	</entityStates>
+	
+	<rootState>0</rootState>
+
+	
+</entity>

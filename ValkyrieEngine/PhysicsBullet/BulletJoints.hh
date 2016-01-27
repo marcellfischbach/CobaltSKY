@@ -58,6 +58,8 @@ public:
   virtual void SetFrameB(const vkMatrix4f &frame);
   virtual const vkMatrix4f &GetFrameB() const;
 
+  virtual void SetFrames(const vkMatrix4f &frameA, const vkMatrix4f &frameB);
+
   btHingeConstraint *GetHingeConstraint();
   const btHingeConstraint *GetHingeConstraint() const;
 

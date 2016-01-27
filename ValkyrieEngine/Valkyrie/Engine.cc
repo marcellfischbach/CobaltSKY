@@ -595,16 +595,16 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(planeEntity);
 
 
-  vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
-  mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
-  mineEntity->GetTransformation().SetTranslation(vkVector3f(5.0f, 5.0f, 5.0f));
-  mineEntity->FinishTransformation();
-  entityScene->AddEntity(mineEntity);
+  vkEntity *signEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/sign.xml"));
+  signEntity->SetClippingRange(-FLT_MAX, 50.0f);
+  signEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
+  signEntity->FinishTransformation();
+  entityScene->AddEntity(signEntity);
 
 
+#if 0
 
-
-  for (int i = 0; i < 100; ++i)
+  for (int i = 0; i < 1; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;
@@ -623,6 +623,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   }
 
+#endif
 
 
   vkDirectionalLight *directionalLight = new vkDirectionalLight();

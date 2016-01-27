@@ -2,6 +2,7 @@
 #include <Valkyrie/Loaders/EntityLoader.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/EntityState.hh>
+#include <Valkyrie/Entity/JointState.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Entity/ColliderState.hh>
@@ -98,6 +99,10 @@ IObject *vkEntityStateMasterLoader::Load(TiXmlElement *element, const vkResource
   {
     return 0;
   }
+
+  vkEntity *entity = vkQueryClass<vkEntity>(userData);
+
+
   vkString className(element->Attribute("class"));
   const vkClass *entityStateClass = vkClassRegistry::Get()->GetClass(className);
   if (!entityStateClass)
@@ -112,8 +117,11 @@ IObject *vkEntityStateMasterLoader::Load(TiXmlElement *element, const vkResource
   }
 
   vkEntityState *entityState = entityStateClass->CreateInstance<vkEntityState>();
+  vkEntityStateLoaderData data;
+  data.entity = entity;
+  data.state = entityState;
 
-  return loader->Load(element, locator, entityState);
+  return loader->Load(element, locator, &data);
 }
 
 
@@ -169,7 +177,7 @@ IObject *vkEntityLoader::Load(TiXmlElement *element, const vkResourceLocator &lo
       stateElement = stateElement->NextSiblingElement("entityState"))
     {
 
-      vkEntityState *entityState = vkResourceManager::Get()->Load<vkEntityState>(stateElement, locator, 0);
+      vkEntityState *entityState = vkResourceManager::Get()->Load<vkEntityState>(stateElement, locator, entity);
       if (entityState)
       {
         bool addedToEntity = false;
@@ -261,7 +269,8 @@ IObject *vkEntityStateLoader::Load(TiXmlElement *element, const vkResourceLocato
     return userData;
   }
 
-  vkEntityState *entityState = vkQueryClass<vkEntityState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkEntityState *entityState = vkQueryClass<vkEntityState>(data->state);
   if (entityState)
   {
     if (element->Attribute("name"))
@@ -272,8 +281,14 @@ IObject *vkEntityStateLoader::Load(TiXmlElement *element, const vkResourceLocato
     {
       entityState->SetName(entityState->GetClass()->GetName());
     }
+
+    if (element->Attribute("id"))
+    {
+      vkID id = static_cast<vkID>(atoi(element->Attribute("id")));
+      entityState->SetID(id);
+    }
   }
-  return userData;
+  return data->state;
 }
 
 const vkClass *vkEntityStateLoader::GetLoadingClass() const
@@ -315,15 +330,15 @@ IObject *vkSpatialStateLoader::Load(TiXmlElement *element, const vkResourceLocat
   {
     return userData;
   }
-
-  vkSpatialState *spatialState = vkQueryClass<vkSpatialState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkSpatialState *spatialState = vkQueryClass<vkSpatialState>(data->state);
   if (spatialState)
   {
 
 
     TiXmlElement *transformationElement = element->FirstChildElement("transformation");
     if (transformationElement)
-    {
+     {
       vkTransformation trans = spatialState->GetTransformation();
 
       TiXmlElement *translationElement = transformationElement->FirstChildElement("translation");
@@ -364,6 +379,7 @@ IObject *vkSpatialStateLoader::Load(TiXmlElement *element, const vkResourceLocat
       spatialState->SetClippingRange(min, max);
     }
   }
+
   return vkEntityStateLoader::Load(element, locator, userData);
 }
 
@@ -401,7 +417,8 @@ vkRenderStateLoader::~vkRenderStateLoader()
 
 IObject *vkRenderStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  vkRenderState *renderState = vkQueryClass<vkRenderState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkRenderState *renderState = vkQueryClass<vkRenderState>(data->state);
   if (!renderState)
   {
     return userData;
@@ -455,7 +472,8 @@ IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLo
     return userData;
   }
 
-  vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(data->state);
   if (staticMeshState)
   {
     TiXmlElement *meshElement = element->FirstChildElement("mesh");
@@ -505,6 +523,33 @@ IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLo
         staticMeshState->SetMaterial(material, 0);
       }
     }
+    TiXmlElement *colliderElement = element->FirstChildElement("collider");
+    if (colliderElement)
+    {
+      TiXmlElement *shapeElement = colliderElement->FirstChildElement("shape");
+      if (shapeElement)
+      {
+        const char *txt = shapeElement->GetText();
+        vkResourceLoadingMode loadingMode = GetResourceLoadingMode(shapeElement, eRLM_Shared, eRLM_Instance);
+        vkPhysicsShapeContainer *shapes = vkResourceManager::Get()->Aquire<vkPhysicsShapeContainer>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+        if (shapes)
+        {
+          staticMeshState->SetColliderShape(shapes);
+
+          TiXmlElement *frictionElement = colliderElement->FirstChildElement("friction");
+          if (frictionElement)
+          {
+            staticMeshState->SetFriction(LoadFloat(frictionElement->GetText()));
+          }
+          TiXmlElement *restitutionElement = colliderElement->FirstChildElement("restitution");
+          if (restitutionElement)
+          {
+            staticMeshState->SetRestitution(LoadFloat(restitutionElement->GetText()));
+          }
+        }
+      }
+
+    }
 
 
   }
@@ -544,7 +589,8 @@ IObject *vkColliderStateLoader::Load(TiXmlElement *element, const vkResourceLoca
     return userData;
   }
 
-  vkColliderState *collider = vkQueryClass<vkColliderState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkColliderState *collider = vkQueryClass<vkColliderState>(data->state);
   TiXmlElement *shapeElement = element->FirstChildElement("shape");
   if (shapeElement)
   {
@@ -585,7 +631,8 @@ IObject *vkBaseColliderStateLoader::Load(TiXmlElement *element, const vkResource
     return userData;
   }
 
-  vkBaseColliderState *baseCollider = vkQueryClass<vkBaseColliderState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkBaseColliderState *baseCollider = vkQueryClass<vkBaseColliderState>(data->state);
   if (baseCollider)
   {
     TiXmlElement *frictionElement = element->FirstChildElement("friction");
@@ -663,7 +710,8 @@ IObject *vkDynamicColliderStateLoader::Load(TiXmlElement *element, const vkResou
     return userData;
   }
 
-  vkDynamicColliderState *dynCollider = vkQueryClass<vkDynamicColliderState>(userData);
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkDynamicColliderState *dynCollider = vkQueryClass<vkDynamicColliderState>(data->state);
   if (dynCollider)
   {
     TiXmlElement *massElement = element->FirstChildElement("mass");
@@ -699,6 +747,85 @@ const vkClass *vkDynamicColliderStateLoader::GetLoadingClass() const
 {
   return vkDynamicColliderStateClass::Get();
 }
+
+
+
+
+vkJointStateLoader::vkJointStateLoader()
+  : vkSpatialStateLoader()
+{
+
+}
+
+vkJointStateLoader::~vkJointStateLoader()
+{
+
+}
+
+
+IObject *vkJointStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
+  vkJointState *jointState = vkQueryClass<vkJointState>(data->state);
+  if (jointState)
+  {
+    TiXmlElement *colliderAElement = element->FirstChildElement("colliderA");
+    if (colliderAElement && colliderAElement->Attribute("id"))
+    {
+      vkID id = static_cast<vkID>(atoi(colliderAElement->Attribute("id")));
+      vkEntityState *state = data->entity->GetState(id);
+      vkDynamicColliderState *dynState = vkQueryClass<vkDynamicColliderState>(state);
+      if (dynState)
+      {
+        jointState->SetColliderA(dynState);
+      }
+    }
+    TiXmlElement *colliderBElement = element->FirstChildElement("colliderB");
+    if (colliderBElement && colliderBElement->Attribute("id"))
+    {
+      vkID id = static_cast<vkID>(atoi(colliderBElement->Attribute("id")));
+      vkEntityState *state = data->entity->GetState(id);
+      vkDynamicColliderState *dynState = vkQueryClass<vkDynamicColliderState>(state);
+      if (dynState)
+      {
+        jointState->SetColliderB(dynState);
+      }
+    }
+  }
+  return vkSpatialStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkJointStateLoader::GetLoadingClass() const
+{
+  return vkJointStateClass::Get();
+}
+
+
+
+
+vkHingeJointStateLoader::vkHingeJointStateLoader()
+  : vkJointStateLoader()
+{
+
+}
+
+vkHingeJointStateLoader::~vkHingeJointStateLoader()
+{
+
+}
+
+
+IObject *vkHingeJointStateLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkJointStateLoader::Load(element, locator, userData);
+}
+
+const vkClass *vkHingeJointStateLoader::GetLoadingClass() const
+{
+  return vkHingeJointStateClass::Get();
+}
+
+
 
 
 

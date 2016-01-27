@@ -38,6 +38,13 @@ public:
   void SetName(const vkString &name);
   const vkString &GetName() const;
 
+  vkEntityState *GetState(vkID id);
+  const vkEntityState *GetState(vkID id) const;
+  vkEntityState *GetState(const vkString &name);
+  const vkEntityState *GetState(const vkString &name) const;
+
+
+
   void SetRootState(vkSpatialState *rootState);
   void AddState(vkEntityState *state);
   void AddState(vkSpatialState *state, vkSpatialState *parentState);

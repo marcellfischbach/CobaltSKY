@@ -6,6 +6,22 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Loaders/EntityLoader.refl.hh>
 
+class vkEntity;
+class vkEntityState;
+
+VK_CLASS()
+class vkEntityStateLoaderData : public vkObject
+{
+  VK_CLASS_GEN;
+  vkEntityStateLoaderData () : vkObject () { }
+  virtual ~vkEntityStateLoaderData() { }
+
+public:
+  vkEntityState *state;
+  vkEntity *entity;
+};
+
+
 
 VK_CLASS();
 /**
@@ -193,6 +209,29 @@ public:
 
 };
 
+VK_CLASS()
+class VKE_API vkJointStateLoader : public vkSpatialStateLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkJointStateLoader();
+  virtual ~vkJointStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+};
+
+VK_CLASS()
+class VKE_API vkHingeJointStateLoader : public vkJointStateLoader
+{
+  VK_CLASS_GEN;
+  vkHingeJointStateLoader();
+  virtual ~vkHingeJointStateLoader();
+
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *GetLoadingClass() const;
+
+};
 
 
 /**

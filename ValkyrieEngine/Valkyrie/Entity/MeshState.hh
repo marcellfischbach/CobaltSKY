@@ -5,6 +5,8 @@
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Entity/MeshState.refl.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.hh>
+#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 
 class vkMesh;
 class vkMaterialInstance;
@@ -29,8 +31,22 @@ public:
   vkMaterialInstance *GetMaterial(vkUInt32 slot = 0);
   const vkMaterialInstance *GetMaterial(vkUInt32 slot = 0) const;
 
+  void SetColliderShape(vkPhysicsShapeContainer *shapes);
+  vkPhysicsShapeContainer *GetColliderShape();
+  const vkPhysicsShapeContainer *GetColliderShape() const;
+  void SetFriction(float friction);
+  float GetFriction() const;
+  void SetRestitution(float restitution);
+  float GetRestitution() const;
+
+
   void SetCastShadow(bool castShadow);
   bool IsCastShadow() const;
+
+  virtual void UpdateTransformation();
+
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
 
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
@@ -49,6 +65,10 @@ private:
   vkUInt32 m_numberOfMaterialSlots;
   vkMaterialInstance **m_materials;
 
+  IPhysicsStaticCollider *m_staticCollider;
+  vkPhysicsShapeContainer *m_shapes;
+  float m_friction;
+  float m_restitution;
 };
 
 VK_FORCEINLINE vkMesh *vkStaticMeshState::GetMesh()
@@ -92,4 +112,26 @@ VK_FORCEINLINE void vkStaticMeshState::SetCastShadow(bool castShadow)
 VK_FORCEINLINE bool vkStaticMeshState::IsCastShadow() const
 {
   return m_castShadow;
+}
+
+
+VK_FORCEINLINE vkPhysicsShapeContainer *vkStaticMeshState::GetColliderShape()
+{
+  return m_shapes;
+}
+
+VK_FORCEINLINE const vkPhysicsShapeContainer *vkStaticMeshState::GetColliderShape() const
+{
+  return m_shapes;
+}
+
+
+VK_FORCEINLINE float vkStaticMeshState::GetFriction() const
+{
+  return m_friction;
+}
+
+VK_FORCEINLINE float vkStaticMeshState::GetRestitution() const
+{
+  return m_restitution;
 }

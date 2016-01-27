@@ -34,15 +34,17 @@ public:
   IPhysicsCollider *GetCollider();
   const IPhysicsCollider *GetCollider() const;
 
-  virtual void FinishTransformation();
 
 protected:
   vkColliderState();
 
+  virtual void UpdateTransformation();
+
   void SetCollider(IPhysicsCollider *collider);
 
-private:
   bool m_updateTransformationGuard;
+
+private:
   IPhysicsCollider *m_collider;
 
 };

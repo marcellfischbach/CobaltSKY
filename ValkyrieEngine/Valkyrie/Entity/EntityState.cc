@@ -5,6 +5,7 @@
 vkEntityState::vkEntityState()
   : vkObject()
   , m_entity(0)
+  , m_id (vkID_Undefined)
 {
 
 }

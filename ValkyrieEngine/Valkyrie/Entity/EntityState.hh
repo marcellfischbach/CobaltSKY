@@ -25,7 +25,7 @@ class VKE_API vkEntityState : public vkObject
 public:
   virtual ~vkEntityState();
 
-
+  virtual void SetID(vkID id);
   vkID GetID() const;
 
   void SetName(const vkString &name);
@@ -54,6 +54,10 @@ private:
   vkEntity *m_entity;
 };
 
+VK_FORCEINLINE void vkEntityState::SetID(vkID id)
+{
+  m_id = id;
+}
 
 VK_FORCEINLINE vkID vkEntityState::GetID() const
 {

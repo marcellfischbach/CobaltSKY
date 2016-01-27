@@ -20,6 +20,8 @@ typedef signed __int64 vkInt64;
 
 
 typedef unsigned long vkID;
+#define vkID_Undefined ~0x00
+
 typedef std::string vkString;
 
 typedef size_t vkSize;
