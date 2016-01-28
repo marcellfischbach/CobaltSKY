@@ -24,9 +24,10 @@ vkEntityScene::~vkEntityScene()
 
 void vkEntityScene::AddEntity(vkEntity *entity, vkEntity *parent)
 {
+  entity->Assemble();
   if (!parent)
   {
-    entity->SetScene(this);
+    entity->AttachToScene(this);
     m_rootEntity->AttachEntity(entity);
   }
   else
@@ -39,6 +40,15 @@ void vkEntityScene::RemoveEntity(vkEntity *entity)
 {
   if (entity->GetScene() == this)
   {
+    entity->DetachFromScene(this);
+    vkEntity* parent = entity->GetParentEntity();
+    if (!parent)
+    {
+      return;
+    }
+    parent->DetachEntity(entity);
   }
+
+
 }
 

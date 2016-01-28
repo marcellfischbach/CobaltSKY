@@ -34,16 +34,83 @@ public:
   virtual vkSpatialState *ToSpatialState();
   virtual const vkSpatialState *ToSpatialState() const;
 
-  virtual void OnAttachedToScene(vkEntityScene *scene);
-  virtual void OnDetachedFromScene(vkEntityScene *scene);
-  virtual void OnAttachedToEntity(vkEntity *entity);
-  virtual void OnDetachedFromEntity(vkEntity *entity);
 
   vkEntity *GetEntity();
   const vkEntity *GetEntity() const;
 
+  /**
+   * \name Live-cycles
+   * @{
+   */
+  void Create();
+  void AttachToEntity(vkEntity *entity);
+  void Assemble();
+  void AttachToScene(vkEntityScene *scene);
+  void DetachFromScene(vkEntityScene *scene);
+  void Disassemble();
+  void DetachFromEntity(vkEntity *entity);
+  void Destroy();
+  /** 
+   * @}
+   */
+
 protected:
   vkEntityState();
+
+  /**
+  * \name Live-cycle event listeners
+  * @{
+  */
+
+  /**
+   * \brief Called after almost all parameter have been set during loading.
+   */
+  virtual void OnCreated();
+
+  /**
+   * \brief Called when the entitye state is attached to the entity it belongs to.
+   */
+  virtual void OnAttachedToEntity(vkEntity *entity);
+
+  /**
+   * \brief Called after all state have been attached to the same entity this state is attached to.
+   *
+   * If a state need access to other entity state within the same entity, those connections should
+   * be done here.
+   *
+   * This is usually called before the entity is attached to a scene
+   */
+  virtual void OnAssembled();
+
+  /**
+   * \brief Called when the entity has been attached to the scene.
+   */
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+
+  /**
+   * \brief Called when the entity has been detached from the scene
+   */
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
+  
+  /**
+   * \brief Call when the entity was removed from scene but still all entity states are present
+   *        with the entity.
+   */
+  virtual void OnDisassembled();
+
+  /**
+   * \brief Called when the state has been removed from the entity
+   */
+  virtual void OnDetachedFromEntity(vkEntity *entity);
+
+  /**
+   * \brief Called right before the entity object is removed from memory.
+   */
+  virtual void OnDestroyed();
+  /**
+  * @}
+  */
+
 
 
 
@@ -51,7 +118,10 @@ private:
   vkID m_id;
   vkString m_name;
 
+  bool m_created;
+  bool m_assembled;
   vkEntity *m_entity;
+  vkEntityScene *m_scene;
 };
 
 VK_FORCEINLINE void vkEntityState::SetID(vkID id)

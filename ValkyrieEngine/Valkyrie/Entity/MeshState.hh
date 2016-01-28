@@ -45,12 +45,13 @@ public:
 
   virtual void UpdateTransformation();
 
-  virtual void OnAttachedToScene(vkEntityScene *scene);
-  virtual void OnDetachedFromScene(vkEntityScene *scene);
 
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
 protected:
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
+
   virtual void FillBoundingBox(vkBoundingBox &bbox);
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 

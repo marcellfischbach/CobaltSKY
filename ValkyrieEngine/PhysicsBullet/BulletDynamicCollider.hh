@@ -10,6 +10,7 @@ class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
 class vkBulletScene;
+class vkBulletJoint;
 
 
 VK_CLASS()
@@ -87,6 +88,9 @@ public:
   btRigidBody *GetRigidBody();
   const btRigidBody *GetRigidBody() const;
 
+  void AddJoint(vkBulletJoint *joint);
+  void RemoveJoint(vkBulletJoint *joint);
+
 private:
   class MotionState : public btMotionState
   {
@@ -120,6 +124,9 @@ private:
   btRigidBody *m_body;
   btCollisionShape *m_shape;
   btCompoundShape *m_compoundShape;
+
+  void DetachJoints(vkBulletScene *scene);
+  std::vector<vkBulletJoint*> m_joints;
 };
 
 VK_FORCEINLINE vkPhysicsColliderType vkBulletDynamicCollider::GetType() const

@@ -87,6 +87,7 @@ public:
   IPhysicsStaticCollider *GetStaticCollider ();
   const IPhysicsStaticCollider *GetStaticCollider () const;
 
+protected:
   virtual void OnAttachedToScene(vkEntityScene *scene);
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 
@@ -123,6 +124,7 @@ public:
 
   virtual void DynamicTransformationChanged(const vkMatrix4f &transformation);
 
+protected:
   virtual void OnAttachedToScene(vkEntityScene *scene);
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 

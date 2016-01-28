@@ -31,7 +31,8 @@ public:
   void Jump();
 
 protected:
-  virtual void UpdateScene(vkEntityScene *scene);
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
 
 private:
   vkCharacterEntityTransformationCallback *m_callback;

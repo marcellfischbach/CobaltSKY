@@ -35,11 +35,11 @@ public:
   void SetTransformReference(TransformReference reference);
   TransformReference GetTransformReference() const;
 
-  virtual void ConnectState() = 0;
 
 protected:
   vkJointState();
 
+  virtual void OnAssembled();
 
 private:
   vkDynamicColliderState *m_colliderA;
@@ -57,9 +57,12 @@ public:
   vkHingeJointState();
   virtual ~vkHingeJointState();
 
-  virtual void ConnectState();
 protected:
   virtual void UpdateTransformation();
+
+  virtual void OnAssembled();
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
 
 private:
   IPhysicsHingeJoint *m_hingeJoint;

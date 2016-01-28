@@ -2,6 +2,7 @@
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 #include <PhysicsBullet/BulletShape.hh>
 #include <PhysicsBullet/BulletScene.hh>
+#include <PhysicsBullet/BulletJoints.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 #include <Valkyrie/Entity/ColliderState.hh>
@@ -125,6 +126,7 @@ void vkBulletDynamicCollider::FinishTransformation()
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_transformation.m00));
   m_body->setWorldTransform(trans);
+  m_body->updateInertiaTensor();
 }
 
 void vkBulletDynamicCollider::SetTransformationCallback(ITransformationCallback *callback)
@@ -200,6 +202,7 @@ void vkBulletDynamicCollider::UpdateInertia()
 
   btVector3 inertia(m_inertia.x, m_inertia.y, m_inertia.z);
   m_body->setMassProps(m_mass, inertia);
+  m_body->updateInertiaTensor();
 }
 
 
@@ -214,9 +217,10 @@ void vkBulletDynamicCollider::AttachToScene(vkBulletScene *scene)
 
 void vkBulletDynamicCollider::DetachFromScene(vkBulletScene *scene)
 {
-;
   if (m_scene && m_scene->GetBulletScene())
   {
+
+    DetachJoints(scene);
     m_scene->GetBulletScene()->removeRigidBody(m_body);
   }
   m_scene = 0;
@@ -233,6 +237,7 @@ void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& 
 {
   worldTrans.getOpenGLMatrix(static_cast<btScalar*>(&m_parent->m_transformation.m00));
 
+
   if (m_parent->m_scene && !m_parent->IsKinematic())
   {
     m_parent->m_scene->DynamicColliderChanged(m_parent);
@@ -247,3 +252,30 @@ void vkBulletDynamicCollider::PropagateTransformation()
     m_transformationCallback->TransformationChanged(m_transformation);
   }
 }
+
+
+void vkBulletDynamicCollider::DetachJoints(vkBulletScene *scene)
+{
+  for (size_t i = 0, in = m_joints.size(); i < in; ++i)
+  {
+    m_joints[i]->DetachFromScene(scene);
+  }
+}
+
+void vkBulletDynamicCollider::AddJoint(vkBulletJoint *joint)
+{
+  m_joints.push_back(joint);
+}
+
+
+void vkBulletDynamicCollider::RemoveJoint(vkBulletJoint *joint)
+{
+  for (size_t i = 0, in = m_joints.size(); i < in; ++i)
+  {
+    if (m_joints[i] == joint)
+    {
+      m_joints.erase(m_joints.begin() + i);
+    }
+  }
+}
+

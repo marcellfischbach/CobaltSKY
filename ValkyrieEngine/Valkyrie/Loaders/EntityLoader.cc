@@ -60,7 +60,10 @@ IObject *vkEntityMasterLoader::Load(TiXmlElement *element, const vkResourceLocat
 
   vkEntity *entity = entityClass->CreateInstance<vkEntity>();
 
-  return loader->Load(element, locator, entity);
+  IObject *obj = loader->Load(element, locator, entity);
+  //entity->Create();
+  return obj;
+
 }
 
 
@@ -121,7 +124,10 @@ IObject *vkEntityStateMasterLoader::Load(TiXmlElement *element, const vkResource
   data.entity = entity;
   data.state = entityState;
 
-  return loader->Load(element, locator, &data);
+  IObject *obj = loader->Load(element, locator, &data);
+  //entityState->Create();
+  return obj;
+
 }
 
 

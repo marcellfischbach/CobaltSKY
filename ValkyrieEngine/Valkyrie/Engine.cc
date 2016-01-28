@@ -133,12 +133,14 @@ int vkEngine::Run()
 
   // Setup the character 
   vkCharacterEntity *character = new vkCharacterEntity();
+  
   vkStaticMeshState *characterMesh = new vkStaticMeshState();
   characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
   characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
+
   character->SetRootState(characterMesh);
   character->AddState(characterMesh);
-  character->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 20.0f));
+  character->GetTransformation().SetTranslation(vkVector3f(4.0f, 4.0f, 20.0f));
   character->FinishTransformation();
 
   scene->AddEntity(character);

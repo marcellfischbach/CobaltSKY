@@ -41,8 +41,24 @@ const btTypedConstraint *vkBulletJoint::GetConstraint() const
 
 void vkBulletJoint::SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDynamicCollider *colliderB)
 {
+  if (m_colliderA)
+  {
+    m_colliderA->RemoveJoint(this);
+  }
+  if (m_colliderB)
+  {
+    m_colliderB->RemoveJoint(this);
+  }
   VK_SET(m_colliderA, colliderA);
   VK_SET(m_colliderB, colliderB);
+  if (m_colliderA)
+  {
+    m_colliderA->AddJoint(this);
+  }
+  if (m_colliderB)
+  {
+    m_colliderB->AddJoint(this);
+  }
 }
 
 IPhysicsDynamicCollider *vkBulletJoint::GetColliderA() const
@@ -58,12 +74,19 @@ IPhysicsDynamicCollider *vkBulletJoint::GetColliderB() const
 void vkBulletJoint::AttachToScene(vkBulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
-  world->addConstraint(m_constraint);
-
+  world->addConstraint(m_constraint, true);
 }
 
 void vkBulletJoint::DetachFromScene(vkBulletScene* scene)
 {
+  if (m_colliderA)
+  {
+    m_colliderA->RemoveJoint(this);
+  }
+  if (m_colliderB)
+  {
+    m_colliderB->RemoveJoint(this);
+  }
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->removeConstraint(m_constraint);
 }
@@ -97,17 +120,18 @@ bool vkBulletHingeJoint::Initialize(vkBulletDynamicCollider *colliderA, vkBullet
   trans.setIdentity();
   if (bodyA && bodyB)
   {
-    m_hingeConstraints = new btHingeConstraint(*bodyA, *bodyB, trans, trans, false);
+    m_hingeConstraints = new btHingeConstraint(*bodyA, *bodyB, trans, trans, true);
   }
   else if (bodyA)
   {
-    m_hingeConstraints = new btHingeConstraint(*bodyA, trans, false);
+    m_hingeConstraints = new btHingeConstraint(*bodyA, trans, true);
   }
   else 
   {
-    m_hingeConstraints = new btHingeConstraint(*bodyB, trans, false);
+    m_hingeConstraints = new btHingeConstraint(*bodyB, trans, true);
   }
 
+  SetConstraint(m_hingeConstraints);
   return m_hingeConstraints != 0;
 }
 

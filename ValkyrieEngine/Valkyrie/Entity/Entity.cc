@@ -18,7 +18,10 @@ vkID vkEntity::GetNextID()
 vkEntity::vkEntity()
   : vkObject ()
   , m_rootState(0)
+  , m_created(false)
+  , m_assemabled(false)
   , m_scene(0)
+  , m_parentEntity(0)
   , m_id(vkEntity::GetNextID())
 {
 
@@ -105,23 +108,6 @@ const vkEntityState *vkEntity::GetState(const vkString &name) const
 }
 
 
-void vkEntity::SetScene(vkEntityScene *scene)
-{
-  if (m_scene != scene)
-  {
-    m_scene = scene;
-    UpdateScene(m_scene);
-  }
-  for (size_t i = 0, in = m_children.size(); i < in; ++i)
-  {
-    m_children[i]->SetScene(scene);
-  }
-  for (size_t i = 0, in = m_states.size(); i < in; ++i)
-  {
-    m_states[i]->OnAttachedToScene(m_scene);
-  }
-}
-
 vkTransformation vkEntity::GetTransformation()
 {
   if (m_rootState)
@@ -167,7 +153,9 @@ void vkEntity::AddState(vkEntityState *state)
   {
     state->AddRef();
     m_states.push_back(state);
-    state->OnAttachedToEntity(this);
+    state->AttachToEntity(this);
+    state->AttachToScene(m_scene);
+    m_assemabled = false;
   }
 }
 
@@ -214,8 +202,9 @@ void vkEntity::AttachEntity(vkEntity *entity, vkSpatialState *parentState)
 
   entity->AddRef();
   m_children.push_back(entity);
-  entity->m_parentEntity = this;
-  entity->SetScene(m_scene);
+
+  entity->AttachToEntity(this);
+  entity->AttachToScene(m_scene);
 }
 
 void vkEntity::AttachEntity(vkEntity *entity, const vkString &parentStateName)
@@ -254,3 +243,156 @@ void vkEntity::SetClippingRange(float min, float max)
   }
 }
 
+
+
+void vkEntity::Create()
+{
+  if (m_created)
+  {
+    return;
+  }
+  m_created = true;
+  OnCreated();
+}
+
+void vkEntity::Assemble()
+{
+  if (m_assemabled)
+  {
+    return;
+  }
+  m_assemabled = true;
+  OnAssembled();
+}
+
+void vkEntity::AttachToEntity(vkEntity *entity)
+{
+  if (m_parentEntity)
+  {
+    return;
+  }
+  m_parentEntity = entity;
+  OnAttachedToEntity(entity);
+}
+
+void vkEntity::AttachToScene(vkEntityScene *scene)
+{
+  if (m_scene)
+  {
+    return;
+  }
+
+  m_scene = scene;
+  OnAttachedToScene(scene);
+}
+
+void vkEntity::DetachFromScene(vkEntityScene* scene)
+{
+  if (m_scene != scene)
+  {
+    return;
+  }
+
+  m_scene = 0;
+  OnDetachedFromScene(scene);
+}
+
+void vkEntity::DetachFromEntity(vkEntity *entity)
+{
+  if (m_parentEntity != entity)
+  {
+    return;
+  }
+  m_parentEntity = 0;
+  OnDetachedFromEntity(entity);
+}
+
+void vkEntity::Disassemble()
+{
+  if (!m_assemabled)
+  {
+    return;
+  }
+  m_assemabled = false;
+  OnDisassembled();
+}
+
+void vkEntity::Destroy()
+{
+  if (!m_created)
+  { 
+    return;
+  }
+  m_created = false;
+  OnDestroyed();
+}
+
+
+
+void vkEntity::OnCreated()
+{
+
+}
+
+void vkEntity::OnAssembled()
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->Assemble();
+  }
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->Assemble();
+  }
+}
+
+void vkEntity::OnAttachedToEntity(vkEntity *entity)
+{
+
+}
+
+void vkEntity::OnAttachedToScene(vkEntityScene *scene)
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->AttachToScene(scene);
+  }
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->AttachToScene(m_scene);
+  }
+}
+
+void vkEntity::OnDetachedFromScene(vkEntityScene *scene)
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->DetachFromScene(scene);
+  }
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->DetachFromScene(m_scene);
+  }
+}
+
+void vkEntity::OnDetachedFromEntity(vkEntity *entity)
+{
+
+}
+
+void vkEntity::OnDisassembled()
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->Assemble();
+  }
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->Assemble();
+  }
+}
+
+void vkEntity::OnDestroyed()
+{
+
+}

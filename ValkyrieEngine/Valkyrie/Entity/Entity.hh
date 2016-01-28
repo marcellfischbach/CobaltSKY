@@ -31,7 +31,6 @@ public:
 
   vkID GetID() const;
 
-  void SetScene(vkEntityScene *scene);
   vkEntityScene *GetScene();
   const vkEntityScene *GetScene() const;
 
@@ -51,6 +50,9 @@ public:
   vkSpatialState *GetRootState();
   const vkSpatialState *GetRootState() const;
 
+  vkEntity *GetParentEntity() ;
+  const vkEntity *GetParentEntity() const;
+
   const vkBoundingBox &GetBoundingBox() const;
   vkTransformation GetTransformation();
   void FinishTransformation();
@@ -67,9 +69,41 @@ public:
 
   void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 
+  /**
+  * \name Live-cycles
+  * @{
+  */
+  void Create();
+  void Assemble();
+  void AttachToEntity(vkEntity *entity);
+  void AttachToScene(vkEntityScene *scene);
+  void DetachFromScene(vkEntityScene *scene);
+  void DetachFromEntity(vkEntity *entity);
+  void Disassemble();
+  void Destroy();
+  /**
+  * @}
+  */
 protected:
   virtual void UpdateScene(vkEntityScene *scene) { }
   void PerformTransformation();
+
+  /**
+  * \name Live-cycle event listeners
+  * @{
+  */
+
+  virtual void OnCreated();
+  virtual void OnAssembled();
+  virtual void OnAttachedToEntity(vkEntity *entity);
+  virtual void OnAttachedToScene(vkEntityScene *scene);
+  virtual void OnDetachedFromScene(vkEntityScene *scene);
+  virtual void OnDetachedFromEntity(vkEntity *entity);
+  virtual void OnDisassembled();
+  virtual void OnDestroyed();
+  /**
+  * @}
+  */
 
 private:
   vkID m_id;
@@ -78,6 +112,8 @@ private:
   vkSpatialState *m_rootState;
   std::vector<vkEntityState*> m_states;
 
+  bool m_created;
+  bool m_assemabled;
   vkEntityScene *m_scene;
   vkEntity *m_parentEntity;
   std::vector<vkEntity*> m_children;
@@ -119,4 +155,16 @@ VK_FORCEINLINE const vkSpatialState *vkEntity::GetRootState() const
 {
   return m_rootState;
 }
+
+
+VK_FORCEINLINE vkEntity *vkEntity::GetParentEntity()
+{
+  return m_parentEntity;
+}
+
+VK_FORCEINLINE const vkEntity *vkEntity::GetParentEntity() const
+{
+  return m_parentEntity;
+}
+
 

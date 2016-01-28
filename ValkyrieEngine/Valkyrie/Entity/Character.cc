@@ -53,18 +53,21 @@ void vkCharacterEntity::SetRadius(float radius)
   m_radius = radius;
 }
 
-void vkCharacterEntity::UpdateScene(vkEntityScene *scene)
+void vkCharacterEntity::OnAttachedToScene(vkEntityScene *scene)
 {
-  vkEntityScene *oldScene = GetScene();
-  if (oldScene)
-  {
-    oldScene->GetPhysicsScene()->RemoveCharacterController(m_characterController);
-  }
-  
   if (scene)
   {
     scene->GetPhysicsScene()->AddCharacterController(m_characterController);
   }
+}
+
+void vkCharacterEntity::OnDetachedFromScene(vkEntityScene *scene)
+{
+  if (scene)
+  {
+    scene->GetPhysicsScene()->RemoveCharacterController(m_characterController);
+  }
+  
 }
 
 void vkCharacterEntity::FinishTransformation()

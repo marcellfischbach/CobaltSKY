@@ -22,8 +22,8 @@
 			
 			<shape resourceMode="shared">${models}/sign_sign.staticmesh:Collision</shape>
 			<kinematic>false</kinematic>
-			<mass>1.0</mass>
-			<friction>10.0</friction>
+			<mass>0.01</mass>
+			<friction>0.5</friction>
 			<restitution>0.5</restitution>
 		</entityState>
 		
@@ -36,7 +36,8 @@
 		
 		<entityState id="3" class="vkHingeJointState" parentID="0">
 			<transformation>
-				<translation>0.0;0.0;2.0</translation>
+				<translation>-0.65;0.0;2.0</translation>
+				<axisAngle>0.0;1.0;0.0;1.5707963267948966192313216916398</axisAngle>
 			</transformation>
 			
 			<colliderA id="1" />

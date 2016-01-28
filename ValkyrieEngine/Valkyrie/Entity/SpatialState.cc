@@ -4,6 +4,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Math/Clipper.hh>
 #include <Valkyrie/Time.hh>
+#include <Valkyrie/Entity/ColliderState.hh>
 
 vkSpatialState::vkSpatialState()
   : vkEntityState()
