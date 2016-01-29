@@ -13,7 +13,7 @@
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
-
+#include <Valkyrie/Math/Clipper.hh>
 
 
 vkLightvkGraphicsGL4::vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
@@ -118,6 +118,7 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
 
   m_distances = vkVector3f(15.0f, 45.0f, 135.0f);
   m_mapBias = 0.99f;
+  m_mapBias = 0.999f;
 
   vkUInt16 bufferSize = 2024;
   ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
@@ -231,6 +232,85 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
 }
 
 
+
+void vkDirectionalLightvkGraphicsGL4::UpdateProjectionMatrices()
+{
+  float min = FLT_MAX;
+  float max = -FLT_MAX;
+  const vkMatrix4f &view = m_shadowCam[2];
+  for (vkSize i = 0; i < m_renderStates.length; ++i)
+  {
+    vkRenderState *renderState = m_renderStates[i];
+    if (renderState)
+    {
+      const vkBoundingBox &bbox = renderState->GetBoundingBox();
+      for (unsigned i = 0; i < 8; ++i)
+      {
+        vkVector3f p;
+        vkMatrix4f::Transform(view, bbox.GetPoints()[i], p);
+        if (p.y < min)
+        {
+          min = p.y;
+        }
+        if (p.y > max)
+        {
+          max = p.y;
+        }
+      }
+    }
+  }
+  for (unsigned i = 0; i < 3; ++i)
+  {
+    m_min[i].y = min;
+    //m_max[i].y = max;
+    m_renderer->GetOrthographicProjection(m_min[i].x, m_max[i].x, m_min[i].z, m_max[i].z, m_min[i].y, m_max[i].y, m_shadowProj[i]);
+    vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
+
+  }
+}
+
+vkClipper *vkDirectionalLightvkGraphicsGL4::CreateClipper()
+{
+  vkVector3f topLeft(m_min[2].x, 0.0, m_max[2].z);
+  vkVector3f topRight(m_max[2].x, 0.0, m_max[2].z);
+  vkVector3f bottomLeft(m_min[2].x, 0.0, m_min[2].z);
+  vkVector3f bottomRight(m_max[2].x, 0.0, m_min[2].z);
+
+  const vkMatrix4f &camInv = m_shadowCamInv[2];
+  vkVector3f tl, tr, bl, br;
+  vkMatrix4f::Transform(camInv, topLeft, tl);
+  vkMatrix4f::Transform(camInv, topRight, tr);
+  vkMatrix4f::Transform(camInv, bottomLeft, bl);
+  vkMatrix4f::Transform(camInv, bottomRight, br);
+
+  vkVector3f r;
+  camInv.GetXAxis(r);
+  vkVector3f l(r);
+  l *= -1.0f;
+
+  vkVector3f t;
+  camInv.GetZAxis(t);
+  vkVector3f b(t);
+  b *= -1.0f;
+  /*
+  l.Debug("L");
+  r.Debug("R");
+  b.Debug("B");
+  t.Debug("T");
+  tl.Debug("TL");
+  br.Debug("BR");
+  m_shadowCam[2].Debug("Norm");
+  m_shadowCamInv[2].Debug("Inv");
+  */
+
+  vkPlaneClipper *clipper = new vkPlaneClipper();
+  clipper->AddPlane(vkPlane(tl, r));
+  clipper->AddPlane(vkPlane(tl, b));
+  clipper->AddPlane(vkPlane(br, l));
+  clipper->AddPlane(vkPlane(br, t));
+  return clipper;
+}
+
 void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *camera, const vkDirectionalLight *light)
 {
   CalcPSSMMatrices(light, camera);
@@ -245,8 +325,11 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   vkDefaultCollector collector(&m_renderStates, 0);
   m_renderStates.Clear();
 
-  vkClipper *clipper = camera->GetClipper();
+  vkClipper *clipper = CreateClipper();
   root->Scan(clipper, m_renderer, &collector, config);
+  delete clipper;
+
+  UpdateProjectionMatrices();
 
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
@@ -267,8 +350,7 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   m_renderer->SetShadowMatrices(m_shadowProjView, 3);
   m_renderer->SetBlendEnabled(false);
 
-  // render all geometries
-  //printf("Shadow casters: %d\n", m_renderStates.length);
+  printf("Num elements: %d\n", m_renderStates.length);
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState= m_renderStates[i];
@@ -288,14 +370,13 @@ void vkDirectionalLightvkGraphicsGL4::CalcPSSMMatrices(const vkDirectionalLight 
 
   for (vkSize i = 0; i < 3; ++i)
   {
-    camera->GetPlanePoints(0, &points[i]);
+    camera->GetPlanePoints(0, &points[0]);
     camera->GetPlanePoints(dists[i + 1], &points[4]);
-    CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowProj[i]);
-    vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
+    CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowCamInv[i], m_min[i], m_max[i]);
   }
 }
 
-void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const
+void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &camInv, vkVector3f &min, vkVector3f &max) const
 {
   vkVector3f spot;
   for (vkSize i = 0; i < numPoints; i++)
@@ -319,9 +400,10 @@ void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize n
   }
 
   cam.SetLookAt(vkVector3f(0, 0, 0), dir, up);
+  camInv.SetLookAtInv(vkVector3f(0, 0, 0), dir, up);
 
-  vkVector3f min(FLT_MAX, FLT_MAX, FLT_MAX);
-  vkVector3f max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+  min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
+  max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   vkVector3f t;
   for (vkSize i = 0; i < numPoints; i++)
   {
@@ -352,8 +434,6 @@ void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize n
       max.z = t.z;
     }
   }
-  m_renderer->GetOrthographicProjection(min.x, max.x, min.z, max.z, min.y, max.y, proj);
-  // proj.SetOrthographic(min.x, max.x, min.y, max.y, max.z, min.z);
 }
 
 

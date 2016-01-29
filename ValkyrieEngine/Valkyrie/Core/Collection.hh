@@ -14,6 +14,13 @@ public:
     this->resizeStep = resizeStep;
   }
 
+  ~vkCollection()
+  {
+    delete[] data;
+    length = 0;
+    capacity = 0;
+  }
+
 
   void Add(const T& t)
   {

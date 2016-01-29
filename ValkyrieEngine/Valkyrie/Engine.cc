@@ -588,6 +588,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkStaticMeshState *planeState = new vkStaticMeshState();
   planeState->SetMesh(planeMesh);
   planeState->SetMaterial(materialFieldstoneInst, 0);
+  planeState->SetCastShadow(true);
 
   vkEntity *planeEntity = new vkEntity();
   planeEntity->SetRootState(staticState);
@@ -604,9 +605,9 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(signEntity);
 
 
-#if 0
+#if 1
 
-  for (int i = 0; i < 1; ++i)
+  for (int i = 0; i < 20; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;

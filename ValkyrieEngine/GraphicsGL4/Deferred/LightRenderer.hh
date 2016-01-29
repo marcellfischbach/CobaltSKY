@@ -10,6 +10,7 @@ struct ISampler;
 struct IShaderAttribute;
 struct ITexture2DArray;
 class vkCamera;
+class vkClipper;
 class vkDirectionalLight;
 class vkEntity;
 class vkGBuffer;
@@ -82,11 +83,16 @@ public:
 private:
   void RenderShadow(vkEntity *root, vkCamera *camera, const vkDirectionalLight *light);
   void CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera);
-  void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &proj) const;
+  void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &camInv, vkVector3f &min, vkVector3f &max) const;
+  void UpdateProjectionMatrices();
+  vkClipper *CreateClipper();
 
   vkMatrix4f m_shadowCam[3];
+  vkMatrix4f m_shadowCamInv[3];
   vkMatrix4f m_shadowProj[3];
   vkMatrix4f m_shadowProjView[3];
+  vkVector3f m_min[3];
+  vkVector3f m_max[3];
 
   vkVector3f m_distances;
 
