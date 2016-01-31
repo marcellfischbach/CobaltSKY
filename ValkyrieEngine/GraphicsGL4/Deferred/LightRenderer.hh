@@ -105,8 +105,10 @@ private:
   IShaderAttribute *m_attrDisancesPSSM;
   IShaderAttribute *m_attrShadowMats;
   IShaderAttribute *m_attrShadowMap;
+  IShaderAttribute *m_attrShadowColorMap;
   IShaderAttribute *m_attrMapBias;
   IShaderAttribute *m_attrShadowIntensity;
+  ITexture2DArray *m_colorBuffer;
   ITexture2DArray *m_depthBuffer;
   void BindDirectionalLightPSSM(vkDirectionalLight *directionalLight);
 

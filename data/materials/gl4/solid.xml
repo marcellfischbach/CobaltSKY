@@ -31,13 +31,20 @@
 	
 		<techniques>
 		
-			<technique name="Default">
+			<!--technique name="OLD">
 				<shader>${shaders}/solid/shadow.vert</shader>
 				<shader>${shaders}/solid/shadow_pssm.geom</shader>
 				<shader>${shaders}/solid/shadow.frag</shader>
 				<shader>${shaders}/commons/fade_in_out.frag</shader>
+			</technique-->
+
+			<technique name="Default">
+				<shader>${shaders}/solid/shadow_vsm.vert</shader>
+				<shader>${shaders}/solid/shadow_pssm_vsm.geom</shader>
+				<shader>${shaders}/solid/shadow_vsm.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
 			</technique>
-			
+
 		</techniques>
 		
 	</program>

@@ -113,6 +113,7 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_attrDisancesPSSM = m_programPSSM.program->GetAttribute(vkShaderAttributeID("Distances"));
   m_attrShadowMats = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMats"));
   m_attrShadowMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMap"));
+  m_attrShadowColorMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowColorMap"));
   m_attrMapBias = m_programPSSM.program->GetAttribute(vkShaderAttributeID("MapBias"));
   m_attrShadowIntensity = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowIntensity"));
 
@@ -121,15 +122,15 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_mapBias = 0.999f;
 
   vkUInt16 bufferSize = 2024;
-  ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 3);
+  m_colorBuffer = renderer->CreateTexture2DArray(ePF_R16G16F, bufferSize, bufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 3);
 
-  colorBuffer->SetSampler(vkGBuffer::GetColorSampler(renderer));
+  m_colorBuffer->SetSampler(vkGBuffer::GetColorSampler(renderer));
   m_depthBuffer->SetSampler(m_depthSampler);
 
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
-  m_shadowBuffer->AddColorTexture(colorBuffer);
+  m_shadowBuffer->AddColorTexture(m_colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();
 
@@ -220,6 +221,11 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
   {
     vkTextureUnit tu = m_renderer->BindTexture(m_depthBuffer);
     m_attrShadowMap->Set(tu);
+  }
+  if (m_attrShadowColorMap)
+  {
+    vkTextureUnit tu = m_renderer->BindTexture(m_colorBuffer);
+    m_attrShadowColorMap->Set(tu);
   }
   if (m_attrMapBias)
   {
@@ -342,15 +348,14 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
-  //glColorMask(true, true, true, true);
-  glColorMask(false, false, false, false);
+  glColorMask(true, true, true, true);
+  //glColorMask(false, false, false, false);
   //glDisable(GL_CULL_FACE);
 
-  m_renderer->Clear();
+  m_renderer->Clear(true, vkVector4f (1, 1, 1, 1));
   m_renderer->SetShadowMatrices(m_shadowProjView, 3);
   m_renderer->SetBlendEnabled(false);
 
-  printf("Num elements: %d\n", m_renderStates.length);
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState= m_renderStates[i];
