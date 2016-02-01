@@ -43,7 +43,7 @@ public:
   virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
 
-  virtual void SetShadowMatrices(const vkMatrix4f *matrix, vkSize numberOfMatrices);
+  virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, vkSize numberOfMatrices);
 
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
@@ -120,7 +120,9 @@ private:
   bool m_matrixNeedsRecalculation[eMT_COUNT];
 
   vkSize m_numberOfShadowMatrices;
-  vkMatrix4f m_shadowMatrices[6];
+  vkMatrix4f m_shadowMatricesProjView[6];
+  vkMatrix4f m_shadowMatricesProj[6];
+  vkMatrix4f m_shadowMatricesView[6];
 
   void InvalidateSamplers();
 

@@ -316,10 +316,12 @@ void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, floa
 }
 
 
-void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
+void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, vkSize numberOfMatrices)
 {
   m_numberOfShadowMatrices = numberOfMatrices;
-  memcpy(m_shadowMatrices, matrices, sizeof(vkMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowMatricesProjView, projView, sizeof(vkMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowMatricesProj, proj, sizeof(vkMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowMatricesView, view, sizeof(vkMatrix4f) * numberOfMatrices);
 }
 
 void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
@@ -394,11 +396,25 @@ void vkGraphicsGL4::BindMatrices()
     }
   }
 
-  static vkShaderAttributeID ShadowMatricesAttribID("ShadowMapMatProjView");
-  IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesAttribID);
+  static vkShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
+  IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
   if (attrib)
   {
-    attrib->Set(m_shadowMatrices, m_numberOfShadowMatrices);
+    attrib->Set(m_shadowMatricesProjView, m_numberOfShadowMatrices);
+  }
+
+  static vkShaderAttributeID ShadowMatricesProjAttribID("ShadowMapMatProj");
+  attrib = m_program->GetAttribute(ShadowMatricesProjAttribID);
+  if (attrib)
+  {
+    attrib->Set(m_shadowMatricesProj, m_numberOfShadowMatrices);
+  }
+
+  static vkShaderAttributeID ShadowMatricesViewAttribID("ShadowMapMatView");
+  attrib = m_program->GetAttribute(ShadowMatricesViewAttribID);
+  if (attrib)
+  {
+    attrib->Set(m_shadowMatricesView, m_numberOfShadowMatrices);
   }
 }
 

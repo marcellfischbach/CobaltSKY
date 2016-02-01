@@ -2,26 +2,42 @@
 #version 330
 
 uniform vec3 vk_Distances;
-uniform mat4 vk_ShadowMats[3];
+uniform mat4 vk_ShadowMatsProj[3];
+uniform mat4 vk_ShadowMatsView[3];
 uniform float vk_MapBias;
 uniform vec2 vk_ShadowIntensity;
 
 uniform sampler2DArray vk_ShadowColorMap;
 uniform sampler2DArrayShadow vk_ShadowMap;
 
+
+float linstep(float min, float max, float v)  
+{ 
+  return clamp((v - min) / (max - min), 0, 1);  
+}  
+
+float ReduceLightBleeding(float p_max, float Amount)  
+{  
+  // Remove the [0, Amount] tail and linearly rescale (Amount, 1].  
+   return linstep(Amount, 1, p_max);  
+} 
+
 float ChebyshevUpperBound(vec2 Moments, float t)
 {
 	// One-tailed inequality valid if t > Moments.x
 	float p = 0.0;
-	if (t <= Moments.x)  p = 1.0;
+	if (t <= Moments.x) p = 1.0;
 	
 	// Compute variance.
 	float Variance = Moments.y - (Moments.x*Moments.x);
-	Variance = max(Variance, 0.0001);
+	Variance = max(Variance, 0.01);
 	// Compute probabilistic upper bound.
 	float d = t - Moments.x;
 	float p_max = Variance / (Variance + d*d);
-	return max(p, p_max);
+	p_max = max(p, p_max);
+	p_max = ReduceLightBleeding(p_max, 0.25);
+	
+	return p_max;
 }
 
 
@@ -48,7 +64,8 @@ float calculate_shadow(vec4 world, vec3 cam)
 	}
 	
 	// transform into final depth buffer space and performce perspective division
-	vec4 depthBufferSpace = vk_ShadowMats[layer] * world;
+	vec4 shadowCamSpace = vk_ShadowMatsView[layer] * world;
+	vec4 depthBufferSpace = vk_ShadowMatsProj[layer] * shadowCamSpace;
 
 	// shift from [-1, 1] -> [0, 1]
 	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;
@@ -61,10 +78,6 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
-	//float intensity = texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias));
-	
-	//return intensity * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
-	
-	vec2 val2 = texture(vk_ShadowColorMap, vec3(depthBufferSpace.xy, layer)).rg;
-	return ChebyshevUpperBound(val2, depthBufferSpace.z);
+	vec2 moments = texture(vk_ShadowColorMap, vec3(depthBufferSpace.xy, layer)).rg;
+	return ChebyshevUpperBound(moments, shadowCamSpace.y+0.02);
 }

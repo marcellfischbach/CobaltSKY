@@ -64,8 +64,18 @@ protected:
   vkGraphicsGL4 *m_renderer;
   float m_mapBias;
 
+  vkProgramGL4 *m_blurProgramH;
+  IShaderAttribute *m_blurProgramHShadowBuffer;
+  IShaderAttribute *m_blurProgramHShadowBufferSizeInv;
+
+  vkProgramGL4 *m_blurProgramV;
+  IShaderAttribute *m_blurProgramVShadowBuffer;
+  IShaderAttribute *m_blurProgramVShadowBufferSizeInv;
+
   // shadow buffer
+  float m_shadowBufferSize;
   vkRenderTargetGL4 *m_shadowBuffer;
+  vkRenderTargetGL4 *m_shadowBufferBlur;
   vkVector2f m_shadowIntensity;
 
   ISampler *m_depthSampler;
@@ -85,6 +95,7 @@ private:
   void CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera);
   void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &camInv, vkVector3f &min, vkVector3f &max) const;
   void UpdateProjectionMatrices();
+  void BlurShadowMap();
   vkClipper *CreateClipper();
 
   vkMatrix4f m_shadowCam[3];
@@ -93,6 +104,11 @@ private:
   vkMatrix4f m_shadowProjView[3];
   vkVector3f m_min[3];
   vkVector3f m_max[3];
+
+  vkMatrix4f m_shadowCamAll;
+  vkMatrix4f m_shadowCamInvAll;
+  vkVector3f m_minAll;
+  vkVector3f m_maxAll;
 
   vkVector3f m_distances;
 
@@ -103,13 +119,16 @@ private:
   LightProgram m_programPSSM;
   IShaderAttribute *m_attrLightDirectionPSSM;
   IShaderAttribute *m_attrDisancesPSSM;
-  IShaderAttribute *m_attrShadowMats;
+  IShaderAttribute *m_attrShadowMatsProjView;
+  IShaderAttribute *m_attrShadowMatsProj;
+  IShaderAttribute *m_attrShadowMatsView;
   IShaderAttribute *m_attrShadowMap;
   IShaderAttribute *m_attrShadowColorMap;
   IShaderAttribute *m_attrMapBias;
   IShaderAttribute *m_attrShadowIntensity;
   ITexture2DArray *m_colorBuffer;
   ITexture2DArray *m_depthBuffer;
+  ITexture2DArray *m_colorBufferBlur;
   void BindDirectionalLightPSSM(vkDirectionalLight *directionalLight);
 
 };
