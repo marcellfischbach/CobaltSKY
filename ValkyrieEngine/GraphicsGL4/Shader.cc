@@ -210,6 +210,22 @@ void vkShaderAttributeGL4::Set(const vkColor4f &v)
 }
 
 
+void vkShaderAttributeGL4::Set(const vkVector2f *vs, vkSize num)
+{
+  glUniform2fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
+}
+
+void vkShaderAttributeGL4::Set(const vkVector3f *vs, vkSize num)
+{
+  glUniform3fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
+}
+
+void vkShaderAttributeGL4::Set(const vkVector4f *vs, vkSize num)
+{
+  glUniform4fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
+}
+
+
 void vkShaderAttributeGL4::Set(const vkMatrix3f &m)
 {
   glUniformMatrix3fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));

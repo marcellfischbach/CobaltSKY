@@ -4,6 +4,7 @@
 uniform vec3 vk_Distances;
 uniform mat4 vk_ShadowMatsProj[3];
 uniform mat4 vk_ShadowMatsView[3];
+uniform vec2 vk_ShadowProjNearFar[3];
 uniform float vk_MapBias;
 uniform vec2 vk_ShadowIntensity;
 
@@ -13,7 +14,7 @@ uniform sampler2DArrayShadow vk_ShadowMap;
 
 float linstep(float min, float max, float v)  
 { 
-  return clamp((v - min) / (max - min), 0, 1);  
+  return clamp((v - min) / (max - min), 0.0, 1.0);  
 }  
 
 float ReduceLightBleeding(float p_max, float Amount)  
@@ -22,22 +23,31 @@ float ReduceLightBleeding(float p_max, float Amount)
    return linstep(Amount, 1, p_max);  
 } 
 
-float ChebyshevUpperBound(vec2 Moments, float t)
+float ChebyshevUpperBound(vec2 moments, float compare)
 {
+	/*
 	// One-tailed inequality valid if t > Moments.x
 	float p = 0.0;
-	if (t <= Moments.x) p = 1.0;
+	if (compare <= moments.x) p = 1.0;
 	
 	// Compute variance.
-	float Variance = Moments.y - (Moments.x*Moments.x);
-	Variance = max(Variance, 0.01);
+	float variance = moments.y - (moments.x*moments.x);
+	variance = max(variance, 0.00001);
 	// Compute probabilistic upper bound.
-	float d = t - Moments.x;
-	float p_max = Variance / (Variance + d*d);
+	float d = compare - moments.x;
+	float p_max = variance / (variance + d*d);
 	p_max = max(p, p_max);
 	p_max = ReduceLightBleeding(p_max, 0.25);
 	
 	return p_max;
+	*/
+	
+	float p = smoothstep(compare-0.005, compare, moments.x);
+	float variance = max(moments.y - moments.x*moments.x, -0.001);
+	float d = compare - moments.x;
+	float p_max = linstep(0.2, 1.0, variance / (variance + d*d));
+	return clamp(max(p, p_max), 0.0, 1.0);
+	
 }
 
 
@@ -78,6 +88,10 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
+	vec2 nearFar = vk_ShadowProjNearFar[layer];
+	
+	float nd = (shadowCamSpace.y - nearFar.x) / (nearFar.y - nearFar.x);
+	
 	vec2 moments = texture(vk_ShadowColorMap, vec3(depthBufferSpace.xy, layer)).rg;
-	return ChebyshevUpperBound(moments, shadowCamSpace.y+0.02);
+	return ChebyshevUpperBound(moments, nd);
 }

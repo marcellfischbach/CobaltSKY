@@ -24,4 +24,5 @@ void vkRenderState::SetFadeOut(float start, float end)
 void vkRenderState::Render(IGraphics *graphics, vkRenderPass pass) const
 {
   graphics->SetRenderFadeInOut(m_renderStartFade, m_renderEndFade);
+  graphics->SetRenderFadeInOutValue(m_distanceState.GetFadeValue());
 }

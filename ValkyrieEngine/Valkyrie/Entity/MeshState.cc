@@ -184,7 +184,6 @@ void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
   {
     vkRenderState::Render(graphics, pass);
     graphics->SetModelMatrix(GetGlobalTransformation());
-    graphics->SetRenderFadeInOutValue(m_distanceState.GetFadeValue());
     m_mesh->Render(graphics, pass, m_numberOfMaterialSlots, m_materials);
   }
 }

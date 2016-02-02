@@ -7,6 +7,7 @@ layout(triangle_strip, max_vertices=9) out;
 
 uniform mat4 vk_ShadowMapMatView[3];
 uniform mat4 vk_ShadowMapMatProj[3];
+uniform vec2 vk_ShadowMapNearFar[3];
 
 in vec2 inGeomTexCoord[];
 in vec3 inGeomNormal[];
@@ -19,24 +20,25 @@ void main ()
 {
 	for (int i=0; i<3; ++i)
 	{
+		float invDepthScale = 1.0 / (vk_ShadowMapNearFar[i].y - vk_ShadowMapNearFar[i].x);
 		gl_Layer = i;
 		vec4 viewPos = vk_ShadowMapMatView[i] * gl_in[0].gl_Position;
 		gl_Position = vk_ShadowMapMatProj[i] * viewPos;
-		inFragDepth = viewPos.y;
+		inFragDepth = (viewPos.y - vk_ShadowMapNearFar[i].x) * invDepthScale;
 		inFragTexCoord = inGeomTexCoord[0];
 		inFragNormal = inGeomNormal[0];
 		EmitVertex ();
 		
 		viewPos = vk_ShadowMapMatView[i] * gl_in[1].gl_Position;
 		gl_Position = vk_ShadowMapMatProj[i] * viewPos;
-		inFragDepth = viewPos.y;
+		inFragDepth = (viewPos.y - vk_ShadowMapNearFar[i].x) * invDepthScale;
 		inFragTexCoord = inGeomTexCoord[1];
 		inFragNormal = inGeomNormal[1];
 		EmitVertex ();
 		
 		viewPos = vk_ShadowMapMatView[i] * gl_in[2].gl_Position;
 		gl_Position = vk_ShadowMapMatProj[i] * viewPos;
-		inFragDepth = viewPos.y;
+		inFragDepth = (viewPos.y - vk_ShadowMapNearFar[i].x) * invDepthScale;
 		inFragTexCoord = inGeomTexCoord[2];
 		inFragNormal = inGeomNormal[2];
 		EmitVertex ();

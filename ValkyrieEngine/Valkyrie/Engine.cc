@@ -607,7 +607,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
 #if 1
 
-  for (int i = 0; i < 20; ++i)
+  for (int i = 0; i < 1000; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;
@@ -616,7 +616,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
     vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
-    mineEntity->GetTransformation().SetTranslation(vkVector3f(-20.0f + x * 40.0f, -20.0f + y * 40.0f, 10.0f + z * 20.0f));
+    mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));
     mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);
     mineEntity->FinishTransformation();
     entityScene->AddEntity(mineEntity);
@@ -631,8 +631,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
-  directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -1.0f));
-  directionalLight->SetCastShadow(true);
+  directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
+  directionalLight->SetCastShadow(false);
   directionalLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalLightState = new vkLightState();

@@ -37,6 +37,9 @@ struct VKE_API IShaderAttribute : public virtual IObject
   virtual void Set(const vkVector3f &v) = 0;
   virtual void Set(const vkVector4f &v) = 0;
   virtual void Set(const vkColor4f &v) = 0;
+  virtual void Set(const vkVector2f *v, vkSize num) = 0;
+  virtual void Set(const vkVector3f *v, vkSize num) = 0;
+  virtual void Set(const vkVector4f *v, vkSize num) = 0;
 
   virtual void Set(const vkMatrix3f &m) = 0;
   virtual void Set(const vkMatrix3f *ms, vkSize num) = 0;

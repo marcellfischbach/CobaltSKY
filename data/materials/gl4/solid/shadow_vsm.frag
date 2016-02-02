@@ -3,6 +3,7 @@
 
 layout(location = 0) out vec2 vk_FragColor;
 
+
 in float inFragDepth;
 
 void fade_in_out_test();

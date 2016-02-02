@@ -26,7 +26,7 @@ struct VKE_API IGraphics : public IObject
   VK_CLASS_GEN;
 
 
-  /** 
+  /**
    * \name Create of render buffers and render states
    * @{
    */
@@ -44,10 +44,10 @@ struct VKE_API IGraphics : public IObject
    */
 
 
-  /**
-   * \name Transformation handling
-   * @{
-   */
+   /**
+    * \name Transformation handling
+    * @{
+    */
   virtual void SetProjectionMatrix(const vkMatrix4f &matrix) = 0;
   virtual void SetProjectionMatrixInv(const vkMatrix4f &matrix) = 0;
   virtual void SetViewMatrix(const vkMatrix4f &matrix) = 0;
@@ -62,10 +62,10 @@ struct VKE_API IGraphics : public IObject
    * @}
    */
 
-  /**
-   * \name The rendering API
-   * @{
-   */
+   /**
+    * \name The rendering API
+    * @{
+    */
   virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration) = 0;
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;

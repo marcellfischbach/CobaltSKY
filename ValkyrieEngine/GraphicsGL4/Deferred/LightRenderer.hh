@@ -102,6 +102,7 @@ private:
   vkMatrix4f m_shadowCamInv[3];
   vkMatrix4f m_shadowProj[3];
   vkMatrix4f m_shadowProjView[3];
+  vkVector2f m_shadowNearFar[3];
   vkVector3f m_min[3];
   vkVector3f m_max[3];
 
@@ -126,6 +127,7 @@ private:
   IShaderAttribute *m_attrShadowColorMap;
   IShaderAttribute *m_attrMapBias;
   IShaderAttribute *m_attrShadowIntensity;
+  IShaderAttribute *m_attrShadowProjNearFar;
   ITexture2DArray *m_colorBuffer;
   ITexture2DArray *m_depthBuffer;
   ITexture2DArray *m_colorBufferBlur;
@@ -151,6 +153,7 @@ private:
   vkMatrix4f m_shadowCam[6];
   vkMatrix4f m_shadowProj[6];
   vkMatrix4f m_shadowProjView[6];
+  vkVector2f m_shadowNearFar[6];
 
   LightProgram m_programNoShadow;
   IShaderAttribute *m_attrLightPositionNoShadow;

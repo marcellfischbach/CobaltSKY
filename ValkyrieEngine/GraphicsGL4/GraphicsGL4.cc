@@ -69,6 +69,7 @@ vkGraphicsGL4::vkGraphicsGL4()
 
   glFrontFace(GL_CW);
   glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
 
 
 }
@@ -316,12 +317,13 @@ void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, floa
 }
 
 
-void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, vkSize numberOfMatrices)
+void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices)
 {
   m_numberOfShadowMatrices = numberOfMatrices;
   memcpy(m_shadowMatricesProjView, projView, sizeof(vkMatrix4f) * numberOfMatrices);
   memcpy(m_shadowMatricesProj, proj, sizeof(vkMatrix4f) * numberOfMatrices);
   memcpy(m_shadowMatricesView, view, sizeof(vkMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowNearFars, nearFars, sizeof(vkVector2f) * numberOfMatrices);
 }
 
 void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
@@ -416,6 +418,14 @@ void vkGraphicsGL4::BindMatrices()
   {
     attrib->Set(m_shadowMatricesView, m_numberOfShadowMatrices);
   }
+
+  static vkShaderAttributeID ShadowNearFarsAttribID("ShadowMapNearFar");
+  attrib = m_program->GetAttribute(ShadowNearFarsAttribID);
+  if (attrib)
+  {
+    attrib->Set(m_shadowNearFars, m_numberOfShadowMatrices);
+  }
+
 }
 
 
@@ -670,6 +680,8 @@ void vkGraphicsGL4::BindValues()
 {
   BindMatrices();
 
+
+
   /* ******************************************* */
   /*    Bind data for the fading gradient        */
   /* ******************************************* */
@@ -714,6 +726,7 @@ void vkGraphicsGL4::BindValues()
   {
     attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
   }
+
 }
 
 

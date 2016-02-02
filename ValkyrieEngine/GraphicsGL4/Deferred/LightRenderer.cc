@@ -120,17 +120,18 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_attrShadowMatsProjView = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMatsProjView"));
   m_attrShadowMatsProj = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMatsProj"));
   m_attrShadowMatsView = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMatsView"));
+  m_attrShadowProjNearFar = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowProjNearFar"));
   m_attrShadowMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMap"));
-  m_attrShadowColorMap = m_programPSSM.program-> GetAttribute(vkShaderAttributeID("ShadowColorMap"));
+  m_attrShadowColorMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowColorMap"));
   m_attrMapBias = m_programPSSM.program->GetAttribute(vkShaderAttributeID("MapBias"));
   m_attrShadowIntensity = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowIntensity"));
 
 
-  m_blurProgramH = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "HBlurShadowMapPSSMLo"));
+  m_blurProgramH = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "HBlurShadowMapPSSMHi"));
   m_blurProgramHShadowBuffer = m_blurProgramH->GetAttribute(vkShaderAttributeID("ShadowBuffer"));
   m_blurProgramHShadowBufferSizeInv = m_blurProgramH->GetAttribute(vkShaderAttributeID("ShadowBufferSizeInv"));
 
-  m_blurProgramV = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "VBlurShadowMapPSSMLo"));
+  m_blurProgramV = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "VBlurShadowMapPSSMHi"));
   m_blurProgramVShadowBuffer = m_blurProgramV->GetAttribute(vkShaderAttributeID("ShadowBuffer"));
   m_blurProgramVShadowBufferSizeInv = m_blurProgramV->GetAttribute(vkShaderAttributeID("ShadowBufferSizeInv"));
 
@@ -139,7 +140,7 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_mapBias = 0.99f;
   m_mapBias = 0.999f;
 
-  vkPixelFormat shadowBufferFormat = ePF_R16G16F;
+  vkPixelFormat shadowBufferFormat = ePF_R32G32F;
   m_shadowBufferSize = 1024;
   m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3);
@@ -278,6 +279,15 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
   {
     m_attrShadowIntensity->Set(m_shadowIntensity);
   }
+  if (m_attrShadowProjNearFar)
+  {
+    vkVector2f nearFar[3];
+    nearFar[0] = vkVector2f(m_min[0].y, m_max[0].y);
+    nearFar[1] = vkVector2f(m_min[1].y, m_max[1].y);
+    nearFar[2] = vkVector2f(m_min[2].y, m_max[2].y);
+    m_attrShadowProjNearFar->Set(nearFar, 3);
+  }
+
 }
 
 
@@ -311,6 +321,7 @@ void vkDirectionalLightvkGraphicsGL4::UpdateProjectionMatrices()
   for (unsigned i = 0; i < 3; ++i)
   {
     m_min[i].y = min;
+    m_shadowNearFar[i].Set(m_min[i].y, m_max[i].y);
     m_renderer->GetOrthographicProjection(m_min[i].x, m_max[i].x, m_min[i].z, m_max[i].z, m_min[i].y, m_max[i].y, m_shadowProj[i]);
     vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
 
@@ -368,6 +379,7 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   root->Scan(clipper, m_renderer, &collector, config);
   delete clipper;
 
+
   UpdateProjectionMatrices();
 
   // setup the rendering 
@@ -382,16 +394,15 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   glDepthFunc(GL_LEQUAL);
   glClearDepth(1.0);
   glColorMask(true, true, false, false);
-  //glColorMask(false, false, false, false);
-  //glDisable(GL_CULL_FACE);
 
-  m_renderer->Clear(true, vkVector4f (100, 100*100, 1, 1));
-  m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, 3);
+
+  m_renderer->Clear(true, vkVector4f(m_max[2].y, m_max[2].y * m_max[2].y, 1, 1));
+  m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);
   m_renderer->SetBlendEnabled(false);
 
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
-    vkRenderState *renderState= m_renderStates[i];
+    vkRenderState *renderState = m_renderStates[i];
     if (renderState)
     {
       renderState->Render(m_renderer, eRP_ShadowPSSM);
@@ -700,7 +711,7 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
   //glDisable(GL_CULL_FACE);
 
   m_renderer->Clear();
-  m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, 6);
+  m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 6);
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
@@ -746,6 +757,7 @@ void vkPointLightvkGraphicsGL4::CalcCubeMatrices(const vkPointLight *light)
     vkVector3f::Add(light->GetPosition(), dirs[i], spot);
     m_shadowCam[i].SetLookAt(light->GetPosition(), spot, ups[i]);
     m_shadowProj[i] = proj;
+    m_shadowNearFar[i].Set(1.0f, radius);
     vkMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
   }
 
