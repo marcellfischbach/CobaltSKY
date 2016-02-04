@@ -15,9 +15,5 @@ void main ()
 	float dx = dFdx(inFragDepth);
 	float dy = dFdy(inFragDepth);
 	
-	vk_FragColor = vec2(
-				inFragDepth, 
-				inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy)
-	);
-	
+	vk_FragColor = vec2(abs(dx) + abs(dy), 1.0);
 }

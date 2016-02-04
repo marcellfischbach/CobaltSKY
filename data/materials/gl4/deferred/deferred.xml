@@ -30,47 +30,6 @@
 		</techniques>
 	</program>
 	
-	<program name="HBlurShadowMapPSSMHi">
-		<techniques>
-			<technique name="Default">
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.vert</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.geom</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm_h_hi.frag</shader>
-			</technique>
-		</techniques>
-	</program>
-
-	<program name="VBlurShadowMapPSSMHi">
-		<techniques>
-			<technique name="Default">
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.vert</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.geom</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm_v_hi.frag</shader>
-			</technique>
-		</techniques>
-	</program>
-	
-		<program name="HBlurShadowMapPSSMLo">
-		<techniques>
-			<technique name="Default">
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.vert</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.geom</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm_h_lo.frag</shader>
-			</technique>
-		</techniques>
-	</program>
-
-	<program name="VBlurShadowMapPSSMLo">
-		<techniques>
-			<technique name="Default">
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.vert</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm.geom</shader>
-				<shader>${shaders}/deferred/blur_shadow_map_pssm_v_lo.frag</shader>
-			</technique>
-		</techniques>
-	</program>
-
-
 	<program name="PointLight">
 		<techniques>
 			<technique name="Default">

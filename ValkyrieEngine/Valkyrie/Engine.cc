@@ -607,7 +607,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
 #if 1
 
-  for (int i = 0; i < 1000; ++i)
+  for (int i = 0; i < 100; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;
@@ -632,7 +632,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(false);
+  directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalLightState = new vkLightState();

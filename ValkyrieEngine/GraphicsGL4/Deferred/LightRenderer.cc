@@ -123,24 +123,15 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_attrShadowProjNearFar = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowProjNearFar"));
   m_attrShadowMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMap"));
   m_attrShadowColorMap = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowColorMap"));
+  m_attrShadowMapSizeInv = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMapSizeInv"));
   m_attrMapBias = m_programPSSM.program->GetAttribute(vkShaderAttributeID("MapBias"));
   m_attrShadowIntensity = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowIntensity"));
 
 
-  m_blurProgramH = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "HBlurShadowMapPSSMHi"));
-  m_blurProgramHShadowBuffer = m_blurProgramH->GetAttribute(vkShaderAttributeID("ShadowBuffer"));
-  m_blurProgramHShadowBufferSizeInv = m_blurProgramH->GetAttribute(vkShaderAttributeID("ShadowBufferSizeInv"));
-
-  m_blurProgramV = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/deferred/deferred.xml", "VBlurShadowMapPSSMHi"));
-  m_blurProgramVShadowBuffer = m_blurProgramV->GetAttribute(vkShaderAttributeID("ShadowBuffer"));
-  m_blurProgramVShadowBufferSizeInv = m_blurProgramV->GetAttribute(vkShaderAttributeID("ShadowBufferSizeInv"));
-
 
   m_distances = vkVector3f(15.0f, 45.0f, 135.0f);
-  m_mapBias = 0.99f;
-  m_mapBias = 0.999f;
 
-  vkPixelFormat shadowBufferFormat = ePF_R32G32F;
+  vkPixelFormat shadowBufferFormat = ePF_R16G16F;
   m_shadowBufferSize = 1024;
   m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3);
@@ -160,15 +151,6 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();
 
-
-
-  m_colorBufferBlur = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3);
-  m_colorBufferBlur->SetSampler(colorSampler);
-
-  m_shadowBufferBlur = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
-  m_shadowBufferBlur->Initialize(m_shadowBufferSize, m_shadowBufferSize);
-  m_shadowBufferBlur->AddColorTexture(m_colorBufferBlur);
-  m_shadowBufferBlur->Finilize();
 }
 
 vkDirectionalLightvkGraphicsGL4::~vkDirectionalLightvkGraphicsGL4()
@@ -191,7 +173,6 @@ void vkDirectionalLightvkGraphicsGL4::Render(vkEntity *root, vkCamera *camera, v
   if (shadow)
   {
     RenderShadow(root, camera, directionalLight);
-    BlurShadowMap();
   }
 
 
@@ -286,6 +267,10 @@ void vkDirectionalLightvkGraphicsGL4::BindDirectionalLightPSSM(vkDirectionalLigh
     nearFar[1] = vkVector2f(m_min[1].y, m_max[1].y);
     nearFar[2] = vkVector2f(m_min[2].y, m_max[2].y);
     m_attrShadowProjNearFar->Set(nearFar, 3);
+  }
+  if (m_attrShadowMapSizeInv)
+  {
+    m_attrShadowMapSizeInv->Set(1.0f / m_shadowBufferSize);
   }
 
 }
@@ -487,64 +472,6 @@ void vkDirectionalLightvkGraphicsGL4::CalcMatrix(const vkVector3f &dir, vkSize n
       max.z = t.z;
     }
   }
-}
-
-
-void vkDirectionalLightvkGraphicsGL4::BlurShadowMap()
-{
-  float shadowSampling = 1.0f / m_shadowBufferSize;
-
-  // now the final image will be assembled
-  m_renderer->SetRenderTarget(m_shadowBufferBlur);
-  m_renderer->SetViewport(m_shadowBufferBlur);
-  m_renderer->SetBlendEnabled(false);
-
-  // from now on we will only render to the single color buffer
-  GLenum buffers[] = {
-    GL_COLOR_ATTACHMENT0,
-  };
-  glDrawBuffers(1, buffers);
-
-  m_renderer->SetShader(m_blurProgramH);
-  m_renderer->InvalidateTextures();
-
-  if (m_blurProgramHShadowBuffer)
-  {
-    vkTextureUnit tu = m_renderer->BindTexture(m_colorBuffer);
-    m_blurProgramHShadowBuffer->Set(tu);
-  }
-  if (m_blurProgramHShadowBufferSizeInv)
-  {
-    m_blurProgramHShadowBufferSizeInv->Set(shadowSampling);
-  }
-
-  m_renderer->RenderFullScreenFrame();
-
-
-
-
-
-
-  // now the final image will be assembled
-  m_renderer->SetRenderTarget(m_shadowBuffer);
-  m_renderer->SetViewport(m_shadowBuffer);
-  m_renderer->SetBlendEnabled(false);
-  m_renderer->SetShader(m_blurProgramV);
-  m_renderer->InvalidateTextures();
-
-  if (m_blurProgramVShadowBuffer)
-  {
-    vkTextureUnit tu = m_renderer->BindTexture(m_colorBufferBlur);
-    m_blurProgramVShadowBuffer->Set(tu);
-  }
-  if (m_blurProgramVShadowBufferSizeInv)
-  {
-    m_blurProgramVShadowBufferSizeInv->Set(shadowSampling);
-  }
-
-  m_renderer->RenderFullScreenFrame();
-
-
 }
 
 

@@ -2,53 +2,12 @@
 #version 330
 
 uniform vec3 vk_Distances;
-uniform mat4 vk_ShadowMatsProj[3];
-uniform mat4 vk_ShadowMatsView[3];
-uniform vec2 vk_ShadowProjNearFar[3];
-uniform float vk_MapBias;
+uniform mat4 vk_ShadowMatsProjView[3];
 uniform vec2 vk_ShadowIntensity;
+uniform float vk_ShadowMapSizeInv;
 
 uniform sampler2DArray vk_ShadowColorMap;
 uniform sampler2DArrayShadow vk_ShadowMap;
-
-
-float linstep(float min, float max, float v)  
-{ 
-  return clamp((v - min) / (max - min), 0.0, 1.0);  
-}  
-
-float ReduceLightBleeding(float p_max, float Amount)  
-{  
-  // Remove the [0, Amount] tail and linearly rescale (Amount, 1].  
-   return linstep(Amount, 1, p_max);  
-} 
-
-float ChebyshevUpperBound(vec2 moments, float compare)
-{
-	/*
-	// One-tailed inequality valid if t > Moments.x
-	float p = 0.0;
-	if (compare <= moments.x) p = 1.0;
-	
-	// Compute variance.
-	float variance = moments.y - (moments.x*moments.x);
-	variance = max(variance, 0.00001);
-	// Compute probabilistic upper bound.
-	float d = compare - moments.x;
-	float p_max = variance / (variance + d*d);
-	p_max = max(p, p_max);
-	p_max = ReduceLightBleeding(p_max, 0.25);
-	
-	return p_max;
-	*/
-	
-	float p = smoothstep(compare-0.005, compare, moments.x);
-	float variance = max(moments.y - moments.x*moments.x, -0.001);
-	float d = compare - moments.x;
-	float p_max = linstep(0.2, 1.0, variance / (variance + d*d));
-	return clamp(max(p, p_max), 0.0, 1.0);
-	
-}
 
 
 float calculate_shadow(vec4 world, vec3 cam)
@@ -74,9 +33,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 	}
 	
 	// transform into final depth buffer space and performce perspective division
-	vec4 shadowCamSpace = vk_ShadowMatsView[layer] * world;
-	vec4 depthBufferSpace = vk_ShadowMatsProj[layer] * shadowCamSpace;
-
+	vec4 depthBufferSpace = vk_ShadowMatsProjView[layer] * world;
 	// shift from [-1, 1] -> [0, 1]
 	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;
 
@@ -88,10 +45,34 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
-	vec2 nearFar = vk_ShadowProjNearFar[layer];
+
+	float val = 0.0;
+	float kernStep = 1.0;
+	float kernSize = 2.0;
+	float moment = texture(vk_ShadowColorMap, 
+												 vec3(depthBufferSpace.xy, 
+															layer)).r;
+	if (moment > 1.0)
+	{
+		moment = 0.0;
+	}
 	
-	float nd = (shadowCamSpace.y - nearFar.x) / (nearFar.y - nearFar.x);
+	int kerns = 0;
+	for (float i=-kernSize; i<=kernSize; i+=kernStep)
+	{
+		for (float j=-kernSize; j<=kernSize; j+=kernStep)
+		{
+			vec2 kern = vec2 (i, j) * vk_ShadowMapSizeInv;
+			
+			
+			val += texture(vk_ShadowMap, 
+										 vec4(depthBufferSpace.xy + kern, 
+													layer, 
+			                    depthBufferSpace.z - moment));
+			kerns+=1;
+		}
+	}
 	
-	vec2 moments = texture(vk_ShadowColorMap, vec3(depthBufferSpace.xy, layer)).rg;
-	return ChebyshevUpperBound(moments, nd);
+	val /= float(kerns);
+	return val * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
 }

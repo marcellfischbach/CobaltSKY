@@ -64,18 +64,9 @@ protected:
   vkGraphicsGL4 *m_renderer;
   float m_mapBias;
 
-  vkProgramGL4 *m_blurProgramH;
-  IShaderAttribute *m_blurProgramHShadowBuffer;
-  IShaderAttribute *m_blurProgramHShadowBufferSizeInv;
-
-  vkProgramGL4 *m_blurProgramV;
-  IShaderAttribute *m_blurProgramVShadowBuffer;
-  IShaderAttribute *m_blurProgramVShadowBufferSizeInv;
-
   // shadow buffer
   float m_shadowBufferSize;
   vkRenderTargetGL4 *m_shadowBuffer;
-  vkRenderTargetGL4 *m_shadowBufferBlur;
   vkVector2f m_shadowIntensity;
 
   ISampler *m_depthSampler;
@@ -95,7 +86,6 @@ private:
   void CalcPSSMMatrices(const vkDirectionalLight *light, const vkCamera *camera);
   void CalcMatrix(const vkVector3f &dir, vkSize numPoints, vkVector3f *points, vkMatrix4f &cam, vkMatrix4f &camInv, vkVector3f &min, vkVector3f &max) const;
   void UpdateProjectionMatrices();
-  void BlurShadowMap();
   vkClipper *CreateClipper();
 
   vkMatrix4f m_shadowCam[3];
@@ -125,6 +115,7 @@ private:
   IShaderAttribute *m_attrShadowMatsView;
   IShaderAttribute *m_attrShadowMap;
   IShaderAttribute *m_attrShadowColorMap;
+  IShaderAttribute *m_attrShadowMapSizeInv;
   IShaderAttribute *m_attrMapBias;
   IShaderAttribute *m_attrShadowIntensity;
   IShaderAttribute *m_attrShadowProjNearFar;
