@@ -15,6 +15,7 @@
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/PostProcessing.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
@@ -29,6 +30,7 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
   , m_renderer(renderer)
   , m_renderStates(64, 16)
   , m_gbuffer(0)
+  , m_postProcessor(0)
 {
   VK_CLASS_GEN_CONSTR;
 
@@ -65,6 +67,11 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
   }
 
   return true;
+}
+
+void vkDeferredFrameProcessor::SetPostProcessor(vkPostProcessor *postProcessor)
+{
+  VK_SET(m_postProcessor, postProcessor);
 }
 
 

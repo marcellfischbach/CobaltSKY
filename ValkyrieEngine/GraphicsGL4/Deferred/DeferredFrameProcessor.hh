@@ -25,6 +25,8 @@ public:
 
   bool Initialize(vkUInt16 width, vkUInt16 height);
 
+  void SetPostProcessor(vkPostProcessor *processor);
+
   void Render(vkEntity *root, vkCamera *camera, IRenderTarget *target);
 
 private:
@@ -34,6 +36,8 @@ private:
   vkCollection<vkRenderState*> m_renderStates;
   vkCollection<vkLightState*> m_lightStates;
   vkGraphicsGL4 *m_renderer;
+
+  vkPostProcessor *m_postProcessor;
 
   vkGBuffer *m_gbuffer;
 

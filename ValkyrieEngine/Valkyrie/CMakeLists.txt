@@ -111,6 +111,8 @@ set(SOURCE_GRAPHICS
 	Graphics/Material.hh
 	Graphics/Mesh.cc
 	Graphics/Mesh.hh
+  Graphics/PostProcessing.cc
+  Graphics/PostProcessing.hh
 	Graphics/ShaderID.cc
 	Graphics/ShaderID.hh
 	)

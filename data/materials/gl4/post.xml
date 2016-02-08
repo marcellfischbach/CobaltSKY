@@ -1,0 +1,16 @@
+<programs>
+
+	<program name="BlurVertLo">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/post/post.vert</shader>
+				<shader>${shaders}/post/blur_vert_lo.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
+</programs>

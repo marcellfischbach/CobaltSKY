@@ -26,6 +26,7 @@
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/PostProcessing.hh>
 #include <Valkyrie/Graphics/Scene/CameraNode.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
 #include <Valkyrie/Graphics/Scene/GroupNode.hh>
@@ -42,6 +43,7 @@
 vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
+vkPostProcessor *createPostProcessor(IGraphics *graphics);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
 
@@ -664,3 +666,19 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   return entityScene;
 }
+
+
+vkPostProcessor *createPostProcessor(IGraphics *graphics)
+{
+  vkPostProcessor *pp = new vkPostProcessor();
+
+  IShader *blurShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
+  vkGenericShaderPostProcess *blurPP = new vkGenericShaderPostProcess();
+  blurPP->BindInput("FinalImage", "Color0");
+  blurPP->SetShader(blurShader);
+
+  pp->SetFinalProcess(blurPP);
+
+  return pp;
+}
+
