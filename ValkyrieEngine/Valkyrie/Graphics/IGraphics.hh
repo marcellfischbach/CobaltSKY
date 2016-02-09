@@ -91,6 +91,7 @@ struct VKE_API IGraphics : public IObject
   virtual void SetViewport(IRenderTarget *viewport) = 0;
   virtual void Render(vkPrimitiveType type, vkUInt32 count) = 0;
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType) = 0;
+  virtual void RenderFullScreenFrame() = 0;
   virtual void RenderFullScreenFrame(ITexture2D* textureColor) = 0;
   /**
    * @}

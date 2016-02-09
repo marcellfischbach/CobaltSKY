@@ -1,6 +1,7 @@
 
 #include <GraphicsGL4/RenderTargetGL4.hh>
 #include <GraphicsGL4/TextureGL4.hh>
+#include <GraphicsGL4/DefinesGL4.hh>
 
 vkRenderTargetGL4::vkRenderTargetGL4()
   : IRenderTarget ()
@@ -53,6 +54,7 @@ void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)
 
 void vkRenderTargetGL4::AddColorTexture(ITexture *color)
 {
+  VK_CHECK_GL_ERROR;
   vkTextureGL4 *coloGL4 = vkQueryClass<vkTextureGL4>(color);
   if (coloGL4)
   {
@@ -61,6 +63,8 @@ void vkRenderTargetGL4::AddColorTexture(ITexture *color)
     m_colorTextures.push_back(coloGL4);
 
   }
+
+  VK_CHECK_GL_ERROR;
 }
 
 void vkRenderTargetGL4::SetDepthTexture(ITexture *depth)
@@ -85,9 +89,12 @@ void vkRenderTargetGL4::SetDepthBuffer(vkUInt16 width, vkUInt16 height)
 
 bool vkRenderTargetGL4::Finilize()
 {
+  VK_CHECK_GL_ERROR;
   GLenum r = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+  VK_CHECK_GL_ERROR;
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  VK_CHECK_GL_ERROR;
   return r == GL_FRAMEBUFFER_COMPLETE;
 }
 

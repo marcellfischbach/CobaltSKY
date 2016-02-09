@@ -133,7 +133,7 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   }
 }
 
-void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
+IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
   m_renderStates.Clear();
   m_lightStates.Clear();
@@ -189,6 +189,18 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
 
   m_renderer->SetBlendEnabled(false);
 
+
+  if (m_postProcessor)
+  {
+    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
+    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
+    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());
+    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_SSSSpec, m_gbuffer->GetSSSSpec());
+    m_postProcessor->SetInput(vkPostProcessor::eOO_FinalTarget_Color, target->GetColorBuffer(0));
+    m_postProcessor->SetInput(vkPostProcessor::eOO_FinalTarget_Depth, target->GetDepthBuffer());
+    m_postProcessor->Render(m_renderer);
+  }
+
   ITexture2DArray *txt = vkQueryClass<ITexture2DArray>(m_lightRenderers[eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));
   //m_renderer->RenderFullScreenFrame(m_gbuffer->GetDiffuseRoughness());
   //m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0, 0.25, txt, 0);
@@ -200,5 +212,9 @@ void vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderT
   //m_renderer->RenderFullScreenFrame(txt, 1);
   
   m_renderer->SetBlendEnabled(false);
-
+  if (m_postProcessor)
+  {
+    return m_postProcessor->GetOutput();
+  }
+  return target;
 }

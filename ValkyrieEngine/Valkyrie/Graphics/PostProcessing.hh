@@ -11,6 +11,7 @@
 
 class vkPostProcess;
 struct IRenderTarget;
+struct IShaderAttribute;
 struct ITexture;
 
 VK_CLASS()
@@ -18,20 +19,36 @@ class VKE_API vkPostProcessor : public vkObject
 {
   VK_CLASS_GEN;
 public:
+  enum OriginOutput
+  {
+    eOO_GBuffer_DiffuseRoughness,
+    eOO_GBuffer_NormalLightMode,
+    eOO_GBuffer_EmissiveMetallic,
+    eOO_GBuffer_SSSSpec,
+    eOO_FinalTarget_Color,
+    eOO_FinalTarget_Depth,
+    eOO_COUNT
+  };
+public:
   vkPostProcessor();
   virtual ~vkPostProcessor();
 
-  void SetInput(const vkString &inputName, ITexture *texture);
-  const ITexture *GetInput(const vkString &inputName) const;
-  ITexture *GetInput(const vkString &inputName);
+  void SetInput(OriginOutput originOutput, ITexture *texture);
+  const ITexture *GetInput(OriginOutput originOutput) const;
+  ITexture *GetInput(OriginOutput originOutput);
 
   void SetFinalProcess(vkPostProcess *postProcess);
-  void BuildPostProcessing();
+  void BuildPostProcessing(IGraphics *graphics);
+
+  void Render(IGraphics *graphics);
+
+  IRenderTarget *GetOutput();
+
 
 private:
   vkPostProcess *m_finalProcess;
   std::vector<vkPostProcess*> m_processes;
-  std::map<vkString, ITexture*> m_inputs;
+  ITexture *m_originInputs[eOO_COUNT];
 };
 
 
@@ -43,13 +60,15 @@ class VKE_API vkPostProcess : public vkObject
 public:
   virtual ~vkPostProcess();
 
-  virtual void Render(IGraphics *graphics) = 0;
+  virtual bool Render(IGraphics *graphics);
+  virtual bool Initialize(IGraphics *graphics);
 
   int BindInput(ITexture *texture, const vkString &inputName = "");
   int BindInput(vkPostProcess *postProcess, int outputIdx, const vkString &inputName = "");
-  int BindInput(const vkString &outputName, const vkString &inputName = "");
+  int BindInput(vkPostProcessor::OriginOutput originOutput, const vkString &inputName = "");
 
   void SetOutput(IRenderTarget *output);
+  IRenderTarget *GetOutput();
 
   IShader *GetShader();
   const IShader *GetShader() const;
@@ -58,9 +77,11 @@ protected:
   vkPostProcess();
 
   void SetInputBindingName(int idx, const vkString &name);
-
   void SetShader(IShader *shader);
   
+  bool BindShader(IGraphics *graphics);
+  bool BindInputs(IGraphics *graphics);
+  bool BindOutput(IGraphics *graphics);
 
 private:
   enum InputSource
@@ -69,6 +90,7 @@ private:
     eIS_PostProcess,
     eIS_Origin,
   };
+
   struct Input
   {
     InputSource m_inputSource;
@@ -76,7 +98,13 @@ private:
     ITexture *m_texture;
     vkPostProcess *m_postProcess;
     int m_postProcessOutput;
-    vkString m_originOutput;
+    vkPostProcessor::OriginOutput m_originOutput;
+
+    // shader attributes
+    bool m_initialized;
+    IShaderAttribute *m_attrInput;
+    IShaderAttribute *m_attrInputSize;
+    IShaderAttribute *m_attrInputSizeInv;
   };
 
   std::vector<Input> m_inputs;
@@ -85,6 +113,7 @@ private:
   vkPostProcessor *m_postProcessor;
 
   IShader *m_shader;
+
 };
 
 
@@ -96,7 +125,7 @@ public:
   vkGenericShaderPostProcess();
   virtual ~vkGenericShaderPostProcess();
 
-  virtual void Render(IGraphics *graphics);
+  virtual bool Render(IGraphics *graphics);
 
   void SetShader(IShader *shader);
 

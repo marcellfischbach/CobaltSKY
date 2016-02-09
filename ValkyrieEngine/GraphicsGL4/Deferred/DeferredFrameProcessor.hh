@@ -27,7 +27,7 @@ public:
 
   void SetPostProcessor(vkPostProcessor *processor);
 
-  void Render(vkEntity *root, vkCamera *camera, IRenderTarget *target);
+  IRenderTarget *Render(vkEntity *root, vkCamera *camera, IRenderTarget *target);
 
 private:
   void RenderGBuffer(vkEntity *root);

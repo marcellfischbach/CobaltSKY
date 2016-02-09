@@ -625,6 +625,7 @@ void vkGraphicsGL4::SetClearStencilValue(vkUInt8 stencilValue)
 
 void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDepth, float depth, bool clearStencil, vkUInt8 stencil)
 {
+  VK_CHECK_GL_ERROR;
   GLbitfield clear = 0;
   if (clearColor)
   {

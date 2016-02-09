@@ -3,7 +3,7 @@
 in vec4 vk_Position;
 in vec2 vk_TexCoord0;
 
-out vec inFragTexCoord0;
+out vec2 inFragTexCoord0;
 
 void main ()
 {

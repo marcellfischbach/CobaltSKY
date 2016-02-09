@@ -8,8 +8,9 @@
 
 vkPostProcessor::vkPostProcessor()
   : vkObject()
+  , m_finalProcess(0)
 {
-
+  memset(m_originInputs, 0, sizeof(m_originInputs));
 }
 
 vkPostProcessor::~vkPostProcessor()
@@ -18,38 +19,25 @@ vkPostProcessor::~vkPostProcessor()
 }
 
 
-void vkPostProcessor::SetInput(const vkString &inputName, ITexture *texture)
+void vkPostProcessor::SetInput(OriginOutput originOutput, ITexture *texture)
 {
   if (!texture)
   {
     return;
   }
   texture->AddRef();
-  m_inputs[inputName] = texture;
+  m_originInputs[originOutput] = texture;
 }
 
-const ITexture *vkPostProcessor::GetInput(const vkString &name) const
+const ITexture *vkPostProcessor::GetInput(OriginOutput originOutput) const
 {
-  std::map<vkString, ITexture*>::const_iterator it = m_inputs.find(name);
-  if (it == m_inputs.end())
-  {
-    return 0;
-  }
-
-  return it->second;
+  return m_originInputs[originOutput];
 }
 
-ITexture *vkPostProcessor::GetInput(const vkString &name) 
+ITexture *vkPostProcessor::GetInput(OriginOutput originOutput)
 {
-  std::map<vkString, ITexture*>::iterator it = m_inputs.find(name);
-  if (it == m_inputs.end())
-  {
-    return 0;
-  }
-
-  return it->second;
+  return m_originInputs[originOutput];
 }
-
 
 
 void vkPostProcessor::SetFinalProcess(vkPostProcess *postProcess)
@@ -58,12 +46,44 @@ void vkPostProcessor::SetFinalProcess(vkPostProcess *postProcess)
 }
 
 
-void vkPostProcessor::BuildPostProcessing()
+void vkPostProcessor::BuildPostProcessing(IGraphics *graphics)
 {
-  // TODO: implement me
+  m_processes.clear();
+
+  m_processes.push_back(m_finalProcess);
+
+  // assign the post processor
+  for (size_t i = 0, in = m_processes.size(); i < in; ++i)
+  {
+    m_processes[i]->m_postProcessor = this;
+  }
+
+  for (size_t i = 0, in = m_processes.size(); i < in; ++i)
+  {
+    m_processes[i]->Initialize(graphics);
+  }
 }
 
 
+IRenderTarget *vkPostProcessor::GetOutput()
+{
+  if (m_finalProcess)
+  {
+    return m_finalProcess->GetOutput();
+  }
+  return 0;
+}
+
+void vkPostProcessor::Render(IGraphics *graphics)
+{
+  for (size_t i = 0, in = m_processes.size(); i < in; ++i)
+  {
+    if (!m_processes[i]->Render(graphics))
+    {
+      return;
+    }
+  }
+}
 
 
 
@@ -131,7 +151,7 @@ int vkPostProcess::BindInput(vkPostProcess *postProcess, int outputIdx, const vk
   return res;
 }
 
-int vkPostProcess::BindInput(const vkString &originOutput, const vkString &inputName)
+int vkPostProcess::BindInput(vkPostProcessor::OriginOutput originOutput, const vkString &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -151,7 +171,90 @@ void vkPostProcess::SetOutput(IRenderTarget *output)
   VK_SET(m_output, output);
 }
 
+IRenderTarget *vkPostProcess::GetOutput()
+{
+  return m_output;
+}
 
+bool vkPostProcess::BindShader(IGraphics *graphics)
+{
+  if (!m_shader)
+  {
+    return false;
+  }
+  graphics->SetShader(m_shader);
+  return true;
+}
+
+bool vkPostProcess::BindInputs(IGraphics *graphics)
+{
+  for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
+  {
+    Input &input = m_inputs[i];
+    if (input.m_inputSource == eIS_Origin)
+    {
+      input.m_texture = m_postProcessor->GetInput(input.m_originOutput);
+    }
+
+    if (!input.m_texture || !input.m_attrInput)
+    {
+      continue;
+    }
+
+    vkTextureUnit tu = graphics->BindTexture(input.m_texture);
+    input.m_attrInput->Set(tu);
+    switch (input.m_texture->GetType())
+    {
+    case eTT_Texture2D:
+      {
+        ITexture2D *txt2D = vkQueryClass<ITexture2D>(input.m_texture);
+        if (input.m_attrInputSize)
+        {
+          input.m_attrInputSize->Set((float)txt2D->GetWidth(), (float)txt2D->GetHeight());
+        }
+        if (input.m_attrInputSizeInv)
+        {
+          input.m_attrInputSizeInv->Set(1.0f / (float)txt2D->GetWidth(), 1.0f / (float)txt2D->GetHeight());
+        }
+      }
+      break;
+    }
+  }
+  return true;
+}
+
+bool vkPostProcess::BindOutput(IGraphics *graphics)
+{
+  if (!m_output)
+  {
+    return false;
+  }
+  graphics->SetRenderTarget(m_output);
+  graphics->SetViewport(m_output);
+  return true;
+}
+
+bool vkPostProcess::Initialize(IGraphics *graphics)
+{
+  for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
+  {
+    Input &input = m_inputs[i];
+
+    vkString inputName = input.m_inputName;
+    vkString inputSizeName = inputName + vkString("Size");
+    vkString inputSizeInvName = inputSizeName + vkString("Inv");
+
+    input.m_attrInput = m_shader->GetAttribute(vkShaderAttributeID(inputName));
+    input.m_attrInputSize = m_shader->GetAttribute(vkShaderAttributeID(inputSizeName));
+    input.m_attrInputSizeInv = m_shader->GetAttribute(vkShaderAttributeID(inputSizeInvName));
+  }
+  return true;
+}
+
+bool vkPostProcess::Render(IGraphics *graphics)
+{
+  return BindShader(graphics) && BindInputs(graphics) && BindOutput (graphics);
+}
 
 
 
@@ -176,9 +279,15 @@ void vkGenericShaderPostProcess::SetShader(IShader *shader)
 }
 
 
-void vkGenericShaderPostProcess::Render(IGraphics *graphics)
+bool vkGenericShaderPostProcess::Render(IGraphics *graphics)
 {
+  if (!vkPostProcess::Render(graphics))
+  {
+    return false;
+  }
 
+  graphics->RenderFullScreenFrame();
+  return true;
 }
 
 

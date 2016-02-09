@@ -159,6 +159,9 @@ int vkEngine::Run()
     return -1;
   }
 
+  vkPostProcessor *pp = createPostProcessor(m_renderer);
+  fp->SetPostProcessor(pp);
+
   const IMouse *mouse = m_window->GetMouse();
 
   bool anim = true;
@@ -186,7 +189,8 @@ int vkEngine::Run()
 
 
     scene->GetRoot()->UpdateBoundingBox();
-    fp->Render(scene->GetRoot(), camera, rt);
+    IRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
+    ITexture2D *colorTarget = vkQueryClass<ITexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 
@@ -194,7 +198,7 @@ int vkEngine::Run()
     m_renderer->SetRenderTarget(0);
     m_renderer->SetViewport(1366, 768);
     m_renderer->Clear();
-    m_renderer->RenderFullScreenFrame(color0);
+    m_renderer->RenderFullScreenFrame(colorTarget);
 
     m_window->Present();
     fps++;
@@ -667,6 +671,51 @@ vkEntityScene *create_scene(IGraphics *graphics)
   return entityScene;
 }
 
+IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height, vkPixelFormat colorFormat, bool createDepthTexture)
+{
+  static ISampler *colorSampler = 0;
+  if (!colorSampler)
+  {
+    colorSampler = graphics->CreateSampler();
+    colorSampler->SetFilter(eFM_MinMagNearest);
+  }
+
+  IRenderTarget *target = graphics->CreateRenderTarget();
+  target->Initialize(width, height);
+
+  ITexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height);
+  colorTexture->SetSampler(colorSampler);
+  target->AddColorTexture(colorTexture);
+
+
+  if (createDepthTexture)
+  {
+    static ISampler *depthSampler = 0;
+    if (!depthSampler)
+    {
+      depthSampler = graphics->CreateSampler();
+      depthSampler->SetFilter(eFM_MinMagNearest);
+      depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
+      depthSampler->SetTextureCompareMode(eTCM_CompareToR);
+    }
+    ITexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height);
+    depthTexture->SetSampler(depthSampler);
+    target->SetDepthTexture(depthTexture);
+
+  }
+  else
+  {
+    target->SetDepthBuffer(width, height);
+  }
+
+  if (!target->Finilize())
+  {
+    target->Release();
+    target = 0;
+  }
+  return target;
+}
+
 
 vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
@@ -674,11 +723,15 @@ vkPostProcessor *createPostProcessor(IGraphics *graphics)
 
   IShader *blurShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
   vkGenericShaderPostProcess *blurPP = new vkGenericShaderPostProcess();
-  blurPP->BindInput("FinalImage", "Color0");
+  blurPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color0");
   blurPP->SetShader(blurShader);
+
+  blurPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+
 
   pp->SetFinalProcess(blurPP);
 
+  pp->BuildPostProcessing(graphics);
   return pp;
 }
 
