@@ -284,6 +284,10 @@ bool vkPostProcess::BindInputs(IGraphics *graphics)
     {
       input.m_texture = m_postProcessor->GetInput(input.m_originOutput);
     }
+    else if (input.m_inputSource == eIS_PostProcess)
+    {
+      input.m_texture = input.m_postProcess->GetOutput()->GetColorBuffer(input.m_postProcessOutput);
+    }
 
     if (!input.m_texture || !input.m_attrInput)
     {
@@ -342,7 +346,13 @@ bool vkPostProcess::Initialize(IGraphics *graphics)
 
 bool vkPostProcess::Render(IGraphics *graphics)
 {
-  return BindShader(graphics) && BindInputs(graphics) && BindOutput(graphics);
+  bool success = BindShader(graphics) && BindInputs(graphics) && BindOutput(graphics) ;
+  if (!success)
+  {
+    return false;
+  }
+  graphics->BindValues();
+  return true;
 }
 
 

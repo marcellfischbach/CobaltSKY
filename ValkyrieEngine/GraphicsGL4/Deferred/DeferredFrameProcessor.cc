@@ -192,6 +192,9 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
 
   if (m_postProcessor)
   {
+    // rebind the camera because it might be switched by a light renderer
+    camera->Apply(m_renderer);
+    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_Depth, m_gbuffer->GetDepth());
     m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
     m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
     m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());

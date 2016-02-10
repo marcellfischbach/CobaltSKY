@@ -10,7 +10,7 @@ in vec2 inFragTexCoord0;
 void main ()
 {
 	vec4 r = vec4(0.0);
-	float stepSize = 0.5;
+	float stepSize = 0.1;
 	float kernelSize = 5.0;
 	float num = 0.0;
 	for (float i=-1.0; i<=1.0; i+=stepSize)

@@ -22,6 +22,7 @@ class VKE_API vkPostProcessor : public vkObject
 public:
   enum OriginOutput
   {
+    eOO_GBuffer_Depth,
     eOO_GBuffer_DiffuseRoughness,
     eOO_GBuffer_NormalLightMode,
     eOO_GBuffer_EmissiveMetallic,

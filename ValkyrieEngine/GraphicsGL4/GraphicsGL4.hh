@@ -70,6 +70,7 @@ public:
   virtual void SetViewport(IRenderTarget *viewport);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
+  virtual void BindValues();
 
   virtual void RenderFullScreenFrame();
   virtual void RenderFullScreenFrame(ITexture2D *texture);
@@ -80,7 +81,6 @@ public:
 
 
 private:
-  void BindValues();
   void BindMatrices();
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();

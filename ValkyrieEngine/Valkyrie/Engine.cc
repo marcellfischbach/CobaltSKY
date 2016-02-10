@@ -135,7 +135,7 @@ int vkEngine::Run()
 
   // Setup the character 
   vkCharacterEntity *character = new vkCharacterEntity();
-  
+
   vkStaticMeshState *characterMesh = new vkStaticMeshState();
   characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
   characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
@@ -584,7 +584,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   staticState->AttachShape(boxShape);
   staticState->SetFriction(10.0f);
   staticState->SetRestitution(0.5f);
-  
+
   /* create the plane mesh */
   vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
   vkMesh *planeMesh = new vkMesh();
@@ -721,6 +721,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
 vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
   vkPostProcessor *pp = new vkPostProcessor();
+#if 0
 
   IShader *blurVertShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
   IShader *blurHoriShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
@@ -737,6 +738,20 @@ vkPostProcessor *createPostProcessor(IGraphics *graphics)
   blurHoriPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
   pp->SetFinalProcess(blurHoriPP);
+#else
+  IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
+
+  vkGenericShaderPostProcess *fsaoPP = new vkGenericShaderPostProcess();
+  fsaoPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color");
+  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, "Normal");
+  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_Depth, "Depth");
+  fsaoPP->SetShader(fsaoShader);
+  fsaoPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+
+  pp->SetFinalProcess(fsaoPP);
+
+
+#endif
 
   if (!pp->BuildPostProcessing(graphics))
   {

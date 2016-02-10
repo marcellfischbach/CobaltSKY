@@ -15,9 +15,12 @@ void main ()
 	float num = 0.0;
 	for (float i=-1.0; i<=1.0; i+=stepSize)
 	{
-		vec2 disp = vk_Color0SizeInv * vec2 (0.0, i) * kernelSize;
-		r += texture(vk_Color0, inFragTexCoord0 + disp);
-		num += 1.0;
+		for (float j=-1.0; j<=1.0; j+= stepSize)
+		{
+			vec2 disp = vk_Color0SizeInv * vec2 (i, j) * kernelSize;
+			r += texture(vk_Color0, inFragTexCoord0 + disp);
+			num += 1.0;
+		}
 	}
 	
 	vk_FragColor = r / num;

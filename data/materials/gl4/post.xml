@@ -1,30 +1,39 @@
 <programs>
 
 	<program name="BlurVertLo">
-
 		<techniques>
-		
 			<technique name="Default">
 				<shader>${shaders}/post/post.vert</shader>
 				<shader>${shaders}/post/blur_vert_lo.frag</shader>
 			</technique>
-			
 		</techniques>
-		
 	</program>
 	
-		<program name="BlurHoriLo">
-
+	<program name="BlurHoriLo">
 		<techniques>
-		
 			<technique name="Default">
 				<shader>${shaders}/post/post.vert</shader>
 				<shader>${shaders}/post/blur_hori_lo.frag</shader>
 			</technique>
-			
 		</techniques>
-		
 	</program>
 	
+	<program name="BlurLo">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/post/post.vert</shader>
+				<shader>${shaders}/post/blur_lo.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+	
+	<program name="FSAO">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/post/post.vert</shader>
+				<shader>${shaders}/post/fsao.frag</shader>
+			</technique>
+		</techniques>
+	</program>
 	
 </programs>
