@@ -160,6 +160,7 @@ int vkEngine::Run()
   }
 
   vkPostProcessor *pp = createPostProcessor(m_renderer);
+  printf("PP: %p\n", pp);
   fp->SetPostProcessor(pp);
 
   const IMouse *mouse = m_window->GetMouse();
@@ -721,17 +722,26 @@ vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
   vkPostProcessor *pp = new vkPostProcessor();
 
-  IShader *blurShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
-  vkGenericShaderPostProcess *blurPP = new vkGenericShaderPostProcess();
-  blurPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color0");
-  blurPP->SetShader(blurShader);
+  IShader *blurVertShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
+  IShader *blurHoriShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
 
-  blurPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+  vkGenericShaderPostProcess *blurVertPP = new vkGenericShaderPostProcess();
+  blurVertPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color0");
+  blurVertPP->SetShader(blurVertShader);
+  blurVertPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
 
-  pp->SetFinalProcess(blurPP);
+  vkGenericShaderPostProcess *blurHoriPP = new vkGenericShaderPostProcess();
+  blurHoriPP->BindInput(blurVertPP, 0, "Color0");
+  blurHoriPP->SetShader(blurHoriShader);
+  blurHoriPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
-  pp->BuildPostProcessing(graphics);
+  pp->SetFinalProcess(blurHoriPP);
+
+  if (!pp->BuildPostProcessing(graphics))
+  {
+    return 0;
+  }
   return pp;
 }
 

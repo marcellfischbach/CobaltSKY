@@ -6,6 +6,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <vector>
 #include <map>
+#include <set>
 
 #include <Valkyrie/Graphics/PostProcessing.refl.hh>
 
@@ -38,7 +39,7 @@ public:
   ITexture *GetInput(OriginOutput originOutput);
 
   void SetFinalProcess(vkPostProcess *postProcess);
-  void BuildPostProcessing(IGraphics *graphics);
+  bool BuildPostProcessing(IGraphics *graphics);
 
   void Render(IGraphics *graphics);
 
@@ -46,6 +47,7 @@ public:
 
 
 private:
+  void BuildSet(vkPostProcess *process, std::set<vkPostProcess*> &processes);
   vkPostProcess *m_finalProcess;
   std::vector<vkPostProcess*> m_processes;
   ITexture *m_originInputs[eOO_COUNT];

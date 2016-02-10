@@ -15,7 +15,7 @@ void main ()
 	float num = 0.0;
 	for (float i=-1.0; i<=1.0; i+=stepSize)
 	{
-		vec2 disp = vk_Color0SizeInv * vec2 (0.0, i) * kernelSize;
+		vec2 disp = vk_Color0SizeInv * vec2 (i, 0.0) * kernelSize;
 		r += texture(vk_Color0, inFragTexCoord0 + disp);
 		num += 1.0;
 	}
