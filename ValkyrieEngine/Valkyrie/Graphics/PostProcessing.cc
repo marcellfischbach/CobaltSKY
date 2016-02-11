@@ -289,13 +289,16 @@ bool vkPostProcess::BindInputs(IGraphics *graphics)
       input.m_texture = input.m_postProcess->GetOutput()->GetColorBuffer(input.m_postProcessOutput);
     }
 
-    if (!input.m_texture || !input.m_attrInput)
+    if (!input.m_texture)
     {
       continue;
     }
 
-    vkTextureUnit tu = graphics->BindTexture(input.m_texture);
-    input.m_attrInput->Set(tu);
+    if (input.m_attrInput)
+    {
+      vkTextureUnit tu = graphics->BindTexture(input.m_texture);
+      input.m_attrInput->Set(tu);
+    }
     switch (input.m_texture->GetType())
     {
     case eTT_Texture2D:
@@ -336,7 +339,6 @@ bool vkPostProcess::Initialize(IGraphics *graphics)
     vkString inputName = input.m_inputName;
     vkString inputSizeName = inputName + vkString("Size");
     vkString inputSizeInvName = inputSizeName + vkString("Inv");
-
     input.m_attrInput = m_shader->GetAttribute(vkShaderAttributeID(inputName));
     input.m_attrInputSize = m_shader->GetAttribute(vkShaderAttributeID(inputSizeName));
     input.m_attrInputSizeInv = m_shader->GetAttribute(vkShaderAttributeID(inputSizeInvName));

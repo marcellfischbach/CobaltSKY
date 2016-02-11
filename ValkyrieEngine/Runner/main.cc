@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;

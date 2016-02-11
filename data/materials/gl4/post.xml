@@ -36,4 +36,22 @@
 		</techniques>
 	</program>
 	
+	<program name="CombineMult">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/post/post.vert</shader>
+				<shader>${shaders}/post/combine_mult.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+
+	<program name="CombineAdd">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/post/post.vert</shader>
+				<shader>${shaders}/post/combine_add.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+
 </programs>

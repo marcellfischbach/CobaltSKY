@@ -614,7 +614,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
 #if 1
 
-  for (int i = 0; i < 100; ++i)
+  for (int i = 0; i < 10; ++i)
   {
     float x = (float)rand() / (float)RAND_MAX;
     float y = (float)rand() / (float)RAND_MAX;
@@ -720,14 +720,24 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
 
 vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
-  vkPostProcessor *pp = new vkPostProcessor();
+  vkPostProcessor *pp = 0;
 #if 0
-
+  pp = new vkPostProcessor();
+  IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
+  IShader *combineShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "CombineMult"));
   IShader *blurVertShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
   IShader *blurHoriShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
 
+  vkGenericShaderPostProcess *fsaoPP = new vkGenericShaderPostProcess();
+  fsaoPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color");
+  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, "Normal");
+  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_Depth, "Depth");
+  fsaoPP->SetShader(fsaoShader);
+  fsaoPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+
+
   vkGenericShaderPostProcess *blurVertPP = new vkGenericShaderPostProcess();
-  blurVertPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color0");
+  blurVertPP->BindInput(fsaoPP, 0, "Color0");
   blurVertPP->SetShader(blurVertShader);
   blurVertPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
@@ -737,26 +747,23 @@ vkPostProcessor *createPostProcessor(IGraphics *graphics)
   blurHoriPP->SetShader(blurHoriShader);
   blurHoriPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
-  pp->SetFinalProcess(blurHoriPP);
-#else
-  IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
 
-  vkGenericShaderPostProcess *fsaoPP = new vkGenericShaderPostProcess();
-  fsaoPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color");
-  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, "Normal");
-  fsaoPP->BindInput(vkPostProcessor::eOO_GBuffer_Depth, "Depth");
-  fsaoPP->SetShader(fsaoShader);
-  fsaoPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
-
-  pp->SetFinalProcess(fsaoPP);
+  vkGenericShaderPostProcess *combinePP = new vkGenericShaderPostProcess();
+  combinePP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color0");
+  combinePP->BindInput(blurHoriPP, 0, "Color1");
+  combinePP->SetShader(combineShader);
+  combinePP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
 
-#endif
+  pp->SetFinalProcess(combinePP);
 
   if (!pp->BuildPostProcessing(graphics))
   {
     return 0;
   }
+
+#endif
+
   return pp;
 }
 
