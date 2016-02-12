@@ -721,7 +721,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
 vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
   vkPostProcessor *pp = 0;
-#if 0
+#if 1
   pp = new vkPostProcessor();
   IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
   IShader *combineShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "CombineMult"));
