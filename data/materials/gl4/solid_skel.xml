@@ -1,0 +1,64 @@
+<programs>
+	<program name="GBuffer">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/gbuffer_skel.vert</shader>
+				<shader>${shaders}/solid/gbuffer.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
+				<shader>${shaders}/commons/skeleton.vert</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
+	<program name="GBufferColor">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/gbuffer_skel.vert</shader>
+				<shader>${shaders}/solid/gbuffer_color.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
+				<shader>${shaders}/commons/skeleton.vert</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
+	<program name="ShadowPSSM">
+	
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/shadow_vsm_skel.vert</shader>
+				<shader>${shaders}/solid/shadow_pssm_vsm.geom</shader>
+				<shader>${shaders}/solid/shadow_vsm.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
+				<shader>${shaders}/commons/skeleton.vert</shader>
+			</technique>
+
+		</techniques>
+		
+	</program>
+
+	<program name="ShadowCube">
+	
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/solid/shadow_skel.vert</shader>
+				<shader>${shaders}/solid/shadow_cube.geom</shader>
+				<shader>${shaders}/solid/shadow.frag</shader>
+				<shader>${shaders}/commons/fade_in_out.frag</shader>
+				<shader>${shaders}/commons/skeleton.vert</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+	
+</programs>

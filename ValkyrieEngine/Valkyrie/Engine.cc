@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Time.hh>
+#include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Entity/Character.hh>
@@ -43,6 +44,7 @@
 vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
+vkSubMesh *create_skeleton_mesh(IGraphics *renderer, float size);
 vkPostProcessor *createPostProcessor(IGraphics *graphics);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
@@ -171,6 +173,8 @@ int vkEngine::Run()
   float ct = 0.0f;
   vkUInt32 fps = 0;
   vkUInt64 nextFPS = vkTime::Get().GetCurrentTimeMilli();
+
+
   while (true)
   {
     vkTime::Get().Tick();
@@ -452,6 +456,105 @@ vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
 }
 
 
+vkSubMesh* create_skeleton_mesh(IGraphics *renderer, float size)
+{
+  float s = size;
+  float vertexBuffer[] = {
+    -s, 0.0f, 0.0f, 1.0f,
+     s, 0.0f, 0.0f, 1.0f,
+    -s, 0.0f, 0.0f, 1.0f,
+     s, 0.0f, 0.0f, 1.0f,
+    -s, 0.0f, 0.0f, 1.0f,
+     s, 0.0f, 0.0f, 1.0f,
+    -s, s, 0.0f, 1.0f,
+     s, s, 0.0f, 1.0f,
+  };
+
+  float normalBuffer[] = {
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+    0.0f, 0.0f, 1.0f,
+  };
+
+  float boneWeightBuffer[] = {
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f, 0.0f, 0.0f, 0.0f,
+  };
+
+  unsigned short boneIndexBuffer[] = {
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    1, 0, 0, 0,
+    1, 0, 0, 0,
+    2, 0, 0, 0,
+    2, 0, 0, 0,
+    2, 0, 0, 0,
+    2, 0, 0, 0,
+  };
+
+  float texCoordBuffer[] = {
+    0.0f, 0.0f,
+    2.0f, 0.0f,
+    0.0f, 2.0f,
+    2.0f, 2.0f,
+  };
+
+  unsigned short indexBuffer[] = {
+    0, 2, 3, 0, 3, 1,
+    2, 4, 5, 2, 5, 3,
+    4, 6, 7, 4, 7, 5,
+  };
+
+
+  vkVertexElement elements[] = {
+    vkVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
+    vkVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
+    vkVertexElement(eVST_BoneWeight, eDT_Float, 4, 0, sizeof(float) * 4, 2),
+    vkVertexElement(eVST_BoneIndex, eDT_UnsignedShort, 4, 0, sizeof(unsigned short) * 4, 3),
+    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 4),
+    vkVertexElement()
+  };
+
+  IVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
+  IVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
+  IVertexBuffer *bwb = renderer->CreateVertexBuffer(sizeof(boneWeightBuffer), boneWeightBuffer, eBDM_Static);
+  IVertexBuffer *bib = renderer->CreateVertexBuffer(sizeof(boneIndexBuffer), boneIndexBuffer, eBDM_Static);
+  IVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
+  IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
+  IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+
+  vkBoundingBox bbox;
+  bbox.Add(vkVector3f(-s * 4, -s * 4, -s * 4));
+  bbox.Add(vkVector3f(s * 4, s * 4, s * 4));
+  bbox.Finish();
+
+  vkSubMesh *mesh = new vkSubMesh();
+  mesh->SetIndexType(eDT_UnsignedShort);
+  mesh->SetPrimitiveType(ePT_Triangles);
+  mesh->SetVertexDeclaration(vd);
+  mesh->AddVertexBuffer(vb);
+  mesh->AddVertexBuffer(nb);
+  mesh->AddVertexBuffer(bwb);
+  mesh->AddVertexBuffer(bib);
+  mesh->AddVertexBuffer(tb);
+  mesh->SetIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
+  mesh->SetBoundingBox(bbox);
+
+  return mesh;
+}
+
+
 void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
   static float rotH = -3.906003f, rotV = -0.096000f;
@@ -554,6 +657,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
   vkMaterialInstance *materialFieldstoneGreenInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
   vkMaterialInstance *materialFieldstoneBlueInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
+  vkMaterialInstance *materialRedSkelInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "RedSkeleton"));
 
 
   vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
@@ -603,6 +707,41 @@ vkEntityScene *create_scene(IGraphics *graphics)
   planeEntity->AddState(planeState, staticState);
 
   entityScene->AddEntity(planeEntity);
+
+  // create the skeleton mesh
+  vkSubMesh *skelMeshInst = create_skeleton_mesh(graphics, 5.0);
+  vkMesh *skelMesh = new vkMesh();
+  skelMesh->AddMesh(skelMeshInst);
+  skelMesh->OptimizeDataStruct();
+  skelMesh->UpdateBoundingBox();
+
+  vkStaticMeshState *skelState = new vkStaticMeshState();
+  skelState->SetMesh(skelMesh);
+  skelState->SetMaterial(materialRedSkelInst);
+  skelState->SetCastShadow(true);
+
+  vkEntity *skelEntity = new vkEntity();
+  skelEntity->SetRootState(skelState);
+  skelEntity->AddState(skelState);
+
+  skelEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 4.0f));
+  skelEntity->FinishTransformation();
+
+  vkSkeleton *skeleton = new vkSkeleton();
+  skeleton->PrepareBones(3);
+  vkMatrix4f *mats = skeleton->GetMatrices();
+  mats[0].SetIdentity();
+  mats[1].SetIdentity();
+  mats[1].SetTranslation(vkVector3f(0.0f, 5.0f, 0.0f));
+  mats[2].SetIdentity();
+  mats[2].SetTranslation(vkVector3f(0.0f, 10.0f, 0.0f));
+  mats[2].SetRotationX(3.1415f / 4.0f);
+
+  graphics->SetSkeleton(skeleton);
+
+  entityScene->AddEntity(skelEntity);
+
+
 
 
   vkEntity *signEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/sign.xml"));
@@ -721,7 +860,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
 vkPostProcessor *createPostProcessor(IGraphics *graphics)
 {
   vkPostProcessor *pp = 0;
-#if 1
+#if 0
   pp = new vkPostProcessor();
   IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
   IShader *combineShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "CombineMult"));

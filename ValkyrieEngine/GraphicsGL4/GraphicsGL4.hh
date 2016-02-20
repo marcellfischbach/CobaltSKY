@@ -42,6 +42,8 @@ public:
   virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
   virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
+  virtual void SetSkeleton(const vkSkeleton *skeleton);
+  virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices);
 
   virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices);
 
@@ -118,6 +120,9 @@ private:
 
   vkMatrix4f m_matrices[eMT_COUNT];
   bool m_matrixNeedsRecalculation[eMT_COUNT];
+
+  const vkMatrix4f *m_skeletonMatrices;
+  vkSize m_numberOfSkeletonMatrices;
 
   vkSize m_numberOfShadowMatrices;
   vkMatrix4f m_shadowMatricesProjView[6];

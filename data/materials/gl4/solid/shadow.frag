@@ -9,11 +9,11 @@ in vec3 inFragNormal;
 uniform sampler2D vk_Diffuse;
 uniform vec4 vk_Color;
 
-void fade_in_out_test();
+void vk_fade_in_out_test();
 
 void main ()
 {
-	fade_in_out_test();
+	vk_fade_in_out_test();
 	
 	vk_FragColor = vec4(1, 1, 1, 1);
 }

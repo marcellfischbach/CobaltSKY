@@ -15,11 +15,12 @@ uniform vec4 vk_Color;
 
 
 
-void fade_in_out_test();
+
+void vk_fade_in_out_test();
 
 void main ()
 {
-	fade_in_out_test();
+	vk_fade_in_out_test();
 	
 	vec3 diffuse = texture(vk_Diffuse, texCoord).rgb;
 	diffuse *= vk_Color.rgb;

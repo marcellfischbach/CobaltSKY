@@ -21,6 +21,18 @@ source_group(
 	)
 
 
+set(SOURCE_ANIMATION
+  Animation/Skeleton.cc
+  Animation/Skeleton.hh
+	)
+
+
+source_group(
+	"ValkyrieEngine\\Animation"
+	FILES
+	${SOURCE_ANIMATION}
+	)
+
 set(SOURCE_CORE
   Core/ClassRegistry.cc
   Core/ClassRegistry.hh
@@ -216,6 +228,7 @@ source_group(
 
 set(ALL_SOURCES
 	${SOURCE}
+	${SOURCE_ANIMATION}
 	${SOURCE_CORE}
   ${SOURCE_ENTITY}
 	${SOURCE_GRAPHICS}

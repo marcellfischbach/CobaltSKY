@@ -14,11 +14,11 @@ uniform vec4 vk_Color;
 
 
 
-void fade_in_out_test();
+void vk_fade_in_out_test();
 
 void main ()
 {
-	fade_in_out_test();
+	vk_fade_in_out_test();
 	
 	vec3 diffuse = vk_Color.rgb;
 	vk_DiffuseRoughness = vec4(diffuse, 0.0);

@@ -5,7 +5,7 @@ uniform vec2 vk_BinaryGradientToScreen;
 uniform int vk_FadeInOutValue;
 
 
-void fade_in_out_test()
+void vk_fade_in_out_test()
 {
 	if (vk_FadeInOutValue == 0)
 	{

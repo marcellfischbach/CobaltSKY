@@ -19,6 +19,7 @@ struct ITexture2D;
 struct ITexture2DArray;
 struct ITextureCube;
 struct vkVertexElement;
+class vkSkeleton;
 
 VK_INTERFACE()
 struct VKE_API IGraphics : public IObject
@@ -58,6 +59,9 @@ struct VKE_API IGraphics : public IObject
   virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
   virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
+  virtual void SetSkeleton(const vkSkeleton *skeleton) = 0;
+  virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices) = 0;
+
   /**
    * @}
    */

@@ -10,6 +10,7 @@
 #include <GraphicsGL4/MappingGL4.hh>
 #include <GraphicsGL4/DefinesGL4.hh>
 #include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
+#include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Graphics/BinaryGradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
@@ -21,6 +22,8 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_indexBuffer(0)
   , m_program(0)
   , m_renderTarget(0)
+  , m_skeletonMatrices(0)
+  , m_numberOfSkeletonMatrices(0)
 {
   VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
@@ -279,7 +282,7 @@ void vkGraphicsGL4::GetOrthographicProjection(float l, float r, float b, float t
   float sx = r + l;
   float sy = t + b;
   float sz = f + n;
- 
+
   /*
   m.m00 = 2.0f / dx; m.m10 = 0.0f;      m.m20 = 0.0f;      m.m30 = -sx / dx;
   m.m01 = 0.0f;      m.m11 = 2.0f / dy; m.m21 = 0.0f;      m.m31 = -sy / dy;
@@ -314,6 +317,17 @@ void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, floa
   m.m02 = 0.0f;      m.m12 = dy / 2.0f; m.m22 = 0.0f;       m.m32 = sy / 2.0f;
   m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;       m.m33 = 1.0;
 
+}
+
+void vkGraphicsGL4::SetSkeleton(const vkSkeleton *skeleton)
+{
+  SetSkeletonMatrices(skeleton->GetMatrices(), skeleton->GetNumberOfBones());
+}
+
+void vkGraphicsGL4::SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
+{
+  m_skeletonMatrices = matrices;
+  m_numberOfSkeletonMatrices = numberOfMatrices;
 }
 
 
@@ -398,6 +412,15 @@ void vkGraphicsGL4::BindMatrices()
     }
   }
 
+  if (m_skeletonMatrices && m_numberOfSkeletonMatrices)
+  {
+
+    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatsSkeleton);
+    if (attrib)
+    {
+      attrib->Set(m_skeletonMatrices, m_numberOfSkeletonMatrices);
+    }
+  }
   static vkShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
   IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
   if (attrib)
@@ -425,6 +448,7 @@ void vkGraphicsGL4::BindMatrices()
   {
     attrib->Set(m_shadowNearFars, m_numberOfShadowMatrices);
   }
+
 
 }
 
@@ -891,7 +915,7 @@ void vkGraphicsGL4::InitFullScreenData()
     1, 1, 0, 1,     1, 1,
 
     0, 0, 0, 1,     0, 0,
-    1, 1, 0, 1,     1, 1, 
+    1, 1, 0, 1,     1, 1,
     1, 0, 0, 1,     1, 0,
   };
   m_fullScreenParamVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexDataParam), vertexDataParam, eBDM_Static));
