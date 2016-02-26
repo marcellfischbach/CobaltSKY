@@ -50,9 +50,22 @@ source_group(
 	)
 
 
+set(SOURCE_SHADERGRAPH
+  ShaderGraph/ShaderGraphGL4.cc
+  ShaderGraph/ShaderGraphGL4.hh
+  )
+  
+source_group(
+	"GraphicsGL4\\ShaderGraph"
+	FILES
+	${SOURCE_SHADERGRAPH}
+	)
+
+
 set(ALL_SOURCES
 	${SOURCE}
   ${SOURCE_DEFERRED}
+	${SOURCE_SHADERGRAPH}
 	)
 
 VK_MOC(GraphicsGL4 VKGL4_API ALL_SOURCES MOC_SOURCES)

@@ -790,7 +790,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(directionalLightEntity);
 
   vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
-  directionalBackLight->SetColor(vkColor4f(1.0f, 0.8f, 0.2f));
+  directionalBackLight->SetColor(vkColor4f(1.0f, 0.0f, 1.0f));
   directionalBackLight->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
   directionalBackLight->SetCastShadow(false);
   directionalBackLight->SetEnergy(0.25f);

@@ -156,6 +156,19 @@ source_group(
 	FILES
 	${SOURCE_GRAPHICS_SCENE}
 	)
+
+  	
+set(SOURCE_GRAPHICS_SHADERGRAPH
+  Graphics/ShaderGraph/SGNode.cc
+  Graphics/ShaderGraph/SGNode.hh
+	)
+	
+source_group(
+	"ValkyrieEngine\\Graphics\\ShaderGraph"
+	FILES
+	${SOURCE_GRAPHICS_SHADERGRAPH}
+	)
+	
 	
 set(SOURCE_LOADERS
   Loaders/EntityLoader.cc
@@ -233,6 +246,7 @@ set(ALL_SOURCES
   ${SOURCE_ENTITY}
 	${SOURCE_GRAPHICS}
 	${SOURCE_GRAPHICS_SCENE}
+	${SOURCE_GRAPHICS_SHADERGRAPH}
 	${SOURCE_LOADERS}
 	${SOURCE_MATH}
   ${SOURCE_PHYSICS}

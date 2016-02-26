@@ -50,7 +50,7 @@ void vkStaticMeshState::SetMesh(vkMesh *mesh)
   UpdateBoundingBox();
 }
 
-void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkUInt32 slot)
+void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkSize slot)
 {
   if (slot >= m_numberOfMaterialSlots)
   {
@@ -63,7 +63,7 @@ void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkUInt32 slot)
 
 void vkStaticMeshState::UpdateMaterialSlots()
 {
-  vkUInt32 numberOfSlots = m_mesh->GetNumberOfMaterials();
+  vkSize numberOfSlots = m_mesh->GetNumberOfMaterials();
   if (numberOfSlots == m_numberOfMaterialSlots)
   {
     return;

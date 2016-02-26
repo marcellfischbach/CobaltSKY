@@ -26,10 +26,10 @@ public:
   vkMesh *GetMesh();
   const vkMesh *GetMesh() const;
 
-  vkUInt32 GetNumberOfMaterialsSlots() const;
-  void SetMaterial(vkMaterialInstance *material, vkUInt32 slot = 0);
-  vkMaterialInstance *GetMaterial(vkUInt32 slot = 0);
-  const vkMaterialInstance *GetMaterial(vkUInt32 slot = 0) const;
+  vkSize GetNumberOfMaterialsSlots() const;
+  void SetMaterial(vkMaterialInstance *material, vkSize slot = 0);
+  vkMaterialInstance *GetMaterial(vkSize slot = 0);
+  const vkMaterialInstance *GetMaterial(vkSize slot = 0) const;
 
   void SetColliderShape(vkPhysicsShapeContainer *shapes);
   vkPhysicsShapeContainer *GetColliderShape();
@@ -63,7 +63,7 @@ private:
 
   vkMesh* m_mesh;
 
-  vkUInt32 m_numberOfMaterialSlots;
+  vkSize m_numberOfMaterialSlots;
   vkMaterialInstance **m_materials;
 
   IPhysicsStaticCollider *m_staticCollider;
@@ -82,12 +82,12 @@ VK_FORCEINLINE const vkMesh *vkStaticMeshState::GetMesh() const
   return m_mesh;
 }
 
-VK_FORCEINLINE vkUInt32 vkStaticMeshState::GetNumberOfMaterialsSlots() const
+VK_FORCEINLINE vkSize vkStaticMeshState::GetNumberOfMaterialsSlots() const
 {
   return m_numberOfMaterialSlots;
 }
 
-VK_FORCEINLINE vkMaterialInstance *vkStaticMeshState::GetMaterial(vkUInt32 slot)
+VK_FORCEINLINE vkMaterialInstance *vkStaticMeshState::GetMaterial(vkSize slot)
 {
   if (slot >= m_numberOfMaterialSlots)
   {
@@ -96,7 +96,7 @@ VK_FORCEINLINE vkMaterialInstance *vkStaticMeshState::GetMaterial(vkUInt32 slot)
   return m_materials[slot];
 }
 
-VK_FORCEINLINE const vkMaterialInstance *vkStaticMeshState::GetMaterial(vkUInt32 slot) const
+VK_FORCEINLINE const vkMaterialInstance *vkStaticMeshState::GetMaterial(vkSize slot) const
 {
   if (slot >= m_numberOfMaterialSlots)
   {

@@ -75,9 +75,9 @@ public:
   void UpdateBoundingBox();
 
 
-  vkUInt32 GetNumberOfMaterials() const;
+  vkSize GetNumberOfMaterials() const;
   void AddMaterialName(const vkString &materialName);
-  const vkString &GetMaterialName(vkUInt32 idx) const;
+  const vkString &GetMaterialName(vkSize idx) const;
   vkUInt32 GetMaterialIndex(const vkString &materialName) const;
 
   void Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
@@ -97,9 +97,8 @@ private:
   };
 
   std::vector<LOD> m_lods;
-  vkUInt32 m_numberOfMaterials;
-  std::vector<vkString> m_materialNames
-    ;
+  vkSize m_numberOfMaterials;
+  std::vector<vkString> m_materialNames;
 
   LOD &GetLOD(vkUInt8 lod);
 
@@ -107,7 +106,7 @@ private:
 };
 
 
-VK_FORCEINLINE vkUInt32 vkMesh::GetNumberOfMaterials() const
+VK_FORCEINLINE vkSize vkMesh::GetNumberOfMaterials() const
 {
   return m_numberOfMaterials;
 }

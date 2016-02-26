@@ -27,8 +27,8 @@ public:
 
 vkCharacterEntity::vkCharacterEntity()
   : vkEntity()
-  , m_height(1.8)
-  , m_radius(0.35)
+  , m_height(1.8f)
+  , m_radius(0.35f)
 {
   m_callback = new vkCharacterEntityTransformationCallback(this);
   m_characterController = vkEngine::Get()->GetPhysicsSystem()->CreateCapsulseCharacterController();

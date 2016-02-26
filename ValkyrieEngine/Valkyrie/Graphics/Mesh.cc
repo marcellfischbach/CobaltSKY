@@ -143,7 +143,7 @@ void vkMesh::AddMaterialName(const vkString &materialName)
   m_materialNames.push_back(materialName);
 }
 
-const vkString &vkMesh::GetMaterialName(vkUInt32 idx) const
+const vkString &vkMesh::GetMaterialName(vkSize idx) const
 {
   if (idx >= m_materialNames.size())
   {
