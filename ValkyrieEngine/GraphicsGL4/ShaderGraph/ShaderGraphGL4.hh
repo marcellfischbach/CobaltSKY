@@ -57,6 +57,8 @@ public:
   vkString AddAssignment(const vkString &type, const vkString &statement);
   void SetOutputValue(vkSGOutput *output, const vkString &value);
 
+  bool HasOutputValue(vkSGOutput *output) const;
+  bool HasInputValue(vkSGInput *input) const;
   vkString GetOutputValue(vkSGOutput *output);
   vkString GetInputValue(vkSGInput *input);
 
@@ -65,16 +67,21 @@ public:
 
   vkString GetNextVariable();
 
+  void AddBinding(const vkString &variableType, const vkString &variableName);
+
+  void SetDefaultTextureCoordinate(const vkString &defaultTextureCoordinat);
+  const vkString &GetDefaultTextureCoordinate() const;
 
 private:
   vkShaderGraphGL4 *m_graph;
 
   vkString m_code;
   vkUInt32 m_variableCounter;
+  vkString m_defaultTextureCoordinate;
   std::map<vkSGOutput *, vkString> m_outputValue;
   std::map<vkSGNode *, vkSGNodeGL4*> m_nodes;
   std::map<vkSGOutput *, vkString> m_outputToVar;
-
+  std::map<vkString, vkString> m_unisformBindingNames;
 };
 
 
@@ -128,9 +135,11 @@ private:
 private:
   void EvaluateConstFloat(vkShaderGraphCtx &ctx);
   void EvaluateConstFloat3(vkShaderGraphCtx &ctx);
+  void EvaluateFloat2(vkShaderGraphCtx &ctx);
   void EvaluateFloat3(vkShaderGraphCtx &ctx);
   void EvaluateAddFloat(vkShaderGraphCtx &ctx);
   void EvaluateAddFloat3(vkShaderGraphCtx &ctx);
   void EvaluateSplitFloat3(vkShaderGraphCtx &ctx);
+  void EvaluateTexture2D(vkShaderGraphCtx &ctx);
 };
 

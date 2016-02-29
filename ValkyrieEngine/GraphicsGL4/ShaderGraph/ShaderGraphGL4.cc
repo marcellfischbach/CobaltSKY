@@ -7,14 +7,7 @@
 
 vkShaderGraphGL4::vkShaderGraphGL4()
 {
-  /*
-  m_nodeMapping[vkSGConstFloat::GetStaticClass()] = vkSGConstFloatGL4::GetStaticClass();
-  m_nodeMapping[vkSGConstFloat3::GetStaticClass()] = vkSGConstFloat3GL4::GetStaticClass();
-  m_nodeMapping[vkSGFloat3::GetStaticClass()] = vkSGFloat3GL4::GetStaticClass();
-  m_nodeMapping[vkSGAddFloat::GetStaticClass()] = vkSGAddFloatGL4::GetStaticClass();
-  m_nodeMapping[vkSGAddFloat3::GetStaticClass()] = vkSGAddFloat3GL4::GetStaticClass();
-  m_nodeMapping[vkSGSplitFloat3::GetStaticClass()] = vkSGSplitFloat3GL4::GetStaticClass();
-  */
+
 }
 
 
@@ -60,6 +53,7 @@ vkString vkShaderGraphGL4::CreateCode(vkSGNode *node, const vkString &outputName
 vkString vkShaderGraphGL4::CreateCode(vkSGOutput *output)
 {
   vkShaderGraphCtx ctx(this);
+  ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   return ctx.CreateCode(output);
 }
 
@@ -196,12 +190,39 @@ vkString vkShaderGraphCtx::GetNextVariable()
 }
 
 
+void vkShaderGraphCtx::AddBinding(const vkString &variableType, const vkString &variableName)
+{
+  m_unisformBindingNames[variableName] = variableType;
+}
+
+
+void vkShaderGraphCtx::SetDefaultTextureCoordinate(const vkString &defaultTextureCoordinate) 
+{
+  m_defaultTextureCoordinate = defaultTextureCoordinate;
+}
+
+const vkString &vkShaderGraphCtx::GetDefaultTextureCoordinate() const
+{
+  return m_defaultTextureCoordinate;
+}
+
 void vkShaderGraphCtx::SetOutputValue(vkSGOutput *output, const vkString &value)
 {
   if (output)
   {
     m_outputValue[output] = value;
   }
+}
+
+bool vkShaderGraphCtx::HasInputValue(vkSGInput *input) const
+{
+  return HasOutputValue(input ? input->GetInput() : 0);
+}
+
+bool vkShaderGraphCtx::HasOutputValue(vkSGOutput *output) const
+{
+  std::map<vkSGOutput *, vkString>::const_iterator it = m_outputValue.find(output);
+  return it != m_outputValue.end();
 }
 
 vkString vkShaderGraphCtx::GetOutputValue(vkSGOutput *output)
@@ -320,6 +341,10 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
   {
     EvaluateConstFloat3(ctx);
   }
+  else if (nodeClass == eSGNT_Float2)
+  {
+    EvaluateFloat2(ctx);
+  }
   else if (nodeClass == eSGNT_Float3)
   {
     EvaluateFloat3(ctx);
@@ -332,7 +357,10 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
   {
     EvaluateSplitFloat3(ctx);
   }
-
+  else if (nodeClass == eSGNT_Texture2D)
+  {
+    EvaluateTexture2D(ctx);
+  }
 
 
   return true;
@@ -405,6 +433,39 @@ void vkSGNodeGL4::EvaluateConstFloat3(vkShaderGraphCtx &ctx)
   ctx.SetOutputValue(fl->GetOutput(0), ss.str());
 
 }
+
+void vkSGNodeGL4::EvaluateFloat2(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *fl = GetNode();
+  if (!fl->GetInputNode(0) || !fl->GetInputNode(1))
+  {
+    return;
+  }
+
+  vkString src0 = ctx.GetInputValue(fl->GetInput(0));
+  vkString src1 = ctx.GetInputValue(fl->GetInput(1));
+
+  if (src0 == src1)
+  {
+    // full swizzle possible
+    ss << src0 << "." <<
+      fl->GetInput(0)->GetInput()->GetAttr() <<
+      fl->GetInput(1)->GetInput()->GetAttr();
+
+  }
+  else
+  {
+    // create complete new vec3
+    ss << "vec2(" <<
+      ctx.GetFullInputValue(fl->GetInput(0)) << ", " <<
+      ctx.GetFullInputValue(fl->GetInput(1)) <<
+      ")";
+  }
+
+  AssignOutput(ctx, fl->GetOutput(0), ss.str(), "vec2");
+}
+
 
 void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
 {
@@ -502,4 +563,32 @@ void vkSGNodeGL4::EvaluateSplitFloat3(vkShaderGraphCtx &ctx)
   ctx.SetOutputValue(split->GetOutput(0), exp);
   ctx.SetOutputValue(split->GetOutput(1), exp);
   ctx.SetOutputValue(split->GetOutput(2), exp);
+}
+
+
+void vkSGNodeGL4::EvaluateTexture2D(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *txt = GetNode();
+  vkString bindingName = txt->GetBindingName();
+  if (bindingName.length() == 0)
+  {
+    return;
+  }
+
+  vkString txtCoordinate = ctx.GetDefaultTextureCoordinate();
+  if (ctx.HasInputValue(txt->GetInput("uv")))
+  {
+    txtCoordinate = ctx.GetFullInputValue(txt->GetInput("uv"));
+  }
+
+  bindingName = "vk_" + bindingName;
+  std::ostringstream ss;
+  ss << "texture(" << bindingName << ", " << txtCoordinate << ")";
+  vkString code = ss.str();
+
+  ctx.SetOutputValue(txt->GetOutput(0), code);
+  ctx.SetOutputValue(txt->GetOutput(1), code);
+  ctx.SetOutputValue(txt->GetOutput(2), code);
+  ctx.SetOutputValue(txt->GetOutput(3), code);
+  ctx.SetOutputValue(txt->GetOutput(4), code);
 }

@@ -156,11 +156,17 @@ vkSGNode::vkSGNode(vkSGNodeType type)
   switch (type)
   {
   case eSGNT_ConstFloat3:
-    SetName("ConstFloat3");
+    SetName("Const/ConstFloat3");
     AddInput(new vkSGInput(eSGDT_Float, "x", true, false));
     AddInput(new vkSGInput(eSGDT_Float, "y", true, false));
     AddInput(new vkSGInput(eSGDT_Float, "z", true, false));
     AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
+    break;
+  case eSGNT_Float2:
+    SetName("Float2");
+    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
     break;
   case eSGNT_Float3:
     SetName("Float3");
@@ -169,9 +175,17 @@ vkSGNode::vkSGNode(vkSGNodeType type)
     AddInput(new vkSGInput(eSGDT_Float, "z", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
     break;
+  case eSGNT_Float4:
+    SetName("Float4");
+    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "z", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "w", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
+    break;
 
   case eSGNT_SplitFloat3:
-    SetName("SplitFloat3");
+    SetName("Util/SplitFloat3");
     AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float3, "x", "x"));
     AddOutput(new vkSGOutput(eSGDT_Float3, "y", "y"));
@@ -179,12 +193,23 @@ vkSGNode::vkSGNode(vkSGNodeType type)
     break;
 
   case eSGNT_AddFloat3:
-    SetName("AddFloat3");
+    SetName("Arith/AddFloat3");
     AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
     AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
     break;
 
+
+  case eSGNT_Texture2D:
+    SetName("Texture/Texture2D");
+    AddInput(new vkSGInput(eSGDT_Texture2D, "t", false, true));
+    AddInput(new vkSGInput(eSGDT_Float2, "uv", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "c", ""));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "r", "r"));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "g", "g"));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "b", "b"));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "a", "a"));
+    break;
   }
 
 }

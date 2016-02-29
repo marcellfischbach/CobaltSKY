@@ -46,6 +46,15 @@ int main(int argc, char **argv)
   float3->GetInput("y")->SetInput(splitFloat->GetOutput(2));
   float3->GetInput("z")->SetInput(splitFloat->GetOutput(1));
 
+  vkSGNode *txtCoord = new vkSGNode(eSGNT_Float2);
+  txtCoord->GetInput("x")->SetInput(float3->GetOutput(0));
+  txtCoord->GetInput("y")->SetInput(float3->GetOutput(2));
+
+  vkSGNode *texture = new vkSGNode(eSGNT_Texture2D);
+  texture->SetBindingName("Diffuse");
+  texture->GetInput("uv")->SetInput(txtCoord->GetOutput(0));
+
+
 
   printf("ConstFloat1: %p\n", constFloat1);
   printf("ConstFloat2: %p\n", constFloat2);
@@ -55,7 +64,7 @@ int main(int argc, char **argv)
   printf("Float3      : %p\n", float3);
 
   vkShaderGraphGL4 graph;
-  vkString code = graph.CreateCode(float3, 0);
+  vkString code = graph.CreateCode(texture, 0);
   printf("Code:\n%s\n", code.c_str());
 
   return 0;

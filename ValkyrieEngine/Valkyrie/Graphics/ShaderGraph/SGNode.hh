@@ -18,15 +18,26 @@ enum vkSGDataType
   eSGDT_Int2 = 0x20,
   eSGDT_Int3 = 0x40,
   eSGDT_Int4 = 0x80,
+  eSGDT_Texture1D = 0x100,
+  eSGDT_Texture1DArray = 0x200,
+  eSGDT_Texture2D = 0x400,
+  eSGDT_Texture2DArray = 0x800,
+  eSGDT_Texture3D = 0x1000,
+  eSGDT_TextureCube = 0x2000,
+  eSGDT_TextureCubeArray = 0x4000,
 };
 
 enum vkSGNodeType
 {
   eSGNT_ConstFloat,
   eSGNT_ConstFloat3,
+  eSGNT_Float2,
   eSGNT_Float3,
+  eSGNT_Float4,
   eSGNT_AddFloat3,
   eSGNT_SplitFloat3,
+  eSGNT_Texture2D,
+  eSGNT_Texture2DArray,
 };
 
 
@@ -135,6 +146,9 @@ public:
 
   const vkString &GetName() const;
 
+  void SetBindingName(const vkString &bindingName);
+  const vkString &GetBindingName() const;
+
   vkSize GetNumberOfInputs() const;
   vkSGInput *GetInput(vkSize idx);
   vkSGInput *GetInput(const vkString &name);
@@ -157,6 +171,7 @@ public:
 
 private:
   vkString m_name;
+  vkString m_bindingName;
   vkSGNodeType m_type;
 
   std::vector<vkSGInput*> m_inputs;
@@ -251,6 +266,15 @@ VK_FORCEINLINE const vkString &vkSGNode::GetName() const
   return m_name;
 }
 
+VK_FORCEINLINE void vkSGNode::SetBindingName(const vkString &bindingName)
+{
+  m_bindingName = bindingName;
+}
+
+VK_FORCEINLINE const vkString &vkSGNode::GetBindingName() const
+{
+  return m_bindingName;
+}
 
 VK_FORCEINLINE vkSGNodeType vkSGNode::GetType() const
 {
