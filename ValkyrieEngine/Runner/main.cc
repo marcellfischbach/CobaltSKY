@@ -14,32 +14,37 @@
 
 int main(int argc, char **argv)
 {
-  vkSGConstFloat3 *constFloat1 = new vkSGConstFloat3();
-  constFloat1->SetValue(10.0f, 12.0f, 13.0f);
+  vkSGNode *constFloat1 = new vkSGNode(eSGNT_ConstFloat3);
+  constFloat1->GetInput(0)->SetConstData(10.0f);
+  constFloat1->GetInput(1)->SetConstData(12.0f);
+  constFloat1->GetInput(2)->SetConstData(13.0f);
 
 
-  vkSGConstFloat3 *constFloat2 = new vkSGConstFloat3();
-  constFloat2->SetValue(25.2f, 27.0f, 30.0f);
+
+  vkSGNode *constFloat2 = new vkSGNode(eSGNT_ConstFloat3);
+  constFloat2->GetInput(0)->SetConstData(25.2f);
+  constFloat2->GetInput(1)->SetConstData(27.0f);
+  constFloat2->GetInput(2)->SetConstData(30.0f);
 
 
-  vkSGAddFloat3 *addFloat = new vkSGAddFloat3();
-  addFloat->GetInput("A")->SetOutput(constFloat1->GetOutput(0));
-  addFloat->GetInput("B")->SetOutput(constFloat2->GetOutput(0));
+  vkSGNode *addFloat = new vkSGNode(eSGNT_AddFloat3);
+  addFloat->GetInput("a")->SetInput(constFloat1->GetOutput(0));
+  addFloat->GetInput("b")->SetInput(constFloat2->GetOutput(0));
 
-  vkSGAddFloat3 *add2Float = new vkSGAddFloat3();
-  add2Float->GetInput("A")->SetOutput(addFloat->GetOutput(0));
-  add2Float->GetInput("B")->SetOutput(addFloat->GetOutput(0));
+  vkSGNode *add2Float = new vkSGNode(eSGNT_AddFloat3);
+  add2Float->GetInput("a")->SetInput(addFloat->GetOutput(0));
+  add2Float->GetInput("b")->SetInput(addFloat->GetOutput(0));
 
-  vkSGSplitFloat3 *splitFloat = new vkSGSplitFloat3();
-  splitFloat->GetInput("Val")->SetOutput(add2Float->GetOutput(0));
+  vkSGNode *splitFloat = new vkSGNode(eSGNT_SplitFloat3);
+  splitFloat->GetInput("v")->SetInput(add2Float->GetOutput(0));
 
-  vkSGSplitFloat3 *split2Float = new vkSGSplitFloat3();
-  split2Float->GetInput("Val")->SetOutput(addFloat->GetOutput(0));
+  vkSGNode *split2Float = new vkSGNode(eSGNT_SplitFloat3);
+  split2Float->GetInput("v")->SetInput(addFloat->GetOutput(0));
 
-  vkSGFloat3 *float3 = new vkSGFloat3();
-  float3->GetInput("x")->SetOutput(splitFloat->GetOutput(0));
-  float3->GetInput("y")->SetOutput(split2Float->GetOutput(2));
-  float3->GetInput("z")->SetOutput(splitFloat->GetOutput(1));
+  vkSGNode *float3 = new vkSGNode(eSGNT_Float3);
+  float3->GetInput("x")->SetInput(splitFloat->GetOutput(0));
+  float3->GetInput("y")->SetInput(splitFloat->GetOutput(2));
+  float3->GetInput("z")->SetInput(splitFloat->GetOutput(1));
 
 
   printf("ConstFloat1: %p\n", constFloat1);

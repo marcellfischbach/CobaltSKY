@@ -26,6 +26,7 @@ public:
 
   vkSGNodeGL4 *CreateNode(const vkClass *clazz) const;
 
+
 private:
   std::map<const vkClass*, const vkClass*> m_nodeMapping;
 
@@ -93,11 +94,9 @@ public:
   virtual bool EvaluateInline(vkShaderGraphCtx &ctx);
   virtual bool Evaluate(vkShaderGraphCtx &ctx);
 
-  template<typename T>
-  T* GetNode()
+  vkSGNode* GetNode() 
   {
-    T* t = vkQueryClass<T>(m_node);
-    return t;
+    return m_node;
   }
 
   void SetForceInline(bool forceInline)
@@ -122,6 +121,9 @@ private:
   vkSGNode *m_node;
   bool m_inlineEvaluated;
   bool m_evaluated;
+
+  vkString GetFloat(vkShaderGraphCtx &ctx, int x);
+  vkString GetInt(vkShaderGraphCtx &ctx, int x);
 
 private:
   void EvaluateConstFloat(vkShaderGraphCtx &ctx);

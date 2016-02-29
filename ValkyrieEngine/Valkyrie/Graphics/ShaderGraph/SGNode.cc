@@ -20,23 +20,13 @@ vkSGOutput::~vkSGOutput()
 
 
 
-vkSGInput::vkSGInput(vkSGDataType type, const vkString &name)
-  : m_dataType(type)
-  , m_dataTypes(type)
-  , m_name(name)
-  , m_node(0)
-  , m_output(0)
-  , m_canConstData(false)
-{
-  memset(&m_constData, 0, sizeof(m_constData));
-}
-
-vkSGInput::vkSGInput(vkUInt32 types, const vkString &name, bool canConst)
+vkSGInput::vkSGInput(vkUInt32 types, const vkString &name, bool canConst, bool canInputNode)
   : m_dataTypes(types)
   , m_name(name)
   , m_node(0)
-  , m_output(0)
-  , m_canConstData(canConst)
+  , m_input(0)
+  , m_canConstData(canConst && (types == eSGDT_Float || types == eSGDT_Int))
+  , m_canInputNode(canInputNode)
 {
   memset(&m_constData, 0, sizeof(m_constData));
 }
@@ -48,112 +38,154 @@ vkSGInput::~vkSGInput()
 }
 
 
- vkSGNode *vkSGInput::GetInputNode() 
+vkSGNode *vkSGInput::GetInputNode()
 {
-  if (!m_output)
+  if (!m_input)
   {
     return 0;
   }
-  return m_output->GetNode();
+  return m_input->GetNode();
+}
+
+void vkSGInput::SetInput(vkSGOutput *input)
+{
+  if (m_canInputNode)
+  {
+    m_input = input;
+  }
 }
 
 
-
- void vkSGInput::SetConstDataPossible(bool constDataPossible)
- {
-   m_canConstData = constDataPossible;
- }
-
- void vkSGInput::SetConstData(unsigned i0)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Int) != 0)
-   {
-     m_constDataType = eSGDT_Int;
-     m_constData.u4[0] = i0;
-   }
- }
-
-
- void vkSGInput::SetConstData(unsigned i0, unsigned i1)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Int2) != 0)
-   {
-     m_constDataType = eSGDT_Int2;
-     m_constData.u4[0] = i0;
-     m_constData.u4[1] = i1;
-   }
- }
-
- void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Int3) != 0)
-   {
-     m_constDataType = eSGDT_Int3;
-     m_constData.u4[0] = i0;
-     m_constData.u4[1] = i1;
-     m_constData.u4[2] = i2;
-   }
- }
-
- void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2, unsigned i3)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Int4) != 0)
-   {
-     m_constDataType = eSGDT_Int4;
-     m_constData.u4[0] = i0;
-     m_constData.u4[1] = i1;
-     m_constData.u4[2] = i2;
-     m_constData.u4[3] = i3;
-   }
- }
-
-
- void vkSGInput::SetConstData(float i0)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Float) != 0)
-   {
-     m_constDataType = eSGDT_Float;
-     m_constData.f4[0] = i0;
-   }
- }
-
-
- void vkSGInput::SetConstData(float i0, float i1)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Float2) != 0)
-   {
-     m_constDataType = eSGDT_Float2;
-     m_constData.f4[0] = i0;
-     m_constData.f4[1] = i1;
-   }
- }
-
- void vkSGInput::SetConstData(float i0, float i1, float i2)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Float3) != 0)
-   {
-     m_constDataType = eSGDT_Float3;
-     m_constData.f4[0] = i0;
-     m_constData.f4[1] = i1;
-     m_constData.f4[2] = i2;
-   }
- }
-
- void vkSGInput::SetConstData(float i0, float i1, float i2, float i3)
- {
-   if (m_canConstData && (m_dataTypes & eSGDT_Float4) != 0)
-   {
-     m_constDataType = eSGDT_Float4;
-     m_constData.f4[0] = i0;
-     m_constData.f4[1] = i1;
-     m_constData.f4[2] = i2;
-     m_constData.f4[3] = i3;
-   }
- }
-
-vkSGNode::vkSGNode()
-  : vkObject()
+void vkSGInput::SetConstDataPossible(bool constDataPossible)
 {
+  m_canConstData = constDataPossible;
+}
+
+void vkSGInput::SetConstData(unsigned i0)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Int) != 0)
+  {
+    m_constDataType = eSGDT_Int;
+    m_constData.u4[0] = i0;
+  }
+}
+
+
+void vkSGInput::SetConstData(unsigned i0, unsigned i1)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Int2) != 0)
+  {
+    m_constDataType = eSGDT_Int2;
+    m_constData.u4[0] = i0;
+    m_constData.u4[1] = i1;
+  }
+}
+
+void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Int3) != 0)
+  {
+    m_constDataType = eSGDT_Int3;
+    m_constData.u4[0] = i0;
+    m_constData.u4[1] = i1;
+    m_constData.u4[2] = i2;
+  }
+}
+
+void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2, unsigned i3)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Int4) != 0)
+  {
+    m_constDataType = eSGDT_Int4;
+    m_constData.u4[0] = i0;
+    m_constData.u4[1] = i1;
+    m_constData.u4[2] = i2;
+    m_constData.u4[3] = i3;
+  }
+}
+
+
+void vkSGInput::SetConstData(float i0)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Float) != 0)
+  {
+    m_constDataType = eSGDT_Float;
+    m_constData.f4[0] = i0;
+  }
+}
+
+
+void vkSGInput::SetConstData(float i0, float i1)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Float2) != 0)
+  {
+    m_constDataType = eSGDT_Float2;
+    m_constData.f4[0] = i0;
+    m_constData.f4[1] = i1;
+  }
+}
+
+void vkSGInput::SetConstData(float i0, float i1, float i2)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Float3) != 0)
+  {
+    m_constDataType = eSGDT_Float3;
+    m_constData.f4[0] = i0;
+    m_constData.f4[1] = i1;
+    m_constData.f4[2] = i2;
+  }
+}
+
+void vkSGInput::SetConstData(float i0, float i1, float i2, float i3)
+{
+  if (m_canConstData && (m_dataTypes & eSGDT_Float4) != 0)
+  {
+    m_constDataType = eSGDT_Float4;
+    m_constData.f4[0] = i0;
+    m_constData.f4[1] = i1;
+    m_constData.f4[2] = i2;
+    m_constData.f4[3] = i3;
+  }
+}
+
+vkSGNode::vkSGNode(vkSGNodeType type)
+  : vkObject()
+  , m_type(type)
+{
+
+  switch (type)
+  {
+  case eSGNT_ConstFloat3:
+    SetName("ConstFloat3");
+    AddInput(new vkSGInput(eSGDT_Float, "x", true, false));
+    AddInput(new vkSGInput(eSGDT_Float, "y", true, false));
+    AddInput(new vkSGInput(eSGDT_Float, "z", true, false));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
+    break;
+  case eSGNT_Float3:
+    SetName("Float3");
+    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "z", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
+    break;
+
+  case eSGNT_SplitFloat3:
+    SetName("SplitFloat3");
+    AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "x", "x"));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "y", "y"));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "z", "z"));
+    break;
+
+  case eSGNT_AddFloat3:
+    SetName("AddFloat3");
+    AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
+    break;
+
+  }
 
 }
 
@@ -265,7 +297,7 @@ vkSGOutput *vkSGNode::GetOutput(const vkString &name)
 }
 
 
-
+/*
 
 
 
@@ -370,4 +402,6 @@ vkSGSplitFloat3::~vkSGSplitFloat3()
 {
 
 }
+
+*/
 

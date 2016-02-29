@@ -107,7 +107,7 @@ vkSGNodeGL4 *vkShaderGraphCtx::GetNode(vkSGInput *input)
     return 0;
   }
 
-  return GetNode(input->GetOutput());
+  return GetNode(input->GetInput());
 }
 
 void vkShaderGraphCtx::Evaluate(vkSGNodeGL4 *node)
@@ -216,7 +216,7 @@ vkString vkShaderGraphCtx::GetOutputValue(vkSGOutput *output)
 
 vkString vkShaderGraphCtx::GetInputValue(vkSGInput *input)
 {
-  return GetOutputValue(input ? input->GetOutput() : 0);
+  return GetOutputValue(input ? input->GetInput() : 0);
 }
 
 vkString vkShaderGraphCtx::GetFullOutputValue(vkSGOutput *output)
@@ -238,7 +238,7 @@ vkString vkShaderGraphCtx::GetFullOutputValue(vkSGOutput *output)
 
 vkString vkShaderGraphCtx::GetFullInputValue(vkSGInput *input)
 {
-  return GetFullOutputValue(input ? input->GetOutput() : 0);
+  return GetFullOutputValue(input ? input->GetInput() : 0);
 }
 
 vkSGNodeGL4::vkSGNodeGL4()
@@ -311,28 +311,24 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
   }
 
   // select the type of the node
-  const vkClass *nodeClass = m_node->GetClass();
-  if (nodeClass == vkSGConstFloat::GetStaticClass())
+  vkSGNodeType nodeClass = m_node->GetType();
+  if (nodeClass == eSGNT_ConstFloat)
   {
     EvaluateConstFloat(ctx);
   }
-  else if (nodeClass == vkSGConstFloat3::GetStaticClass())
+  else if (nodeClass == eSGNT_ConstFloat3)
   {
     EvaluateConstFloat3(ctx);
   }
-  else if (nodeClass == vkSGFloat3::GetStaticClass())
+  else if (nodeClass == eSGNT_Float3)
   {
     EvaluateFloat3(ctx);
   }
-  else if (nodeClass == vkSGAddFloat::GetStaticClass())
+  else if (nodeClass == eSGNT_AddFloat3)
   {
     EvaluateAddFloat3(ctx);
   }
-  else if (nodeClass == vkSGAddFloat3::GetStaticClass())
-  {
-    EvaluateAddFloat3(ctx);
-  }
-  else if (nodeClass == vkSGSplitFloat3::GetStaticClass())
+  else if (nodeClass == eSGNT_SplitFloat3)
   {
     EvaluateSplitFloat3(ctx);
   }
@@ -342,37 +338,78 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
   return true;
 }
 
+vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
+{
+  vkSGInput *input = m_node->GetInput(x);
+  if (!input)
+  {
+    return std::to_string(0.0f);
+  }
 
+  if (input->CanInputNode())
+  {
+    vkSGOutput *output = input->GetInput();
+    if (output)
+    {
+      return ctx.GetFullOutputValue(output);
+    }
+  }
+  if (input->CanConstData())
+  {
+    return std::to_string(input->GetFloat(0));
+  }
+  return std::to_string(0.0f);
+}
+
+
+vkString vkSGNodeGL4::GetInt(vkShaderGraphCtx &ctx, int x)
+{
+  vkSGInput *input = m_node->GetInput(x);
+  if (!input)
+  {
+    return std::to_string(0);
+  }
+
+  if (input->CanInputNode())
+  {
+    vkSGOutput *output = input->GetInput();
+    if (output)
+    {
+      return ctx.GetFullOutputValue(output);
+    }
+  }
+  if (input->CanConstData())
+  {
+    return std::to_string(input->GetInt(0));
+  }
+  return std::to_string(0);
+}
 
 void vkSGNodeGL4::EvaluateConstFloat(vkShaderGraphCtx &ctx)
 {
-  vkSGConstFloat *fl = GetNode<vkSGConstFloat>();
+  vkSGNode *fl = GetNode();
   ctx.SetOutputValue(fl->GetOutput(0), std::to_string(fl->GetInput(0)->GetFloat(0)));
 }
 
 void vkSGNodeGL4::EvaluateConstFloat3(vkShaderGraphCtx &ctx)
 {
-  vkSGConstFloat3 *fl = GetNode<vkSGConstFloat3>();
+  vkSGNode *fl = GetNode();
 
   std::ostringstream ss;
   ss << "vec3(" <<
-    std::to_string(fl->GetValueX()) << ", " <<
-    std::to_string(fl->GetValueY()) << ", " <<
-    std::to_string(fl->GetValueZ()) <<
+    GetFloat(ctx, 0) << ", " <<
+    GetFloat(ctx, 1) << ", " <<
+    GetFloat(ctx, 2) << 
     ")";
 
   ctx.SetOutputValue(fl->GetOutput(0), ss.str());
-
-  ctx.SetOutputValue(fl->GetOutput(1), std::to_string(fl->GetValueX()));
-  ctx.SetOutputValue(fl->GetOutput(2), std::to_string(fl->GetValueY()));
-  ctx.SetOutputValue(fl->GetOutput(3), std::to_string(fl->GetValueZ()));
 
 }
 
 void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGFloat3 *fl = GetNode<vkSGFloat3>();
+  vkSGNode *fl = GetNode();
   if (!fl->GetInputNode(0) || !fl->GetInputNode(1) || !fl->GetInputNode(2))
   {
     return;
@@ -386,9 +423,9 @@ void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
   {
     // full swizzle possible
     ss << src0 << "." <<
-      fl->GetInput(0)->GetOutput()->GetAttr() <<
-      fl->GetInput(1)->GetOutput()->GetAttr() <<
-      fl->GetInput(2)->GetOutput()->GetAttr();
+      fl->GetInput(0)->GetInput()->GetAttr() <<
+      fl->GetInput(1)->GetInput()->GetAttr() <<
+      fl->GetInput(2)->GetInput()->GetAttr();
 
   }
   else if (src0 == src1)
@@ -396,7 +433,7 @@ void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
     // partly sizzle possible
     ss << "vec3(" <<
       src0 << "." <<
-      fl->GetInput(0)->GetOutput()->GetAttr() << fl->GetInput(1)->GetOutput()->GetAttr() << ", " <<
+      fl->GetInput(0)->GetInput()->GetAttr() << fl->GetInput(1)->GetInput()->GetAttr() << ", " <<
       ctx.GetFullInputValue(fl->GetInput(2)) <<
       ")";
   }
@@ -406,7 +443,7 @@ void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
     ss << "vec3(" <<
       src0 << "." <<
       ctx.GetFullInputValue(fl->GetInput(0)) <<
-      fl->GetInput(1)->GetOutput()->GetAttr() << fl->GetInput(2)->GetOutput()->GetAttr() << ", " <<
+      fl->GetInput(1)->GetInput()->GetAttr() << fl->GetInput(2)->GetInput()->GetAttr() << ", " <<
       ")";
   }
   else
@@ -426,7 +463,7 @@ void vkSGNodeGL4::EvaluateAddFloat(vkShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
 
-  vkSGAddFloat *add = GetNode<vkSGAddFloat>();
+  vkSGNode *add = GetNode();
   ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " + " <<
     ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
     ")";
@@ -438,7 +475,7 @@ void vkSGNodeGL4::EvaluateAddFloat(vkShaderGraphCtx &ctx)
 void vkSGNodeGL4::EvaluateAddFloat3(vkShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGAddFloat3 *add = GetNode<vkSGAddFloat3>();
+  vkSGNode *add = GetNode();
   ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " + " <<
     ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
     ")";
@@ -449,7 +486,7 @@ void vkSGNodeGL4::EvaluateAddFloat3(vkShaderGraphCtx &ctx)
 
 void vkSGNodeGL4::EvaluateSplitFloat3(vkShaderGraphCtx &ctx)
 {
-  vkSGSplitFloat3 *split = GetNode<vkSGSplitFloat3>();
+  vkSGNode *split = GetNode();
   vkSGNodeGL4 *inputNode = ctx.GetNode(split->GetInput(0));
   if (!inputNode)
   {
