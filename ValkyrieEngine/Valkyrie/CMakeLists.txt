@@ -161,6 +161,8 @@ source_group(
 set(SOURCE_GRAPHICS_SHADERGRAPH
   Graphics/ShaderGraph/SGNode.cc
   Graphics/ShaderGraph/SGNode.hh
+  Graphics/ShaderGraph/SGShaderGraph.cc
+  Graphics/ShaderGraph/SGShaderGraph.hh
 	)
 	
 source_group(

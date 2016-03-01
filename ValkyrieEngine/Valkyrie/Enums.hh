@@ -391,3 +391,15 @@ enum vkPhysicsJointType
 {
   ePJT_Hinge,
 };
+
+
+
+enum vkCompareMode
+{
+  eCM_LessOrEqual,
+  eCM_GreaterOrEqual,
+  eCM_Less,
+  eCM_Greater,
+  eCM_Equal,
+  eCM_NotEqual,
+};

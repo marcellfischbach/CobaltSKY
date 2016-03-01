@@ -30,7 +30,7 @@ public:
   virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
   virtual IFrameProcessor *CreateDeferredFrameProcessor();
 
-
+  virtual ISGShaderGraphFactory* GetShaderGraphFactory();
 
   virtual void SetProjectionMatrix(const vkMatrix4f &matrix);
   virtual void SetProjectionMatrixInv(const vkMatrix4f &matrix);
@@ -149,5 +149,7 @@ private:
   /**
    * @}
    */
+
+  ISGShaderGraphFactory* m_shaderGraphFactory;
 };
 

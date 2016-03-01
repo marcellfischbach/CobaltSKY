@@ -183,32 +183,104 @@ vkSGNode::vkSGNode(vkSGNodeType type)
     AddInput(new vkSGInput(eSGDT_Float, "w", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
     break;
+  case eSGNT_VarFloat:
+    SetName("Var/Float1");
+    AddOutput(new vkSGOutput(eSGDT_Float, "v", ""));
+    break;
+  case eSGNT_VarFloat2:
+    SetName("Var/Float2");
+    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
+    break;
+  case eSGNT_VarFloat3:
+    SetName("Var/Float3");
+    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
+    break;
+  case eSGNT_VarFloat4:
+    SetName("Var/Float4");
+    AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
+    break;
 
   case eSGNT_SplitFloat3:
     SetName("Util/SplitFloat3");
     AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "x", "x"));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "y", "y"));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "z", "z"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
     break;
 
+  case eSGNT_SplitFloat4:
+    SetName("Util/SplitFloat4");
+    AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "w", "w"));
+    break;
+
+  case eSGNT_AddFloat:
+    SetName("Arith/AddFloat");
+    AddInput(new vkSGInput(eSGDT_Float, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float, "o", ""));
+    break;
+  case eSGNT_AddFloat2:
+    SetName("Arith/AddFloat2");
+    AddInput(new vkSGInput(eSGDT_Float2, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float2, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float2, "o", ""));
+    break;
   case eSGNT_AddFloat3:
     SetName("Arith/AddFloat3");
     AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
     AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
     break;
+  case eSGNT_AddFloat4:
+    SetName("Arith/AddFloat4");
+    AddInput(new vkSGInput(eSGDT_Float4, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float4, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "o", ""));
+    break;
 
+  case eSGNT_SubFloat:
+    SetName("Arith/SubFloat");
+    AddInput(new vkSGInput(eSGDT_Float, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float, "o", ""));
+    break;
+  case eSGNT_SubFloat2:
+    SetName("Arith/SubFloat2");
+    AddInput(new vkSGInput(eSGDT_Float2, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float2, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float2, "o", ""));
+    break;
+  case eSGNT_SubFloat3:
+    SetName("Arith/SubFloat3");
+    AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
+    break;
+  case eSGNT_SubFloat4:
+    SetName("Arith/SubFloat4");
+    AddInput(new vkSGInput(eSGDT_Float4, "a", false, true));
+    AddInput(new vkSGInput(eSGDT_Float4, "b", false, true));
+    AddOutput(new vkSGOutput(eSGDT_Float4, "o", ""));
+    break;
+
+
+
+  case eSGNT_DefaultTextureCoord:
+    SetName("Texture/DefaultTextureCoordinate");
+    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
 
   case eSGNT_Texture2D:
     SetName("Texture/Texture2D");
-    AddInput(new vkSGInput(eSGDT_Texture2D, "t", false, true));
     AddInput(new vkSGInput(eSGDT_Float2, "uv", false, true));
     AddOutput(new vkSGOutput(eSGDT_Float4, "c", ""));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "r", "r"));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "g", "g"));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "b", "b"));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "a", "a"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "g", "g"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "b", "b"));
+    AddOutput(new vkSGOutput(eSGDT_Float, "a", "a"));
     break;
   }
 

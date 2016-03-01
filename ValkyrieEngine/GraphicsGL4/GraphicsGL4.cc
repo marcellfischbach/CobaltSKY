@@ -10,6 +10,7 @@
 #include <GraphicsGL4/MappingGL4.hh>
 #include <GraphicsGL4/DefinesGL4.hh>
 #include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
+#include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Graphics/BinaryGradient.hh>
 #include <GL/glew.h>
@@ -24,6 +25,7 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_renderTarget(0)
   , m_skeletonMatrices(0)
   , m_numberOfSkeletonMatrices(0)
+  , m_shaderGraphFactory(0)
 {
   VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
@@ -74,6 +76,8 @@ vkGraphicsGL4::vkGraphicsGL4()
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
+
+  m_shaderGraphFactory = new vkShaderGraphGL4(this);
 
 }
 
@@ -173,6 +177,11 @@ IFrameProcessor *vkGraphicsGL4::CreateDeferredFrameProcessor()
   return new vkDeferredFrameProcessor(this);
 }
 
+
+ISGShaderGraphFactory *vkGraphicsGL4::GetShaderGraphFactory()
+{
+  return m_shaderGraphFactory;
+}
 
 
 void vkGraphicsGL4::SetProjectionMatrix(const vkMatrix4f &matrix)

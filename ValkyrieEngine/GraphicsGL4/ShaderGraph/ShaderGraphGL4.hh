@@ -1,21 +1,16 @@
 #pragma once
 
-
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/Core/String.hh>
+#include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
-#include <map>
-#include <set>
-#include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.refl.hh>
 
 class vkSGNodeGL4;
-class vkShaderGraphGL4;
+class vkGraphicsGL4;
 
-
-class VKGL4_API vkShaderGraphGL4
+class VKGL4_API vkShaderGraphGL4 : public ISGShaderGraphFactory
 {
 public:
-  vkShaderGraphGL4();
+  vkShaderGraphGL4(vkGraphicsGL4 *graphics);
   ~vkShaderGraphGL4();
 
 
@@ -24,122 +19,15 @@ public:
 
   vkString CreateCode(vkSGOutput *output);
 
-  vkSGNodeGL4 *CreateNode(const vkClass *clazz) const;
 
+  vkSGNodeGL4 *CreateNode(const vkClass *nodeClass);
+
+
+  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph);
 
 private:
-  std::map<const vkClass*, const vkClass*> m_nodeMapping;
+  void GenerateGBuffer(vkSGShaderGraph *graph);
 
+private:
+  vkGraphicsGL4 *m_graphics;
 };
-
-class vkShaderGraphCtx
-{
-public:
-  vkShaderGraphCtx(vkShaderGraphGL4 *graph);
-
-  vkSGNodeGL4 *GetNode(vkSGNode *node);
-  vkSGNodeGL4 *GetNode(vkSGOutput *output);
-  vkSGNodeGL4 *GetNode(vkSGInput *input);
-
-  vkString CreateCode(vkSGOutput *output);
-
-  void Evaluate(vkSGNodeGL4 *node);
-  void Evaluate(vkSGNode *node);
-  void Evaluate(vkSGOutput *node);
-  void Evaluate(vkSGInput *node);
-
-  void EvaluateInline(vkSGNodeGL4 *node);
-  void EvaluateInline(vkSGNode *node);
-  void EvaluateInline(vkSGOutput *node);
-  void EvaluateInline(vkSGInput *node);
-
-  void AddExpression(const vkString &expression);
-  vkString AddAssignment(const vkString &type, const vkString &statement);
-  void SetOutputValue(vkSGOutput *output, const vkString &value);
-
-  bool HasOutputValue(vkSGOutput *output) const;
-  bool HasInputValue(vkSGInput *input) const;
-  vkString GetOutputValue(vkSGOutput *output);
-  vkString GetInputValue(vkSGInput *input);
-
-  vkString GetFullOutputValue(vkSGOutput *output);
-  vkString GetFullInputValue(vkSGInput *input);
-
-  vkString GetNextVariable();
-
-  void AddBinding(const vkString &variableType, const vkString &variableName);
-
-  void SetDefaultTextureCoordinate(const vkString &defaultTextureCoordinat);
-  const vkString &GetDefaultTextureCoordinate() const;
-
-private:
-  vkShaderGraphGL4 *m_graph;
-
-  vkString m_code;
-  vkUInt32 m_variableCounter;
-  vkString m_defaultTextureCoordinate;
-  std::map<vkSGOutput *, vkString> m_outputValue;
-  std::map<vkSGNode *, vkSGNodeGL4*> m_nodes;
-  std::map<vkSGOutput *, vkString> m_outputToVar;
-  std::map<vkString, vkString> m_unisformBindingNames;
-};
-
-
-VK_INTERFACE()
-class VKGL4_API vkSGNodeGL4 : public vkObject
-{
-  VK_CLASS_GEN;
-public:
-  vkSGNodeGL4();
-  virtual ~vkSGNodeGL4();
-
-  void SetNode(vkSGNode *node)
-  {
-    m_node = node;
-  }
-
-  virtual bool EvaluateInline(vkShaderGraphCtx &ctx);
-  virtual bool Evaluate(vkShaderGraphCtx &ctx);
-
-  vkSGNode* GetNode() 
-  {
-    return m_node;
-  }
-
-  void SetForceInline(bool forceInline)
-  {
-    m_forceInline = forceInline;
-  }
-  void SetInline(bool iinline)
-  {
-    m_inline = iinline;
-  }
-  bool IsInline() const
-  {
-    return m_forceInline || m_inline;
-  }
-
-
-  vkString AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, const vkString &exp, const vkString &type);
-
-private:
-  bool m_forceInline;
-  bool m_inline;
-  vkSGNode *m_node;
-  bool m_inlineEvaluated;
-  bool m_evaluated;
-
-  vkString GetFloat(vkShaderGraphCtx &ctx, int x);
-  vkString GetInt(vkShaderGraphCtx &ctx, int x);
-
-private:
-  void EvaluateConstFloat(vkShaderGraphCtx &ctx);
-  void EvaluateConstFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateFloat2(vkShaderGraphCtx &ctx);
-  void EvaluateFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateAddFloat(vkShaderGraphCtx &ctx);
-  void EvaluateAddFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateSplitFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateTexture2D(vkShaderGraphCtx &ctx);
-};
-

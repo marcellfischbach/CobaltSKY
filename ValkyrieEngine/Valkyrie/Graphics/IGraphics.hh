@@ -13,6 +13,7 @@ struct IIndexBuffer;
 struct IVertexBuffer;
 struct IVertexDeclaration;
 struct ISampler;
+struct ISGShaderGraphFactory;
 struct IShader;
 struct ITexture;
 struct ITexture2D;
@@ -43,7 +44,7 @@ struct VKE_API IGraphics : public IObject
   /**
    * @}
    */
-
+  virtual ISGShaderGraphFactory* GetShaderGraphFactory() = 0;
 
    /**
     * \name Transformation handling

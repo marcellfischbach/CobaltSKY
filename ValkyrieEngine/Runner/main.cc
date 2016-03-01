@@ -12,66 +12,40 @@
 #include <PhysicsBullet/BulletSystem.hh>
 #include <stdio.h>
 
-int main(int argc, char **argv)
+int test(vkGraphicsGL4 *graphics)
 {
-  vkSGNode *constFloat1 = new vkSGNode(eSGNT_ConstFloat3);
-  constFloat1->GetInput(0)->SetConstData(10.0f);
-  constFloat1->GetInput(1)->SetConstData(12.0f);
-  constFloat1->GetInput(2)->SetConstData(13.0f);
+  vkSGNode *defaultTxt = new vkSGNode(eSGNT_DefaultTextureCoord);
 
+  vkSGNode *textureBias = new vkSGNode(eSGNT_VarFloat2);
+  textureBias->SetBindingName("TextureBias");
 
+  vkSGNode *add = new vkSGNode(eSGNT_AddFloat2);
+  add->GetInput(0)->SetInput(defaultTxt->GetOutput(0));
+  add->GetInput(1)->SetInput(textureBias->GetOutput(0));
 
-  vkSGNode *constFloat2 = new vkSGNode(eSGNT_ConstFloat3);
-  constFloat2->GetInput(0)->SetConstData(25.2f);
-  constFloat2->GetInput(1)->SetConstData(27.0f);
-  constFloat2->GetInput(2)->SetConstData(30.0f);
+  vkSGNode *sub = new vkSGNode(eSGNT_SubFloat2);
+  sub->GetInput(0)->SetInput(add->GetOutput(0));
+  sub->GetInput(1)->SetInput(textureBias->GetOutput(0));
 
-
-  vkSGNode *addFloat = new vkSGNode(eSGNT_AddFloat3);
-  addFloat->GetInput("a")->SetInput(constFloat1->GetOutput(0));
-  addFloat->GetInput("b")->SetInput(constFloat2->GetOutput(0));
-
-  vkSGNode *add2Float = new vkSGNode(eSGNT_AddFloat3);
-  add2Float->GetInput("a")->SetInput(addFloat->GetOutput(0));
-  add2Float->GetInput("b")->SetInput(addFloat->GetOutput(0));
-
-  vkSGNode *splitFloat = new vkSGNode(eSGNT_SplitFloat3);
-  splitFloat->GetInput("v")->SetInput(add2Float->GetOutput(0));
-
-  vkSGNode *split2Float = new vkSGNode(eSGNT_SplitFloat3);
-  split2Float->GetInput("v")->SetInput(addFloat->GetOutput(0));
-
-  vkSGNode *float3 = new vkSGNode(eSGNT_Float3);
-  float3->GetInput("x")->SetInput(splitFloat->GetOutput(0));
-  float3->GetInput("y")->SetInput(splitFloat->GetOutput(2));
-  float3->GetInput("z")->SetInput(splitFloat->GetOutput(1));
-
-  vkSGNode *txtCoord = new vkSGNode(eSGNT_Float2);
-  txtCoord->GetInput("x")->SetInput(float3->GetOutput(0));
-  txtCoord->GetInput("y")->SetInput(float3->GetOutput(2));
 
   vkSGNode *texture = new vkSGNode(eSGNT_Texture2D);
   texture->SetBindingName("Diffuse");
-  texture->GetInput("uv")->SetInput(txtCoord->GetOutput(0));
+  texture->GetInput("uv")->SetInput(sub->GetOutput(0));
 
 
 
-  printf("ConstFloat1: %p\n", constFloat1);
-  printf("ConstFloat2: %p\n", constFloat2);
-  printf("AddFloat   : %p\n", addFloat);
-  printf("AddFloat2  : %p\n", add2Float);
-  printf("Split      : %p\n", splitFloat);
-  printf("Float3      : %p\n", float3);
+  vkSGShaderGraph graph;
+  graph.SetDiffuse(texture->GetOutput(0));
+  graph.SetAlpha(texture->GetOutput(4));
+  graph.SetDiscardAlpha(0.5f, eCM_Less);
 
-  vkShaderGraphGL4 graph;
-  vkString code = graph.CreateCode(texture, 0);
-  printf("Code:\n%s\n", code.c_str());
+  graphics->GetShaderGraphFactory()->GenerateShaderGraph(&graph);
 
   return 0;
 }
 
 
-int main1(int argc, char **argv)
+int main(int argc, char **argv)
 {
 
   vkSettings::Initialize(argc, argv);
@@ -103,6 +77,8 @@ int main1(int argc, char **argv)
   bulletSystem->Initialize();
   engine->SetPhysicsSystem(bulletSystem);
 
+  test(GraphicsGL4);
+  return 0;
 
-  return engine->Run();
+  //return engine->Run();
 }

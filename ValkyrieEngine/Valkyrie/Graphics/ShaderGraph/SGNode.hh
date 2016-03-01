@@ -34,8 +34,21 @@ enum vkSGNodeType
   eSGNT_Float2,
   eSGNT_Float3,
   eSGNT_Float4,
+  eSGNT_VarFloat,
+  eSGNT_VarFloat2,
+  eSGNT_VarFloat3,
+  eSGNT_VarFloat4,
+  eSGNT_AddFloat,
+  eSGNT_AddFloat2,
   eSGNT_AddFloat3,
+  eSGNT_AddFloat4,
+  eSGNT_SubFloat,
+  eSGNT_SubFloat2,
+  eSGNT_SubFloat3,
+  eSGNT_SubFloat4,
   eSGNT_SplitFloat3,
+  eSGNT_SplitFloat4,
+  eSGNT_DefaultTextureCoord,
   eSGNT_Texture2D,
   eSGNT_Texture2DArray,
 };
@@ -178,87 +191,6 @@ private:
   std::vector<vkSGOutput*> m_outputs;
 };
 
-/*
-VK_CLASS()
-class VKE_API vkSGConstFloat : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGConstFloat();
-  virtual ~vkSGConstFloat();
-
-  void SetValue(float value);
-  float GetValue() const;
-
-private:
-  float m_value;
-};
-
-
-VK_CLASS()
-class VKE_API vkSGConstFloat3 : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGConstFloat3();
-  virtual ~vkSGConstFloat3();
-
-  void SetValue(float x, float y, float z);
-  float GetValueX() const;
-  float GetValueY() const;
-  float GetValueZ() const;
-
-private:
-  float m_valueX;
-  float m_valueY;
-  float m_valueZ;
-};
-
-
-
-VK_CLASS()
-class VKE_API vkSGFloat3 : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGFloat3();
-  virtual ~vkSGFloat3();
-
-};
-
-VK_CLASS()
-class VKE_API vkSGAddFloat : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGAddFloat();
-  virtual ~vkSGAddFloat();
-
-};
-
-
-VK_CLASS()
-class VKE_API vkSGAddFloat3 : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGAddFloat3();
-  virtual ~vkSGAddFloat3();
-
-};
-
-
-VK_CLASS()
-class VKE_API vkSGSplitFloat3 : public vkSGNode
-{
-  VK_CLASS_GEN;
-public:
-  vkSGSplitFloat3();
-  virtual ~vkSGSplitFloat3();
-
-};
-
-*/
 
 
 VK_FORCEINLINE const vkString &vkSGNode::GetName() const
