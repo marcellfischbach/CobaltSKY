@@ -128,6 +128,12 @@ public:
 
   vkString AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, const vkString &exp, const vkString &type);
 
+  static vkSGDataType GetHigher(vkSGDataType dtA, vkSGDataType dtB);
+  static vkString GetDataTypeVar(vkSGDataType dt);
+
+protected:
+  virtual void PrivEvaluate(vkShaderGraphCtx &ctx) = 0;
+
 private:
   bool m_forceInline;
   bool m_inline;
@@ -157,3 +163,166 @@ private:
   void EvaluateTexture2D(vkShaderGraphCtx &ctx);
 };
 
+VK_CLASS()
+class VKGL4_API vkSGVarGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarGL4() : vkSGNodeGL4() { }
+  vkSGVarGL4(const vkString &typeName);
+  virtual ~vkSGVarGL4 () { }
+private:
+  vkString m_typeName;
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGVarFloatGL4 : public vkSGVarGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloatGL4() : vkSGVarGL4("float") { }
+  virtual ~vkSGVarFloatGL4() { }
+};
+
+VK_CLASS()
+class VKGL4_API vkSGVarFloat2GL4 : public vkSGVarGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat2GL4 () : vkSGVarGL4("vec2") { }
+  virtual ~vkSGVarFloat2GL4() { }
+};
+
+VK_CLASS()
+class VKGL4_API vkSGVarFloat3GL4 : public vkSGVarGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat3GL4() : vkSGVarGL4("vec3") { }
+  virtual ~vkSGVarFloat3GL4() { }
+
+};
+
+VK_CLASS()
+class VKGL4_API vkSGVarFloat4GL4 : public vkSGVarGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat4GL4() : vkSGVarGL4("vec4") { }
+  virtual ~vkSGVarFloat4GL4() { }
+};
+
+
+VK_CLASS()
+class VKGL4_API vkSGConstFloatGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloatGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGConstFloatGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+
+VK_CLASS()
+class VKGL4_API vkSGConstFloat2GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat2GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGConstFloat2GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGConstFloat3GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat3GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGConstFloat3GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGConstFloat4GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat4GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGConstFloat4GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGFloat2GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat2GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGFloat2GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGAddGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGAddGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGAddGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGSubGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSubGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGSubGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+
+VK_CLASS()
+class VKGL4_API vkSGDefaultTextureCoordinateGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDefaultTextureCoordinateGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGDefaultTextureCoordinateGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+
+
+VK_CLASS()
+class VKGL4_API vkSGTexture2DGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGTexture2DGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGTexture2DGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};

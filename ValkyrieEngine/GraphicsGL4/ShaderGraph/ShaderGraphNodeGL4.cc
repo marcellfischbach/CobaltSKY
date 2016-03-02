@@ -7,6 +7,7 @@
 
 
 
+
 vkShaderGraphCtx::vkShaderGraphCtx(vkShaderGraphGL4 *graph)
   : m_graph(graph)
   , m_code("")
@@ -26,6 +27,11 @@ vkSGNodeGL4 *vkShaderGraphCtx::GetNode(vkSGNode *node)
   if (!glNode)
   {
     glNode = m_graph->CreateNode(node->GetClass());
+    if (glNode == 0)
+    {
+      return 0;
+    }
+
     glNode->SetNode(node);
     m_nodes[node] = glNode;
   }
@@ -180,6 +186,7 @@ bool vkShaderGraphCtx::IsBindingApplyingFor(const vkString &bindingName, vkSGNod
       return true;
     }
   }
+  return false;
 }
 
 bool vkShaderGraphCtx::IsBindingApplyingFor(const vkString &bindingName, vkSGOutput *output) const
@@ -282,6 +289,10 @@ vkString vkShaderGraphCtx::GetFullOutputValue(vkSGOutput *output)
 
 vkString vkShaderGraphCtx::GetFullInputValue(vkSGInput *input)
 {
+  if (input->GetInput() == 0 && input->CanInputConst())
+  {
+    return std::to_string(input->GetConst());
+  }
   return GetFullOutputValue(input ? input->GetInput() : 0);
 }
 
@@ -318,6 +329,51 @@ vkString vkSGNodeGL4::AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, co
   }
 }
 
+vkSGDataType vkSGNodeGL4::GetHigher(vkSGDataType dtA, vkSGDataType dtB)
+{
+  return dtA > dtB ? dtA : dtB;
+}
+
+vkString vkSGNodeGL4::GetDataTypeVar(vkSGDataType dt)
+{
+  switch (dt)
+  {
+  case eSGDT_Float:
+    return "float";
+  case eSGDT_Float2:
+    return "vec2";
+  case eSGDT_Float3:
+    return "vec3";
+  case eSGDT_Float4:
+    return "vec4";
+  case eSGDT_Int:
+    return "int";
+  case eSGDT_Int2:
+    return "uvec2";
+  case eSGDT_Int3:
+    return "uvec3";
+  case eSGDT_Int4:
+    return "uvec4";
+  case eSGDT_Texture1D:
+    return "sampler1D";
+  case eSGDT_Texture1DArray:
+    return "sampler1DArray";
+
+  case eSGDT_Texture2D:
+    return "sampler2D";
+  case eSGDT_Texture2DArray:
+    return "sampler2DArray";
+
+  case eSGDT_Texture3D:
+    return "sampler3D";
+
+  case eSGDT_TextureCube:
+    return "samplerCube";
+  case eSGDT_TextureCubeArray:
+    return "samplerCubeArray";
+  }
+  return "inval";
+}
 
 
 bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
@@ -354,6 +410,11 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
     ctx.Evaluate(input);
   }
 
+  PrivEvaluate(ctx);
+
+  return true;
+}
+/*
   // select the type of the node
   vkSGNodeType nodeClass = m_node->GetType();
   if (nodeClass == eSGNT_ConstFloat)
@@ -440,6 +501,10 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
 
   return true;
 }
+*/
+
+
+
 
 vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
 {
@@ -457,9 +522,9 @@ vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
       return ctx.GetFullOutputValue(output);
     }
   }
-  if (input->CanConstData())
+  if (input->CanInputConst())
   {
-    return std::to_string(input->GetFloat(0));
+    return std::to_string(input->GetConst());
   }
   return std::to_string(0.0f);
 }
@@ -481,17 +546,27 @@ vkString vkSGNodeGL4::GetInt(vkShaderGraphCtx &ctx, int x)
       return ctx.GetFullOutputValue(output);
     }
   }
-  if (input->CanConstData())
+  if (input->CanInputConst())
   {
-    return std::to_string(input->GetInt(0));
+    return std::to_string((int)input->GetConst());
   }
   return std::to_string(0);
 }
 
+
+
+
+
+
+
+
+
+
+
 void vkSGNodeGL4::EvaluateConstFloat(vkShaderGraphCtx &ctx)
 {
   vkSGNode *fl = GetNode();
-  ctx.SetOutputValue(fl->GetOutput(0), std::to_string(fl->GetInput(0)->GetFloat(0)));
+  ctx.SetOutputValue(fl->GetOutput(0), std::to_string(fl->GetInput(0)->GetConst()));
 }
 
 void vkSGNodeGL4::EvaluateConstFloat3(vkShaderGraphCtx &ctx)
@@ -594,6 +669,7 @@ void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
 
   AssignOutput(ctx, fl->GetOutput(0), ss.str(), "vec3");
 }
+
 
 void vkSGNodeGL4::EvaluateVarFloat(vkShaderGraphCtx &ctx)
 {
@@ -765,3 +841,205 @@ void vkSGNodeGL4::EvaluateTexture2D(vkShaderGraphCtx &ctx)
 
   ctx.AddBinding(txt, "sampler2D", bindingName);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+vkSGVarGL4::vkSGVarGL4(const vkString &typeName)
+  : vkSGNodeGL4()
+  , m_typeName(typeName)
+{
+
+}
+
+void vkSGVarGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *fl = GetNode();
+
+  vkString bindingName = "vk_" + fl->GetBindingName();
+  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
+
+  ctx.AddBinding(fl, m_typeName, bindingName);
+}
+
+void vkSGConstFloatGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+
+  ctx.SetOutputValue(n->GetOutput(0), std::to_string(n->GetInput(0)->GetConst()));
+}
+
+void vkSGConstFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+
+  std::ostringstream ss;
+  ss << "vec2("
+    << std::to_string(n->GetInput(0)->GetConst()) << ", "
+    << std::to_string(n->GetInput(1)->GetConst())
+    << ")";
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+void vkSGConstFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+
+  std::ostringstream ss;
+  ss << "vec3("
+    << std::to_string(n->GetInput(0)->GetConst()) << ", "
+    << std::to_string(n->GetInput(1)->GetConst()) << ", "
+    << std::to_string(n->GetInput(2)->GetConst())
+    << ")";
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+
+void vkSGConstFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+
+  std::ostringstream ss;
+  ss << "vec4("
+    << std::to_string(n->GetInput(0)->GetConst()) << ", "
+    << std::to_string(n->GetInput(1)->GetConst()) << ", "
+    << std::to_string(n->GetInput(2)->GetConst()) << ", "
+    << std::to_string(n->GetInput(3)->GetConst())
+    << ")";
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+
+  vkString &src0 = n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "";
+  vkString &src1 = n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "";
+
+  std::ostringstream ss;
+  if (src0 == src1)
+  {
+    if (src0.length() == 0)
+    {
+      // both values are const
+      ss << "vec2("
+        << std::to_string(n->GetInput(0)->GetConst()) << ", "
+        << std::to_string(n->GetInput(1)->GetConst())
+        << ")";
+
+    }
+    else
+    {
+      ss << src0 << "." << n->GetInput(0)->GetInput()->GetAttr() << n->GetInput(0)->GetInput()->GetAttr();
+    }
+  }
+  else
+  {
+    ss << "vec2(";
+    if (src0.length() == 0)
+    {
+      ss << std::to_string(n->GetInput(0)->GetConst());
+    }
+    else
+    {
+      ss << ctx.GetFullInputValue(n->GetInput(0));
+    }
+    ss << ", ";
+    if (src1.length() == 0)
+    {
+      ss << std::to_string(n->GetInput(1)->GetConst());
+    }
+    else
+    {
+      ss << ctx.GetFullInputValue(n->GetInput(1));
+    }
+    ss << ")";
+  }
+
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+void vkSGAddGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *add = GetNode();
+  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " + " <<
+    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
+    ")";
+
+  vkSGDataType dt = GetHigher(add->GetInput(0)->GetDataType(), add->GetInput(1)->GetDataType());
+  AssignOutput(ctx, add->GetOutput(0), ss.str(), GetDataTypeVar(dt));
+}
+
+void vkSGSubGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *add = GetNode();
+  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " - " <<
+    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
+    ")";
+
+  vkSGDataType dt = GetHigher(add->GetInput(0)->GetDataType(), add->GetInput(1)->GetDataType());
+  AssignOutput(ctx, add->GetOutput(0), ss.str(), GetDataTypeVar(dt));
+}
+
+void vkSGDefaultTextureCoordinateGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *coord = GetNode();
+
+  ctx.SetOutputValue(coord->GetOutput(0), ctx.GetDefaultTextureCoordinate());
+
+}
+
+
+void vkSGTexture2DGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *txt = GetNode();
+  vkString bindingName = txt->GetBindingName();
+  if (bindingName.length() == 0)
+  {
+    return ;
+  }
+
+  vkString txtCoordinate = ctx.GetDefaultTextureCoordinate();
+  if (ctx.HasInputValue(txt->GetInput("uv")))
+  {
+    txtCoordinate = ctx.GetFullInputValue(txt->GetInput("uv"));
+  }
+
+  bindingName = "vk_" + bindingName;
+  std::ostringstream ss;
+  ss << "texture(" << bindingName << ", " << txtCoordinate << ")";
+  vkString code = ss.str();
+
+  if (!IsInline())
+  {
+    code = ctx.AddAssignment("vec4", code);
+  }
+
+  ctx.SetOutputValue(txt->GetOutput("c"), code);
+  ctx.SetOutputValue(txt->GetOutput("r"), code);
+  ctx.SetOutputValue(txt->GetOutput("g"), code);
+  ctx.SetOutputValue(txt->GetOutput("b"), code);
+  ctx.SetOutputValue(txt->GetOutput("a"), code);
+
+  ctx.AddBinding(txt, "sampler2D", bindingName);
+}
+
+

@@ -3,6 +3,7 @@
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
+#include <map>
 
 class vkSGNodeGL4;
 class vkGraphicsGL4;
@@ -30,4 +31,5 @@ private:
 
 private:
   vkGraphicsGL4 *m_graphics;
+  std::map<const vkClass*, const vkClass*> m_classMapping;
 };

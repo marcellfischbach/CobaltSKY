@@ -10,14 +10,19 @@
 
 enum vkSGDataType
 {
-  eSGDT_Float = 0x01,
-  eSGDT_Float2 = 0x02,
-  eSGDT_Float3 = 0x04,
-  eSGDT_Float4 = 0x08,
-  eSGDT_Int    = 0x10,
-  eSGDT_Int2 = 0x20,
-  eSGDT_Int3 = 0x40,
-  eSGDT_Int4 = 0x80,
+  eSGDT_Inval = 0x00,
+  eSGDT_Int = 0x01,
+  eSGDT_Int2 = 0x02,
+  eSGDT_Int3 = 0x04,
+  eSGDT_Int4 = 0x08,
+  eSGDT_Float = 0x10,
+  eSGDT_Float2 = 0x20,
+  eSGDT_Float3 = 0x40,
+  eSGDT_Float4 = 0x80,
+  eSGDT_IntTypes = 0x0f,
+  eSGDT_FloatTypes = 0xf0,
+  eSGDT_ScalarTypes = 0xff,
+
   eSGDT_Texture1D = 0x100,
   eSGDT_Texture1DArray = 0x200,
   eSGDT_Texture2D = 0x400,
@@ -27,31 +32,6 @@ enum vkSGDataType
   eSGDT_TextureCubeArray = 0x4000,
 };
 
-enum vkSGNodeType
-{
-  eSGNT_ConstFloat,
-  eSGNT_ConstFloat3,
-  eSGNT_Float2,
-  eSGNT_Float3,
-  eSGNT_Float4,
-  eSGNT_VarFloat,
-  eSGNT_VarFloat2,
-  eSGNT_VarFloat3,
-  eSGNT_VarFloat4,
-  eSGNT_AddFloat,
-  eSGNT_AddFloat2,
-  eSGNT_AddFloat3,
-  eSGNT_AddFloat4,
-  eSGNT_SubFloat,
-  eSGNT_SubFloat2,
-  eSGNT_SubFloat3,
-  eSGNT_SubFloat4,
-  eSGNT_SplitFloat3,
-  eSGNT_SplitFloat4,
-  eSGNT_DefaultTextureCoord,
-  eSGNT_Texture2D,
-  eSGNT_Texture2DArray,
-};
 
 
 class vkSGNode;
@@ -61,13 +41,15 @@ class VKE_API vkSGOutput
 {
   friend class vkSGNode;
 public:
-  vkSGOutput(vkSGDataType type, const vkString &name, const vkString &attr);
+  vkSGOutput(vkSGDataType type, const vkString &name, const vkString &attr = "");
+  vkSGOutput(const vkString &name, const vkString &attr = "");
   virtual ~vkSGOutput();
 
   const vkSGNode *GetNode() const;
   vkSGNode *GetNode();
 
-  vkSGDataType GetType() const;
+  void SetDataType(vkSGDataType dataType);
+  vkSGDataType GetDataType() const;
   const vkString &GetName() const;
   const vkString &GetAttr() const;
 
@@ -85,13 +67,12 @@ class VKE_API vkSGInput
 {
   friend class vkSGNode;
 public:
-  vkSGInput(vkUInt32 types, const vkString &name, bool canConst, bool canInputNode);
+  vkSGInput(const vkString &name, bool canConst, bool canInputNode);
   virtual ~vkSGInput();
 
   const vkSGNode *GetNode() const;
   vkSGNode *GetNode();
 
-  vkSGDataType GetType() const;
   const vkString &GetName() const;
 
   void SetInput(vkSGOutput* output);
@@ -99,26 +80,15 @@ public:
   const vkSGOutput* GetInput() const;
 
   bool CanInputNode() const;
-
   vkSGNode *GetInputNode();
 
-  void SetConstDataPossible(bool constData);
-  void SetConstData(unsigned i0);
-  void SetConstData(unsigned i0, unsigned i1);
-  void SetConstData(unsigned i0, unsigned i1, unsigned i2);
-  void SetConstData(unsigned i0, unsigned i1, unsigned i2, unsigned i3);
-  void SetConstData(float i0);
-  void SetConstData(float i0, float i1);
-  void SetConstData(float i0, float i1, float i2);
-  void SetConstData(float i0, float i1, float i2, float i3);
+  bool CanInputConst() const;
+  void SetConst(float fl);
+  float GetConst() const;
 
-  bool CanConstData() const;
-  vkSGDataType GetConstDataType() const;
-  unsigned GetInt(vkSize idx) const;
-  float GetFloat(vkSize idx) const;
+  vkSGDataType GetDataType()const;
   
 private:
-  vkSGDataType m_dataType;
   vkString m_name;
 
   vkSGNode *m_node;
@@ -126,24 +96,10 @@ private:
   bool m_canInputNode;
   vkSGOutput *m_input;
 
-  bool m_canConstData;
-  union
-  {
-    float f4[4];
-    unsigned u4[4];
-  } m_constData;
-  vkSGDataType m_constDataType;
-  vkUInt32 m_dataTypes;
+  bool m_canInputConst;
+  float m_constFloat;
 
 };
-
-
-class vkDataTypeValidationMapping
-{
-
-};
-
-
 
 VK_CLASS()
 class VKE_API vkSGNode : public vkObject
@@ -151,10 +107,7 @@ class VKE_API vkSGNode : public vkObject
 
   VK_CLASS_GEN;
 public:
-  vkSGNode() : vkObject () { }
-
-public:
-  vkSGNode(vkSGNodeType type);
+  vkSGNode();
   virtual ~vkSGNode();
 
   const vkString &GetName() const;
@@ -163,8 +116,18 @@ public:
   const vkString &GetBindingName() const;
 
   vkSize GetNumberOfInputs() const;
-  vkSGInput *GetInput(vkSize idx);
-  vkSGInput *GetInput(const vkString &name);
+  vkSGInput *GetInput(vkSize idx) const;
+  vkSGInput *GetInput(const vkString &name) const;
+  vkSGDataType GetInputDataType(vkSize idx) const;
+  vkSGDataType GetInputDataType(const vkString &name) const;
+
+  void SetOutputDataType(vkSize idx, vkSGDataType dataType);
+  void SetOutputDataType(const vkString &name, vkSGDataType dataType);
+
+  void SetInput(int inputIdx, vkSGNode* node, int outputIdx = 0);
+  void SetInput(const vkString &inputName, vkSGNode *node, int outputIdx = 0);
+  void SetInput(int inputIdx, vkSGNode* node, const vkString &outputName);
+  void SetInput(const vkString &inputName, vkSGNode *node, const vkString &outputName);
 
   vkSGNode *GetInputNode(vkSize idx);
   vkSGNode *GetInputNode(const vkString &name);
@@ -174,7 +137,22 @@ public:
   vkSGOutput *GetOutput(vkSize idx);
   vkSGOutput *GetOutput(const vkString &name);
 
-  vkSGNodeType GetType() const;
+
+  bool NotInvalid(vkSGDataType dt) const;
+  bool ScalarType(vkSGDataType dt) const;
+  bool FloatType(vkSGDataType dt) const;
+  bool IntType(vkSGDataType dt) const;
+
+
+  bool NotInvalid(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool ScalarType(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool FloatType(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool IntType(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool SameScalarType(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool SameTypeOrOne(vkSGDataType dtA, vkSGDataType dtB) const;
+  vkSGDataType HighOrderType(vkSGDataType dtA, vkSGDataType dtB) const;
+
+  virtual bool Validate();
 
 //protected:
   void SetName(const vkString &name);
@@ -182,14 +160,147 @@ public:
   void AddInput(vkSGInput *input);
   void AddOutput(vkSGOutput *output);
 
+  void SetValidationMessage(const vkString &validationMessage);
+  const vkString &GetValidationMessage() const;
+
 private:
   vkString m_name;
   vkString m_bindingName;
-  vkSGNodeType m_type;
+  vkString m_validationMessage;
 
   std::vector<vkSGInput*> m_inputs;
   std::vector<vkSGOutput*> m_outputs;
+
 };
+
+
+VK_CLASS()
+class VKE_API vkSGVarFloat : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat();
+  virtual ~vkSGVarFloat() { }
+};
+
+VK_CLASS()
+class VKE_API vkSGVarFloat2 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat2();
+  virtual ~vkSGVarFloat2() { }
+};
+
+VK_CLASS()
+class VKE_API vkSGVarFloat3 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat3();
+  virtual ~vkSGVarFloat3() { }
+};
+
+
+VK_CLASS()
+class VKE_API vkSGVarFloat4 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGVarFloat4();
+  virtual ~vkSGVarFloat4() { }
+};
+
+VK_CLASS()
+class VKE_API vkSGConstFloat : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat();
+  virtual ~vkSGConstFloat() { };
+};
+
+VK_CLASS()
+class VKE_API vkSGConstFloat2 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat2();
+  virtual ~vkSGConstFloat2() { };
+};
+
+VK_CLASS()
+class VKE_API vkSGConstFloat3 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat3();
+  virtual ~vkSGConstFloat3() { };
+};
+
+VK_CLASS()
+class VKE_API vkSGConstFloat4 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGConstFloat4();
+  virtual ~vkSGConstFloat4() { };
+};
+
+
+VK_CLASS()
+class VKE_API vkSGFloat2 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat2();
+  virtual ~vkSGFloat2() { };
+};
+
+
+VK_CLASS()
+class VKE_API vkSGAdd : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGAdd();
+  virtual ~vkSGAdd() { }
+
+  virtual bool Validate();
+
+};
+
+VK_CLASS()
+class VKE_API vkSGSub : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSub();
+  virtual ~vkSGSub() { }
+
+  virtual bool Validate();
+};
+
+VK_CLASS()
+class VKE_API vkSGDefaultTextureCoordinate : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDefaultTextureCoordinate();
+  virtual ~vkSGDefaultTextureCoordinate() { }
+
+};
+
+VK_CLASS()
+class VKE_API vkSGTexture2D : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGTexture2D();
+  virtual ~vkSGTexture2D() { }
+
+};
+
 
 
 
@@ -208,14 +319,27 @@ VK_FORCEINLINE const vkString &vkSGNode::GetBindingName() const
   return m_bindingName;
 }
 
-VK_FORCEINLINE vkSGNodeType vkSGNode::GetType() const
+VK_FORCEINLINE void vkSGNode::SetName(const vkString &name)
 {
-  return m_type;
+  m_name = name;
 }
 
+VK_FORCEINLINE void vkSGNode::SetValidationMessage(const vkString &validationMessage)
+{
+  m_validationMessage = validationMessage;
+}
 
+VK_FORCEINLINE const vkString &vkSGNode::GetValidationMessage() const
+{
+  return m_validationMessage;
+}
 
-VK_FORCEINLINE vkSGDataType vkSGOutput::GetType() const
+VK_FORCEINLINE void vkSGOutput::SetDataType(vkSGDataType dataType)
+{
+  m_dataType = dataType;
+}
+
+VK_FORCEINLINE vkSGDataType vkSGOutput::GetDataType() const
 {
   return m_dataType;
 }
@@ -241,14 +365,6 @@ VK_FORCEINLINE const vkSGNode *vkSGOutput::GetNode() const
 }
 
 
-
-
-
-
-VK_FORCEINLINE vkSGDataType vkSGInput::GetType() const
-{
-  return m_dataType;
-}
 
 VK_FORCEINLINE const vkString &vkSGInput::GetName() const
 {
@@ -276,66 +392,22 @@ VK_FORCEINLINE const vkSGOutput *vkSGInput::GetInput() const
   return m_input;
 }
 
-/*
-
-VK_FORCEINLINE void vkSGConstFloat::SetValue(float value)
-{
-  m_value = value;
-}
-
-VK_FORCEINLINE float vkSGConstFloat::GetValue() const
-{
-  return m_value;
-}
-
-
-
-
-VK_FORCEINLINE void vkSGConstFloat3::SetValue(float x, float y, float z)
-{
-  m_valueX = x;
-  m_valueY = y;
-  m_valueZ = z;
-}
-
-VK_FORCEINLINE float vkSGConstFloat3::GetValueX() const
-{
-  return m_valueX;
-}
-
-VK_FORCEINLINE float vkSGConstFloat3::GetValueY() const
-{
-  return m_valueY;
-}
-
-VK_FORCEINLINE float vkSGConstFloat3::GetValueZ() const
-{
-  return m_valueZ;
-}
-
-*/
-
 VK_FORCEINLINE bool vkSGInput::CanInputNode() const
 {
   return m_canInputNode;
 }
 
-VK_FORCEINLINE bool vkSGInput::CanConstData() const
+VK_FORCEINLINE bool vkSGInput::CanInputConst() const
 {
-  return m_canConstData;
+  return m_canInputConst;
 }
 
-VK_FORCEINLINE vkSGDataType vkSGInput::GetConstDataType() const
+VK_FORCEINLINE void vkSGInput::SetConst(float fl)
 {
-  return m_constDataType;
+  m_constFloat = fl;
 }
 
-VK_FORCEINLINE unsigned vkSGInput::GetInt(vkSize idx) const
+VK_FORCEINLINE float vkSGInput::GetConst() const
 {
-  return m_constData.u4[idx];
-}
-
-VK_FORCEINLINE float vkSGInput::GetFloat(vkSize idx) const
-{
-  return m_constData.f4[idx];
+  return m_constFloat;
 }

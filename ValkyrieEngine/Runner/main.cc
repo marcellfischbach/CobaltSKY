@@ -14,23 +14,32 @@
 
 int test(vkGraphicsGL4 *graphics)
 {
-  vkSGNode *defaultTxt = new vkSGNode(eSGNT_DefaultTextureCoord);
+  vkSGDefaultTextureCoordinate *defaultTxt = new vkSGDefaultTextureCoordinate();
 
-  vkSGNode *textureBias = new vkSGNode(eSGNT_VarFloat2);
+  vkSGVarFloat2 *textureBias = new vkSGVarFloat2();
   textureBias->SetBindingName("TextureBias");
 
-  vkSGNode *add = new vkSGNode(eSGNT_AddFloat2);
-  add->GetInput(0)->SetInput(defaultTxt->GetOutput(0));
-  add->GetInput(1)->SetInput(textureBias->GetOutput(0));
+  vkSGConstFloat *fl = new vkSGConstFloat();
+  fl->GetInput(0)->SetConst(10.0f);
 
-  vkSGNode *sub = new vkSGNode(eSGNT_SubFloat2);
-  sub->GetInput(0)->SetInput(add->GetOutput(0));
-  sub->GetInput(1)->SetInput(textureBias->GetOutput(0));
+  vkSGFloat2 *textureBias3 = new vkSGFloat2();
+  textureBias3->GetInput(0)->SetConst(0.25f);
+  textureBias3->SetInput(1, fl);
+  //textureBias3->SetBindingName("TextureBias3");
+
+  vkSGAdd *add = new vkSGAdd();
+  add->SetInput(0, defaultTxt);
+  add->SetInput(1, textureBias);
+
+  vkSGSub *sub = new vkSGSub();
+  sub->SetInput(0, add);
+  sub->GetInput(1)->SetConst(0.5f);
+  sub->SetInput(1, textureBias3);
 
 
-  vkSGNode *texture = new vkSGNode(eSGNT_Texture2D);
+  vkSGTexture2D *texture = new vkSGTexture2D();
   texture->SetBindingName("Diffuse");
-  texture->GetInput("uv")->SetInput(sub->GetOutput(0));
+  texture->SetInput("uv", sub);
 
 
 
@@ -40,6 +49,15 @@ int test(vkGraphicsGL4 *graphics)
   graph.SetDiscardAlpha(0.5f, eCM_Less);
 
   graphics->GetShaderGraphFactory()->GenerateShaderGraph(&graph);
+
+  printf("Messages:\n");
+  printf("defaultTxt: %s\n", defaultTxt->GetValidationMessage().c_str());
+  printf("textureBias: %s\n", textureBias->GetValidationMessage().c_str());
+  printf("textureBias3: %s\n", textureBias3->GetValidationMessage().c_str());
+  printf("add: %s\n", add->GetValidationMessage().c_str());
+  printf("sub: %s\n", sub->GetValidationMessage().c_str());
+  printf("texture: %s\n", texture->GetValidationMessage().c_str());
+
 
   return 0;
 }

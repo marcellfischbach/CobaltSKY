@@ -4,7 +4,7 @@
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.refl.hh>
 
-
+class vkSGNode;
 class vkSGOutput;
 
 VK_CLASS()
@@ -14,6 +14,7 @@ class VKE_API vkSGShaderGraph : public vkMaterial
 public:
   vkSGShaderGraph();
 
+  bool Validate();
 
   void SetDiffuse(vkSGOutput *diffuse);
   vkSGOutput *GetDiffuse();
@@ -33,6 +34,8 @@ public:
   vkCompareMode GetDiscardAlphaCompareMode() const;
 
 private:
+  vkSGNode *GetNode(vkSGOutput *output);
+  bool ValidateNode(vkSGOutput *output);
   bool m_blendOutWithBinaryGradient;
   vkSGOutput *m_diffuse;
 

@@ -12,6 +12,15 @@ vkSGOutput::vkSGOutput(vkSGDataType type, const vkString &name, const vkString &
 
 }
 
+vkSGOutput::vkSGOutput(const vkString &name, const vkString &attr)
+  : m_dataType(eSGDT_Inval)
+  , m_name(name)
+  , m_node(0)
+  , m_attr(attr)
+{
+
+}
+
 vkSGOutput::~vkSGOutput()
 {
 
@@ -20,15 +29,14 @@ vkSGOutput::~vkSGOutput()
 
 
 
-vkSGInput::vkSGInput(vkUInt32 types, const vkString &name, bool canConst, bool canInputNode)
-  : m_dataTypes(types)
-  , m_name(name)
+vkSGInput::vkSGInput(const vkString &name, bool canConst, bool canInputNode)
+  : m_name(name)
   , m_node(0)
   , m_input(0)
-  , m_canConstData(canConst && (types == eSGDT_Float || types == eSGDT_Int))
+  , m_constFloat(0.0)
+  , m_canInputConst(canConst)
   , m_canInputNode(canInputNode)
 {
-  memset(&m_constData, 0, sizeof(m_constData));
 }
 
 
@@ -55,235 +63,23 @@ void vkSGInput::SetInput(vkSGOutput *input)
   }
 }
 
-
-void vkSGInput::SetConstDataPossible(bool constDataPossible)
+vkSGDataType vkSGInput::GetDataType() const
 {
-  m_canConstData = constDataPossible;
-}
-
-void vkSGInput::SetConstData(unsigned i0)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Int) != 0)
+  if (m_canInputNode && m_input)
   {
-    m_constDataType = eSGDT_Int;
-    m_constData.u4[0] = i0;
+    return m_input->GetDataType();
   }
-}
-
-
-void vkSGInput::SetConstData(unsigned i0, unsigned i1)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Int2) != 0)
+  if (m_canInputConst)
   {
-    m_constDataType = eSGDT_Int2;
-    m_constData.u4[0] = i0;
-    m_constData.u4[1] = i1;
+    return eSGDT_Float;
   }
-}
-
-void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Int3) != 0)
-  {
-    m_constDataType = eSGDT_Int3;
-    m_constData.u4[0] = i0;
-    m_constData.u4[1] = i1;
-    m_constData.u4[2] = i2;
-  }
-}
-
-void vkSGInput::SetConstData(unsigned i0, unsigned i1, unsigned i2, unsigned i3)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Int4) != 0)
-  {
-    m_constDataType = eSGDT_Int4;
-    m_constData.u4[0] = i0;
-    m_constData.u4[1] = i1;
-    m_constData.u4[2] = i2;
-    m_constData.u4[3] = i3;
-  }
+  return eSGDT_Inval;
 }
 
 
-void vkSGInput::SetConstData(float i0)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Float) != 0)
-  {
-    m_constDataType = eSGDT_Float;
-    m_constData.f4[0] = i0;
-  }
-}
-
-
-void vkSGInput::SetConstData(float i0, float i1)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Float2) != 0)
-  {
-    m_constDataType = eSGDT_Float2;
-    m_constData.f4[0] = i0;
-    m_constData.f4[1] = i1;
-  }
-}
-
-void vkSGInput::SetConstData(float i0, float i1, float i2)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Float3) != 0)
-  {
-    m_constDataType = eSGDT_Float3;
-    m_constData.f4[0] = i0;
-    m_constData.f4[1] = i1;
-    m_constData.f4[2] = i2;
-  }
-}
-
-void vkSGInput::SetConstData(float i0, float i1, float i2, float i3)
-{
-  if (m_canConstData && (m_dataTypes & eSGDT_Float4) != 0)
-  {
-    m_constDataType = eSGDT_Float4;
-    m_constData.f4[0] = i0;
-    m_constData.f4[1] = i1;
-    m_constData.f4[2] = i2;
-    m_constData.f4[3] = i3;
-  }
-}
-
-vkSGNode::vkSGNode(vkSGNodeType type)
+vkSGNode::vkSGNode()
   : vkObject()
-  , m_type(type)
 {
-
-  switch (type)
-  {
-  case eSGNT_ConstFloat3:
-    SetName("Const/ConstFloat3");
-    AddInput(new vkSGInput(eSGDT_Float, "x", true, false));
-    AddInput(new vkSGInput(eSGDT_Float, "y", true, false));
-    AddInput(new vkSGInput(eSGDT_Float, "z", true, false));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
-    break;
-  case eSGNT_Float2:
-    SetName("Float2");
-    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
-    break;
-  case eSGNT_Float3:
-    SetName("Float3");
-    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "z", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
-    break;
-  case eSGNT_Float4:
-    SetName("Float4");
-    AddInput(new vkSGInput(eSGDT_Float, "x", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "y", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "z", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "w", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
-    break;
-  case eSGNT_VarFloat:
-    SetName("Var/Float1");
-    AddOutput(new vkSGOutput(eSGDT_Float, "v", ""));
-    break;
-  case eSGNT_VarFloat2:
-    SetName("Var/Float2");
-    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
-    break;
-  case eSGNT_VarFloat3:
-    SetName("Var/Float3");
-    AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
-    break;
-  case eSGNT_VarFloat4:
-    SetName("Var/Float4");
-    AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
-    break;
-
-  case eSGNT_SplitFloat3:
-    SetName("Util/SplitFloat3");
-    AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
-    break;
-
-  case eSGNT_SplitFloat4:
-    SetName("Util/SplitFloat4");
-    AddInput(new vkSGInput(eSGDT_Float3, "v", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "w", "w"));
-    break;
-
-  case eSGNT_AddFloat:
-    SetName("Arith/AddFloat");
-    AddInput(new vkSGInput(eSGDT_Float, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float, "o", ""));
-    break;
-  case eSGNT_AddFloat2:
-    SetName("Arith/AddFloat2");
-    AddInput(new vkSGInput(eSGDT_Float2, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float2, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float2, "o", ""));
-    break;
-  case eSGNT_AddFloat3:
-    SetName("Arith/AddFloat3");
-    AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
-    break;
-  case eSGNT_AddFloat4:
-    SetName("Arith/AddFloat4");
-    AddInput(new vkSGInput(eSGDT_Float4, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float4, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "o", ""));
-    break;
-
-  case eSGNT_SubFloat:
-    SetName("Arith/SubFloat");
-    AddInput(new vkSGInput(eSGDT_Float, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float, "o", ""));
-    break;
-  case eSGNT_SubFloat2:
-    SetName("Arith/SubFloat2");
-    AddInput(new vkSGInput(eSGDT_Float2, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float2, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float2, "o", ""));
-    break;
-  case eSGNT_SubFloat3:
-    SetName("Arith/SubFloat3");
-    AddInput(new vkSGInput(eSGDT_Float3, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float3, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float3, "o", ""));
-    break;
-  case eSGNT_SubFloat4:
-    SetName("Arith/SubFloat4");
-    AddInput(new vkSGInput(eSGDT_Float4, "a", false, true));
-    AddInput(new vkSGInput(eSGDT_Float4, "b", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "o", ""));
-    break;
-
-
-
-  case eSGNT_DefaultTextureCoord:
-    SetName("Texture/DefaultTextureCoordinate");
-    AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
-
-  case eSGNT_Texture2D:
-    SetName("Texture/Texture2D");
-    AddInput(new vkSGInput(eSGDT_Float2, "uv", false, true));
-    AddOutput(new vkSGOutput(eSGDT_Float4, "c", ""));
-    AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "g", "g"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "b", "b"));
-    AddOutput(new vkSGOutput(eSGDT_Float, "a", "a"));
-    break;
-  }
-
 }
 
 vkSGNode::~vkSGNode()
@@ -302,11 +98,6 @@ vkSGNode::~vkSGNode()
 
 }
 
-void vkSGNode::SetName(const vkString &name)
-{
-  m_name = name;
-}
-
 
 
 void vkSGNode::AddInput(vkSGInput *input)
@@ -323,7 +114,7 @@ vkSize vkSGNode::GetNumberOfInputs() const
   return m_inputs.size();
 }
 
-vkSGInput *vkSGNode::GetInput(vkSize idx)
+vkSGInput *vkSGNode::GetInput(vkSize idx) const
 {
   if (idx >= m_inputs.size())
   {
@@ -332,7 +123,7 @@ vkSGInput *vkSGNode::GetInput(vkSize idx)
   return m_inputs[idx];
 }
 
-vkSGInput *vkSGNode::GetInput(const vkString &name)
+vkSGInput *vkSGNode::GetInput(const vkString &name) const
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -344,6 +135,128 @@ vkSGInput *vkSGNode::GetInput(const vkString &name)
   }
   return 0;
 }
+
+vkSGDataType vkSGNode::GetInputDataType(vkSize idx) const
+{
+  vkSGInput *input = GetInput(idx);
+  if (!input)
+  {
+    return eSGDT_Inval;
+  }
+  return input->GetDataType();
+}
+
+vkSGDataType vkSGNode::GetInputDataType(const vkString &name) const
+{
+  vkSGInput *input = GetInput(name);
+  if (!input)
+  {
+    return eSGDT_Inval;
+  }
+  return input->GetDataType();
+}
+
+void vkSGNode::SetOutputDataType(vkSize idx, vkSGDataType dataType)
+{
+  vkSGOutput *output = GetOutput(idx);
+  if (output)
+  {
+    output->SetDataType(dataType);
+  }
+}
+
+
+void vkSGNode::SetOutputDataType(const vkString &name, vkSGDataType dataType)
+{
+  vkSGOutput *output = GetOutput(name);
+  if (output)
+  {
+    output->SetDataType(dataType);
+  }
+}
+
+
+void vkSGNode::SetInput(int inputIdx, vkSGNode *node, int outputIdx)
+{
+  if (!node)
+  {
+    return;
+  }
+  vkSGInput *input = GetInput(inputIdx);
+  if (!input)
+  {
+    return;
+  }
+  vkSGOutput *output = node->GetOutput(outputIdx);
+  if (!output)
+  {
+    return;
+  }
+
+  input->SetInput(output);
+}
+
+void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, int outputIdx)
+{
+  if (!node)
+  {
+    return;
+  }
+  vkSGInput *input = GetInput(inputName);
+  if (!input)
+  {
+    return;
+  }
+  vkSGOutput *output = node->GetOutput(outputIdx);
+  if (!output)
+  {
+    return;
+  }
+
+  input->SetInput(output);
+}
+
+
+void vkSGNode::SetInput(int inputIdx, vkSGNode *node, const vkString &outputName)
+{
+  if (!node)
+  {
+    return;
+  }
+  vkSGInput *input = GetInput(inputIdx);
+  if (!input)
+  {
+    return;
+  }
+  vkSGOutput *output = node->GetOutput(outputName);
+  if (!output)
+  {
+    return;
+  }
+
+  input->SetInput(output);
+}
+
+void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, const vkString &outputName)
+{
+  if (!node)
+  {
+    return;
+  }
+  vkSGInput *input = GetInput(inputName);
+  if (!input)
+  {
+    return;
+  }
+  vkSGOutput *output = node->GetOutput(outputName);
+  if (!output)
+  {
+    return;
+  }
+
+  input->SetInput(output);
+}
+
 
 vkSGNode *vkSGNode::GetInputNode(vkSize idx)
 {
@@ -393,112 +306,258 @@ vkSGOutput *vkSGNode::GetOutput(const vkString &name)
   return 0;
 }
 
+bool vkSGNode::NotInvalid(vkSGDataType dt) const
+{
+  return dt != eSGDT_Inval;
+}
 
-/*
+bool vkSGNode::ScalarType(vkSGDataType dt) const
+{
+  return (dt & eSGDT_ScalarTypes) == dt;
+}
+
+bool vkSGNode::FloatType(vkSGDataType dt) const
+{
+  return (dt & eSGDT_FloatTypes) == dt;
+}
+
+bool vkSGNode::IntType(vkSGDataType dt) const
+{
+  return (dt & eSGDT_IntTypes) == dt;
+}
+
+bool vkSGNode::NotInvalid(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return NotInvalid(dtA) && NotInvalid(dtB);
+}
+
+bool vkSGNode::ScalarType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return ScalarType(dtA) && ScalarType(dtB);
+}
 
 
+bool vkSGNode::FloatType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return FloatType(dtA) && FloatType(dtB);
+}
+
+
+bool vkSGNode::IntType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return IntType(dtA) && IntType(dtB);
+}
+
+bool vkSGNode::SameScalarType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return FloatType(dtA, dtB) || IntType(dtA, dtB);
+}
+
+bool vkSGNode::SameTypeOrOne(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  if (FloatType(dtA, dtB))
+  {
+    return dtA == dtB || dtA == eSGDT_Float || dtB == eSGDT_Float;
+  }
+  if (IntType(dtA, dtB))
+  {
+    return dtA == dtB || dtA == eSGDT_Int || dtB == eSGDT_Int;
+  }
+  return false;
+}
+
+
+vkSGDataType vkSGNode::HighOrderType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return dtA > dtB ? dtA : dtB;
+}
+
+bool vkSGNode::Validate()
+{
+  SetValidationMessage("");
+  bool success = true;
+  for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
+  {
+    vkSGInput *input = m_inputs[i];
+    if (!input)
+    {
+      continue;
+    }
+    vkSGOutput *output = input->GetInput();
+    if (!output)
+    {
+      continue;
+    }
+    vkSGNode *node = output->GetNode();
+    if (node)
+    {
+      if (node == this)
+      {
+        printf("Bound to itself.\n");
+        success = false;
+        return false;
+      }
+      if (!node->Validate())
+      {
+        success = false;
+      }
+    }
+  }
+
+  return success;
+}
+
+vkSGVarFloat::vkSGVarFloat()
+  : vkSGNode()
+{
+  SetName("Var/Float");
+  AddOutput(new vkSGOutput(eSGDT_Float, "v"));
+}
+
+vkSGVarFloat2::vkSGVarFloat2()
+  : vkSGNode()
+{
+  SetName("Var/Float2");
+  AddOutput(new vkSGOutput(eSGDT_Float2, "v"));
+}
+
+vkSGVarFloat3::vkSGVarFloat3()
+  : vkSGNode()
+{
+  SetName("Var/Float3");
+  AddOutput(new vkSGOutput(eSGDT_Float3, "v"));
+}
+
+vkSGVarFloat4::vkSGVarFloat4()
+  : vkSGNode()
+{
+  SetName("Var/Float4");
+  AddOutput(new vkSGOutput(eSGDT_Float4, "v"));
+}
 
 vkSGConstFloat::vkSGConstFloat()
   : vkSGNode()
-  , m_value(0.0)
 {
-  SetName("ConstFloat");
-  AddOutput(new vkSGOutput(eSGDT_Float, "Val", ""));
+  SetName("Const/Float");
+  AddInput(new vkSGInput("x", true, false));
+  AddOutput(new vkSGOutput(eSGDT_Float, "v", ""));
 }
 
-
-vkSGConstFloat::~vkSGConstFloat()
+vkSGConstFloat2::vkSGConstFloat2()
+  : vkSGNode()
 {
-
+  SetName("Const/Float2");
+  AddInput(new vkSGInput("x", true, false));
+  AddInput(new vkSGInput("y", true, false));
+  AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
 }
-
 
 vkSGConstFloat3::vkSGConstFloat3()
   : vkSGNode()
-  , m_valueX(0.0)
-  , m_valueY(0.0)
-  , m_valueZ(0.0)
 {
-  SetName("ConstFloat3");
-  AddOutput(new vkSGOutput(eSGDT_Float3, "Val", ""));
-  AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "y", "x"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "z", "x"));
+  SetName("Const/Float3");
+  AddInput(new vkSGInput("x", true, false));
+  AddInput(new vkSGInput("y", true, false));
+  AddInput(new vkSGInput("z", true, false));
+  AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
 }
 
-
-vkSGConstFloat3::~vkSGConstFloat3()
-{
-
-}
-
-
-
-vkSGFloat3::vkSGFloat3()
+vkSGConstFloat4::vkSGConstFloat4()
   : vkSGNode()
 {
-  SetName("Float3");
-  AddOutput(new vkSGOutput(eSGDT_Float3, "Val", ""));
-  AddInput(new vkSGInput(eSGDT_Float, "x"));
-  AddInput(new vkSGInput(eSGDT_Float, "y"));
-  AddInput(new vkSGInput(eSGDT_Float, "z"));
+  SetName("Const/Float4");
+  AddInput(new vkSGInput("x", true, false));
+  AddInput(new vkSGInput("y", true, false));
+  AddInput(new vkSGInput("z", true, false));
+  AddInput(new vkSGInput("w", true, false));
+  AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
 }
 
 
-vkSGFloat3::~vkSGFloat3()
-{
-
-}
-
-
-
-vkSGAddFloat::vkSGAddFloat()
+vkSGFloat2::vkSGFloat2()
   : vkSGNode()
 {
-  SetName("ADD");
-  AddInput(new vkSGInput(eSGDT_Float, "A"));
-  AddInput(new vkSGInput(eSGDT_Float, "B"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "Val", ""));
-}
-
-vkSGAddFloat::~vkSGAddFloat()
-{
-
+  SetName("Assemble/Float2");
+  AddInput(new vkSGInput("x", true, true));
+  AddInput(new vkSGInput("y", true, true));
+  AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
 }
 
 
-
-vkSGAddFloat3::vkSGAddFloat3()
+vkSGAdd::vkSGAdd()
   : vkSGNode()
 {
-  SetName("ADD3");
-  AddInput(new vkSGInput(eSGDT_Float3, "A"));
-  AddInput(new vkSGInput(eSGDT_Float3, "B"));
-  AddOutput(new vkSGOutput(eSGDT_Float3, "Val", ""));
+  SetName("Math/Add");
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput("v"));
 }
 
-vkSGAddFloat3::~vkSGAddFloat3()
+bool vkSGAdd::Validate()
 {
+  bool success = vkSGNode::Validate();
 
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (!ScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+
+  SetOutputDataType(0, HighOrderType(dtA, dtB));
+  return success;
 }
 
-
-
-vkSGSplitFloat3::vkSGSplitFloat3()
+vkSGSub::vkSGSub()
   : vkSGNode()
 {
-  SetName("SplitFloat3");
-  AddInput(new vkSGInput(eSGDT_Float3, "Val"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
-  AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
+  SetName("Math/Sub");
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput("v"));
 }
 
 
-vkSGSplitFloat3::~vkSGSplitFloat3()
+bool vkSGSub::Validate()
 {
+  bool success = vkSGNode::Validate();
 
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (!ScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+
+  SetOutputDataType(0, HighOrderType(dtA, dtB));
+  return success;
 }
 
-*/
+vkSGDefaultTextureCoordinate::vkSGDefaultTextureCoordinate()
+  : vkSGNode()
+{
+  AddOutput(new vkSGOutput(eSGDT_Float2, "uv"));
+}
 
+vkSGTexture2D::vkSGTexture2D()
+  : vkSGNode()
+{
+  AddInput(new vkSGInput("uv", false, true));
+  AddOutput(new vkSGOutput(eSGDT_Float4, "c"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "g", "g"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "b", "b"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "a", "a"));
+}

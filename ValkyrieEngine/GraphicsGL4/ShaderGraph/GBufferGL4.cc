@@ -21,8 +21,9 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   {
     return;
   }
-  if (diffuseOutput->GetType() == eSGDT_Float4)
+  if (diffuseOutput->GetDataType() == eSGDT_Float4)
   {
+    /*
     vkSGNode *diffuseSplit = new vkSGNode(eSGNT_SplitFloat4);
     diffuseSplit->GetInput(0)->SetInput(diffuseOutput);
     vkSGNode *vec3 = new vkSGNode(eSGNT_Float3);
@@ -30,10 +31,11 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     vec3->GetInput(1)->SetInput(diffuseSplit->GetOutput(1));
     vec3->GetInput(2)->SetInput(diffuseSplit->GetOutput(2));
     diffuseOutput = vec3->GetOutput(0);
+    */
   }
   if (alphaOutput)
   {
-    if (alphaOutput->GetType() != eSGDT_Float)
+    if (alphaOutput->GetDataType() != eSGDT_Float)
     {
       alphaOutput = 0;
     }

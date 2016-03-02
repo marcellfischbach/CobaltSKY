@@ -1,6 +1,7 @@
 
 
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
+#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
 
 vkSGShaderGraph::vkSGShaderGraph()
@@ -12,4 +13,36 @@ vkSGShaderGraph::vkSGShaderGraph()
   , m_discardAlphaCompareMode(eCM_Less)
 {
 
+}
+
+bool vkSGShaderGraph::Validate()
+{
+  bool success = true;
+
+  success &= ValidateNode(m_diffuse);
+  success &= ValidateNode(m_alpha);
+
+  return success;
+}
+
+
+vkSGNode *vkSGShaderGraph::GetNode(vkSGOutput *output)
+{
+  if (!output)
+  {
+    return 0;
+  }
+
+  return output->GetNode();
+}
+
+bool vkSGShaderGraph::ValidateNode(vkSGOutput *output)
+{
+  vkSGNode *node = GetNode(output);
+  if (!node)
+  {
+    return true;
+  }
+
+  return node->Validate();
 }
