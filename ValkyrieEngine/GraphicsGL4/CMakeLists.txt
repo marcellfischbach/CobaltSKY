@@ -51,6 +51,7 @@ source_group(
 
 
 set(SOURCE_SHADERGRAPH
+  ShaderGraph/GBufferGL4.cc
   ShaderGraph/ShaderGraphGL4.cc
   ShaderGraph/ShaderGraphGL4.hh
   ShaderGraph/ShaderGraphNodeGL4.cc

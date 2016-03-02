@@ -30,6 +30,18 @@ private:
   void GenerateGBuffer(vkSGShaderGraph *graph);
 
 private:
+  struct Map 
+  {
+    const vkClass *nodeClass;
+    const vkClass *nodeClassGL4;
+    Map(const vkClass *nodeClass, const vkClass *nodeClassGL4)
+      : nodeClass(nodeClass)
+      , nodeClassGL4(nodeClassGL4)
+    {
+
+    }
+  };
   vkGraphicsGL4 *m_graphics;
-  std::map<const vkClass*, const vkClass*> m_classMapping;
+  std::vector<Map> m_classMapping;
+  //std::map<const vkClass*, const vkClass*> m_classMapping;
 };

@@ -20,10 +20,10 @@ int test(vkGraphicsGL4 *graphics)
   textureBias->SetBindingName("TextureBias");
 
   vkSGConstFloat *fl = new vkSGConstFloat();
-  fl->GetInput(0)->SetConst(10.0f);
+  fl->SetInput(0, 10.0f);
 
   vkSGFloat2 *textureBias3 = new vkSGFloat2();
-  textureBias3->GetInput(0)->SetConst(0.25f);
+  textureBias3->SetInput(0, 0.25f);
   textureBias3->SetInput(1, fl);
   //textureBias3->SetBindingName("TextureBias3");
 
@@ -41,10 +41,22 @@ int test(vkGraphicsGL4 *graphics)
   texture->SetBindingName("Diffuse");
   texture->SetInput("uv", sub);
 
+  vkSGSplitFloat4 *split = new vkSGSplitFloat4();
+  split->SetInput(0, texture);
 
+  vkSGFloat4 *float4 = new vkSGFloat4();
+  float4->SetInput(0, split, 0);
+  float4->SetInput(1, split, 0);
+  float4->SetInput(2, split, 0);
+  float4->SetInput(3, 1.0f);
+
+  vkSGVarFloat *roughness = new vkSGVarFloat();
+  roughness->SetBindingName("Roughness");
+  //roughness->SetInput(0, 0.234f);
 
   vkSGShaderGraph graph;
-  graph.SetDiffuse(texture->GetOutput(0));
+  graph.SetDiffuse(float4->GetOutput(0));
+  graph.SetRoughness(roughness->GetOutput(0));
   graph.SetAlpha(texture->GetOutput(4));
   graph.SetDiscardAlpha(0.5f, eCM_Less);
 

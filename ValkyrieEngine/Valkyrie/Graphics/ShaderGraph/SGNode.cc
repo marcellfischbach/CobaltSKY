@@ -257,6 +257,27 @@ void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, const vkStrin
   input->SetInput(output);
 }
 
+void vkSGNode::SetInput(int idx, float constFloat)
+{
+  vkSGInput *input = GetInput(idx);
+  if (!input)
+  {
+    return;
+  }
+
+  input->SetConst(constFloat);
+}
+
+void vkSGNode::SetInput(const vkString &inputName, float constFloat)
+{
+  vkSGInput *input = GetInput(inputName);
+  if (!input)
+  {
+    return;
+  }
+
+  input->SetConst(constFloat);
+}
 
 vkSGNode *vkSGNode::GetInputNode(vkSize idx)
 {
@@ -483,6 +504,86 @@ vkSGFloat2::vkSGFloat2()
   AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
 }
 
+vkSGFloat3::vkSGFloat3()
+  : vkSGNode()
+{
+  SetName("Assemble/Float3");
+  AddInput(new vkSGInput("x", true, true));
+  AddInput(new vkSGInput("y", true, true));
+  AddInput(new vkSGInput("z", true, true));
+  AddOutput(new vkSGOutput(eSGDT_Float3, "v", ""));
+}
+
+
+vkSGFloat4::vkSGFloat4()
+  : vkSGNode()
+{
+  SetName("Assemble/Float4");
+  AddInput(new vkSGInput("x", true, true));
+  AddInput(new vkSGInput("y", true, true));
+  AddInput(new vkSGInput("z", true, true));
+  AddInput(new vkSGInput("w", true, true));
+  AddOutput(new vkSGOutput(eSGDT_Float4, "v", ""));
+}
+
+vkSGSplitFloat2::vkSGSplitFloat2()
+  : vkSGNode()
+{
+  SetName("Assemble/SplitFloat2");
+  AddInput(new vkSGInput("v", false, true));
+  AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
+}
+
+bool vkSGSplitFloat2::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dt = GetInputDataType(0);
+
+  return success && dt == eSGDT_Float2;
+}
+
+
+vkSGSplitFloat3::vkSGSplitFloat3()
+  : vkSGNode()
+{
+  SetName("Assemble/SplitFloat3");
+  AddInput(new vkSGInput("v", false, true));
+  AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
+}
+
+bool vkSGSplitFloat3::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dt = GetInputDataType(0);
+
+  return success && dt == eSGDT_Float3;
+}
+
+
+vkSGSplitFloat4::vkSGSplitFloat4()
+  : vkSGNode()
+{
+  SetName("Assemble/SplitFloat4");
+  AddInput(new vkSGInput("v", false, true));
+  AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "z", "z"));
+  AddOutput(new vkSGOutput(eSGDT_Float, "w", "w"));
+}
+
+bool vkSGSplitFloat4::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dt = GetInputDataType(0);
+
+  return success && dt == eSGDT_Float4;
+}
 
 vkSGAdd::vkSGAdd()
   : vkSGNode()

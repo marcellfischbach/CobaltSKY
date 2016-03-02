@@ -128,6 +128,8 @@ public:
   void SetInput(const vkString &inputName, vkSGNode *node, int outputIdx = 0);
   void SetInput(int inputIdx, vkSGNode* node, const vkString &outputName);
   void SetInput(const vkString &inputName, vkSGNode *node, const vkString &outputName);
+  void SetInput(int inputIdx, float constFloat);
+  void SetInput(const vkString &inputName, float constFloat);
 
   vkSGNode *GetInputNode(vkSize idx);
   vkSGNode *GetInputNode(const vkString &name);
@@ -255,6 +257,58 @@ class VKE_API vkSGFloat2 : public vkSGNode
 public:
   vkSGFloat2();
   virtual ~vkSGFloat2() { };
+};
+
+VK_CLASS()
+class VKE_API vkSGFloat3 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat3();
+  virtual ~vkSGFloat3() { };
+};
+
+VK_CLASS()
+class VKE_API vkSGFloat4 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat4();
+  virtual ~vkSGFloat4() { };
+};
+
+
+VK_CLASS()
+class VKE_API vkSGSplitFloat2 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat2();
+  virtual ~vkSGSplitFloat2() { }
+
+  virtual bool Validate();
+};
+
+VK_CLASS()
+class VKE_API vkSGSplitFloat3 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat3();
+  virtual ~vkSGSplitFloat3() { }
+
+  virtual bool Validate();
+};
+
+VK_CLASS()
+class VKE_API vkSGSplitFloat4 : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat4();
+  virtual ~vkSGSplitFloat4() { }
+
+  virtual bool Validate();
 };
 
 

@@ -277,6 +277,68 @@ protected:
 };
 
 VK_CLASS()
+class VKGL4_API vkSGFloat3GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat3GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGFloat3GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGFloat4GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGFloat4GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGFloat4GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+
+VK_CLASS()
+class VKGL4_API vkSGSplitFloat2GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat2GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGSplitFloat2GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+
+VK_CLASS()
+class VKGL4_API vkSGSplitFloat3GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat3GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGSplitFloat3GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGSplitFloat4GL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGSplitFloat4GL4() : vkSGNodeGL4() { }
+  virtual ~vkSGSplitFloat4GL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
 class VKGL4_API vkSGAddGL4 : public vkSGNodeGL4
 {
   VK_CLASS_GEN;

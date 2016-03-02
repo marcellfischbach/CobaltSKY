@@ -16,6 +16,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 {
   std::set<vkSGOutput*> outputs;
   vkSGOutput *diffuseOutput = graph->GetDiffuse();
+  vkSGOutput *roughnessOutput = graph->GetRoughness();
   vkSGOutput *alphaOutput = graph->GetAlpha();
   if (!diffuseOutput)
   {
@@ -23,15 +24,26 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   }
   if (diffuseOutput->GetDataType() == eSGDT_Float4)
   {
-    /*
-    vkSGNode *diffuseSplit = new vkSGNode(eSGNT_SplitFloat4);
+    vkSGSplitFloat4 *diffuseSplit = new vkSGSplitFloat4();
     diffuseSplit->GetInput(0)->SetInput(diffuseOutput);
-    vkSGNode *vec3 = new vkSGNode(eSGNT_Float3);
-    vec3->GetInput(0)->SetInput(diffuseSplit->GetOutput(0));
-    vec3->GetInput(1)->SetInput(diffuseSplit->GetOutput(1));
-    vec3->GetInput(2)->SetInput(diffuseSplit->GetOutput(2));
+
+    vkSGFloat3 *vec3 = new vkSGFloat3();
+    vec3->SetInput(0, diffuseSplit, 0);
+    vec3->SetInput(1, diffuseSplit, 1);
+    vec3->SetInput(2, diffuseSplit, 2);
+
     diffuseOutput = vec3->GetOutput(0);
-    */
+  }
+  if (roughnessOutput)
+  {
+    if (roughnessOutput->GetDataType() != eSGDT_Float)
+    {
+      roughnessOutput = 0;
+    }
+    else
+    {
+      outputs.insert(roughnessOutput);
+    }
   }
   if (alphaOutput)
   {
@@ -107,8 +119,13 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
       << "    discard;" << std::endl
       << "  }" << std::endl;
   }
-  ss << "  vk_DiffuseRoughness = vec4(" << ctx.GetFullOutputValue(diffuseOutput) << ", 0.0);" << std::endl
-    << "  vk_NormalLightMode = vec4(normal * 0.5 + 0.5, 0.0);" << std::endl
+  vkString roughness = "0.0";
+  if (roughnessOutput)
+  {
+    roughness = ctx.GetFullOutputValue(roughnessOutput);
+  }
+  ss << "  vk_DiffuseRoughness = vec4(" << ctx.GetFullOutputValue(diffuseOutput) << ", " << roughness << ");" << std::endl
+    << "  vk_NormalLightMode = vec4(inFragNormal * 0.5 + 0.5, 0.0);" << std::endl
     << "  vk_EmissivMetallic = vec4(0, 0, 0, 0);" << std::endl
     << "  vk_SSSSpecular = vec4(0, 0, 0, 0);" << std::endl
     << "}" << std::endl

@@ -925,54 +925,203 @@ void vkSGConstFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   ctx.SetOutputValue(n->GetOutput(0), ss.str());
 }
 
-void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+namespace
 {
-  vkSGNode *n = GetNode();
-
-  vkString &src0 = n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "";
-  vkString &src1 = n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "";
-
-  std::ostringstream ss;
-  if (src0 == src1)
+vkString eval(vkString *src, vkSGNode *node, vkShaderGraphCtx &ctx, int start, int num)
+{
+  if (start >= num)
   {
-    if (src0.length() == 0)
-    {
-      // both values are const
-      ss << "vec2("
-        << std::to_string(n->GetInput(0)->GetConst()) << ", "
-        << std::to_string(n->GetInput(1)->GetConst())
-        << ")";
+    return "";
+  }
 
+  int next = start;
+  std::ostringstream ss;
+  if (src[start].length() != 0)
+  {
+
+    int numEquals = 1;
+    for (int i = start+1; i < num; ++i)
+    {
+      if (src[start] == src[i] && node->GetInput(i)->GetInput()->GetAttr().length() != 0)
+      {
+        numEquals++;
+      }
+      else
+      {
+        break;
+      }
+    }
+    if (numEquals == 1)
+    {
+      ss << ctx.GetFullInputValue(node->GetInput(start));
     }
     else
     {
-      ss << src0 << "." << n->GetInput(0)->GetInput()->GetAttr() << n->GetInput(0)->GetInput()->GetAttr();
+      ss << src[start] << ".";
+      for (int i = 0; i < numEquals; ++i)
+      {
+        ss << node->GetInput(start + i)->GetInput()->GetAttr();
+      }
     }
+    next += numEquals;
   }
   else
   {
-    ss << "vec2(";
-    if (src0.length() == 0)
-    {
-      ss << std::to_string(n->GetInput(0)->GetConst());
-    }
-    else
-    {
-      ss << ctx.GetFullInputValue(n->GetInput(0));
-    }
-    ss << ", ";
-    if (src1.length() == 0)
-    {
-      ss << std::to_string(n->GetInput(1)->GetConst());
-    }
-    else
-    {
-      ss << ctx.GetFullInputValue(n->GetInput(1));
-    }
-    ss << ")";
+    ss << std::to_string(node->GetInput(start)->GetConst());
+    next++;
+  }
+
+  vkString trail = ::eval(src, node, ctx, next, num);
+  if (trail.length() != 0)
+  {
+    ss << ", " << trail;
+  }
+  return ss.str();
+}
+}
+
+
+void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+  vkString src[] = {
+    n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
+    n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : ""
+  };
+
+
+  std::ostringstream ss;
+  if (src[0] == src[1] && src[0].length() != 0)
+  {
+    ss << src[0] << "."
+      << n->GetInput(0)->GetInput()->GetAttr()
+      << n->GetInput(1)->GetInput()->GetAttr();
+  }
+  else
+  {
+    ss << "vec2(" << eval(src, n, ctx, 0, 2) << ")";
   }
 
   ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+
+void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+  vkString src[] = {
+     n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
+     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "",
+     n->GetInput(2)->GetInput() ? ctx.GetInputValue(n->GetInput(2)) : ""
+  };
+
+
+  std::ostringstream ss;
+  if (src[0] == src[1] && src[0] == src[2] && src[0].length () != 0)
+  {
+    ss << src[0] << "." 
+      << n->GetInput(0)->GetInput()->GetAttr() 
+      << n->GetInput(1)->GetInput()->GetAttr()
+      << n->GetInput(2)->GetInput()->GetAttr();
+  }
+  else
+  {
+    ss << "vec3(" << eval(src, n, ctx, 0, 3) << ")";
+  }
+
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+
+void vkSGFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *n = GetNode();
+  vkString src[] = {
+    n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
+    n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "",
+    n->GetInput(2)->GetInput() ? ctx.GetInputValue(n->GetInput(2)) : "",
+    n->GetInput(3)->GetInput() ? ctx.GetInputValue(n->GetInput(3)) : ""
+  };
+
+
+  std::ostringstream ss;
+  if (src[0] == src[1] && src[0] == src[2] && src[0] == src[3] && src[0].length() != 0)
+  {
+    ss << src[0] << "."
+      << n->GetInput(0)->GetInput()->GetAttr()
+      << n->GetInput(1)->GetInput()->GetAttr()
+      << n->GetInput(2)->GetInput()->GetAttr();
+  }
+  else
+  {
+    ss << "vec4(" << eval(src, n, ctx, 0, 4) << ")";
+  }
+
+  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+}
+
+void vkSGSplitFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *node = GetNode();
+  vkSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  if (!inputNode)
+  {
+    return;
+  }
+
+  vkString exp = ctx.GetInputValue(node->GetInput(0));
+  if (inputNode->IsInline())
+  {
+    exp = ctx.AddAssignment("vec2", exp);
+  }
+
+  ctx.SetOutputValue(node->GetOutput(0), exp);
+  ctx.SetOutputValue(node->GetOutput(1), exp);
+
+}
+
+void vkSGSplitFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *node = GetNode();
+  vkSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  if (!inputNode)
+  {
+    return;
+  }
+
+  vkString exp = ctx.GetInputValue(node->GetInput(0));
+  if (inputNode->IsInline())
+  {
+    exp = ctx.AddAssignment("vec3", exp);
+  }
+
+  ctx.SetOutputValue(node->GetOutput(0), exp);
+  ctx.SetOutputValue(node->GetOutput(1), exp);
+  ctx.SetOutputValue(node->GetOutput(2), exp);
+
+}
+
+
+void vkSGSplitFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  vkSGNode *node = GetNode();
+  vkSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  if (!inputNode)
+  {
+    return;
+  }
+
+  vkString exp = ctx.GetInputValue(node->GetInput(0));
+  if (inputNode->IsInline())
+  {
+    exp = ctx.AddAssignment("vec4", exp);
+  }
+
+  ctx.SetOutputValue(node->GetOutput(0), exp);
+  ctx.SetOutputValue(node->GetOutput(1), exp);
+  ctx.SetOutputValue(node->GetOutput(2), exp);
+  ctx.SetOutputValue(node->GetOutput(3), exp);
+
 }
 
 void vkSGAddGL4::PrivEvaluate(vkShaderGraphCtx &ctx)

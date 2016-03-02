@@ -20,6 +20,10 @@ public:
   vkSGOutput *GetDiffuse();
   const vkSGOutput *GetDiffuse() const;
 
+  void SetRoughness(vkSGOutput *roughness);
+  vkSGOutput *GetRoughness();
+  const vkSGOutput *GetRoughness() const;
+
   void SetAlpha(vkSGOutput *alpha);
   vkSGOutput *GetAlpha();
   const vkSGOutput *GetAlpha() const;
@@ -38,6 +42,7 @@ private:
   bool ValidateNode(vkSGOutput *output);
   bool m_blendOutWithBinaryGradient;
   vkSGOutput *m_diffuse;
+  vkSGOutput *m_roughness;
 
   vkSGOutput *m_alpha;
   bool m_discardAlpha;
@@ -67,6 +72,23 @@ VK_FORCEINLINE vkSGOutput *vkSGShaderGraph::GetDiffuse()
 VK_FORCEINLINE const vkSGOutput *vkSGShaderGraph::GetDiffuse() const
 {
   return m_diffuse;
+}
+
+
+VK_FORCEINLINE void vkSGShaderGraph::SetRoughness(vkSGOutput *roughness)
+{
+  m_roughness = roughness;
+}
+
+VK_FORCEINLINE vkSGOutput *vkSGShaderGraph::GetRoughness()
+{
+  return m_roughness;
+}
+
+
+VK_FORCEINLINE const vkSGOutput *vkSGShaderGraph::GetRoughness() const
+{
+  return m_roughness;
 }
 
 
