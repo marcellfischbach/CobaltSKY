@@ -649,12 +649,14 @@ bool vkSGSub::Validate()
 vkSGDefaultTextureCoordinate::vkSGDefaultTextureCoordinate()
   : vkSGNode()
 {
+  SetName("Texture/DefaultTextureCoordinate");
   AddOutput(new vkSGOutput(eSGDT_Float2, "uv"));
 }
 
 vkSGTexture2D::vkSGTexture2D()
   : vkSGNode()
 {
+  SetName("Texture/Texture2D");
   AddInput(new vkSGInput("uv", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float4, "c"));
   AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));

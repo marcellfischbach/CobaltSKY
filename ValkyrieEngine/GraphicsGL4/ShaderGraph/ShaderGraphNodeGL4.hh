@@ -33,9 +33,9 @@ public:
   vkSGNodeGL4 *GetNode(vkSGOutput *output);
   vkSGNodeGL4 *GetNode(vkSGInput *input);
 
-
   vkString CreateCode(vkSGOutput* outputs);
 
+  void EvaluateInlines(std::set<vkSGOutput*> outputs);
   void GenerateCode(std::set<vkSGOutput*> outputs);
 
   void Evaluate(vkSGNodeGL4 *node);
@@ -133,6 +133,7 @@ public:
 
 protected:
   virtual void PrivEvaluate(vkShaderGraphCtx &ctx) = 0;
+  void SetDoubleInlineEvaluateInput();
 
 private:
   bool m_forceInline;
@@ -140,27 +141,11 @@ private:
   vkSGNode *m_node;
   bool m_inlineEvaluated;
   bool m_evaluated;
+  bool m_doubleInlineEvaluateInput;
 
   vkString GetFloat(vkShaderGraphCtx &ctx, int x);
   vkString GetInt(vkShaderGraphCtx &ctx, int x);
 
-private:
-  void EvaluateConstFloat(vkShaderGraphCtx &ctx);
-  void EvaluateConstFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateFloat2(vkShaderGraphCtx &ctx);
-  void EvaluateFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateVarFloat(vkShaderGraphCtx &ctx);
-  void EvaluateVarFloat2(vkShaderGraphCtx &ctx);
-  void EvaluateVarFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateVarFloat4(vkShaderGraphCtx &ctx);
-  void EvaluateArithFloat(vkShaderGraphCtx &ctx, const char *arith);
-  void EvaluateArithFloat2(vkShaderGraphCtx &ctx, const char *arith);
-  void EvaluateArithFloat3(vkShaderGraphCtx &ctx, const char *arith);
-  void EvaluateArithFloat4(vkShaderGraphCtx &ctx, const char *arith);
-  void EvaluateSplitFloat3(vkShaderGraphCtx &ctx);
-  void EvaluateSplitFloat4(vkShaderGraphCtx &ctx);
-  void EvaluateDefaultTextureCoordinate(vkShaderGraphCtx &ctx);
-  void EvaluateTexture2D(vkShaderGraphCtx &ctx);
 };
 
 VK_CLASS()
@@ -306,7 +291,7 @@ class VKGL4_API vkSGSplitFloat2GL4 : public vkSGNodeGL4
 {
   VK_CLASS_GEN;
 public:
-  vkSGSplitFloat2GL4() : vkSGNodeGL4() { }
+  vkSGSplitFloat2GL4();
   virtual ~vkSGSplitFloat2GL4() { }
 
 protected:
@@ -319,7 +304,7 @@ class VKGL4_API vkSGSplitFloat3GL4 : public vkSGNodeGL4
 {
   VK_CLASS_GEN;
 public:
-  vkSGSplitFloat3GL4() : vkSGNodeGL4() { }
+  vkSGSplitFloat3GL4();
   virtual ~vkSGSplitFloat3GL4() { }
 
 protected:
@@ -331,7 +316,7 @@ class VKGL4_API vkSGSplitFloat4GL4 : public vkSGNodeGL4
 {
   VK_CLASS_GEN;
 public:
-  vkSGSplitFloat4GL4() : vkSGNodeGL4() { }
+  vkSGSplitFloat4GL4();
   virtual ~vkSGSplitFloat4GL4() { }
 
 protected:

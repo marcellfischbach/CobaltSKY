@@ -14,61 +14,57 @@
 
 int test(vkGraphicsGL4 *graphics)
 {
-  vkSGDefaultTextureCoordinate *defaultTxt = new vkSGDefaultTextureCoordinate();
-
-  vkSGVarFloat2 *textureBias = new vkSGVarFloat2();
-  textureBias->SetBindingName("TextureBias");
-
-  vkSGConstFloat *fl = new vkSGConstFloat();
-  fl->SetInput(0, 10.0f);
-
-  vkSGFloat2 *textureBias3 = new vkSGFloat2();
-  textureBias3->SetInput(0, 0.25f);
-  textureBias3->SetInput(1, fl);
-  //textureBias3->SetBindingName("TextureBias3");
-
-  vkSGAdd *add = new vkSGAdd();
-  add->SetInput(0, defaultTxt);
-  add->SetInput(1, textureBias);
-
-  vkSGSub *sub = new vkSGSub();
-  sub->SetInput(0, add);
-  sub->GetInput(1)->SetConst(0.5f);
-  sub->SetInput(1, textureBias3);
 
 
   vkSGTexture2D *texture = new vkSGTexture2D();
   texture->SetBindingName("Diffuse");
-  texture->SetInput("uv", sub);
 
-  vkSGSplitFloat4 *split = new vkSGSplitFloat4();
-  split->SetInput(0, texture);
 
-  vkSGFloat4 *float4 = new vkSGFloat4();
-  float4->SetInput(0, split, 0);
-  float4->SetInput(1, split, 0);
-  float4->SetInput(2, split, 0);
-  float4->SetInput(3, 1.0f);
 
-  vkSGVarFloat *roughness = new vkSGVarFloat();
-  roughness->SetBindingName("Roughness");
-  //roughness->SetInput(0, 0.234f);
+
+  vkSGConstFloat3 *const1 = new vkSGConstFloat3();
+  const1->SetInput(0, 0.25f);
+  const1->SetInput(1, 0.75f);
+
+  vkSGConstFloat3 *const2 = new vkSGConstFloat3();
+  const2->SetInput(0, 1.25f);
+  const2->SetInput(1, 1.75f);
+
+  vkSGAdd *add12 = new vkSGAdd();
+  add12->SetInput(0, const1);
+  add12->SetInput(1, const2);
+
+  vkSGSplitFloat3 *split3 = new vkSGSplitFloat3();
+  split3->SetInput(0, add12);
+
+
+  vkSGFloat3 *newFloat3 = new vkSGFloat3();
+  newFloat3->SetInput(0, split3, 0);
+  newFloat3->SetInput(1, split3, 2);
+  newFloat3->SetInput(2, split3, 1);
+
+
+  vkSGSplitFloat3 *split3a = new vkSGSplitFloat3();
+  split3a->SetInput(0, newFloat3);
+
+  vkSGFloat2 *float2 = new vkSGFloat2();
+  float2->SetInput(0, split3a, 0);
+  float2->SetInput(1, split3a, 1);
+
+  vkSGTexture2D *alphaBlend = new vkSGTexture2D();
+  alphaBlend->SetBindingName("AlphaBlend");
+  alphaBlend->SetInput("uv", float2);
+
+
 
   vkSGShaderGraph graph;
-  graph.SetDiffuse(float4->GetOutput(0));
-  graph.SetRoughness(roughness->GetOutput(0));
-  graph.SetAlpha(texture->GetOutput(4));
+  graph.SetDiffuse(newFloat3->GetOutput(0));
+  graph.SetRoughness(split3->GetOutput(0));
+  graph.SetAlpha(alphaBlend->GetOutput(4));
   graph.SetDiscardAlpha(0.5f, eCM_Less);
 
   graphics->GetShaderGraphFactory()->GenerateShaderGraph(&graph);
 
-  printf("Messages:\n");
-  printf("defaultTxt: %s\n", defaultTxt->GetValidationMessage().c_str());
-  printf("textureBias: %s\n", textureBias->GetValidationMessage().c_str());
-  printf("textureBias3: %s\n", textureBias3->GetValidationMessage().c_str());
-  printf("add: %s\n", add->GetValidationMessage().c_str());
-  printf("sub: %s\n", sub->GetValidationMessage().c_str());
-  printf("texture: %s\n", texture->GetValidationMessage().c_str());
 
 
   return 0;

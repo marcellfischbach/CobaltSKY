@@ -15,6 +15,9 @@ static const char *compareMode[] = {
 void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 {
   std::set<vkSGOutput*> outputs;
+  std::set<vkSGOutput*> preAlphaOutputs;
+  std::set<vkSGOutput*> postAlphaOutputs;
+
   vkSGOutput *diffuseOutput = graph->GetDiffuse();
   vkSGOutput *roughnessOutput = graph->GetRoughness();
   vkSGOutput *alphaOutput = graph->GetAlpha();
@@ -43,6 +46,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     else
     {
       outputs.insert(roughnessOutput);
+      postAlphaOutputs.insert(roughnessOutput);
     }
   }
   if (alphaOutput)
@@ -54,16 +58,24 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     else
     {
       outputs.insert(alphaOutput);
+      preAlphaOutputs.insert(alphaOutput);
     }
   }
 
   outputs.insert(diffuseOutput);
+  postAlphaOutputs.insert(diffuseOutput);
 
   vkShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
-  ctx.GenerateCode(outputs);
+  ctx.EvaluateInlines(outputs);
 
   std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
+
+  ctx.GenerateCode(preAlphaOutputs);
+  vkString preAlphaCode = ctx.GetCode();
+
+  ctx.GenerateCode(postAlphaOutputs);
+  vkString postAlphaCode = ctx.GetCode();
 
 
   std::ostringstream ss;
@@ -110,15 +122,17 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "in vec3 inFragNormal;" << std::endl
     << std::endl
     << "void main()" << std::endl
-    << "{" << std::endl
-    << ctx.GetCode() << std::endl;
+    << "{" << std::endl;
   if (graph->IsDiscardAlpha() && alphaOutput)
   {
-    ss << "  if (" << ctx.GetFullOutputValue(alphaOutput) << " " << compareMode[graph->GetDiscardAlphaCompareMode()] << " " << std::to_string(graph->GetDiscardAlphaThreshold()) << ")" << std::endl
+
+    ss << preAlphaCode << std::endl
+      << "  if (" << ctx.GetFullOutputValue(alphaOutput) << " " << compareMode[graph->GetDiscardAlphaCompareMode()] << " " << std::to_string(graph->GetDiscardAlphaThreshold()) << ")" << std::endl
       << "  {" << std::endl
       << "    discard;" << std::endl
       << "  }" << std::endl;
   }
+  ss << postAlphaCode << std::endl;
   vkString roughness = "0.0";
   if (roughnessOutput)
   {

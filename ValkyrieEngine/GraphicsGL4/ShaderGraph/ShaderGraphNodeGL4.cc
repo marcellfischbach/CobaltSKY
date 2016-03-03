@@ -121,14 +121,22 @@ vkString vkShaderGraphCtx::CreateCode(vkSGOutput *output)
   return code;
 }
 
-void vkShaderGraphCtx::GenerateCode(std::set<vkSGOutput*> outputs)
+void vkShaderGraphCtx::EvaluateInlines(std::set<vkSGOutput*> outputs)
 {
   for (vkSGOutput *output : outputs)
   {
     EvaluateInline(output);
   }
+}
+
+void vkShaderGraphCtx::GenerateCode(std::set<vkSGOutput*> outputs)
+{
+  printf("Generate Code\n");
+  m_code = "";
   for (vkSGOutput *output : outputs)
   {
+    vkSGNode *node = output->GetNode();
+    printf("   Node: %s\n", node->GetName().c_str());
     Evaluate(output);
   }
 }
@@ -302,6 +310,7 @@ vkSGNodeGL4::vkSGNodeGL4()
   , m_forceInline(false)
   , m_inlineEvaluated(false)
   , m_evaluated(false)
+  , m_doubleInlineEvaluateInput(false)
 {
 
 }
@@ -375,9 +384,14 @@ vkString vkSGNodeGL4::GetDataTypeVar(vkSGDataType dt)
   return "inval";
 }
 
+void vkSGNodeGL4::SetDoubleInlineEvaluateInput()
+{
+  m_doubleInlineEvaluateInput = true;
+}
 
 bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
 {
+  printf("EvaluateInline: %d <= %s\n", m_inlineEvaluated, GetNode()->GetName().c_str());
   if (!m_inlineEvaluated)
   {
     m_inlineEvaluated = true;
@@ -387,6 +401,10 @@ bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
       vkSGNode *node = input->GetNode();
 
       ctx.EvaluateInline(input);
+      if (m_doubleInlineEvaluateInput)
+      {
+        ctx.EvaluateInline(input);
+      }
     }
     return true;
   }
@@ -414,94 +432,6 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
 
   return true;
 }
-/*
-  // select the type of the node
-  vkSGNodeType nodeClass = m_node->GetType();
-  if (nodeClass == eSGNT_ConstFloat)
-  {
-    EvaluateConstFloat(ctx);
-  }
-  else if (nodeClass == eSGNT_ConstFloat3)
-  {
-    EvaluateConstFloat3(ctx);
-  }
-  else if (nodeClass == eSGNT_Float2)
-  {
-    EvaluateFloat2(ctx);
-  }
-  else if (nodeClass == eSGNT_Float3)
-  {
-    EvaluateFloat3(ctx);
-  }
-  else if (nodeClass == eSGNT_VarFloat)
-  {
-    EvaluateVarFloat(ctx);
-  }
-  else if (nodeClass == eSGNT_VarFloat2)
-  {
-    EvaluateVarFloat2(ctx);
-  }
-  else if (nodeClass == eSGNT_VarFloat3)
-  {
-    EvaluateVarFloat3(ctx);
-  }
-  else if (nodeClass == eSGNT_VarFloat4)
-  {
-    EvaluateVarFloat4(ctx);
-  }
-  else if (nodeClass == eSGNT_AddFloat)
-  {
-    EvaluateArithFloat(ctx, "+");
-  }
-  else if (nodeClass == eSGNT_AddFloat2)
-  {
-    EvaluateArithFloat2(ctx, "+");
-  }
-  else if (nodeClass == eSGNT_AddFloat3)
-  {
-    EvaluateArithFloat3(ctx, "+");
-  }
-  else if (nodeClass == eSGNT_AddFloat4)
-  {
-    EvaluateArithFloat4(ctx, "+");
-  }
-  else if (nodeClass == eSGNT_SubFloat)
-  {
-    EvaluateArithFloat(ctx, "-");
-  }
-  else if (nodeClass == eSGNT_SubFloat2)
-  {
-    EvaluateArithFloat2(ctx, "-");
-  }
-  else if (nodeClass == eSGNT_SubFloat3)
-  {
-    EvaluateArithFloat3(ctx, "-");
-  }
-  else if (nodeClass == eSGNT_SubFloat4)
-  {
-    EvaluateArithFloat4(ctx, "-");
-  }
-  else if (nodeClass == eSGNT_SplitFloat3)
-  {
-    EvaluateSplitFloat3(ctx);
-  }
-  else if (nodeClass == eSGNT_SplitFloat4)
-  {
-    EvaluateSplitFloat4(ctx);
-  }
-  else if (nodeClass == eSGNT_DefaultTextureCoord)
-  {
-    EvaluateDefaultTextureCoordinate(ctx);
-  }
-  else if (nodeClass == eSGNT_Texture2D)
-  {
-    EvaluateTexture2D(ctx);
-  }
-
-
-  return true;
-}
-*/
 
 
 
@@ -552,314 +482,6 @@ vkString vkSGNodeGL4::GetInt(vkShaderGraphCtx &ctx, int x)
   }
   return std::to_string(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-void vkSGNodeGL4::EvaluateConstFloat(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-  ctx.SetOutputValue(fl->GetOutput(0), std::to_string(fl->GetInput(0)->GetConst()));
-}
-
-void vkSGNodeGL4::EvaluateConstFloat3(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-
-  std::ostringstream ss;
-  ss << "vec3(" <<
-    GetFloat(ctx, 0) << ", " <<
-    GetFloat(ctx, 1) << ", " <<
-    GetFloat(ctx, 2) <<
-    ")";
-
-  ctx.SetOutputValue(fl->GetOutput(0), ss.str());
-
-}
-
-void vkSGNodeGL4::EvaluateFloat2(vkShaderGraphCtx &ctx)
-{
-  std::ostringstream ss;
-  vkSGNode *fl = GetNode();
-  if (!fl->GetInputNode(0) || !fl->GetInputNode(1))
-  {
-    return;
-  }
-
-  vkString src0 = ctx.GetInputValue(fl->GetInput(0));
-  vkString src1 = ctx.GetInputValue(fl->GetInput(1));
-
-  if (src0 == src1)
-  {
-    // full swizzle possible
-    ss << src0 << "." <<
-      fl->GetInput(0)->GetInput()->GetAttr() <<
-      fl->GetInput(1)->GetInput()->GetAttr();
-
-  }
-  else
-  {
-    // create complete new vec3
-    ss << "vec2(" <<
-      ctx.GetFullInputValue(fl->GetInput(0)) << ", " <<
-      ctx.GetFullInputValue(fl->GetInput(1)) <<
-      ")";
-  }
-
-  AssignOutput(ctx, fl->GetOutput(0), ss.str(), "vec2");
-}
-
-
-void vkSGNodeGL4::EvaluateFloat3(vkShaderGraphCtx &ctx)
-{
-  std::ostringstream ss;
-  vkSGNode *fl = GetNode();
-  if (!fl->GetInputNode(0) || !fl->GetInputNode(1) || !fl->GetInputNode(2))
-  {
-    return;
-  }
-
-  vkString src0 = ctx.GetInputValue(fl->GetInput(0));
-  vkString src1 = ctx.GetInputValue(fl->GetInput(1));
-  vkString src2 = ctx.GetInputValue(fl->GetInput(2));
-
-  if (src0 == src1 && src1 == src2)
-  {
-    // full swizzle possible
-    ss << src0 << "." <<
-      fl->GetInput(0)->GetInput()->GetAttr() <<
-      fl->GetInput(1)->GetInput()->GetAttr() <<
-      fl->GetInput(2)->GetInput()->GetAttr();
-
-  }
-  else if (src0 == src1)
-  {
-    // partly sizzle possible
-    ss << "vec3(" <<
-      src0 << "." <<
-      fl->GetInput(0)->GetInput()->GetAttr() << fl->GetInput(1)->GetInput()->GetAttr() << ", " <<
-      ctx.GetFullInputValue(fl->GetInput(2)) <<
-      ")";
-  }
-  else if (src1 == src2)
-  {
-    // partly sizzle possible
-    ss << "vec3(" <<
-      src0 << "." <<
-      ctx.GetFullInputValue(fl->GetInput(0)) <<
-      fl->GetInput(1)->GetInput()->GetAttr() << fl->GetInput(2)->GetInput()->GetAttr() << ", " <<
-      ")";
-  }
-  else
-  {
-    // create complete new vec3
-    ss << "vec3(" <<
-      ctx.GetFullInputValue(fl->GetInput(0)) << ", " <<
-      ctx.GetFullInputValue(fl->GetInput(1)) << ", " <<
-      ctx.GetFullInputValue(fl->GetInput(2)) <<
-      ")";
-  }
-
-  AssignOutput(ctx, fl->GetOutput(0), ss.str(), "vec3");
-}
-
-
-void vkSGNodeGL4::EvaluateVarFloat(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-
-  vkString bindingName = "vk_" + fl->GetBindingName();
-  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
-
-  ctx.AddBinding(fl, "float", bindingName);
-}
-
-void vkSGNodeGL4::EvaluateVarFloat2(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-
-  vkString bindingName = "vk_" + fl->GetBindingName();
-  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
-
-  ctx.AddBinding(fl, "vec2", bindingName);
-}
-
-void vkSGNodeGL4::EvaluateVarFloat3(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-
-  vkString bindingName = "vk_" + fl->GetBindingName();
-  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
-
-  ctx.AddBinding(fl, "vec3", bindingName);
-}
-
-void vkSGNodeGL4::EvaluateVarFloat4(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *fl = GetNode();
-
-  vkString bindingName = "vk_" + fl->GetBindingName();
-  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
-
-  ctx.AddBinding(fl, "vec4", bindingName);
-}
-
-void vkSGNodeGL4::EvaluateArithFloat(vkShaderGraphCtx &ctx, const char *arith)
-{
-  std::ostringstream ss;
-
-  vkSGNode *add = GetNode();
-  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " " << arith << " " <<
-    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
-    ")";
-
-
-  AssignOutput(ctx, add->GetOutput(0), ss.str(), "float");
-}
-
-void vkSGNodeGL4::EvaluateArithFloat2(vkShaderGraphCtx &ctx, const char *arith)
-{
-  std::ostringstream ss;
-  vkSGNode *add = GetNode();
-  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " " << arith << " " <<
-    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
-    ")";
-
-
-  AssignOutput(ctx, add->GetOutput(0), ss.str(), "vec2");
-}
-
-void vkSGNodeGL4::EvaluateArithFloat3(vkShaderGraphCtx &ctx, const char *arith)
-{
-  std::ostringstream ss;
-  vkSGNode *add = GetNode();
-  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " " << arith << " " <<
-    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
-    ")";
-
-
-  AssignOutput(ctx, add->GetOutput(0), ss.str(), "vec3");
-}
-
-void vkSGNodeGL4::EvaluateArithFloat4(vkShaderGraphCtx &ctx, const char *arith)
-{
-  std::ostringstream ss;
-  vkSGNode *add = GetNode();
-  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " " << arith << " " <<
-    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
-    ")";
-
-
-  AssignOutput(ctx, add->GetOutput(0), ss.str(), "vec4");
-}
-void vkSGNodeGL4::EvaluateSplitFloat3(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *split = GetNode();
-  vkSGNodeGL4 *inputNode = ctx.GetNode(split->GetInput(0));
-  if (!inputNode)
-  {
-    return;
-  }
-
-  vkString exp = ctx.GetInputValue(split->GetInput(0));
-  if (inputNode->IsInline())
-  {
-    exp = ctx.AddAssignment("vec3", exp);
-  }
-
-  ctx.SetOutputValue(split->GetOutput(0), exp);
-  ctx.SetOutputValue(split->GetOutput(1), exp);
-  ctx.SetOutputValue(split->GetOutput(2), exp);
-}
-
-void vkSGNodeGL4::EvaluateSplitFloat4(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *split = GetNode();
-  vkSGNodeGL4 *inputNode = ctx.GetNode(split->GetInput(0));
-  if (!inputNode)
-  {
-    return;
-  }
-
-  vkString exp = ctx.GetInputValue(split->GetInput(0));
-  if (inputNode->IsInline())
-  {
-    exp = ctx.AddAssignment("vec4", exp);
-  }
-
-  ctx.SetOutputValue(split->GetOutput(0), exp);
-  ctx.SetOutputValue(split->GetOutput(1), exp);
-  ctx.SetOutputValue(split->GetOutput(2), exp);
-  ctx.SetOutputValue(split->GetOutput(4), exp);
-}
-
-
-void vkSGNodeGL4::EvaluateDefaultTextureCoordinate(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *coord = GetNode();
-
-  ctx.SetOutputValue(coord->GetOutput(0), ctx.GetDefaultTextureCoordinate());
-}
-
-void vkSGNodeGL4::EvaluateTexture2D(vkShaderGraphCtx &ctx)
-{
-  vkSGNode *txt = GetNode();
-  vkString bindingName = txt->GetBindingName();
-  if (bindingName.length() == 0)
-  {
-    return;
-  }
-
-  vkString txtCoordinate = ctx.GetDefaultTextureCoordinate();
-  if (ctx.HasInputValue(txt->GetInput("uv")))
-  {
-    txtCoordinate = ctx.GetFullInputValue(txt->GetInput("uv"));
-  }
-
-  bindingName = "vk_" + bindingName;
-  std::ostringstream ss;
-  ss << "texture(" << bindingName << ", " << txtCoordinate << ")";
-  vkString code = ss.str();
-
-  if (!IsInline())
-  {
-    code = ctx.AddAssignment("vec4", code);
-  }
-
-  ctx.SetOutputValue(txt->GetOutput("c"), code);
-  ctx.SetOutputValue(txt->GetOutput("r"), code);
-  ctx.SetOutputValue(txt->GetOutput("g"), code);
-  ctx.SetOutputValue(txt->GetOutput("b"), code);
-  ctx.SetOutputValue(txt->GetOutput("a"), code);
-
-  ctx.AddBinding(txt, "sampler2D", bindingName);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 vkSGVarGL4::vkSGVarGL4(const vkString &typeName)
   : vkSGNodeGL4()
@@ -1002,7 +624,7 @@ void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
     ss << "vec2(" << eval(src, n, ctx, 0, 2) << ")";
   }
 
-  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+  AssignOutput(ctx, n->GetOutput(0), ss.str(), "vec2");
 }
 
 
@@ -1017,10 +639,10 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 
 
   std::ostringstream ss;
-  if (src[0] == src[1] && src[0] == src[2] && src[0].length () != 0)
+  if (src[0] == src[1] && src[0] == src[2] && src[0].length() != 0)
   {
-    ss << src[0] << "." 
-      << n->GetInput(0)->GetInput()->GetAttr() 
+    ss << src[0] << "."
+      << n->GetInput(0)->GetInput()->GetAttr()
       << n->GetInput(1)->GetInput()->GetAttr()
       << n->GetInput(2)->GetInput()->GetAttr();
   }
@@ -1029,7 +651,7 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
     ss << "vec3(" << eval(src, n, ctx, 0, 3) << ")";
   }
 
-  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+  AssignOutput(ctx, n->GetOutput(0), ss.str(), "vec3");
 }
 
 
@@ -1057,7 +679,14 @@ void vkSGFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
     ss << "vec4(" << eval(src, n, ctx, 0, 4) << ")";
   }
 
-  ctx.SetOutputValue(n->GetOutput(0), ss.str());
+
+  AssignOutput(ctx, n->GetOutput(0), ss.str(), "vec4");
+}
+
+vkSGSplitFloat2GL4::vkSGSplitFloat2GL4()
+  : vkSGNodeGL4()
+{
+  SetDoubleInlineEvaluateInput();
 }
 
 void vkSGSplitFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
@@ -1070,15 +699,17 @@ void vkSGSplitFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
 
   vkString exp = ctx.GetInputValue(node->GetInput(0));
-  if (inputNode->IsInline())
-  {
-    exp = ctx.AddAssignment("vec2", exp);
-  }
-
   ctx.SetOutputValue(node->GetOutput(0), exp);
   ctx.SetOutputValue(node->GetOutput(1), exp);
 
 }
+
+vkSGSplitFloat3GL4::vkSGSplitFloat3GL4()
+  : vkSGNodeGL4()
+{
+  SetDoubleInlineEvaluateInput();
+}
+
 
 void vkSGSplitFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {
@@ -1090,17 +721,17 @@ void vkSGSplitFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
 
   vkString exp = ctx.GetInputValue(node->GetInput(0));
-  if (inputNode->IsInline())
-  {
-    exp = ctx.AddAssignment("vec3", exp);
-  }
-
   ctx.SetOutputValue(node->GetOutput(0), exp);
   ctx.SetOutputValue(node->GetOutput(1), exp);
   ctx.SetOutputValue(node->GetOutput(2), exp);
 
 }
 
+vkSGSplitFloat4GL4::vkSGSplitFloat4GL4()
+  : vkSGNodeGL4()
+{
+  SetDoubleInlineEvaluateInput();
+}
 
 void vkSGSplitFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {
@@ -1112,11 +743,6 @@ void vkSGSplitFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
 
   vkString exp = ctx.GetInputValue(node->GetInput(0));
-  if (inputNode->IsInline())
-  {
-    exp = ctx.AddAssignment("vec4", exp);
-  }
-
   ctx.SetOutputValue(node->GetOutput(0), exp);
   ctx.SetOutputValue(node->GetOutput(1), exp);
   ctx.SetOutputValue(node->GetOutput(2), exp);
