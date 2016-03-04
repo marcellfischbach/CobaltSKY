@@ -1,6 +1,7 @@
 
 find_package(Qt5Core)
 find_package(Qt5Widgets)
+find_package(Qt5OpenGL)
 
 
 
@@ -14,6 +15,8 @@ set(EDITOR_SOURCES
   Editor.hh
   EditorWindow.cc
   EditorWindow.hh
+  SceneView.cc
+  SceneView.hh
 	)
 
 source_group(
@@ -25,6 +28,8 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/SGToolBox.cc
+    ShaderGraph/SGToolBox.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
     )
@@ -45,5 +50,12 @@ add_executable(
 	${EDITOR_SHADERGRAPH_SOURCES}
   )
 
-target_link_libraries(ValkyrieEditor Qt5::Widgets Qt5::Core)
+target_link_libraries(ValkyrieEditor 
+    Qt5::Core
+    Qt5::Widgets 
+    Qt5::OpenGL
+    ValkyrieEngine
+    ValkyrieEngine-GraphicsGL4
+    ValkyrieEngine-PhysicsBullet
+    )
 

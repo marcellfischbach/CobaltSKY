@@ -20,6 +20,9 @@ public:
 
   int Run();
 
+  bool Initialize();
+  bool SetupTestScene();
+
 protected:
   void RegisterLoaders();
   void RegisterClasses();
