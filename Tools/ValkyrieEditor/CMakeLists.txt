@@ -28,8 +28,8 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
-    ShaderGraph/SGToolBox.cc
-    ShaderGraph/SGToolBox.hh
+    #ShaderGraph/SGToolBox.cc
+    #ShaderGraph/SGToolBox.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
     )
@@ -47,7 +47,7 @@ source_group(
 add_executable(
   ValkyrieEditor 
   ${EDITOR_SOURCES}
-	${EDITOR_SHADERGRAPH_SOURCES}
+  ${EDITOR_SHADERGRAPH_SOURCES}
   )
 
 target_link_libraries(ValkyrieEditor 

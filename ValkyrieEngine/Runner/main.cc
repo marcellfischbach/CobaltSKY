@@ -103,8 +103,8 @@ int main(int argc, char **argv)
   bulletSystem->Initialize();
   engine->SetPhysicsSystem(bulletSystem);
 
-  test(GraphicsGL4);
-  return 0;
+  //test(GraphicsGL4);
+  //return 0;
 
-  //return engine->Run();
+  return engine->Run();
 }

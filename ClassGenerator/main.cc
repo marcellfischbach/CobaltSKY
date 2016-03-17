@@ -213,7 +213,7 @@ bool setFiletime(const std::string &fileName, LPFILETIME fileTime)
                              0);
   if (handle)
   {
-    if (SetFileTime(handle, 0, 0, fileTime))
+    if (SetFileTime(handle, 0, fileTime, fileTime))
     {
       result = true;
     }

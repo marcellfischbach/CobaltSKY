@@ -34,11 +34,21 @@ function(VK_MOC prefix api inlist outlist)
 endfunction(VK_MOC)
 
 function(VK_INSTALL_MOCCER target prefix api inlist)
-
-	add_custom_command (TARGET ${target} PRE_BUILD 
+    if (MSVC_IDE)
+	add_custom_command (TARGET ${target} PRE_BUILD
 										COMMAND ClassGenerator "--list" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${${inlist}}
 										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										)
+
+    else()
+	set(TARGET_NAME "${target}-MOC")
+	add_custom_target(
+		    ${TARGET_NAME}
+										COMMAND ClassGenerator "--list" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${${inlist}}
+										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+										)
+	add_dependencies(${target} ${TARGET_NAME})
+    endif()
 endfunction(VK_INSTALL_MOCCER)
 
 if (WIN32)
