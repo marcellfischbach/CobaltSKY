@@ -1,8 +1,10 @@
 
+#include <ShaderGraph/Node.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>
 #include <qpainterpath.h>
+#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
 class GraphNode : public QGraphicsRectItem
 {
@@ -34,6 +36,12 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_scene = new QGraphicsScene();
   m_view->setScene(m_scene);
 
+  ShaderGraphNode *node = new ShaderGraphNode();
+  node->SetNode(new vkSGTexture2D());
+  node->Initialize();
+  m_scene->addItem(node);
+
+  /*
   GraphNode *graphNode = new GraphNode(0);
   graphNode->setPos(-200, -200);
   m_scene->addItem(graphNode);
@@ -42,6 +50,8 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   graphNode = new GraphNode(0);
   graphNode->setPos(200, 200);
   m_scene->addItem(graphNode);
+  */
+
 
   QGraphicsPathItem *path = new QGraphicsPathItem();
   QPen pen(QColor(255, 255, 255));

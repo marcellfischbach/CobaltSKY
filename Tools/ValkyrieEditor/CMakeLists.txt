@@ -32,6 +32,8 @@ set(EDITOR_SHADERGRAPH_SOURCES
     #ShaderGraph/SGToolBox.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
+    ShaderGraph/Node.cc
+    ShaderGraph/Node.hh
     )
 
 source_group(
