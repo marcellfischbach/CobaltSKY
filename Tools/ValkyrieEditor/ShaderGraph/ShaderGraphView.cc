@@ -37,7 +37,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_view->setScene(m_scene);
 
   ShaderGraphNode *node = new ShaderGraphNode();
-  node->SetNode(new vkSGTexture2D());
+  node->SetNode(new vkSGFloat4());
   node->Initialize();
   m_scene->addItem(node);
 
