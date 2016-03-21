@@ -71,6 +71,10 @@ T* vkQueryClass(IObject *object)
 template<typename T>
 const T* vkQueryClass(const IObject *object)
 {
+  if (!object)
+  {
+    return 0;
+  }
   return reinterpret_cast<const T*>(object->QueryClass(T::GetStaticClass()));
 }
 

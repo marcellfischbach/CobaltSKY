@@ -1,9 +1,11 @@
 
 #include <ShaderGraph/Node.hh>
+#include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>
 #include <qpainterpath.h>
+#include <qevent.h>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
 class GraphNode : public QGraphicsRectItem
@@ -22,6 +24,7 @@ public:
 ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
 {
+  setMouseTracking(true);
   m_view = new QGraphicsView(this);
   m_view->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
 
@@ -41,16 +44,6 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   node->Initialize();
   m_scene->addItem(node);
 
-  /*
-  GraphNode *graphNode = new GraphNode(0);
-  graphNode->setPos(-200, -200);
-  m_scene->addItem(graphNode);
-
-
-  graphNode = new GraphNode(0);
-  graphNode->setPos(200, 200);
-  m_scene->addItem(graphNode);
-  */
 
 
   QGraphicsPathItem *path = new QGraphicsPathItem();
@@ -69,3 +62,34 @@ ShaderGraphView::~ShaderGraphView()
 {
 
 }
+
+
+void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Space)
+  {
+    popupNodeSelector ();
+  }
+}
+
+void ShaderGraphView::popupNodeSelector()
+{
+  NodeSelector *selector = new NodeSelector(this);
+  connect(selector, SIGNAL(addNode(const vkClass*)), this, SLOT(addNode(const vkClass*)));
+  selector->setVisible(true);
+}
+
+void ShaderGraphView::addNode(const vkClass *clazz)
+{
+  vkSGNode *node = clazz->CreateInstance<vkSGNode>();
+  if (!node)
+  {
+    return;
+  }
+
+  ShaderGraphNode *graphNode = new ShaderGraphNode();
+  graphNode->SetNode(node);
+  graphNode->Initialize();
+  m_scene->addItem(graphNode);
+}
+

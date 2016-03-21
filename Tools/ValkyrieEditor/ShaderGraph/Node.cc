@@ -9,6 +9,7 @@ ShaderGraphNode::ShaderGraphNode()
   : QGraphicsItem()
   , m_fontSize(14)
   , m_inMotion(false)
+  , m_node(0)
 {
 
 }
@@ -31,7 +32,8 @@ bool ShaderGraphNode::Initialize()
 
 
   // calculate the width
-  int titleWidth = fm.width(m_node->GetName().c_str());
+  QString nodeName(m_node->GetName().c_str());
+  int titleWidth = fm.width(nodeName);
 
   int maxInput = 0;
   int maxOuput = 0;
@@ -171,7 +173,7 @@ const vkSGNode *ShaderGraphNode::GetNode() const
 
 void ShaderGraphNode::SetNode(vkSGNode *node)
 {
-  m_node = node;
+  VK_SET(m_node, node);
 }
 
 

@@ -14,6 +14,11 @@
 
 int test(vkGraphicsGL4 *graphics)
 {
+  IObject *object = (IObject*)vkSGTexture2D::GetStaticClass()->CreateInstance();
+
+  vkSGTexture2DClass *txtClass = vkSGTexture2DClass::Get();
+  void *texture2D = object->QueryClass(txtClass);
+
 
 
   vkSGTexture2D *texture = new vkSGTexture2D();
@@ -103,8 +108,8 @@ int main(int argc, char **argv)
   bulletSystem->Initialize();
   engine->SetPhysicsSystem(bulletSystem);
 
-  //test(GraphicsGL4);
-  //return 0;
+  test(GraphicsGL4);
+  return 0;
 
-  return engine->Run();
+  //return engine->Run();
 }

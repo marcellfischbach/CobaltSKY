@@ -40,6 +40,7 @@
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
+#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
 vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
@@ -55,6 +56,13 @@ vkEngine::vkEngine()
   , m_renderer(0)
   , m_physicsSystem(0)
 {
+  IObject *object = (IObject*)vkSGTexture2D::GetStaticClass()->CreateInstance();
+
+  vkSGTexture2DClass *txtClass = vkSGTexture2DClass::Get();
+  void *texture2D = object->QueryClass(txtClass);
+  printf("Object   : 0x%p\n", object);
+  printf("TxtClass : 0x%p\n", txtClass);
+  printf("texture2D: 0x%p\n", texture2D);
 
 }
 
