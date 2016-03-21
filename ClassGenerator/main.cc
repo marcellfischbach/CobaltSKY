@@ -21,7 +21,7 @@ std::string CreateHeaderFile(Class *clazz, const std::string &api)
   result += "  \n";
   result += "  static " + className + " *Get();\n";
   result += "  \n";
-  result += "  virtual void *CreateInstance() const;\n";
+  result += "  virtual IObject *CreateInstance() const;\n";
   result += "  \n";
   result += "  \n";
   result += "};\n";
@@ -95,7 +95,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   }
   result += "}\n";
   result += "\n";
-  result += "void *" + className + "::CreateInstance() const\n";
+  result += "IObject *" + className + "::CreateInstance() const\n";
   result += "{\n";
   if (clazz->IsInterface())
   {
@@ -103,7 +103,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   }
   else
   {
-    result += "  return new " + clazz->GetName() + "();\n";
+    result += "  return static_cast<IObject*>(new " + clazz->GetName() + "());\n";
   }
   result += "}\n";
   result += "\n";

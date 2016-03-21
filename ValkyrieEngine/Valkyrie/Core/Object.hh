@@ -8,8 +8,8 @@
 #define VK_CLASS_GEN public: \
     virtual const vkClass *GetClass () const;\
     static const vkClass *GetStaticClass (); \
-    void *QueryClass(const vkClass *clazz); \
-    const void *QueryClass(const vkClass *clazz) const
+    virtual void *QueryClass(const vkClass *clazz); \
+    virtual const void *QueryClass(const vkClass *clazz) const
 
 #define VK_CLASS_GEN_OBJECT \
     VK_CLASS_GEN; \
@@ -116,11 +116,11 @@ private:
 class VKE_API vkClass
 {
 public:
-  virtual void *CreateInstance() const = 0;
+  virtual IObject *CreateInstance() const = 0;
   template<typename T>
   T *CreateInstance() const
   {
-    return reinterpret_cast<T*>(CreateInstance());
+    return vkQueryClass<T>(CreateInstance());
   }
 
   size_t GetNumberOfProperties() const;

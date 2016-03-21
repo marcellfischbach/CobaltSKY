@@ -3,7 +3,7 @@
 #include <qdialog.h>
 #include <qlistview.h>
 
-#include <ui_NodeSelector.h>
+// #include <ui_NodeSelector.h>
 #include <Valkyrie/Core/Object.hh>
 
 class NodeSelector : public QDialog

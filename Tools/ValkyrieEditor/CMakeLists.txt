@@ -3,8 +3,6 @@ find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 
-
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOMOC ON)
@@ -53,10 +51,9 @@ set(ALL_UI
     )
 
 
-QT5_WRAP_UI(ALL_UI_SOURCES ${ALL_UI})
+qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
 
 message("ALL_UI ${ALL_UI_SOURCES}")
-
 
 add_executable(
     ValkyrieEditor

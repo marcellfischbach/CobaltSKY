@@ -56,10 +56,11 @@ vkEngine::vkEngine()
   , m_renderer(0)
   , m_physicsSystem(0)
 {
-  IObject *object = (IObject*)vkSGTexture2D::GetStaticClass()->CreateInstance();
+  const vkClass *clazz = vkSGTexture2D::GetStaticClass();
+  vkSGNode *object = clazz->CreateInstance<vkSGNode>();
 
   vkSGTexture2DClass *txtClass = vkSGTexture2DClass::Get();
-  void *texture2D = object->QueryClass(txtClass);
+  vkSGTexture2D *texture2D = vkQueryClass<vkSGTexture2D>(object);
   printf("Object   : 0x%p\n", object);
   printf("TxtClass : 0x%p\n", txtClass);
   printf("texture2D: 0x%p\n", texture2D);
