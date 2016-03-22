@@ -6,6 +6,7 @@
 // #include <ui_NodeSelector.h>
 #include <Valkyrie/Core/Object.hh>
 
+class NodesModel;
 class NodeSelector : public QDialog
 {
   Q_OBJECT
@@ -14,10 +15,10 @@ public:
 
 private:
   QListView *m_listView;
+  NodesModel *m_nodesModel;
 
 private slots:
-  void timed ();
-
+  void on_listView_doubleClicked(const QModelIndex &index);
 signals:
   void addNode (const vkClass *clazz);
 };

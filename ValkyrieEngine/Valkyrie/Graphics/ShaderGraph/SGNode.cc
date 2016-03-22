@@ -428,38 +428,107 @@ bool vkSGNode::Validate()
   return success;
 }
 
+#define VK_VAR_FLOAT_NAME "Var/Float"
+#define VK_VAR_FLOAT2_NAME "Var/Float2"
+#define VK_VAR_FLOAT3_NAME "Var/Float3"
+#define VK_VAR_FLOAT4_NAME "Var/Float4"
+
+#define VK_CONST_FLOAT_NAME "Const/Float"
+#define VK_CONST_FLOAT2_NAME "Const/Float2"
+#define VK_CONST_FLOAT3_NAME "Const/Float3"
+#define VK_CONST_FLOAT4_NAME "Const/Float4"
+
+#define VK_FLOAT2_NAME "Assemble/Float2"
+#define VK_FLOAT3_NAME "Assemble/Float3"
+#define VK_FLOAT4_NAME "Assemble/Float4"
+
+#define VK_SPLIT_FLOAT2_NAME "Assemble/SplitFloat2"
+#define VK_SPLIT_FLOAT3_NAME "Assemble/SplitFloat3"
+#define VK_SPLIT_FLOAT4_NAME "Assemble/SplitFloat4"
+
+#define VK_ADD_NAME "Math/Add"
+#define VK_SUB_NAME "Math/SUB"
+
+#define VK_DEFAULT_TEXTURE_COORDINATE_NAME "Texture/DefaultTextureCoordinate"
+#define VK_TEXTURE2D_NAME "Texture/Texture2D"
+
+vkSGNodes::Entry::Entry(const vkString &name, const vkClass *clazz)
+  : name(name)
+  , clazz(clazz)
+{
+
+}
+
+vkSGNodes::vkSGNodes()
+{
+  m_entries.push_back(Entry (VK_VAR_FLOAT_NAME, vkSGVarFloat::GetStaticClass()));
+  m_entries.push_back(Entry (VK_VAR_FLOAT2_NAME, vkSGVarFloat2::GetStaticClass()));
+  m_entries.push_back(Entry (VK_VAR_FLOAT3_NAME, vkSGVarFloat3::GetStaticClass()));
+  m_entries.push_back(Entry (VK_VAR_FLOAT4_NAME, vkSGVarFloat4::GetStaticClass()));
+
+  m_entries.push_back(Entry (VK_CONST_FLOAT_NAME, vkSGConstFloat::GetStaticClass()));
+  m_entries.push_back(Entry (VK_CONST_FLOAT2_NAME, vkSGConstFloat2::GetStaticClass()));
+  m_entries.push_back(Entry (VK_CONST_FLOAT3_NAME, vkSGConstFloat3::GetStaticClass()));
+  m_entries.push_back(Entry (VK_CONST_FLOAT4_NAME, vkSGConstFloat4::GetStaticClass()));
+
+  m_entries.push_back(Entry (VK_FLOAT2_NAME, vkSGFloat2::GetStaticClass()));
+  m_entries.push_back(Entry (VK_FLOAT3_NAME, vkSGFloat3::GetStaticClass()));
+  m_entries.push_back(Entry (VK_FLOAT4_NAME, vkSGFloat4::GetStaticClass()));
+
+  m_entries.push_back(Entry (VK_SPLIT_FLOAT2_NAME, vkSGSplitFloat2::GetStaticClass()));
+  m_entries.push_back(Entry (VK_SPLIT_FLOAT3_NAME, vkSGSplitFloat3::GetStaticClass()));
+  m_entries.push_back(Entry (VK_SPLIT_FLOAT4_NAME, vkSGSplitFloat4::GetStaticClass()));
+
+  m_entries.push_back(Entry (VK_ADD_NAME, vkSGAdd::GetStaticClass()));
+  m_entries.push_back(Entry (VK_SUB_NAME, vkSGSub::GetStaticClass()));
+
+  m_entries.push_back(Entry (VK_DEFAULT_TEXTURE_COORDINATE_NAME, vkSGDefaultTextureCoordinate::GetStaticClass()));
+  m_entries.push_back(Entry (VK_TEXTURE2D_NAME, vkSGTexture2D::GetStaticClass()));
+}
+
+vkSGNodes *vkSGNodes::Get()
+{
+  static vkSGNodes static_instance;
+  return &static_instance;
+}
+
+const std::vector<vkSGNodes::Entry> &vkSGNodes::GetEntries () const
+{
+  return m_entries;
+}
+
 vkSGVarFloat::vkSGVarFloat()
   : vkSGNode()
 {
-  SetName("Var/Float");
+  SetName(VK_VAR_FLOAT_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float, "v"));
 }
 
 vkSGVarFloat2::vkSGVarFloat2()
   : vkSGNode()
 {
-  SetName("Var/Float2");
+  SetName(VK_VAR_FLOAT2_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float2, "v"));
 }
 
 vkSGVarFloat3::vkSGVarFloat3()
   : vkSGNode()
 {
-  SetName("Var/Float3");
+  SetName(VK_VAR_FLOAT3_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float3, "v"));
 }
 
 vkSGVarFloat4::vkSGVarFloat4()
   : vkSGNode()
 {
-  SetName("Var/Float4");
+  SetName(VK_VAR_FLOAT4_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float4, "v"));
 }
 
 vkSGConstFloat::vkSGConstFloat()
   : vkSGNode()
 {
-  SetName("Const/Float");
+  SetName(VK_CONST_FLOAT_NAME);
   AddInput(new vkSGInput("x", true, false));
   AddOutput(new vkSGOutput(eSGDT_Float, "v", ""));
 }
@@ -467,7 +536,7 @@ vkSGConstFloat::vkSGConstFloat()
 vkSGConstFloat2::vkSGConstFloat2()
   : vkSGNode()
 {
-  SetName("Const/Float2");
+  SetName(VK_CONST_FLOAT2_NAME);
   AddInput(new vkSGInput("x", true, false));
   AddInput(new vkSGInput("y", true, false));
   AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
@@ -476,7 +545,7 @@ vkSGConstFloat2::vkSGConstFloat2()
 vkSGConstFloat3::vkSGConstFloat3()
   : vkSGNode()
 {
-  SetName("Const/Float3");
+  SetName(VK_CONST_FLOAT3_NAME);
   AddInput(new vkSGInput("x", true, false));
   AddInput(new vkSGInput("y", true, false));
   AddInput(new vkSGInput("z", true, false));
@@ -486,7 +555,7 @@ vkSGConstFloat3::vkSGConstFloat3()
 vkSGConstFloat4::vkSGConstFloat4()
   : vkSGNode()
 {
-  SetName("Const/Float4");
+  SetName(VK_CONST_FLOAT4_NAME);
   AddInput(new vkSGInput("x", true, false));
   AddInput(new vkSGInput("y", true, false));
   AddInput(new vkSGInput("z", true, false));
@@ -498,7 +567,7 @@ vkSGConstFloat4::vkSGConstFloat4()
 vkSGFloat2::vkSGFloat2()
   : vkSGNode()
 {
-  SetName("Assemble/Float2");
+  SetName(VK_FLOAT2_NAME);
   AddInput(new vkSGInput("x", true, true));
   AddInput(new vkSGInput("y", true, true));
   AddOutput(new vkSGOutput(eSGDT_Float2, "v", ""));
@@ -507,7 +576,7 @@ vkSGFloat2::vkSGFloat2()
 vkSGFloat3::vkSGFloat3()
   : vkSGNode()
 {
-  SetName("Assemble/Float3");
+  SetName(VK_FLOAT4_NAME);
   AddInput(new vkSGInput("x", true, true));
   AddInput(new vkSGInput("y", true, true));
   AddInput(new vkSGInput("z", true, true));
@@ -518,7 +587,7 @@ vkSGFloat3::vkSGFloat3()
 vkSGFloat4::vkSGFloat4()
   : vkSGNode()
 {
-  SetName("Assemble/Float4");
+  SetName(VK_FLOAT4_NAME);
   AddInput(new vkSGInput("x", true, true));
   AddInput(new vkSGInput("y", true, true));
   AddInput(new vkSGInput("z", true, true));
@@ -529,7 +598,7 @@ vkSGFloat4::vkSGFloat4()
 vkSGSplitFloat2::vkSGSplitFloat2()
   : vkSGNode()
 {
-  SetName("Assemble/SplitFloat2");
+  SetName(VK_SPLIT_FLOAT2_NAME);
   AddInput(new vkSGInput("v", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
   AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
@@ -548,7 +617,7 @@ bool vkSGSplitFloat2::Validate()
 vkSGSplitFloat3::vkSGSplitFloat3()
   : vkSGNode()
 {
-  SetName("Assemble/SplitFloat3");
+  SetName(VK_SPLIT_FLOAT3_NAME);
   AddInput(new vkSGInput("v", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
   AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
@@ -568,7 +637,7 @@ bool vkSGSplitFloat3::Validate()
 vkSGSplitFloat4::vkSGSplitFloat4()
   : vkSGNode()
 {
-  SetName("Assemble/SplitFloat4");
+  SetName(VK_SPLIT_FLOAT4_NAME);
   AddInput(new vkSGInput("v", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float, "x", "x"));
   AddOutput(new vkSGOutput(eSGDT_Float, "y", "y"));
@@ -588,7 +657,7 @@ bool vkSGSplitFloat4::Validate()
 vkSGAdd::vkSGAdd()
   : vkSGNode()
 {
-  SetName("Math/Add");
+  SetName(VK_ADD_NAME);
   AddInput(new vkSGInput("a", true, true));
   AddInput(new vkSGInput("b", true, true));
   AddOutput(new vkSGOutput("v"));
@@ -618,7 +687,7 @@ bool vkSGAdd::Validate()
 vkSGSub::vkSGSub()
   : vkSGNode()
 {
-  SetName("Math/Sub");
+  SetName(VK_SUB_NAME);
   AddInput(new vkSGInput("a", true, true));
   AddInput(new vkSGInput("b", true, true));
   AddOutput(new vkSGOutput("v"));
@@ -649,14 +718,14 @@ bool vkSGSub::Validate()
 vkSGDefaultTextureCoordinate::vkSGDefaultTextureCoordinate()
   : vkSGNode()
 {
-  SetName("Texture/DefaultTextureCoordinate");
+  SetName(VK_DEFAULT_TEXTURE_COORDINATE_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float2, "uv"));
 }
 
 vkSGTexture2D::vkSGTexture2D()
   : vkSGNode()
 {
-  SetName("Texture/Texture2D");
+  SetName(VK_TEXTURE2D_NAME);
   AddInput(new vkSGInput("uv", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float4, "c"));
   AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));

@@ -23,6 +23,7 @@ public:
 
 ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
+  , m_currentBounding(0)
 {
   setMouseTracking(true);
   m_view = new QGraphicsView(this);
@@ -39,13 +40,11 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_scene = new QGraphicsScene();
   m_view->setScene(m_scene);
 
-  ShaderGraphNode *node = new ShaderGraphNode();
-  node->SetNode(new vkSGFloat4());
-  node->Initialize();
-  m_scene->addItem(node);
+  //addNode(vkSGFloat4::GetStaticClass());
 
 
 
+  /*
   QGraphicsPathItem *path = new QGraphicsPathItem();
   QPen pen(QColor(255, 255, 255));
   pen.setWidth(2);
@@ -55,6 +54,44 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   ppath.cubicTo(0, -200, 0, 200, 150, 200);
   path->setPath(ppath);
   m_scene->addItem(path);
+  */
+
+
+  {
+    QGraphicsItemGroup *group = new QGraphicsItemGroup();
+
+    QGraphicsRectItem *rect = new QGraphicsRectItem();
+    rect->setFlag(QGraphicsItem::ItemIsMovable, true);
+    rect->setRect(0, 0, 200, 100);
+    rect->setBrush(QBrush(QColor(196, 196, 196)));
+    rect->setPen(QPen(QColor(64, 64, 64)));
+
+    QGraphicsRectItem *rect2 = new QGraphicsRectItem(rect);
+    rect2->setParentItem(rect);
+    rect2->setRect(20, 20, 160, 20);
+    rect2->setBrush(QBrush(QColor(255, 255, 255)));
+    rect2->setPen(QPen(QColor(64, 64, 64)));
+
+    QGraphicsTextItem *text = new QGraphicsTextItem(rect2);
+    text->setParentItem(rect2);
+    text->setPos(20, 20);
+    text->setPlainText("Hello World!");
+    text->setTextInteractionFlags(Qt::TextEditorInteraction);
+    text->setTextWidth(160);
+
+    group->setHandlesChildEvents(false);
+    group->addToGroup(rect);
+    group->addToGroup(rect2);
+    group->addToGroup(text);
+
+//    m_scene->addItem(group);
+  }
+
+
+
+  ShaderGraphNode *node = new ShaderGraphNode (new vkSGFloat4());
+  m_scene->addItem(node->GetItem());
+
 
 }
 
@@ -79,6 +116,21 @@ void ShaderGraphView::popupNodeSelector()
   selector->setVisible(true);
 }
 
+void ShaderGraphView::startConnectingInput(const QPointF &pos, int i)
+{
+
+}
+
+void ShaderGraphView::startConnectingOutput(const QPointF &pos, int i)
+{
+
+}
+
+void ShaderGraphView::processConnecion(const QPointF &pos)
+{
+
+}
+
 void ShaderGraphView::addNode(const vkClass *clazz)
 {
   vkSGNode *node = clazz->CreateInstance<vkSGNode>();
@@ -87,9 +139,13 @@ void ShaderGraphView::addNode(const vkClass *clazz)
     return;
   }
 
-  ShaderGraphNode *graphNode = new ShaderGraphNode();
+  ShaderGraphNode2 *graphNode = new ShaderGraphNode2();
   graphNode->SetNode(node);
   graphNode->Initialize();
   m_scene->addItem(graphNode);
+
+  //  connect(graphNode, SIGNAL(startConnectionInput(QPointF,int)), this, SLOT(startConnectingInput(QPointF,int)));
+  //  connect(graphNode, SIGNAL(startConnectionOutput(QPointF,int)), this, SLOT(startConnectingOutput(QPointF,int)));
+  //  connect(graphNode, SIGNAL(processConnection(QPointF)), this, SLOT(processConnecion(QPointF)));
 }
 

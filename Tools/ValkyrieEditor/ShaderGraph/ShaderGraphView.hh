@@ -23,8 +23,14 @@ protected:
 
 private slots:
   void addNode (const vkClass *clazz);
+  void startConnectingInput (const QPointF &pos, int i);
+  void startConnectingOutput (const QPointF &pos, int i);
+  void processConnecion (const QPointF &pos);
 
 private:
   QGraphicsView *m_view;
   QGraphicsScene *m_scene;
+
+
+  QGraphicsPathItem *m_currentBounding;
 };

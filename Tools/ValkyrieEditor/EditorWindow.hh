@@ -32,4 +32,7 @@ private:
   SceneView *m_sceneView;
   ShaderGraphView *m_shaderGraphView;
   QTabWidget *m_mainTabWidget;
+
+private slots:
+  void switchView();
 };

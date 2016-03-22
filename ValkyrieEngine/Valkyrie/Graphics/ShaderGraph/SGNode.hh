@@ -175,12 +175,34 @@ private:
 
 };
 
+class VKE_API vkSGNodes
+{
+public:
+  struct Entry
+  {
+    vkString name;
+    const vkClass *clazz;
+    Entry (const vkString &name, const vkClass *clazz);
+  };
+
+public:
+  static vkSGNodes *Get();
+
+  const std::vector<Entry> &GetEntries () const;
+
+private:
+  vkSGNodes ();
+
+  std::vector<Entry> m_entries;
+};
+
 
 VK_CLASS()
 class VKE_API vkSGVarFloat : public vkSGNode
 {
   VK_CLASS_GEN;
 public:
+
   vkSGVarFloat();
   virtual ~vkSGVarFloat() { }
 };

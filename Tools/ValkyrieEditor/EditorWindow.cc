@@ -2,6 +2,7 @@
 #include <EditorWindow.hh>
 #include <SceneView.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
+#include <qtimer.h>
 
 EditorWindow::EditorWindow()
   : QMainWindow()
@@ -15,12 +16,21 @@ EditorWindow::EditorWindow()
 
   m_shaderGraphView = new ShaderGraphView(this);
   m_mainTabWidget->addTab(m_shaderGraphView, "ShaderGraph");
+
+  //m_mainTabWidget->setCurrentIndex(1);
+
+  QTimer::singleShot(100, this, SLOT(switchView()));
 }
 
 
 EditorWindow::~EditorWindow()
 {
 
+}
+
+void EditorWindow::switchView()
+{
+  m_mainTabWidget->setCurrentIndex(1);
 }
 
 
