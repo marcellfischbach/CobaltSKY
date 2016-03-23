@@ -5,7 +5,8 @@
 #include <qwidget.h>
 
 class vkClass;
-
+class ShaderGraphConnection;
+class ShaderGraphNode;
 class ShaderGraphView : public QWidget
 {
   Q_OBJECT
@@ -23,9 +24,12 @@ protected:
 
 private slots:
   void addNode (const vkClass *clazz);
-  void startConnectingInput (const QPointF &pos, int i);
-  void startConnectingOutput (const QPointF &pos, int i);
-  void processConnecion (const QPointF &pos);
+  void moveDrag (bool input, int idx, const QPointF &pointA, const QPointF &pointB);
+  void stopDrag (bool input, int idx, const QPointF& pointA, const QPointF & pointB);
+
+private:
+  QPointF testAnchor (ShaderGraphNode *node, bool input, const QPointF &p);
+  bool testAnchor (ShaderGraphNode *node, bool input, const QPointF &p, ShaderGraphNode **other, int *index);
 
 private:
   QGraphicsView *m_view;
@@ -33,4 +37,6 @@ private:
 
 
   QGraphicsPathItem *m_currentBounding;
+
+  QList<ShaderGraphNode*> m_nodes;
 };

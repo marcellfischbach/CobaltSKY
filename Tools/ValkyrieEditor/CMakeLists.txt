@@ -26,6 +26,8 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/Connection.cc
+    ShaderGraph/Connection.hh
     ShaderGraph/Node.cc
     ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc

@@ -1,5 +1,6 @@
 
 #include <ShaderGraph/Node.hh>
+#include <ShaderGraph/Connection.hh>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qpainter.h>
@@ -7,7 +8,125 @@
 #include <qgraphicssceneevent.h>
 #include <qtextdocument.h>
 
-ShaderGraphNode2 *ShaderGraphNode2::selectedNode = 0;
+ShaderGraphNode *ShaderGraphNode::currentSelectedNode = 0;
+
+class ShaderGraphNodeGroup : public QGraphicsItemGroup
+{
+public:
+  ShaderGraphNodeGroup (ShaderGraphNode *node)
+    : QGraphicsItemGroup()
+    , m_inMotion(false)
+    , m_node(node)
+  {
+
+  }
+
+  virtual void mousePressEvent (QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton && event->pos().y() <= m_handleSize)
+    {
+      event->accept();
+      m_startMouseScenePos = mapToScene(event->pos());
+      m_startGroupScenePos = mapToScene(0, 0);
+      m_inMotion = true;
+      grabMouse();
+      ShaderGraphNode::Select(m_node);
+    }
+    else
+    {
+//      QGraphicsItemGroup::mousePressEvent(event);
+    }
+  }
+
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+  {
+    m_inMotion = false;
+    ungrabMouse();
+  }
+
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (m_inMotion)
+    {
+      QPointF currentScenePos = mapToScene (event->pos());
+      QPointF delta = currentScenePos - m_startMouseScenePos;
+      QPointF newPos = m_startGroupScenePos + delta;
+      setPos(newPos);
+      m_node->UpdateConnections ();
+    }
+  }
+
+  void SetHandleSize (float handleSize)
+  {
+    m_handleSize = handleSize;
+  }
+
+private:
+  float m_handleSize;
+  bool m_inMotion;
+  ShaderGraphNode *m_node;
+  QPointF m_startMouseScenePos;
+  QPointF m_startGroupScenePos;
+};
+
+class ShaderGraphNodeAnchor : public QGraphicsEllipseItem
+{
+public:
+  ShaderGraphNodeAnchor (QGraphicsItem *parent, ShaderGraphNode *node, bool isInput, int index)
+    : QGraphicsEllipseItem(parent)
+    , m_node (node)
+    , m_moving (false)
+    , m_isInput(isInput)
+    , m_index(index)
+  {
+
+  }
+
+  virtual void mousePressEvent (QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton)
+    {
+      m_moving = true;
+    }
+
+  }
+
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+  {
+    m_moving = false;
+    QPointF c = mapToScene(boundingRect().center());
+    QPointF p = mapToScene(event->pos());
+    m_node->onStopDrag(m_isInput, m_index, c, p);
+  }
+
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (m_moving)
+    {
+      QPointF c = mapToScene(boundingRect().center());
+      QPointF p = mapToScene(event->pos());
+      m_node->onMoveDrag(m_isInput, m_index, c, p);
+    }
+  }
+
+  bool contains (const QPointF &point, QPointF &out) const
+  {
+    QPointF p = mapFromScene(point);
+    if (boundingRect().contains(p))
+    {
+      out = mapToScene(boundingRect().center());
+      return true;
+    }
+    return false;
+  }
+
+private:
+  ShaderGraphNode *m_node;
+  bool m_isInput;
+  int m_index;
+  bool m_moving;
+};
+
 
 
 ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
@@ -15,6 +134,7 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
   , m_node(node)
   , m_titleFontSize(12)
   , m_inoutFontSize(11)
+  , m_selected (false)
 {
 
   QFont fntTitle;
@@ -36,13 +156,15 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
   int titleWidth = fmTitle.width(nodeTitle) + 2*margin;
 
 
-  m_parent = new QGraphicsItemGroup();
+  m_parent = new ShaderGraphNodeGroup(this);
   m_parent->setHandlesChildEvents(false);
+  m_parent->setFlag(QGraphicsItem::ItemIsMovable, false);
 
 
   m_background = new QGraphicsRectItem();
   m_background->setPen(QPen(QColor(255, 255, 255)));
   m_background->setBrush(QBrush(QColor(64, 64, 64)));
+//  m_background->setAcceptedMouseButtons(0);
   m_parent->addToGroup(m_background);
 
   m_title = new QGraphicsSimpleTextItem (m_background);
@@ -54,11 +176,15 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
   m_parent->addToGroup(m_title);
 
   int titleHeight = fmTitle.height() + 2*spacing + margin ;
-  int posY = titleHeight;
+  int posInY = titleHeight;
+
+  m_parent->SetHandleSize(titleHeight);
 
 
   int inputWidth = 0;
   int inputHeight = 0;
+  int maxAnchorWidth = 0;
+  int maxAnchorNameWidth = 0;
   for (size_t i=0, in=m_node->GetNumberOfInputs(); i<in; ++i)
   {
     vkSGInput *input = m_node->GetInput(i);
@@ -70,19 +196,23 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
     memset(&anchor, 0, sizeof(Anchor));
     if (input->CanInputNode())
     {
-      anchor.anchor = new QGraphicsEllipseItem(m_background);
-      anchor.anchor->setRect(margin, posY, elipseSize, elipseSize);
+      anchor.anchor = new ShaderGraphNodeAnchor(m_background, this, true, i);
+      anchor.anchor->setRect(margin, posInY, elipseSize, elipseSize);
       anchor.anchor->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
       anchor.anchor->setBrush(QBrush(Qt::NoBrush));
       m_parent->addToGroup(anchor.anchor);
+      maxAnchorWidth = elipseSize + spacing;
     }
     anchor.text = new QGraphicsSimpleTextItem(m_background);
     anchor.text->setFont(fntIF);
     anchor.text->setText(inputName);
-    anchor.text->setPos(thisWidth, posY);
+    anchor.text->setPos(thisWidth, posInY);
     anchor.text->setPen(QPen(Qt::NoPen));
     anchor.text->setBrush(QBrush(QColor(255, 255, 255)));
     m_parent->addToGroup(anchor.text);
+
+    printf ("Name '%s' => %d\n", (const char*)inputName.toLatin1(), fmIF.width(inputName));
+    maxAnchorNameWidth = maxAnchorNameWidth < fmIF.width(inputName) ? fmIF.width(inputName) : maxAnchorNameWidth;
 
     thisWidth += fmIF.width(inputName);
     if (input->CanInputConst())
@@ -91,22 +221,20 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
       anchor.editValueBackground = new QGraphicsRectItem(m_background);
       anchor.editValueBackground->setPen(QPen(QColor(0, 0, 0)));
       anchor.editValueBackground->setBrush(QBrush(QColor(255, 255, 255)));
-      anchor.editValueBackground->setRect(thisWidth, posY, constInputWidth, constInputHeight);
+      anchor.editValueBackground->setRect(thisWidth, posInY, constInputWidth, constInputHeight);
 
       anchor.editValue = new QGraphicsTextItem(anchor.editValueBackground);
-      anchor.editValue->setPos(thisWidth, posY);
+      anchor.editValue->setPos(thisWidth, posInY);
       anchor.editValue->setPlainText("1");
       anchor.editValue->setTextInteractionFlags(Qt::TextEditorInteraction);
       anchor.editValue->setTextWidth(constInputWidth);
       anchor.editValue->setFont(fntIF);
-      printf ("Size: %d\n", anchor.editValue->document()->documentMargin());
-      fflush(stdout);
 
       m_parent->addToGroup(anchor.editValueBackground);
       m_parent->addToGroup(anchor.editValue);
 
       thisWidth += constInputWidth;
-      posY += fmIF.descent();
+      posInY += fmIF.descent();
     }
 
     // add a margin on the far side
@@ -114,18 +242,92 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
 
     inputWidth = inputWidth < thisWidth ? thisWidth : inputWidth;
 
-    posY += fmIF.height() + spacing;
+    posInY += fmIF.height() + spacing;
     inputHeight += fmIF.height() + spacing;
+    m_inputs.append(anchor);
+  }
+  maxAnchorNameWidth += spacing;
+
+  printf ("Max Values: %d %d\n", maxAnchorWidth, maxAnchorNameWidth);
+  fflush(stdout);
+
+  for (int i=0; i<m_inputs.size(); ++i)
+  {
+    Anchor &anchor = m_inputs[i];
+    anchor.text->setPos(margin + maxAnchorWidth, anchor.text->pos().y());
+    if (anchor.editValue && anchor.editValueBackground)
+    {
+      QRectF rect = anchor.editValueBackground->rect();
+      rect.setX(margin + maxAnchorWidth + maxAnchorNameWidth);
+      rect.setWidth(constInputWidth);
+      anchor.editValueBackground->setRect(rect);
+      anchor.editValue->setPos(margin + maxAnchorWidth + maxAnchorNameWidth, anchor.editValue->pos().y());
+    }
   }
 
-  int width = inputWidth > titleWidth ? inputWidth : titleWidth;
-  int height = posY;
 
 
+  int outputWidth = 0;
+  for (size_t i=0, in=m_node->GetNumberOfOutputs(); i<in; ++i)
+  {
+    vkSGOutput *output = m_node->GetOutput(i);
+    QString outputName (output->GetName().c_str());
+    int thisWidth = margin + elipseSize + spacing + fmIF.width(outputName) + margin;
+    outputWidth = outputWidth < thisWidth ? thisWidth : outputWidth;
+  }
+
+  int inOutWidth = inputWidth + outputWidth;
+  int width = inOutWidth > titleWidth ? inOutWidth : titleWidth;
+
+  int posOutY = titleHeight;
+  for (size_t i=0, in=m_node->GetNumberOfOutputs(); i<in; ++i)
+  {
+    vkSGOutput *output = m_node->GetOutput(i);
+    QString outputName (output->GetName().c_str());
+
+    Anchor anchor;
+    memset(&anchor, 0, sizeof(Anchor));
+
+    anchor.anchor = new ShaderGraphNodeAnchor(m_background, this, false, i);
+    anchor.anchor->setRect(width - margin - elipseSize, posOutY, elipseSize, elipseSize);
+    anchor.anchor->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
+    anchor.anchor->setBrush(QBrush(Qt::NoBrush));
+    m_parent->addToGroup(anchor.anchor);
+
+    int textWidth = fmIF.width(outputName);
+
+    anchor.text = new QGraphicsSimpleTextItem(m_background);
+    anchor.text->setFont(fntIF);
+    anchor.text->setText(outputName);
+    anchor.text->setPos(width - margin - elipseSize - spacing - textWidth, posOutY);
+    anchor.text->setPen(QPen(Qt::NoPen));
+    anchor.text->setBrush(QBrush(QColor(255, 255, 255)));
+    m_parent->addToGroup(anchor.text);
+
+    int thisWidth = margin + elipseSize + spacing + textWidth + margin;
+    outputWidth = outputWidth < thisWidth ? thisWidth : outputWidth;
+    posOutY += fmIF.height() + spacing;
+
+    m_outputs.append(anchor);
+  }
+
+  int height = posInY > posOutY ? posInY : posOutY;
 
   m_background->setRect(0, 0, width, height);
 
 
+}
+
+void ShaderGraphNode::SetSelected(bool selected)
+{
+  if (selected)
+  {
+    m_background->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
+  }
+  else
+  {
+    m_background->setPen(QPen(QBrush(QColor(128, 128, 128)), 1.0f));
+  }
 }
 
 QGraphicsItem *ShaderGraphNode::GetItem()
@@ -133,265 +335,106 @@ QGraphicsItem *ShaderGraphNode::GetItem()
   return m_parent;
 }
 
-
-ShaderGraphNode2::ShaderGraphNode2()
-  : QGraphicsItem()
-  , m_fontSize(14)
-  , m_inMotion(false)
-  , m_node(0)
+QPointF ShaderGraphNode::GetInputAnchor(int idx) const
 {
-
+  const Anchor &anchor = m_inputs[idx];
+  return anchor.anchor->mapToScene(anchor.anchor->boundingRect().center());
 }
 
 
-bool ShaderGraphNode2::Initialize()
+QPointF ShaderGraphNode::GetOutputAnchor(int idx) const
 {
-  if (!m_node)
+  const Anchor &anchor = m_outputs[idx];
+  return anchor.anchor->mapToScene(anchor.anchor->boundingRect().center());
+}
+
+void ShaderGraphNode::UpdateConnections()
+{
+  for (size_t i=0, in=m_inputs.size(); i<in; ++i)
   {
-    return false;
-  }
-
-
-  QFont fnt;
-  fnt.setPixelSize(m_fontSize);
-  QFontMetrics fm (fnt);
-
-  m_margin = fm.height();
-  m_spacing = fm.width("G");
-
-
-  // calculate the width
-  QString nodeName(m_node->GetName().c_str());
-  int titleWidth = fm.width(nodeName);
-
-  int maxInput = 0;
-  int maxOuput = 0;
-
-  vkSize numInputs = m_node->GetNumberOfInputs();
-  vkSize numOutputs = m_node->GetNumberOfOutputs();
-
-  for (vkSize i=0, in=numInputs; i<in; ++i)
-  {
-    vkSGInput *input = m_node->GetInput(i);
-    int width = fm.width(input->GetName().c_str());
-    maxInput = maxInput < width ? width : maxInput;
-  }
-
-  for (vkSize i=0, in=numOutputs; i<in; ++i)
-  {
-    vkSGOutput *output= m_node->GetOutput(i);
-    int width = fm.width(output->GetName().c_str());
-    maxOuput = maxOuput < width ? width : maxOuput;
-  }
-
-  int width = titleWidth + 2 * m_margin;
-  int inoutWidth = maxInput + maxOuput + m_spacing + 2 * m_margin;
-
-  width = width < inoutWidth ? inoutWidth : width;
-
-
-  // calculate the height
-  int titleHeight = fm.height() * 2;
-  int rowHeight = fm.height();
-
-
-  int numRows = numInputs > numOutputs ? numInputs : numOutputs;
-
-  int height = titleHeight + numRows * rowHeight + rowHeight;
-
-  m_size = QRectF(-width/2.0, -height/2.0, width, height);
-  m_inOutStart = m_size.top() + titleHeight;
-  m_handleSize = QRectF(m_size.left(), m_size.top(), m_size.width(), fm.height());
-
-
-  int startY = m_inOutStart;
-  for (vkSize i=0, in=m_node->GetNumberOfInputs(); i<in; ++i)
-  {
-    vkSGInput *input = m_node->GetInput(i);
-    if (input->CanInputNode())
+    Anchor &anchor = m_inputs[i];
+    if (anchor.connection)
     {
-      int d = 4;\
-      m_inputRects.append(QRectF(m_size.left() + d, startY + d, fm.height() - 2*d, fm.height() - 2*d));
-      //painter->drawEllipse(m_size.left() + d, startY + d, fm.height() - 2*d, fm.height() - 2*d);
+      anchor.connection->UpdateValues();
     }
-    startY += fm.height();
   }
-  startY = m_inOutStart;
-  for (vkSize i=0, in=m_node->GetNumberOfOutputs(); i<in; ++i)
+  for (size_t i=0, in=m_outputs.size(); i<in; ++i)
   {
-
-    int d = 4;
-    m_outputRects.append(QRectF(m_size.right() - d -(fm.height() - 2*d), startY + d, (fm.height() - 2*d), fm.height() - 2*d));
-
-    startY += fm.height();
+    Anchor &anchor = m_outputs[i];
+    if (anchor.connection)
+    {
+      anchor.connection->UpdateValues();
+    }
   }
 
-  return true;
+}
+
+void ShaderGraphNode::ConnectInput(ShaderGraphConnection *connection, int idx)
+{
+  m_inputs[idx].connection = connection;
+}
+
+void ShaderGraphNode::ConnectOutput(ShaderGraphConnection *connection, int idx)
+{
+  m_outputs[idx].connection = connection;
 }
 
 
-void ShaderGraphNode2::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+bool ShaderGraphNode::hasAnchor(bool input, const QPointF &globalP, QPointF &globalOut, int &index) const
 {
-  QFont fnt;
-  fnt.setPixelSize(m_fontSize);
-  QFontMetrics fm (fnt);
-
-  painter->setFont(fnt);
-
-  // draw the background
-  QLinearGradient linearGradient(0.0, m_size.top(), 0.0, m_size.top() + fm.height() * 2);
-  if (this == ShaderGraphNode2::GetSelectedNode())
+  if (input)
   {
-    linearGradient.setColorAt(0.0f, QColor(150, 0, 0));
-    linearGradient.setColorAt(1.0f, QColor(16, 16, 16));
-    painter->setPen(QPen(QBrush(QColor(196, 196, 196)), 2.0));
+    for (size_t i=0, in=m_inputs.size(); i<in; ++i)
+    {
+      const Anchor &anchor = m_inputs[i];
+      if (anchor.anchor)
+      {
+        if (anchor.anchor->contains(globalP, globalOut))
+        {
+          index = i;
+          return true;
+        }
+      }
+    }
   }
   else
   {
-    linearGradient.setColorAt(0.0f, QColor(128, 0, 0));
-    linearGradient.setColorAt(1.0f, QColor(0, 0, 0));
-    painter->setPen(QPen(QBrush(QColor(64, 64, 64)), 1.0));
-  }
-  painter->setBrush(QBrush(linearGradient));
-  painter->drawRoundedRect(m_size, m_fontSize/2, m_fontSize/2);
-//  painter->drawRect(m_size);
-
-
-  // draw the title
-  painter->setBrush(QBrush(QColor(0, 0, 0)));
-  painter->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0));
-  painter->drawText(m_size.left(), m_size.top(), m_size.width(), fm.height(), Qt::AlignCenter, QString(m_node->GetName().c_str()));
-
-  // draw the inputs
-  int startY = m_inOutStart;
-  for (vkSize i=0, in=m_node->GetNumberOfInputs(); i<in; ++i)
-  {
-    vkSGInput *input = m_node->GetInput(i);
-    QString str (input->GetName().c_str());
-    int width = fm.width(str);
-    painter->drawText(m_size.left() + m_margin, startY, width, fm.height(), Qt::AlignHCenter, str);
-    startY += fm.height();
-  }
-  startY = m_inOutStart;
-  for (vkSize i=0, in=m_node->GetNumberOfOutputs(); i<in; ++i)
-  {
-    vkSGOutput *output= m_node->GetOutput(i);
-    QString str (output->GetName().c_str());
-    int width = fm.width(str);
-    painter->drawText(m_size.right() - m_margin - width, startY, width, fm.height(), Qt::AlignHCenter, str);
-    startY += fm.height();
-  }
-
-  foreach (QRectF rect, m_inputRects)
-  {
-    painter->drawEllipse(rect);
-  }
-  foreach (QRectF rect, m_outputRects)
-  {
-    painter->drawEllipse(rect);
-  }
-}
-
-
-void ShaderGraphNode2::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-  m_inMotion = m_handleSize.contains(event->pos());
-  m_scenePos = event->scenePos();
-  QMatrix m = matrix();
-  m_pos = QPointF(m.dx(), m.dy());
-
-  bool hit = false;
-  for (size_t i=0; i<m_inputRects.size() && !hit; ++i)
-  {
-    if (m_inputRects[i].contains(event->pos()))
+    for (size_t i=0, in=m_inputs.size(); i<in; ++i)
     {
-      hit = true;
-      QPointF p = event->pos();
-      p = mapToScene(p);
-      m_connecting = true;
-//      emit startConnectionInput(p, i);
+      const Anchor &anchor = m_inputs[i];
+      if (anchor.anchor)
+      {
+        if (anchor.anchor->contains(globalP, globalOut))
+        {
+          index = i;
+          return true;
+        }
+      }
     }
   }
-  for (size_t i=0; i<m_outputRects.size() && !hit; ++i)
+  return false;
+}
+
+void ShaderGraphNode::onMoveDrag(bool input, int index, const QPointF &pointA, const QPointF &pointB)
+{
+  emit moveDrag(input, index, pointA, pointB);
+}
+
+void ShaderGraphNode::onStopDrag(bool input, int index, const QPointF &pointA, const QPointF &pointB)
+{
+  emit stopDrag(input, index, pointA, pointB);
+}
+
+
+void ShaderGraphNode::Select(ShaderGraphNode *node)
+{
+  if (ShaderGraphNode::currentSelectedNode)
   {
-    if (m_outputRects[i].contains(event->pos()))
-    {
-      hit = true;
-      QPointF p = event->pos();
-      p = mapToScene(p);
-      m_connecting = true;
-//      emit startConnectionOutput(p, i);
-    }
+    ShaderGraphNode::currentSelectedNode->SetSelected(false);
   }
-
-
-}
-
-void ShaderGraphNode2::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-  if (m_inMotion)
+  ShaderGraphNode::currentSelectedNode = node;
+  if (ShaderGraphNode::currentSelectedNode)
   {
-    ShaderGraphNode2::SetSelectedNode(this);
-    QPointF scenePos = event->scenePos();
-    QPointF delta = scenePos - m_scenePos;
-    QPointF p = m_pos + delta;
-    QMatrix m = matrix();
-    QMatrix m1 (m.m11(), m.m12(), m.m21(), m.m22(), p.x(), p.y());
-    setMatrix(m1);
+    ShaderGraphNode::currentSelectedNode->SetSelected(true);
   }
-  if (m_connecting)
-  {
-    QPointF p = event->pos();
-    p = mapToScene(p);
-//    emit processConnection(p);
-  }
-}
-
-void ShaderGraphNode2::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-  if (m_inMotion)
-  {
-    ShaderGraphNode2::SetSelectedNode(this);
-  }
-  m_inMotion = false;
-  m_connecting = false;
-
-}
-
-
-QRectF ShaderGraphNode2::boundingRect() const
-{
-  return m_size;
-}
-
-
-const vkSGNode *ShaderGraphNode2::GetNode() const
-{
-  return m_node;
-}
-
-void ShaderGraphNode2::SetNode(vkSGNode *node)
-{
-  VK_SET(m_node, node);
-}
-
-
-
-
-void ShaderGraphNode2::SetSelectedNode(ShaderGraphNode2 *selectedNode)
-{
-  if (ShaderGraphNode2::selectedNode)
-  {
-    ShaderGraphNode2::selectedNode->update();
-  }
-  ShaderGraphNode2::selectedNode = selectedNode;
-  if (ShaderGraphNode2::selectedNode)
-  {
-    ShaderGraphNode2::selectedNode->update();
-  }
-}
-
-ShaderGraphNode2 *ShaderGraphNode2::GetSelectedNode()
-{
-  return ShaderGraphNode2::selectedNode;
 }
