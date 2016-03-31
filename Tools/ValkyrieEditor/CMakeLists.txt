@@ -24,6 +24,18 @@ source_group(
     )
 
 
+set(EDITOR_GRAPH_SOURCES
+    Graph/Node.cc
+    Graph/Node.hh
+    )
+
+source_group(
+    "Editor\\Graph"
+    FILES
+    ${EDITOR_GRAPH_SOURCES}
+    )
+
+
 
 set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/Connection.cc
@@ -60,6 +72,7 @@ message("ALL_UI ${ALL_UI_SOURCES}")
 add_executable(
     ValkyrieEditor
     ${EDITOR_SOURCES}
+    ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
     ${ALL_UI_SOURCES}
     )

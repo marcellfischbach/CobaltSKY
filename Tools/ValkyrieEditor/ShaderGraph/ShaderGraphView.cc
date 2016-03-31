@@ -3,6 +3,7 @@
 #include <ShaderGraph/Connection.hh>
 #include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
+#include <Graph/Node.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>
 #include <qpainterpath.h>
@@ -57,7 +58,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_scene->addItem(path);
   */
 
-
+  /*
   {
     QGraphicsItemGroup *group = new QGraphicsItemGroup();
 
@@ -87,10 +88,21 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
 
     //    m_scene->addItem(group);
   }
+  */
 
+//  addNode(vkSGFloat4::GetStaticClass());
 
-  addNode(vkSGFloat4::GetStaticClass());
+  Node *node = new Node();
+  node->SetLabel("Hello World");
+  node->AddInput("x", "x", Node::eIM_Both);
+  node->AddInput("y", "y", Node::eIM_Both);
+  node->AddInput("z", "z", Node::eIM_Both);
+  node->AddOutput("v", "v");
 
+  if (node->Initialize())
+  {
+    m_scene->addItem(node->GetItem());
+  }
 
 
 }

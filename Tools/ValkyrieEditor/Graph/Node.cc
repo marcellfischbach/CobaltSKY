@@ -1,0 +1,437 @@
+
+
+#include <Graph/Node.hh>
+#include <qgraphicsitem.h>
+#include <qbrush.h>
+#include <qpen.h>
+#include <qfont.h>
+#include <qfontmetrics.h>
+
+
+#define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
+#define VK_MIN(a, b) ((a) < (b) ? (a) : (b))
+
+
+class NodeGroup : public QGraphicsItemGroup
+{
+public:
+  NodeGroup(QGraphicsItem *parent = 0)
+    : QGraphicsItemGroup(parent)
+  {
+    rectItem = new QGraphicsRectItem(this);
+    gradientHeight = 10.0f;
+    color = QColor(128, 0, 0);
+    borderWidth = 1.0f;
+    borderColor = QColor(128, 128, 128);
+
+    UpdateData();
+  }
+
+  void SetSize (float width, float height)
+  {
+    rectItem->setRect(0, 0, width, height);
+  }
+
+  void SetTitleHeight (float titleHeight)
+  {
+    gradientHeight = titleHeight;
+  }
+
+  void UpdateData ()
+  {
+    rectItem->setPen(QPen(QBrush(borderColor), borderWidth));
+
+    QLinearGradient gradient (QPointF (0.0f, 0.0f), QPointF (0.0f, gradientHeight));
+    gradient.setColorAt(0.0f, color);
+    gradient.setColorAt(1.0f, QColor(32, 32, 32));
+
+    rectItem->setBrush(QBrush(gradient));
+  }
+
+  void SetSelected (bool selected)
+  {
+    if (selected)
+    {
+      borderColor = QColor(255, 255, 255);
+      borderWidth = 2.0f;
+    }
+    else
+    {
+      borderColor = QColor(128, 128, 128);
+      borderWidth = 1.0f;
+    }
+  }
+
+  QGraphicsRectItem *rectItem;
+  float gradientHeight;
+  QColor color;
+  QColor borderColor;
+  float borderWidth;
+};
+
+
+class NodeAnchor : public QGraphicsEllipseItem
+{
+public:
+  NodeAnchor (QGraphicsItem *parent, const QFont &fnt)
+    : QGraphicsEllipseItem(parent)
+  {
+    QFontMetrics fm(fnt);
+    setRect(0, 0, fm.height(), fm.height());
+    setPen(QPen(QColor(255, 255, 255)));
+    setBrush(QBrush(Qt::NoBrush));
+  }
+
+  static QRectF GetRect (const QFontMetrics &fm)
+  {
+    return QRectF (0, 0, fm.ascent(), fm.ascent());
+  }
+};
+
+class NodeLabel : public QGraphicsSimpleTextItem
+{
+public:
+  NodeLabel (QGraphicsItem *parent, const QFont &fnt)
+    : QGraphicsSimpleTextItem(parent)
+  {
+    setFont(fnt);
+    SetColor(QColor(255, 255, 255));
+  }
+
+  void SetRect (const QRectF &rect)
+  {
+    m_rect = rect;
+    Update ();
+  }
+
+  void SetAlignment (int alignment)
+  {
+    m_alignment = alignment;
+    Update ();
+  }
+
+private:
+  void Update ()
+  {
+    float x = 0.0f;
+    float y = 0.0f;
+    QFontMetrics fm (font());
+    QRect br = fm.boundingRect(text());
+
+    if (m_alignment & Qt::AlignLeft)
+    {
+      x = m_rect.left() + br.left();
+    }
+    else if (m_alignment & Qt::AlignRight)
+    {
+      x = m_rect.right() - br.right();
+    }
+    else if (m_alignment & Qt::AlignHCenter)
+    {
+      x = (m_rect.left() + m_rect.right()) / 2.0f - (br.left() + br.right()) / 2.0f;
+    }
+
+    if (m_alignment & Qt::AlignTop)
+    {
+      y = m_rect.top() + br.top() + fm.ascent();
+    }
+    else if (m_alignment & Qt::AlignBottom)
+    {
+      y = m_rect.bottom() + br.top() - fm.descent();
+    }
+    else if (m_alignment & Qt::AlignCenter)
+    {
+      y = (m_rect.bottom() + m_rect.top()) / 2.0f + br.top() + fm.ascent() / 2.0f;
+    }
+    setPos(x, y);
+  }
+
+  void SetColor(const QColor &color)
+  {
+    m_color = color;
+    setPen(QPen(Qt::NoPen));
+    setBrush(QBrush(color));
+  }
+
+
+private:
+  int m_alignment;
+  QRectF m_rect;
+  QColor m_color;
+
+};
+
+class NodeConstInput : public QGraphicsItemGroup
+{
+public:
+  NodeConstInput (QGraphicsItem *parent, const QFont &fnt)
+    : QGraphicsItemGroup(parent)
+  {
+    m_background = new QGraphicsRectItem(this);
+    m_background->setPen(QPen(QColor(0, 0, 0)));
+    m_background->setBrush(QBrush(QColor(255, 255, 255)));
+
+    m_textItem = new QGraphicsTextItem(this);
+
+    QFontMetrics fm (fnt);
+    QRectF rect = GetRect (fm);
+    m_background->setRect(rect);
+    SetText("1.0");
+  }
+
+  void SetText (const QString &text)
+  {
+    m_textItem->setPlainText(text);
+  }
+
+  static QRectF GetRect (const QFontMetrics &fm)
+  {
+    return QRectF (0, 0, fm.width("GGGG"), fm.height() *1.5);
+  }
+
+private:
+  QGraphicsRectItem *m_background;
+  QGraphicsTextItem *m_textItem;
+};
+
+
+class NodeInputItem : public QGraphicsItemGroup
+{
+public:
+  NodeInputItem(Node::InputMode mode, const QFont &fnt, QGraphicsItem *parent)
+    : QGraphicsItemGroup(parent)
+  {
+    if (mode & Node::eIM_Output)
+    {
+      anchor = new NodeAnchor(this, fnt);
+    }
+    if (mode & Node::eIM_Const)
+    {
+      constInput = new NodeConstInput(this, fnt);
+    }
+    label = new NodeLabel(this, fnt);
+  }
+
+  void SetSizes (const QFontMetrics &fm, const QString &text, float anchorPos, float constPos, float labelPos)
+  {
+    if (anchor)
+    {
+      float height = (NodeConstInput::GetRect(fm).height() - NodeAnchor::GetRect(fm).height()) / 2.0f;
+      anchor->setPos(anchorPos, height);
+    }
+    if (constInput)
+    {
+      constInput->setPos(constPos, 0);
+    }
+    QRectF rect (labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
+    label->SetRect(rect);
+    label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
+  }
+
+  NodeAnchor *anchor;
+  NodeConstInput *constInput;
+  NodeLabel *label;
+};
+
+class NodeOutputItem : public QGraphicsItemGroup
+{
+public:
+  NodeOutputItem(QGraphicsItem *parent = 0)
+    : QGraphicsItemGroup(parent)
+  {
+
+  }
+};
+
+
+
+
+
+
+
+Node::Node(QObject *parent)
+  : QObject(parent)
+{
+
+}
+
+
+void Node::AddInput(const QString &label, const QString &key, InputMode mode)
+{
+  Input input;
+  input.label = label;
+  input.key = key;
+  input.mode = mode;
+  input.item = 0;
+
+  m_inputs << input;
+}
+
+void Node::AddOutput(const QString &label, const QString &key)
+{
+  Output output;
+  output.label = label;
+  output.key = key;
+  output.item = 0;
+
+  m_outputs << output;
+}
+
+int Node::GetIndexOfInput(const QString &key) const
+{
+  for (int i=0, in=m_inputs.size(); i<in; ++i)
+  {
+    if (m_inputs[i].key == key)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+int Node::GetIndexOfOutput(const QString &key) const
+{
+  for (int i=0, in=m_outputs.size(); i<in; ++i)
+  {
+    if (m_outputs[i].key == key)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+
+
+
+bool Node::Initialize()
+{
+  // first check any of the inputs need anchors and/or const inputs
+  bool needAnchor = false;
+  bool needConst = false;
+  for (Input &input : m_inputs)
+  {
+    if (input.mode & eIM_Output)
+    {
+      needAnchor = true;
+    }
+    if (input.mode & eIM_Const)
+    {
+      needConst = true;
+    }
+  }
+
+  // approximate the needed width and height
+
+  QFont fnt;
+  QFont fntTitle;
+  fntTitle.setPixelSize(16);
+
+  QFontMetrics fm(fnt);
+  QFontMetrics fmTitle(fntTitle);
+
+  float m_margin = 5.0f;
+  float m_spacing = 3.0f;
+  float titleHeight = fmTitle.height();
+
+  float width = 0.0f;
+  float height = 0.0f;
+
+  QRectF achorRect = NodeAnchor::GetRect(fm);
+  QRectF constRect = NodeConstInput::GetRect(fm);
+
+  // get the overall width of all inputs
+  int inputWidth = 0;
+  int inputHeight = (NodeConstInput::GetRect(fm).height() + m_spacing) * m_inputs.size();
+  for (Input &input : m_inputs)
+  {
+    int width = fm.width(input.label);
+    inputWidth = VK_MAX(inputWidth, width);
+  }
+
+  float inputAnchorPos = 0.0f;
+  float inputConstPos = 0.0f;
+  float inputLabelPos = 0.0f;
+
+  if (needAnchor)
+  {
+    int anchorWidth = achorRect.width() + m_spacing;;
+    inputWidth += anchorWidth;
+    inputConstPos += anchorWidth;
+    inputLabelPos += anchorWidth;
+  }
+  if (needConst)
+  {
+    int constWidth = constRect.width() + m_spacing;
+    inputWidth += constWidth;
+    inputLabelPos += constWidth;
+  }
+  inputWidth += m_margin;
+
+
+  // get the overall width of all outputs
+  int outputWidth = 0;
+  int outputHeight = (constRect.height() + m_spacing) * m_outputs.size();
+  for (Output &output : m_outputs)
+  {
+    int width = fm.width(output.label);
+    outputWidth = VK_MAX(outputWidth, width);
+  }
+  outputWidth += achorRect.width() + m_spacing;
+  outputWidth += m_margin;
+
+
+
+  // get the total width of the title
+  int titleWidth = fmTitle.width(m_label) + 2.0f * m_margin;
+  //  the execution path in and out (if needed) are added here later
+
+
+  // now just get the final width;
+  int inoutWidth = inputWidth + 2.0f * m_margin + outputWidth;
+  width = VK_MAX(titleWidth, inoutWidth);
+
+  height = titleHeight + VK_MAX(inputHeight, outputHeight);
+
+
+  // create the parent object
+  m_item = m_nodeGroup = new NodeGroup();
+  m_nodeGroup->SetTitleHeight(titleHeight + 2.0f * m_margin);
+  m_nodeGroup->UpdateData();
+  m_nodeGroup->SetSize(width, height);
+
+
+
+  int posY = titleHeight + m_spacing;
+  // now place the inputs
+  for (Input &input : m_inputs)
+  {
+    input.item = new NodeInputItem(input.mode, fnt, m_nodeGroup);
+    input.item->label->setText(input.label);
+    input.item->SetSizes(fm, input.label, inputAnchorPos, inputConstPos, inputLabelPos);
+    input.item->setPos(m_margin, posY);
+
+    posY += constRect.height();
+  }
+
+
+
+
+
+  m_title = new NodeLabel(m_nodeGroup, fntTitle);
+  m_title->setText(m_label);
+  m_title->SetRect(QRect(0, 0, width, titleHeight));
+  m_title->SetAlignment(Qt::AlignHCenter | Qt::AlignTop);
+
+  return true;
+}
+
+
+
+
+
+
+
+
+#undef VK_MAX
+#undef VK_MIN
