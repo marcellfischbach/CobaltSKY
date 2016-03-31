@@ -18,6 +18,8 @@ public:
   NodeGroup(QGraphicsItem *parent = 0)
     : QGraphicsItemGroup(parent)
   {
+    setHandlesChildEvents(false);
+
     rectItem = new QGraphicsRectItem(this);
     gradientHeight = 10.0f;
     color = QColor(128, 0, 0);
@@ -167,11 +169,14 @@ public:
   NodeConstInput (QGraphicsItem *parent, const QFont &fnt)
     : QGraphicsItemGroup(parent)
   {
+    setHandlesChildEvents(false);
+
     m_background = new QGraphicsRectItem(this);
     m_background->setPen(QPen(QColor(0, 0, 0)));
     m_background->setBrush(QBrush(QColor(255, 255, 255)));
-
+    
     m_textItem = new QGraphicsTextItem(this);
+    m_textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
 
     QFontMetrics fm (fnt);
     QRectF rect = GetRect (fm);
@@ -198,9 +203,13 @@ private:
 class NodeInputItem : public QGraphicsItemGroup
 {
 public:
-  NodeInputItem(Node::InputMode mode, const QFont &fnt, QGraphicsItem *parent)
+  NodeInputItem(Node::InputMode mode, const QString &labelText, const QFont &fnt, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent)
+    , anchor (0)
+    , constInput(0)
+    , label(0)
   {
+    setHandlesChildEvents(false);
     if (mode & Node::eIM_Output)
     {
       anchor = new NodeAnchor(this, fnt);
@@ -210,6 +219,8 @@ public:
       constInput = new NodeConstInput(this, fnt);
     }
     label = new NodeLabel(this, fnt);
+    label->setText(labelText);
+
   }
 
   void SetSizes (const QFontMetrics &fm, const QString &text, float anchorPos, float constPos, float labelPos)
@@ -236,11 +247,33 @@ public:
 class NodeOutputItem : public QGraphicsItemGroup
 {
 public:
-  NodeOutputItem(QGraphicsItem *parent = 0)
+  NodeOutputItem(const QString &labelText, const QFont &fnt, float spacing, QGraphicsItem *parent = 0)
     : QGraphicsItemGroup(parent)
   {
+    setHandlesChildEvents(false);
+    anchor = new NodeAnchor(this, fnt);
+
+    label = new NodeLabel(this, fnt);
+    label->setFont(fnt);
+    label->setText(labelText);
+
+    QFontMetrics fm(fnt);
+    QRectF anchorRect = NodeAnchor::GetRect(fm);
+    float height = (NodeConstInput::GetRect(fm).height() - anchorRect.height()) / 2.0f;
+    anchor->setPos(-anchorRect.width(), height);
+
+    int textWidth = fm.width(labelText);
+
+    QRectF rect(-textWidth - anchorRect.width() - spacing*2.0f, 0.0f, textWidth, NodeConstInput::GetRect(fm).height());
+    label->SetRect(rect);
+    label->SetAlignment(Qt::AlignRight| Qt::AlignCenter);
+
 
   }
+
+
+  NodeAnchor *anchor;
+  NodeLabel *label;
 };
 
 
@@ -331,7 +364,8 @@ bool Node::Initialize()
   QFontMetrics fmTitle(fntTitle);
 
   float m_margin = 5.0f;
-  float m_spacing = 3.0f;
+  float m_spacing = 5.0f;
+  float m_middleSpacing = 15.0f;
   float titleHeight = fmTitle.height();
 
   float width = 0.0f;
@@ -342,7 +376,7 @@ bool Node::Initialize()
 
   // get the overall width of all inputs
   int inputWidth = 0;
-  int inputHeight = (NodeConstInput::GetRect(fm).height() + m_spacing) * m_inputs.size();
+  int inputHeight = (constRect.height() + m_spacing) * m_inputs.size();
   for (Input &input : m_inputs)
   {
     int width = fm.width(input.label);
@@ -355,7 +389,7 @@ bool Node::Initialize()
 
   if (needAnchor)
   {
-    int anchorWidth = achorRect.width() + m_spacing;;
+    int anchorWidth = achorRect.width() + m_spacing;
     inputWidth += anchorWidth;
     inputConstPos += anchorWidth;
     inputLabelPos += anchorWidth;
@@ -388,10 +422,10 @@ bool Node::Initialize()
 
 
   // now just get the final width;
-  int inoutWidth = inputWidth + 2.0f * m_margin + outputWidth;
+  int inoutWidth = inputWidth + 2.0f * m_margin + outputWidth + m_middleSpacing;
   width = VK_MAX(titleWidth, inoutWidth);
 
-  height = titleHeight + VK_MAX(inputHeight, outputHeight);
+  height = m_margin + titleHeight + VK_MAX(inputHeight, outputHeight) + m_margin;
 
 
   // create the parent object
@@ -402,16 +436,24 @@ bool Node::Initialize()
 
 
 
-  int posY = titleHeight + m_spacing;
+  int posY = m_margin + titleHeight + m_spacing;
   // now place the inputs
   for (Input &input : m_inputs)
   {
-    input.item = new NodeInputItem(input.mode, fnt, m_nodeGroup);
-    input.item->label->setText(input.label);
+    input.item = new NodeInputItem(input.mode, input.label, fnt, m_nodeGroup);
     input.item->SetSizes(fm, input.label, inputAnchorPos, inputConstPos, inputLabelPos);
     input.item->setPos(m_margin, posY);
 
-    posY += constRect.height();
+    posY += constRect.height() + m_spacing;
+  }
+
+  posY = m_margin + titleHeight + m_spacing;
+  for (Output &output : m_outputs)
+  {
+    output.item = new NodeOutputItem(output.label, fnt, m_spacing, m_nodeGroup);
+    output.item->setPos(width - m_margin, posY);
+
+    posY += constRect.height() + m_spacing;
   }
 
 

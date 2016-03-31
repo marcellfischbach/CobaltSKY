@@ -98,6 +98,9 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   node->AddInput("y", "y", Node::eIM_Both);
   node->AddInput("z", "z", Node::eIM_Both);
   node->AddOutput("v", "v");
+  node->AddOutput("v1", "v1");
+  node->AddOutput("v2", "v2");
+  node->AddOutput("v3", "v3");
 
   if (node->Initialize())
   {
