@@ -3,6 +3,7 @@
 
 #include <qgraphicsview.h>
 #include <qwidget.h>
+#include <Graph/Scene.hh>
 
 class vkClass;
 class ShaderGraphConnection;
@@ -33,7 +34,7 @@ private:
 
 private:
   QGraphicsView *m_view;
-  QGraphicsScene *m_scene;
+  NodeGraphScene *m_scene;
 
 
   QGraphicsPathItem *m_currentBounding;

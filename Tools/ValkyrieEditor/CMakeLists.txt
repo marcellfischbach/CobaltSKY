@@ -25,8 +25,13 @@ source_group(
 
 
 set(EDITOR_GRAPH_SOURCES
+    Graph/Connection.cc
+    Graph/Connection.hh
+    Graph/Direction.h
     Graph/Node.cc
     Graph/Node.hh
+    Graph/Scene.cc
+    Graph/Scene.hh
     )
 
 source_group(

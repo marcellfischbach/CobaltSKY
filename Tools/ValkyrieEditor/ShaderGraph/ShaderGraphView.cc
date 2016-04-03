@@ -39,7 +39,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
 
 
-  m_scene = new QGraphicsScene();
+  m_scene = new NodeGraphScene();
   m_view->setScene(m_scene);
 
   //addNode(vkSGFloat4::GetStaticClass());
@@ -93,7 +93,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
 //  addNode(vkSGFloat4::GetStaticClass());
 
   Node *node = new Node();
-  node->SetLabel("Hello World");
+  node->SetLabel("Hello World 1");
   node->AddInput("x", "x", Node::eIM_Both);
   node->AddInput("y", "y", Node::eIM_Both);
   node->AddInput("z", "z", Node::eIM_Both);
@@ -104,7 +104,25 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
 
   if (node->Initialize())
   {
-    m_scene->addItem(node->GetItem());
+    m_scene->AddNode(node);
+    node->SetPosition(QPointF(-100, 0));
+  }
+
+
+  node = new Node();
+  node->SetLabel("Hello World 2");
+  node->AddInput("x", "x", Node::eIM_Both);
+  node->AddInput("y", "y", Node::eIM_Both);
+  node->AddInput("z", "z", Node::eIM_Both);
+  node->AddOutput("v", "v");
+  node->AddOutput("v1", "v1");
+  node->AddOutput("v2", "v2");
+  node->AddOutput("v3", "v3");
+
+  if (node->Initialize())
+  {
+    m_scene->AddNode(node);
+    node->SetPosition(QPointF(100, 0));
   }
 
 

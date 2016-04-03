@@ -1,7 +1,9 @@
 
 
 #include <Graph/Node.hh>
+#include <Graph/Scene.hh>
 #include <qgraphicsitem.h>
+#include <qgraphicssceneevent.h>
 #include <qbrush.h>
 #include <qpen.h>
 #include <qfont.h>
@@ -11,16 +13,61 @@
 #define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define VK_MIN(a, b) ((a) < (b) ? (a) : (b))
 
+class NodeBackground : public QGraphicsRectItem
+{
+public:
+  NodeBackground(Node *node, QGraphicsItem *item)
+    : QGraphicsRectItem(item)
+    , m_node(node)
+    , m_inMotion(false)
+  {
+
+  }
+
+  void mousePressEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton && motionHandle.contains(event->pos()))
+    {
+      m_delta = mapToScene(QPointF(0, 0)) - mapToScene(event->pos());
+      m_inMotion = true;
+    }
+  }
+
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton)
+    {
+      m_inMotion = false;
+    }
+  }
+
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (m_inMotion)
+    {
+      QPointF pos = mapToScene(event->pos()) + m_delta;
+      m_node->SetPosition(pos);
+    }
+  }
+  QRectF motionHandle;
+
+private:
+  Node *m_node;
+  QPointF m_delta;
+  bool m_inMotion;
+
+};
+
 
 class NodeGroup : public QGraphicsItemGroup
 {
 public:
-  NodeGroup(QGraphicsItem *parent = 0)
+  NodeGroup(Node *node, QGraphicsItem *parent = 0)
     : QGraphicsItemGroup(parent)
   {
     setHandlesChildEvents(false);
 
-    rectItem = new QGraphicsRectItem(this);
+    background = new NodeBackground(node, this);
     gradientHeight = 10.0f;
     color = QColor(128, 0, 0);
     borderWidth = 1.0f;
@@ -29,28 +76,28 @@ public:
     UpdateData();
   }
 
-  void SetSize (float width, float height)
+  void SetSize(float width, float height)
   {
-    rectItem->setRect(0, 0, width, height);
+    background->setRect(0, 0, width, height);
   }
 
-  void SetTitleHeight (float titleHeight)
+  void SetTitleHeight(float titleHeight)
   {
     gradientHeight = titleHeight;
   }
 
-  void UpdateData ()
+  void UpdateData()
   {
-    rectItem->setPen(QPen(QBrush(borderColor), borderWidth));
+    background->setPen(QPen(QBrush(borderColor), borderWidth));
 
-    QLinearGradient gradient (QPointF (0.0f, 0.0f), QPointF (0.0f, gradientHeight));
+    QLinearGradient gradient(QPointF(0.0f, 0.0f), QPointF(0.0f, gradientHeight));
     gradient.setColorAt(0.0f, color);
     gradient.setColorAt(1.0f, QColor(32, 32, 32));
 
-    rectItem->setBrush(QBrush(gradient));
+    background->setBrush(QBrush(gradient));
   }
 
-  void SetSelected (bool selected)
+  void SetSelected(bool selected)
   {
     if (selected)
     {
@@ -64,7 +111,10 @@ public:
     }
   }
 
-  QGraphicsRectItem *rectItem;
+
+
+
+  NodeBackground *background;
   float gradientHeight;
   QColor color;
   QColor borderColor;
@@ -75,8 +125,12 @@ public:
 class NodeAnchor : public QGraphicsEllipseItem
 {
 public:
-  NodeAnchor (QGraphicsItem *parent, const QFont &fnt)
+  NodeAnchor(Node *node, int idx, Direction dir, QGraphicsItem *parent, const QFont &fnt)
     : QGraphicsEllipseItem(parent)
+    , m_connecting(false)
+    , m_node(node)
+    , m_dir(dir)
+    , m_idx(idx)
   {
     QFontMetrics fm(fnt);
     setRect(0, 0, fm.height(), fm.height());
@@ -84,40 +138,85 @@ public:
     setBrush(QBrush(Qt::NoBrush));
   }
 
-  static QRectF GetRect (const QFontMetrics &fm)
+  static QRectF GetRect(const QFontMetrics &fm)
   {
-    return QRectF (0, 0, fm.ascent(), fm.ascent());
+    return QRectF(0, 0, fm.ascent(), fm.ascent());
   }
+
+  void mousePressEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton)
+    {
+      m_connecting = true;
+    }
+  }
+
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (event->button() == Qt::LeftButton && m_connecting)
+    {
+      NodeGraphScene *scn = static_cast<NodeGraphScene*>(scene());
+      if (scn)
+      {
+        QRectF r0 = mapRectToScene(rect());
+        QPointF p0 = r0.center();
+        QPointF p1 = mapToScene(event->pos());
+        scn->StopConnection(m_node, m_idx, m_dir, p0, p1);
+      }
+      m_connecting = false;
+    }
+  }
+
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+  {
+    if (m_connecting)
+    {
+      NodeGraphScene *scn = static_cast<NodeGraphScene*>(scene());
+      if (scn)
+      {
+        QRectF r0 = mapRectToScene(rect());
+        QPointF p0 = r0.center();
+        QPointF p1 = mapToScene(event->pos());
+        scn->MoveConnection(m_node, m_idx, m_dir, p0, p1);
+      }
+
+    }
+  }
+private:
+  bool m_connecting;
+  Node *m_node;
+  Direction m_dir;
+  int m_idx;
 };
 
 class NodeLabel : public QGraphicsSimpleTextItem
 {
 public:
-  NodeLabel (QGraphicsItem *parent, const QFont &fnt)
+  NodeLabel(QGraphicsItem *parent, const QFont &fnt)
     : QGraphicsSimpleTextItem(parent)
   {
     setFont(fnt);
     SetColor(QColor(255, 255, 255));
   }
 
-  void SetRect (const QRectF &rect)
+  void SetRect(const QRectF &rect)
   {
     m_rect = rect;
-    Update ();
+    Update();
   }
 
-  void SetAlignment (int alignment)
+  void SetAlignment(int alignment)
   {
     m_alignment = alignment;
-    Update ();
+    Update();
   }
 
 private:
-  void Update ()
+  void Update()
   {
     float x = 0.0f;
     float y = 0.0f;
-    QFontMetrics fm (font());
+    QFontMetrics fm(font());
     QRect br = fm.boundingRect(text());
 
     if (m_alignment & Qt::AlignLeft)
@@ -166,7 +265,7 @@ private:
 class NodeConstInput : public QGraphicsItemGroup
 {
 public:
-  NodeConstInput (QGraphicsItem *parent, const QFont &fnt)
+  NodeConstInput(QGraphicsItem *parent, const QFont &fnt)
     : QGraphicsItemGroup(parent)
   {
     setHandlesChildEvents(false);
@@ -174,24 +273,24 @@ public:
     m_background = new QGraphicsRectItem(this);
     m_background->setPen(QPen(QColor(0, 0, 0)));
     m_background->setBrush(QBrush(QColor(255, 255, 255)));
-    
+
     m_textItem = new QGraphicsTextItem(this);
     m_textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
 
-    QFontMetrics fm (fnt);
-    QRectF rect = GetRect (fm);
+    QFontMetrics fm(fnt);
+    QRectF rect = GetRect(fm);
     m_background->setRect(rect);
     SetText("1.0");
   }
 
-  void SetText (const QString &text)
+  void SetText(const QString &text)
   {
     m_textItem->setPlainText(text);
   }
 
-  static QRectF GetRect (const QFontMetrics &fm)
+  static QRectF GetRect(const QFontMetrics &fm)
   {
-    return QRectF (0, 0, fm.width("GGGG"), fm.height() *1.5);
+    return QRectF(0, 0, fm.width("GGGG"), fm.height() *1.5);
   }
 
 private:
@@ -203,16 +302,16 @@ private:
 class NodeInputItem : public QGraphicsItemGroup
 {
 public:
-  NodeInputItem(Node::InputMode mode, const QString &labelText, const QFont &fnt, QGraphicsItem *parent)
+  NodeInputItem(Node *node, int idx, Node::InputMode mode, const QString &labelText, const QFont &fnt, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent)
-    , anchor (0)
+    , anchor(0)
     , constInput(0)
     , label(0)
   {
     setHandlesChildEvents(false);
     if (mode & Node::eIM_Output)
     {
-      anchor = new NodeAnchor(this, fnt);
+      anchor = new NodeAnchor(node, idx, eD_Input, this, fnt);
     }
     if (mode & Node::eIM_Const)
     {
@@ -223,7 +322,7 @@ public:
 
   }
 
-  void SetSizes (const QFontMetrics &fm, const QString &text, float anchorPos, float constPos, float labelPos)
+  void SetSizes(const QFontMetrics &fm, const QString &text, float anchorPos, float constPos, float labelPos)
   {
     if (anchor)
     {
@@ -234,7 +333,7 @@ public:
     {
       constInput->setPos(constPos, 0);
     }
-    QRectF rect (labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
+    QRectF rect(labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
     label->SetRect(rect);
     label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
   }
@@ -247,11 +346,11 @@ public:
 class NodeOutputItem : public QGraphicsItemGroup
 {
 public:
-  NodeOutputItem(const QString &labelText, const QFont &fnt, float spacing, QGraphicsItem *parent = 0)
+  NodeOutputItem(Node *node, int idx, const QString &labelText, const QFont &fnt, float spacing, QGraphicsItem *parent = 0)
     : QGraphicsItemGroup(parent)
   {
     setHandlesChildEvents(false);
-    anchor = new NodeAnchor(this, fnt);
+    anchor = new NodeAnchor(node, idx, eD_Output, this, fnt);
 
     label = new NodeLabel(this, fnt);
     label->setFont(fnt);
@@ -266,7 +365,7 @@ public:
 
     QRectF rect(-textWidth - anchorRect.width() - spacing*2.0f, 0.0f, textWidth, NodeConstInput::GetRect(fm).height());
     label->SetRect(rect);
-    label->SetAlignment(Qt::AlignRight| Qt::AlignCenter);
+    label->SetAlignment(Qt::AlignRight | Qt::AlignCenter);
 
 
   }
@@ -284,6 +383,7 @@ public:
 
 Node::Node(QObject *parent)
   : QObject(parent)
+  , m_scene(0)
 {
 
 }
@@ -312,7 +412,7 @@ void Node::AddOutput(const QString &label, const QString &key)
 
 int Node::GetIndexOfInput(const QString &key) const
 {
-  for (int i=0, in=m_inputs.size(); i<in; ++i)
+  for (int i = 0, in = m_inputs.size(); i < in; ++i)
   {
     if (m_inputs[i].key == key)
     {
@@ -324,7 +424,7 @@ int Node::GetIndexOfInput(const QString &key) const
 
 int Node::GetIndexOfOutput(const QString &key) const
 {
-  for (int i=0, in=m_outputs.size(); i<in; ++i)
+  for (int i = 0, in = m_outputs.size(); i < in; ++i)
   {
     if (m_outputs[i].key == key)
     {
@@ -334,7 +434,38 @@ int Node::GetIndexOfOutput(const QString &key) const
   return -1;
 }
 
+QPointF Node::GetAnchorInputPos(int idx) const
+{
+  if (idx < 0 || idx >= m_inputs.size())
+  {
+    return QPointF();
+  }
 
+  const Input &input = m_inputs[idx];
+  if (input.item && input.item->anchor)
+  {
+    return input.item->anchor->sceneBoundingRect().center();
+  }
+
+  return QPointF();
+}
+
+
+QPointF Node::GetAnchorOutputPos(int idx) const
+{
+  if (idx < 0 || idx >= m_outputs.size())
+  {
+    return QPointF();
+  }
+
+  const Output &output = m_outputs[idx];
+  if (output.item)
+  {
+    return output.item->anchor->sceneBoundingRect().center();
+  }
+
+  return QPointF();
+}
 
 
 bool Node::Initialize()
@@ -429,18 +560,20 @@ bool Node::Initialize()
 
 
   // create the parent object
-  m_item = m_nodeGroup = new NodeGroup();
+  m_item = m_nodeGroup = new NodeGroup(this);
   m_nodeGroup->SetTitleHeight(titleHeight + 2.0f * m_margin);
   m_nodeGroup->UpdateData();
   m_nodeGroup->SetSize(width, height);
+  m_nodeGroup->background->motionHandle = QRectF(0, 0, width, titleHeight + 2.0f * m_margin);
 
 
 
   int posY = m_margin + titleHeight + m_spacing;
   // now place the inputs
+  int i = 0;
   for (Input &input : m_inputs)
   {
-    input.item = new NodeInputItem(input.mode, input.label, fnt, m_nodeGroup);
+    input.item = new NodeInputItem(this, i++, input.mode, input.label, fnt, m_nodeGroup);
     input.item->SetSizes(fm, input.label, inputAnchorPos, inputConstPos, inputLabelPos);
     input.item->setPos(m_margin, posY);
 
@@ -448,9 +581,10 @@ bool Node::Initialize()
   }
 
   posY = m_margin + titleHeight + m_spacing;
+  i = 0;
   for (Output &output : m_outputs)
   {
-    output.item = new NodeOutputItem(output.label, fnt, m_spacing, m_nodeGroup);
+    output.item = new NodeOutputItem(this, i++, output.label, fnt, m_spacing, m_nodeGroup);
     output.item->setPos(width - m_margin, posY);
 
     posY += constRect.height() + m_spacing;
@@ -470,8 +604,53 @@ bool Node::Initialize()
 
 
 
+void Node::SetPosition(const QPointF &pos)
+{
+  m_item->setPos(pos);
 
+  if (m_scene)
+  {
+    m_scene->NodeMoved(this);
+  }
 
+}
+
+bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)
+{
+  int i = 0;
+  for (Input &input : m_inputs)
+  {
+    if (input.item->anchor)
+    {
+      QRectF anchorRect = input.item->anchor->sceneBoundingRect();
+      if (anchorRect.contains(pos))
+      {
+        result.idx = i;
+        result.dir = eD_Input;
+        result.key = input.key;
+        result.pos = anchorRect.center();
+        return true;
+      }
+    }
+    i++;
+  }
+
+  i = 0;
+  for (Output &output : m_outputs)
+  {
+    QRectF anchorRect = output.item->anchor->sceneBoundingRect();
+    if (anchorRect.contains(pos))
+    {
+      result.idx = i;
+      result.dir = eD_Output;
+      result.key = output.key;
+      result.pos = anchorRect.center();
+      return true;
+    }
+    i++;
+  }
+  return false;
+}
 
 
 
