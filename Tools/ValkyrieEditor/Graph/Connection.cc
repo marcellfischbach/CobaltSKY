@@ -16,6 +16,7 @@ NodeConnection::NodeConnection(Node *outputNode, int outputIdx, Node *inputNode,
 {
   Update();
   setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
+
 }
 
 

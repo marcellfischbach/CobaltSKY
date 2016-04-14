@@ -33,6 +33,7 @@ public:
     {
       m_delta = mapToScene(QPointF(0, 0)) - mapToScene(event->pos());
       m_inMotion = true;
+      Node::Select(m_node);
     }
   }
 
@@ -112,6 +113,8 @@ public:
       borderColor = QColor(128, 128, 128);
       borderWidth = 1.0f;
     }
+
+    UpdateData();
   }
 
 
@@ -341,6 +344,14 @@ public:
     label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
   }
 
+  void SetConstVisible(bool visible)
+  {
+    if (constInput)
+    {
+      constInput->setVisible(visible);
+    }
+  }
+
   NodeAnchor *anchor;
   NodeConstInput *constInput;
   NodeLabel *label;
@@ -381,7 +392,7 @@ public:
 
 
 
-
+Node *Node::selectedNode = 0;
 
 
 Node::Node(QObject *parent)
@@ -389,6 +400,32 @@ Node::Node(QObject *parent)
   , m_scene(0)
 {
 
+}
+
+void Node::Select(Node *node)
+{
+  Node *current = Node::selectedNode;
+  Node::selectedNode = node;
+
+ 
+  if (node == current)
+  {
+    return;
+  }
+
+  if (current)
+  {
+    current->UpdateSelection();
+  }
+  if (node)
+  {
+    node->UpdateSelection();
+  }
+}
+
+Node *Node::GetSelected()
+{
+  return Node::selectedNode;
 }
 
 
@@ -605,6 +642,25 @@ bool Node::Initialize()
   return true;
 }
 
+void Node::UpdateSelection()
+{
+  bool selected = (this == Node::selectedNode);
+
+  m_nodeGroup->SetSelected(selected);
+}
+
+void Node::ResetConstVisible()
+{
+  for (Input &input : m_inputs)
+  {
+    input.item->SetConstVisible(true);
+  }
+}
+
+void Node::SetConstVisible(int input, bool visible)
+{
+  m_inputs[input].item->SetConstVisible(visible);
+}
 
 
 void Node::SetPosition(const QPointF &pos)

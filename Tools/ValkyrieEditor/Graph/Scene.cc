@@ -11,7 +11,7 @@ NodeGraphScene::NodeGraphScene(QObject *parent)
   : QGraphicsScene(parent)
   , m_currentConnectionPath(0)
 {
-
+  setSceneRect(QRect(-2000, -2000, 4000, 4000));
 }
 
 
@@ -24,6 +24,22 @@ void NodeGraphScene::AddNode(Node *node)
   emit NodeAdded(node);
 }
 
+void NodeGraphScene::RemoveSelectedNode()
+{
+  Node *selected = Node::GetSelected();
+  if (!selected)
+  {
+    return;
+  }
+
+  Node::Select(0);
+  m_nodes.removeAll(selected);
+  selected->SetScene(0);
+  removeItem(selected->GetItem());
+  emit NodeRemoved(selected);
+  delete selected;
+}
+
 void NodeGraphScene::Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx)
 {
   NodeConnection *connection = new NodeConnection(nodeOutput, outputIdx, nodeInput, inputIdx, 0);
@@ -31,6 +47,91 @@ void NodeGraphScene::Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, i
   m_connections.append(connection);
 
   emit NodesConnected(nodeOutput, outputIdx, nodeInput, inputIdx);
+  ResetConstValues();
+}
+
+void NodeGraphScene::Disconnect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx)
+{
+
+  for (NodeConnection *connection : m_connections)
+  {
+    if (connection->GetOutputNode() == nodeOutput &&
+        connection->GetOutputIdx() == outputIdx &&
+        connection->GetInputNode() == nodeInput &&
+        connection->GetInputIdx() == inputIdx)
+    {
+      removeItem(connection);
+      m_connections.removeAll(connection);
+
+      emit NodesDisconnected(nodeOutput, outputIdx, nodeInput, inputIdx);
+      delete connection;
+
+      ResetConstValues();
+      return;
+    }
+  }
+}
+
+void NodeGraphScene::DisconnectInput(Node *nodeInput, int inputIdx)
+{
+
+  bool disconnected = false;
+  for (NodeConnection *connection : m_connections)
+  {
+    if (connection->GetInputNode() == nodeInput &&
+        connection->GetInputIdx() == inputIdx)
+    {
+      removeItem(connection);
+      m_connections.removeAll(connection);
+
+      emit NodesDisconnected(connection->GetOutputNode(), connection->GetOutputIdx(), nodeInput, inputIdx);
+      delete connection;
+
+      disconnected = true;
+    }
+  }
+
+  if (disconnected)
+  {
+    ResetConstValues();
+  }
+}
+
+void NodeGraphScene::DisconnectOutput(Node *nodeOutput, int outputIdx)
+{
+
+  bool disconnected = false;
+  for (NodeConnection *connection : m_connections)
+  {
+    if (connection->GetOutputNode() == nodeOutput &&
+        connection->GetOutputIdx() == outputIdx)
+    {
+      removeItem(connection);
+      m_connections.removeAll(connection);
+
+      emit NodesDisconnected(nodeOutput, outputIdx, connection->GetInputNode(), connection->GetInputIdx());
+      delete connection;
+
+      disconnected = true;
+    }
+  }
+
+  if (disconnected)
+  {
+    ResetConstValues();
+  }
+}
+
+void NodeGraphScene::ResetConstValues()
+{
+  for (Node *node : m_nodes)
+  {
+    node->ResetConstVisible();
+  }
+  for (NodeConnection *connection : m_connections)
+  {
+    connection->GetInputNode()->SetConstVisible(connection->GetInputIdx(), false);
+  }
 }
 
 void NodeGraphScene::NodeMoved(Node *node)
@@ -83,6 +184,16 @@ void NodeGraphScene::StopConnection(Node *node, int idx, Direction dir, const QP
         return;
       }
     }
+  }
+
+  switch (dir)
+  {
+  case eD_Input:
+    emit NodeConnectedLooseInput(node, idx);
+    break;
+  case eD_Output:
+    emit NodeConnectedLooseOutput(node, idx);
+    break;
   }
 
 }

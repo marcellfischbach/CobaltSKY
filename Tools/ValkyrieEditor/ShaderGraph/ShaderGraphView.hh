@@ -25,15 +25,19 @@ protected:
 
 
   private slots:
-  void AddNode(const vkClass *clazz);
+  graph::Node *AddNode(const vkClass *clazz);
   void NodeAdded(graph::Node *node);
   void NodeRemoved(graph::Node *node);
   void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
-  void NodesDisnnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
+  void NodesDisconnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
+  void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
 
 private:
+  void RemoveAllConnections(vkSGNode *node);
+
   QGraphicsView *m_view;
   graph::NodeGraphScene *m_scene;
 
   QMap<graph::Node*, vkSGNode*> m_nodes;
+  QMap<vkSGNode*, graph::Node*> m_nodesRev;
 };

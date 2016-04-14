@@ -105,6 +105,7 @@ void vkSGNode::AddInput(vkSGInput *input)
   if (input)
   {
     input->m_node = this;
+    input->SetIdx(m_inputs.size());
     m_inputs.push_back(input);
   }
 }
@@ -296,6 +297,7 @@ void vkSGNode::AddOutput(vkSGOutput *output)
   if (output)
   {
     output->m_node = this;
+    output->SetIdx(m_outputs.size());
     m_outputs.push_back(output);
   }
 }

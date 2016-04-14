@@ -18,11 +18,30 @@ public:
     return m_outputNode;
   }
 
+  Node *GetOutputNode() 
+  {
+    return m_outputNode;
+  }
+
+  int GetOutputIdx() const
+  {
+    return m_outputIdx;
+  }
+
   const Node *GetInputNode() const
   {
     return m_inputNode;
   }
 
+  Node *GetInputNode() 
+  {
+    return m_inputNode;
+  }
+
+  int GetInputIdx() const
+  {
+    return m_inputIdx;
+  }
 private:
   Node *m_outputNode;
   int m_outputIdx;

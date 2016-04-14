@@ -45,6 +45,9 @@ public:
   vkSGOutput(const vkString &name, const vkString &attr = "");
   virtual ~vkSGOutput();
 
+  void SetIdx(vkUInt32 idx);
+  vkUInt32 GetIdx() const;
+
   const vkSGNode *GetNode() const;
   vkSGNode *GetNode();
 
@@ -60,6 +63,8 @@ private:
 
   vkSGNode *m_node;
 
+  vkUInt32 m_idx;
+
 };
 
 
@@ -69,6 +74,9 @@ class VKE_API vkSGInput
 public:
   vkSGInput(const vkString &name, bool canConst, bool canInputNode);
   virtual ~vkSGInput();
+
+  void SetIdx(vkUInt32 idx);
+  vkUInt32 GetIdx() const;
 
   const vkSGNode *GetNode() const;
   vkSGNode *GetNode();
@@ -98,6 +106,8 @@ private:
 
   bool m_canInputConst;
   float m_constFloat;
+
+  vkUInt32 m_idx;
 
 };
 
@@ -410,6 +420,17 @@ VK_FORCEINLINE const vkString &vkSGNode::GetValidationMessage() const
   return m_validationMessage;
 }
 
+
+VK_FORCEINLINE void vkSGOutput::SetIdx(vkUInt32 idx)
+{
+  m_idx = idx;
+}
+VK_FORCEINLINE vkUInt32 vkSGOutput::GetIdx() const
+{
+  return m_idx;
+}
+
+
 VK_FORCEINLINE void vkSGOutput::SetDataType(vkSGDataType dataType)
 {
   m_dataType = dataType;
@@ -440,6 +461,14 @@ VK_FORCEINLINE const vkSGNode *vkSGOutput::GetNode() const
   return m_node;
 }
 
+VK_FORCEINLINE void vkSGInput::SetIdx(vkUInt32 idx)
+{
+  m_idx = idx;
+}
+VK_FORCEINLINE vkUInt32 vkSGInput::GetIdx() const
+{
+  return m_idx;
+}
 
 
 VK_FORCEINLINE const vkString &vkSGInput::GetName() const

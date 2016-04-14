@@ -46,6 +46,11 @@ public:
     m_label = label;
   }
 
+  inline const QString &GetLabel() const
+  {
+    return m_label;
+  }
+
   void AddInput(const QString &label, const QString &key, InputMode mode);
   void AddOutput(const QString &label, const QString &key);
 
@@ -70,6 +75,14 @@ public:
   {
     m_scene = scene;
   }
+
+  void UpdateSelection();
+
+  void ResetConstVisible();
+  void SetConstVisible(int input, bool visible);
+
+  static void Select(Node *node);
+  static Node *GetSelected();
 private:
 
   struct Input
@@ -96,6 +109,8 @@ private:
   NodeLabel *m_title;
 
   NodeGraphScene *m_scene;
+
+  static Node *selectedNode;
 };
 
 }
