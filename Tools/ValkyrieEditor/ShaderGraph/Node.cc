@@ -211,7 +211,6 @@ ShaderGraphNode::ShaderGraphNode(vkSGNode *node)
     anchor.text->setBrush(QBrush(QColor(255, 255, 255)));
     m_parent->addToGroup(anchor.text);
 
-    printf ("Name '%s' => %d\n", (const char*)inputName.toLatin1(), fmIF.width(inputName));
     maxAnchorNameWidth = maxAnchorNameWidth < fmIF.width(inputName) ? fmIF.width(inputName) : maxAnchorNameWidth;
 
     thisWidth += fmIF.width(inputName);

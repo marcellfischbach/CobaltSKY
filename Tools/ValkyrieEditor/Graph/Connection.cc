@@ -5,6 +5,8 @@
 #include <qpen.h>
 #include <qbrush.h>
 
+namespace graph
+{
 NodeConnection::NodeConnection(Node *outputNode, int outputIdx, Node *inputNode, int inputIdx, QGraphicsItem *parent)
   : QGraphicsPathItem(parent)
   , m_outputNode(outputNode)
@@ -28,4 +30,6 @@ void NodeConnection::Update()
   path.moveTo(p0);
   path.cubicTo(QPointF(cx, p0.y()), QPointF(cx, p1.y()), p1);
   setPath(path);
+}
+
 }

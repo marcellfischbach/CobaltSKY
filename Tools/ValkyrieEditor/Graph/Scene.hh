@@ -5,10 +5,14 @@
 #include <qlist.h>
 #include <Graph/Direction.h>
 
+namespace graph
+{
+
 class Node;
 class NodeConnection;
 class NodeGraphScene : public QGraphicsScene
 {
+  Q_OBJECT
 public:
   NodeGraphScene(QObject *parent = 0);
 
@@ -26,4 +30,14 @@ private:
   QList<Node*> m_nodes;
   QList<NodeConnection*> m_connections;
   QGraphicsPathItem *m_currentConnectionPath;
+
+
+signals:
+
+  void NodeAdded(Node *node);
+  void NodeRemoved(Node *node);
+  void NodesConnected(Node *outNode, int outIdx, Node *inNode, int inIdx);
+  void NodesDisconnected(Node *outNode, int outIdx, Node *inNode, int inIdx);
 };
+
+}

@@ -4,6 +4,9 @@
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
 
+namespace graph
+{
+
 NodeGraphScene::NodeGraphScene(QObject *parent)
   : QGraphicsScene(parent)
   , m_currentConnectionPath(0)
@@ -17,6 +20,8 @@ void NodeGraphScene::AddNode(Node *node)
   m_nodes.append(node);
   node->SetScene(this);
   addItem(node->GetItem());
+
+  emit NodeAdded(node);
 }
 
 void NodeGraphScene::Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx)
@@ -24,6 +29,8 @@ void NodeGraphScene::Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, i
   NodeConnection *connection = new NodeConnection(nodeOutput, outputIdx, nodeInput, inputIdx, 0);
   addItem(connection);
   m_connections.append(connection);
+
+  emit NodesConnected(nodeOutput, outputIdx, nodeInput, inputIdx);
 }
 
 void NodeGraphScene::NodeMoved(Node *node)
@@ -86,7 +93,7 @@ QGraphicsPathItem *NodeGraphScene::GetCurrentConnectionPath()
   {
     m_currentConnectionPath = new QGraphicsPathItem();
     m_currentConnectionPath->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
-   
+
     addItem(m_currentConnectionPath);
   }
 
@@ -108,4 +115,6 @@ QPointF NodeGraphScene::TestForAnchorMatch(const QPointF &p, Node *node, Directi
     }
   }
   return p;
+}
+
 }

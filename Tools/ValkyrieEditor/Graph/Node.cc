@@ -13,6 +13,9 @@
 #define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define VK_MIN(a, b) ((a) < (b) ? (a) : (b))
 
+namespace graph
+{
+
 class NodeBackground : public QGraphicsRectItem
 {
 public:
@@ -652,6 +655,7 @@ bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)
   return false;
 }
 
+}
 
 
 #undef VK_MAX

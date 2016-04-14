@@ -9,6 +9,8 @@
 
 class QGraphicsItem;
 
+namespace graph
+{
 class NodeInputItem;
 class NodeOutputItem;
 class NodeGroup;
@@ -20,9 +22,9 @@ class Node : public QObject
 public:
   enum InputMode
   {
-    eIM_Const   = 0x01,
-    eIM_Output  = 0x02,
-    eIM_Both    = eIM_Const | eIM_Output
+    eIM_Const = 0x01,
+    eIM_Output = 0x02,
+    eIM_Both = eIM_Const | eIM_Output
   };
 
 
@@ -39,23 +41,23 @@ public:
 public:
   Node(QObject *parent = 0);
 
-  inline void SetLabel (const QString &label)
+  inline void SetLabel(const QString &label)
   {
     m_label = label;
   }
 
-  void AddInput (const QString &label, const QString &key, InputMode mode);
-  void AddOutput (const QString &label, const QString &key);
+  void AddInput(const QString &label, const QString &key, InputMode mode);
+  void AddOutput(const QString &label, const QString &key);
 
-  int GetIndexOfInput (const QString &key) const;
-  int GetIndexOfOutput (const QString &key) const;
+  int GetIndexOfInput(const QString &key) const;
+  int GetIndexOfOutput(const QString &key) const;
 
   QPointF GetAnchorInputPos(int idx) const;
   QPointF GetAnchorOutputPos(int idx) const;
 
-  bool Initialize ();
+  bool Initialize();
 
-  inline QGraphicsItem *GetItem ()
+  inline QGraphicsItem *GetItem()
   {
     return m_item;
   }
@@ -96,3 +98,4 @@ private:
   NodeGraphScene *m_scene;
 };
 
+}

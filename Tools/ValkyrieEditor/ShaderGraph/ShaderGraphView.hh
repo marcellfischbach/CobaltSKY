@@ -5,6 +5,7 @@
 #include <qwidget.h>
 #include <Graph/Scene.hh>
 
+class vkSGNode;
 class vkClass;
 class ShaderGraphConnection;
 class ShaderGraphNode;
@@ -15,29 +16,24 @@ public:
   ShaderGraphView(QWidget *parent = 0);
   virtual ~ShaderGraphView();
 
-public slots:
-  void popupNodeSelector ();
+  public slots:
+  void popupNodeSelector();
 
 
 protected:
-  void keyReleaseEvent (QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
 
 
-private slots:
-  void addNode (const vkClass *clazz);
-  void moveDrag (bool input, int idx, const QPointF &pointA, const QPointF &pointB);
-  void stopDrag (bool input, int idx, const QPointF& pointA, const QPointF & pointB);
-
-private:
-  QPointF testAnchor (ShaderGraphNode *node, bool input, const QPointF &p);
-  bool testAnchor (ShaderGraphNode *node, bool input, const QPointF &p, ShaderGraphNode **other, int *index);
+  private slots:
+  void AddNode(const vkClass *clazz);
+  void NodeAdded(graph::Node *node);
+  void NodeRemoved(graph::Node *node);
+  void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
+  void NodesDisnnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
 
 private:
   QGraphicsView *m_view;
-  NodeGraphScene *m_scene;
+  graph::NodeGraphScene *m_scene;
 
-
-  QGraphicsPathItem *m_currentBounding;
-
-  QList<ShaderGraphNode*> m_nodes;
+  QMap<graph::Node*, vkSGNode*> m_nodes;
 };

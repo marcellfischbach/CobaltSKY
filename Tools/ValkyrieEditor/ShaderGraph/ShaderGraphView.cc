@@ -10,22 +10,8 @@
 #include <qevent.h>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
-class GraphNode : public QGraphicsRectItem
-{
-public:
-  GraphNode(QGraphicsItem *parent)
-    : QGraphicsRectItem(parent)
-  {
-    setRect(-50.0f, -50.0f, 100.0f, 100.0f);
-    setBrush(QBrush(QColor(128, 128, 128)));
-    setPen(QPen(QColor(0, 0, 0)));
-  }
-};
-
-
 ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
-  , m_currentBounding(0)
 {
   setMouseTracking(true);
   m_view = new QGraphicsView(this);
@@ -39,64 +25,15 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
 
 
-  m_scene = new NodeGraphScene();
+  m_scene = new graph::NodeGraphScene();
   m_view->setScene(m_scene);
 
-  //addNode(vkSGFloat4::GetStaticClass());
 
-
-
-  /*
-  QGraphicsPathItem *path = new QGraphicsPathItem();
-  QPen pen(QColor(255, 255, 255));
-  pen.setWidth(2);
-  path->setPen(pen);
-  QPainterPath ppath;
-  ppath.moveTo(-150, -200);
-  ppath.cubicTo(0, -200, 0, 200, 150, 200);
-  path->setPath(ppath);
-  m_scene->addItem(path);
-  */
-
-  /*
-  {
-    QGraphicsItemGroup *group = new QGraphicsItemGroup();
-
-    QGraphicsRectItem *rect = new QGraphicsRectItem();
-    rect->setFlag(QGraphicsItem::ItemIsMovable, true);
-    rect->setRect(0, 0, 200, 100);
-    rect->setBrush(QBrush(QColor(196, 196, 196)));
-    rect->setPen(QPen(QColor(64, 64, 64)));
-
-    QGraphicsRectItem *rect2 = new QGraphicsRectItem(rect);
-    rect2->setParentItem(rect);
-    rect2->setRect(20, 20, 160, 20);
-    rect2->setBrush(QBrush(QColor(255, 255, 255)));
-    rect2->setPen(QPen(QColor(64, 64, 64)));
-
-    QGraphicsTextItem *text = new QGraphicsTextItem(rect2);
-    text->setParentItem(rect2);
-    text->setPos(20, 20);
-    text->setPlainText("Hello World!");
-    text->setTextInteractionFlags(Qt::TextEditorInteraction);
-    text->setTextWidth(160);
-
-    group->setHandlesChildEvents(false);
-    group->addToGroup(rect);
-    group->addToGroup(rect2);
-    group->addToGroup(text);
-
-    //    m_scene->addItem(group);
-  }
-  */
-
-//  addNode(vkSGFloat4::GetStaticClass());
-
-  Node *node = new Node();
+  graph::Node *node = new graph::Node();
   node->SetLabel("Hello World 1");
-  node->AddInput("x", "x", Node::eIM_Both);
-  node->AddInput("y", "y", Node::eIM_Both);
-  node->AddInput("z", "z", Node::eIM_Both);
+  node->AddInput("x", "x", graph::Node::eIM_Both);
+  node->AddInput("y", "y", graph::Node::eIM_Both);
+  node->AddInput("z", "z", graph::Node::eIM_Both);
   node->AddOutput("v", "v");
   node->AddOutput("v1", "v1");
   node->AddOutput("v2", "v2");
@@ -109,11 +46,11 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   }
 
 
-  node = new Node();
+  node = new graph::Node();
   node->SetLabel("Hello World 2");
-  node->AddInput("x", "x", Node::eIM_Both);
-  node->AddInput("y", "y", Node::eIM_Both);
-  node->AddInput("z", "z", Node::eIM_Both);
+  node->AddInput("x", "x", graph::Node::eIM_Both);
+  node->AddInput("y", "y", graph::Node::eIM_Both);
+  node->AddInput("z", "z", graph::Node::eIM_Both);
   node->AddOutput("v", "v");
   node->AddOutput("v1", "v1");
   node->AddOutput("v2", "v2");
@@ -145,107 +82,12 @@ void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
 void ShaderGraphView::popupNodeSelector()
 {
   NodeSelector *selector = new NodeSelector(this);
-  connect(selector, SIGNAL(addNode(const vkClass*)), this, SLOT(addNode(const vkClass*)));
+  connect(selector, SIGNAL(addNode(const vkClass*)), this, SLOT(AddNode(const vkClass*)));
   selector->setVisible(true);
 }
 
-void ShaderGraphView::moveDrag(bool input, int idx, const QPointF& pointA, const QPointF & pointB)
-{
-  printf ("Move %d %d (%f %f) => (%f %f)\n", input, idx, pointA.x(), pointA.y(), pointB.x(), pointB.y());
-  fflush(stdout);
-  if (!m_currentBounding)
-  {
-    m_currentBounding = new QGraphicsPathItem();
-    m_currentBounding->setPen(QPen(QBrush(QColor(255, 255, 255)), 2.0f));
-    m_scene->addItem(m_currentBounding);
-  }
 
-
-  ShaderGraphNode *node = (ShaderGraphNode*)sender();
-
-  QPointF pB = testAnchor(node, input, pointB);
-
-  float cX = (pointA.x() + pB.x()) / 2.0f;
-
-  QPainterPath ppath;
-  ppath.moveTo(pointA);
-  ppath.cubicTo(QPointF(cX, pointA.y()), QPointF(cX, pB.y()), pB);
-  m_currentBounding->setPath(ppath);
-}
-
-void ShaderGraphView::stopDrag(bool input, int idx, const QPointF& pointA, const QPointF & pointB)
-{
-  if (m_currentBounding)
-  {
-    m_scene->removeItem(m_currentBounding);
-    delete m_currentBounding;
-    m_currentBounding = 0;
-
-    ShaderGraphNode *node = (ShaderGraphNode*)sender();
-    ShaderGraphNode *other;
-    int index;
-    if (testAnchor(node, input, pointB, &other, &index))
-    {
-      ShaderGraphConnection *connection;
-      if (input)
-      {
-        connection = new ShaderGraphConnection(other, index, node, idx);
-        node->ConnectInput(connection, idx);
-        other->ConnectOutput(connection, index);
-      }
-      else
-      {
-        connection = new ShaderGraphConnection(node, idx, other, index);
-        node->ConnectOutput(connection, idx);
-        other->ConnectInput(connection, index);
-      }
-
-      m_scene->addItem(connection->GetItem());
-    }
-
-  }
-}
-
-QPointF ShaderGraphView::testAnchor(ShaderGraphNode *node, bool input, const QPointF &p)
-{
-  for (size_t i=0, in=m_nodes.size(); i<in; ++i)
-  {
-    ShaderGraphNode *sgn = m_nodes[i];
-    if (sgn != node)
-    {
-      QPointF r;
-      int index;
-      if (sgn->hasAnchor(input, p, r, index))
-      {
-        return r;
-      }
-    }
-  }
-  return p;
-}
-
-bool ShaderGraphView::testAnchor (ShaderGraphNode *node, bool input, const QPointF &p, ShaderGraphNode **other, int *index)
-{
-  for (size_t i=0, in=m_nodes.size(); i<in; ++i)
-  {
-    ShaderGraphNode *sgn = m_nodes[i];
-    if (sgn != node)
-    {
-      QPointF r;
-      int idx;
-      if (sgn->hasAnchor(input, p, r, idx))
-      {
-        *other = sgn;
-        *index = idx;
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-void ShaderGraphView::addNode(const vkClass *clazz)
+void ShaderGraphView::AddNode(const vkClass *clazz)
 {
   vkSGNode *node = clazz->CreateInstance<vkSGNode>();
   if (!node)
@@ -253,12 +95,54 @@ void ShaderGraphView::addNode(const vkClass *clazz)
     return;
   }
 
-  ShaderGraphNode *graphNode = new ShaderGraphNode(node);
-  m_scene->addItem(graphNode->GetItem());
+  graph::Node *graphNode = new graph::Node();
+  graphNode->SetLabel(QString(node->GetName().c_str()));
+  
+  for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
+  {
+    vkSGInput *input = node->GetInput(i);
+    QString inputName(input->GetName().c_str());
 
-  connect (graphNode, SIGNAL(moveDrag(bool, int, const QPointF&, const QPointF &)), this, SLOT(moveDrag(bool, int, const QPointF&, const QPointF &)));
-  connect (graphNode, SIGNAL(stopDrag(bool, int, const QPointF&, const QPointF &)), this, SLOT(stopDrag(bool, int, const QPointF&, const QPointF &)));
+    graph::Node::InputMode mode;
+    if (input->CanInputConst ())
+    {
+      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Const);
+    }
+    if (input->CanInputNode())
+    {
+      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
+    }
+    graphNode->AddInput(inputName, inputName, mode);
+  }
+  for (vkSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
+  {
+    vkSGOutput *output = node->GetOutput(i);
+    QString outputName(output->GetName().c_str());
 
-  m_nodes.append(graphNode);
+    graphNode->AddOutput(outputName, outputName);
+  }
+
+  m_scene->AddNode(graphNode);
+
+  m_nodes[graphNode] = node;
 }
 
+void ShaderGraphView::NodeAdded(graph::Node *node)
+{
+
+}
+
+void ShaderGraphView::NodeRemoved(graph::Node *node)
+{
+
+}
+
+void ShaderGraphView::NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx)
+{
+
+}
+
+void ShaderGraphView::NodesDisnnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx)
+{
+
+}

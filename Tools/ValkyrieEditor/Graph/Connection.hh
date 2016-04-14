@@ -3,6 +3,8 @@
 
 #include <qgraphicsitem.h>
 
+namespace graph
+{
 class Node;
 class NodeConnection : public QGraphicsPathItem
 {
@@ -28,3 +30,5 @@ private:
   Node *m_inputNode;
   int m_inputIdx;
 };
+
+}
