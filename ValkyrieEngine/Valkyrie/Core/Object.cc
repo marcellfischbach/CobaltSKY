@@ -10,6 +10,11 @@ vkObject::vkObject()
   m_refCount = 1;
 }
 
+vkObject::~vkObject()
+{
+
+}
+
 void vkObject::AddRef()
 {
   m_refCount++;

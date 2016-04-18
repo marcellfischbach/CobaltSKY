@@ -62,7 +62,7 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
   if (!passesElement)
   {
     material->Release();
-    printf("Exit 1");
+    printf("Exit 1\n");
     return 0;
   }
 
@@ -92,7 +92,7 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     else
     {
       material->Release();
-      printf("Exit 2");
+      printf("Exit 2\n");
       return 0;
     }
 
@@ -101,7 +101,7 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     if (!shader)
     {
       material->Release();
-      printf("Exit 3");
+      printf("Exit 3\n");
       return 0;
     }
 

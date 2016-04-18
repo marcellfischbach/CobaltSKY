@@ -220,10 +220,6 @@ public:
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
       return t_instance;
     }
     return 0;
@@ -236,10 +232,6 @@ public:
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
       return t_instance;
     }
     return 0;
@@ -252,7 +244,7 @@ public:
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
-      if (!t_instance)
+      if (!t_instance && mode == eRLM_Instance)
       {
         object->Release();
       }
