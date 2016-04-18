@@ -5,7 +5,6 @@
 
 #include <Valkyrie/Physics/IPhysicsJoints.hh>
 
-#include <PhysicsBullet/BulletJoints.refl.hh>
 
 VK_INTERFACE()
 class VKBULLET_API vkBulletJoint : public virtual IPhysicsJoint

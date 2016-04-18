@@ -6,7 +6,6 @@
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Enums.hh>
 
-#include <Valkyrie/Entity/ColliderState.refl.hh>
 
 struct IPhysicsShape;
 struct IPhysicsCollider;

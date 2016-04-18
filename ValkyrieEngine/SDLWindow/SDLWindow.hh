@@ -5,7 +5,6 @@
 #include <Valkyrie/Window/IWindow.hh>
 #include <SDL.h>
 #include <string>
-#include <SDLWindow/SDLWindow.refl.hh>
 
 class SDLKeyboard;
 class SDLMouse;

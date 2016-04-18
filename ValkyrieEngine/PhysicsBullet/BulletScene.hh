@@ -4,7 +4,6 @@
 #include <Valkyrie/Defs.hh>
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
-#include <PhysicsBullet/BulletScene.refl.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 
 class vkBulletBody;

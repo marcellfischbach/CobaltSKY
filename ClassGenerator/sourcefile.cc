@@ -4,7 +4,19 @@
 #include <stdio.h>
 
 
+SourceFile::SourceFile(const std::string &filename)
+{
+  FILE *file = fopen(filename.c_str(), "rt");
+  Init(file);
+}
+
 SourceFile::SourceFile(FILE *file)
+{
+  Init(file);
+}
+
+
+void SourceFile::Init(FILE *file)
 {
   m_lines.clear();
   while (!feof(file))

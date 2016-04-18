@@ -4,7 +4,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
-#include <Valkyrie/Loaders/StaticMeshLoader.refl.hh>
 
 class vkGeometryData;
 class vkGeometryMesh;

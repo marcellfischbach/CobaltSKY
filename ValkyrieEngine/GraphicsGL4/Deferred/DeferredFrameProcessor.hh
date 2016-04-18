@@ -6,7 +6,6 @@
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <GraphicsGL4/Deferred/DefaultCollector.hh>
-#include <GraphicsGL4/Deferred/DeferredFrameProcessor.refl.hh>
 
 struct IShader;
 class vkGBuffer;

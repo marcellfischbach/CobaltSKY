@@ -2,11 +2,11 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Graphics/ShaderGraph/SGNode.refl.hh>
 #include <Valkyrie/Defs.hh>
 
 #include <Valkyrie/Core/String.hh>
 #include <vector>
+
 
 enum vkSGDataType
 {

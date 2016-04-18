@@ -3,7 +3,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Physics/IPhysicsSystem.refl.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 
 struct IPhysicsScene;

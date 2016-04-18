@@ -10,6 +10,8 @@ set(SOURCE
   IndexBufferGL4.cc
   IndexBufferGL4.hh
   MappingGL4.hh
+  Module.cc
+  Module.hh
   RenderTargetGL4.cc
   RenderTargetGL4.hh
   Shader.cc
@@ -71,18 +73,9 @@ set(ALL_SOURCES
 	${SOURCE_SHADERGRAPH}
 	)
 
-VK_MOC(GraphicsGL4 VKGL4_API ALL_SOURCES MOC_SOURCES)
-
-
-source_group(
-	"GraphicsGL4\\MOC_sources"
-	FILES
-	${MOC_SOURCES}
-	)
 
 add_library(ValkyrieEngine-GraphicsGL4 SHARED
 	${ALL_SOURCES}
-	${MOC_SOURCES}
 	)
 
 target_link_libraries(ValkyrieEngine-GraphicsGL4

@@ -5,7 +5,6 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Physics/IPhysicsCollider.refl.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 
 

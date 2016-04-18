@@ -2,7 +2,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/Character.refl.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 
 

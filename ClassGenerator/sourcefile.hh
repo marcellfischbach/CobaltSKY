@@ -11,6 +11,7 @@
 class SourceFile
 {
 public:
+  SourceFile(const std::string &filename);
   SourceFile(FILE *file); 
   ~SourceFile();
 
@@ -20,6 +21,7 @@ public:
   void Debug();
 
 private:
+  void Init(FILE *file);
   std::string ReadLine(FILE *file);
   void RemoveComments();
   bool RemoveComment(std::string &line, bool inBlockComment);

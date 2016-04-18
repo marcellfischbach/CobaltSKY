@@ -2,7 +2,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Graphics/IIndexBuffer.refl.hh>
 #include <Valkyrie/Enums.hh>
 
 VK_INTERFACE();

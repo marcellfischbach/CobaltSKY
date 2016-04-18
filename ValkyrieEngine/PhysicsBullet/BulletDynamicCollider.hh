@@ -4,7 +4,6 @@
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
-#include <PhysicsBullet/BulletDynamicCollider.refl.hh>
 
 class btRigidBody;
 class btCollisionShape;

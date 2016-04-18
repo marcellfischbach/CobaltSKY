@@ -18,6 +18,8 @@ set(SOURCE
   BulletStaticCollider.hh
   BulletSystem.cc
   BulletSystem.hh
+  Module.cc
+  Module.hh
   )
 
 
@@ -33,7 +35,6 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-VK_MOC(PhysicsBullet VKBULLET_API ALL_SOURCES MOC_SOURCES)
 
 
 source_group(
@@ -44,7 +45,6 @@ source_group(
 
 add_library(ValkyrieEngine-PhysicsBullet SHARED
 	${ALL_SOURCES}
-	${MOC_SOURCES}
 	)
 
 target_link_libraries(ValkyrieEngine-PhysicsBullet

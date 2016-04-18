@@ -6,7 +6,6 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <GL/glew.h>
-#include <GraphicsGL4/Shader.refl.hh>
 #include <vector>
 
 VK_CLASS();

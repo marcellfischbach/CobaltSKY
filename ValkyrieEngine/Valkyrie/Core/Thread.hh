@@ -2,13 +2,9 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/Thread.refl.hh>
-
-#ifdef VK_WIN32
-#include <Windows.h>
-#endif
 
 
+struct vkThreadPriv;
 VK_INTERFACE();
 class VKE_API vkThread : public vkObject
 {
@@ -28,8 +24,5 @@ public:
 protected:
   bool m_running;
 
-#ifdef VK_WIN32
-  DWORD m_threadID;
-  HANDLE m_threadHandle;
-#endif
+  vkThreadPriv *m_priv;
 };

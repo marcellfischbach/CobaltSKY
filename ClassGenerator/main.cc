@@ -350,7 +350,7 @@ int perform (const char *in_filename, const char *in_prefix, const char* api, co
 }
 
 
-int main(int argc, char **argv)
+int main2(int argc, char **argv)
 {
   if (argc < 5)
   {

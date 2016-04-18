@@ -5,7 +5,6 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 
-#include <Valkyrie/Physics/IPhysicsJoints.refl.hh>
 
 VK_INTERFACE()
 struct VKE_API IPhysicsJoint : public IObject

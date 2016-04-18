@@ -1,6 +1,7 @@
 
 
 #include <Valkyrie/Engine.hh>
+#include <Valkyrie/Module.hh>
 #include <Valkyrie/Time.hh>
 #include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Core/ClassRegistry.hh>
@@ -42,6 +43,7 @@
 #include <math.h>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 
+
 vkEntityScene *create_scene(IGraphics *graphics);
 vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
@@ -56,14 +58,10 @@ vkEngine::vkEngine()
   , m_renderer(0)
   , m_physicsSystem(0)
 {
+  ValkyrieModule::Initialize();
   const vkClass *clazz = vkSGTexture2D::GetStaticClass();
   vkSGNode *object = clazz->CreateInstance<vkSGNode>();
 
-  vkSGTexture2DClass *txtClass = vkSGTexture2DClass::Get();
-  vkSGTexture2D *texture2D = vkQueryClass<vkSGTexture2D>(object);
-  printf("Object   : 0x%p\n", object);
-  printf("TxtClass : 0x%p\n", txtClass);
-  printf("texture2D: 0x%p\n", texture2D);
 
 }
 
@@ -244,7 +242,6 @@ void vkEngine::RegisterLoaders()
 
 void vkEngine::RegisterClasses()
 {
-  vkEntityModule::Initialize();
 }
 
 

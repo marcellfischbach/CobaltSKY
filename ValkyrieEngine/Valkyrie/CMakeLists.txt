@@ -9,6 +9,8 @@ set(SOURCE
 	Engine.cc
 	Enums.hh
 	Export.hh
+  Module.cc
+  Module.hh
   Time.cc
   Time.hh
 	Types.hh
@@ -83,8 +85,6 @@ set(SOURCE_ENTITY
   Entity/LightState.hh
   Entity/MeshState.cc
   Entity/MeshState.hh
-  Entity/Module.cc
-  Entity/Module.hh
   Entity/RenderState.cc
   Entity/RenderState.hh
   Entity/Scan.hh
@@ -255,18 +255,9 @@ set(ALL_SOURCES
 	${SOURCE_WINDOW}
 	)
 
-VK_MOC(Valkyrie VKE_API ALL_SOURCES MOC_SOURCES)
-
-
-source_group(
-	"ValkyrieEngine\\MOC_sources"
-	FILES
-	${MOC_SOURCES}
-	)
 
 add_library(ValkyrieEngine SHARED
 	${ALL_SOURCES}
-	${MOC_SOURCES}
 	)
 
 target_link_libraries(ValkyrieEngine

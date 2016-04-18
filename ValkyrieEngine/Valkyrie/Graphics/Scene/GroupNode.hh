@@ -2,7 +2,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
-#include <Valkyrie/Graphics/Scene/GroupNode.refl.hh>
 #include <vector>
 
 VK_CLASS();

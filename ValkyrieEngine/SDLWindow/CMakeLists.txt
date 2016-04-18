@@ -4,6 +4,8 @@ add_definitions(-DVKSDL_EXPORT)
 
 set(SOURCE
   Export.hh
+  Module.cc
+  Module.hh
   SDLButtonMap.hh
   SDLKeyMap.hh
   SDLKeyboard.cc
@@ -24,18 +26,8 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-VK_MOC(SDLWindow VKSDL_API ALL_SOURCES MOC_SOURCES)
-
-
-source_group(
-	"ValkyrieEngine-SDLWindow\\MOC_sources"
-	FILES
-	${MOC_SOURCES}
-	)
-
 add_library(ValkyrieEngine-SDLWindow SHARED
 	${ALL_SOURCES}
-	${MOC_SOURCES}
 	)
 
 target_link_libraries(ValkyrieEngine-SDLWindow

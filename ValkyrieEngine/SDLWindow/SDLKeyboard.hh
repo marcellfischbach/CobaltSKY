@@ -2,7 +2,6 @@
 
 #include <SDLWindow/Export.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
-#include <SDLWindow/SDLKeyboard.refl.hh>
 
 VK_CLASS()
 class SDLKeyboard : public IKeyboard

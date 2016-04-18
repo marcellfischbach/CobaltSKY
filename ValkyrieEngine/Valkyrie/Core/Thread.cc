@@ -2,15 +2,24 @@
 #include <Valkyrie/Core/Thread.hh>
 #include <Windows.h>
 
+#ifdef VK_WIN32
+struct vkThreadPriv
+{
+  DWORD m_threadID;
+  HANDLE m_threadHandle;
+};
+#endif
+
 vkThread::vkThread()
-  : m_running (false)
+  : m_running(false)
+  , m_priv(new vkThreadPriv())
 {
 
 }
 
 vkThread::~vkThread()
 {
-
+  delete m_priv;
 }
 
 #if VK_WIN32
@@ -28,7 +37,7 @@ void vkThread::Start()
 
 #ifdef VK_WIN32
 
-  CreateThread(NULL, 0, vk_run_thread, this, 0, &m_threadID);
+  CreateThread(NULL, 0, vk_run_thread, this, 0, &m_priv->m_threadID);
 
 #endif
 }
@@ -42,7 +51,7 @@ bool vkThread::IsFinished() const
 {
 #ifdef VK_WIN32
   DWORD exitCode;
-  GetExitCodeThread(m_threadHandle, &exitCode);
+  GetExitCodeThread(m_priv->m_threadHandle, &exitCode);
   return exitCode != STILL_ACTIVE;
 #endif
 }

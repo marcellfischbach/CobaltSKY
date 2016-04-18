@@ -2,7 +2,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Entity/EntityState.refl.hh>
 #include <Valkyrie/Defs.hh>
 #include <Valkyrie/Types.hh>
 

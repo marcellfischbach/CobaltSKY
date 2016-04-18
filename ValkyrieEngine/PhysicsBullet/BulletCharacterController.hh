@@ -3,7 +3,6 @@
 #include <PhysicsBullet/Export.hh>
 #include <Valkyrie/Physics/IPhysicsCharacterController.hh>
 
-#include <PhysicsBullet/BulletCharacterController.refl.hh>
 
 class btCapsuleShape;
 class btKinematicCharacterController;

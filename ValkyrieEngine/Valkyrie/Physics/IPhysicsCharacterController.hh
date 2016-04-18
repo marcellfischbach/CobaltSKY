@@ -3,7 +3,6 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Physics/IPhysicsCharacterController.refl.hh>
 
 struct ITransformationCallback;
 

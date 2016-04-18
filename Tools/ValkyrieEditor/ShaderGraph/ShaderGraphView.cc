@@ -1,8 +1,6 @@
 
-#include <ShaderGraph/Node.hh>
-#include <ShaderGraph/Connection.hh>
-#include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
+#include <ShaderGraph/NodeSelector.hh>
 #include <Graph/Node.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>

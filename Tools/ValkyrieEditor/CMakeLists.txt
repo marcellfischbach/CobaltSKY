@@ -23,6 +23,20 @@ source_group(
     ${EDITOR_SOURCES}
     )
 
+set(EDITOR_ASSETMANAGER_SOURCES
+    AssetManager/AssetManagerWidget.cc
+    AssetManager/AssetManagerWidget.hh
+    )
+
+set(EDITOR_ASSETMANAGER_UI
+    AssetManager/AssetManagerWidget.ui)
+
+source_group(
+  "Editor\\AssetManager"
+  FILES
+  ${EDITOR_ASSETMANAGER_SOURCES}
+  ${EDITOR_ASSETMANAGER_UI}
+  )
 
 set(EDITOR_GRAPH_SOURCES
     Graph/Connection.cc
@@ -43,10 +57,6 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
-    ShaderGraph/Connection.cc
-    ShaderGraph/Connection.hh
-    ShaderGraph/Node.cc
-    ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc
     ShaderGraph/NodeSelector.hh
     ShaderGraph/ShaderGraphView.cc
@@ -62,21 +72,22 @@ source_group(
     "Editor\\ShaderGraph"
     FILES
     ${EDITOR_SHADERGRAPH_SOURCES}
+    ${EDITOR_SHADERGRAPH_UI}
     )
 
 
 set(ALL_UI
+    ${EDITOR_ASSETMANAGER_UI}
     ${EDITOR_SHADERGRAPH_UI}
     )
 
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
 
-message("ALL_UI ${ALL_UI_SOURCES}")
-
 add_executable(
     ValkyrieEditor
     ${EDITOR_SOURCES}
+    ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
     ${ALL_UI_SOURCES}

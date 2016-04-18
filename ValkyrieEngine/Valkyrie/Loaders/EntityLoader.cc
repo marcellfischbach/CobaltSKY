@@ -229,7 +229,7 @@ IObject *vkEntityLoader::Load(TiXmlElement *element, const vkResourceLocator &lo
 
 const vkClass *vkEntityLoader::GetLoadingClass() const
 {
-  return vkEntityClass::Get();
+  return vkEntity::GetStaticClass();
 }
 
 
@@ -299,7 +299,7 @@ IObject *vkEntityStateLoader::Load(TiXmlElement *element, const vkResourceLocato
 
 const vkClass *vkEntityStateLoader::GetLoadingClass() const
 {
-  return vkEntityStateClass::Get();
+  return vkEntityState::GetStaticClass();
 }
 
 
@@ -391,7 +391,7 @@ IObject *vkSpatialStateLoader::Load(TiXmlElement *element, const vkResourceLocat
 
 const vkClass *vkSpatialStateLoader::GetLoadingClass() const
 {
-  return vkSpatialStateClass::Get();
+  return vkSpatialState::GetStaticClass();
 }
 
 
@@ -441,7 +441,7 @@ IObject *vkRenderStateLoader::Load(TiXmlElement *element, const vkResourceLocato
 
 const vkClass *vkRenderStateLoader::GetLoadingClass() const
 {
-  return vkRenderStateClass::Get();
+  return vkRenderState::GetStaticClass();
 }
 
 
@@ -565,7 +565,7 @@ IObject *vkStaticMeshStateLoader::Load(TiXmlElement *element, const vkResourceLo
 
 const vkClass *vkStaticMeshStateLoader::GetLoadingClass() const
 {
-  return vkStaticMeshStateClass::Get();
+  return vkStaticMeshState::GetStaticClass();
 }
 
 
@@ -611,7 +611,7 @@ IObject *vkColliderStateLoader::Load(TiXmlElement *element, const vkResourceLoca
 
 const vkClass *vkColliderStateLoader::GetLoadingClass() const
 {
-  return vkColliderStateClass::Get();
+  return vkColliderState::GetStaticClass();
 }
 
 
@@ -659,7 +659,7 @@ IObject *vkBaseColliderStateLoader::Load(TiXmlElement *element, const vkResource
 
 const vkClass *vkBaseColliderStateLoader::GetLoadingClass() const
 {
-  return vkBaseColliderStateClass::Get();
+  return vkBaseColliderState::GetStaticClass();
 }
 
 
@@ -690,7 +690,7 @@ IObject *vkStaticColliderStateLoader::Load(TiXmlElement *element, const vkResour
 
 const vkClass *vkStaticColliderStateLoader::GetLoadingClass() const
 {
-  return vkStaticColliderStateClass::Get();
+  return vkStaticColliderState::GetStaticClass();
 }
 
 
@@ -751,7 +751,7 @@ IObject *vkDynamicColliderStateLoader::Load(TiXmlElement *element, const vkResou
 
 const vkClass *vkDynamicColliderStateLoader::GetLoadingClass() const
 {
-  return vkDynamicColliderStateClass::Get();
+  return vkDynamicColliderState::GetStaticClass();
 }
 
 
@@ -803,7 +803,7 @@ IObject *vkJointStateLoader::Load(TiXmlElement *element, const vkResourceLocator
 
 const vkClass *vkJointStateLoader::GetLoadingClass() const
 {
-  return vkJointStateClass::Get();
+  return vkJointState::GetStaticClass();
 }
 
 
@@ -828,7 +828,7 @@ IObject *vkHingeJointStateLoader::Load(TiXmlElement *element, const vkResourceLo
 
 const vkClass *vkHingeJointStateLoader::GetLoadingClass() const
 {
-  return vkHingeJointStateClass::Get();
+  return vkHingeJointState::GetStaticClass();
 }
 
 

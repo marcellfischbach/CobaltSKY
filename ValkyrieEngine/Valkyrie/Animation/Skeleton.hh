@@ -3,7 +3,6 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Animation/Skeleton.refl.hh>
 
 VK_CLASS()
 class VKE_API vkSkeleton : public vkObject

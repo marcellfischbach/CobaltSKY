@@ -2,6 +2,8 @@
 
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
+
+
 vkRenderState::vkRenderState()
   : vkSpatialState()
   , m_renderStartFade(FLT_MAX)

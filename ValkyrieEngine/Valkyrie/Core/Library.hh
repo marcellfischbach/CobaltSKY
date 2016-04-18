@@ -5,10 +5,8 @@
 #include <Valkyrie/Core/Object.hh>
 #include <string>
 
-#include <Valkyrie/Core/Library.refl.hh>
-#ifdef WIN32
-#include <Windows.h>
-#endif
+
+struct vkLibraryPriv;
 
 VK_CLASS();
 class vkLibrary : public vkObject
@@ -25,8 +23,6 @@ public:
   void *GetProcAddress(const std::string &procName);
 
 private:
-#ifdef WIN32
-  HMODULE m_libModule;
-#endif
+  vkLibraryPriv *m_priv;
 
 };

@@ -3,7 +3,6 @@
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <GraphicsGL4/TextureGL4.hh>
-#include <GraphicsGL4/Deferred/GBuffer.refl.hh>
 
 class vkGraphicsGL4;
 class vkTexture2DGL4;

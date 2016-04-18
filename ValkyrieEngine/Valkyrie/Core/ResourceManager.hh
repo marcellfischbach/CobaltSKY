@@ -12,7 +12,6 @@
 #include <tixml\tinyxml.h>
 #include <map>
 #include <vector>
-#include <Valkyrie/Core/ResourceManager.refl.hh>
 
 class VKE_API vkResourceLocator
 {

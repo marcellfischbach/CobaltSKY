@@ -3,7 +3,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Graphics/IFrameProcessor.refl.hh>
 
 
 class vkCamera;

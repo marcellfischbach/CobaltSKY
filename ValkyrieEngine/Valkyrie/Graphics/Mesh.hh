@@ -5,7 +5,6 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <vector>
-#include <Valkyrie/Graphics/Mesh.refl.hh>
 
 struct IIndexBuffer;
 struct IGraphics;

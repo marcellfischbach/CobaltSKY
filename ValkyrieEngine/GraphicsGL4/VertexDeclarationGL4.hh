@@ -2,7 +2,6 @@
 
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
-#include <GraphicsGL4/VertexDeclarationGL4.refl.hh>
 
 
 class vkProgramGL4;

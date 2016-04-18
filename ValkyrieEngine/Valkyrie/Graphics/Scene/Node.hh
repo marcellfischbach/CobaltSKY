@@ -5,7 +5,6 @@
 #include <Valkyrie/Graphics/Scene/Scan.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <Valkyrie/Math/Clipper.hh>
-#include <Valkyrie/Graphics/Scene/Node.refl.hh>
 
 
 class vkGroupNode;

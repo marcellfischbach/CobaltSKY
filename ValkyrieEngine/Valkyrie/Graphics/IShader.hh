@@ -4,7 +4,6 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Graphics/IShader.refl.hh>
 #include <Valkyrie/Graphics/ShaderID.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Matrix.hh>

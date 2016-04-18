@@ -9,7 +9,6 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Enums.hh>
 
-#include <Valkyrie/Graphics/Material.refl.hh>
 #include <vector>
 
 #define vkInvalidShaderParamIndex (~0x00)

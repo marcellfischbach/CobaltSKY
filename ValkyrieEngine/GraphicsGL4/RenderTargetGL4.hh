@@ -4,7 +4,6 @@
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <vector>
 #include <GL/glew.h>
-#include <GraphicsGL4/RenderTargetGL4.refl.hh>
 
 class vkTextureGL4;
 

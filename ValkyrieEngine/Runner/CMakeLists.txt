@@ -14,18 +14,8 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-VK_MOC(Runner " " ALL_SOURCES MOC_SOURCES)
-
-
-source_group(
-	"MOC_sources"
-	FILES
-	${MOC_SOURCES}
-	)
-
 add_executable(ValkyrieRunner
 	${ALL_SOURCES}
-	${MOC_SOURCES}
 	)
 
 target_link_libraries(ValkyrieRunner

@@ -2,7 +2,6 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
-#include <Valkyrie/Graphics/Scene/CameraNode.refl.hh>
 
 
 class vkCamera;

@@ -3,13 +3,11 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Core/IFile.refl.hh>
 
 /**
  * \addtogroup engine
  * @{
  */
-
 enum vkSeekPos
 {
 	eSP_Set,

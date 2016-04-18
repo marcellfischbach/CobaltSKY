@@ -3,7 +3,6 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Defs.hh>
 #include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Graphics/Image.refl.hh>
 #include <Valkyrie/Enums.hh>
 #include <vector>
 

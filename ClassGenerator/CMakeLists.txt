@@ -4,8 +4,11 @@ project(ClassGenerator)
 
 
 add_executable(ClassGenerator
+  cache.cc
+  cache.hh
 	class.cc
 	class.hh
+  generator.cc
 	main.cc
   reader.cc
   reader.hh
@@ -15,3 +18,5 @@ add_executable(ClassGenerator
 	tokenizer.hh
 	)
 
+
+ install(TARGETS ClassGenerator DESTINATION  ${ClassGenerator_SOURCE_DIR}/../bin)

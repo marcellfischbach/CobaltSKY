@@ -3,7 +3,6 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Graphics/IGraphics.refl.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Enums.hh>
 

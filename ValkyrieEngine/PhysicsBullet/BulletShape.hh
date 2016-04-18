@@ -3,7 +3,6 @@
 #include <PhysicsBullet/Export.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
-#include <PhysicsBullet/BulletShape.refl.hh>
 #include <bullet/btBulletCollisionCommon.h>
 
 VK_CLASS()
