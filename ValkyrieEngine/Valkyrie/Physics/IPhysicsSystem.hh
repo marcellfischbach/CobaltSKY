@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
+#include <Valkyrie/Physics/IPhysicsSystem.refl.hh>
 
 struct IPhysicsScene;
 struct IPhysicsCapsuleCharacterController;

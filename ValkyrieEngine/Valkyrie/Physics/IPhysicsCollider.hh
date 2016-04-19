@@ -6,6 +6,7 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/Physics/IPhysicsCollider.refl.hh>
 
 
 class vkDynamicColliderState;

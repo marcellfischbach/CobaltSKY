@@ -5,6 +5,7 @@
 #include <Valkyrie/Core/Collection.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
+#include <PhysicsBullet/BulletScene.refl.hh>
 
 class vkBulletBody;
 class vkBulletDynamicCollider;

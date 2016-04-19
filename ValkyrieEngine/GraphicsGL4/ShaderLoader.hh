@@ -3,6 +3,7 @@
 
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <GraphicsGL4/ShaderLoader.refl.hh>
 
 
 VK_CLASS();

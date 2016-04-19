@@ -3,6 +3,7 @@
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <GL/glew.h>
+#include <GraphicsGL4/VertexBufferGL4.refl.hh>
 
 VK_CLASS();
 class VertexBufferGL4 : public IVertexBuffer

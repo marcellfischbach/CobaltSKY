@@ -6,6 +6,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
+#include <Valkyrie/Entity/MeshState.refl.hh>
 
 class vkMesh;
 class vkMaterialInstance;

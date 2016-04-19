@@ -2,6 +2,7 @@
 
 #include <SDLWindow/Export.hh>
 #include <Valkyrie/Window/IMouse.hh>
+#include <SDLWindow/SDLMouse.refl.hh>
 
 VK_CLASS()
 class SDLMouse : public IMouse

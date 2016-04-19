@@ -7,6 +7,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Graphics/ITexture.refl.hh>
 
 VK_INTERFACE();
 struct VKE_API ISampler : public IObject

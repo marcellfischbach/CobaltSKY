@@ -3,6 +3,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Types.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Graphics/IVertexDeclaration.refl.hh>
 
 /**
 * @brief One element within the entire vertex declaration

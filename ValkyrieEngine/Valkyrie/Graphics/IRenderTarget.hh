@@ -3,6 +3,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/IRenderTarget.refl.hh>
 
 
 VK_INTERFACE();

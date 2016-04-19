@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <Valkyrie/Graphics/PostProcessing.refl.hh>
 
 
 class vkPostProcess;

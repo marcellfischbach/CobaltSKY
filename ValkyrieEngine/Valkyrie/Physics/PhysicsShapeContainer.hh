@@ -4,6 +4,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <vector>
+#include <Valkyrie/Physics/PhysicsShapeContainer.refl.hh>
 
 VK_CLASS()
 class VKE_API vkPhysicsShapeContainer : public vkObject

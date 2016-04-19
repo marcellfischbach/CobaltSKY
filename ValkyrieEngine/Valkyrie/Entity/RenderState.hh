@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Entity/RenderState.refl.hh>
 
 struct IGraphics;
 /**

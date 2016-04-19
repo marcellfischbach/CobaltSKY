@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/Entity/LightState.refl.hh>
 
 class vkLight;
 /**

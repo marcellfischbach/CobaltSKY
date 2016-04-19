@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Types.hh>
+#include <Valkyrie/Window/IWindow.refl.hh>
 
 struct IKeyboard;
 struct IMouse;

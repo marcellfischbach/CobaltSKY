@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
+#include <Valkyrie/Graphics/Scene/LightNode.refl.hh>
 
 struct IGraphics;
 class vkLight;

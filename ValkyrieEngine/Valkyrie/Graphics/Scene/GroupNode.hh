@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
 #include <vector>
+#include <Valkyrie/Graphics/Scene/GroupNode.refl.hh>
 
 VK_CLASS();
 class VKE_API vkGroupNode : public vkNode

@@ -4,6 +4,7 @@
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 
 #include <Valkyrie/Physics/IPhysicsJoints.hh>
+#include <PhysicsBullet/BulletJoints.refl.hh>
 
 
 VK_INTERFACE()

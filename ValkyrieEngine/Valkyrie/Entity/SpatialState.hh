@@ -6,6 +6,7 @@
 #include <Valkyrie/Entity/Transformation.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <vector>
+#include <Valkyrie/Entity/SpatialState.refl.hh>
 
 struct vkScanConfig;
 

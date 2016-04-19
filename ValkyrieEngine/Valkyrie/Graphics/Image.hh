@@ -5,6 +5,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Enums.hh>
 #include <vector>
+#include <Valkyrie/Graphics/Image.refl.hh>
 
 
 VK_CLASS();

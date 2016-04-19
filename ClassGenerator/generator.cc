@@ -131,10 +131,7 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   for (size_t i = 0, in = clazz->GetNumberOfSuperClasses(); i < in; ++i)
   {
     std::string super = clazz->GetSuperClass(i);
-    if (classesCache->ContainsClass(super))
-    {
-      result += "  AddSuperClass(" + super + "Class::Get());\n";
-    }
+    result += "  AddSuperClass(" + super + "Class::Get());\n";
   }
 
   for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
@@ -179,14 +176,11 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
     for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
     {
       std::string super = clazz->GetSuperClass(s);
-      if (classesCache->ContainsClass(super))
-      {
-        result += "  super = " + super + "::QueryClass(clazz);\n";
-        result += "  if (super != null)\n";
-        result += "  {\n";
-        result += "    return super;\n";
-        result += "  }\n";
-      }
+      result += "  super = " + super + "::QueryClass(clazz);\n";
+      result += "  if (super != null)\n";
+      result += "  {\n";
+      result += "    return super;\n";
+      result += "  }\n";
     }
   }
   result += "  return null;\n";
@@ -354,7 +348,7 @@ int main(int argc, char **argv)
         }
 
         includeOrigin += "#include <" + prefix + "/" + it.filename + ">\n";
-        includeHeaders += "#include <" + prefix + "/" + outputHeaderFilename + ">\n";
+        //includeHeaders += "#include <" + prefix + "/" + outputHeaderFilename + ">\n";
         includeSources += "#include <" + prefix + "/" + outputSourceFilename + ">\n";
 
         classRegistration += "  // " + it.filename + "\n";
@@ -367,14 +361,10 @@ int main(int argc, char **argv)
 
     masterSource += "\n";
     masterSource += includeOrigin + "\n";
-    masterSource += includeHeaders + "\n";
+    //masterSource += includeHeaders + "\n";
     masterSource += includeSources + "\n";
     masterSource += "#include <Valkyrie/Core/ClassRegistry.hh>\n";
     masterSource += "\n\n";
-    masterSource += "#ifdef RegisterClass\n";
-    masterSource += "#undef RegisterClass\n";
-    masterSource += "#define RegisterClass RegisterClass\n";
-    masterSource += "#endif\n";
     masterSource += "\n\n\n";
     masterSource += "static void register_classes ()\n";
     masterSource += "{\n";

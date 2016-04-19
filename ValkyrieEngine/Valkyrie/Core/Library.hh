@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <string>
+#include <Valkyrie/Core/Library.refl.hh>
 
 
 struct vkLibraryPriv;

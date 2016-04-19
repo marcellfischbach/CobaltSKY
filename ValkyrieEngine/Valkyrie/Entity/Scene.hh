@@ -4,6 +4,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Defs.hh>
 #include <vector>
+#include <Valkyrie/Entity/Scene.refl.hh>
 
 struct IPhysicsScene;
 class vkEntity;

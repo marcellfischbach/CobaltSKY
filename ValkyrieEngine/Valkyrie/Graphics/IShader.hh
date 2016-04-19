@@ -9,6 +9,8 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Graphics/IShader.refl.hh>
+
 using std::string;
 
 VK_INTERFACE();

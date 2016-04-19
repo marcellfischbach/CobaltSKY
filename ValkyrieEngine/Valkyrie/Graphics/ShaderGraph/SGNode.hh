@@ -6,6 +6,7 @@
 
 #include <Valkyrie/Core/String.hh>
 #include <vector>
+#include <Valkyrie/Graphics/ShaderGraph/SGNode.refl.hh>
 
 
 enum vkSGDataType

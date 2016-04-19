@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 
+#include <Valkyrie/Core/Thread.refl.hh>
 
 struct vkThreadPriv;
 VK_INTERFACE();

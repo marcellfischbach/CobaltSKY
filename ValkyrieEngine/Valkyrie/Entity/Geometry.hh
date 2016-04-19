@@ -5,6 +5,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Entity/Geometry.refl.hh>
 
 class vkClipper;
 class vkMultiMaterial;

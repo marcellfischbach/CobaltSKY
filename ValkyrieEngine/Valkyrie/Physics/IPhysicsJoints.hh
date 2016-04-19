@@ -4,6 +4,7 @@
 #include <Valkyrie/Diamond.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
+#include <Valkyrie/Physics/IPhysicsJoints.refl.hh>
 
 
 VK_INTERFACE()

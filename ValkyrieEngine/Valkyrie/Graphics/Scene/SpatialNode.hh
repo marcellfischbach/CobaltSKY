@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
 #include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Graphics/Scene/SpatialNode.refl.hh>
 
 VK_CLASS();
 class VKE_API vkSpatialNode : public vkNode

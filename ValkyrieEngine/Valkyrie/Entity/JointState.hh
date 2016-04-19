@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Entity/JointState.refl.hh>
 
 
 class vkDynamicColliderState;

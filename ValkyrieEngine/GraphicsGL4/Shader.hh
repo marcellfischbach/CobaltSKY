@@ -7,6 +7,7 @@
 #include <Valkyrie/Graphics/IShader.hh>
 #include <GL/glew.h>
 #include <vector>
+#include <GraphicsGL4/Shader.refl.hh>
 
 VK_CLASS();
 class vkShaderGL4 : public IObject

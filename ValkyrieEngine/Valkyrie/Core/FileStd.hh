@@ -4,7 +4,7 @@
 #include <Valkyrie/Core/IFile.hh>
 #include <stdio.h>
 #include <string>
-
+#include <Valkyrie/Core/FileStd.refl.hh>
 
 /**
  * \addtogroup engine

@@ -8,6 +8,7 @@
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Graphics/Material.refl.hh>
 
 #include <vector>
 

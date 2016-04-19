@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Window/IMouse.refl.hh>
 
 VK_INTERFACE()
 struct VKE_API IMouse : public IObject

@@ -5,6 +5,7 @@
 #include <Valkyrie/Core/String.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Graphics/IGraphics.refl.hh>
 
 struct IFrameProcessor;
 struct IRenderTarget;

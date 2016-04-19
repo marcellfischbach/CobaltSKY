@@ -3,6 +3,7 @@
 
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
+#include <GraphicsGL4/GraphicsGL4.refl.hh>
 
 class IndexBufferGL4;
 class vkProgramGL4;

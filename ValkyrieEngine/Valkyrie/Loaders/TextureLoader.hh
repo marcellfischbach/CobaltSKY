@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Loaders/TextureLoader.refl.hh>
 
 class vkImage;
 struct ISampler;

@@ -4,6 +4,7 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <bullet/btBulletCollisionCommon.h>
+#include <PhysicsBullet/BulletShape.refl.hh>
 
 VK_CLASS()
 class VKBULLET_API vkBulletShape : public IPhysicsShape

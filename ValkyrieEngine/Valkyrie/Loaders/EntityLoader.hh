@@ -4,6 +4,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Loaders/EntityLoader.refl.hh>
 
 class vkEntity;
 class vkEntityState;

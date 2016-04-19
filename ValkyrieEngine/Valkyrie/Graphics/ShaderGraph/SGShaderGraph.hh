@@ -2,6 +2,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.refl.hh>
 
 class vkSGNode;
 class vkSGOutput;

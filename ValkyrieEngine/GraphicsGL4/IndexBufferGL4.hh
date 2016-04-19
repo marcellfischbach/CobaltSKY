@@ -3,6 +3,7 @@
 #include <GraphicsGL4/Export.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
 #include <GL/glew.h>
+#include <GraphicsGL4/IndexBufferGL4.refl.hh>
 
 VK_CLASS();
 class IndexBufferGL4 : public IIndexBuffer

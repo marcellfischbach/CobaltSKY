@@ -4,6 +4,7 @@
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
+#include <PhysicsBullet/BulletStaticCollider.refl.hh>
 
 class vkBulletScene;
 class vkBulletShape;
