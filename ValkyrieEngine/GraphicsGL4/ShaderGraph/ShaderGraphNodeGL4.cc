@@ -765,14 +765,63 @@ void vkSGAddGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 void vkSGSubGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGNode *add = GetNode();
-  ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " - " <<
-    ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
+  vkSGNode *sub = GetNode();
+  ss << "(" << ctx.GetFullInputValue(sub->GetInput(0)).c_str() << " - " <<
+    ctx.GetFullInputValue(sub->GetInput(1)).c_str() <<
     ")";
 
-  vkSGDataType dt = GetHigher(add->GetInput(0)->GetDataType(), add->GetInput(1)->GetDataType());
-  AssignOutput(ctx, add->GetOutput(0), ss.str(), GetDataTypeVar(dt));
+  vkSGDataType dt = GetHigher(sub->GetInput(0)->GetDataType(), sub->GetInput(1)->GetDataType());
+  AssignOutput(ctx, sub->GetOutput(0), ss.str(), GetDataTypeVar(dt));
 }
+
+
+void vkSGMulGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *mul = GetNode();
+  ss << "(" << ctx.GetFullInputValue(mul->GetInput(0)).c_str() << " * " <<
+    ctx.GetFullInputValue(mul->GetInput(1)).c_str() <<
+    ")";
+
+  vkSGDataType dt = GetHigher(mul->GetInput(0)->GetDataType(), mul->GetInput(1)->GetDataType());
+  AssignOutput(ctx, mul->GetOutput(0), ss.str(), GetDataTypeVar(dt));
+}
+
+void vkSGDivGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *div = GetNode();
+  ss << "(" << ctx.GetFullInputValue(div->GetInput(0)).c_str() << " / " <<
+    ctx.GetFullInputValue(div->GetInput(1)).c_str() <<
+    ")";
+
+  vkSGDataType dt = GetHigher(div->GetInput(0)->GetDataType(), div->GetInput(1)->GetDataType());
+  AssignOutput(ctx, div->GetOutput(0), ss.str(), GetDataTypeVar(dt));
+}
+
+
+void vkSGDotGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *dot = GetNode();
+  ss << "dot(" << ctx.GetFullInputValue(dot->GetInput(0)).c_str() << ", " <<
+    ctx.GetFullInputValue(dot->GetInput(1)).c_str() <<
+    ")";
+
+  AssignOutput(ctx, dot->GetOutput(0), ss.str(), GetDataTypeVar(eSGDT_Float));
+}
+
+void vkSGCrossGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+{
+  std::ostringstream ss;
+  vkSGNode *dot = GetNode();
+  ss << "cross(" << ctx.GetFullInputValue(dot->GetInput(0)).c_str() << ", " <<
+    ctx.GetFullInputValue(dot->GetInput(1)).c_str() <<
+    ")";
+
+  AssignOutput(ctx, dot->GetOutput(0), ss.str(), GetDataTypeVar(eSGDT_Float3));
+}
+
 
 void vkSGDefaultTextureCoordinateGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {

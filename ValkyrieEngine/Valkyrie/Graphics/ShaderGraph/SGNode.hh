@@ -161,6 +161,7 @@ public:
   bool ScalarType(vkSGDataType dtA, vkSGDataType dtB) const;
   bool FloatType(vkSGDataType dtA, vkSGDataType dtB) const;
   bool IntType(vkSGDataType dtA, vkSGDataType dtB) const;
+  bool SameType(vkSGDataType dtA, vkSGDataType dtB) const;
   bool SameScalarType(vkSGDataType dtA, vkSGDataType dtB) const;
   bool SameTypeOrOne(vkSGDataType dtA, vkSGDataType dtB) const;
   vkSGDataType HighOrderType(vkSGDataType dtA, vkSGDataType dtB) const;
@@ -367,6 +368,53 @@ public:
 
   virtual bool Validate();
 };
+
+
+VK_CLASS()
+class VKE_API vkSGMul : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGMul();
+  virtual ~vkSGMul() { }
+
+  virtual bool Validate();
+};
+
+
+VK_CLASS()
+class VKE_API vkSGDiv : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDiv();
+  virtual ~vkSGDiv() { }
+
+  virtual bool Validate();
+};
+
+VK_CLASS()
+class VKE_API vkSGDot : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDot();
+  virtual ~vkSGDot() { }
+
+  virtual bool Validate();
+};
+
+VK_CLASS()
+class VKE_API vkSGCross : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGCross();
+  virtual ~vkSGCross() { }
+
+  virtual bool Validate();
+};
+
 
 VK_CLASS()
 class VKE_API vkSGDefaultTextureCoordinate : public vkSGNode

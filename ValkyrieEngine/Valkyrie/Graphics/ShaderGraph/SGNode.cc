@@ -371,6 +371,11 @@ bool vkSGNode::IntType(vkSGDataType dtA, vkSGDataType dtB) const
   return IntType(dtA) && IntType(dtB);
 }
 
+bool vkSGNode::SameType(vkSGDataType dtA, vkSGDataType dtB) const
+{
+  return dtA == dtB;
+}
+
 bool vkSGNode::SameScalarType(vkSGDataType dtA, vkSGDataType dtB) const
 {
   return FloatType(dtA, dtB) || IntType(dtA, dtB);
@@ -449,7 +454,12 @@ bool vkSGNode::Validate()
 #define VK_SPLIT_FLOAT4_NAME "Assemble/SplitFloat4"
 
 #define VK_ADD_NAME "Math/Add"
-#define VK_SUB_NAME "Math/SUB"
+#define VK_SUB_NAME "Math/Sub"
+#define VK_MUL_NAME "Math/Mul"
+#define VK_DIV_NAME "Math/Div"
+#define VK_DOT_NAME "Math/Dot"
+#define VK_CROSS_NAME "Math/Cross"
+
 
 #define VK_DEFAULT_TEXTURE_COORDINATE_NAME "Texture/DefaultTextureCoordinate"
 #define VK_TEXTURE2D_NAME "Texture/Texture2D"
@@ -716,6 +726,127 @@ bool vkSGSub::Validate()
   SetOutputDataType(0, HighOrderType(dtA, dtB));
   return success;
 }
+
+vkSGMul::vkSGMul()
+  : vkSGNode()
+{
+  SetName(VK_MUL_NAME);
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput("v"));
+}
+
+
+bool vkSGMul::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (!ScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+
+  SetOutputDataType(0, HighOrderType(dtA, dtB));
+  return success;
+}
+
+vkSGDiv::vkSGDiv()
+  : vkSGNode()
+{
+  SetName(VK_DIV_NAME);
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput("v"));
+}
+
+
+bool vkSGDiv::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (!ScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+
+  SetOutputDataType(0, HighOrderType(dtA, dtB));
+  return success;
+}
+
+
+vkSGDot::vkSGDot()
+  : vkSGNode()
+{
+  SetName(VK_DIV_NAME);
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput(eSGDT_Float, "v"));
+}
+
+
+bool vkSGDot::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (!ScalarType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameType(dtA, dtB))
+  {
+    SetValidationMessage("Invalid mix of types");
+    return false;
+  }
+
+  return success;
+}
+
+
+vkSGCross::vkSGCross()
+  : vkSGNode()
+{
+  SetName(VK_DIV_NAME);
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddOutput(new vkSGOutput(eSGDT_Float3, "v"));
+}
+
+
+bool vkSGCross::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  if (dtA != eSGDT_Float3 || dtB != eSGDT_Float3)
+  {
+    SetValidationMessage("Only Float3 supported for inputs");
+    return false;
+  }
+
+  return success;
+}
+
+
 
 vkSGDefaultTextureCoordinate::vkSGDefaultTextureCoordinate()
   : vkSGNode()

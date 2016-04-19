@@ -37,6 +37,10 @@ vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
     m_classMapping.push_back(Map(vkSGSplitFloat4::GetStaticClass(), vkSGSplitFloat4GL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGAdd::GetStaticClass(), vkSGAddGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGSub::GetStaticClass(), vkSGSubGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGMul::GetStaticClass(), vkSGMulGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGDiv::GetStaticClass(), vkSGDivGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGDot::GetStaticClass(), vkSGDotGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGCross::GetStaticClass(), vkSGCrossGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGDefaultTextureCoordinate::GetStaticClass(), vkSGDefaultTextureCoordinateGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGTexture2D::GetStaticClass(), vkSGTexture2DGL4::GetStaticClass()));
     initialized = true;

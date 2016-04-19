@@ -347,6 +347,53 @@ protected:
   void PrivEvaluate(vkShaderGraphCtx &ctx);
 };
 
+VK_CLASS()
+class VKGL4_API vkSGMulGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGMulGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGMulGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGDivGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDivGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGDivGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGDotGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGDotGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGDotGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
+class VKGL4_API vkSGCrossGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGCrossGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGCrossGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
 
 VK_CLASS()
 class VKGL4_API vkSGDefaultTextureCoordinateGL4 : public vkSGNodeGL4
