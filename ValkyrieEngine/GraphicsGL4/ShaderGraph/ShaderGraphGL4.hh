@@ -28,7 +28,7 @@ public:
 
 private:
   void GenerateGBuffer(vkSGShaderGraph *graph);
-  void GenerateShadowPSSM(vkSGShaderGraph *graph);
+  void GenerateShadow(vkSGShaderGraph *graph, unsigned layers);
 
 private:
   struct Map 

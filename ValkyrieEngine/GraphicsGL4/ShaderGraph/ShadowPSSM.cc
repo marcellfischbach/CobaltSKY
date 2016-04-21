@@ -13,7 +13,7 @@ static const char *compareMode[] = {
   "!="
 };
 
-void vkShaderGraphGL4::GenerateShadowPSSM(vkSGShaderGraph *graph)
+void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers)
 {
   std::set<vkSGOutput*> outputs;
   std::set<vkSGOutput*> preAlphaOutputs;
@@ -51,21 +51,56 @@ void vkShaderGraphGL4::GenerateShadowPSSM(vkSGShaderGraph *graph)
   ss << ""
     << "#version 330" << std::endl
     << std::endl
-    << "uniform mat4 vk_MatProjViewModel;" << std::endl
+    << "uniform mat4 vk_MatModel;" << std::endl
     << std::endl
     << "in vec4 vk_Position;" << std::endl
     << "in vec4 vk_TexCoord0;" << std::endl
     << std::endl
     // if we use hardware skinning this should be placed here
-    << "out vec2 inFragTexCoord;" << std::endl
-    << std::endl
-    << "void main()" << std::endl
+    << "out vec2 inGeomTexCoord;" << std::endl
+    << std::endl;
+  ss << "void main()" << std::endl
     << "{" << std::endl
-    << "  gl_Position = vk_MatProjViewModel * vk_Position;" << std::endl
-    << "  inFragTexCoord = vk_TexCoord0;" << std::endl
+    << "  gl_Position = vk_MatModel * vk_Position;" << std::endl
+    << "  inGeomTexCoord = vk_TexCoord0;" << std::endl
     << "}" << std::endl
     << std::endl;
   vkString vertexShaderSources = ss.str();
+
+  ss = std::ostringstream();
+  ss << ""
+    << "#version 330" << std::endl
+    << std::endl
+    << "layout(triangles) in;" << std::endl
+    << "layout(triangle_strip, max_vertices = " << (numLayers * 3) << ") out;" << std::endl
+    << "uniform mat4 vk_ShadowMapMatProjView[" << numLayers << "];" << std::endl
+    << "in vec2 inGeomTexCoord[];" << std::endl
+    << std::endl
+    << "out vec2 inFragTexCoord;" << std::endl
+    << std::endl
+    << "void main()" << std::endl
+    << "{" << std::endl;
+  
+  for (unsigned i = 0; i < numLayers; ++i)
+  {
+    ss << "  gl_Layer = " << i << ";" << std::endl
+      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[0].gl_Position;" << std::endl
+      << "  inFragTexCoord = inGeomTexCoord[0];" << std::endl
+      << "  EmitVertex();" << std::endl
+      << "  " << std::endl
+      << "  gl_Layer = " << i << ";" << std::endl
+      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[1].gl_Position;" << std::endl
+      << "  inFragTexCoord = inGeomTexCoord[1];" << std::endl
+      << "  EmitVertex();" << std::endl
+      << "  " << std::endl
+      << "  gl_Layer = " << i << ";" << std::endl
+      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[2].gl_Position;" << std::endl
+      << "  inFragTexCoord = inGeomTexCoord[2];" << std::endl
+      << "  EmitVertex();" << std::endl
+      << "  " << std::endl
+      << "  EndPrimitive();" << std::endl
+  }
+
 
 
 
