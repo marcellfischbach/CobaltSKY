@@ -58,6 +58,7 @@ set(SOURCE_SHADERGRAPH
   ShaderGraph/ShaderGraphGL4.hh
   ShaderGraph/ShaderGraphNodeGL4.cc
   ShaderGraph/ShaderGraphNodeGL4.hh
+  ShaderGraph/ShadowPSSM.cc
   )
   
 source_group(

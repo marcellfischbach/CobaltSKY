@@ -33,6 +33,8 @@
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
 #include <Valkyrie/Graphics/Scene/GroupNode.hh>
 #include <Valkyrie/Graphics/Scene/LightNode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
@@ -652,13 +654,30 @@ void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IK
   character->SetWalkDirection(vkVector3f(sx, sy, 0.0f));
 }
 
+vkMaterial *create_red_shader(IGraphics *graphics)
+{
+  vkSGShaderGraph *shader = new vkSGShaderGraph();
 
+  vkSGConstFloat3 *constRed = new vkSGConstFloat3();
+  constRed->SetInput(0, 1.0f);
+  constRed->SetInput(1, 0.0f);
+  constRed->SetInput(2, 0.0f);
+  shader->SetDiffuse(constRed->GetOutput(0));
+
+  if (!graphics->GetShaderGraphFactory()->GenerateShaderGraph(shader))
+  {
+    delete shader;
+    shader = 0;
+  }
+  return shader;
+}
 
 
 
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
+  vkMaterial *constRedMaterial = create_red_shader(graphics);
   vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
   vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
   vkMaterialInstance *materialFieldstoneGreenInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));

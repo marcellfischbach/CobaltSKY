@@ -13,7 +13,7 @@ static const char *compareMode[] = {
   "!="
 };
 
-void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers)
+void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers, vkRenderPass renderPass)
 {
   std::set<vkSGOutput*> outputs;
   std::set<vkSGOutput*> preAlphaOutputs;
@@ -54,12 +54,12 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << "uniform mat4 vk_MatModel;" << std::endl
     << std::endl
     << "in vec4 vk_Position;" << std::endl
-    << "in vec4 vk_TexCoord0;" << std::endl
+    << "in vec2 vk_TexCoord0;" << std::endl
     << std::endl
     // if we use hardware skinning this should be placed here
     << "out vec2 inGeomTexCoord;" << std::endl
-    << std::endl;
-  ss << "void main()" << std::endl
+    << std::endl
+    << "void main()" << std::endl
     << "{" << std::endl
     << "  gl_Position = vk_MatModel * vk_Position;" << std::endl
     << "  inGeomTexCoord = vk_TexCoord0;" << std::endl
@@ -76,31 +76,34 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << "uniform mat4 vk_ShadowMapMatProjView[" << numLayers << "];" << std::endl
     << "in vec2 inGeomTexCoord[];" << std::endl
     << std::endl
-    << "out vec2 inFragTexCoord;" << std::endl
-    << std::endl
+    << "out vec2 inFragTexCoord;" << std::endl;
+  if (vsm)
+  {
+    ss << "out float inFragDepth;" << std::endl;
+  }
+  ss << std::endl
     << "void main()" << std::endl
     << "{" << std::endl;
   
   for (unsigned i = 0; i < numLayers; ++i)
   {
-    ss << "  gl_Layer = " << i << ";" << std::endl
-      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[0].gl_Position;" << std::endl
-      << "  inFragTexCoord = inGeomTexCoord[0];" << std::endl
-      << "  EmitVertex();" << std::endl
-      << "  " << std::endl
-      << "  gl_Layer = " << i << ";" << std::endl
-      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[1].gl_Position;" << std::endl
-      << "  inFragTexCoord = inGeomTexCoord[1];" << std::endl
-      << "  EmitVertex();" << std::endl
-      << "  " << std::endl
-      << "  gl_Layer = " << i << ";" << std::endl
-      << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[2].gl_Position;" << std::endl
-      << "  inFragTexCoord = inGeomTexCoord[2];" << std::endl
-      << "  EmitVertex();" << std::endl
-      << "  " << std::endl
-      << "  EndPrimitive();" << std::endl
+    ss << ""
+      << "  gl_Layer = " << i << ";" << std::endl;
+      for (unsigned j = 0; j < 3; ++j)
+    {
+      ss << ""
+        << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[" << j << "].gl_Position;" << std::endl
+        << "  inFragTexCoord = inGeomTexCoord[" << j << "];" << std::endl;
+      if (vsm)
+      {
+        ss << "  inFragDepth = gl_Position.z / gl_Position.w;" << std::endl;
+      }
+      ss << "  EmitVertex();" << std::endl;
+    }
+    ss << "  EndPrimitive();" << std::endl;
   }
-
+  ss << "}" << std::endl;
+  vkString geometryShaderSources = ss.str();
 
 
 
@@ -115,8 +118,12 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     ss << "uniform " << binding.variableType << " " << binding.variableName << ";" << std::endl;
   }
   ss << std::endl
-    << "in vec2 inFragTexCoord;" << std::endl
-    << std::endl
+    << "in vec2 inFragTexCoord;" << std::endl;
+  if (vsm)
+  {
+    ss << "in float inFragDepth;" << std::endl;
+  }
+  ss << std::endl
     << "void main()" << std::endl
     << "{" << std::endl;
   if (graph->IsDiscardAlpha() && alphaOutput)
@@ -130,11 +137,13 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   }
   if (vsm)
   {
-
+    ss << "  float dx = dFdx(inFragDepth);" << std::endl
+      << "  float dy = dFdy(inFragDepth);" << std::endl
+      << "  vk_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy);" << std::endl;
   }
   else
   {
-    ss << "  vk_FragColor = vec4(0, 0, 0, 0);" << std::endl;
+    ss << "  vk_FragColor = vec4(1, 1, 1, 1);" << std::endl;
   }
   // if VSM this can be 
   ss << "}" << std::endl
@@ -143,13 +152,29 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
 
   ss.clear();
 
+  printf("Shadow[%d].Vertex:\n%s\n", numLayers, vertexShaderSources.c_str());
+  printf("Shadow[%d].Geometry:\n%s\n", numLayers, geometryShaderSources.c_str());
+  printf("Shadow[%d].Fragment:\n%s\n", numLayers, fragmentShaderSources.c_str());
+
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
+    printf("Error geometry shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
+    return;
+  }
+
+  vkShaderGL4 *geometryShader = new vkShaderGL4();
+  geometryShader->SetShaderType(eST_Geometry);
+  geometryShader->SetSource(geometryShaderSources);
+  if (!geometryShader->Compile())
+  {
+    printf("Error geometry shader:\n%s\n", geometryShader->GetCompileErrorLog().c_str());
+    vertexShader->Release();
+    geometryShader->Release();
     return;
   }
 
@@ -158,23 +183,27 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
+    printf("Error fragment shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
+    geometryShader->Release();
     fragmentShader->Release();
     return;
   }
 
-  vkProgramGL4 *gBufferShader = new vkProgramGL4();
-  gBufferShader->AttachShader(vertexShader);
-  gBufferShader->AttachShader(fragmentShader);
-  if (!gBufferShader->Link())
+  vkProgramGL4 *shadowShader = new vkProgramGL4();
+  shadowShader->AttachShader(vertexShader);
+  shadowShader->AttachShader(fragmentShader);
+  if (!shadowShader->Link())
   {
+    printf("Error link:\n%s\n", shadowShader->GetLinkErrorLog().c_str());
     vertexShader->Release();
+    geometryShader->Release();
     fragmentShader->Release();
-    gBufferShader->Release();
+    shadowShader->Release();
     return;
   }
 
 
-  graph->SetShader(eRP_GBuffer, gBufferShader);
+  graph->SetShader(renderPass, shadowShader);
 
 }

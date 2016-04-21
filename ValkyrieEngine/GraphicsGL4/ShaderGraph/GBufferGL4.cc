@@ -89,8 +89,8 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "uniform mat4 vk_MatModel;" << std::endl
     << std::endl
     << "in vec4 vk_Position;" << std::endl
-    << "in vec4 vk_Normal;" << std::endl
-    << "in vec4 vk_TexCoord0;" << std::endl
+    << "in vec3 vk_Normal;" << std::endl
+    << "in vec2 vk_TexCoord0;" << std::endl
     << std::endl
     // if we use hardware skinning this should be placed here
     << "out vec2 inFragTexCoord;" << std::endl
@@ -149,6 +149,9 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 
   ss.clear();
 
+
+  printf("GBuffer.Vertex:\n%s\n", vertexShaderSources.c_str());
+  printf("GBuffer.Fragment:\n%s\n", fragmentShaderSources.c_str());
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
