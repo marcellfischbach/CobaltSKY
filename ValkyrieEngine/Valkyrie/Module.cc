@@ -4,7 +4,7 @@
 
 #include <Valkyrie/master.refl.cc>
 
-void ValkyrieModule::Initialize()
+void vkValkyrieModule::Initialize()
 {
   register_classes();
 }

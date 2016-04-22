@@ -4,6 +4,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Enums.hh>
+#include <Valkyrie/Core/AssetStream.hh>
 #include <Valkyrie/Core/IFile.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/String.hh>
@@ -13,6 +14,8 @@
 #include <map>
 #include <vector>
 #include <Valkyrie/Core/ResourceManager.refl.hh>
+
+
 
 class VKE_API vkResourceLocator
 {
@@ -40,6 +43,31 @@ struct VKE_API IFileLoader : public IObject
 };
 
 
+VK_CLASS();
+class VKE_API vkAssetFileLoader : public IFileLoader
+{
+  VK_CLASS_GEN_OBJECT;
+public:
+  vkAssetFileLoader();
+  virtual ~vkAssetFileLoader();
+
+  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+};
+
+
+VK_INTERFACE();
+struct VKE_API IAssetLoader : public IObject
+{
+  VK_CLASS_GEN;
+
+  virtual bool CanLoad(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+
+  virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+};
+
+
+
 VK_INTERFACE();
 struct VKE_API IXMLLoader : public IObject
 {
@@ -60,6 +88,7 @@ public:
   IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 };
+
 
 VK_INTERFACE();
 class VKE_API vkBaseXMLLoader : public IXMLLoader

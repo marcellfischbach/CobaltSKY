@@ -36,6 +36,8 @@ source_group(
 	)
 
 set(SOURCE_CORE
+  Core/AssetStream.cc
+  Core/AssetStream.hh
   Core/ClassRegistry.cc
   Core/ClassRegistry.hh
   Core/Collection.hh
@@ -181,6 +183,8 @@ set(SOURCE_LOADERS
 	Loaders/ImageLoader.hh
 	Loaders/MaterialLoader.cc
 	Loaders/MaterialLoader.hh
+  Loaders/ShaderGraphLoader.cc
+  Loaders/ShaderGraphLoader.hh
   Loaders/StaticMeshLoader.cc
   Loaders/StaticMeshLoader.hh
 	Loaders/TextureLoader.cc

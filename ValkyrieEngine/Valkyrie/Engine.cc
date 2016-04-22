@@ -60,9 +60,10 @@ vkEngine::vkEngine()
   , m_renderer(0)
   , m_physicsSystem(0)
 {
-  ValkyrieModule::Initialize();
+  vkValkyrieModule::Initialize();
   const vkClass *clazz = vkSGTexture2D::GetStaticClass();
   vkSGNode *object = clazz->CreateInstance<vkSGNode>();
+
 
 
 }
@@ -673,11 +674,41 @@ vkMaterial *create_red_shader(IGraphics *graphics)
 }
 
 
+vkMaterial *create_green_shader(IGraphics *graphics)
+{
+  vkSGShaderGraph *shader = new vkSGShaderGraph();
+
+  vkSGConstFloat3 *constRed = new vkSGConstFloat3();
+  constRed->SetInput(0, 0.0f);
+  constRed->SetInput(1, 1.0f);
+  constRed->SetInput(2, 0.0f);
+  shader->SetDiffuse(constRed->GetOutput(0));
+
+  if (!graphics->GetShaderGraphFactory()->GenerateShaderGraph(shader))
+  {
+    delete shader;
+    shader = 0;
+  }
+  return shader;
+}
+
+
 
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
   vkMaterial *constRedMaterial = create_red_shader(graphics);
+  vkMaterial *constGreenMaterial = create_green_shader(graphics);
+  vkMaterialInstance *constRedMaterialInst = new vkMaterialInstance();
+  constRedMaterialInst->SetMaterial(constRedMaterial);
+  vkMaterialInstance *constGreenMaterialInst = new vkMaterialInstance();
+  constGreenMaterialInst->SetMaterial(constGreenMaterial);
+  vkMultiMaterial *shaderGraphMaterial = new vkMultiMaterial();
+  shaderGraphMaterial->AddMaterialInstance(constRedMaterialInst);
+  shaderGraphMaterial->AddMaterialInstance(constGreenMaterialInst);
+
+
+
   vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
   vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
   vkMaterialInstance *materialFieldstoneGreenInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
@@ -786,6 +817,10 @@ vkEntityScene *create_scene(IGraphics *graphics)
     float t = (float)rand() / (float)RAND_MAX;
 
     vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
+    vkStaticMeshState *meshState = vkQueryClass<vkStaticMeshState>(mineEntity->GetState(1));
+    meshState->SetMaterial(constRedMaterialInst, 0);
+    meshState->SetMaterial(constGreenMaterialInst, 1);
+
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));
     mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);

@@ -121,7 +121,19 @@ public:
   template<typename T>
   T *CreateInstance() const
   {
-    return vkQueryClass<T>(CreateInstance());
+    IObject *obj = CreateInstance();
+    if (!obj)
+    {
+      return 0;
+    }
+
+    T* t = vkQueryClass<T>(obj);
+    if (!t)
+    {
+      obj->Release();
+      obj = 0;
+    }
+    return t;
   }
 
   size_t GetNumberOfProperties() const;

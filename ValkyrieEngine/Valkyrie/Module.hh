@@ -1,11 +1,11 @@
 #pragma once
 
 
-class ValkyrieModule
+class vkValkyrieModule
 {
 public:
   static void Initialize();
 
 private:
-  ValkyrieModule() {}
+  vkValkyrieModule() {}
 };

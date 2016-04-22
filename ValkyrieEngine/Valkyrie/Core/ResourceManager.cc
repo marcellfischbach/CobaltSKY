@@ -1,5 +1,6 @@
 
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/VFS.hh>
 
 vkResourceManager *vkResourceManager::Get()
@@ -174,6 +175,90 @@ bool vkResourceLocator::operator<(const vkResourceLocator &o) const
   if (m_resourceName < o.m_resourceName) return true;
   return false;
 }
+
+
+vkAssetFileLoader::vkAssetFileLoader()
+  : IFileLoader()
+{
+  VK_CLASS_GEN_CONSTR;
+}
+
+vkAssetFileLoader::~vkAssetFileLoader()
+{
+
+}
+
+bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  return file->GetExtension() == vkString("asset");
+}
+
+
+IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  char magicNumber[8];
+  file->Read(magicNumber, 8);
+  if (vkString(magicNumber) != vkString("VALASSET"))
+  {
+    return 0;
+  }
+
+  vkUInt8 numEntries;
+  file->Read(&numEntries, 1);
+
+  for (vkUInt8 i = 0; i < numEntries; ++i)
+  {
+#pragma pack(1)
+    struct Entry
+    {
+      char typeID[4];
+      char name[32];
+      vkUInt32 offset;
+    } entry;
+
+    file->Read(&entry, sizeof(Entry));
+
+    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == vkString(entry.name))
+    {
+      // move pointer to the right position within the file
+      file->Seek(eSP_Set, entry.offset);
+#pragma pack(1)
+      struct EntryHeader
+      {
+        vkUInt32 length;
+        char loaderName[64];
+      } entryHeader;
+      file->Read(&entryHeader, sizeof(EntryHeader));
+
+      const vkClass *cls = vkClassRegistry::Get()->GetClass(vkString(entryHeader.loaderName));
+      if (!cls)
+      {
+        return 0;
+      }
+
+      vkUInt8 *buffer = new vkUInt8[entryHeader.length];
+      file->Read(buffer, entryHeader.length);
+
+      vkAssetInputStream is(buffer);
+      IObject *obj = 0;
+
+      IAssetLoader *assetLoader = cls->CreateInstance<IAssetLoader>();
+      if (assetLoader && assetLoader->CanLoad(is, locator, userData))
+      {
+        obj = assetLoader->Load(is, locator, userData);
+      }
+      delete[] buffer;
+      // load the data
+      return obj;
+    }
+  }
+
+  return 0;
+}
+
+
+
+
 
 
 vkXMLFileLoader::vkXMLFileLoader()
