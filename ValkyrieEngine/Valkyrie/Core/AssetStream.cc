@@ -300,3 +300,13 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkMatrix4f &i)
   m_writePointer += sizeof(float) * 16;
   return *this;
 }
+
+vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkString &i)
+{
+  AcquireCapacity(sizeof(vkUInt16) + i.length());
+  *this << (vkUInt16)i.length();
+
+  memcpy(m_writePointer, i.c_str(), sizeof(char) * i.length());
+  m_writePointer += sizeof(char) * i.length();
+  return *this;
+}

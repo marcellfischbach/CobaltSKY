@@ -55,6 +55,11 @@ public:
   vkAssetOutputStream & operator<< (const vkMatrix4f &i);
   vkAssetOutputStream & operator<< (const vkString &i);
 
+  VK_FORCEINLINE const vkUInt8 *GetBuffer() const
+  {
+    return m_buffer;
+  }
+
 private:
   void AcquireCapacity(vkUInt32 capacity);
   vkUInt8 *m_writePointer;

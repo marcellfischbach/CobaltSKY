@@ -203,7 +203,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
     return 0;
   }
 
-  vkUInt8 numEntries;
+  vkUInt16 numEntries;
   file->Read(&numEntries, 1);
 
   for (vkUInt8 i = 0; i < numEntries; ++i)
@@ -211,7 +211,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
 #pragma pack(1)
     struct Entry
     {
-      char typeID[4];
+      char typeID[8];
       char name[32];
       vkUInt32 offset;
     } entry;

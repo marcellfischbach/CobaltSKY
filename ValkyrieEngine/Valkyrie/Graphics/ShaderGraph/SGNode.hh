@@ -3,6 +3,7 @@
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Defs.hh>
+#include <Valkyrie/Math/Vector.hh>
 
 #include <Valkyrie/Core/String.hh>
 #include <vector>
@@ -177,6 +178,17 @@ public:
   void SetValidationMessage(const vkString &validationMessage);
   const vkString &GetValidationMessage() const;
 
+#ifdef VK_BUILD_EDITOR
+  const vkVector2f &GetPosition() const
+  {
+    return m_position;
+  }
+  void SetPosition(const vkVector2f &position)
+  {
+    m_position = position;
+  }
+#endif
+
 private:
   vkString m_name;
   vkString m_bindingName;
@@ -185,6 +197,9 @@ private:
   std::vector<vkSGInput*> m_inputs;
   std::vector<vkSGOutput*> m_outputs;
 
+#ifdef VK_BUILD_EDITOR
+  vkVector2f m_position;
+#endif
 };
 
 class VKE_API vkSGNodes

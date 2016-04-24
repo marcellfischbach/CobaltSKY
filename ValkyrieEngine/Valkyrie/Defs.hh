@@ -10,6 +10,8 @@
 
 #define VK_FORCEINLINE __forceinline
 
+#define VK_ZERO(e) memset(&e, 0, sizeof(e))
+
 #else
 
 #define VK_FORCEINLINE inline

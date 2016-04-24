@@ -26,6 +26,8 @@ source_group(
 set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/AssetManagerWidget.cc
     AssetManager/AssetManagerWidget.hh
+    AssetManager/AssetWriter.cc
+    AssetManager/AssetWriter.hh
     )
 
 set(EDITOR_ASSETMANAGER_UI

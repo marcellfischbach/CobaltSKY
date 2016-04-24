@@ -1,6 +1,7 @@
 
 
 add_definitions(-DVKE_EXPORT)
+add_definitions(-DVK_BUILD_EDITOR)
 
 set(SOURCE
   Defs.hh
