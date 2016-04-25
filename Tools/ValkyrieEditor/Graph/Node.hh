@@ -17,6 +17,7 @@ class NodeOutputItem;
 class NodeGroup;
 class NodeLabel;
 class NodeGraphScene;
+class NodeNameInput;
 class Node : public QObject
 {
   friend class NodeBackground;
@@ -62,6 +63,18 @@ public:
     return m_color;
   }
 
+  inline void SetHasName(bool hasName)
+  {
+    m_hasName = hasName;
+  }
+
+  inline bool HasName() const
+  {
+    return m_hasName;
+  }
+
+  QString GetName() const;
+
   void AddInput(const QString &label, const QString &key, InputMode mode);
   void AddOutput(const QString &label, const QString &key);
 
@@ -73,6 +86,9 @@ public:
 
   QPointF GetAnchorInputPos(int idx) const;
   QPointF GetAnchorOutputPos(int idx) const;
+
+  size_t GetNumberOfInputs() const;
+  float GetConstInput(size_t idx) const;
 
   bool Initialize();
 
@@ -126,6 +142,9 @@ private:
 
   QString m_label;
   QColor m_color;
+
+  bool m_hasName;
+  NodeNameInput *m_nodeNameInput;
 
   QVector<Input> m_inputs;
   QVector<Output> m_outputs;

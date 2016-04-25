@@ -15,8 +15,8 @@ public:
   enum InputType
   {
     eIT_Diffuse,
-    eIT_Roughness,
     eIT_Alpha,
+    eIT_Roughness,
     eIT_Normal,
     eIT_Undefined,
   };
@@ -135,7 +135,6 @@ VK_FORCEINLINE void vkSGShaderGraph::SetDiscardAlpha(bool discardAlpha)
 
 VK_FORCEINLINE void vkSGShaderGraph::SetDiscardAlpha(float discardAlphaThreshold, vkCompareMode discardAlphaCompareMode)
 {
-  m_discardAlpha = true;
   m_discardAlphaThreshold = discardAlphaThreshold;
   m_discardAlphaCompareMode = discardAlphaCompareMode;
 }

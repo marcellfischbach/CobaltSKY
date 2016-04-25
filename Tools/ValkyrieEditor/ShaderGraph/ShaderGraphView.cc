@@ -128,6 +128,7 @@ void ShaderGraphView::on_cbDiscardAlpha_stateChanged(int state)
 
 void ShaderGraphView::on_pbCompile_clicked(bool)
 {
+  CollectData();
   if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
   {
     printf("Unable to compile\n");
@@ -136,6 +137,7 @@ void ShaderGraphView::on_pbCompile_clicked(bool)
 
 void ShaderGraphView::on_pbSave_clicked(bool)
 {
+  CollectData();
   QVector<shadergraph::SGNode*> nodes;
   for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
@@ -207,4 +209,40 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   }
 
 
+}
+
+
+
+
+void ShaderGraphView::CollectData()
+{
+  for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
+  {
+    shadergraph::Node* node = static_cast<shadergraph::Node*>(m_scene->GetNode(i));
+    if (node->GetType() != shadergraph::Node::eT_Node)
+    {
+      continue;
+    }
+
+    shadergraph::SGNode* sgNode = static_cast<shadergraph::SGNode*>(node);
+
+    for (size_t j = 0, jn = sgNode->GetNumberOfInputs(); j < jn; ++j)
+    {
+      float constFloat = sgNode->GetConstInput(j);
+      sgNode->GetNode()->GetInput(j)->SetConst(constFloat);
+    }
+
+    vkSGNode *vksgNode = sgNode->GetNode();
+    vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(vksgNode);
+    if (resNode && sgNode->HasName())
+    {
+      resNode->SetResourceName(vkString((const char*)sgNode->GetName().toLatin1()));
+    }
+  }
+
+
+  m_shaderGraph->SetBlendOutWithBinaryGradient(m_gui.cbBlendBinaryGradient->checkState() != 0);
+  m_shaderGraph->SetDiscardAlpha(m_gui.cbDiscardAlpha->checkState() != 0);
+  m_shaderGraph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
+                                 (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
 }

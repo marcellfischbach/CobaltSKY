@@ -124,8 +124,8 @@ public:
 
   const vkString &GetName() const;
 
-  void SetBindingName(const vkString &bindingName);
-  const vkString &GetBindingName() const;
+  //void SetBindingName(const vkString &bindingName);
+  //const vkString &GetBindingName() const;
 
   vkSize GetNumberOfInputs() const;
   vkSGInput *GetInput(vkSize idx) const;
@@ -191,7 +191,7 @@ public:
 
 private:
   vkString m_name;
-  vkString m_bindingName;
+  //vkString m_bindingName;
   vkString m_validationMessage;
 
   std::vector<vkSGInput*> m_inputs;
@@ -201,6 +201,7 @@ private:
   vkVector2f m_position;
 #endif
 };
+
 
 class VKE_API vkSGNodes
 {
@@ -223,9 +224,24 @@ private:
   std::vector<Entry> m_entries;
 };
 
+VK_CLASS()
+class VKE_API vkSGResourceNode : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGResourceNode();
+  virtual ~vkSGResourceNode();
+
+  void SetResourceName(const vkString &resourceName);
+  const vkString &GetResourceName() const;
+
+private:
+  vkString m_resourceName;
+
+};
 
 VK_CLASS()
-class VKE_API vkSGVarFloat : public vkSGNode
+class VKE_API vkSGVarFloat : public vkSGResourceNode
 {
   VK_CLASS_GEN;
 public:
@@ -235,7 +251,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGVarFloat2 : public vkSGNode
+class VKE_API vkSGVarFloat2 : public vkSGResourceNode
 {
   VK_CLASS_GEN;
 public:
@@ -244,7 +260,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGVarFloat3 : public vkSGNode
+class VKE_API vkSGVarFloat3 : public vkSGResourceNode
 {
   VK_CLASS_GEN;
 public:
@@ -254,7 +270,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGVarFloat4 : public vkSGNode
+class VKE_API vkSGVarFloat4 : public vkSGResourceNode
 {
   VK_CLASS_GEN;
 public:
@@ -442,7 +458,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGTexture2D : public vkSGNode
+class VKE_API vkSGTexture2D : public vkSGResourceNode
 {
   VK_CLASS_GEN;
 public:
@@ -459,6 +475,7 @@ VK_FORCEINLINE const vkString &vkSGNode::GetName() const
   return m_name;
 }
 
+/*
 VK_FORCEINLINE void vkSGNode::SetBindingName(const vkString &bindingName)
 {
   m_bindingName = bindingName;
@@ -468,6 +485,7 @@ VK_FORCEINLINE const vkString &vkSGNode::GetBindingName() const
 {
   return m_bindingName;
 }
+*/
 
 VK_FORCEINLINE void vkSGNode::SetName(const vkString &name)
 {

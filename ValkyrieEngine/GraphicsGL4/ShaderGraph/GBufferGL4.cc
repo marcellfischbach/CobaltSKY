@@ -72,7 +72,6 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   ctx.EvaluateInlines(outputs);
 
-  std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   ctx.GenerateCode(preAlphaOutputs);
   vkString preAlphaCode = ctx.GetCode();
@@ -80,6 +79,8 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   ctx.GenerateCode(postAlphaOutputs);
   vkString postAlphaCode = ctx.GetCode();
 
+  ctx.GenerateCode(outputs);
+  std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   std::ostringstream ss;
 

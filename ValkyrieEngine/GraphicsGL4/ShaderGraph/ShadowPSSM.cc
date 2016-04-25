@@ -39,11 +39,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   ctx.EvaluateInlines(outputs);
 
-  std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
-
   ctx.GenerateCode(preAlphaOutputs);
   vkString preAlphaCode = ctx.GetCode();
 
+  ctx.GenerateCode(outputs);
+  std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   bool vsm = false;
 

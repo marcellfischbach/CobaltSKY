@@ -99,6 +99,9 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
   SetLabel(name);
   SetBackgroundColor(getTypeColor(category));
 
+  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(node);
+  SetHasName(res != 0);
+
   for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
   {
     vkSGInput *input = node->GetInput(i);

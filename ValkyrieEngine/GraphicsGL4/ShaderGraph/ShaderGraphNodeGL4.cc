@@ -493,11 +493,14 @@ vkSGVarGL4::vkSGVarGL4(const vkString &typeName)
 void vkSGVarGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {
   vkSGNode *fl = GetNode();
+  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(fl);
+  if (res)
+  {
+    vkString bindingName = "vk_" + res->GetResourceName();
+    ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
 
-  vkString bindingName = "vk_" + fl->GetBindingName();
-  ctx.SetOutputValue(fl->GetOutput("v"), bindingName);
-
-  ctx.AddBinding(fl, m_typeName, bindingName);
+    ctx.AddBinding(fl, m_typeName, bindingName);
+  }
 }
 
 void vkSGConstFloatGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
@@ -835,7 +838,12 @@ void vkSGDefaultTextureCoordinateGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 void vkSGTexture2DGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 {
   vkSGNode *txt = GetNode();
-  vkString bindingName = txt->GetBindingName();
+  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(txt);
+  if (!res)
+  {
+    return;
+  }
+  vkString bindingName = res->GetResourceName();
   if (bindingName.length() == 0)
   {
     return ;

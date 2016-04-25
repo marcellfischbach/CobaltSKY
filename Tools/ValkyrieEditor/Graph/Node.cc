@@ -299,6 +299,12 @@ public:
     m_textItem->setPlainText(text);
   }
 
+  float GetConst() const
+  {
+    QString text = m_textItem->toPlainText();
+    return atof((const char*)text.toLatin1());
+  }
+
   static QRectF GetRect(const QFontMetrics &fm)
   {
     return QRectF(0, 0, fm.width("GGGG"), fm.height() *1.5);
@@ -309,6 +315,58 @@ private:
   QGraphicsTextItem *m_textItem;
 };
 
+
+class NodeNameInput : public QGraphicsItemGroup
+{
+public:
+  NodeNameInput(QGraphicsItem *parent, const QFont &fnt)
+    : QGraphicsItemGroup(parent)
+  {
+    setHandlesChildEvents(false);
+
+    m_background = new QGraphicsRectItem(this);
+    m_background->setPen(QPen(QColor(0, 0, 0)));
+    m_background->setBrush(QBrush(QColor(255, 255, 255)));
+
+    m_textItem = new QGraphicsTextItem(this);
+    m_textItem->setTextInteractionFlags(Qt::TextEditorInteraction);
+
+    QFontMetrics fm(fnt);
+    QRectF rect = GetRect(fm);
+    m_background->setRect(rect);
+    SetText("");
+  }
+
+  void SetRect(const QRectF &rect)
+  {
+    m_background->setRect(rect);
+    m_textItem->setPos(rect.topLeft());
+  }
+
+  void SetText(const QString &text)
+  {
+    m_textItem->setPlainText(text);
+  }
+
+  QString GetName() const
+  {
+    return m_textItem->toPlainText();
+  }
+
+  float GetHeight(const QFontMetrics &fm) const
+  {
+
+  }
+
+  static QRectF GetRect(const QFontMetrics &fm)
+  {
+    return QRectF(0, 0, fm.width("GGGG"), fm.height() *1.5);
+  }
+
+private:
+  QGraphicsRectItem *m_background;
+  QGraphicsTextItem *m_textItem;
+};
 
 class NodeInputItem : public QGraphicsItemGroup
 {
@@ -404,6 +462,7 @@ Node::Node(QObject *parent)
   : QObject(parent)
   , m_scene(0)
   , m_color(128, 0, 0)
+  , m_hasName(false)
   , m_valid(false)
 {
 
@@ -435,6 +494,14 @@ Node *Node::GetSelected()
   return Node::selectedNode;
 }
 
+QString Node::GetName() const
+{
+  if (m_nodeNameInput)
+  {
+    return m_nodeNameInput->GetName();
+  }
+  return "";
+}
 
 void Node::AddInput(const QString &label, const QString &key, InputMode mode)
 {
@@ -534,6 +601,27 @@ QPointF Node::GetAnchorOutputPos(int idx) const
 }
 
 
+size_t Node::GetNumberOfInputs() const
+{
+  return m_inputs.size();
+}
+
+float Node::GetConstInput(size_t idx) const
+{
+  if (idx >= m_inputs.size())
+  {
+    return 0.0f;
+  }
+
+  graph::NodeConstInput *constInput = m_inputs[idx].item->constInput;
+  if (!constInput)
+  {
+    return 0.0f;
+  }
+
+  return constInput->GetConst();
+}
+
 bool Node::Initialize()
 {
   // first check any of the inputs need anchors and/or const inputs
@@ -567,6 +655,12 @@ bool Node::Initialize()
 
   float width = 0.0f;
   float height = 0.0f;
+
+  float nameHeight = 0.0f;
+  if (m_hasName)
+  {
+    nameHeight = fm.height() * 1.5f + m_spacing;
+  }
 
   QRectF achorRect = NodeAnchor::GetRect(fm);
   QRectF constRect = NodeConstInput::GetRect(fm);
@@ -622,7 +716,7 @@ bool Node::Initialize()
   int inoutWidth = inputWidth + 2.0f * m_margin + outputWidth + m_middleSpacing;
   width = VK_MAX(titleWidth, inoutWidth);
 
-  height = m_margin + titleHeight + VK_MAX(inputHeight, outputHeight) + m_margin;
+  height = m_margin + titleHeight + nameHeight + VK_MAX(inputHeight, outputHeight) + m_margin;
 
 
   // create the parent object
@@ -636,6 +730,17 @@ bool Node::Initialize()
 
 
   int posY = m_margin + titleHeight + m_spacing;
+
+  if (m_hasName)
+  {
+    float nameInputHeight = fm.height() * 1.5;
+    m_nodeNameInput = new NodeNameInput(m_nodeGroup, fnt);
+    m_nodeNameInput->SetRect(QRectF(m_margin, posY, width - 2.0f * m_margin, nameInputHeight));
+
+    posY += nameHeight;
+  }
+
+  int topPosY = posY;
   // now place the inputs
   int i = 0;
   for (Input &input : m_inputs)
@@ -647,7 +752,7 @@ bool Node::Initialize()
     posY += constRect.height() + m_spacing;
   }
 
-  posY = m_margin + titleHeight + m_spacing;
+  posY = topPosY;
   i = 0;
   for (Output &output : m_outputs)
   {

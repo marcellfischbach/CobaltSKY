@@ -39,6 +39,7 @@ protected:
 
 
 private:
+  void CollectData();
 
   Ui::ShaderGraphView m_gui;
   QGraphicsView *m_view;

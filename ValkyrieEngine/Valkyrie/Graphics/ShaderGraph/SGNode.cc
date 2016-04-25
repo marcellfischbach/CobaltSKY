@@ -497,29 +497,52 @@ const std::vector<vkSGNodes::Entry> &vkSGNodes::GetEntries () const
   return m_entries;
 }
 
-vkSGVarFloat::vkSGVarFloat()
+vkSGResourceNode::vkSGResourceNode()
   : vkSGNode()
+  , m_resourceName("")
+{
+
+}
+
+vkSGResourceNode::~vkSGResourceNode()
+{
+
+}
+
+void vkSGResourceNode::SetResourceName(const vkString &resourceName)
+{
+  m_resourceName = resourceName;
+}
+
+const vkString &vkSGResourceNode::GetResourceName() const
+{
+  return m_resourceName;
+}
+
+
+vkSGVarFloat::vkSGVarFloat()
+  : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float, "v"));
 }
 
 vkSGVarFloat2::vkSGVarFloat2()
-  : vkSGNode()
+  : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT2_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float2, "v"));
 }
 
 vkSGVarFloat3::vkSGVarFloat3()
-  : vkSGNode()
+  : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT3_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float3, "v"));
 }
 
 vkSGVarFloat4::vkSGVarFloat4()
-  : vkSGNode()
+  : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT4_NAME);
   AddOutput(new vkSGOutput(eSGDT_Float4, "v"));
@@ -844,7 +867,7 @@ vkSGDefaultTextureCoordinate::vkSGDefaultTextureCoordinate()
 }
 
 vkSGTexture2D::vkSGTexture2D()
-  : vkSGNode()
+  : vkSGResourceNode()
 {
   SetName(VK_TEXTURE2D_NAME);
   AddInput(new vkSGInput("uv", false, true));
