@@ -1,6 +1,7 @@
 
 
 #include <Graph/Node.hh>
+#include <Graph/Connection.hh>
 #include <Graph/Scene.hh>
 #include <qgraphicsitem.h>
 #include <qgraphicssceneevent.h>
@@ -88,6 +89,10 @@ public:
   void SetTitleHeight(float titleHeight)
   {
     gradientHeight = titleHeight;
+  }
+  void SetColor(const QColor &color)
+  {
+    this->color = color;
   }
 
   void UpdateData()
@@ -398,6 +403,8 @@ Node *Node::selectedNode = 0;
 Node::Node(QObject *parent)
   : QObject(parent)
   , m_scene(0)
+  , m_color(128, 0, 0)
+  , m_valid(false)
 {
 
 }
@@ -473,6 +480,25 @@ int Node::GetIndexOfOutput(const QString &key) const
   }
   return -1;
 }
+
+QString Node::GetInputKey(int idx) const
+{
+  if (idx < 0 || idx >= m_inputs.size())
+  {
+    return "";
+  }
+  return m_inputs[idx].key;
+}
+
+QString Node::GetOutputKey(int idx) const
+{
+  if (idx < 0 || idx >= m_outputs.size())
+  {
+    return "";
+  }
+  return m_outputs[idx].key;
+}
+
 
 QPointF Node::GetAnchorInputPos(int idx) const
 {
@@ -602,6 +628,7 @@ bool Node::Initialize()
   // create the parent object
   m_item = m_nodeGroup = new NodeGroup(this);
   m_nodeGroup->SetTitleHeight(titleHeight + 2.0f * m_margin);
+  m_nodeGroup->SetColor(m_color);
   m_nodeGroup->UpdateData();
   m_nodeGroup->SetSize(width, height);
   m_nodeGroup->background->motionHandle = QRectF(0, 0, width, titleHeight + 2.0f * m_margin);
@@ -639,6 +666,7 @@ bool Node::Initialize()
   m_title->SetRect(QRect(0, 0, width, titleHeight));
   m_title->SetAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
+  m_valid = true;
   return true;
 }
 
@@ -672,6 +700,21 @@ void Node::SetPosition(const QPointF &pos)
     m_scene->NodeMoved(this);
   }
 
+}
+
+void Node::AddConnection(NodeConnection *connection)
+{
+  m_connections.append(connection);
+}
+
+void Node::RemoveConnection(NodeConnection *connection)
+{
+  m_connections.removeAll(connection);
+}
+
+void Node::RemoveAllConnections()
+{
+  m_connections.clear();
 }
 
 bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)

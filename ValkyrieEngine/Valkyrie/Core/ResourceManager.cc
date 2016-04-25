@@ -203,6 +203,9 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
     return 0;
   }
 
+  vkUInt32 assetVersion;
+  file->Read(&assetVersion, sizeof(vkUInt32));
+
   vkUInt16 numEntries;
   file->Read(&numEntries, 1);
 
@@ -212,7 +215,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
     struct Entry
     {
       char typeID[8];
-      char name[32];
+      char name[64];
       vkUInt32 offset;
     } entry;
 
@@ -225,8 +228,8 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
 #pragma pack(1)
       struct EntryHeader
       {
+        char loaderName[256];
         vkUInt32 length;
-        char loaderName[64];
       } entryHeader;
       file->Read(&entryHeader, sizeof(EntryHeader));
 

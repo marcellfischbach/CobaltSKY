@@ -9,24 +9,23 @@ struct IFile;
 class AssetWriter
 {
 public:
-  AssetWriter(IFile *file);
+  AssetWriter();
   ~AssetWriter();
 
   void AddEntry(const vkString& typeID, const vkString &name, const vkString &loaderName, vkUInt32 length, const vkUInt8* buffer);
 
-  void Output();
+  void Output(IFile *file);
 
 private:
   IFile *m_file;
 
-#pragma pack(1)
   struct Entry
   {
     char typeID[8];
-    char name[32];
+    char name[64];
     vkUInt32 offset;
 
-    char loaderName[64];
+    char loaderName[256];
     vkUInt32 length;
     vkUInt8 *buffer;
   };

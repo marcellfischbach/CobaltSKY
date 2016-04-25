@@ -59,10 +59,16 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/Node.cc
+    ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc
     ShaderGraph/NodeSelector.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
+    ShaderGraph/SGNode.cc
+    ShaderGraph/SGNode.hh
+    ShaderGraph/SGShaderGraphNode.cc
+    ShaderGraph/SGShaderGraphNode.hh
     )
 
 set(EDITOR_SHADERGRAPH_UI

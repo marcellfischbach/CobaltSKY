@@ -12,9 +12,22 @@ class VKE_API vkSGShaderGraph : public vkMaterial
 {
   VK_CLASS_GEN;
 public:
+  enum InputType
+  {
+    eIT_Diffuse,
+    eIT_Roughness,
+    eIT_Alpha,
+    eIT_Normal,
+    eIT_Undefined,
+  };
+public:
   vkSGShaderGraph();
 
   bool Validate();
+
+  void SetInput(InputType type, vkSGOutput* output);
+  vkSGOutput *GetInput(InputType type);
+  const vkSGOutput *GetInput(InputType type) const;
 
   void SetDiffuse(vkSGOutput *diffuse);
   vkSGOutput *GetDiffuse();
@@ -37,6 +50,10 @@ public:
   float GetDiscardAlphaThreshold() const;
   vkCompareMode GetDiscardAlphaCompareMode() const;
 
+  void SetNormal(vkSGOutput *normal);
+  vkSGOutput *GetNormal();
+  const vkSGOutput *GetNormal() const;
+
 private:
   vkSGNode *GetNode(vkSGOutput *output);
   bool ValidateNode(vkSGOutput *output);
@@ -48,6 +65,9 @@ private:
   bool m_discardAlpha;
   float m_discardAlphaThreshold;
   vkCompareMode m_discardAlphaCompareMode;
+
+  vkSGOutput *m_normal;
+
 };
 
 struct VKE_API ISGShaderGraphFactory 
@@ -143,4 +163,20 @@ VK_FORCEINLINE void vkSGShaderGraph::SetBlendOutWithBinaryGradient(bool blendOut
 VK_FORCEINLINE bool vkSGShaderGraph::IsBlendOutWithBinaryGradient() const
 {
   return m_blendOutWithBinaryGradient;
+}
+
+VK_FORCEINLINE void vkSGShaderGraph::SetNormal(vkSGOutput *normal)
+{
+  m_normal = normal;
+}
+
+VK_FORCEINLINE vkSGOutput *vkSGShaderGraph::GetNormal()
+{
+  return m_normal;
+}
+
+
+VK_FORCEINLINE const vkSGOutput *vkSGShaderGraph::GetNormal() const
+{
+  return m_normal;
 }

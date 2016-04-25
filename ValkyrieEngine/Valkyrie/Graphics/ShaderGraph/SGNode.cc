@@ -179,19 +179,15 @@ void vkSGNode::SetOutputDataType(const vkString &name, vkSGDataType dataType)
 
 void vkSGNode::SetInput(int inputIdx, vkSGNode *node, int outputIdx)
 {
-  if (!node)
-  {
-    return;
-  }
   vkSGInput *input = GetInput(inputIdx);
   if (!input)
   {
     return;
   }
-  vkSGOutput *output = node->GetOutput(outputIdx);
-  if (!output)
+  vkSGOutput *output = 0;
+  if (node)
   {
-    return;
+    output = node->GetOutput(outputIdx);
   }
 
   input->SetInput(output);
@@ -199,19 +195,15 @@ void vkSGNode::SetInput(int inputIdx, vkSGNode *node, int outputIdx)
 
 void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, int outputIdx)
 {
-  if (!node)
-  {
-    return;
-  }
   vkSGInput *input = GetInput(inputName);
   if (!input)
   {
     return;
   }
-  vkSGOutput *output = node->GetOutput(outputIdx);
-  if (!output)
+  vkSGOutput *output = 0;
+  if (node)
   {
-    return;
+    output = node->GetOutput(outputIdx);
   }
 
   input->SetInput(output);
@@ -220,19 +212,15 @@ void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, int outputIdx
 
 void vkSGNode::SetInput(int inputIdx, vkSGNode *node, const vkString &outputName)
 {
-  if (!node)
-  {
-    return;
-  }
   vkSGInput *input = GetInput(inputIdx);
   if (!input)
   {
     return;
   }
-  vkSGOutput *output = node->GetOutput(outputName);
-  if (!output)
+  vkSGOutput *output = 0;
+  if (node)
   {
-    return;
+    output = node->GetOutput(outputName);
   }
 
   input->SetInput(output);
@@ -240,19 +228,15 @@ void vkSGNode::SetInput(int inputIdx, vkSGNode *node, const vkString &outputName
 
 void vkSGNode::SetInput(const vkString &inputName, vkSGNode *node, const vkString &outputName)
 {
-  if (!node)
-  {
-    return;
-  }
   vkSGInput *input = GetInput(inputName);
   if (!input)
   {
     return;
   }
-  vkSGOutput *output = node->GetOutput(outputName);
-  if (!output)
+  vkSGOutput *output = 0;
+  if (node)
   {
-    return;
+    output = node->GetOutput(outputName);
   }
 
   input->SetInput(output);

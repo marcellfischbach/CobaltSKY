@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <qcolor.h>
 #include <qobject.h>
 #include <qstring.h>
 #include <qvector.h>
@@ -8,9 +9,9 @@
 
 
 class QGraphicsItem;
-
 namespace graph
 {
+class NodeConnection;
 class NodeInputItem;
 class NodeOutputItem;
 class NodeGroup;
@@ -51,11 +52,24 @@ public:
     return m_label;
   }
 
+  inline void SetBackgroundColor(const QColor &color)
+  {
+    m_color = color;
+  }
+
+  inline const QColor &GetBackgroundColor() const
+  {
+    return m_color;
+  }
+
   void AddInput(const QString &label, const QString &key, InputMode mode);
   void AddOutput(const QString &label, const QString &key);
 
   int GetIndexOfInput(const QString &key) const;
   int GetIndexOfOutput(const QString &key) const;
+
+  QString GetInputKey(int idx) const;
+  QString GetOutputKey(int idx) const;
 
   QPointF GetAnchorInputPos(int idx) const;
   QPointF GetAnchorOutputPos(int idx) const;
@@ -76,10 +90,20 @@ public:
     m_scene = scene;
   }
 
+  inline NodeGraphScene *GetScene()
+  {
+    return m_scene;
+  }
+
   void UpdateSelection();
 
   void ResetConstVisible();
   void SetConstVisible(int input, bool visible);
+
+  virtual void AddConnection(NodeConnection *connection);
+  virtual void RemoveConnection(NodeConnection *connection);
+
+  virtual void RemoveAllConnections();
 
   static void Select(Node *node);
   static Node *GetSelected();
@@ -101,6 +125,8 @@ private:
   };
 
   QString m_label;
+  QColor m_color;
+
   QVector<Input> m_inputs;
   QVector<Output> m_outputs;
 
@@ -109,8 +135,12 @@ private:
   NodeLabel *m_title;
 
   NodeGraphScene *m_scene;
+  bool m_valid;
 
   static Node *selectedNode;
+protected:
+  QVector<NodeConnection*> m_connections;
+
 };
 
 }

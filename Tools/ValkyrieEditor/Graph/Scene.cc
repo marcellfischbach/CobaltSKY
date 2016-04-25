@@ -35,7 +35,24 @@ void NodeGraphScene::RemoveSelectedNode()
   Node::Select(0);
   m_nodes.removeAll(selected);
   selected->SetScene(0);
+  selected->RemoveAllConnections();
   removeItem(selected->GetItem());
+
+  QList<NodeConnection*> removes;
+  for (auto connection : m_connections)
+  {
+    if (connection->GetInputNode() == selected || connection->GetOutputNode() == selected)
+    {
+      removes.append(connection);
+    }
+  }
+  for (auto connection : removes)
+  {
+    m_connections.removeAll(connection);
+    delete connection;
+  }
+
+
   emit NodeRemoved(selected);
   delete selected;
 }
@@ -50,6 +67,23 @@ void NodeGraphScene::Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, i
   ResetConstValues();
 }
 
+
+void NodeGraphScene::Disconnect(NodeConnection *connection, bool resetConst)
+{
+  removeItem(connection);
+  m_connections.removeAll(connection);
+
+  emit NodesDisconnected(connection->GetOutputNode(),
+                         connection->GetOutputIdx(),
+                         connection->GetInputNode(),
+                         connection->GetInputIdx());
+  delete connection;
+  if (resetConst)
+  {
+    ResetConstValues();
+  }
+}
+
 void NodeGraphScene::Disconnect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx)
 {
 
@@ -60,13 +94,7 @@ void NodeGraphScene::Disconnect(Node *nodeOutput, int outputIdx, Node *nodeInput
         connection->GetInputNode() == nodeInput &&
         connection->GetInputIdx() == inputIdx)
     {
-      removeItem(connection);
-      m_connections.removeAll(connection);
-
-      emit NodesDisconnected(nodeOutput, outputIdx, nodeInput, inputIdx);
-      delete connection;
-
-      ResetConstValues();
+      Disconnect(connection);
       return;
     }
   }
@@ -81,12 +109,7 @@ void NodeGraphScene::DisconnectInput(Node *nodeInput, int inputIdx)
     if (connection->GetInputNode() == nodeInput &&
         connection->GetInputIdx() == inputIdx)
     {
-      removeItem(connection);
-      m_connections.removeAll(connection);
-
-      emit NodesDisconnected(connection->GetOutputNode(), connection->GetOutputIdx(), nodeInput, inputIdx);
-      delete connection;
-
+      Disconnect(connection, false);
       disconnected = true;
     }
   }
@@ -106,12 +129,7 @@ void NodeGraphScene::DisconnectOutput(Node *nodeOutput, int outputIdx)
     if (connection->GetOutputNode() == nodeOutput &&
         connection->GetOutputIdx() == outputIdx)
     {
-      removeItem(connection);
-      m_connections.removeAll(connection);
-
-      emit NodesDisconnected(nodeOutput, outputIdx, connection->GetInputNode(), connection->GetInputIdx());
-      delete connection;
-
+      Disconnect(connection, false);
       disconnected = true;
     }
   }

@@ -36,9 +36,8 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
   {
     vkUInt32 idx;
     vkString nodeClassName;
-    vkVector2f editorPos;
 
-    inputStream >> idx >> nodeClassName >> editorPos;
+    inputStream >> idx >> nodeClassName;
     const vkClass *nodeClass = vkClassRegistry::Get()->GetClass(nodeClassName);
     if (!nodeClass)
     {

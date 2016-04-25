@@ -10,8 +10,10 @@ class NodeConnection : public QGraphicsPathItem
 {
 public:
   NodeConnection(Node *outputNode, int outputIdx, Node *inputNode, int inputIdx, QGraphicsItem *parent = 0);
+  ~NodeConnection();
 
   void Update();
+
 
   const Node *GetOutputNode() const
   {
