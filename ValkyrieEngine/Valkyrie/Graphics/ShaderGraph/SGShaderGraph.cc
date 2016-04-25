@@ -83,3 +83,4 @@ bool vkSGShaderGraph::ValidateNode(vkSGOutput *output)
 
   return node->Validate();
 }
+

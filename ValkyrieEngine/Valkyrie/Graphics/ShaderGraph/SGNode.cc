@@ -477,6 +477,10 @@ vkSGNodes::vkSGNodes()
 
   m_entries.push_back(Entry (VK_ADD_NAME, vkSGAdd::GetStaticClass()));
   m_entries.push_back(Entry (VK_SUB_NAME, vkSGSub::GetStaticClass()));
+  m_entries.push_back(Entry(VK_MUL_NAME, vkSGMul::GetStaticClass()));
+  m_entries.push_back(Entry(VK_DIV_NAME, vkSGDiv::GetStaticClass()));
+  m_entries.push_back(Entry(VK_DOT_NAME, vkSGDot::GetStaticClass()));
+  m_entries.push_back(Entry(VK_CROSS_NAME, vkSGCross::GetStaticClass()));
 
   m_entries.push_back(Entry (VK_DEFAULT_TEXTURE_COORDINATE_NAME, vkSGDefaultTextureCoordinate::GetStaticClass()));
   m_entries.push_back(Entry (VK_TEXTURE2D_NAME, vkSGTexture2D::GetStaticClass()));

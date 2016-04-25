@@ -140,6 +140,37 @@ void NodeGraphScene::DisconnectOutput(Node *nodeOutput, int outputIdx)
   }
 }
 
+size_t NodeGraphScene::GetNumberOfNodes()
+{
+  return m_nodes.size();
+}
+
+Node *NodeGraphScene::GetNode(size_t idx)
+{
+  if (idx >= m_nodes.size())
+  {
+    return 0;
+  }
+  return m_nodes[idx];
+}
+
+size_t NodeGraphScene::GetNumberOfConnections()
+{
+  return m_connections.size();
+}
+
+NodeConnection *NodeGraphScene::GetConnection(size_t idx)
+{
+  if (idx >= m_connections.size())
+  {
+    return 0;
+  }
+  return m_connections[idx];
+}
+
+
+
+
 void NodeGraphScene::ResetConstValues()
 {
   for (Node *node : m_nodes)

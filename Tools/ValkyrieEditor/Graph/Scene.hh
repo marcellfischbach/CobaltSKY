@@ -24,6 +24,11 @@ public:
   void DisconnectInput(Node *nodeInput, int inputIdx);
   void DisconnectOutput(Node *nodeOutput, int outputIdx);
 
+  size_t GetNumberOfNodes();
+  Node *GetNode(size_t idx);
+  size_t GetNumberOfConnections();
+  NodeConnection *GetConnection(size_t idx);
+
 public:
   void NodeMoved(Node *node);
   void MoveConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);

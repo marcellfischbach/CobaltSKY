@@ -14,8 +14,8 @@ shadergraph::SGShaderGraphNode::SGShaderGraphNode(vkSGShaderGraph *graph)
   SetLabel("Shader");
   SetBackgroundColor(QColor(128, 128, 128));
   AddInput("Diffuse", "diffuse", graph::Node::eIM_Output);
-  AddInput("Alpha", "alpha", graph::Node::eIM_Both);
-  AddInput("Roughness", "roughness", graph::Node::eIM_Both);
+  AddInput("Alpha", "alpha", graph::Node::eIM_Output);
+  AddInput("Roughness", "roughness", graph::Node::eIM_Output);
   AddInput("Normal", "normal", graph::Node::eIM_Output);
 
 }

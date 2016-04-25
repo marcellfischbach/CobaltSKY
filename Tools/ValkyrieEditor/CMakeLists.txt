@@ -73,6 +73,7 @@ set(EDITOR_SHADERGRAPH_SOURCES
 
 set(EDITOR_SHADERGRAPH_UI
     ShaderGraph/NodeSelector.ui
+    ShaderGraph/ShaderGraphView.ui
     )
 
 

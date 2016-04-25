@@ -102,11 +102,11 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
   inputStream >> numGraphInputs;
   for (unsigned i = 0; i < numGraphInputs; ++i)
   {
-    vkString attribute;
+    vkUInt8 inputType;
     vkUInt32 outputNodeIdx;
     vkUInt8 outputNodeOutputIdx;
     inputStream
-      >> attribute
+      >> inputType
       >> outputNodeIdx
       >> outputNodeOutputIdx;
 
@@ -119,23 +119,7 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
     vkSGNode *outputNode = outputIt->second;
     vkSGOutput *outputNodeOutput = outputNode->GetOutput(outputNodeOutputIdx);
 
-    if (attribute == vkString("diffuse"))
-    {
-      shaderGraph->SetDiffuse(outputNodeOutput);
-    }
-    else if (attribute == vkString("roughness"))
-    {
-      shaderGraph->SetDiffuse(outputNodeOutput);
-    }
-    else if (attribute == vkString("alpha"))
-    {
-      shaderGraph->SetAlpha(outputNodeOutput);
-    }
-    else
-    {
-      Cleanup(nodes, shaderGraph);
-      return 0;
-    }
+    shaderGraph->SetInput((vkSGShaderGraph::InputType)inputType, outputNodeOutput);
   }
 
   //

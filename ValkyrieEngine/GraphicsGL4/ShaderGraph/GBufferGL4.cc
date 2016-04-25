@@ -15,6 +15,8 @@ static const char *compareMode[] = {
 
 void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 {
+  graph->SetShader(eRP_GBuffer, 0);
+
   std::set<vkSGOutput*> outputs;
   std::set<vkSGOutput*> preAlphaOutputs;
   std::set<vkSGOutput*> postAlphaOutputs;
