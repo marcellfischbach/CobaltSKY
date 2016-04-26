@@ -44,6 +44,23 @@ const std::string &vkClass::GetName() const
   return m_name;
 }
 
+bool vkClass::IsInstanceOf(const vkClass* clazz) const
+{
+  if (clazz == this)
+  {
+    return true;
+  }
+
+  for (const vkClass *parent : m_superClasses)
+  {
+    if (parent->IsInstanceOf(clazz))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 void vkClass::AddSuperClass(vkClass *parentClass)
 {
   m_superClasses.push_back(parentClass);

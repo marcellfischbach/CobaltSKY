@@ -177,6 +177,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkInt8 &i)
   AcquireCapacity(sizeof(vkInt8));
   *reinterpret_cast<vkInt8*>(m_writePointer) = i;
   m_writePointer++;
+  m_size += 1;
   return *this;
 }
 
@@ -185,6 +186,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkUInt8 &i)
   AcquireCapacity(sizeof(vkUInt8));
   *reinterpret_cast<vkUInt8*>(m_writePointer) = i;
   m_writePointer++;
+  m_size += 1;
   return *this;
 }
 
@@ -194,6 +196,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkInt16 &i)
   AcquireCapacity(sizeof(vkInt16));
   *reinterpret_cast<vkInt16*>(m_writePointer) = i;
   m_writePointer+=sizeof(vkInt16);
+  m_size += sizeof(vkInt16);
   return *this;
 }
 
@@ -202,6 +205,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkUInt16 &i)
   AcquireCapacity(sizeof(vkUInt16));
   *reinterpret_cast<vkUInt16*>(m_writePointer) = i;
   m_writePointer+=sizeof(vkUInt16);
+  m_size += sizeof(vkUInt16);
   return *this;
 }
 
@@ -212,6 +216,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkInt32 &i)
   AcquireCapacity(sizeof(vkInt32));
   *reinterpret_cast<vkInt32*>(m_writePointer) = i;
   m_writePointer += sizeof(vkInt32);
+  m_size += sizeof(vkInt32);
   return *this;
 }
 
@@ -220,6 +225,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkUInt32 &i)
   AcquireCapacity(sizeof(vkUInt32));
   *reinterpret_cast<vkUInt32*>(m_writePointer) = i;
   m_writePointer += sizeof(vkUInt32);
+  m_size += sizeof(vkUInt32);
   return *this;
 }
 
@@ -229,6 +235,7 @@ vkAssetOutputStream & vkAssetOutputStream::operator<< (const float &i)
   AcquireCapacity(sizeof(float));
   *reinterpret_cast<float*>(m_writePointer) = i;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   return *this;
 }
 
@@ -238,8 +245,10 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkVector2f &i)
   AcquireCapacity(sizeof(float)*2);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.y;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   return *this;
 }
 
@@ -249,10 +258,13 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkVector3f &i)
   AcquireCapacity(sizeof(float) * 3);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.y;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.z;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   return *this;
 }
 
@@ -261,12 +273,16 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkVector4f &i)
   AcquireCapacity(sizeof(float) * 4);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.y;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.z;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.w;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   return *this;
 }
 
@@ -275,12 +291,16 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkColor4f &i)
   AcquireCapacity(sizeof(float) * 4);
   *reinterpret_cast<float*>(m_writePointer) = i.r;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.g;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.b;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   *reinterpret_cast<float*>(m_writePointer) = i.a;
   m_writePointer += sizeof(float);
+  m_size += sizeof(float);
   return *this;
 }
 
@@ -289,6 +309,8 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkMatrix3f &i)
   AcquireCapacity(sizeof(float) * 9);
   memcpy(reinterpret_cast<float*>(m_writePointer), &i.m00, sizeof(float) * 9);
   m_writePointer += sizeof(float) * 9;
+  m_size += sizeof(float) * 9;
+
   return *this;
 }
 
@@ -298,6 +320,7 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkMatrix4f &i)
   AcquireCapacity(sizeof(float) * 16);
   memcpy(reinterpret_cast<float*>(m_writePointer), &i.m00, sizeof(float) * 16);
   m_writePointer += sizeof(float) * 16;
+  m_size += sizeof(float) * 16;
   return *this;
 }
 
@@ -308,5 +331,6 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkString &i)
 
   memcpy(m_writePointer, i.c_str(), sizeof(char) * i.length());
   m_writePointer += sizeof(char) * i.length();
+  m_size += sizeof(char) * i.length();
   return *this;
 }

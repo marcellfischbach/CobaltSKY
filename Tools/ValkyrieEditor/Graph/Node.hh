@@ -73,6 +73,20 @@ public:
     return m_hasName;
   }
 
+  inline void SetMinWidth(float minWidth)
+  {
+    m_minWidth = minWidth;
+  }
+
+  inline float GetMinWidth() const
+  {
+    return m_minWidth;
+  }
+
+  inline void SetName(const QString &name)
+  {
+    m_name = name;
+  }
   QString GetName() const;
 
   void AddInput(const QString &label, const QString &key, InputMode mode);
@@ -101,7 +115,7 @@ public:
 
   void SetPosition(const QPointF &pos);
 
-  void SetScene(NodeGraphScene *scene)
+  inline void SetScene(NodeGraphScene *scene)
   {
     m_scene = scene;
   }
@@ -144,7 +158,10 @@ private:
   QColor m_color;
 
   bool m_hasName;
+  QString m_name;
   NodeNameInput *m_nodeNameInput;
+
+  float m_minWidth;
 
   QVector<Input> m_inputs;
   QVector<Output> m_outputs;

@@ -145,6 +145,13 @@ public:
 
   const std::string &GetName() const;
 
+  template<typename T>
+  bool IsInstanceOf() const
+  {
+    return IsInstanceOf(T::GetStaticClass());
+  }
+  bool IsInstanceOf(const vkClass *clazz) const;
+
 protected:
   vkClass(const std::string &name);
 

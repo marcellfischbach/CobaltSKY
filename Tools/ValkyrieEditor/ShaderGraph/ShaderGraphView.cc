@@ -3,6 +3,7 @@
 #include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
+#include <AssetManager/AssetWriter.hh>
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
 #include <qgridlayout.h>
@@ -12,6 +13,7 @@
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
+#include <Valkyrie/Core/VFS.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
@@ -22,7 +24,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
 {
   m_gui.setupUi(this);
 
-
+  m_resourceLocator = vkResourceLocator("${materials}/my_material.asset");
 
   setMouseTracking(true);
   m_view = new QGraphicsView(this);
@@ -59,9 +61,9 @@ ShaderGraphView::~ShaderGraphView()
 void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
 {
   m_shaderGraph = shaderGraph;
-  shadergraph::SGShaderGraphNode *shaderGraphNode = new shadergraph::SGShaderGraphNode(m_shaderGraph);
-  shaderGraphNode->Initialize();
-  m_scene->AddNode(shaderGraphNode);
+  m_shaderGraphNode = new shadergraph::SGShaderGraphNode(m_shaderGraph);
+  m_shaderGraphNode->Initialize();
+  m_scene->AddNode(m_shaderGraphNode);
 
 }
 
@@ -137,33 +139,37 @@ void ShaderGraphView::on_pbCompile_clicked(bool)
 
 void ShaderGraphView::on_pbSave_clicked(bool)
 {
+  if (m_resourceLocator.GetResourceFile().length() == 0)
+  {
+    return;
+  }
+
+
   CollectData();
   QVector<shadergraph::SGNode*> nodes;
+  QVector<vkSGNode*> sgNodes;
   for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
     graph::Node *grNode = m_scene->GetNode(i);
     shadergraph::Node *node = static_cast<shadergraph::Node*>(grNode);
     if (node->GetType() == shadergraph::Node::eT_Node)
     {
-      nodes.append(static_cast<shadergraph::SGNode*>(node));
+      shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
+      nodes.append(sgNode);
+      sgNodes.append(sgNode->GetNode());
     }
   }
 
 
-  QVector<graph::NodeConnection*> connections;
-  for (size_t i = 0, in = m_scene->GetNumberOfConnections(); i < in; ++i)
-  {
-    graph::NodeConnection *connection = m_scene->GetConnection(i);
+  QVector<vkSGInput*> inputs;
 
-    shadergraph::Node *node = static_cast<shadergraph::Node*>(connection->GetInputNode());
-    if (node->GetType() == shadergraph::Node::eT_Node)
-    {
-      shadergraph::SGNode *inputNode = static_cast<shadergraph::SGNode*>(connection->GetInputNode());
-      shadergraph::SGNode *outputNode = static_cast<shadergraph::SGNode*>(connection->GetOutputNode());
-      if (nodes.contains(inputNode) && (!outputNode || nodes.contains(outputNode)))
-      {
-        connections.append(connection);
-      }
+  for (size_t i = 0, in = nodes.size(); i < in; ++i)
+  {
+    vkSGNode* node = sgNodes[i];
+    for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
+    { 
+      vkSGInput* input = node->GetInput(j);
+      inputs.push_back(input);
     }
   }
 
@@ -178,21 +184,29 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     os << (vkUInt32)i << vkString(sgNode->GetClass()->GetName());
   }
 
-  os << (vkUInt16)connections.size();
-  for (size_t i = 0, in = connections.size(); i < in; ++i)
+  os << (vkUInt16)inputs.size();
+  for (size_t i = 0, in = inputs.size(); i < in; ++i)
   {
-    graph::NodeConnection *connection = connections[i];
-    shadergraph::SGNode *inputNode = static_cast<shadergraph::SGNode*>(connection->GetInputNode());
-    shadergraph::SGNode *outputNode = static_cast<shadergraph::SGNode*>(connection->GetOutputNode());
+    vkSGInput *input = inputs[i];
+    vkSGNode *inputNode = input->GetNode();
+    vkUInt32 inputIdx = input->GetIdx();
 
-    vkSGInput *input = inputNode->GetNode()->GetInput(connection->GetInputIdx());
-    vkUInt8 inputType = outputNode ? 1 : 0;
-    os << (vkUInt32)nodes.indexOf(inputNode)
-      << (vkUInt8)connection->GetInputIdx()
+    vkSGOutput *output = input->GetInput();
+    vkSGNode *outputNode = 0;
+    vkUInt32 outputIdx = 0;
+    if (output)
+    {
+      outputIdx = output->GetIdx();
+      outputNode = output->GetNode();
+    }
+
+    vkUInt8 inputType = output ? 1 : 0;
+    os << (vkUInt32)sgNodes.indexOf(inputNode)
+      << (vkUInt8)inputIdx
       << inputType
-      << (float)(input ? input->GetConst() : 0.0f)
-      << (vkUInt32)nodes.indexOf(outputNode)
-      << (vkUInt8)connection->GetOutputIdx();
+      << (float)input->GetConst()
+      << (vkUInt32)sgNodes.indexOf(outputNode)
+      << (vkUInt8)outputIdx;
   }
 
   struct Attrib
@@ -203,12 +217,47 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   };
 
   QVector<Attrib> attribs;
-  if (m_shaderGraph->GetDiffuse())
+  for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
   {
+    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    if (output)
+    {
+      vkSGNode *outputNode = output->GetNode();
+      Attrib attr;
+      attr.attrib = i;
+      attr.nodeIdx = sgNodes.indexOf(outputNode);
+      attr.nodeOutputIdx = output->GetIdx();
+      attribs.append(attr);
+    }
+  }
 
+  os << (vkUInt16)attribs.size();
+  for (Attrib &attr : attribs)
+  {
+    os << attr.attrib
+      << attr.nodeIdx
+      << attr.nodeOutputIdx;
   }
 
 
+ 
+  os << (vkUInt16)2
+    // binary gradient
+    << vkString ("blendOutWithBinaryGradient")
+    << (vkUInt8)(m_shaderGraph->IsBlendOutWithBinaryGradient() ? 1 : 0)
+    // discard alpha
+    << vkString("discardAlpha")
+    << (vkUInt8)(m_shaderGraph->IsDiscardAlpha() ? 1 : 0)
+    << (vkUInt8)(m_shaderGraph->GetDiscardAlphaCompareMode())
+    << (float)m_shaderGraph->GetDiscardAlphaThreshold();
+
+
+  IFile *file = vkVFS::Get()->Open(m_resourceLocator.GetResourceFile(), eOM_Write, eTM_Binary);
+  AssetWriter writer;
+  writer.AddEntry("SHADER_GRAPH", "DATA", os.GetSize(), os.GetBuffer());
+  
+  writer.Output(file);
+  file->Close();
 }
 
 

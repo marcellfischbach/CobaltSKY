@@ -12,6 +12,8 @@ public:
 
   void RegisterClass(const vkClass *clazz);
 
+  const std::vector<const vkClass*> &GetAllClasses() const;
+
   const vkClass *GetClass(const vkString &className) const;
   void *CreateClass(const vkString &className) const;
 
@@ -24,6 +26,7 @@ public:
 private:
   vkClassRegistry();
 
+  std::vector<const vkClass*> m_allClasses;
   std::map<vkString, const vkClass *> m_classes;
 };
 

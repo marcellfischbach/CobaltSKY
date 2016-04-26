@@ -45,7 +45,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ctx.GenerateCode(outputs);
   std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
-  bool vsm = false;
+  bool vsm = true;
 
   std::ostringstream ss;
 
@@ -86,12 +86,12 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ss << std::endl
     << "void main()" << std::endl
     << "{" << std::endl;
-  
+
   for (unsigned i = 0; i < numLayers; ++i)
   {
     ss << ""
       << "  gl_Layer = " << i << ";" << std::endl;
-      for (unsigned j = 0; j < 3; ++j)
+    for (unsigned j = 0; j < 3; ++j)
     {
       ss << ""
         << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[" << j << "].gl_Position;" << std::endl
@@ -100,9 +100,9 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
       {
         ss << "  inFragDepth = gl_Position.z / gl_Position.w;" << std::endl;
       }
-      ss << "  EmitVertex();" << std::endl;
+      ss << "  EmitVertex();" << std::endl << std::endl;
     }
-    ss << "  EndPrimitive();" << std::endl;
+    ss << "  EndPrimitive();" << std::endl << std::endl << std::endl;
   }
   ss << "}" << std::endl;
   vkString geometryShaderSources = ss.str();
@@ -113,7 +113,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ss << ""
     << "#version 330" << std::endl
     << std::endl
-    << "layout(location = 0) out vec4 vk_FragColor;" << std::endl
+    << (vsm
+        ? "layout(location = 0) out vec2 vk_FragColor;"
+        : "layout(location = 0) out vec4 vk_FragColor;"
+        ) << std::endl
     << std::endl;
   for (const vkShaderGraphCtx::ExternalBinding &binding : bindings)
   {
@@ -141,7 +144,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   {
     ss << "  float dx = dFdx(inFragDepth);" << std::endl
       << "  float dy = dFdy(inFragDepth);" << std::endl
-      << "  vk_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy);" << std::endl;
+      // << "  vk_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
+      << "  vk_FragColor = vec2(abs(dx) + abs(dy), 1.0);" << std::endl
+      ;
+    ;
   }
   else
   {
@@ -154,11 +160,9 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
 
   ss.clear();
 
-  /*
   printf("Shadow[%d].Vertex:\n%s\n", numLayers, vertexShaderSources.c_str());
   printf("Shadow[%d].Geometry:\n%s\n", numLayers, geometryShaderSources.c_str());
   printf("Shadow[%d].Fragment:\n%s\n", numLayers, fragmentShaderSources.c_str());
-  */
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
@@ -195,6 +199,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
 
   vkProgramGL4 *shadowShader = new vkProgramGL4();
   shadowShader->AttachShader(vertexShader);
+  shadowShader->AttachShader(geometryShader);
   shadowShader->AttachShader(fragmentShader);
   if (!shadowShader->Link())
   {

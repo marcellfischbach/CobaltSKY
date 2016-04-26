@@ -5,7 +5,13 @@
 #include <qwidget.h>
 #include <Graph/Scene.hh>
 #include <Valkyrie/Types.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
 #include <ui_ShaderGraphView.h>
+
+namespace shadergraph
+{
+class SGShaderGraphNode;
+}
 
 class vkSGNode;
 class vkSGShaderGraph;
@@ -41,10 +47,12 @@ protected:
 private:
   void CollectData();
 
+  vkResourceLocator m_resourceLocator;
+
   Ui::ShaderGraphView m_gui;
   QGraphicsView *m_view;
   graph::NodeGraphScene *m_scene;
 
   vkSGShaderGraph* m_shaderGraph;
-
+  shadergraph::SGShaderGraphNode *m_shaderGraphNode;
 };

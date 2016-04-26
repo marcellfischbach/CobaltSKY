@@ -19,6 +19,7 @@ public:
     eIT_Roughness,
     eIT_Normal,
     eIT_Undefined,
+    eIT_COUNT = eIT_Undefined,
   };
 public:
   vkSGShaderGraph();

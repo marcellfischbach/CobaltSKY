@@ -292,6 +292,7 @@ public:
     QRectF rect = GetRect(fm);
     m_background->setRect(rect);
     SetText("1.0");
+    m_textItem->setTextWidth(rect.width());
   }
 
   void SetText(const QString &text)
@@ -307,7 +308,7 @@ public:
 
   static QRectF GetRect(const QFontMetrics &fm)
   {
-    return QRectF(0, 0, fm.width("GGGG"), fm.height() *1.5);
+    return QRectF(0, 0, fm.width("GGGGGGG"), fm.height() *1.5);
   }
 
 private:
@@ -341,6 +342,7 @@ public:
   {
     m_background->setRect(rect);
     m_textItem->setPos(rect.topLeft());
+    m_textItem->setTextWidth(rect.width());
   }
 
   void SetText(const QString &text)
@@ -463,6 +465,7 @@ Node::Node(QObject *parent)
   , m_scene(0)
   , m_color(128, 0, 0)
   , m_hasName(false)
+  , m_minWidth(0.0f)
   , m_valid(false)
 {
 
@@ -715,6 +718,7 @@ bool Node::Initialize()
   // now just get the final width;
   int inoutWidth = inputWidth + 2.0f * m_margin + outputWidth + m_middleSpacing;
   width = VK_MAX(titleWidth, inoutWidth);
+  width = VK_MAX(width, m_minWidth);
 
   height = m_margin + titleHeight + nameHeight + VK_MAX(inputHeight, outputHeight) + m_margin;
 
@@ -736,6 +740,7 @@ bool Node::Initialize()
     float nameInputHeight = fm.height() * 1.5;
     m_nodeNameInput = new NodeNameInput(m_nodeGroup, fnt);
     m_nodeNameInput->SetRect(QRectF(m_margin, posY, width - 2.0f * m_margin, nameInputHeight));
+    m_nodeNameInput->SetText(m_name);
 
     posY += nameHeight;
   }

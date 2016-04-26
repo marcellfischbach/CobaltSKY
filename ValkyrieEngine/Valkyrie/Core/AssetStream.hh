@@ -60,6 +60,11 @@ public:
     return m_buffer;
   }
 
+  VK_FORCEINLINE vkUInt32 GetSize() const
+  {
+    return m_size;
+  }
+
 private:
   void AcquireCapacity(vkUInt32 capacity);
   vkUInt8 *m_writePointer;

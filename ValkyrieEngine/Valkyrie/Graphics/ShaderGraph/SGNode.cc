@@ -599,7 +599,7 @@ vkSGFloat2::vkSGFloat2()
 vkSGFloat3::vkSGFloat3()
   : vkSGNode()
 {
-  SetName(VK_FLOAT4_NAME);
+  SetName(VK_FLOAT3_NAME);
   AddInput(new vkSGInput("x", true, true));
   AddInput(new vkSGInput("y", true, true));
   AddInput(new vkSGInput("z", true, true));

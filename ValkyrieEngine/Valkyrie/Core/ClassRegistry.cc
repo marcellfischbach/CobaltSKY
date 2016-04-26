@@ -21,8 +21,19 @@ void vkClassRegistry::RegisterClass(const vkClass *clazz)
     return;
   }
 
+  if (m_classes.find(clazz->GetName()) != m_classes.end())
+  {
+    return;
+  }
+  m_allClasses.push_back(clazz);
   m_classes[clazz->GetName()] = clazz;
 }
+
+const std::vector<const vkClass*> &vkClassRegistry::GetAllClasses() const
+{
+  return m_allClasses;
+}
+
 
 const vkClass *vkClassRegistry::GetClass(const vkString &name) const
 {

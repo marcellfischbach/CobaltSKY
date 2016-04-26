@@ -16,7 +16,7 @@ public:
   vkShaderGraphAssetLoader();
   virtual ~vkShaderGraphAssetLoader();
 
-  virtual bool CanLoad(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
 

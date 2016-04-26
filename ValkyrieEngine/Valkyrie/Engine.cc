@@ -707,6 +707,9 @@ vkEntityScene *create_scene(IGraphics *graphics)
   shaderGraphMaterial->AddMaterialInstance(constRedMaterialInst);
   shaderGraphMaterial->AddMaterialInstance(constGreenMaterialInst);
 
+  vkMaterial *myMaterial = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/my_material.asset"));
+  vkMaterialInstance *myMaterialInst = new vkMaterialInstance();
+  myMaterialInst->SetMaterial(myMaterial);
 
 
   vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
@@ -818,8 +821,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
     vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
     vkStaticMeshState *meshState = vkQueryClass<vkStaticMeshState>(mineEntity->GetState(1));
-    meshState->SetMaterial(constRedMaterialInst, 0);
-    meshState->SetMaterial(constGreenMaterialInst, 1);
+    meshState->SetMaterial(myMaterialInst, 0);
+    meshState->SetMaterial(myMaterialInst, 1);
 
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));

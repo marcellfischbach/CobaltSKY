@@ -92,6 +92,7 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
   : shadergraph::Node(eT_Node)
   , m_node(node)
 {
+  SetMinWidth(100.0f);
 
   QString category, name;
   Split(node->GetName(), category, name);
@@ -100,7 +101,22 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
   SetBackgroundColor(getTypeColor(category));
 
   vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(node);
+
   SetHasName(res != 0);
+  if (HasName())
+  {
+    QString name = "";
+    if (res->GetResourceName().length() == 0)
+    {
+      static unsigned nameCounter = 1;
+      name = QString("Var%1").arg(nameCounter++);
+    }
+    else
+    {
+      name = QString(res->GetResourceName().c_str());
+    }
+    SetName(name);
+  }
 
   for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
   {

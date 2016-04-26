@@ -53,6 +53,7 @@ public:
 
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+
 };
 
 
@@ -61,7 +62,7 @@ struct VKE_API IAssetLoader : public IObject
 {
   VK_CLASS_GEN;
 
-  virtual bool CanLoad(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 
   virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };

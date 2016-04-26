@@ -18,9 +18,9 @@ vkShaderGraphAssetLoader::~vkShaderGraphAssetLoader()
 
 }
 
-bool vkShaderGraphAssetLoader::CanLoad(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+bool vkShaderGraphAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData) const
 {
-  return true;
+  return typeID == "SHADER_GRAPH";
 }
 
 IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
@@ -142,8 +142,8 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
       float alphaThreshold;
       inputStream
         >> discardAlpha
-        >> alphaThreshold
-        >> compareMode;
+        >> compareMode
+        >> alphaThreshold;
       shaderGraph->SetDiscardAlpha(discardAlpha != 0);
       shaderGraph->SetDiscardAlpha(alphaThreshold, (vkCompareMode)compareMode);
     }
