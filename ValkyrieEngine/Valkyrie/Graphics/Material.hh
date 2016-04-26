@@ -19,6 +19,7 @@ struct ITexture;
 VK_CLASS();
 class VKE_API vkMaterial : public vkObject
 {
+  friend class vkMaterialInstance;
   VK_CLASS_GEN;
 
 public:
@@ -32,7 +33,29 @@ public:
   vkSize GetNumberOfParameters() const;
   const vkShaderAttributeID &GetParamID(vkSize idx) const;
   vkShaderParameterType GetParamType(vkSize idx) const;
-  void RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type);
+
+  void SetDefault(vkSize idx, float def);
+  void SetDefault(vkSize idx, const vkVector2f &def);
+  void SetDefault(vkSize idx, const vkVector3f &def);
+  void SetDefault(vkSize idx, const vkVector4f &def);
+  void SetDefault(vkSize idx, const vkColor4f &def);
+  void SetDefault(vkSize idx, int def);
+  void SetDefault(vkSize idx, const vkMatrix3f &def);
+  void SetDefault(vkSize idx, const vkMatrix4f &def);
+  void SetDefault(vkSize idx, ITexture *def);
+
+  float GetDefaultFloat(vkSize idx) const;
+  vkVector2f GetDefaultVector2(vkSize idx) const;
+  vkVector3f GetDefaultVector3(vkSize idx) const;
+  vkVector4f GetDefaultVector4(vkSize idx) const;
+  vkColor4f GetDefaultColor4(vkSize idx) const;
+  int GetDefaultInt(vkSize idx) const;
+  vkMatrix3f GetDefaultMatrix3(vkSize idx) const;
+  vkMatrix4f GetDefaultMatrix4(vkSize idx) const;
+  ITexture* GetDefaultTexture(vkSize idx) const;
+
+
+  vkSize RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type);
 
   IShader *Bind(IGraphics *renderer, vkRenderPass pass);
 
@@ -42,6 +65,12 @@ private:
   {
     vkShaderAttributeID id;
     vkShaderParameterType type;
+    union
+    {
+      float m_defaultFloat[16];
+      int m_defaultInt[16];
+      ITexture *m_defaultTexture;
+    };
     Param(const vkShaderAttributeID &id, vkShaderParameterType type);
   };
 

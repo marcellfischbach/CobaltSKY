@@ -103,8 +103,9 @@ public:
 
   size_t GetNumberOfInputs() const;
   float GetConstInput(size_t idx) const;
+  void SetConstInput(size_t idx, float constValue);
 
-  bool Initialize();
+  virtual bool Initialize();
 
   inline QGraphicsItem *GetItem()
   {

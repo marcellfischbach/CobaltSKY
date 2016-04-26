@@ -300,6 +300,27 @@ public:
     m_textItem->setPlainText(text);
   }
 
+  void SetConst(float value)
+  {
+    char buffer[256];
+    memset(buffer, 0, sizeof(buffer));
+    snprintf(buffer, 256, "%f", value);
+    for (int i = 255; i >= 0; --i)
+    {
+      if (buffer[i] == '\0' || buffer[i] == '0')
+      {
+        buffer[i] = '\0';
+        continue;
+      }
+      if (buffer[i] == '.' && i != 255)
+      {
+        buffer[i + 1] = '0';
+      }
+      break;
+    }
+    SetText(QString(buffer));
+  }
+
   float GetConst() const
   {
     QString text = m_textItem->toPlainText();
@@ -623,6 +644,22 @@ float Node::GetConstInput(size_t idx) const
   }
 
   return constInput->GetConst();
+}
+
+void Node::SetConstInput(size_t idx, float constValue)
+{
+  if (idx >= m_inputs.size())
+  {
+    return;
+  }
+
+  graph::NodeConstInput *constInput = m_inputs[idx].item->constInput;
+  if (!constInput)
+  {
+    return;
+  }
+  constInput->SetConst(constValue);
+
 }
 
 bool Node::Initialize()

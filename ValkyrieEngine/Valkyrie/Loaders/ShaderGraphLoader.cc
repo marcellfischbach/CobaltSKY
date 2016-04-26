@@ -27,6 +27,7 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
 {
   std::map<vkUInt32, vkSGNode *> nodes;
 
+  vkSGShaderGraph *shaderGraph = new vkSGShaderGraph();
 
   //
   // Read all nodes
@@ -41,12 +42,13 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
     const vkClass *nodeClass = vkClassRegistry::Get()->GetClass(nodeClassName);
     if (!nodeClass)
     {
-      Cleanup(nodes, 0);
+      Cleanup(nodes, shaderGraph);
       return 0;
     }
 
     vkSGNode *node = nodeClass->CreateInstance<vkSGNode>();
     nodes[idx] = node;
+    shaderGraph->AddNode(node);
   }
 
   //
@@ -70,7 +72,7 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
     auto inputIt = nodes.find(inputNodeIdx);
     if (inputIt == nodes.end())
     {
-      Cleanup(nodes, 0);
+      Cleanup(nodes, shaderGraph);
       return 0;
     }
     vkSGNode *inputNode = inputIt->second;
@@ -87,7 +89,7 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
       auto outputIt = nodes.find(outputNodeIdx);
       if (outputIt == nodes.end())
       {
-        Cleanup(nodes, 0);
+        Cleanup(nodes, shaderGraph);
         return 0;
       }
       vkSGNode *outputNode = outputIt->second;
@@ -96,7 +98,6 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
   }
 
 
-  vkSGShaderGraph *shaderGraph = new vkSGShaderGraph();
 
   vkUInt16 numGraphInputs;
   inputStream >> numGraphInputs;

@@ -55,6 +55,11 @@ public:
   vkSGOutput *GetNormal();
   const vkSGOutput *GetNormal() const;
 
+  void AddNode(vkSGNode *node);
+  size_t GetNumberOfTotalNodes() const;
+  vkSGNode *GetNode(size_t idx) ;
+  const vkSGNode *GetNode(size_t idx) const;
+
 private:
   vkSGNode *GetNode(vkSGOutput *output);
   bool ValidateNode(vkSGOutput *output);
@@ -68,6 +73,8 @@ private:
   vkCompareMode m_discardAlphaCompareMode;
 
   vkSGOutput *m_normal;
+
+  std::vector<vkSGNode*> m_allNodes;
 
 };
 

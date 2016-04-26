@@ -143,6 +143,25 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
   }
 }
 
+bool shadergraph::SGNode::Initialize()
+{
+  if (!graph::Node::Initialize())
+  {
+    return false;
+  }
+
+  for (size_t i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
+  {
+    vkSGInput *input = m_node->GetInput(i);
+    if (input->CanInputConst())
+    {
+      SetConstInput(i, input->GetConst());
+    }
+  }
+
+  return true;
+}
+
 void shadergraph::SGNode::AddConnection(graph::NodeConnection* connection)
 {
   if (connection->GetInputNode() == this)

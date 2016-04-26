@@ -117,11 +117,14 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     parameterElement;
       parameterElement = parameterElement->NextSiblingElement("parameter"))
     {
-      vkString type;
-      if (parameterElement->Attribute("type"))
+      vkString type, name;
+      if (!parameterElement->Attribute("type") || !parameterElement->Attribute("name"))
       {
-        type = vkString(parameterElement->Attribute("type"));
+        continue;
       }
+      type = vkString(parameterElement->Attribute("type"));
+      name = vkString(parameterElement->Attribute("name"));
+      vkString defaultValue = vkString(parameterElement->GetText());
 
       vkShaderParameterType paramType;
       if (type == vkString("float"))
@@ -177,9 +180,60 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
         continue;
       }
 
-      vkString name(parameterElement->GetText());
-      material->RegisterParam(vkShaderAttributeID(name), paramType);
+      vkSize idx = material->RegisterParam(vkShaderAttributeID(name), paramType);
+      switch (paramType)
+      {
+      case eSPT_Float:
+        {
+          float f = LoadFloat(parameterElement->GetText());
+          material->SetDefault(idx, f);
+        }
+        break;
+      case eSPT_Vector2:
+        {
+          vkVector2f v = LoadVector2f(parameterElement->GetText());
+          material->SetDefault(idx, v);
+        }
+        break;
+      case eSPT_Vector3:
+        {
+          vkVector3f v = LoadVector3f(parameterElement->GetText());
+          material->SetDefault(idx, v);
+        }
+        break;
+      case eSPT_Vector4:
+        {
+          vkVector4f v = LoadVector4f(parameterElement->GetText());
+          material->SetDefault(idx, v);
+        }
+        break;
+      case eSPT_Color4:
+        {
+          vkColor4f v = LoadColor4f(parameterElement->GetText());
+          material->SetDefault(idx, v);
+        }
+        break;
+      case eSPT_Texture:
+        {
+          vkResourceLoadingMode rlm = GetResourceLoadingMode(parameterElement);
+          ITexture *texture = 0;
+          switch (rlm)
+          {
+          case eRLM_Shared:
+            texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            material->SetDefault(idx, texture);
+            break;
+          case eRLM_Instance:
+            texture = vkResourceManager::Get()->Load<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            material->SetDefault(idx, texture);
+            if (texture) texture->Release();
+            break;
+          default:
+            printf("not implemented yet.");
 
+          }
+        }
+      }
     }
 
   }

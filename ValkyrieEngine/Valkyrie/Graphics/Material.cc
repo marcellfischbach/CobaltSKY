@@ -29,9 +29,11 @@ void vkMaterial::SetShader(vkRenderPass pass, IShader *shader)
   VK_SET(m_shaders[pass], shader);
 }
 
-void vkMaterial::RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type)
+vkSize vkMaterial::RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type)
 {
+  vkSize idx = m_params.size();
   m_params.push_back(Param(id, type));
+  return idx;
 }
 
 IShader *vkMaterial::GetShader(vkRenderPass pass)
@@ -72,11 +74,107 @@ vkShaderParameterType vkMaterial::GetParamType(vkSize idx) const
   return m_params[idx].type;
 }
 
+void vkMaterial::SetDefault(vkSize idx, float def)
+{
+  m_params[idx].m_defaultFloat[0] = def;
+}
+
+void vkMaterial::SetDefault(vkSize idx, const vkVector2f &def)
+{
+  m_params[idx].m_defaultFloat[0] = def.x;
+  m_params[idx].m_defaultFloat[1] = def.y;
+}
+
+void vkMaterial::SetDefault(vkSize idx, const vkVector3f &def)
+{
+  m_params[idx].m_defaultFloat[0] = def.x;
+  m_params[idx].m_defaultFloat[1] = def.y;
+  m_params[idx].m_defaultFloat[2] = def.z;
+}
+
+void vkMaterial::SetDefault(vkSize idx, const vkVector4f &def)
+{
+  m_params[idx].m_defaultFloat[0] = def.x;
+  m_params[idx].m_defaultFloat[1] = def.y;
+  m_params[idx].m_defaultFloat[2] = def.z;
+  m_params[idx].m_defaultFloat[3] = def.w;
+}
+
+
+void vkMaterial::SetDefault(vkSize idx, const vkColor4f &def)
+{
+  m_params[idx].m_defaultFloat[0] = def.r;
+  m_params[idx].m_defaultFloat[1] = def.g;
+  m_params[idx].m_defaultFloat[2] = def.b;
+  m_params[idx].m_defaultFloat[3] = def.a;
+}
+
+void vkMaterial::SetDefault(vkSize idx, int def)
+{
+  m_params[idx].m_defaultInt[0] = def;
+}
+
+void vkMaterial::SetDefault(vkSize idx, const vkMatrix3f &def)
+{
+  memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 9);
+}
+
+void vkMaterial::SetDefault(vkSize idx, const vkMatrix4f &def)
+{
+  memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 16);
+}
+
+void vkMaterial::SetDefault(vkSize idx, ITexture *texture)
+{
+  VK_SET(m_params[idx].m_defaultTexture, texture);
+}
+
+
+float vkMaterial::GetDefaultFloat(vkSize idx) const
+{
+  return m_params[idx].m_defaultFloat[0];
+}
+
+vkVector2f vkMaterial::GetDefaultVector2(vkSize idx) const
+{
+  return vkVector2f(m_params[idx].m_defaultFloat);
+}
+
+vkVector3f vkMaterial::GetDefaultVector3(vkSize idx) const
+{
+  return vkVector3f(m_params[idx].m_defaultFloat);
+}
+
+vkVector4f vkMaterial::GetDefaultVector4(vkSize idx) const
+{
+  return vkVector4f(m_params[idx].m_defaultFloat);
+}
+
+int vkMaterial::GetDefaultInt(vkSize idx) const
+{
+  return m_params[idx].m_defaultInt[0];
+}
+
+vkMatrix3f vkMaterial::GetDefaultMatrix3(vkSize idx) const
+{
+  return vkMatrix3f(m_params[idx].m_defaultFloat);
+}
+
+vkMatrix4f vkMaterial::GetDefaultMatrix4(vkSize idx) const
+{
+  return vkMatrix4f(m_params[idx].m_defaultFloat);
+}
+
+ITexture *vkMaterial::GetDefaultTexture(vkSize idx) const
+{
+  return m_params[idx].m_defaultTexture;
+}
+
 vkMaterial::Param::Param(const vkShaderAttributeID &id, vkShaderParameterType type)
   : id(id)
   , type(type)
 {
-
+  VK_ZERO(m_defaultFloat);
 }
 
 vkMaterialInstance::vkMaterialInstance()
@@ -106,6 +204,15 @@ void vkMaterialInstance::SetMaterial(vkMaterial *material)
       ShaderParameter param(id);
       param.m_paramType = type;
       param.m_texture = 0;
+      switch (type)
+      {
+      case eSPT_Texture:
+        VK_SET(param.m_texture, material->GetDefaultTexture(i));
+        break;
+      default:
+        memcpy(param.m_float, material->m_params[i].m_defaultFloat, sizeof(float) * 16);
+        break;
+      }
       m_parameters.push_back(param);
     }
   }

@@ -23,9 +23,6 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
 {
   m_gui.setupUi(this);
-
-  m_resourceLocator = vkResourceLocator("${materials}/my_material.asset");
-
   setMouseTracking(true);
   m_view = new QGraphicsView(this);
   m_view->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
@@ -50,12 +47,20 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   on_cbDiscardAlpha_stateChanged(0);
 
 
-  Setup(new vkSGShaderGraph());
 }
 
 ShaderGraphView::~ShaderGraphView()
 {
 
+}
+
+void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
+{
+  m_resourceLocator = resourceLocator;
+
+
+  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
+  Setup(shaderGraph);
 }
 
 void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
@@ -65,6 +70,54 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
   m_shaderGraphNode->Initialize();
   m_scene->AddNode(m_shaderGraphNode);
 
+  std::map<vkSGNode*, graph::Node*> nodes;
+  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *sgNode = m_shaderGraph->GetNode(i);
+    graph::Node *gnode = AddNode(sgNode);
+    nodes[sgNode] = gnode;
+  }
+
+  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *inputNode = m_shaderGraph->GetNode(i);
+    for (size_t j = 0, jn = inputNode->GetNumberOfInputs(); j < jn; ++j)
+    {
+      vkSGInput *input = inputNode->GetInput(j);
+      if (input->CanInputNode())
+      {
+        vkSGOutput *output = input->GetInput();
+        if (output)
+        {
+          vkSGNode *outputNode = output->GetNode();
+          if (outputNode)
+          {
+            if (nodes.find(inputNode) != nodes.end() && nodes.find(outputNode) != nodes.end())
+            {
+              graph::Node *gInputNode = nodes[inputNode];
+              graph::Node *gOutputNode = nodes[outputNode];
+              m_scene->Connect(gOutputNode, output->GetIdx(), gInputNode, input->GetIdx());
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  for (size_t i = 0, in = vkSGShaderGraph::eIT_COUNT; i < in; ++i)
+  {
+    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    if (output)
+    {
+      vkSGNode *outputNode = output->GetNode();
+      if (nodes.find(outputNode) != nodes.end())
+      {
+        graph::Node *gOutputNode = nodes[outputNode];
+        m_scene->Connect(gOutputNode, output->GetIdx(), m_shaderGraphNode, i);
+      }
+    }
+  }
 }
 
 
@@ -99,11 +152,16 @@ void ShaderGraphView::popupNodeSelector()
 graph::Node *ShaderGraphView::AddNode(const vkClass *clazz)
 {
   vkSGNode *node = clazz->CreateInstance<vkSGNode>();
+  return AddNode(node);
+}
+
+
+graph::Node *ShaderGraphView::AddNode(vkSGNode *node)
+{
   if (!node)
   {
     return 0;
   }
-
   shadergraph::SGNode *sgNode = new shadergraph::SGNode(node);
   if (!sgNode->Initialize())
   {

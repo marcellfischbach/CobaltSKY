@@ -25,6 +25,7 @@ public:
   ShaderGraphView(QWidget *parent = 0);
   virtual ~ShaderGraphView();
 
+  void Set(const vkResourceLocator &resourceLocator);
   void Setup(vkSGShaderGraph *shaderGraph);
 
   public slots:
@@ -37,6 +38,7 @@ protected:
 
   private slots:
   graph::Node *AddNode(const vkClass *clazz);
+  graph::Node *AddNode(vkSGNode *node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
 
   void on_cbDiscardAlpha_stateChanged(int state);

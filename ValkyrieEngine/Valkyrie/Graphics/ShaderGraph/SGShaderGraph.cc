@@ -84,3 +84,36 @@ bool vkSGShaderGraph::ValidateNode(vkSGOutput *output)
   return node->Validate();
 }
 
+
+void vkSGShaderGraph::AddNode(vkSGNode *node)
+{
+  if (!node)
+  {
+    return;
+  }
+  node->AddRef();
+  m_allNodes.push_back(node);
+}
+
+size_t vkSGShaderGraph::GetNumberOfTotalNodes() const
+{
+  return m_allNodes.size();
+}
+
+vkSGNode* vkSGShaderGraph::GetNode(size_t idx)
+{
+  if (idx >= m_allNodes.size())
+  {
+    return 0;
+  }
+  return m_allNodes[idx];
+}
+
+const vkSGNode* vkSGShaderGraph::GetNode(size_t idx) const
+{
+  if (idx >= m_allNodes.size())
+  {
+    return 0;
+  }
+  return m_allNodes[idx];
+}

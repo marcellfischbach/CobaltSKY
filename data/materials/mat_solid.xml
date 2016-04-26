@@ -9,8 +9,8 @@
 		</passes>
 		
 		<parameters>
-			<parameter type="texture">Diffuse</parameter>
-			<parameter type="col">Color</parameter>
+			<parameter type="texture" name="Diffuse">${materials}/textures.xml:FieldStone</parameter>
+			<parameter type="col" name="Color">1.0;1.0;1.0;1.0</parameter>
 		</parameters>
 		
 	</material>
@@ -24,7 +24,7 @@
 		</passes>
 		
 		<parameters>
-			<parameter type="col">Color</parameter>
+			<parameter type="col" name="Color">1.0;1.0;1.0;1.0</parameter>
 		</parameters>
 		
 	</material>

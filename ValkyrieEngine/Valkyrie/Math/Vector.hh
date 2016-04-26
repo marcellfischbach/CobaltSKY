@@ -13,6 +13,13 @@ public:
   float y;
 
 public:
+  VK_FORCEINLINE vkVector2f(const float *f)
+    : x(f[0])
+    , y(f[1])
+  {
+
+  }
+
   VK_FORCEINLINE vkVector2f(float x = 0.0f, float y = 0.0f)
     : x(x)
     , y(y)
@@ -189,6 +196,14 @@ public:
   float z;
 
 public:
+  VK_FORCEINLINE vkVector3f(const float *f)
+    : x(f[0])
+    , y(f[1])
+    , z(f[2])
+  {
+
+  }
+
   VK_FORCEINLINE vkVector3f(float x = 0.0f, float y = 0.0f, float z = 0.0f)
     : x(x)
     , y(y)
@@ -424,6 +439,14 @@ public:
   float w;
 
 public:
+  VK_FORCEINLINE vkVector4f(const float *f)
+    : x(f[0])
+    , y(f[1])
+    , z(f[2])
+    , w(f[3])
+  {
+
+  }
 
   VK_FORCEINLINE vkVector4f(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
     : x(x)

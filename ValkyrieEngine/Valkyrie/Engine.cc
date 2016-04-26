@@ -61,6 +61,8 @@ vkEngine::vkEngine()
   , m_physicsSystem(0)
 {
   vkValkyrieModule::Initialize();
+  RegisterLoaders();
+
   const vkClass *clazz = vkSGTexture2D::GetStaticClass();
   vkSGNode *object = clazz->CreateInstance<vkSGNode>();
 
@@ -114,9 +116,6 @@ int vkEngine::Run()
   {
     return -1;
   }
-
-  RegisterLoaders();
-  RegisterClasses();
 
   ITexture2D *color0 = m_renderer->CreateTexture2D(ePF_RGBA, 1366, 768);
   IRenderTarget *rt = m_renderer->CreateRenderTarget();
@@ -821,8 +820,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
     vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
     vkStaticMeshState *meshState = vkQueryClass<vkStaticMeshState>(mineEntity->GetState(1));
-    meshState->SetMaterial(myMaterialInst, 0);
-    meshState->SetMaterial(myMaterialInst, 1);
+    //meshState->SetMaterial(myMaterialInst, 0);
+    //meshState->SetMaterial(myMaterialInst, 1);
 
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));
@@ -853,7 +852,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(directionalLightEntity);
 
   vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
-  directionalBackLight->SetColor(vkColor4f(1.0f, 0.0f, 1.0f));
+  directionalBackLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalBackLight->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
   directionalBackLight->SetCastShadow(false);
   directionalBackLight->SetEnergy(0.25f);

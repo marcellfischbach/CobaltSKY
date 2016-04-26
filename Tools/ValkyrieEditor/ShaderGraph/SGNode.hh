@@ -14,6 +14,7 @@ class SGNode : public Node
 {
 public:
   SGNode(vkSGNode *node);
+  bool Initialize();
   void AddConnection(graph::NodeConnection* connection);
 
   void RemoveConnection(graph::NodeConnection* connection);

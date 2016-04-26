@@ -31,6 +31,7 @@ EditorWindow::~EditorWindow()
 void EditorWindow::switchView()
 {
   m_mainTabWidget->setCurrentIndex(1);
+  m_shaderGraphView->Set(vkResourceLocator("${materials}/my_material.asset"));
 }
 
 

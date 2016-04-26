@@ -20,6 +20,19 @@ public:
   float m22;
 
 public:
+  VK_FORCEINLINE vkMatrix3f(const float *f)
+    : m00(f[0])
+    , m01(f[1])
+    , m02(f[2])
+    , m10(f[3])
+    , m11(f[4])
+    , m12(f[5])
+    , m20(f[6])
+    , m21(f[7])
+    , m22(f[8])
+  {
+  }
+
   VK_FORCEINLINE vkMatrix3f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f)
     : m00(m00)
     , m01(m01)
@@ -57,6 +70,26 @@ public:
   float m33;
 
 public:
+  VK_FORCEINLINE vkMatrix4f(const float *f)
+    : m00(f[0])
+    , m01(f[1])
+    , m02(f[2])
+    , m03(f[3])
+    , m10(f[4])
+    , m11(f[5])
+    , m12(f[6])
+    , m13(f[7])
+    , m20(f[8])
+    , m21(f[9])
+    , m22(f[10])
+    , m23(f[11])
+    , m30(f[12])
+    , m31(f[13])
+    , m32(f[14])
+    , m33(f[15])
+  {
+  }
+
   VK_FORCEINLINE vkMatrix4f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m03 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m13 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f, float m23 = 0.0f, float m30 = 0.0f, float m31 = 0.0f, float m32 = 0.0f, float m33 = 1.0f)
     : m00(m00)
     , m01(m01)

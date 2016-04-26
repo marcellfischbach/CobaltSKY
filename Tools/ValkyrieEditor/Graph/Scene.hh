@@ -48,6 +48,7 @@ signals:
 
   void NodeAdded(graph::Node *node);
   void NodeRemoved(graph::Node *node);
+  void NodeNameChanged(graph::Node *node);
   void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
   void NodesDisconnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
