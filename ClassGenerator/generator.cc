@@ -238,6 +238,15 @@ int main(int argc, char **argv)
   std::string api(argv[2]);
   std::string binDir(argv[3]);
 
+  if (prefix == std::string("NO_PREFIX"))
+  {
+    prefix = "";
+  }
+  if (api == std::string("NO_API"))
+  {
+    api = "";
+  }
+
 
   std::string processedFilesCacheFileName = binDir + "/.vkproc";
   ProcessedFilesCache processedFilesCache;
@@ -346,10 +355,14 @@ int main(int argc, char **argv)
         {
           continue;
         }
-
-        includeOrigin += "#include <" + prefix + "/" + it.filename + ">\n";
+        std::string incPrefix = prefix;
+        if (incPrefix.length () != 0)
+        {
+          incPrefix += "/";
+        }
+        includeOrigin += "#include <" + incPrefix + it.filename + ">\n";
         //includeHeaders += "#include <" + prefix + "/" + outputHeaderFilename + ">\n";
-        includeSources += "#include <" + prefix + "/" + outputSourceFilename + ">\n";
+        includeSources += "#include <" + incPrefix + outputSourceFilename + ">\n";
 
         classRegistration += "  // " + it.filename + "\n";
         for (auto cls : classes)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ShaderGraph/Node.hh>
-
+#include <Valkyrie/Core/Object.hh>
 class vkSGNode;
 namespace graph
 {
@@ -13,25 +13,20 @@ namespace shadergraph
 class SGNode : public Node
 {
 public:
-  SGNode(vkSGNode *node);
-  bool Initialize();
+  SGNode(const vkClass *nodeClass);
   void AddConnection(graph::NodeConnection* connection);
 
   void RemoveConnection(graph::NodeConnection* connection);
 
   void RemoveAllConnections();
 
-  vkSGNode* GetNode()
+  const vkClass* GetClass() const
   {
-    return m_node;
-  }
-  const vkSGNode* GetNode() const
-  {
-    return m_node;
+    return m_nodeClass;
   }
 
 private:
-  vkSGNode *m_node;
+  const vkClass *m_nodeClass;
 };
 
 }

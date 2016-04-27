@@ -197,11 +197,11 @@ bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, I
 class AssetLoaderCache
 {
 public:
-  static IAssetLoader *Get(const vkString &typeID, const vkResourceLocator &locator, IObject *userData)
+  static IAssetLoader *Get(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
   {
     for (size_t i = 0, in = s_loaders.size(); i < in; ++i)
     {
-      if (s_loaders[i]->CanLoad(typeID, locator, userData))
+      if (s_loaders[i]->CanLoad(typeID, name, locator, userData))
       {
         return s_loaders[i];
       }
@@ -238,7 +238,7 @@ public:
           continue;
         }
         s_loaders.push_back(assetLoader);
-        if (!finalLoader && assetLoader->CanLoad(typeID, locator, userData))
+        if (!finalLoader && assetLoader->CanLoad(typeID, name, locator, userData))
         {
           finalLoader = assetLoader;
         }
@@ -289,7 +289,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
       vkUInt32 length;
       file->Read(&length, sizeof(vkUInt32));
 
-      IAssetLoader *assetLoader = AssetLoaderCache::Get(vkString(entry.typeID), locator, userData);
+      IAssetLoader *assetLoader = AssetLoaderCache::Get(vkString(entry.typeID), vkString(entry.name), locator, userData);
       if (!assetLoader)
       {
         return 0;

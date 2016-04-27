@@ -59,6 +59,10 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/MetaData.cc
+    ShaderGraph/MetaData.hh
+    ShaderGraph/MetaDataLoader.cc
+    ShaderGraph/MetaDataLoader.hh
     ShaderGraph/Node.cc
     ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc
@@ -93,12 +97,16 @@ set(ALL_UI
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
 
-add_executable(
-    ValkyrieEditor
+set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
+    )
+
+add_executable(
+    ValkyrieEditor
+    ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     )
 
@@ -111,3 +119,4 @@ target_link_libraries(ValkyrieEditor
     ValkyrieEngine-PhysicsBullet
     )
 
+VK_INSTALL_MOCCER(ValkyrieEditor NO_PREFIX NO_API ALL_SOURCES)

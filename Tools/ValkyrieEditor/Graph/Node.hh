@@ -6,6 +6,7 @@
 #include <qstring.h>
 #include <qvector.h>
 #include <Graph/Direction.h>
+#include <Valkyrie/Types.hh>
 
 
 class QGraphicsItem;
@@ -131,6 +132,7 @@ public:
   void ResetConstVisible();
   void SetConstVisible(int input, bool visible);
 
+  QVector<NodeConnection*> GetAllConnections() const;
   virtual void AddConnection(NodeConnection *connection);
   virtual void RemoveConnection(NodeConnection *connection);
 
@@ -138,7 +140,18 @@ public:
 
   static void Select(Node *node);
   static Node *GetSelected();
+
+  inline void SetIdx(vkUInt32 idx)
+  {
+    m_idx = idx;
+  }
+
+  inline vkUInt32 GetIdx() const
+  {
+    return m_idx;
+  }
 private:
+  vkUInt32 m_idx;
 
   struct Input
   {

@@ -26,6 +26,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   vkSGOutput *alphaOutput = graph->GetAlpha();
   if (!diffuseOutput)
   {
+    printf("No diffuse output assigned\n");
     return;
   }
   if (diffuseOutput->GetDataType() == eSGDT_Float4)
@@ -39,6 +40,11 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     vec3->SetInput(2, diffuseSplit, 2);
 
     diffuseOutput = vec3->GetOutput(0);
+  }
+  else if (diffuseOutput->GetDataType() == eSGDT_Float2)
+  {
+    printf("Invalid input type for diffuse\n");
+    return;
   }
   if (roughnessOutput)
   {

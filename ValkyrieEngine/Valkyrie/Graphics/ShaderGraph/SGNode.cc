@@ -702,6 +702,11 @@ bool vkSGAdd::Validate()
     SetValidationMessage("Invalid mix of int/float");
     return false;
   }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid combination of types in add");
+    return false;
+  }
 
   SetOutputDataType(0, HighOrderType(dtA, dtB));
   return success;
@@ -731,6 +736,11 @@ bool vkSGSub::Validate()
   if (!SameTypeOrOne(dtA, dtB))
   {
     SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid combination of types in sub");
     return false;
   }
 
@@ -764,6 +774,11 @@ bool vkSGMul::Validate()
     SetValidationMessage("Invalid mix of int/float");
     return false;
   }
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid combination of types in mul");
+    return false;
+  }
 
   SetOutputDataType(0, HighOrderType(dtA, dtB));
   return success;
@@ -793,6 +808,12 @@ bool vkSGDiv::Validate()
   if (!SameTypeOrOne(dtA, dtB))
   {
     SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+
+  if (!SameTypeOrOne(dtA, dtB))
+  {
+    SetValidationMessage("Invalid combination of types in Add");
     return false;
   }
 

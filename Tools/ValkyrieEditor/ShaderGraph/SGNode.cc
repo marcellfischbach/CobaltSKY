@@ -88,10 +88,16 @@ static void Split(const vkString &fullName, QString &category, QString &name)
 
 
 
-shadergraph::SGNode::SGNode(vkSGNode *node)
+shadergraph::SGNode::SGNode(const vkClass *nodeClass)
   : shadergraph::Node(eT_Node)
-  , m_node(node)
+  , m_nodeClass(nodeClass)
 {
+  vkSGNode *node = nodeClass->CreateInstance<vkSGNode>();
+  if (!node)
+  {
+    return;
+  }
+
   SetMinWidth(100.0f);
 
   QString category, name;
@@ -141,25 +147,8 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
 
     AddOutput(outputName, outputName);
   }
-}
 
-bool shadergraph::SGNode::Initialize()
-{
-  if (!graph::Node::Initialize())
-  {
-    return false;
-  }
-
-  for (size_t i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
-  {
-    vkSGInput *input = m_node->GetInput(i);
-    if (input->CanInputConst())
-    {
-      SetConstInput(i, input->GetConst());
-    }
-  }
-
-  return true;
+  node->Release();
 }
 
 void shadergraph::SGNode::AddConnection(graph::NodeConnection* connection)
@@ -170,30 +159,18 @@ void shadergraph::SGNode::AddConnection(graph::NodeConnection* connection)
     {
       GetScene()->DisconnectInput(this, connection->GetInputIdx());
     }
-
-    SGNode *sgOutput = static_cast<SGNode*>(connection->GetOutputNode());
-    if (sgOutput->GetType() == SGNode::eT_Node)
-    {
-      vkSGNode *outputNode = static_cast<SGNode*>(sgOutput)->GetNode();
-      m_node->SetInput(connection->GetInputIdx(), outputNode, connection->GetOutputIdx());
-    }
   }
   shadergraph::Node::AddConnection(connection);
 }
 
 void shadergraph::SGNode::RemoveConnection(graph::NodeConnection* connection)
 {
-  if (connection->GetInputNode() == this)
-  {
-    m_node->SetInput(connection->GetInputIdx(), 0, 0);
-  }
-
   shadergraph::Node::RemoveConnection(connection);
-
 }
 
 void shadergraph::SGNode::RemoveAllConnections()
 {
+  /*
   for (auto it : m_connections)
   {
     graph::NodeConnection* connection = it;
@@ -226,6 +203,6 @@ void shadergraph::SGNode::RemoveAllConnections()
     // remove the input connection
     m_node->SetInput(i, 0, 0);
   }
-
-  Node::RemoveAllConnections();
+  */
+  shadergraph::Node::RemoveAllConnections();
 }

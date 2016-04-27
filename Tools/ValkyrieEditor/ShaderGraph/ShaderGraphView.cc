@@ -1,5 +1,6 @@
 
 #include <ShaderGraph/ShaderGraphView.hh>
+#include <ShaderGraph/MetaData.hh>
 #include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
@@ -58,29 +59,51 @@ void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
 {
   m_resourceLocator = resourceLocator;
 
+  vkResourceLocator metaLocator = vkResourceLocator(m_resourceLocator.GetResourceFile(), "META_DATA");
 
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
-  Setup(shaderGraph);
+  ShaderGraphMetaData *metaData = vkResourceManager::Get()->GetOrLoad<ShaderGraphMetaData>(metaLocator);
+
+  if (!shaderGraph)
+  {
+    shaderGraph = new vkSGShaderGraph();
+  }
+  Setup(shaderGraph, metaData);
 }
 
-void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
+void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
 {
   m_shaderGraph = shaderGraph;
-  m_shaderGraphNode = new shadergraph::SGShaderGraphNode(m_shaderGraph);
+  m_shaderGraphNode = new shadergraph::SGShaderGraphNode(shaderGraph);
   m_shaderGraphNode->Initialize();
   m_scene->AddNode(m_shaderGraphNode);
 
-  std::map<vkSGNode*, graph::Node*> nodes;
-  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  if (metaData)
   {
-    vkSGNode *sgNode = m_shaderGraph->GetNode(i);
-    graph::Node *gnode = AddNode(sgNode);
+    vkVector2f graphPos = metaData->GetGraphPosition();
+    m_shaderGraphNode->SetPosition(QPointF(graphPos.x, graphPos.y));
+  }
+
+  std::map<vkSGNode*, graph::Node*> nodes;
+  for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *sgNode = shaderGraph->GetNode(i);
+    vkVector2f nodePosition = metaData ? metaData->GetNodePosition(i) : vkVector2f(0.0f, 0.0f);
+    graph::Node *gnode = AddNode(sgNode, nodePosition);
     nodes[sgNode] = gnode;
   }
 
-  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+
+  for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    vkSGNode *inputNode = m_shaderGraph->GetNode(i);
+    vkSGNode *inputNode = shaderGraph->GetNode(i);
+    if (nodes.find(inputNode) == nodes.end())
+    {
+      continue;
+    }
+    graph::Node *gInputNode = nodes[inputNode];
+
+
     for (size_t j = 0, jn = inputNode->GetNumberOfInputs(); j < jn; ++j)
     {
       vkSGInput *input = inputNode->GetInput(j);
@@ -92,22 +115,24 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
           vkSGNode *outputNode = output->GetNode();
           if (outputNode)
           {
-            if (nodes.find(inputNode) != nodes.end() && nodes.find(outputNode) != nodes.end())
+            if (nodes.find(outputNode) != nodes.end())
             {
-              graph::Node *gInputNode = nodes[inputNode];
               graph::Node *gOutputNode = nodes[outputNode];
               m_scene->Connect(gOutputNode, output->GetIdx(), gInputNode, input->GetIdx());
             }
           }
         }
       }
+      if (input->CanInputConst())
+      {
+        gInputNode->SetConstInput(j, input->GetConst());
+      }
     }
   }
 
-
   for (size_t i = 0, in = vkSGShaderGraph::eIT_COUNT; i < in; ++i)
   {
-    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    vkSGOutput *output = shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
     if (output)
     {
       vkSGNode *outputNode = output->GetNode();
@@ -118,6 +143,7 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph)
       }
     }
   }
+
 }
 
 
@@ -148,31 +174,40 @@ void ShaderGraphView::popupNodeSelector()
   selector->setVisible(true);
 }
 
-
 graph::Node *ShaderGraphView::AddNode(const vkClass *clazz)
 {
-  vkSGNode *node = clazz->CreateInstance<vkSGNode>();
-  return AddNode(node);
+  return AddNode(clazz, vkVector2f(0.0f, 0.0f));
 }
 
-
-graph::Node *ShaderGraphView::AddNode(vkSGNode *node)
+graph::Node *ShaderGraphView::AddNode(vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
   {
     return 0;
   }
-  shadergraph::SGNode *sgNode = new shadergraph::SGNode(node);
+  return AddNode(node->GetClass(), pos);
+
+}
+
+graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkVector2f &pos)
+{
+  if (!clazz)
+  {
+    return 0;
+  }
+  shadergraph::SGNode *sgNode = new shadergraph::SGNode(clazz);
   if (!sgNode->Initialize())
   {
     delete sgNode;
-    node->Release();
     return 0;
   }
 
   m_scene->AddNode(sgNode);
+  sgNode->SetPosition(QPointF(pos.x, pos.y));
   return sgNode;
 }
+
+
 
 void ShaderGraphView::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
 {
@@ -188,11 +223,36 @@ void ShaderGraphView::on_cbDiscardAlpha_stateChanged(int state)
 
 void ShaderGraphView::on_pbCompile_clicked(bool)
 {
-  CollectData();
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
+  vkSGShaderGraph compileGraph ;
+  std::map<graph::Node*, vkSGNode*> nodes; 
+  CollectData(&compileGraph, nodes);
+  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(&compileGraph))
   {
-    printf("Unable to compile\n");
+    for (auto it : nodes)
+    {
+      printf("Node: %s\n", it.second->GetValidationMessage().c_str());
+    }
+    return;
   }
+  printf("Successfully compiled\n");
+
+  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
+  if (!shaderGraph)
+  {
+    return;
+  }
+  CollectData(shaderGraph, nodes);
+}
+
+namespace
+{
+void invert(const std::map<graph::Node*, vkSGNode*> &in, std::map<vkSGNode*, graph::Node*> &out)
+{
+  for (auto v : in)
+  {
+    out[v.second] = v.first;
+  }
+}
 }
 
 void ShaderGraphView::on_pbSave_clicked(bool)
@@ -202,26 +262,28 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     return;
   }
 
+  on_pbCompile_clicked(false);
 
-  CollectData();
-  QVector<shadergraph::SGNode*> nodes;
-  QVector<vkSGNode*> sgNodes;
-  for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
+  vkSGShaderGraph tempGraph;
+  std::map<graph::Node*, vkSGNode*> nodes;
+  CollectData(&tempGraph, nodes);
+  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(&tempGraph))
   {
-    graph::Node *grNode = m_scene->GetNode(i);
-    shadergraph::Node *node = static_cast<shadergraph::Node*>(grNode);
-    if (node->GetType() == shadergraph::Node::eT_Node)
-    {
-      shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
-      nodes.append(sgNode);
-      sgNodes.append(sgNode->GetNode());
-    }
+    return;
   }
+  std::map<vkSGNode*, graph::Node*> nodesInv;
+  ::invert(nodes, nodesInv);
 
+  QVector<vkSGNode*> sgNodes;
+  for (size_t i = 0, in = tempGraph.GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    sgNodes.append(tempGraph.GetNode(i));
+  }
+ 
 
   QVector<vkSGInput*> inputs;
 
-  for (size_t i = 0, in = nodes.size(); i < in; ++i)
+  for (size_t i = 0, in = sgNodes.size(); i < in; ++i)
   {
     vkSGNode* node = sgNodes[i];
     for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
@@ -232,17 +294,23 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   }
 
 
+  QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
+  vkAssetOutputStream osMeta;
+  osMeta << vkVector2f(shaderGraphPos.x(), shaderGraphPos.y());
 
-  vkAssetOutputStream os;
-  os << (vkUInt16)nodes.size();
-  for (size_t i = 0, in = nodes.size(); i < in; ++i)
+  vkAssetOutputStream osData;
+  osData << (vkUInt16)nodes.size();
+  osMeta << (vkUInt16)nodes.size();
+  for (size_t i = 0, in = sgNodes.size(); i < in; ++i)
   {
-    shadergraph::SGNode *node = nodes[i];
-    vkSGNode *sgNode = node->GetNode();
-    os << (vkUInt32)i << vkString(sgNode->GetClass()->GetName());
+    vkSGNode *sgNode = sgNodes[i];
+    osData << (vkUInt32)i << vkString(sgNode->GetClass()->GetName());
+
+    QPointF pos = nodesInv[sgNode]->GetItem()->pos();
+    osMeta << (vkUInt32)i << vkVector2f(pos.x(), pos.y());
   }
 
-  os << (vkUInt16)inputs.size();
+  osData << (vkUInt16)inputs.size();
   for (size_t i = 0, in = inputs.size(); i < in; ++i)
   {
     vkSGInput *input = inputs[i];
@@ -259,7 +327,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     }
 
     vkUInt8 inputType = output ? 1 : 0;
-    os << (vkUInt32)sgNodes.indexOf(inputNode)
+    osData << (vkUInt32)sgNodes.indexOf(inputNode)
       << (vkUInt8)inputIdx
       << inputType
       << (float)input->GetConst()
@@ -277,7 +345,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   QVector<Attrib> attribs;
   for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
   {
-    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    vkSGOutput *output = tempGraph.GetInput((vkSGShaderGraph::InputType)i);
     if (output)
     {
       vkSGNode *outputNode = output->GetNode();
@@ -289,31 +357,32 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     }
   }
 
-  os << (vkUInt16)attribs.size();
+  osData << (vkUInt16)attribs.size();
   for (Attrib &attr : attribs)
   {
-    os << attr.attrib
+    osData << attr.attrib
       << attr.nodeIdx
       << attr.nodeOutputIdx;
   }
 
 
  
-  os << (vkUInt16)2
+  osData << (vkUInt16)2
     // binary gradient
     << vkString ("blendOutWithBinaryGradient")
-    << (vkUInt8)(m_shaderGraph->IsBlendOutWithBinaryGradient() ? 1 : 0)
+    << (vkUInt8)(tempGraph.IsBlendOutWithBinaryGradient() ? 1 : 0)
     // discard alpha
     << vkString("discardAlpha")
-    << (vkUInt8)(m_shaderGraph->IsDiscardAlpha() ? 1 : 0)
-    << (vkUInt8)(m_shaderGraph->GetDiscardAlphaCompareMode())
-    << (float)m_shaderGraph->GetDiscardAlphaThreshold();
+    << (vkUInt8)(tempGraph.IsDiscardAlpha() ? 1 : 0)
+    << (vkUInt8)(tempGraph.GetDiscardAlphaCompareMode())
+    << (float)tempGraph.GetDiscardAlphaThreshold();
 
 
   IFile *file = vkVFS::Get()->Open(m_resourceLocator.GetResourceFile(), eOM_Write, eTM_Binary);
   AssetWriter writer;
-  writer.AddEntry("SHADER_GRAPH", "DATA", os.GetSize(), os.GetBuffer());
-  
+  writer.AddEntry("SHADER_GRAPH", "DATA", osData.GetSize(), osData.GetBuffer());
+  writer.AddEntry("SHADER_GRAPH", "META_DATA", osMeta.GetSize(), osMeta.GetBuffer());
+
   writer.Output(file);
   file->Close();
 }
@@ -321,8 +390,17 @@ void ShaderGraphView::on_pbSave_clicked(bool)
 
 
 
-void ShaderGraphView::CollectData()
+void ShaderGraphView::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes)
 {
+  if (!graph)
+  {
+    return;
+  }
+
+  graph->Clear();
+  nodes.clear();
+
+  // create all nodes for the graph and assign all const values
   for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
     shadergraph::Node* node = static_cast<shadergraph::Node*>(m_scene->GetNode(i));
@@ -332,24 +410,59 @@ void ShaderGraphView::CollectData()
     }
 
     shadergraph::SGNode* sgNode = static_cast<shadergraph::SGNode*>(node);
+    vkSGNode *vksgNode = sgNode->GetClass()->CreateInstance<vkSGNode>();
+    nodes[sgNode] = vksgNode;
 
     for (size_t j = 0, jn = sgNode->GetNumberOfInputs(); j < jn; ++j)
     {
       float constFloat = sgNode->GetConstInput(j);
-      sgNode->GetNode()->GetInput(j)->SetConst(constFloat);
+      vksgNode->SetInput(j, constFloat);
     }
 
-    vkSGNode *vksgNode = sgNode->GetNode();
+    // the node has a resource name
     vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(vksgNode);
     if (resNode && sgNode->HasName())
     {
       resNode->SetResourceName(vkString((const char*)sgNode->GetName().toLatin1()));
     }
+
+    graph->AddNode(vksgNode);
+  }
+
+  // create all connections
+  for (size_t i = 0, in = m_scene->GetNumberOfConnections(); i < in; ++i)
+  {
+    graph::NodeConnection* connection = m_scene->GetConnection(i);
+    if (nodes.find(connection->GetInputNode()) == nodes.end() || nodes.find(connection->GetOutputNode()) == nodes.end())
+    {
+      continue;
+    }
+
+    vkSGNode *inputNode = nodes[connection->GetInputNode()];
+    vkSGNode *outputNode = nodes[connection->GetOutputNode()];
+
+    vkSGOutput *output = outputNode->GetOutput(connection->GetOutputIdx());
+    vkSGInput *input = inputNode->GetInput(connection->GetInputIdx());
+
+    input->SetInput(output);
   }
 
 
-  m_shaderGraph->SetBlendOutWithBinaryGradient(m_gui.cbBlendBinaryGradient->checkState() != 0);
-  m_shaderGraph->SetDiscardAlpha(m_gui.cbDiscardAlpha->checkState() != 0);
-  m_shaderGraph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
+  for (auto connection : m_shaderGraphNode->GetAllConnections())
+  {
+    if (nodes.find(connection->GetOutputNode()) == nodes.end())
+    {
+      continue;
+    }
+    vkSGNode *outputNode = nodes[connection->GetOutputNode()];
+    vkSGOutput *output = outputNode->GetOutput(connection->GetOutputIdx());
+
+    graph->SetInput((vkSGShaderGraph::InputType)connection->GetInputIdx(), output);
+  }
+
+
+  graph->SetBlendOutWithBinaryGradient(m_gui.cbBlendBinaryGradient->checkState() != 0);
+  graph->SetDiscardAlpha(m_gui.cbDiscardAlpha->checkState() != 0);
+  graph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
                                  (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
 }

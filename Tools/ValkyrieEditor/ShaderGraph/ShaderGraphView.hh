@@ -18,6 +18,7 @@ class vkSGShaderGraph;
 class vkClass;
 class ShaderGraphConnection;
 class ShaderGraphNode;
+class ShaderGraphMetaData;
 class ShaderGraphView : public QWidget
 {
   Q_OBJECT
@@ -26,7 +27,7 @@ public:
   virtual ~ShaderGraphView();
 
   void Set(const vkResourceLocator &resourceLocator);
-  void Setup(vkSGShaderGraph *shaderGraph);
+  void Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData);
 
   public slots:
   void popupNodeSelector();
@@ -36,10 +37,14 @@ protected:
   void keyReleaseEvent(QKeyEvent *event);
 
 
-  private slots:
+private:
+  graph::Node *AddNode(const vkClass *clazz, const vkVector2f &pos);
+  graph::Node *AddNode(vkSGNode *node, const vkVector2f &pos);
+
+private slots:
   graph::Node *AddNode(const vkClass *clazz);
-  graph::Node *AddNode(vkSGNode *node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
+
 
   void on_cbDiscardAlpha_stateChanged(int state);
   void on_pbSave_clicked(bool checked);
@@ -47,7 +52,7 @@ protected:
 
 
 private:
-  void CollectData();
+  void CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes);
 
   vkResourceLocator m_resourceLocator;
 

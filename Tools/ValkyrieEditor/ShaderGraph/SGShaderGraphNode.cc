@@ -27,14 +27,6 @@ void shadergraph::SGShaderGraphNode::AddConnection(graph::NodeConnection* connec
     {
       GetScene()->DisconnectInput(this, connection->GetInputIdx());
     }
-
-    SGNode *sgOutput = static_cast<SGNode*>(connection->GetOutputNode());
-    if (sgOutput->GetType() == SGNode::eT_Node)
-    {
-      vkSGNode *outputNode = static_cast<SGNode*>(sgOutput)->GetNode();
-      vkSGOutput *output = outputNode->GetOutput(connection->GetOutputIdx());
-      m_graph->SetInput((vkSGShaderGraph::InputType)connection->GetInputIdx(), output);
-    }
   }
 
   shadergraph::Node::AddConnection(connection);
@@ -42,12 +34,5 @@ void shadergraph::SGShaderGraphNode::AddConnection(graph::NodeConnection* connec
 
 void shadergraph::SGShaderGraphNode::RemoveConnection(graph::NodeConnection* connection)
 {
-
-  if (connection->GetInputNode() == this)
-  {
-    m_graph->SetInput((vkSGShaderGraph::InputType)connection->GetInputIdx(), 0);
-  }
-
-
   shadergraph::Node::RemoveConnection(connection);
 }

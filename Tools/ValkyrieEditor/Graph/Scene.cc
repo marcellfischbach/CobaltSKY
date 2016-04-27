@@ -49,6 +49,7 @@ void NodeGraphScene::RemoveSelectedNode()
   for (auto connection : removes)
   {
     m_connections.removeAll(connection);
+    removeItem(connection);
     delete connection;
   }
 
@@ -167,7 +168,6 @@ NodeConnection *NodeGraphScene::GetConnection(size_t idx)
   }
   return m_connections[idx];
 }
-
 
 
 

@@ -17,6 +17,19 @@ vkSGShaderGraph::vkSGShaderGraph()
 
 }
 
+void vkSGShaderGraph::Clear()
+{
+  for (size_t i = eIT_START; i < eIT_COUNT; ++i)
+  {
+    SetInput((InputType)i, 0);
+  }
+
+  for (size_t i = 0, in = m_allNodes.size(); i < in; ++i)
+  {
+    m_allNodes[i]->Release();
+  }
+  m_allNodes.clear();
+}
 
 void vkSGShaderGraph::SetInput(vkSGShaderGraph::InputType type, vkSGOutput *output)
 {

@@ -849,6 +849,11 @@ void Node::SetPosition(const QPointF &pos)
 
 }
 
+QVector<NodeConnection*> Node::GetAllConnections() const
+{
+  return m_connections;
+}
+
 void Node::AddConnection(NodeConnection *connection)
 {
   m_connections.append(connection);
@@ -861,7 +866,6 @@ void Node::RemoveConnection(NodeConnection *connection)
 
 void Node::RemoveAllConnections()
 {
-  m_connections.clear();
 }
 
 bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)

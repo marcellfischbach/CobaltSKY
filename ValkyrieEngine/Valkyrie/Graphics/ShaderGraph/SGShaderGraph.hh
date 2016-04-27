@@ -14,7 +14,8 @@ class VKE_API vkSGShaderGraph : public vkMaterial
 public:
   enum InputType
   {
-    eIT_Diffuse,
+    eIT_START,
+    eIT_Diffuse = eIT_START,
     eIT_Alpha,
     eIT_Roughness,
     eIT_Normal,
@@ -23,6 +24,8 @@ public:
   };
 public:
   vkSGShaderGraph();
+
+  void Clear();
 
   bool Validate();
 
