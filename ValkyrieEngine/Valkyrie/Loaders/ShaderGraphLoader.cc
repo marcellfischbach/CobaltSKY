@@ -31,6 +31,9 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
 
   vkSGShaderGraph *shaderGraph = new vkSGShaderGraph();
 
+  vkUInt32 version;
+  inputStream >> version;
+
   //
   // Read all nodes
   vkUInt16 numNodes;
@@ -50,6 +53,59 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
 
     vkSGNode *node = nodeClass->CreateInstance<vkSGNode>();
     nodes[idx] = node;
+
+    vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(node);
+    if (resNode)
+    {
+      float* floats = resNode->GetDefaultFloats();
+      int* ints = resNode->GetDefaultInts();
+      vkResourceLocator &txtLocator = resNode->GetDefaultTextureResource();
+
+      switch (resNode->GetResourceType())
+      {
+      case eSPT_Float:
+        inputStream >> floats[0];
+        break;
+      case eSPT_Vector2:
+        for (int i = 0; i < 2; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Vector3:
+        for (int i = 0; i < 3; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Vector4:
+        for (int i = 0; i < 4; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Int:
+        inputStream >> ints[0];
+        break;
+      case eSPT_IVector2:
+        for (int i = 0; i < 2; ++i) inputStream >> ints[i];
+        break;
+      case eSPT_IVector3:
+        for (int i = 0; i < 3; ++i) inputStream >> ints[i];
+        break;
+      case eSPT_IVector4:
+        for (int i = 0; i < 4; ++i) inputStream >> ints[i];
+        break;
+      case eSPT_Color4:
+        for (int i = 0; i < 4; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Matrix3:
+        for (int i = 0; i < 9; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Matrix4:
+        for (int i = 0; i < 16; ++i) inputStream >> floats[i];
+        break;
+      case eSPT_Texture:
+        {
+          vkString loc;
+          inputStream >> loc;
+          txtLocator = vkResourceLocator(loc);
+        }
+        break;
+      }
+    }
+
     shaderGraph->AddNode(node);
   }
 

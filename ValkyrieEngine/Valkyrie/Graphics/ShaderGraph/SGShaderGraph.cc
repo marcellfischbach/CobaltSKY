@@ -63,6 +63,7 @@ vkSGOutput *vkSGShaderGraph::GetInput(vkSGShaderGraph::InputType type)
   case eIT_Normal:
     return GetNormal();
   }
+  return 0;
 }
 
 bool vkSGShaderGraph::Validate()

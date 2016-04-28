@@ -10,7 +10,9 @@
 
 namespace shadergraph
 {
+class SGNode;
 class SGShaderGraphNode;
+class ResourcesModel;
 }
 
 class vkSGNode;
@@ -38,12 +40,15 @@ protected:
 
 
 private:
-  graph::Node *AddNode(const vkClass *clazz, const vkVector2f &pos);
-  graph::Node *AddNode(vkSGNode *node, const vkVector2f &pos);
+  graph::Node *AddNode(const vkSGNode *node, const vkVector2f &pos);
+  graph::Node *AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos);
 
 private slots:
   graph::Node *AddNode(const vkClass *clazz);
+  void NodeNameChanged(graph::Node *node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
+  void ResourceDoubleClicked(const QModelIndex &index);
+  void ResourceEditApplied(shadergraph::SGNode *node);
 
 
   void on_cbDiscardAlpha_stateChanged(int state);
@@ -62,4 +67,6 @@ private:
 
   vkSGShaderGraph* m_shaderGraph;
   shadergraph::SGShaderGraphNode *m_shaderGraphNode;
+
+  shadergraph::ResourcesModel *m_resourcesModel;
 };

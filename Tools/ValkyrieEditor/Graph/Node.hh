@@ -21,6 +21,7 @@ class NodeGraphScene;
 class NodeNameInput;
 class Node : public QObject
 {
+  Q_OBJECT
   friend class NodeBackground;
 public:
   enum InputMode
@@ -44,50 +45,19 @@ public:
 public:
   Node(QObject *parent = 0);
 
-  inline void SetLabel(const QString &label)
-  {
-    m_label = label;
-  }
+  void SetLabel(const QString &label);
+  const QString &GetLabel() const;
 
-  inline const QString &GetLabel() const
-  {
-    return m_label;
-  }
+  void SetBackgroundColor(const QColor &color);
+  const QColor &GetBackgroundColor() const;
 
-  inline void SetBackgroundColor(const QColor &color)
-  {
-    m_color = color;
-  }
+  void SetHasName(bool hasName);
+  bool HasName() const;
 
-  inline const QColor &GetBackgroundColor() const
-  {
-    return m_color;
-  }
+  void SetMinWidth(float minWidth);
+  float GetMinWidth() const;
 
-  inline void SetHasName(bool hasName)
-  {
-    m_hasName = hasName;
-  }
-
-  inline bool HasName() const
-  {
-    return m_hasName;
-  }
-
-  inline void SetMinWidth(float minWidth)
-  {
-    m_minWidth = minWidth;
-  }
-
-  inline float GetMinWidth() const
-  {
-    return m_minWidth;
-  }
-
-  inline void SetName(const QString &name)
-  {
-    m_name = name;
-  }
+  void SetName(const QString &name);
   QString GetName() const;
 
   void AddInput(const QString &label, const QString &key, InputMode mode);
@@ -108,24 +78,15 @@ public:
 
   virtual bool Initialize();
 
-  inline QGraphicsItem *GetItem()
-  {
-    return m_item;
-  }
+  QGraphicsItem *GetItem();
 
   bool TestAnchor(const QPointF &pos, AnchorRequestResult &result);
 
   void SetPosition(const QPointF &pos);
 
-  inline void SetScene(NodeGraphScene *scene)
-  {
-    m_scene = scene;
-  }
+  void SetScene(NodeGraphScene *scene);
+  NodeGraphScene *GetScene();
 
-  inline NodeGraphScene *GetScene()
-  {
-    return m_scene;
-  }
 
   void UpdateSelection();
 
@@ -141,15 +102,13 @@ public:
   static void Select(Node *node);
   static Node *GetSelected();
 
-  inline void SetIdx(vkUInt32 idx)
-  {
-    m_idx = idx;
-  }
+  void SetIdx(vkUInt32 idx);
+  vkUInt32 GetIdx() const;
 
-  inline vkUInt32 GetIdx() const
-  {
-    return m_idx;
-  }
+
+private slots:
+void NameChanged();
+
 private:
   vkUInt32 m_idx;
 
@@ -192,5 +151,76 @@ protected:
   QVector<NodeConnection*> m_connections;
 
 };
+
+
+inline void Node::SetLabel(const QString &label)
+{
+  m_label = label;
+}
+
+inline const QString &Node::GetLabel() const
+{
+  return m_label;
+}
+
+inline void Node::SetBackgroundColor(const QColor &color)
+{
+  m_color = color;
+}
+
+inline const QColor &Node::GetBackgroundColor() const
+{
+  return m_color;
+}
+
+inline void Node::SetHasName(bool hasName)
+{
+  m_hasName = hasName;
+}
+
+inline bool Node::HasName() const
+{
+  return m_hasName;
+}
+
+inline void Node::SetMinWidth(float minWidth)
+{
+  m_minWidth = minWidth;
+}
+
+inline float Node::GetMinWidth() const
+{
+  return m_minWidth;
+}
+
+inline void Node::SetName(const QString &name)
+{
+  m_name = name;
+}
+
+inline void Node::SetScene(NodeGraphScene *scene)
+{
+  m_scene = scene;
+}
+
+inline NodeGraphScene *Node::GetScene()
+{
+  return m_scene;
+}
+
+inline QGraphicsItem *Node::GetItem()
+{
+  return m_item;
+}
+
+inline void Node::SetIdx(vkUInt32 idx)
+{
+  m_idx = idx;
+}
+
+inline vkUInt32 Node::GetIdx() const
+{
+  return m_idx;
+}
 
 }

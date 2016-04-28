@@ -88,7 +88,7 @@ static void Split(const vkString &fullName, QString &category, QString &name)
 
 
 
-shadergraph::SGNode::SGNode(const vkClass *nodeClass)
+shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode)
   : shadergraph::Node(eT_Node)
   , m_nodeClass(nodeClass)
 {
@@ -108,8 +108,9 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass)
 
   vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(node);
 
-  SetHasName(res != 0);
-  if (HasName())
+  m_resource = res != 0;
+  SetHasName(m_resource);
+  if (m_resource)
   {
     QString name = "";
     if (res->GetResourceName().length() == 0)
@@ -121,6 +122,22 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass)
     {
       name = QString(res->GetResourceName().c_str());
     }
+    m_resourceType = res->GetResourceType();
+    if (originNode)
+    {
+      const vkSGResourceNode *resNode = vkQueryClass<const vkSGResourceNode>(originNode);
+      memcpy(m_defaultFloat, resNode->GetDefaultFloats(), sizeof(m_defaultFloat));
+      memcpy(m_defaultInt, resNode->GetDefaultInts(), sizeof(m_defaultInt));
+      m_defaultTexture = resNode->GetDefaultTextureResource();
+    }
+    else
+    {
+      memset(m_defaultFloat, 0.0f, sizeof(m_defaultFloat));
+      memset(m_defaultInt, 0.0f, sizeof(m_defaultInt));
+    }
+    
+
+
     SetName(name);
   }
 

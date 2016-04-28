@@ -172,18 +172,18 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   result += "  }\n";
   if (clazz->GetNumberOfSuperClasses() > 0)
   {
-    result += "  void *super = null;\n";
+    result += "  void *super = 0;\n";
     for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
     {
       std::string super = clazz->GetSuperClass(s);
       result += "  super = " + super + "::QueryClass(clazz);\n";
-      result += "  if (super != null)\n";
+      result += "  if (super != 0)\n";
       result += "  {\n";
       result += "    return super;\n";
       result += "  }\n";
     }
   }
-  result += "  return null;\n";
+  result += "  return 0;\n";
   result += "}\n";
   result += "\n";
   result += "\n";
@@ -195,17 +195,17 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   result += "  }\n";
   if (clazz->GetNumberOfSuperClasses() > 0)
   {
-    result += "  const void *super = null;\n";
+    result += "  const void *super = 0;\n";
     for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
     {
       result += "  super = " + clazz->GetSuperClass(s) + "::QueryClass(clazz);\n";
-      result += "  if (super != null)\n";
+      result += "  if (super != 0)\n";
       result += "  {\n";
       result += "    return super;\n";
       result += "  }\n";
     }
   }
-  result += "  return null;\n";
+  result += "  return 0;\n";
   result += "}\n";
   result += "\n";
   result += "\n";

@@ -2,7 +2,6 @@
 
 #include <string>
 
-#define null ((void*)0)
 
 #ifdef WIN32
 

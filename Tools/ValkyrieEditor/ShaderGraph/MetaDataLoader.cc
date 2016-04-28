@@ -27,7 +27,7 @@ IObject *MetaDataLoader::Load(vkAssetInputStream &is, const vkResourceLocator &l
 {
   ShaderGraphMetaData *metaData = new ShaderGraphMetaData();
   vkUInt32 version;
-  //is >> version;
+  is >> version;
 
   vkVector2f pos;
   is >> pos;

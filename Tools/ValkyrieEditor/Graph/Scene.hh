@@ -19,6 +19,7 @@ public:
   void AddNode(Node *node);
   void RemoveSelectedNode();
   void Connect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx);
+
   void Disconnect(Node *nodeOutput, int outputIdx, Node *nodeInput, int inputIdx);
   void Disconnect(NodeConnection *nodeConnection, bool resetConst = true);
   void DisconnectInput(Node *nodeInput, int inputIdx);

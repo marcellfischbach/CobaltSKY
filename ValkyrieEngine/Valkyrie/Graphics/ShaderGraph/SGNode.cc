@@ -105,7 +105,7 @@ void vkSGNode::AddInput(vkSGInput *input)
   if (input)
   {
     input->m_node = this;
-    input->SetIdx(m_inputs.size());
+    input->SetIdx((vkUInt32)m_inputs.size());
     m_inputs.push_back(input);
   }
 }
@@ -281,7 +281,7 @@ void vkSGNode::AddOutput(vkSGOutput *output)
   if (output)
   {
     output->m_node = this;
-    output->SetIdx(m_outputs.size());
+    output->SetIdx((vkUInt32)m_outputs.size());
     m_outputs.push_back(output);
   }
 }
@@ -519,11 +519,51 @@ const vkString &vkSGResourceNode::GetResourceName() const
   return m_resourceName;
 }
 
+void vkSGResourceNode::SetResourceType(vkShaderParameterType resourceType)
+{
+  m_resourceType = resourceType;
+}
+
+vkShaderParameterType vkSGResourceNode::GetResourceType() const
+{
+  return m_resourceType;
+}
+
+float *vkSGResourceNode::GetDefaultFloats()
+{
+  return m_defaultFloats;
+}
+
+int *vkSGResourceNode::GetDefaultInts()
+{
+  return m_defaultInts;
+}
+
+vkResourceLocator &vkSGResourceNode::GetDefaultTextureResource()
+{
+  return m_defaultTextureResource;
+}
+
+const float *vkSGResourceNode::GetDefaultFloats() const
+{
+  return m_defaultFloats;
+}
+
+const int *vkSGResourceNode::GetDefaultInts() const
+{
+  return m_defaultInts;
+}
+
+const vkResourceLocator &vkSGResourceNode::GetDefaultTextureResource() const
+{
+  return m_defaultTextureResource;
+}
 
 vkSGVarFloat::vkSGVarFloat()
   : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT_NAME);
+  SetResourceType(eSPT_Float);
   AddOutput(new vkSGOutput(eSGDT_Float, "v"));
 }
 
@@ -531,6 +571,7 @@ vkSGVarFloat2::vkSGVarFloat2()
   : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT2_NAME);
+  SetResourceType(eSPT_Vector2);
   AddOutput(new vkSGOutput(eSGDT_Float2, "v"));
 }
 
@@ -538,6 +579,7 @@ vkSGVarFloat3::vkSGVarFloat3()
   : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT3_NAME);
+  SetResourceType(eSPT_Vector3);
   AddOutput(new vkSGOutput(eSGDT_Float3, "v"));
 }
 
@@ -545,6 +587,7 @@ vkSGVarFloat4::vkSGVarFloat4()
   : vkSGResourceNode()
 {
   SetName(VK_VAR_FLOAT4_NAME);
+  SetResourceType(eSPT_Vector4);
   AddOutput(new vkSGOutput(eSGDT_Float4, "v"));
 }
 
@@ -891,6 +934,8 @@ vkSGTexture2D::vkSGTexture2D()
   : vkSGResourceNode()
 {
   SetName(VK_TEXTURE2D_NAME);
+  SetResourceType(eSPT_Texture);
+
   AddInput(new vkSGInput("uv", false, true));
   AddOutput(new vkSGOutput(eSGDT_Float4, "c"));
   AddOutput(new vkSGOutput(eSGDT_Float, "r", "r"));

@@ -9,6 +9,7 @@
 #include <qpen.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
+#include <qtextdocument.h>
 
 
 #define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
@@ -357,6 +358,11 @@ public:
     QRectF rect = GetRect(fm);
     m_background->setRect(rect);
     SetText("");
+  }
+
+  QTextDocument *GetDocument()
+  {
+    return m_textItem->document();
   }
 
   void SetRect(const QRectF &rect)
@@ -779,6 +785,8 @@ bool Node::Initialize()
     m_nodeNameInput->SetRect(QRectF(m_margin, posY, width - 2.0f * m_margin, nameInputHeight));
     m_nodeNameInput->SetText(m_name);
 
+    connect(m_nodeNameInput->GetDocument(), SIGNAL(contentsChanged()), this, SLOT(NameChanged()));
+
     posY += nameHeight;
   }
 
@@ -903,6 +911,12 @@ bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)
     i++;
   }
   return false;
+}
+
+void Node::NameChanged()
+{
+  printf("Node Name: %s\n", (const char*)GetName().toLatin1());
+  emit m_scene->NodeNameChanged(this);
 }
 
 }

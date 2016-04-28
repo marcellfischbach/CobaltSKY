@@ -1,7 +1,9 @@
 
 #include <ShaderGraph/ShaderGraphView.hh>
+#include <ShaderGraph/EditResourceDefaultDialog.hh>
 #include <ShaderGraph/MetaData.hh>
 #include <ShaderGraph/NodeSelector.hh>
+#include <ShaderGraph/ResourcesModel.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/AssetWriter.hh>
@@ -22,6 +24,7 @@
 
 ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
+  , m_resourcesModel (0)
 {
   m_gui.setupUi(this);
   setMouseTracking(true);
@@ -36,6 +39,7 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
   m_scene = new graph::NodeGraphScene();
   connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node *, int)), this, SLOT(NodeConnectedLooseInput(graph::Node *, int)));
+  connect(m_scene, SIGNAL(NodeNameChanged(graph::Node*)), this, SLOT(NodeNameChanged(graph::Node*)));
   m_view->setScene(m_scene);
 
   
@@ -47,12 +51,24 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_gui.cbDiscardAlphaCompareMode->addItem("!= (not equal)", QVariant(eCM_NotEqual));
   on_cbDiscardAlpha_stateChanged(0);
 
+  m_resourcesModel = new shadergraph::ResourcesModel();
+  m_gui.tvResources->setModel(m_resourcesModel);
 
+  connect(m_gui.tvResources, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(ResourceDoubleClicked(const QModelIndex&)));
 }
 
 ShaderGraphView::~ShaderGraphView()
 {
 
+}
+
+void ShaderGraphView::NodeNameChanged(graph::Node *node)
+{
+  shadergraph::Node *gNode = static_cast<shadergraph::Node*>(node);
+  if (gNode->GetType() == shadergraph::Node::eT_Node && m_resourcesModel)
+  {
+    m_resourcesModel->NodeChanged(static_cast<shadergraph::SGNode*>(node));
+  }
 }
 
 void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
@@ -143,7 +159,6 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *m
       }
     }
   }
-
 }
 
 
@@ -176,32 +191,36 @@ void ShaderGraphView::popupNodeSelector()
 
 graph::Node *ShaderGraphView::AddNode(const vkClass *clazz)
 {
-  return AddNode(clazz, vkVector2f(0.0f, 0.0f));
+  return AddNode(clazz, 0, vkVector2f(0.0f, 0.0f));
 }
 
-graph::Node *ShaderGraphView::AddNode(vkSGNode *node, const vkVector2f &pos)
+graph::Node *ShaderGraphView::AddNode(const vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
   {
     return 0;
   }
-  return AddNode(node->GetClass(), pos);
+  return AddNode (node->GetClass(), node, pos);
 
 }
 
-graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkVector2f &pos)
+graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos)
 {
   if (!clazz)
   {
     return 0;
   }
-  shadergraph::SGNode *sgNode = new shadergraph::SGNode(clazz);
+  shadergraph::SGNode *sgNode = new shadergraph::SGNode(clazz, node);
   if (!sgNode->Initialize())
   {
     delete sgNode;
     return 0;
   }
 
+  if (sgNode->IsResources())
+  {
+    m_resourcesModel->AddNode(sgNode);
+  }
   m_scene->AddNode(sgNode);
   sgNode->SetPosition(QPointF(pos.x, pos.y));
   return sgNode;
@@ -209,9 +228,35 @@ graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkVector2f &po
 
 
 
+
 void ShaderGraphView::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
 {
   m_scene->DisconnectInput(inputNode, inputIdx);
+}
+
+void ShaderGraphView::ResourceDoubleClicked(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return;
+  }
+
+  shadergraph::SGNode* node = static_cast<shadergraph::SGNode*>(index.internalPointer());
+  if (!node)
+  {
+    return;
+  }
+
+  shadergraph::EditResourceDefaultDialog *dialog = new shadergraph::EditResourceDefaultDialog(this);
+  connect(dialog, SIGNAL(Changed(shadergraph::SGNode*)), this, SLOT(ResourceEditApplied(shadergraph::SGNode*)));
+  dialog->SetNode(node);
+  dialog->setVisible(true);
+}
+
+void ShaderGraphView::ResourceEditApplied(shadergraph::SGNode* node)
+{
+  m_resourcesModel->NodeChanged(node);
+  connect(sender(), SIGNAL(Changed(shadergraph::SGNode*)), this, SLOT(ResourceEditApplied(shadergraph::SGNode*)));
 }
 
 void ShaderGraphView::on_cbDiscardAlpha_stateChanged(int state)
@@ -296,9 +341,11 @@ void ShaderGraphView::on_pbSave_clicked(bool)
 
   QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
   vkAssetOutputStream osMeta;
+  osMeta << (vkUInt32)VK_VERSION(1, 0, 0);
   osMeta << vkVector2f(shaderGraphPos.x(), shaderGraphPos.y());
 
   vkAssetOutputStream osData;
+  osData << (vkUInt32)VK_VERSION(1, 0, 0);
   osData << (vkUInt16)nodes.size();
   osMeta << (vkUInt16)nodes.size();
   for (size_t i = 0, in = sgNodes.size(); i < in; ++i)
@@ -306,7 +353,55 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     vkSGNode *sgNode = sgNodes[i];
     osData << (vkUInt32)i << vkString(sgNode->GetClass()->GetName());
 
-    QPointF pos = nodesInv[sgNode]->GetItem()->pos();
+    shadergraph::SGNode *graphNode = static_cast<shadergraph::SGNode*>(nodesInv[sgNode]);
+    if (graphNode->IsResources())
+    {
+      float *floats = graphNode->GetDefaultFloat();
+      int *ints = graphNode->GetDefaultInt();
+      vkResourceLocator &txtResLocator = graphNode->GetDefaultTexture();
+
+      switch (graphNode->GetResourceType())
+      {
+      case eSPT_Float:
+        osData << floats[0];
+        break;
+      case eSPT_Vector2:
+        for (int i = 0; i < 2; ++i) osData << floats[i];
+        break;
+      case eSPT_Vector3:
+        for (int i = 0; i < 3; ++i) osData << floats[i];
+        break;
+      case eSPT_Vector4:
+        for (int i = 0; i < 4; ++i) osData << floats[i];
+        break;
+      case eSPT_Int:
+        osData << ints[0];
+        break;
+      case eSPT_IVector2:
+        for (int i = 0; i < 2; ++i) osData << ints[i];
+        break;
+      case eSPT_IVector3:
+        for (int i = 0; i < 3; ++i) osData << ints[i];
+        break;
+      case eSPT_IVector4:
+        for (int i = 0; i < 4; ++i) osData << ints[i];
+        break;
+      case eSPT_Color4:
+        for (int i = 0; i < 4; ++i) osData << floats[i];
+        break;
+      case eSPT_Matrix3:
+        for (int i = 0; i < 9; ++i) osData << floats[i];
+        break;
+      case eSPT_Matrix4:
+        for (int i = 0; i < 16; ++i) osData << floats[i];
+        break;
+      case eSPT_Texture:
+        osData << txtResLocator.GetResourceFile();
+      }
+    }
+    
+    
+    QPointF pos = graphNode->GetItem()->pos();
     osMeta << (vkUInt32)i << vkVector2f(pos.x(), pos.y());
   }
 

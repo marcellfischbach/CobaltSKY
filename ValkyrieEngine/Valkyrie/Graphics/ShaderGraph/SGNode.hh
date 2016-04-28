@@ -2,7 +2,9 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Defs.hh>
+#include <Valkyrie/Enums.hh>
 #include <Valkyrie/Math/Vector.hh>
 
 #include <Valkyrie/Core/String.hh>
@@ -235,8 +237,26 @@ public:
   void SetResourceName(const vkString &resourceName);
   const vkString &GetResourceName() const;
 
+  vkShaderParameterType GetResourceType() const;
+
+  float *GetDefaultFloats();
+  int *GetDefaultInts();
+  vkResourceLocator &GetDefaultTextureResource();
+
+  const float *GetDefaultFloats() const;
+  const int *GetDefaultInts() const;
+  const vkResourceLocator &GetDefaultTextureResource() const;
+
+protected:
+  void SetResourceType(vkShaderParameterType type);
+
 private:
   vkString m_resourceName;
+  vkShaderParameterType m_resourceType;
+
+  float m_defaultFloats[16];
+  int m_defaultInts[16];
+  vkResourceLocator m_defaultTextureResource;
 
 };
 

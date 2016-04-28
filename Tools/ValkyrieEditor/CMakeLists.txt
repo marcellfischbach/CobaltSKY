@@ -15,6 +15,8 @@ set(EDITOR_SOURCES
     EditorWindow.hh
     SceneView.cc
     SceneView.hh
+    Utils.cc
+    Utils.hh
     )
 
 source_group(
@@ -59,6 +61,8 @@ source_group(
 
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/EditResourceDefaultDialog.cc
+    ShaderGraph/EditResourceDefaultDialog.hh
     ShaderGraph/MetaData.cc
     ShaderGraph/MetaData.hh
     ShaderGraph/MetaDataLoader.cc
@@ -67,6 +71,8 @@ set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc
     ShaderGraph/NodeSelector.hh
+    ShaderGraph/ResourcesModel.cc
+    ShaderGraph/ResourcesModel.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
     ShaderGraph/SGNode.cc
@@ -76,6 +82,7 @@ set(EDITOR_SHADERGRAPH_SOURCES
     )
 
 set(EDITOR_SHADERGRAPH_UI
+    ShaderGraph/EditResourceDefaultDialog.ui
     ShaderGraph/NodeSelector.ui
     ShaderGraph/ShaderGraphView.ui
     )
@@ -96,6 +103,7 @@ set(ALL_UI
 
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
+qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
@@ -108,6 +116,7 @@ add_executable(
     ValkyrieEditor
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
+    ${RESOURCES_SOURCES}
     )
 
 target_link_libraries(ValkyrieEditor 
