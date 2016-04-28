@@ -468,6 +468,16 @@ public:
 
 
 VK_CLASS()
+class VKE_API vkSGLerp : public vkSGNode
+{
+  VK_CLASS_GEN;
+public:
+  vkSGLerp();
+  virtual ~vkSGLerp() { }
+
+  virtual bool Validate();
+};
+VK_CLASS()
 class VKE_API vkSGDefaultTextureCoordinate : public vkSGNode
 {
   VK_CLASS_GEN;

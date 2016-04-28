@@ -30,6 +30,8 @@ private:
   void GenerateGBuffer(vkSGShaderGraph *graph);
   void GenerateShadow(vkSGShaderGraph *graph, unsigned layers, vkRenderPass renderPass);
 
+  void DebugCode(const vkString &title, const vkString &source);
+
 private:
   struct Map 
   {

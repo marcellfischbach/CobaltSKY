@@ -396,6 +396,18 @@ protected:
 };
 
 VK_CLASS()
+class VKGL4_API vkSGLerpGL4 : public vkSGNodeGL4
+{
+  VK_CLASS_GEN;
+public:
+  vkSGLerpGL4() : vkSGNodeGL4() { }
+  virtual ~vkSGLerpGL4() { }
+
+protected:
+  void PrivEvaluate(vkShaderGraphCtx &ctx);
+};
+
+VK_CLASS()
 class VKGL4_API vkSGDefaultTextureCoordinateGL4 : public vkSGNodeGL4
 {
   VK_CLASS_GEN;

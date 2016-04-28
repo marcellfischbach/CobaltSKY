@@ -443,6 +443,7 @@ bool vkSGNode::Validate()
 #define VK_DIV_NAME "Math/Div"
 #define VK_DOT_NAME "Math/Dot"
 #define VK_CROSS_NAME "Math/Cross"
+#define VK_LERP_NAME "Math/Lerp"
 
 
 #define VK_DEFAULT_TEXTURE_COORDINATE_NAME "Texture/DefaultTextureCoordinate"
@@ -481,6 +482,7 @@ vkSGNodes::vkSGNodes()
   m_entries.push_back(Entry(VK_DIV_NAME, vkSGDiv::GetStaticClass()));
   m_entries.push_back(Entry(VK_DOT_NAME, vkSGDot::GetStaticClass()));
   m_entries.push_back(Entry(VK_CROSS_NAME, vkSGCross::GetStaticClass()));
+  m_entries.push_back(Entry(VK_LERP_NAME, vkSGLerp::GetStaticClass()));
 
   m_entries.push_back(Entry (VK_DEFAULT_TEXTURE_COORDINATE_NAME, vkSGDefaultTextureCoordinate::GetStaticClass()));
   m_entries.push_back(Entry (VK_TEXTURE2D_NAME, vkSGTexture2D::GetStaticClass()));
@@ -776,7 +778,7 @@ bool vkSGSub::Validate()
     SetValidationMessage("Invalid input type");
     return false;
   }
-  if (!SameTypeOrOne(dtA, dtB))
+  if (!SameScalarType(dtA, dtB))
   {
     SetValidationMessage("Invalid mix of int/float");
     return false;
@@ -812,7 +814,7 @@ bool vkSGMul::Validate()
     SetValidationMessage("Invalid input type");
     return false;
   }
-  if (!SameTypeOrOne(dtA, dtB))
+  if (!SameScalarType(dtA, dtB))
   {
     SetValidationMessage("Invalid mix of int/float");
     return false;
@@ -848,7 +850,7 @@ bool vkSGDiv::Validate()
     SetValidationMessage("Invalid input type");
     return false;
   }
-  if (!SameTypeOrOne(dtA, dtB))
+  if (!SameScalarType(dtA, dtB))
   {
     SetValidationMessage("Invalid mix of int/float");
     return false;
@@ -856,7 +858,7 @@ bool vkSGDiv::Validate()
 
   if (!SameTypeOrOne(dtA, dtB))
   {
-    SetValidationMessage("Invalid combination of types in Add");
+    SetValidationMessage("Invalid combination of types in div");
     return false;
   }
 
@@ -892,6 +894,8 @@ bool vkSGDot::Validate()
     return false;
   }
 
+  SetOutputDataType(0, dtA);
+
   return success;
 }
 
@@ -918,6 +922,46 @@ bool vkSGCross::Validate()
     return false;
   }
 
+  return success;
+}
+
+
+
+vkSGLerp::vkSGLerp()
+  : vkSGNode()
+{
+  SetName(VK_LERP_NAME);
+  AddInput(new vkSGInput("a", true, true));
+  AddInput(new vkSGInput("b", true, true));
+  AddInput(new vkSGInput("x", true, true));
+  AddOutput(new vkSGOutput("v"));
+}
+
+
+bool vkSGLerp::Validate()
+{
+  bool success = vkSGNode::Validate();
+
+  vkSGDataType dtA = GetInputDataType(0);
+  vkSGDataType dtB = GetInputDataType(1);
+  vkSGDataType dtX = GetInputDataType(2);
+  if (!ScalarType(dtA, dtB) || !ScalarType(dtX))
+  {
+    SetValidationMessage("Invalid input type");
+    return false;
+  }
+  if (!SameScalarType(dtA, dtB) || !(SameScalarType(dtA, dtX) || dtX == eSGDT_Float)) 
+  {
+    SetValidationMessage("Invalid mix of int/float");
+    return false;
+  }
+  if (!SameTypeOrOne(dtA, dtB) || !SameTypeOrOne(dtA, dtX))
+  {
+    SetValidationMessage("Invalid combination of types in mul");
+    return false;
+  }
+
+  SetOutputDataType(0, HighOrderType(dtA, dtB));
   return success;
 }
 

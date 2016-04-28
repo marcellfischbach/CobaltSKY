@@ -41,6 +41,7 @@ vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
     m_classMapping.push_back(Map(vkSGDiv::GetStaticClass(), vkSGDivGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGDot::GetStaticClass(), vkSGDotGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGCross::GetStaticClass(), vkSGCrossGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGLerp::GetStaticClass(), vkSGLerpGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGDefaultTextureCoordinate::GetStaticClass(), vkSGDefaultTextureCoordinateGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGTexture2D::GetStaticClass(), vkSGTexture2DGL4::GetStaticClass()));
     initialized = true;
@@ -102,3 +103,28 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
   return true;
 }
 
+
+
+void vkShaderGraphGL4::DebugCode(const vkString &title, const vkString &code)
+{
+  printf("%s\n", title.c_str());
+  
+  unsigned line = 1;
+  printf("(%02d) ", line++);
+  for (size_t i = 0, in = code.length(); i < in; ++i)
+  {
+    if (code[i] == '\n')
+    {
+      printf("\n(%02d) ", line++);
+    }
+    else if (code[i] == '\r')
+    {
+      continue;
+    }
+    else
+    {
+      printf("%c", code[i]);
+    }
+  }
+  printf("\n");
+}
