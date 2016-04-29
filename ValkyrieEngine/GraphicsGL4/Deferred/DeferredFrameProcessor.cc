@@ -44,13 +44,8 @@ vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
 
 }
 
-bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
+bool vkDeferredFrameProcessor::Initialize()
 {
-  m_gbuffer = new vkGBuffer(m_renderer, width, height);
-  if (!m_gbuffer->IsValid())
-  {
-    return false;
-  }
 
   vkResourceManager *mgr = vkResourceManager::Get();
 
@@ -66,6 +61,22 @@ bool vkDeferredFrameProcessor::Initialize(vkUInt16 width, vkUInt16 height)
     return false;
   }
 
+  return true;
+}
+
+bool vkDeferredFrameProcessor::Resize(vkUInt16 width, vkUInt16 height)
+{
+  if (!m_gbuffer)
+  {
+    m_gbuffer = new vkGBuffer(m_renderer);
+  }
+  if (!m_gbuffer->Resize(width, height))
+  {
+    m_gbuffer->Release();
+    m_gbuffer = 0;
+    printf("Unable to resize\n");
+    return false;
+  }
   return true;
 }
 
@@ -135,6 +146,7 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
 IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
+  /*
   m_renderStates.Clear();
   m_lightStates.Clear();
 
@@ -147,20 +159,22 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   root->Scan(clipper, m_renderer, &collector, config);
 
   camera->Apply(m_renderer);
-
-  glBeginQuery(GL_TIME_ELAPSED, queries[0]);
+  */
+  //glBeginQuery(GL_TIME_ELAPSED, queries[0]);
   // render to the main GBuffer this buffer will be used to assemble the final image
-  RenderGBuffer(root);
-  glEndQuery(GL_TIME_ELAPSED);
+  //RenderGBuffer(root);
+  //glEndQuery(GL_TIME_ELAPSED);
 
+  printf("Meshes: %d\n", m_renderStates.length);
+  printf("Target: %p\n", target);
 
-  glBeginQuery(GL_TIME_ELAPSED, queries[1]);
+  //glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
   m_renderer->SetBlendEnabled(true);
   m_renderer->SetBlendMode(eBM_One, eBM_One);
-  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
-
+  m_renderer->Clear(true, vkVector4f(0.0f, 1.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
+  /*
   for (vkSize i = 0; i < m_lightStates.length; ++i)
   {
     vkLightState *lightState = m_lightStates[i];
@@ -177,8 +191,8 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     }
 
   }
-
-  glEndQuery(GL_TIME_ELAPSED);
+  */
+  //glEndQuery(GL_TIME_ELAPSED);
 
 #if 0
   GLuint time0, time1;
@@ -186,9 +200,8 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   glGetQueryObjectuiv(queries[1], GL_QUERY_RESULT, &time1);
   printf("Times: %.2f %.2f\n", (float)(time0 / 1000) / 1000.0f, (float)(time1 / 1000.0f) / 1000.0f);
 #endif
-
+  /*
   m_renderer->SetBlendEnabled(false);
-
 
   if (m_postProcessor)
   {
@@ -213,7 +226,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
 
 
   //m_renderer->RenderFullScreenFrame(txt, 1);
-  
+  */
   m_renderer->SetBlendEnabled(false);
   if (m_postProcessor)
   {

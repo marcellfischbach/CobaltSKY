@@ -76,6 +76,10 @@ vkGraphicsGL4::vkGraphicsGL4()
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
+  GLint major, minor;
+  glGetIntegerv(GL_MAJOR_VERSION, &major);
+  glGetIntegerv(GL_MINOR_VERSION, &minor);
+  printf("OpenGL: %d.%d\n", major, minor);
 
   m_shaderGraphFactory = new vkShaderGraphGL4(this);
 
@@ -550,20 +554,29 @@ void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
 
 void vkGraphicsGL4::SetRenderTarget(IRenderTarget *renderTarget)
 {
+  VK_CHECK_GL_ERROR;
+  GLint currentBound;
+  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentBound);
+  printf("CurrentBound: %u\n", currentBound);
   vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
+  VK_CHECK_GL_ERROR;
   if (m_renderTarget != rtGL4)
   {
     VK_SET(m_renderTarget, rtGL4);
     if (m_renderTarget)
     {
+      VK_CHECK_GL_ERROR;
       m_renderTarget->Bind();
+      VK_CHECK_GL_ERROR;
     }
     else
     {
+      VK_CHECK_GL_ERROR;
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      VK_CHECK_GL_ERROR;
     }
   }
-
+  VK_CHECK_GL_ERROR;
 }
 
 
@@ -705,8 +718,6 @@ void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 h
 void vkGraphicsGL4::SetViewport(IRenderTarget *renderTarget)
 {
   SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
-  m_viewportWidth = renderTarget->GetWidth();
-  m_viewportHeight = renderTarget->GetHeight();
 }
 
 
@@ -809,14 +820,19 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_ALWAYS);
   glClearDepth(1.0);
+  glDisable(GL_BLEND);
 
   SetShader(m_fullScreenProgram);
   SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   vkTextureUnit tu = BindTexture(texture);
-  m_fullScreenProgram->GetAttribute(attrDiffuseID)->Set(tu);
+  if (m_fullScreenProgram->GetAttribute(attrDiffuseID))
+  {
+    m_fullScreenProgram->GetAttribute(attrDiffuseID)->Set(tu);
+  }
   m_fullScreenProgram->GetAttribute(attrLeftBottomID)->Set(vkVector2f(x0, y0));
   m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
+
   Render(ePT_Triangles, 6);
 }
 

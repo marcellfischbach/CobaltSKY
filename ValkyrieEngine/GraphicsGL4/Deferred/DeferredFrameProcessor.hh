@@ -23,7 +23,8 @@ public:
   vkDeferredFrameProcessor(vkGraphicsGL4 *renderer);
   virtual ~vkDeferredFrameProcessor();
 
-  bool Initialize(vkUInt16 width, vkUInt16 height);
+  bool Resize(vkUInt16 width, vkUInt16 height);
+  bool Initialize();
 
   void SetPostProcessor(vkPostProcessor *processor);
 

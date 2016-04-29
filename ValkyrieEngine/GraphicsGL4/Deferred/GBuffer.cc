@@ -6,16 +6,33 @@
 #include <stdio.h>
 
 
-vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height)
+vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer)
+  : vkObject ()
+  , m_renderer(renderer)
+  , m_diffuseRoughness(0)
+  , m_normalLightMode(0)
+  , m_emissiveMetallic(0)
+  , m_sssSpec(0)
+  , m_renderTarget(0)
 {
-  m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_normalLightMode = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_R10G10B10A2, width, height));
-  m_emissiveMetallic = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_sssSpec = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_depth = vkQueryClass<vkTexture2DGL4>(renderer->CreateTexture2D(ePF_D24S8, width, height));
+}
 
-  vkSamplerGL4 *colorSampler = vkGBuffer::GetColorSampler(renderer);
-  vkSamplerGL4 *depthSampler = vkGBuffer::GetDepthSampler(renderer);
+bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
+{
+  VK_RELEASE(m_diffuseRoughness);
+  VK_RELEASE(m_normalLightMode);
+  VK_RELEASE(m_emissiveMetallic);
+  VK_RELEASE(m_sssSpec);
+  VK_RELEASE(m_renderTarget);
+
+  m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
+  m_normalLightMode = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height));
+  m_emissiveMetallic = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
+  m_sssSpec = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
+  m_depth = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_D24S8, width, height));
+
+  vkSamplerGL4 *colorSampler = vkGBuffer::GetColorSampler(m_renderer);
+  vkSamplerGL4 *depthSampler = vkGBuffer::GetDepthSampler(m_renderer);
 
   m_diffuseRoughness->SetSampler(colorSampler);
   m_normalLightMode->SetSampler(colorSampler);
@@ -24,7 +41,7 @@ vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height)
   m_depth->SetSampler(depthSampler);
 
 
-  m_renderTarget = vkQueryClass<vkRenderTargetGL4>(renderer->CreateRenderTarget());
+  m_renderTarget = vkQueryClass<vkRenderTargetGL4>(m_renderer->CreateRenderTarget());
   m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(m_diffuseRoughness);
   m_renderTarget->AddColorTexture(m_normalLightMode);
@@ -33,7 +50,8 @@ vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height)
   m_renderTarget->SetDepthTexture(m_depth);
   if (m_renderTarget->Finilize())
   {
-    printf("Successfully created GBuffer\n");
+    printf("Successfully resized GBuffer\n");
+    return true;
   }
   else
   {
@@ -43,6 +61,7 @@ vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height)
     VK_RELEASE(m_sssSpec);
     VK_RELEASE(m_renderTarget);
     printf("Failed to create GBuffer\n");
+    return false;
   }
 }
 

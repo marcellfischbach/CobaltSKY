@@ -15,6 +15,7 @@ class VKGL4_API vkRenderTargetGL4 : public IRenderTarget
 
 public:
   vkRenderTargetGL4();
+  vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 height);
   virtual ~vkRenderTargetGL4();
 
   void Bind();

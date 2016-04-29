@@ -14,7 +14,9 @@ class VKGL4_API vkGBuffer : public vkObject
 {
   VK_CLASS_GEN;
 public:
-  vkGBuffer(vkGraphicsGL4 *renderer, vkUInt16 width, vkUInt16 height);
+  vkGBuffer(vkGraphicsGL4 *renderer);
+
+  bool Resize(vkUInt16 width, vkUInt16 height);
 
   bool Bind(vkGraphicsGL4 *renderer);
 
@@ -55,5 +57,5 @@ private:
   vkTexture2DGL4 *m_sssSpec;
   vkTexture2DGL4 *m_depth;
   vkRenderTargetGL4 *m_renderTarget;
-
+  vkGraphicsGL4 *m_renderer;
 };

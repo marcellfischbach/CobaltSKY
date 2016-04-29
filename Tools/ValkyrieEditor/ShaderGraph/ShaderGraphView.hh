@@ -13,6 +13,7 @@ namespace shadergraph
 class SGNode;
 class SGShaderGraphNode;
 class ResourcesModel;
+class PreviewWidget;
 }
 
 class vkSGNode;
@@ -46,6 +47,7 @@ private:
 private slots:
   graph::Node *AddNode(const vkClass *clazz);
   void NodeNameChanged(graph::Node *node);
+  void NodeRemoved(graph::Node* node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
   void ResourceDoubleClicked(const QModelIndex &index);
   void ResourceEditApplied(shadergraph::SGNode *node);
@@ -57,6 +59,7 @@ private slots:
 
 
 private:
+  bool Compile();
   void CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes);
 
   vkResourceLocator m_resourceLocator;
@@ -69,4 +72,7 @@ private:
   shadergraph::SGShaderGraphNode *m_shaderGraphNode;
 
   shadergraph::ResourcesModel *m_resourcesModel;
+
+  shadergraph::PreviewWidget *m_previewWidget;
+
 };

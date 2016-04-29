@@ -351,6 +351,7 @@ vkProgramGL4::~vkProgramGL4()
 
 void vkProgramGL4::Bind()
 {
+  printf("vkProgram::Bind: %d\n", m_name);
   glUseProgram(m_name);
 }
 

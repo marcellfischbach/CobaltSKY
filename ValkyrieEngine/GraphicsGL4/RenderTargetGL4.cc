@@ -11,6 +11,16 @@ vkRenderTargetGL4::vkRenderTargetGL4()
   VK_CLASS_GEN_CONSTR;
 }
 
+vkRenderTargetGL4::vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 height)
+  : IRenderTarget()
+  , m_name(name)
+  , m_depthTexture(0)
+  , m_width(width)
+  , m_height(height)
+{
+  VK_CLASS_GEN_CONSTR;
+}
+
 vkRenderTargetGL4::~vkRenderTargetGL4()
 {
   if (m_name != 0)

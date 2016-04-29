@@ -197,6 +197,7 @@ void vkMaterialInstance::SetMaterial(vkMaterial *material)
   VK_SET(m_material, material);
   if (material)
   {
+    m_parameters.clear();
     for (vkSize i = 0, in = material->GetNumberOfParameters(); i < in; ++i)
     {
       const vkShaderAttributeID &id = material->GetParamID(i);

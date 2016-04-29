@@ -57,6 +57,9 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
     vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(node);
     if (resNode)
     {
+      vkString name;
+      inputStream >> name;
+      resNode->SetResourceName(name);
       float* floats = resNode->GetDefaultFloats();
       int* ints = resNode->GetDefaultInts();
       vkResourceLocator &txtLocator = resNode->GetDefaultTextureResource();

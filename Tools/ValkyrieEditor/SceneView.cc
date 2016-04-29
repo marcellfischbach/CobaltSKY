@@ -1,6 +1,7 @@
 
 
 #include <SceneView.hh>
+#include <qopenglcontext.h>
 
 
 SceneView::SceneView()
@@ -16,7 +17,8 @@ SceneView::~SceneView()
 
 void SceneView::initializeGL()
 {
-
+  context()->setShareContext(QOpenGLContext::globalShareContext());
+  printf("SceneView::initializeGL(): %p %p\n", context(), context()->shareContext());
 }
 
 void SceneView::paintGL()

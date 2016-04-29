@@ -3,6 +3,7 @@
 #include <qobject.h>
 #include <Valkyrie/Defs.hh>
 
+class QOpenGLContext;
 struct IGraphics;
 struct IPhysicsSystem;
 class EditorWindow;
@@ -22,6 +23,8 @@ public:
   vkEngine *GetEngine();
   IGraphics *GetGraphics();
   IPhysicsSystem *GetPhysicsSystem();
+
+  void RequestGraphics();
 
 private:
   Editor();

@@ -19,14 +19,9 @@ public:
   IGraphics *GetRenderer() const;
   IPhysicsSystem *GetPhysicsSystem() const;
 
-  int Run();
-
   bool Initialize();
   bool SetupTestScene();
 
-protected:
-  void RegisterLoaders();
-  void RegisterClasses();
 
 private:
   vkEngine();

@@ -113,15 +113,7 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
   if (m_resource)
   {
     QString name = "";
-    if (res->GetResourceName().length() == 0)
-    {
-      static unsigned nameCounter = 1;
-      name = QString("Var%1").arg(nameCounter++);
-    }
-    else
-    {
-      name = QString(res->GetResourceName().c_str());
-    }
+    
     m_resourceType = res->GetResourceType();
     if (originNode)
     {
@@ -129,11 +121,14 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
       memcpy(m_defaultFloat, resNode->GetDefaultFloats(), sizeof(m_defaultFloat));
       memcpy(m_defaultInt, resNode->GetDefaultInts(), sizeof(m_defaultInt));
       m_defaultTexture = resNode->GetDefaultTextureResource();
+      name = QString(resNode->GetResourceName().c_str());
     }
     else
     {
       memset(m_defaultFloat, 0.0f, sizeof(m_defaultFloat));
       memset(m_defaultInt, 0.0f, sizeof(m_defaultInt));
+      static unsigned nameCounter = 1;
+      name = QString("Var%1").arg(nameCounter++);
     }
     
 

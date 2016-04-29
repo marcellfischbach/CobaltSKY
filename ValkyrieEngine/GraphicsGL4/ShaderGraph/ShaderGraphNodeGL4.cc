@@ -131,12 +131,12 @@ void vkShaderGraphCtx::EvaluateInlines(std::set<vkSGOutput*> outputs)
 
 void vkShaderGraphCtx::GenerateCode(std::set<vkSGOutput*> outputs)
 {
-  printf("Generate Code\n");
+  //printf("Generate Code\n");
   m_code = "";
   for (vkSGOutput *output : outputs)
   {
     vkSGNode *node = output->GetNode();
-    printf("   Node: %s\n", node->GetName().c_str());
+    //printf("   Node: %s\n", node->GetName().c_str());
     Evaluate(output);
   }
 }
@@ -391,7 +391,7 @@ void vkSGNodeGL4::SetDoubleInlineEvaluateInput()
 
 bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
 {
-  printf("EvaluateInline: %d <= %s\n", m_inlineEvaluated, GetNode()->GetName().c_str());
+  //printf("EvaluateInline: %d <= %s\n", m_inlineEvaluated, GetNode()->GetName().c_str());
   if (!m_inlineEvaluated)
   {
     m_inlineEvaluated = true;

@@ -3,16 +3,19 @@
 #include <ShaderGraph/EditResourceDefaultDialog.hh>
 #include <ShaderGraph/MetaData.hh>
 #include <ShaderGraph/NodeSelector.hh>
+#include <ShaderGraph/PreviewWidget.hh>
 #include <ShaderGraph/ResourcesModel.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/AssetWriter.hh>
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
+#include <Editor.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>
 #include <qpainterpath.h>
 #include <qevent.h>
+#include <qtimer.h>
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
@@ -24,8 +27,9 @@
 
 ShaderGraphView::ShaderGraphView(QWidget *parent)
   : QWidget(parent)
-  , m_resourcesModel (0)
+  , m_resourcesModel(0)
 {
+
   m_gui.setupUi(this);
   setMouseTracking(true);
   m_view = new QGraphicsView(this);
@@ -40,9 +44,10 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_scene = new graph::NodeGraphScene();
   connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node *, int)), this, SLOT(NodeConnectedLooseInput(graph::Node *, int)));
   connect(m_scene, SIGNAL(NodeNameChanged(graph::Node*)), this, SLOT(NodeNameChanged(graph::Node*)));
+  connect(m_scene, SIGNAL(NodeRemoved(graph::Node*)), this, SLOT(NodeRemoved(graph::Node*)));
   m_view->setScene(m_scene);
 
-  
+
   m_gui.cbDiscardAlphaCompareMode->addItem("<= (less or equal)", QVariant(eCM_LessOrEqual));
   m_gui.cbDiscardAlphaCompareMode->addItem(">= (greater or equal)", QVariant(eCM_GreaterOrEqual));
   m_gui.cbDiscardAlphaCompareMode->addItem("< (less)", QVariant(eCM_Less));
@@ -55,11 +60,26 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
   m_gui.tvResources->setModel(m_resourcesModel);
 
   connect(m_gui.tvResources, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(ResourceDoubleClicked(const QModelIndex&)));
+
+  m_previewWidget = new shadergraph::PreviewWidget(this);
+  layout = new QGridLayout(m_gui.wPreview);
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->addWidget(m_previewWidget);
+
 }
+
 
 ShaderGraphView::~ShaderGraphView()
 {
 
+}
+void ShaderGraphView::NodeRemoved(graph::Node *node)
+{
+  shadergraph::Node* gNode = static_cast<shadergraph::Node*>(node);
+  if (gNode->GetType() == shadergraph::Node::eT_Node)
+  {
+    m_resourcesModel->RemoveNode(static_cast<shadergraph::SGNode*>(node));
+  }
 }
 
 void ShaderGraphView::NodeNameChanged(graph::Node *node)
@@ -79,12 +99,17 @@ void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
 
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
   ShaderGraphMetaData *metaData = vkResourceManager::Get()->GetOrLoad<ShaderGraphMetaData>(metaLocator);
-
-  if (!shaderGraph)
+  bool nullShader = !shaderGraph;
+  if (nullShader)
   {
     shaderGraph = new vkSGShaderGraph();
   }
   Setup(shaderGraph, metaData);
+
+  if (nullShader)
+  {
+    Compile();
+  }
 }
 
 void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
@@ -166,7 +191,7 @@ void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Space)
   {
-    popupNodeSelector ();
+    popupNodeSelector();
   }
   else if (event->key() == Qt::Key_Delete)
   {
@@ -175,7 +200,7 @@ void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
     {
       return;
     }
-    if (static_cast<shadergraph::SGNode*>(selectedNode)->GetType () == shadergraph::SGNode::eT_Node)
+    if (static_cast<shadergraph::SGNode*>(selectedNode)->GetType() == shadergraph::SGNode::eT_Node)
     {
       m_scene->RemoveSelectedNode();
     }
@@ -200,7 +225,7 @@ graph::Node *ShaderGraphView::AddNode(const vkSGNode *node, const vkVector2f &po
   {
     return 0;
   }
-  return AddNode (node->GetClass(), node, pos);
+  return AddNode(node->GetClass(), node, pos);
 
 }
 
@@ -265,11 +290,10 @@ void ShaderGraphView::on_cbDiscardAlpha_stateChanged(int state)
   m_gui.sbDiscardAlphaThreshold->setEnabled(state != 0);
 }
 
-
-void ShaderGraphView::on_pbCompile_clicked(bool)
+bool ShaderGraphView::Compile()
 {
-  vkSGShaderGraph compileGraph ;
-  std::map<graph::Node*, vkSGNode*> nodes; 
+  vkSGShaderGraph compileGraph;
+  std::map<graph::Node*, vkSGNode*> nodes;
   CollectData(&compileGraph, nodes);
   if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(&compileGraph))
   {
@@ -277,17 +301,26 @@ void ShaderGraphView::on_pbCompile_clicked(bool)
     {
       printf("Node: %s\n", it.second->GetValidationMessage().c_str());
     }
-    return;
+    return false;
   }
-  printf("Successfully compiled\n");
 
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
   if (!shaderGraph)
   {
-    return;
+    return false;
   }
   CollectData(shaderGraph, nodes);
+
+  m_previewWidget->SetMaterial(shaderGraph);
+  m_previewWidget->repaint();
+  return true;
 }
+
+void ShaderGraphView::on_pbCompile_clicked(bool)
+{
+  Compile();
+}
+  
 
 namespace
 {
@@ -307,7 +340,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
     return;
   }
 
-  on_pbCompile_clicked(false);
+  Compile();
 
   vkSGShaderGraph tempGraph;
   std::map<graph::Node*, vkSGNode*> nodes;
@@ -324,7 +357,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   {
     sgNodes.append(tempGraph.GetNode(i));
   }
- 
+
 
   QVector<vkSGInput*> inputs;
 
@@ -332,7 +365,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   {
     vkSGNode* node = sgNodes[i];
     for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
-    { 
+    {
       vkSGInput* input = node->GetInput(j);
       inputs.push_back(input);
     }
@@ -359,7 +392,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
       float *floats = graphNode->GetDefaultFloat();
       int *ints = graphNode->GetDefaultInt();
       vkResourceLocator &txtResLocator = graphNode->GetDefaultTexture();
-
+      osData << vkString((const char*)graphNode->GetName().toLatin1());
       switch (graphNode->GetResourceType())
       {
       case eSPT_Float:
@@ -399,8 +432,8 @@ void ShaderGraphView::on_pbSave_clicked(bool)
         osData << txtResLocator.GetResourceFile();
       }
     }
-    
-    
+
+
     QPointF pos = graphNode->GetItem()->pos();
     osMeta << (vkUInt32)i << vkVector2f(pos.x(), pos.y());
   }
@@ -461,10 +494,10 @@ void ShaderGraphView::on_pbSave_clicked(bool)
   }
 
 
- 
+
   osData << (vkUInt16)2
     // binary gradient
-    << vkString ("blendOutWithBinaryGradient")
+    << vkString("blendOutWithBinaryGradient")
     << (vkUInt8)(tempGraph.IsBlendOutWithBinaryGradient() ? 1 : 0)
     // discard alpha
     << vkString("discardAlpha")
@@ -559,5 +592,5 @@ void ShaderGraphView::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*,
   graph->SetBlendOutWithBinaryGradient(m_gui.cbBlendBinaryGradient->checkState() != 0);
   graph->SetDiscardAlpha(m_gui.cbDiscardAlpha->checkState() != 0);
   graph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
-                                 (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
+                         (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
 }

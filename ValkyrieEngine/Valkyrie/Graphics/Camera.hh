@@ -119,9 +119,9 @@ VK_FORCEINLINE const vkVector3f &vkCamera::GetUp() const
 }
 
 
-VK_FORCEINLINE void vkCamera::SetNear(float near)
+VK_FORCEINLINE void vkCamera::SetNear(float n)
 {
-  m_near = near;
+  m_near = n;
 }
 
 VK_FORCEINLINE float vkCamera::GetNear() const
@@ -129,9 +129,9 @@ VK_FORCEINLINE float vkCamera::GetNear() const
   return m_near;
 }
 
-VK_FORCEINLINE void vkCamera::SetFar(float far)
+VK_FORCEINLINE void vkCamera::SetFar(float f)
 {
-  m_far = far;
+  m_far = f;
 }
 
 VK_FORCEINLINE float vkCamera::GetFar() const

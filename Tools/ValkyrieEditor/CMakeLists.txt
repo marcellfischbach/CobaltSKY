@@ -71,6 +71,8 @@ set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/Node.hh
     ShaderGraph/NodeSelector.cc
     ShaderGraph/NodeSelector.hh
+    ShaderGraph/PreviewWidget.cc
+    ShaderGraph/PreviewWidget.hh
     ShaderGraph/ResourcesModel.cc
     ShaderGraph/ResourcesModel.hh
     ShaderGraph/ShaderGraphView.cc
