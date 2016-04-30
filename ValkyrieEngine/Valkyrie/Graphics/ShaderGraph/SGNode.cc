@@ -870,7 +870,7 @@ bool vkSGDiv::Validate()
 vkSGDot::vkSGDot()
   : vkSGNode()
 {
-  SetName(VK_DIV_NAME);
+  SetName(VK_DOT_NAME);
   AddInput(new vkSGInput("a", true, true));
   AddInput(new vkSGInput("b", true, true));
   AddOutput(new vkSGOutput(eSGDT_Float, "v"));
@@ -903,7 +903,7 @@ bool vkSGDot::Validate()
 vkSGCross::vkSGCross()
   : vkSGNode()
 {
-  SetName(VK_DIV_NAME);
+  SetName(VK_CROSS_NAME);
   AddInput(new vkSGInput("a", true, true));
   AddInput(new vkSGInput("b", true, true));
   AddOutput(new vkSGOutput(eSGDT_Float3, "v"));

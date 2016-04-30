@@ -18,6 +18,7 @@ public:
   vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 height);
   virtual ~vkRenderTargetGL4();
 
+  void Setup(GLuint name, vkUInt16 width, vkUInt16 heigth);
   void Bind();
 
 
@@ -43,6 +44,7 @@ private:
   vkTextureGL4 *m_depthTexture;
   GLuint m_depthBuffer;
   GLuint m_name;
+  bool m_provided;
 };
 
 

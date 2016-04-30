@@ -9,6 +9,7 @@ class vkMaterial;
 class vkMaterialInstance;
 class vkStaticMeshState;
 class vkSubMesh;
+class vkRenderTargetGL4;
 struct IFrameProcessor;
 struct IGraphics;
 struct IRenderTarget;
@@ -45,6 +46,7 @@ private:
   ISampler *m_sampler;
   vkStaticMeshState *m_staticMeshState;
   vkMaterialInstance *m_materialInstance;
+  vkRenderTargetGL4 *m_onscreenTarget;
 };
 
 }

@@ -21,7 +21,7 @@ std::string CreateHeaderFile(Class *clazz, const std::string &api)
   result += "  \n";
   result += "  static " + className + " *Get();\n";
   result += "  \n";
-  result += "  virtual IObject *CreateInstance() const;\n";
+  result += "  virtual IObject   *CreateInstance() const;\n";
   result += "  \n";
   result += "  \n";
   result += "};\n";
@@ -125,17 +125,17 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   result += "  }\n";
   if (clazz->GetNumberOfSuperClasses() > 0)
   {
-    result += "  void *super = null;\n";
+    result += "  void *super = 0;\n";
     for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
     {
       result += "  super = " + clazz->GetSuperClass(s) + "::QueryClass(clazz);\n";
-      result += "  if (super != null)\n";
+      result += "  if (super)\n";
       result += "  {\n";
       result += "    return super;\n";
       result += "  }\n";
     }
   }
-  result += "  return null;\n";
+  result += "  return 0;\n";
   result += "}\n";
   result += "\n";
   result += "\n";
@@ -147,17 +147,17 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   result += "  }\n";
   if (clazz->GetNumberOfSuperClasses() > 0)
   {
-    result += "  const void *super = null;\n";
+    result += "  const void *super = 0;\n";
     for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
     {
       result += "  super = " + clazz->GetSuperClass(s) + "::QueryClass(clazz);\n";
-      result += "  if (super != null)\n";
+      result += "  if (super)\n";
       result += "  {\n";
       result += "    return super;\n";
       result += "  }\n";
     }
   }
-  result += "  return null;\n";
+  result += "  return 0;\n";
   result += "}\n";
   result += "\n";
   result += "\n";

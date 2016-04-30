@@ -4,9 +4,10 @@
 #include <GraphicsGL4/DefinesGL4.hh>
 
 vkRenderTargetGL4::vkRenderTargetGL4()
-  : IRenderTarget ()
+  : IRenderTarget()
   , m_name(0)
   , m_depthTexture(0)
+  , m_provided(false)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -17,26 +18,30 @@ vkRenderTargetGL4::vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 heigh
   , m_depthTexture(0)
   , m_width(width)
   , m_height(height)
+  , m_provided(true)
 {
   VK_CLASS_GEN_CONSTR;
 }
 
 vkRenderTargetGL4::~vkRenderTargetGL4()
 {
-  if (m_name != 0)
+  if (!m_provided)
   {
-    glDeleteFramebuffers(1, &m_name);
+    if (m_name != 0)
+    {
+      glDeleteFramebuffers(1, &m_name);
+    }
+    if (m_depthTexture)
+    {
+      m_depthTexture->Release();
+      m_depthTexture = 0;
+    }
+    for (vkTextureGL4 *txt : m_colorTextures)
+    {
+      txt->Release();
+    }
+    m_colorTextures.clear();
   }
-  if (m_depthTexture)
-  {
-    m_depthTexture->Release();
-    m_depthTexture = 0;
-  }
-  for (vkTextureGL4 *txt : m_colorTextures)
-  {
-    txt->Release();
-  }
-  m_colorTextures.clear();
 }
 
 void vkRenderTargetGL4::Bind()
@@ -52,6 +57,13 @@ vkUInt16 vkRenderTargetGL4::GetWidth() const
 vkUInt16 vkRenderTargetGL4::GetHeight() const
 {
   return m_height;
+}
+
+void vkRenderTargetGL4::Setup(GLuint name, vkUInt16 width, vkUInt16 height)
+{
+  m_name = name;
+  m_width = width;
+  m_height = height;
 }
 
 void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)

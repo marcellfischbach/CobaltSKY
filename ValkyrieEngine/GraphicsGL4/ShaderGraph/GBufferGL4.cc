@@ -46,6 +46,16 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     printf("Invalid input type for diffuse\n");
     return;
   }
+  else if (diffuseOutput->GetDataType() == eSGDT_Float)
+  {
+    vkSGFloat3 *vec3 = new vkSGFloat3();
+    vec3->GetInput(0)->SetInput(diffuseOutput);
+    vec3->GetInput(1)->SetInput(diffuseOutput);
+    vec3->GetInput(2)->SetInput(diffuseOutput);
+
+    diffuseOutput = vec3->GetOutput(0);
+
+  }
   if (roughnessOutput)
   {
     if (roughnessOutput->GetDataType() != eSGDT_Float)
@@ -158,16 +168,16 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 
   ss.clear();
 
-  /*
   DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
   DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
-  */
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
+    DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
+    printf("Unable to compile vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
     return;
   }
@@ -177,6 +187,8 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
+    DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
+    printf("Unable to compile vertex shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
     fragmentShader->Release();
     return;
@@ -187,6 +199,9 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   gBufferShader->AttachShader(fragmentShader);
   if (!gBufferShader->Link())
   {
+    DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
+    DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
+    printf("Unable to link shader:\n%s\n", gBufferShader->GetLinkErrorLog().c_str());
     vertexShader->Release();
     fragmentShader->Release();
     gBufferShader->Release();

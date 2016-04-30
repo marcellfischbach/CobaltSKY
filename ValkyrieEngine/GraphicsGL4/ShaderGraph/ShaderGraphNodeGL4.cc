@@ -552,7 +552,7 @@ void vkSGConstFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
 
 namespace
 {
-vkString eval(vkString *src, vkSGNode *node, vkShaderGraphCtx &ctx, int start, int num)
+vkString eval(vkString *src, vkSGDataType *dataTypes, vkSGNode *node, vkShaderGraphCtx &ctx, int start, int num)
 {
   if (start >= num)
   {
@@ -565,15 +565,18 @@ vkString eval(vkString *src, vkSGNode *node, vkShaderGraphCtx &ctx, int start, i
   {
 
     int numEquals = 1;
-    for (int i = start+1; i < num; ++i)
+    if (dataTypes[start] != eSGDT_Float && dataTypes[start] != eSGDT_Int)
     {
-      if (src[start] == src[i] && node->GetInput(i)->GetInput()->GetAttr().length() != 0)
+      for (int i = start + 1; i < num; ++i)
       {
-        numEquals++;
-      }
-      else
-      {
-        break;
+        if (src[start] == src[i] && node->GetInput(i)->GetInput()->GetAttr().length() != 0)
+        {
+          numEquals++;
+        }
+        else
+        {
+          break;
+        }
       }
     }
     if (numEquals == 1)
@@ -596,7 +599,7 @@ vkString eval(vkString *src, vkSGNode *node, vkShaderGraphCtx &ctx, int start, i
     next++;
   }
 
-  vkString trail = ::eval(src, node, ctx, next, num);
+  vkString trail = ::eval(src, dataTypes, node, ctx, next, num);
   if (trail.length() != 0)
   {
     ss << ", " << trail;
@@ -614,7 +617,10 @@ void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : ""
   };
 
-
+  vkSGDataType dt[] = {
+    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
+  };
   std::ostringstream ss;
   if (src[0] == src[1] && src[0].length() != 0)
   {
@@ -624,7 +630,7 @@ void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
   else
   {
-    ss << "vec2(" << eval(src, n, ctx, 0, 2) << ")";
+    ss << "vec2(" << eval(src, dt, n, ctx, 0, 2) << ")";
   }
 
   AssignOutput(ctx, n->GetOutput(0), ss.str(), "vec2");
@@ -640,9 +646,15 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
      n->GetInput(2)->GetInput() ? ctx.GetInputValue(n->GetInput(2)) : ""
   };
 
+  vkSGDataType dt[] = {
+    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetDataType() : eSGDT_Inval,
+  };
+
 
   std::ostringstream ss;
-  if (src[0] == src[1] && src[0] == src[2] && src[0].length() != 0)
+  if (src[0] == src[1] && src[0] == src[2] && src[0].length() != 0 && dt[0] != eSGDT_Float && dt[0] != eSGDT_Int)
   {
     ss << src[0] << "."
       << n->GetInput(0)->GetInput()->GetAttr()
@@ -651,7 +663,7 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
   else
   {
-    ss << "vec3(" << eval(src, n, ctx, 0, 3) << ")";
+    ss << "vec3(" << eval(src, dt, n, ctx, 0, 3) << ")";
   }
 
   AssignOutput(ctx, n->GetOutput(0), ss.str(), "vec3");
@@ -668,7 +680,12 @@ void vkSGFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
     n->GetInput(3)->GetInput() ? ctx.GetInputValue(n->GetInput(3)) : ""
   };
 
-
+  vkSGDataType dt[] = { 
+    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetDataType() : eSGDT_Inval,
+    n->GetInput(3)->GetInput() ? n->GetInput(3)->GetInput()->GetDataType() : eSGDT_Inval,
+  };
   std::ostringstream ss;
   if (src[0] == src[1] && src[0] == src[2] && src[0] == src[3] && src[0].length() != 0)
   {
@@ -679,7 +696,7 @@ void vkSGFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   }
   else
   {
-    ss << "vec4(" << eval(src, n, ctx, 0, 4) << ")";
+    ss << "vec4(" << eval(src, dt, n, ctx, 0, 4) << ")";
   }
 
 

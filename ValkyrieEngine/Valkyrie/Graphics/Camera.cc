@@ -32,10 +32,6 @@ void vkCamera::Apply(IGraphics *renderer)
   }
   renderer->SetProjectionMatrix(m_projectionMatrix);
   renderer->SetProjectionMatrixInv(m_projectionMatrixInv);
-
-  m_cameraMatrixInv.Debug("Cam");
-  m_projectionMatrix.Debug("Proj");
-  printf("\n\n");
 }
 
 void vkCamera::UpdateCameraMatrices()

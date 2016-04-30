@@ -9,5 +9,5 @@ in vec2 texCoord;
 
 void main ()
 {
-  vk_FragColor = vec4 (texCoord, 0, 0) + texture(vk_Diffuse, texCoord);
+  vk_FragColor = texture(vk_Diffuse, texCoord);
 }

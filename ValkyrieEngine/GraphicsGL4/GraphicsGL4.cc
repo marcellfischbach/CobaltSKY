@@ -555,9 +555,6 @@ void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
 void vkGraphicsGL4::SetRenderTarget(IRenderTarget *renderTarget)
 {
   VK_CHECK_GL_ERROR;
-  GLint currentBound;
-  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentBound);
-  printf("CurrentBound: %u\n", currentBound);
   vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
   VK_CHECK_GL_ERROR;
   if (m_renderTarget != rtGL4)

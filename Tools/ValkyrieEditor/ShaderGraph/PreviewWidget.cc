@@ -30,12 +30,13 @@ PreviewWidget::PreviewWidget(QWidget *parent)
   : QOpenGLWidget(parent)
   , m_renderTarget(0)
   , m_sampler(0)
+  , m_onscreenTarget(0)
 {
 }
 
 PreviewWidget::~PreviewWidget()
 {
-
+  VK_RELEASE(m_onscreenTarget);
 } 
 
 QSize PreviewWidget::sizeHint() const
@@ -45,12 +46,7 @@ QSize PreviewWidget::sizeHint() const
 
 void PreviewWidget::SetMaterial(vkMaterial *material)
 {
-  printf("SetMaterial\n");
   m_materialInstance->SetMaterial(material);
-  for (unsigned i = 0; i < eRP_COUNT; ++i)
-  {
-    printf("  pass: %d => %p\n", i, material->GetShader((vkRenderPass)i));
-  }
 }
 
 void PreviewWidget::initializeGL()
@@ -76,7 +72,7 @@ void PreviewWidget::initializeGL()
   // the camera for viewing the scene
   m_camera = new vkCamera();
   m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
-  m_camera->SetEye(vkVector3f(7.814438f, 8.341354f, 7.872684f));
+  m_camera->SetEye(vkVector3f(20.0f, 20.0f, 20.0f));
   m_camera->SetSpot(vkVector3f(0, 0, 0));
   m_camera->SetUp(vkVector3f(0, 0, 1));
   m_camera->UpdateCameraMatrices();
@@ -91,31 +87,31 @@ void PreviewWidget::initializeGL()
     return;
   }
 
+  m_onscreenTarget = new vkRenderTargetGL4(-0, width(), height());
 
 }
 
 void PreviewWidget::paintGL()
 {
-
   GLint name;
   glGetIntegerv(GL_FRAMEBUFFER_BINDING, &name);
-  vkRenderTargetGL4 widgetBuffer (name, width(), height());
+  m_onscreenTarget->Setup(name, width(), height());
 
   m_scene->GetRoot()->UpdateBoundingBox();
   ITexture2D *colorTarget = 0;
 
   IRenderTarget *target = m_frameProcessor->Render(m_scene->GetRoot(),m_camera, m_renderTarget);
-  //colorTarget = vkQueryClass<ITexture2D>(target->GetColorBuffer(0));
+  colorTarget = vkQueryClass<ITexture2D>(target->GetColorBuffer(0));
 
   //
   // now render this image onscreen
-  m_graphics->SetRenderTarget(&widgetBuffer);
-  m_graphics->SetViewport(width(), height());
+  m_graphics->SetRenderTarget(m_onscreenTarget);
+  m_graphics->SetViewport(m_onscreenTarget);
 
   m_graphics->Clear(true, vkVector4f(0, 0, 0, 1));
   m_graphics->RenderFullScreenFrame(colorTarget);
 
-  m_graphics->SetRenderTarget(0);
+
 }
 
 void PreviewWidget::resizeGL(int width, int height)
@@ -147,8 +143,6 @@ void PreviewWidget::resizeGL(int width, int height)
   //
   // the camera projection will change aswell
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
-
-
 }
 
 
@@ -228,13 +222,13 @@ vkSubMesh* PreviewWidget::CreatePlaneMesh(float size, float height)
 
   float texCoordBuffer[] = {
     0.0f, 0.0f,
-    2.0f, 0.0f,
-    0.0f, 2.0f,
-    2.0f, 2.0f,
+    1.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
     0.0f, 0.0f,
-    2.0f, 0.0f,
-    0.0f, 2.0f,
-    2.0f, 2.0f,
+    1.0f, 0.0f,
+    0.0f, 1.0f,
+    1.0f, 1.0f,
   };
 
   unsigned short indexBuffer[] = {

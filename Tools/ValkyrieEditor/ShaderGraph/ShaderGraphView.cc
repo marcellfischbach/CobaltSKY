@@ -184,6 +184,11 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *m
       }
     }
   }
+
+  m_gui.cbBlendBinaryGradient->setChecked(shaderGraph->IsBlendOutWithBinaryGradient());
+  m_gui.cbDiscardAlpha->setChecked(shaderGraph->IsDiscardAlpha());
+  m_gui.cbDiscardAlphaCompareMode->setCurrentIndex(shaderGraph->GetDiscardAlphaCompareMode());
+  m_gui.sbDiscardAlphaThreshold->setValue(shaderGraph->GetDiscardAlphaThreshold());
 }
 
 
@@ -304,12 +309,18 @@ bool ShaderGraphView::Compile()
     return false;
   }
 
+
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
   if (!shaderGraph)
   {
+    printf("no shader graph\n");
     return false;
   }
   CollectData(shaderGraph, nodes);
+  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph))
+  {
+    return false;
+  }
 
   m_previewWidget->SetMaterial(shaderGraph);
   m_previewWidget->repaint();

@@ -27,7 +27,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_editorWindow = new EditorWindow();
   m_editorWindow->resize(1024, 768);
   m_editorWindow->setVisible(true);
-  m_editorWindow->move(QPoint(-1500, 100));
+  //m_editorWindow->move(QPoint(-1500, 100));
 
 
   return true;
