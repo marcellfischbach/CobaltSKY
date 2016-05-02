@@ -31,8 +31,10 @@ public:
   const IShader *GetShader(vkRenderPass pass) const;
 
   vkSize GetNumberOfParameters() const;
-  const vkShaderAttributeID &GetParamID(vkSize idx) const;
   vkShaderParameterType GetParamType(vkSize idx) const;
+  IShaderAttribute *GetAttribute(vkSize idx, vkRenderPass pass) const;
+
+  vkInt16 GetIndex(const vkString &parametername) const;
 
   void SetDefault(vkSize idx, float def);
   void SetDefault(vkSize idx, const vkVector2f &def);
@@ -55,23 +57,25 @@ public:
   ITexture* GetDefaultTexture(vkSize idx) const;
 
 
-  vkSize RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type);
+  vkSize RegisterParam(const vkString &parameterName, vkShaderParameterType type);
 
   IShader *Bind(IGraphics *renderer, vkRenderPass pass);
-
+protected:
+  void BindParameter(IGraphics *renderer, vkRenderPass pass, vkSize idx);
 
 private:
   struct Param
   {
-    vkShaderAttributeID id;
-    vkShaderParameterType type;
+    vkString m_name;
+    IShaderAttribute *m_attribute[eRP_COUNT];
+    vkShaderParameterType m_type;
     union
     {
       float m_defaultFloat[16];
       int m_defaultInt[16];
       ITexture *m_defaultTexture;
     };
-    Param(const vkShaderAttributeID &id, vkShaderParameterType type);
+    Param(const vkString &name, vkShaderParameterType type);
   };
 
   std::vector<Param> m_params;
@@ -94,10 +98,10 @@ public:
   vkMaterial *GetMaterial();
   const vkMaterial  *GetMaterial() const;
 
+  vkInt16 GetIndex(const vkString &parametername) const;
+
   bool Bind(IGraphics *renderer, vkRenderPass pass);
 
-  vkUInt16 GetIndex(const vkShaderAttributeID &id) const;
-  const vkShaderAttributeID &GetID(vkUInt16 idx) const;
   void Set(vkUInt16 idx, float v);
   void Set(vkUInt16 idx, const vkVector2f &v);
   void Set(vkUInt16 idx, const vkVector3f &v);
@@ -110,7 +114,7 @@ private:
 
   struct ShaderParameter
   {
-
+    bool m_inherit;
     vkShaderParameterType m_paramType;
     union
     {
@@ -119,12 +123,10 @@ private:
       ITexture *m_texture;
       // Add Texture later.
     };
-    vkShaderAttributeID m_id;
-    ShaderParameter(const vkShaderAttributeID &id);
+    ShaderParameter();
   };
 
   std::vector<ShaderParameter> m_parameters;
-  ShaderParameter &GetParameter(const vkShaderAttributeID &id);
 
 
 };

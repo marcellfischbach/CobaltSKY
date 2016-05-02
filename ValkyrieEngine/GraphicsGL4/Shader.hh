@@ -140,9 +140,12 @@ public:
   virtual vkUInt32 GetNumberOfAttributes() const;
   virtual IShaderAttribute *GetAttribute(vkUInt32 idx);
   virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id);
+  virtual IShaderAttribute *GetAttribute(const vkString &attributeName);
 
   virtual vkUInt16 GetNumberOfStreams() const;
   virtual IShaderStream *GetStream(const vkShaderStreamID &id);
+  virtual IShaderStream *GetStream(const vkString &streamName);
+
 
   void AttachShader(vkShaderGL4 *shader);
   void DetachShader(vkShaderGL4 *shader);
@@ -162,6 +165,9 @@ private:
   void ResizeStreams(vkUInt32 id);
   std::vector<vkShaderAttributeGL4*> m_attributes;
   std::vector<vkShaderStreamGL4*> m_streams;
+
+  std::vector<vkShaderAttributeGL4*> m_namedAttributes;
+  std::vector<vkShaderStreamGL4*> m_namedStreams;
 
 };
 

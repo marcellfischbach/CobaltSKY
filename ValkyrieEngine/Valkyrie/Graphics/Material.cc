@@ -29,10 +29,20 @@ void vkMaterial::SetShader(vkRenderPass pass, IShader *shader)
   VK_SET(m_shaders[pass], shader);
 }
 
-vkSize vkMaterial::RegisterParam(const vkShaderAttributeID &id, vkShaderParameterType type)
+vkSize vkMaterial::RegisterParam(const vkString &parameterName, vkShaderParameterType type)
 {
   vkSize idx = m_params.size();
-  m_params.push_back(Param(id, type));
+  Param param(parameterName, type);
+  for (vkSize i = 0; i < eRP_COUNT; ++i)
+  {
+    IShader *shader = m_shaders[i];
+    if (shader)
+    {
+      param.m_attribute[(vkRenderPass)i] = shader->GetAttribute(parameterName);
+    }
+  }
+
+  m_params.push_back(param);
   return idx;
 }
 
@@ -56,7 +66,63 @@ IShader *vkMaterial::Bind(IGraphics *renderer, vkRenderPass pass)
 
   renderer->SetShader(shader);
 
+
+
   return shader;
+}
+
+void vkMaterial::BindParameter(IGraphics *renderer, vkRenderPass pass, vkSize idx)
+{
+  Param &param = m_params[idx];
+  IShaderAttribute *attribute = param.m_attribute[pass];
+  if (attribute)
+  {
+    switch (param.m_type)
+    {
+    case eSPT_Float:
+      attribute->Set(param.m_defaultFloat[0]);
+      break;
+    case eSPT_Vector2:
+      attribute->Set(param.m_defaultFloat[0], param.m_defaultFloat[1]);
+      break;
+    case eSPT_Vector3:
+      attribute->Set(param.m_defaultFloat[0], param.m_defaultFloat[1], param.m_defaultFloat[2]);
+      break;
+    case eSPT_Vector4:
+      attribute->Set(param.m_defaultFloat[0], param.m_defaultFloat[1], param.m_defaultFloat[2], param.m_defaultFloat[3]);
+      break;
+    case eSPT_Color4:
+      attribute->Set(param.m_defaultFloat[0], param.m_defaultFloat[1], param.m_defaultFloat[2], param.m_defaultFloat[3]);
+      break;
+    case eSPT_Int:
+      attribute->Set(param.m_defaultInt[0]);
+      break;
+    case eSPT_IVector2:
+      attribute->Set(param.m_defaultInt[0], param.m_defaultInt[1]);
+      break;
+    case eSPT_IVector3:
+      attribute->Set(param.m_defaultInt[0], param.m_defaultInt[1], param.m_defaultInt[2]);
+      break;
+    case eSPT_IVector4:
+      attribute->Set(param.m_defaultInt[0], param.m_defaultInt[1], param.m_defaultInt[2], param.m_defaultInt[3]);
+      break;
+    case eSPT_Matrix3:
+      attribute->Set(vkMatrix3f(param.m_defaultFloat));
+      break;
+    case eSPT_Matrix4:
+      attribute->Set(vkMatrix4f(param.m_defaultFloat));
+      break;
+    case eSPT_Texture:
+      {
+        vkTextureUnit unit = renderer->BindTexture(param.m_defaultTexture);
+        if (unit != eTU_Invalid)
+        {
+          attribute->Set((vkInt32)unit);
+        }
+      }
+      break;
+    }
+  }
 }
 
 vkSize vkMaterial::GetNumberOfParameters() const
@@ -64,14 +130,26 @@ vkSize vkMaterial::GetNumberOfParameters() const
   return m_params.size();
 }
 
-const vkShaderAttributeID &vkMaterial::GetParamID(vkSize idx) const
-{
-  return m_params[idx].id;
-}
-
 vkShaderParameterType vkMaterial::GetParamType(vkSize idx) const
 {
-  return m_params[idx].type;
+  return m_params[idx].m_type;
+}
+
+IShaderAttribute *vkMaterial::GetAttribute(vkSize idx, vkRenderPass pass) const
+{
+  return m_params[idx].m_attribute[pass];
+}
+
+vkInt16 vkMaterial::GetIndex(const vkString &parameterName) const
+{
+  for (size_t i = 0, in = m_params.size(); i < in; ++i)
+  {
+    if (m_params[i].m_name == parameterName)
+    {
+      return i;
+    }
+  }
+  return -1;
 }
 
 void vkMaterial::SetDefault(vkSize idx, float def)
@@ -170,9 +248,9 @@ ITexture *vkMaterial::GetDefaultTexture(vkSize idx) const
   return m_params[idx].m_defaultTexture;
 }
 
-vkMaterial::Param::Param(const vkShaderAttributeID &id, vkShaderParameterType type)
-  : id(id)
-  , type(type)
+vkMaterial::Param::Param(const vkString &name, vkShaderParameterType type)
+  : m_name(name)
+  , m_type(type)
 {
   VK_ZERO(m_defaultFloat);
 }
@@ -200,20 +278,11 @@ void vkMaterialInstance::SetMaterial(vkMaterial *material)
     m_parameters.clear();
     for (vkSize i = 0, in = material->GetNumberOfParameters(); i < in; ++i)
     {
-      const vkShaderAttributeID &id = material->GetParamID(i);
       vkShaderParameterType type = material->GetParamType(i);
-      ShaderParameter param(id);
+      ShaderParameter param;
+      param.m_inherit = true;
       param.m_paramType = type;
       param.m_texture = 0;
-      switch (type)
-      {
-      case eSPT_Texture:
-        VK_SET(param.m_texture, material->GetDefaultTexture(i));
-        break;
-      default:
-        memcpy(param.m_float, material->m_params[i].m_defaultFloat, sizeof(float) * 16);
-        break;
-      }
       m_parameters.push_back(param);
     }
   }
@@ -229,6 +298,15 @@ const vkMaterial *vkMaterialInstance::GetMaterial() const
   return m_material;
 }
 
+vkInt16 vkMaterialInstance::GetIndex(const vkString &parameterName) const
+{
+  if (!m_material)
+  {
+    return -1;
+  }
+  return m_material->GetIndex(parameterName);
+}
+
 void vkMaterialInstance::Set(vkUInt16 idx, float v)
 {
   if (idx >= m_parameters.size())
@@ -238,6 +316,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, float v)
 
 
   ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = false;
   param.m_float[0] = v;
 }
 
@@ -250,6 +329,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, const vkVector2f &v)
 
 
   ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = false;
   param.m_float[0] = v.x;
   param.m_float[1] = v.y;
 }
@@ -264,6 +344,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, const vkVector3f &v)
 
 
   ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = false;
   param.m_float[0] = v.x;
   param.m_float[1] = v.y;
   param.m_float[2] = v.z;
@@ -279,6 +360,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, const vkVector4f &v)
 
 
   ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = false;
   param.m_float[0] = v.x;
   param.m_float[1] = v.y;
   param.m_float[2] = v.z;
@@ -295,6 +377,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, const vkColor4f &c)
 
 
   ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = false;
   param.m_float[0] = c.r;
   param.m_float[1] = c.g;
   param.m_float[2] = c.b;
@@ -311,6 +394,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
 
   ShaderParameter &param = m_parameters[idx];
   VK_SET(param.m_texture, texture);
+  param.m_inherit = false;
 }
 
 bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
@@ -328,47 +412,54 @@ bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
   for (vkUInt16 i = 0, in = (vkUInt16)m_parameters.size(); i < in; ++i)
   {
     ShaderParameter &param = m_parameters[i];
-    IShaderAttribute *attr = shader->GetAttribute(param.m_id);
-    if (attr)
+    if (param.m_inherit)
     {
-      switch (param.m_paramType)
+      m_material->BindParameter(renderer, pass, (vkSize)i);
+    }
+    else
+    {
+      IShaderAttribute *attr = m_material->GetAttribute((vkSize)i, pass);
+      if (attr)
       {
-      case eSPT_Float:
-        attr->Set(param.m_float[0]);
-        break;
-      case eSPT_Vector2:
-        attr->Set(param.m_float[0], param.m_float[1]);
-        break;
-      case eSPT_Vector3:
-        attr->Set(param.m_float[0], param.m_float[1], param.m_float[2]);
-        break;
-      case eSPT_Vector4:
-        attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
-        break;
-      case eSPT_Int:
-        attr->Set(param.m_int[0]);
-        break;
-      case eSPT_IVector2:
-        attr->Set(param.m_int[0], param.m_int[1]);
-        break;
-      case eSPT_IVector3:
-        attr->Set(param.m_int[0], param.m_int[1], param.m_int[2]);
-        break;
-      case eSPT_IVector4:
-        attr->Set(param.m_int[0], param.m_int[1], param.m_int[2], param.m_int[3]);
-        break;
-      case eSPT_Color4:
-        attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
-        break;
-      case eSPT_Texture:
+        switch (param.m_paramType)
         {
-          vkTextureUnit unit = renderer->BindTexture(param.m_texture);
-          if (unit != eTU_Invalid)
+        case eSPT_Float:
+          attr->Set(param.m_float[0]);
+          break;
+        case eSPT_Vector2:
+          attr->Set(param.m_float[0], param.m_float[1]);
+          break;
+        case eSPT_Vector3:
+          attr->Set(param.m_float[0], param.m_float[1], param.m_float[2]);
+          break;
+        case eSPT_Vector4:
+          attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
+          break;
+        case eSPT_Int:
+          attr->Set(param.m_int[0]);
+          break;
+        case eSPT_IVector2:
+          attr->Set(param.m_int[0], param.m_int[1]);
+          break;
+        case eSPT_IVector3:
+          attr->Set(param.m_int[0], param.m_int[1], param.m_int[2]);
+          break;
+        case eSPT_IVector4:
+          attr->Set(param.m_int[0], param.m_int[1], param.m_int[2], param.m_int[3]);
+          break;
+        case eSPT_Color4:
+          attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
+          break;
+        case eSPT_Texture:
           {
-            attr->Set((vkInt32)unit);
+            vkTextureUnit unit = renderer->BindTexture(param.m_texture);
+            if (unit != eTU_Invalid)
+            {
+              attr->Set((vkInt32)unit);
+            }
           }
+          break;
         }
-        break;
       }
     }
   }
@@ -376,44 +467,7 @@ bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
   return true;
 }
 
-vkMaterialInstance::ShaderParameter &vkMaterialInstance::GetParameter(const vkShaderAttributeID &id)
-{
-  vkSize num = m_parameters.size();
-  for (vkUInt16 i = 0;  i < num; ++i)
-  {
-    if (m_parameters[i].m_id == id)
-    {
-      return m_parameters[i];
-    }
-  }
-
-  ShaderParameter param(id);
-  m_parameters.push_back(param);
-  return m_parameters[num];
-}
-
-
-
-vkUInt16 vkMaterialInstance::GetIndex(const vkShaderAttributeID &id) const
-{
-  vkSize num = m_parameters.size();
-  for (vkUInt16 i = 0; i < num; ++i)
-  {
-    if (m_parameters[i].m_id.GetID() == id.GetID())
-    {
-      return i;
-    }
-  }
-  return vkInvalidShaderParamIndex;
-}
-
-const vkShaderAttributeID &vkMaterialInstance::GetID(vkUInt16 idx) const
-{
-  return m_parameters[idx].m_id;
-}
-
-vkMaterialInstance::ShaderParameter::ShaderParameter(const vkShaderAttributeID &id)
-  : m_id(id)
+vkMaterialInstance::ShaderParameter::ShaderParameter()
 {
 
 }

@@ -2,6 +2,7 @@
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphNodeGL4.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 #include <iostream>
 #include <sstream>
 
@@ -99,6 +100,62 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
   //GenerateShadow(graph, 1, eRP_ShadowGeneric);
   GenerateShadow(graph, 3, eRP_ShadowPSSM);
   GenerateShadow(graph, 6, eRP_ShadowCube);
+
+  for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *node = graph->GetNode(i);
+    if (!node)
+    {
+      continue;
+    }
+
+    vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(node);
+    if (!resNode)
+    {
+      continue;
+    }
+
+    const vkString &resName = resNode->GetResourceName();
+    vkShaderParameterType resType = resNode->GetResourceType();
+
+    vkSize idx = graph->RegisterParam(resName, resType);
+
+    float *floats = resNode->GetDefaultFloats();
+    int *ints = resNode->GetDefaultInts();
+    switch (resType)
+    {
+    case eSPT_Float:
+      graph->SetDefault(idx, floats[0]);
+      break;
+    case eSPT_Vector2:
+      graph->SetDefault(idx, vkVector2f(floats[0], floats[1]));
+      break;
+    case eSPT_Vector3:
+      graph->SetDefault(idx, vkVector3f(floats[0], floats[1], floats[2]));
+      break;
+    case eSPT_Vector4:
+      graph->SetDefault(idx, vkVector4f(floats[0], floats[1], floats[2], floats[3]));
+      break;
+    case eSPT_Color4:
+      graph->SetDefault(idx, vkColor4f(floats[0], floats[1], floats[2], floats[3]));
+      break;
+    case eSPT_Texture:
+      {
+        ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(resNode->GetDefaultTextureResource());
+        printf ("Set Default texture: %s %s => %p\n",
+                resNode->GetDefaultTextureResource().GetResourceFile().c_str(),
+                resNode->GetDefaultTextureResource().GetResourceName().c_str(),
+                texture);
+        graph->SetDefault(idx, texture);
+      }
+      break;
+    case eSPT_Int:
+    case eSPT_IVector2:
+    case eSPT_IVector3:
+    case eSPT_IVector4:
+      break;
+    }
+  }
 
   return true;
 }

@@ -436,6 +436,33 @@ IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
   return attr;
 }
 
+IShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
+{
+  for (size_t i = 0, in = m_namedAttributes.size(); i < in; ++i)
+  {
+    if (m_namedAttributes[i]->GetName() == name)
+    {
+      return m_namedAttributes[i];
+    }
+  }
+
+  Bind();
+  vkString uniformName = vkString("vk_") + name;
+  GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
+  if (loc == -1)
+  {
+    return 0;
+  }
+
+  vkShaderAttributeGL4 *attribute = new vkShaderAttributeGL4();
+  attribute->SetLocation(loc);
+  attribute->SetName(name);
+  attribute->SetValid(true);
+
+  m_namedAttributes.push_back(attribute);
+  return attribute;
+}
+
 
 
 vkUInt16 vkProgramGL4::GetNumberOfStreams() const
@@ -462,6 +489,35 @@ IShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
 
   return stream;
 }
+
+
+IShaderStream *vkProgramGL4::GetStream(const vkString &name)
+{
+  for (size_t i = 0, in = m_namedStreams.size(); i < in; ++i)
+  {
+    if (m_namedStreams[i]->GetName() == name)
+    {
+      return m_namedStreams[i];
+    }
+  }
+
+  Bind();
+  vkString attribName = vkString("vk_") + name;
+  GLint loc = glGetAttribLocation(m_name, attribName.c_str());
+  if (loc == -1)
+  {
+    return 0;
+  }
+  vkShaderStreamGL4 *stream = new vkShaderStreamGL4();
+  stream->SetLocation(loc);
+  stream->SetName(name);
+  stream->SetValid(true);
+
+  m_namedStreams.push_back(stream);
+  return stream;
+}
+
+
 
 void vkProgramGL4::AttachShader(vkShaderGL4 *shader)
 {

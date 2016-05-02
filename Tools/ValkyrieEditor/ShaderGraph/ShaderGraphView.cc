@@ -563,6 +563,25 @@ void ShaderGraphView::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*,
     if (resNode && sgNode->HasName())
     {
       resNode->SetResourceName(vkString((const char*)sgNode->GetName().toLatin1()));
+      switch (resNode->GetResourceType())
+      {
+      case eSPT_Float:
+      case eSPT_Vector2:
+      case eSPT_Vector3:
+      case eSPT_Vector4:
+      case eSPT_Color4:
+        memcpy(resNode->GetDefaultFloats(), sgNode->GetDefaultFloat(), sizeof(float) * 16);
+        break;
+      case eSPT_Int:
+      case eSPT_IVector2:
+      case eSPT_IVector3:
+      case eSPT_IVector4:
+        memcpy(resNode->GetDefaultInts(), sgNode->GetDefaultInt(), sizeof(int) * 16);
+        break;
+      case eSPT_Texture:
+        resNode->GetDefaultTextureResource() = sgNode->GetDefaultTexture();
+        break;
+      }
     }
 
     graph->AddNode(vksgNode);

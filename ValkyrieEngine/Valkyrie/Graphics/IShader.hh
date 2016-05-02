@@ -83,9 +83,11 @@ struct VKE_API IShader : public virtual IObject
 
   virtual vkUInt32 GetNumberOfAttributes() const = 0;
   virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id) = 0;
+  virtual IShaderAttribute *GetAttribute(const vkString &attributeName) = 0;
 
   virtual vkUInt16 GetNumberOfStreams() const = 0;
   virtual IShaderStream *GetStream(const vkShaderStreamID &id) = 0;
+  virtual IShaderStream *GetStream(const vkString &streamName) = 0;
 
 };
 

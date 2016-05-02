@@ -180,7 +180,7 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
         continue;
       }
 
-      vkSize idx = material->RegisterParam(vkShaderAttributeID(name), paramType);
+      vkSize idx = material->RegisterParam(name, paramType);
       switch (paramType)
       {
       case eSPT_Float:
@@ -303,7 +303,7 @@ IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceL
 
       vkString name(parameterElement->Attribute("name"));
 
-      vkInt16 idx = instance->GetIndex(vkShaderAttributeID(name));
+      vkInt16 idx = instance->GetIndex(name);
       if (idx == -1)
       {
         printf("name not defined %s\n", name.c_str());
