@@ -8,7 +8,7 @@
 vkShaderGL4::vkShaderGL4()
   : m_name(0)
 {
-
+  VK_CLASS_GEN_CONSTR;
 }
 
 vkShaderGL4::~vkShaderGL4()
@@ -108,7 +108,6 @@ vkShaderAttributeGL4::vkShaderAttributeGL4()
 
 vkShaderAttributeGL4::~vkShaderAttributeGL4()
 {
-
 }
 
 void vkShaderAttributeGL4::SetName(const vkString &name)
@@ -253,7 +252,7 @@ vkShaderStreamGL4::vkShaderStreamGL4()
   , m_absLocation(-1)
   , m_valid(false)
 {
-
+  VK_CLASS_GEN_CONSTR;
 }
 
 vkShaderStreamGL4::~vkShaderStreamGL4()
@@ -344,6 +343,24 @@ vkProgramGL4::~vkProgramGL4()
     shader->Release();
   }
   m_shaders.clear();
+
+  for (auto stream : m_streams)
+  {
+    stream->Release();
+  }
+  for (auto stream : m_namedStreams)
+  {
+    stream->Release();
+  }
+
+  for (auto attribute : m_attributes)
+  {
+    attribute->Release();
+  }
+  for (auto attribute : m_namedAttributes)
+  {
+    attribute->Release();
+  }
 
   glDeleteProgram(m_name);
 }

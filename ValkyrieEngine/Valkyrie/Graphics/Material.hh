@@ -56,7 +56,7 @@ public:
   vkMatrix4f GetDefaultMatrix4(vkSize idx) const;
   ITexture* GetDefaultTexture(vkSize idx) const;
 
-
+  void ClearParameters();
   vkSize RegisterParam(const vkString &parameterName, vkShaderParameterType type);
 
   IShader *Bind(IGraphics *renderer, vkRenderPass pass);

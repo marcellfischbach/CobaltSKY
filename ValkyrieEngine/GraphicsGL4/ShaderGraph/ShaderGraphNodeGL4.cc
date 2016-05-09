@@ -646,6 +646,12 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
      n->GetInput(2)->GetInput() ? ctx.GetInputValue(n->GetInput(2)) : ""
   };
 
+  vkString attr[] = {
+    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetAttr() : "", 
+    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetAttr() : "",
+    n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetAttr() : ""
+  };
+
   vkSGDataType dt[] = {
     n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
     n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
@@ -653,8 +659,9 @@ void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
   };
 
 
+
   std::ostringstream ss;
-  if (src[0] == src[1] && src[0] == src[2] && src[0].length() != 0 && dt[0] != eSGDT_Float && dt[0] != eSGDT_Int)
+  if (src[0] == src[1] && src[0] == src[2] && src[0].length() != 0 && attr[0].length () != 0 && attr[1].length() != 0 && attr[2].length() != 0)
   {
     ss << src[0] << "."
       << n->GetInput(0)->GetInput()->GetAttr()

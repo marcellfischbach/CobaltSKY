@@ -29,6 +29,11 @@ void vkMaterial::SetShader(vkRenderPass pass, IShader *shader)
   VK_SET(m_shaders[pass], shader);
 }
 
+void vkMaterial::ClearParameters()
+{
+  m_params.clear();
+}
+
 vkSize vkMaterial::RegisterParam(const vkString &parameterName, vkShaderParameterType type)
 {
   vkSize idx = m_params.size();

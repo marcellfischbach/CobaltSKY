@@ -30,6 +30,8 @@ set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/AssetManagerWidget.hh
     AssetManager/AssetWriter.cc
     AssetManager/AssetWriter.hh
+    AssetManager/FolderItemModel.cc
+    AssetManager/FolderItemModel.hh
     )
 
 set(EDITOR_ASSETMANAGER_UI

@@ -1,8 +1,10 @@
 
 #include <EditorWindow.hh>
 #include <SceneView.hh>
+#include <AssetManager/AssetManagerWidget.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
 #include <qtimer.h>
+#include <qdockwidget.h>
 
 EditorWindow::EditorWindow()
   : QMainWindow()
@@ -20,6 +22,12 @@ EditorWindow::EditorWindow()
   //m_mainTabWidget->setCurrentIndex(1);
 
   QTimer::singleShot(100, this, SLOT(switchView()));
+
+  QDockWidget *dock = new QDockWidget(tr("Asset manager"), this);
+  dock->setAllowedAreas(Qt::BottomDockWidgetArea);
+  assetmanager::AssetManagerWidget *assetManagerWidget = new assetmanager::AssetManagerWidget(dock);
+  dock->setWidget(assetManagerWidget);
+  addDockWidget(Qt::BottomDockWidgetArea, dock);
 }
 
 
@@ -32,6 +40,7 @@ void EditorWindow::switchView()
 {
   m_mainTabWidget->setCurrentIndex(0);
   m_shaderGraphView->Set(vkResourceLocator("${materials}/my_material.asset"));
+
 }
 
 

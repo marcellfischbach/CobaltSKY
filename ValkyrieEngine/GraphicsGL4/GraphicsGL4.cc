@@ -490,6 +490,7 @@ void vkGraphicsGL4::SetIndexBuffer(IIndexBuffer *indexBuffer)
 
 void vkGraphicsGL4::SetShader(IShader *shader)
 {
+  VK_CHECK_GL_ERROR;
   vkProgramGL4 *prog = static_cast<vkProgramGL4*>(shader);
   if (prog != m_program)
   {
@@ -506,10 +507,12 @@ void vkGraphicsGL4::SetShader(IShader *shader)
     }
   }
   InvalidateTextures();
+  VK_CHECK_GL_ERROR;
 }
 
 vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
 {
+  VK_CHECK_GL_ERROR;
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
   {
     return eTU_Invalid;
@@ -523,11 +526,13 @@ vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
   SetTexture(unit, texture);
 
 
+  VK_CHECK_GL_ERROR;
   return unit;
 }
 
 void vkGraphicsGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
 {
+  VK_CHECK_GL_ERROR;
   vkTextureGL4 *textureGL = texture ? vkQueryClass<vkTextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL)
   {
@@ -539,6 +544,7 @@ void vkGraphicsGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
       textureGL->Bind();
     }
   }
+  VK_CHECK_GL_ERROR;
 }
 
 void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
@@ -720,6 +726,7 @@ void vkGraphicsGL4::SetViewport(IRenderTarget *renderTarget)
 
 void vkGraphicsGL4::BindValues()
 {
+  VK_CHECK_GL_ERROR;
   BindMatrices();
 
 
@@ -768,6 +775,7 @@ void vkGraphicsGL4::BindValues()
   {
     attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
   }
+  VK_CHECK_GL_ERROR;
 
 }
 
@@ -782,6 +790,7 @@ void vkGraphicsGL4::Render(vkPrimitiveType primType, vkUInt32 count)
 
     UnbindVertexDeclaration();
   }
+  VK_CHECK_GL_ERROR;
 }
 
 void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDataType indexType)
@@ -795,6 +804,7 @@ void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDa
 
     UnbindVertexDeclaration();
   }
+  VK_CHECK_GL_ERROR;
 }
 
 void vkGraphicsGL4::RenderFullScreenFrame(ITexture2D *texture)
@@ -804,6 +814,7 @@ void vkGraphicsGL4::RenderFullScreenFrame(ITexture2D *texture)
 
 void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture)
 {
+  VK_CHECK_GL_ERROR;
   static vkShaderAttributeID attrDiffuseID("Diffuse");
   static vkShaderAttributeID attrLeftBottomID("LeftBottom");
   static vkShaderAttributeID attrDeltaID("Delta");
@@ -831,6 +842,7 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
 
   Render(ePT_Triangles, 6);
+  VK_CHECK_GL_ERROR;
 }
 
 void vkGraphicsGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
@@ -840,6 +852,7 @@ void vkGraphicsGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
 
 void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer)
 {
+  VK_CHECK_GL_ERROR;
   static vkShaderAttributeID attrDiffuseID("Diffuse");
   static vkShaderAttributeID attrLayerID("Layer");
   static vkShaderAttributeID attrLeftBottomID("LeftBottom");
@@ -864,9 +877,13 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   m_fullScreenArrayProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
   m_fullScreenArrayProgram->GetAttribute(attrLayerID)->Set(layer);
   Render(ePT_Triangles, 6);
+  VK_CHECK_GL_ERROR;
 }
+
+
 void vkGraphicsGL4::RenderFullScreenFrame()
 {
+  VK_CHECK_GL_ERROR;
   glDepthMask(true);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_ALWAYS);
@@ -875,11 +892,13 @@ void vkGraphicsGL4::RenderFullScreenFrame()
   SetVertexBuffer(0, m_fullScreenVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   Render(ePT_Triangles, 6);
+  VK_CHECK_GL_ERROR;
 }
 
 
 bool vkGraphicsGL4::BindVertexDeclaration()
 {
+  VK_CHECK_GL_ERROR;
   if (!(m_vertexDeclaration && m_program))
   {
     return false;
@@ -895,17 +914,20 @@ bool vkGraphicsGL4::BindVertexDeclaration()
     m_vertexDeclaration->BindStream(m_program, i, 0);
   }
 
+  VK_CHECK_GL_ERROR;
   return true;
 }
 
 void vkGraphicsGL4::UnbindVertexDeclaration()
 {
+  VK_CHECK_GL_ERROR;
   VertexBufferGL4::Unbind();
   for (unsigned i = 0, in = m_vertexDeclaration->GetNumberOfStreams(); i < in; ++i)
   {
     m_vertexDeclaration->UnbindStream(m_program, i);
   }
 
+  VK_CHECK_GL_ERROR;
 }
 
 

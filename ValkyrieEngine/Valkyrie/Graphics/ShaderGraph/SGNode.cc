@@ -894,7 +894,7 @@ bool vkSGDot::Validate()
     return false;
   }
 
-  SetOutputDataType(0, dtA);
+  SetOutputDataType(0, eSGDT_Float);
 
   return success;
 }

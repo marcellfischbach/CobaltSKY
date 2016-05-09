@@ -278,8 +278,6 @@ vkTextureGL4::vkTextureGL4(vkTextureType type)
 
 vkTextureGL4::~vkTextureGL4()
 {
-  printf("vkTextureGL4::~vkTextureGL4\n");
-
   if (m_name)
   {
     glDeleteTextures(1, &m_name);

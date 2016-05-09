@@ -50,7 +50,6 @@ bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
   m_renderTarget->SetDepthTexture(m_depth);
   if (m_renderTarget->Finilize())
   {
-    printf("Successfully resized GBuffer\n");
     return true;
   }
   else
