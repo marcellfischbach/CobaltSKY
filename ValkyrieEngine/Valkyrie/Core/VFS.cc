@@ -147,6 +147,11 @@ void vkVFS::SetRootPath(const vkString &rootPath)
   m_rootPath = rootPath;
 }
 
+const vkString &vkVFS::GetRootPath() const
+{
+  return m_rootPath;
+}
+
 IFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMode)
 {
   vkString res = GetPathResolution(filename);

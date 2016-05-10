@@ -2,5 +2,6 @@
   <qresource prefix="icons">
     <file>Resources/Compile48.png</file>
     <file>Resources/Save48.png</file>
+    <file>Resources/NoIcon64.png</file>
   </qresource>
 </RCC>

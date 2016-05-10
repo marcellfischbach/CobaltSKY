@@ -7,6 +7,8 @@
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <PhysicsBullet/BulletSystem.hh>
 
+#include <Texture/TextureImporter.hh>
+
 Editor::Editor()
   : QObject()
   , m_graphics(0)
@@ -23,6 +25,9 @@ bool Editor::Initialize(int argc, char **argv)
 
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
+  m_engine = vkEngine::Get();
+
+  assetmanager::ImporterRegistry::Get()->RegisterImporter(texture::Importer::Get());
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->resize(1024, 768);
@@ -36,12 +41,10 @@ bool Editor::Initialize(int argc, char **argv)
 
 void Editor::RequestGraphics()
 {
-  if (m_engine)
+  if (m_graphics)
   {
     return;
   }
-
-  m_engine = vkEngine::Get();
 
   m_graphics = new vkGraphicsGL4();
   m_engine->SetRenderer(m_graphics);

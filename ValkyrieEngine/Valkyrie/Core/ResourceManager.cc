@@ -298,7 +298,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
       vkUInt8 *buffer = new vkUInt8[length];
       file->Read(buffer, length);
 
-      vkAssetInputStream is(buffer);
+      vkAssetInputStream is(buffer, (vkSize)length);
       IObject *obj = 0;
 
       obj = assetLoader->Load(is, locator, userData);

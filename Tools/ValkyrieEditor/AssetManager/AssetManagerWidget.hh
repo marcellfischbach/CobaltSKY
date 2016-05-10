@@ -4,10 +4,15 @@
 #include <qdialog.h>
 #include <qabstractitemmodel.h>
 #include <qdir.h>
+#include <qlist.h>
+#include <AssetManager/Importer.hh>
 #include <ui_AssetManagerWidget.h>
 
 namespace assetmanager
 {
+
+
+
 
 class FolderItemModel;
 class FolderTreeModel : public QAbstractItemModel
@@ -22,9 +27,11 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
   QDir GetDir(const QModelIndex &index) const;
+  const QDir &GetRootDir() const;
 private:
   FolderTreeModel();
 
+  QDir m_rootDir;
 
   struct Entry
   {
@@ -51,6 +58,7 @@ public:
 
 private slots:
 
+  void on_pbImport_clicked(bool);
   void on_tvFolders_clicked(const QModelIndex &index);
 
 private:

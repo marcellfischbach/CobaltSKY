@@ -6,6 +6,9 @@
 
 struct IFile;
 
+namespace assetmanager
+{
+
 class AssetWriter
 {
 public:
@@ -30,3 +33,5 @@ private:
 
   std::list<Entry> m_entries;
 };
+
+}

@@ -518,7 +518,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
 
 
   IFile *file = vkVFS::Get()->Open(m_resourceLocator.GetResourceFile(), eOM_Write, eTM_Binary);
-  AssetWriter writer;
+  assetmanager::AssetWriter writer;
   writer.AddEntry("SHADER_GRAPH", "DATA", osData.GetSize(), osData.GetBuffer());
   writer.AddEntry("SHADER_GRAPH", "META_DATA", osMeta.GetSize(), osMeta.GetBuffer());
 

@@ -9,7 +9,7 @@
 class VKE_API vkAssetInputStream
 {
 public:
-  vkAssetInputStream(const vkUInt8 *buffer);
+  vkAssetInputStream(const vkUInt8 *buffer, vkSize bufferSize);
   virtual ~vkAssetInputStream();
 
   vkAssetInputStream & operator>> (vkInt8 &o);
@@ -27,10 +27,14 @@ public:
   vkAssetInputStream & operator>> (vkMatrix4f &o);
   vkAssetInputStream & operator>> (vkString &o);
 
+  const vkUInt8 *GetData() const;
+  const vkUInt8 *GetReadData() const;
+  vkSize GetBufferSize() const;
+
 private:
   const vkUInt8 *m_readPointer;
   const vkUInt8 *m_buffer;
-
+  vkSize m_bufferSize;
 };
 
 

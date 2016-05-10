@@ -30,8 +30,14 @@ set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/AssetManagerWidget.hh
     AssetManager/AssetWriter.cc
     AssetManager/AssetWriter.hh
+    AssetManager/EditorIcon.cc
+    AssetManager/EditorIcon.hh
+    AssetManager/EditorIconLoader.cc
+    AssetManager/EditorIconLoader.hh
     AssetManager/FolderItemModel.cc
     AssetManager/FolderItemModel.hh
+    AssetManager/Importer.cc
+    AssetManager/Importer.hh
     )
 
 set(EDITOR_ASSETMANAGER_UI
@@ -59,8 +65,6 @@ source_group(
     FILES
     ${EDITOR_GRAPH_SOURCES}
     )
-
-
 
 set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/EditResourceDefaultDialog.cc
@@ -100,6 +104,19 @@ source_group(
     )
 
 
+set(EDITOR_TEXTURE_SOURCES
+    Texture/TextureImporter.cc
+    Texture/TextureImporter.hh
+    )
+
+source_group(
+    "Editor\\Texture"
+    FILES
+    ${EDITOR_TEXTURE_SOURCES}
+    )
+
+
+
 set(ALL_UI
     ${EDITOR_ASSETMANAGER_UI}
     ${EDITOR_SHADERGRAPH_UI}
@@ -114,6 +131,7 @@ set(ALL_SOURCES
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
+    ${EDITOR_TEXTURE_SOURCES}
     )
 
 add_executable(

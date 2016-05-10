@@ -11,20 +11,24 @@ EditorWindow::EditorWindow()
 {
 
   m_mainTabWidget = new QTabWidget();
+  m_mainTabWidget->setTabsClosable(true);
   setCentralWidget(m_mainTabWidget);
 
-  //m_sceneView = new SceneView();
-  //m_mainTabWidget->addTab(m_sceneView, "Scene");
+
+  m_sceneView = new SceneView();
+  m_mainTabWidget->addTab(m_sceneView, "Scene");
+
 
   m_shaderGraphView = new ShaderGraphView(this);
   m_mainTabWidget->addTab(m_shaderGraphView, "ShaderGraph");
 
   //m_mainTabWidget->setCurrentIndex(1);
 
-  QTimer::singleShot(100, this, SLOT(switchView()));
+  //QTimer::singleShot(100, this, SLOT(switchView()));
 
   QDockWidget *dock = new QDockWidget(tr("Asset manager"), this);
-  dock->setAllowedAreas(Qt::BottomDockWidgetArea);
+  dock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+  dock->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
   assetmanager::AssetManagerWidget *assetManagerWidget = new assetmanager::AssetManagerWidget(dock);
   dock->setWidget(assetManagerWidget);
   addDockWidget(Qt::BottomDockWidgetArea, dock);
@@ -38,8 +42,8 @@ EditorWindow::~EditorWindow()
 
 void EditorWindow::switchView()
 {
-  m_mainTabWidget->setCurrentIndex(0);
-  m_shaderGraphView->Set(vkResourceLocator("${materials}/my_material.asset"));
+  //m_mainTabWidget->setCurrentIndex(1);
+  //m_shaderGraphView->Set(vkResourceLocator("${materials}/my_material.asset"));
 
 }
 

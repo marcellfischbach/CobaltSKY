@@ -27,6 +27,7 @@ public:
 
   bool Initialize(int argc, char** argv);
   void SetRootPath (const vkString& rootPath);
+  const vkString &GetRootPath()const;
 
   bool HasPath (const vkString &vfsName) const;
   void AddPath (const vkString &vfsName, const vkString &path);

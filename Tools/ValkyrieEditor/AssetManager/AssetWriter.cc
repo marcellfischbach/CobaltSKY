@@ -3,6 +3,9 @@
 #include <Valkyrie/Core/IFile.hh>
 #include <Valkyrie/Defs.hh>
 
+namespace assetmanager
+{
+
 
 AssetWriter::AssetWriter()
 {
@@ -72,4 +75,6 @@ void AssetWriter::Output(IFile *file)
     file->Write(&entry.length, sizeof(entry.length));
     file->Write(entry.buffer, entry.length);
   }
+}
+
 }

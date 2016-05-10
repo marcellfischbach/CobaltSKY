@@ -3,14 +3,19 @@
 #include <AssetManager/AssetManagerWidget.hh>
 #include <AssetManager/FolderItemModel.hh>
 #include <qfilesystemmodel.h>
+#include <qfiledialog.h>
+#include <qfileinfo.h>
 
 namespace assetmanager
 {
 
+
+
 FolderTreeModel::FolderTreeModel()
   : QAbstractItemModel()
 {
-  Scan(0, QDir("G:/ide/devs/valkyrieengine/data"));
+  m_rootDir = QDir("G:/ide/devs/valkyrieengine/data");
+  Scan(0, m_rootDir);
 }
 
 FolderTreeModel *FolderTreeModel::Get()
@@ -132,6 +137,12 @@ QDir FolderTreeModel::GetDir(const QModelIndex &index) const
   return QDir();
 }
 
+const QDir &FolderTreeModel::GetRootDir() const
+{
+  return m_rootDir;
+}
+
+
 AssetManagerWidget::AssetManagerWidget(QWidget *parent)
   : QWidget(parent)
 {
@@ -141,7 +152,9 @@ AssetManagerWidget::AssetManagerWidget(QWidget *parent)
   m_gui.tvFolders->setModel(folderModel);
 
   m_contentModel = new FolderItemModel();
+  m_contentModel->SetPath(folderModel->GetRootDir());
   m_gui.lvContent->setModel(m_contentModel);
+  
 
 }
 
@@ -152,11 +165,33 @@ AssetManagerWidget::~AssetManagerWidget()
 
 
 
+void AssetManagerWidget::on_pbImport_clicked(bool)
+{
+  printf("Import\n");
 
+  QStringList files = QFileDialog::getOpenFileNames(this, tr("Select file to import..."), FolderTreeModel::Get()->GetRootDir().absolutePath());
+
+  bool anySuccess = false;
+  for (QString &file : files)
+  {
+    QFileInfo info(file);
+    assetmanager::Importer *importer = assetmanager::ImporterRegistry::Get()->GetImporter(info);
+    if (importer)
+    {
+      if (importer->Import(info, m_contentModel->GetPath()))
+      {
+        anySuccess = true;
+      }
+    }
+  }
+  if (anySuccess)
+  {
+    m_contentModel->Refresh();
+  }
+}
 
 void AssetManagerWidget::on_tvFolders_clicked(const QModelIndex &index)
 {
-  printf("Activated\n");
   if (!index.isValid())
   {
     return;

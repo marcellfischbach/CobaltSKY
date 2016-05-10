@@ -3,9 +3,10 @@
 #include <Valkyrie/Core/AssetStream.hh>
 
 
-vkAssetInputStream::vkAssetInputStream(const vkUInt8 *buffer)
+vkAssetInputStream::vkAssetInputStream(const vkUInt8 *buffer, vkSize bufferSize)
   : m_readPointer(buffer)
   , m_buffer(buffer)
+  , m_bufferSize(bufferSize)
 {
 
 }
@@ -129,11 +130,20 @@ vkAssetInputStream &vkAssetInputStream::operator>>(vkString &o)
 }
 
 
+const vkUInt8 *vkAssetInputStream::GetData() const
+{
+  return m_buffer;
+}
 
+const vkUInt8 *vkAssetInputStream::GetReadData() const
+{
+  return m_readPointer;
+}
 
-
-
-
+vkSize vkAssetInputStream::GetBufferSize() const
+{
+  return m_bufferSize;
+}
 
 
 
