@@ -13,8 +13,19 @@ vkGBuffer::vkGBuffer(vkGraphicsGL4 *renderer)
   , m_normalLightMode(0)
   , m_emissiveMetallic(0)
   , m_sssSpec(0)
+  , m_depth(0)
   , m_renderTarget(0)
 {
+}
+
+vkGBuffer::~vkGBuffer()
+{
+  VK_RELEASE(m_diffuseRoughness);
+  VK_RELEASE(m_normalLightMode);
+  VK_RELEASE(m_emissiveMetallic);
+  VK_RELEASE(m_sssSpec);
+  VK_RELEASE(m_depth);
+  VK_RELEASE(m_renderTarget);
 }
 
 bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
@@ -23,6 +34,7 @@ bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
   VK_RELEASE(m_normalLightMode);
   VK_RELEASE(m_emissiveMetallic);
   VK_RELEASE(m_sssSpec);
+  VK_RELEASE(m_depth);
   VK_RELEASE(m_renderTarget);
 
   m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));

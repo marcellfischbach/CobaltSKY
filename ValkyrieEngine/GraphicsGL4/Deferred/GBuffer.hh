@@ -15,6 +15,7 @@ class VKGL4_API vkGBuffer : public vkObject
   VK_CLASS_GEN;
 public:
   vkGBuffer(vkGraphicsGL4 *renderer);
+  virtual ~vkGBuffer();
 
   bool Resize(vkUInt16 width, vkUInt16 height);
 

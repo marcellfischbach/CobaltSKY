@@ -27,21 +27,12 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_numberOfSkeletonMatrices(0)
   , m_shaderGraphFactory(0)
 {
-  VK_CLASS_GEN_CONSTR;
-  VK_CHECK_GL_ERROR;
-  glDepthMask(true);
-  //glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glClearDepth(1.0);
-  VK_CHECK_GL_ERROR;
-
   glewExperimental = true;
   if (glewInit() != GLEW_OK)
   {
     printf("Initialize GLEW failed\n");
   }
-  glGetError();
-  VK_CHECK_GL_ERROR;
+
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)
   {
@@ -54,34 +45,63 @@ vkGraphicsGL4::vkGraphicsGL4()
     m_matrixNeedsRecalculation[i] = false;
   }
 
-  m_blendEnabled = false;
-  m_blendModeSrcColor = m_blendModeSrcAlpha = eBM_One;
-  m_blendModeDstColor = m_blendModeDstAlpha = eBM_Zero;
+  vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
+  vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
+
+  InitFullScreenData();
+
+  ResetDefaults();
+
+  m_shaderGraphFactory = new vkShaderGraphGL4(this);
+
 
   GLuint vao;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
+
+
+}
+
+
+void vkGraphicsGL4::ResetDefaults ()
+{
+  VK_CLASS_GEN_CONSTR;
+  VK_CHECK_GL_ERROR;
+  glDepthMask(true);
+  //glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
+  glClearDepth(1.0);
+  VK_CHECK_GL_ERROR;
+
+  glGetError();
+  VK_CHECK_GL_ERROR;
+  // initialize all 16 vertex buffer streams
+  for (unsigned i = 0; i < 16; ++i)
+  {
+    SetVertexBuffer(i, 0);
+  }
+
+  for (unsigned i = 0; i < eMT_COUNT; i++)
+  {
+    m_matrices[i].SetIdentity();
+    m_matrixNeedsRecalculation[i] = false;
+  }
+
+  m_blendEnabled = false;
+  m_blendModeSrcColor = m_blendModeSrcAlpha = eBM_One;
+  m_blendModeDstColor = m_blendModeDstAlpha = eBM_Zero;
 
   memset(m_samplers, 0, sizeof(m_samplers));
   memset(m_textures, 0, sizeof(m_textures));
   InvalidateSamplers();
   InvalidateTextures();
 
-  vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
-  vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
 
-  InitFullScreenData();
 
   glFrontFace(GL_CW);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
-  GLint major, minor;
-  glGetIntegerv(GL_MAJOR_VERSION, &major);
-  glGetIntegerv(GL_MINOR_VERSION, &minor);
-  printf("OpenGL: %d.%d\n", major, minor);
-
-  m_shaderGraphFactory = new vkShaderGraphGL4(this);
 
 }
 
@@ -472,7 +492,6 @@ void vkGraphicsGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
   VK_SET(m_vertexDeclaration, decl);
 }
 
-
 void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer)
 {
   assert(streamIdx < 16);
@@ -563,7 +582,7 @@ void vkGraphicsGL4::SetRenderTarget(IRenderTarget *renderTarget)
   VK_CHECK_GL_ERROR;
   vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
   VK_CHECK_GL_ERROR;
-  if (m_renderTarget != rtGL4)
+  if (m_renderTarget != rtGL4 )
   {
     VK_SET(m_renderTarget, rtGL4);
     if (m_renderTarget)
@@ -931,6 +950,13 @@ void vkGraphicsGL4::UnbindVertexDeclaration()
 }
 
 
+void vkGraphicsGL4::FreeTextures()
+{
+  for (int i = 0; i < eTU_COUNT; ++i)
+  {
+    SetTexture((vkTextureUnit)i, 0);
+  }
+}
 
 void vkGraphicsGL4::InvalidateSamplers()
 {

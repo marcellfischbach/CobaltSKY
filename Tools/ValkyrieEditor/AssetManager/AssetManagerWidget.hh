@@ -8,9 +8,10 @@
 #include <AssetManager/Importer.hh>
 #include <ui_AssetManagerWidget.h>
 
+class vkResourceLocator;
+
 namespace assetmanager
 {
-
 
 
 
@@ -60,11 +61,16 @@ private slots:
 
   void on_pbImport_clicked(bool);
   void on_tvFolders_clicked(const QModelIndex &index);
+  void on_lvContent_doubleClicked(const QModelIndex &index);
 
 private:
   Ui::AssetManager m_gui;
 
   FolderItemModel *m_contentModel;
+
+signals:
+
+  void ResourceActivated(const vkResourceLocator &locator);
 };
 
 

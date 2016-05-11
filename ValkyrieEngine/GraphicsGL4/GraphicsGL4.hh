@@ -19,6 +19,7 @@ class VKGL4_API vkGraphicsGL4 : public IGraphics
   VK_CLASS_GEN_OBJECT;
 public:
   vkGraphicsGL4();
+  virtual void ResetDefaults();
 
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
   virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
@@ -51,6 +52,7 @@ public:
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
   virtual void SetShader(IShader *shader);
+  virtual void FreeTextures();
   virtual void InvalidateTextures();
   virtual vkTextureUnit BindTexture(ITexture *texture);
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture);

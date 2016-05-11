@@ -45,6 +45,7 @@ private:
   IRenderTarget *m_renderTarget;
   ISampler *m_sampler;
   vkStaticMeshState *m_staticMeshState;
+  vkMaterial *m_material;
   vkMaterialInstance *m_materialInstance;
   vkRenderTargetGL4 *m_onscreenTarget;
 };

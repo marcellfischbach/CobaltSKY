@@ -215,12 +215,13 @@ IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const v
       return 0;
     }
   }
-
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph))
+  IGraphics *graphics = vkEngine::Get()->GetRenderer();
+  if (graphics && !graphics->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph))
   {
     Cleanup(nodes, shaderGraph);
     return 0;
   }
+  // there are situtations where there is no renderer present (within editor ofcause)
 
   Cleanup(nodes, 0);
   return shaderGraph;

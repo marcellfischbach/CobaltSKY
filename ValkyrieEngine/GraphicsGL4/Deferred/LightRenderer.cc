@@ -31,6 +31,8 @@ vkLightvkGraphicsGL4::vkLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
 
 vkLightvkGraphicsGL4::~vkLightvkGraphicsGL4()
 {
+  VK_RELEASE(m_depthSampler);
+  VK_RELEASE(m_shadowBuffer);
 }
 
 
@@ -110,6 +112,9 @@ void vkLightvkGraphicsGL4::CalcShadowIntensity(const vkLight *light)
 
 vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
   : vkLightvkGraphicsGL4(renderer)
+  , m_colorBuffer(0)
+  , m_colorBufferBlur(0)
+  , m_depthBuffer(0)
 {
   InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
   m_attrLightDirectionNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightDirection"));
@@ -144,6 +149,8 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
 
   m_colorBuffer->SetSampler(colorSampler);
   m_depthBuffer->SetSampler(m_depthSampler);
+  
+  colorSampler->Release();
 
   m_shadowBuffer = static_cast<vkRenderTargetGL4*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(m_shadowBufferSize, m_shadowBufferSize);
@@ -155,7 +162,9 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
 
 vkDirectionalLightvkGraphicsGL4::~vkDirectionalLightvkGraphicsGL4()
 {
-
+  VK_RELEASE(m_colorBuffer);
+  VK_RELEASE(m_depthBuffer);
+  VK_RELEASE(m_colorBufferBlur);
 }
 
 
@@ -507,12 +516,14 @@ vkPointLightvkGraphicsGL4::vkPointLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();
 
+  colorBuffer->Release();
+
 
 }
 
 vkPointLightvkGraphicsGL4::~vkPointLightvkGraphicsGL4()
 {
-
+  VK_RELEASE(m_depthBuffer);
 }
 
 

@@ -26,7 +26,7 @@ public:
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-  vkResourceLocator GetLocator(const QModelIndex &index, const vkString &name = "DATA") const;
+  vkResourceLocator GetLocator(const QModelIndex &index, const vkString &name = "") const;
 
 private:
   void Clear();

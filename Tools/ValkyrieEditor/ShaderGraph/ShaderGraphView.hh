@@ -3,10 +3,12 @@
 
 #include <qgraphicsview.h>
 #include <qwidget.h>
+#include <EditorView.hh>
 #include <Graph/Scene.hh>
 #include <Valkyrie/Types.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <ui_ShaderGraphView.h>
+#include <ShaderGraph/ShaderGraphView.refl.hh>
 
 namespace shadergraph
 {
@@ -22,12 +24,12 @@ class vkClass;
 class ShaderGraphConnection;
 class ShaderGraphNode;
 class ShaderGraphMetaData;
-class ShaderGraphView : public QWidget
+class ShaderGraphWidget : public QWidget
 {
   Q_OBJECT
 public:
-  ShaderGraphView(QWidget *parent = 0);
-  virtual ~ShaderGraphView();
+  ShaderGraphWidget(QWidget *parent = 0);
+  virtual ~ShaderGraphWidget();
 
   void Set(const vkResourceLocator &resourceLocator);
   void Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData);
@@ -74,5 +76,34 @@ private:
   shadergraph::ResourcesModel *m_resourcesModel;
 
   shadergraph::PreviewWidget *m_previewWidget;
+
+};
+
+
+
+class ShaderGraphView : public EditorView
+{
+public:
+  ShaderGraphView(QWidget *parent);
+  virtual ~ShaderGraphView();
+
+  void Initialize();
+  virtual bool Close();
+
+private:
+  ShaderGraphWidget *m_shaderGraphWidget;
+};
+
+VK_CLASS()
+class ShaderGraphViewFactory : public IEditorViewFactory
+{
+  VK_CLASS_GEN_OBJECT;
+public:
+  ShaderGraphViewFactory();
+  virtual ~ShaderGraphViewFactory();
+
+
+  virtual bool CanEdit(const vkResourceLocator &resourceLocator, IObject *obj);
+  virtual EditorView *CreateView(QWidget *parent, const vkResourceLocator &resourceLocator, IObject *obj);
 
 };

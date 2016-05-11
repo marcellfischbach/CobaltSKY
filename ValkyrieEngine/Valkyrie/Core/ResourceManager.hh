@@ -26,6 +26,7 @@ public:
   const vkString &GetResourceName() const;
 
   bool operator< (const vkResourceLocator &o) const;
+  bool operator== (const vkResourceLocator &o) const;
 
 private:
   vkString m_resourceFile;

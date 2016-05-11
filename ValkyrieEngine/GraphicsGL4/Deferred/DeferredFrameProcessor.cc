@@ -41,7 +41,14 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
 
 vkDeferredFrameProcessor::~vkDeferredFrameProcessor()
 {
+  delete m_lightRenderers[eLT_DirectionalLight];
+  delete m_lightRenderers[eLT_PointLight];
 
+  VK_RELEASE(m_simplePresentShader);
+  VK_RELEASE(m_directionLightShader);
+  VK_RELEASE(m_gbuffer);
+  VK_RELEASE(m_postProcessor);
+  glDeleteQueries(10, queries);
 }
 
 bool vkDeferredFrameProcessor::Initialize()
@@ -54,12 +61,14 @@ bool vkDeferredFrameProcessor::Initialize()
   {
     return false;
   }
+  m_simplePresentShader->AddRef();
 
   m_directionLightShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
   if (!m_directionLightShader)
   {
     return false;
   }
+  m_directionLightShader->AddRef();
 
   return true;
 }
@@ -170,7 +179,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   m_renderer->SetViewport(target);
   m_renderer->SetBlendEnabled(true);
   m_renderer->SetBlendMode(eBM_One, eBM_One);
-  m_renderer->Clear(true, vkVector4f(0.0f, -0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
+  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
   for (vkSize i = 0; i < m_lightStates.length; ++i)
   {
     vkLightState *lightState = m_lightStates[i];

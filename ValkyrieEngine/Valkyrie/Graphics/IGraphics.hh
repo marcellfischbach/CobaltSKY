@@ -27,6 +27,7 @@ struct VKE_API IGraphics : public IObject
 {
   VK_CLASS_GEN;
 
+  virtual void ResetDefaults() = 0;
 
   /**
    * \name Create of render buffers and render states
@@ -75,6 +76,7 @@ struct VKE_API IGraphics : public IObject
   virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
   virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
   virtual void SetShader(IShader *shader) = 0;
+  virtual void FreeTextures() = 0;
   virtual void InvalidateTextures() = 0;
   virtual vkTextureUnit BindTexture(ITexture *texture) = 0;
   virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;

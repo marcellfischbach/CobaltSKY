@@ -31,14 +31,19 @@ vkRenderTargetGL4::~vkRenderTargetGL4()
     {
       glDeleteFramebuffers(1, &m_name);
     }
-    if (m_depthTexture)
+
+    if (m_depthBuffer)
     {
-      m_depthTexture->Release();
-      m_depthTexture = 0;
+      glDeleteRenderbuffers(1, &m_depthBuffer);
+      m_depthBuffer = 0;
     }
+
+    VK_RELEASE(m_depthTexture);
+    m_depthTexture = 0;
+
     for (vkTextureGL4 *txt : m_colorTextures)
     {
-      txt->Release();
+      VK_RELEASE(txt);
     }
     m_colorTextures.clear();
   }

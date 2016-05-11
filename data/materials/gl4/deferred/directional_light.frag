@@ -49,8 +49,6 @@ void main ()
 	
 	
 	
-	
-	
 	vk_FragColor = vec4 (diffuse * lamb * vk_LightColor.rgb * vk_LightEnergy, 1.0);
 	
 	float shadow = calculate_shadow (world4, cam.xyz);

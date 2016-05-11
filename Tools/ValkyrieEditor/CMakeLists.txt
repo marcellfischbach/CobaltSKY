@@ -11,6 +11,8 @@ set(EDITOR_SOURCES
     main.cc
     Editor.cc
     Editor.hh
+    EditorView.cc
+    EditorView.hh
     EditorWindow.cc
     EditorWindow.hh
     SceneView.cc
@@ -38,6 +40,8 @@ set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/FolderItemModel.hh
     AssetManager/Importer.cc
     AssetManager/Importer.hh
+    AssetManager/Utils.cc
+    AssetManager/Utils.hh
     )
 
 set(EDITOR_ASSETMANAGER_UI

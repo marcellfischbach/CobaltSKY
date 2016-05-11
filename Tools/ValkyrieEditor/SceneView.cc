@@ -2,6 +2,8 @@
 
 #include <SceneView.hh>
 #include <qopenglcontext.h>
+#include <Editor.hh>
+#include <Valkyrie/Engine.hh>
 
 
 SceneView::SceneView()
@@ -18,7 +20,14 @@ SceneView::~SceneView()
 void SceneView::initializeGL()
 {
   context()->setShareContext(QOpenGLContext::globalShareContext());
-  printf("SceneView::initializeGL(): %p %p\n", context(), context()->shareContext());
+
+
+  Editor::Get().RequestGraphics();
+
+
+  IGraphics *graphics = vkEngine::Get()->GetRenderer();
+  graphics->ResetDefaults();
+
 }
 
 void SceneView::paintGL()

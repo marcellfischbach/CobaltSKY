@@ -31,13 +31,19 @@ PreviewWidget::PreviewWidget(QWidget *parent)
   , m_renderTarget(0)
   , m_sampler(0)
   , m_onscreenTarget(0)
+  , m_material(0)
+  , m_materialInstance(0)
 {
 }
 
 PreviewWidget::~PreviewWidget()
 {
+  makeCurrent();
   VK_RELEASE(m_onscreenTarget);
-} 
+  VK_RELEASE(m_frameProcessor);
+  VK_RELEASE(m_renderTarget);
+  doneCurrent();
+}
 
 QSize PreviewWidget::sizeHint() const
 {
@@ -46,20 +52,23 @@ QSize PreviewWidget::sizeHint() const
 
 void PreviewWidget::SetMaterial(vkMaterial *material)
 {
-  m_materialInstance->SetMaterial(material);
+  VK_SET(m_material, material);
+  if (m_materialInstance)
+  {
+    m_materialInstance->SetMaterial(material);
+  }
 }
 
 void PreviewWidget::initializeGL()
 {
   context()->setShareContext(QOpenGLContext::globalShareContext());
 
-  printf("PreviewWidget::initializeGL(): %p %p\n", context(), context()->shareContext());
-
   Editor::Get().RequestGraphics();
 
 
   m_graphics = vkEngine::Get()->GetRenderer();
-  
+  m_graphics->ResetDefaults();
+
 
   //
   // the sampler that is used for sampling the color buffer
@@ -87,7 +96,7 @@ void PreviewWidget::initializeGL()
     return;
   }
 
-  m_onscreenTarget = new vkRenderTargetGL4(-0, width(), height());
+  m_onscreenTarget = new vkRenderTargetGL4(0, width(), height()); 
 
 }
 
@@ -108,18 +117,16 @@ void PreviewWidget::paintGL()
   m_graphics->SetRenderTarget(m_onscreenTarget);
   m_graphics->SetViewport(m_onscreenTarget);
 
-  m_graphics->Clear(true, vkVector4f(0, 0, 0, 1));
+  m_graphics->Clear(true, vkVector4f(0, 0.5, 0, 1), true, 1.0f);
   m_graphics->RenderFullScreenFrame(colorTarget);
-
 
 }
 
 void PreviewWidget::resizeGL(int width, int height)
 {
-  if (m_renderTarget)
-  {
-    m_renderTarget->Release();
-  }
+  m_graphics->ResetDefaults();
+
+  VK_RELEASE(m_renderTarget);
 
   if (m_frameProcessor)
   {
@@ -139,6 +146,8 @@ void PreviewWidget::resizeGL(int width, int height)
   }
   color0->SetSampler(m_sampler);
 
+  // we don't own the color 0 anymore
+  color0->Release();
 
   //
   // the camera projection will change aswell
@@ -149,6 +158,7 @@ void PreviewWidget::resizeGL(int width, int height)
 vkEntityScene* PreviewWidget::CreateScene()
 {
   m_materialInstance = new vkMaterialInstance();
+  m_materialInstance->SetMaterial(m_material);
 
   vkEntityScene *entityScene = new vkEntityScene();
   vkSubMesh *planeSubMesh = CreatePlaneMesh(20.0f, 0.0f);
@@ -264,6 +274,11 @@ vkSubMesh* PreviewWidget::CreatePlaneMesh(float size, float height)
   mesh->AddVertexBuffer(tb);
   mesh->SetIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
   mesh->SetBoundingBox(bbox);
+
+  vb->Release();
+  nb->Release();
+  tb->Release();
+  vd->Release();
 
   return mesh;
 }

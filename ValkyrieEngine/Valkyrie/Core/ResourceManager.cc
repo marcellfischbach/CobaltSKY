@@ -177,6 +177,11 @@ bool vkResourceLocator::operator<(const vkResourceLocator &o) const
 }
 
 
+bool vkResourceLocator::operator==(const vkResourceLocator &o) const
+{
+  return m_resourceFile == o.m_resourceFile && m_resourceName == o.m_resourceName;
+}
+
 vkAssetFileLoader::vkAssetFileLoader()
   : IFileLoader()
 {

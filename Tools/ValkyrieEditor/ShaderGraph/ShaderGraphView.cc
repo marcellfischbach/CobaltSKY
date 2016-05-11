@@ -8,6 +8,7 @@
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/AssetWriter.hh>
+#include <AssetManager/Utils.hh>
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
 #include <Editor.hh>
@@ -25,7 +26,7 @@
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 
 
-ShaderGraphView::ShaderGraphView(QWidget *parent)
+ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_resourcesModel(0)
 {
@@ -69,11 +70,11 @@ ShaderGraphView::ShaderGraphView(QWidget *parent)
 }
 
 
-ShaderGraphView::~ShaderGraphView()
+ShaderGraphWidget::~ShaderGraphWidget()
 {
-
 }
-void ShaderGraphView::NodeRemoved(graph::Node *node)
+
+void ShaderGraphWidget::NodeRemoved(graph::Node *node)
 {
   shadergraph::Node* gNode = static_cast<shadergraph::Node*>(node);
   if (gNode->GetType() == shadergraph::Node::eT_Node)
@@ -82,7 +83,7 @@ void ShaderGraphView::NodeRemoved(graph::Node *node)
   }
 }
 
-void ShaderGraphView::NodeNameChanged(graph::Node *node)
+void ShaderGraphWidget::NodeNameChanged(graph::Node *node)
 {
   shadergraph::Node *gNode = static_cast<shadergraph::Node*>(node);
   if (gNode->GetType() == shadergraph::Node::eT_Node && m_resourcesModel)
@@ -91,7 +92,7 @@ void ShaderGraphView::NodeNameChanged(graph::Node *node)
   }
 }
 
-void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
+void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_resourceLocator = resourceLocator;
 
@@ -110,9 +111,14 @@ void ShaderGraphView::Set(const vkResourceLocator &resourceLocator)
   {
     Compile();
   }
+
+
+  m_previewWidget->SetMaterial(shaderGraph);
+  m_previewWidget->repaint();
 }
 
-void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
+
+void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
 {
   m_shaderGraph = shaderGraph;
   m_shaderGraphNode = new shadergraph::SGShaderGraphNode(shaderGraph);
@@ -192,7 +198,7 @@ void ShaderGraphView::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *m
 }
 
 
-void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
+void  ShaderGraphWidget::keyReleaseEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Space)
   {
@@ -212,19 +218,19 @@ void  ShaderGraphView::keyReleaseEvent(QKeyEvent *event)
   }
 }
 
-void ShaderGraphView::popupNodeSelector()
+void ShaderGraphWidget::popupNodeSelector()
 {
   NodeSelector *selector = new NodeSelector(this);
   connect(selector, SIGNAL(addNode(const vkClass*)), this, SLOT(AddNode(const vkClass*)));
   selector->setVisible(true);
 }
 
-graph::Node *ShaderGraphView::AddNode(const vkClass *clazz)
+graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz)
 {
   return AddNode(clazz, 0, vkVector2f(0.0f, 0.0f));
 }
 
-graph::Node *ShaderGraphView::AddNode(const vkSGNode *node, const vkVector2f &pos)
+graph::Node *ShaderGraphWidget::AddNode(const vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
   {
@@ -234,7 +240,7 @@ graph::Node *ShaderGraphView::AddNode(const vkSGNode *node, const vkVector2f &po
 
 }
 
-graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos)
+graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos)
 {
   if (!clazz)
   {
@@ -259,12 +265,12 @@ graph::Node *ShaderGraphView::AddNode(const vkClass *clazz, const vkSGNode *node
 
 
 
-void ShaderGraphView::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
+void ShaderGraphWidget::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
 {
   m_scene->DisconnectInput(inputNode, inputIdx);
 }
 
-void ShaderGraphView::ResourceDoubleClicked(const QModelIndex &index)
+void ShaderGraphWidget::ResourceDoubleClicked(const QModelIndex &index)
 {
   if (!index.isValid())
   {
@@ -283,19 +289,19 @@ void ShaderGraphView::ResourceDoubleClicked(const QModelIndex &index)
   dialog->setVisible(true);
 }
 
-void ShaderGraphView::ResourceEditApplied(shadergraph::SGNode* node)
+void ShaderGraphWidget::ResourceEditApplied(shadergraph::SGNode* node)
 {
   m_resourcesModel->NodeChanged(node);
   connect(sender(), SIGNAL(Changed(shadergraph::SGNode*)), this, SLOT(ResourceEditApplied(shadergraph::SGNode*)));
 }
 
-void ShaderGraphView::on_cbDiscardAlpha_stateChanged(int state)
+void ShaderGraphWidget::on_cbDiscardAlpha_stateChanged(int state)
 {
   m_gui.cbDiscardAlphaCompareMode->setEnabled(state != 0);
   m_gui.sbDiscardAlphaThreshold->setEnabled(state != 0);
 }
 
-bool ShaderGraphView::Compile()
+bool ShaderGraphWidget::Compile()
 {
   vkSGShaderGraph compileGraph;
   std::map<graph::Node*, vkSGNode*> nodes;
@@ -327,7 +333,7 @@ bool ShaderGraphView::Compile()
   return true;
 }
 
-void ShaderGraphView::on_pbCompile_clicked(bool)
+void ShaderGraphWidget::on_pbCompile_clicked(bool)
 {
   Compile();
 }
@@ -344,7 +350,7 @@ void invert(const std::map<graph::Node*, vkSGNode*> &in, std::map<vkSGNode*, gra
 }
 }
 
-void ShaderGraphView::on_pbSave_clicked(bool)
+void ShaderGraphWidget::on_pbSave_clicked(bool)
 {
   if (m_resourceLocator.GetResourceFile().length() == 0)
   {
@@ -529,7 +535,7 @@ void ShaderGraphView::on_pbSave_clicked(bool)
 
 
 
-void ShaderGraphView::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes)
+void ShaderGraphWidget::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes)
 {
   if (!graph)
   {
@@ -624,3 +630,66 @@ void ShaderGraphView::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*,
   graph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
                          (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
 }
+
+
+
+
+
+ShaderGraphView::ShaderGraphView (QWidget *parent)
+  : EditorView ()
+{
+  m_shaderGraphWidget = new ShaderGraphWidget(parent);
+  SetWidget(m_shaderGraphWidget);
+  SetCanClose(true);
+}
+
+ShaderGraphView::~ShaderGraphView()
+{
+  m_shaderGraphWidget->deleteLater();
+}
+
+void ShaderGraphView::Initialize()
+{
+  m_shaderGraphWidget->Set(GetResourceLocator());
+  SetName(assetmanager::GetNameFromResource(GetResourceLocator()));
+}
+
+bool ShaderGraphView::Close()
+{
+  return true;
+}
+
+
+
+ShaderGraphViewFactory::ShaderGraphViewFactory()
+  : IEditorViewFactory()
+{
+
+}
+
+ShaderGraphViewFactory::~ShaderGraphViewFactory()
+{
+
+}
+
+
+bool ShaderGraphViewFactory::CanEdit(const vkResourceLocator &resourceLocator, IObject *obj)
+{
+  if (vkQueryClass<vkSGShaderGraph>(obj))
+  {
+    return true;
+  }
+
+  return false;
+}
+
+EditorView *ShaderGraphViewFactory::CreateView(QWidget *parent, const vkResourceLocator &resourceLocator, IObject *obj)
+{
+  ShaderGraphView *view = new ShaderGraphView(parent);
+  view->SetEditorObject(obj);
+  view->SetResourceLocator(resourceLocator);
+  view->Initialize();
+  return view;
+}
+
+

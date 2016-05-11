@@ -200,6 +200,16 @@ void AssetManagerWidget::on_tvFolders_clicked(const QModelIndex &index)
   m_contentModel->SetPath(dir);
 }
 
+void AssetManagerWidget::on_lvContent_doubleClicked(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return;
+  }
+
+  vkResourceLocator resourceLocator = m_contentModel->GetLocator(index);
+  emit ResourceActivated(resourceLocator);
+}
 
 AssetManagerDialog::AssetManagerDialog(QWidget *parent)
   : QDialog(parent)

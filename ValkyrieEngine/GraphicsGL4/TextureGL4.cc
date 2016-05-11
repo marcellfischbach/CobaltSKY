@@ -329,7 +329,6 @@ vkTexture2DGL4::vkTexture2DGL4()
 
 vkTexture2DGL4::~vkTexture2DGL4()
 {
-
 }
 
 bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height)

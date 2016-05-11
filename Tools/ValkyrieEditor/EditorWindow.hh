@@ -3,36 +3,28 @@
 #include <qmainwindow.h>
 
 
-class ShaderGraphView;
+class vkResourceLocator;
 class SceneView;
 
+class EditorView;
 class EditorWindow : public QMainWindow
 {
   Q_OBJECT;
 public:
-  struct View
-  {
-    QString name;
-    QWidget *view;
-    View(const QString &name, QWidget *view) 
-      : name(name)
-      , view(view)
-    {
 
-    }
-  };
-
-public:
   EditorWindow();
   virtual ~EditorWindow();
 
-  void AddView(View view);
+
+public slots:
+  void AddView(EditorView *view);
+  void AddView(const vkResourceLocator &resourceLocator);
+  void CloseTab(int idx);
 
 private:
   SceneView *m_sceneView;
-  ShaderGraphView *m_shaderGraphView;
   QTabWidget *m_mainTabWidget;
 
-private slots:
-  void switchView();
+  QList<EditorView*> m_views;
 };
+
