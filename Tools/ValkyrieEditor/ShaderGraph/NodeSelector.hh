@@ -3,7 +3,7 @@
 #include <qdialog.h>
 #include <qlistview.h>
 
-// #include <ui_NodeSelector.h>
+#include <ui_NodeSelector.h>
 #include <Valkyrie/Core/Object.hh>
 
 class NodesModel;
@@ -18,8 +18,14 @@ private:
   NodesModel *m_nodesModel;
 
 private slots:
-  void on_listView_doubleClicked(const QModelIndex &index);
+void selectIndex(const QModelIndex &index);
+  void on_tvNodes_doubleClicked(const QModelIndex &index);
+  void on_tvNodes_activated(const QModelIndex &index);
+  void on_leFilter_textChanged(const QString &text);
 signals:
   void addNode (const vkClass *clazz);
+
+private:
+  Ui::NodeSelector m_gui;
 };
 

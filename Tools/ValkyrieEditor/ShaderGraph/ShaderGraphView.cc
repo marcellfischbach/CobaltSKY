@@ -175,13 +175,15 @@ void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
   vkResourceLocator metaLocator = vkResourceLocator(m_resourceLocator.GetResourceFile(), "META_DATA");
 
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
-  ShaderGraphMetaData *metaData = vkResourceManager::Get()->GetOrLoad<ShaderGraphMetaData>(metaLocator);
+  ShaderGraphMetaData *metaData = vkResourceManager::Get()->Load<ShaderGraphMetaData>(metaLocator);
   bool nullShader = !shaderGraph;
   if (nullShader)
   {
     shaderGraph = new vkSGShaderGraph();
   }
   Setup(shaderGraph, metaData);
+
+  VK_RELEASE(metaData);
 
   if (nullShader)
   {
