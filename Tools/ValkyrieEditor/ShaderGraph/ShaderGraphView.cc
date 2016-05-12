@@ -17,6 +17,7 @@
 #include <qpainterpath.h>
 #include <qevent.h>
 #include <qtimer.h>
+#include <qscrollbar.h>
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
@@ -24,6 +25,78 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
+
+class MyGraphicsView : public QGraphicsView
+{
+public:
+  MyGraphicsView(QWidget *parent)
+    : QGraphicsView(parent)
+    , m_scrolling(false)
+  {
+
+  }
+
+protected:
+  virtual void mousePressEvent(QMouseEvent *event)
+  {
+    if (event->button() == Qt::MidButton)
+    {
+      m_scrolling = true;
+      m_lastPos = event->pos();
+    }
+    else
+    {
+      QGraphicsView::mousePressEvent(event);
+    }
+  }
+
+  virtual void mouseReleaseEvent(QMouseEvent *event)
+  {
+    if (event->button() == Qt::MidButton)
+    {
+      m_scrolling = false;
+    }
+    else
+    {
+      QGraphicsView::mouseReleaseEvent(event);
+    }
+  }
+
+  virtual void mouseMoveEvent(QMouseEvent *event)
+  {
+    if (m_scrolling)
+    {
+      QPoint dpos = event->pos() - m_lastPos;
+      m_lastPos = event->pos();
+
+      horizontalScrollBar()->setValue(horizontalScrollBar()->value() - dpos.x());
+      verticalScrollBar()->setValue(verticalScrollBar()->value() - dpos.y());
+    }
+    else
+    {
+      QGraphicsView::mouseMoveEvent(event);
+    }
+  }
+
+  virtual void wheelEvent(QWheelEvent *event)
+  {
+    int scroll = event->angleDelta().y();
+    QMatrix m = matrix();
+    if (scroll > 0)
+    {
+      m.scale(1.0f / 0.9f, 1.0f / 0.9f);
+    }
+    else
+    {
+      m.scale(0.9f, 0.9f);
+    }
+    setMatrix(m);
+  }
+
+private:
+  bool m_scrolling;
+  QPoint m_lastPos;
+};
 
 
 ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
@@ -33,8 +106,9 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
 
   m_gui.setupUi(this);
   setMouseTracking(true);
-  m_view = new QGraphicsView(this);
+  m_view = new MyGraphicsView(this);
   m_view->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::HighQualityAntialiasing);
+  m_view->setContextMenuPolicy(Qt::CustomContextMenu);
 
   QGridLayout *layout = new QGridLayout(m_gui.wShaderGraphView);
   layout->setContentsMargins(0, 0, 0, 0);
@@ -66,6 +140,8 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   layout = new QGridLayout(m_gui.wPreview);
   layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(m_previewWidget);
+
+  connect(m_view, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ViewRightClicked(const QPoint&)));
 
 }
 
@@ -222,12 +298,24 @@ void ShaderGraphWidget::popupNodeSelector()
 {
   NodeSelector *selector = new NodeSelector(this);
   connect(selector, SIGNAL(addNode(const vkClass*)), this, SLOT(AddNode(const vkClass*)));
+
+  QPoint pos = m_view->mapFromScene(QPointF(m_newNodePosition.x, m_newNodePosition.y));
+  pos = mapToGlobal(pos);
+  selector->move(pos);
   selector->setVisible(true);
+}
+
+void ShaderGraphWidget::ViewRightClicked(const QPoint &p)
+{
+  QPointF scenePos = m_view->mapToScene(p);
+  m_newNodePosition = vkVector2f(scenePos.x(), scenePos.y());
+
+  popupNodeSelector();
 }
 
 graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz)
 {
-  return AddNode(clazz, 0, vkVector2f(0.0f, 0.0f));
+  return AddNode(clazz, 0, m_newNodePosition);
 }
 
 graph::Node *ShaderGraphWidget::AddNode(const vkSGNode *node, const vkVector2f &pos)

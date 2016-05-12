@@ -47,6 +47,7 @@ private:
   graph::Node *AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos);
 
 private slots:
+void ViewRightClicked(const QPoint&);
   graph::Node *AddNode(const vkClass *clazz);
   void NodeNameChanged(graph::Node *node);
   void NodeRemoved(graph::Node* node);
@@ -76,6 +77,8 @@ private:
   shadergraph::ResourcesModel *m_resourcesModel;
 
   shadergraph::PreviewWidget *m_previewWidget;
+
+  vkVector2f m_newNodePosition;
 
 };
 
