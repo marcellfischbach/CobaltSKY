@@ -462,6 +462,10 @@ bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
             {
               attr->Set((vkInt32)unit);
             }
+            else
+            {
+              attr->Set((vkInt32)0);
+            }
           }
           break;
         }

@@ -1,24 +1,17 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <qopenglwidget.h>
+#include <SceneWidget/SceneWidget.hh>
 
-class vkCamera;
-class vkEntityScene;
-class vkMaterial;
-class vkMaterialInstance;
-class vkStaticMeshState;
-class vkSubMesh;
-class vkRenderTargetGL4;
-struct IFrameProcessor;
-struct IGraphics;
-struct IRenderTarget;
-struct ISampler;
+namespace scenewidget
+{
+class OrbitCamera;
+}
 
 namespace shadergraph
 {
 
-class PreviewWidget: public QOpenGLWidget
+
+class PreviewWidget: public scenewidget::SceneWidget
 {
 public:
   PreviewWidget(QWidget *parent = 0);
@@ -29,25 +22,16 @@ public:
   void SetMaterial(vkMaterial *material);
 protected:
   void initializeGL();
-  void paintGL();
-  void resizeGL(int w, int h);
-
-
 
 private:
   vkEntityScene *CreateScene();
   vkSubMesh *CreatePlaneMesh(float size, float height);
+
 private:
-  IGraphics *m_graphics;
-  vkCamera *m_camera;
-  IFrameProcessor* m_frameProcessor;
-  vkEntityScene *m_scene;
-  IRenderTarget *m_renderTarget;
-  ISampler *m_sampler;
+  scenewidget::OrbitCamera *m_orbitCamera;
   vkStaticMeshState *m_staticMeshState;
   vkMaterial *m_material;
   vkMaterialInstance *m_materialInstance;
-  vkRenderTargetGL4 *m_onscreenTarget;
 };
 
 }

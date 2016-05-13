@@ -1,7 +1,7 @@
 
 
 #include <ShaderGraph/PreviewWidget.hh>
-
+#include <SceneWidget/Camera.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/LightState.hh>
@@ -27,22 +27,16 @@ namespace shadergraph
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)
-  : QOpenGLWidget(parent)
-  , m_renderTarget(0)
-  , m_sampler(0)
-  , m_onscreenTarget(0)
+  : scenewidget::SceneWidget(parent)
   , m_material(0)
   , m_materialInstance(0)
+  , m_orbitCamera(0)
 {
 }
 
 PreviewWidget::~PreviewWidget()
 {
-  makeCurrent();
-  VK_RELEASE(m_onscreenTarget);
-  VK_RELEASE(m_frameProcessor);
-  VK_RELEASE(m_renderTarget);
-  doneCurrent();
+  delete m_orbitCamera;
 }
 
 QSize PreviewWidget::sizeHint() const
@@ -61,99 +55,16 @@ void PreviewWidget::SetMaterial(vkMaterial *material)
 
 void PreviewWidget::initializeGL()
 {
-  context()->setShareContext(QOpenGLContext::globalShareContext());
+  scenewidget::SceneWidget::initializeGL();
 
-  Editor::Get().RequestGraphics();
+  vkEntityScene *scene = CreateScene();
+  SetScene(scene);
+  scene->Release();
 
-
-  m_graphics = vkEngine::Get()->GetRenderer();
-  m_graphics->ResetDefaults();
-
-
-  //
-  // the sampler that is used for sampling the color buffer
-  m_sampler = m_graphics->CreateSampler();
-  m_sampler->SetFilter(eFM_MinMagNearest);
-
-  m_scene = CreateScene();
-
-  //
-  // the camera for viewing the scene
-  m_camera = new vkCamera();
-  m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
-  m_camera->SetEye(vkVector3f(20.0f, 20.0f, 20.0f));
-  m_camera->SetSpot(vkVector3f(0, 0, 0));
-  m_camera->SetUp(vkVector3f(0, 0, 1));
-  m_camera->UpdateCameraMatrices();
-
-
-  //
-  // create the frameprocessor that will render the scene
-  m_frameProcessor = m_graphics->CreateDeferredFrameProcessor();
-  if (!m_frameProcessor->Initialize())
-  {
-    printf("Unable to initialize frame processor\n");
-    return;
-  }
-
-  m_onscreenTarget = new vkRenderTargetGL4(0, width(), height()); 
+  m_orbitCamera = new scenewidget::OrbitCamera(m_camera, 3.1415f / 4.0f, -3.1415f / 4.0f);
+  AddEventListener(m_orbitCamera);
 
 }
-
-void PreviewWidget::paintGL()
-{
-  GLint name;
-  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &name);
-  m_onscreenTarget->Setup(name, width(), height());
-
-  m_scene->GetRoot()->UpdateBoundingBox();
-  ITexture2D *colorTarget = 0;
-
-  IRenderTarget *target = m_frameProcessor->Render(m_scene->GetRoot(),m_camera, m_renderTarget);
-  colorTarget = vkQueryClass<ITexture2D>(target->GetColorBuffer(0));
-
-  //
-  // now render this image onscreen
-  m_graphics->SetRenderTarget(m_onscreenTarget);
-  m_graphics->SetViewport(m_onscreenTarget);
-
-  m_graphics->Clear(true, vkVector4f(0, 0.5, 0, 1), true, 1.0f);
-  m_graphics->RenderFullScreenFrame(colorTarget);
-
-}
-
-void PreviewWidget::resizeGL(int width, int height)
-{
-  m_graphics->ResetDefaults();
-
-  VK_RELEASE(m_renderTarget);
-
-  if (m_frameProcessor)
-  {
-    m_frameProcessor->Resize(width, height);
-  }
-
-  // 
-  // create the render target
-  ITexture2D *color0 = m_graphics->CreateTexture2D(ePF_RGBA, width, height);
-  m_renderTarget = m_graphics->CreateRenderTarget();
-  m_renderTarget->Initialize(width, height);
-  m_renderTarget->AddColorTexture(color0);
-  m_renderTarget->SetDepthBuffer(width, height);
-  if (!m_renderTarget->Finilize())
-  {
-    printf("Unable to create render target!!!\n");
-  }
-  color0->SetSampler(m_sampler);
-
-  // we don't own the color 0 anymore
-  color0->Release();
-
-  //
-  // the camera projection will change aswell
-  m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
-}
-
 
 vkEntityScene* PreviewWidget::CreateScene()
 {

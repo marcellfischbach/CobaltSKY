@@ -102,32 +102,40 @@ vkUInt8 *generate_down_scale(const vkUInt8 *data, vkUInt16 width, vkUInt16 heigh
       bool right = (sx + 1) < width;
       for (int c = 0; c < num; ++c, ++srcPtr)
       {
-        vkUInt16 col = *srcPtr;
+        vkUInt16 col = (vkUInt8)*srcPtr;
         int rc = 1;
-
+        /*
         if (right)
         {
-          col += *(srcPtr + num);
+          col += (vkUInt8)*(srcPtr + num);
           rc++;
         }
         if (bottom)
         {
-          col += *(srcPtr + lineScan);
+          col += (vkUInt8)*(srcPtr + lineScan);
           rc++;
 
           if (right)
           {
-            col += *(srcPtr + lineScan + num);
+            col += (vkUInt8)*(srcPtr + lineScan + num);
             rc++;
           }
         }
-
+        */
+        if (debug)
+        {
+          printf("S(%d:%d)  D(%d:%d)  %d/%d   %p  %p   %d\n", sx, sy, x, y, col, rc, srcPtr, dstPtr, lineScan);
+        }
         float v = (float)col / (float)rc;
-        *dstPtr++ = (vkUInt8)v;
+        *dstPtr++ = (vkUInt8)(col >> 0);// v;
       }
+      if (debug) printf("SrcPtr: %p + %d", srcPtr, num);
       srcPtr += num;
+      if (debug) printf(" => %p\n", srcPtr);
     }
+    if (debug) printf("SrcPtr: %p + %d", srcPtr, lineScan);
     srcPtr += lineScan;
+    if (debug) printf(" => %p\n", srcPtr);
   }
 
   return res;
@@ -157,11 +165,6 @@ bool vkImage::GenerateMipMaps()
 
     m_data.push_back(data);
 
-    if (width == 1 && height == 1)
-    {
-      break;
-    }
-
     width >>= 1;
     if (width == 0)
     {
@@ -173,6 +176,13 @@ bool vkImage::GenerateMipMaps()
     {
       height = 1;
     }
+
+
+    if (width == 1 && height == 1)
+    {
+      break;
+    }
+
   }
 
 

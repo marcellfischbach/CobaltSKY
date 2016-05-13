@@ -18,14 +18,14 @@ vkShaderGraphAssetLoader::~vkShaderGraphAssetLoader()
 
 }
 
-bool vkShaderGraphAssetLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData) const
+bool vkShaderGraphAssetLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
 {
   bool bTypeID = typeID == "SHADER_GRAPH";
   bool bName = name == "DATA";
   return bTypeID && bName;
 }
 
-IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+IObject *vkShaderGraphAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData)
 {
   std::map<vkUInt32, vkSGNode *> nodes;
 

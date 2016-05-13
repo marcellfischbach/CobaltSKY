@@ -5,14 +5,14 @@
 #include <qimagereader.h>
 #include <qbuffer.h>
 
-bool EditorIconLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData) const
+bool EditorIconLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
 {
   bool bName = name == "EDITOR_ICON";
   return bName;
 }
 
 
-IObject *EditorIconLoader::Load(vkAssetInputStream &is, const vkResourceLocator &locator, IObject *userData) const
+IObject *EditorIconLoader::Load(vkAssetInputStream &is, const vkResourceLocator &locator, IObject *userData)
 {
   QBuffer buffer;
   buffer.setData((const char*)is.GetData(), (int)is.GetBufferSize());

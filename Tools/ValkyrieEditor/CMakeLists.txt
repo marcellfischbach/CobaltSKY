@@ -70,6 +70,17 @@ source_group(
     ${EDITOR_GRAPH_SOURCES}
     )
 
+set(EDITOR_SCENEWIDGET_SOURCES
+    SceneWidget/SceneWidget.cc
+    SceneWidget/SceneWidget.hh
+    )
+
+source_group(
+    "Editor\\SceneWidget"
+    FILES
+    ${EDITOR_SCENEWIDGET_SOURCES}
+    )
+
 set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/EditResourceDefaultDialog.cc
     ShaderGraph/EditResourceDefaultDialog.hh
@@ -134,6 +145,7 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
+    ${EDITOR_SCENEWIDGET_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
     ${EDITOR_TEXTURE_SOURCES}
     )

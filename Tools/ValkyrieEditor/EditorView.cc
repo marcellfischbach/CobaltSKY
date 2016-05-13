@@ -126,6 +126,7 @@ IEditorViewFactory *EditorViewFactoryManager::GetFactory(const vkResourceLocator
     }
   }
 
+  return 0;
 }
 
 

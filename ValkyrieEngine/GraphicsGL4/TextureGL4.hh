@@ -49,6 +49,7 @@ public:
   virtual void SetTextureCompareFunc(vkTextureCompareFunc func);
   virtual vkTextureCompareFunc GetTextureCompareFunc() const;
 
+  virtual bool NeedsMipMaps() const;
 private:
   GLuint m_name;
 

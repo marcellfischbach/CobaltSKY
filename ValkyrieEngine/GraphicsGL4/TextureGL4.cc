@@ -262,7 +262,10 @@ vkTextureCompareFunc vkSamplerGL4::GetTextureCompareFunc() const
   return m_textureCompareFunc;
 }
 
-
+bool vkSamplerGL4::NeedsMipMaps() const
+{
+  return m_filterMode >= eFM_MinMagMipNearest;
+}
 
 
 
@@ -284,6 +287,8 @@ vkTextureGL4::~vkTextureGL4()
     VK_CHECK_GL_ERROR;
     m_name = 0;
   }
+  VK_RELEASE(m_sampler);
+  m_sampler = 0;
 }
 
 bool vkTextureGL4::Initialize()
@@ -370,6 +375,7 @@ bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *d
     layerHeight = 1;
   }
 
+  printf ("  glTexImage2D(%d, %d, 0x%08x, %d %d %d, 0x%08x, 0x%08x, %p)\n", m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   Bind();
   glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   VK_CHECK_GL_ERROR;

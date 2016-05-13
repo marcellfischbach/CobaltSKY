@@ -26,6 +26,7 @@ public:
   vkAssetInputStream & operator>> (vkMatrix3f &o);
   vkAssetInputStream & operator>> (vkMatrix4f &o);
   vkAssetInputStream & operator>> (vkString &o);
+  vkAssetInputStream & Read(void *buffer, size_t size);
 
   const vkUInt8 *GetData() const;
   const vkUInt8 *GetReadData() const;
@@ -58,6 +59,7 @@ public:
   vkAssetOutputStream & operator<< (const vkMatrix3f &i);
   vkAssetOutputStream & operator<< (const vkMatrix4f &i);
   vkAssetOutputStream & operator<< (const vkString &i);
+  vkAssetOutputStream & Write(const void *buffer, size_t size);
 
   VK_FORCEINLINE const vkUInt8 *GetBuffer() const
   {

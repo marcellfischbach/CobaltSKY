@@ -36,6 +36,7 @@
 
 
 #define VK_SET(oo, no) if (no) no->AddRef(); if (oo) oo->Release(); oo = no
+#define VK_ADDREF(o) if (o) o->AddRef()
 #define VK_RELEASE(o) if (o) o->Release()
 
 #include <string>

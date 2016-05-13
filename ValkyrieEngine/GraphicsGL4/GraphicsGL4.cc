@@ -534,6 +534,10 @@ vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
   VK_CHECK_GL_ERROR;
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
   {
+    if (m_nextTextureUnit != eTU_Invalid)
+    {
+      SetTexture(m_nextTextureUnit, 0);
+    }
     return eTU_Invalid;
   }
 

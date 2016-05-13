@@ -45,6 +45,8 @@ struct VKE_API ISampler : public IObject
   virtual void SetTextureCompareFunc(vkTextureCompareFunc func) = 0;
   virtual vkTextureCompareFunc GetTextureCompareFunc() const = 0;
 
+  virtual bool NeedsMipMaps() const = 0;
+
 };
 
 VK_INTERFACE();

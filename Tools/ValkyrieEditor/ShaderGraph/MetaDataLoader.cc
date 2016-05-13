@@ -15,7 +15,7 @@ MetaDataLoader::~MetaDataLoader()
 
 
 
-bool MetaDataLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData) const
+bool MetaDataLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
 {
   bool bTypeID = typeID == "SHADER_GRAPH";
   bool bName = name == "META_DATA";
@@ -23,7 +23,7 @@ bool MetaDataLoader::CanLoad(const vkString &typeID, const vkString &name, const
 }
 
 
-IObject *MetaDataLoader::Load(vkAssetInputStream &is, const vkResourceLocator &locator, IObject *userData) const
+IObject *MetaDataLoader::Load(vkAssetInputStream &is, const vkResourceLocator &locator, IObject *userData)
 {
   ShaderGraphMetaData *metaData = new ShaderGraphMetaData();
   vkUInt32 version;

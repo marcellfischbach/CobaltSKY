@@ -2,8 +2,11 @@
 
 #include <Texture/TextureImporter.hh>
 #include <AssetManager/AssetWriter.hh>
+#include <Valkyrie/Core/AssetStream.hh>
 #include <Valkyrie/Core/IFile.hh>
 #include <Valkyrie/Core/VFS.hh>
+#include <Valkyrie/Defs.hh>
+#include <Valkyrie/Enums.hh>
 #include <qimage.h>
 #include <qimagewriter.h>
 #include <qfileinfo.h>
@@ -61,6 +64,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     case QImage::Format_RGBX8888:
       // no sensible alpha channel
       format = "JPG";
+      format = "PNG"; // yet no png loader 
       break;
 
 
@@ -91,7 +95,31 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QByteArray buffer = file.readAll();
     file.close();
     file.remove();
-    writer.AddEntry("TEXTURE", "DATA", buffer.length(), (vkUInt8*)buffer.data());
+
+
+    vkAssetOutputStream os(buffer.length());
+    os << (vkUInt32)VK_VERSION(1, 0, 0)
+      << (vkUInt8)eRLM_Inline // we provide the sampler data here >> this must be changed later
+      // << (vkString)"Path/To/The/Sampler/Asset" // if the param above would be 0
+      << (vkUInt8)eFM_MinMagMipLinear // texture access filtering
+      << (vkUInt8)1 // anisotropy
+      << (vkInt16)-1000 // min lod
+      << (vkInt16)1000 // max lod
+      << (vkUInt8)eTAM_Repeat // clamp U
+      << (vkUInt8)eTAM_Repeat // clamp V
+      << (vkUInt8)eTAM_Repeat // clamp W
+      << vkColor4f(0.0f, 0.0f, 0.0f, 0.0f)
+      << (vkUInt8)eTCM_None
+      << (vkUInt8)eTCF_Less;
+
+    os << vkString((const char*)format.toLatin1())
+      << (vkUInt32)buffer.length();
+    os.Write(buffer.data(), buffer.length());
+
+      
+
+
+    writer.AddEntry("TEXTURE2D", "DATA", os.GetSize(), os.GetBuffer());
   }
 
 
@@ -107,7 +135,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QByteArray buffer = file.readAll();
     file.close();
     file.remove();
-    writer.AddEntry("TEXTURE", "EDITOR_ICON", buffer.length(), (vkUInt8*)buffer.data());
+    writer.AddEntry("TEXTURE2D", "EDITOR_ICON", buffer.length(), (vkUInt8*)buffer.data());
   }
 
 

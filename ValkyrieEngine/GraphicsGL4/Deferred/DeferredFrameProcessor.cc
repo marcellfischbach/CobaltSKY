@@ -164,13 +164,19 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   config.MainCameraPosition = camera->GetEye();
   vkDefaultCollector collector(&m_renderStates, &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
-  root->Scan(clipper, m_renderer, &collector, config);
+  if (root)
+  {
+    root->Scan(clipper, m_renderer, &collector, config);
+  }
 
   camera->Apply(m_renderer);
   
   glBeginQuery(GL_TIME_ELAPSED, queries[0]);
   // render to the main GBuffer this buffer will be used to assemble the final image
-  RenderGBuffer(root);
+  if (root)
+  {
+    RenderGBuffer(root);
+  }
   glEndQuery(GL_TIME_ELAPSED);
 
 

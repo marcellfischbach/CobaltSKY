@@ -3,7 +3,8 @@
 	<materialinstance name="FieldStone">
 		<material>${materials}/mat_solid.xml:Solid</material>
 		<parameters>
-			<parameter name="Diffuse">${materials}/textures.xml:Dirt</parameter>
+			<!--parameter name="Diffuse">${materials}/textures.xml:FieldStone</parameter-->
+			<parameter name="Diffuse">${materials}/textures/fieldstone_diffuse.asset</parameter>
 			<!--parameter name="Color">1.0;1.0;1.0;1.0</parameter-->
 		</parameters>
 	</materialinstance>

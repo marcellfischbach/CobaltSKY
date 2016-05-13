@@ -129,6 +129,13 @@ vkAssetInputStream &vkAssetInputStream::operator>>(vkString &o)
   return *this;
 }
 
+vkAssetInputStream &vkAssetInputStream::Read(void *buffer, size_t size)
+{
+  memcpy(buffer, m_readPointer, size);
+  m_readPointer += size;
+  return *this;
+}
+
 
 const vkUInt8 *vkAssetInputStream::GetData() const
 {
@@ -342,5 +349,15 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkString &i)
   memcpy(m_writePointer, i.c_str(), sizeof(char) * i.length());
   m_writePointer += sizeof(char) * i.length();
   m_size += sizeof(char) * i.length();
+  return *this;
+}
+
+vkAssetOutputStream &vkAssetOutputStream::Write(const void *buffer, size_t size)
+{
+  AcquireCapacity(size);
+
+  memcpy(m_writePointer, buffer, size);
+  m_writePointer += size;
+  m_size += size;
   return *this;
 }
