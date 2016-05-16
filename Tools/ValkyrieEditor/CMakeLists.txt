@@ -71,6 +71,8 @@ source_group(
     )
 
 set(EDITOR_SCENEWIDGET_SOURCES
+    SceneWidget/Camera.cc
+    SceneWidget/Camera.hh
     SceneWidget/SceneWidget.cc
     SceneWidget/SceneWidget.hh
     )

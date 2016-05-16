@@ -328,8 +328,8 @@ IObject *vkTextureAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
       sampler = graphics->CreateSampler();
       sampler->SetFilter((vkFilterMode)filterMode);
       sampler->SetAnisotropy(anisotropy);
-      sampler->SetMinLOD(0); // lodMin);
-      sampler->SetMaxLOD(9);
+      sampler->SetMinLOD(lodMin);
+      sampler->SetMaxLOD(lodMax);
       sampler->SetAddressU((vkTextureAddressMode)addressU);
       sampler->SetAddressV((vkTextureAddressMode)addressV);
       sampler->SetAddressW((vkTextureAddressMode)addressW);
@@ -385,16 +385,14 @@ IObject *vkTextureAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
     image->GenerateMipMaps();
   }
 
-  int start = 5;
-  ITexture2D *texture2D = graphics->CreateTexture2D(image->GetPixelFormat(), image->GetWidth()>> start, image->GetHeight()>> start);
+  ITexture2D *texture2D = graphics->CreateTexture2D(image->GetPixelFormat(), image->GetWidth(), image->GetHeight());
   texture2D->SetSampler(sampler);
   sampler->Release();
   sampler = 0;
 
-  printf("Create Texture2D\n");
-  for (vkUInt8 i = start, in = image->GetNumberOfLevels(); i < in; ++i)
+  for (vkUInt8 i = 0, in = image->GetNumberOfLevels(); i < in; ++i)
   {
-    texture2D->CopyData(i-start, image->GetPixelFormat(), image->GetData(i));
+    texture2D->CopyData(i, image->GetPixelFormat(), image->GetData(i));
   }
 
   image->Release();
