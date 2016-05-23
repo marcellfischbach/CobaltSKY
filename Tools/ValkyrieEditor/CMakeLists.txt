@@ -2,6 +2,9 @@
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
+find_package(assimp)
+
+include_directories(${ASSIMP_INCLUDE_DIR})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -38,6 +41,8 @@ set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/EditorIconLoader.hh
     AssetManager/FolderItemModel.cc
     AssetManager/FolderItemModel.hh
+    AssetManager/FolderTreeModel.cc
+    AssetManager/FolderTreeModel.hh
     AssetManager/Importer.cc
     AssetManager/Importer.hh
     AssetManager/Utils.cc
@@ -70,7 +75,23 @@ source_group(
     ${EDITOR_GRAPH_SOURCES}
     )
 
+set(EDITOR_MESH_SOURCES
+    Mesh/Assimp.cc
+    Mesh/Assimp.hh
+    Mesh/MeshImporter.cc
+    Mesh/MeshImporter.hh
+    )
+
+source_group(
+    "Editor\\Mesh"
+    FILES
+    ${EDITOR_MESH_SOURCES}
+    )
+
 set(EDITOR_SCENEWIDGET_SOURCES
+    SceneWidget/Camera.cc
+    SceneWidget/Camera.hh
+    SceneWidget/EventListener.hh
     SceneWidget/SceneWidget.cc
     SceneWidget/SceneWidget.hh
     )
@@ -145,6 +166,7 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
+    ${EDITOR_MESH_SOURCES}
     ${EDITOR_SCENEWIDGET_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
     ${EDITOR_TEXTURE_SOURCES}
@@ -164,6 +186,7 @@ target_link_libraries(ValkyrieEditor
     ValkyrieEngine
     ValkyrieEngine-GraphicsGL4
     ValkyrieEngine-PhysicsBullet
+    ${ASSIMP_LIBRARY}
     )
 
 VK_INSTALL_MOCCER(ValkyrieEditor NO_PREFIX NO_API ALL_SOURCES)

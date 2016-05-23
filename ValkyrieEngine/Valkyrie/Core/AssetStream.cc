@@ -66,6 +66,13 @@ vkAssetInputStream &vkAssetInputStream::operator>>(vkUInt32 &o)
   return *this;
 }
 
+vkAssetInputStream &vkAssetInputStream::operator>>(vkSize &o)
+{
+  o = *reinterpret_cast<const vkSize*>(m_readPointer);
+  m_readPointer += sizeof(vkSize);
+  return *this;
+}
+
 
 vkAssetInputStream &vkAssetInputStream::operator>>(float &o)
 {
@@ -243,6 +250,15 @@ vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkUInt32 &i)
   *reinterpret_cast<vkUInt32*>(m_writePointer) = i;
   m_writePointer += sizeof(vkUInt32);
   m_size += sizeof(vkUInt32);
+  return *this;
+}
+
+vkAssetOutputStream &vkAssetOutputStream::operator<<(const vkSize &i)
+{
+  AcquireCapacity(sizeof(vkSize));
+  *reinterpret_cast<vkSize*>(m_writePointer) = i;
+  m_writePointer += sizeof(vkSize);
+  m_size += sizeof(vkSize);
   return *this;
 }
 

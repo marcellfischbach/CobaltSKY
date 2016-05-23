@@ -13,7 +13,7 @@ class vkMultiMaterial;
 class vkPhysicsShapeContainer;
 class vkSubMesh;
 struct IVertexDeclaration;
-
+struct IIndexBuffer;
 /**
 * \ingroup loading
 */
@@ -50,4 +50,21 @@ private:
 
   vkString ReadString(IFile *file) const;
   
+};
+
+
+VK_CLASS()
+class VKE_API vkStaticMeshAssetLoader : public IAssetLoader
+{
+  VK_CLASS_GEN_OBJECT;
+public:
+  vkStaticMeshAssetLoader();
+  virtual ~vkStaticMeshAssetLoader();
+
+  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0);
+
+  IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
+  
+private:
+  vkSubMesh *ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData = 0);
 };

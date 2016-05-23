@@ -491,6 +491,28 @@ public:
     return *this;
   }
 
+  VK_FORCEINLINE vkMatrix4f Transposed() const
+  {
+    return vkMatrix4f(
+      m00, m10, m20, m30,
+      m01, m11, m21, m31,
+      m02, m12, m22, m32,
+      m03, m13, m23, m33);
+  }
+#define SWAP(a, b, s) (s) = (a); (a)=(b); (b)=(s)
+  VK_FORCEINLINE vkMatrix4f& Transpose()
+  {
+    float s;
+    SWAP(m01, m10, s);
+    SWAP(m02, m20, s);
+    SWAP(m03, m30, s);
+    SWAP(m12, m21, s);
+    SWAP(m13, m31, s);
+    SWAP(m23, m32, s);
+    return *this;
+  }
+#undef SWAP
+
   VK_FORCEINLINE vkMatrix4f &SetLookAt(const vkVector3f& eye, const vkVector3f& spot, const vkVector3f& up)
   {
     vkVector3f xAxis, yAxis, zAxis;

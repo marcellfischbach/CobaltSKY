@@ -25,7 +25,7 @@ void FolderItemModel::Refresh()
   Clear();
   QStringList filters;
   filters.append("*.asset");
-  QStringList pathEntries = m_path.entryList(filters, QDir::Files, QDir::Name);
+  QStringList pathEntries = m_path.entryList(filters, QDir::Dirs | QDir::Files, QDir::Name);
   for (QString &pathEntry : pathEntries)
   {
     Entry *entry = new Entry();
@@ -33,8 +33,12 @@ void FolderItemModel::Refresh()
     if (entry->name.endsWith(".asset"))
     {
       entry->resourceString = m_resourceRel + "/" + pathEntry;
-      entry->name = entry->name.left(entry->name.length() - 6);
+      entry->displayName = entry->name.left(entry->name.length() - 6);
       entry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(entry, "EDITOR_ICON"));
+      QDir dir(m_path);
+      entry->container = dir.cd(pathEntry);
+      entry->containerOpen = false;
+      entry->parent = 0;
     }
     m_entries.append(entry);
   }
@@ -137,13 +141,20 @@ QVariant FolderItemModel::data(const QModelIndex &index, int role) const
     Entry *entry = static_cast<Entry*>(index.internalPointer());
     if (role == Qt::DisplayRole)
     {
-      return entry->name;
+      return entry->displayName;
     }
     else if (role == Qt::DecorationRole)
     {
       if (entry->icon && !entry->icon->GetImage().isNull())
       {
         return entry->icon->GetImage();
+      }
+      else if (entry->container)
+      {
+        return entry->containerOpen
+          ? QImage(":/icons/Resources/ContainerOpen64.png")
+          : QImage(":/icons/Resources/ContainerClose64.png");
+
       }
       else
       {
@@ -153,6 +164,98 @@ QVariant FolderItemModel::data(const QModelIndex &index, int role) const
   }
   return QVariant();
 }
+
+bool FolderItemModel::IsContainer(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return false;
+  }
+
+  Entry *entry = static_cast<Entry*>(index.internalPointer());
+  return entry->container;
+}
+
+bool FolderItemModel::IsContainerOpen(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return false;
+  }
+
+  Entry *entry = static_cast<Entry*>(index.internalPointer());
+  return entry->container && entry->containerOpen;
+}
+
+void FolderItemModel::CloseContainer(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return;
+  }
+  Entry *entry = static_cast<Entry*>(index.internalPointer());
+
+  while (true)
+  {
+    bool removed = false;
+    for (unsigned i = 0, in = m_entries.size(); i < in; ++i)
+    {
+      Entry *e = m_entries[i];
+      if (e->parent == entry)
+      {
+        beginRemoveRows(QModelIndex(), i, i);
+        m_entries.removeAt(i);
+        delete e;
+        endRemoveRows();
+        removed = true;
+        break;
+      }
+    }
+    if (!removed)
+    {
+      break;
+    }
+  }
+  entry->containerOpen = false;
+}
+
+void FolderItemModel::OpenContainer(const QModelIndex &index)
+{
+  if (!index.isValid())
+  {
+    return;
+  }
+  Entry *entry = static_cast<Entry*>(index.internalPointer());
+
+  int idx = m_entries.indexOf(entry) + 1;
+
+  QStringList filters;
+  filters.append("*.asset");
+  QDir path(m_path);
+  path.cd(entry->name);
+  QStringList pathEntries = path.entryList(filters, QDir::Files, QDir::Name);
+  for (QString &pathEntry : pathEntries)
+  {
+    Entry *newEntry = new Entry();
+    newEntry->name = pathEntry;
+    if (newEntry->name.endsWith(".asset"))
+    {
+      newEntry->resourceString = entry->resourceString + "/" + pathEntry;
+      newEntry->displayName = newEntry->name.left(newEntry->name.length() - 6);
+      newEntry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(newEntry, "EDITOR_ICON"));
+      newEntry->container = false;
+      newEntry->containerOpen = false;
+      newEntry->parent = entry;
+    }
+
+    beginInsertRows(QModelIndex(), idx, idx);
+    m_entries.insert(idx, newEntry);
+    endInsertRows();
+  }
+  entry->containerOpen = true;
+
+}
+
 
 }
 

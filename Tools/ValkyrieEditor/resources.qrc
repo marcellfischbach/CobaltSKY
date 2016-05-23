@@ -3,5 +3,11 @@
     <file>Resources/Compile48.png</file>
     <file>Resources/Save48.png</file>
     <file>Resources/NoIcon64.png</file>
-  </qresource>
+    <file>Resources/ContainerClose24.png</file>
+    <file>Resources/ContainerClose64.png</file>
+    <file>Resources/ContainerOpen24.png</file>
+    <file>Resources/ContainerOpen64.png</file>
+		<file>Resources/Import16.png</file>
+		<file>Resources/Import24.png</file>
+	</qresource>
 </RCC>

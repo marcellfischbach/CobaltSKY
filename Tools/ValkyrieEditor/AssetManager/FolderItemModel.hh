@@ -13,6 +13,7 @@ namespace assetmanager
 class FolderItemModel : public QAbstractItemModel
 {
 public:
+
   FolderItemModel();
   virtual ~FolderItemModel();
 
@@ -28,15 +29,27 @@ public:
 
   vkResourceLocator GetLocator(const QModelIndex &index, const vkString &name = "") const;
 
+  bool IsContainer(const QModelIndex &index);
+  bool IsContainerOpen(const QModelIndex &index);
+  void CloseContainer(const QModelIndex &index);
+  void OpenContainer(const QModelIndex &index);
+
+
 private:
   void Clear();
   struct Entry
   {
     QString name;
+    QString displayName;
     EditorIcon *icon;
     QString resourceString;
+    bool container;
+    bool containerOpen;
+    Entry *parent;
     Entry () { }
   };
+
+
   vkResourceLocator GetLocator(Entry *entry, const vkString &name = "DATA") const;
 
   QDir m_path;

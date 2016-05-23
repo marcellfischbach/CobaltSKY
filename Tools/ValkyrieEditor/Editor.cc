@@ -7,7 +7,6 @@
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <PhysicsBullet/BulletSystem.hh>
 
-#include <Texture/TextureImporter.hh>
 
 Editor::Editor()
   : QObject()
@@ -27,7 +26,7 @@ bool Editor::Initialize(int argc, char **argv)
   vkVFS::Get()->Initialize(argc, argv);
   m_engine = vkEngine::Get();
 
-  assetmanager::ImporterRegistry::Get()->RegisterImporter(texture::Importer::Get());
+  InitializeImporters();
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->resize(1024, 768);
@@ -60,4 +59,15 @@ Editor &Editor::Get()
 {
   static Editor editor;
   return editor;
+}
+
+
+#include <Mesh/MeshImporter.hh>
+#include <Texture/TextureImporter.hh>
+void Editor::InitializeImporters()
+{
+  assetmanager::ImporterRegistry *impReg = assetmanager::ImporterRegistry::Get();
+  impReg->RegisterImporter(mesh::Importer::Get());
+  impReg->RegisterImporter(texture::Importer::Get());
+
 }

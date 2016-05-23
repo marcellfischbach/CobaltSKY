@@ -26,6 +26,9 @@ public:
 
   void RequestGraphics();
 
+protected:
+  void InitializeImporters();
+
 private:
   Editor();
 

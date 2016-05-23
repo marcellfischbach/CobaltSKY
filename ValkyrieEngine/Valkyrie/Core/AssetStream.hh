@@ -18,6 +18,7 @@ public:
   vkAssetInputStream & operator>> (vkUInt16 &o);
   vkAssetInputStream & operator>> (vkInt32 &o);
   vkAssetInputStream & operator>> (vkUInt32 &o);
+  vkAssetInputStream & operator>> (vkSize &o);
   vkAssetInputStream & operator>> (float &o);
   vkAssetInputStream & operator>> (vkVector2f &o);
   vkAssetInputStream & operator>> (vkVector3f &o);
@@ -51,6 +52,7 @@ public:
   vkAssetOutputStream & operator<< (const vkUInt16 &i);
   vkAssetOutputStream & operator<< (const vkInt32 &i);
   vkAssetOutputStream & operator<< (const vkUInt32 &i);
+  vkAssetOutputStream & operator<< (const vkSize &i);
   vkAssetOutputStream & operator<< (const float &i);
   vkAssetOutputStream & operator<< (const vkVector2f &i);
   vkAssetOutputStream & operator<< (const vkVector3f &i);
