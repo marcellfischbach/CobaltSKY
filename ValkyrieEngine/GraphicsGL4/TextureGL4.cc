@@ -141,7 +141,7 @@ vkUInt8 vkSamplerGL4::GetAnisotropy() const
   return m_anisotropy;
 }
 
-void vkSamplerGL4::SetMinLOD(vkUInt16 minLOD)
+void vkSamplerGL4::SetMinLOD(vkInt16 minLOD)
 {
   if (m_minLOD != minLOD)
   {
@@ -151,12 +151,12 @@ void vkSamplerGL4::SetMinLOD(vkUInt16 minLOD)
   }
 }
 
-vkUInt16 vkSamplerGL4::GetMinLOD() const
+vkInt16 vkSamplerGL4::GetMinLOD() const
 {
   return m_minLOD;
 }
 
-void vkSamplerGL4::SetMaxLOD(vkUInt16 maxLOD)
+void vkSamplerGL4::SetMaxLOD(vkInt16 maxLOD)
 {
   if (m_maxLOD != maxLOD)
   {
@@ -166,7 +166,7 @@ void vkSamplerGL4::SetMaxLOD(vkUInt16 maxLOD)
   }
 }
 
-vkUInt16 vkSamplerGL4::GetMaxLOD() const
+vkInt16 vkSamplerGL4::GetMaxLOD() const
 {
   return m_maxLOD;
 }

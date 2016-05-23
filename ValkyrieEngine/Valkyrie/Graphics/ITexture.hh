@@ -21,11 +21,11 @@ struct VKE_API ISampler : public IObject
   virtual void SetAnisotropy(vkUInt8 anisotropy) = 0;
   virtual vkUInt8 GetAnisotropy() const = 0;
 
-  virtual void SetMinLOD(vkUInt16 minLOD) = 0;
-  virtual vkUInt16 GetMinLOD() const = 0;
+  virtual void SetMinLOD(vkInt16 minLOD) = 0;
+  virtual vkInt16 GetMinLOD() const = 0;
 
-  virtual void SetMaxLOD(vkUInt16 minLOD) = 0;
-  virtual vkUInt16 GetMaxLOD() const = 0;
+  virtual void SetMaxLOD(vkInt16 minLOD) = 0;
+  virtual vkInt16 GetMaxLOD() const = 0;
 
   virtual void SetAddressU(vkTextureAddressMode addressMode) = 0;
   virtual vkTextureAddressMode GetAddressU() const = 0;

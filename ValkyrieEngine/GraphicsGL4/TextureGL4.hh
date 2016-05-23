@@ -25,11 +25,11 @@ public:
   virtual void SetAnisotropy(vkUInt8 anisotropy);
   virtual vkUInt8 GetAnisotropy() const;
 
-  virtual void SetMinLOD(vkUInt16 minLOD);
-  virtual vkUInt16 GetMinLOD() const;
+  virtual void SetMinLOD(vkInt16 minLOD);
+  virtual vkInt16 GetMinLOD() const;
 
-  virtual void SetMaxLOD(vkUInt16 minLOD);
-  virtual vkUInt16 GetMaxLOD() const;
+  virtual void SetMaxLOD(vkInt16 minLOD);
+  virtual vkInt16 GetMaxLOD() const;
 
   virtual void SetAddressU(vkTextureAddressMode addressMode);
   virtual vkTextureAddressMode GetAddressU() const;
@@ -55,8 +55,8 @@ private:
 
   vkFilterMode m_filterMode;
   vkUInt8 m_anisotropy;
-  vkUInt16 m_minLOD;
-  vkUInt16 m_maxLOD;
+  vkInt16 m_minLOD;
+  vkInt16 m_maxLOD;
   vkTextureAddressMode m_addressU;
   vkTextureAddressMode m_addressV;
   vkTextureAddressMode m_addressW;

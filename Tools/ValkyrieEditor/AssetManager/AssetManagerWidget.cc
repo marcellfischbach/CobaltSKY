@@ -13,7 +13,6 @@ namespace assetmanager
 
 
 
-
 AssetManagerWidget::AssetManagerWidget(QWidget *parent)
   : QWidget(parent)
 {
