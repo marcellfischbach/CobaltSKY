@@ -189,7 +189,7 @@ void Importer::Write(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix
   //
   // output the vertex declarations
   vkUInt8 numVertexDeclarations = 0;
-  vkUInt32 stride = 0;
+  vkSize stride = 0;
   if (mesh->HasPositions())
   {
     numVertexDeclarations++;

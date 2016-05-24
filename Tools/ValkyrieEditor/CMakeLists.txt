@@ -141,14 +141,24 @@ source_group(
 
 
 set(EDITOR_TEXTURE_SOURCES
+    Texture/PreviewWidget.cc
+    Texture/PreviewWidget.hh
     Texture/TextureImporter.cc
     Texture/TextureImporter.hh
+    Texture/TextureView.cc
+    Texture/TextureView.hh
     )
+
+set(EDITOR_TEXTURE_UI
+    Texture/TextureView.ui
+    )
+
 
 source_group(
     "Editor\\Texture"
     FILES
     ${EDITOR_TEXTURE_SOURCES}
+    ${EDITOR_TEXTURE_UI}
     )
 
 
@@ -156,6 +166,7 @@ source_group(
 set(ALL_UI
     ${EDITOR_ASSETMANAGER_UI}
     ${EDITOR_SHADERGRAPH_UI}
+    ${EDITOR_TEXTURE_UI}
     )
 
 

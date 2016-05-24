@@ -10,6 +10,7 @@
 		
 		<parameters>
 			<parameter type="texture" name="Diffuse">${materials}/textures.xml:FieldStone</parameter>
+			<parameter type="texture" name="Normal">${materials}/textures.xml:FieldStoneNormal</parameter>
 			<parameter type="col" name="Color">1.0;1.0;1.0;1.0</parameter>
 		</parameters>
 		

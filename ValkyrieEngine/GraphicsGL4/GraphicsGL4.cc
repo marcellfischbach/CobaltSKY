@@ -202,6 +202,90 @@ IFrameProcessor *vkGraphicsGL4::CreateDeferredFrameProcessor()
 }
 
 
+IShader *vkGraphicsGL4::CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode)
+{
+  vkProgramGL4 *program = new vkProgramGL4();
+
+  vkShaderGL4 *vertexShader = new vkShaderGL4();
+  vertexShader->SetShaderType(eST_Vertex);
+  vertexShader->SetSource(vertexCode);
+  if (!vertexShader->Compile())
+  {
+    printf("Unable to compile vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
+    VK_RELEASE(vertexShader);
+    VK_RELEASE(program);
+    return 0;
+  }
+  program->AttachShader(vertexShader);
+  VK_RELEASE(vertexShader);
+
+  if (tessCtrlCode.length() != 0)
+  {
+    vkShaderGL4 *tessCtrlShader = new vkShaderGL4();
+    tessCtrlShader->SetShaderType(eST_TessCtrl);
+    tessCtrlShader->SetSource(tessCtrlCode);
+    if (!tessCtrlShader->Compile())
+    {
+      printf("Unable to compile tess ctrl shader:\n%s\n", tessCtrlShader->GetCompileErrorLog().c_str());
+      VK_RELEASE(tessCtrlShader);
+      VK_RELEASE(program);
+      return 0;
+    }
+    program->AttachShader(tessCtrlShader);
+    VK_RELEASE(tessCtrlShader);
+  }
+  if (tessEvalCode.length() != 0)
+  {
+    vkShaderGL4 *tessEvalShader = new vkShaderGL4();
+    tessEvalShader->SetShaderType(eST_TessEval);
+    tessEvalShader->SetSource(tessEvalCode);
+    if (!tessEvalShader->Compile())
+    {
+      printf("Unable to compile tess eval shader:\n%s\n", tessEvalShader->GetCompileErrorLog().c_str());
+      VK_RELEASE(tessEvalShader);
+      VK_RELEASE(program);
+      return 0;
+    }
+    program->AttachShader(tessEvalShader);
+    VK_RELEASE(tessEvalShader);
+  }
+  if (geometryCode.length() != 0)
+  {
+    vkShaderGL4 *geometryShader = new vkShaderGL4();
+    geometryShader->SetShaderType(eST_Geometry);
+    geometryShader->SetSource(geometryCode);
+    if (!geometryShader->Compile())
+    {
+      printf("Unable to compile geometry shader:\n%s\n", geometryShader->GetCompileErrorLog().c_str());
+      VK_RELEASE(geometryShader);
+      VK_RELEASE(program);
+      return 0;
+    }
+    program->AttachShader(geometryShader);
+    VK_RELEASE(geometryShader);
+  }
+  vkShaderGL4 *fragmentShader = new vkShaderGL4();
+  fragmentShader->SetShaderType(eST_Fragment);
+  fragmentShader->SetSource(fragmentCode);
+  if (!fragmentShader->Compile())
+  {
+    printf("Unable to compile fragment shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
+    VK_RELEASE(fragmentShader);
+    VK_RELEASE(program);
+    return 0;
+  }
+  program->AttachShader(fragmentShader);
+  VK_RELEASE(fragmentShader);
+
+  if (!program->Link())
+  {
+    printf("Unable to link program:\n%s\n", program->GetLinkErrorLog().c_str());
+    VK_RELEASE(program);
+    return 0;
+  }
+  return program;
+}
+
 ISGShaderGraphFactory *vkGraphicsGL4::GetShaderGraphFactory()
 {
   return m_shaderGraphFactory;

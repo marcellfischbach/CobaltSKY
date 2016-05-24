@@ -76,7 +76,7 @@ vkCharacterEntity *character = 0;
 IFrameProcessor* fp = 0;
 vkEntityScene *scene;
 IRenderTarget *rt = 0;
-
+vkDirectionalLight *directionalLight;
 
 int main(int argc, char **argv)
 {
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;
@@ -204,7 +204,7 @@ int main_loop()
   vkUInt32 fps = 0;
   vkUInt64 nextFPS = vkTime::Get().GetCurrentTimeMilli();
   bool anim = false;
-
+  float angle = 0.0f;
   while (true)
   {
     vkTime::Get().Tick();
@@ -247,6 +247,10 @@ int main_loop()
 
     scene->GetPhysicsScene()->StepSimulation();
     scene->GetPhysicsScene()->UpdateColliders();
+
+    
+    directionalLight->SetArbDirection(vkVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
+    angle += 0.01f;
   }
 
 
@@ -861,7 +865,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 #endif
 
 
-  vkDirectionalLight *directionalLight = new vkDirectionalLight();
+  directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
   directionalLight->SetCastShadow(true);
@@ -874,6 +878,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   directionalLightEntity->SetRootState(directionalLightState);
   directionalLightEntity->AddState(directionalLightState);
   entityScene->AddEntity(directionalLightEntity);
+
 
   vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
   directionalBackLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));

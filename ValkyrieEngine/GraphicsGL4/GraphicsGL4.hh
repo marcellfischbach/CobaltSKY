@@ -30,6 +30,7 @@ public:
   virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers);
   virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
   virtual IFrameProcessor *CreateDeferredFrameProcessor();
+  virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode);
 
   virtual ISGShaderGraphFactory* GetShaderGraphFactory();
 

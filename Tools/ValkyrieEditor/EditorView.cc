@@ -117,10 +117,13 @@ IEditorViewFactory *EditorViewFactoryManager::GetFactory(const vkResourceLocator
       if (!has)
       {
         IEditorViewFactory *factory = clazz->CreateInstance<IEditorViewFactory>();
-        m_factories.append(factory);
-        if (factory->CanEdit(resourceLocator, obj))
+        if (factory)
         {
-          return factory;
+          m_factories.append(factory);
+          if (factory->CanEdit(resourceLocator, obj))
+          {
+            return factory;
+          }
         }
       }
     }
