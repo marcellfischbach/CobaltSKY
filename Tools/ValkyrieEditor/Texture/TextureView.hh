@@ -3,6 +3,8 @@
 #include <EditorView.hh>
 #include <Texture/TextureView.refl.hh>
 
+#include <ui_TextureView.h>
+
 namespace texture
 {
 class PreviewWidget;
@@ -10,6 +12,7 @@ class PreviewWidget;
 
 class TextureWidget : public QWidget
 {
+  Q_OBJECT
 public:
   TextureWidget(QWidget *parent);
   virtual ~TextureWidget();
@@ -20,6 +23,15 @@ private:
   texture::PreviewWidget *m_previewWidget;
 
   vkResourceLocator m_resourceLocator;
+
+  Ui::TextureWidget m_gui;
+
+private slots:
+
+  void on_btnRed_toggled(bool checked);
+  void on_btnGreen_toggled(bool checked);
+  void on_btnBlue_toggled(bool checked);
+  void on_btnAlpha_toggled(bool checked);
 };
 
 class TextureView : public EditorView

@@ -741,7 +741,7 @@ ShaderGraphView::~ShaderGraphView()
 void ShaderGraphView::Initialize()
 {
   m_shaderGraphWidget->Set(GetResourceLocator());
-  SetName(assetmanager::GetNameFromResource(GetResourceLocator()));
+  SetName(assetmanager::GetNameFromResource(GetResourceLocator()) + QString("(ShaderGraph)"));
 }
 
 bool ShaderGraphView::Close()

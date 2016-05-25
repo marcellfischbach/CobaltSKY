@@ -53,11 +53,23 @@ set(EDITOR_ASSETMANAGER_UI
     AssetManager/AssetManagerWidget.ui)
 
 source_group(
-  "Editor\\AssetManager"
-  FILES
-  ${EDITOR_ASSETMANAGER_SOURCES}
-  ${EDITOR_ASSETMANAGER_UI}
-  )
+    "Editor\\AssetManager"
+    FILES
+    ${EDITOR_ASSETMANAGER_SOURCES}
+    ${EDITOR_ASSETMANAGER_UI}
+    )
+
+
+set(EDITOR_ENTITY_SOURCES
+    Entity/EntityView.cc
+    Entity/EntityView.hh
+    )
+
+source_group(
+    "Editor\\Entity"
+    FILES
+    ${EDITOR_ENTITY_SOURCES}
+    )
 
 set(EDITOR_GRAPH_SOURCES
     Graph/Connection.cc
@@ -176,6 +188,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
+    ${EDITOR_ENTITY_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_MESH_SOURCES}
     ${EDITOR_SCENEWIDGET_SOURCES}

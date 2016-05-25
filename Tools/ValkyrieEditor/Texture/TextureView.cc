@@ -12,23 +12,13 @@
 TextureWidget::TextureWidget(QWidget *parent)
   : QWidget(parent)
 {
-  QGridLayout *layout = new QGridLayout(this);
-  layout->setContentsMargins(3, 3, 3, 3);
+  m_gui.setupUi(this);
 
-
-  QPushButton *btnRed = new QPushButton(tr("Red"), this);
-  QPushButton *btnGreen = new QPushButton(tr("Green"), this);
-  QPushButton *btnBlue = new QPushButton(tr("Blue"), this);
-  QPushButton *btnAlpha = new QPushButton(tr("Alpha"), this);
+  QGridLayout *layout = new QGridLayout(m_gui.wPreview);
+  layout->setContentsMargins(0, 0, 0, 0);
   m_previewWidget = new texture::PreviewWidget(this);
-
-
   m_previewWidget->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(m_previewWidget, 1, 0, 1, 5);
-  layout->addWidget(btnRed, 0, 0, 0, 1);
-  layout->addWidget(btnGreen, 0, 1, 0, 1);
-  layout->addWidget(btnBlue, 0, 2, 0, 1);
-  layout->addWidget(btnAlpha, 0, 3, 0, 1);
 }
 
 TextureWidget::~TextureWidget()
@@ -36,6 +26,25 @@ TextureWidget::~TextureWidget()
 
 }
 
+void TextureWidget::on_btnRed_toggled(bool checked)
+{
+  m_previewWidget->SetRed(checked);
+}
+
+void TextureWidget::on_btnGreen_toggled(bool checked)
+{
+  m_previewWidget->SetGreen(checked);
+}
+
+void TextureWidget::on_btnBlue_toggled(bool checked)
+{
+  m_previewWidget->SetBlue(checked);
+}
+
+void TextureWidget::on_btnAlpha_toggled(bool checked)
+{
+  m_previewWidget->SetAlpha(checked);
+}
 
 void TextureWidget::Set(const vkResourceLocator &resourceLocator)
 {
@@ -66,7 +75,7 @@ TextureView::~TextureView()
 void TextureView::Initialize()
 {
   m_textureWidget->Set(GetResourceLocator());
-  SetName(assetmanager::GetNameFromResource(GetResourceLocator()));
+  SetName(assetmanager::GetNameFromResource(GetResourceLocator()) + QString("(Texture)"));
 }
 
 bool TextureView::Close()

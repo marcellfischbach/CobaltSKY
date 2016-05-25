@@ -73,6 +73,7 @@ void PreviewWidget::initializeGL()
     "#version 330\n"
     "\n"
     "uniform vec2 vk_TextureScale;\n"
+    "uniform vec2 vk_Inset;\n"
     "\n"
     "in vec4 vk_Position;\n"
     "in vec2 vk_TexCoord0;\n"
@@ -81,7 +82,7 @@ void PreviewWidget::initializeGL()
     "\n"
     "void main ()\n"
     "{\n"
-    "  gl_Position = vec4 (vec2(-1, 1) + vk_Position.xy * vk_TextureScale, 0.0, 1.0);\n"
+    "  gl_Position = vec4 (vk_Inset + vk_Position.xy * vk_TextureScale, 0.0, 1.0);\n"
     "  inFragTexCoord = vk_TexCoord0;\n"
     "}\n"
     "\n";
@@ -124,6 +125,7 @@ void PreviewWidget::initializeGL()
   m_attrDiffuseColor = m_shaderColor->GetAttribute(vkShaderAttributeID("Diffuse"));
   m_attrTextureScaleColor = m_shaderColor->GetAttribute(vkShaderAttributeID("TextureScale"));
   m_attrColorScaleColor = m_shaderColor->GetAttribute(vkShaderAttributeID("ColorScale"));
+  m_attrInsetColor = m_shaderColor->GetAttribute(vkShaderAttributeID("Inset"));
 
 
   m_shaderAlpha = m_graphics->CreateShader(
@@ -134,11 +136,36 @@ void PreviewWidget::initializeGL()
     fragmentShaderAlphaCode);
   m_attrDiffuseAlpha = m_shaderAlpha->GetAttribute(vkShaderAttributeID("Diffuse"));
   m_attrTextureScaleAlpha = m_shaderAlpha->GetAttribute(vkShaderAttributeID("TextureScale"));
+  m_attrInsetAlpha = m_shaderAlpha->GetAttribute(vkShaderAttributeID("Inset"));
 }
 
 void PreviewWidget::SetTexture(ITexture2D *texture)
 {
   VK_SET(m_texture, texture);
+}
+
+void PreviewWidget::SetRed(bool red)
+{
+  m_maskRed = red;
+  repaint();
+}
+
+void PreviewWidget::SetGreen(bool green)
+{
+  m_maskGreen = green;
+  repaint();
+}
+
+void PreviewWidget::SetBlue(bool blue)
+{
+  m_maskBlue = blue;
+  repaint();
+}
+
+void PreviewWidget::SetAlpha(bool alpha)
+{
+  m_maskAlpha = alpha;
+  repaint();
 }
 
 void PreviewWidget::paintGL()
@@ -174,6 +201,10 @@ void PreviewWidget::paintGL()
       {
         m_attrTextureScaleAlpha->Set(vkVector2f((float)m_texture->GetWidth() / (float)width(), -(float)m_texture->GetHeight() / (float)height()));
       }
+      if (m_attrInsetAlpha)
+      {
+        m_attrInsetAlpha->Set(vkVector2f(-1.0 + 20.0f / (float)width() * 2.0f, 1.0f - 20.0f / (float)height() * 2.0f));
+      }
     }
     else
     {
@@ -194,6 +225,11 @@ void PreviewWidget::paintGL()
 
         m_attrColorScaleColor->Set(colorScale);
       }
+      if (m_attrInsetColor)
+      {
+        m_attrInsetColor->Set(vkVector2f(-1.0 + 20.0f / (float)width() * 2.0f, 1.0f - 20.0f / (float)height() * 2.0f));
+      }
+
     }
 
 

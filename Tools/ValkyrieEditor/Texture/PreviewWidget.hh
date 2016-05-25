@@ -25,7 +25,12 @@ public:
   ~PreviewWidget();
 
   void SetTexture(ITexture2D* texture);
-  
+
+  void SetRed(bool red);
+  void SetGreen(bool green);
+  void SetBlue(bool blue);
+  void SetAlpha(bool alpha);
+
 protected:
   void initializeGL();
   void paintGL();
@@ -47,10 +52,12 @@ private:
   IShaderAttribute *m_attrTextureScaleColor;
   IShaderAttribute *m_attrDiffuseColor;
   IShaderAttribute *m_attrColorScaleColor;
+  IShaderAttribute *m_attrInsetColor;
 
   IShader *m_shaderAlpha;
   IShaderAttribute *m_attrTextureScaleAlpha;
   IShaderAttribute *m_attrDiffuseAlpha;
+  IShaderAttribute *m_attrInsetAlpha;
 
   bool m_maskRed;
   bool m_maskGreen;
