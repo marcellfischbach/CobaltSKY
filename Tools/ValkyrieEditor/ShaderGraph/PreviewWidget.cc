@@ -57,9 +57,7 @@ void PreviewWidget::initializeGL()
 {
   scenewidget::SceneWidget::initializeGL();
 
-  vkEntityScene *scene = CreateScene();
-  SetScene(scene);
-  scene->Release();
+  CreateScene();
 
   m_orbitCamera = new scenewidget::OrbitCamera(m_camera, 3.1415f / 4.0f, -3.1415f / 4.0f);
   AddEventListener(m_orbitCamera);
@@ -71,7 +69,7 @@ vkEntityScene* PreviewWidget::CreateScene()
   m_materialInstance = new vkMaterialInstance();
   m_materialInstance->SetMaterial(m_material);
 
-  vkEntityScene *entityScene = new vkEntityScene();
+  vkEntityScene *entityScene = GetScene();
   vkSubMesh *planeSubMesh = CreatePlaneMesh(20.0f, 0.0f);
   vkMesh *planeMesh = new vkMesh();
   planeMesh->AddMesh(planeSubMesh);

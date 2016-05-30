@@ -5,7 +5,6 @@
 
 class vkCamera;
 class vkEntityScene;
-class vkMaterial;
 class vkMaterialInstance;
 class vkStaticMeshState;
 class vkSubMesh;
@@ -42,6 +41,8 @@ protected:
   virtual void	wheelEvent(QWheelEvent *event);
 
   void SetScene(vkEntityScene *scene);
+  vkEntityScene *GetScene();
+  const vkEntityScene *GetScene() const;
 
 protected:
   IGraphics *m_graphics;

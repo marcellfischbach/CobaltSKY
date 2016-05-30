@@ -5,6 +5,11 @@
 #include <Entity/EntityView.refl.hh>
 
 class vkResourceLocator;
+namespace entity
+{
+class PreviewWidget;
+}
+
 
 class EntityWidget : public QWidget
 {
@@ -16,6 +21,8 @@ public:
   void Set(const vkResourceLocator &resourceLocator);
 
 private:
+
+  entity::PreviewWidget *m_previewWidget;
   
   vkResourceLocator m_resourceLocator;
   

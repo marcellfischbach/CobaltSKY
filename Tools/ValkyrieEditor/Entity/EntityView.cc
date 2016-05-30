@@ -1,6 +1,9 @@
 
 #include <Entity/EntityView.hh>
+#include <Entity/PreviewWidget.hh>
 #include <AssetManager/Utils.hh>
+#include <Valkyrie/Engine.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <qlayout.h>
 
@@ -9,6 +12,10 @@
 EntityWidget::EntityWidget(QWidget *parent)
   : QWidget(parent)
 {
+  m_previewWidget = new entity::PreviewWidget(this);
+
+  QGridLayout *gridLayout = new QGridLayout(this);
+  gridLayout->addWidget(m_previewWidget, 0, 0, 1, 1);
 }
 
 EntityWidget::~EntityWidget()
@@ -21,6 +28,17 @@ void EntityWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_resourceLocator = resourceLocator;
 
+  IObject *object = vkResourceManager::Get()->GetOrLoad(resourceLocator, 0);
+  if (!object)
+  {
+    return;
+  }
+
+  vkMesh *mesh = vkQueryClass<vkMesh>(object);
+  if (mesh)
+  {
+    m_previewWidget->SetMesh(mesh);
+  }
 }
 
 

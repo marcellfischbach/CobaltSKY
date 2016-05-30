@@ -7,12 +7,16 @@ namespace scenewidget
 class OrbitCamera;
 }
 
+class vkEntity;
 class vkMaterial;
-namespace shadergraph
+class vkMaterialInstance;
+class vkMesh;
+class vkStaticMeshState;
+namespace entity
 {
 
 
-class PreviewWidget: public scenewidget::SceneWidget
+class PreviewWidget : public scenewidget::SceneWidget
 {
 public:
   PreviewWidget(QWidget *parent = 0);
@@ -20,17 +24,22 @@ public:
 
   virtual QSize sizeHint() const;
 
-  void SetMaterial(vkMaterial *material);
+  void SetMesh(vkMesh *mesh);
 protected:
   void initializeGL();
 
 private:
-  vkEntityScene *CreateScene();
-  vkSubMesh *CreatePlaneMesh(float size, float height);
+  void CreateScene();
+  vkMaterialInstance *CreateDefaultMaterial();
+
 
 private:
   scenewidget::OrbitCamera *m_orbitCamera;
+
+  vkEntity *m_entity;
   vkStaticMeshState *m_staticMeshState;
+
+
   vkMaterial *m_material;
   vkMaterialInstance *m_materialInstance;
 };

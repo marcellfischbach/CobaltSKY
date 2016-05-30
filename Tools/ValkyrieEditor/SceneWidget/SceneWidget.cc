@@ -33,7 +33,7 @@ SceneWidget::SceneWidget(QWidget *parent)
   , m_renderTarget(0)
   , m_sampler(0)
   , m_onscreenTarget(0)
-  , m_scene(0)
+  , m_scene(new vkEntityScene())
 {
 }
 
@@ -43,6 +43,7 @@ SceneWidget::~SceneWidget()
   VK_RELEASE(m_onscreenTarget);
   VK_RELEASE(m_frameProcessor);
   VK_RELEASE(m_renderTarget);
+  VK_RELEASE(m_scene);
   doneCurrent();
 }
 
@@ -59,6 +60,16 @@ void SceneWidget::RemoveEventListener(EventListener *eventListener)
 void SceneWidget::SetScene(vkEntityScene *scene)
 {
   VK_SET(m_scene, scene);
+}
+
+vkEntityScene *SceneWidget::GetScene()
+{
+  return m_scene;
+}
+
+const vkEntityScene *SceneWidget::GetScene() const
+{
+  return m_scene;
 }
 
 void SceneWidget::initializeGL()
@@ -120,7 +131,7 @@ void SceneWidget::paintGL()
   m_graphics->SetRenderTarget(m_onscreenTarget);
   m_graphics->SetViewport(m_onscreenTarget);
 
-  m_graphics->Clear(true, vkVector4f(0, 0.5, 0, 1), true, 1.0f);
+  m_graphics->Clear(true, vkVector4f(0, 0, 0, 1), true, 1.0f);
   m_graphics->RenderFullScreenFrame(colorTarget);
 
 }

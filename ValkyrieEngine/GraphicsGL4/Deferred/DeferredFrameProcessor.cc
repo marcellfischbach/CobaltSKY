@@ -142,7 +142,6 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   };
   glDrawBuffers(4, buffers);
 
-  //printf ("Num Meshes: %d\n", m_renderStates.length);
   for (vkSize i = 0; i < m_renderStates.length; ++i)
   {
     vkRenderState *renderState = m_renderStates[i];

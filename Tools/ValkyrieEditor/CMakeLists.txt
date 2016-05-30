@@ -63,6 +63,8 @@ source_group(
 set(EDITOR_ENTITY_SOURCES
     Entity/EntityView.cc
     Entity/EntityView.hh
+    Entity/PreviewWidget.cc
+    Entity/PreviewWidget.hh
     )
 
 source_group(
