@@ -32,13 +32,14 @@ PreviewWidget::PreviewWidget(QWidget *parent)
   : scenewidget::SceneWidget(parent)
   , m_material(0)
   , m_materialInstance(0)
-  , m_orbitCamera(0)
+  , m_freeCamera(0)
 {
+  setFocusPolicy(Qt::StrongFocus);
 }
 
 PreviewWidget::~PreviewWidget()
 {
-  delete m_orbitCamera;
+  delete m_freeCamera;
 }
 
 QSize PreviewWidget::sizeHint() const
@@ -72,8 +73,9 @@ void PreviewWidget::initializeGL()
 
   CreateScene();
 
-  m_orbitCamera = new scenewidget::OrbitCamera(m_camera, 3.1415f / 4.0f, -3.1415f / 4.0f);
-  AddEventListener(m_orbitCamera);
+  m_freeCamera = new scenewidget::FreeCamera(m_camera, 0.0f, -3.1415f / 4.0f, vkVector3f (0.0f, -20.0f, 20.0f));
+  m_freeCamera->SetWidget(this);
+  AddEventListener(m_freeCamera);
 
 }
 

@@ -4,7 +4,7 @@
 
 namespace scenewidget
 {
-class OrbitCamera;
+class FreeCamera;
 }
 
 class vkEntity;
@@ -34,7 +34,7 @@ private:
 
 
 private:
-  scenewidget::OrbitCamera *m_orbitCamera;
+  scenewidget::FreeCamera *m_freeCamera;
 
   vkEntity *m_entity;
   vkStaticMeshState *m_staticMeshState;
