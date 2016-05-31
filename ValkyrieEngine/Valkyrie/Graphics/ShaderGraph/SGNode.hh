@@ -34,6 +34,7 @@ enum vkSGDataType
   eSGDT_Texture3D = 0x1000,
   eSGDT_TextureCube = 0x2000,
   eSGDT_TextureCubeArray = 0x4000,
+  eSGDT_Textures = 0x7f00,
 };
 
 

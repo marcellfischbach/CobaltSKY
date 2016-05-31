@@ -400,11 +400,12 @@ private:
 class NodeInputItem : public QGraphicsItemGroup
 {
 public:
-  NodeInputItem(Node *node, int idx, Node::InputMode mode, const QString &labelText, const QFont &fnt, QGraphicsItem *parent)
+  NodeInputItem(Node *node, int idx, Node::InputMode mode, const QString &labelText, const QFont &fnt, const QImage &image, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent)
     , anchor(0)
     , constInput(0)
     , label(0)
+    , image(0)
   {
     setHandlesChildEvents(false);
     if (mode & Node::eIM_Output)
@@ -415,8 +416,17 @@ public:
     {
       constInput = new NodeConstInput(this, fnt);
     }
-    label = new NodeLabel(this, fnt);
-    label->setText(labelText);
+
+    if (mode & Node::eIM_Image)
+    {
+      this->image = new QGraphicsPixmapItem(this);
+      this->image->setPixmap(QPixmap::fromImage(image));
+    }
+    else
+    {
+      label = new NodeLabel(this, fnt);
+      label->setText(labelText);
+    }
 
   }
 
@@ -431,9 +441,16 @@ public:
     {
       constInput->setPos(constPos, 0);
     }
-    QRectF rect(labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
-    label->SetRect(rect);
-    label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
+    if (label)
+    {
+      QRectF rect(labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
+      label->SetRect(rect);
+      label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
+    }
+    if (image)
+    {
+      image->setPos(anchorPos, 0);
+    }
   }
 
   void SetConstVisible(bool visible)
@@ -447,6 +464,7 @@ public:
   NodeAnchor *anchor;
   NodeConstInput *constInput;
   NodeLabel *label;
+  QGraphicsPixmapItem *image;
 };
 
 class NodeOutputItem : public QGraphicsItemGroup
@@ -540,6 +558,20 @@ void Node::AddInput(const QString &label, const QString &key, InputMode mode)
   input.key = key;
   input.mode = mode;
   input.item = 0;
+
+  m_inputs << input;
+}
+
+void Node::AddInput(const QString &key, const QImage &image)
+{
+  Input input;
+  input.label = "";
+  input.key = key;
+  input.mode = eIM_Image;
+  input.item = 0;
+  input.image = image;
+
+  fflush(stdout);
 
   m_inputs << input;
 }
@@ -713,11 +745,23 @@ bool Node::Initialize()
 
   // get the overall width of all inputs
   int inputWidth = 0;
-  int inputHeight = (constRect.height() + m_spacing) * m_inputs.size();
+  int inputHeight = 0;
   for (Input &input : m_inputs)
   {
-    int width = fm.width(input.label);
+    int height = 0;
+    int width = 0;
+    if (input.image.isNull())
+    {
+      width = fm.width(input.label);
+      height = constRect.height();
+    }
+    else
+    {
+      width = input.image.width();
+      height = VK_MAX(constRect.height(), input.image.height());
+    }
     inputWidth = VK_MAX(inputWidth, width);
+    inputHeight += height + m_spacing;
   }
 
   float inputAnchorPos = 0.0f;
@@ -795,11 +839,18 @@ bool Node::Initialize()
   int i = 0;
   for (Input &input : m_inputs)
   {
-    input.item = new NodeInputItem(this, i++, input.mode, input.label, fnt, m_nodeGroup);
+    input.item = new NodeInputItem(this, i++, input.mode, input.label, fnt, input.image, m_nodeGroup);
     input.item->SetSizes(fm, input.label, inputAnchorPos, inputConstPos, inputLabelPos);
     input.item->setPos(m_margin, posY);
 
-    posY += constRect.height() + m_spacing;
+    if (input.image.isNull())
+    {
+      posY += constRect.height() + m_spacing;
+    }
+    else
+    {
+      posY += input.image.height() + m_spacing;
+    }
   }
 
   posY = topPosY;

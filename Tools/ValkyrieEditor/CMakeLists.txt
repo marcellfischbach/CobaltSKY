@@ -5,6 +5,7 @@ find_package(Qt5OpenGL)
 find_package(assimp)
 
 include_directories(${ASSIMP_INCLUDE_DIR})
+include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS})
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

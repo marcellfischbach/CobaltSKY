@@ -56,7 +56,7 @@ void PreviewWidget::SetMesh(vkMesh *mesh)
   {
     m_staticMeshState->SetMaterial(material, i);
   }
-
+  m_staticMeshState->SetCastShadow(true);
   m_staticMeshState->UpdateTransformation();
 
   m_entity = new vkEntity();
@@ -86,7 +86,7 @@ void PreviewWidget::CreateScene()
   vkDirectionalLight *directionalLight = new vkDirectionalLight();
   directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(false);
+  directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
   vkLightState *directionalLightState = new vkLightState();

@@ -1,6 +1,7 @@
 
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
+#include <AssetManager/EditorIcon.hh>
 #include <Graph/Connection.hh>
 #include <Graph/Scene.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
@@ -140,18 +141,33 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
   {
     vkSGInput *input = node->GetInput(i);
     QString inputName(input->GetName().c_str());
-
-    graph::Node::InputMode mode;
-    if (input->CanInputConst())
+    if (!(input->GetDataType() & eSGDT_Textures))
     {
-      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Const);
+      graph::Node::InputMode mode;
+      if (input->CanInputConst())
+      {
+        mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Const);
+      }
+      if (input->CanInputNode())
+      {
+        mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
+      }
+      AddInput(inputName, inputName, mode);
     }
-    if (input->CanInputNode())
+    else
     {
-      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
+      AddInput(inputName, QImage(":/icons/Resources/NoIcon64.png"));
     }
-    AddInput(inputName, inputName, mode);
   }
+  if (m_resource && m_resourceType == eSPT_Texture)
+  {
+    EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_defaultTexture.GetResourceFile(), "EDITOR_ICON"));
+    if (icon)
+    {
+      AddInput("", icon->GetImage());
+    }
+  }
+
   for (vkSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
   {
     vkSGOutput *output = node->GetOutput(i);

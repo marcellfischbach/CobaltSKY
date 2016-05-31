@@ -100,8 +100,8 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
 
   GenerateGBuffer(graph);
   //GenerateShadow(graph, 1, eRP_ShadowGeneric);
-  //GenerateShadow(graph, 3, eRP_ShadowPSSM);
-  //GenerateShadow(graph, 6, eRP_ShadowCube);
+  GenerateShadow(graph, 3, eRP_ShadowPSSM);
+  GenerateShadow(graph, 6, eRP_ShadowCube);
 
   for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {

@@ -7,6 +7,7 @@
 #include <qvector.h>
 #include <Graph/Direction.h>
 #include <Valkyrie/Types.hh>
+#include <QImage>
 
 
 class QGraphicsItem;
@@ -28,7 +29,8 @@ public:
   {
     eIM_Const = 0x01,
     eIM_Output = 0x02,
-    eIM_Both = eIM_Const | eIM_Output
+    eIM_Both = eIM_Const | eIM_Output,
+    eIM_Image = 0x04
   };
 
 
@@ -61,6 +63,7 @@ public:
   QString GetName() const;
 
   void AddInput(const QString &label, const QString &key, InputMode mode);
+  void AddInput(const QString &key, const QImage &image);
   void AddOutput(const QString &label, const QString &key);
 
   int GetIndexOfInput(const QString &key) const;
@@ -107,7 +110,7 @@ public:
 
 
 private slots:
-void NameChanged();
+  void NameChanged();
 
 private:
   vkUInt32 m_idx;
@@ -118,6 +121,7 @@ private:
     QString key;
     InputMode mode;
     NodeInputItem *item;
+    QImage image;
   };
 
   struct Output

@@ -115,7 +115,6 @@ void EditResourceDefaultDialog::SetNode(SGNode *node)
   m_gui.sbMat433->setValue(node->GetDefaultFloat()[15]);
 
   m_gui.leTextureRefFile->setText(QString(node->GetDefaultTexture().GetResourceFile().c_str()));
-  m_gui.leTextureRefName->setText(QString(node->GetDefaultTexture().GetResourceName().c_str()));
 
 }
 
@@ -205,10 +204,7 @@ void EditResourceDefaultDialog::on_pbOK_clicked(bool)
     floats[15] = m_gui.sbMat433->value();
     break;
   case eSPT_Texture:
-    texture = vkResourceLocator(
-      vkString((const char*)m_gui.leTextureRefFile->text().toLatin1()),
-      vkString((const char*)m_gui.leTextureRefName->text().toLatin1())
-      );
+    texture = vkResourceLocator(vkString((const char*)m_gui.leTextureRefFile->text().toLatin1()));
     break;
   }
 
