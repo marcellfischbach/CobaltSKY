@@ -16,16 +16,21 @@ namespace shadergraph
 class SGNode : public Node
 {
 public:
-  SGNode(const vkClass *nodeClass, const vkSGNode *originNode);
+  SGNode(vkSGNode *node);
   void AddConnection(graph::NodeConnection* connection);
 
   void RemoveConnection(graph::NodeConnection* connection);
 
   void RemoveAllConnections();
 
-  const vkClass* GetClass() const
+  const vkSGNode *GetNode () const
   {
-    return m_nodeClass;
+    return m_node;
+  }
+
+  vkSGNode *GetNode ()
+  {
+    return m_node;
   }
 
   bool IsResources() const
@@ -52,7 +57,7 @@ public:
   }
 
 private:
-  const vkClass *m_nodeClass;
+  vkSGNode *m_node;
 
   bool m_resource;
 

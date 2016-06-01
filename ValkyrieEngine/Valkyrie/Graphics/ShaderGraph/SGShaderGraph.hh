@@ -62,6 +62,8 @@ public:
   size_t GetNumberOfTotalNodes() const;
   vkSGNode *GetNode(size_t idx) ;
   const vkSGNode *GetNode(size_t idx) const;
+  bool ContainsNode(const vkSGNode *node) const;
+  int GetIndexOfNode(const vkSGNode *node) const;
 
 private:
   vkSGNode *GetNode(vkSGOutput *output);

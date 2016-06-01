@@ -89,12 +89,12 @@ static void Split(const vkString &fullName, QString &category, QString &name)
 
 
 
-shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode)
+shadergraph::SGNode::SGNode(vkSGNode *node)
   : shadergraph::Node(eT_Node)
-  , m_nodeClass(nodeClass)
+  , m_node(0)
 {
-  vkSGNode *node = nodeClass->CreateInstance<vkSGNode>();
-  if (!node)
+  VK_SET(m_node, node);
+  if (!m_node)
   {
     return;
   }
@@ -102,12 +102,12 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
   SetMinWidth(100.0f);
 
   QString category, name;
-  Split(node->GetName(), category, name);
+  Split(m_node->GetName(), category, name);
 
   SetLabel(name);
   SetBackgroundColor(getTypeColor(category));
 
-  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(node);
+  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(m_node);
 
   m_resource = res != 0;
   SetHasName(m_resource);
@@ -116,13 +116,12 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
     QString name = "";
     
     m_resourceType = res->GetResourceType();
-    if (originNode)
+    if (m_node)
     {
-      const vkSGResourceNode *resNode = vkQueryClass<const vkSGResourceNode>(originNode);
-      memcpy(m_defaultFloat, resNode->GetDefaultFloats(), sizeof(m_defaultFloat));
-      memcpy(m_defaultInt, resNode->GetDefaultInts(), sizeof(m_defaultInt));
-      m_defaultTexture = resNode->GetDefaultTextureResource();
-      name = QString(resNode->GetResourceName().c_str());
+      memcpy(m_defaultFloat, res->GetDefaultFloats(), sizeof(m_defaultFloat));
+      memcpy(m_defaultInt, res->GetDefaultInts(), sizeof(m_defaultInt));
+      m_defaultTexture = res->GetDefaultTextureResource();
+      name = QString(res->GetResourceName().c_str());
     }
     else
     {
@@ -137,46 +136,41 @@ shadergraph::SGNode::SGNode(const vkClass *nodeClass, const vkSGNode *originNode
     SetName(name);
   }
 
-  for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
+  for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
   {
-    vkSGInput *input = node->GetInput(i);
+    vkSGInput *input = m_node->GetInput(i);
     QString inputName(input->GetName().c_str());
-    if (!(input->GetDataType() & eSGDT_Textures))
+    graph::Node::InputMode mode;
+    if (input->CanInputConst())
     {
-      graph::Node::InputMode mode;
-      if (input->CanInputConst())
-      {
-        mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Const);
-      }
-      if (input->CanInputNode())
-      {
-        mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
-      }
-      AddInput(inputName, inputName, mode);
+      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Const);
     }
-    else
+    if (input->CanInputNode())
     {
-      AddInput(inputName, QImage(":/icons/Resources/NoIcon64.png"));
+      mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
     }
+    AddInput(inputName, inputName, mode);
   }
+
+
   if (m_resource && m_resourceType == eSPT_Texture)
   {
+    SetShowImage(true);
     EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_defaultTexture.GetResourceFile(), "EDITOR_ICON"));
     if (icon)
     {
-      AddInput("", icon->GetImage());
+      SetImage(icon->GetImage());
     }
   }
 
-  for (vkSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
+  for (vkSize i = 0, in = m_node->GetNumberOfOutputs(); i < in; ++i)
   {
-    vkSGOutput *output = node->GetOutput(i);
+    vkSGOutput *output = m_node->GetOutput(i);
     QString outputName(output->GetName().c_str());
 
     AddOutput(outputName, outputName);
   }
 
-  node->Release();
 }
 
 void shadergraph::SGNode::AddConnection(graph::NodeConnection* connection)

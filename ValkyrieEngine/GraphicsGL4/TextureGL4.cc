@@ -375,7 +375,7 @@ bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *d
     layerHeight = 1;
   }
 
-  printf ("  glTexImage2D(%d, %d, 0x%08x, %d %d %d, 0x%08x, 0x%08x, %p)\n", m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
+//  printf ("  glTexImage2D(%d, %d, 0x%08x, %d %d %d, 0x%08x, 0x%08x, %p)\n", m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   Bind();
   glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   VK_CHECK_GL_ERROR;

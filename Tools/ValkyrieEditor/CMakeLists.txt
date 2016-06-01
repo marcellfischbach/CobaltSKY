@@ -132,6 +132,8 @@ set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/PreviewWidget.hh
     ShaderGraph/ResourcesModel.cc
     ShaderGraph/ResourcesModel.hh
+    ShaderGraph/ShaderEditor.cc
+    ShaderGraph/ShaderEditor.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
     ShaderGraph/SGNode.cc
@@ -143,6 +145,7 @@ set(EDITOR_SHADERGRAPH_SOURCES
 set(EDITOR_SHADERGRAPH_UI
     ShaderGraph/EditResourceDefaultDialog.ui
     ShaderGraph/NodeSelector.ui
+    ShaderGraph/ShaderEditor.ui
     ShaderGraph/ShaderGraphView.ui
     )
 

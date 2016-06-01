@@ -5,6 +5,7 @@
 #include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/PreviewWidget.hh>
 #include <ShaderGraph/ResourcesModel.hh>
+#include <ShaderGraph/ShaderEditor.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/AssetWriter.hh>
@@ -102,6 +103,7 @@ private:
 ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_resourcesModel(0)
+  , m_editorWidget(0)
 {
 
   m_gui.setupUi(this);
@@ -118,8 +120,10 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
   m_scene = new graph::NodeGraphScene();
   connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node *, int)), this, SLOT(NodeConnectedLooseInput(graph::Node *, int)));
+  connect(m_scene, SIGNAL(NodesConnected(graph::Node *, int, graph::Node *, int)), this, SLOT(NodesConnected(graph::Node *, int, graph::Node *, int)));
   connect(m_scene, SIGNAL(NodeNameChanged(graph::Node*)), this, SLOT(NodeNameChanged(graph::Node*)));
   connect(m_scene, SIGNAL(NodeRemoved(graph::Node*)), this, SLOT(NodeRemoved(graph::Node*)));
+  connect(m_scene, SIGNAL(NodeSelected(graph::Node*)), this, SLOT(NodeSelected(graph::Node*)));
   m_view->setScene(m_scene);
 
 
@@ -150,23 +154,6 @@ ShaderGraphWidget::~ShaderGraphWidget()
 {
 }
 
-void ShaderGraphWidget::NodeRemoved(graph::Node *node)
-{
-  shadergraph::Node* gNode = static_cast<shadergraph::Node*>(node);
-  if (gNode->GetType() == shadergraph::Node::eT_Node)
-  {
-    m_resourcesModel->RemoveNode(static_cast<shadergraph::SGNode*>(node));
-  }
-}
-
-void ShaderGraphWidget::NodeNameChanged(graph::Node *node)
-{
-  shadergraph::Node *gNode = static_cast<shadergraph::Node*>(node);
-  if (gNode->GetType() == shadergraph::Node::eT_Node && m_resourcesModel)
-  {
-    m_resourcesModel->NodeChanged(static_cast<shadergraph::SGNode*>(node));
-  }
-}
 
 void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
 {
@@ -185,21 +172,25 @@ void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
 
   VK_RELEASE(metaData);
 
-  if (nullShader)
-  {
-    Compile();
-  }
+  Compile();
 
 
-  m_previewWidget->SetMaterial(shaderGraph);
+  m_previewWidget->SetMaterial(m_shaderGraph);
   m_previewWidget->repaint();
 }
 
 
 void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
 {
-  m_shaderGraph = shaderGraph;
-  m_shaderGraphNode = new shadergraph::SGShaderGraphNode(shaderGraph);
+  m_scene->SetSilent(true);
+  // create a full copy of the src shader
+  m_shaderGraph = new vkSGShaderGraph();
+  SyncGraph(shaderGraph, m_shaderGraph);
+
+
+
+  // now create the graph node for the shader
+  m_shaderGraphNode = new shadergraph::SGShaderGraphNode(m_shaderGraph);
   m_shaderGraphNode->Initialize();
   m_scene->AddNode(m_shaderGraphNode);
 
@@ -209,19 +200,20 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
     m_shaderGraphNode->SetPosition(QPointF(graphPos.x, graphPos.y));
   }
 
+  // now create the graph nodes for the shader's nodes
   std::map<vkSGNode*, graph::Node*> nodes;
-  for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    vkSGNode *sgNode = shaderGraph->GetNode(i);
+    vkSGNode *sgNode = m_shaderGraph->GetNode(i);
     vkVector2f nodePosition = metaData ? metaData->GetNodePosition(i) : vkVector2f(0.0f, 0.0f);
     graph::Node *gnode = AddNode(sgNode, nodePosition);
     nodes[sgNode] = gnode;
   }
 
 
-  for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    vkSGNode *inputNode = shaderGraph->GetNode(i);
+    vkSGNode *inputNode = m_shaderGraph->GetNode(i);
     if (nodes.find(inputNode) == nodes.end())
     {
       continue;
@@ -257,7 +249,7 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
 
   for (size_t i = 0, in = vkSGShaderGraph::eIT_COUNT; i < in; ++i)
   {
-    vkSGOutput *output = shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
     if (output)
     {
       vkSGNode *outputNode = output->GetNode();
@@ -269,11 +261,117 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
     }
   }
 
-  m_gui.cbBlendBinaryGradient->setChecked(shaderGraph->IsBlendOutWithBinaryGradient());
-  m_gui.cbDiscardAlpha->setChecked(shaderGraph->IsDiscardAlpha());
-  m_gui.cbDiscardAlphaCompareMode->setCurrentIndex(shaderGraph->GetDiscardAlphaCompareMode());
-  m_gui.sbDiscardAlphaThreshold->setValue(shaderGraph->GetDiscardAlphaThreshold());
+
+  m_scene->SetSilent(false);
 }
+
+
+void ShaderGraphWidget::SyncGraph(const vkSGShaderGraph *src, vkSGShaderGraph *dst)
+{
+  dst->SetBlendOutWithBinaryGradient(src->IsBlendOutWithBinaryGradient());
+  dst->SetDiscardAlpha(dst->IsDiscardAlpha());
+  dst->SetDiscardAlpha(src->GetDiscardAlphaThreshold(),
+                       src->GetDiscardAlphaCompareMode());
+
+  SyncNodes(src, dst);
+}
+
+void ShaderGraphWidget::SyncNodes(const vkSGShaderGraph *src, vkSGShaderGraph *dst)
+{
+  dst->Clear();
+
+  for (vkSize i=0, in=src->GetNumberOfTotalNodes(); i<in; ++i)
+  {
+    vkSGNode *node = Copy(src->GetNode(i));
+    dst->AddNode(node);
+  }
+
+  for (vkSize i=0, in=src->GetNumberOfTotalNodes(); i<in; ++i)
+  {
+    const vkSGNode *srcNode = src->GetNode(i);
+    vkSGNode *dstNode = dst->GetNode(i);
+
+    for (vkSize j=0, jn=srcNode->GetNumberOfInputs(); j<jn; ++j)
+    {
+      const vkSGInput *srcInput = srcNode->GetInput(j);
+      vkSGInput *dstInput = dstNode->GetInput(j);
+      if (srcInput->CanInputConst())
+      {
+        dstInput->SetConst(srcInput->GetConst());
+      }
+      if (srcInput->CanInputNode())
+      {
+        const vkSGOutput *srcOutput = srcInput->GetInput();
+        if (srcOutput)
+        {
+          const vkSGNode *srcOutputNode = srcOutput->GetNode();
+          int srcOutputNodeIndex = src->GetIndexOfNode(srcOutputNode);
+          if (srcOutputNodeIndex != -1)
+          {
+            vkSGNode *dstOutputNode = dst->GetNode(srcOutputNodeIndex);
+            if (dstOutputNode)
+            {
+              vkSGOutput *dstOutput = dstOutputNode->GetOutput(srcOutput->GetIdx());
+              if (dstOutput)
+              {
+                dstInput->SetInput(dstOutput);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  for (int i=vkSGShaderGraph::eIT_START; i<vkSGShaderGraph::eIT_COUNT; ++i)
+  {
+    vkSGShaderGraph::InputType inputType = (vkSGShaderGraph::InputType)i;
+
+    const vkSGOutput *srcOutput = src->GetInput(inputType);
+    if (srcOutput)
+    {
+      const vkSGNode *srcOutputNode = srcOutput->GetNode();
+      int srcOutputNodeIdx = src->GetIndexOfNode(srcOutputNode);
+      if (srcOutputNodeIdx != -1)
+      {
+        vkSGNode *dstOutputNode = dst->GetNode(srcOutputNodeIdx);
+        if (dstOutputNode)
+        {
+          vkSGOutput *dstOutput = dstOutputNode->GetOutput(srcOutput->GetIdx());
+          if (dstOutput)
+          {
+            dst->SetInput(inputType, dstOutput);
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+vkSGNode *ShaderGraphWidget::Copy(const vkSGNode *node)
+{
+  if (!node)
+  {
+    return 0;
+  }
+
+  vkSGNode *newNode = node->GetClass()->CreateInstance<vkSGNode>();
+
+  vkSGResourceNode *newResourceNode = vkQueryClass<vkSGResourceNode>(newNode);
+  const vkSGResourceNode *resourceNode = vkQueryClass<const vkSGResourceNode>(node);
+  if (resourceNode && newResourceNode)
+  {
+    newResourceNode->SetResourceName(resourceNode->GetResourceName());
+    memcpy (newResourceNode->GetDefaultFloats(), resourceNode->GetDefaultFloats(), sizeof(float) * 16);
+    memcpy (newResourceNode->GetDefaultInts(), resourceNode->GetDefaultInts(), sizeof(int) * 16);
+    newResourceNode->GetDefaultTextureResource() = resourceNode->GetDefaultTextureResource();
+  }
+  return newNode;
+}
+
 
 
 void  ShaderGraphWidget::keyReleaseEvent(QKeyEvent *event)
@@ -284,7 +382,7 @@ void  ShaderGraphWidget::keyReleaseEvent(QKeyEvent *event)
   }
   else if (event->key() == Qt::Key_Delete)
   {
-    graph::Node *selectedNode = graph::Node::GetSelected();
+    graph::Node *selectedNode = m_scene->GetSelectedNode();
     if (!selectedNode)
     {
       return;
@@ -317,47 +415,130 @@ void ShaderGraphWidget::ViewRightClicked(const QPoint &p)
 
 graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz)
 {
-  return AddNode(clazz, 0, m_newNodePosition);
+  vkSGNode *node = clazz->CreateInstance<vkSGNode>();
+  graph::Node *sgNode = AddNode(node, m_newNodePosition);
+  VK_RELEASE(node);
+  return sgNode;
 }
 
-graph::Node *ShaderGraphWidget::AddNode(const vkSGNode *node, const vkVector2f &pos)
+graph::Node *ShaderGraphWidget::AddNode(vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
   {
     return 0;
   }
-  return AddNode(node->GetClass(), node, pos);
-
-}
-
-graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos)
-{
-  if (!clazz)
-  {
-    return 0;
-  }
-  shadergraph::SGNode *sgNode = new shadergraph::SGNode(clazz, node);
+  shadergraph::SGNode *sgNode = new shadergraph::SGNode(node);
   if (!sgNode->Initialize())
   {
     delete sgNode;
     return 0;
   }
 
-  if (sgNode->IsResources())
-  {
-    m_resourcesModel->AddNode(sgNode);
-  }
   m_scene->AddNode(sgNode);
   sgNode->SetPosition(QPointF(pos.x, pos.y));
   return sgNode;
 }
 
+void ShaderGraphWidget::NodeSelected(graph::Node *node)
+{
+  QWidget *currentEditor = m_gui.saAttributes->takeWidget();
+  if (currentEditor)
+  {
+    currentEditor->deleteLater();
+    currentEditor = 0;
+  }
 
+  if (node)
+  {
+    shadergraph::Node *sgNode = static_cast<shadergraph::Node*>(node);
+    if (sgNode->GetType() == shadergraph::Node::eT_ShaderGraph)
+    {
+      shadergraph::ShaderEditorWidget *editorWidget = new shadergraph::ShaderEditorWidget(this);
+      editorWidget->SetShader(static_cast<shadergraph::SGShaderGraphNode*>(node));
+      currentEditor = editorWidget;
+    }
+    else
+    {
+      shadergraph::NodeEditorWidget *editorWidget = new shadergraph::NodeEditorWidget(this);
+      editorWidget->SetNode(static_cast<shadergraph::SGNode*>(node));
+      currentEditor = editorWidget;
+    }
+  }
+
+  if (currentEditor)
+  {
+    m_gui.saAttributes->setWidget(currentEditor);
+  }
+}
+
+
+void ShaderGraphWidget::NodeRemoved(graph::Node *node)
+{
+  shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
+
+  vkSGNode *vksgNode = sgNode->GetNode();
+
+  for (vkSize i=0, in=vksgNode->GetNumberOfInputs(); i<in; ++i)
+  {
+    vkSGInput *input = vksgNode->GetInput(i);
+    input->SetInput(0);
+  }
+
+  for (vkSize i=0, in=m_shaderGraph->GetNumberOfTotalNodes(); i<in; ++i)
+  {
+    vkSGNode *n = m_shaderGraph->GetNode(i);
+    for (vkSize j=0, jn=n->GetNumberOfInputs(); j<jn; ++j)
+    {
+      vkSGInput *input = n->GetInput(j);
+      vkSGOutput *output = input->GetInput();
+      if (output && output->GetNode() == vksgNode)
+      {
+        input->SetInput(0);
+      }
+    }
+  }
+
+}
 
 
 void ShaderGraphWidget::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
 {
+  shadergraph::Node *node = static_cast<shadergraph::Node*>(inputNode);
+
+  if (node->GetType() == shadergraph::Node::eT_Node)
+  {
+    shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
+    vkSGNode *vksgNode = sgNode->GetNode();
+    vksgNode->SetInput(inputIdx, (vkSGNode*)0);
+  }
+  else if (node->GetType() == shadergraph::Node::eT_ShaderGraph)
+  {
+    shadergraph::SGShaderGraphNode *sgNode = static_cast<shadergraph::SGShaderGraphNode*>(node);
+    vkSGShaderGraph *shaderGraph = sgNode->GetShaderGraph();
+    shaderGraph->SetInput((vkSGShaderGraph::InputType)inputIdx, 0);
+  }
+
   m_scene->DisconnectInput(inputNode, inputIdx);
+}
+
+void ShaderGraphWidget::NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx)
+{
+  shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(outNode);
+  vkSGOutput *output = sgNode->GetNode()->GetOutput(outIdx);
+
+  shadergraph::Node *node = static_cast<shadergraph::Node*>(inNode);
+  if (node->GetType() == shadergraph::Node::eT_Node)
+  {
+    shadergraph::SGNode *sgInNode = static_cast<shadergraph::SGNode*>(node);
+    vkSGNode *vksgNode = sgInNode->GetNode();
+    vksgNode->GetInput(inIdx)->SetInput(output);
+  }
+  else if (node->GetType() == shadergraph::Node::eT_ShaderGraph)
+  {
+    shadergraph::SGShaderGraphNode *sgInNode = static_cast<shadergraph::SGShaderGraphNode*>(node);
+    vkSGShaderGraph *shaderGraph = sgInNode->GetShaderGraph();
+    shaderGraph->SetInput((vkSGShaderGraph::InputType)inIdx, output);
+  }
 }
 
 void ShaderGraphWidget::ResourceDoubleClicked(const QModelIndex &index)
@@ -393,32 +574,16 @@ void ShaderGraphWidget::on_cbDiscardAlpha_stateChanged(int state)
 
 bool ShaderGraphWidget::Compile()
 {
-  vkSGShaderGraph compileGraph;
-  std::map<graph::Node*, vkSGNode*> nodes;
-  CollectData(&compileGraph, nodes);
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(&compileGraph))
+  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
   {
-    for (auto it : nodes)
-    {
-      printf("Node: %s\n", it.second->GetValidationMessage().c_str());
-    }
+//    for (auto it : nodes)
+//    {
+//      printf("Node: %s\n", it.second->GetValidationMessage().c_str());
+//    }
     return false;
   }
 
 
-  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
-  if (!shaderGraph)
-  {
-    printf("no shader graph\n");
-    return false;
-  }
-  CollectData(shaderGraph, nodes);
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph))
-  {
-    return false;
-  }
-
-  m_previewWidget->SetMaterial(shaderGraph);
   m_previewWidget->repaint();
   return true;
 }
@@ -627,6 +792,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
 void ShaderGraphWidget::CollectData(vkSGShaderGraph *graph, std::map<graph::Node*, vkSGNode*>& nodes)
 {
+#if 0
   if (!graph)
   {
     return;
@@ -719,6 +885,7 @@ void ShaderGraphWidget::CollectData(vkSGShaderGraph *graph, std::map<graph::Node
   graph->SetDiscardAlpha(m_gui.cbDiscardAlpha->checkState() != 0);
   graph->SetDiscardAlpha((float)m_gui.sbDiscardAlphaThreshold->value(),
                          (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
+#endif
 }
 
 

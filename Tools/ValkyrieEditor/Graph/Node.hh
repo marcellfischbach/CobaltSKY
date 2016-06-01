@@ -8,6 +8,7 @@
 #include <Graph/Direction.h>
 #include <Valkyrie/Types.hh>
 #include <QImage>
+#include <QGraphicsPixmapItem>
 
 
 class QGraphicsItem;
@@ -30,7 +31,6 @@ public:
     eIM_Const = 0x01,
     eIM_Output = 0x02,
     eIM_Both = eIM_Const | eIM_Output,
-    eIM_Image = 0x04
   };
 
 
@@ -62,8 +62,10 @@ public:
   void SetName(const QString &name);
   QString GetName() const;
 
+  void SetImage(const QImage &image);
+  const QImage &GetImage () const;
+
   void AddInput(const QString &label, const QString &key, InputMode mode);
-  void AddInput(const QString &key, const QImage &image);
   void AddOutput(const QString &label, const QString &key);
 
   int GetIndexOfInput(const QString &key) const;
@@ -102,12 +104,13 @@ public:
 
   virtual void RemoveAllConnections();
 
-  static void Select(Node *node);
-  static Node *GetSelected();
+//  static void Select(Node *node);
+//  static Node *GetSelected();
 
   void SetIdx(vkUInt32 idx);
   vkUInt32 GetIdx() const;
 
+  void SetShowImage(bool showImage);
 
 private slots:
   void NameChanged();
@@ -121,7 +124,6 @@ private:
     QString key;
     InputMode mode;
     NodeInputItem *item;
-    QImage image;
   };
 
   struct Output
@@ -143,6 +145,10 @@ private:
   QVector<Input> m_inputs;
   QVector<Output> m_outputs;
 
+  bool m_showImage;
+  QImage m_image;
+  QGraphicsPixmapItem *m_imageItem;
+
   QGraphicsItem *m_item;
   NodeGroup *m_nodeGroup;
   NodeLabel *m_title;
@@ -150,7 +156,7 @@ private:
   NodeGraphScene *m_scene;
   bool m_valid;
 
-  static Node *selectedNode;
+//  static Node *selectedNode;
 protected:
   QVector<NodeConnection*> m_connections;
 
@@ -225,6 +231,11 @@ inline void Node::SetIdx(vkUInt32 idx)
 inline vkUInt32 Node::GetIdx() const
 {
   return m_idx;
+}
+
+inline void Node::SetShowImage(bool showImage)
+{
+  m_showImage = showImage;
 }
 
 }

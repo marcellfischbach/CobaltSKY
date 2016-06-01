@@ -16,6 +16,7 @@ class SGNode;
 class SGShaderGraphNode;
 class ResourcesModel;
 class PreviewWidget;
+class ShaderEditorWidget;
 }
 
 class vkSGNode;
@@ -43,15 +44,19 @@ protected:
 
 
 private:
-  graph::Node *AddNode(const vkSGNode *node, const vkVector2f &pos);
-  graph::Node *AddNode(const vkClass *clazz, const vkSGNode *node, const vkVector2f &pos);
+  graph::Node *AddNode(vkSGNode *node, const vkVector2f &pos);
+
+  void SyncGraph (const vkSGShaderGraph *src, vkSGShaderGraph *dst);
+  void SyncNodes (const vkSGShaderGraph *src, vkSGShaderGraph *dst);
+  vkSGNode *Copy (const vkSGNode* node);
 
 private slots:
-void ViewRightClicked(const QPoint&);
+  void NodeSelected(graph::Node *node);
+  void ViewRightClicked(const QPoint&);
   graph::Node *AddNode(const vkClass *clazz);
-  void NodeNameChanged(graph::Node *node);
   void NodeRemoved(graph::Node* node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
+  void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
   void ResourceDoubleClicked(const QModelIndex &index);
   void ResourceEditApplied(shadergraph::SGNode *node);
 
@@ -79,6 +84,9 @@ private:
   shadergraph::PreviewWidget *m_previewWidget;
 
   vkVector2f m_newNodePosition;
+
+  QWidget *m_editorWidget;
+
 
 };
 

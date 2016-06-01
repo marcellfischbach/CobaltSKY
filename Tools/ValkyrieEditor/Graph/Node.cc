@@ -35,7 +35,10 @@ public:
     {
       m_delta = mapToScene(QPointF(0, 0)) - mapToScene(event->pos());
       m_inMotion = true;
-      Node::Select(m_node);
+      if (m_node && m_node->GetScene())
+      {
+        m_node->GetScene()->SelectNode(m_node);
+      }
     }
   }
 
@@ -400,12 +403,11 @@ private:
 class NodeInputItem : public QGraphicsItemGroup
 {
 public:
-  NodeInputItem(Node *node, int idx, Node::InputMode mode, const QString &labelText, const QFont &fnt, const QImage &image, QGraphicsItem *parent)
+  NodeInputItem(Node *node, int idx, Node::InputMode mode, const QString &labelText, const QFont &fnt, QGraphicsItem *parent)
     : QGraphicsItemGroup(parent)
     , anchor(0)
     , constInput(0)
     , label(0)
-    , image(0)
   {
     setHandlesChildEvents(false);
     if (mode & Node::eIM_Output)
@@ -417,16 +419,8 @@ public:
       constInput = new NodeConstInput(this, fnt);
     }
 
-    if (mode & Node::eIM_Image)
-    {
-      this->image = new QGraphicsPixmapItem(this);
-      this->image->setPixmap(QPixmap::fromImage(image));
-    }
-    else
-    {
-      label = new NodeLabel(this, fnt);
-      label->setText(labelText);
-    }
+    label = new NodeLabel(this, fnt);
+    label->setText(labelText);
 
   }
 
@@ -441,16 +435,9 @@ public:
     {
       constInput->setPos(constPos, 0);
     }
-    if (label)
-    {
-      QRectF rect(labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
-      label->SetRect(rect);
-      label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
-    }
-    if (image)
-    {
-      image->setPos(anchorPos, 0);
-    }
+    QRectF rect(labelPos, 0.0f, fm.width(text), NodeConstInput::GetRect(fm).height());
+    label->SetRect(rect);
+    label->SetAlignment(Qt::AlignLeft | Qt::AlignCenter);
   }
 
   void SetConstVisible(bool visible)
@@ -464,7 +451,6 @@ public:
   NodeAnchor *anchor;
   NodeConstInput *constInput;
   NodeLabel *label;
-  QGraphicsPixmapItem *image;
 };
 
 class NodeOutputItem : public QGraphicsItemGroup
@@ -502,7 +488,7 @@ public:
 
 
 
-Node *Node::selectedNode = 0;
+//Node *Node::selectedNode = 0;
 
 
 Node::Node(QObject *parent)
@@ -512,10 +498,13 @@ Node::Node(QObject *parent)
   , m_hasName(false)
   , m_minWidth(0.0f)
   , m_valid(false)
+  , m_imageItem(0)
+  , m_showImage(false)
 {
 
 }
 
+/*
 void Node::Select(Node *node)
 {
   Node *current = Node::selectedNode;
@@ -541,6 +530,7 @@ Node *Node::GetSelected()
 {
   return Node::selectedNode;
 }
+*/
 
 QString Node::GetName() const
 {
@@ -551,6 +541,22 @@ QString Node::GetName() const
   return "";
 }
 
+void Node::SetImage(const QImage &image)
+{
+  if (!image.isNull() && (image.width() != 64 || image.height() != 64))
+  {
+    m_image = image.scaled(64, 64);
+  }
+  else
+  {
+    m_image = image;
+  }
+  if  (m_imageItem)
+  {
+    m_imageItem->setPixmap(QPixmap::fromImage(m_image));
+  }
+}
+
 void Node::AddInput(const QString &label, const QString &key, InputMode mode)
 {
   Input input;
@@ -558,20 +564,6 @@ void Node::AddInput(const QString &label, const QString &key, InputMode mode)
   input.key = key;
   input.mode = mode;
   input.item = 0;
-
-  m_inputs << input;
-}
-
-void Node::AddInput(const QString &key, const QImage &image)
-{
-  Input input;
-  input.label = "";
-  input.key = key;
-  input.mode = eIM_Image;
-  input.item = 0;
-  input.image = image;
-
-  fflush(stdout);
 
   m_inputs << input;
 }
@@ -675,7 +667,7 @@ float Node::GetConstInput(size_t idx) const
     return 0.0f;
   }
 
-  graph::NodeConstInput *constInput = m_inputs[idx].item->constInput;
+  graph::NodeConstInput *constInput = m_inputs[(int)idx].item->constInput;
   if (!constInput)
   {
     return 0.0f;
@@ -691,7 +683,7 @@ void Node::SetConstInput(size_t idx, float constValue)
     return;
   }
 
-  graph::NodeConstInput *constInput = m_inputs[idx].item->constInput;
+  graph::NodeConstInput *constInput = m_inputs[(int)idx].item->constInput;
   if (!constInput)
   {
     return;
@@ -743,25 +735,18 @@ bool Node::Initialize()
   QRectF achorRect = NodeAnchor::GetRect(fm);
   QRectF constRect = NodeConstInput::GetRect(fm);
 
-  // get the overall width of all inputs
+  // get the overall width of all inputs (this might include a possible image at the top)
   int inputWidth = 0;
-  int inputHeight = 0;
+  int inputHeight = (constRect.height() + m_spacing) * m_inputs.size();
+  if (m_showImage)
+  {
+    // the images that are shown here will always be 64x64
+    inputHeight += 64 + m_spacing;
+    inputWidth += 64 + m_spacing;
+  }
   for (Input &input : m_inputs)
   {
-    int height = 0;
-    int width = 0;
-    if (input.image.isNull())
-    {
-      width = fm.width(input.label);
-      height = constRect.height();
-    }
-    else
-    {
-      width = input.image.width();
-      height = VK_MAX(constRect.height(), input.image.height());
-    }
-    inputWidth = VK_MAX(inputWidth, width);
-    inputHeight += height + m_spacing;
+    inputWidth = VK_MAX(fm.width(input.label), inputWidth);
   }
 
   float inputAnchorPos = 0.0f;
@@ -835,22 +820,29 @@ bool Node::Initialize()
   }
 
   int topPosY = posY;
+
+  if (m_showImage)
+  {
+    m_imageItem = new QGraphicsPixmapItem(m_nodeGroup);
+    if (!m_image.isNull())
+    {
+      m_imageItem->setPixmap(QPixmap::fromImage(m_image));
+    }
+    m_imageItem->setPos(m_margin, posY);
+
+    posY += 64 + m_spacing;
+  }
+
+
   // now place the inputs
   int i = 0;
   for (Input &input : m_inputs)
   {
-    input.item = new NodeInputItem(this, i++, input.mode, input.label, fnt, input.image, m_nodeGroup);
+    input.item = new NodeInputItem(this, i++, input.mode, input.label, fnt, m_nodeGroup);
     input.item->SetSizes(fm, input.label, inputAnchorPos, inputConstPos, inputLabelPos);
     input.item->setPos(m_margin, posY);
 
-    if (input.image.isNull())
-    {
-      posY += constRect.height() + m_spacing;
-    }
-    else
-    {
-      posY += input.image.height() + m_spacing;
-    }
+    posY += constRect.height() + m_spacing;
   }
 
   posY = topPosY;
@@ -878,7 +870,7 @@ bool Node::Initialize()
 
 void Node::UpdateSelection()
 {
-  bool selected = (this == Node::selectedNode);
+  bool selected = m_scene && this == m_scene->GetSelectedNode();
 
   m_nodeGroup->SetSelected(selected);
 }

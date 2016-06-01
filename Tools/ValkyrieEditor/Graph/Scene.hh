@@ -30,6 +30,13 @@ public:
   size_t GetNumberOfConnections();
   NodeConnection *GetConnection(size_t idx);
 
+  void SelectNode (graph::Node *node);
+  graph::Node *GetSelectedNode ();
+  const graph::Node *GetSelectedNode () const;
+
+  void SetSilent(bool silent);
+  bool IsSilent () const;
+
 public:
   void NodeMoved(Node *node);
   void MoveConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);
@@ -43,10 +50,15 @@ private:
   QList<NodeConnection*> m_connections;
   QGraphicsPathItem *m_currentConnectionPath;
 
+  graph::Node *m_currentSelectedNode;
+
+  bool m_silent;
+
   void ResetConstValues();
+  void EmitCurrentNodeChanged ();
 
 signals:
-
+  void NodeSelected(graph::Node *node);
   void NodeAdded(graph::Node *node);
   void NodeRemoved(graph::Node *node);
   void NodeNameChanged(graph::Node *node);

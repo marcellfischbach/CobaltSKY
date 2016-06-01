@@ -66,6 +66,22 @@ vkSGOutput *vkSGShaderGraph::GetInput(vkSGShaderGraph::InputType type)
   return 0;
 }
 
+const vkSGOutput *vkSGShaderGraph::GetInput(vkSGShaderGraph::InputType type) const
+{
+  switch (type)
+  {
+  case eIT_Diffuse:
+    return GetDiffuse();
+  case eIT_Roughness:
+    return GetRoughness();
+  case eIT_Alpha:
+    return GetAlpha();
+  case eIT_Normal:
+    return GetNormal();
+  }
+  return 0;
+}
+
 bool vkSGShaderGraph::Validate()
 {
   bool success = true;
@@ -130,4 +146,31 @@ const vkSGNode* vkSGShaderGraph::GetNode(size_t idx) const
     return 0;
   }
   return m_allNodes[idx];
+}
+
+bool vkSGShaderGraph::ContainsNode(const vkSGNode *node) const
+{
+  for (vkSGNode *n : m_allNodes)
+  {
+    if (n == node)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+int vkSGShaderGraph::GetIndexOfNode(const vkSGNode *node) const
+{
+  for (int i=0, in=m_allNodes.size(); i<in; ++i)
+  {
+    if (m_allNodes[i] == node)
+    {
+      return i;
+    }
+  }
+
+  return -1;
 }

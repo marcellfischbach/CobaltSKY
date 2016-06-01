@@ -214,4 +214,6 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   vertexShader->Release();
   fragmentShader->Release();
   gBufferShader->Release();
+
+  fflush(stdout);
 }
