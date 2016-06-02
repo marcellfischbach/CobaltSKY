@@ -118,8 +118,6 @@ source_group(
     )
 
 set(EDITOR_SHADERGRAPH_SOURCES
-    ShaderGraph/EditResourceDefaultDialog.cc
-    ShaderGraph/EditResourceDefaultDialog.hh
     ShaderGraph/MetaData.cc
     ShaderGraph/MetaData.hh
     ShaderGraph/MetaDataLoader.cc
@@ -130,8 +128,6 @@ set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/NodeSelector.hh
     ShaderGraph/PreviewWidget.cc
     ShaderGraph/PreviewWidget.hh
-    ShaderGraph/ResourcesModel.cc
-    ShaderGraph/ResourcesModel.hh
     ShaderGraph/ShaderEditor.cc
     ShaderGraph/ShaderEditor.hh
     ShaderGraph/ShaderGraphView.cc
@@ -143,7 +139,6 @@ set(EDITOR_SHADERGRAPH_SOURCES
     )
 
 set(EDITOR_SHADERGRAPH_UI
-    ShaderGraph/EditResourceDefaultDialog.ui
     ShaderGraph/NodeSelector.ui
     ShaderGraph/ShaderEditor.ui
     ShaderGraph/ShaderGraphView.ui
