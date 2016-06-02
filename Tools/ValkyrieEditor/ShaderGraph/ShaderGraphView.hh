@@ -61,7 +61,6 @@ private slots:
   void ResourceEditApplied(shadergraph::SGNode *node);
 
 
-  void on_cbDiscardAlpha_stateChanged(int state);
   void on_pbSave_clicked(bool checked);
   void on_pbCompile_clicked(bool checked);
 

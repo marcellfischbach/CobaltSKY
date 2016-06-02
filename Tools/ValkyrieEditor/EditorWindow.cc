@@ -1,5 +1,6 @@
 
 #include <EditorWindow.hh>
+#include <Editor.hh>
 #include <SceneView.hh>
 #include <AssetManager/AssetManagerWidget.hh>
 #include <ShaderGraph/ShaderGraphView.hh>
@@ -61,7 +62,7 @@ void EditorWindow::AddView(const vkResourceLocator &locator)
   if (!obj)
   {
     // we could not open the resource
-    QMessageBox::critical(this, tr("Unable to edit resource"), tr("It was not possible to load the resource:\n%1").
+    QMessageBox::critical(this, Editor::Get().GetTitleName(), tr("It was not possible to load the resource:\n%1").
                           arg(QString(locator.GetResourceFile().c_str())), QMessageBox::Close, QMessageBox::NoButton);
     return;
   }
@@ -70,7 +71,7 @@ void EditorWindow::AddView(const vkResourceLocator &locator)
   if (!factory)
   {
     // there is no editor view registered for this data tyep
-    QMessageBox::critical(this, tr("Unable to edit resource"), tr("It was not possible to open an editor for the resource:\n%1").
+    QMessageBox::critical(this, Editor::Get().GetTitleName(), tr("It was not possible to open an editor for the resource:\n%1").
                           arg(QString(locator.GetResourceFile().c_str())), QMessageBox::Close, QMessageBox::NoButton);
     return;
 
@@ -80,7 +81,7 @@ void EditorWindow::AddView(const vkResourceLocator &locator)
   if (!view)
   {
     // we could not open the resource
-    QMessageBox::critical(this, tr("Unable to edit resource"), tr("It was not possible to open an editor for the resource:\n%1").
+    QMessageBox::critical(this, Editor::Get().GetTitleName(), tr("It was not possible to open an editor for the resource:\n%1").
                           arg(QString(locator.GetResourceFile().c_str())), QMessageBox::Close, QMessageBox::NoButton);
     return;
   }

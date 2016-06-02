@@ -128,19 +128,6 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   m_view->setScene(m_scene);
 
 
-  m_gui.cbDiscardAlphaCompareMode->addItem("<= (less or equal)", QVariant(eCM_LessOrEqual));
-  m_gui.cbDiscardAlphaCompareMode->addItem(">= (greater or equal)", QVariant(eCM_GreaterOrEqual));
-  m_gui.cbDiscardAlphaCompareMode->addItem("< (less)", QVariant(eCM_Less));
-  m_gui.cbDiscardAlphaCompareMode->addItem("> (greater)", QVariant(eCM_Greater));
-  m_gui.cbDiscardAlphaCompareMode->addItem("== (equal)", QVariant(eCM_Equal));
-  m_gui.cbDiscardAlphaCompareMode->addItem("!= (not equal)", QVariant(eCM_NotEqual));
-  on_cbDiscardAlpha_stateChanged(0);
-
-  m_resourcesModel = new shadergraph::ResourcesModel();
-  m_gui.tvResources->setModel(m_resourcesModel);
-
-  connect(m_gui.tvResources, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(ResourceDoubleClicked(const QModelIndex&)));
-
   m_previewWidget = new shadergraph::PreviewWidget(this);
   layout = new QGridLayout(m_gui.wPreview);
   layout->setContentsMargins(0, 0, 0, 0);
@@ -501,6 +488,15 @@ void ShaderGraphWidget::NodeRemoved(graph::Node *node)
     }
   }
 
+  for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
+  {
+    vkSGShaderGraph::InputType inputType =  (vkSGShaderGraph::InputType)i;
+    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
+    if (output && output->GetNode() == vksgNode)
+    {
+        m_shaderGraph->SetInput(inputType, 0);
+    }
+  }
 }
 
 
@@ -569,11 +565,6 @@ void ShaderGraphWidget::ResourceEditApplied(shadergraph::SGNode* node)
   connect(sender(), SIGNAL(Changed(shadergraph::SGNode*)), this, SLOT(ResourceEditApplied(shadergraph::SGNode*)));
 }
 
-void ShaderGraphWidget::on_cbDiscardAlpha_stateChanged(int state)
-{
-  m_gui.cbDiscardAlphaCompareMode->setEnabled(state != 0);
-  m_gui.sbDiscardAlphaThreshold->setEnabled(state != 0);
-}
 
 bool ShaderGraphWidget::Compile()
 {
@@ -677,8 +668,8 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
   vkAssetOutputStream osData;
   osData << (vkUInt32)VK_VERSION(1, 0, 0);
-  osData << (vkUInt16)m_scene->GetNumberOfNodes()-1; // one node is the shader graph itself
-  osMeta << (vkUInt16)m_scene->GetNumberOfNodes()-1;
+  osData << (vkUInt16)(m_scene->GetNumberOfNodes()-1); // one node is the shader graph itself
+  osMeta << (vkUInt16)(m_scene->GetNumberOfNodes()-1);
   for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
     graph::Node *graphNode = m_scene->GetNode(i);
@@ -700,6 +691,8 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
     osData << index
            << vkString(sgNode->GetClass()->GetName());
+    printf ("out: %d '%s'\n", index, vkString(sgNode->GetClass()->GetName()).c_str());
+    fflush(stdout);
 
     vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
     if (resourceNode)
