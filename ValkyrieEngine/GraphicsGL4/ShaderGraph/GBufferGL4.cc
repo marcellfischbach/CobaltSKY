@@ -168,8 +168,8 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 
   ss.clear();
 
-  DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
-  DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
+//  DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
+//  DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);

@@ -14,7 +14,7 @@ Editor::Editor()
   , m_physicsSystem(0)
   , m_engine(0)
 {
-
+  m_titleName = "ValkyrieEditor v1.0";
 }
 
 bool Editor::Initialize(int argc, char **argv)

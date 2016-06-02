@@ -2,6 +2,7 @@
 
 #include <qobject.h>
 #include <Valkyrie/Defs.hh>
+#include <QString>
 
 class QOpenGLContext;
 struct IGraphics;
@@ -26,6 +27,8 @@ public:
 
   void RequestGraphics();
 
+  const QString &GetTitleName () const;
+
 protected:
   void InitializeImporters();
 
@@ -39,6 +42,7 @@ private:
   IGraphics *m_graphics;
   IPhysicsSystem *m_physicsSystem;
 
+  QString m_titleName;
 };
 
 VK_FORCEINLINE vkEngine *Editor::GetEngine()
@@ -56,3 +60,8 @@ VK_FORCEINLINE IPhysicsSystem *Editor::GetPhysicsSystem()
   return m_physicsSystem;
 }
 
+
+VK_FORCEINLINE const QString &Editor::GetTitleName () const
+{
+  return m_titleName;
+}

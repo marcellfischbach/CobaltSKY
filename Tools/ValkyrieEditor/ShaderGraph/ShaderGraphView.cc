@@ -19,6 +19,7 @@
 #include <qevent.h>
 #include <qtimer.h>
 #include <qscrollbar.h>
+#include <QMessageBox>
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
@@ -206,9 +207,11 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
   {
     vkSGNode *sgNode = m_shaderGraph->GetNode(i);
     vkVector2f nodePosition = metaData ? metaData->GetNodePosition(i) : vkVector2f(0.0f, 0.0f);
+    printf ("Load node position: %p %d >> %f %f\n", metaData, i, nodePosition.x, nodePosition.y);
     graph::Node *gnode = AddNode(sgNode, nodePosition);
     nodes[sgNode] = gnode;
   }
+  fflush(stdout);
 
 
   for (size_t i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
@@ -607,6 +610,26 @@ void invert(const std::map<graph::Node*, vkSGNode*> &in, std::map<vkSGNode*, gra
 
 void ShaderGraphWidget::on_pbSave_clicked(bool)
 {
+  if (!Compile())
+  {
+    QMessageBox::StandardButton button = QMessageBox::question(this, Editor::Get().GetTitleName(),
+                          tr("The material could not be compiled.\nStill want to save the material?"),
+                          QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
+    if (button == QMessageBox::No)
+    {
+      return;
+    }
+  }
+
+  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
+  if (shaderGraph)
+  {
+    SyncGraph(m_shaderGraph, shaderGraph);
+    vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph);
+  }
+
+
+
   if (m_resourceLocator.GetResourceFile().length() == 0)
   {
     return;
@@ -614,6 +637,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
   Compile();
 
+  /*
   vkSGShaderGraph tempGraph;
   std::map<graph::Node*, vkSGNode*> nodes;
   CollectData(&tempGraph, nodes);
@@ -624,15 +648,17 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   std::map<vkSGNode*, graph::Node*> nodesInv;
   ::invert(nodes, nodesInv);
 
-  QVector<vkSGNode*> sgNodes;
-  for (size_t i = 0, in = tempGraph.GetNumberOfTotalNodes(); i < in; ++i)
+  for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
+
     sgNodes.append(tempGraph.GetNode(i));
   }
+  */
 
-
+  QVector<vkSGNode*> sgNodes;
   QVector<vkSGInput*> inputs;
 
+  /*
   for (size_t i = 0, in = sgNodes.size(); i < in; ++i)
   {
     vkSGNode* node = sgNodes[i];
@@ -642,7 +668,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
       inputs.push_back(input);
     }
   }
-
+  */
 
   QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
   vkAssetOutputStream osMeta;
@@ -651,21 +677,38 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
   vkAssetOutputStream osData;
   osData << (vkUInt32)VK_VERSION(1, 0, 0);
-  osData << (vkUInt16)nodes.size();
-  osMeta << (vkUInt16)nodes.size();
-  for (size_t i = 0, in = sgNodes.size(); i < in; ++i)
+  osData << (vkUInt16)m_scene->GetNumberOfNodes()-1; // one node is the shader graph itself
+  osMeta << (vkUInt16)m_scene->GetNumberOfNodes()-1;
+  for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
-    vkSGNode *sgNode = sgNodes[i];
-    osData << (vkUInt32)i << vkString(sgNode->GetClass()->GetName());
-
-    shadergraph::SGNode *graphNode = static_cast<shadergraph::SGNode*>(nodesInv[sgNode]);
-    if (graphNode->IsResources())
+    graph::Node *graphNode = m_scene->GetNode(i);
+    if (graphNode == m_shaderGraphNode)
     {
-      float *floats = graphNode->GetDefaultFloat();
-      int *ints = graphNode->GetDefaultInt();
-      vkResourceLocator &txtResLocator = graphNode->GetDefaultTexture();
-      osData << vkString((const char*)graphNode->GetName().toLatin1());
-      switch (graphNode->GetResourceType())
+      continue;
+    }
+
+    vkSGNode *sgNode = static_cast<shadergraph::SGNode*>(graphNode)->GetNode();
+    for (size_t j = 0, jn = sgNode->GetNumberOfInputs(); j < jn; ++j)
+    {
+      vkSGInput* input = sgNode->GetInput(j);
+      inputs.push_back(input);
+    }
+
+    sgNodes.append(sgNode);
+    vkUInt32 index = sgNodes.indexOf(sgNode);
+
+
+    osData << index
+           << vkString(sgNode->GetClass()->GetName());
+
+    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
+    if (resourceNode)
+    {
+      float *floats = resourceNode->GetDefaultFloats();
+      int *ints = resourceNode->GetDefaultInts();
+      vkResourceLocator &txtResLocator = resourceNode->GetDefaultTextureResource();
+      osData << resourceNode->GetResourceName();
+      switch (resourceNode->GetResourceType())
       {
       case eSPT_Float:
         osData << floats[0];
@@ -707,7 +750,10 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
 
     QPointF pos = graphNode->GetItem()->pos();
-    osMeta << (vkUInt32)i << vkVector2f(pos.x(), pos.y());
+    printf ("Index: %d << %f %f\n", index, pos.x(), pos.y());
+    osMeta << index
+           << vkVector2f(pos.x(), pos.y());
+    fflush(stdout);
   }
 
   osData << (vkUInt16)inputs.size();
@@ -745,7 +791,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   QVector<Attrib> attribs;
   for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
   {
-    vkSGOutput *output = tempGraph.GetInput((vkSGShaderGraph::InputType)i);
+    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
     if (output)
     {
       vkSGNode *outputNode = output->GetNode();
@@ -770,12 +816,12 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   osData << (vkUInt16)2
     // binary gradient
     << vkString("blendOutWithBinaryGradient")
-    << (vkUInt8)(tempGraph.IsBlendOutWithBinaryGradient() ? 1 : 0)
+    << (vkUInt8)(m_shaderGraph->IsBlendOutWithBinaryGradient() ? 1 : 0)
     // discard alpha
     << vkString("discardAlpha")
-    << (vkUInt8)(tempGraph.IsDiscardAlpha() ? 1 : 0)
-    << (vkUInt8)(tempGraph.GetDiscardAlphaCompareMode())
-    << (float)tempGraph.GetDiscardAlphaThreshold();
+    << (vkUInt8)(m_shaderGraph->IsDiscardAlpha() ? 1 : 0)
+    << (vkUInt8)(m_shaderGraph->GetDiscardAlphaCompareMode())
+    << (float)m_shaderGraph->GetDiscardAlphaThreshold();
 
 
   IFile *file = vkVFS::Get()->Open(m_resourceLocator.GetResourceFile(), eOM_Write, eTM_Binary);
