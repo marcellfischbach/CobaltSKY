@@ -40,7 +40,6 @@ public slots:
 protected:
   void keyReleaseEvent(QKeyEvent *event);
 
-
 private:
   graph::Node *AddNode(vkSGNode *node, const vkVector2f &pos);
 

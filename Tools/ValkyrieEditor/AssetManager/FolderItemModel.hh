@@ -26,6 +26,8 @@ public:
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+  virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
 
   vkResourceLocator GetLocator(const QModelIndex &index, const vkString &name = "") const;
 

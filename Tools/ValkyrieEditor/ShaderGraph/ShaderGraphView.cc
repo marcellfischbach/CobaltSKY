@@ -33,7 +33,7 @@ public:
     : QGraphicsView(parent)
     , m_scrolling(false)
   {
-
+    setAcceptDrops(true);
   }
 
 protected:
@@ -93,6 +93,31 @@ protected:
     setMatrix(m);
   }
 
+
+  virtual void dragEnterEvent(QDragEnterEvent *event)
+  {
+      printf ("DragEnter\n");
+      fflush(stdout);
+      //QWidget::dragEnterEvent(event);
+      event->acceptProposedAction();
+  }
+  virtual void dragMoveEvent(QDragMoveEvent *event)
+  {
+      printf ("move\n");
+      fflush(stdout);
+      //QWidget::dragEnterEvent(event);
+      event->acceptProposedAction();
+  }
+
+  virtual void dropEvent(QDropEvent *event)
+  {
+      printf ("Drop\n");
+      fflush(stdout);
+      //QWidget::dragEnterEvent(event);
+      event->acceptProposedAction();
+  }
+
+
 private:
   bool m_scrolling;
   QPoint m_lastPos;
@@ -103,7 +128,6 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_editorWidget(0)
 {
-
   m_gui.setupUi(this);
   setMouseTracking(true);
   m_view = new MyGraphicsView(this);

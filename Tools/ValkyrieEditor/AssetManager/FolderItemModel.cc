@@ -2,6 +2,8 @@
 
 #include <AssetManager/FolderItemModel.hh>
 #include <Valkyrie/Core/VFS.hh>
+#include <AssetManager/Utils.hh>
+#include <QMimeData>
 
 
 namespace assetmanager
@@ -256,6 +258,34 @@ void FolderItemModel::OpenContainer(const QModelIndex &index)
 
 }
 
+Qt::ItemFlags FolderItemModel::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
+
+    flags |= Qt::ItemIsDragEnabled;
+
+    return flags;
+}
+
+QMimeData *FolderItemModel::mimeData(const QModelIndexList &indexes) const
+{
+    if (indexes.size() != 1)
+    {
+        return 0;
+    }
+
+    const QModelIndex &index = indexes.at(0);
+    Entry *entry = static_cast<Entry*>(index.internalPointer());
+
+    QString type = assetmanager::GetTypeOfResource(vkResourceLocator(vkString((const char*)entry->resourceString.toLatin1())));
+
+
+    QMimeData *mimeData = new QMimeData();
+    mimeData->setData("TYPE", type.to);
+    printf ("mime data: %s\n", (const char*)type.toLatin1());
+    fflush(stdout);
+    return mimeData;
+}
 
 }
 

@@ -3,6 +3,7 @@
 #include <Graph/Scene.hh>
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
+#include <QGraphicsSceneDragDropEvent>
 
 namespace graph
 {
