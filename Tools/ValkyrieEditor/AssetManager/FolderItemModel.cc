@@ -281,7 +281,8 @@ QMimeData *FolderItemModel::mimeData(const QModelIndexList &indexes) const
 
 
     QMimeData *mimeData = new QMimeData();
-    mimeData->setData("TYPE", type.to);
+    mimeData->setData("VALKYRIE/RESOURCE/TYPE", type.toLatin1());
+    mimeData->setData("VALKYRIE/RESOURCE/FILE", entry->resourceString.toLatin1());
     printf ("mime data: %s\n", (const char*)type.toLatin1());
     fflush(stdout);
     return mimeData;

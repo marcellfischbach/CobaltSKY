@@ -6,6 +6,7 @@
 #include <Valkyrie/Enums.hh>
 
 class vkSGNode;
+class vkSGResourceNode;
 namespace graph
 {
 class Connection;
@@ -21,7 +22,7 @@ public:
 
   void RemoveConnection(graph::NodeConnection* connection);
 
-  void RemoveAllConnections();
+  void UpdateResource ();
 
   const vkSGNode *GetNode () const
   {
@@ -33,38 +34,10 @@ public:
     return m_node;
   }
 
-  bool IsResources() const
-  {
-    return m_resource;
-  }
- 
-  vkShaderParameterType GetResourceType() const
-  {
-    return m_resourceType;
-  }
-
-  float *GetDefaultFloat()
-  {
-    return m_defaultFloat;
-  }
-  int *GetDefaultInt()
-  {
-    return m_defaultInt;
-  }
-  vkResourceLocator &GetDefaultTexture()
-  {
-    return m_defaultTexture;
-  }
 
 private:
   vkSGNode *m_node;
-
-  bool m_resource;
-
-  vkShaderParameterType m_resourceType;
-  float m_defaultFloat[16];
-  int m_defaultInt[16];
-  vkResourceLocator m_defaultTexture;
+  vkSGResourceNode *m_res;
 
 };
 

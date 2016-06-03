@@ -33,6 +33,8 @@ public:
   void Set(const vkResourceLocator &resourceLocator);
   void Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData);
 
+  void AddTexture2D(const vkResourceLocator &locator, const QPoint &pos = QPoint(0, 0));
+
 public slots:
   void popupNodeSelector();
 
@@ -52,6 +54,7 @@ private slots:
   void ViewRightClicked(const QPoint&);
   graph::Node *AddNode(const vkClass *clazz);
   void NodeRemoved(graph::Node* node);
+  void NodeAdded (graph::Node *node);
   void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
   void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
 

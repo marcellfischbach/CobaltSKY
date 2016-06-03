@@ -128,9 +128,9 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="narf">
+       <widget class="QWidget" name="attributes">
         <attribute name="title">
-         <string>Narf</string>
+         <string>Attributes</string>
         </attribute>
         <layout class="QGridLayout" name="gridLayout_6">
          <property name="leftMargin">
@@ -167,8 +167,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>741</width>
-              <height>174</height>
+              <width>445</width>
+              <height>130</height>
              </rect>
             </property>
             <property name="autoFillBackground">

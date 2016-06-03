@@ -18,6 +18,7 @@
 #include <qtimer.h>
 #include <qscrollbar.h>
 #include <QMessageBox>
+#include <QMimeData>
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
@@ -29,9 +30,11 @@
 class MyGraphicsView : public QGraphicsView
 {
 public:
-  MyGraphicsView(QWidget *parent)
-    : QGraphicsView(parent)
+  MyGraphicsView(ShaderGraphWidget *view)
+    : QGraphicsView(view)
     , m_scrolling(false)
+    , m_lastValidDrag(false)
+    , m_view(view)
   {
     setAcceptDrops(true);
   }
@@ -96,31 +99,56 @@ protected:
 
   virtual void dragEnterEvent(QDragEnterEvent *event)
   {
-      printf ("DragEnter\n");
-      fflush(stdout);
-      //QWidget::dragEnterEvent(event);
+    m_lastValidDrag = false;
+    const QMimeData *data = event->mimeData();
+    if (data->hasFormat("VALKYRIE/RESOURCE/TYPE"))
+    {
+      QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
+      QString typeStr ((const char*)type);
+      m_lastValidDrag = typeStr == QString("TEXTURE2D");
+    }
+    if (m_lastValidDrag)
+    {
       event->acceptProposedAction();
+    }
   }
   virtual void dragMoveEvent(QDragMoveEvent *event)
   {
-      printf ("move\n");
-      fflush(stdout);
-      //QWidget::dragEnterEvent(event);
+    if (m_lastValidDrag)
+    {
       event->acceptProposedAction();
+    }
   }
 
   virtual void dropEvent(QDropEvent *event)
   {
-      printf ("Drop\n");
-      fflush(stdout);
-      //QWidget::dragEnterEvent(event);
+    const QMimeData *data = event->mimeData();
+    if (m_lastValidDrag)
+    {
+      if (data->hasFormat("VALKYRIE/RESOURCE/TYPE") && data->hasFormat("VALKYRIE/RESOURCE/FILE"))
+      {
+        QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
+        QString typeStr ((const char*)type);
+        QByteArray file= data->data("VALKYRIE/RESOURCE/FILE");
+        if (typeStr == QString("TEXTURE2D"))
+        {
+          m_view->AddTexture2D(vkResourceLocator(vkString((const char*)file)), event->pos());
+        }
+
+      }
+
       event->acceptProposedAction();
+    }
+    m_lastValidDrag = false;
   }
 
 
 private:
   bool m_scrolling;
   QPoint m_lastPos;
+
+  bool m_lastValidDrag;
+  ShaderGraphWidget *m_view;
 };
 
 
@@ -141,9 +169,9 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
 
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
   m_scene = new graph::NodeGraphScene();
-  connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node *, int)), this, SLOT(NodeConnectedLooseInput(graph::Node *, int)));
-  connect(m_scene, SIGNAL(NodesConnected(graph::Node *, int, graph::Node *, int)), this, SLOT(NodesConnected(graph::Node *, int, graph::Node *, int)));
-  connect(m_scene, SIGNAL(NodeNameChanged(graph::Node*)), this, SLOT(NodeNameChanged(graph::Node*)));
+  connect(m_scene, SIGNAL(NodeAdded(graph::Node*)), this, SLOT(NodeAdded(graph::Node*)));
+  connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node*, int)), this, SLOT(NodeConnectedLooseInput(graph::Node*, int)));
+  connect(m_scene, SIGNAL(NodesConnected(graph::Node*, int, graph::Node*, int)), this, SLOT(NodesConnected(graph::Node*, int, graph::Node*, int)));
   connect(m_scene, SIGNAL(NodeRemoved(graph::Node*)), this, SLOT(NodeRemoved(graph::Node*)));
   connect(m_scene, SIGNAL(NodeSelected(graph::Node*)), this, SLOT(NodeSelected(graph::Node*)));
   m_view->setScene(m_scene);
@@ -280,7 +308,7 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
 void ShaderGraphWidget::SyncGraph(const vkSGShaderGraph *src, vkSGShaderGraph *dst)
 {
   dst->SetBlendOutWithBinaryGradient(src->IsBlendOutWithBinaryGradient());
-  dst->SetDiscardAlpha(dst->IsDiscardAlpha());
+  dst->SetDiscardAlpha(src->IsDiscardAlpha());
   dst->SetDiscardAlpha(src->GetDiscardAlphaThreshold(),
                        src->GetDiscardAlphaCompareMode());
 
@@ -432,6 +460,19 @@ graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz)
   return sgNode;
 }
 
+void ShaderGraphWidget::AddTexture2D(const vkResourceLocator &locator, const QPoint &pos)
+{
+  vkSGTexture2D *txt2D = vkSGTexture2D::GetStaticClass()->CreateInstance<vkSGTexture2D>();
+  txt2D->GetDefaultTextureResource() = locator;
+  txt2D->SetResourceName(vkString((const char*)assetmanager::GetNameFromResource(locator).toLatin1()));
+
+
+  QPointF scenePos = m_view->mapToScene(pos);
+
+  AddNode(txt2D, vkVector2f(scenePos.x(), scenePos.y()));
+  VK_RELEASE(txt2D);
+}
+
 graph::Node *ShaderGraphWidget::AddNode(vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
@@ -515,11 +556,25 @@ void ShaderGraphWidget::NodeRemoved(graph::Node *node)
     vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
     if (output && output->GetNode() == vksgNode)
     {
-        m_shaderGraph->SetInput(inputType, 0);
+      m_shaderGraph->SetInput(inputType, 0);
     }
   }
 }
 
+
+void ShaderGraphWidget::NodeAdded(graph::Node *node)
+{
+  shadergraph::Node *shadergraph_node = static_cast<shadergraph::Node*>(node);
+
+  if (shadergraph_node->GetType() == shadergraph::Node::eT_Node)
+  {
+    vkSGNode *sgNode = static_cast<shadergraph::SGNode*>(shadergraph_node)->GetNode();
+    if (!m_shaderGraph->ContainsNode(sgNode))
+    {
+      m_shaderGraph->AddNode(sgNode);
+    }
+  }
+}
 
 void ShaderGraphWidget::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
 {
@@ -567,14 +622,16 @@ bool ShaderGraphWidget::Compile()
 {
   if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
   {
-//    for (auto it : nodes)
-//    {
-//      printf("Node: %s\n", it.second->GetValidationMessage().c_str());
-//    }
+    //    for (auto it : nodes)
+    //    {
+    //      printf("Node: %s\n", it.second->GetValidationMessage().c_str());
+    //    }
     return false;
   }
 
-
+  // the material itself will not change, but by setting the material again
+  // the parameters of the material instance will update (maybe parameters were added)
+  m_previewWidget->SetMaterial(m_shaderGraph);
   m_previewWidget->repaint();
   return true;
 }
@@ -583,7 +640,7 @@ void ShaderGraphWidget::on_pbCompile_clicked(bool)
 {
   Compile();
 }
-  
+
 
 namespace
 {
@@ -601,8 +658,8 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   if (!Compile())
   {
     QMessageBox::StandardButton button = QMessageBox::question(this, Editor::Get().GetTitleName(),
-                          tr("The material could not be compiled.\nStill want to save the material?"),
-                          QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
+                                                               tr("The material could not be compiled.\nStill want to save the material?"),
+                                                               QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No));
     if (button == QMessageBox::No)
     {
       return;
@@ -764,11 +821,11 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
     vkUInt8 inputType = output ? 1 : 0;
     osData << (vkUInt32)sgNodes.indexOf(inputNode)
-      << (vkUInt8)inputIdx
-      << inputType
-      << (float)input->GetConst()
-      << (vkUInt32)sgNodes.indexOf(outputNode)
-      << (vkUInt8)outputIdx;
+           << (vkUInt8)inputIdx
+           << inputType
+           << (float)input->GetConst()
+           << (vkUInt32)sgNodes.indexOf(outputNode)
+           << (vkUInt8)outputIdx;
   }
 
   struct Attrib
@@ -797,21 +854,21 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   for (Attrib &attr : attribs)
   {
     osData << attr.attrib
-      << attr.nodeIdx
-      << attr.nodeOutputIdx;
+           << attr.nodeIdx
+           << attr.nodeOutputIdx;
   }
 
 
 
   osData << (vkUInt16)2
-    // binary gradient
-    << vkString("blendOutWithBinaryGradient")
-    << (vkUInt8)(m_shaderGraph->IsBlendOutWithBinaryGradient() ? 1 : 0)
-    // discard alpha
-    << vkString("discardAlpha")
-    << (vkUInt8)(m_shaderGraph->IsDiscardAlpha() ? 1 : 0)
-    << (vkUInt8)(m_shaderGraph->GetDiscardAlphaCompareMode())
-    << (float)m_shaderGraph->GetDiscardAlphaThreshold();
+            // binary gradient
+         << vkString("blendOutWithBinaryGradient")
+         << (vkUInt8)(m_shaderGraph->IsBlendOutWithBinaryGradient() ? 1 : 0)
+            // discard alpha
+         << vkString("discardAlpha")
+         << (vkUInt8)(m_shaderGraph->IsDiscardAlpha() ? 1 : 0)
+         << (vkUInt8)(m_shaderGraph->GetDiscardAlphaCompareMode())
+         << (float)m_shaderGraph->GetDiscardAlphaThreshold();
 
 
   IFile *file = vkVFS::Get()->Open(m_resourceLocator.GetResourceFile(), eOM_Write, eTM_Binary);
