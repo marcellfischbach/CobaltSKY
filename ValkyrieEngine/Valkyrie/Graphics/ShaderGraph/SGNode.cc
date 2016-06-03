@@ -405,7 +405,6 @@ bool vkSGNode::Validate()
     {
       if (node == this)
       {
-        printf("Bound to itself.\n");
         success = false;
         return false;
       }

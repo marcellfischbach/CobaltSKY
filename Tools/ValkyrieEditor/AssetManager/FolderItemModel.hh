@@ -29,6 +29,7 @@ public:
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
   virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
 
+  vkResourceLocator CreateLocator (const QString &assetName) const;
   vkResourceLocator GetLocator(const QModelIndex &index, const vkString &name = "") const;
 
   bool IsContainer(const QModelIndex &index);

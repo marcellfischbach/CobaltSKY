@@ -82,13 +82,6 @@ void ShaderEditorWidget::SyncFromGraph()
   m_gui.sbDiscardAlphaThreshold->setValue(shaderGraph->GetDiscardAlphaThreshold());
   m_syncGuard = false;
 
-  printf ("SyncFromGraph:\n");
-  printf ("   Blend: %d\n", shaderGraph->IsBlendOutWithBinaryGradient());
-  printf ("   Alpha: %d\n", shaderGraph->IsDiscardAlpha());
-  printf ("     Threshold: %f\n", shaderGraph->GetDiscardAlphaThreshold());
-  printf ("     Commpare: %d\n", shaderGraph->GetDiscardAlphaCompareMode());
-  fflush(stdout);
-
 }
 
 
@@ -110,12 +103,6 @@ void ShaderEditorWidget::SyncToGraph()
   shaderGraph->SetDiscardAlpha(m_gui.sbDiscardAlphaThreshold->value(),
                                (vkCompareMode)m_gui.cbDiscardAlphaCompareMode->currentIndex());
 
-  printf ("SyncToGraph:\n");
-  printf ("   Blend: %d\n", m_gui.cbBlendBinaryGradient->isChecked());
-  printf ("   Alpha: %d\n", m_gui.cbDiscardAlpha->isChecked());
-  printf ("     Threshold: %f\n", m_gui.sbDiscardAlphaThreshold->value());
-  printf ("     Commpare: %d\n", m_gui.cbDiscardAlphaCompareMode->currentIndex());
-  fflush(stdout);
 }
 
 

@@ -81,6 +81,12 @@ void FolderItemModel::Clear()
   m_entries.clear();
 }
 
+vkResourceLocator FolderItemModel::CreateLocator (const QString &assetName) const
+{
+  QString path = m_resourceRel + "/" + assetName + ".asset";
+  return vkResourceLocator(vkString((const char*)path.toLatin1()));
+}
+
 vkResourceLocator FolderItemModel::GetLocator(const QModelIndex &index, const vkString &name) const
 {
   if (index.isValid())
@@ -283,8 +289,6 @@ QMimeData *FolderItemModel::mimeData(const QModelIndexList &indexes) const
     QMimeData *mimeData = new QMimeData();
     mimeData->setData("VALKYRIE/RESOURCE/TYPE", type.toLatin1());
     mimeData->setData("VALKYRIE/RESOURCE/FILE", entry->resourceString.toLatin1());
-    printf ("mime data: %s\n", (const char*)type.toLatin1());
-    fflush(stdout);
     return mimeData;
 }
 

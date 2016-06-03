@@ -44,6 +44,10 @@ set(EDITOR_ASSETMANAGER_SOURCES
     AssetManager/FolderItemModel.hh
     AssetManager/FolderTreeModel.cc
     AssetManager/FolderTreeModel.hh
+    AssetManager/NewAssetAction.cc
+    AssetManager/NewAssetAction.hh
+    AssetManager/NewAssetDialog.cc
+    AssetManager/NewAssetDialog.hh
     AssetManager/Importer.cc
     AssetManager/Importer.hh
     AssetManager/Utils.cc
@@ -51,7 +55,9 @@ set(EDITOR_ASSETMANAGER_SOURCES
     )
 
 set(EDITOR_ASSETMANAGER_UI
-    AssetManager/AssetManagerWidget.ui)
+    AssetManager/AssetManagerWidget.ui
+    AssetManager/NewAssetWidget.ui
+    )
 
 source_group(
     "Editor\\AssetManager"
@@ -118,6 +124,8 @@ source_group(
     )
 
 set(EDITOR_SHADERGRAPH_SOURCES
+    ShaderGraph/CreateNewShaderGraph.cc
+    ShaderGraph/CreateNewShaderGraph.hh
     ShaderGraph/MetaData.cc
     ShaderGraph/MetaData.hh
     ShaderGraph/MetaDataLoader.cc

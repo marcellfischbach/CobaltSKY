@@ -98,7 +98,6 @@ void EditorWindow::AddView(EditorView *view)
 
 void EditorWindow::CloseTab(int idx)
 {
-  printf("Close Tab: %d\n", idx);
   QWidget *widget = m_mainTabWidget->widget(idx);
   for (EditorView *view : m_views)
   {
@@ -106,21 +105,17 @@ void EditorWindow::CloseTab(int idx)
     {
       if (!view->CanClose())
       {
-        printf("cannot close\n");
         return;
       }
 
       if (view->Close())
       {
-        printf("done\n");
         m_mainTabWidget->removeTab(idx);
         m_views.removeAll(view);
         delete view;
         return;
       }
-      printf("unable to close\n");
       return;
     }
   }
-  printf("No widget found\n");
 }

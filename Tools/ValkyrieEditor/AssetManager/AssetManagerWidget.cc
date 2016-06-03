@@ -3,10 +3,12 @@
 #include <AssetManager/AssetManagerWidget.hh>
 #include <AssetManager/FolderItemModel.hh>
 #include <AssetManager/FolderTreeModel.hh>
+#include <AssetManager/NewAssetDialog.hh>
+#include <ShaderGraph/CreateNewShaderGraph.hh>
 #include <qfilesystemmodel.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
-#include <qmenu.h>
+#include <QMenu>
 
 namespace assetmanager
 {
@@ -34,11 +36,52 @@ AssetManagerWidget::~AssetManagerWidget()
 }
 
 
+void AssetManagerWidget::on_pbNew_clicked(bool)
+{
+  QMenu *menu = new QMenu ();
+
+  QList<QAction*> actions;
+  actions.append(new shadergraph::NewShaderGraphAction(this));
+
+  for (QAction *action : actions)
+  {
+    connect (action, SIGNAL(triggered(bool)), this, SLOT(NewAsset(bool)));
+  }
+  menu->addActions(actions);
+  menu->popup(m_gui.pbNew->mapToGlobal(QPoint(0, 0)));
+}
+
+void AssetManagerWidget::NewAsset(bool)
+{
+  NewAssetAction *action = static_cast<NewAssetAction*>(sender());
+  NewAssetDialog dlg(m_gui.pbNew);
+  int res = dlg.exec();
+  if (res == QDialog::Rejected)
+  {
+    fflush(stdout);
+    return;
+  }
+
+  QString name = dlg.GetName();
+  if (name.length() == 0)
+  {
+    return;
+  }
+
+  action->SetLocator(m_contentModel->CreateLocator(name));
+  action->activate();
+
+  // reset the path
+  m_contentModel->SetPath(m_contentModel->GetPath());
+  emit ResourceActivated(action->GetLocator());
+}
+
+
+
+
 
 void AssetManagerWidget::on_pbImport_clicked(bool)
 {
-  printf("Import\n");
-
   QStringList files = QFileDialog::getOpenFileNames(this, tr("Select file to import..."), FolderTreeModel::Get()->GetRootDir().absolutePath());
 
   bool anySuccess = false;

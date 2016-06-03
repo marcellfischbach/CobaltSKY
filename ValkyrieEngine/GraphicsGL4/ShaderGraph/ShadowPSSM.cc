@@ -161,9 +161,6 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ss.clear();
 
   /*
-  printf("Shadow[%d].Vertex:\n%s\n", numLayers, vertexShaderSources.c_str());
-  printf("Shadow[%d].Geometry:\n%s\n", numLayers, geometryShaderSources.c_str());
-  printf("Shadow[%d].Fragment:\n%s\n", numLayers, fragmentShaderSources.c_str());
 
   DebugCode("Shadow.Vertex", vertexShaderSources.c_str());
   DebugCode("Shadow.Geometry", geometryShaderSources.c_str());

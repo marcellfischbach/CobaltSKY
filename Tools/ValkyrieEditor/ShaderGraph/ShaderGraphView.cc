@@ -243,7 +243,6 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
   {
     vkSGNode *sgNode = m_shaderGraph->GetNode(i);
     vkVector2f nodePosition = metaData ? metaData->GetNodePosition(i) : vkVector2f(0.0f, 0.0f);
-    printf ("Load node position: %p %d >> %f %f\n", metaData, i, nodePosition.x, nodePosition.y);
     graph::Node *gnode = AddNode(sgNode, nodePosition);
     nodes[sgNode] = gnode;
   }
@@ -745,8 +744,6 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
     osData << index
            << vkString(sgNode->GetClass()->GetName());
-    printf ("out: %d '%s'\n", index, vkString(sgNode->GetClass()->GetName()).c_str());
-    fflush(stdout);
 
     vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
     if (resourceNode)
@@ -797,10 +794,8 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
 
     QPointF pos = graphNode->GetItem()->pos();
-    printf ("Index: %d << %f %f\n", index, pos.x(), pos.y());
     osMeta << index
            << vkVector2f(pos.x(), pos.y());
-    fflush(stdout);
   }
 
   osData << (vkUInt16)inputs.size();

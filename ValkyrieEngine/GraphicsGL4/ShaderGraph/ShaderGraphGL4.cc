@@ -122,7 +122,6 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
 
     vkSize idx = graph->RegisterParam(resName, resType);
 
-    printf ("RegisterParameter: %s => %d\n", resName.c_str(), resType); fflush(stdout);
     float *floats = resNode->GetDefaultFloats();
     int *ints = resNode->GetDefaultInts();
     switch (resType)
@@ -145,8 +144,6 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
     case eSPT_Texture:
       {
         ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(resNode->GetDefaultTextureResource());
-        printf ("RegisterTexture: %s => %p\n", resNode->GetDefaultTextureResource().GetResourceFile().c_str(), texture);
-        fflush(stdout);
         graph->SetDefault(idx, texture);
       }
       break;

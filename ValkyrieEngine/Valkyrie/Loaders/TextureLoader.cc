@@ -513,7 +513,6 @@ vkImage *vkTextureAssetImagePNGLoader::Load(vkAssetInputStream &inputStream)
                                     &colorType,
                                     NULL, NULL, NULL);
 
-  printf("Image: %dx%d@%d => %d\n", width, height, bitDepth, colorType);
   if (retval != 1)
   {
     return 0;

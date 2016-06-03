@@ -28,6 +28,8 @@ public:
 
 private slots:
 
+  void on_pbNew_clicked(bool);
+  void NewAsset(bool);
   void on_pbImport_clicked(bool);
   void on_tvFolders_clicked(const QModelIndex &index);
   void on_lvContent_doubleClicked(const QModelIndex &index);

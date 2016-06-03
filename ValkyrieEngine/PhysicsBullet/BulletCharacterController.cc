@@ -28,7 +28,6 @@ vkBulletCapsuleCharacterController::~vkBulletCapsuleCharacterController()
 
 void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
 {
-  printf("Initialize: %f %f\n", height, radius);
   m_capsuleShape = new btCapsuleShapeZ(radius, height - 2.0f * radius);
   m_ghostObject = new btPairCachingGhostObject();
   m_ghostObject->setCollisionShape(m_capsuleShape);

@@ -958,7 +958,6 @@ bool Node::TestAnchor(const QPointF &pos, Node::AnchorRequestResult &result)
 
 void Node::NameChanged()
 {
-  printf("Node Name: %s\n", (const char*)GetName().toLatin1());
   emit m_scene->NodeNameChanged(this);
 }
 

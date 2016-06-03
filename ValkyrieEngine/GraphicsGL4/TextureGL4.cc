@@ -375,7 +375,6 @@ bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *d
     layerHeight = 1;
   }
 
-//  printf ("  glTexImage2D(%d, %d, 0x%08x, %d %d %d, 0x%08x, 0x%08x, %p)\n", m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   Bind();
   glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   VK_CHECK_GL_ERROR;
@@ -480,7 +479,6 @@ bool vkTexture2DArrayGL4::CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat fo
 
   Bind();
   VK_CHECK_GL_ERROR;
-  printf("Format array: 0x%08x, 0x%08x\n", externalFormatMap[format], externalFormatTypeMap[format]);
   glTexSubImage3D(m_target, lod, 0, 0, layer, layerWidth, layerHeight, 1, externalFormatMap[format], externalFormatTypeMap[format], data);
   VK_CHECK_GL_ERROR;
 
