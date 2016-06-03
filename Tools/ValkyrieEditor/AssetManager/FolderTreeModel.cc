@@ -8,7 +8,7 @@ namespace assetmanager
 FolderTreeModel::FolderTreeModel()
   : QAbstractItemModel()
 {
-#if 1
+#if 0
   m_rootDir = QDir("G:/ide/devs/valkyrieengine/data");
 #else
     m_rootDir = QDir("D:/programming/valkyrieengine/data");
