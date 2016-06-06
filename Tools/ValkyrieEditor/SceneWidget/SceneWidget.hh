@@ -44,6 +44,8 @@ protected:
   vkEntityScene *GetScene();
   const vkEntityScene *GetScene() const;
 
+  vkSubMesh *CreatePlaneMesh(float size, float height);
+  vkSubMesh *CreateSphereMesh(float radius, int numH, int numV);
 protected:
   IGraphics *m_graphics;
   vkCamera *m_camera;

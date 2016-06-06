@@ -96,6 +96,24 @@ source_group(
     ${EDITOR_GRAPH_SOURCES}
     )
 
+set(EDITOR_MATERIAL_INSTANCE_SOURCES
+    MaterialInstance/CreateNewMaterialInstance.cc
+    MaterialInstance/CreateNewMaterialInstance.hh
+    MaterialInstance/MaterialInstanceView.cc
+    MaterialInstance/MaterialInstanceView.hh
+    )
+
+set(EDITOR_MATERIAL_INSTANCE_UI
+    MaterialInstance/MaterialInstanceView.ui
+    )
+
+source_group(
+    "Editor\\MaterialInstance"
+    FILES
+    ${EDITOR_MATERIAL_INSTANCE_SOURCES}
+    ${EDITOR_MATERIAL_INSTANCE_UI}
+    )
+
 set(EDITOR_MESH_SOURCES
     Mesh/Assimp.cc
     Mesh/Assimp.hh
@@ -186,6 +204,7 @@ source_group(
 
 set(ALL_UI
     ${EDITOR_ASSETMANAGER_UI}
+    ${EDITOR_MATERIAL_INSTANCE_UI}
     ${EDITOR_SHADERGRAPH_UI}
     ${EDITOR_TEXTURE_UI}
     )
@@ -199,6 +218,7 @@ set(ALL_SOURCES
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_ENTITY_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
+    ${EDITOR_MATERIAL_INSTANCE_SOURCES}
     ${EDITOR_MESH_SOURCES}
     ${EDITOR_SCENEWIDGET_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}

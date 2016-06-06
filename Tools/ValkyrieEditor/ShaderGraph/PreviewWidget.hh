@@ -30,8 +30,7 @@ protected:
 private:
   void UpdateLight();
   vkEntityScene *CreateScene();
-  vkSubMesh *CreatePlaneMesh(float size, float height);
-  vkSubMesh *CreateSphereMesh(float radius, int numH, int numV);
+
 
 private:
   scenewidget::OrbitCamera *m_orbitCamera;
