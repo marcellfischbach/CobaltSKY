@@ -66,6 +66,17 @@ source_group(
     ${EDITOR_ASSETMANAGER_UI}
     )
 
+set(EDITOR_COMPONENTS_SOURCES
+    Components/ResourceWidget.cc
+    Components/ResourceWidget.hh
+    )
+
+source_group(
+    "Editor\\Components"
+    FILES
+    ${EDITOR_COMPONENTS_SOURCES}
+    )
+
 
 set(EDITOR_ENTITY_SOURCES
     Entity/EntityView.cc
@@ -101,6 +112,8 @@ set(EDITOR_MATERIAL_INSTANCE_SOURCES
     MaterialInstance/CreateNewMaterialInstance.hh
     MaterialInstance/MaterialInstanceView.cc
     MaterialInstance/MaterialInstanceView.hh
+    MaterialInstance/PreviewWidget.cc
+    MaterialInstance/PreviewWidget.hh
     )
 
 set(EDITOR_MATERIAL_INSTANCE_UI
@@ -216,6 +229,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
+    ${EDITOR_COMPONENTS_SOURCES}
     ${EDITOR_ENTITY_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_MATERIAL_INSTANCE_SOURCES}
