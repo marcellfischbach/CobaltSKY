@@ -343,6 +343,7 @@ int main(int argc, char **argv)
     std::string includeHeaders;
     std::string includeSources;
     std::string classRegistration;
+    std::string classUnregistration;
 
     std::list<ProcessedFilesCache::CacheFile> files = processedFilesCache.GetTouchedFiles();
     for (auto it : files)
@@ -365,9 +366,11 @@ int main(int argc, char **argv)
         includeSources += "#include <" + incPrefix + outputSourceFilename + ">\n";
 
         classRegistration += "  // " + it.filename + "\n";
+        classUnregistration += "  // " + it.filename + "\n";
         for (auto cls : classes)
         {
-          classRegistration += "  cr->RegisterClass(" + cls.className + "Class::Get());\n";
+          classRegistration += "  cr->Register(" + cls.className + "Class::Get());\n";
+          classUnregistration += "  cr->Unregister(" + cls.className + "Class::Get());\n";
         }
       }
     }
@@ -383,6 +386,11 @@ int main(int argc, char **argv)
     masterSource += "{\n";
     masterSource += "  vkClassRegistry* cr = vkClassRegistry::Get();\n";
     masterSource += classRegistration;
+    masterSource += "}\n\n";
+    masterSource += "static void unregister_classes ()\n";
+    masterSource += "{\n";
+    masterSource += "  vkClassRegistry* cr = vkClassRegistry::Get();\n";
+    masterSource += classUnregistration;
     masterSource += "}\n\n";
 
     std::string masterFilename = binDir + "/master.refl.cc";

@@ -1,16 +1,27 @@
 #pragma once
 
 #include <EditorView.hh>
+#include <ui_MaterialInstanceView.h>
+
 #include <MaterialInstance/MaterialInstanceView.refl.hh>
 
 
+class vkMaterialInstance;
 class MaterialInstanceWidget : public QWidget
 {
+  Q_OBJECT
 public:
   MaterialInstanceWidget (QWidget *parent);
   virtual ~MaterialInstanceWidget();
 
   void Set(const vkResourceLocator &resourceLocator);
+
+private slots:
+  void DataChanged ();
+
+private:
+  Ui::MaterialInstanceWidget m_gui;
+  vkMaterialInstance *m_materialInstance;
 };
 
 

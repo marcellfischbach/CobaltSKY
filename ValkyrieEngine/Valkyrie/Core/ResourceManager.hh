@@ -28,6 +28,8 @@ public:
   bool operator< (const vkResourceLocator &o) const;
   bool operator== (const vkResourceLocator &o) const;
 
+  bool IsValid () const;
+
 private:
   vkString m_resourceFile;
   vkString m_resourceName;

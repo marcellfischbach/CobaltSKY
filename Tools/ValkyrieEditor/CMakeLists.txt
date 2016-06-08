@@ -112,6 +112,8 @@ set(EDITOR_MATERIAL_INSTANCE_SOURCES
     MaterialInstance/CreateNewMaterialInstance.hh
     MaterialInstance/MaterialInstanceView.cc
     MaterialInstance/MaterialInstanceView.hh
+    MaterialInstance/ParameterEditor.cc
+    MaterialInstance/ParameterEditor.hh
     MaterialInstance/PreviewWidget.cc
     MaterialInstance/PreviewWidget.hh
     )

@@ -1,13 +1,15 @@
 
 #include <MaterialInstance/MaterialInstanceView.hh>
 #include <AssetManager/Utils.hh>
+#include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Material.hh>
 
 
 MaterialInstanceWidget::MaterialInstanceWidget(QWidget *parent)
   : QWidget (parent)
 {
-
+  m_gui.setupUi(this);
+  connect (m_gui.parameterEditor, SIGNAL(DataChanged ()), this, SLOT(DataChanged ()));
 }
 
 MaterialInstanceWidget::~MaterialInstanceWidget()
@@ -17,9 +19,16 @@ MaterialInstanceWidget::~MaterialInstanceWidget()
 
 void MaterialInstanceWidget::Set(const vkResourceLocator &resourceLocator)
 {
+  m_materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(resourceLocator);
 
+  m_gui.previewWidget->SetMaterialInstance(m_materialInstance);
+  m_gui.parameterEditor->SetMaterialInstance(m_materialInstance);
 }
 
+void MaterialInstanceWidget::DataChanged()
+{
+  m_gui.previewWidget->repaint();
+}
 
 
 

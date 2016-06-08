@@ -14,7 +14,7 @@ vkClassRegistry *vkClassRegistry::Get()
   return &reg;
 }
 
-void vkClassRegistry::RegisterClass(const vkClass *clazz)
+void vkClassRegistry::Register(const vkClass *clazz)
 {
   if (!clazz)
   {
@@ -27,6 +27,28 @@ void vkClassRegistry::RegisterClass(const vkClass *clazz)
   }
   m_allClasses.push_back(clazz);
   m_classes[clazz->GetName()] = clazz;
+}
+
+void vkClassRegistry::Unregister(const vkClass *clazz)
+{
+  if (!clazz)
+  {
+    return;
+  }
+
+  auto it = m_classes.find(clazz->GetName());
+  if (it != m_classes.end())
+  {
+    m_classes.erase(it);
+  }
+  for (size_t i=0, in=m_allClasses.size(); i<in; ++i)
+  {
+    if (m_allClasses[i] == clazz)
+    {
+      m_allClasses.erase(m_allClasses.begin() + i);
+      break;
+    }
+  }
 }
 
 const std::vector<const vkClass*> &vkClassRegistry::GetAllClasses() const
