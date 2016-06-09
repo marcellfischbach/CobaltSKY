@@ -560,6 +560,8 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
   }
   globalIndexBuffers.clear();
 
+  mesh->OptimizeDataStruct();
+  mesh->UpdateBoundingBox();
 
   return mesh;
 }

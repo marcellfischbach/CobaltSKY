@@ -30,4 +30,17 @@
 		
 	</material>
 	
+	<material name="SolidUnshaded">
+		<passes>
+			<pass name="ForwardUnshaded">${shaders}/solid.xml:ForwardUnshaded</pass>
+			<pass name="ShadowPSSM">${shaders}/solid.xml:ShadowPSSM</pass>
+			<pass name="ShadowCube">${shaders}/solid.xml:ShadowCube</pass>
+		</passes>
+		
+		<parameters>
+			<parameter type="texture" name="Diffuse">${materials}/textures.xml:FieldStone</parameter>
+		</parameters>
+		
+	</material>
+	
 </materials>

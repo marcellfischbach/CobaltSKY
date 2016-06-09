@@ -64,4 +64,13 @@
 		
 	</program>
 	
+	<program name="ForwardUnshaded">
+		<techniques>
+			<technique name="Default">
+				<shader>${shaders}/solid/forward_unshaded.vert</shader>
+				<shader>${shaders}/solid/forward_unshaded.frag</shader>
+			</technique>
+		</techniques>
+	</program>
+	
 </programs>

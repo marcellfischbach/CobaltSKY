@@ -28,7 +28,9 @@ GLuint queries[10];
 vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
   : IFrameProcessor()
   , m_renderer(renderer)
-  , m_renderStates(64, 16)
+  , m_renderStatesDeferred(64, 16)
+  , m_renderStatesForward(64, 16)
+  , m_renderStatesForwardTransprent(64, 16)
   , m_gbuffer(0)
   , m_postProcessor(0)
 {
@@ -125,26 +127,32 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
     return;
   }
 
-  glDepthMask(true);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glClearDepth(1.0);
+  m_renderer->SetDepthMask(true);
+  m_renderer->SetDepthTest(true);
+  m_renderer->SetDepthFunc(eCM_LessOrEqual);
+
+//  glDepthMask(true);
+//  glEnable(GL_DEPTH_TEST);
+//  glDepthFunc(GL_LEQUAL);
+//  glClearDepth(1.0);
 
 
-  m_renderer->Clear();
-  m_renderer->SetBlendEnabled(false);
 
   GLenum buffers[] = {
     GL_COLOR_ATTACHMENT0, // Diffuse / Roughness
     GL_COLOR_ATTACHMENT1, // Normal / LightMode
     GL_COLOR_ATTACHMENT2, // Emission / Metallic
     GL_COLOR_ATTACHMENT3, // SSS / Specular
+    //GL_DEPTH_ATTACHMENT,
   };
   glDrawBuffers(4, buffers);
 
-  for (vkSize i = 0; i < m_renderStates.length; ++i)
+  m_renderer->Clear();
+  m_renderer->SetBlendEnabled(false);
+
+  for (vkSize i = 0; i < m_renderStatesDeferred.length; ++i)
   {
-    vkRenderState *renderState = m_renderStates[i];
+    vkRenderState *renderState = m_renderStatesDeferred[i];
     if (renderState)
     {
       renderState->Render(m_renderer, eRP_GBuffer);
@@ -154,14 +162,19 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
 IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
-  m_renderStates.Clear();
+  m_renderStatesDeferred.Clear();
+  m_renderStatesForward.Clear();
+  m_renderStatesForwardTransprent.Clear();
   m_lightStates.Clear();
 
   vkScanConfig config;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
   config.MainCameraPosition = camera->GetEye();
-  vkDefaultCollector collector(&m_renderStates, &m_lightStates);
+  vkDefaultCollector collector(&m_renderStatesDeferred,
+                               &m_renderStatesForward,
+                               &m_renderStatesForwardTransprent,
+                               &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
   if (root)
   {
@@ -182,9 +195,12 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
+  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), false, 1.0f, false, 0);
+
+
   m_renderer->SetBlendEnabled(true);
   m_renderer->SetBlendMode(eBM_One, eBM_One);
-  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), true, 1.0f, false, 0);
+
   for (vkSize i = 0; i < m_lightStates.length; ++i)
   {
     vkLightState *lightState = m_lightStates[i];
@@ -199,9 +215,29 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     {
       lightRenderer->Render(root, camera, light, m_gbuffer, target);
     }
+  }
+
+  glEndQuery(GL_TIME_ELAPSED);
+
+  target->SetDepthTexture(m_gbuffer->GetDepth());
+  camera->Apply(m_renderer);
+  m_renderer->SetBlendEnabled(false);
+  m_renderer->SetDepthMask(true);
+  m_renderer->SetDepthTest(true);
+  m_renderer->SetDepthFunc(eCM_LessOrEqual);
+  for (vkSize i=0; i<m_renderStatesForward.length; ++i)
+  {
+    vkRenderState *renderState = m_renderStatesForward[i];
+    if (!renderState)
+    {
+      continue;
+    }
+
+    RenderForward(renderState);
 
   }
-  glEndQuery(GL_TIME_ELAPSED);
+
+
 
 #if 0
   GLuint time0, time1;
@@ -241,4 +277,21 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     return m_postProcessor->GetOutput();
   }
   return target;
+}
+
+void vkDeferredFrameProcessor::RenderForward(vkRenderState *renderState)
+{
+
+  switch (renderState->GetShadingMode())
+  {
+  case eSM_Shaded:
+    // bind the light
+    renderState->Render(m_renderer, eRP_Forward);
+    break;
+
+  case eSM_Unlit:
+    renderState->Render(m_renderer, eRP_ForwardUnshaded);
+    break;
+  }
+
 }
