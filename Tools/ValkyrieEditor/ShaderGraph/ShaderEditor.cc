@@ -109,70 +109,6 @@ void ShaderEditorWidget::SyncToGraph()
 
 
 
-class TextureDragNDropLineEdit : public QLineEdit
-{
-public:
-  TextureDragNDropLineEdit(QWidget *parent)
-    : QLineEdit(parent)
-  {
-    setAcceptDrops(true);
-  }
-
-protected:
-  virtual void dragEnterEvent(QDragEnterEvent *event)
-  {
-    m_lastValidDrag = false;
-    const QMimeData *data = event->mimeData();
-    if (data->hasFormat("VALKYRIE/RESOURCE/TYPE"))
-    {
-      QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-      QString typeStr ((const char*)type);
-      m_lastValidDrag = typeStr == QString("TEXTURE2D");
-    }
-    if (m_lastValidDrag)
-    {
-      event->acceptProposedAction();
-    }
-  }
-  virtual void dragMoveEvent(QDragMoveEvent *event)
-  {
-    if (m_lastValidDrag)
-    {
-      event->acceptProposedAction();
-    }
-  }
-
-  virtual void dropEvent(QDropEvent *event)
-  {
-    const QMimeData *data = event->mimeData();
-    if (m_lastValidDrag)
-    {
-      if (data->hasFormat("VALKYRIE/RESOURCE/TYPE") && data->hasFormat("VALKYRIE/RESOURCE/FILE"))
-      {
-        QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-        QString typeStr ((const char*)type);
-        QByteArray file= data->data("VALKYRIE/RESOURCE/FILE");
-        if (typeStr == QString("TEXTURE2D"))
-        {
-          setText(QString((const char*)file));
-        }
-
-      }
-
-      event->acceptProposedAction();
-    }
-    m_lastValidDrag = false;
-  }
-
-
-private:
-  bool m_lastValidDrag;
-};
-
-
-
-
-
 NodeEditorWidget::NodeEditorWidget(QWidget *parent)
   : QWidget(parent)
   , m_node(0)
@@ -258,8 +194,10 @@ void NodeEditorWidget::SetNode(SGNode *node)
       break;
     case eSPT_Texture:
       layout->addWidget(new QLabel(tr("Texture"), this), row, 0, 1, 1);
-      layout->addWidget(m_leResourceValue = new TextureDragNDropLineEdit(this), row++, 1, 1, 1);
-      connect (m_leResourceValue, SIGNAL(textChanged(const QString&)), this, SLOT(textChanged(const QString&)));
+      layout->addWidget(m_leResourceValue = new ResourceWidget(this), row++, 1, 1, 1);
+      m_leResourceValue->AddValidType("TEXTURE2D");
+      connect (m_leResourceValue, SIGNAL(ResourceChanged(const vkResourceLocator&)), this, SLOT(ResourceChanged(const vkResourceLocator&)));
+
       break;
     }
 
@@ -303,7 +241,7 @@ void NodeEditorWidget::doubleChanged(double value)
   SyncToNode();
 }
 
-void NodeEditorWidget::textChanged(const QString &text)
+void NodeEditorWidget::ResourceChanged(const vkResourceLocator &locator)
 {
   SyncToNode();
 }
@@ -360,7 +298,7 @@ void NodeEditorWidget::SyncFromNode()
     case eSPT_Matrix4:
       break;
     case eSPT_Texture:
-      m_leResourceValue->setText(QString(resource->GetDefaultTextureResource().GetResourceFile().c_str()));
+      m_leResourceValue->SetResourceLocator(resource->GetDefaultTextureResource());
       break;
     }
 
@@ -420,7 +358,7 @@ void NodeEditorWidget::SyncToNode()
     case eSPT_Matrix4:
       break;
     case eSPT_Texture:
-      resource->GetDefaultTextureResource() = vkResourceLocator(vkString((const char*)m_leResourceValue->text().toLatin1()));
+      resource->GetDefaultTextureResource() = m_leResourceValue->GetResourceLocator();
       break;
     }
 

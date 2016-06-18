@@ -32,6 +32,7 @@ public:
 
   vkSize GetNumberOfParameters() const;
   vkShaderParameterType GetParamType(vkSize idx) const;
+  vkString GetParamName (vkSize idx) const;
   IShaderAttribute *GetAttribute(vkSize idx, vkRenderPass pass) const;
 
   vkInt16 GetIndex(const vkString &parametername) const;
@@ -101,6 +102,9 @@ public:
   vkInt16 GetIndex(const vkString &parametername) const;
 
   bool Bind(IGraphics *renderer, vkRenderPass pass);
+
+  void SetInherited(vkUInt16 idx, bool inherited);
+  bool IsInherited(vkUInt16 idx) const;
 
   void Set(vkUInt16 idx, float v);
   void Set(vkUInt16 idx, const vkVector2f &v);

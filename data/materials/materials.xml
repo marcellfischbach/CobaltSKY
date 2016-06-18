@@ -80,5 +80,8 @@
 		</parameters>
 	</materialinstance>
 
-
+	<materialinstance name="FieldStoneUnshaded">
+		<material>${materials}/mat_solid.xml:SolidUnshaded</material>
+	</materialinstance>
+	
 </materialinstances>

@@ -66,6 +66,11 @@ public:
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha);
   virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const;
 
+  virtual void SetDepthMask(bool depth);
+  virtual void SetColorMask(bool red, bool green, bool blue, bool alpha);
+  virtual void SetDepthTest(bool depthTest);
+  virtual void SetDepthFunc(vkCompareMode compareMode);
+
   virtual void SetRenderFadeInOut(float near, float far);
   virtual void SetRenderFadeInOutValue(vkUInt8 value);
 
@@ -108,6 +113,12 @@ private:
   vkBlendMode m_blendModeSrcAlpha;
   vkBlendMode m_blendModeDstColor;
   vkBlendMode m_blendModeDstAlpha;
+
+  bool m_depthMask;
+  vkUInt8 m_colorMask;
+  bool m_depthTest;
+  vkCompareMode m_depthFunc;
+
 
   vkVector4f m_clearColor;
   float m_clearDepth;

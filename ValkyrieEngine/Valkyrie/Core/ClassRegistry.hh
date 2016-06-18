@@ -10,7 +10,8 @@ class VKE_API vkClassRegistry
 public:
   static vkClassRegistry *Get();
 
-  void RegisterClass(const vkClass *clazz);
+  void Register(const vkClass *clazz);
+  void Unregister(const vkClass *clazz);
 
   const std::vector<const vkClass*> &GetAllClasses() const;
 

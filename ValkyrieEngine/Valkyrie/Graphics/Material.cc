@@ -140,6 +140,12 @@ vkShaderParameterType vkMaterial::GetParamType(vkSize idx) const
   return m_params[idx].m_type;
 }
 
+vkString vkMaterial::GetParamName(vkSize idx) const
+{
+  return m_params[idx].m_name;
+}
+
+
 IShaderAttribute *vkMaterial::GetAttribute(vkSize idx, vkRenderPass pass) const
 {
   return m_params[idx].m_attribute[pass];
@@ -310,6 +316,30 @@ vkInt16 vkMaterialInstance::GetIndex(const vkString &parameterName) const
     return -1;
   }
   return m_material->GetIndex(parameterName);
+}
+
+void vkMaterialInstance::SetInherited(vkUInt16 idx, bool inherited)
+{
+  if (idx >= m_parameters.size())
+  {
+    return;
+  }
+
+
+  ShaderParameter &param = m_parameters[idx];
+  param.m_inherit = inherited;
+}
+
+bool vkMaterialInstance::IsInherited(vkUInt16 idx) const
+{
+  if (idx >= m_parameters.size())
+  {
+    return false;
+  }
+
+
+  const ShaderParameter &param = m_parameters[idx];
+  return param.m_inherit;
 }
 
 void vkMaterialInstance::Set(vkUInt16 idx, float v)

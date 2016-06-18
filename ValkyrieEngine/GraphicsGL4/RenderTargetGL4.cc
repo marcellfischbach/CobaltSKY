@@ -97,10 +97,14 @@ void vkRenderTargetGL4::AddColorTexture(ITexture *color)
 void vkRenderTargetGL4::SetDepthTexture(ITexture *depth)
 {
   vkTextureGL4 *depthGL4 = vkQueryClass<vkTextureGL4>(depth);
-  VK_SET(m_depthTexture, depthGL4);
-  if (depthGL4)
+  if (depthGL4 != m_depthTexture)
   {
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
+    VK_SET(m_depthTexture, depthGL4);
+    if (depthGL4)
+    {
+      glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
+      VK_CHECK_GL_ERROR;
+    }
   }
 }
 

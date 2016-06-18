@@ -90,6 +90,13 @@ struct VKE_API IGraphics : public IObject
   virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha) = 0;
   virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const = 0;
 
+  virtual void SetDepthMask(bool depth) = 0;
+  virtual void SetColorMask(bool red, bool green, bool blue, bool alpha) = 0;
+  virtual void SetDepthTest(bool depthTest) = 0;
+  virtual void SetDepthFunc(vkCompareMode compareMode) = 0;
+
+
+
   virtual void SetRenderFadeInOut(float near, float far) = 0;
   virtual void SetRenderFadeInOutValue(vkUInt8 value) = 0;
 

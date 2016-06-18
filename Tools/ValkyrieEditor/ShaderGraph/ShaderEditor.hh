@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <ui_ShaderEditor.h>
+#include <Components/ResourceWidget.hh>
 
 namespace shadergraph
 {
@@ -57,13 +58,13 @@ private:
   QDoubleSpinBox *m_spResource1;
   QDoubleSpinBox *m_spResource2;
   QDoubleSpinBox *m_spResource3;
-  QLineEdit *m_leResourceValue;\
+  ResourceWidget *m_leResourceValue;\
 
   QDoubleSpinBox **m_constInputs;
 
 private slots:
   void doubleChanged(double value);
-  void textChanged(const QString &text);
+  void ResourceChanged(const vkResourceLocator &locator);
 
 };
 

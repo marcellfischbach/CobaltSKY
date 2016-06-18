@@ -248,9 +248,11 @@ int main_loop()
     scene->GetPhysicsScene()->StepSimulation();
     scene->GetPhysicsScene()->UpdateColliders();
 
-    
+    if (anim)
+    {
+      angle += 0.01f;
+    }
     directionalLight->SetArbDirection(vkVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
-    angle += 0.01f;
   }
 
 
@@ -747,11 +749,13 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkMaterialInstance *materialFieldstoneBlueInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
   vkMaterialInstance *materialRedSkelInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "RedSkeleton"));
 
+  vkMaterialInstance *materialUnshaded = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneUnshaded"));
 
   vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
   vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
   vkMultiMaterial *materialFieldStoneGreen = new vkMultiMaterial(materialFieldstoneGreenInst);
   vkMultiMaterial *materialFieldStoneBlue = new vkMultiMaterial(materialFieldstoneBlueInst);
+
   vkMultiMaterial *mineMaterial = new vkMultiMaterial();
   mineMaterial->AddMaterialInstance(materialFieldstoneInst);
   mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
@@ -848,8 +852,13 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
     vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
     vkStaticMeshState *meshState = vkQueryClass<vkStaticMeshState>(mineEntity->GetState(1));
-    //meshState->SetMaterial(myMaterialInst, 0);
-    //meshState->SetMaterial(myMaterialInst, 1);
+    if (i % 2)
+    {
+      meshState->SetRenderQueue(eRQ_Forward);
+      meshState->SetShadingMode(eSM_Unlit);
+      meshState->SetMaterial(materialUnshaded, 0);
+      meshState->SetMaterial(materialUnshaded, 1);
+    }
 
     mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
     mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));

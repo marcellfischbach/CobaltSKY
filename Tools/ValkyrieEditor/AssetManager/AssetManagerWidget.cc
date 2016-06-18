@@ -4,6 +4,7 @@
 #include <AssetManager/FolderItemModel.hh>
 #include <AssetManager/FolderTreeModel.hh>
 #include <AssetManager/NewAssetDialog.hh>
+#include <MaterialInstance/CreateNewMaterialInstance.hh>
 #include <ShaderGraph/CreateNewShaderGraph.hh>
 #include <qfilesystemmodel.h>
 #include <qfiledialog.h>
@@ -42,6 +43,7 @@ void AssetManagerWidget::on_pbNew_clicked(bool)
 
   QList<QAction*> actions;
   actions.append(new shadergraph::NewShaderGraphAction(this));
+  actions.append(new materialinstance::NewMaterialInstanceAction(this));
 
   for (QAction *action : actions)
   {

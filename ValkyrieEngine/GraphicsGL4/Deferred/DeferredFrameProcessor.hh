@@ -32,9 +32,12 @@ public:
 
 private:
   void RenderGBuffer(vkEntity *root);
+  void RenderForward (vkRenderState *renderState);
 
 private:
-  vkCollection<vkRenderState*> m_renderStates;
+  vkCollection<vkRenderState*> m_renderStatesDeferred;
+  vkCollection<vkRenderState*> m_renderStatesForward;
+  vkCollection<vkRenderState*> m_renderStatesForwardTransprent;
   vkCollection<vkLightState*> m_lightStates;
   vkGraphicsGL4 *m_renderer;
 

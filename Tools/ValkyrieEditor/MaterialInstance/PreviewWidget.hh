@@ -9,7 +9,7 @@ class OrbitCamera;
 
 class vkMaterial;
 class vkDirectionalLight;
-namespace shadergraph
+namespace materialinstance
 {
 
 
@@ -21,7 +21,7 @@ public:
 
   virtual QSize sizeHint() const;
 
-  void SetMaterial(vkMaterial *material);
+  void SetMaterialInstance(vkMaterialInstance *materialInstance);
 protected:
   void initializeGL();
   virtual void	mouseMoveEvent(QMouseEvent *event);
@@ -35,7 +35,6 @@ private:
 private:
   scenewidget::OrbitCamera *m_orbitCamera;
   vkStaticMeshState *m_staticMeshState;
-  vkMaterial *m_material;
   vkMaterialInstance *m_materialInstance;
 
   vkDirectionalLight *m_light;

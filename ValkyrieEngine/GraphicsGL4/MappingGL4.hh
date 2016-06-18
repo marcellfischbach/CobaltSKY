@@ -204,6 +204,18 @@ static GLenum textureCompareFuncMap[] = {
   GL_NEVER,
 };
 
+static GLenum compareFuncMap[] = {
+  GL_LEQUAL,
+  GL_GEQUAL,
+  GL_LESS,
+  GL_GREATER,
+  GL_EQUAL,
+  GL_NOTEQUAL,
+  GL_ALWAYS,
+  GL_NEVER,
+};
+
+
 
 static GLenum blendModeMap[] = {
   GL_ZERO, // eBM_Zero,

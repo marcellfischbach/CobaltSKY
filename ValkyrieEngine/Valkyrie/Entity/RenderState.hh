@@ -21,10 +21,18 @@ public:
 
   void SetFadeOut(float start, float end);
 
+  void SetRenderQueue (vkRenderQueue queue);
+  vkRenderQueue GetRenderQueue () const;
+
+  void SetShadingMode (vkShadingMode shadingMode);
+  vkShadingMode GetShadingMode() const;
+
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
 
 private:
   float m_renderStartFade;
   float m_renderEndFade;
+  vkRenderQueue m_queue;
+  vkShadingMode m_shadingMode;
 };
 

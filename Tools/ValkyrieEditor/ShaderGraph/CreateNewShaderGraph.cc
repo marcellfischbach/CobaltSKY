@@ -9,6 +9,7 @@
 namespace shadergraph
 {
 
+/*
 CreateNewShaderGraph::CreateNewShaderGraph()
 {
 
@@ -49,7 +50,7 @@ void CreateNewShaderGraph::CreateNew(const vkResourceLocator &locator)
   file->Close();
 
 }
-
+*/
 
 
 NewShaderGraphAction::NewShaderGraphAction(QObject *parent)

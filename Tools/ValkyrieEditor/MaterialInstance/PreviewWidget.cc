@@ -1,6 +1,6 @@
 
 
-#include <ShaderGraph/PreviewWidget.hh>
+#include <MaterialInstance/PreviewWidget.hh>
 #include <SceneWidget/Camera.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Entity/Entity.hh>
@@ -23,14 +23,14 @@
 #include <qopenglcontext.h>
 #include <math.h>
 
-namespace shadergraph
+namespace materialinstance
 {
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)
   : scenewidget::SceneWidget(parent)
-  , m_material(0)
   , m_materialInstance(0)
+  , m_staticMeshState(0)
   , m_orbitCamera(0)
   , m_lightRotating (false)
   , m_lightRotH(0.0f)
@@ -46,14 +46,14 @@ PreviewWidget::~PreviewWidget()
 QSize PreviewWidget::sizeHint() const
 {
   return QSize(255, 255);
-} 
+}
 
-void PreviewWidget::SetMaterial(vkMaterial *material)
+void PreviewWidget::SetMaterialInstance(vkMaterialInstance *materialInstance)
 {
-  VK_SET(m_material, material);
-  if (m_materialInstance)
+  VK_SET(m_materialInstance, materialInstance);
+  if (m_staticMeshState)
   {
-    m_materialInstance->SetMaterial(material);
+    m_staticMeshState->SetMaterial(m_materialInstance, 0);
   }
 }
 
@@ -123,9 +123,6 @@ void PreviewWidget::UpdateLight()
 
 vkEntityScene* PreviewWidget::CreateScene()
 {
-  m_materialInstance = new vkMaterialInstance();
-  m_materialInstance->SetMaterial(m_material);
-
   vkEntityScene *entityScene = GetScene();
   vkSubMesh *planeSubMesh = CreatePlaneMesh(20.0f, 0.0f);
   vkSubMesh *sphereSubMesh = CreateSphereMesh(10.0, 16, 32);

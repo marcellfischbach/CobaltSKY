@@ -327,9 +327,23 @@ enum vkRenderPass
   //eRP_ShadowGeneric,
   eRP_ShadowPSSM,
   eRP_ShadowCube,
+  eRP_Forward,
+  eRP_ForwardUnshaded,
   eRP_COUNT,
 };
 
+enum vkRenderQueue
+{
+  eRQ_Deferred,
+  eRQ_Forward,
+  eRQ_ForwardTransparent,
+};
+
+enum vkShadingMode
+{
+  eSM_Unlit,
+  eSM_Shaded,
+};
 
 
 enum vkResourceLoadingMode
@@ -407,4 +421,6 @@ enum vkCompareMode
   eCM_Greater,
   eCM_Equal,
   eCM_NotEqual,
+  eCM_Never,
+  eCM_Always,
 };

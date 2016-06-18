@@ -67,9 +67,19 @@ void vkGraphicsGL4::ResetDefaults ()
 {
   VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
+  m_depthMask = true;
   glDepthMask(true);
-  //glEnable(GL_DEPTH_TEST);
+
+  m_colorMask = 0xf;
+  glColorMask(true, true, true, true);
+
+  m_depthTest = true;
+  glEnable(GL_DEPTH_TEST);
+
+  m_depthFunc = eCM_LessOrEqual;
   glDepthFunc(GL_LEQUAL);
+
+
   glClearDepth(1.0);
   VK_CHECK_GL_ERROR;
 
@@ -741,6 +751,51 @@ void vkGraphicsGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendD
   blendDstAlpha = m_blendModeDstAlpha;
 }
 
+
+void vkGraphicsGL4::SetDepthMask(bool depth)
+{
+  //if (m_depthMask != depth)
+  {
+    m_depthMask = depth;
+    glDepthMask(m_depthMask);
+  }
+}
+
+void vkGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
+{
+  vkUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
+//  if (colorMask != m_colorMask)
+  {
+    m_colorMask = colorMask;
+    glColorMask(red, green, blue, alpha);
+  }
+}
+
+void vkGraphicsGL4::SetDepthTest(bool depthTest)
+{
+  //if (m_depthTest != depthTest)
+  {
+    m_depthTest = depthTest;
+    if (m_depthTest)
+    {
+      glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+      glDisable(GL_DEPTH_TEST);
+    }
+  }
+}
+
+void vkGraphicsGL4::SetDepthFunc(vkCompareMode compareMode)
+{
+  //if (m_depthFunc != compareMode)
+  {
+    m_depthFunc = compareMode;
+    glDepthFunc(compareFuncMap[compareMode]);
+  }
+}
+
 void vkGraphicsGL4::SetRenderFadeInOut(float near, float far)
 {
   m_fadeInOutDistances.Set(near, far, far - near);
@@ -970,9 +1025,10 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   float x1 = -1.0f + right * 2.0f;
   float y1 = -1.0f + top * 2.0f;
 
-  glDepthMask(true);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
+  SetDepthMask(true);
+  SetDepthTest(true);
+  SetDepthFunc(eCM_Always);
+  SetDepthMask(false);
   glClearDepth(1.0);
 
   SetShader(m_fullScreenArrayProgram);
@@ -991,10 +1047,11 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
 void vkGraphicsGL4::RenderFullScreenFrame()
 {
   VK_CHECK_GL_ERROR;
-  glDepthMask(true);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
-  glClearDepth(1.0);
+  SetDepthMask(true);
+  SetDepthTest(false);
+  SetDepthFunc(eCM_Always);
+  SetDepthMask(false);
+  //glClearDepth(1.0);
 
   SetVertexBuffer(0, m_fullScreenVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
