@@ -9,6 +9,7 @@
 
 #if VK_WIN32
 
+
 #define VK_FORCEINLINE __forceinline
 
 #define VK_ZERO(e) memset(&e, 0, sizeof(e))

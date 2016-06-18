@@ -6,5 +6,6 @@
 // this is the diamond problem
 #pragma warning( disable : 4250 )
 
+
 #endif
 

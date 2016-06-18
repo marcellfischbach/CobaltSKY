@@ -3,7 +3,7 @@
 #include <string>
 
 
-#ifdef WIN32
+#ifdef VK_WIN32
 
 typedef unsigned __int8  vkUInt8;
 typedef unsigned __int16 vkUInt16;

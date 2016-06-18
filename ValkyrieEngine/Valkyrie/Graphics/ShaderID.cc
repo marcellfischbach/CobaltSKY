@@ -149,6 +149,10 @@ private:
     m_map["TexCoord6"] = eVST_TexCoord6;
     m_map["TexCoord7"] = eVST_TexCoord7;
 
+    m_map["ParticleSize"] = eVST_ParticleSize;
+    m_map["ParticleRotation"] = eVST_ParticleRotation;
+    m_map["ParticleTexCoord"] = eVST_ParticleTexCoord;
+
     m_map["BoneIndex"] = eVST_BoneIndex;
     m_map["BoneWeight"] = eVST_BoneWeight;
 

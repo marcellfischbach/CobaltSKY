@@ -124,7 +124,7 @@ bool AssimpIOSystem::Exists(const char *pFile) const
 
 char AssimpIOSystem::getOsSeparator() const
 {
-#ifdef WIN32
+#ifdef VK_WIN32
   return '\\';
 #else
   return '/';

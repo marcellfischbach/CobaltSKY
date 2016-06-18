@@ -3,7 +3,7 @@
 
 #include <Windows.h>
 
-#ifdef WIN32
+#ifdef VK_WIN32
 struct vkLibraryPriv
 {
   HMODULE m_libModule;
@@ -30,7 +30,7 @@ vkLibrary::~vkLibrary()
 
 bool vkLibrary::Open(const std::string &libName)
 {
-#ifdef WIN32
+#ifdef VK_WIN32
   std::string name = libName + std::string(".dll");
   m_priv->m_libModule = LoadLibrary(name.c_str());
   return m_priv->m_libModule != 0;
@@ -40,14 +40,14 @@ bool vkLibrary::Open(const std::string &libName)
 
 bool vkLibrary::IsOpen() const
 {
-#ifdef WIN32
+#ifdef VK_WIN32
   return m_priv->m_libModule != 0;
 #endif
 }
 
 void vkLibrary::Close()
 {
-#ifdef WIN32
+#ifdef VK_WIN32
   if (m_priv->m_libModule != 0)
   {
     if (FreeLibrary(m_priv->m_libModule))
@@ -60,7 +60,7 @@ void vkLibrary::Close()
 
 void *vkLibrary::GetProcAddress(const std::string &procName)
 {
-#ifdef WIN32
+#ifdef VK_WIN32
   return ::GetProcAddress(m_priv->m_libModule, procName.c_str());
 #endif
 }
