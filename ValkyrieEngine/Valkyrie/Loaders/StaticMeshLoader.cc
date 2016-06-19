@@ -562,6 +562,8 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
 
   mesh->OptimizeDataStruct();
   mesh->UpdateBoundingBox();
+  const vkBoundingBox& bbox = mesh->GetBoundingBox();
+  bbox.Debug("StaticMeshLoader");
 
   return mesh;
 }
