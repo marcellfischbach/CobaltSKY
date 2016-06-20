@@ -10,6 +10,7 @@ public:
   vkDefaultCollector(vkCollection<vkRenderState*> *renderStatesGBuffer,
                      vkCollection<vkRenderState*> *renderStatesForward,
                      vkCollection<vkRenderState*> *renderStatesForwardTransparent,
+                     vkCollection<vkRenderState*> *renderStatesParticle,
                      vkCollection<vkLightState*> *lightStates);
 
   virtual void ScanRenderState(vkRenderState *renderState);
@@ -21,5 +22,6 @@ private:
   vkCollection<vkRenderState*> *m_renderStatesDeferred;
   vkCollection<vkRenderState*> *m_renderStatesForward;
   vkCollection<vkRenderState*> *m_renderStatesForwardTransprent;
+  vkCollection<vkRenderState*> *m_renderStatesParticle;
   vkCollection<vkLightState*> *m_lightStates;
 };

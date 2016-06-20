@@ -38,6 +38,7 @@ private:
   vkCollection<vkRenderState*> m_renderStatesDeferred;
   vkCollection<vkRenderState*> m_renderStatesForward;
   vkCollection<vkRenderState*> m_renderStatesForwardTransprent;
+  vkCollection<vkRenderState*> m_renderStatesParticles;
   vkCollection<vkLightState*> m_lightStates;
   vkGraphicsGL4 *m_renderer;
 

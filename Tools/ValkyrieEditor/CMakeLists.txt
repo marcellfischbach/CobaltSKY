@@ -146,6 +146,8 @@ set(EDITOR_SCENEWIDGET_SOURCES
     SceneWidget/Camera.cc
     SceneWidget/Camera.hh
     SceneWidget/EventListener.hh
+    SceneWidget/Meshes.cc
+    SceneWidget/Meshes.hh
     SceneWidget/SceneWidget.cc
     SceneWidget/SceneWidget.hh
     )

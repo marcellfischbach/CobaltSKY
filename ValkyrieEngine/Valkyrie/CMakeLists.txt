@@ -88,6 +88,8 @@ set(SOURCE_ENTITY
     Entity/LightState.hh
     Entity/MeshState.cc
     Entity/MeshState.hh
+    Entity/ParticleState.cc
+    Entity/ParticleState.hh
     Entity/RenderState.cc
     Entity/RenderState.hh
     Entity/Scan.hh
@@ -126,6 +128,8 @@ set(SOURCE_GRAPHICS
     Graphics/Material.hh
     Graphics/Mesh.cc
     Graphics/Mesh.hh
+    Graphics/Particle.cc
+    Graphics/Particle.hh
     Graphics/PostProcessing.cc
     Graphics/PostProcessing.hh
     Graphics/ShaderID.cc

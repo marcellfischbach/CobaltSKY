@@ -1,0 +1,13 @@
+<materials>
+
+
+	<material name="ParticleUnlit">
+		<passes>
+			<pass name="Forward">${shaders}/particle_unlit.xml</pass>
+		</passes>
+		<parameters>
+		</parameters>
+	</material>
+	
+	
+</materials>

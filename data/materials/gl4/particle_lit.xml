@@ -1,0 +1,15 @@
+<programs>
+	<program name="Forward">
+
+		<techniques>
+		
+			<technique name="Default">
+				<shader>${shaders}/particle/particle.vert</shader>
+				<shader>${shaders}/particle/particle.geom</shader>
+				<shader>${shaders}/particle/particle_lit.frag</shader>
+			</technique>
+			
+		</techniques>
+		
+	</program>
+</programs>

@@ -165,6 +165,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   m_renderStatesDeferred.Clear();
   m_renderStatesForward.Clear();
   m_renderStatesForwardTransprent.Clear();
+  m_renderStatesParticles.Clear();
   m_lightStates.Clear();
 
   vkScanConfig config;
@@ -174,6 +175,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   vkDefaultCollector collector(&m_renderStatesDeferred,
                                &m_renderStatesForward,
                                &m_renderStatesForwardTransprent,
+                               &m_renderStatesParticles,
                                &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
   if (root)
@@ -236,7 +238,17 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     RenderForward(renderState);
 
   }
+  for (vkSize i = 0; i<m_renderStatesParticles.length; ++i)
+  {
+    vkRenderState *renderState = m_renderStatesParticles[i];
+    if (!renderState)
+    {
+      continue;
+}
 
+    RenderForward(renderState);
+
+  }
 
 
 #if 0
@@ -281,17 +293,5 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
 
 void vkDeferredFrameProcessor::RenderForward(vkRenderState *renderState)
 {
-
-  switch (renderState->GetShadingMode())
-  {
-  case eSM_Shaded:
-    // bind the light
-    renderState->Render(m_renderer, eRP_Forward);
-    break;
-
-  case eSM_Unlit:
-    renderState->Render(m_renderer, eRP_ForwardUnshaded);
-    break;
-  }
-
+  renderState->Render(m_renderer, eRP_Forward);
 }

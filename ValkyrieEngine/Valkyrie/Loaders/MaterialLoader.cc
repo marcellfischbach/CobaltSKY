@@ -93,10 +93,6 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
     {
       renderPass = eRP_Forward;
     }
-    else if (passName == vkString("ForwardUnshaded"))
-    {
-      renderPass = eRP_ForwardUnshaded;
-    }
     else
     {
       material->Release();

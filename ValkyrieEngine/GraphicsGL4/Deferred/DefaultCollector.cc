@@ -7,10 +7,12 @@
 vkDefaultCollector::vkDefaultCollector(vkCollection<vkRenderState*> *renderStatesDeferred,
                                        vkCollection<vkRenderState*> *renderStatesForward,
                                        vkCollection<vkRenderState*> *renderStatesForwardTransparent,
+                                       vkCollection<vkRenderState*> *renderStatesParticle,
                                        vkCollection<vkLightState*> *lightStates)
   : m_renderStatesDeferred(renderStatesDeferred)
   , m_renderStatesForward(renderStatesForward)
   , m_renderStatesForwardTransprent(renderStatesForwardTransparent)
+  , m_renderStatesParticle(renderStatesParticle)
   , m_lightStates(lightStates)
 {
 
@@ -31,6 +33,13 @@ void vkDefaultCollector::ScanRenderState(vkRenderState *renderState)
     if (m_renderStatesForward)
     {
       m_renderStatesForward->Add(renderState);
+    }
+    break;
+
+  case eRQ_Particles:
+    if (m_renderStatesParticle)
+    {
+      m_renderStatesParticle->Add(renderState);
     }
     break;
 

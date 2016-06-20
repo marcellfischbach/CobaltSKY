@@ -366,7 +366,7 @@ void vkDirectionalLightvkGraphicsGL4::RenderShadow(vkEntity *root, vkCamera *cam
   config.ScanNonShadowCasters = false;
   config.MainCameraPosition = camera->GetEye();
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0);
+  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0, 0);
   m_renderStates.Clear();
 
   vkClipper *clipper = CreateClipper();
@@ -630,7 +630,7 @@ void vkPointLightvkGraphicsGL4::RenderShadow(vkEntity *root, const vkPointLight 
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0);
+  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0, 0);
   m_renderStates.Clear();
   root->Scan(0, m_renderer, &collector, config);
 

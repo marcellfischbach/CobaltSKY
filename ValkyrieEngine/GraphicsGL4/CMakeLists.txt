@@ -12,6 +12,8 @@ set(SOURCE
   MappingGL4.hh
   Module.cc
   Module.hh
+  ParticleRendererGL4.cc
+  ParticleRendererGL4.hh
   RenderTargetGL4.cc
   RenderTargetGL4.hh
   Shader.cc

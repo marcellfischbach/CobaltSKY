@@ -328,13 +328,13 @@ enum vkRenderPass
   eRP_ShadowPSSM,
   eRP_ShadowCube,
   eRP_Forward,
-  eRP_ForwardUnshaded,
   eRP_COUNT,
 };
 
 enum vkRenderQueue
 {
   eRQ_Deferred,
+  eRQ_Particles,
   eRQ_Forward,
   eRQ_ForwardTransparent,
 };

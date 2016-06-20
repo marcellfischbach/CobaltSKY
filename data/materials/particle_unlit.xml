@@ -1,0 +1,10 @@
+<materialinstances>
+
+	<materialinstance name="ParticleUnlit">
+		<material>${materials}/mat_particle_unlit.xml</material>
+		<parameters>
+		</parameters>
+	</materialinstance>
+
+
+</materialinstances>

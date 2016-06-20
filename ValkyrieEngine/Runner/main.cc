@@ -21,6 +21,7 @@
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/LightState.hh>
 #include <Valkyrie/Entity/MeshState.hh>
+#include <Valkyrie/Entity/ParticleState.hh>
 #include <Valkyrie/Entity/RenderState.hh>
 #include <Valkyrie/Entity/Module.hh>
 #include <Valkyrie/Entity/Scene.hh>
@@ -37,6 +38,7 @@
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/Particle.hh>
 #include <Valkyrie/Graphics/PostProcessing.hh>
 #include <Valkyrie/Graphics/Scene/CameraNode.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
@@ -90,7 +92,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;
@@ -594,6 +596,61 @@ vkSubMesh* create_skeleton_mesh(IGraphics *renderer, float size)
   return mesh;
 }
 
+vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
+{
+  vkParticle *particle = new vkParticle();
+  if (particle->Initialize(graphics, numParticles))
+  {
+    particle->SetNumberOfRenderParticles(numParticles);
+
+    vkVector4f *positions = new vkVector4f[numParticles];
+    vkVector4f *sizes = new vkVector4f[numParticles];
+    vkVector3f *rotations = new vkVector3f[numParticles];
+    vkVector4f *texCoords = new vkVector4f[numParticles];
+
+    srand(4567898);
+    for (unsigned i = 0; i < numParticles; ++i)
+    {
+      float x = (float)rand() / (float)RAND_MAX;
+      float y = (float)rand() / (float)RAND_MAX;
+      float z = (float)rand() / (float)RAND_MAX;
+      positions[i] = vkVector4f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f, 1.0f);
+      sizes[i] = vkVector4f(-0.5f, -0.5f, 0.5f, 0.5f);
+      rotations[i] = 0.0f;
+      texCoords[i] = vkVector4f(0.0f, 0.0f, 1.0, 1.0);
+    }
+
+    void *buffer;
+    if (particle->GetPositions()->Lock(0, &buffer, eBAM_ReadWrite))
+    {
+      memcpy(buffer, positions, sizeof(vkVector4f) * numParticles);
+      particle->GetPositions()->Unlock();
+    }
+    if (particle->GetSizes()->Lock(0, &buffer, eBAM_ReadWrite))
+    {
+      memcpy(buffer, sizes, sizeof(vkVector4f) * numParticles);
+      particle->GetSizes()->Unlock();
+    }
+    if (particle->GetRotations()->Lock(0, &buffer, eBAM_ReadWrite))
+    {
+      memcpy(buffer, rotations, sizeof(vkVector3f) * numParticles);
+      particle->GetRotations()->Unlock();
+    }
+    if (particle->GetTexCoords()->Lock(0, &buffer, eBAM_ReadWrite))
+    {
+      memcpy(buffer, texCoords, sizeof(vkVector4f) * numParticles);
+      particle->GetTexCoords()->Unlock();
+    }
+    delete[] positions;
+    delete[] sizes;
+    delete[] rotations;
+    delete[] texCoords;
+  }
+
+  return particle;
+}
+
+
 
 void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
@@ -750,6 +807,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkMaterialInstance *materialRedSkelInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "RedSkeleton"));
 
   vkMaterialInstance *materialUnshaded = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneUnshaded"));
+  vkMaterialInstance *materialParticle = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/particle_unlit.xml"));
 
   vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
   vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
@@ -799,6 +857,19 @@ vkEntityScene *create_scene(IGraphics *graphics)
   planeEntity->AddState(planeState, staticState);
 
   entityScene->AddEntity(planeEntity);
+
+
+  vkParticle *particle = CreateParticle(graphics, 10);
+  vkParticleState *particleState = new vkParticleState();
+  particleState->SetRenderQueue(eRQ_Particles);
+  particleState->SetParticle(particle);
+  particleState->SetMaterial(materialParticle);
+
+  vkEntity *particleEntity = new vkEntity();
+  particleEntity->SetRootState(particleState);
+  particleEntity->AddState(particleState);
+
+  entityScene->AddEntity(particleEntity);
 
   // create the skeleton mesh
   vkSubMesh *skelMeshInst = create_skeleton_mesh(graphics, 5.0);

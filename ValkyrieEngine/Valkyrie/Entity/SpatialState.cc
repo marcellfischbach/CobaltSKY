@@ -231,7 +231,7 @@ const vkSpatialState *vkSpatialState::FindState(const vkString &stateName) const
 
 void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
 {
-  if (clipper)
+  if (clipper && false)
   {
     vkClipper::ClipResult cr = clipper->Test(m_boundingBox);
     switch (cr)
