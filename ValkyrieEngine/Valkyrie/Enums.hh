@@ -346,6 +346,14 @@ enum vkShadingMode
 };
 
 
+enum vkParticleShadingMode
+{
+  ePSM_Shaded,
+  ePSM_Emitting,
+};
+
+
+
 enum vkResourceLoadingMode
 {
   eRLM_Shared,

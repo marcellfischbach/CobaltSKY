@@ -28,6 +28,9 @@ public:
   vkMaterialInstance *GetMaterial();
   const vkMaterialInstance *GetMaterial() const;
 
+  void SetShadingMode(vkParticleShadingMode shadingMode);
+  vkParticleShadingMode GetShadingMode() const;
+
   virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
   virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
 
@@ -36,5 +39,6 @@ private:
   vkParticle *m_particle;
   vkMaterialInstance *m_materialInstance;
 
+  vkParticleShadingMode m_shadingMode;
 };
 

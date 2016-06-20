@@ -14,6 +14,7 @@ class vkGraphicsGL4;
 class vkLight;
 class vkLightvkGraphicsGL4;
 class vkGeometryMesh;
+class vkParticleRendererGL4;
 
 VK_INTERFACE();
 class VKGL4_API vkDeferredFrameProcessor : public virtual IFrameProcessor
@@ -50,4 +51,5 @@ private:
   IShader *m_directionLightShader;
 
   vkLightvkGraphicsGL4 *m_lightRenderers[eLT_Count];
+  vkParticleRendererGL4 *m_particleRenderer;
 };

@@ -92,7 +92,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 1
+#if 0
   posX = -1500;
 #else
   //posX = 2000;
@@ -615,7 +615,7 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
       float y = (float)rand() / (float)RAND_MAX;
       float z = (float)rand() / (float)RAND_MAX;
       positions[i] = vkVector4f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f, 1.0f);
-      sizes[i] = vkVector4f(-0.5f, -0.5f, 0.5f, 0.5f);
+      sizes[i] = vkVector4f(-1.0f, -1.0f, 1.0f, 1.0f);
       rotations[i] = 0.0f;
       texCoords[i] = vkVector4f(0.0f, 0.0f, 1.0, 1.0);
     }
@@ -859,10 +859,11 @@ vkEntityScene *create_scene(IGraphics *graphics)
   entityScene->AddEntity(planeEntity);
 
 
-  vkParticle *particle = CreateParticle(graphics, 10);
+  vkParticle *particle = CreateParticle(graphics, 5000);
   vkParticleState *particleState = new vkParticleState();
   particleState->SetRenderQueue(eRQ_Particles);
   particleState->SetParticle(particle);
+  particleState->SetShadingMode(ePSM_Shaded);
   particleState->SetMaterial(materialParticle);
 
   vkEntity *particleEntity = new vkEntity();
@@ -973,7 +974,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkEntity *directionalBackLightEntity = new vkEntity();
   directionalBackLightEntity->SetRootState(directionalBackLightState);
   directionalBackLightEntity->AddState(directionalBackLightState);
-  entityScene->AddEntity(directionalBackLightEntity);
+  //entityScene->AddEntity(directionalBackLightEntity);
 
   entityScene->GetRoot()->FinishTransformation();
 

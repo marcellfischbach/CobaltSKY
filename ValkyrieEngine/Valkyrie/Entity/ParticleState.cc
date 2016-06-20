@@ -8,6 +8,7 @@ vkParticleState::vkParticleState()
   : vkRenderState()
   , m_particle(0)
   , m_materialInstance(0)
+  , m_shadingMode(ePSM_Emitting)
 {
 
 }
@@ -49,11 +50,31 @@ const vkMaterialInstance *vkParticleState::GetMaterial() const
   return m_materialInstance;
 }
 
-void vkParticleState::Render(IGraphics *graphics, vkRenderPass pass) const
+void vkParticleState::SetShadingMode(vkParticleShadingMode shadingMode)
+{
+  m_shadingMode = shadingMode;
+}
+
+vkParticleShadingMode vkParticleState::GetShadingMode() const
+{
+  return m_shadingMode;
+}
+
+void vkParticleState::Render(IGraphics *graphics, vkRenderPass pass)  const
 {
   vkRenderState::Render(graphics, pass);
   if (m_particle && m_materialInstance)
   {
+    switch (m_shadingMode)
+    {
+    case ePSM_Emitting:
+      graphics->SetBlendMode(eBM_SrcAlpha, eBM_One);
+      break;
+    case ePSM_Shaded:
+      graphics->SetBlendMode(eBM_SrcAlpha, eBM_InvSrcAlpha);
+      break;
+    }
+
     m_particle->Render(graphics, pass, m_materialInstance);
   }
 }

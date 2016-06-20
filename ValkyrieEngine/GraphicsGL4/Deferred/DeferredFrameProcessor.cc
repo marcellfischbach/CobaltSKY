@@ -1,6 +1,7 @@
 
 #include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
 #include <GraphicsGL4/Deferred/LightRenderer.hh>
+#include <GraphicsGL4/Deferred/ParticleRendererGL4.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <GraphicsGL4/RenderTargetGL4.hh>
 #include <GraphicsGL4/TextureGL4.hh>
@@ -38,6 +39,8 @@ vkDeferredFrameProcessor::vkDeferredFrameProcessor(vkGraphicsGL4 *renderer)
 
   m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightvkGraphicsGL4(renderer);
   m_lightRenderers[eLT_PointLight] = new vkPointLightvkGraphicsGL4(renderer);
+
+  m_particleRenderer = new vkParticleRendererGL4();
   glGenQueries(10, queries);
 }
 
@@ -238,17 +241,8 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     RenderForward(renderState);
 
   }
-  for (vkSize i = 0; i<m_renderStatesParticles.length; ++i)
-  {
-    vkRenderState *renderState = m_renderStatesParticles[i];
-    if (!renderState)
-    {
-      continue;
-}
 
-    RenderForward(renderState);
-
-  }
+  m_particleRenderer->Render(m_renderer, m_renderStatesParticles);
 
 
 #if 0
