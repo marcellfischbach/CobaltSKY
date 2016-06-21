@@ -66,6 +66,7 @@ vkSubMesh *create_skeleton_mesh(IGraphics *renderer, float size);
 vkPostProcessor *createPostProcessor(IGraphics *graphics);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
+void UpdateParticle(float tpf);
 
 vkEngine *engine = 0;
 SDLWindow *window = 0;
@@ -79,6 +80,8 @@ IFrameProcessor* fp = 0;
 vkEntityScene *scene;
 IRenderTarget *rt = 0;
 vkDirectionalLight *directionalLight;
+vkParticle *particle;
+vkSize numParticles;
 
 int main(int argc, char **argv)
 {
@@ -92,7 +95,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;
@@ -205,7 +208,7 @@ int main_loop()
 
   vkUInt32 fps = 0;
   vkUInt64 nextFPS = vkTime::Get().GetCurrentTimeMilli();
-  bool anim = false;
+  bool anim = true;
   float angle = 0.0f;
   while (true)
   {
@@ -252,6 +255,7 @@ int main_loop()
 
     if (anim)
     {
+      UpdateParticle(1.0);
       angle += 0.01f;
     }
     directionalLight->SetArbDirection(vkVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
@@ -289,10 +293,6 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
     -s,  s, height, 1.0f,
     s, -s, height, 1.0f,
     s,  s, height, 1.0f,
-    s, -s, height, 1.0f,
-    s,  s, height, 1.0f,
-    -s, -s, height, 1.0f,
-    -s,  s, height, 1.0f,
   };
 
   float normalBuffer[] = {
@@ -300,17 +300,21 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
-    0.0f, 0.0f, -1.0f,
+  };
+
+  float tangentBuffer[] = {
+    1.0f, 0.0, 0.0,
+    1.0f, 0.0, 0.0,
+    1.0f, 0.0, 0.0,
+  };
+
+  float biNormalBuffer[] = {
+    0.0f, 1.0, 0.0,
+    0.0f, 1.0, 0.0,
+    0.0f, 1.0, 0.0,
   };
 
   float texCoordBuffer[] = {
-    0.0f, 0.0f,
-    2.0f, 0.0f,
-    0.0f, 2.0f,
-    2.0f, 2.0f,
     0.0f, 0.0f,
     2.0f, 0.0f,
     0.0f, 2.0f,
@@ -319,19 +323,22 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
 
   unsigned short indexBuffer[] = {
     0, 1, 3, 0, 3, 2,
-    4, 5, 7, 4, 7, 6,
   };
 
 
   vkVertexElement elements[] = {
     vkVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
     vkVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
-    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 2),
+    vkVertexElement(eVST_Tangent, eDT_Float, 3, 0, sizeof(float) * 3, 2),
+    vkVertexElement(eVST_BiNormal, eDT_Float, 3, 0, sizeof(float) * 3, 3),
+    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 4),
     vkVertexElement()
   };
 
   IVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
   IVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
+  IVertexBuffer *tanb = renderer->CreateVertexBuffer(sizeof(tangentBuffer), tangentBuffer, eBDM_Static);
+  IVertexBuffer *binb = renderer->CreateVertexBuffer(sizeof(biNormalBuffer), biNormalBuffer, eBDM_Static);
   IVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
   IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
   IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
@@ -347,6 +354,8 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
+  mesh->AddVertexBuffer(tanb);
+  mesh->AddVertexBuffer(binb);
   mesh->AddVertexBuffer(tb);
   mesh->SetIndexBuffer(ib, sizeof(indexBuffer) / sizeof(indexBuffer[0]));
   mesh->SetBoundingBox(bbox);
@@ -603,54 +612,49 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
   {
     particle->SetNumberOfRenderParticles(numParticles);
 
-    vkVector4f *positions = new vkVector4f[numParticles];
-    vkVector4f *sizes = new vkVector4f[numParticles];
-    vkVector3f *rotations = new vkVector3f[numParticles];
-    vkVector4f *texCoords = new vkVector4f[numParticles];
+    vkParticle::ParticleData *data;
+    if (particle->GetParticleBuffer()->Lock(0, (void**)&data, eBAM_ReadWrite))
+    {
 
-    srand(4567898);
-    for (unsigned i = 0; i < numParticles; ++i)
-    {
-      float x = (float)rand() / (float)RAND_MAX;
-      float y = (float)rand() / (float)RAND_MAX;
-      float z = (float)rand() / (float)RAND_MAX;
-      positions[i] = vkVector4f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f, 1.0f);
-      sizes[i] = vkVector4f(-1.0f, -1.0f, 1.0f, 1.0f);
-      rotations[i] = 0.0f;
-      texCoords[i] = vkVector4f(0.0f, 0.0f, 1.0, 1.0);
+      srand(4567898);
+      for (unsigned i = 0; i < numParticles; ++i)
+      {
+        float x = (float)rand() / (float)RAND_MAX;
+        float y = (float)rand() / (float)RAND_MAX;
+        float z = (float)rand() / (float)RAND_MAX;
+        data[i].position = vkVector3f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f);
+        data[i].size = vkVector2f(1.0f, 1.0f);
+        data[i].rotation = 0.0f;
+        data[i].spawnTime = vkTime::Get().GetCurrentTimeMilli();
+        data[i].killTime = vkTime::Get().GetCurrentTimeMilli() + 5000 +(unsigned)(5000.0 * (float)rand() / (float)RAND_MAX);
+      }
+      particle->GetParticleBuffer()->Unlock();
     }
-
-    void *buffer;
-    if (particle->GetPositions()->Lock(0, &buffer, eBAM_ReadWrite))
-    {
-      memcpy(buffer, positions, sizeof(vkVector4f) * numParticles);
-      particle->GetPositions()->Unlock();
-    }
-    if (particle->GetSizes()->Lock(0, &buffer, eBAM_ReadWrite))
-    {
-      memcpy(buffer, sizes, sizeof(vkVector4f) * numParticles);
-      particle->GetSizes()->Unlock();
-    }
-    if (particle->GetRotations()->Lock(0, &buffer, eBAM_ReadWrite))
-    {
-      memcpy(buffer, rotations, sizeof(vkVector3f) * numParticles);
-      particle->GetRotations()->Unlock();
-    }
-    if (particle->GetTexCoords()->Lock(0, &buffer, eBAM_ReadWrite))
-    {
-      memcpy(buffer, texCoords, sizeof(vkVector4f) * numParticles);
-      particle->GetTexCoords()->Unlock();
-    }
-    delete[] positions;
-    delete[] sizes;
-    delete[] rotations;
-    delete[] texCoords;
   }
 
   return particle;
 }
 
 
+void UpdateParticle(float tpf)
+{
+  vkUInt64 currentTime = vkTime::Get().GetCurrentTimeMilli();
+  vkParticle::ParticleData *data;
+  if (particle->GetParticleBuffer()->Lock(0, (void **)&data, eBAM_ReadWrite))
+  {
+    for (unsigned i = 0; i < numParticles; ++i)
+    {
+      float v = (float)rand() / (float)RAND_MAX;
+      data[i].position.z += 0.01f * tpf * v;
+      if (currentTime >= data[i].killTime)
+      {
+        data[i].size.Set(0.0f, 0.0f);
+      }
+
+    }
+    particle->GetParticleBuffer()->Unlock();
+  }
+}
 
 void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
@@ -858,8 +862,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   entityScene->AddEntity(planeEntity);
 
-
-  vkParticle *particle = CreateParticle(graphics, 5000);
+  numParticles = 5000;
+  particle = CreateParticle(graphics, numParticles);
   vkParticleState *particleState = new vkParticleState();
   particleState->SetRenderQueue(eRQ_Particles);
   particleState->SetParticle(particle);

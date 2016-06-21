@@ -5,6 +5,7 @@
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/Material.hh>
+#include <stddef.h>
 
 static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphics)
 {
@@ -13,10 +14,10 @@ static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphic
   {
 
     vkVertexElement elements[] = {
-      vkVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
-      vkVertexElement(eVST_ParticleSize, eDT_Float, 4, 0, sizeof(float) * 4, 1),
-      vkVertexElement(eVST_ParticleRotation, eDT_Float, 3, 0, sizeof(float) * 3, 2),
-      vkVertexElement(eVST_ParticleTexCoord, eDT_Float, 4, 0, sizeof(float) * 4, 3),
+      vkVertexElement(eVST_Position, eDT_Float, 3, offsetof(vkParticle::ParticleData, position), sizeof(vkParticle::ParticleData), 0),
+      vkVertexElement(eVST_ParticleSize, eDT_Float, 2, offsetof(vkParticle::ParticleData, size), sizeof(vkParticle::ParticleData), 0),
+      vkVertexElement(eVST_ParticleRotation, eDT_Float, 1, offsetof(vkParticle::ParticleData, rotation), sizeof(vkParticle::ParticleData), 0),
+      //vkVertexElement(eVST_ParticleTexCoord, eDT_Float, 4, offsetof(vkParticle::ParticleData, position), sizeof(vkParticle::ParticleData), 0),
       vkVertexElement()
     };
 
@@ -29,10 +30,7 @@ static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphic
 
 vkParticle::vkParticle()
   : vkObject()
-  , m_positions(0)
-  , m_sizes(0)
-  , m_rotations(0)
-  , m_texCoords(0)
+  , m_buffer(0)
   , m_vertexDeclaration(0)
   , m_numParticles(0)
   , m_numRenderParticles(0)
@@ -41,10 +39,7 @@ vkParticle::vkParticle()
 
 vkParticle::~vkParticle()
 {
-  VK_RELEASE(m_positions);
-  VK_RELEASE(m_sizes);
-  VK_RELEASE(m_rotations);
-  VK_RELEASE(m_texCoords);
+  VK_RELEASE(m_buffer);
 
 
   // the vertex declaration is a static shared... this will NEVER be released
@@ -55,78 +50,29 @@ bool vkParticle::Initialize(IGraphics *graphics, vkSize numPartilces)
 {
   SetNumberOfParticles(numPartilces);
 
-  m_positions = graphics->CreateVertexBuffer(numPartilces * 4 * sizeof(float), 0, eBDM_Static);
-  m_sizes = graphics->CreateVertexBuffer(numPartilces * 4 * sizeof(float), 0, eBDM_Static);
-  m_rotations = graphics->CreateVertexBuffer(numPartilces * 3 * sizeof(float), 0, eBDM_Static);
-  m_texCoords = graphics->CreateVertexBuffer(numPartilces * 4 * sizeof(float), 0, eBDM_Static);
-
+  m_buffer = graphics->CreateVertexBuffer(numPartilces * sizeof(ParticleData), 0, eBDM_Static);
   m_vertexDeclaration = create_particle_vertex_declaration(graphics);
 
 
   return true;
 }
 
-
-void vkParticle::SetPosition(IVertexBuffer *buffer)
+void vkParticle::SetParticleData(unsigned numParticles, const vkParticle::ParticleData *data)
 {
-  VK_SET(m_positions, buffer);
+  if (m_buffer)
+  {
+    m_buffer->Copy(0, numParticles * sizeof(ParticleData), data);
+  }
 }
 
-IVertexBuffer *vkParticle::GetPositions()
+IVertexBuffer *vkParticle::GetParticleBuffer()
 {
-  return m_positions;
+  return m_buffer;
 }
 
-const IVertexBuffer *vkParticle::GetPositions() const
+const IVertexBuffer *vkParticle::GetParticleBuffer() const
 {
-  return m_positions;
-}
-
-void vkParticle::SetSizes(IVertexBuffer *buffer)
-{
-  VK_SET(m_sizes, buffer);
-}
-
-IVertexBuffer *vkParticle::GetSizes()
-{
-  return m_sizes;
-}
-
-const IVertexBuffer *vkParticle::GetSizes() const
-{
-  return m_sizes;
-}
-
-
-void vkParticle::SetRotations(IVertexBuffer *buffer)
-{
-  VK_SET(m_rotations, buffer);
-}
-
-IVertexBuffer *vkParticle::GetRotations()
-{
-  return m_rotations;
-}
-
-const IVertexBuffer *vkParticle::GetRotations() const
-{
-  return m_rotations;
-}
-
-
-void vkParticle::SetTexCoords(IVertexBuffer *buffer)
-{
-  VK_SET(m_texCoords, buffer);
-}
-
-IVertexBuffer *vkParticle::GetTexCoords()
-{
-  return m_texCoords;
-}
-
-const IVertexBuffer *vkParticle::GetTexCoords() const
-{
-  return m_texCoords;
+  return m_buffer;
 }
 
 void vkParticle::SetNumberOfParticles(vkSize numParticles)
@@ -157,10 +103,7 @@ void vkParticle::Render(IGraphics *renderer, vkRenderPass pass, vkMaterialInstan
 {
   if (material->Bind(renderer, pass))
   {
-    renderer->SetVertexBuffer(0, m_positions);
-    renderer->SetVertexBuffer(1, m_sizes);
-    renderer->SetVertexBuffer(2, m_rotations);
-    renderer->SetVertexBuffer(3, m_texCoords);
+    renderer->SetVertexBuffer(0, m_buffer);
     renderer->SetVertexDeclaration(m_vertexDeclaration);
 
     renderer->Render(ePT_Points, (vkUInt32)m_numRenderParticles);

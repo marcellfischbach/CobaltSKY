@@ -8,20 +8,20 @@
 			<!--parameter name="Color">1.0;1.0;1.0;1.0</parameter-->
 		</parameters>
 	</materialinstance>
-
-	<materialinstance name="Dirt">
-		<material>${materials}/mat_solid.xml:Solid</material>
-		<parameters>
-			<parameter name="Diffuse">${materials}/textures.xml:Dirt</parameter>
-			<parameter name="Color">1.0;1.0;1.0;1.0</parameter>
-		</parameters>
-	</materialinstance>
 	
 	<materialinstance name="FieldStoneRed">
 		<material>${materials}/mat_solid.xml:Solid</material>
 		<parameters>
 			<parameter name="Diffuse">${materials}/textures.xml:Dirt</parameter>
 			<parameter name="Color">1.0;0.0;0.0;1.0</parameter>
+		</parameters>
+	</materialinstance>
+
+	<materialinstance name="Dirt">
+		<material>${materials}/mat_solid.xml:Solid</material>
+		<parameters>
+			<parameter name="Diffuse">${materials}/textures.xml:Dirt</parameter>
+			<parameter name="Color">1.0;1.0;1.0;1.0</parameter>
 		</parameters>
 	</materialinstance>
 

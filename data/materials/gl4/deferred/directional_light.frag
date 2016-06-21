@@ -53,5 +53,4 @@ void main ()
 	
 	float shadow = calculate_shadow (world4, cam.xyz);
 	vk_FragColor.xyz *= shadow;
-	vk_FragColor = texture(vk_NormalLightMode, texCoord);//vec4(normal * 0.5 + 0.5, 1.0);
 }

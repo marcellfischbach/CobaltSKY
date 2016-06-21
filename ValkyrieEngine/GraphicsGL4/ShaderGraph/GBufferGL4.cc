@@ -203,15 +203,13 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   vkString normal = "vec3(0, 0, 1)";
   if (normalOutput)
   {
-    normal = "((" + ctx.GetFullOutputValue(normalOutput) + ") * 2.0 - 1.0)";
+    //normal = "((" + ctx.GetFullOutputValue(normalOutput) + ") * 2.0 - 1.0)";
   }
 
   ss << "vec3 n = normalize(inFragNormal);" << std::endl
     << "vec3 t = normalize(inFragTangent);" << std::endl
     << "vec3 b = normalize(inFragBiNormal);" << std::endl
-    << "  mat3 faceToModel = mat3(t.x, b.x, n.x," << std::endl
-    << "                          t.y, b.y, n.y," << std::endl
-    << "                          t.z, b.z, n.z);" << std::endl
+    << "  mat3 faceToModel = mat3(t, b, n);" << std::endl
      << "  vk_DiffuseRoughness = vec4(" << ctx.GetFullOutputValue(diffuseOutput) << ", " << roughness << ");" << std::endl
      << "  vk_NormalLightMode = vec4((faceToModel * " << normal << ") * 0.5 + 0.5, 0.0);" << std::endl
      << "  vk_EmissivMetallic = vec4(0, 0, 0, 0);" << std::endl

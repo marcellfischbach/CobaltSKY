@@ -3,6 +3,7 @@
 
 #include <Valkyrie/Export.hh>
 #include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Graphics/Particle.refl.hh>
 
@@ -16,27 +17,26 @@ VK_CLASS()
 class VKE_API vkParticle : public vkObject
 {
   VK_CLASS_GEN;
+
+public:
+  struct ParticleData
+  {
+    vkVector3f position;
+    vkVector2f size;
+    float      rotation;
+    vkUInt32   spawnTime;
+    vkUInt32   killTime;
+  };
+
 public:
   vkParticle();
   virtual ~vkParticle();
 
   bool Initialize(IGraphics *renderer, vkSize numberOfParticles);
 
-  void SetPosition(IVertexBuffer *vertexBuffer);
-  IVertexBuffer *GetPositions();
-  const IVertexBuffer *GetPositions() const;
-
-  void SetSizes(IVertexBuffer *vertexBuffer);
-  IVertexBuffer *GetSizes();
-  const IVertexBuffer *GetSizes() const;
-
-  void SetRotations(IVertexBuffer *vertexBuffer);
-  IVertexBuffer *GetRotations();
-  const IVertexBuffer *GetRotations() const;
-
-  void SetTexCoords(IVertexBuffer *vertexBuffer);
-  IVertexBuffer *GetTexCoords();
-  const IVertexBuffer *GetTexCoords() const;
+  void SetParticleData(unsigned numParticles, const ParticleData *data);
+  IVertexBuffer *GetParticleBuffer();
+  const IVertexBuffer *GetParticleBuffer() const;
 
   void SetNumberOfParticles(vkSize numParticles);
   vkSize GetNumberOfParticles() const;
@@ -47,12 +47,10 @@ public:
 
   void Render(IGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material);
 
+
 private:
   IVertexDeclaration *m_vertexDeclaration;
-  IVertexBuffer *m_positions;
-  IVertexBuffer *m_sizes;
-  IVertexBuffer *m_rotations;
-  IVertexBuffer *m_texCoords;
+  IVertexBuffer *m_buffer;
 
   vkSize m_numParticles;
   vkSize m_numRenderParticles;
