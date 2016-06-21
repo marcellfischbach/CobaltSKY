@@ -24,8 +24,11 @@ void vk_fade_in_out_test();
 void main ()
 {
 	vk_fade_in_out_test();
-	
-	mat3 faceToWorldMat = mat3(normalize(tangent), normalize(binormal), normalize(normal));
+	vec3 t = normalize(tangent);
+	vec3 b = normalize(binormal);
+	vec3 n = normalize(normal);
+	mat3 faceToWorldMat = mat3(t, b, n);
+														 
 	vec3 normalTxt = texture(vk_Normal, texCoord).rgb * 2.0 - 1.0;
 	normalTxt = faceToWorldMat * normalTxt;
 	
