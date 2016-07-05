@@ -89,3 +89,95 @@ void vkParticleState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityS
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+vkParticleEmitterState::vkParticleEmitterState()
+  : vkSpatialState()
+  , m_particleState(0)
+  , m_particlesPerSecond(20.0f)
+{
+  m_timeToNextParticle = 1.0f / m_particlesPerSecond;
+}
+
+vkParticleEmitterState::~vkParticleEmitterState()
+{
+  VK_RELEASE(m_particleState);
+}
+
+void vkParticleEmitterState::SetParticleState(vkParticleState *particleState)
+{
+  VK_SET(m_particleState, particleState);
+}
+
+vkParticleState *vkParticleEmitterState::GetParticleState()
+{
+  return m_particleState;
+}
+
+const vkParticleState *vkParticleEmitterState::GetParticleState() const
+{
+  return m_particleState;
+}
+
+
+void vkParticleEmitterState::Update(float tpf)
+{
+  if (!m_particleState)
+  {
+    return;
+  }
+
+  vkParticle *particle = m_particleState->GetParticle();
+  if (!particle)
+  {
+    return;
+  }
+
+  vkParticle::ParticleData *data = 0;
+  m_timeToNextParticle -= tpf;
+  vkSize particleID = 0;
+  while (true)
+  {
+    if (m_timeToNextParticle > 0.0f)
+    {
+      break;
+    }
+
+    m_timeToNextParticle += 1.0 / m_particlesPerSecond;
+    if (!data)
+    {
+      particle->LockParticleData(false);
+      data = particle->GetParticleData();
+    }
+
+    for (vkSize in = particle->GetNumberOfParticles(); particleID < in; ++particleID)
+    {
+      if (data[particleID].timeToLive < 0.0)
+      {
+        float x = (float)rand() / (float)RAND_MAX;
+        float y = (float)rand() / (float)RAND_MAX;
+        float z = (float)rand() / (float)RAND_MAX;
+        data[particleID].position = vkVector3f(-1.0f + x * 2.0f, -1.0f + y * 2.0f, z * 0.0f);
+        data[particleID].size = vkVector2f(2.0f, 2.0f);
+        data[particleID].rotation = 0.0f;
+        data[particleID].timeToLive = 10.0f;
+        break;
+      }
+    }
+
+  }
+  if (data)
+  {
+    particle->UnlockParticleData();
+  }
+
+}

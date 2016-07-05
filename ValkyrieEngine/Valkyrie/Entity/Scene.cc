@@ -52,3 +52,11 @@ void vkEntityScene::RemoveEntity(vkEntity *entity)
 
 }
 
+void vkEntityScene::Update(float tpf)
+{
+  if (m_rootEntity)
+  {
+    m_rootEntity->Update(tpf);
+  }
+}
+

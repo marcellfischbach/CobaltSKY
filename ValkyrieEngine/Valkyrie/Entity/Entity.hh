@@ -70,6 +70,8 @@ public:
 
   void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 
+  virtual void Update(float tpf);
+
   /**
   * \name Live-cycles
   * @{

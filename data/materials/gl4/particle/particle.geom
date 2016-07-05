@@ -10,12 +10,18 @@ uniform mat4 vk_MatProjView;
 
 in vec2 inGeomParticleSize[];
 in float inGeomParticleRotation[];
+in float inGeomParticleTimeToLive[];
 
 out vec2 inFragTexCoord;
 
 
 void main ()
 {
+	if (inGeomParticleTimeToLive[0] <= 0.0)
+	{
+		return;
+	}
+	
 	vec2 minS = -inGeomParticleSize[0];
 	vec2 maxS = inGeomParticleSize[0];
 	

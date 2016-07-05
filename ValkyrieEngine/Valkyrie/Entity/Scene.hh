@@ -26,6 +26,8 @@ public:
   IPhysicsScene *GetPhysicsScene();
   const IPhysicsScene *GetPhysicsScene() const;
 
+  void Update(float tpf);
+
 private:
   vkEntity* m_rootEntity;
   IPhysicsScene *m_physicsScene;

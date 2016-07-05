@@ -42,3 +42,26 @@ private:
   vkParticleShadingMode m_shadingMode;
 };
 
+
+VK_CLASS()
+class VKE_API vkParticleEmitterState : public vkSpatialState
+{
+  VK_CLASS_GEN;
+public:
+  vkParticleEmitterState();
+  virtual ~vkParticleEmitterState();
+
+  void SetParticleState(vkParticleState *particleState);
+  vkParticleState *GetParticleState();
+  const vkParticleState *GetParticleState() const;
+
+  virtual void Update(float tpf);
+
+private:
+  vkParticleState *m_particleState;
+
+
+  float m_particlesPerSecond;
+  float m_timeToNextParticle;
+
+};

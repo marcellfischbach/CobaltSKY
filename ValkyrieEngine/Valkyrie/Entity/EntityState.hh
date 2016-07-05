@@ -54,6 +54,8 @@ public:
    * @}
    */
 
+  virtual void Update(float tpf);
+
 protected:
   vkEntityState();
 

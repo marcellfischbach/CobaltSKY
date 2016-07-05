@@ -210,6 +210,7 @@ int main_loop()
   vkUInt64 nextFPS = vkTime::Get().GetCurrentTimeMilli();
   bool anim = true;
   float angle = 0.0f;
+  vkUInt64 lastTime = vkTime::Get().GetCurrentTimeMilli();
   while (true)
   {
     vkTime::Get().Tick();
@@ -249,13 +250,18 @@ int main_loop()
       fps = 0;
       nextFPS += 1000;
     }
+    vkUInt64 deltaT = time - lastTime;
+    lastTime = time;
+
+    float tpf = (float)deltaT / 1000.0f;
+    scene->Update(tpf);
 
     scene->GetPhysicsScene()->StepSimulation();
     scene->GetPhysicsScene()->UpdateColliders();
 
     if (anim)
     {
-      UpdateParticle(1.0);
+      UpdateParticle(tpf);
       angle += 0.01f;
     }
     directionalLight->SetArbDirection(vkVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
@@ -625,8 +631,7 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
         data[i].position = vkVector3f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f);
         data[i].size = vkVector2f(1.0f, 1.0f);
         data[i].rotation = 0.0f;
-        data[i].spawnTime = vkTime::Get().GetCurrentTimeMilli();
-        data[i].killTime = vkTime::Get().GetCurrentTimeMilli() + 5000 +(unsigned)(5000.0 * (float)rand() / (float)RAND_MAX);
+        data[i].timeToLive = -1.0f;// 5.0f + (float)(5.0 * (float)rand() / (float)RAND_MAX);
       }
       particle->GetParticleBuffer()->Unlock();
     }
@@ -645,10 +650,10 @@ void UpdateParticle(float tpf)
     for (unsigned i = 0; i < numParticles; ++i)
     {
       float v = (float)rand() / (float)RAND_MAX;
-      data[i].position.z += 0.01f * tpf * v;
-      if (currentTime >= data[i].killTime)
+      data[i].position.z += 10.0f * tpf * v;
+      if (data[i].timeToLive > 0.0f)
       {
-        data[i].size.Set(0.0f, 0.0f);
+        data[i].timeToLive -= tpf;
       }
 
     }
@@ -867,12 +872,16 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkParticleState *particleState = new vkParticleState();
   particleState->SetRenderQueue(eRQ_Particles);
   particleState->SetParticle(particle);
-  particleState->SetShadingMode(ePSM_Shaded);
+  particleState->SetShadingMode(ePSM_Emitting);
   particleState->SetMaterial(materialParticle);
 
+  vkParticleEmitterState *particleEmitterState = new vkParticleEmitterState();
+  particleEmitterState->SetParticleState(particleState);
+
   vkEntity *particleEntity = new vkEntity();
-  particleEntity->SetRootState(particleState);
-  particleEntity->AddState(particleState);
+  particleEntity->SetRootState(particleEmitterState);
+  particleEntity->AddState(particleEmitterState);
+  particleEntity->AddState(particleState, particleEmitterState);
 
   entityScene->AddEntity(particleEntity);
 

@@ -177,6 +177,18 @@ void vkEntity::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entity
   }
 }
 
+void vkEntity::Update(float tpf)
+{
+  for (vkSize i = 0, in = m_states.size(); i < in; ++i)
+  {
+    m_states[i]->Update(tpf);
+  }
+  for (vkSize i = 0, in = m_children.size(); i < in; ++i)
+  {
+    m_children[i]->Update(tpf);
+  }
+}
+
 const vkBoundingBox& vkEntity::GetBoundingBox() const
 {
   return m_rootState->GetBoundingBox();

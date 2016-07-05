@@ -18,7 +18,6 @@ vkEntityState::~vkEntityState()
 
 }
 
-
 vkSpatialState *vkEntityState::ToSpatialState()
 {
   return 0;
@@ -154,3 +153,9 @@ void vkEntityState::OnDestroyed()
 {
 
 }
+
+void vkEntityState::Update(float tpf)
+{
+
+}
+

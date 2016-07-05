@@ -12,6 +12,8 @@ struct IVertexBuffer;
 struct IVertexDeclaration;
 
 class vkMaterialInstance;
+class vkParticle;
+
 
 VK_CLASS()
 class VKE_API vkParticle : public vkObject
@@ -24,8 +26,7 @@ public:
     vkVector3f position;
     vkVector2f size;
     float      rotation;
-    vkUInt32   spawnTime;
-    vkUInt32   killTime;
+    float      timeToLive;
   };
 
 public:
@@ -44,6 +45,10 @@ public:
   void SetNumberOfRenderParticles(vkSize numParticles);
   vkSize GetNumberOfRenderParticles() const;
 
+  bool LockParticleData(bool readOnly = false);
+  ParticleData *GetParticleData();
+  const ParticleData *GetParticleData() const;
+  void UnlockParticleData();
 
   void Render(IGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material);
 
@@ -54,4 +59,9 @@ private:
 
   vkSize m_numParticles;
   vkSize m_numRenderParticles;
+  ParticleData *m_particleData;
 };
+
+
+
+
