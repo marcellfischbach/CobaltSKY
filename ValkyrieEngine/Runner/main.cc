@@ -922,7 +922,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   vkEntity *signEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/sign.xml"));
   signEntity->SetClippingRange(-FLT_MAX, 50.0f);
-  signEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
+  signEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 0.0f));
   signEntity->FinishTransformation();
   entityScene->AddEntity(signEntity);
 

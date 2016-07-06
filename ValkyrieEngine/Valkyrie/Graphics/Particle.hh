@@ -24,8 +24,10 @@ public:
   struct ParticleData
   {
     vkVector3f position;
+    vkVector3f direction;
     vkVector2f size;
     float      rotation;
+    float      angularSpeed;
     float      timeToLive;
   };
 

@@ -152,7 +152,7 @@ void vkParticleEmitterState::Update(float tpf)
       break;
     }
 
-    m_timeToNextParticle += 1.0 / m_particlesPerSecond;
+    m_timeToNextParticle += 1.0f / m_particlesPerSecond;
     if (!data)
     {
       particle->LockParticleData(false);
