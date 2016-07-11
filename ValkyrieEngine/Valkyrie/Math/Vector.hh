@@ -357,6 +357,15 @@ public:
     return r;
   }
 
+
+  VK_FORCEINLINE static vkVector3f &MulAdd(const vkVector3f &v0, const vkVector3f v1, float fact, vkVector3f &r)
+  {
+    r.x = v0.x + v1.x * fact;
+    r.y = v0.y + v1.y * fact;
+    r.z = v0.z + v1.z * fact;
+    return r;
+  }
+
   VK_FORCEINLINE static vkVector3f &Div(const vkVector3f &v0, const vkVector3f &v1, vkVector3f &r)
   {
     r.x = v0.x / v1.x;

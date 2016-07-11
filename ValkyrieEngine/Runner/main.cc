@@ -66,7 +66,6 @@ vkSubMesh *create_skeleton_mesh(IGraphics *renderer, float size);
 vkPostProcessor *createPostProcessor(IGraphics *graphics);
 void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
-void UpdateParticle(float tpf);
 
 vkEngine *engine = 0;
 SDLWindow *window = 0;
@@ -261,7 +260,6 @@ int main_loop()
 
     if (anim)
     {
-      UpdateParticle(tpf);
       angle += 0.01f;
     }
     directionalLight->SetArbDirection(vkVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
@@ -641,26 +639,6 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
 }
 
 
-void UpdateParticle(float tpf)
-{
-  vkUInt64 currentTime = vkTime::Get().GetCurrentTimeMilli();
-  vkParticle::ParticleData *data;
-  if (particle->GetParticleBuffer()->Lock(0, (void **)&data, eBAM_ReadWrite))
-  {
-    for (unsigned i = 0; i < numParticles; ++i)
-    {
-      float v = (float)rand() / (float)RAND_MAX;
-      data[i].position.z += 10.0f * tpf * v;
-      if (data[i].timeToLive > 0.0f)
-      {
-        data[i].timeToLive -= tpf;
-      }
-
-    }
-    particle->GetParticleBuffer()->Unlock();
-  }
-}
-
 void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 {
   static float rotH = -3.906003f, rotV = -0.096000f;
@@ -872,16 +850,26 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkParticleState *particleState = new vkParticleState();
   particleState->SetRenderQueue(eRQ_Particles);
   particleState->SetParticle(particle);
-  particleState->SetShadingMode(ePSM_Emitting);
+  particleState->SetShadingMode(ePSM_Shaded);
   particleState->SetMaterial(materialParticle);
 
-  vkParticleEmitterState *particleEmitterState = new vkParticleEmitterState();
-  particleEmitterState->SetParticleState(particleState);
+  vkDefaultParticleEmitter *emitter = new vkDefaultParticleEmitter();
+  emitter->SetParticlesPerSecond(10);
+  emitter->SetTimeToLive(vkRandomRange::Value(4.0f, 1.0f));
+  emitter->SetInitialRotation(vkRandomRange::Range(-M_PI, M_PI));
+  emitter->SetRotationSpeed(vkRandomRange::Value(0.0, M_PI));
+  emitter->SetSizeX(vkRandomRange::Value(2.0f));
+  emitter->SetSizeY(vkRandomRange::Value(2.0f));
+  particleState->SetEmitter(emitter);
+  emitter->Release();
+
+  vkGravitationParticleStepper *stepper = new vkGravitationParticleStepper();
+  particleState->SetStepper(stepper);
+  stepper->Release();
 
   vkEntity *particleEntity = new vkEntity();
-  particleEntity->SetRootState(particleEmitterState);
-  particleEntity->AddState(particleEmitterState);
-  particleEntity->AddState(particleState, particleEmitterState);
+  particleEntity->SetRootState(particleState);
+  particleEntity->AddState(particleState);
 
   entityScene->AddEntity(particleEntity);
 

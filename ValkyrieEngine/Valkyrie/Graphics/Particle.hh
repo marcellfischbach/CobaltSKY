@@ -26,8 +26,10 @@ public:
     vkVector3f position;
     vkVector3f direction;
     vkVector2f size;
+    vkVector4f sizeRange;
+    float      sizeTime;
     float      rotation;
-    float      angularSpeed;
+    float      rotationSpeed;
     float      timeToLive;
   };
 

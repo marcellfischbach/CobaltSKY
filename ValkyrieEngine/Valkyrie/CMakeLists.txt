@@ -213,6 +213,7 @@ set(SOURCE_MATH
     Math/Hysteresis.hh
     Math/Matrix.hh
     Math/Plane.hh
+    Math/RandomRange.hh
     Math/Vector.hh
     )
 

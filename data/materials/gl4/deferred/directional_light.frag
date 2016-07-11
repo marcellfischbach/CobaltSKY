@@ -28,7 +28,8 @@ void main ()
 	float d = texture(vk_Depth, texCoord).r;
 	if (d == 1.0)
 	{
-		discard;
+		vk_FragColor = vec4(0.7, 0.8, 1.0, 1.0);//discard;
+		return;
 	}
 	d = d * 2.0f - 1.0;
 	
@@ -44,13 +45,14 @@ void main ()
 	vec3 diffuse = texture(vk_DiffuseRoughness, texCoord).xyz;
 
 	
-	float lamb = dot (-vk_LightDirection, normal);
-	//lamb = lamb * 0.5 + 0.5;
+	float lamb = clamp(dot (-vk_LightDirection, normal), 0.0, 1.0);
 	
 	
+	float backLamb = clamp(dot (vk_LightDirection, normal), 0.0, 1.0) * 0.5;
 	
-	vk_FragColor = vec4 (diffuse * lamb * vk_LightColor.rgb * vk_LightEnergy, 1.0);
+	
 	
 	float shadow = calculate_shadow (world4, cam.xyz);
-	vk_FragColor.xyz *= shadow;
+	
+	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * vk_LightEnergy * (lamb * shadow + backLamb), 1.0);
 }
