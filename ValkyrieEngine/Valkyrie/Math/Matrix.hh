@@ -46,6 +46,90 @@ public:
   {
 
   }
+
+  VK_FORCEINLINE void SetXAxis(float x, float y, float z)
+  {
+    m00 = x;
+    m01 = y;
+    m02 = z;
+  }
+
+  VK_FORCEINLINE void SetXAxis(const vkVector3f &v)
+  {
+    m00 = v.x;
+    m01 = v.y;
+    m02 = v.z;
+  }
+
+  VK_FORCEINLINE void SetYAxis(float x, float y, float z)
+  {
+    m10 = x;
+    m11 = y;
+    m12 = z;
+  }
+
+  VK_FORCEINLINE void SetYAxis(const vkVector3f &v)
+  {
+    m10 = v.x;
+    m11 = v.y;
+    m12 = v.z;
+  }
+
+
+  VK_FORCEINLINE void SetZAxis(float x, float y, float z)
+  {
+    m20 = x;
+    m21 = y;
+    m22 = z;
+  }
+
+  VK_FORCEINLINE void SetZAxis(const vkVector3f &v)
+  {
+    m20 = v.x;
+    m21 = v.y;
+    m22 = v.z;
+  }
+
+  VK_FORCEINLINE static vkMatrix3f &Mult(const vkMatrix3f &m0, const vkMatrix3f &m1, vkMatrix3f &r)
+  {
+    float m00 = m0.m00 * m1.m00 + m0.m10 * m1.m01 + m0.m20 * m1.m02;
+    float m01 = m0.m01 * m1.m00 + m0.m11 * m1.m01 + m0.m21 * m1.m02;
+    float m02 = m0.m02 * m1.m00 + m0.m12 * m1.m01 + m0.m22 * m1.m02;
+
+    float m10 = m0.m00 * m1.m10 + m0.m10 * m1.m11 + m0.m20 * m1.m12;
+    float m11 = m0.m01 * m1.m10 + m0.m11 * m1.m11 + m0.m21 * m1.m12;
+    float m12 = m0.m02 * m1.m10 + m0.m12 * m1.m11 + m0.m22 * m1.m12;
+
+    float m20 = m0.m00 * m1.m20 + m0.m10 * m1.m21 + m0.m20 * m1.m22;
+    float m21 = m0.m01 * m1.m20 + m0.m11 * m1.m21 + m0.m21 * m1.m22;
+    float m22 = m0.m02 * m1.m20 + m0.m12 * m1.m21 + m0.m22 * m1.m22;
+
+
+    r.m00 = m00;
+    r.m01 = m01;
+    r.m02 = m02;
+    r.m10 = m10;
+    r.m11 = m11;
+    r.m12 = m12;
+    r.m20 = m20;
+    r.m21 = m21;
+    r.m22 = m22;
+    return r;
+  }
+
+
+  static vkVector3f &Mult(const vkMatrix3f &m, const vkVector3f &v, vkVector3f &res)
+  {
+    float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z;
+    float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z;
+    float z = m.m02 * v.x + m.m12 * v.y + m.m22 * v.z;
+    res.x = x;
+    res.y = y;
+    res.z = z;
+    return res;
+  }
+
+
 };
 
 

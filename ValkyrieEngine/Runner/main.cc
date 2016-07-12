@@ -845,7 +845,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   entityScene->AddEntity(planeEntity);
 
-  numParticles = 5000;
+  numParticles = 100;
   particle = CreateParticle(graphics, numParticles);
   vkParticleState *particleState = new vkParticleState();
   particleState->SetRenderQueue(eRQ_Particles);
@@ -855,15 +855,23 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   vkDefaultParticleEmitter *emitter = new vkDefaultParticleEmitter();
   emitter->SetParticlesPerSecond(10);
-  emitter->SetTimeToLive(vkRandomRange::Value(4.0f, 1.0f));
+  emitter->SetTimeToLive(vkRandomRange::Value(10.0f));
+  emitter->SetInitialTime(vkRandomRange::Range(0.0f, 2.0f));
+  emitter->SetSpawnSphere(vkVector3f(0, 0, 1), vkRandomRange::Range(0.0f, 2.0f));
+  emitter->SetInitialDirection(vkVector3f(0, 0, 1), vkRandomRange::Range(0.0f, M_PI / 2.0f), vkRandomRange::Value(1.0f));
   emitter->SetInitialRotation(vkRandomRange::Range(-M_PI, M_PI));
-  emitter->SetRotationSpeed(vkRandomRange::Value(0.0, M_PI));
-  emitter->SetSizeX(vkRandomRange::Value(2.0f));
-  emitter->SetSizeY(vkRandomRange::Value(2.0f));
+  emitter->SetRotationSpeed(vkRandomRange::Range(0.0, M_PI * 0.1f));
+  emitter->SetRotationMode(ePRM_Both);
+  emitter->SetSizeX(vkRandomRange::Range(2.0, 10.0f));
+  emitter->SetSizeY(vkRandomRange::Value(2.0f, 1.0f));
+  emitter->SetSyncSize(true);
   particleState->SetEmitter(emitter);
   emitter->Release();
 
-  vkGravitationParticleStepper *stepper = new vkGravitationParticleStepper();
+  vkDefaultParticleStepper *stepper = new vkDefaultParticleStepper();
+  stepper->SetGravity(vkVector3f(0.0f, 0.0f, 1.0f));// -9.81f));
+  stepper->SetSizeCicleTime(8.0f);
+  stepper->SetSizeMode(ePSM_Linear);
   particleState->SetStepper(stepper);
   stepper->Release();
 

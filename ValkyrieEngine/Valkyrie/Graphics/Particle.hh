@@ -30,6 +30,7 @@ public:
     float      sizeTime;
     float      rotation;
     float      rotationSpeed;
+    float      time;
     float      timeToLive;
   };
 

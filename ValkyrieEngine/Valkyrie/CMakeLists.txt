@@ -2,6 +2,7 @@
 
 add_definitions(-DVKE_EXPORT)
 add_definitions(-DVK_BUILD_EDITOR)
+add_definitions(-D_USE_MATH_DEFINES)
 
 set(SOURCE
     Defs.hh
