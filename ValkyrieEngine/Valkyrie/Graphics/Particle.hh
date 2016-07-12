@@ -32,6 +32,7 @@ public:
     float      rotationSpeed;
     float      time;
     float      timeToLive;
+    vkVector3f textPage;
   };
 
 public:

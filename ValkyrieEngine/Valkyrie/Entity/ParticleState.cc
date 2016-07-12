@@ -430,6 +430,8 @@ vkDefaultParticleStepper::vkDefaultParticleStepper()
   : IParticleStepper()
   , m_sizeMode(ePSM_Linear)
   , m_gravity(0.0f, 0.0f, 0.0f)
+  , m_numTextPages(1)
+  , m_textPageTime(1.0f)
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -467,6 +469,26 @@ void vkDefaultParticleStepper::SetGravity(const vkVector3f &gravity)
 const vkVector3f &vkDefaultParticleStepper::GetGravity() const
 {
   return m_gravity;
+}
+
+void vkDefaultParticleStepper::SetNumberOfTextPages(vkUInt8 numTextPages)
+{
+  m_numTextPages = numTextPages;
+}
+
+vkUInt8 vkDefaultParticleStepper::GetNumberOfTextPages() const
+{
+  return m_numTextPages;
+}
+
+void vkDefaultParticleStepper::SetTextPageTime(float textPageTime)
+{
+  m_textPageTime = textPageTime;
+}
+
+float vkDefaultParticleStepper::GetTextPageTime() const
+{
+  return m_textPageTime;
 }
 
 void vkDefaultParticleStepper::Update(float tpf, vkParticle *particle)
@@ -538,5 +560,12 @@ void vkDefaultParticleStepper::UpdateParticle(float tpf, vkParticle::ParticleDat
     particle->size.x = particle->sizeRange.x + particle->sizeRange.y * tf;
     particle->size.y = particle->sizeRange.z + particle->sizeRange.w * tf;
   }
+
+  unsigned page = particle->time / m_textPageTime;
+  page %= m_numTextPages;
+  unsigned nextPage = (page + 1) % m_numTextPages;
+  float fact = 1.0f - fmod(particle->time, m_textPageTime);
+
+  particle->textPage = vkVector3f(page, nextPage, fact);
 
 }

@@ -151,7 +151,7 @@ private:
 
     m_map["ParticleSize"] = eVST_ParticleSize;
     m_map["ParticleRotation"] = eVST_ParticleRotation;
-    m_map["ParticleTexCoord"] = eVST_ParticleTexCoord;
+    m_map["ParticleTextPage"] = eVST_ParticleTextPage;
     m_map["ParticleTimeToLive"] = eVST_ParticleTimeToLive;
 
     m_map["BoneIndex"] = eVST_BoneIndex;

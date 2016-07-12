@@ -106,7 +106,7 @@ enum vkVertexStreamType
 
   eVST_ParticleSize,
   eVST_ParticleRotation,
-  eVST_ParticleTexCoord,
+  eVST_ParticleTextPage,
   eVST_ParticleTimeToLive,
 
   eVST_BoneIndex,

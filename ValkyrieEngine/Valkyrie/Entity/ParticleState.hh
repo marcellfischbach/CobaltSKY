@@ -193,6 +193,12 @@ public:
   void SetSizeCicleTime(float sizeCicleTime);
   float GetSizeCicleTime() const;
 
+  void SetNumberOfTextPages(vkUInt8 numTextPages);
+  vkUInt8 GetNumberOfTextPages() const;
+
+  void SetTextPageTime(float textPageTime);
+  float GetTextPageTime() const;
+
   void SetGravity(const vkVector3f &gravity);
   const vkVector3f &GetGravity() const;
 
@@ -205,6 +211,8 @@ protected:
 private:
   vkParticleSizeMode m_sizeMode;
   float m_sizeCicleTime;
+  vkUInt8 m_numTextPages;
+  float m_textPageTime;
   vkVector3f m_gravity;
 };
 

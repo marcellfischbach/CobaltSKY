@@ -94,7 +94,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 1
+#if 0
   posX = -1500;
 #else
   //posX = 2000;
@@ -854,7 +854,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   particleState->SetMaterial(materialParticle);
 
   vkDefaultParticleEmitter *emitter = new vkDefaultParticleEmitter();
-  emitter->SetParticlesPerSecond(10);
+  emitter->SetParticlesPerSecond(1.0f);
   emitter->SetTimeToLive(vkRandomRange::Value(10.0f));
   emitter->SetInitialTime(vkRandomRange::Range(0.0f, 2.0f));
   emitter->SetSpawnSphere(vkVector3f(0, 0, 1), vkRandomRange::Range(0.0f, 2.0f));
@@ -872,6 +872,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
   stepper->SetGravity(vkVector3f(0.0f, 0.0f, 1.0f));// -9.81f));
   stepper->SetSizeCicleTime(8.0f);
   stepper->SetSizeMode(ePSM_Linear);
+  stepper->SetTextPageTime(1.0f);
+  stepper->SetNumberOfTextPages(4);
   particleState->SetStepper(stepper);
   stepper->Release();
 

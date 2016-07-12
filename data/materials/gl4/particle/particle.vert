@@ -5,11 +5,13 @@ in vec3 vk_Position;
 in vec2 vk_ParticleSize;
 in float vk_ParticleRotation;
 in float vk_ParticleTimeToLive;
+in vec3 vk_ParticleTextPage;
 
 
 out vec2 inGeomParticleSize;
 out float inGeomParticleRotation;
 out float inGeomParticleTimeToLive;
+out vec3 inGeomParticleTextPage;
 
 void main ()
 {
@@ -18,5 +20,6 @@ void main ()
 	inGeomParticleSize = vk_ParticleSize;
 	inGeomParticleRotation = vk_ParticleRotation;
 	inGeomParticleTimeToLive = vk_ParticleTimeToLive;
+	inGeomParticleTextPage = vk_ParticleTextPage;
 }
 

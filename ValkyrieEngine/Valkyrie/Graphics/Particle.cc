@@ -18,7 +18,7 @@ static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphic
       vkVertexElement(eVST_ParticleSize, eDT_Float, 2, offsetof(vkParticle::ParticleData, size), sizeof(vkParticle::ParticleData), 0),
       vkVertexElement(eVST_ParticleRotation, eDT_Float, 1, offsetof(vkParticle::ParticleData, rotation), sizeof(vkParticle::ParticleData), 0),
       vkVertexElement(eVST_ParticleTimeToLive, eDT_Float, 1, offsetof(vkParticle::ParticleData, timeToLive), sizeof(vkParticle::ParticleData), 0),
-      //vkVertexElement(eVST_ParticleTexCoord, eDT_Float, 4, offsetof(vkParticle::ParticleData, position), sizeof(vkParticle::ParticleData), 0),
+      vkVertexElement(eVST_ParticleTextPage, eDT_Float, 3, offsetof(vkParticle::ParticleData, textPage), sizeof(vkParticle::ParticleData), 0),
       vkVertexElement()
     };
 

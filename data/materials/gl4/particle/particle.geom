@@ -11,8 +11,10 @@ uniform mat4 vk_MatProj;
 in vec2 inGeomParticleSize[];
 in float inGeomParticleRotation[];
 in float inGeomParticleTimeToLive[];
+in vec3 inGeomParticleTextPage[];
 
 out vec2 inFragTexCoord;
+out vec3 inFragTextPage;
 
 
 void main ()
@@ -33,6 +35,8 @@ void main ()
 									vec4(0.0, 0.0, 0.0, 0.0),
 									vec4(-s,   0.0, c,   0.0),
 									vec4(0.0, 0.0, 0.0, 1.0));
+	
+	inFragTextPage = inGeomParticleTextPage[0];
 	
 	// Vertex 0
 	gl_Position = vk_MatProj * (vk_MatView * gl_in[0].gl_Position + rot * vec4(minS.x, 0.0f, minS.y, 0.0));
