@@ -62,6 +62,8 @@ struct VKE_API ITexture : public virtual IObject
   virtual ISampler* GetSampler() = 0;
   virtual const ISampler* GetSampler() const = 0;
 
+  virtual void GenerateMipMaps() = 0;
+
 };
 
 VK_INTERFACE();

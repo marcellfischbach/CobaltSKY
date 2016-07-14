@@ -3,3 +3,14 @@
 ################################################################################
 
 *.user
+/docs/ValkyrieEngine.vpp~14
+/docs/ValkyrieEngine.vpp~15
+/ValkyrieEngine/Valkyrie/Entity/ITransformationCallback.hh
+/ValkyrieEngine/Valkyrie/Loaders/CollisionLoader.hh
+/data/TestInstance.asset
+/data/temple.fbx
+/data/mine.fbx
+/data/models/temple.asset
+/data/models/mine2.staticmesh
+/data/models/mine.asset
+/data/materials/AnotherMaterial.asset

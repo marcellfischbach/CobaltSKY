@@ -81,6 +81,7 @@ struct VKE_API IXMLLoader : public IObject
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
+
 VK_CLASS();
 class VKE_API vkXMLFileLoader : public IFileLoader
 {
@@ -103,6 +104,7 @@ protected:
   virtual ~vkBaseXMLLoader();
 
   TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
+  TiXmlElement *FindElementByTagName(TiXmlElement *root, const vkString &elementName) const;
 
   vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared, vkResourceLoadingMode alterInline = eRLM_Inline) const;
 
@@ -114,6 +116,18 @@ protected:
   vkColor4f LoadColor4f(const char *str) const;
 };
 
+VK_CLASS();
+class VKE_API vkAssetXMLLoader : public vkBaseXMLLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkAssetXMLLoader();
+  virtual ~vkAssetXMLLoader();
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+};
 
 class VKE_API vkResourceManager
 {

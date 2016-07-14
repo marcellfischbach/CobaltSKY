@@ -324,6 +324,12 @@ vkTextureType vkTextureGL4::GetType() const
   return m_type;
 }
 
+void vkTextureGL4::GenerateMipMaps()
+{
+  Bind();
+  glGenerateMipmap(m_target);
+}
+
 
 vkTexture2DGL4::vkTexture2DGL4()
   : vkTextureGL4(eTT_Texture2D)
@@ -336,7 +342,7 @@ vkTexture2DGL4::~vkTexture2DGL4()
 {
 }
 
-bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
+bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
 {
   if (!vkTextureGL4::Initialize())
   {
@@ -352,7 +358,19 @@ bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 h
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexImage2D(m_target, 0, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
+
+  int lod = 0;
+  while (width >= 1 || height >= 1)
+  {
+    glTexImage2D(m_target, lod, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
+    lod++;
+    width >>= 1;
+    height >>= 1;
+    if (!mipmaps)
+    {
+      break;
+    }
+  }
   VK_CHECK_GL_ERROR;
 
   return true;
@@ -412,7 +430,7 @@ vkTexture2DArrayGL4::~vkTexture2DArrayGL4()
 
 }
 
-bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers)
+bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
 {
   if (!vkTextureGL4::Initialize())
   {
@@ -425,11 +443,23 @@ bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUIn
   m_layers = layers;
 
   Bind();
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_R, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexImage3D(m_target, 0, internalFormatMap[format], width, height, layers, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
+  int lod = 0;
+  while (width >= 1 || height >= 1)
+  {
+    glTexImage3D(m_target, lod, internalFormatMap[format], width, height, layers, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
+    lod++;
+    width >>= 1;
+    height >>= 1;
+    if (!mipmaps)
+    {
+      break;
+    }
+  }
   VK_CHECK_GL_ERROR;
 
   return true;

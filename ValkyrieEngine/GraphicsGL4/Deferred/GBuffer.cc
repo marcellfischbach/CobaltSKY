@@ -37,11 +37,11 @@ bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
   VK_RELEASE(m_depth);
   VK_RELEASE(m_renderTarget);
 
-  m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_normalLightMode = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height));
-  m_emissiveMetallic = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_sssSpec = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height));
-  m_depth = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_D24S8, width, height));
+  m_diffuseRoughness = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_normalLightMode = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false));
+  m_emissiveMetallic = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_sssSpec = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_depth = vkQueryClass<vkTexture2DGL4>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false));
 
   vkSamplerGL4 *colorSampler = vkGBuffer::GetColorSampler(m_renderer);
   vkSamplerGL4 *depthSampler = vkGBuffer::GetDepthSampler(m_renderer);

@@ -329,7 +329,7 @@ ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
   if (!static_textureArray)
   {
     IGraphics *graphics = vkEngine::Get()->GetRenderer();
-    if (static_textureArray = graphics->CreateTexture2DArray(ePF_RGBA, 8, 8, 18))
+    if (static_textureArray = graphics->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
     {
       vkPixelFormat format = ePF_RGBA;
       vkUInt32 colors[8 * 8 * 18];

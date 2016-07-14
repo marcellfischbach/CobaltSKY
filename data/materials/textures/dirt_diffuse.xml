@@ -1,0 +1,10 @@
+<asset>
+	<data>
+	
+		<texture2d>
+			<sampler resourcemode="shared">default_sampler.xml</sampler>
+			<image mipmap="true">materials/textures/dirt_diffuse.png</image>
+		</texture2d>
+		
+	</data>
+</asset>

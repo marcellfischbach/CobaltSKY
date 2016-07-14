@@ -38,8 +38,8 @@ struct VKE_API IGraphics : public IObject
   virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements) = 0;
   virtual IRenderTarget *CreateRenderTarget() = 0;
   virtual ISampler *CreateSampler() = 0;
-  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height) = 0;
-  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers) = 0;
+  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps) = 0;
+  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) = 0;
   virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) = 0;
   virtual IFrameProcessor *CreateDeferredFrameProcessor() = 0;
   virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) = 0;

@@ -131,7 +131,7 @@ int initialize()
     return -1;
   }
 
-  ITexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768);
+  ITexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768, false);
   rt = graphicsGL4->CreateRenderTarget();
   rt->Initialize(1366, 768);
   rt->AddColorTexture(color0);
@@ -772,6 +772,10 @@ vkMaterial *create_green_shader(IGraphics *graphics)
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
+  ITexture2D *dirtTexture = vkResourceManager::Get()->GetOrLoad<ITexture2D>(vkResourceLocator("materials/textures/dirt_diffuse.xml"));
+  ITexture2DArray *testArray = vkResourceManager::Get()->GetOrLoad<ITexture2DArray>(vkResourceLocator("materials/textures/test_array.xml"));
+
+
   vkMaterial *constRedMaterial = create_red_shader(graphics);
   vkMaterial *constGreenMaterial = create_green_shader(graphics);
   vkMaterialInstance *constRedMaterialInst = new vkMaterialInstance();
@@ -795,6 +799,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   vkMaterialInstance *materialUnshaded = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneUnshaded"));
   vkMaterialInstance *materialParticle = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/particle_unlit.xml"));
+
+  ISampler *testSampler = vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator("default_sampler.xml"));
 
   vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
   vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
@@ -1006,7 +1012,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
   IRenderTarget *target = graphics->CreateRenderTarget();
   target->Initialize(width, height);
 
-  ITexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height);
+  ITexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
   colorTexture->SetSampler(colorSampler);
   target->AddColorTexture(colorTexture);
 
@@ -1021,7 +1027,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
       depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
       depthSampler->SetTextureCompareMode(eTCM_CompareToR);
     }
-    ITexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height);
+    ITexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
     depthTexture->SetSampler(depthSampler);
     target->SetDepthTexture(depthTexture);
 

@@ -8,108 +8,158 @@
 #include <Valkyrie/Engine.hh>
 #include <png.h>
 
-vkSamplerLoader::vkSamplerLoader()
+
+vkSamplerAssetXMLLoader::vkSamplerAssetXMLLoader()
   : vkBaseXMLLoader()
 {
+
 }
 
-vkSamplerLoader::~vkSamplerLoader()
+vkSamplerAssetXMLLoader::~vkSamplerAssetXMLLoader()
 {
 
 }
 
-
-bool vkSamplerLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkSamplerAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  vkString tagName(element->Value());
-
-  return tagName == vkString("sampler") || tagName == vkString("samplers");
+  return vkString(element->Value()) == vkString("sampler");
 }
 
 
 namespace
 {
-vkTextureAddressMode get_texture_address_mode(const vkString &addressMode)
+vkFilterMode evalFilterMode(const vkString &filterString)
 {
-#define CHK_ADDRESS_MODE(mode) if (addressMode == vkString(#mode)) return eTAM_##mode
+#define IF_FILTER(flt) if (filterString == vkString (#flt)) return eFM_##flt
+#define ELSE_IF_FILTER(flt) else IF_FILTER(flt)
 
-  CHK_ADDRESS_MODE(Repeat);
-  CHK_ADDRESS_MODE(RepeatMirror);
-  CHK_ADDRESS_MODE(Clamp);
-  CHK_ADDRESS_MODE(ClampBorder);
-  CHK_ADDRESS_MODE(MirrowOnce);
-
-  return eTAM_Repeat;
+  IF_FILTER(MinMagNearest);
+  ELSE_IF_FILTER(MinNearestMagLinear);
+  ELSE_IF_FILTER(MinLinearMagNearest);
+  ELSE_IF_FILTER(MinMagLinear);
+  ELSE_IF_FILTER(MinMagMipNearest);
+  ELSE_IF_FILTER(MinMagNearestMipLinear);
+  ELSE_IF_FILTER(MinNearestMagLinearMipNearest);
+  ELSE_IF_FILTER(MinNearestMagMipLinear);
+  ELSE_IF_FILTER(MinLinearMagMipNearest);
+  ELSE_IF_FILTER(MinLinearMagNearestMipLinear);
+  ELSE_IF_FILTER(MinMagLinearMipNearest);
+  ELSE_IF_FILTER(MinMagMipLinear);
+  ELSE_IF_FILTER(Anisotropic);
+#undef IF_FILTER
+#undef ELSE_IF_FILTER
+  return eFM_MinMagMipLinear;
 }
-}
 
-
-IObject  *vkSamplerLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+vkTextureAddressMode evalAddressMode(const vkString &addressModeString)
 {
-  TiXmlElement *samplerElement = FindElement(element, "sampler", locator.GetResourceName());
-  if (!samplerElement)
+#define IF_ADDRESS(addr) if (addressModeString == vkString (#addr)) return eTAM_##addr
+#define ELSE_IF_ADDRESS(addr) else IF_ADDRESS(addr)
+  IF_ADDRESS(Repeat);
+  ELSE_IF_ADDRESS(RepeatMirror);
+  ELSE_IF_ADDRESS(Clamp);
+  ELSE_IF_ADDRESS(ClampBorder);
+  ELSE_IF_ADDRESS(MirrowOnce);
+#undef IF_ADDRESS
+#undef ELSE_IF_ADDRESS
+  return  eTAM_Repeat;
+}
+
+vkTextureCompareMode evalCompareMode(const vkString &compareString)
+{
+#define IF_COMPARE(cmp) if (compareString == vkString (#cmp)) return eTCM_##cmp
+#define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
+  IF_COMPARE(CompareToR);
+  ELSE_IF_COMPARE(None);
+#undef IF_COMPARE
+#undef ELSE_IF_COMPARE
+  return eTCM_None;
+}
+
+vkTextureCompareFunc evalCompareFunc(const vkString &compareString)
+{
+#define IF_COMPARE(cmp) if (compareString == vkString (#cmp)) return eTCF_##cmp
+#define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
+  IF_COMPARE(LessOrEqual);
+  ELSE_IF_COMPARE(GreaterOrEqual);
+  ELSE_IF_COMPARE(Less);
+  ELSE_IF_COMPARE(Greater);
+  ELSE_IF_COMPARE(Equal);
+  ELSE_IF_COMPARE(NotEqual);
+  ELSE_IF_COMPARE(Always);
+  ELSE_IF_COMPARE(Never);
+#undef IF_COMPARE
+#undef ELSE_IF_COMPARE
+  return eTCF_Less;
+}
+
+
+}
+
+IObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  ISampler *sampler = vkEngine::Get()->GetRenderer()->CreateSampler();
+  if (!sampler)
   {
     return 0;
   }
 
-  ISampler *sampler = vkEngine::Get()->GetRenderer()->CreateSampler();
 
-  TiXmlElement *filterElement = samplerElement->FirstChildElement("filter");
+  TiXmlElement *filterElement = element->FirstChildElement("filter");
   if (filterElement)
   {
-    vkString filter = filterElement->GetText();
-#define CHK_FILTER(flt) if (filter == vkString(#flt)) { sampler->SetFilter (eFM_##flt); } 
-    CHK_FILTER(MinMagMipLinear);
-    CHK_FILTER(MinMagNearestMipLinear);
-    CHK_FILTER(MinNearestMagLinearMipNearest);
-    CHK_FILTER(MinNearestMagMipLinear);
-    CHK_FILTER(MinLinearMagMipNearest);
-    CHK_FILTER(MinLinearMagNearestMipLinear);
-    CHK_FILTER(MinMagLinearMipNearest);
-    CHK_FILTER(MinMagMipLinear);
-    CHK_FILTER(Anisotropic);
-#undef CHK_FILTER
+    sampler->SetFilter(::evalFilterMode(vkString(filterElement->GetText())));
   }
 
-  TiXmlElement * anisotropyElement = samplerElement->FirstChildElement("anisotropy");
+  TiXmlElement *anisotropyElement = element->FirstChildElement("anisotropy");
   if (anisotropyElement)
   {
     sampler->SetAnisotropy(atoi(anisotropyElement->GetText()));
   }
 
-
-  TiXmlElement *minLodElement = samplerElement->FirstChildElement("minLOD");
+  TiXmlElement *minLodElement = element->FirstChildElement("minlod");
   if (minLodElement)
   {
     sampler->SetMinLOD(atoi(minLodElement->GetText()));
   }
 
-  TiXmlElement *maxLodElement = samplerElement->FirstChildElement("maxLOD");
+  TiXmlElement *maxLodElement = element->FirstChildElement("maxlod");
   if (maxLodElement)
   {
     sampler->SetMaxLOD(atoi(maxLodElement->GetText()));
   }
 
-  TiXmlElement *addressUElement = samplerElement->FirstChildElement("addressU");
+  TiXmlElement *addressUElement = element->FirstChildElement("addressu");
   if (addressUElement)
   {
-    vkString addressU = addressUElement->GetText();
-    sampler->SetAddressU(::get_texture_address_mode(addressU));
+    sampler->SetAddressU(::evalAddressMode(vkString(addressUElement->GetText())));
   }
-
-  TiXmlElement *addressVElement = samplerElement->FirstChildElement("addressV");
+  TiXmlElement *addressVElement = element->FirstChildElement("addressv");
   if (addressVElement)
   {
-    vkString addressV = addressVElement->GetText();
-    sampler->SetAddressV(::get_texture_address_mode(addressV));
+    sampler->SetAddressV(::evalAddressMode(vkString(addressVElement->GetText())));
   }
 
-
-  TiXmlElement *addressWElement = samplerElement->FirstChildElement("addressW");
+  TiXmlElement *addressWElement = element->FirstChildElement("addressw");
   if (addressWElement)
   {
-    vkString addressW = addressWElement->GetText();
-    sampler->SetAddressW(::get_texture_address_mode(addressW));
+    sampler->SetAddressW(::evalAddressMode(vkString(addressWElement->GetText())));
+  }
+
+  TiXmlElement *borderColorElement = element->FirstChildElement("bordercolor");
+  if (borderColorElement)
+  {
+    sampler->SetBorderColor(LoadVector4f(borderColorElement->GetText()));
+  }
+  TiXmlElement *compareModeElement = element->FirstChildElement("comparemode");
+  if (compareModeElement)
+  {
+    sampler->SetTextureCompareMode(::evalCompareMode(vkString(compareModeElement->GetText())));
+  }
+  TiXmlElement *compareFuncElement = element->FirstChildElement("comparefunc");
+  if (compareFuncElement)
+  {
+    sampler->SetTextureCompareFunc(::evalCompareFunc(vkString(compareFuncElement->GetText())));
   }
 
   return sampler;
@@ -120,56 +170,51 @@ IObject  *vkSamplerLoader::Load(TiXmlElement *element, const vkResourceLocator &
 
 
 
-vkTextureLoader::vkTextureLoader()
+
+vkTextureAssetXMLLoader::vkTextureAssetXMLLoader()
   : vkBaseXMLLoader()
 {
 }
 
-vkTextureLoader::~vkTextureLoader()
+vkTextureAssetXMLLoader::~vkTextureAssetXMLLoader()
 {
 
 }
 
 
-bool vkTextureLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkTextureAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   vkString tagName(element->Value());
-  return tagName == vkString("textures") || tagName == vkString("texture");
+  return tagName == vkString("texture1d")
+    || tagName == vkString("texture2d")
+    || tagName == vkString("texture3d")
+    || tagName == vkString("texture1darray")
+    || tagName == vkString("texture2darray")
+    || tagName == vkString("texturecube");
 }
 
 
 
-IObject  *vkTextureLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+IObject  *vkTextureAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  TiXmlElement *textureElement = FindElement(element, "texture", locator.GetResourceName());
-  if (!textureElement)
-  {
-    return 0;
-  }
 
-
-  const char *typeC = textureElement->Attribute("type");
-  if (!typeC)
-  {
-    return 0;
-  }
-
-  vkTextureType type = GetTextureType(textureElement);
+  vkTextureType type = GetTextureType(vkString(element->Value()));
   switch (type)
   {
   case eTT_Texture2D:
-    return LoadTexture2D(textureElement);
+    return LoadTexture2D(element, locator, userData);
+  case eTT_Texture2DArray:
+    return LoadTexture2DArray(element, locator, userData);
   }
 
   return 0;
 }
 
-IObject *vkTextureLoader::LoadTexture2D(TiXmlElement *element) const
+IObject *vkTextureAssetXMLLoader::LoadTexture2D(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  bool release = false;
   TiXmlElement *samplerElement = element->FirstChildElement("sampler");
-  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), release);
-  vkImage *image = LoadImage(element->FirstChildElement("image"));
+  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
+  vkImage *image = LoadImage(element->FirstChildElement("image"), locator, userData);
   if (!image)
   {
     return 0;
@@ -177,45 +222,117 @@ IObject *vkTextureLoader::LoadTexture2D(TiXmlElement *element) const
 
   ITexture2D *texture = vkEngine::Get()->GetRenderer()->CreateTexture2D(image->GetPixelFormat(),
                                                                         image->GetWidth(),
-                                                                        image->GetHeight());
+                                                                        image->GetHeight(),
+                                                                        image->GetNumberOfLevels () > 1);
   texture->SetSampler(sampler);
-  if (sampler && release)
-  {
-    sampler->Release();
-  }
+  VK_RELEASE(sampler);
 
   for (vkUInt8 lvl = 0; lvl < image->GetNumberOfLevels(); ++lvl)
   {
     texture->CopyData(lvl, image->GetPixelFormat(), image->GetData(lvl));
   }
-  
+  VK_RELEASE(image);
 
   return texture;
 }
 
-ISampler *vkTextureLoader::LoadSampler(TiXmlElement *element, bool &release) const
+IObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  TiXmlElement *samplerElement = element->FirstChildElement("sampler");
+  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
+
+
+  unsigned numImages = 0;
+  for (TiXmlElement *imageElement = element->FirstChildElement("image"); imageElement; imageElement=imageElement->NextSiblingElement("image"))
+  {
+    numImages++;
+  }
+
+  unsigned layer = 0;
+  ITexture2DArray *texture = 0;
+  vkPixelFormat pixelFormat;
+  for (TiXmlElement *imageElement = element->FirstChildElement("image"); imageElement; imageElement = imageElement->NextSiblingElement("image"))
+  {
+    vkImage *image = LoadImage(element->FirstChildElement("image"), locator, userData);
+    if (!image)
+    {
+      VK_RELEASE(sampler);
+      VK_RELEASE(texture);
+      return 0;
+    }
+
+    if (!texture)
+    {
+      texture = vkEngine::Get()->GetRenderer()->CreateTexture2DArray(image->GetPixelFormat(),
+                                                                     image->GetWidth(),
+                                                                     image->GetHeight(),
+                                                                     numImages,
+                                                                     image->GetNumberOfLevels() > 1);
+
+      pixelFormat = image->GetPixelFormat();
+    }
+    else
+    {
+      if (image->GetPixelFormat() != pixelFormat ||
+          image->GetWidth() != texture->GetWidth() ||
+          image->GetHeight() != texture->GetHeight())
+      {
+        VK_RELEASE(image);
+        VK_RELEASE(sampler);
+        VK_RELEASE(texture);
+        return 0;
+      }
+    }
+
+    for (vkUInt8 lvl = 0; lvl < image->GetNumberOfLevels(); ++lvl)
+    {
+      texture->CopyData(layer, lvl, image->GetPixelFormat(), image->GetData(lvl));
+    }
+    VK_RELEASE(image);
+    layer++;
+
+  }
+
+  texture->SetSampler(sampler);
+  VK_RELEASE(sampler);
+
+
+
+
+  return texture;
+}
+
+
+ISampler *vkTextureAssetXMLLoader::LoadSampler(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   if (!element)
   {
     return 0;
   }
 
-  vkString samplerName(element->GetText());
+  
   vkResourceLoadingMode rlm = GetResourceLoadingMode(element);
+  ISampler *sampler = 0;
   switch (rlm)
   {
   case eRLM_Shared:
-    return vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator(samplerName));
+    sampler = vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator(vkString(element->GetText())));
+    VK_ADDREF(sampler);
+    break;
+    
   case eRLM_Instance:
-    release = true;
-    return vkResourceManager::Get()->Load<ISampler>(vkResourceLocator(samplerName));
+    sampler = vkResourceManager::Get()->Load<ISampler>(vkResourceLocator(vkString(element->GetText())));
+    break;
+
   case eRLM_Inline:
-    return 0;
+    sampler = vkResourceManager::Get()->Load<ISampler>(element, locator, userData);
+    break;
   }
-  return 0;
+
+  return sampler;
 }
 
-vkImage *vkTextureLoader::LoadImage(TiXmlElement *element) const
+vkImage *vkTextureAssetXMLLoader::LoadImage(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   if (!element)
   {
@@ -235,30 +352,30 @@ vkImage *vkTextureLoader::LoadImage(TiXmlElement *element) const
   }
   return image;
 }
-vkTextureType vkTextureLoader::GetTextureType(TiXmlElement *element) const
+
+vkTextureType vkTextureAssetXMLLoader::GetTextureType(const vkString &typeName) const
 {
-  vkString typeName(element->Attribute("type"));
-  if (typeName == vkString("textue1D"))
+  if (typeName == vkString("textue1d"))
   {
     return eTT_Texture1D;
   }
-  else if (typeName == vkString("textue2D"))
+  else if (typeName == vkString("textue2d"))
   {
     return eTT_Texture2D;
   }
-  else if (typeName == vkString("textue3D"))
+  else if (typeName == vkString("textue3d"))
   {
     return eTT_Texture3D;
   }
-  else if (typeName == vkString("textue1DArray"))
+  else if (typeName == vkString("textue1darray"))
   {
     return eTT_Texture1DArray;
   }
-  else if (typeName == vkString("textue2DArray"))
+  else if (typeName == vkString("texture2darray"))
   {
     return eTT_Texture2DArray;
   }
-  else if (typeName == vkString("textueCube"))
+  else if (typeName == vkString("textuecube"))
   {
     return eTT_TextureCube;
   }
@@ -385,7 +502,7 @@ IObject *vkTextureAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
     image->GenerateMipMaps();
   }
 
-  ITexture2D *texture2D = graphics->CreateTexture2D(image->GetPixelFormat(), image->GetWidth(), image->GetHeight());
+  ITexture2D *texture2D = graphics->CreateTexture2D(image->GetPixelFormat(), image->GetWidth(), image->GetHeight(), sampler->NeedsMipMaps());
   texture2D->SetSampler(sampler);
   sampler->Release();
   sampler = 0;

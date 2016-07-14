@@ -149,7 +149,7 @@ void SceneWidget::resizeGL(int width, int height)
 
   // 
   // create the render target
-  ITexture2D *color0 = m_graphics->CreateTexture2D(ePF_RGBA, width, height);
+  ITexture2D *color0 = m_graphics->CreateTexture2D(ePF_RGBA, width, height, false);
   m_renderTarget = m_graphics->CreateRenderTarget();
   m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(color0);

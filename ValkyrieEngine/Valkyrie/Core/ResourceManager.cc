@@ -13,6 +13,7 @@ vkResourceManager *vkResourceManager::Get()
 vkResourceManager::vkResourceManager()
 {
   RegisterLoader(new vkXMLFileLoader());
+  RegisterLoader(new vkAssetXMLLoader());
 }
 
 
@@ -419,13 +420,39 @@ TiXmlElement *vkBaseXMLLoader::FindElement(TiXmlElement *root, const vkString &e
   return 0;
 }
 
+TiXmlElement *vkBaseXMLLoader::FindElementByTagName(TiXmlElement *root, const vkString &elementName) const
+{
+  if (!root)
+  {
+    return 0;
+  }
+
+  vkString tagName(root->Value());
+  if (tagName == elementName)
+  {
+    return root;
+  }
+
+  for (TiXmlElement *element = root->FirstChildElement();
+       element;
+       element = element->NextSiblingElement())
+  {
+    if (elementName.length() == 0 || vkString(element->Value ()) == elementName)
+    {
+      return element;
+    }
+  }
+
+  return 0;
+}
+
 
 vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode, vkResourceLoadingMode alterInline) const
 {
   vkResourceLoadingMode mode = defaultMode;
-  if (element->Attribute("resourceMode"))
+  if (element->Attribute("resourcemode"))
   {
-    vkString modeString(element->Attribute("resourceMode"));
+    vkString modeString(element->Attribute("resourcemode"));
     if (modeString == vkString("shared"))
     {
       mode = eRLM_Shared;
@@ -438,6 +465,11 @@ vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *elem
     {
       mode = alterInline;
     }
+  }
+  if (!element->GetText())
+  {
+    // no references should be inline
+    mode = alterInline;
   }
   return mode;
 }
@@ -559,3 +591,36 @@ vkColor4f vkBaseXMLLoader::LoadColor4f(const char *str) const
   return vkColor4f(r, g, b, a);
 }
 
+vkAssetXMLLoader::vkAssetXMLLoader()
+  : vkBaseXMLLoader()
+{
+
+}
+
+vkAssetXMLLoader::~vkAssetXMLLoader()
+{
+
+}
+
+bool vkAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkString tagName(element->Value());
+  return tagName == vkString("asset");
+}
+
+IObject *vkAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  TiXmlElement *dataElement = FindElementByTagName(element, locator.GetResourceName());
+  if (!dataElement)
+  {
+    return 0;
+  }
+
+  TiXmlElement *firstChild = dataElement->FirstChildElement();
+  if (!firstChild)
+  {
+    return 0;
+  }
+
+  return vkResourceManager::Get()->Load(firstChild, locator);
+}

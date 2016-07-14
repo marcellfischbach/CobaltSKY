@@ -1,0 +1,18 @@
+<asset>
+	<data>
+	
+		<sampler>
+			<filter>Anisotropic</filter>
+			<anisotropy>6</anisotropy>
+			<minlod>-1000</minlod>
+			<maxlod>1000</maxlod>
+			<addressu>Repeat</addressu>
+			<addressv>Repeat</addressv>
+			<addressw>Repeat</addressw>
+			<bordercolor>0 0 0 0</bordercolor>
+			<comparemode>None</comparemode>
+			<comparefunc>Greater</comparefunc>
+		</sampler>
+		
+	</data>
+</asset>

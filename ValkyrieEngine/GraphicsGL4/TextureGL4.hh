@@ -80,6 +80,7 @@ public:
   virtual ISampler *GetSampler();
   virtual const ISampler *GetSampler() const;
 
+  virtual void GenerateMipMaps();
 
   void Bind();
   GLuint GetName() const;
@@ -106,7 +107,7 @@ public:
   vkTexture2DGL4();
   virtual ~vkTexture2DGL4();
 
-  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height);
+  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
 
 
   // Implementation of the ITexture2D interface
@@ -120,6 +121,7 @@ private:
 
   vkUInt16 m_width;
   vkUInt16 m_height;
+
 };
 
 VK_CLASS();
@@ -131,7 +133,7 @@ public:
   vkTexture2DArrayGL4();
   virtual ~vkTexture2DArrayGL4();
 
-  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers);
+  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
 
 
   // Implementation of the ITexture2DArray interface

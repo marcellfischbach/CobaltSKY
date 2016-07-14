@@ -138,8 +138,8 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
 
   vkPixelFormat shadowBufferFormat = ePF_R16G16F;
   m_shadowBufferSize = 1024;
-  m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3);
-  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3);
+  m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false);
+  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false);
 
   ISampler *colorSampler = renderer->CreateSampler();
   colorSampler->SetFilter(eFM_MinMagLinear);
@@ -504,8 +504,8 @@ vkPointLightvkGraphicsGL4::vkPointLightvkGraphicsGL4(vkGraphicsGL4 *renderer)
   m_mapBias = 0.99f;
 
   vkUInt16 bufferSize = 1024;
-  ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6);
-  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6);
+  ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false);
+  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6, false);
 
   colorBuffer->SetSampler(vkGBuffer::GetColorSampler(renderer));
   m_depthBuffer->SetSampler(m_depthSampler);

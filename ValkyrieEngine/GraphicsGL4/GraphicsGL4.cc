@@ -172,10 +172,10 @@ ISampler *vkGraphicsGL4::CreateSampler()
   return sampler;
 }
 
-ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height)
+ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
 {
   vkTexture2DGL4 *texture = new vkTexture2DGL4();
-  if (!texture->Initialize(format, width, height))
+  if (!texture->Initialize(format, width, height, mipmaps))
   {
     texture->Release();
     texture = 0;
@@ -184,10 +184,10 @@ ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width,
 }
 
 
-ITexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers)
+ITexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
 {
   vkTexture2DArrayGL4 *texture = new vkTexture2DArrayGL4();
-  if (!texture->Initialize(format, width, height, layers))
+  if (!texture->Initialize(format, width, height, layers, mipmaps))
   {
     texture->Release();
     texture = 0;

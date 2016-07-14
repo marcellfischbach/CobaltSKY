@@ -21,9 +21,9 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkMaterialLoader());
   mgr->RegisterLoader(new vkMaterialInstanceLoader());
   mgr->RegisterLoader(new vkPNGImageLoader());
-  mgr->RegisterLoader(new vkSamplerLoader());
   mgr->RegisterLoader(new vkStaticMeshLoader());
-  mgr->RegisterLoader(new vkTextureLoader());
+  mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
+  mgr->RegisterLoader(new vkTextureAssetXMLLoader());
   mgr->RegisterLoader(new vkAssetFileLoader());
 
   vkEntityLoaderRegistry *reg = vkEntityLoaderRegistry::Get();
