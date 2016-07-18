@@ -240,8 +240,17 @@ public:
 
   vkShaderParameterType GetResourceType() const;
 
+  void SetDefault(float value);
+  void SetDefault(const vkVector2f &value);
+  void SetDefault(const vkVector3f &value);
+  void SetDefault(const vkVector4f &value);
+  void SetDefault(const vkColor4f &value);
+  void SetDefault(const vkMatrix3f &value);
+  void SetDefault(const vkMatrix4f &value);
   float *GetDefaultFloats();
   int *GetDefaultInts();
+
+  void SetDefaultTextureResource(const vkResourceLocator &locator);
   vkResourceLocator &GetDefaultTextureResource();
 
   const float *GetDefaultFloats() const;

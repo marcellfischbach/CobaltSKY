@@ -11,7 +11,8 @@
 #include <qimagewriter.h>
 #include <qfileinfo.h>
 #include <qdir.h>
-
+#include <qxmlstream.h>
+#include <qdom.h>
 
 namespace texture
 {
@@ -97,29 +98,13 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     file.remove();
 
 
-    vkAssetOutputStream os(buffer.length());
+    vkAssetOutputStream os(buffer.length() + 128);
     os << (vkUInt32)VK_VERSION(1, 0, 0)
-      << (vkUInt8)eRLM_Inline // we provide the sampler data here >> this must be changed later
-      // << (vkString)"Path/To/The/Sampler/Asset" // if the param above would be 0
-      << (vkUInt8)eFM_MinMagMipLinear // texture access filtering
-      << (vkUInt8)1 // anisotropy
-      << (vkInt16)-1000 // min lod
-      << (vkInt16)1000 // max lod
-      << (vkUInt8)eTAM_Repeat // clamp U
-      << (vkUInt8)eTAM_Repeat // clamp V
-      << (vkUInt8)eTAM_Repeat // clamp W
-      << vkColor4f(0.0f, 0.0f, 0.0f, 0.0f)
-      << (vkUInt8)eTCM_None
-      << (vkUInt8)eTCF_Less;
-
-    os << vkString((const char*)format.toLatin1())
-      << (vkUInt32)buffer.length();
+       << vkString((const char*)format.toLatin1())
+       << (vkUInt32)buffer.length();
     os.Write(buffer.data(), buffer.length());
 
-      
-
-
-    writer.AddEntry("TEXTURE2D", "DATA", os.GetSize(), os.GetBuffer());
+    writer.AddEntry("IMAGE", "DATA", os.GetSize(), os.GetBuffer());
   }
 
 
@@ -135,33 +120,100 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QByteArray buffer = file.readAll();
     file.close();
     file.remove();
-    writer.AddEntry("TEXTURE2D", "EDITOR_ICON", buffer.length(), (vkUInt8*)buffer.data());
+
+    vkAssetOutputStream os(buffer.length() + 128);
+    os << (vkUInt32)VK_VERSION(1, 0, 0)
+      << vkString((const char*)format.toLatin1())
+      << (vkUInt32)buffer.length();
+    os.Write(buffer.data(), buffer.length());
+
+    writer.AddEntry("IMAGE", "EDITOR_ICON", os.GetSize(), os.GetBuffer());
   }
 
 
-
-  QString fileName = info.completeBaseName() + ".asset";
-  QString absFileName = outputDir.absoluteFilePath(fileName);
-
-
-  QFileInfo rootPathInfo(vkVFS::Get()->GetRootPath().c_str());
-  QString rootPath = rootPathInfo.absoluteFilePath();
-
-  if (absFileName.startsWith(rootPath, Qt::CaseInsensitive))
+  QString dataFileName;
   {
-    absFileName = absFileName.right(absFileName.length() - rootPath.length());
-  }
+    QString fileName = info.completeBaseName() + ".data";
+    QString absFileName = outputDir.absoluteFilePath(fileName);
 
-  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)absFileName.toLatin1()), eOM_Write, eTM_Binary);
-  if (finalOutputFile)
-  {
+
+    QFileInfo rootPathInfo(vkVFS::Get()->GetRootPath().c_str());
+    QString rootPath = rootPathInfo.absoluteFilePath();
+
+    if (absFileName.startsWith(rootPath, Qt::CaseInsensitive))
+    {
+      absFileName = absFileName.right(absFileName.length() - rootPath.length());
+    }
+    dataFileName = absFileName.right(absFileName.length() - 1);
+
+    IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)absFileName.toLatin1()), eOM_Write, eTM_Binary);
+    if (!finalOutputFile)
+    {
+      return false;
+    }
     writer.Output(finalOutputFile);
     finalOutputFile->Close();
-    return true;
   }
-  
 
-  return false;
+  {
+    QString fileName = info.completeBaseName() + ".xasset";
+    QString absFileName = outputDir.absoluteFilePath(fileName);
+
+
+    QFileInfo rootPathInfo(vkVFS::Get()->GetRootPath().c_str());
+    QString rootPath = rootPathInfo.absoluteFilePath();
+
+    if (absFileName.startsWith(rootPath, Qt::CaseInsensitive))
+    {
+      absFileName = absFileName.right(absFileName.length() - rootPath.length());
+    }
+
+
+    QDomDocument doc;
+    QDomElement assetElement = doc.createElement("asset");
+    QDomElement dataElement = doc.createElement("data");
+    QDomElement editorIconElement = doc.createElement("editoricon");
+    QDomElement textureElement = doc.createElement("texture2d");
+    QDomElement dataImageElement = doc.createElement("image");
+    QDomElement dataSamplerElement = doc.createElement("sampler");
+    QDomElement editorIconImageElement = doc.createElement("image");
+    textureElement.appendChild(dataImageElement);
+    textureElement.appendChild(dataSamplerElement);
+    dataElement.appendChild(textureElement);
+    assetElement.appendChild(dataElement);
+
+    editorIconElement.appendChild(editorIconImageElement);
+    assetElement.appendChild(editorIconImageElement);
+
+    doc.appendChild(assetElement);
+
+    dataSamplerElement.setAttribute("resourcemode", "shared");
+    QDomText dataSamplerText = doc.createTextNode("default_sampler.xasset");
+    dataSamplerElement.appendChild(dataSamplerText);
+
+    dataImageElement.setAttribute("mipmap", "true");
+    QDomText dataImageText = doc.createTextNode(dataFileName);
+    dataImageElement.appendChild(dataImageText);
+
+
+    QDomText editorIconImageText = doc.createTextNode(dataFileName + QString(":EDITOR_ICON"));
+    editorIconImageElement.appendChild(editorIconImageText);
+
+    QString xmlDoc = doc.toString(2);
+
+
+    IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)absFileName.toLatin1()), eOM_Write, eTM_Binary);
+    if (!finalOutputFile)
+    {
+      return false;
+    }
+    finalOutputFile->Write((const char*)xmlDoc.toLatin1(), xmlDoc.length());
+    finalOutputFile->Close();
+  }
+
+
+
+  return true;
 }
 
 }

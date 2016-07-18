@@ -3,6 +3,7 @@
 #include <Valkyrie/Loaders/EntityLoader.hh>
 #include <Valkyrie/Loaders/ImageLoader.hh>
 #include <Valkyrie/Loaders/MaterialLoader.hh>
+#include <Valkyrie/Loaders/ShaderGraphLoader.hh>
 #include <Valkyrie/Loaders/StaticMeshLoader.hh>
 #include <Valkyrie/Loaders/TextureLoader.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
@@ -22,6 +23,7 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkMaterialInstanceLoader());
   mgr->RegisterLoader(new vkPNGImageLoader());
   mgr->RegisterLoader(new vkStaticMeshLoader());
+  mgr->RegisterLoader(new vkShaderGraphAssetXMLLoader());
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
   mgr->RegisterLoader(new vkTextureAssetXMLLoader());
   mgr->RegisterLoader(new vkAssetFileLoader());

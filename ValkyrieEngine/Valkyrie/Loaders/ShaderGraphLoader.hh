@@ -23,3 +23,17 @@ public:
 private:
   void Cleanup(std::map<vkUInt32, vkSGNode *> &nodes, vkSGShaderGraph *graph) const;
 };
+
+
+VK_CLASS()
+class VKE_API vkShaderGraphAssetXMLLoader : public vkBaseXMLLoader
+{
+  VK_CLASS_GEN;
+public:
+  vkShaderGraphAssetXMLLoader();
+  virtual ~vkShaderGraphAssetXMLLoader();
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+};

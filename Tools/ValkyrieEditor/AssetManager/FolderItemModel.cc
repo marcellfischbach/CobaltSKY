@@ -26,13 +26,13 @@ void FolderItemModel::Refresh()
   beginResetModel();
   Clear();
   QStringList filters;
-  filters.append("*.asset");
+  filters.append("*.xasset");
   QStringList pathEntries = m_path.entryList(filters, QDir::Dirs | QDir::Files, QDir::Name);
   for (QString &pathEntry : pathEntries)
   {
     Entry *entry = new Entry();
     entry->name = pathEntry;
-    if (entry->name.endsWith(".asset"))
+    if (entry->name.endsWith(".xasset"))
     {
       entry->resourceString = m_resourceRel + "/" + pathEntry;
       entry->displayName = entry->name.left(entry->name.length() - 6);

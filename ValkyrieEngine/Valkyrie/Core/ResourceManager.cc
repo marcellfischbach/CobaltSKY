@@ -201,7 +201,9 @@ vkAssetFileLoader::~vkAssetFileLoader()
 
 bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  return file->GetExtension() == vkString("asset");
+  vkString extension = file->GetExtension();
+  return extension == vkString("asset")
+    || extension == vkString("data");
 }
 
 
@@ -334,13 +336,16 @@ vkXMLFileLoader::~vkXMLFileLoader()
 
 bool vkXMLFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  return file->GetExtension() == vkString("xml");
+  const vkString extension = file->GetExtension();
+  return extension == vkString("xml")
+    || extension == vkString("xasset");
 }
 
 
 IObject *vkXMLFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  if (file->GetExtension() != vkString("xml"))
+  const vkString extension = file->GetExtension();
+  if (extension != vkString("xml") && extension != vkString("xasset"))
   {
     return 0;
   }
