@@ -31,6 +31,7 @@ public:
 
 protected:
   void InitializeImporters();
+  void InitializeLoaders();
 
 private:
   Editor();

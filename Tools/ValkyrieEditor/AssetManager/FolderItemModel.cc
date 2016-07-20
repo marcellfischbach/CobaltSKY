@@ -36,7 +36,7 @@ void FolderItemModel::Refresh()
     {
       entry->resourceString = m_resourceRel + "/" + pathEntry;
       entry->displayName = entry->name.left(entry->name.length() - 6);
-      entry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(entry, "editoricon"));
+      entry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(entry, "preview"));
       QDir dir(m_path);
       entry->container = dir.cd(pathEntry);
       entry->containerOpen = false;

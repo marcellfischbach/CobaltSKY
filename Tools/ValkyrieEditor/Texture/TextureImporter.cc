@@ -161,6 +161,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QDomDocument doc;
     QDomElement assetElement = doc.createElement("asset");
     QDomElement dataElement = doc.createElement("data");
+    QDomElement previewElement = doc.createElement("preview");
     QDomElement editorIconElement = doc.createElement("editoricon");
     QDomElement textureElement = doc.createElement("texture2d");
     QDomElement dataImageElement = doc.createElement("image");
@@ -172,7 +173,8 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     assetElement.appendChild(dataElement);
 
     editorIconElement.appendChild(editorIconImageElement);
-    assetElement.appendChild(editorIconElement);
+    previewElement.appendChild(editorIconElement);
+    assetElement.appendChild(previewElement);
 
     doc.appendChild(assetElement);
 

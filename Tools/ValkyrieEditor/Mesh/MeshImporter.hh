@@ -4,7 +4,7 @@
 #include <Valkyrie/Core/AssetStream.hh>
 
 
-class vkMatrix4f;
+struct vkMatrix4f;
 struct aiMesh;
 
 namespace mesh

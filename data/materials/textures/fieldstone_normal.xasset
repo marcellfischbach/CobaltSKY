@@ -5,7 +5,9 @@
       <sampler resourcemode="shared">default_sampler.xasset</sampler>
     </texture2d>
   </data>
-  <editoricon>
-    <image>materials/textures/fieldstone_normal.data:EDITOR_ICON</image>
-  </editoricon>
+  <preview>
+    <editoricon>
+      <image>materials/textures/fieldstone_normal.data:EDITOR_ICON</image>
+    </editoricon>
+  </preview>
 </asset>

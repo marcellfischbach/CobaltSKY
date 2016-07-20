@@ -1,6 +1,7 @@
 
 #include <Editor.hh>
 #include <EditorWindow.hh>
+#include <AssetManager/EditorIconLoader.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/Settings.hh>
 #include <Valkyrie/Core/VFS.hh>
@@ -27,6 +28,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_engine = vkEngine::Get();
 
   InitializeImporters();
+  InitializeLoaders();
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->resize(1024, 768);
@@ -70,4 +72,9 @@ void Editor::InitializeImporters()
   impReg->RegisterImporter(mesh::Importer::Get());
   impReg->RegisterImporter(texture::Importer::Get());
 
+}
+
+void Editor::InitializeLoaders()
+{
+  vkResourceManager::Get()->RegisterLoader(new EditorIconAssetXMLLoader());
 }
