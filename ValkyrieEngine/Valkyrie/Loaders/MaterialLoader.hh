@@ -8,13 +8,13 @@
 /**
 * \ingroup loading
 */
-VK_CLASS();
-class VKE_API vkMaterialLoader : public vkBaseXMLLoader
+VK_CLASS()
+class VKE_API vkMaterialAssetXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkMaterialLoader();
-  virtual ~vkMaterialLoader();
+  vkMaterialAssetXMLLoader();
+  virtual ~vkMaterialAssetXMLLoader();
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -22,20 +22,3 @@ public:
 
 };
 
-
-/**
-* \ingroup loading
-*/
-VK_CLASS();
-class VKE_API vkMaterialInstanceLoader : public vkBaseXMLLoader
-{
-  VK_CLASS_GEN;
-public:
-  vkMaterialInstanceLoader();
-  virtual ~vkMaterialInstanceLoader();
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-
-};

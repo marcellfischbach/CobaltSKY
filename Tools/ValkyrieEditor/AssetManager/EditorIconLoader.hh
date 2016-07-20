@@ -5,16 +5,31 @@
 #include <AssetManager/EditorIconLoader.refl.hh>
 
 
+/*
 VK_CLASS()
-class EditorIconLoader : public IAssetLoader
+class EditorIconAssetLoader : public IAssetLoader
 {
   VK_CLASS_GEN_OBJECT;
 public:
-  EditorIconLoader() : IAssetLoader() { }
-  virtual ~EditorIconLoader() { }
+  EditorIconAssetLoader() : IAssetLoader() { }
+  virtual ~EditorIconAssetLoader() { }
 
-  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0);
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0);
 
   virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
 
+};
+*/
+
+VK_CLASS()
+class EditorIconAssetXMLLoader : public vkBaseXMLLoader
+{
+  VK_CLASS_GEN_OBJECT;
+public:
+  EditorIconAssetXMLLoader() : vkBaseXMLLoader() { }
+  virtual ~EditorIconAssetXMLLoader() { }
+
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 };

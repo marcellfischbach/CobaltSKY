@@ -61,7 +61,7 @@ public:
   vkStaticMeshAssetLoader();
   virtual ~vkStaticMeshAssetLoader();
 
-  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0);
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0);
 
   IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
   

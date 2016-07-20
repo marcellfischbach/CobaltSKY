@@ -1,0 +1,43 @@
+<asset>
+	<data>
+		<shadergraph>
+		
+			<nodes>
+			
+				<node id="0" class="vkSGTexture2D">
+					<resource name="Diffuse">
+						<locator>materials/textures/fieldstone_diffuse.xasset</locator>
+					</resource>
+				</node>
+				
+				<node id="1" class="vkSGDefaultTextureCoordinate" />
+				
+				<node id="2" class="vkSGMul" />
+				
+			</nodes>
+			
+			
+			
+			<inputs>
+			
+				<shadergraph input="Diffuse">
+					<node id="0" output="0" />
+				</shadergraph>
+			
+				<node id="2" input="0">
+					<node id="1" output="0" />
+				</node>
+				
+				<node id="2" input="1">
+					<float>2.0</float>
+				</node>
+				
+				<node id="0" input="0">
+					<node id="2" output="0" />
+				</node>
+				
+			</inputs>
+			
+		</shadergraph>
+	</data>
+</asset>

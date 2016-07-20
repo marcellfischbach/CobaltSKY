@@ -488,9 +488,9 @@ vkStaticMeshAssetLoader::~vkStaticMeshAssetLoader()
 
 }
 
-bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
+bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData)
 {
-  return typeID == vkString("MESH") && name == vkString("DATA");
+  return typeID == vkString("MESH");// && name == vkString("DATA");
 }
 
 

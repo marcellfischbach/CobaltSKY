@@ -17,12 +17,12 @@ AssetWriter::~AssetWriter()
 
 
 
-void AssetWriter::AddEntry(const vkString &typeID, const vkString &name, vkUInt32 length, const vkUInt8* buffer)
+void AssetWriter::AddEntry(const vkString &name, const vkString &typeID, vkUInt32 length, const vkUInt8* buffer)
 {
   Entry entry;
   VK_ZERO(entry);
-  snprintf(entry.typeID, 64, typeID.c_str());
   snprintf(entry.name, 64, name.c_str());
+  snprintf(entry.typeID, 64, typeID.c_str());
   entry.length = length;
   entry.buffer = new vkUInt8[length];
   memcpy(entry.buffer, buffer, length);
@@ -62,8 +62,8 @@ void AssetWriter::Output(IFile *file)
   {
     Entry &entry = *it;
     // write the needed informations for the entry header
-    file->Write(entry.typeID, sizeof(entry.typeID));
     file->Write(entry.name, sizeof(entry.name));
+    file->Write(entry.typeID, sizeof(entry.typeID));
     file->Write(&entry.offset, sizeof(entry.offset));
   }
 

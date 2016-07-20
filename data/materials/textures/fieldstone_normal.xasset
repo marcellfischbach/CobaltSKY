@@ -1,0 +1,11 @@
+<asset>
+  <data>
+    <texture2d>
+      <image mipmap="true">materials/textures/fieldstone_normal.data</image>
+      <sampler resourcemode="shared">default_sampler.xasset</sampler>
+    </texture2d>
+  </data>
+  <editoricon>
+    <image>materials/textures/fieldstone_normal.data:EDITOR_ICON</image>
+  </editoricon>
+</asset>

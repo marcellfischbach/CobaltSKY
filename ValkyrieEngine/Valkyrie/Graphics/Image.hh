@@ -31,11 +31,13 @@ public:
   vkUInt16 GetDepth(vkUInt16 level = 0) const;
   vkUInt8 GetNumberOfLevels() const;
   vkPixelFormat GetPixelFormat() const;
+  vkUInt32 GetSize(vkUInt16 level = 0) const;
 
   bool GenerateMipMaps();
 
 private:
   void Delete();
+  vkUInt32 GetBytesPerPixel(vkPixelFormat format) const;
 
   vkUInt16 m_width;
   vkUInt16 m_height;

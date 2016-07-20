@@ -15,11 +15,10 @@ MetaDataLoader::~MetaDataLoader()
 
 
 
-bool MetaDataLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
+bool MetaDataLoader::CanLoad(const vkString &typeID,const vkResourceLocator &locator, IObject *userData)
 {
-  bool bTypeID = typeID == "SHADER_GRAPH";
-  bool bName = name == "META_DATA";
-  return bTypeID && bName;
+  bool bTypeID = typeID == "SHADER_GRAPH_META";
+  return bTypeID;
 }
 
 

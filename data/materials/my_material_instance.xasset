@@ -1,0 +1,14 @@
+<asset>
+	<data>
+	
+		<materialinstance>
+			<material>materials/my_material.xasset</material>
+			<parameters>
+				<parameter name="Diffuse">
+					<locator>materials/textures/dirt_diffuse.xasset</locator>
+				</parameter>
+			</parameters>
+		</materialinstance>
+		
+	</data>
+</asset>

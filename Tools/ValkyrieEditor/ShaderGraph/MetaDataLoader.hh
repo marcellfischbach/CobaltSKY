@@ -13,7 +13,7 @@ public:
   MetaDataLoader();
   virtual ~MetaDataLoader();
 
-  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0);
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0);
 
   virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
 

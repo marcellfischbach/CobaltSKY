@@ -97,14 +97,8 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     file.close();
     file.remove();
 
-
-    vkAssetOutputStream os(buffer.length() + 128);
-    os << (vkUInt32)VK_VERSION(1, 0, 0)
-       << vkString((const char*)format.toLatin1())
-       << (vkUInt32)buffer.length();
-    os.Write(buffer.data(), buffer.length());
-
-    writer.AddEntry("IMAGE", "DATA", os.GetSize(), os.GetBuffer());
+    vkString typeID((const char*)format.toLatin1());
+    writer.AddEntry("DATA", typeID, buffer.length(), (const vkUInt8*)buffer.data());
   }
 
 
@@ -121,13 +115,8 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     file.close();
     file.remove();
 
-    vkAssetOutputStream os(buffer.length() + 128);
-    os << (vkUInt32)VK_VERSION(1, 0, 0)
-      << vkString((const char*)format.toLatin1())
-      << (vkUInt32)buffer.length();
-    os.Write(buffer.data(), buffer.length());
-
-    writer.AddEntry("IMAGE", "EDITOR_ICON", os.GetSize(), os.GetBuffer());
+    vkString typeID((const char*)format.toLatin1());
+    writer.AddEntry("EDITOR_ICON", typeID, buffer.length(), (const vkUInt8*)buffer.data());
   }
 
 
@@ -183,7 +172,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     assetElement.appendChild(dataElement);
 
     editorIconElement.appendChild(editorIconImageElement);
-    assetElement.appendChild(editorIconImageElement);
+    assetElement.appendChild(editorIconElement);
 
     doc.appendChild(assetElement);
 

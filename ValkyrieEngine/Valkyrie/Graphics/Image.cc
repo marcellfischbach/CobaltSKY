@@ -240,3 +240,36 @@ const void *vkImage::GetData(vkUInt16 level) const
 }
 
 
+vkUInt32 vkImage::GetSize(vkUInt16 level) const
+{
+  vkUInt32 width = m_width >> level;
+  if (width == 0)
+  {
+    width = 1;
+  }
+  vkUInt32 height = m_height >> level;
+  if (height == 0)
+  {
+    height = 1;
+  }
+
+  vkUInt32 bpp = GetBytesPerPixel(m_pixelFormat);
+
+  return width * height * bpp;
+}
+
+vkUInt32 vkImage::GetBytesPerPixel(vkPixelFormat pixelFormat) const
+{
+  switch (pixelFormat)
+  {
+  case ePF_R8G8B8A8U:
+    return 4;
+  case ePF_R8G8B8U:
+    return 3;
+  case ePF_R8G8U:
+    return 2;
+  case ePF_R8U:
+    return 1;
+  }
+  return 0;
+}

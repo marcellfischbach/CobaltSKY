@@ -5,19 +5,19 @@
 #include <Valkyrie/Core/ClassRegistry.hh>
 #include <png.h>
 
-vkPNGImageLoader::vkPNGImageLoader()
+vkPNGImageFileLoader::vkPNGImageFileLoader()
   : IFileLoader()
 {
 
 }
 
-vkPNGImageLoader::~vkPNGImageLoader()
+vkPNGImageFileLoader::~vkPNGImageFileLoader()
 {
 
 }
 
 
-bool vkPNGImageLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkPNGImageFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
   return file->GetExtension() == vkString("png");
 }
@@ -38,10 +38,24 @@ void read_data_from_ifile(png_structp png_ptr,
   IFile *file = static_cast<IFile*>(io);
   file->Read(outBytes, (long)byteCountToRead);
 }
+
+void read_data_from_asset_input_stream(png_structp png_ptr,
+                                       png_bytep outBytes,
+                                       png_size_t byteCountToRead)
+{
+  png_voidp io = png_get_io_ptr(png_ptr);
+  if (!io)
+  {
+    return;
+  }
+
+  vkAssetInputStream *stream = static_cast<vkAssetInputStream*>(io);
+  stream->Read(outBytes, (long)byteCountToRead);
+}
 }
 
 
-IObject *vkPNGImageLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+IObject *vkPNGImageFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)
@@ -129,153 +143,31 @@ IObject *vkPNGImageLoader::Load(IFile *file, const vkResourceLocator &locator, I
 
 
 
-class ImageLoaderCache
-{
-public:
-  static IImageDataLoader *Get(const vkString &format, const vkResourceLocator &locator, IObject *userData)
-  {
-    for (size_t i = 0, in = s_loaders.size(); i < in; ++i)
-    {
-      if (s_loaders[i]->CanLoad(format, locator, userData))
-      {
-        return s_loaders[i];
-      }
-    }
-
-    IImageDataLoader *finalLoader = 0;
-    std::vector<const vkClass*> allClasses = vkClassRegistry::Get()->GetAllClasses();
-    for (const vkClass *clazz : allClasses)
-    {
-      if (clazz->IsInstanceOf <IImageDataLoader>())
-      {
-        // check if this class is already within the list.
-        bool alreadyInList = false;
-        for (size_t i = 0, in = s_loaders.size(); i < in; ++i)
-        {
-          if (s_loaders[i]->GetClass() == clazz)
-          {
-            alreadyInList = true;
-            break;
-          }
-        }
-
-        if (alreadyInList)
-        {
-          continue;
-        }
-
-
-        IImageDataLoader *imageLoader = clazz->CreateInstance<IImageDataLoader>();
-        if (!imageLoader)
-        {
-          // this can happen 
-          // there are interfaces wihtin the list aswell
-          continue;
-        }
-        s_loaders.push_back(imageLoader);
-        if (!finalLoader && imageLoader->CanLoad(format, locator, userData))
-        {
-          finalLoader = imageLoader;
-        }
-      }
-    }
-    return finalLoader;
-  }
-private:
-  ImageLoaderCache() {}
-  static std::vector<IImageDataLoader*> s_loaders;
-};
-
-std::vector<IImageDataLoader*> ImageLoaderCache::s_loaders;
 
 
 
 
-vkImageDataLoader::vkImageDataLoader()
+vkPNGImageAssetLoader::vkPNGImageAssetLoader()
   : IAssetLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
 
-vkImageDataLoader::~vkImageDataLoader()
+vkPNGImageAssetLoader::~vkPNGImageAssetLoader()
 {
 
 }
 
 
 
-bool vkImageDataLoader::CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
+bool vkPNGImageAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData)
 {
-  return typeID == vkString("IMAGE") 
-    && name == vkString("DATA");
+  return typeID == vkString("PNG");
 }
 
 
-IObject *vkImageDataLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData)
+IObject *vkPNGImageAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData)
 {
-  vkUInt32 version;
-  vkString format;
-
-  inputStream >> version;
-  if (version != VK_VERSION(1, 0, 0))
-  {
-    return 0;
-  }
-
-  inputStream >> format;
-
-
-  IImageDataLoader *imageLoader = ImageLoaderCache::Get(format, locator, userData);
-  if (!imageLoader)
-  {
-    return 0;
-  }
-
-  return imageLoader->Load(inputStream, locator, userData);
-}
-
-
-
-vkPNGImageDataLoader::vkPNGImageDataLoader()
-  :IImageDataLoader()
-{
-  VK_CLASS_GEN_CONSTR;
-}
-
-
-
-vkPNGImageDataLoader::~vkPNGImageDataLoader()
-{
-
-}
-
-bool vkPNGImageDataLoader::CanLoad(const vkString &format, const vkResourceLocator &locator, IObject *userData)
-{
-  return format == "PNG";
-}
-
-
-namespace
-{
-void read_data_from_asset_input_stream(png_structp png_ptr,
-                                       png_bytep outBytes,
-                                       png_size_t byteCountToRead)
-{
-  png_voidp io = png_get_io_ptr(png_ptr);
-  if (!io)
-  {
-    return;
-  }
-
-  vkAssetInputStream *stream = static_cast<vkAssetInputStream*>(io);
-  stream->Read(outBytes, (long)byteCountToRead);
-}
-}
-
-IObject *vkPNGImageDataLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData)
-{
-  vkUInt32 size;
-  inputStream >> size;
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)
   {

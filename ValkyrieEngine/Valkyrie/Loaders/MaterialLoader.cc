@@ -6,18 +6,18 @@
 
 
 
-vkMaterialLoader::vkMaterialLoader()
+vkMaterialAssetXMLLoader::vkMaterialAssetXMLLoader()
   : vkBaseXMLLoader()
 {
 }
 
-vkMaterialLoader::~vkMaterialLoader()
+vkMaterialAssetXMLLoader::~vkMaterialAssetXMLLoader()
 {
 
 }
 
 
-bool vkMaterialLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkMaterialAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   vkString tagName(element->Value());
 
@@ -47,7 +47,7 @@ vkShaderParameterType get_shader_parameter_type(const vkString &name)
 }
 
 
-IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   TiXmlElement *materialElement = FindElement(element, "material", locator.GetResourceName());
   if (!materialElement)
@@ -247,130 +247,8 @@ IObject *vkMaterialLoader::Load(TiXmlElement *element, const vkResourceLocator &
   return material;
 }
 
-vkMaterialInstanceLoader::vkMaterialInstanceLoader()
-  : vkBaseXMLLoader()
-{
-}
-
-vkMaterialInstanceLoader::~vkMaterialInstanceLoader()
-{
-
-}
 
 
-bool vkMaterialInstanceLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
-{
-  vkString tagName(element->Value());
-
-  return tagName == vkString("materialinstance") || tagName == vkString("materialinstances");
-}
 
 
-IObject *vkMaterialInstanceLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
-{
-  TiXmlElement *materialInstanceElement = FindElement(element, "materialinstance", locator.GetResourceName());
-  if (!materialInstanceElement)
-  {
-    return 0;
-  }
 
-  TiXmlElement *materialElement = materialInstanceElement->FirstChildElement("material");
-  if (!materialElement)
-  {
-    printf("No material defined\n");
-    return 0;
-  }
-
-  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator(materialElement->GetText()));
-  if (!material)
-  {
-    printf("No valid material found\n");
-    return 0;
-  }
-
-  vkMaterialInstance *instance = new vkMaterialInstance();
-  instance->SetMaterial(material);
-
-
-  TiXmlElement *parametersElement = materialInstanceElement->FirstChildElement("parameters");
-  if (parametersElement)
-  {
-    for (TiXmlElement *parameterElement = parametersElement->FirstChildElement("parameter");
-    parameterElement;
-      parameterElement = parameterElement->NextSiblingElement("parameter"))
-    {
-      if (!parameterElement->Attribute("name"))
-      {
-        printf("no name\n");
-        continue;
-      }
-
-      vkString name(parameterElement->Attribute("name"));
-
-      vkInt16 idx = instance->GetIndex(name);
-      if (idx == -1)
-      {
-        printf("name not defined %s\n", name.c_str());
-        continue;
-      }
-
-      vkShaderParameterType type = material->GetParamType(idx);
-      switch (type)
-      {
-      case eSPT_Float:
-        {
-          float f = LoadFloat(parameterElement->GetText());
-          instance->Set(idx, f);
-        }
-        break;
-      case eSPT_Vector2:
-        {
-          vkVector2f v = LoadVector2f(parameterElement->GetText());
-          instance->Set(idx, v);
-        }
-        break;
-      case eSPT_Vector3:
-        {
-          vkVector3f v = LoadVector3f(parameterElement->GetText());
-          instance->Set(idx, v);
-        }
-        break;
-      case eSPT_Vector4:
-        {
-          vkVector4f v = LoadVector4f(parameterElement->GetText());
-          instance->Set(idx, v);
-        }
-        break;
-      case eSPT_Color4:
-        {
-          vkColor4f v = LoadColor4f(parameterElement->GetText());
-          printf("Load color: %.2f %.2f %.2f %.2f\n", v.r, v.g, v.b, v.a);
-          instance->Set(idx, v);
-        }
-        break;
-      case eSPT_Texture:
-        {
-          vkResourceLoadingMode rlm = GetResourceLoadingMode(parameterElement);
-          ITexture *texture = 0;
-          switch (rlm)
-          {
-          case eRLM_Shared:
-            texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator(parameterElement->GetText()));
-            instance->Set(idx, texture);
-            break;
-          case eRLM_Instance:
-            texture = vkResourceManager::Get()->Load<ITexture>(vkResourceLocator(parameterElement->GetText()));
-            instance->Set(idx, texture);
-            if (texture) texture->Release();
-            break;
-          default:
-            printf("not implemented yet.");
-
-          }
-        }
-      }
-    }
-  }
-
-  return instance;
-}

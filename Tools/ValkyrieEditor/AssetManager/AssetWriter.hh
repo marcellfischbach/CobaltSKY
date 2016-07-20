@@ -15,7 +15,7 @@ public:
   AssetWriter();
   ~AssetWriter();
 
-  void AddEntry(const vkString &typeID, const vkString &name, vkUInt32 length, const vkUInt8* buffer);
+  void AddEntry(const vkString &name, const vkString &typeID, vkUInt32 length, const vkUInt8* buffer);
 
   void Output(IFile *file);
 

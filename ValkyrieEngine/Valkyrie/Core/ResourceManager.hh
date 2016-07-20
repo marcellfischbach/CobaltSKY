@@ -36,7 +36,7 @@ private:
 
 };
 
-VK_INTERFACE();
+VK_INTERFACE()
 struct VKE_API IFileLoader : public IObject
 {
   VK_CLASS_GEN;
@@ -46,7 +46,7 @@ struct VKE_API IFileLoader : public IObject
 };
 
 
-VK_CLASS();
+VK_CLASS()
 class VKE_API vkAssetFileLoader : public IFileLoader
 {
   VK_CLASS_GEN_OBJECT;
@@ -60,29 +60,19 @@ public:
 };
 
 
-VK_INTERFACE();
+VK_INTERFACE()
 struct VKE_API IAssetLoader : public IObject
 {
   VK_CLASS_GEN;
+  virtual ~ IAssetLoader() { }
 
-  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0) = 0;
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) = 0;
 
   virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) = 0;
 };
 
 
-
-VK_INTERFACE();
-struct VKE_API IXMLLoader : public IObject
-{
-  VK_CLASS_GEN;
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-};
-
-
-VK_CLASS();
+VK_CLASS()
 class VKE_API vkXMLFileLoader : public IFileLoader
 {
   VK_CLASS_GEN_OBJECT;
@@ -95,7 +85,18 @@ public:
 };
 
 
-VK_INTERFACE();
+VK_INTERFACE()
+struct VKE_API IXMLLoader : public IObject
+{
+  VK_CLASS_GEN;
+
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+};
+
+
+
+VK_INTERFACE()
 class VKE_API vkBaseXMLLoader : public IXMLLoader
 {
   VK_CLASS_GEN_OBJECT;
@@ -116,7 +117,7 @@ protected:
   vkColor4f LoadColor4f(const char *str) const;
 };
 
-VK_CLASS();
+VK_CLASS()
 class VKE_API vkAssetXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
@@ -173,6 +174,20 @@ public:
   */
   IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
+  /**
+  * \brief Load an object from the \a asset \a file.
+  *
+  * IMPORTANT: The caller is the owner of the returned object.
+  *
+  * \param name The typeIDwithin the asset file
+  * \param inputStream The data stream from where the data sould be loaded
+  * \param locator The origin location from where the resource should be loaded
+  * \param userData An optional user data that the loader can use.
+  *
+  * \return The object
+  */
+  IObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
+
   template<typename T>
   T *Load(const vkResourceLocator &locator, IObject *userData = 0) const
   {
@@ -209,6 +224,22 @@ public:
   T *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const
   {
     IObject *object = Load(element, locator, userData);
+    if (object)
+    {
+      T* t_instance = vkQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const
+  {
+    IObject *object = Load(typeID, inputStream, locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -303,6 +334,7 @@ public:
 
   void RegisterLoader(IXMLLoader *loader);
   void RegisterLoader(IFileLoader *loader);
+  void RegisterLoader(IAssetLoader *loader);
 
   bool RegisterObject(const vkResourceLocator &locator, IObject *object);
   void DeregisterObject(const vkResourceLocator &locator);
@@ -310,8 +342,9 @@ public:
 private:
   vkResourceManager();
 
-  std::vector<IXMLLoader*> m_xmlLoaders;
   std::vector<IFileLoader*> m_fileLoaders;
+  std::vector<IXMLLoader*> m_xmlLoaders;
+  std::vector<IAssetLoader*> m_assetLoaders;
 
   std::map<vkResourceLocator, IObject*> m_objects;
 

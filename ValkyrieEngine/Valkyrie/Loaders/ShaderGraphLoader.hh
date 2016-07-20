@@ -8,22 +8,6 @@
 class vkSGNode;
 class vkSGShaderGraph;
 
-VK_CLASS()
-class VKE_API vkShaderGraphAssetLoader : public IAssetLoader
-{
-  VK_CLASS_GEN_OBJECT;
-public:
-  vkShaderGraphAssetLoader();
-  virtual ~vkShaderGraphAssetLoader();
-
-  virtual bool CanLoad(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData = 0);
-
-  virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
-
-private:
-  void Cleanup(std::map<vkUInt32, vkSGNode *> &nodes, vkSGShaderGraph *graph) const;
-};
-
 
 VK_CLASS()
 class VKE_API vkShaderGraphAssetXMLLoader : public vkBaseXMLLoader

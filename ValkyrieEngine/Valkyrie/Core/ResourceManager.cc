@@ -3,6 +3,10 @@
 #include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/VFS.hh>
 
+
+
+
+
 vkResourceManager *vkResourceManager::Get()
 {
   static vkResourceManager static_manager;
@@ -13,6 +17,7 @@ vkResourceManager *vkResourceManager::Get()
 vkResourceManager::vkResourceManager()
 {
   RegisterLoader(new vkXMLFileLoader());
+  RegisterLoader(new vkAssetFileLoader());
   RegisterLoader(new vkAssetXMLLoader());
 }
 
@@ -32,6 +37,15 @@ void vkResourceManager::RegisterLoader(IXMLLoader *loader)
   {
     loader->AddRef();
     m_xmlLoaders.push_back(loader);
+  }
+}
+
+void vkResourceManager::RegisterLoader(IAssetLoader *loader)
+{
+  if (loader)
+  {
+    loader->AddRef();
+    m_assetLoaders.push_back(loader);
   }
 }
 
@@ -70,6 +84,19 @@ IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator 
     if (loader->CanLoad(element, locator))
     {
       IObject *obj = loader->Load(element, locator, userData);
+      return obj;
+    }
+  }
+  return 0;
+}
+
+IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+{
+  for (auto loader : m_assetLoaders)
+  {
+    if (loader->CanLoad(typeID, locator))
+    {
+      IObject *obj = loader->Load(inputStream, locator, userData);
       return obj;
     }
   }
@@ -206,66 +233,6 @@ bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, I
     || extension == vkString("data");
 }
 
-
-class AssetLoaderCache
-{
-public:
-  static IAssetLoader *Get(const vkString &typeID, const vkString &name, const vkResourceLocator &locator, IObject *userData)
-  {
-    for (size_t i = 0, in = s_loaders.size(); i < in; ++i)
-    {
-      if (s_loaders[i]->CanLoad(typeID, name, locator, userData))
-      {
-        return s_loaders[i];
-      }
-    }
-
-    IAssetLoader *finalLoader = 0;
-    std::vector<const vkClass*> allClasses = vkClassRegistry::Get()->GetAllClasses();
-    for (const vkClass *clazz : allClasses)
-    {
-      if (clazz->IsInstanceOf <IAssetLoader>())
-      {
-        // check if this class is already within the list.
-        bool alreadyInList = false;
-        for (size_t i = 0, in = s_loaders.size(); i < in; ++i)
-        {
-          if (s_loaders[i]->GetClass() == clazz)
-          {
-            alreadyInList = true;
-            break;
-          }
-        }
-
-        if (alreadyInList)
-        {
-          continue;
-        }
-
-
-        IAssetLoader *assetLoader = clazz->CreateInstance<IAssetLoader>();
-        if (!assetLoader)
-        {
-          // this can happen 
-          // there are interfaces wihtin the list aswell
-          continue;
-        }
-        s_loaders.push_back(assetLoader);
-        if (!finalLoader && assetLoader->CanLoad(typeID, name, locator, userData))
-        {
-          finalLoader = assetLoader;
-        }
-      }
-    }
-    return finalLoader;
-  }
-private:
-  AssetLoaderCache() {}
-  static std::vector<IAssetLoader*> s_loaders;
-};
-
-std::vector<IAssetLoader*> AssetLoaderCache::s_loaders;
-
 IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
   char magicNumber[9];
@@ -287,8 +254,8 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
 #pragma pack(1)
     struct Entry
     {
-      char typeID[64];
       char name[64];
+      char typeID[64];
       vkUInt32 offset;
     } entry;
 
@@ -302,19 +269,13 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
       vkUInt32 length;
       file->Read(&length, sizeof(vkUInt32));
 
-      IAssetLoader *assetLoader = AssetLoaderCache::Get(vkString(entry.typeID), vkString(entry.name), locator, userData);
-      if (!assetLoader)
-      {
-        return 0;
-      }
-
       vkUInt8 *buffer = new vkUInt8[length];
       file->Read(buffer, length);
 
       vkAssetInputStream is(buffer, (vkSize)length);
       IObject *obj = 0;
 
-      obj = assetLoader->Load(is, locator, userData);
+      obj = vkResourceManager::Get()->Load(entry.typeID, is, locator, userData);
       delete[] buffer;
       // load the data
       return obj;
