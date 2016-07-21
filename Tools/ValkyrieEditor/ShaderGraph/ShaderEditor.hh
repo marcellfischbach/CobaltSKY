@@ -58,7 +58,7 @@ private:
   QDoubleSpinBox *m_spResource1;
   QDoubleSpinBox *m_spResource2;
   QDoubleSpinBox *m_spResource3;
-  ResourceWidget *m_leResourceValue;\
+  ResourceWidget *m_leResourceValue;
 
   QDoubleSpinBox **m_constInputs;
 

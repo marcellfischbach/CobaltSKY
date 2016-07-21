@@ -42,6 +42,7 @@ struct VKE_API IFileLoader : public IObject
   VK_CLASS_GEN;
 
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
   virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
@@ -55,6 +56,7 @@ public:
   virtual ~vkAssetFileLoader();
 
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 };
@@ -66,9 +68,9 @@ struct VKE_API IAssetLoader : public IObject
   VK_CLASS_GEN;
   virtual ~ IAssetLoader() { }
 
-  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) = 0;
-
-  virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) = 0;
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual const vkClass *EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
 
@@ -80,6 +82,7 @@ public:
   vkXMLFileLoader();
   virtual ~vkXMLFileLoader();
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 };
@@ -91,6 +94,7 @@ struct VKE_API IXMLLoader : public IObject
   VK_CLASS_GEN;
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
 };
 
@@ -126,6 +130,7 @@ public:
   virtual ~vkAssetXMLLoader();
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 };
@@ -147,6 +152,7 @@ public:
    * \return The object
    */
   IObject *Load(const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(const vkResourceLocator &locator, IObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -161,6 +167,8 @@ public:
   */
   IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
 
+  const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+
   /**
   * \brief Load an object from the \a file.
   *
@@ -173,6 +181,9 @@ public:
   * \return The object
   */
   IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+
+  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a asset \a file.
@@ -187,6 +198,7 @@ public:
   * \return The object
   */
   IObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   template<typename T>
   T *Load(const vkResourceLocator &locator, IObject *userData = 0) const

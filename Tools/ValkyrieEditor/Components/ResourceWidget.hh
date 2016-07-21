@@ -17,12 +17,14 @@ public:
   virtual ~ResourceWidget ();
 
   void SetAllValid(bool allValid);
-  void AddValidType(const QString &validType);
+  void AddValidType(const vkClass *validType);
+  bool IsValidType(const vkClass *type);
 
   void SetResourceLocator (const vkResourceLocator &locator);
   const vkResourceLocator &GetResourceLocator () const;
 
   void SetEnabled (bool enabled);
+
 
 signals:
   void ResourceChanged (const vkResourceLocator &locator);
@@ -35,7 +37,7 @@ private:
   QToolButton *m_clearButton;
 
   bool m_allValid;
-  QList<QString> m_validTypes;
+  QList<const vkClass*> m_validTypes;
 
   vkResourceLocator m_locator;
 

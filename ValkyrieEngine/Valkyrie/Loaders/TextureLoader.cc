@@ -96,6 +96,11 @@ vkTextureCompareFunc evalCompareFunc(const vkString &compareString)
 
 }
 
+const vkClass *vkSamplerAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return ISampler::GetStaticClass();
+}
+
 IObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   ISampler *sampler = vkEngine::Get()->GetRenderer()->CreateSampler();
@@ -193,6 +198,18 @@ bool vkTextureAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLoc
     || tagName == vkString("texturecube");
 }
 
+const vkClass *vkTextureAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  vkTextureType type = GetTextureType(vkString(element->Value()));
+  switch (type)
+  {
+  case eTT_Texture2D:
+    return ITexture2D::GetStaticClass();
+  case eTT_Texture2DArray:
+    return ITexture2DArray::GetStaticClass();
+  }
+  return 0;
+}
 
 
 IObject  *vkTextureAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const

@@ -5,6 +5,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 
+#include <Valkyrie/Core/ClassRegistry.hh>
 
 class ResourceLineEdit : public QLineEdit
 {
@@ -26,8 +27,8 @@ protected:
     if (data->hasFormat("VALKYRIE/RESOURCE/TYPE"))
     {
       QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-      QString typeStr ((const char*)type);
-      m_lastValidDrag = m_resourceWidget->m_allValid || m_resourceWidget->m_validTypes.contains(typeStr);
+      const vkClass *cls = vkClassRegistry::Get()->GetClass(vkString((const char*)type));
+      m_lastValidDrag = m_resourceWidget->m_allValid || m_resourceWidget->IsValidType(cls);
     }
     if (m_lastValidDrag)
     {
@@ -51,9 +52,9 @@ protected:
       if (data->hasFormat("VALKYRIE/RESOURCE/TYPE") && data->hasFormat("VALKYRIE/RESOURCE/FILE"))
       {
         QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-        QString typeStr ((const char*)type);
+        const vkClass *cls = vkClassRegistry::Get()->GetClass(vkString((const char*)type));
         QByteArray file= data->data("VALKYRIE/RESOURCE/FILE");
-        if (m_resourceWidget->m_allValid || m_resourceWidget->m_validTypes.contains(typeStr))
+        if (m_resourceWidget->m_allValid || m_resourceWidget->IsValidType(cls))
         {
           m_resourceWidget->m_locator = vkResourceLocator(vkString((const char*)file));
           m_resourceWidget->UpdateText();
@@ -105,12 +106,29 @@ void ResourceWidget::SetAllValid(bool allValid)
   m_allValid = allValid;
 }
 
-void ResourceWidget::AddValidType(const QString &validType)
+void ResourceWidget::AddValidType(const vkClass *validType)
 {
   if (!m_validTypes.contains(validType))
   {
     m_validTypes.append(validType);
   }
+}
+
+bool ResourceWidget::IsValidType(const vkClass *type)
+{
+  if (m_validTypes.contains(type))
+  {
+    return true;
+  }
+
+  for (vkSize i = 0, in=type->GetNumberOfSuperClasses(); i < in; ++i)
+  {
+    if (IsValidType(type->GetSuperClass(i)))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 void ResourceWidget::SetResourceLocator(const vkResourceLocator &locator)

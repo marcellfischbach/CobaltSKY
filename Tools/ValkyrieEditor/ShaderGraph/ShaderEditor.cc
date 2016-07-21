@@ -2,6 +2,7 @@
 #include <ShaderGraph/ShaderEditor.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <ShaderGraph/SGNode.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 
@@ -195,7 +196,7 @@ void NodeEditorWidget::SetNode(SGNode *node)
     case eSPT_Texture:
       layout->addWidget(new QLabel(tr("Texture"), this), row, 0, 1, 1);
       layout->addWidget(m_leResourceValue = new ResourceWidget(this), row++, 1, 1, 1);
-      m_leResourceValue->AddValidType("TEXTURE2D");
+      m_leResourceValue->AddValidType(ITexture::GetStaticClass());
       connect (m_leResourceValue, SIGNAL(ResourceChanged(const vkResourceLocator&)), this, SLOT(ResourceChanged(const vkResourceLocator&)));
 
       break;

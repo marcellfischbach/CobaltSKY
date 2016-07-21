@@ -63,6 +63,20 @@ IObject *vkResourceManager::Load(const vkResourceLocator &locator, IObject *user
   return object;
 }
 
+const vkClass *vkResourceManager::EvalClass(const vkResourceLocator &locator, IObject *userData) const
+{
+  IFile *file = vkVFS::Get()->Open(locator.GetResourceFile());
+  if (!file)
+  {
+    return 0;
+  }
+
+  const vkClass *cls = EvalClass(file, locator, userData);
+  file->Release();
+
+  return cls;
+}
+
 IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
   for (auto loader : m_fileLoaders)
@@ -77,6 +91,19 @@ IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, 
   return 0;
 }
 
+const vkClass *vkResourceManager::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  for (auto loader : m_fileLoaders)
+  {
+    if (loader->CanLoad(file, locator))
+    {
+      return loader->EvalClass(file, locator, userData);
+    }
+  }
+  return 0;
+}
+
+
 IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   for (auto loader : m_xmlLoaders)
@@ -89,6 +116,19 @@ IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator 
   }
   return 0;
 }
+
+const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  for (auto loader : m_xmlLoaders)
+  {
+    if (loader->CanLoad(element, locator))
+    {
+      return loader->EvalClass(element, locator, userData);
+    }
+  }
+  return 0;
+}
+
 
 IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
 {
@@ -103,6 +143,17 @@ IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inp
   return 0;
 }
 
+const vkClass *vkResourceManager::EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+{
+  for (auto loader : m_assetLoaders)
+  {
+    if (loader->CanLoad(typeID, locator))
+    {
+      return loader->EvalClass(inputStream, locator, userData);
+    }
+  }
+  return 0;
+}
 
 IObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
 {
@@ -233,6 +284,58 @@ bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, I
     || extension == vkString("data");
 }
 
+const vkClass *vkAssetFileLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  char magicNumber[9];
+  file->Read(magicNumber, 8);
+  magicNumber[8] = '\0';
+  if (vkString(magicNumber) != vkString("VALASSET"))
+  {
+    return 0;
+  }
+
+  vkUInt32 assetVersion;
+  file->Read(&assetVersion, sizeof(vkUInt32));
+
+  vkUInt16 numEntries;
+  file->Read(&numEntries, sizeof(vkUInt16));
+
+  for (vkUInt16 i = 0; i < numEntries; ++i)
+  {
+#pragma pack(1)
+    struct Entry
+    {
+      char name[64];
+      char typeID[64];
+      vkUInt32 offset;
+    } entry;
+
+    file->Read(&entry, sizeof(Entry));
+
+    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == vkString(entry.name))
+    {
+      // move pointer to the right position within the file
+      file->Seek(eSP_Set, entry.offset);
+#pragma pack(1)
+      vkUInt32 length;
+      file->Read(&length, sizeof(vkUInt32));
+
+      vkUInt8 *buffer = new vkUInt8[length];
+      file->Read(buffer, length);
+
+      vkAssetInputStream is(buffer, (vkSize)length);
+      IObject *obj = 0;
+
+      const vkClass *cls = vkResourceManager::Get()->EvalClass(entry.typeID, is, locator, userData);
+      delete[] buffer;
+      // load the data
+      return cls;
+    }
+  }
+
+  return 0;
+}
+
 IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
   char magicNumber[9];
@@ -302,6 +405,42 @@ bool vkXMLFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IOb
     || extension == vkString("xasset");
 }
 
+
+const vkClass *vkXMLFileLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  const vkString extension = file->GetExtension();
+  if (extension != vkString("xml") && extension != vkString("xasset"))
+  {
+    return 0;
+  }
+
+  // save the current position (we will reset this possition at the end)
+  vkSize currentPos = file->Tell();
+
+  // get the length of the file
+  vkSize length = file->GetLength();
+  file->Seek(eSP_Set, 0);
+
+  // create a buffer with an appropriet size and read all
+  char *buffer = new char[length + 1];
+  file->Read(buffer, length);
+  buffer[length] = '\0';
+
+  file->Seek(eSP_Set, (long)currentPos);
+
+
+  TiXmlDocument document;
+  document.Parse(buffer);
+  delete[] buffer;
+  if (document.Error())
+  {
+    printf("Unable to parse xml file: %s\n%s\n",
+           locator.GetResourceFile().c_str(), document.ErrorDesc());
+    return 0;
+  }
+
+  return vkResourceManager::Get()->EvalClass(document.RootElement(), locator);
+}
 
 IObject *vkXMLFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
@@ -572,6 +711,24 @@ bool vkAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &l
 {
   vkString tagName(element->Value());
   return tagName == vkString("asset");
+}
+
+
+const vkClass *vkAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  TiXmlElement *dataElement = FindElementByTagName(element, locator.GetResourceName());
+  if (!dataElement)
+  {
+    return 0;
+  }
+
+  TiXmlElement *firstChild = dataElement->FirstChildElement();
+  if (!firstChild)
+  {
+    return 0;
+  }
+
+  return vkResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
 IObject *vkAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const

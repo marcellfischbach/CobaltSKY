@@ -19,6 +19,7 @@
 #include <qscrollbar.h>
 #include <QMessageBox>
 #include <QMimeData>
+#include <qdom.h>
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
@@ -196,7 +197,7 @@ void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_resourceLocator = resourceLocator;
 
-  vkResourceLocator metaLocator = vkResourceLocator(m_resourceLocator.GetResourceFile(), "META_DATA");
+  vkResourceLocator metaLocator = vkResourceLocator(m_resourceLocator.GetResourceFile(), "meta");
 
   vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->GetOrLoad<vkSGShaderGraph>(m_resourceLocator);
   ShaderGraphMetaData *metaData = vkResourceManager::Get()->Load<ShaderGraphMetaData>(metaLocator);
@@ -676,11 +677,234 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
   if (m_resourceLocator.GetResourceFile().length() == 0)
   {
+    printf("Invalid resource\n");
     return;
   }
 
   Compile();
 
+
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement metaElement = doc.createElement("meta");
+  QDomElement shadergraphElement = doc.createElement("shadergraph");
+  QDomElement nodesElement = doc.createElement("nodes");
+  QDomElement inputsElement = doc.createElement("inputs");
+  QDomElement metaShadergraphElement = doc.createElement("shadergraphmeta");
+  QDomElement metaNodesElement = doc.createElement("nodes");
+
+
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  assetElement.appendChild(metaElement);
+
+  dataElement.appendChild(shadergraphElement);
+  shadergraphElement.appendChild(nodesElement);
+  shadergraphElement.appendChild(inputsElement);
+
+  metaElement.appendChild(metaShadergraphElement);
+  metaShadergraphElement.appendChild(metaNodesElement);
+
+
+
+  QVector<vkSGNode*> sgNodes;
+  QVector<vkSGInput*> inputs;
+  for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
+  {
+    graph::Node *graphNode = m_scene->GetNode(i);
+    if (graphNode == m_shaderGraphNode)
+    {
+      continue;
+    }
+
+    vkSGNode *sgNode = static_cast<shadergraph::SGNode*>(graphNode)->GetNode();
+    for (size_t j = 0, jn = sgNode->GetNumberOfInputs(); j < jn; ++j)
+    {
+      vkSGInput* input = sgNode->GetInput(j);
+      inputs.push_back(input);
+    }
+
+    sgNodes.append(sgNode);
+    vkUInt32 index = sgNodes.indexOf(sgNode);
+
+    QDomElement nodeElement = doc.createElement("node");
+    nodeElement.setAttribute("id", index);
+    nodeElement.setAttribute("class", QString(sgNode->GetClass()->GetName().c_str()));
+
+    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
+    if (resourceNode)
+    {
+
+      float *floats = resourceNode->GetDefaultFloats();
+      int *ints = resourceNode->GetDefaultInts();
+      vkResourceLocator &txtResLocator = resourceNode->GetDefaultTextureResource();
+
+      QDomElement resourceElement = doc.createElement("resource");
+      resourceElement.setAttribute("name", QString(resourceNode->GetResourceName().c_str()));
+
+      switch (resourceNode->GetResourceType())
+      {
+      case eSPT_Float:
+        resourceElement.
+          appendChild(doc.createElement("float")).
+          appendChild(doc.createTextNode(QString::asprintf("%f", floats[0])));
+        break;
+      case eSPT_Vector2:
+        resourceElement.
+          appendChild(doc.createElement("float2")).
+          appendChild(doc.createTextNode(QString::asprintf("%f, %f", floats[0], floats[1])));
+        break;
+      case eSPT_Vector3:
+        resourceElement.
+          appendChild(doc.createElement("float3")).
+          appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", floats[0], floats[1], floats[2])));
+        break;
+      case eSPT_Vector4:
+        resourceElement.
+          appendChild(doc.createElement("float4")).
+          appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[0], floats[1], floats[2], floats[3])));
+        break;
+      case eSPT_Int:
+        resourceElement.
+          appendChild(doc.createElement("int")).
+          appendChild(doc.createTextNode(QString::asprintf("%d", ints[0])));
+        break;
+      case eSPT_IVector2:
+        resourceElement.
+          appendChild(doc.createElement("int2")).
+          appendChild(doc.createTextNode(QString::asprintf("%d, %d", ints[0], ints[1])));
+        break;
+      case eSPT_IVector3:
+        resourceElement.
+          appendChild(doc.createElement("int3")).
+          appendChild(doc.createTextNode(QString::asprintf("%d, %d, %d", ints[0], ints[1], ints[2])));
+        break;
+      case eSPT_IVector4:
+        resourceElement.
+          appendChild(doc.createElement("int4")).
+          appendChild(doc.createTextNode(QString::asprintf("%d, %d, %d, %d", ints[0], ints[1], ints[2], ints[3])));
+        break;
+
+      case eSPT_Color4:
+         resourceElement.
+           appendChild(doc.createElement("color4")).
+           appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[0], floats[1], floats[2], floats[3])));
+        break;
+      case eSPT_Matrix3:
+        {
+          QDomElement valueElement = doc.createElement("mat3");
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", floats[0], floats[1], floats[2])));
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", floats[4], floats[5], floats[6])));
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", floats[8], floats[9], floats[10], floats[11])));
+          resourceElement.appendChild(valueElement);
+        }
+        break;
+      case eSPT_Matrix4:
+        {
+          QDomElement valueElement = doc.createElement("mat4");
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[0], floats[1], floats[2], floats[3])));
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[4], floats[5], floats[6], floats[7])));
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[8], floats[9], floats[10], floats[11])));
+          valueElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", floats[12], floats[13], floats[14], floats[15])));
+          resourceElement.appendChild(valueElement);
+        }
+        break;
+      case eSPT_Texture:
+        resourceElement.
+          appendChild(doc.createElement("locator")).
+          appendChild(doc.createTextNode(QString(txtResLocator.GetResourceFile().c_str())));
+      }
+      nodeElement.appendChild(resourceElement);
+    }
+
+    nodesElement.appendChild(nodeElement);
+
+    QPointF pos = graphNode->GetItem()->pos();
+    QDomElement metaNodeElement = doc.createElement("node");
+    metaNodeElement.setAttribute("id", index);
+    metaNodeElement.
+      appendChild(doc.createElement("pos")).
+      appendChild(doc.createTextNode(QString::asprintf("%f, %f", pos.x(), pos.y())));
+
+    metaNodesElement.appendChild(metaNodeElement);
+  }
+
+  for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
+  {
+
+    vkSGShaderGraph::InputType inputType = (vkSGShaderGraph::InputType)i;
+    vkSGOutput *output = m_shaderGraph->GetInput(inputType);
+    if (output)
+    {
+      vkSGNode *outputNode = output->GetNode();
+
+      QDomElement shadergraphInputElement = doc.createElement("shadergraph");
+#define INPUT(input) if (inputType == vkSGShaderGraph::eIT_##input) shadergraphInputElement.setAttribute("input", #input)
+      INPUT(Diffuse);
+      INPUT(Alpha);
+      INPUT(Roughness);
+      INPUT(Normal);
+#undef INPUT
+
+
+      QDomElement nodeElement = doc.createElement("node");
+      nodeElement.setAttribute("id", sgNodes.indexOf(outputNode));
+      nodeElement.setAttribute("output", output->GetIdx());
+      shadergraphInputElement.appendChild(nodeElement);
+      inputsElement.appendChild(shadergraphInputElement);
+    }
+  }
+
+  for (size_t i = 0, in = inputs.size(); i < in; ++i)
+  {
+    vkSGInput *input = inputs[i];
+    vkSGNode *inputNode = input->GetNode();
+    vkUInt32 inputIdx = input->GetIdx();
+
+    vkSGOutput *output = input->GetInput();
+    vkSGNode *outputNode = 0;
+    vkUInt32 outputIdx = 0;
+    if (output)
+    {
+      outputIdx = output->GetIdx();
+      outputNode = output->GetNode();
+    }
+
+    QDomElement nodeElement = doc.createElement("node");
+    nodeElement.setAttribute("id", sgNodes.indexOf(inputNode));
+    nodeElement.setAttribute("input", inputIdx);
+
+    if (output) 
+    {
+      QDomElement refNodeElement = doc.createElement("node");
+      refNodeElement.setAttribute("id", sgNodes.indexOf(outputNode));
+      refNodeElement.setAttribute("output", outputIdx);
+      nodeElement.appendChild(refNodeElement);
+    }
+    else
+    {
+      QDomElement refFloatElement = doc.createElement("float");
+      refFloatElement.appendChild(doc.createTextNode(QString::asprintf("%f", input->GetConst())));
+      nodeElement.appendChild(refFloatElement);
+    }
+    inputsElement.appendChild(nodeElement);
+  }
+
+
+
+
+  QString xml = doc.toString(2);
+
+  vkString absolutPath = vkVFS::Get()->GetAbsolutPath(m_resourceLocator.GetResourceFile());
+
+  QFile file(QString(absolutPath.c_str()));
+  file.open(QIODevice::ReadWrite);
+  file.write(xml.toLatin1());
+  file.close();
+  return;
+#if 0
   /*
   vkSGShaderGraph tempGraph;
   std::map<graph::Node*, vkSGNode*> nodes;
@@ -713,6 +937,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
     }
   }
   */
+
 
   QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
   vkAssetOutputStream osMeta;
@@ -873,6 +1098,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
   writer.Output(file);
   file->Close();
+#endif
 }
 
 

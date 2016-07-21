@@ -167,8 +167,8 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QDomElement dataImageElement = doc.createElement("image");
     QDomElement dataSamplerElement = doc.createElement("sampler");
     QDomElement editorIconImageElement = doc.createElement("image");
-    textureElement.appendChild(dataImageElement);
     textureElement.appendChild(dataSamplerElement);
+    textureElement.appendChild(dataImageElement);
     dataElement.appendChild(textureElement);
     assetElement.appendChild(dataElement);
 

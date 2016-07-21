@@ -162,7 +162,7 @@ void ParameterEditor::ShaderChanged()
         break;
       case eSPT_Texture:
         data.m_textureSelector = new ResourceWidget(this);
-        data.m_textureSelector->AddValidType("TEXTURE2D");
+        data.m_textureSelector->AddValidType(ITexture::GetStaticClass());
         data.m_layout->addWidget(data.m_textureSelector, 1);
         break;
       }

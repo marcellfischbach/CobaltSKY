@@ -2,6 +2,7 @@
 #include <Editor.hh>
 #include <EditorWindow.hh>
 #include <AssetManager/EditorIconLoader.hh>
+#include <ShaderGraph/MetaDataLoader.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/Settings.hh>
 #include <Valkyrie/Core/VFS.hh>
@@ -76,5 +77,7 @@ void Editor::InitializeImporters()
 
 void Editor::InitializeLoaders()
 {
-  vkResourceManager::Get()->RegisterLoader(new EditorIconAssetXMLLoader());
+  vkResourceManager *mgr = vkResourceManager::Get();
+  mgr->RegisterLoader(new EditorIconAssetXMLLoader());
+  mgr->RegisterLoader(new ShaderGraphMetaDataAssetXMLLoader());
 }

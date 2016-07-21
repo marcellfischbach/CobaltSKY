@@ -16,6 +16,7 @@ public:
   virtual ~vkShaderGL4Loader();
 
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject * userData = 0) const;
+  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject * userData = 0) const;
   virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject * userData = 0) const;
 
 
@@ -30,6 +31,7 @@ public:
   virtual ~vkProgramGL4Loader();
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 private:

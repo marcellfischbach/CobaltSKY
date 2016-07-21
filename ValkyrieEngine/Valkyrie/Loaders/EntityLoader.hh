@@ -36,6 +36,7 @@ public:
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 
@@ -56,6 +57,7 @@ public:
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 
@@ -76,6 +78,7 @@ public:
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   virtual const vkClass *GetLoadingClass() const;
@@ -95,6 +98,7 @@ public:
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
 
   virtual const vkClass *GetLoadingClass() const;
@@ -114,6 +118,7 @@ public:
   virtual ~vkSpatialStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -131,6 +136,7 @@ public:
   virtual ~vkRenderStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -148,6 +154,7 @@ public:
   virtual ~vkStaticMeshStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -163,6 +170,7 @@ public:
   virtual ~vkColliderStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -177,6 +185,7 @@ public:
   virtual ~vkBaseColliderStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -191,6 +200,7 @@ public:
   virtual ~vkDynamicColliderStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -205,6 +215,7 @@ public:
   virtual ~vkStaticColliderStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };
@@ -218,6 +229,7 @@ public:
   virtual ~vkJointStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 };
 
@@ -229,6 +241,7 @@ class VKE_API vkHingeJointStateLoader : public vkJointStateLoader
   virtual ~vkHingeJointStateLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *GetLoadingClass() const;
 
 };

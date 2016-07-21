@@ -58,6 +58,10 @@ bool vkStaticMeshLoader::CanLoad(IFile *file, const vkResourceLocator &locator, 
 }
 
 
+const vkClass *vkStaticMeshLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkMesh::GetStaticClass();
+}
 
 
 IObject *vkStaticMeshLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
@@ -488,13 +492,17 @@ vkStaticMeshAssetLoader::~vkStaticMeshAssetLoader()
 
 }
 
-bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData)
+bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData) const
 {
   return typeID == vkString("MESH");// && name == vkString("DATA");
 }
 
+const vkClass *vkStaticMeshAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkMesh::GetStaticClass();
+}
 
-IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData)
+IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
 {
   vkUInt32 version, numMaterials, numSubMeshes, numIndices;
   inputStream >> version;
@@ -569,7 +577,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
 }
 
 
-vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData)
+vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData) const
 {
   vkSubMesh *subMesh = new vkSubMesh();
 

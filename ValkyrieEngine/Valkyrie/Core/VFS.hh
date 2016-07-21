@@ -45,6 +45,7 @@ public:
   /**
   * @}
   */
+  vkString GetAbsolutPath(const vkString &path);
 
 private:
   vkVFS ();

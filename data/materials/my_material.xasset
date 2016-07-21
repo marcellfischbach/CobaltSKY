@@ -1,43 +1,44 @@
 <asset>
-	<data>
-		<shadergraph>
-		
-			<nodes>
-			
-				<node id="0" class="vkSGTexture2D">
-					<resource name="Diffuse">
-						<locator>materials/textures/fieldstone_diffuse.xasset</locator>
-					</resource>
-				</node>
-				
-				<node id="1" class="vkSGDefaultTextureCoordinate" />
-				
-				<node id="2" class="vkSGMul" />
-				
-			</nodes>
-			
-			
-			
-			<inputs>
-			
-				<shadergraph input="Diffuse">
-					<node id="0" output="0" />
-				</shadergraph>
-			
-				<node id="2" input="0">
-					<node id="1" output="0" />
-				</node>
-				
-				<node id="2" input="1">
-					<float>2.0</float>
-				</node>
-				
-				<node id="0" input="0">
-					<node id="2" output="0" />
-				</node>
-				
-			</inputs>
-			
-		</shadergraph>
-	</data>
+  <data>
+    <shadergraph>
+      <nodes>
+        <node class="vkSGTexture2D" id="0">
+          <resource name="Diffuse">
+            <locator>materials/textures/fieldstone_diffuse.xasset</locator>
+          </resource>
+        </node>
+        <node class="vkSGDefaultTextureCoordinate" id="1"/>
+        <node class="vkSGMul" id="2"/>
+      </nodes>
+      <inputs>
+        <shadergraph input="Diffuse">
+          <node id="0" output="0"/>
+        </shadergraph>
+        <node input="0" id="0">
+          <node id="2" output="0"/>
+        </node>
+        <node input="0" id="2">
+          <node id="1" output="0"/>
+        </node>
+        <node input="1" id="2">
+          <float>2.000000</float>
+        </node>
+      </inputs>
+    </shadergraph>
+  </data>
+  <meta>
+    <shadergraphmeta>
+      <nodes>
+        <node id="0">
+          <pos>-196.000000, -11.000000</pos>
+        </node>
+        <node id="1">
+          <pos>-625.000000, -2.000000</pos>
+        </node>
+        <node id="2">
+          <pos>-383.000000, -9.000000</pos>
+        </node>
+      </nodes>
+    </shadergraphmeta>
+  </meta>
 </asset>

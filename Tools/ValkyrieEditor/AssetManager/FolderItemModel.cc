@@ -35,7 +35,7 @@ void FolderItemModel::Refresh()
     if (entry->name.endsWith(".xasset"))
     {
       entry->resourceString = m_resourceRel + "/" + pathEntry;
-      entry->displayName = entry->name.left(entry->name.length() - 6);
+      entry->displayName = entry->name.left(entry->name.length() - 7);
       entry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(entry, "preview"));
       QDir dir(m_path);
       entry->container = dir.cd(pathEntry);
@@ -283,11 +283,16 @@ QMimeData *FolderItemModel::mimeData(const QModelIndexList &indexes) const
     const QModelIndex &index = indexes.at(0);
     Entry *entry = static_cast<Entry*>(index.internalPointer());
 
-    QString type = assetmanager::GetTypeOfResource(vkResourceLocator(vkString((const char*)entry->resourceString.toLatin1())));
+    const vkClass *cls = vkResourceManager::Get()->EvalClass(vkResourceLocator(vkString((const char*)entry->resourceString.toLatin1())));
 
-
+    if (!cls)
+    {
+      printf("no cls\n");
+        return 0;
+    }
+    printf("Class: %s\n", cls->GetName().c_str());
     QMimeData *mimeData = new QMimeData();
-    mimeData->setData("VALKYRIE/RESOURCE/TYPE", type.toLatin1());
+    mimeData->setData("VALKYRIE/RESOURCE/TYPE", cls->GetName().c_str());
     mimeData->setData("VALKYRIE/RESOURCE/FILE", entry->resourceString.toLatin1());
     return mimeData;
 }

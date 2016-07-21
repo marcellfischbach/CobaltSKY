@@ -46,6 +46,11 @@ vkShaderParameterType get_shader_parameter_type(const vkString &name)
 }
 }
 
+const vkClass *vkMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkMaterial::GetStaticClass();
+}
+
 
 IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {

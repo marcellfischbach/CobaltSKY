@@ -29,6 +29,11 @@ bool vkShaderGraphAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourc
   return tagName == vkString("shadergraph");
 }
 
+const vkClass *vkShaderGraphAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkSGShaderGraph::GetStaticClass();
+}
+
 IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   vkSGShaderGraph *shaderGraph = new vkSGShaderGraph();

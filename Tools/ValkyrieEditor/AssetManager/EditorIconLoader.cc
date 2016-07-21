@@ -36,6 +36,10 @@ bool EditorIconAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLo
   return vkString("editoricon") == vkString(element->Value());
 }
 
+const vkClass *EditorIconAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return EditorIcon::GetStaticClass();
+}
 IObject *EditorIconAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   TiXmlElement *imageElement = element->FirstChildElement("image");
@@ -51,13 +55,19 @@ IObject *EditorIconAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
     return 0;
   }
 
-  QBuffer buffer;
-  buffer.setData((const char*)image->GetData(), (int)image->GetSize());
-
-  QImage qimage;
-  QImageReader qreader(&buffer);
-  qreader.read(&qimage);
-  image->Release();
+  QImage::Format format;
+  switch (image->GetPixelFormat())
+  {
+  case ePF_R8G8B8A8U:
+    format = QImage::Format_RGBA8888;
+    break;
+  case ePF_R8G8B8U:
+    format = QImage::Format_RGB888;
+    break;
+  default:
+    break;
+  }
+  QImage qimage((uchar*)image->GetData(), image->GetWidth(), image->GetHeight(), format);
 
   EditorIcon *icon = new EditorIcon();
   icon->SetImage(qimage);

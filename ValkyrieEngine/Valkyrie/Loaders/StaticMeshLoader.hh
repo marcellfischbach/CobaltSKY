@@ -27,6 +27,7 @@ public:
   virtual ~vkStaticMeshLoader();
 
   virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
 
 private:
@@ -61,10 +62,11 @@ public:
   vkStaticMeshAssetLoader();
   virtual ~vkStaticMeshAssetLoader();
 
-  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0);
+  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
 
-  IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0);
+  IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
   
 private:
-  vkSubMesh *ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData = 0);
+  vkSubMesh *ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData = 0) const;
 };

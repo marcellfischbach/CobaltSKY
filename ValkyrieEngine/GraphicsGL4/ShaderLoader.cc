@@ -26,6 +26,11 @@ bool vkShaderGL4Loader::CanLoad(IFile *file, const vkResourceLocator &locator, I
     ext == vkString("comp");
 }
 
+const vkClass *vkShaderGL4Loader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *) const
+{
+  return vkShaderGL4::GetStaticClass();
+}
+
 IObject *vkShaderGL4Loader::Load(IFile *file, const vkResourceLocator &locator, IObject *) const
 {
   vkString ext = file->GetExtension();
@@ -111,6 +116,10 @@ bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator 
 
 
 
+const vkClass *vkProgramGL4Loader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+{
+  return vkProgramGL4::GetStaticClass();
+}
 
 IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
