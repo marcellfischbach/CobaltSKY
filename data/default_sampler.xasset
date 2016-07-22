@@ -4,14 +4,14 @@
 		<sampler>
 			<filter>Anisotropic</filter>
 			<anisotropy>6</anisotropy>
-			<minlod>-1000</minlod>
-			<maxlod>1000</maxlod>
-			<addressu>Repeat</addressu>
-			<addressv>Repeat</addressv>
-			<addressw>Repeat</addressw>
-			<bordercolor>0 0 0 0</bordercolor>
-			<comparemode>None</comparemode>
-			<comparefunc>Greater</comparefunc>
+			<minLOD>-1000</minLOD>
+			<maxLOD>1000</maxLOD>
+			<addressU>Repeat</addressU>
+			<addressV>Repeat</addressV>
+			<addressW>Repeat</addressW>
+			<borderColor>0 0 0 0</borderColor>
+			<compareMode>None</compareMode>
+			<compareFunc>Greater</compareFunc>
 		</sampler>
 		
 	</data>

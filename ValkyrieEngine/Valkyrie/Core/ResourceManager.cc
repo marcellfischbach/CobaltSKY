@@ -555,9 +555,9 @@ TiXmlElement *vkBaseXMLLoader::FindElementByTagName(TiXmlElement *root, const vk
 vkResourceLoadingMode vkBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode, vkResourceLoadingMode alterInline) const
 {
   vkResourceLoadingMode mode = defaultMode;
-  if (element->Attribute("resourcemode"))
+  if (element->Attribute("resourceMode"))
   {
-    vkString modeString(element->Attribute("resourcemode"));
+    vkString modeString(element->Attribute("resourceMode"));
     if (modeString == vkString("shared"))
     {
       mode = eRLM_Shared;

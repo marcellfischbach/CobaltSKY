@@ -775,8 +775,9 @@ vkEntityScene *create_scene(IGraphics *graphics)
   /*
   ITexture2D *dirtTexture = vkResourceManager::Get()->GetOrLoad<ITexture2D>(vkResourceLocator("materials/textures/fieldstone_diffuse.xasset"));
   ITexture2DArray *testArray = vkResourceManager::Get()->GetOrLoad<ITexture2DArray>(vkResourceLocator("materials/textures/test_array.xasset"));
-  vkMaterial *testMaterial = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("materials/my_material.xasset"));
   */
+
+  vkMaterial *testMaterial = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("materials/my_material.xasset"));
   vkMaterialInstance *testInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/my_material_instance.xasset"));
 
   vkMaterial *constRedMaterial = create_red_shader(graphics);

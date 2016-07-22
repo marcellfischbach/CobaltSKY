@@ -1,13 +1,13 @@
 <asset>
   <data>
     <texture2d>
+      <sampler resourceMode="shared">default_sampler.xasset</sampler>
       <image mipmap="true">materials/textures/fieldstone_diffuse.data</image>
-      <sampler resourcemode="shared">default_sampler.xasset</sampler>
     </texture2d>
   </data>
   <preview>
-    <editoricon>
+    <editorIcon>
       <image>materials/textures/fieldstone_diffuse.data:EDITOR_ICON</image>
-    </editoricon>
+    </editorIcon>
   </preview>
 </asset>

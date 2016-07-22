@@ -23,8 +23,10 @@
 
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/AssetStream.hh>
+#include <Valkyrie/Core/ClassRegistry.hh>
 #include <Valkyrie/Core/VFS.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
 
@@ -105,8 +107,8 @@ protected:
     if (data->hasFormat("VALKYRIE/RESOURCE/TYPE"))
     {
       QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-      QString typeStr ((const char*)type);
-      m_lastValidDrag = typeStr == QString("TEXTURE2D");
+      const vkClass *resClass = vkClassRegistry::Get()->GetClass((const char*)type);
+      m_lastValidDrag = resClass && resClass->IsInstanceOf<ITexture2D>();
     }
     if (m_lastValidDrag)
     {
@@ -129,9 +131,9 @@ protected:
       if (data->hasFormat("VALKYRIE/RESOURCE/TYPE") && data->hasFormat("VALKYRIE/RESOURCE/FILE"))
       {
         QByteArray type = data->data("VALKYRIE/RESOURCE/TYPE");
-        QString typeStr ((const char*)type);
+        const vkClass *resClass = vkClassRegistry::Get()->GetClass((const char*)type);
         QByteArray file= data->data("VALKYRIE/RESOURCE/FILE");
-        if (typeStr == QString("TEXTURE2D"))
+        if (resClass && resClass->IsInstanceOf<ITexture2D>())
         {
           m_view->AddTexture2D(vkResourceLocator(vkString((const char*)file)), event->pos());
         }
@@ -688,10 +690,11 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   QDomElement assetElement = doc.createElement("asset");
   QDomElement dataElement = doc.createElement("data");
   QDomElement metaElement = doc.createElement("meta");
-  QDomElement shadergraphElement = doc.createElement("shadergraph");
+  QDomElement shadergraphElement = doc.createElement("shaderGraph");
   QDomElement nodesElement = doc.createElement("nodes");
   QDomElement inputsElement = doc.createElement("inputs");
-  QDomElement metaShadergraphElement = doc.createElement("shadergraphmeta");
+  QDomElement attributesElement = doc.createElement("attributes");
+  QDomElement metaShadergraphElement = doc.createElement("shaderGraphMeta");
   QDomElement metaNodesElement = doc.createElement("nodes");
 
 
@@ -703,10 +706,23 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   dataElement.appendChild(shadergraphElement);
   shadergraphElement.appendChild(nodesElement);
   shadergraphElement.appendChild(inputsElement);
+  shadergraphElement.appendChild(attributesElement);
 
   metaElement.appendChild(metaShadergraphElement);
   metaShadergraphElement.appendChild(metaNodesElement);
 
+
+
+
+  QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
+
+
+  QDomElement metaShaderGraphShaderGraphElement = doc.createElement("shaderGraph");
+  metaShaderGraphShaderGraphElement.
+    appendChild(doc.createElement("pos")).
+    appendChild(doc.createTextNode(QString::asprintf("%f, %f", shaderGraphPos.x(), shaderGraphPos.y())));
+
+  metaShadergraphElement.appendChild(metaShaderGraphShaderGraphElement);
 
 
   QVector<vkSGNode*> sgNodes;
@@ -840,7 +856,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
     {
       vkSGNode *outputNode = output->GetNode();
 
-      QDomElement shadergraphInputElement = doc.createElement("shadergraph");
+      QDomElement shadergraphInputElement = doc.createElement("shaderGraph");
 #define INPUT(input) if (inputType == vkSGShaderGraph::eIT_##input) shadergraphInputElement.setAttribute("input", #input)
       INPUT(Diffuse);
       INPUT(Alpha);
@@ -892,7 +908,29 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
     inputsElement.appendChild(nodeElement);
   }
 
+  // 
+  // write the attributes of the shader graph
+  QDomElement blendOutWithBinaryGradientElement = doc.createElement("blendOutWithBinaryGradient");
+  blendOutWithBinaryGradientElement.setAttribute("enabled", shaderGraph->IsBlendOutWithBinaryGradient());
+  attributesElement.appendChild(blendOutWithBinaryGradientElement);
 
+
+  QDomElement discardAlphaElement = doc.createElement("discardAlpha");
+  QDomElement thresholdElement = doc.createElement("threshold");
+  thresholdElement.appendChild(doc.createTextNode(QString::asprintf("%f", shaderGraph->GetDiscardAlphaThreshold())));
+  QDomElement modeElement = doc.createElement("mode");
+#define CMP(cmp) (shaderGraph->GetDiscardAlphaCompareMode() == eCM_##cmp) modeElement.setAttribute("mode", #cmp)
+  if CMP(LessOrEqual);
+  else if CMP(GreaterOrEqual);
+  else if CMP(Less);
+  else if CMP(Greater);
+  else if CMP(Equal);
+  else if CMP(NotEqual);
+  else if CMP(Never);
+  else if CMP(Always);
+  discardAlphaElement.appendChild(thresholdElement);
+  discardAlphaElement.appendChild(modeElement);
+  attributesElement.appendChild(discardAlphaElement);
 
 
   QString xml = doc.toString(2);

@@ -63,7 +63,7 @@ ShaderGraphMetaDataAssetXMLLoader::~ShaderGraphMetaDataAssetXMLLoader()
 
 bool ShaderGraphMetaDataAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  return vkString(element->Value()) == vkString("shadergraphmeta");
+  return vkString(element->Value()) == vkString("shaderGraphMeta");
 }
 
 const vkClass *ShaderGraphMetaDataAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
@@ -74,6 +74,16 @@ const vkClass *ShaderGraphMetaDataAssetXMLLoader::EvalClass(TiXmlElement *elemen
 IObject *ShaderGraphMetaDataAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   ShaderGraphMetaData *metaData = new ShaderGraphMetaData();
+  TiXmlElement *shaderGraphElement = element->FirstChildElement("shaderGraph");
+  if (shaderGraphElement)
+  {
+    TiXmlElement *posElement = shaderGraphElement->FirstChildElement("pos");
+    if (posElement)
+    {
+      vkVector2f pos = LoadVector2f(posElement->GetText());
+      metaData->SetGraphPosition(pos);
+    }
+  }
   TiXmlElement *nodesElement = element->FirstChildElement("nodes");
   if (nodesElement)
   {

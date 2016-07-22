@@ -162,7 +162,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     QDomElement assetElement = doc.createElement("asset");
     QDomElement dataElement = doc.createElement("data");
     QDomElement previewElement = doc.createElement("preview");
-    QDomElement editorIconElement = doc.createElement("editoricon");
+    QDomElement editorIconElement = doc.createElement("editorIcon");
     QDomElement textureElement = doc.createElement("texture2d");
     QDomElement dataImageElement = doc.createElement("image");
     QDomElement dataSamplerElement = doc.createElement("sampler");
@@ -178,7 +178,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
 
     doc.appendChild(assetElement);
 
-    dataSamplerElement.setAttribute("resourcemode", "shared");
+    dataSamplerElement.setAttribute("resourceMode", "shared");
     QDomText dataSamplerText = doc.createTextNode("default_sampler.xasset");
     dataSamplerElement.appendChild(dataSamplerText);
 

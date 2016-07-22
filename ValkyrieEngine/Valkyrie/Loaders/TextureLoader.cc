@@ -122,46 +122,46 @@ IObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLo
     sampler->SetAnisotropy(atoi(anisotropyElement->GetText()));
   }
 
-  TiXmlElement *minLodElement = element->FirstChildElement("minlod");
+  TiXmlElement *minLodElement = element->FirstChildElement("minLOD");
   if (minLodElement)
   {
     sampler->SetMinLOD(atoi(minLodElement->GetText()));
   }
 
-  TiXmlElement *maxLodElement = element->FirstChildElement("maxlod");
+  TiXmlElement *maxLodElement = element->FirstChildElement("maxlLOD");
   if (maxLodElement)
   {
     sampler->SetMaxLOD(atoi(maxLodElement->GetText()));
   }
 
-  TiXmlElement *addressUElement = element->FirstChildElement("addressu");
+  TiXmlElement *addressUElement = element->FirstChildElement("addressU");
   if (addressUElement)
   {
     sampler->SetAddressU(::evalAddressMode(vkString(addressUElement->GetText())));
   }
-  TiXmlElement *addressVElement = element->FirstChildElement("addressv");
+  TiXmlElement *addressVElement = element->FirstChildElement("addressV");
   if (addressVElement)
   {
     sampler->SetAddressV(::evalAddressMode(vkString(addressVElement->GetText())));
   }
 
-  TiXmlElement *addressWElement = element->FirstChildElement("addressw");
+  TiXmlElement *addressWElement = element->FirstChildElement("addressW");
   if (addressWElement)
   {
     sampler->SetAddressW(::evalAddressMode(vkString(addressWElement->GetText())));
   }
 
-  TiXmlElement *borderColorElement = element->FirstChildElement("bordercolor");
+  TiXmlElement *borderColorElement = element->FirstChildElement("borderColor");
   if (borderColorElement)
   {
     sampler->SetBorderColor(LoadVector4f(borderColorElement->GetText()));
   }
-  TiXmlElement *compareModeElement = element->FirstChildElement("comparemode");
+  TiXmlElement *compareModeElement = element->FirstChildElement("compareMode");
   if (compareModeElement)
   {
     sampler->SetTextureCompareMode(::evalCompareMode(vkString(compareModeElement->GetText())));
   }
-  TiXmlElement *compareFuncElement = element->FirstChildElement("comparefunc");
+  TiXmlElement *compareFuncElement = element->FirstChildElement("compareFunc");
   if (compareFuncElement)
   {
     sampler->SetTextureCompareFunc(::evalCompareFunc(vkString(compareFuncElement->GetText())));

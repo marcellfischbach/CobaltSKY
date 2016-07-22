@@ -33,7 +33,7 @@ IObject *EditorIconLoader::Load(vkAssetInputStream &is, const vkResourceLocator 
 
 bool EditorIconAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  return vkString("editoricon") == vkString(element->Value());
+  return vkString("editorIcon") == vkString(element->Value());
 }
 
 const vkClass *EditorIconAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const

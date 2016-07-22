@@ -1,6 +1,6 @@
 <asset>
   <data>
-    <shadergraph>
+    <shaderGraph>
       <nodes>
         <node class="vkSGTexture2D" id="0">
           <resource name="Diffuse">
@@ -11,9 +11,12 @@
         <node class="vkSGMul" id="2"/>
       </nodes>
       <inputs>
-        <shadergraph input="Diffuse">
+        <shaderGraph input="Diffuse">
           <node id="0" output="0"/>
-        </shadergraph>
+        </shaderGraph>
+        <shaderGraph input="Alpha">
+          <node id="0" output="4"/>
+        </shaderGraph>
         <node input="0" id="0">
           <node id="2" output="0"/>
         </node>
@@ -24,21 +27,31 @@
           <float>2.000000</float>
         </node>
       </inputs>
-    </shadergraph>
+      <attributes>
+        <blendOutWithBinaryGradient enabled="0"/>
+        <discardAlpha>
+          <threshold>0.000000</threshold>
+          <mode mode="Less"/>
+        </discardAlpha>
+      </attributes>
+    </shaderGraph>
   </data>
   <meta>
-    <shadergraphmeta>
+    <shaderGraphMeta>
       <nodes>
         <node id="0">
-          <pos>-196.000000, -11.000000</pos>
+          <pos>-29.000000, -13.000000</pos>
         </node>
         <node id="1">
-          <pos>-625.000000, -2.000000</pos>
+          <pos>-469.000000, -10.000000</pos>
         </node>
         <node id="2">
-          <pos>-383.000000, -9.000000</pos>
+          <pos>-227.000000, -14.000000</pos>
         </node>
       </nodes>
-    </shadergraphmeta>
+      <shaderGraph>
+        <pos>173.000000, 2.000000</pos>
+      </shaderGraph>
+    </shaderGraphMeta>
   </meta>
 </asset>

@@ -83,7 +83,7 @@ void FolderItemModel::Clear()
 
 vkResourceLocator FolderItemModel::CreateLocator (const QString &assetName) const
 {
-  QString path = m_resourceRel + "/" + assetName + ".asset";
+  QString path = m_resourceRel + "/" + assetName + ".xasset";
   return vkResourceLocator(vkString((const char*)path.toLatin1()));
 }
 

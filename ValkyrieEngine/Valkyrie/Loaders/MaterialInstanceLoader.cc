@@ -23,7 +23,7 @@ vkMaterialInstanceAssetXMLLoader::~vkMaterialInstanceAssetXMLLoader()
 
 bool vkMaterialInstanceAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  return vkString(element->Value()) == vkString("materialinstance");
+  return vkString(element->Value()) == vkString("materialInstance");
 }
 
 const vkClass *vkMaterialInstanceAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const

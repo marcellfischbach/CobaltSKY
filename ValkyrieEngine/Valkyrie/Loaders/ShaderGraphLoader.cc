@@ -26,7 +26,7 @@ vkShaderGraphAssetXMLLoader::~vkShaderGraphAssetXMLLoader()
 bool vkShaderGraphAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
   vkString tagName(element->Value());
-  return tagName == vkString("shadergraph");
+  return tagName == vkString("shaderGraph");
 }
 
 const vkClass *vkShaderGraphAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
@@ -40,7 +40,8 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
 
   TiXmlElement *nodesElement = element->FirstChildElement("nodes");
   TiXmlElement *inputsElement = element->FirstChildElement("inputs");
-  if (!nodesElement || !inputsElement)
+  TiXmlElement *attributesElement = element->FirstChildElement("attributes");
+  if (!nodesElement || !inputsElement || !attributesElement)
   {
     shaderGraph->Release();
     return 0;
@@ -170,7 +171,7 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
     }
 
     vkString tagName(inputElement->Value());
-    if (tagName == vkString("shadergraph") && inputElement->Attribute("input"))
+    if (tagName == vkString("shaderGraph") && inputElement->Attribute("input"))
     {
       if (!output)
       {
@@ -235,6 +236,53 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
     }
 
   }
+
+  //
+  // load the attributes
+  TiXmlElement *blendOutWithBinaryGradientElement = attributesElement->FirstChildElement("blendOutWithBinaryGradient");
+  if (blendOutWithBinaryGradientElement)
+  {
+    if (blendOutWithBinaryGradientElement->Attribute("enabled"))
+    {
+      shaderGraph->SetBlendOutWithBinaryGradient(LoadBool(blendOutWithBinaryGradientElement->Attribute("enabled")));
+    }
+    else
+    {
+      shaderGraph->SetBlendOutWithBinaryGradient(false);
+    }
+  }
+  TiXmlElement *discardAlphaElement = attributesElement->FirstChildElement("discardAlpha");
+  if (discardAlphaElement)
+  {
+    if (discardAlphaElement->Attribute("enabled"))
+    {
+      shaderGraph->SetDiscardAlpha(LoadBool(discardAlphaElement->Attribute("enabled")));
+      TiXmlElement *thresholdElement = discardAlphaElement->FirstChildElement("threshold");
+      TiXmlElement *modeElement = discardAlphaElement->FirstChildElement("mode");
+      float threshold = 0.0f;
+      vkCompareMode compareMode = eCM_Less;
+      if (thresholdElement)
+      {
+        threshold = LoadFloat(thresholdElement->GetText());
+      }
+      if (modeElement)
+      {
+        vkString cmpStr(modeElement->GetText());
+#define CMP(cmp)  (cmpStr == #cmp)  compareMode = eCM_##cmp
+        if CMP(LessOrEqual);
+        else if CMP(GreaterOrEqual);
+        else if CMP(Less);
+        else if CMP(Greater);
+        else if CMP(Equal);
+        else if CMP(NotEqual);
+        else if CMP(Never);
+        else if CMP(Always);
+#undef CMP
+      }
+      shaderGraph->SetDiscardAlpha(threshold, compareMode);
+    }
+  }
+
 
   IGraphics *graphics = vkEngine::Get()->GetRenderer();
   if (graphics && !graphics->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph))
