@@ -146,7 +146,7 @@ void NodeEditorWidget::SetNode(SGNode *node)
     layout->addWidget(new QLabel(tr("Resource:"), this), row, 0, 1, 1);
 
     m_leResourceName = new QLineEdit(this);
-    connect (m_leResourceName, SIGNAL(textChanged(const QString&)), this, SLOT(textChanged(const QString&)));
+    connect (m_leResourceName, SIGNAL(textChanged(const QString&)), this, SLOT(ResourceNameChanged(const QString&)));
 
     layout->addWidget(m_leResourceName, row++, 1, 1, 1);
 
@@ -156,23 +156,23 @@ void NodeEditorWidget::SetNode(SGNode *node)
     case eSPT_Float:
       layout->addWidget(new QLabel(tr("Float"), this), row, 0, 1, 1);
       layout->addWidget(m_spResource0 = new QDoubleSpinBox(this), row++, 1, 1, 1);
-      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
+      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
       break;
     case eSPT_Vector2:
       layout->addWidget(new QLabel(tr("Vec2"), this), row, 0, 1, 1);
       layout->addWidget(m_spResource0 = new QDoubleSpinBox(this), row++, 1, 1, 1);
       layout->addWidget(m_spResource1 = new QDoubleSpinBox(this), row++, 1, 1, 1);
-      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
+      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
       break;
     case eSPT_Vector3:
       layout->addWidget(new QLabel(tr("Vec3"), this), row, 0, 1, 1);
       layout->addWidget(m_spResource0 = new QDoubleSpinBox(this), row++, 1, 1, 1);
       layout->addWidget(m_spResource1 = new QDoubleSpinBox(this), row++, 1, 1, 1);
       layout->addWidget(m_spResource2 = new QDoubleSpinBox(this), row++, 1, 1, 1);
-      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource2, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
+      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource2, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
       break;
     case eSPT_Vector4:
       layout->addWidget(new QLabel(tr("Vec4"), this), row, 0, 1, 1);
@@ -180,10 +180,10 @@ void NodeEditorWidget::SetNode(SGNode *node)
       layout->addWidget(m_spResource1 = new QDoubleSpinBox(this), row++, 1, 1, 1);
       layout->addWidget(m_spResource2 = new QDoubleSpinBox(this), row++, 1, 1, 1);
       layout->addWidget(m_spResource3 = new QDoubleSpinBox(this), row++, 1, 1, 1);
-      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource2, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
-      connect(m_spResource3, SIGNAL(valueChanged(double)), this, SLOT(doubleChanged(double)));
+      connect(m_spResource0, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource1, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource2, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
+      connect(m_spResource3, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
       break;
     case eSPT_Int:
     case eSPT_IVector2:
@@ -235,7 +235,13 @@ void NodeEditorWidget::SetNode(SGNode *node)
   SyncFromNode();
 }
 
-void NodeEditorWidget::doubleChanged(double value)
+void NodeEditorWidget::ResourceNameChanged(const QString &resourceName)
+{
+  printf("ResourceName changed\n");
+  SyncToNode();
+}
+
+void NodeEditorWidget::DoubleChanged(double value)
 {
   printf ("Double changed\n");
   fflush(stdout);
@@ -250,7 +256,6 @@ void NodeEditorWidget::ResourceChanged(const vkResourceLocator &locator)
 
 void NodeEditorWidget::SyncFromNode()
 {
-
   if (!m_node)
   {
     return;
@@ -303,8 +308,6 @@ void NodeEditorWidget::SyncFromNode()
       break;
     }
 
-
-
   }
 
 
@@ -314,14 +317,17 @@ void NodeEditorWidget::SyncFromNode()
 
 void NodeEditorWidget::SyncToNode()
 {
+  printf("SyncToNode\n");
   if (!m_node || m_syncGuard)
   {
+    printf("  no node or sync guard\n");
     return;
   }
 
   vkSGNode *node = m_node->GetNode();
   if (!node)
   {
+    printf("  no node\n");
     return;
   }
 
@@ -359,6 +365,7 @@ void NodeEditorWidget::SyncToNode()
     case eSPT_Matrix4:
       break;
     case eSPT_Texture:
+      printf("Set resource locator: %s:%s\n", resource->GetDefaultTextureResource().GetResourceFile().c_str(), resource->GetDefaultTextureResource().GetResourceName().c_str());
       resource->GetDefaultTextureResource() = m_leResourceValue->GetResourceLocator();
       break;
     }

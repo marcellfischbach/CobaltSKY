@@ -1,14 +1,24 @@
 <asset>
-	<data>
-	
-		<materialInstance>
-			<material>materials/my_material.xasset</material>
-			<parameters>
-				<parameter name="Diffuse">
-					<locator>materials/textures/dirt_diffuse.xasset</locator>
-				</parameter>
-			</parameters>
-		</materialInstance>
-		
-	</data>
+  <data>
+    <materialInstance>
+      <material>/materials/TestMaterial.xasset</material>
+      <parameters/>
+    </materialInstance>
+  </data>
+  <meta>
+    <materialInstanceMeta>
+      <material>/materials/TestMaterial.xasset</material>
+      <parameters/>
+    </materialInstanceMeta>
+  </meta>
+</asset>
+aterialInstanceMeta>
+      <material>materials/my_material.xasset</material>
+      <parameters>
+        <parameter name="Normal">
+          <locator>/materials/textures/fieldstone_normal.xasset</locator>
+        </parameter>
+      </parameters>
+    </materialInstanceMeta>
+  </meta>
 </asset>

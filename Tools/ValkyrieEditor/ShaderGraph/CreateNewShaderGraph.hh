@@ -7,16 +7,6 @@ class vkResourceLocator;
 namespace shadergraph
 {
 
-/*
-class CreateNewShaderGraph
-{
-public:
-  void CreateNew(const vkResourceLocator &locator);
-
-private:
-  CreateNewShaderGraph();
-};
-*/
 
 class NewShaderGraphAction : public assetmanager::NewAssetAction
 {

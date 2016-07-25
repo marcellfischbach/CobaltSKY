@@ -1,8 +1,11 @@
 
 #include <MaterialInstance/MaterialInstanceView.hh>
+#include <MaterialInstance/MaterialInstanceMeta.hh>
 #include <AssetManager/Utils.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Material.hh>
+#include <qdom.h>
+
 
 
 MaterialInstanceWidget::MaterialInstanceWidget(QWidget *parent)
@@ -19,10 +22,12 @@ MaterialInstanceWidget::~MaterialInstanceWidget()
 
 void MaterialInstanceWidget::Set(const vkResourceLocator &resourceLocator)
 {
+  m_locator = resourceLocator;
   m_materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(resourceLocator);
+  m_materialInstanceMeta = vkResourceManager::Get()->GetOrLoad<MaterialInstanceMeta>(vkResourceLocator(resourceLocator, "meta"));
 
   m_gui.previewWidget->SetMaterialInstance(m_materialInstance);
-  m_gui.parameterEditor->SetMaterialInstance(m_materialInstance);
+  m_gui.parameterEditor->SetMaterialInstance(m_materialInstance, m_materialInstanceMeta);
 }
 
 void MaterialInstanceWidget::DataChanged()
@@ -31,6 +36,12 @@ void MaterialInstanceWidget::DataChanged()
 }
 
 
+void MaterialInstanceWidget::on_pbSave_clicked(bool)
+{
+
+  m_gui.parameterEditor->Save(m_locator);
+
+}
 
 
 MaterialInstanceView::MaterialInstanceView(QWidget *parent)

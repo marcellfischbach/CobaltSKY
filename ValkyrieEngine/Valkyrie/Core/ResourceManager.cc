@@ -79,8 +79,9 @@ const vkClass *vkResourceManager::EvalClass(const vkResourceLocator &locator, IO
 
 IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_fileLoaders)
+  for (int i=m_fileLoaders.size()-1; i>=0; --i)
   {
+    const IFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
     {
       IObject *obj = loader->Load(file, locator, userData);
@@ -93,8 +94,9 @@ IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, 
 
 const vkClass *vkResourceManager::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_fileLoaders)
+  for (int i = m_fileLoaders.size() - 1; i >= 0; --i)
   {
+    const IFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
     {
       return loader->EvalClass(file, locator, userData);
@@ -106,8 +108,9 @@ const vkClass *vkResourceManager::EvalClass(IFile *file, const vkResourceLocator
 
 IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_xmlLoaders)
+  for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
   {
+    const IXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
     {
       IObject *obj = loader->Load(element, locator, userData);
@@ -119,8 +122,9 @@ IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator 
 
 const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_xmlLoaders)
+  for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
   {
+    const IXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
     {
       return loader->EvalClass(element, locator, userData);
@@ -132,8 +136,9 @@ const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResou
 
 IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_assetLoaders)
+  for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {
+    const IAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))
     {
       IObject *obj = loader->Load(inputStream, locator, userData);
@@ -145,8 +150,9 @@ IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inp
 
 const vkClass *vkResourceManager::EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
 {
-  for (auto loader : m_assetLoaders)
+  for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {
+    const IAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))
     {
       return loader->EvalClass(inputStream, locator, userData);
@@ -235,6 +241,13 @@ vkResourceLocator::vkResourceLocator(const vkString &resourceFile, const vkStrin
       m_resourceFile = m_resourceFile.substr(0, idx);
     }
   }
+}
+
+vkResourceLocator::vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName)
+  : m_resourceFile(resource.GetResourceFile())
+  , m_resourceName(resourceName)
+{
+
 }
 
 const vkString &vkResourceLocator::GetResourceFile() const

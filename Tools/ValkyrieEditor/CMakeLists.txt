@@ -111,6 +111,10 @@ source_group(
 set(EDITOR_MATERIAL_INSTANCE_SOURCES
     MaterialInstance/CreateNewMaterialInstance.cc
     MaterialInstance/CreateNewMaterialInstance.hh
+    MaterialInstance/MaterialInstanceMeta.cc
+    MaterialInstance/MaterialInstanceMeta.hh
+    MaterialInstance/MaterialInstanceMetaLoader.cc
+    MaterialInstance/MaterialInstanceMetaLoader.hh
     MaterialInstance/MaterialInstanceView.cc
     MaterialInstance/MaterialInstanceView.hh
     MaterialInstance/ParameterEditor.cc

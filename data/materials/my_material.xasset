@@ -2,29 +2,40 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node class="vkSGTexture2D" id="0">
+        <node id="0" class="vkSGTexture2D">
           <resource name="Diffuse">
             <locator>materials/textures/fieldstone_diffuse.xasset</locator>
           </resource>
         </node>
-        <node class="vkSGDefaultTextureCoordinate" id="1"/>
-        <node class="vkSGMul" id="2"/>
+        <node id="1" class="vkSGDefaultTextureCoordinate"/>
+        <node id="2" class="vkSGMul"/>
+        <node id="3" class="vkSGTexture2D">
+          <resource name="Normal">
+            <locator>/materials/textures/fieldstone_normal.xasset</locator>
+          </resource>
+        </node>
       </nodes>
       <inputs>
         <shaderGraph input="Diffuse">
-          <node id="0" output="0"/>
+          <node output="0" id="0"/>
         </shaderGraph>
         <shaderGraph input="Alpha">
-          <node id="0" output="4"/>
+          <node output="4" id="0"/>
         </shaderGraph>
-        <node input="0" id="0">
-          <node id="2" output="0"/>
+        <shaderGraph input="Normal">
+          <node output="0" id="3"/>
+        </shaderGraph>
+        <node id="0" input="0">
+          <node output="0" id="2"/>
         </node>
-        <node input="0" id="2">
-          <node id="1" output="0"/>
+        <node id="2" input="0">
+          <node output="0" id="1"/>
         </node>
-        <node input="1" id="2">
+        <node id="2" input="1">
           <float>2.000000</float>
+        </node>
+        <node id="3" input="0">
+          <float>0.000000</float>
         </node>
       </inputs>
       <attributes>
@@ -47,6 +58,9 @@
         </node>
         <node id="2">
           <pos>-227.000000, -14.000000</pos>
+        </node>
+        <node id="3">
+          <pos>-332.000000, 173.000000</pos>
         </node>
       </nodes>
       <shaderGraph>

@@ -21,6 +21,7 @@ class VKE_API vkResourceLocator
 {
 public:
   vkResourceLocator(const vkString &resourceFile = "", const vkString &resourceName = "");
+  explicit vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName);
   
   const vkString &GetResourceFile() const;
   const vkString &GetResourceName() const;

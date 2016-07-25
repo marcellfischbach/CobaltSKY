@@ -7,6 +7,7 @@
 
 
 class vkMaterialInstance;
+class MaterialInstanceMeta;
 class MaterialInstanceWidget : public QWidget
 {
   Q_OBJECT
@@ -18,10 +19,13 @@ public:
 
 private slots:
   void DataChanged ();
+  void on_pbSave_clicked(bool);
 
 private:
   Ui::MaterialInstanceWidget m_gui;
+  vkResourceLocator m_locator;
   vkMaterialInstance *m_materialInstance;
+  MaterialInstanceMeta *m_materialInstanceMeta;
 };
 
 

@@ -63,7 +63,8 @@ private:
   QDoubleSpinBox **m_constInputs;
 
 private slots:
-  void doubleChanged(double value);
+  void ResourceNameChanged(const QString &text);
+  void DoubleChanged(double value);
   void ResourceChanged(const vkResourceLocator &locator);
 
 };

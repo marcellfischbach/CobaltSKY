@@ -169,7 +169,7 @@ void shadergraph::SGNode::UpdateResource()
 {
   if (m_res && m_res->GetResourceType() == eSPT_Texture)
   {
-    EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_res->GetDefaultTextureResource().GetResourceFile(), "EDITOR_ICON"));
+    EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_res->GetDefaultTextureResource().GetResourceFile(), "preview"));
     if (icon)
     {
       SetImage(icon->GetImage());

@@ -38,15 +38,13 @@ IObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkR
   TiXmlElement *materialElement = element->FirstChildElement("material");
   if (!materialElement)
   {
-    materialInstance->Release();
-    return 0;
+    return materialInstance;
   }
 
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator(vkString(materialElement->GetText())));
   if (!material)
   {
-    materialInstance->Release();
-    return 0;
+    return materialInstance;
   }
 
   materialInstance->SetMaterial(material);
@@ -59,23 +57,20 @@ IObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkR
     {
       if (!parameterElement->Attribute("name"))
       {
-        materialInstance->Release();
-        return 0;
+        continue;
       }
       vkString parameterName(parameterElement->Attribute("name"));
       vkInt16 index = materialInstance->GetIndex(parameterName);
       if (index == -1)
       {
-        materialInstance->Release();
-        return 0;
+        continue;
       }
 
       vkShaderParameterType type = material->GetParamType(index);
       TiXmlElement *valueElement = parameterElement->FirstChildElement();
       if (!valueElement)
       {
-        materialInstance->Release();
-        return 0;
+        continue;
       }
 
       vkString tagName(valueElement->Value());

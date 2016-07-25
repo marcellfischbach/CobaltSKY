@@ -23,6 +23,10 @@ QString GetNameFromResource(const vkResourceLocator &locator)
   {
     name = name.left(name.length() - 6);
   }
+  if (name.endsWith(".xasset"))
+  {
+    name = name.left(name.length() - 7);
+  }
   return name;
 }
 

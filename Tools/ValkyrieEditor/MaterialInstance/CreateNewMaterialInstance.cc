@@ -5,6 +5,7 @@
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Core/AssetStream.hh>
 #include <Valkyrie/Core/VFS.hh>
+#include <qdom.h>
 
 namespace materialinstance
 {
@@ -20,21 +21,30 @@ NewMaterialInstanceAction::NewMaterialInstanceAction(QObject *parent)
 
 bool NewMaterialInstanceAction::activate()
 {
-  //vkAssetOutputStream osMeta;
-  //osMeta << (vkUInt32)VK_VERSION(1, 0, 0);
 
-  vkAssetOutputStream osData;
-  osData << (vkUInt32)VK_VERSION(1, 0, 0)
-         << vkString("")
-         << (vkUInt16)0;
+  QDomDocument doc;
 
-  IFile *file = vkVFS::Get()->Open(GetLocator().GetResourceFile(), eOM_Write, eTM_Binary);
-  assetmanager::AssetWriter writer;
-  writer.AddEntry("MATERIAL_INSTANCE", "DATA", osData.GetSize(), osData.GetBuffer());
-  //writer.AddEntry("MATERIAL_INSTANCE", "META_DATA", osMeta.GetSize(), osMeta.GetBuffer());
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement materialInstanceElement = doc.createElement("materialInstance");
+  QDomElement metaElement = doc.createElement("meta");
+  QDomElement materialInstanceMetaElement = doc.createElement("materialInstanceMeta");
 
-  writer.Output(file);
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  assetElement.appendChild(metaElement);
+
+  dataElement.appendChild(materialInstanceElement);
+
+
+  metaElement.appendChild(materialInstanceMetaElement);
+
+  QString xml = doc.toString(2);
+
+  IFile *file = vkVFS::Get()->Open(GetLocator().GetResourceFile(), eOM_Write, eTM_Text);
+  file->Write((const char*)xml.toLatin1(), xml.length());
   file->Close();
+
 
   return true;
 }

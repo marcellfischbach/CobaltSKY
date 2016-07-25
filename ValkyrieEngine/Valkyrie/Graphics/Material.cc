@@ -64,10 +64,6 @@ const IShader *vkMaterial::GetShader(vkRenderPass pass) const
 IShader *vkMaterial::Bind(IGraphics *renderer, vkRenderPass pass)
 {
   IShader *shader = m_shaders[pass];
-  if (!shader)
-  {
-    return 0;
-  }
 
   renderer->SetShader(shader);
 

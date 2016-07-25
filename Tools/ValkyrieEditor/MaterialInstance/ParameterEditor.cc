@@ -1,7 +1,12 @@
+
 #include <MaterialInstance/ParameterEditor.hh>
+#include <MaterialInstance/MaterialInstanceMeta.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Core/VFS.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
+#include <qdom.h>
+#include <qfile.h>
 
 namespace materialinstance
 {
@@ -9,6 +14,8 @@ namespace materialinstance
 ParameterEditor::ParameterEditor(QWidget *parent)
   : QWidget(parent)
   , m_materialInstance(0)
+  , m_materialInstanceMeta(new MaterialInstanceMeta())
+  , m_updateGuard(false)
 {
 
   InitGUI();
@@ -47,17 +54,39 @@ void ParameterEditor::InitGUI()
 
 }
 
-void ParameterEditor::SetMaterialInstance(vkMaterialInstance *materialInstance)
+
+
+void ParameterEditor::SetMaterialInstance(vkMaterialInstance *materialInstance, MaterialInstanceMeta* meta)
 {
   if (m_materialInstance != materialInstance)
   {
     VK_SET(m_materialInstance, materialInstance);
   }
+  if (!meta)
+  {
+    meta = new MaterialInstanceMeta();
+  }
+  VK_SET(m_materialInstanceMeta, meta);
+
+  ShaderChanged();
+}
+
+vkMaterialInstance *ParameterEditor::GetMaterialInstance()
+{
+  return m_materialInstance;
+}
+
+
+MaterialInstanceMeta *ParameterEditor::GetMaterialInstanceMeta()
+{
+  return m_materialInstanceMeta;
 }
 
 void ParameterEditor::ShaderChanged(const vkResourceLocator &locator)
 {
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(locator);
+  m_materialInstanceMeta->SetShaderResourceLocator(locator);
+
   ShaderChanged(material);
 }
 
@@ -79,8 +108,14 @@ void ParameterEditor::ShaderChanged(vkMaterial *material)
 
 void ParameterEditor::ShaderChanged()
 {
+  if (m_updateGuard)
+  {
+    return;
+  }
+  m_updateGuard = true;
   RemoveCurrent();
 
+  m_shaderSelector->SetResourceLocator(m_materialInstanceMeta->GetShaderResourceLocator());
 
   int row = 2;
   vkMaterial *material = m_materialInstance ? m_materialInstance->GetMaterial() : 0;
@@ -164,6 +199,7 @@ void ParameterEditor::ShaderChanged()
         data.m_textureSelector = new ResourceWidget(this);
         data.m_textureSelector->AddValidType(ITexture::GetStaticClass());
         data.m_layout->addWidget(data.m_textureSelector, 1);
+
         break;
       }
 
@@ -177,7 +213,14 @@ void ParameterEditor::ShaderChanged()
       }
       if (data.m_textureSelector)
       {
-        data.m_textureSelector->SetEnabled(false);
+        bool hasResource = m_materialInstanceMeta->HasResourceLocator(name);
+        if (hasResource)
+        {
+          data.m_textureSelector->SetResourceLocator(m_materialInstanceMeta->GetResourceLocator(name));
+        }
+
+        data.m_checkBox->setChecked(hasResource);
+        data.m_textureSelector->SetEnabled(hasResource);
         connect (data.m_textureSelector, SIGNAL(ResourceChanged (const vkResourceLocator &)), this, SLOT(ResourceChanged (const vkResourceLocator &)));
 
       }
@@ -189,6 +232,7 @@ void ParameterEditor::ShaderChanged()
   }
 
   m_layout->addItem(m_bottomSpacer, row, 0, 1, 3);
+  m_updateGuard = false;
 }
 
 void ParameterEditor::RemoveCurrent()
@@ -311,6 +355,8 @@ void ParameterEditor::ResourceChanged(const vkResourceLocator &)
   vkMaterial *material = m_materialInstance->GetMaterial();
   if (data && material)
   {
+    vkString name = material->GetParamName(data->m_shaderIndex);
+
     vkShaderParameterType type = material->GetParamType(data->m_shaderIndex);
     switch (type)
     {
@@ -318,6 +364,7 @@ void ParameterEditor::ResourceChanged(const vkResourceLocator &)
     {
       ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(data->m_textureSelector->GetResourceLocator());
       m_materialInstance->Set(data->m_shaderIndex, texture);
+      m_materialInstanceMeta->SetResourceLocator(name, data->m_textureSelector->GetResourceLocator());
     }
       break;
     default:
@@ -345,5 +392,110 @@ ParameterEditor::ParameterData *ParameterEditor::FindData(QObject *value)
   }
   return 0;
 }
+
+
+void ParameterEditor::Save(const vkResourceLocator &locator)
+{
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement materialInstanceElement = doc.createElement("materialInstance");
+  QDomElement metaElement = doc.createElement("meta");
+  QDomElement materialInstanceMetaElement = doc.createElement("materialInstanceMeta");
+
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  assetElement.appendChild(metaElement);
+
+  dataElement.appendChild(materialInstanceElement);
+  metaElement.appendChild(materialInstanceMetaElement);
+
+
+  if (m_materialInstance && m_materialInstanceMeta && m_materialInstance->GetMaterial())
+  {
+    QDomElement materialElement = doc.createElement("material");
+    QDomElement materialMetaElement = doc.createElement("material");
+
+    vkString matRes = m_materialInstanceMeta->GetShaderResourceLocator().GetResourceFile();
+    materialElement.appendChild(doc.createTextNode(matRes.c_str()));
+    materialMetaElement.appendChild(doc.createTextNode(matRes.c_str()));
+    materialInstanceElement.appendChild(materialElement);
+    materialInstanceMetaElement.appendChild(materialMetaElement);
+
+
+    vkMaterial *material = m_materialInstance->GetMaterial();
+
+    QDomElement parametersElement = doc.createElement("parameters");
+    QDomElement parametersMetaElement = doc.createElement("parameters");
+    for (ParameterData &data : m_allParameters)
+    {
+      if (!data.m_checkBox->isChecked())
+      {
+        continue;
+      }
+
+      vkString name = material->GetParamName(data.m_shaderIndex);
+      QDomElement parameterElement = doc.createElement("parameter");
+      parameterElement.setAttribute("name", name.c_str());
+
+      parametersElement.appendChild(parameterElement);
+      vkShaderParameterType type = material->GetParamType(data.m_shaderIndex);
+      switch (type)
+      {
+          case eSPT_Float:
+            parameterElement.appendChild(doc.createElement("float")).appendChild(doc.createTextNode(QString::asprintf("%f", 
+                                                                                                                      data.m_floatAttributes[0])));
+            break;
+          case eSPT_Vector2:
+            parameterElement.appendChild(doc.createElement("float2")).appendChild(doc.createTextNode(QString::asprintf("%f, %f", 
+                                                                                                                       data.m_floatAttributes[0], 
+                                                                                                                       data.m_floatAttributes[1])));
+            break;
+          case eSPT_Vector3:
+            parameterElement.appendChild(doc.createElement("float3")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", 
+                                                                                                                       data.m_floatAttributes[0], 
+                                                                                                                       data.m_floatAttributes[1],
+                                                                                                                       data.m_floatAttributes[2])));
+            break;
+          case eSPT_Vector4:
+            parameterElement.appendChild(doc.createElement("float4")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f",
+                                                                                                                       data.m_floatAttributes[0],
+                                                                                                                       data.m_floatAttributes[1],
+                                                                                                                       data.m_floatAttributes[2])));
+            break;
+          case eSPT_Color4:
+            parameterElement.appendChild(doc.createElement("color4")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f",
+                                                                                                                       data.m_floatAttributes[0],
+                                                                                                                       data.m_floatAttributes[1],
+                                                                                                                       data.m_floatAttributes[2])));
+            break;
+          case eSPT_Texture:
+            {
+              vkResourceLocator loc = m_materialInstanceMeta->GetResourceLocator(name);
+              parameterElement.appendChild(doc.createElement("locator")).appendChild(doc.createTextNode(loc.GetResourceFile().c_str()));
+              QDomElement parameterMetaElement = doc.createElement("parameter");
+              parameterMetaElement.setAttribute("name", name.c_str());
+              parameterMetaElement.appendChild(doc.createElement("locator")).appendChild(doc.createTextNode(loc.GetResourceFile().c_str()));
+              parametersMetaElement.appendChild(parameterMetaElement);
+            }
+            break;
+      }
+
+    }
+    materialInstanceElement.appendChild(parametersElement);
+    materialInstanceMetaElement.appendChild(parametersMetaElement);
+  }
+
+  QString xml = doc.toString(2);
+
+  vkString absolutPath = vkVFS::Get()->GetAbsolutPath(locator.GetResourceFile());
+
+  QFile file(QString(absolutPath.c_str()));
+  file.open(QIODevice::ReadWrite);
+  file.write(xml.toLatin1());
+  file.close();
+}
+
 
 } // namespace materialinstance

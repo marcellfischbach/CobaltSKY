@@ -14,6 +14,7 @@
 
 class vkMaterial;
 class vkMaterialInstance;
+class MaterialInstanceMeta;
 class vkResourceLocator;
 
 namespace materialinstance
@@ -25,7 +26,12 @@ class ParameterEditor : public QWidget
 public:
   explicit ParameterEditor(QWidget *parent = 0);
 
-  void SetMaterialInstance (vkMaterialInstance *materialInstance);
+  void SetMaterialInstance (vkMaterialInstance *materialInstance, MaterialInstanceMeta* meta);
+
+  vkMaterialInstance *GetMaterialInstance();
+  MaterialInstanceMeta *GetMaterialInstanceMeta();
+
+  void Save(const vkResourceLocator& locator);
 
 signals:
   void DataChanged ();
@@ -46,6 +52,7 @@ private:
 
 
   vkMaterialInstance *m_materialInstance;
+  MaterialInstanceMeta *m_materialInstanceMeta;
 
   QGridLayout *m_layout;
   QLabel *m_shaderSelectorLabel;
@@ -65,6 +72,8 @@ private:
   QSpacerItem *m_bottomSpacer;
 
   ParameterData *FindData (QObject *value);
+
+  bool m_updateGuard;
 };
 
 } // namespace materialinstance
