@@ -122,9 +122,15 @@ void AssetManagerWidget::on_lvContent_doubleClicked(const QModelIndex &index)
     return;
   }
 
-
-  vkResourceLocator resourceLocator = m_contentModel->GetLocator(index);
-  emit ResourceActivated(resourceLocator);
+  if (m_contentModel->IsContainer(index))
+  {
+    m_contentModel->ToggleContainer(index);
+  }
+  else
+  {
+    vkResourceLocator resourceLocator = m_contentModel->GetLocator(index);
+    emit ResourceActivated(resourceLocator);
+  }
 }
 
 void AssetManagerWidget::on_lvContent_customContextMenuRequested(const QPoint& p)

@@ -1,30 +1,34 @@
-<entity name="MyEntityName" class="vkEntity">
-	
-	<entityStates>
-	
-		<entityState id="0" class="vkDynamicColliderState" >
-			<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
-			<kinematic>false</kinematic>
-			<mass>0.001</mass>
-			<friction>10.0</friction>
-			<restitution>0.5</restitution>
-		</entityState>
-	
-		<entityState id="1" class="vkStaticMeshState" parentID="0">
-			<!--mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh-->
-			<mesh resourceMode="shared">${models}/mine.asset</mesh>
-			<materials>
-				<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>
-				<material slot="1" slotName="MinePin">${materials}/materials.xml:FieldStoneRed</material>
-			</materials>
-			<clippingRange max="50.0"/>
-		</entityState>
+<asset>
+	<data>
+		<entity name="MyEntityName" class="vkEntity">
+			
+			<entityStates>
+			
+				<entityState id="0" class="vkDynamicColliderState" >
+					<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
+					<kinematic>false</kinematic>
+					<mass>0.001</mass>
+					<friction>10.0</friction>
+					<restitution>0.5</restitution>
+				</entityState>
+			
+				<entityState id="1" class="vkStaticMeshState" parentID="0">
+					<!--mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh-->
+					<mesh resourceMode="shared">${models}/mine.asset</mesh>
+					<materials>
+						<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>
+						<material slot="1" slotName="MinePin">${materials}/materials.xml:FieldStoneRed</material>
+					</materials>
+					<clippingRange max="50.0"/>
+				</entityState>
 
-	
+			
 
-	</entityStates>
-	
-	<rootState>0</rootState>
+			</entityStates>
+			
+			<rootState>0</rootState>
 
-	
-</entity>
+			
+		</entity>
+	</data>
+</asset>

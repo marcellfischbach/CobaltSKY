@@ -13,6 +13,7 @@
 #include <Editor.hh>
 #include <qgridlayout.h>
 #include <qgraphicsitem.h>
+#include <qgraphicswidget.h>
 #include <qpainterpath.h>
 #include <qevent.h>
 #include <qtimer.h>

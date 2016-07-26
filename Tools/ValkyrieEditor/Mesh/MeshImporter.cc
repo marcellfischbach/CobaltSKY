@@ -13,6 +13,7 @@
 #include <assimp/postprocess.h>
 
 #include <qdir.h>
+#include <qdom.h>
 
 namespace mesh
 {
@@ -23,14 +24,24 @@ struct Mesh
   aiMesh *mesh;
 };
 
+struct Bone
+{
+  vkString name;
+  vkMatrix4f matrix;
+  std::vector<Bone> childBones;
+};
 
-void Debug(const aiScene* scene);
-void Debug(const aiScene *scene, aiNode* node, int i);
-void Debug(aiMesh* mesh);
-void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene);
-void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 
-
+static void Debug(const aiScene* scene);
+static void Debug(const aiScene *scene, aiNode* node, int i);
+static void Debug(aiMesh* mesh);
+static void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, const aiScene *scene);
+static void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
+static void CollectSkeleton(Bone &skeleton, const aiScene *scene, aiNode *node);
+static bool ExportSkeleton(const aiScene *scene, Bone &bone, const QString &dataPath, const QString &dataName, const QString &suffix);
+static bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString &dataPath, const QString &dataName, const QString &suffix);
+static void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh);
+static vkString ValidateName(const vkString &name);
 
 Importer *Importer::Get()
 {
@@ -78,7 +89,20 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     return false;
   }
 
+
+  // eval the relative path within the VFS:
   QString fileName = info.absoluteFilePath();
+  QFileInfo rootPathInfo(vkVFS::Get()->GetRootPath().c_str());
+  QString rootPath = rootPathInfo.absoluteFilePath();
+  QString dataPath = outputDir.absolutePath();
+  if (dataPath.startsWith(rootPath))
+  {
+    dataPath = dataPath.right(dataPath.length() - rootPath.length() - 1);
+    if (dataPath.length() > 0 && dataPath[0] == '/')
+    {
+      dataPath = dataPath.right(-1);
+    }
+  }
 
   const aiScene *scene = importer->ReadFile((const char*)fileName.toLatin1(), 0
                                             | aiProcess_CalcTangentSpace
@@ -87,7 +111,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
                                             | aiProcess_Triangulate
                                             | aiProcess_LimitBoneWeights
                                             | aiProcess_FlipWindingOrder
-                                            );
+  );
   if (!scene)
   {
     delete importer;
@@ -97,13 +121,110 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
 
 
   std::vector<Mesh> meshes;
-  CollectMeshes(meshes, scene);
+  Bone skeleton;
+  skeleton.name = "undefined";
+  CollectData(meshes, skeleton, scene);
 
-  vkAssetOutputStream outputStream;
 
-  vkUInt32 version = VK_VERSION(1, 0, 0);
-  outputStream << version;
+  unsigned numDatas = 0;
+  if (meshes.size() > 0)
+  {
+    numDatas++;
+  }
+  if (skeleton.name != vkString("undefined"))
+  {
+    numDatas++;
+  }
 
+
+  if (numDatas > 1)
+  {
+    QString dataParentPath = rootPath + "/" + dataPath;
+    dataPath += "/" + info.baseName() + ".fasset";
+
+    QDir dir(dataParentPath);
+    dir.mkdir(info.baseName() + ".fasset");
+  }
+
+
+  if (meshes.size() > 0)
+  {
+    ExportMeshes(scene, meshes, dataPath, info.baseName(), "_Meshes");
+  }
+  if (skeleton.name != vkString("undefined"))
+  {
+    ExportSkeleton(scene, skeleton, dataPath, info.baseName(), "_Skeleton");
+  }
+
+}
+
+void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
+{
+  QDomElement boneElement = doc.createElement("bone");
+  boneElement.setAttribute("name", bone.name.c_str());
+  parentElement.appendChild(boneElement);
+
+
+  for (Bone &child : bone.childBones)
+  {
+    ExportBone(child, boneElement, doc);
+  }
+}
+
+bool  ExportSkeleton(const aiScene *scene, Bone &bone, const QString &dataPath, const QString &dataName, const QString &suffix)
+{
+  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
+  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
+
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement skeletonElement = doc.createElement("skeleton");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(skeletonElement);
+
+  for (Bone &b : bone.childBones)
+  {
+    ExportBone(b, skeletonElement, doc);
+  }
+  QString xml = doc.toString(2);
+  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
+  if (!finalOutputFile)
+  {
+    return false;
+  }
+  finalOutputFile->Write((const char*)xml.toLatin1(), xml.length());
+  finalOutputFile->Close();
+
+
+  return true;
+}
+
+bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString &dataPath, const QString &dataName, const QString &suffix)
+{
+
+  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
+  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
+
+  assetmanager::AssetWriter writer;
+
+
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement meshElement = doc.createElement("mesh");
+  QDomElement materialSlotsElement = doc.createElement("materialSlots");
+  QDomElement globalIndicesElement = doc.createElement("globalIndices");
+  QDomElement subMeshesElement = doc.createElement("subMeshes");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(meshElement);
+  meshElement.appendChild(materialSlotsElement);
+  meshElement.appendChild(globalIndicesElement);
+  meshElement.appendChild(subMeshesElement);
 
 
   //
@@ -116,72 +237,91 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
       materialIndices.push_back(mesh.mesh->mMaterialIndex);
     }
   }
-  outputStream << (vkUInt32)materialIndices.size();
   for (unsigned i = 0, in = materialIndices.size(); i < in; ++i)
   {
     aiString materialName;
     scene->mMaterials[materialIndices[i]]->Get(AI_MATKEY_NAME, materialName);
-    outputStream << vkString(materialName.C_Str());
+
+    QDomElement materialSlotElement = doc.createElement("materialSlot");
+    materialSlotElement.setAttribute("id", i);
+    materialSlotElement.setAttribute("name", materialName.C_Str());
+    materialSlotsElement.appendChild(materialSlotElement);
   }
 
 
   // we don't use global index buffers here
-  vkUInt32 numIndexBuffers = 0;
-  outputStream << numIndexBuffers;
-
+  // later use global index buffers here
 
 
   // write the submeshes
-  outputStream << (vkUInt32)meshes.size();
   for (Mesh &mesh : meshes)
   {
-    outputStream
-      << (vkSize)indexOf(materialIndices, mesh.mesh->mMaterialIndex)
-      << (vkUInt8)0 // no LOD at the moment
-      << vkString(mesh.mesh->mName.C_Str()); // this might produce doublicates
+    QDomElement subMeshElement = doc.createElement("subMesh");
+    subMeshElement.setAttribute("lod", 0); // <- there is currently only LOD 0
+    subMeshElement.setAttribute("name", mesh.mesh->mName.C_Str());
+    subMeshElement.setAttribute("materialSlot", indexOf(materialIndices, mesh.mesh->mMaterialIndex));
+    subMeshElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(mesh.mesh->mName.C_Str()).c_str()));
+
+    subMeshesElement.appendChild(subMeshElement);
+
+    vkAssetOutputStream outputStream;
 
     vkMatrix4f normalMatrix;
     //transpose(inverse(modelView))
     mesh.matrix.Inverted(normalMatrix);
     normalMatrix.Transpose();
-    Write(outputStream, mesh.matrix, normalMatrix, mesh.mesh);
+    WriteMeshToOutputStream(outputStream, mesh.matrix, normalMatrix, mesh.mesh);
 
-
+    writer.AddEntry(ValidateName(vkString(mesh.mesh->mName.C_Str())), "SUBMESH", outputStream.GetSize(), outputStream.GetBuffer());
   }
 
-  delete importer;
-
-  assetmanager::AssetWriter writer;
-  writer.AddEntry("MESH", "DATA", outputStream.GetSize(), outputStream.GetBuffer());
-
-  fileName = info.completeBaseName() + ".asset";
-  QString absFileName = outputDir.absoluteFilePath(fileName);
 
 
-  QFileInfo rootPathInfo(vkVFS::Get()->GetRootPath().c_str());
-  QString rootPath = rootPathInfo.absoluteFilePath();
 
-  if (absFileName.startsWith(rootPath, Qt::CaseInsensitive))
+  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)dataFileName.toLatin1()), eOM_Write, eTM_Binary);
+  if (!finalOutputFile)
   {
-    absFileName = absFileName.right(absFileName.length() - rootPath.length());
+    return false;
   }
+  writer.Output(finalOutputFile);
+  finalOutputFile->Close();
 
-  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)absFileName.toLatin1()), eOM_Write, eTM_Binary);
-  if (finalOutputFile)
+
+
+  QString xml = doc.toString(2);
+  finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
+  if (!finalOutputFile)
   {
-    writer.Output(finalOutputFile);
-    finalOutputFile->Close();
-    return true;
+    return false;
   }
+  finalOutputFile->Write((const char*)xml.toLatin1(), xml.length());
+  finalOutputFile->Close();
 
 
-
-  return false;
+  return true;
 }
 
-void Importer::Write(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh)
+vkString ValidateName(const vkString &name)
+{
+  vkString res = name;
+  for (vkSize i = 0, in = res.length(); i < in; ++i)
+  {
+    char ch = res[i];
+    if (ch != ':' && ch != '.')
+    {
+      continue;
+    }
+
+    res[i] = '_';
+  }
+  return res;
+}
+
+
+void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh)
 {
   outputStream
+    << (vkUInt32)VK_VERSION(1, 0, 0)
     << (vkUInt32)ePT_Triangles
     << (vkUInt32)(mesh->mNumVertices >= 65536 ? eDT_UnsignedInt : eDT_UnsignedShort);
 
@@ -374,16 +514,27 @@ void Importer::Write(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix
 }
 
 
-
-void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene)
+int indent = 0;
+void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, const aiScene *scene)
 {
   vkMatrix4f parentMatrix;
   aiNode *root = scene->mRootNode;
 
+  printf("Root:\n");
   for (unsigned i = 0, in = root->mNumChildren; i < in; ++i)
   {
     aiNode *child = root->mChildren[i];
-    CollectMeshes(meshes, scene, child, parentMatrix);
+    indent++;
+    vkString name = vkString(child->mName.C_Str());
+    if (name.length () >= 8 && (name.substr(0, 8) == vkString("Skeleton") || name.substr(0, 8) == vkString("Armature")))
+    {
+      CollectSkeleton(skeleton, scene, child);
+    }
+    else
+    {
+      CollectMeshes(meshes, scene, child, parentMatrix);
+    }
+    indent--;
   }
 }
 
@@ -400,12 +551,65 @@ void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node
     m.matrix = M;
     meshes.push_back(m);
   }
+  for (int i = 0; i < indent; ++i)
+  {
+    printf("  ");
+  }
+  printf("Node: %s\n", node->mName.C_Str());
   for (unsigned i = 0; i < node->mNumChildren; ++i)
   {
     aiNode *child = node->mChildren[i];
+    indent++;
     CollectMeshes(meshes, scene, child, M);
+    indent--;
   }
 }
+
+void CollectBone(Bone &bone, const aiScene *scene, aiNode *node)//, const vkMatrix4f &parentMatrix)
+{
+  vkMatrix4f M(node->mTransformation.mData);
+  M.Transpose();
+  bone.matrix = M;
+  bone.name = node->mName.C_Str();
+
+  for (unsigned i = 0; i < node->mNumChildren; ++i)
+  {
+    aiNode *child = node->mChildren[i];
+
+    // add a new bone but work with a reference on the real entry
+    Bone nbone;
+    bone.childBones.push_back(nbone);
+    Bone &boneRef = *(bone.childBones.rbegin());
+
+    CollectBone(boneRef, scene, child);
+
+  }
+
+}
+
+void CollectSkeleton(Bone &skeleton, const aiScene *scene, aiNode *node)
+{
+  vkMatrix4f M(node->mTransformation.mData);
+  M.Transpose();
+  skeleton.matrix = M;
+  skeleton.name = "Skeleton";
+
+
+  for (unsigned i = 0; i < node->mNumChildren; ++i)
+  {
+    aiNode *child = node->mChildren[i];
+
+    // add a new bone but work with a reference on the real entry
+    Bone bone;
+    skeleton.childBones.push_back(bone);
+    Bone &boneRef = *(skeleton.childBones.rbegin());
+
+    CollectBone(boneRef, scene, child);
+
+  }
+}
+
+
 
 void Debug(const aiScene *scene)
 {
@@ -460,5 +664,6 @@ void Debug(aiMesh *mesh)
     printf("    %d  <%.2f %.2f %.2f>  <%.2f %.2f>  <%.2f %.2f %.2f>  <%.2f %.2f %.2f>  <%.2f %.2f %.2f>\n", i, vertex.x, vertex.y, vertex.z, texCoord.x, texCoord.y, normal.x, normal.y, normal.z, tangent.x, tangent.y, tangent.z, bitangent.x, bitangent.y, bitangent.z);
   }
 }
+
 
 }

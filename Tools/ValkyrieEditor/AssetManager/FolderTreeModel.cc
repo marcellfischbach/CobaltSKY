@@ -117,7 +117,7 @@ void FolderTreeModel::Scan(Entry *parent, const QDir &path)
 
   for (QString pathEntry : entries)
   {
-    if (pathEntry.endsWith(".asset"))
+    if (pathEntry.endsWith(".fasset"))
     {
       continue;
     }

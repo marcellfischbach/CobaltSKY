@@ -34,6 +34,7 @@ public:
 
   bool IsContainer(const QModelIndex &index);
   bool IsContainerOpen(const QModelIndex &index);
+  void ToggleContainer(const QModelIndex &index);
   void CloseContainer(const QModelIndex &index);
   void OpenContainer(const QModelIndex &index);
 

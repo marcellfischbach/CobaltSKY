@@ -24,7 +24,8 @@ private:
   Importer() { }
   virtual ~Importer() { }
 
-  void Write(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh);
+  
+
 };
 
 }

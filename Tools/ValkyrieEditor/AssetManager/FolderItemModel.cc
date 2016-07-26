@@ -27,12 +27,23 @@ void FolderItemModel::Refresh()
   Clear();
   QStringList filters;
   filters.append("*.xasset");
+  filters.append("*.fasset");
   QStringList pathEntries = m_path.entryList(filters, QDir::Dirs | QDir::Files, QDir::Name);
   for (QString &pathEntry : pathEntries)
   {
     Entry *entry = new Entry();
     entry->name = pathEntry;
     if (entry->name.endsWith(".xasset"))
+    {
+      entry->resourceString = m_resourceRel + "/" + pathEntry;
+      entry->displayName = entry->name.left(entry->name.length() - 7);
+      entry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(entry, "preview"));
+      QDir dir(m_path);
+      entry->container = false;
+      entry->containerOpen = false;
+      entry->parent = 0;
+    }
+    else if (entry->name.endsWith(".fasset"))
     {
       entry->resourceString = m_resourceRel + "/" + pathEntry;
       entry->displayName = entry->name.left(entry->name.length() - 7);
@@ -195,6 +206,18 @@ bool FolderItemModel::IsContainerOpen(const QModelIndex &index)
   return entry->container && entry->containerOpen;
 }
 
+void FolderItemModel::ToggleContainer(const QModelIndex &index)
+{
+  if (IsContainerOpen(index))
+  {
+    CloseContainer(index);
+  }
+  else
+  {
+    OpenContainer(index);
+  }
+}
+
 void FolderItemModel::CloseContainer(const QModelIndex &index)
 {
   if (!index.isValid())
@@ -238,7 +261,7 @@ void FolderItemModel::OpenContainer(const QModelIndex &index)
   int idx = m_entries.indexOf(entry) + 1;
 
   QStringList filters;
-  filters.append("*.asset");
+  filters.append("*.xasset");
   QDir path(m_path);
   path.cd(entry->name);
   QStringList pathEntries = path.entryList(filters, QDir::Files, QDir::Name);
@@ -246,18 +269,18 @@ void FolderItemModel::OpenContainer(const QModelIndex &index)
   {
     Entry *newEntry = new Entry();
     newEntry->name = pathEntry;
-    if (newEntry->name.endsWith(".asset"))
+    if (newEntry->name.endsWith(".xasset"))
     {
       newEntry->resourceString = entry->resourceString + "/" + pathEntry;
-      newEntry->displayName = newEntry->name.left(newEntry->name.length() - 6);
-      newEntry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(newEntry, "EDITOR_ICON"));
+      newEntry->displayName = newEntry->name.left(newEntry->name.length() - 7);
+      newEntry->icon = vkResourceManager::Get()->Load<EditorIcon>(GetLocator(newEntry, "preview"));
       newEntry->container = false;
       newEntry->containerOpen = false;
       newEntry->parent = entry;
     }
 
     beginInsertRows(QModelIndex(), idx, idx);
-    m_entries.insert(idx, newEntry);
+    m_entries.insert(idx, newEntry); 
     endInsertRows();
   }
   entry->containerOpen = true;
