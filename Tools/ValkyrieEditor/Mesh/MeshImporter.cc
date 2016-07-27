@@ -24,6 +24,13 @@ struct Mesh
   aiMesh *mesh;
 };
 
+struct Shape
+{
+  vkMatrix4f matrix;
+  aiMesh *mesh;
+  aiNode *node;
+};
+
 struct Bone
 {
   vkString name;
@@ -35,11 +42,13 @@ struct Bone
 static void Debug(const aiScene* scene);
 static void Debug(const aiScene *scene, aiNode* node, int i);
 static void Debug(aiMesh* mesh);
-static void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, const aiScene *scene);
+static void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene);
 static void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 static void CollectSkeleton(Bone &skeleton, const aiScene *scene, aiNode *node);
+static void CollectCollisions(std::vector<Shape> &collisions, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 static bool ExportSkeleton(const aiScene *scene, Bone &bone, const QString &dataPath, const QString &dataName, const QString &suffix);
 static bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString &dataPath, const QString &dataName, const QString &suffix);
+static bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, const QString &dataPath, const QString &dataName, const QString &suffix);
 static void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh);
 static vkString ValidateName(const vkString &name);
 
@@ -121,9 +130,10 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
 
 
   std::vector<Mesh> meshes;
+  std::vector<Shape> collisions;
   Bone skeleton;
   skeleton.name = "undefined";
-  CollectData(meshes, skeleton, scene);
+  CollectData(meshes, skeleton, collisions, scene);
 
 
   unsigned numDatas = 0;
@@ -132,6 +142,10 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     numDatas++;
   }
   if (skeleton.name != vkString("undefined"))
+  {
+    numDatas++;
+  }
+  if (collisions.size() > 0)
   {
     numDatas++;
   }
@@ -156,7 +170,10 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
   {
     ExportSkeleton(scene, skeleton, dataPath, info.baseName(), multi ? "_Skeleton" : "");
   }
-
+  if (collisions.size() > 0)
+  {
+    ExportCollisions(scene, collisions, dataPath, info.baseName(), multi ? "_Collision" : "");
+  }
 }
 
 void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
@@ -166,8 +183,9 @@ void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
   parentElement.appendChild(boneElement);
 
 
-  for (Bone &child : bone.childBones)
+  for (size_t i=0, in = bone.childBones.size(); i<in; ++i)
   {
+    Bone &child = bone.childBones[i];
     ExportBone(child, boneElement, doc);
   }
 }
@@ -301,6 +319,121 @@ bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString
 
   return true;
 }
+
+vkVector3f EvalSize(aiMesh *mesh)
+{
+  vkVector3f r;
+  for (size_t i = 0; i < mesh->mNumVertices; ++i)
+  {
+    aiVector3D &aiv = mesh->mVertices[i];
+    vkVector3f v(abs(aiv.x), abs(aiv.y), abs(aiv.z));
+    r.x = r.x > v.x ? r.x : v.x;
+    r.y = r.y > v.y ? r.y : v.y;
+    r.z = r.z > v.z ? r.z : v.z;
+  }
+
+  return r;
+}
+
+bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, const QString &dataPath, const QString &dataName, const QString &suffix)
+{
+
+  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
+  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
+
+  assetmanager::AssetWriter writer;
+
+
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement collisionElement = doc.createElement("collision");
+  QDomElement shapesElement = doc.createElement("shapes");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(collisionElement);
+  collisionElement.appendChild(shapesElement);
+
+
+
+  for (Shape &collision : collisions)
+  {
+    vkString name(collision.node->mName.C_Str());
+    QDomElement shapeElement = doc.createElement("shape");
+    shapeElement.setAttribute("name", name.c_str());
+
+    QDomElement transformElement = doc.createElement("transform");
+    shapeElement.appendChild(transformElement);
+    QDomElement matrixElement = doc.createElement("matrix");
+    transformElement.appendChild(matrixElement);
+
+    const vkMatrix4f &m = collision.matrix;
+    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m00, m.m01, m.m02, m.m03)));
+    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m10, m.m11, m.m12, m.m13)));
+    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m20, m.m21, m.m22, m.m23)));
+    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m30, m.m31, m.m32, m.m33)));
+    
+
+    vkVector3f size = EvalSize(collision.mesh);
+    if (name.length() >= 6 && name.substr(0, 6) == vkString("COLBOX"))
+    {
+      QDomElement boxElement = doc.createElement("box");
+      boxElement.setAttribute("halfX", size.x);
+      boxElement.setAttribute("halfY", size.y);
+      boxElement.setAttribute("halfZ", size.z);
+      shapeElement.appendChild(boxElement);
+    }
+    else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLSPH"))
+    {
+      float r = size.x > size.y ? size.x : size.y;
+      r = r > size.z ? r : size.z;
+      QDomElement sphereElement = doc.createElement("sphere");
+      sphereElement.setAttribute("radius", r);
+      shapeElement.appendChild(sphereElement);
+    }
+    else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLCYL"))
+    {
+      QDomElement cylinderElement = doc.createElement("cylinder");
+      float r = size.x > size.y ? size.x : size.y;
+      cylinderElement.setAttribute("radius", r);
+      cylinderElement.setAttribute("halfHeight", size.z);
+      shapeElement.appendChild(cylinderElement);
+    }
+    else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLTRI"))
+    {
+      QDomElement triMeshElement = doc.createElement("triMesh");
+      triMeshElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(name).c_str()));
+
+      shapeElement.appendChild(triMeshElement);
+    }
+    else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLHUL"))
+    {
+      QDomElement convexHullElement = doc.createElement("convexHull");
+      convexHullElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(name).c_str()));
+      shapeElement.appendChild(convexHullElement);
+    }
+    else
+    {
+      continue;
+    }
+    shapesElement.appendChild(shapeElement);
+  }
+
+
+
+  QString xml = doc.toString(2);
+  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
+  if (!finalOutputFile)
+  {
+    return false;
+  }
+  finalOutputFile->Write((const char*)xml.toLatin1(), xml.length());
+  finalOutputFile->Close();
+  return true;
+}
+
+
 
 vkString ValidateName(const vkString &name)
 {
@@ -516,12 +649,11 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
 
 
 int indent = 0;
-void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, const aiScene *scene)
+void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene)
 {
   vkMatrix4f parentMatrix;
   aiNode *root = scene->mRootNode;
 
-  printf("Root:\n");
   for (unsigned i = 0, in = root->mNumChildren; i < in; ++i)
   {
     aiNode *child = root->mChildren[i];
@@ -530,6 +662,10 @@ void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, const aiScene *scene
     if (name.length () >= 8 && (name.substr(0, 8) == vkString("Skeleton") || name.substr(0, 8) == vkString("Armature")))
     {
       CollectSkeleton(skeleton, scene, child);
+    }
+    else if (name.length() >= 3 && (name.substr(0, 3) == vkString("COL")))
+    {
+      CollectCollisions(collisions, scene, child, parentMatrix);
     }
     else
     {
@@ -552,19 +688,36 @@ void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node
     m.matrix = M;
     meshes.push_back(m);
   }
-  for (int i = 0; i < indent; ++i)
-  {
-    printf("  ");
-  }
-  printf("Node: %s\n", node->mName.C_Str());
   for (unsigned i = 0; i < node->mNumChildren; ++i)
   {
     aiNode *child = node->mChildren[i];
-    indent++;
     CollectMeshes(meshes, scene, child, M);
-    indent--;
   }
 }
+
+void CollectCollisions(std::vector<Shape> &collisions, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix)
+{
+  vkMatrix4f M(node->mTransformation.mData);
+  M.Transpose();
+  M.Debug();
+  M = vkMatrix4f::Mult(parentMatrix, M, M);
+  for (unsigned i = 0; i < node->mNumMeshes; ++i)
+  {
+    aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+    Shape s;
+    s.mesh = mesh;
+    s.matrix = M;
+    s.node = node;
+    collisions.push_back(s);
+  }
+  
+  for (unsigned i = 0; i < node->mNumChildren; ++i)
+  {
+    aiNode *child = node->mChildren[i];
+    CollectCollisions(collisions, scene, child, M);
+  }
+}
+
 
 void CollectBone(Bone &bone, const aiScene *scene, aiNode *node)//, const vkMatrix4f &parentMatrix)
 {

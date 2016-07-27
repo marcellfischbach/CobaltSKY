@@ -181,6 +181,8 @@ source_group(
 
 
 set(SOURCE_LOADERS
+    Loaders/CollisionLoader.cc
+    Loaders/CollisionLoader.hh
     Loaders/EntityLoader.cc
     Loaders/EntityLoader.hh
     Loaders/Loaders.cc

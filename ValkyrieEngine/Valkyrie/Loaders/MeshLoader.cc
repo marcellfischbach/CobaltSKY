@@ -12,7 +12,7 @@
 
 
 vkMeshAssetXMLLoader::vkMeshAssetXMLLoader()
-  : vkAssetXMLLoader()
+  : vkBaseXMLLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }

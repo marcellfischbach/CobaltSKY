@@ -1,5 +1,6 @@
 
 #include <Valkyrie/Loaders/Loaders.hh>
+#include <Valkyrie/Loaders/CollisionLoader.hh>
 #include <Valkyrie/Loaders/EntityLoader.hh>
 #include <Valkyrie/Loaders/ImageLoader.hh>
 #include <Valkyrie/Loaders/MaterialLoader.hh>
@@ -37,6 +38,7 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
   mgr->RegisterLoader(new vkTextureAssetXMLLoader());
   mgr->RegisterLoader(new vkMeshAssetXMLLoader());
+  mgr->RegisterLoader(new vkCollisionAssetXMLLoader());
 
   // image loaders
   mgr->RegisterLoader(new vkPNGImageAssetLoader());

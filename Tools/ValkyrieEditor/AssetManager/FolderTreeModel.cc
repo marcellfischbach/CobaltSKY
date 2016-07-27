@@ -1,6 +1,6 @@
 
 #include <AssetManager/FolderTreeModel.hh>
-
+#include <Valkyrie/Core/VFS.hh>
 
 namespace assetmanager
 {
@@ -8,11 +8,7 @@ namespace assetmanager
 FolderTreeModel::FolderTreeModel()
   : QAbstractItemModel()
 {
-#if 1
-  m_rootDir = QDir("G:/ide/devs/valkyrieengine/data");
-#else
-    m_rootDir = QDir("D:/programming/valkyrieengine/data");
-#endif
+  m_rootDir = QDir(vkVFS::Get()->GetRootPath().c_str());
   Scan(0, m_rootDir);
 }
 

@@ -7,7 +7,7 @@
 
 
 VK_CLASS()
-class VKE_API vkMeshAssetXMLLoader : public vkAssetXMLLoader
+class VKE_API vkMeshAssetXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN_OBJECT;
 public:

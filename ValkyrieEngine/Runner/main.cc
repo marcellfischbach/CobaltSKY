@@ -94,7 +94,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 1
+#if 0
   posX = -1500;
 #else
   //posX = 2000;
@@ -761,7 +761,8 @@ vkEntityScene *create_scene(IGraphics *graphics)
 {
   vkMaterialInstance *groundFieldStone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/GroundFieldStone.xasset"));
   vkMaterialInstance *templeDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/TempleDirt.xasset"));
-  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.xasset"));
+  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.fasset/temple_Mesh.xasset"));
+  vkPhysicsShapeContainer *templeShape = vkResourceManager::Get()->GetOrLoad<vkPhysicsShapeContainer>(vkResourceLocator("models/temple.fasset/temple_Collision.xasset"));
   vkEntityScene *entityScene = new vkEntityScene();
   IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
 
@@ -807,9 +808,14 @@ vkEntityScene *create_scene(IGraphics *graphics)
   templeState->SetMesh(templeMesh);
   templeState->SetMaterial(templeDirt, 0);
 
+  vkStaticColliderState *colliderState = new vkStaticColliderState();
+  colliderState->AttachShape(templeShape);
+
+
   vkEntity *templeEntity = new vkEntity();
-  templeEntity->SetRootState(templeState);
-  templeEntity->AddState(templeState);
+  templeEntity->SetRootState(colliderState);
+  templeEntity->AddState(colliderState);
+  templeEntity->AddState(templeState, colliderState);
   templeEntity->UpdateBoundingBox();
   templeEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
 
