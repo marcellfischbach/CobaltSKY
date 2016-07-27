@@ -1,0 +1,77 @@
+<asset>
+  <data>
+    <shaderGraph>
+      <nodes>
+        <node id="0" class="vkSGTexture2D">
+          <resource name="fieldstone_diffuse">
+            <locator>/materials/textures/fieldstone_diffuse.xasset</locator>
+          </resource>
+        </node>
+        <node id="1" class="vkSGTexture2D">
+          <resource name="fieldstone_normal">
+            <locator>/materials/textures/fieldstone_normal.xasset</locator>
+          </resource>
+        </node>
+        <node id="2" class="vkSGVarFloat2">
+          <resource name="Multiplier">
+            <float2>1.000000, 1.000000</float2>
+          </resource>
+        </node>
+        <node id="3" class="vkSGDefaultTextureCoordinate"/>
+        <node id="4" class="vkSGMul"/>
+      </nodes>
+      <inputs>
+        <shaderGraph input="Diffuse">
+          <node output="0" id="0"/>
+        </shaderGraph>
+        <shaderGraph input="Normal">
+          <node output="0" id="1"/>
+        </shaderGraph>
+        <node input="0" id="0">
+          <node output="0" id="4"/>
+        </node>
+        <node input="0" id="1">
+          <node output="0" id="4"/>
+        </node>
+        <node input="0" id="4">
+          <node output="0" id="2"/>
+        </node>
+        <node input="1" id="4">
+          <node output="0" id="3"/>
+        </node>
+      </inputs>
+      <attributes>
+        <blendOutWithBinaryGradient enabled="0"/>
+        <discardAlpha>
+          <threshold>0.000000</threshold>
+          <mode mode="Less"/>
+        </discardAlpha>
+      </attributes>
+    </shaderGraph>
+  </data>
+  <meta>
+    <shaderGraphMeta>
+      <nodes>
+        <node id="0">
+          <pos>-216.000000, -184.000000</pos>
+        </node>
+        <node id="1">
+          <pos>-218.000000, 21.000000</pos>
+        </node>
+        <node id="2">
+          <pos>-763.000000, -180.000000</pos>
+        </node>
+        <node id="3">
+          <pos>-830.000000, -36.000000</pos>
+        </node>
+        <node id="4">
+          <pos>-468.000000, -151.000000</pos>
+        </node>
+      </nodes>
+      <shaderGraph>
+        <pos>67.000000, -62.000000</pos>
+      </shaderGraph>
+    </shaderGraphMeta>
+  </meta>
+</asset>
+>

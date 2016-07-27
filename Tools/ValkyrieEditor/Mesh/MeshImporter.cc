@@ -136,8 +136,8 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     numDatas++;
   }
 
-
-  if (numDatas > 1)
+  bool multi = numDatas > 1;
+  if (multi)
   {
     QString dataParentPath = rootPath + "/" + dataPath;
     dataPath += "/" + info.baseName() + ".fasset";
@@ -147,13 +147,14 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
   }
 
 
+
   if (meshes.size() > 0)
   {
-    ExportMeshes(scene, meshes, dataPath, info.baseName(), "_Meshes");
+    ExportMeshes(scene, meshes, dataPath, info.baseName(), multi ? "_Mesh" : "");
   }
   if (skeleton.name != vkString("undefined"))
   {
-    ExportSkeleton(scene, skeleton, dataPath, info.baseName(), "_Skeleton");
+    ExportSkeleton(scene, skeleton, dataPath, info.baseName(), multi ? "_Skeleton" : "");
   }
 
 }

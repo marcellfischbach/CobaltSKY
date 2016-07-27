@@ -94,7 +94,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;
@@ -157,20 +157,6 @@ int initialize()
 
 
   vkBinaryGradient::GetBinaryGradient();
-
-  // Setup the character 
-  character = new vkCharacterEntity();
-
-  vkStaticMeshState *characterMesh = new vkStaticMeshState();
-  characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
-  characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
-
-  character->SetRootState(characterMesh);
-  character->AddState(characterMesh);
-  character->GetTransformation().SetTranslation(vkVector3f(4.0f, 4.0f, 20.0f));
-  character->FinishTransformation();
-
-  scene->AddEntity(character);
 
   float v = 0.0f;
   float m = 0.0f;
@@ -699,6 +685,10 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard)
 {
+  if (!character)
+  {
+    return;
+  }
   float sx = 0.0f;
   float sy = 0.0f;
   float speed = 0.1f;
@@ -767,10 +757,111 @@ vkMaterial *create_green_shader(IGraphics *graphics)
   return shader;
 }
 
-
-
-
 vkEntityScene *create_scene(IGraphics *graphics)
+{
+  vkMaterialInstance *groundFieldStone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/GroundFieldStone.xasset"));
+  vkMaterialInstance *templeDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/TempleDirt.xasset"));
+  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.xasset"));
+  vkEntityScene *entityScene = new vkEntityScene();
+  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
+
+
+
+  // 
+  // Create the ground plane with physics
+  vkPhysGeometry boxGeometry;
+  boxGeometry.Type = ePGT_Box;
+  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
+  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
+
+  vkStaticColliderState *staticState = new vkStaticColliderState();
+  staticState->AttachShape(boxShape);
+  staticState->SetFriction(10.0f);
+  staticState->SetRestitution(0.5f);
+
+  // create the plane mesh 
+  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
+  vkMesh *planeMesh = new vkMesh();
+  planeMesh->AddMesh(planeMeshInst);
+  planeMesh->OptimizeDataStruct();
+  planeMesh->UpdateBoundingBox();
+
+  vkStaticMeshState *planeState = new vkStaticMeshState();
+  planeState->SetMesh(planeMesh);
+  planeState->SetMaterial(groundFieldStone, 0);
+  planeState->SetCastShadow(true);
+
+  vkEntity *planeEntity = new vkEntity();
+  planeEntity->SetRootState(staticState);
+  planeEntity->AddState(staticState);
+  planeEntity->AddState(planeState, staticState);
+  planeEntity->FinishTransformation();
+  entityScene->AddEntity(planeEntity);
+
+
+
+
+  //
+  // Add the temple to the scene
+  vkStaticMeshState *templeState = new vkStaticMeshState();
+  templeState->SetMesh(templeMesh);
+  templeState->SetMaterial(templeDirt, 0);
+
+  vkEntity *templeEntity = new vkEntity();
+  templeEntity->SetRootState(templeState);
+  templeEntity->AddState(templeState);
+  templeEntity->UpdateBoundingBox();
+  templeEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
+
+  entityScene->AddEntity(templeEntity);
+
+  //
+  // Add the player character
+  // Setup the character 
+
+  /*
+  character = new vkCharacterEntity();
+
+  vkStaticMeshState *characterMesh = new vkStaticMeshState();
+  characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
+  characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
+
+  character->SetRootState(characterMesh);
+  character->AddState(characterMesh);
+  character->GetTransformation().SetTranslation(vkVector3f(4.0f, 4.0f, 20.0f));
+  character->FinishTransformation();
+
+  scene->AddEntity(character);
+  */
+
+
+
+  //
+  // Add Lighting
+
+
+  directionalLight = new vkDirectionalLight();
+  directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
+  directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
+  directionalLight->SetCastShadow(true);
+  directionalLight->SetShadowIntensity(0.0f);
+
+  vkLightState *directionalLightState = new vkLightState();
+  directionalLightState->SetLight(directionalLight);
+
+  vkEntity *directionalLightEntity = new vkEntity();
+  directionalLightEntity->SetRootState(directionalLightState);
+  directionalLightEntity->AddState(directionalLightState);
+  entityScene->AddEntity(directionalLightEntity);
+
+  entityScene->GetRoot()->FinishTransformation();
+  entityScene->GetRoot()->UpdateBoundingBox();
+
+  return entityScene;
+}
+
+
+vkEntityScene *create_scene2(IGraphics *graphics)
 {
   /*
   ITexture2D *dirtTexture = vkResourceManager::Get()->GetOrLoad<ITexture2D>(vkResourceLocator("materials/textures/fieldstone_diffuse.xasset"));

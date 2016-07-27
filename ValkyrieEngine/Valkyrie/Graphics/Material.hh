@@ -113,6 +113,13 @@ public:
   void Set(vkUInt16 idx, const vkColor4f &c);
   void Set(vkUInt16 idx, ITexture *texture);
 
+  float GetFloat(vkUInt16 idx);
+  vkVector2f GetFloat2(vkUInt16 idx);
+  vkVector3f GetFloat3(vkUInt16 idx);
+  vkVector4f GetFloat4(vkUInt16 idx);
+  vkColor4f GetColor4(vkUInt16 idx);
+  ITexture *GetTexture(vkUInt16 idx);
+
 private:
   vkMaterial *m_material;
 

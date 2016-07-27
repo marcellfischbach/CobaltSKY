@@ -48,11 +48,8 @@ void main ()
 	float lamb = clamp(dot (-vk_LightDirection, normal), 0.0, 1.0);
 	
 	
-	float backLamb = clamp(dot (vk_LightDirection, normal), 0.0, 1.0) * 0.5;
-	
-	
 	
 	float shadow = calculate_shadow (world4, cam.xyz);
 	
-	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * vk_LightEnergy * (lamb * shadow + backLamb), 1.0);
+	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * vk_LightEnergy * lamb * shadow , 1.0);
 }

@@ -428,6 +428,80 @@ void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
   param.m_inherit = false;
 }
 
+float vkMaterialInstance::GetFloat(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return 0.0f;
+  }
+
+  ShaderParameter &param = m_parameters[idx];
+  return param.m_float[0];
+}
+
+vkVector2f vkMaterialInstance::GetFloat2(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return vkVector2f(0.0f, 0.0f);
+  }
+
+  ShaderParameter &param = m_parameters[idx];
+  return vkVector2f(param.m_float[0],
+                    param.m_float[1]);
+}
+vkVector3f vkMaterialInstance::GetFloat3(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return vkVector3f(0.0f, 0.0f, 0.0f);
+  }
+
+  ShaderParameter &param = m_parameters[idx];
+  return vkVector3f(param.m_float[0],
+                    param.m_float[1],
+                    param.m_float[2]);
+}
+
+vkVector4f vkMaterialInstance::GetFloat4(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return vkVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+
+  ShaderParameter &param = m_parameters[idx];
+  return vkVector4f(param.m_float[0],
+                    param.m_float[1],
+                    param.m_float[2],
+                    param.m_float[3]);
+}
+
+
+vkColor4f vkMaterialInstance::GetColor4(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return vkColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+
+  ShaderParameter &param = m_parameters[idx];
+  return vkColor4f(param.m_float[0],
+                    param.m_float[1],
+                    param.m_float[2],
+                    param.m_float[3]);
+}
+
+ITexture *vkMaterialInstance::GetTexture(vkUInt16 idx)
+{
+  if (idx >= m_parameters.size())
+  {
+    return 0;
+  }
+
+  return m_parameters[idx].m_texture;
+}
+
 bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
 {
   if (!m_material)

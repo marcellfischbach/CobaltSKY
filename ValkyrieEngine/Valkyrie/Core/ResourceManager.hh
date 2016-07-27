@@ -277,6 +277,16 @@ public:
    */
   IObject *Get(const vkResourceLocator &resourceLocator) const;
 
+
+  /**
+   * \brief Get the resource locator for the given object
+   *
+   * \param object The object for which to query the resource locator
+   *
+   * \return The resource locator
+   */
+  vkResourceLocator Get(IObject *object) const;
+
   /**
   * \brief Get the object from the resource cache. 
   * If the object is not in the cache it is loaded and than put into cache.
@@ -351,6 +361,7 @@ public:
 
   bool RegisterObject(const vkResourceLocator &locator, IObject *object);
   void DeregisterObject(const vkResourceLocator &locator);
+  void DeregisterObject(IObject *object);
 
 private:
   vkResourceManager();
@@ -360,6 +371,7 @@ private:
   std::vector<IAssetLoader*> m_assetLoaders;
 
   std::map<vkResourceLocator, IObject*> m_objects;
+  std::map<IObject*, vkResourceLocator> m_resources;
 
 };
 

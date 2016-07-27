@@ -76,23 +76,23 @@ IObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkR
       vkString tagName(valueElement->Value());
       if (tagName == vkString("float"))
       {
-        materialInstance->Set(index, LoadFloat(valueElement->Value()));
+        materialInstance->Set(index, LoadFloat(valueElement->GetText()));
       }
       else if (tagName == vkString("float2"))
       {
-        materialInstance->Set(index, LoadVector2f(valueElement->Value()));
+        materialInstance->Set(index, LoadVector2f(valueElement->GetText()));
       }
       else if (tagName == vkString("float3"))
       {
-        materialInstance->Set(index, LoadVector3f(valueElement->Value()));
+        materialInstance->Set(index, LoadVector3f(valueElement->GetText()));
       }
       else if (tagName == vkString("float4"))
       {
-        materialInstance->Set(index, LoadVector4f(valueElement->Value()));
+        materialInstance->Set(index, LoadVector4f(valueElement->GetText()));
       }
       else if (tagName == vkString("color4"))
       {
-        materialInstance->Set(index, LoadColor4f(valueElement->Value()));
+        materialInstance->Set(index, LoadColor4f(valueElement->GetText()));
       }
       else if (tagName == vkString("locator"))
       {

@@ -26,10 +26,9 @@ class ParameterEditor : public QWidget
 public:
   explicit ParameterEditor(QWidget *parent = 0);
 
-  void SetMaterialInstance (vkMaterialInstance *materialInstance, MaterialInstanceMeta* meta);
+  void SetMaterialInstance (vkMaterialInstance *materialInstance);
 
   vkMaterialInstance *GetMaterialInstance();
-  MaterialInstanceMeta *GetMaterialInstanceMeta();
 
   void Save(const vkResourceLocator& locator);
 
@@ -52,7 +51,6 @@ private:
 
 
   vkMaterialInstance *m_materialInstance;
-  MaterialInstanceMeta *m_materialInstanceMeta;
 
   QGridLayout *m_layout;
   QLabel *m_shaderSelectorLabel;

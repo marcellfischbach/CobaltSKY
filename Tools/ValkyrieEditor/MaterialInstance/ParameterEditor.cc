@@ -1,6 +1,5 @@
 
 #include <MaterialInstance/ParameterEditor.hh>
-#include <MaterialInstance/MaterialInstanceMeta.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Core/VFS.hh>
@@ -14,7 +13,6 @@ namespace materialinstance
 ParameterEditor::ParameterEditor(QWidget *parent)
   : QWidget(parent)
   , m_materialInstance(0)
-  , m_materialInstanceMeta(new MaterialInstanceMeta())
   , m_updateGuard(false)
 {
 
@@ -56,17 +54,12 @@ void ParameterEditor::InitGUI()
 
 
 
-void ParameterEditor::SetMaterialInstance(vkMaterialInstance *materialInstance, MaterialInstanceMeta* meta)
+void ParameterEditor::SetMaterialInstance(vkMaterialInstance *materialInstance)
 {
   if (m_materialInstance != materialInstance)
   {
     VK_SET(m_materialInstance, materialInstance);
   }
-  if (!meta)
-  {
-    meta = new MaterialInstanceMeta();
-  }
-  VK_SET(m_materialInstanceMeta, meta);
 
   ShaderChanged();
 }
@@ -77,15 +70,9 @@ vkMaterialInstance *ParameterEditor::GetMaterialInstance()
 }
 
 
-MaterialInstanceMeta *ParameterEditor::GetMaterialInstanceMeta()
-{
-  return m_materialInstanceMeta;
-}
-
 void ParameterEditor::ShaderChanged(const vkResourceLocator &locator)
 {
   vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(locator);
-  m_materialInstanceMeta->SetShaderResourceLocator(locator);
 
   ShaderChanged(material);
 }
@@ -115,12 +102,13 @@ void ParameterEditor::ShaderChanged()
   m_updateGuard = true;
   RemoveCurrent();
 
-  m_shaderSelector->SetResourceLocator(m_materialInstanceMeta->GetShaderResourceLocator());
 
   int row = 2;
   vkMaterial *material = m_materialInstance ? m_materialInstance->GetMaterial() : 0;
   if (material)
   {
+    
+    m_shaderSelector->SetResourceLocator(vkResourceManager::Get()->Get(material));
     for (vkSize i=0, in=material->GetNumberOfParameters(); i<in; ++i)
     {
       vkString name = material->GetParamName(i);
@@ -213,11 +201,14 @@ void ParameterEditor::ShaderChanged()
       }
       if (data.m_textureSelector)
       {
-        bool hasResource = m_materialInstanceMeta->HasResourceLocator(name);
+        ITexture *texture = m_materialInstance->GetTexture(i);
+        vkResourceLocator loc = vkResourceManager::Get()->Get(texture);
+        bool hasResource = loc.IsValid();
         if (hasResource)
         {
-          data.m_textureSelector->SetResourceLocator(m_materialInstanceMeta->GetResourceLocator(name));
+          data.m_textureSelector->SetResourceLocator(loc);
         }
+        
 
         data.m_checkBox->setChecked(hasResource);
         data.m_textureSelector->SetEnabled(hasResource);
@@ -364,7 +355,6 @@ void ParameterEditor::ResourceChanged(const vkResourceLocator &)
     {
       ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(data->m_textureSelector->GetResourceLocator());
       m_materialInstance->Set(data->m_shaderIndex, texture);
-      m_materialInstanceMeta->SetResourceLocator(name, data->m_textureSelector->GetResourceLocator());
     }
       break;
     default:
@@ -400,28 +390,22 @@ void ParameterEditor::Save(const vkResourceLocator &locator)
   QDomElement assetElement = doc.createElement("asset");
   QDomElement dataElement = doc.createElement("data");
   QDomElement materialInstanceElement = doc.createElement("materialInstance");
-  QDomElement metaElement = doc.createElement("meta");
-  QDomElement materialInstanceMetaElement = doc.createElement("materialInstanceMeta");
 
 
   doc.appendChild(assetElement);
   assetElement.appendChild(dataElement);
-  assetElement.appendChild(metaElement);
-
   dataElement.appendChild(materialInstanceElement);
-  metaElement.appendChild(materialInstanceMetaElement);
 
 
-  if (m_materialInstance && m_materialInstanceMeta && m_materialInstance->GetMaterial())
+  if (m_materialInstance && m_materialInstance->GetMaterial())
   {
     QDomElement materialElement = doc.createElement("material");
-    QDomElement materialMetaElement = doc.createElement("material");
 
-    vkString matRes = m_materialInstanceMeta->GetShaderResourceLocator().GetResourceFile();
+    vkResourceLocator materialLocator = vkResourceManager::Get()->Get(m_materialInstance->GetMaterial());
+
+    vkString matRes = materialLocator.GetResourceFile();
     materialElement.appendChild(doc.createTextNode(matRes.c_str()));
-    materialMetaElement.appendChild(doc.createTextNode(matRes.c_str()));
     materialInstanceElement.appendChild(materialElement);
-    materialInstanceMetaElement.appendChild(materialMetaElement);
 
 
     vkMaterial *material = m_materialInstance->GetMaterial();
@@ -445,46 +429,42 @@ void ParameterEditor::Save(const vkResourceLocator &locator)
       {
           case eSPT_Float:
             parameterElement.appendChild(doc.createElement("float")).appendChild(doc.createTextNode(QString::asprintf("%f", 
-                                                                                                                      data.m_floatAttributes[0])));
+                                                                                                                      data.m_floatAttributes[0]->value())));
             break;
           case eSPT_Vector2:
             parameterElement.appendChild(doc.createElement("float2")).appendChild(doc.createTextNode(QString::asprintf("%f, %f", 
-                                                                                                                       data.m_floatAttributes[0], 
-                                                                                                                       data.m_floatAttributes[1])));
+                                                                                                                       data.m_floatAttributes[0]->value(),
+                                                                                                                       data.m_floatAttributes[1]->value())));
             break;
           case eSPT_Vector3:
             parameterElement.appendChild(doc.createElement("float3")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f", 
-                                                                                                                       data.m_floatAttributes[0], 
-                                                                                                                       data.m_floatAttributes[1],
-                                                                                                                       data.m_floatAttributes[2])));
+                                                                                                                       data.m_floatAttributes[0]->value(),
+                                                                                                                       data.m_floatAttributes[1]->value(),
+                                                                                                                       data.m_floatAttributes[2]->value())));
             break;
           case eSPT_Vector4:
             parameterElement.appendChild(doc.createElement("float4")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f",
-                                                                                                                       data.m_floatAttributes[0],
-                                                                                                                       data.m_floatAttributes[1],
-                                                                                                                       data.m_floatAttributes[2])));
+                                                                                                                       data.m_floatAttributes[0]->value(),
+                                                                                                                       data.m_floatAttributes[1]->value(),
+                                                                                                                       data.m_floatAttributes[2]->value())));
             break;
           case eSPT_Color4:
             parameterElement.appendChild(doc.createElement("color4")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f",
-                                                                                                                       data.m_floatAttributes[0],
-                                                                                                                       data.m_floatAttributes[1],
-                                                                                                                       data.m_floatAttributes[2])));
+                                                                                                                       data.m_floatAttributes[0]->value(),
+                                                                                                                       data.m_floatAttributes[1]->value(),
+                                                                                                                       data.m_floatAttributes[2]->value())));
             break;
           case eSPT_Texture:
             {
-              vkResourceLocator loc = m_materialInstanceMeta->GetResourceLocator(name);
+              ITexture *texture = m_materialInstance->GetTexture(data.m_shaderIndex); 
+              vkResourceLocator loc = vkResourceManager::Get()->Get(texture);
               parameterElement.appendChild(doc.createElement("locator")).appendChild(doc.createTextNode(loc.GetResourceFile().c_str()));
-              QDomElement parameterMetaElement = doc.createElement("parameter");
-              parameterMetaElement.setAttribute("name", name.c_str());
-              parameterMetaElement.appendChild(doc.createElement("locator")).appendChild(doc.createTextNode(loc.GetResourceFile().c_str()));
-              parametersMetaElement.appendChild(parameterMetaElement);
             }
             break;
       }
 
     }
     materialInstanceElement.appendChild(parametersElement);
-    materialInstanceMetaElement.appendChild(parametersMetaElement);
   }
 
   QString xml = doc.toString(2);
@@ -492,9 +472,11 @@ void ParameterEditor::Save(const vkResourceLocator &locator)
   vkString absolutPath = vkVFS::Get()->GetAbsolutPath(locator.GetResourceFile());
 
   QFile file(QString(absolutPath.c_str()));
-  file.open(QIODevice::ReadWrite);
+  file.open(QIODevice::WriteOnly);
   file.write(xml.toLatin1());
   file.close();
+
+  printf("Xml: %s\n", (const char*)xml.toLatin1());
 }
 
 

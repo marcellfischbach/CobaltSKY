@@ -171,6 +171,17 @@ IObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
   return 0;
 }
 
+vkResourceLocator vkResourceManager::Get(IObject *object) const
+{
+  std::map<IObject*, vkResourceLocator>::const_iterator it = m_resources.find(object);
+  if (it != m_resources.end())
+  {
+    return it->second;
+  }
+
+  return vkResourceLocator();
+}
+
 
 
 IObject *vkResourceManager::GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData)
@@ -188,6 +199,7 @@ IObject *vkResourceManager::GetOrLoad(const vkResourceLocator &resourceLocator, 
   }
 
   m_objects[resourceLocator] = object;
+  m_resources[object] = resourceLocator;
 
   return object;
 }
@@ -209,6 +221,7 @@ bool vkResourceManager::RegisterObject(const vkResourceLocator &resourceLocator,
 
   object->AddRef();
   m_objects[resourceLocator] = object;
+  m_resources[object] = resourceLocator;
   return true;
 }
 
@@ -221,9 +234,38 @@ void vkResourceManager::DeregisterObject(const vkResourceLocator &resourceLocato
     IObject *object = it->second;
     if (object)
     {
+      std::map<IObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
+      if (rit != m_resources.end())
+      {
+        m_resources.erase(rit);
+      }
+
+
       object->Release();
     }
     m_objects.erase(it);
+  }
+}
+
+void vkResourceManager::DeregisterObject(IObject *object)
+{
+  if (!object)
+  {
+    return;
+  }
+
+  std::map<IObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
+  if (rit != m_resources.end())
+  {
+    const vkResourceLocator &resourceLocator = rit->second;
+    std::map<vkResourceLocator, IObject*>::iterator it = m_objects.find(resourceLocator);
+    if (it != m_objects.end())
+    {
+      m_objects.erase(it);
+    }
+    m_resources.erase(rit);
+
+    object->Release();
   }
 }
 

@@ -1,6 +1,5 @@
 
 #include <MaterialInstance/MaterialInstanceView.hh>
-#include <MaterialInstance/MaterialInstanceMeta.hh>
 #include <AssetManager/Utils.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Graphics/Material.hh>
@@ -24,10 +23,9 @@ void MaterialInstanceWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_locator = resourceLocator;
   m_materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(resourceLocator);
-  m_materialInstanceMeta = vkResourceManager::Get()->GetOrLoad<MaterialInstanceMeta>(vkResourceLocator(resourceLocator, "meta"));
 
   m_gui.previewWidget->SetMaterialInstance(m_materialInstance);
-  m_gui.parameterEditor->SetMaterialInstance(m_materialInstance, m_materialInstanceMeta);
+  m_gui.parameterEditor->SetMaterialInstance(m_materialInstance);
 }
 
 void MaterialInstanceWidget::DataChanged()

@@ -25,7 +25,6 @@ private:
   Ui::MaterialInstanceWidget m_gui;
   vkResourceLocator m_locator;
   vkMaterialInstance *m_materialInstance;
-  MaterialInstanceMeta *m_materialInstanceMeta;
 };
 
 

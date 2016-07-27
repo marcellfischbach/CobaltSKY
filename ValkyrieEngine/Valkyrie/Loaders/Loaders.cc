@@ -4,6 +4,7 @@
 #include <Valkyrie/Loaders/ImageLoader.hh>
 #include <Valkyrie/Loaders/MaterialLoader.hh>
 #include <Valkyrie/Loaders/MaterialInstanceLoader.hh>
+#include <Valkyrie/Loaders/MeshLoader.hh>
 #include <Valkyrie/Loaders/ShaderGraphLoader.hh>
 #include <Valkyrie/Loaders/StaticMeshLoader.hh>
 #include <Valkyrie/Loaders/TextureLoader.hh>
@@ -18,6 +19,10 @@ vkLoaders::vkLoaders()
 
 void vkLoaders::Register(vkResourceManager *mgr)
 {
+
+  //
+  // Legacy loaders
+
   mgr->RegisterLoader(new vkEntityMasterLoader());
   mgr->RegisterLoader(new vkEntityStateMasterLoader());
   //mgr->RegisterLoader(new vkMaterialLoader());
@@ -25,16 +30,18 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkStaticMeshLoader());
 
 
+  //
+  // The new loaders go here
   mgr->RegisterLoader(new vkShaderGraphAssetXMLLoader());
+  mgr->RegisterLoader(new vkMaterialInstanceAssetXMLLoader());
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
   mgr->RegisterLoader(new vkTextureAssetXMLLoader());
+  mgr->RegisterLoader(new vkMeshAssetXMLLoader());
 
   // image loaders
   mgr->RegisterLoader(new vkPNGImageAssetLoader());
   mgr->RegisterLoader(new vkPNGImageFileLoader());
-
-  mgr->RegisterLoader(new vkShaderGraphAssetXMLLoader());
-  mgr->RegisterLoader(new vkMaterialInstanceAssetXMLLoader());
+  mgr->RegisterLoader(new vkSubMeshAssetLoader());
 
 
   vkEntityLoaderRegistry *reg = vkEntityLoaderRegistry::Get();

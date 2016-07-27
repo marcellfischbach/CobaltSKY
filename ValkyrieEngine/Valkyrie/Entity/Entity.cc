@@ -145,6 +145,7 @@ void vkEntity::UpdateBoundingBox()
 void vkEntity::SetRootState(vkSpatialState *rootState)
 {
   VK_SET(m_rootState, rootState);
+
 }
 
 void vkEntity::AddState(vkEntityState *state)

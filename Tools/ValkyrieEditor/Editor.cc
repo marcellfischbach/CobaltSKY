@@ -74,7 +74,6 @@ void Editor::InitializeImporters()
 }
 
 #include <AssetManager/EditorIconLoader.hh>
-#include <MaterialInstance/MaterialInstanceMetaLoader.hh>
 #include <ShaderGraph/MetaDataLoader.hh>
 
 
@@ -83,5 +82,4 @@ void Editor::InitializeLoaders()
   vkResourceManager *mgr = vkResourceManager::Get();
   mgr->RegisterLoader(new EditorIconAssetXMLLoader());
   mgr->RegisterLoader(new ShaderGraphMetaDataAssetXMLLoader());
-  mgr->RegisterLoader(new MaterialInstanceMetaLoader());
 }

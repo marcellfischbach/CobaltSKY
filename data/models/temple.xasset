@@ -1,0 +1,24 @@
+<asset>
+  <data>
+    <mesh>
+      <materialSlots>
+        <materialSlot name="Material" id="0"/>
+      </materialSlots>
+      <globalIndices/>
+      <subMeshes>
+        <subMesh lod="0" name="Sphere" materialSlot="0">models/temple.data:Sphere</subMesh>
+        <subMesh lod="0" name="Cylinder.010" materialSlot="0">models/temple.data:Cylinder_010</subMesh>
+        <subMesh lod="0" name="Cylinder.009" materialSlot="0">models/temple.data:Cylinder_009</subMesh>
+        <subMesh lod="0" name="Cylinder.008" materialSlot="0">models/temple.data:Cylinder_008</subMesh>
+        <subMesh lod="0" name="Cylinder.007" materialSlot="0">models/temple.data:Cylinder_007</subMesh>
+        <subMesh lod="0" name="Cylinder.006" materialSlot="0">models/temple.data:Cylinder_006</subMesh>
+        <subMesh lod="0" name="Cylinder.005" materialSlot="0">models/temple.data:Cylinder_005</subMesh>
+        <subMesh lod="0" name="Cylinder.004" materialSlot="0">models/temple.data:Cylinder_004</subMesh>
+        <subMesh lod="0" name="Cylinder.003" materialSlot="0">models/temple.data:Cylinder_003</subMesh>
+        <subMesh lod="0" name="Cylinder.002" materialSlot="0">models/temple.data:Cylinder_002</subMesh>
+        <subMesh lod="0" name="Cylinder.001" materialSlot="0">models/temple.data:Cylinder_001</subMesh>
+        <subMesh lod="0" name="Cylinder" materialSlot="0">models/temple.data:Cylinder</subMesh>
+      </subMeshes>
+    </mesh>
+  </data>
+</asset>

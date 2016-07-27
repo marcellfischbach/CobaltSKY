@@ -1,0 +1,12 @@
+<asset>
+  <data>
+    <materialInstance>
+      <material>/materials/Solid.xasset</material>
+      <parameters>
+        <parameter name="Multiplier">
+          <float2>10.000000, 10.000000</float2>
+        </parameter>
+      </parameters>
+    </materialInstance>
+  </data>
+</asset>

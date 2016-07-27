@@ -92,23 +92,23 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
           vkString tagName(valueElement->Value());
           if (tagName == vkString("float"))
           {
-            resource->SetDefault(LoadFloat(valueElement->Value()));
+            resource->SetDefault(LoadFloat(valueElement->GetText()));
           }
           else if (tagName == vkString("float2"))
           {
-            resource->SetDefault(LoadVector2f(valueElement->Value()));
+            resource->SetDefault(LoadVector2f(valueElement->GetText()));
           }
           else if (tagName == vkString("float3"))
           {
-            resource->SetDefault(LoadVector3f(valueElement->Value()));
+            resource->SetDefault(LoadVector3f(valueElement->GetText()));
           }
           else if (tagName == vkString("float4"))
           {
-            resource->SetDefault(LoadVector4f(valueElement->Value()));
+            resource->SetDefault(LoadVector4f(valueElement->GetText()));
           }
           else if (tagName == vkString("color4"))
           {
-            resource->SetDefault(LoadColor4f(valueElement->Value()));
+            resource->SetDefault(LoadColor4f(valueElement->GetText()));
           }
           else if (tagName == vkString("locator"))
           {

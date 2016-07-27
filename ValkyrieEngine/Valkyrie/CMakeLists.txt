@@ -191,6 +191,8 @@ set(SOURCE_LOADERS
     Loaders/MaterialLoader.hh
     Loaders/MaterialInstanceLoader.cc
     Loaders/MaterialInstanceLoader.hh
+    Loaders/MeshLoader.cc
+    Loaders/MeshLoader.hh
     Loaders/ShaderGraphLoader.cc
     Loaders/ShaderGraphLoader.hh
     Loaders/StaticMeshLoader.cc
