@@ -48,7 +48,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 
 	float val = 0.0;
 	float kernStep = 1.0;
-	float kernSize = 1.0;
+	float kernSize = 0.0;
 	float moment = texture(vk_ShadowColorMap, 
 												 vec3(depthBufferSpace.xy, 
 															layer)).r;

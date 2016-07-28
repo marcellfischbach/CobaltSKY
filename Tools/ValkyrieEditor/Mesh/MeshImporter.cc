@@ -454,6 +454,7 @@ vkString ValidateName(const vkString &name)
 
 void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh)
 {
+  normalMatrix.Debug("NormalMatrix");
   outputStream
     << (vkUInt32)VK_VERSION(1, 0, 0)
     << (vkUInt32)ePT_Triangles
@@ -588,7 +589,7 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
       vkMatrix4f::Mult(normalMatrix, vf, vf);
       outputStream << vf;
       v = mesh->mBitangents[i];
-      vf.Set(v.x, v.y, v.z);
+      vf.Set(-v.x, -v.y, -v.z);
       vkMatrix4f::Mult(normalMatrix, vf, vf);
       outputStream << vf;
     }

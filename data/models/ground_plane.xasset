@@ -1,0 +1,13 @@
+<asset>
+  <data>
+    <mesh>
+      <materialSlots>
+        <materialSlot name="Material" id="0"/>
+      </materialSlots>
+      <globalIndices/>
+      <subMeshes>
+        <subMesh name="Plane" lod="0" materialSlot="0">models/ground_plane.data:Plane</subMesh>
+      </subMeshes>
+    </mesh>
+  </data>
+</asset>

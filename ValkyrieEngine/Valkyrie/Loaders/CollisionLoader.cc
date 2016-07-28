@@ -146,7 +146,7 @@ void vkCollisionAssetXMLLoader::LoadCylinder(TiXmlElement *transformElement, vkP
   if (transformElement->Attribute("radius") &&
       transformElement->Attribute("halfHeight"))
   {
-    geometry.Type = ePGT_CapsuleZ;
+    geometry.Type = ePGT_CapsuleX;
     geometry.Radius = atof(transformElement->Attribute("radius"));
     geometry.Height = atof(transformElement->Attribute("halfHeight")) * 2.0f;
   }

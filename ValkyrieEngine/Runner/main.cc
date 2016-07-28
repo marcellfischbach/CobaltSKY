@@ -64,8 +64,8 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
 vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
 vkSubMesh *create_skeleton_mesh(IGraphics *renderer, float size);
 vkPostProcessor *createPostProcessor(IGraphics *graphics);
-void UpdateCamera(vkCamera *cameraNode, const IMouse *mouser, const IKeyboard *keyboard);
-void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard);
+void UpdateCamera(vkCamera *cameraNode, vkCharacterEntity *character, const IMouse *mouser, const IKeyboard *keyboard);
+void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard, float tpf);
 
 vkEngine *engine = 0;
 SDLWindow *window = 0;
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
   vkInt16 posX = 100;
   vkInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   //posX = 2000;
@@ -103,6 +103,12 @@ int main(int argc, char **argv)
   {
     delete window;
     return -1;
+  }
+  vkImage *icon = vkResourceManager::Get()->Load<vkImage>(vkResourceLocator("val.png"));
+  if (icon)
+  {
+    window->SetIcon(icon);
+    icon->Release();
   }
 
   engine->SetWindow(window);
@@ -199,19 +205,31 @@ int main_loop()
   while (true)
   {
     vkTime::Get().Tick();
+    fps++;
+    vkUInt64 time = vkTime::Get().GetCurrentTimeMilli();
+    if (time >= nextFPS)
+    {
+      printf("FPS: %d\n", fps);
+      fps = 0;
+      nextFPS += 1000;
+    }
+    vkUInt64 deltaT = time - lastTime;
+    lastTime = time;
+
+    float tpf = (float)deltaT / 1000.0f;
 
     window->UpdateEvents();
     if (keyboard->IsKeyPressed(eK_Esc))
     {
       break;
     }
-    if (keyboard->IsKeyPressed(eK_Space))
+    if (keyboard->IsKeyPressed(eK_P))
       anim = !anim;
 
 
 
-    UpdateCamera(camera, mouse, keyboard);
-    UpdateCharacter(character, mouse, keyboard);
+    UpdateCamera(camera, character, mouse, keyboard);
+    UpdateCharacter(character, mouse, keyboard, tpf);
 
 
     scene->GetRoot()->UpdateBoundingBox();
@@ -227,18 +245,6 @@ int main_loop()
     graphicsGL4->RenderFullScreenFrame(colorTarget);
 
     window->Present();
-    fps++;
-    vkUInt64 time = vkTime::Get().GetCurrentTimeMilli();
-    if (time >= nextFPS)
-    {
-      printf("FPS: %d\n", fps);
-      fps = 0;
-      nextFPS += 1000;
-    }
-    vkUInt64 deltaT = time - lastTime;
-    lastTime = time;
-
-    float tpf = (float)deltaT / 1000.0f;
     scene->Update(tpf);
 
     scene->GetPhysicsScene()->StepSimulation();
@@ -625,8 +631,28 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
 }
 
 
-void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
+void UpdateCamera(vkCamera *cam, vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard)
 {
+  if (character)
+  {
+    static float upSight = 0.0f;
+    vkTransformation trans = character->GetTransformation();
+    vkVector3f pos = trans.GetGlobalTranslation(pos);
+    pos.z += 0.8f;
+    vkVector3f dir = trans.GetGlobalYAxis(dir);
+    vkVector3f spot = vkVector3f::Add(pos, dir, spot);
+    upSight += (float)-mouse->GetRelY() / 1000.0f;
+    if (upSight > 2.0f) upSight = 2.0f;
+    if (upSight < -2.0f) upSight = -2.0f;
+    spot.z += upSight;
+
+    cam->SetEye(pos);
+    cam->SetSpot(spot);
+    cam->SetUp(vkVector3f(0, 0, 1));
+    cam->UpdateCameraMatrices();
+    return;
+  }
+
   static float rotH = -3.906003f, rotV = -0.096000f;
   rotH -= (float)mouse->GetRelX() * 0.001f;
   rotV -= (float)mouse->GetRelY() * 0.001f;
@@ -683,7 +709,7 @@ void UpdateCamera(vkCamera *cam, const IMouse *mouse, const IKeyboard *keyboard)
 }
 
 
-void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard)
+void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard, float tpf)
 {
   if (!character)
   {
@@ -691,33 +717,42 @@ void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IK
   }
   float sx = 0.0f;
   float sy = 0.0f;
-  float speed = 0.1f;
+  float speed = 5.0f * tpf;
+  float rotate = (float)-mouse->GetRelX() / 1000.0f;
   if (keyboard->IsKeyDown(eK_LShift))
   {
     speed *= 2.0f;
   }
-  if (keyboard->IsKeyDown(eK_Left))
-  {
-    sx += speed;
-  }
-  if (keyboard->IsKeyDown(eK_Right))
+  if (keyboard->IsKeyDown(eK_Left) || keyboard->IsKeyDown(eK_A))
   {
     sx -= speed;
   }
-  if (keyboard->IsKeyDown(eK_Up))
+  if (keyboard->IsKeyDown(eK_Right) || keyboard->IsKeyDown(eK_D))
   {
-    sy -= speed;
+    sx += speed;
   }
-  if (keyboard->IsKeyDown(eK_Down))
+  if (keyboard->IsKeyDown(eK_Up) || keyboard->IsKeyDown(eK_W))
   {
     sy += speed;
+  }
+  if (keyboard->IsKeyDown(eK_Down) || keyboard->IsKeyDown(eK_S))
+  {
+    sy -= speed;
   }
   if (keyboard->IsKeyPressed(eK_Space))
   {
     character->Jump();
   }
+  character->Rotate(rotate);
 
-  character->SetWalkDirection(vkVector3f(sx, sy, 0.0f));
+
+  vkMatrix4f mat = character->GetTransformation().GetTransformation(mat);
+
+  vkVector3f direction(sx, sy, 0.0f);
+  vkMatrix4f::Mult(mat, direction, direction);
+
+
+  character->SetWalkDirection(direction);
 }
 
 vkMaterial *create_red_shader(IGraphics *graphics)
@@ -761,7 +796,9 @@ vkEntityScene *create_scene(IGraphics *graphics)
 {
   vkMaterialInstance *groundFieldStone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/GroundFieldStone.xasset"));
   vkMaterialInstance *templeDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/TempleDirt.xasset"));
-  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.fasset/temple_Mesh.xasset"));
+  //vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.fasset/temple_Mesh.xasset"));
+  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.xasset"));
+  vkMesh *groundMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/ground_plane.xasset"));
   vkPhysicsShapeContainer *templeShape = vkResourceManager::Get()->GetOrLoad<vkPhysicsShapeContainer>(vkResourceLocator("models/temple.fasset/temple_Collision.xasset"));
   vkEntityScene *entityScene = new vkEntityScene();
   IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
@@ -788,7 +825,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   planeMesh->UpdateBoundingBox();
 
   vkStaticMeshState *planeState = new vkStaticMeshState();
-  planeState->SetMesh(planeMesh);
+  planeState->SetMesh(groundMesh);
   planeState->SetMaterial(groundFieldStone, 0);
   planeState->SetCastShadow(true);
 
@@ -809,7 +846,7 @@ vkEntityScene *create_scene(IGraphics *graphics)
   templeState->SetMaterial(templeDirt, 0);
 
   vkStaticColliderState *colliderState = new vkStaticColliderState();
-  colliderState->AttachShape(templeShape);
+  //colliderState->AttachShape(templeShape);
 
 
   vkEntity *templeEntity = new vkEntity();
@@ -818,28 +855,27 @@ vkEntityScene *create_scene(IGraphics *graphics)
   templeEntity->AddState(templeState, colliderState);
   templeEntity->UpdateBoundingBox();
   templeEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
+  templeEntity->GetTransformation().SetRotationZ(0.25f);
 
   entityScene->AddEntity(templeEntity);
 
   //
   // Add the player character
   // Setup the character 
-
-  /*
   character = new vkCharacterEntity();
 
   vkStaticMeshState *characterMesh = new vkStaticMeshState();
-  characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
-  characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
+  vkSpatialState *spatialState = new vkSpatialState();
+//  characterMesh->SetMesh(vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
+//  characterMesh->SetMaterial(vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "White")));
 
-  character->SetRootState(characterMesh);
-  character->AddState(characterMesh);
-  character->GetTransformation().SetTranslation(vkVector3f(4.0f, 4.0f, 20.0f));
+  character->SetRootState(spatialState);
+  character->AddState(spatialState);
+
+  character->GetTransformation().SetTranslation(vkVector3f(10.0f, 10.0f, 20.0f));
   character->FinishTransformation();
 
-  scene->AddEntity(character);
-  */
-
+  entityScene ->AddEntity(character);
 
 
   //

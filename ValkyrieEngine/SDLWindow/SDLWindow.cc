@@ -88,6 +88,17 @@ bool SDLWindow::InitializeOpenGL(
 
 }
 
+void SDLWindow::SetIcon(const vkImage *image)
+{
+  vkUInt8 *buffer = new vkUInt8[image->GetWidth() * image->GetHeight() * 4];
+  memcpy(buffer, image->GetData(), image->GetWidth() * image->GetHeight() * 4);
+  SDL_Surface *iconSurface = SDL_CreateRGBSurfaceFrom(buffer, image->GetWidth(), image->GetHeight(), 32, image->GetWidth() * 4, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+  SDL_SetWindowIcon(m_window, iconSurface);
+  SDL_FreeSurface(iconSurface);
+  delete[] buffer;
+
+}
+
 const IKeyboard *SDLWindow::GetKeyboard() const
 {
   return m_keyboard;

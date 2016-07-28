@@ -4,6 +4,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Types.hh>
 #include <Valkyrie/Window/IWindow.refl.hh>
+#include <Valkyrie/Graphics/Image.hh>
 
 struct IKeyboard;
 struct IMouse;
@@ -11,6 +12,8 @@ VK_INTERFACE()
 struct VKE_API IWindow : public IObject
 {
   VK_CLASS_GEN;
+
+  virtual void SetIcon(const vkImage *image) = 0;
 
   virtual const IKeyboard *GetKeyboard() const = 0;
   virtual const IMouse *GetMouse() const = 0;

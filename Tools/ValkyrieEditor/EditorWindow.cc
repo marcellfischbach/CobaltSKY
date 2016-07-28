@@ -15,6 +15,7 @@ EditorWindow::EditorWindow()
   m_mainTabWidget = new QTabWidget();
   m_mainTabWidget->setTabsClosable(true);
   setCentralWidget(m_mainTabWidget);
+  setWindowIcon(QIcon(":/icons/Resources/Val64.png"));
 
 
   m_sceneView = new SceneView();

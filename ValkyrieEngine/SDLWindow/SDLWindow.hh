@@ -29,6 +29,8 @@ public:
     vkUInt8 openGLMajor,
     vkUInt8 openGLMinor);
 
+  virtual void SetIcon(const vkImage *image);
+
   virtual const IKeyboard *GetKeyboard() const;
   virtual const IMouse *GetMouse() const;
 

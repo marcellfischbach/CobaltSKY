@@ -16,6 +16,9 @@ public:
   vkCharacterEntity();
   virtual ~vkCharacterEntity();
 
+  void Rotate(float angle);
+  void SetRotation(float rotation);
+  float GetRotation() const;
 
   virtual void FinishTransformation();
   void TransformationChanged(const vkMatrix4f &transformation);
@@ -40,6 +43,7 @@ private:
 
   float m_radius;
   float m_height;
+  float m_rotation;
 };
 
 

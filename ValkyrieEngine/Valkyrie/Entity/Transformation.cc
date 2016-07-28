@@ -104,6 +104,120 @@ void vkTransformation::SetRotation(const vkVector3f &axis, float rads)
   }
 }
 
+vkMatrix4f &vkTransformation::GetGlobalTransformation(vkMatrix4f &transformation) const
+{
+  if (m_matrixGlobal)
+  {
+    transformation.Set(*m_matrixGlobal);
+  }
+  else if (m_matrix)
+  {
+    transformation.Set(*m_matrix);
+  }
+  return transformation;
+}
+
+vkMatrix4f &vkTransformation::GetTransformation(vkMatrix4f &transformation) const
+{
+  if (m_matrix)
+  {
+    transformation.Set(*m_matrix);
+  }
+  return transformation;
+}
+
+
+vkVector3f &vkTransformation::GetGlobalTranslation(vkVector3f &globalTranslation) const
+{
+  if (m_matrixGlobal)
+  {
+    return m_matrixGlobal->GetTranslation(globalTranslation);
+  }
+  if (m_matrix)
+  {
+    return m_matrix->GetTranslation(globalTranslation);
+  }
+
+  return globalTranslation;
+}
+
+vkVector3f &vkTransformation::GetTranslation(vkVector3f &globalTranslation) const
+{
+  if (m_matrix)
+  {
+    return m_matrix->GetTranslation(globalTranslation);
+  }
+
+  return globalTranslation;
+}
+
+vkVector3f &vkTransformation::GetGlobalXAxis(vkVector3f &xAxis) const
+{
+  if (m_matrixGlobal)
+  {
+    return m_matrixGlobal->GetXAxis(xAxis);
+  }
+  if (m_matrix)
+  {
+    return m_matrix->GetXAxis(xAxis);
+  }
+  return xAxis;
+}
+
+vkVector3f &vkTransformation::GetGlobalYAxis(vkVector3f &yAxis) const
+{
+  if (m_matrixGlobal)
+  {
+    return m_matrixGlobal->GetYAxis(yAxis);
+  }
+  if (m_matrix)
+  {
+    return m_matrix->GetYAxis(yAxis);
+  }
+  return yAxis;
+}
+
+vkVector3f &vkTransformation::GetGlobalZAxis(vkVector3f &zAxis) const
+{
+  if (m_matrixGlobal)
+  {
+    return m_matrixGlobal->GetZAxis(zAxis);
+  }
+  if (m_matrix)
+  {
+    return m_matrix->GetZAxis(zAxis);
+  }
+  return zAxis;
+}
+
+
+vkVector3f &vkTransformation::GetXAxis(vkVector3f &xAxis) const
+{
+  if (m_matrix)
+  {
+    return m_matrix->GetXAxis(xAxis);
+  }
+  return xAxis;
+}
+
+vkVector3f &vkTransformation::GetYAxis(vkVector3f &yAxis) const
+{
+  if (m_matrix)
+  {
+    return m_matrix->GetYAxis(yAxis);
+  }
+  return yAxis;
+}
+
+vkVector3f &vkTransformation::GetZAxis(vkVector3f &zAxis) const
+{
+  if (m_matrix)
+  {
+    return m_matrix->GetZAxis(zAxis);
+  }
+  return zAxis;
+}
+
 bool vkTransformation::IsValid() const
 {
   return m_matrix != 0;
