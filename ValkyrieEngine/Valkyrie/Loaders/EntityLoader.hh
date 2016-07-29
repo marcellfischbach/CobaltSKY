@@ -27,12 +27,12 @@ VK_CLASS();
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityMasterLoader : public vkBaseXMLLoader
+class VKE_API vkEntityMasterXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkEntityMasterLoader();
-  virtual ~vkEntityMasterLoader();
+  vkEntityMasterXMLLoader();
+  virtual ~vkEntityMasterXMLLoader();
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -48,12 +48,12 @@ VK_CLASS();
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityStateMasterLoader : public vkBaseXMLLoader
+class VKE_API vkEntityStateMasterXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkEntityStateMasterLoader();
-  virtual ~vkEntityStateMasterLoader();
+  vkEntityStateMasterXMLLoader();
+  virtual ~vkEntityStateMasterXMLLoader();
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -69,12 +69,12 @@ VK_CLASS();
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityLoader: public vkBaseXMLLoader
+class VKE_API vkEntityXMLLoader: public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkEntityLoader();
-  virtual ~vkEntityLoader();
+  vkEntityXMLLoader();
+  virtual ~vkEntityXMLLoader();
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -89,12 +89,12 @@ VK_CLASS();
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityStateLoader : public vkBaseXMLLoader
+class VKE_API vkEntityStateXMLLoader : public vkBaseXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkEntityStateLoader();
-  virtual ~vkEntityStateLoader();
+  vkEntityStateXMLLoader();
+  virtual ~vkEntityStateXMLLoader();
 
 
   virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -110,12 +110,12 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkSpatialStateLoader : public vkEntityStateLoader
+class VKE_API vkSpatialStateXMLLoader : public vkEntityStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkSpatialStateLoader();
-  virtual ~vkSpatialStateLoader();
+  vkSpatialStateXMLLoader();
+  virtual ~vkSpatialStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -128,12 +128,12 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkRenderStateLoader : public vkSpatialStateLoader
+class VKE_API vkRenderStateXMLLoader : public vkSpatialStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkRenderStateLoader();
-  virtual ~vkRenderStateLoader();
+  vkRenderStateXMLLoader();
+  virtual ~vkRenderStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -146,12 +146,12 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkStaticMeshStateLoader : public vkRenderStateLoader
+class VKE_API vkStaticMeshStateXMLLoader : public vkRenderStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkStaticMeshStateLoader();
-  virtual ~vkStaticMeshStateLoader();
+  vkStaticMeshStateXMLLoader();
+  virtual ~vkStaticMeshStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -162,12 +162,12 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkColliderStateLoader : public vkSpatialStateLoader
+class VKE_API vkColliderStateXMLLoader : public vkSpatialStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkColliderStateLoader();
-  virtual ~vkColliderStateLoader();
+  vkColliderStateXMLLoader();
+  virtual ~vkColliderStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -177,12 +177,12 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkBaseColliderStateLoader : public vkColliderStateLoader
+class VKE_API vkBaseColliderStateXMLLoader : public vkColliderStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkBaseColliderStateLoader();
-  virtual ~vkBaseColliderStateLoader();
+  vkBaseColliderStateXMLLoader();
+  virtual ~vkBaseColliderStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -192,12 +192,12 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkDynamicColliderStateLoader : public vkBaseColliderStateLoader
+class VKE_API vkDynamicColliderStateXMLLoader : public vkBaseColliderStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkDynamicColliderStateLoader();
-  virtual ~vkDynamicColliderStateLoader();
+  vkDynamicColliderStateXMLLoader();
+  virtual ~vkDynamicColliderStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -207,12 +207,12 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkStaticColliderStateLoader : public vkBaseColliderStateLoader
+class VKE_API vkStaticColliderStateXMLLoader : public vkBaseColliderStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkStaticColliderStateLoader();
-  virtual ~vkStaticColliderStateLoader();
+  vkStaticColliderStateXMLLoader();
+  virtual ~vkStaticColliderStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -221,12 +221,12 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkJointStateLoader : public vkSpatialStateLoader
+class VKE_API vkJointStateXMLLoader : public vkSpatialStateXMLLoader
 {
   VK_CLASS_GEN;
 public:
-  vkJointStateLoader();
-  virtual ~vkJointStateLoader();
+  vkJointStateXMLLoader();
+  virtual ~vkJointStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -234,11 +234,11 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkHingeJointStateLoader : public vkJointStateLoader
+class VKE_API vkHingeJointStateXMLLoader : public vkJointStateXMLLoader
 {
   VK_CLASS_GEN;
-  vkHingeJointStateLoader();
-  virtual ~vkHingeJointStateLoader();
+  vkHingeJointStateXMLLoader();
+  virtual ~vkHingeJointStateXMLLoader();
 
   virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
   virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
@@ -255,15 +255,15 @@ class VKE_API vkEntityLoaderRegistry
 public:
   static vkEntityLoaderRegistry *Get();
 
-  void RegisterLoader(const vkEntityLoader *entityLoader);
-  void RegisterLoader(const vkEntityStateLoader *entityLoader);
-  const vkEntityLoader *GetEntityLoader(const vkClass *clazz) const;
-  const vkEntityStateLoader *GetEntityStateLoader(const vkClass *clazz) const;
+  void RegisterLoader(const vkEntityXMLLoader *entityLoader);
+  void RegisterLoader(const vkEntityStateXMLLoader *entityLoader);
+  const vkEntityXMLLoader *GetEntityLoader(const vkClass *clazz) const;
+  const vkEntityStateXMLLoader *GetEntityStateLoader(const vkClass *clazz) const;
 
 private:
   vkEntityLoaderRegistry();
 
-  std::map<const vkClass*, const vkEntityLoader*> m_entityLoaders;
-  std::map<const vkClass*, const vkEntityStateLoader*> m_entityStateLoaders;
+  std::map<const vkClass*, const vkEntityXMLLoader*> m_entityLoaders;
+  std::map<const vkClass*, const vkEntityStateXMLLoader*> m_entityStateLoaders;
 };
 

@@ -137,7 +137,7 @@ vkDirectionalLightvkGraphicsGL4::vkDirectionalLightvkGraphicsGL4(vkGraphicsGL4 *
   m_distances = vkVector3f(15.0f, 45.0f, 135.0f);
 
   vkPixelFormat shadowBufferFormat = ePF_R16G16F;
-  m_shadowBufferSize = 512;
+  m_shadowBufferSize = 1024;
   m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false);
 

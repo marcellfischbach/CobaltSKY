@@ -4,7 +4,7 @@
       <material>/materials/Solid.xasset</material>
       <parameters>
         <parameter name="fieldstone_diffuse">
-          <locator>/materials/textures/fieldstone_diffuse.xasset</locator>
+          <locator>/materials/textures/dirt_diffuse.xasset</locator>
         </parameter>
       </parameters>
     </materialInstance>

@@ -794,45 +794,19 @@ vkMaterial *create_green_shader(IGraphics *graphics)
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
-  vkMaterialInstance *groundFieldStone = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/GroundFieldStone.xasset"));
-  vkMaterialInstance *templeDirt = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/TempleDirt.xasset"));
-  //vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.fasset/temple_Mesh.xasset"));
-  vkMesh *templeMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/temple.xasset"));
-  vkMesh *groundMesh = vkResourceManager::Get()->GetOrLoad<vkMesh>(vkResourceLocator("models/ground_plane.xasset"));
-  vkPhysicsShapeContainer *templeShape = vkResourceManager::Get()->GetOrLoad<vkPhysicsShapeContainer>(vkResourceLocator("models/temple.fasset/temple_Collision.xasset"));
+  
   vkEntityScene *entityScene = new vkEntityScene();
   IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
 
+  vkStaticMeshState *templeState = vkResourceManager::Get()->GetOrLoad<vkStaticMeshState>(vkResourceLocator("models/temple.xasset"));
+  vkStaticMeshState *groundState = vkResourceManager::Get()->GetOrLoad<vkStaticMeshState>(vkResourceLocator("models/ground_plane.xasset"));
 
 
   // 
-  // Create the ground plane with physics
-  vkPhysGeometry boxGeometry;
-  boxGeometry.Type = ePGT_Box;
-  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
-  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
-
-  vkStaticColliderState *staticState = new vkStaticColliderState();
-  staticState->AttachShape(boxShape);
-  staticState->SetFriction(10.0f);
-  staticState->SetRestitution(0.5f);
-
-  // create the plane mesh 
-  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
-  vkMesh *planeMesh = new vkMesh();
-  planeMesh->AddMesh(planeMeshInst);
-  planeMesh->OptimizeDataStruct();
-  planeMesh->UpdateBoundingBox();
-
-  vkStaticMeshState *planeState = new vkStaticMeshState();
-  planeState->SetMesh(groundMesh);
-  planeState->SetMaterial(groundFieldStone, 0);
-  planeState->SetCastShadow(true);
-
+  // Add the ground plane with physics
   vkEntity *planeEntity = new vkEntity();
-  planeEntity->SetRootState(staticState);
-  planeEntity->AddState(staticState);
-  planeEntity->AddState(planeState, staticState);
+  planeEntity->SetRootState(groundState);
+  planeEntity->AddState(groundState);
   planeEntity->FinishTransformation();
   entityScene->AddEntity(planeEntity);
 
@@ -841,22 +815,12 @@ vkEntityScene *create_scene(IGraphics *graphics)
 
   //
   // Add the temple to the scene
-  vkStaticMeshState *templeState = new vkStaticMeshState();
-  templeState->SetMesh(templeMesh);
-  templeState->SetMaterial(templeDirt, 0);
-
-  vkStaticColliderState *colliderState = new vkStaticColliderState();
-  //colliderState->AttachShape(templeShape);
-
-
   vkEntity *templeEntity = new vkEntity();
-  templeEntity->SetRootState(colliderState);
-  templeEntity->AddState(colliderState);
-  templeEntity->AddState(templeState, colliderState);
-  templeEntity->UpdateBoundingBox();
+  templeEntity->SetRootState(templeState);
+  templeEntity->AddState(templeState);
   templeEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 2.0f));
   templeEntity->GetTransformation().SetRotationZ(0.25f);
-
+  templeEntity->FinishTransformation();
   entityScene->AddEntity(templeEntity);
 
   //

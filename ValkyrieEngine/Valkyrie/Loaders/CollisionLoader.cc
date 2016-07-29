@@ -19,7 +19,8 @@ vkCollisionAssetXMLLoader::~vkCollisionAssetXMLLoader()
 
 bool vkCollisionAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  return vkString(element->Value()) == vkString("collision");
+  return vkString(element->Value()) == vkString("collider") ||
+    vkString(element->Value()) == vkString("shapes");
 }
 
 const vkClass *vkCollisionAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
@@ -31,7 +32,15 @@ IObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResource
 {
   vkPhysicsShapeContainer *container = new vkPhysicsShapeContainer();
 
-  TiXmlElement *shapesElement = element->FirstChildElement("shapes");
+  TiXmlElement *shapesElement = 0;
+  if (vkString(element->Value()) == vkString("shapes"))
+  {
+    shapesElement = element;
+  }
+  else
+  {
+    element->FirstChildElement("shapes");
+  }
   if (!shapesElement)
   {
     return container;
@@ -96,34 +105,24 @@ void vkCollisionAssetXMLLoader::LoadTransform(TiXmlElement *transformElement, vk
   }
 
 
-  vkVector4f row0, row1, row2, row3;
-  TiXmlElement *row = matrixElement->FirstChildElement("row");
-  if (row)
+  vkVector4f r0, r1, r2, r3;
+  TiXmlElement *row0 = matrixElement->FirstChildElement("row0");
+  TiXmlElement *row1 = matrixElement->FirstChildElement("row1");
+  TiXmlElement *row2 = matrixElement->FirstChildElement("row2");
+  TiXmlElement *row3 = matrixElement->FirstChildElement("row3");
+  if (!row0 || !row1 || !row2 || !row3)
   {
-    row0 = LoadVector4f(row->GetText());
-    row = row->NextSiblingElement("row");
+    return;
   }
-  if (row)
-  {
-    row1 = LoadVector4f(row->GetText());
-    row = row->NextSiblingElement("row");
-  }
-  if (row)
-  {
-    row2 = LoadVector4f(row->GetText());
-    row = row->NextSiblingElement("row");
-  }
-  if (row)
-  {
-    row3 = LoadVector4f(row->GetText());
-    row = row->NextSiblingElement("row");
-  }
-
+  r0 = LoadVector4f(row0->GetText());
+  r1 = LoadVector4f(row1->GetText());
+  r2 = LoadVector4f(row2->GetText());
+  r3 = LoadVector4f(row3->GetText());
   localTransform.Set(
-    row0.x, row0.y, row0.z, row0.w,
-    row1.x, row1.y, row1.z, row1.w,
-    row2.x, row2.y, row2.z, row2.w,
-    row3.x, row3.y, row3.z, row3.w
+    r0.x, r0.y, r0.z, r0.w,
+    r1.x, r1.y, r1.z, r1.w,
+    r2.x, r2.y, r2.z, r2.w,
+    r3.x, r3.y, r3.z, r3.w
   );
 }
 
@@ -135,8 +134,8 @@ void vkCollisionAssetXMLLoader::LoadBox(TiXmlElement *transformElement, vkPhysGe
   {
     geometry.Type = ePGT_Box;
     geometry.Dimensions.x = atof(transformElement->Attribute("halfX"));
-    geometry.Dimensions.y = atof(transformElement->Attribute("halfX"));
-    geometry.Dimensions.z = atof(transformElement->Attribute("halfX"));
+    geometry.Dimensions.y = atof(transformElement->Attribute("halfY"));
+    geometry.Dimensions.z = atof(transformElement->Attribute("halfZ"));
   }
 }
 
@@ -146,7 +145,7 @@ void vkCollisionAssetXMLLoader::LoadCylinder(TiXmlElement *transformElement, vkP
   if (transformElement->Attribute("radius") &&
       transformElement->Attribute("halfHeight"))
   {
-    geometry.Type = ePGT_CapsuleX;
+    geometry.Type = ePGT_CylinderZ;
     geometry.Radius = atof(transformElement->Attribute("radius"));
     geometry.Height = atof(transformElement->Attribute("halfHeight")) * 2.0f;
   }

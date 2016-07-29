@@ -42,14 +42,19 @@ struct Bone
 static void Debug(const aiScene* scene);
 static void Debug(const aiScene *scene, aiNode* node, int i);
 static void Debug(aiMesh* mesh);
-static void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene);
-static void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
+static void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene);
+static void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 static void CollectSkeleton(Bone &skeleton, const aiScene *scene, aiNode *node);
 static void CollectCollisions(std::vector<Shape> &collisions, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
-static bool ExportSkeleton(const aiScene *scene, Bone &bone, const QString &dataPath, const QString &dataName, const QString &suffix);
-static bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString &dataPath, const QString &dataName, const QString &suffix);
-static bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, const QString &dataPath, const QString &dataName, const QString &suffix);
+static QDomElement CreateSkeletonElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, Bone &bone, const QString &dataName);
+static QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const QString &dataName);
+static QDomElement CreateShapesElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Shape> &collisions, const QString &dataName);
 static void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh);
+static bool ExportEntity(const aiScene *scene, 
+                         bool meshes, const QString &meshSuffix, std::vector<unsigned> &materialIndices,
+                         bool skeleton, const QString &skeletonSuffix, 
+                         bool collisions, const QString &collisionsSuffix, 
+                         const QString &dataPath, const QString &dataName);
 static vkString ValidateName(const vkString &name);
 
 Importer *Importer::Get()
@@ -113,6 +118,11 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     }
   }
 
+  QString xassetFileName = dataPath + "/" + info.baseName() + ".xasset";
+  QString dataFileName = dataPath + "/" + info.baseName() + ".data";
+
+
+
   const aiScene *scene = importer->ReadFile((const char*)fileName.toLatin1(), 0
                                             | aiProcess_CalcTangentSpace
                                             | aiProcess_JoinIdenticalVertices
@@ -131,49 +141,95 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
 
   std::vector<Mesh> meshes;
   std::vector<Shape> collisions;
+  std::vector<unsigned> materialIndices;
   Bone skeleton;
   skeleton.name = "undefined";
-  CollectData(meshes, skeleton, collisions, scene);
+  CollectData(meshes, materialIndices, skeleton, collisions, scene);
 
+  bool hasMesh = false;
+  bool hasCollider = false;
+  bool hasSkeleton = false;
 
   unsigned numDatas = 0;
   if (meshes.size() > 0)
   {
+    hasMesh = true;
     numDatas++;
   }
   if (skeleton.name != vkString("undefined"))
   {
+    hasSkeleton = true;
     numDatas++;
   }
   if (collisions.size() > 0)
   {
+    hasCollider = true;
     numDatas++;
   }
 
-  bool multi = numDatas > 1;
-  if (multi)
-  {
-    QString dataParentPath = rootPath + "/" + dataPath;
-    dataPath += "/" + info.baseName() + ".fasset";
 
-    QDir dir(dataParentPath);
-    dir.mkdir(info.baseName() + ".fasset");
-  }
+  assetmanager::AssetWriter writer;
+
+  QDomDocument doc;
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement entityStateElement = doc.createElement("entityState");
 
 
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(entityStateElement);
 
-  if (meshes.size() > 0)
+  // maybe make that a skinned mesh state later when there is a skeleton attached
+  entityStateElement.setAttribute("name", info.baseName());
+  entityStateElement.setAttribute("class", "vkStaticMeshState");
+
+  if (hasMesh)
   {
-    ExportMeshes(scene, meshes, dataPath, info.baseName(), multi ? "_Mesh" : "");
+    QDomElement meshElement = CreateMeshElement(doc, writer, scene, meshes, materialIndices, dataFileName);
+    entityStateElement.appendChild(meshElement);
+
+    QDomElement materialsElement = doc.createElement("materials");
+    entityStateElement.appendChild(materialsElement);
+
+    for (size_t i = 0, in = materialIndices.size(); i < in; ++i)
+    {
+      aiString materialName;
+      scene->mMaterials[materialIndices[i]]->Get(AI_MATKEY_NAME, materialName);
+
+      QDomElement materialElement = doc.createElement("material");
+      materialElement.setAttribute("slot", i);
+      materialElement.appendChild(doc.createTextNode("materials/" + QString(materialName.C_Str()) + ".xasset"));
+      materialsElement.appendChild(materialElement);
+    }
   }
-  if (skeleton.name != vkString("undefined"))
+
+  if (hasCollider)
   {
-    ExportSkeleton(scene, skeleton, dataPath, info.baseName(), multi ? "_Skeleton" : "");
+    QDomElement colliderElement = doc.createElement("collider");
+    QDomElement shapesElement = CreateShapesElement(doc, writer, scene, collisions, dataFileName);
+    colliderElement.appendChild(shapesElement);
+    colliderElement.appendChild(doc.createElement("friction")).appendChild(doc.createTextNode("10.0"));
+    colliderElement.appendChild(doc.createElement("restitution")).appendChild(doc.createTextNode("0.5"));
+    entityStateElement.appendChild(colliderElement);
   }
-  if (collisions.size() > 0)
+
+  QString xmlDoc = doc.toString(2);
+  IFile *xassetOutputFile = vkVFS::Get()->Open(vkString((const char*)xassetFileName.toLatin1()), eOM_Write, eTM_Binary);
+  if (!xassetOutputFile)
   {
-    ExportCollisions(scene, collisions, dataPath, info.baseName(), multi ? "_Collision" : "");
+    return false;
   }
+  xassetOutputFile->Write((const char*)xmlDoc.toLatin1(), xmlDoc.length());
+  xassetOutputFile->Close();
+
+  IFile *dataOutputFile = vkVFS::Get()->Open(vkString((const char*)dataFileName.toLatin1()), eOM_Write, eTM_Binary);
+  if (!dataOutputFile)
+  {
+    return false;
+  }
+  writer.Output(dataOutputFile);
+  dataOutputFile->Close();
 }
 
 void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
@@ -190,57 +246,27 @@ void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
   }
 }
 
-bool  ExportSkeleton(const aiScene *scene, Bone &bone, const QString &dataPath, const QString &dataName, const QString &suffix)
+QDomElement CreateSkeletonElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, Bone &bone)
 {
-  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
-  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
-
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
   QDomElement skeletonElement = doc.createElement("skeleton");
 
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(skeletonElement);
 
   for (Bone &b : bone.childBones)
   {
     ExportBone(b, skeletonElement, doc);
   }
-  QString xml = doc.toString(2);
-  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
-  if (!finalOutputFile)
-  {
-    return false;
-  }
-  finalOutputFile->Write((const char*)xml.toLatin1(), xml.length());
-  finalOutputFile->Close();
 
-
-  return true;
+  return skeletonElement;
 }
 
-bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString &dataPath, const QString &dataName, const QString &suffix)
+QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const QString &dataName)
 {
 
-  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
-  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
-
-  assetmanager::AssetWriter writer;
-
-
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
   QDomElement meshElement = doc.createElement("mesh");
   QDomElement materialSlotsElement = doc.createElement("materialSlots");
   QDomElement globalIndicesElement = doc.createElement("globalIndices");
   QDomElement subMeshesElement = doc.createElement("subMeshes");
 
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(meshElement);
   meshElement.appendChild(materialSlotsElement);
   meshElement.appendChild(globalIndicesElement);
   meshElement.appendChild(subMeshesElement);
@@ -248,14 +274,7 @@ bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString
 
   //
   // export the material names 
-  std::vector<unsigned> materialIndices;
-  for (Mesh &mesh : meshes)
-  {
-    if (!contains(materialIndices, mesh.mesh->mMaterialIndex))
-    {
-      materialIndices.push_back(mesh.mesh->mMaterialIndex);
-    }
-  }
+
   for (unsigned i = 0, in = materialIndices.size(); i < in; ++i)
   {
     aiString materialName;
@@ -279,7 +298,7 @@ bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString
     subMeshElement.setAttribute("lod", 0); // <- there is currently only LOD 0
     subMeshElement.setAttribute("name", mesh.mesh->mName.C_Str());
     subMeshElement.setAttribute("materialSlot", indexOf(materialIndices, mesh.mesh->mMaterialIndex));
-    subMeshElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(mesh.mesh->mName.C_Str()).c_str()));
+    subMeshElement.appendChild(doc.createTextNode(dataName + ":" + ValidateName(mesh.mesh->mName.C_Str()).c_str()));
 
     subMeshesElement.appendChild(subMeshElement);
 
@@ -294,35 +313,13 @@ bool ExportMeshes(const aiScene *scene, std::vector<Mesh> &meshes, const QString
     writer.AddEntry(ValidateName(vkString(mesh.mesh->mName.C_Str())), "SUBMESH", outputStream.GetSize(), outputStream.GetBuffer());
   }
 
-
-
-
-  IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)dataFileName.toLatin1()), eOM_Write, eTM_Binary);
-  if (!finalOutputFile)
-  {
-    return false;
-  }
-  writer.Output(finalOutputFile);
-  finalOutputFile->Close();
-
-
-
-  QString xml = doc.toString(2);
-  finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
-  if (!finalOutputFile)
-  {
-    return false;
-  }
-  finalOutputFile->Write((const char*)xml.toLatin1(), xml.length());
-  finalOutputFile->Close();
-
-
-  return true;
+  return meshElement;
 }
+
 
 vkVector3f EvalSize(aiMesh *mesh)
 {
-  vkVector3f r;
+  vkVector3f r(0.0f, 0.0f, 0.0f);
   for (size_t i = 0; i < mesh->mNumVertices; ++i)
   {
     aiVector3D &aiv = mesh->mVertices[i];
@@ -335,26 +332,10 @@ vkVector3f EvalSize(aiMesh *mesh)
   return r;
 }
 
-bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, const QString &dataPath, const QString &dataName, const QString &suffix)
+QDomElement CreateShapesElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Shape> &collisions, const QString &dataName)
 {
 
-  QString xAssetFileName = dataPath + "/" + dataName + suffix + ".xasset";
-  QString dataFileName = dataPath + "/" + dataName + suffix + ".data";
-
-  assetmanager::AssetWriter writer;
-
-
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement collisionElement = doc.createElement("collision");
   QDomElement shapesElement = doc.createElement("shapes");
-
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(collisionElement);
-  collisionElement.appendChild(shapesElement);
-
 
 
   for (Shape &collision : collisions)
@@ -369,10 +350,10 @@ bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, cons
     transformElement.appendChild(matrixElement);
 
     const vkMatrix4f &m = collision.matrix;
-    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m00, m.m01, m.m02, m.m03)));
-    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m10, m.m11, m.m12, m.m13)));
-    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m20, m.m21, m.m22, m.m23)));
-    matrixElement.appendChild(doc.createElement("row")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m30, m.m31, m.m32, m.m33)));
+    matrixElement.appendChild(doc.createElement("row0")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m00, m.m01, m.m02, m.m03)));
+    matrixElement.appendChild(doc.createElement("row1")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m10, m.m11, m.m12, m.m13)));
+    matrixElement.appendChild(doc.createElement("row2")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m20, m.m21, m.m22, m.m23)));
+    matrixElement.appendChild(doc.createElement("row3")).appendChild(doc.createTextNode(QString::asprintf("%f, %f, %f, %f", m.m30, m.m31, m.m32, m.m33)));
     
 
     vkVector3f size = EvalSize(collision.mesh);
@@ -403,14 +384,14 @@ bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, cons
     else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLTRI"))
     {
       QDomElement triMeshElement = doc.createElement("triMesh");
-      triMeshElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(name).c_str()));
+      triMeshElement.appendChild(doc.createTextNode(dataName + ":" + ValidateName(name).c_str()));
 
       shapeElement.appendChild(triMeshElement);
     }
     else if (name.length() >= 6 && name.substr(0, 6) == vkString("COLHUL"))
     {
       QDomElement convexHullElement = doc.createElement("convexHull");
-      convexHullElement.appendChild(doc.createTextNode(dataFileName + ":" + ValidateName(name).c_str()));
+      convexHullElement.appendChild(doc.createTextNode(dataName + ":" + ValidateName(name).c_str()));
       shapeElement.appendChild(convexHullElement);
     }
     else
@@ -420,7 +401,85 @@ bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, cons
     shapesElement.appendChild(shapeElement);
   }
 
+  return shapesElement;
+}
 
+
+bool ExportEntity(const aiScene *scene, 
+                  bool meshes, const QString &meshSuffix, std::vector<unsigned> &materialIndices,
+                  bool skeleton, const QString &skeletonSuffix, 
+                  bool collisions, const QString &collisionsSuffix, 
+                  const QString &dataPath, const QString &dataName)
+{
+  QDomDocument doc;
+
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement entityElement = doc.createElement("entity");
+  QDomElement entityStatesElement = doc.createElement("entityStates");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(entityElement);
+  entityElement.appendChild(entityStatesElement);
+
+  entityElement.setAttribute("name", dataName);
+  int nextID = 0;
+  int collisionID = -1;
+  int meshesID = -1;
+  if (collisions)
+  {
+    collisionID = nextID++;
+
+    QDomElement staticColliderStateElement = doc.createElement("entityState");
+    staticColliderStateElement.setAttribute("class", "vkStaticColliderState");
+    staticColliderStateElement.setAttribute("id", collisionID);
+
+    staticColliderStateElement.appendChild(doc.createElement("shape")).appendChild(doc.createTextNode(dataPath + "/" + dataName + collisionsSuffix + ".xasset"));
+    staticColliderStateElement.appendChild(doc.createElement("friction")).appendChild(doc.createTextNode("10.0"));
+    staticColliderStateElement.appendChild(doc.createElement("restitution")).appendChild(doc.createTextNode("0.5"));
+
+    entityStatesElement.appendChild(staticColliderStateElement);
+  }
+
+  if (meshes)
+  {
+    meshesID = nextID++;
+    QDomElement staticMeshStateElement = doc.createElement("entityState");
+    staticMeshStateElement.setAttribute("class", "vkStaticMeshState");
+    staticMeshStateElement.setAttribute("id", meshesID);
+    if (collisionID != -1)
+    {
+      staticMeshStateElement.setAttribute("parentID", collisionID);
+    }
+
+    staticMeshStateElement.appendChild(doc.createElement("mesh")).appendChild(doc.createTextNode(dataPath + "/" + dataName + meshSuffix + ".xasset"));
+
+    QDomElement materialsElement = doc.createElement("materials");
+    staticMeshStateElement.appendChild(materialsElement);
+
+    for (size_t i = 0, in = materialIndices.size(); i < in; ++i)
+    {
+      aiString materialName;
+      scene->mMaterials[materialIndices[i]]->Get(AI_MATKEY_NAME, materialName);
+
+      QDomElement materialElement = doc.createElement("material");
+      materialElement.setAttribute("slot", i);
+      materialElement.appendChild(doc.createTextNode("materials/" + QString(materialName.C_Str()) + ".xasset"));
+      materialsElement.appendChild(materialElement);
+    }
+
+    entityStatesElement.appendChild(staticMeshStateElement);
+  }
+
+
+  QDomElement rootStateElement = doc.createElement("rootState");
+  rootStateElement.setAttribute("id", 0);
+
+  entityElement.appendChild(rootStateElement);
+
+
+  QString xAssetFileName = dataPath + "/" + dataName + ".xasset";
 
   QString xml = doc.toString(2);
   IFile *finalOutputFile = vkVFS::Get()->Open(vkString((const char*)xAssetFileName.toLatin1()), eOM_Write, eTM_Text);
@@ -432,7 +491,6 @@ bool ExportCollisions(const aiScene *scene, std::vector<Shape> &collisions, cons
   finalOutputFile->Close();
   return true;
 }
-
 
 
 vkString ValidateName(const vkString &name)
@@ -650,7 +708,7 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
 
 
 int indent = 0;
-void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene)
+void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene)
 {
   vkMatrix4f parentMatrix;
   aiNode *root = scene->mRootNode;
@@ -670,13 +728,13 @@ void CollectData(std::vector<Mesh> &meshes, Bone &skeleton, std::vector<Shape> &
     }
     else
     {
-      CollectMeshes(meshes, scene, child, parentMatrix);
+      CollectMeshes(meshes, materialIndices, scene, child, parentMatrix);
     }
     indent--;
   }
 }
 
-void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix)
+void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix)
 {
   vkMatrix4f M(node->mTransformation.mData);
   M.Transpose();
@@ -688,11 +746,17 @@ void CollectMeshes(std::vector<Mesh> &meshes, const aiScene *scene, aiNode *node
     m.mesh = mesh;
     m.matrix = M;
     meshes.push_back(m);
+
+
+    if (!contains(materialIndices, mesh->mMaterialIndex))
+    {
+      materialIndices.push_back(mesh->mMaterialIndex);
+    }
   }
   for (unsigned i = 0; i < node->mNumChildren; ++i)
   {
     aiNode *child = node->mChildren[i];
-    CollectMeshes(meshes, scene, child, M);
+    CollectMeshes(meshes, materialIndices, scene, child, M);
   }
 }
 

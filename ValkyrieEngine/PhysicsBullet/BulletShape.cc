@@ -38,6 +38,11 @@ bool vkBulletShape::Initialize(const vkPhysGeometry &geometry)
 {
   memcpy(&m_geometry, &geometry, sizeof(vkPhysGeometry));
 
+  printf("Initialize: \n");
+  printf("   Type:   %d\n", geometry.Type);
+  printf("   Size:   %f %f %f\n", geometry.Dimensions.x, geometry.Dimensions.y, geometry.Dimensions.z);
+  printf("   Radius: %f\n", geometry.Radius);
+  printf("   Height: %f\n", geometry.Height);
   switch (geometry.Type)
   {
   case ePGT_Sphere:
