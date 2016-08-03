@@ -8,7 +8,7 @@
 vkEntityScene::vkEntityScene()
   : vkObject()
 {
-  m_physicsScene = vkEngine::Get()->GetPhysicsSystem()->CreateScene();
+  m_physicsScene = vkEng->CreateScene();
   m_rootEntity = new vkEntity();
   vkSpatialState *rootState = new vkSpatialState();
   m_rootEntity->SetRootState(rootState);

@@ -433,3 +433,18 @@ enum vkCompareMode
   eCM_Never,
   eCM_Always,
 };
+
+
+enum vkRenderDestination
+{
+  eRD_Color0,
+  eRD_Color1,
+  eRD_Color2,
+  eRD_Color3,
+  eRD_Color4,
+  eRD_Color5,
+  eRD_Color6,
+  eRD_Color7,
+  eRD_Depth,
+  eRD_Stencil
+};

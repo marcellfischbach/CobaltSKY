@@ -37,7 +37,7 @@ vkCharacterEntity::vkCharacterEntity()
   , m_rotation(0.0f)
 {
   m_callback = new vkCharacterEntityTransformationCallback(this);
-  m_characterController = vkEngine::Get()->GetPhysicsSystem()->CreateCapsulseCharacterController();
+  m_characterController = vkEng->CreateCapsulseCharacterController();
   m_characterController->Initialize(m_height, m_radius);
   m_characterController->SetTransformationCallback(m_callback);
 

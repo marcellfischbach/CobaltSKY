@@ -103,7 +103,7 @@ const vkClass *vkSamplerAssetXMLLoader::EvalClass(TiXmlElement *element, const v
 
 IObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  ISampler *sampler = vkEngine::Get()->GetRenderer()->CreateSampler();
+  ISampler *sampler = vkEng->CreateSampler();
   if (!sampler)
   {
     return 0;
@@ -237,7 +237,7 @@ IObject *vkTextureAssetXMLLoader::LoadTexture2D(TiXmlElement *element, const vkR
     return 0;
   }
 
-  ITexture2D *texture = vkEngine::Get()->GetRenderer()->CreateTexture2D(image->GetPixelFormat(),
+  ITexture2D *texture = vkEng->CreateTexture2D(image->GetPixelFormat(),
                                                                         image->GetWidth(),
                                                                         image->GetHeight(),
                                                                         image->GetNumberOfLevels () > 1);
@@ -280,7 +280,7 @@ IObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, cons
 
     if (!texture)
     {
-      texture = vkEngine::Get()->GetRenderer()->CreateTexture2DArray(image->GetPixelFormat(),
+      texture = vkEng->CreateTexture2DArray(image->GetPixelFormat(),
                                                                      image->GetWidth(),
                                                                      image->GetHeight(),
                                                                      numImages,

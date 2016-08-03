@@ -285,7 +285,7 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
   }
 
 
-  IGraphics *graphics = vkEngine::Get()->GetRenderer();
+  IGraphics *graphics = vkEng->GetRenderer();
   if (graphics)
   {
     graphics->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph);

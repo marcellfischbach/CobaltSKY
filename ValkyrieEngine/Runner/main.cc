@@ -40,6 +40,7 @@
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/Particle.hh>
 #include <Valkyrie/Graphics/PostProcessing.hh>
+#include <Valkyrie/Graphics/Deferred/DeferredFrameProcessor.hh>
 #include <Valkyrie/Graphics/Scene/CameraNode.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.hh>
 #include <Valkyrie/Graphics/Scene/GroupNode.hh>
@@ -67,7 +68,6 @@ vkPostProcessor *createPostProcessor(IGraphics *graphics);
 void UpdateCamera(vkCamera *cameraNode, vkCharacterEntity *character, const IMouse *mouser, const IKeyboard *keyboard);
 void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard, float tpf);
 
-vkEngine *engine = 0;
 SDLWindow *window = 0;
 vkGraphicsGL4 *graphicsGL4 = 0;
 vkBulletSystem *bulletSystem = 0;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
-  engine = vkEngine::Get();
+  vkEngine engine;
 
   // initialize the window
   window = new SDLWindow();
@@ -111,14 +111,14 @@ int main(int argc, char **argv)
     icon->Release();
   }
 
-  engine->SetWindow(window);
+  vkEng->SetWindow(window);
 
   graphicsGL4 = new vkGraphicsGL4();
-  engine->SetRenderer(graphicsGL4);
+  vkEng->SetRenderer(graphicsGL4);
 
   bulletSystem = new vkBulletSystem();
   bulletSystem->Initialize();
-  engine->SetPhysicsSystem(bulletSystem);
+  vkEng->SetPhysicsSystem(bulletSystem);
 
 
 
@@ -169,7 +169,7 @@ int initialize()
 
   keyboard = window->GetKeyboard();
 
-  fp = graphicsGL4->CreateDeferredFrameProcessor();
+  fp = new vkDeferredFrameProcessor(graphicsGL4);// ->CreateDeferredFrameProcessor();
 
   if (!fp->Initialize() || !fp->Resize(1366, 768))
   {
@@ -798,7 +798,6 @@ vkEntityScene *create_scene(IGraphics *graphics)
   vkStaticMeshState *groundMeshState = vkResourceManager::Get()->GetOrLoad<vkStaticMeshState>(vkResourceLocator("models/ground_plane.xasset"));
 
   vkEntityScene *entityScene = new vkEntityScene();
-  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
 
 
 
@@ -921,12 +920,11 @@ vkEntityScene *create_scene2(IGraphics *graphics)
   float z = (float)rand() / (float)RAND_MAX;
 
 
-  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
-
+  
   vkPhysGeometry boxGeometry;
   boxGeometry.Type = ePGT_Box;
   boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
-  IPhysicsShape *boxShape = physSystem->CreateShape(boxGeometry);
+  IPhysicsShape *boxShape = vkEng->CreateShape(boxGeometry);
 
   vkStaticColliderState *staticState = new vkStaticColliderState();
   staticState->AttachShape(boxShape);

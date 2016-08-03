@@ -98,7 +98,7 @@ void vkStaticMeshState::SetColliderShape(vkPhysicsShapeContainer *shapes)
   }
   if (!m_staticCollider)
   {
-    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider = vkEng->CreateStaticCollider();
     m_staticCollider->SetFriction(m_friction);
     m_staticCollider->SetRestitution(m_restitution);
   }
@@ -118,7 +118,7 @@ void vkStaticMeshState::SetFriction(float friction)
 {
   if (!m_staticCollider)
   {
-    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider = vkEng->CreateStaticCollider();
     m_staticCollider->AttachShape(m_shapes);
     m_staticCollider->SetRestitution(m_restitution);
   }
@@ -132,7 +132,7 @@ void vkStaticMeshState::SetRestitution(float restitution)
 {
   if (!m_staticCollider)
   {
-    m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+    m_staticCollider = vkEng->CreateStaticCollider();
     m_staticCollider->AttachShape(m_shapes);
     m_staticCollider->SetFriction(m_friction);
   }

@@ -29,7 +29,6 @@ public:
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
   virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
   virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
-  virtual IFrameProcessor *CreateDeferredFrameProcessor();
   virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode);
 
   virtual ISGShaderGraphFactory* GetShaderGraphFactory();
@@ -74,6 +73,9 @@ public:
   virtual void SetRenderFadeInOut(float near, float far);
   virtual void SetRenderFadeInOutValue(vkUInt8 value);
 
+  virtual void SetRenderDestination(vkRenderDestination renderDestination);
+  virtual void SetRenderDestinations(vkRenderDestination *renderDestination, vkSize numRenderDestinations);
+
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
   virtual void SetViewport(vkUInt16 width, vkUInt16 height);
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
@@ -89,6 +91,7 @@ public:
   virtual void RenderFullScreenFrame(ITexture2DArray *texture, int layer);
   virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer);
 
+  void AssetGraphicsErrors() const;
 
 private:
   void BindMatrices();

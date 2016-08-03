@@ -141,7 +141,7 @@ vkStaticColliderState::vkStaticColliderState()
   : vkBaseColliderState()
   , m_staticCollider(0)
 {
-  m_staticCollider = vkEngine::Get()->GetPhysicsSystem()->CreateStaticCollider();
+  m_staticCollider = vkEng->CreateStaticCollider();
   SetBaseCollider(m_staticCollider);
 }
 
@@ -198,7 +198,7 @@ vkDynamicColliderState::vkDynamicColliderState()
   , m_dynamicCollider(0)
 {
   m_callback = new vkDynamicColliderStateTransformationCallback(this);
-  m_dynamicCollider = vkEngine::Get()->GetPhysicsSystem()->CreateDynamicCollider();
+  m_dynamicCollider = vkEng->CreateDynamicCollider();
   m_dynamicCollider->SetTransformationCallback(m_callback);
   SetBaseCollider(m_dynamicCollider);
 }

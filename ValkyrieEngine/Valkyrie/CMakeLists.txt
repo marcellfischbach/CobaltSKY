@@ -142,6 +142,27 @@ source_group(
     FILES
     ${SOURCE_GRAPHICS}
     )
+		
+
+set(SOURCE_GRAPHICS_DEFERRED
+    Graphics/Deferred/DefaultCollector.cc
+    Graphics/Deferred/DefaultCollector.hh
+    Graphics/Deferred/DeferredFrameProcessor.cc
+    Graphics/Deferred/DeferredFrameProcessor.hh
+    Graphics/Deferred/GBuffer.cc
+    Graphics/Deferred/GBuffer.hh
+    Graphics/Deferred/LightRenderer.cc
+    Graphics/Deferred/LightRenderer.hh
+    Graphics/Deferred/ParticleRenderer.cc
+    Graphics/Deferred/ParticleRenderer.hh
+)
+
+source_group(
+    "ValkyrieEngine\\Graphics\\Deferred"
+    FILES
+    ${SOURCE_GRAPHICS_DEFERRED}
+    )
+		
 
 set(SOURCE_GRAPHICS_SCENE
     Graphics/Scene/CameraNode.cc
@@ -264,6 +285,7 @@ set(ALL_SOURCES
     ${SOURCE_CORE}
     ${SOURCE_ENTITY}
     ${SOURCE_GRAPHICS}
+    ${SOURCE_GRAPHICS_DEFERRED}
     ${SOURCE_GRAPHICS_SCENE}
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     ${SOURCE_LOADERS}

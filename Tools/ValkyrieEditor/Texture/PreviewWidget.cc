@@ -32,7 +32,7 @@ void PreviewWidget::initializeGL()
   Editor::Get().RequestGraphics();
 
 
-  m_graphics = vkEngine::Get()->GetRenderer();
+  m_graphics = vkEng->GetRenderer();
   m_graphics->ResetDefaults();
 
 

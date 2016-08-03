@@ -19,6 +19,7 @@
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/Deferred/DeferredFrameProcessor.hh>
 #include <GraphicsGL4/RenderTargetGL4.hh>
 #include <Editor.hh>
 #include <qopenglcontext.h>
@@ -79,7 +80,7 @@ void SceneWidget::initializeGL()
   Editor::Get().RequestGraphics();
 
 
-  m_graphics = vkEngine::Get()->GetRenderer();
+  m_graphics = vkEng->GetRenderer();
   m_graphics->ResetDefaults();
 
 
@@ -98,7 +99,7 @@ void SceneWidget::initializeGL()
 
   //
   // create the frameprocessor that will render the scene
-  m_frameProcessor = m_graphics->CreateDeferredFrameProcessor();
+  m_frameProcessor = new vkDeferredFrameProcessor(m_graphics);
   if (!m_frameProcessor->Initialize())
   {
     printf("Unable to initialize frame processor\n");

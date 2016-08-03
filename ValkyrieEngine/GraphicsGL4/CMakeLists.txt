@@ -34,24 +34,6 @@ source_group(
 	)
 
 
-set(SOURCE_DEFERRED
-  Deferred/DefaultCollector.cc
-  Deferred/DefaultCollector.hh
-  Deferred/DeferredFrameProcessor.cc
-  Deferred/DeferredFrameProcessor.hh
-  Deferred/GBuffer.cc
-  Deferred/GBuffer.hh
-  Deferred/LightRenderer.cc
-  Deferred/LightRenderer.hh
-  Deferred/ParticleRendererGL4.cc
-  Deferred/ParticleRendererGL4.hh
-  )
-  
-source_group(
-	"GraphicsGL4\\Deferred"
-	FILES
-	${SOURCE_DEFERRED}
-	)
 
 
 set(SOURCE_SHADERGRAPH
@@ -72,7 +54,6 @@ source_group(
 
 set(ALL_SOURCES
 	${SOURCE}
-  ${SOURCE_DEFERRED}
 	${SOURCE_SHADERGRAPH}
 	)
 

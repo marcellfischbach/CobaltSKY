@@ -71,7 +71,7 @@ void vkHingeJointState::OnAssembled()
   vkDynamicColliderState *colB = GetColliderB();
   IPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
   IPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
-  IPhysicsJoint *joint = vkEngine::Get()->GetPhysicsSystem()->CreateJoint(ePJT_Hinge, colliderA, colliderB);
+  IPhysicsJoint *joint = vkEng->CreateJoint(ePJT_Hinge, colliderA, colliderB);
   m_hingeJoint = vkQueryClass<IPhysicsHingeJoint>(joint);
   if (!m_hingeJoint)
   {

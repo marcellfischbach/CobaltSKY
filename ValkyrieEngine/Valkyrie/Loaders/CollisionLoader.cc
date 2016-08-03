@@ -46,8 +46,6 @@ IObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResource
     return container;
   }
 
-  IPhysicsSystem *phys = vkEngine::Get()->GetPhysicsSystem();
-
 
 
   for (TiXmlElement *shapeElement = shapesElement->FirstChildElement("shape");
@@ -87,7 +85,7 @@ IObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResource
     {
       continue;
     }
-    IPhysicsShape *shape = phys->CreateShape(geometryDesc);
+    IPhysicsShape *shape = vkEng->CreateShape(geometryDesc);
     shape->SetLocalTransform(localTransform);
     container->AddShape(shape);
   }

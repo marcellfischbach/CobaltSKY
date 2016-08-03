@@ -328,8 +328,7 @@ ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
 {
   if (!static_textureArray)
   {
-    IGraphics *graphics = vkEngine::Get()->GetRenderer();
-    if (static_textureArray = graphics->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
+    if (static_textureArray = vkEng->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
     {
       vkPixelFormat format = ePF_RGBA;
       vkUInt32 colors[8 * 8 * 18];
@@ -354,7 +353,7 @@ ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
       create_pattern16(&colors[i++ * 64]);
       static_textureArray->CopyData(0, format, colors);
 
-      ISampler *sampler = graphics->CreateSampler();
+      ISampler *sampler = vkEng->CreateSampler();
       /*
       sampler->SetAddressU(eTAM_Repeat);
       sampler->SetAddressV(eTAM_Repeat);

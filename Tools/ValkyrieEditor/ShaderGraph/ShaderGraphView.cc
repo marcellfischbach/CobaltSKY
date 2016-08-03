@@ -623,7 +623,7 @@ void ShaderGraphWidget::NodesConnected(graph::Node *outNode, int outIdx, graph::
 
 bool ShaderGraphWidget::Compile()
 {
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
+  if (!vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph))
   {
     //    for (auto it : nodes)
     //    {
@@ -673,7 +673,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   if (shaderGraph)
   {
     SyncGraph(m_shaderGraph, shaderGraph);
-    vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph);
+    vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph);
   }
 
 

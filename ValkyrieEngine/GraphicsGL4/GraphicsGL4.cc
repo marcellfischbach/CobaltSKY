@@ -9,7 +9,6 @@
 #include <GraphicsGL4/TextureGL4.hh>
 #include <GraphicsGL4/MappingGL4.hh>
 #include <GraphicsGL4/DefinesGL4.hh>
-#include <GraphicsGL4/Deferred/DeferredFrameProcessor.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Graphics/BinaryGradient.hh>
@@ -206,10 +205,6 @@ ITextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 wi
   return texture;
 }
 
-IFrameProcessor *vkGraphicsGL4::CreateDeferredFrameProcessor()
-{
-  return new vkDeferredFrameProcessor(this);
-}
 
 
 IShader *vkGraphicsGL4::CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode)
@@ -806,6 +801,26 @@ void vkGraphicsGL4::SetRenderFadeInOutValue(vkUInt8 value)
   m_fadeInOutValue = value;
 }
 
+void vkGraphicsGL4::SetRenderDestination(vkRenderDestination renderDestination)
+{
+  glDrawBuffer(renderDestinationMap[renderDestination]);
+}
+
+void vkGraphicsGL4::SetRenderDestinations(vkRenderDestination *renderDestination, vkSize numRenderDestinations)
+{
+  static GLenum destinations[16];
+  if (numRenderDestinations > 16)
+  {
+    numRenderDestinations = 16;
+  }
+  \
+  for (vkSize i = 0; i < numRenderDestinations; ++i)
+  {
+    destinations[i] = renderDestinationMap[renderDestination[i]];
+  }
+  glDrawBuffers(numRenderDestinations, destinations);
+}
+
 void vkGraphicsGL4::SetClearColorValue(const vkVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
@@ -1156,4 +1171,10 @@ void vkGraphicsGL4::InitFullScreenData()
 
   m_fullScreenProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/renderer.xml:SimplePresent"));
   m_fullScreenArrayProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/renderer.xml:ArrayPresent"));
+}
+
+
+void vkGraphicsGL4::AssetGraphicsErrors() const
+{
+  VK_CHECK_GL_ERROR;
 }

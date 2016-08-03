@@ -199,8 +199,6 @@ vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vk
 
 bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  IGraphics *graphics = vkEngine::Get()->GetRenderer();
-
   vkSubMesh *subMesh = new vkSubMesh();
 
   vkUInt32 materialIndex, LOD;
@@ -231,7 +229,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
     unsigned char *buffer = new unsigned char[numVertices * stride];
     file->Read(buffer, numVertices * stride);
 
-    IVertexBuffer *vb = graphics->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
+    IVertexBuffer *vb = vkEng->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
     delete[] buffer;
     if (!vb)
     {
@@ -264,7 +262,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
   }
   unsigned char *buffer = new unsigned char[numIndices * idxSize];
   file->Read(buffer, numIndices * idxSize);
-  IIndexBuffer *ib = graphics->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
+  IIndexBuffer *ib = vkEng->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
   delete[] buffer;
   if (!ib)
   {
@@ -312,7 +310,7 @@ IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
   }
   elements.push_back(vkVertexElement());
 
-  IVertexDeclaration *decl = vkEngine::Get()->GetRenderer()->CreateVertexDeclaration(elements.data());
+  IVertexDeclaration *decl = vkEng->CreateVertexDeclaration(elements.data());
 
   return decl;
 }
@@ -320,8 +318,6 @@ IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
 
 vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
 {
-  IPhysicsSystem *physSystem = vkEngine::Get()->GetPhysicsSystem();
-
   vkPhysicsShapeContainer *container = new vkPhysicsShapeContainer();
   vkUInt32 numShapes;
   file->Read(&numShapes, sizeof(vkUInt32));
@@ -340,7 +336,7 @@ vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion,
         memset(&geom, 0, sizeof(geom));
         geom.Type = type;
         file->Read(&geom.Dimensions, sizeof(vkVector3f));
-        IPhysicsShape *shape = physSystem->CreateShape(geom);
+        IPhysicsShape *shape = vkEng->CreateShape(geom);
         shape->SetLocalTransform(trans);
         container->AddShape(shape);
       }
@@ -535,7 +531,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    IIndexBuffer *indexBuffer = vkEngine::Get()->GetRenderer()->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    IIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
     globalIndexBuffers.push_back(indexBuffer);
     delete[] buffer;
   }
@@ -615,7 +611,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
       stream));
   }
   vertexElements.push_back(vkVertexElement());
-  IVertexDeclaration *vertexDeclaration = vkEngine::Get()->GetRenderer()->CreateVertexDeclaration(vertexElements.data());
+  IVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(vertexElements.data());
   subMesh->SetVertexDeclaration(vertexDeclaration);
   VK_RELEASE(vertexDeclaration);
 
@@ -629,7 +625,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
     inputStream >> vertexBufferSize;
     unsigned char *buffer = new unsigned char[vertexBufferSize];
     inputStream.Read(buffer, vertexBufferSize);
-    IVertexBuffer *vertexBuffer = vkEngine::Get()->GetRenderer()->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
+    IVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
     subMesh->AddVertexBuffer(vertexBuffer);
     VK_RELEASE(vertexBuffer);
     delete[] buffer;
@@ -655,7 +651,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    IIndexBuffer *indexBuffer = vkEngine::Get()->GetRenderer()->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    IIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
     delete[] buffer;
     subMesh->SetIndexBuffer(indexBuffer, count, offset);
   }

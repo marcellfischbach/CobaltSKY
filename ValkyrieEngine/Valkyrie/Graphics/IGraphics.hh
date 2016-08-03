@@ -22,6 +22,13 @@ struct ITextureCube;
 struct vkVertexElement;
 class vkSkeleton;
 
+#ifdef _DEBUG 
+#	define VK_CHECK_GRAPHICS_ERROR(graphics) if (graphics) graphics->AssetGraphicsErrors()
+#else
+#	define VK_CHECK_GRAPHICS_ERROR(graphics)
+#endif
+
+
 VK_INTERFACE()
 struct VKE_API IGraphics : public IObject
 {
@@ -41,7 +48,6 @@ struct VKE_API IGraphics : public IObject
   virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps) = 0;
   virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) = 0;
   virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) = 0;
-  virtual IFrameProcessor *CreateDeferredFrameProcessor() = 0;
   virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) = 0;
   /**
    * @}
@@ -64,7 +70,7 @@ struct VKE_API IGraphics : public IObject
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
   virtual void SetSkeleton(const vkSkeleton *skeleton) = 0;
   virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices) = 0;
-
+  virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices) = 0;
   /**
    * @}
    */
@@ -100,6 +106,9 @@ struct VKE_API IGraphics : public IObject
   virtual void SetRenderFadeInOut(float near, float far) = 0;
   virtual void SetRenderFadeInOutValue(vkUInt8 value) = 0;
 
+  virtual void SetRenderDestination(vkRenderDestination renderDestination) = 0;
+  virtual void SetRenderDestinations(vkRenderDestination *renderDestination, vkSize numRenderDestinations) = 0;
+
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0) = 0;
   virtual void SetViewport(vkUInt16 width, vkUInt16 height) = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;
@@ -113,5 +122,6 @@ struct VKE_API IGraphics : public IObject
    * @}
    */
 
+  virtual void AssetGraphicsErrors() const = 0;
 };
 

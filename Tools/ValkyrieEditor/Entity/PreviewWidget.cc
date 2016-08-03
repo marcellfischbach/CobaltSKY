@@ -124,7 +124,7 @@ vkMaterialInstance *PreviewWidget::CreateDefaultMaterial()
   diffuse->GetInput(2)->SetConst(1.0f);
   material->SetDiffuse(diffuse->GetOutput(0));
 
-  if (!vkEngine::Get()->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(material))
+  if (!vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(material))
   {
     return 0;
   }

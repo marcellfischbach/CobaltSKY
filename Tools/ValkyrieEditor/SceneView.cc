@@ -25,7 +25,7 @@ void SceneView::initializeGL()
   Editor::Get().RequestGraphics();
 
 
-  IGraphics *graphics = vkEngine::Get()->GetRenderer();
+  IGraphics *graphics = vkEng->GetRenderer();
   graphics->ResetDefaults();
 
 }

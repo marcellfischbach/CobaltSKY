@@ -11,9 +11,7 @@
 
 Editor::Editor()
   : QObject()
-  , m_graphics(0)
-  , m_physicsSystem(0)
-  , m_engine(0)
+
 {
   m_titleName = "ValkyrieEditor v1.0";
 }
@@ -25,7 +23,9 @@ bool Editor::Initialize(int argc, char **argv)
 
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
-  m_engine = vkEngine::Get();
+
+  // just keep it haning arround ... will never be destroyed anyway
+  new vkEngine();
 
   InitializeImporters();
   InitializeLoaders();
@@ -43,17 +43,17 @@ bool Editor::Initialize(int argc, char **argv)
 
 void Editor::RequestGraphics()
 {
-  if (m_graphics)
+  if (vkEng->GetRenderer())
   {
     return;
   }
 
-  m_graphics = new vkGraphicsGL4();
-  m_engine->SetRenderer(m_graphics);
+  IGraphics *graphics = new vkGraphicsGL4();
+  vkEng->SetRenderer(graphics);
 
-  m_physicsSystem = new vkBulletSystem();
-  m_physicsSystem->Initialize();
-  m_engine->SetPhysicsSystem(m_physicsSystem);
+  IPhysicsSystem *physicsSystem = new vkBulletSystem();
+  physicsSystem->Initialize();
+  vkEng->SetPhysicsSystem(physicsSystem);
 
 
 }

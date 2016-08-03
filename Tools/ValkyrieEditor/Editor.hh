@@ -40,27 +40,9 @@ private:
   
   EditorWindow *m_editorWindow;
 
-  vkEngine *m_engine;
-  IGraphics *m_graphics;
-  IPhysicsSystem *m_physicsSystem;
-
   QString m_titleName;
 };
 
-VK_FORCEINLINE vkEngine *Editor::GetEngine()
-{
-  return m_engine;
-}
-
-VK_FORCEINLINE IGraphics *Editor::GetGraphics()
-{
-  return m_graphics;
-}
-
-VK_FORCEINLINE IPhysicsSystem *Editor::GetPhysicsSystem()
-{
-  return m_physicsSystem;
-}
 
 
 VK_FORCEINLINE const QString &Editor::GetTitleName () const
