@@ -1,0 +1,167 @@
+<asset>
+  <data>
+    <entityState name="temple" class="vkStaticMeshState">
+      <mesh>
+        <materialSlots>
+          <materialSlot name="TempleDirt" id="0"/>
+        </materialSlots>
+        <globalIndices/>
+        <subMeshes>
+          <subMesh name="Sphere" lod="0" materialSlot="0">models/temple.data:Sphere</subMesh>
+          <subMesh name="Cylinder.010" lod="0" materialSlot="0">models/temple.data:Cylinder_010</subMesh>
+          <subMesh name="Cylinder.009" lod="0" materialSlot="0">models/temple.data:Cylinder_009</subMesh>
+          <subMesh name="Cylinder.008" lod="0" materialSlot="0">models/temple.data:Cylinder_008</subMesh>
+          <subMesh name="Cylinder.007" lod="0" materialSlot="0">models/temple.data:Cylinder_007</subMesh>
+          <subMesh name="Cylinder.006" lod="0" materialSlot="0">models/temple.data:Cylinder_006</subMesh>
+          <subMesh name="Cylinder.005" lod="0" materialSlot="0">models/temple.data:Cylinder_005</subMesh>
+          <subMesh name="Cylinder.004" lod="0" materialSlot="0">models/temple.data:Cylinder_004</subMesh>
+          <subMesh name="Cylinder.003" lod="0" materialSlot="0">models/temple.data:Cylinder_003</subMesh>
+          <subMesh name="Cylinder.002" lod="0" materialSlot="0">models/temple.data:Cylinder_002</subMesh>
+          <subMesh name="Cylinder.001" lod="0" materialSlot="0">models/temple.data:Cylinder_001</subMesh>
+          <subMesh name="Cylinder" lod="0" materialSlot="0">models/temple.data:Cylinder</subMesh>
+        </subMeshes>
+      </mesh>
+      <materials>
+        <material slot="0">materials/TempleDirt.xasset</material>
+      </materials>
+      <collider>
+        <shapes>
+          <shape name="COLTRI_Sphere.001">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>0.000000, 0.000000, 5.173738, 1.000000</row3>
+              </matrix>
+            </transform>
+            <triMesh>models/temple.data:COLTRI_Sphere_001</triMesh>
+          </shape>
+          <shape name="COLCYL_Cylinder.021">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>-0.000000, 0.000002, 0.100000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="0.1" radius="6"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.020">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>0.000001, 0.000001, 0.300000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="0.1" radius="4.8"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.019">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>-4.000000, 0.000000, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.018">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>4.000000, 0.000000, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.017">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>0.000000, -4.000000, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.016">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>-0.000000, 4.000000, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.015">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>-2.828427, 2.828427, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.014">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>2.828427, -2.828427, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.013">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>2.828427, 2.828427, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.012">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>-2.828427, -2.828427, 2.400000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="2" radius="0.25"/>
+          </shape>
+          <shape name="COLCYL_Cylinder.011">
+            <transform>
+              <matrix>
+                <row0>1.000000, 0.000000, 0.000000, 0.000000</row0>
+                <row1>0.000000, 1.000000, 0.000000, 0.000000</row1>
+                <row2>0.000000, 0.000000, 1.000000, 0.000000</row2>
+                <row3>0.000001, 0.000001, 5.000000, 1.000000</row3>
+              </matrix>
+            </transform>
+            <cylinder halfHeight="0.6" radius="4.8"/>
+          </shape>
+        </shapes>
+        <friction>10.0</friction>
+        <restitution>0.5</restitution>
+      </collider>
+    </entityState>
+  </data>
+</asset>

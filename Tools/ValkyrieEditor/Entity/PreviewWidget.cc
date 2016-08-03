@@ -30,6 +30,8 @@ namespace entity
 
 PreviewWidget::PreviewWidget(QWidget *parent)
   : scenewidget::SceneWidget(parent)
+  , m_entity(0)
+  , m_staticMeshState(0)
   , m_material(0)
   , m_materialInstance(0)
   , m_freeCamera(0)

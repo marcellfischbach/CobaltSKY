@@ -133,9 +133,9 @@ void vkCollisionAssetXMLLoader::LoadBox(TiXmlElement *transformElement, vkPhysGe
       transformElement->Attribute("halfZ"))
   {
     geometry.Type = ePGT_Box;
-    geometry.Dimensions.x = atof(transformElement->Attribute("halfX"));
-    geometry.Dimensions.y = atof(transformElement->Attribute("halfY"));
-    geometry.Dimensions.z = atof(transformElement->Attribute("halfZ"));
+    geometry.Dimensions.x = atof(transformElement->Attribute("halfX")) * 2.0f;
+    geometry.Dimensions.y = atof(transformElement->Attribute("halfY")) * 2.0f;
+    geometry.Dimensions.z = atof(transformElement->Attribute("halfZ")) * 2.0f;
   }
 }
 
