@@ -2,11 +2,12 @@
   <data>
     <mesh>
       <materialSlots>
-        <materialSlot name="Material" id="0"/>
+        <materialSlot id="0" name="DefaultMaterial"/>
       </materialSlots>
       <globalIndices/>
       <subMeshes>
-        <subMesh name="Plane" lod="0" materialSlot="0">models/ground_plane.data:Plane</subMesh>
+        <subMesh materialSlot="0" name="COLBOX_Cube.001" lod="0">models/ground_plane.data:COLBOX_Cube_001</subMesh>
+        <subMesh materialSlot="0" name="Plane" lod="0">models/ground_plane.data:Plane</subMesh>
       </subMeshes>
     </mesh>
   </data>

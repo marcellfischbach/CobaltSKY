@@ -7,6 +7,7 @@
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <PhysicsBullet/BulletSystem.hh>
 
+#include <qapplication.h>
 
 Editor::Editor()
   : QObject()
@@ -28,6 +29,7 @@ bool Editor::Initialize(int argc, char **argv)
 
   InitializeImporters();
   InitializeLoaders();
+  //InitializeStyleSheet();
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->resize(1024, 768);
@@ -62,6 +64,28 @@ Editor &Editor::Get()
   return editor;
 }
 
+
+void Editor::InitializeStyleSheet()
+{
+  IFile *qss = vkVFS::Get()->Open("editor/dark.qss", eOM_Read, eTM_Text);
+  if (!qss)
+  {
+    return;
+  }
+
+  vkSize length = qss->GetLength();
+  char *buffer = new char[length + 1];
+  qss->Read(buffer, length);
+  buffer[length] = '\0';
+  qss->Close();
+  qss->Release();
+
+  QString style(buffer);
+  qApp->setStyleSheet(style);
+  delete[] buffer;
+
+
+}
 
 #include <Mesh/MeshImporter.hh>
 #include <Texture/TextureImporter.hh>

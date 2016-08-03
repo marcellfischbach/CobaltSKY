@@ -135,8 +135,8 @@ void vkCollisionAssetXMLLoader::LoadBox(TiXmlElement *transformElement, vkPhysGe
   {
     geometry.Type = ePGT_Box;
     geometry.Dimensions.x = atof(transformElement->Attribute("halfX"));
-    geometry.Dimensions.y = atof(transformElement->Attribute("halfX"));
-    geometry.Dimensions.z = atof(transformElement->Attribute("halfX"));
+    geometry.Dimensions.y = atof(transformElement->Attribute("halfY"));
+    geometry.Dimensions.z = atof(transformElement->Attribute("halfZ"));
   }
 }
 
@@ -146,7 +146,7 @@ void vkCollisionAssetXMLLoader::LoadCylinder(TiXmlElement *transformElement, vkP
   if (transformElement->Attribute("radius") &&
       transformElement->Attribute("halfHeight"))
   {
-    geometry.Type = ePGT_CapsuleX;
+    geometry.Type = ePGT_CapsuleZ;
     geometry.Radius = atof(transformElement->Attribute("radius"));
     geometry.Height = atof(transformElement->Attribute("halfHeight")) * 2.0f;
   }

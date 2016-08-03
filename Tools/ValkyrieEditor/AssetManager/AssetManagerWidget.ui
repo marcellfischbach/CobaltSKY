@@ -118,12 +118,24 @@
        </size>
       </property>
       <property name="textElideMode">
-       <enum>Qt::ElideRight</enum>
+       <enum>Qt::ElideNone</enum>
+      </property>
+      <property name="movement">
+       <enum>QListView::Snap</enum>
+      </property>
+      <property name="gridSize">
+       <size>
+        <width>128</width>
+        <height>96</height>
+       </size>
       </property>
       <property name="viewMode">
        <enum>QListView::IconMode</enum>
       </property>
       <property name="uniformItemSizes">
+       <bool>false</bool>
+      </property>
+      <property name="selectionRectVisible">
        <bool>true</bool>
       </property>
      </widget>

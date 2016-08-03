@@ -454,7 +454,6 @@ vkString ValidateName(const vkString &name)
 
 void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh)
 {
-  normalMatrix.Debug("NormalMatrix");
   outputStream
     << (vkUInt32)VK_VERSION(1, 0, 0)
     << (vkUInt32)ePT_Triangles
@@ -700,7 +699,6 @@ void CollectCollisions(std::vector<Shape> &collisions, const aiScene *scene, aiN
 {
   vkMatrix4f M(node->mTransformation.mData);
   M.Transpose();
-  M.Debug();
   M = vkMatrix4f::Mult(parentMatrix, M, M);
   for (unsigned i = 0; i < node->mNumMeshes; ++i)
   {

@@ -67,6 +67,19 @@ void PreviewWidget::SetMesh(vkMesh *mesh)
   scene->AddEntity(m_entity);
 }
 
+void PreviewWidget::SetStaticMeshState(vkStaticMeshState *staticMeshState)
+{
+  VK_SET(m_staticMeshState, staticMeshState);
+
+  m_entity = new vkEntity();
+  m_entity->SetRootState(m_staticMeshState);
+  m_entity->AddState(m_staticMeshState);
+
+  vkEntityScene *scene = GetScene();
+  scene->AddEntity(m_entity);
+
+}
+
 void PreviewWidget::initializeGL()
 {
   scenewidget::SceneWidget::initializeGL();

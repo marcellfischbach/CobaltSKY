@@ -4,6 +4,7 @@
 #include <AssetManager/Utils.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Entity/MeshState.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <qlayout.h>
 
@@ -38,7 +39,15 @@ void EntityWidget::Set(const vkResourceLocator &resourceLocator)
   if (mesh)
   {
     m_previewWidget->SetMesh(mesh);
+    return;
   }
+  vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(object);
+  if (staticMeshState)
+  {
+    m_previewWidget->SetStaticMeshState(staticMeshState);
+    return;
+  }
+  
 }
 
 
@@ -88,7 +97,7 @@ EntityViewFactory::~EntityViewFactory()
 
 bool EntityViewFactory::CanEdit(const vkResourceLocator &resourceLocator, IObject *obj)
 {
-  if (vkQueryClass<vkMesh>(obj))
+  if (vkQueryClass<vkMesh>(obj) || vkQueryClass<vkStaticMeshState>(obj))
   {
     return true;
   }

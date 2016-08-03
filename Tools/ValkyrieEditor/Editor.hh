@@ -32,6 +32,7 @@ public:
 protected:
   void InitializeImporters();
   void InitializeLoaders();
+  void InitializeStyleSheet();
 
 private:
   Editor();

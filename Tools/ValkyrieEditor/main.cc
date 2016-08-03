@@ -5,6 +5,7 @@
 #include <master.refl.cc>
 #include <qsurfaceformat.h>
 
+
 int main (int argc, char **argv)
 {
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
@@ -25,6 +26,7 @@ int main (int argc, char **argv)
   //format.setOption(QSurfaceFormat::DeprecatedFunctions, true);
 
   //QSurfaceFormat::setDefaultFormat(format);
+
 
 
   Editor &editor = Editor::Get();

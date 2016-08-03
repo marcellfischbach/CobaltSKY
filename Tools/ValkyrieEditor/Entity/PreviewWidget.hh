@@ -25,6 +25,7 @@ public:
   virtual QSize sizeHint() const;
 
   void SetMesh(vkMesh *mesh);
+  void SetStaticMeshState(vkStaticMeshState *staticMeshState);
 protected:
   void initializeGL();
 

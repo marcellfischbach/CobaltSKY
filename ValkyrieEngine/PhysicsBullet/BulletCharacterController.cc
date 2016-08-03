@@ -36,7 +36,7 @@ void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
 
   m_characterController = new btKinematicCharacterController(m_ghostObject, m_capsuleShape, height / 8.0f, 2 /* Z-Axis up */);
   m_characterController->setGravity(9.81f);
-  m_characterController->setJumpSpeed(16.0f);
+  m_characterController->setJumpSpeed(7.0f);
 //  m_characterController->setGravity(0.01);
 
 }
