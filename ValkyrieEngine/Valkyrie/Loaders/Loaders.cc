@@ -21,18 +21,12 @@ vkLoaders::vkLoaders()
 void vkLoaders::Register(vkResourceManager *mgr)
 {
 
-  //
-  // Legacy loaders
-
-  mgr->RegisterLoader(new vkEntityMasterLoader());
-  mgr->RegisterLoader(new vkEntityStateMasterLoader());
-  //mgr->RegisterLoader(new vkMaterialLoader());
-  //mgr->RegisterLoader(new vkMaterialInstanceLoader());
-  mgr->RegisterLoader(new vkStaticMeshLoader());
-
 
   //
   // The new loaders go here
+  mgr->RegisterLoader(new vkEntityMasterXMLLoader());
+  mgr->RegisterLoader(new vkEntityStateMasterXMLLoader());
+
   mgr->RegisterLoader(new vkShaderGraphAssetXMLLoader());
   mgr->RegisterLoader(new vkMaterialInstanceAssetXMLLoader());
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
@@ -47,13 +41,13 @@ void vkLoaders::Register(vkResourceManager *mgr)
 
 
   vkEntityLoaderRegistry *reg = vkEntityLoaderRegistry::Get();
-  reg->RegisterLoader(new vkEntityLoader());
-  reg->RegisterLoader(new vkEntityStateLoader());
-  reg->RegisterLoader(new vkSpatialStateLoader());
-  reg->RegisterLoader(new vkRenderStateLoader());
-  reg->RegisterLoader(new vkStaticMeshStateLoader());
-  reg->RegisterLoader(new vkStaticColliderStateLoader());
-  reg->RegisterLoader(new vkDynamicColliderStateLoader());
-  reg->RegisterLoader(new vkJointStateLoader());
-  reg->RegisterLoader(new vkHingeJointStateLoader());
+  reg->RegisterLoader(new vkEntityXMLLoader());
+  reg->RegisterLoader(new vkEntityStateXMLLoader());
+  reg->RegisterLoader(new vkSpatialStateXMLLoader());
+  reg->RegisterLoader(new vkRenderStateXMLLoader());
+  reg->RegisterLoader(new vkStaticMeshStateXMLLoader());
+  reg->RegisterLoader(new vkStaticColliderStateXMLLoader());
+  reg->RegisterLoader(new vkDynamicColliderStateXMLLoader());
+  reg->RegisterLoader(new vkJointStateXMLLoader());
+  reg->RegisterLoader(new vkHingeJointStateXMLLoader());
 }

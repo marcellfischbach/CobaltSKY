@@ -24,6 +24,10 @@ vkEntityScene::~vkEntityScene()
 
 void vkEntityScene::AddEntity(vkEntity *entity, vkEntity *parent)
 {
+  if (!entity)
+  {
+    return;
+  }
   entity->Assemble();
   if (!parent)
   {
