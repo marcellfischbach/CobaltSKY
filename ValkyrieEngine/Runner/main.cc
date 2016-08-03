@@ -794,8 +794,8 @@ vkMaterial *create_green_shader(IGraphics *graphics)
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
-  vkStaticMeshState *templeMeshState = vkResourceManager::Get()->GetOrLoad<vkStaticMeshState>(vkResourceLocator("models/temple.xasset"));
-  vkStaticMeshState *groundMeshState = vkResourceManager::Get()->GetOrLoad<vkStaticMeshState>(vkResourceLocator("models/ground_plane.xasset"));
+  vkStaticMeshState *templeMeshState = vkEng->Get<vkStaticMeshState>("models/temple.xasset");
+  vkStaticMeshState *groundMeshState = vkEng->Get<vkStaticMeshState>("models/ground_plane.xasset");
 
   vkEntityScene *entityScene = new vkEntityScene();
 

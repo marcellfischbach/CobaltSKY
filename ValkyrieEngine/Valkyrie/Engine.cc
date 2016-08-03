@@ -36,21 +36,6 @@ void vkEngine::SetPhysicsSystem(IPhysicsSystem *physicsSystem)
 
 
 
-
-
-IObject *vkEngine::Get(const vkResourceLocator &locator, bool forceInstance) const
-{
-  if (forceInstance)
-  {
-    return vkResourceManager::Get()->Load(locator, 0);
-  }
-  else
-  {
-    return vkResourceManager::Get()->GetOrLoad(locator, 0);
-  }
-}
-
-
 IIndexBuffer *vkEngine::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) 
 {
   if (m_renderer)

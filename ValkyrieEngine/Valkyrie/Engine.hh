@@ -41,22 +41,16 @@ public:
     return Get<T>(vkResourceLocator(resourceName), forceInstance);
   }
 
-  
-  IObject *Get(const vkResourceLocator &locator, bool forceInstance = false) const;
+
+  inline IObject *Get(const vkResourceLocator &locator, bool forceInstance = false) const
+  {
+    return vkResourceManager::Get()->Aquire(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
+  }
+
   template<typename T>
   T *Get(const vkResourceLocator &locator, bool forceInstance = false) const
   {
-    IObject *object = Get(locator, forceInstance);
-    if (object)
-    {
-      T* t_instance = vkQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
-      return t_instance;
-    }
-    return 0;
+    return vkResourceManager::Get()->Aquire<T>(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
   }
 
   virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
