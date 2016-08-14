@@ -14,6 +14,18 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="sizeConstraint">
@@ -26,12 +38,12 @@
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
-         <normaloff>:/icons/Resources/Save48.png</normaloff>:/icons/Resources/Save48.png</iconset>
+         <normaloff>:/icons/Resources/Save24.png</normaloff>:/icons/Resources/Save24.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>24</width>
+         <height>24</height>
         </size>
        </property>
        <property name="toolButtonStyle">
@@ -49,12 +61,12 @@
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
-         <normaloff>:/icons/Resources/Compile48.png</normaloff>:/icons/Resources/Compile48.png</iconset>
+         <normaloff>:/icons/Resources/Compile24.png</normaloff>:/icons/Resources/Compile24.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>48</width>
-         <height>48</height>
+         <width>24</width>
+         <height>24</height>
         </size>
        </property>
        <property name="toolButtonStyle">
@@ -134,6 +146,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
@@ -176,12 +191,12 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>445</width>
-              <height>240</height>
+              <width>451</width>
+              <height>268</height>
              </rect>
             </property>
             <property name="autoFillBackground">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </widget>

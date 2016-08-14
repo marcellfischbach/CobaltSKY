@@ -1,7 +1,7 @@
 
 #include <MaterialInstance/MaterialInstanceView.hh>
 #include <AssetManager/Utils.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Engine.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <qdom.h>
 
@@ -22,7 +22,7 @@ MaterialInstanceWidget::~MaterialInstanceWidget()
 void MaterialInstanceWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_locator = resourceLocator;
-  m_materialInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(resourceLocator);
+  m_materialInstance = vkEng->Get<vkMaterialInstance>(resourceLocator);
 
   m_gui.previewWidget->SetMaterialInstance(m_materialInstance);
   m_gui.parameterEditor->SetMaterialInstance(m_materialInstance);

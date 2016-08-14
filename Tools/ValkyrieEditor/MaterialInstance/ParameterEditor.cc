@@ -15,7 +15,6 @@ ParameterEditor::ParameterEditor(QWidget *parent)
   , m_materialInstance(0)
   , m_updateGuard(false)
 {
-
   InitGUI();
 }
 
@@ -24,6 +23,7 @@ void ParameterEditor::InitGUI()
 {
 
   m_layout = new QGridLayout(this);
+  m_layout->setContentsMargins(0, 0, 0, 0);
 
   m_shaderSelectorLabel = new QLabel(tr ("Shader"), this);
   QSizePolicy poly (QSizePolicy::Maximum, QSizePolicy::Fixed);
@@ -46,6 +46,8 @@ void ParameterEditor::InitGUI()
   m_layout->addWidget(line, 1, 0, 1, 3);
 
   m_bottomSpacer = new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+  setContentsMargins(0, 0, 0, 0);
 
   ShaderChanged();
 

@@ -170,7 +170,7 @@ void PreviewWidget::SetAlpha(bool alpha)
 
 void PreviewWidget::paintGL()
 {
-  glClearColor(0, 0, 0, 1);
+  glClearColor(0.8, 0.8, 0.8, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   if (m_texture)
@@ -227,7 +227,7 @@ void PreviewWidget::paintGL()
       }
       if (m_attrInsetColor)
       {
-        m_attrInsetColor->Set(vkVector2f(-1.0 + 20.0f / (float)width() * 2.0f, 1.0f - 20.0f / (float)height() * 2.0f));
+        m_attrInsetColor->Set(vkVector2f(-1.0 + 3.0f / (float)width() * 2.0f, 1.0f - 3.0f / (float)height() * 2.0f));
       }
 
     }

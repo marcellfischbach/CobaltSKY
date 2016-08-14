@@ -14,6 +14,7 @@ EditorWindow::EditorWindow()
 
   m_mainTabWidget = new QTabWidget();
   m_mainTabWidget->setTabsClosable(true);
+  m_mainTabWidget->setContentsMargins(0, 0, 0, 0);
   setCentralWidget(m_mainTabWidget);
   setWindowIcon(QIcon(":/icons/Resources/Val64.png"));
 

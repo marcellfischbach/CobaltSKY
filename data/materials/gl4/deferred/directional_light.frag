@@ -44,12 +44,13 @@ void main ()
 	vec3 normal = texture(vk_NormalLightMode, texCoord).xyz * 2.0 - 1.0;
 	vec3 diffuse = texture(vk_DiffuseRoughness, texCoord).xyz;
 
-	
-	float lamb = clamp(dot (-vk_LightDirection, normal), 0.0, 1.0);
-	
+	float directToIndirect = 0.5;
+	float lamb = dot (-vk_LightDirection, normal);
+	float directLamb = clamp(lamb, 0.0, 1.0) * directToIndirect;
+	float indirectLamb = ((lamb + 1.0) / 2.0) * (1.0 - directToIndirect);
 	
 	
 	float shadow = calculate_shadow (world4, cam.xyz);
 	
-	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * vk_LightEnergy * lamb * shadow , 1.0);
+	vk_FragColor = vec4 (diffuse * vk_LightColor.rgb * vk_LightEnergy * (directLamb * shadow + indirectLamb) , 1.0);
 }
