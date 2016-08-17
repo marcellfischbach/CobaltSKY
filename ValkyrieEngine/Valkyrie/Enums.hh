@@ -328,7 +328,11 @@ enum vkRenderPass
   //eRP_ShadowGeneric,
   eRP_ShadowPSSM,
   eRP_ShadowCube,
-  eRP_Forward,
+  eRP_ForwardUnlit,
+  eRP_Forward1Light,
+  eRP_Forward2Light,
+  eRP_Forward3Light,
+  eRP_Forward4Light,
   eRP_COUNT,
 };
 
@@ -338,6 +342,8 @@ enum vkRenderQueue
   eRQ_Particles,
   eRQ_Forward,
   eRQ_ForwardTransparent,
+  eRQ_Unshaded,
+  eRQ_COUNT,
 };
 
 enum vkShadingMode

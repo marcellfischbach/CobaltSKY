@@ -23,14 +23,15 @@
 vkDeferredFrameProcessor::vkDeferredFrameProcessor(IGraphics *renderer)
   : IFrameProcessor()
   , m_renderer(renderer)
-  , m_renderStatesDeferred(64, 16)
-  , m_renderStatesForward(64, 16)
-  , m_renderStatesForwardTransprent(64, 16)
   , m_gbuffer(0)
   , m_postProcessor(0)
 {
   VK_CLASS_GEN_CONSTR;
 
+  for (unsigned i = 0; i < eRQ_COUNT; ++i)
+  {
+    m_renderStates[i].Initialize(64, 16);
+  }
   m_lightRenderers[eLT_DirectionalLight] = new vkDirectionalLightRenderer(renderer);
   m_lightRenderers[eLT_PointLight] = new vkPointLightRenderer(renderer);
 
@@ -57,14 +58,14 @@ bool vkDeferredFrameProcessor::Initialize()
 
   vkResourceManager *mgr = vkResourceManager::Get();
 
-  m_simplePresentShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "SimplePresent"));
+  m_simplePresentShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/SimplePresent.xasset"));
   if (!m_simplePresentShader)
   {
     return false;
   }
   m_simplePresentShader->AddRef();
 
-  m_directionLightShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
+  m_directionLightShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/DirectionalLight.xasset"));
   if (!m_directionLightShader)
   {
     return false;
@@ -146,9 +147,9 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   m_renderer->Clear();
   m_renderer->SetBlendEnabled(false);
 
-  for (vkSize i = 0; i < m_renderStatesDeferred.length; ++i)
+  for (vkSize i = 0; i < m_renderStates[eRQ_Deferred].length; ++i)
   {
-    vkRenderState *renderState = m_renderStatesDeferred[i];
+    vkRenderState *renderState = m_renderStates[eRQ_Deferred][i];
     if (renderState)
     {
       renderState->Render(m_renderer, eRP_GBuffer);
@@ -158,20 +159,17 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
 
 IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
 {
-  m_renderStatesDeferred.Clear();
-  m_renderStatesForward.Clear();
-  m_renderStatesForwardTransprent.Clear();
-  m_renderStatesParticles.Clear();
+  for (unsigned i = 0; i < eRQ_COUNT; i++)
+  {
+    m_renderStates[i].Clear();
+  }
   m_lightStates.Clear();
 
   vkScanConfig config;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
   config.MainCameraPosition = camera->GetEye();
-  vkDefaultCollector collector(&m_renderStatesDeferred,
-                               &m_renderStatesForward,
-                               &m_renderStatesForwardTransprent,
-                               &m_renderStatesParticles,
+  vkDefaultCollector collector(m_renderStates,
                                &m_lightStates);
   vkClipper *clipper = camera->GetClipper();
   if (root)
@@ -223,9 +221,9 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   m_renderer->SetDepthMask(true);
   m_renderer->SetDepthTest(true);
   m_renderer->SetDepthFunc(eCM_LessOrEqual);
-  for (vkSize i=0; i<m_renderStatesForward.length; ++i)
+  for (vkSize i=0; i<m_renderStates[eRQ_Forward].length; ++i)
   {
-    vkRenderState *renderState = m_renderStatesForward[i];
+    vkRenderState *renderState = m_renderStates[eRQ_Forward][i];
     if (!renderState)
     {
       continue;
@@ -235,7 +233,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
 
   }
 
-  m_particleRenderer->Render(m_renderer, m_renderStatesParticles);
+  m_particleRenderer->Render(m_renderer, m_renderStates[eRQ_Particles]);
 
 
 #if 0
@@ -280,5 +278,5 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
 
 void vkDeferredFrameProcessor::RenderForward(vkRenderState *renderState)
 {
-  renderState->Render(m_renderer, eRP_Forward);
+  renderState->Render(m_renderer, eRP_ForwardUnlit);
 }

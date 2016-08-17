@@ -1,0 +1,13 @@
+<asset>
+	<data>
+		<program name="PointLight">
+			<techniques>
+				<technique name="Default">
+					<shader>${shaders}/deferred/point_light.vert</shader>
+					<shader>${shaders}/deferred/point_light.frag</shader>
+					<shader>${shaders}/deferred/point_light_no_shadow.frag</shader>
+				</technique>
+			</techniques>
+		</program>
+	</data>
+</asset>

@@ -12,7 +12,7 @@ class vkMaterial;
 class vkMaterialInstance;
 class vkMesh;
 class vkStaticMeshState;
-namespace entity
+namespace staticmesh
 {
 
 
@@ -24,15 +24,14 @@ public:
 
   virtual QSize sizeHint() const;
 
-  void SetMesh(vkMesh *mesh);
   void SetStaticMeshState(vkStaticMeshState *staticMeshState);
 protected:
   void initializeGL();
 
 private:
   void CreateScene();
-  vkMaterialInstance *CreateDefaultMaterial();
 
+  bool InitCollisionStaticMesh();
 
 private:
   scenewidget::FreeCamera *m_freeCamera;
@@ -40,9 +39,9 @@ private:
   vkEntity *m_entity;
   vkStaticMeshState *m_staticMeshState;
 
+  vkEntity *m_collisionEntity;
+  vkStaticMeshState *m_collisionStaticMesh;
 
-  vkMaterial *m_material;
-  vkMaterialInstance *m_materialInstance;
 };
 
 }

@@ -114,10 +114,10 @@ vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
   , m_colorBufferBlur(0)
   , m_depthBuffer(0)
 {
-  InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLight"));
+  InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/DirectionalLight.xasset"));
   m_attrLightDirectionNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightDirection"));
 
-  InitializeLightProgram(&m_programPSSM, vkResourceLocator("${shaders}/deferred/deferred.xml", "DirectionalLightPSSM"));
+  InitializeLightProgram(&m_programPSSM, vkResourceLocator("${shaders}/deferred/DirectionalLightPSSM.xasset"));
   m_attrLightDirectionPSSM = m_programPSSM.program->GetAttribute(vkShaderAttributeID("LightDirection"));
   m_attrDisancesPSSM = m_programPSSM.program->GetAttribute(vkShaderAttributeID("Distances"));
   m_attrShadowMatsProjView = m_programPSSM.program->GetAttribute(vkShaderAttributeID("ShadowMatsProjView"));
@@ -286,23 +286,27 @@ void vkDirectionalLightRenderer::UpdateProjectionMatrices()
   float min = FLT_MAX;
   float max = -FLT_MAX;
   const vkMatrix4f &view = m_shadowCamAll;
-  for (vkSize i = 0; i < m_renderStates.length; ++i)
+  for (vkSize i = 0; i < eRQ_COUNT; ++i)
   {
-    vkRenderState *renderState = m_renderStates[i];
-    if (renderState)
+    vkCollection<vkRenderState*> &queue = m_renderStates[i];
+    for (vkSize j = 0; j < queue.length; ++j)
     {
-      const vkBoundingBox &bbox = renderState->GetBoundingBox();
-      for (unsigned i = 0; i < 8; ++i)
+      vkRenderState *renderState = queue[j];
+      if (renderState)
       {
-        vkVector3f p;
-        vkMatrix4f::Transform(view, bbox.GetPoints()[i], p);
-        if (p.y < min)
+        const vkBoundingBox &bbox = renderState->GetBoundingBox();
+        for (unsigned k = 0; k < 8; ++k)
         {
-          min = p.y;
-        }
-        if (p.y > max)
-        {
-          max = p.y;
+          vkVector3f p;
+          vkMatrix4f::Transform(view, bbox.GetPoints()[k], p);
+          if (p.y < min)
+          {
+            min = p.y;
+          }
+          if (p.y > max)
+          {
+            max = p.y;
+          }
         }
       }
     }
@@ -361,8 +365,11 @@ void vkDirectionalLightRenderer::RenderShadow(vkEntity *root, vkCamera *camera, 
   config.ScanNonShadowCasters = false;
   config.MainCameraPosition = camera->GetEye();
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0, 0);
-  m_renderStates.Clear();
+  vkDefaultCollector collector(m_renderStates, 0);
+  for (vkSize i = 0; i < eRQ_COUNT; ++i)
+  {
+    m_renderStates[i].Clear();
+  }
 
   vkClipper *clipper = CreateClipper();
   root->Scan(clipper, m_renderer, &collector, config);
@@ -385,12 +392,16 @@ void vkDirectionalLightRenderer::RenderShadow(vkEntity *root, vkCamera *camera, 
   m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);
   m_renderer->SetBlendEnabled(false);
 
-  for (vkSize i = 0; i < m_renderStates.length; ++i)
+  for (vkSize i = 0; i < eRQ_COUNT; ++i)
   {
-    vkRenderState *renderState = m_renderStates[i];
-    if (renderState)
+    vkCollection<vkRenderState*> &queue = m_renderStates[i];
+    for (vkSize j = 0; j < queue.length; ++j)
     {
-      renderState->Render(m_renderer, eRP_ShadowPSSM);
+      vkRenderState *renderState = queue[j];
+      if (renderState)
+      {
+        renderState->Render(m_renderer, eRP_ShadowPSSM);
+      }
     }
   }
   m_renderer->SetColorMask(true, true, true, true);
@@ -479,11 +490,11 @@ void vkDirectionalLightRenderer::CalcMatrix(const vkVector3f &dir, vkSize numPoi
 vkPointLightRenderer::vkPointLightRenderer(IGraphics *renderer)
   : vkLightRenderer(renderer)
 {
-  InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "PointLight"));
+  InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/PointLight.xasset"));
   m_attrLightPositionNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightPosition"));
   m_attrLightRangeNoShadow = m_programNoShadow.program->GetAttribute(vkShaderAttributeID("LightRadius"));
 
-  InitializeLightProgram(&m_programCubeShadow, vkResourceLocator("${shaders}/deferred/deferred.xml", "PointLightCubeShadow"));
+  InitializeLightProgram(&m_programCubeShadow, vkResourceLocator("${shaders}/deferred/PointLightCubeShadow.xasset"));
   m_attrLightPositionCubeShadow = m_programCubeShadow.program->GetAttribute(vkShaderAttributeID("LightPosition"));
   m_attrLightRangeCubeShadow = m_programCubeShadow.program->GetAttribute(vkShaderAttributeID("LightRadius"));
   m_attrShadowMats = m_programCubeShadow.program->GetAttribute(vkShaderAttributeID("ShadowMats"));
@@ -618,8 +629,11 @@ void vkPointLightRenderer::RenderShadow(vkEntity *root, const vkPointLight *ligh
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
-  vkDefaultCollector collector(&m_renderStates, &m_renderStates, &m_renderStates, 0, 0);
-  m_renderStates.Clear();
+  vkDefaultCollector collector(m_renderStates, 0);
+  for (vkSize i = 0; i < eRQ_COUNT; ++i)
+  {
+    m_renderStates[i].Clear();
+  }
   root->Scan(0, m_renderer, &collector, config);
 
   // setup the rendering 
@@ -639,12 +653,16 @@ void vkPointLightRenderer::RenderShadow(vkEntity *root, const vkPointLight *ligh
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
-  for (vkSize i = 0; i < m_renderStates.length; ++i)
+  for (vkSize i = 0; i < eRQ_COUNT; ++i)
   {
-    vkRenderState *renderState = m_renderStates[i];
-    if (renderState)
+    vkCollection<vkRenderState*> &queue = m_renderStates[i];
+    for (vkSize j = 0; j < queue.length; ++j)
     {
-      renderState->Render(m_renderer, eRP_ShadowCube);
+      vkRenderState *renderState = queue[j];
+      if (renderState)
+      {
+        renderState->Render(m_renderer, eRP_ShadowCube);
+      }
     }
   }
   m_renderer->SetColorMask(true, true, true, true);

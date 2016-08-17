@@ -36,10 +36,7 @@ private:
   void RenderForward (vkRenderState *renderState);
 
 private:
-  vkCollection<vkRenderState*> m_renderStatesDeferred;
-  vkCollection<vkRenderState*> m_renderStatesForward;
-  vkCollection<vkRenderState*> m_renderStatesForwardTransprent;
-  vkCollection<vkRenderState*> m_renderStatesParticles;
+  vkCollection<vkRenderState*> m_renderStates[eRQ_COUNT];
   vkCollection<vkLightState*> m_lightStates;
   IGraphics *m_renderer;
 

@@ -1,0 +1,13 @@
+<asset>
+	<data>
+		<program name="DirectionalLight">
+			<techniques>
+				<technique name="Default">
+					<shader>${shaders}/deferred/directional_light.vert</shader>
+					<shader>${shaders}/deferred/directional_light.frag</shader>
+					<shader>${shaders}/deferred/directional_light_no_shadow.frag</shader>
+				</technique>
+			</techniques>
+		</program>
+	</data>
+</asset>

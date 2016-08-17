@@ -28,6 +28,7 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkEntityStateMasterXMLLoader());
 
   mgr->RegisterLoader(new vkShaderGraphAssetXMLLoader());
+  mgr->RegisterLoader(new vkMaterialAssetXMLLoader());
   mgr->RegisterLoader(new vkMaterialInstanceAssetXMLLoader());
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
   mgr->RegisterLoader(new vkTextureAssetXMLLoader());

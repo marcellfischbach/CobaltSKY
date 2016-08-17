@@ -254,13 +254,12 @@ void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numberOfMat
 
       if (nextMaterial != activeInstance)
       {
-        activeInstance = nextMaterial;
-        if (!activeInstance->Bind(renderer, pass))
+        if (!nextMaterial->Bind(renderer, pass))
         {
           continue;
         }
+        activeInstance = nextMaterial;
       }
-
       data.m_mesh->Render(renderer);
     }
   }

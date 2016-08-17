@@ -111,7 +111,7 @@ bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator 
 {
   vkString tagName(element->Value());
 
-  return tagName == vkString("program") || tagName == vkString("programs");
+  return tagName == vkString("program");
 }
 
 
@@ -123,15 +123,14 @@ const vkClass *vkProgramGL4Loader::EvalClass(TiXmlElement *element, const vkReso
 
 IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  VK_CHECK_GL_ERROR;
-  TiXmlElement *programElement = FindElement(element, "program", locator.GetResourceName());
-  if (!programElement)
+  if (vkString(element->Value()) != vkString("program"))
   {
     return 0;
   }
-
-  TiXmlElement *technique = FindTechnique(programElement);
-  if (!technique)
+  VK_CHECK_GL_ERROR;
+  
+  TiXmlElement *techniqueElement = FindTechnique(element);
+  if (!techniqueElement)
   {
     return 0;
   }
@@ -139,9 +138,9 @@ IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
   vkResourceManager *resourceManager = vkResourceManager::Get();
 
   vkProgramGL4 *program = new vkProgramGL4();
-  for (TiXmlElement *shaderElement = technique->FirstChildElement("shader");
-  shaderElement;
-    shaderElement = shaderElement->NextSiblingElement("shader"))
+  for (TiXmlElement *shaderElement = techniqueElement->FirstChildElement("shader");
+       shaderElement;
+       shaderElement = shaderElement->NextSiblingElement("shader"))
   {
     vkResourceLocator locator(vkString(shaderElement->GetText()));
     vkShaderGL4 *shader = resourceManager->GetOrLoad<vkShaderGL4>(locator);
@@ -179,8 +178,8 @@ TiXmlElement *vkProgramGL4Loader::FindTechnique(TiXmlElement *element) const
   else if (elementName == vkString("techniques"))
   {
     for (TiXmlElement *techniqueElement = element->FirstChildElement("technique");
-    techniqueElement;
-      techniqueElement = techniqueElement->NextSiblingElement("technique"))
+         techniqueElement;
+         techniqueElement = techniqueElement->NextSiblingElement("technique"))
     {
       TiXmlElement *technique = FindTechnique(techniqueElement);
       if (technique)

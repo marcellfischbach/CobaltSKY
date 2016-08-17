@@ -26,7 +26,7 @@ void vkParticleRenderer::Render(IGraphics *renderer, vkCollection<vkRenderState*
       continue;
     }
 
-    renderState->Render(renderer, eRP_Forward);
+    renderState->Render(renderer, eRP_ForwardUnlit);
   }
 }
 

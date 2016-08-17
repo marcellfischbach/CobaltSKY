@@ -1,7 +1,8 @@
 
 
-#include <Entity/PreviewWidget.hh>
+#include <StaticMesh/PreviewWidget.hh>
 #include <SceneWidget/Camera.hh>
+#include <Mesh/CollisionToMeshConverter.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/LightState.hh>
@@ -24,7 +25,7 @@
 #include <Editor.hh>
 #include <qopenglcontext.h>
 
-namespace entity
+namespace staticmesh
 {
 
 
@@ -32,8 +33,6 @@ PreviewWidget::PreviewWidget(QWidget *parent)
   : scenewidget::SceneWidget(parent)
   , m_entity(0)
   , m_staticMeshState(0)
-  , m_material(0)
-  , m_materialInstance(0)
   , m_freeCamera(0)
 {
   setFocusPolicy(Qt::StrongFocus);
@@ -49,37 +48,29 @@ QSize PreviewWidget::sizeHint() const
   return QSize(255, 255);
 }
 
-void PreviewWidget::SetMesh(vkMesh *mesh)
-{
-  vkMaterialInstance *material = CreateDefaultMaterial();
-  m_staticMeshState = new vkStaticMeshState();
-  m_staticMeshState->SetMesh(mesh);
-  for (vkSize i = 0, in = mesh->GetNumberOfMaterials(); i < in; ++i)
-  {
-    m_staticMeshState->SetMaterial(material, i);
-  }
-  m_staticMeshState->SetCastShadow(true);
-  m_staticMeshState->UpdateTransformation();
-
-  m_entity = new vkEntity();
-  m_entity->SetRootState(m_staticMeshState);
-  m_entity->AddState(m_staticMeshState);
-
-  vkEntityScene *scene = GetScene();
-  scene->AddEntity(m_entity);
-}
 
 void PreviewWidget::SetStaticMeshState(vkStaticMeshState *staticMeshState)
 {
+  vkEntityScene *scene = GetScene();
+
+
   VK_SET(m_staticMeshState, staticMeshState);
 
   m_entity = new vkEntity();
   m_entity->SetRootState(m_staticMeshState);
   m_entity->AddState(m_staticMeshState);
 
-  vkEntityScene *scene = GetScene();
   scene->AddEntity(m_entity);
 
+
+  if (InitCollisionStaticMesh())
+  {
+    m_collisionEntity = new vkEntity();
+    m_collisionEntity->SetRootState(m_collisionStaticMesh);
+    m_entity->AddState(m_collisionStaticMesh);
+
+    scene->AddEntity(m_collisionEntity);
+  }
 }
 
 void PreviewWidget::initializeGL()
@@ -115,24 +106,48 @@ void PreviewWidget::CreateScene()
 }
 
 
-vkMaterialInstance *PreviewWidget::CreateDefaultMaterial()
-{
-  vkSGShaderGraph *material = new vkSGShaderGraph();
-  vkSGConstFloat3 *diffuse = new vkSGConstFloat3();
-  diffuse->GetInput(0)->SetConst(1.0f);
-  diffuse->GetInput(1)->SetConst(1.0f);
-  diffuse->GetInput(2)->SetConst(1.0f);
-  material->SetDiffuse(diffuse->GetOutput(0));
 
-  if (!vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(material))
+bool PreviewWidget::InitCollisionStaticMesh()
+{
+  if (!m_staticMeshState)
   {
-    return 0;
+    return false;
   }
 
-  vkMaterialInstance *materialInstance = new vkMaterialInstance();
-  materialInstance->SetMaterial(material);
 
-  return materialInstance;
+  vkPhysicsShapeContainer *container = m_staticMeshState->GetColliderShape();
+  if (!container)
+  {
+    return false;
+  }
+
+
+  vkMesh *colliderMesh = mesh::CollisionToMeshConverter::CreateMesh(container);
+  if (!colliderMesh)
+  {
+    return false;
+  }
+
+  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${shaders}/commons/unlit.xasset"));
+  if (!material)
+  {
+    colliderMesh->Release();
+    return false;
+  }
+
+  vkMaterialInstance *instance = new vkMaterialInstance();
+  instance->SetMaterial(material);
+  instance->Set(instance->GetIndex("Color"), vkColor4f(0, 0, 1, 1));
+  material->Release();
+
+  m_collisionStaticMesh = new vkStaticMeshState();
+  m_collisionStaticMesh->SetMesh(colliderMesh);
+  m_collisionStaticMesh->SetMaterial(instance);
+  m_collisionStaticMesh->SetRenderQueue(eRQ_Forward);
+  instance->Release();
+  colliderMesh->Release();
+
+  return true;
 }
 
 

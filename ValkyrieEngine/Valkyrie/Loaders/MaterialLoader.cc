@@ -21,7 +21,7 @@ bool vkMaterialAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLo
 {
   vkString tagName(element->Value());
 
-  return tagName == vkString("material") || tagName == vkString("materials");
+  return tagName == vkString("material");
 }
 
 
@@ -54,16 +54,14 @@ const vkClass *vkMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const 
 
 IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
 {
-  TiXmlElement *materialElement = FindElement(element, "material", locator.GetResourceName());
-  if (!materialElement)
+  if (vkString(element->Value()) != vkString("material"))
   {
-    printf("Exit 0");
     return 0;
   }
-
+  
   vkMaterial *material = new vkMaterial();
 
-  TiXmlElement *passesElement = materialElement->FirstChildElement("passes");
+  TiXmlElement *passesElement = element->FirstChildElement("passes");
   if (!passesElement)
   {
     material->Release();
@@ -72,8 +70,8 @@ IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
   }
 
   for (TiXmlElement *passElement = passesElement->FirstChildElement("pass");
-  passElement;
-    passElement = passElement->NextSiblingElement("pass"))
+       passElement;
+       passElement = passElement->NextSiblingElement("pass"))
   {
     vkString passName;
     if (passElement->Attribute("name"))
@@ -94,9 +92,25 @@ IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
     {
       renderPass = eRP_ShadowCube;
     }
-    else if (passName == vkString("Forward"))
+    else if (passName == vkString("ForwardUnlit"))
     {
-      renderPass = eRP_Forward;
+      renderPass = eRP_ForwardUnlit;
+    }
+    else if (passName == vkString("Forward1Light"))
+    {
+      renderPass = eRP_Forward1Light;
+    }
+    else if (passName == vkString("Forward2Light"))
+    {
+      renderPass = eRP_Forward2Light;
+    }
+    else if (passName == vkString("Forward3Light"))
+    {
+      renderPass = eRP_Forward3Light;
+    }
+    else if (passName == vkString("Forward4Light"))
+    {
+      renderPass = eRP_Forward4Light;
     }
     else
     {
@@ -119,12 +133,12 @@ IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
 
 
 
-  TiXmlElement *parametersElement = materialElement->FirstChildElement("parameters");
+  TiXmlElement *parametersElement = element->FirstChildElement("parameters");
   if (parametersElement)
   {
     for (TiXmlElement *parameterElement = parametersElement->FirstChildElement("parameter");
-    parameterElement;
-      parameterElement = parameterElement->NextSiblingElement("parameter"))
+         parameterElement;
+         parameterElement = parameterElement->NextSiblingElement("parameter"))
     {
       vkString type, name;
       if (!parameterElement->Attribute("type") || !parameterElement->Attribute("name"))

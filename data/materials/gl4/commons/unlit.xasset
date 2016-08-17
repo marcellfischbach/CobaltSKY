@@ -1,0 +1,12 @@
+<asset>
+	<data>
+		<material name="Unlit">
+			<passes>
+				<pass name="ForwardUnlit">${shaders}/commons/ForwardUnlit.xasset</pass>
+			</passes>
+			<parameters>
+				<parameter name="Color" type="col">1 1 1 1</parameter>
+			</parameters>
+		</material>
+	</data>
+</asset>

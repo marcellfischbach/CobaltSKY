@@ -2,52 +2,52 @@
 
 #include <qwidget.h>
 #include <EditorView.hh>
-#include <Entity/EntityView.refl.hh>
+#include <StaticMesh/StaticMeshView.refl.hh>
 
 class vkResourceLocator;
-namespace entity
+namespace staticmesh
 {
 class PreviewWidget;
 }
 
 
-class EntityWidget : public QWidget
+class StaticMeshWidget : public QWidget
 {
   Q_OBJECT
 public:
-  EntityWidget(QWidget *parent);
-  virtual ~EntityWidget();
+  StaticMeshWidget(QWidget *parent);
+  virtual ~StaticMeshWidget();
 
   void Set(const vkResourceLocator &resourceLocator);
 
 private:
 
-  entity::PreviewWidget *m_previewWidget;
+  staticmesh::PreviewWidget *m_previewWidget;
   
   vkResourceLocator m_resourceLocator;
   
 };
 
-class EntityView : public EditorView
+class StaticMeshView : public EditorView
 {
 public:
-  EntityView(QWidget *parent);
-  virtual ~EntityView();
+  StaticMeshView(QWidget *parent);
+  virtual ~StaticMeshView();
 
   void Initialize();
   virtual bool Close();
 
 private:
-  EntityWidget *m_entityWidget;
+  StaticMeshWidget *m_entityWidget;
 };
 
 VK_CLASS()
-class EntityViewFactory : public IEditorViewFactory
+class StaticMeshViewFactory : public IEditorViewFactory
 {
   VK_CLASS_GEN_OBJECT;
 public:
-  EntityViewFactory();
-  virtual ~EntityViewFactory();
+  StaticMeshViewFactory();
+  virtual ~StaticMeshViewFactory();
 
 
   virtual bool CanEdit(const vkResourceLocator &resourceLocator, IObject *obj);

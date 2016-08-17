@@ -1,6 +1,6 @@
 
-#include <Entity/EntityView.hh>
-#include <Entity/PreviewWidget.hh>
+#include <StaticMesh/StaticMeshView.hh>
+#include <StaticMesh/PreviewWidget.hh>
 #include <AssetManager/Utils.hh>
 #include <Valkyrie/Engine.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
@@ -10,22 +10,22 @@
 
 
 
-EntityWidget::EntityWidget(QWidget *parent)
+StaticMeshWidget::StaticMeshWidget(QWidget *parent)
   : QWidget(parent)
 {
-  m_previewWidget = new entity::PreviewWidget(this);
+  m_previewWidget = new staticmesh::PreviewWidget(this);
 
   QGridLayout *gridLayout = new QGridLayout(this);
   gridLayout->addWidget(m_previewWidget, 0, 0, 1, 1);
 }
 
-EntityWidget::~EntityWidget()
+StaticMeshWidget::~StaticMeshWidget()
 {
 
 }
 
 
-void EntityWidget::Set(const vkResourceLocator &resourceLocator)
+void StaticMeshWidget::Set(const vkResourceLocator &resourceLocator)
 {
   m_resourceLocator = resourceLocator;
 
@@ -35,12 +35,6 @@ void EntityWidget::Set(const vkResourceLocator &resourceLocator)
     return;
   }
 
-  vkMesh *mesh = vkQueryClass<vkMesh>(object);
-  if (mesh)
-  {
-    m_previewWidget->SetMesh(mesh);
-    return;
-  }
   vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(object);
   if (staticMeshState)
   {
@@ -53,26 +47,26 @@ void EntityWidget::Set(const vkResourceLocator &resourceLocator)
 
 
 
-EntityView::EntityView(QWidget *parent)
+StaticMeshView::StaticMeshView(QWidget *parent)
   : EditorView()
 {
-  m_entityWidget = new EntityWidget(parent);
+  m_entityWidget = new StaticMeshWidget(parent);
   SetWidget(m_entityWidget);
   SetCanClose(true);
 }
 
-EntityView::~EntityView()
+StaticMeshView::~StaticMeshView()
 {
   m_entityWidget->deleteLater();
 }
 
-void EntityView::Initialize()
+void StaticMeshView::Initialize()
 {
   m_entityWidget->Set(GetResourceLocator());
   SetName(assetmanager::GetNameFromResource(GetResourceLocator()) + QString("(Entity)"));
 }
 
-bool EntityView::Close()
+bool StaticMeshView::Close()
 {
   return true;
 }
@@ -83,21 +77,21 @@ bool EntityView::Close()
 
 
 
-EntityViewFactory::EntityViewFactory()
+StaticMeshViewFactory::StaticMeshViewFactory()
   : IEditorViewFactory()
 {
 
 }
 
-EntityViewFactory::~EntityViewFactory()
+StaticMeshViewFactory::~StaticMeshViewFactory()
 {
 
 }
 
 
-bool EntityViewFactory::CanEdit(const vkResourceLocator &resourceLocator, IObject *obj)
+bool StaticMeshViewFactory::CanEdit(const vkResourceLocator &resourceLocator, IObject *obj)
 {
-  if (vkQueryClass<vkMesh>(obj) || vkQueryClass<vkStaticMeshState>(obj))
+  if (vkQueryClass<vkStaticMeshState>(obj))
   {
     return true;
   }
@@ -105,9 +99,9 @@ bool EntityViewFactory::CanEdit(const vkResourceLocator &resourceLocator, IObjec
   return false;
 }
 
-EditorView *EntityViewFactory::CreateView(QWidget *parent, const vkResourceLocator &resourceLocator, IObject *obj)
+EditorView *StaticMeshViewFactory::CreateView(QWidget *parent, const vkResourceLocator &resourceLocator, IObject *obj)
 {
-  EntityView *view = new EntityView(parent);
+  StaticMeshView *view = new StaticMeshView(parent);
   view->SetEditorObject(obj);
   view->SetResourceLocator(resourceLocator);
   view->Initialize();

@@ -14,6 +14,18 @@ public:
     this->resizeStep = resizeStep;
   }
 
+  void Initialize(vkSize initialSize = 64, vkSize resizeStep = 16)
+  {
+    if (length != 0 || capacity != initialSize || this->resizeStep != resizeStep)
+    {
+      delete[] data;
+      data = new T[initialSize];
+      length = 0;
+      capacity = initialSize;
+      this->resizeStep = resizeStep;
+    }
+  }
+
   ~vkCollection()
   {
     delete[] data;

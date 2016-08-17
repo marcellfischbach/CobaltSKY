@@ -78,20 +78,6 @@ source_group(
     ${EDITOR_COMPONENTS_SOURCES}
     )
 
-
-set(EDITOR_ENTITY_SOURCES
-    Entity/EntityView.cc
-    Entity/EntityView.hh
-    Entity/PreviewWidget.cc
-    Entity/PreviewWidget.hh
-    )
-
-source_group(
-    "Editor\\Entity"
-    FILES
-    ${EDITOR_ENTITY_SOURCES}
-    )
-
 set(EDITOR_GRAPH_SOURCES
     Graph/Connection.cc
     Graph/Connection.hh
@@ -133,6 +119,8 @@ source_group(
 set(EDITOR_MESH_SOURCES
     Mesh/Assimp.cc
     Mesh/Assimp.hh
+    Mesh/CollisionToMeshConverter.cc
+    Mesh/CollisionToMeshConverter.hh
     Mesh/MeshImporter.cc
     Mesh/MeshImporter.hh
     )
@@ -197,6 +185,20 @@ source_group(
     )
 
 
+set(EDITOR_STATICMESH_SOURCES
+    StaticMesh/PreviewWidget.cc
+    StaticMesh/PreviewWidget.hh
+    StaticMesh/StaticMeshView.cc
+    StaticMesh/StaticMeshView.hh
+    )
+
+source_group(
+    "Editor\\StaticMesh"
+    FILES
+    ${EDITOR_STATICMESH_SOURCES}
+    )
+
+
 set(EDITOR_TEXTURE_SOURCES
     Texture/PreviewWidget.cc
     Texture/PreviewWidget.hh
@@ -235,12 +237,12 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${EDITOR_ASSETMANAGER_SOURCES}
     ${EDITOR_COMPONENTS_SOURCES}
-    ${EDITOR_ENTITY_SOURCES}
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_MATERIAL_INSTANCE_SOURCES}
     ${EDITOR_MESH_SOURCES}
     ${EDITOR_SCENEWIDGET_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
+    ${EDITOR_STATICMESH_SOURCES}
     ${EDITOR_TEXTURE_SOURCES}
     )
 

@@ -3,8 +3,8 @@
     <materialInstance>
       <material>/materials/Solid.xasset</material>
       <parameters>
-        <parameter name="fieldstone_diffuse">
-          <locator>/materials/textures/dirt_diffuse.xasset</locator>
+        <parameter name="Multiplier">
+          <float2>10.000000, 10.000000</float2>
         </parameter>
       </parameters>
     </materialInstance>

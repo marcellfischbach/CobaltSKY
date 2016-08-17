@@ -3,6 +3,7 @@
 
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Core/Collection.hh>
+#include <Valkyrie/Enums.hh>
 
 struct IGraphics;
 struct IRenderTarget;
@@ -59,7 +60,7 @@ protected:
 
 protected:
   void CalcShadowIntensity(const vkLight *light);
-  vkCollection<vkRenderState*> m_renderStates;
+  vkCollection<vkRenderState*> m_renderStates[eRQ_COUNT];
   IGraphics *m_renderer;
   float m_mapBias;
 
