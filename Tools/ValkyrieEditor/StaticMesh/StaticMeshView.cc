@@ -13,10 +13,7 @@
 StaticMeshWidget::StaticMeshWidget(QWidget *parent)
   : QWidget(parent)
 {
-  m_previewWidget = new staticmesh::PreviewWidget(this);
-
-  QGridLayout *gridLayout = new QGridLayout(this);
-  gridLayout->addWidget(m_previewWidget, 0, 0, 1, 1);
+  m_gui.setupUi(this);
 }
 
 StaticMeshWidget::~StaticMeshWidget()
@@ -38,11 +35,30 @@ void StaticMeshWidget::Set(const vkResourceLocator &resourceLocator)
   vkStaticMeshState *staticMeshState = vkQueryClass<vkStaticMeshState>(object);
   if (staticMeshState)
   {
-    m_previewWidget->SetStaticMeshState(staticMeshState);
-    return;
+    m_gui.previewWidget->SetStaticMeshState(staticMeshState);
+
+    bool geometry = m_gui.previewWidget->HasGeometry();
+    m_gui.pbRenderGeometry->setEnabled(geometry);
+    m_gui.pbRenderGeometry->setChecked(geometry);
+
+    bool collision = m_gui.previewWidget->HasCollision();
+    m_gui.pbRenderCollision->setEnabled(collision);
+    m_gui.pbRenderCollision->setChecked(collision);
   }
   
 }
+
+
+void StaticMeshWidget::on_pbRenderGeometry_toggled(bool checked)
+{
+  m_gui.previewWidget->SetRenderGeometry(checked);
+}
+
+void StaticMeshWidget::on_pbRenderCollision_toggled(bool checked)
+{
+  m_gui.previewWidget->SetRenderCollision(checked);
+}
+
 
 
 

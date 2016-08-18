@@ -192,10 +192,15 @@ set(EDITOR_STATICMESH_SOURCES
     StaticMesh/StaticMeshView.hh
     )
 
+set(EDITOR_STATICMESH_UI
+    StaticMesh/StaticMeshView.ui
+    )
+
 source_group(
     "Editor\\StaticMesh"
     FILES
     ${EDITOR_STATICMESH_SOURCES}
+    ${EDITOR_STATICMESH_UI}
     )
 
 
@@ -226,6 +231,7 @@ set(ALL_UI
     ${EDITOR_ASSETMANAGER_UI}
     ${EDITOR_MATERIAL_INSTANCE_UI}
     ${EDITOR_SHADERGRAPH_UI}
+    ${EDITOR_STATICMESH_UI}
     ${EDITOR_TEXTURE_UI}
     )
 

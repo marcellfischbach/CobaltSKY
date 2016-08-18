@@ -25,6 +25,12 @@ public:
   virtual QSize sizeHint() const;
 
   void SetStaticMeshState(vkStaticMeshState *staticMeshState);
+
+  bool HasGeometry() const;
+  void SetRenderGeometry(bool renderGeometry);
+
+  bool HasCollision() const;
+  void SetRenderCollision(bool renderCollision);
 protected:
   void initializeGL();
 

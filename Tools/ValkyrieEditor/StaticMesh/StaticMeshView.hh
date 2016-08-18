@@ -3,6 +3,7 @@
 #include <qwidget.h>
 #include <EditorView.hh>
 #include <StaticMesh/StaticMeshView.refl.hh>
+#include <ui_StaticMeshView.h>
 
 class vkResourceLocator;
 namespace staticmesh
@@ -20,9 +21,12 @@ public:
 
   void Set(const vkResourceLocator &resourceLocator);
 
+private slots:
+void on_pbRenderGeometry_toggled(bool checked);
+void on_pbRenderCollision_toggled(bool checked);
 private:
+  Ui::StaticMeshWidget m_gui;
 
-  staticmesh::PreviewWidget *m_previewWidget;
   
   vkResourceLocator m_resourceLocator;
   

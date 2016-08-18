@@ -32,6 +32,7 @@ namespace staticmesh
 PreviewWidget::PreviewWidget(QWidget *parent)
   : scenewidget::SceneWidget(parent)
   , m_entity(0)
+  , m_collisionEntity(0)
   , m_staticMeshState(0)
   , m_freeCamera(0)
 {
@@ -150,5 +151,43 @@ bool PreviewWidget::InitCollisionStaticMesh()
   return true;
 }
 
+
+bool PreviewWidget::HasGeometry() const
+{
+  return m_entity != 0;
+}
+
+void PreviewWidget::SetRenderGeometry(bool renderGeometry)
+{
+  if (renderGeometry)
+  {
+    GetScene()->AddEntity(m_entity);
+  }
+  else
+  {
+    GetScene()->RemoveEntity(m_entity);
+  }
+
+  repaint();
+}
+
+bool PreviewWidget::HasCollision() const
+{
+  return m_collisionEntity != 0;
+}
+
+void PreviewWidget::SetRenderCollision(bool renderCollision)
+{
+  if (renderCollision)
+  {
+    GetScene()->AddEntity(m_collisionEntity);
+  }
+  else
+  {
+    GetScene()->RemoveEntity(m_collisionEntity);
+  }
+
+  repaint();
+}
 
 }

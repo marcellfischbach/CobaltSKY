@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/icons">
+    <file>Resources/RenderCollision24.png</file>
+    <file>Resources/RenderGeometry24.png</file>
     <file>Resources/Compile24.png</file>
     <file>Resources/Save24.png</file>
     <file>Resources/Compile48.png</file>

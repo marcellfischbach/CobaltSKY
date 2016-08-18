@@ -28,6 +28,12 @@ void vkEntityScene::AddEntity(vkEntity *entity, vkEntity *parent)
   {
     return;
   }
+  if (entity->GetScene() == this)
+  {
+    // don't attach the enityt to the same scene twice
+    return;
+  }
+
   entity->Assemble();
   if (!parent)
   {
