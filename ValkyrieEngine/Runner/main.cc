@@ -121,7 +121,6 @@ int main(int argc, char **argv)
   vkEng->SetPhysicsSystem(bulletSystem);
 
 
-
   if (initialize() < 0)
   {
     printf("Unable to initialize\n");
@@ -170,7 +169,6 @@ int initialize()
   keyboard = window->GetKeyboard();
 
   fp = new vkDeferredFrameProcessor(graphicsGL4);// ->CreateDeferredFrameProcessor();
-
   if (!fp->Initialize() || !fp->Resize(1366, 768))
   {
     printf("Unable to initialize frame processor\n");

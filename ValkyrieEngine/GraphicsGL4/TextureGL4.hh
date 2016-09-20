@@ -99,7 +99,7 @@ private:
 };
 
 VK_CLASS();
-class VKGL4_API vkTexture2DGL4 : public virtual vkTextureGL4, public virtual ITexture2D
+class VKGL4_API vkTexture2DGL4 : public vkTextureGL4, public ITexture2D
 {
   VK_CLASS_GEN;
 public:
@@ -125,7 +125,7 @@ private:
 };
 
 VK_CLASS();
-class VKGL4_API vkTexture2DArrayGL4 : public virtual vkTextureGL4, public virtual ITexture2DArray
+class VKGL4_API vkTexture2DArrayGL4 : public vkTextureGL4, public ITexture2DArray
 {
   VK_CLASS_GEN;
 public:
@@ -154,7 +154,7 @@ private:
 
 
 VK_CLASS();
-class VKGL4_API vkTextureCubeGL4 : public virtual vkTextureGL4, public virtual ITextureCube
+class VKGL4_API vkTextureCubeGL4 : public vkTextureGL4, public ITextureCube
 {
   VK_CLASS_GEN;
 public:

@@ -131,6 +131,7 @@ enum vkVertexAttributeType
   eVAT_MatProjViewModelInv,
 
   eVAT_MatsSkeleton,
+  eVAT_SkeletonMapping,
 
 
   eVAT_Texture0,

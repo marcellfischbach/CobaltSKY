@@ -146,8 +146,17 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "in vec3 vk_Tangent;" << std::endl
     << "in vec3 vk_BiNormal;" << std::endl
     << "in vec2 vk_TexCoord0;" << std::endl
-    << std::endl
-    // if we use hardware skinning this should be placed here
+    << std::endl;
+  if (graph->IsSkinnedMaterial())
+  {
+    ss // add all the bindings that are needed to correctly perform multi bone skinning
+      << "uniform mat4 vk_MatsSkeleton[" << graph->GetMaxBones() << "];" << std::endl
+      << "uniform int vk_SkeletonMapping[" << graph->GetMaxBones() << "];" << std::endl
+      << "in ivec4 vk_BoneIndex;" << std::endl
+      << "in vec4 vk_BoneWeight;" << std::endl;
+  }
+
+  ss // if we use hardware skinning this should be placed here
     << "out vec2 inFragTexCoord;" << std::endl
     << "out vec3 inFragNormal;" << std::endl
     << "out vec3 inFragTangent;" << std::endl
@@ -155,11 +164,55 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << std::endl
     << "void main()" << std::endl
     << "{" << std::endl
-    << "  gl_Position = vk_MatProjViewModel * vk_Position;" << std::endl
+    << "  mat3 matModel3 = mat3(vk_MatModel); " << std::endl;
+  if (graph->IsSkinnedMaterial())
+  {
+    ss
+      << "  int idx0 = vk_SkeletonMapping[vk_BoneIndex.x];" << std::endl
+      << "  int idx1 = vk_SkeletonMapping[vk_BoneIndex.y];" << std::endl
+      << "  int idx2 = vk_SkeletonMapping[vk_BoneIndex.z];" << std::endl
+      << "  int idx3 = vk_SkeletonMapping[vk_BoneIndex.w];" << std::endl
+      << "  mat4 boneMat40 = vk_MatsSkeleton[idx0];" << std::endl
+      << "  mat4 boneMat41 = vk_MatsSkeleton[idx1];" << std::endl
+      << "  mat4 boneMat42 = vk_MatsSkeleton[idx2];" << std::endl
+      << "  mat4 boneMat43 = vk_MatsSkeleton[idx3];" << std::endl
+      << "  mat3 boneMat30 = mat3(boneMat40); " << std::endl
+      << "  mat3 boneMat31 = mat3(boneMat41); " << std::endl
+      << "  mat3 boneMat32 = mat3(boneMat42); " << std::endl
+      << "  mat3 boneMat33 = mat3(boneMat43); " << std::endl
+      << "  vec4 position = boneMat40 * vk_Position * vk_BoneWeight.x + " << std::endl
+      << "                  boneMat41 * vk_Position * vk_BoneWeight.y + " << std::endl
+      << "                  boneMat42 * vk_Position * vk_BoneWeight.z + " << std::endl
+      << "                  boneMat43 * vk_Position * vk_BoneWeight.w;" << std::endl
+      << "  vec3 normal = boneMat30 * vk_Normal * vk_BoneWeight.x + " << std::endl
+      << "                boneMat31 * vk_Normal * vk_BoneWeight.y + " << std::endl
+      << "                boneMat32 * vk_Normal * vk_BoneWeight.z + " << std::endl
+      << "                boneMat33 * vk_Normal * vk_BoneWeight.w;" << std::endl
+      << "  vec3 tangent = boneMat30 * vk_Tangent * vk_BoneWeight.x + " << std::endl
+      << "                 boneMat31 * vk_Tangent * vk_BoneWeight.y + " << std::endl
+      << "                 boneMat32 * vk_Tangent * vk_BoneWeight.z + " << std::endl
+      << "                 boneMat33 * vk_Tangent * vk_BoneWeight.w;" << std::endl
+      << "  vec3 binormal = boneMat30 * vk_BiNormal * vk_BoneWeight.x + " << std::endl
+      << "                  boneMat31 * vk_BiNormal * vk_BoneWeight.y + " << std::endl
+      << "                  boneMat32 * vk_BiNormal * vk_BoneWeight.z + " << std::endl
+      << "                  boneMat33 * vk_BiNormal * vk_BoneWeight.w;" << std::endl
+      << "  gl_Position = vk_MatProjViewModel * position;" << std::endl
+      << "  inFragNormal = matModel3 * normal;" << std::endl
+      << "  inFragTangent = matModel3 * tangent;" << std::endl
+      << "  inFragBiNormal = matModel3 * binormal;" << std::endl;
+
+  }
+  else
+  {
+
+    ss
+      << "  gl_Position = vk_MatProjViewModel * vk_Position;" << std::endl
+      << "  inFragNormal = matModel3 * vk_Normal;" << std::endl
+      << "  inFragTangent = matModel3 * vk_Tangent;" << std::endl
+      << "  inFragBiNormal = matModel3 * vk_BiNormal;" << std::endl;
+  }
+  ss 
     << "  inFragTexCoord = vk_TexCoord0;" << std::endl
-    << "  inFragNormal = mat3(vk_MatModel) * vk_Normal;" << std::endl
-    << "  inFragTangent = mat3(vk_MatModel) * vk_Tangent;" << std::endl
-    << "  inFragBiNormal = mat3(vk_MatModel) * vk_BiNormal;" << std::endl
     << "}" << std::endl
     << std::endl;
   vkString vertexShaderSources = ss.str();
@@ -221,9 +274,6 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
 
   ss.clear();
 
-  DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
-  DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
-  fflush(stdout);
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);

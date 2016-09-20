@@ -396,7 +396,7 @@ vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEn
       vkString name = ReadString(file);
       vkSize currentPosition = file->Tell();
       meshObj = ReadEntry(entries, name, fileVersion, file, locator, userData);
-      file->Seek(eSP_Set, currentPosition);
+      file->Seek(eSP_Set, (long)currentPosition);
     }
     break;
   case eRM_External:
@@ -558,7 +558,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
     VK_RELEASE(subMesh);
   }
 
-  for (unsigned i = 0, in = globalIndexBuffers.size(); i < in; ++i)
+  for (vkSize i = 0, in = globalIndexBuffers.size(); i < in; ++i)
   {
     VK_RELEASE(globalIndexBuffers[i]);
   }

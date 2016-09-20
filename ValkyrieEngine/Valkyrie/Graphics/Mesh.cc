@@ -6,6 +6,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
+#include <Valkyrie/Animation/Skeleton.hh>
 #include <algorithm>
 
 vkSubMesh::vkSubMesh()
@@ -156,11 +157,11 @@ const vkString &vkMesh::GetMaterialName(vkSize idx) const
 
 vkUInt32 vkMesh::GetMaterialIndex(const vkString &materialName) const
 {
-  for (vkUInt32 i = 0, in = m_materialNames.size(); i < in; ++i)
+  for (vkSize i = 0, in = m_materialNames.size(); i < in; ++i)
   {
     if (m_materialNames[i] == materialName)
     {
-      return i;
+      return (vkUInt32)i;
     }
   }
   return ~0x00;
@@ -225,7 +226,7 @@ vkMesh::LOD &vkMesh::GetLOD(vkUInt8 lod)
   return m_lods[lod];
 }
 
-void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
+void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkSize numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {
@@ -267,3 +268,58 @@ void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numberOfMat
 }
 
 
+
+vkSkinnedMesh::vkSkinnedMesh()
+  : vkMesh()
+{
+
+}
+
+
+vkSkinnedMesh::~vkSkinnedMesh()
+{
+
+}
+
+
+
+void vkSkinnedMesh::Render(IGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod)
+{
+  if (m_boneIdxMapping && m_numberOfIndexMapping > 0)
+  {
+    renderer->SetSkeletonBoneMapping(m_boneIdxMapping, m_numberOfIndexMapping);
+
+    vkMesh::Render(renderer, pass, numMaterials, material, lod);
+  }
+}
+
+
+
+
+void vkSkinnedMesh::AddBoneName(const vkString &boneName, vkUInt8 boneIdx)
+{
+  m_boneNameMapping[boneName] = boneIdx;
+}
+
+
+void vkSkinnedMesh::GenerateMapping(const vkSkeleton *skeleton)
+{
+  if (m_boneIdxMapping)
+  {
+    delete[] m_boneIdxMapping;
+  }
+  m_numberOfIndexMapping = m_boneNameMapping.size();
+  m_boneIdxMapping = new vkUInt32[m_numberOfIndexMapping];
+
+  for (std::map<vkString, vkUInt8>::iterator it = m_boneNameMapping.begin(); it != m_boneNameMapping.end(); ++it)
+  {
+    vkSize boneIdx = skeleton->GetBoneIndex(it->first);
+    if (boneIdx == vkInvalidBoneIdx)
+    {
+      continue;
+    }
+
+    m_boneIdxMapping[it->second] = (vkUInt32)boneIdx;
+
+  }
+}

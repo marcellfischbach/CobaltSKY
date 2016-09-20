@@ -26,7 +26,8 @@ vkSGNodeGL4 *vkShaderGraphCtx::GetNode(vkSGNode *node)
   vkSGNodeGL4 *glNode = m_nodes[node];
   if (!glNode)
   {
-    glNode = m_graph->CreateNode(node->GetClass());
+    const vkClass *cls = node->GetClass();
+    glNode = m_graph->CreateNode(cls);
     if (glNode == 0)
     {
       return 0;

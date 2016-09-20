@@ -56,14 +56,46 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << "uniform mat4 vk_MatModel;" << std::endl
     << std::endl
     << "in vec4 vk_Position;" << std::endl
-    << "in vec2 vk_TexCoord0;" << std::endl
+    << "in vec2 vk_TexCoord0;" << std::endl;
+  if (graph->IsSkinnedMaterial())
+  {
+    ss // add all the bindings that are needed to correctly perform multi bone skinning
+      << "uniform mat4 vk_MatsSkeleton[" << graph->GetMaxBones() << "];" << std::endl
+      << "uniform int vk_SkeletonMapping[" << graph->GetMaxBones() << "];" << std::endl
+      << "in ivec4 vk_BoneIndex;" << std::endl
+      << "in vec4 vk_BoneWeight;" << std::endl;
+  }
+
+  ss
     << std::endl
     // if we use hardware skinning this should be placed here
     << "out vec2 inGeomTexCoord;" << std::endl
     << std::endl
     << "void main()" << std::endl
-    << "{" << std::endl
-    << "  gl_Position = vk_MatModel * vk_Position;" << std::endl
+    << "{" << std::endl;
+  if (graph->IsSkinnedMaterial())
+  {
+    ss
+      << "  int idx0 = vk_SkeletonMapping[vk_BoneIndex.x];" << std::endl
+      << "  int idx1 = vk_SkeletonMapping[vk_BoneIndex.y];" << std::endl
+      << "  int idx2 = vk_SkeletonMapping[vk_BoneIndex.z];" << std::endl
+      << "  int idx3 = vk_SkeletonMapping[vk_BoneIndex.w];" << std::endl
+      << "  mat4 boneMat40 = vk_MatsSkeleton[idx0];" << std::endl
+      << "  mat4 boneMat41 = vk_MatsSkeleton[idx1];" << std::endl
+      << "  mat4 boneMat42 = vk_MatsSkeleton[idx2];" << std::endl
+      << "  mat4 boneMat43 = vk_MatsSkeleton[idx3];" << std::endl
+      << "  vec4 position = boneMat40 * vk_Position * vk_BoneWeight.x + " << std::endl
+      << "                  boneMat41 * vk_Position * vk_BoneWeight.y + " << std::endl
+      << "                  boneMat42 * vk_Position * vk_BoneWeight.z + " << std::endl
+      << "                  boneMat43 * vk_Position * vk_BoneWeight.w;" << std::endl
+      << "  gl_Position = vk_MatModel * position;" << std::endl;
+  }
+  else
+  {
+    ss
+      << "  gl_Position = vk_MatModel * vk_Position;" << std::endl;
+  }
+  ss
     << "  inGeomTexCoord = vk_TexCoord0;" << std::endl
     << "}" << std::endl
     << std::endl;
@@ -160,12 +192,9 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
 
   ss.clear();
 
-  /*
-
-  DebugCode("Shadow.Vertex", vertexShaderSources.c_str());
-  DebugCode("Shadow.Geometry", geometryShaderSources.c_str());
-  DebugCode("Shadow.Fragment", fragmentShaderSources.c_str());
-  */
+  //DebugCode("PSSM.Vertex", vertexShaderSources.c_str());
+  //DebugCode("PSSM.Geometry", geometryShaderSources.c_str());
+  //DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
 
 
   vkShaderGL4 *vertexShader = new vkShaderGL4();
@@ -173,7 +202,8 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
-    printf("Error geometry shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
+    DebugCode("PSSM.Vertex", vertexShaderSources.c_str());
+    printf("Error vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
     return;
   }
@@ -183,6 +213,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   geometryShader->SetSource(geometryShaderSources);
   if (!geometryShader->Compile())
   {
+    DebugCode("PSSM.Geometry", geometryShaderSources.c_str());
     printf("Error geometry shader:\n%s\n", geometryShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
     geometryShader->Release();
@@ -194,6 +225,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
+    DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
     printf("Error fragment shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
     vertexShader->Release();
     geometryShader->Release();
@@ -207,6 +239,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   shadowShader->AttachShader(fragmentShader);
   if (!shadowShader->Link())
   {
+
+    DebugCode("PSSM.Vertex", vertexShaderSources.c_str());
+    DebugCode("PSSM.Geometry", geometryShaderSources.c_str());
+    DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
+
     printf("Error link:\n%s\n", shadowShader->GetLinkErrorLog().c_str());
     vertexShader->Release();
     geometryShader->Release();

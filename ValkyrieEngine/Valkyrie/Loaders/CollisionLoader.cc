@@ -131,9 +131,9 @@ void vkCollisionAssetXMLLoader::LoadBox(TiXmlElement *transformElement, vkPhysGe
       transformElement->Attribute("halfZ"))
   {
     geometry.Type = ePGT_Box;
-    geometry.Dimensions.x = atof(transformElement->Attribute("halfX")) * 2.0f;
-    geometry.Dimensions.y = atof(transformElement->Attribute("halfY")) * 2.0f;
-    geometry.Dimensions.z = atof(transformElement->Attribute("halfZ")) * 2.0f;
+    geometry.Dimensions.x = (float)atof(transformElement->Attribute("halfX")) * 2.0f;
+    geometry.Dimensions.y = (float)atof(transformElement->Attribute("halfY")) * 2.0f;
+    geometry.Dimensions.z = (float)atof(transformElement->Attribute("halfZ")) * 2.0f;
   }
 }
 
@@ -144,8 +144,8 @@ void vkCollisionAssetXMLLoader::LoadCylinder(TiXmlElement *transformElement, vkP
       transformElement->Attribute("halfHeight"))
   {
     geometry.Type = ePGT_CylinderZ;
-    geometry.Radius = atof(transformElement->Attribute("radius"));
-    geometry.Height = atof(transformElement->Attribute("halfHeight")) * 2.0f;
+    geometry.Radius = (float)atof(transformElement->Attribute("radius"));
+    geometry.Height = (float)atof(transformElement->Attribute("halfHeight")) * 2.0f;
   }
 }
 
@@ -154,7 +154,7 @@ void vkCollisionAssetXMLLoader::LoadSphere(TiXmlElement *transformElement, vkPhy
   if (transformElement->Attribute("radius"))
   {
     geometry.Type = ePGT_Sphere;
-    geometry.Radius = atof(transformElement->Attribute("radius"));
+    geometry.Radius = (float)atof(transformElement->Attribute("radius"));
   }
 }
 

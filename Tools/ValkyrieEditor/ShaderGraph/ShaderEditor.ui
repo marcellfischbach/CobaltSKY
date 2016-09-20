@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>283</width>
-    <height>213</height>
+    <width>327</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,38 @@
    <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="5" column="0" colspan="2">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Shader</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="Line" name="line">
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="cbBlendBinaryGradient">
+     <property name="text">
+      <string>Blend (binary gradient)</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QCheckBox" name="cbDiscardAlpha">
+     <property name="text">
+      <string>Discard alpha</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="2">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -72,7 +103,41 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="1">
+   <item row="5" column="0" colspan="2">
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QCheckBox" name="cbSkinnedMaterial">
+     <property name="text">
+      <string>Skinned mateiral</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Max bones:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="sbMaxBones"/>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -84,37 +149,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="cbDiscardAlpha">
-     <property name="text">
-      <string>Discard alpha</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Shader</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QCheckBox" name="cbBlendBinaryGradient">
-     <property name="text">
-      <string>Blend (binary gradient)</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" colspan="2">
-    <widget class="Line" name="line">
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

@@ -50,7 +50,7 @@ struct VKE_API ISampler : public IObject
 };
 
 VK_INTERFACE();
-struct VKE_API ITexture : public virtual IObject
+struct VKE_API ITexture : public IObject
 {
   VK_CLASS_GEN;
   ITexture() : IObject() { }

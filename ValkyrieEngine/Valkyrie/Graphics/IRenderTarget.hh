@@ -7,7 +7,7 @@
 
 
 VK_INTERFACE();
-struct VKE_API IRenderTarget : public virtual IObject
+struct VKE_API IRenderTarget : public IObject
 {
   VK_CLASS_GEN;
 

@@ -356,8 +356,8 @@ void vkDefaultParticleEmitter::Update(float tpf, vkParticle *particle)
           break;
         case ePSM_Sphere:
           {
-            float angleY = M_PI_2 - (float)rand() / (float)RAND_MAX * M_PI;
-            float angleZ = (float)rand() / (float)RAND_MAX * M_PI * 2.0f;
+            float angleY = (float)M_PI_2 - (float)rand() / (float)RAND_MAX * (float)M_PI;
+            float angleZ = (float)rand() / (float)RAND_MAX * (float)M_PI * 2.0f;
             vkVector3f dir(
               cos(angleY) * cos(angleZ),
               cos(angleY) * sin(angleZ),
@@ -368,8 +368,8 @@ void vkDefaultParticleEmitter::Update(float tpf, vkParticle *particle)
           break;
         }
 
-        float angleY = M_PI_2 - m_initialDirectionAngle.Get();
-        float angleZ = (float)rand() / (float)RAND_MAX * M_PI * 2.0f;
+        float angleY = (float)M_PI_2 - m_initialDirectionAngle.Get();
+        float angleZ = (float)rand() / (float)(RAND_MAX * M_PI * 2.0);
         vkVector3f dir(
           cos(angleY) * cos(angleZ),
           cos(angleY) * sin(angleZ),
@@ -561,11 +561,11 @@ void vkDefaultParticleStepper::UpdateParticle(float tpf, vkParticle::ParticleDat
     particle->size.y = particle->sizeRange.z + particle->sizeRange.w * tf;
   }
 
-  unsigned page = particle->time / m_textPageTime;
+  unsigned page = (unsigned)(particle->time / m_textPageTime);
   page %= m_numTextPages;
   unsigned nextPage = (page + 1) % m_numTextPages;
   float fact = 1.0f - fmod(particle->time, m_textPageTime);
 
-  particle->textPage = vkVector3f(page, nextPage, fact);
+  particle->textPage = vkVector3f((float)page, (float)nextPage, fact);
 
 }

@@ -45,6 +45,7 @@ public:
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
   virtual void SetSkeleton(const vkSkeleton *skeleton);
   virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices);
+  virtual void SetSkeletonBoneMapping(const vkUInt32 *mapping, vkSize numberOfBoneMappings);
 
   virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices);
 
@@ -95,6 +96,7 @@ public:
 
 private:
   void BindMatrices();
+  void BindSkeleton();
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();
 
@@ -140,6 +142,9 @@ private:
 
   const vkMatrix4f *m_skeletonMatrices;
   vkSize m_numberOfSkeletonMatrices;
+
+  const vkUInt32 *m_skeletonBoneMapping;
+  vkSize m_numberOfSkeletonBoneMappings;
 
   vkSize m_numberOfShadowMatrices;
   vkMatrix4f m_shadowMatricesProjView[6];

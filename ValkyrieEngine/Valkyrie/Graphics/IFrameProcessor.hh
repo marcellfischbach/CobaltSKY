@@ -13,7 +13,7 @@ class vkPostProcessor;
 struct IRenderTarget;
 
 VK_INTERFACE();
-struct VKE_API IFrameProcessor : public virtual IObject
+struct VKE_API IFrameProcessor : public IObject
 {
   VK_CLASS_GEN;
   IFrameProcessor() : IObject() { }

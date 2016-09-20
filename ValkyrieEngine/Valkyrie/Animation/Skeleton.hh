@@ -5,6 +5,8 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Animation/Skeleton.refl.hh>
 
+const vkSize vkInvalidBoneIdx = ~0x00;
+
 VK_CLASS()
 class VKE_API vkSkeleton : public vkObject
 {
@@ -15,14 +17,20 @@ public:
 
   void PrepareBones(vkSize numberOfBones);
 
+  void SetBoneName(vkSize boneIdx, const vkString &boneName);
+
   vkSize GetNumberOfBones() const;
 
   vkMatrix4f *GetMatrices();
   const vkMatrix4f *GetMatrices() const;
 
+  vkString GetBoneName(vkSize boneIdx) const;
+  vkSize GetBoneIndex(const vkString &boneIndex) const;
+
 private:
   vkSize m_numberOfBones;
   vkMatrix4f *m_matrices;
+  vkString *m_boneNames;
 
 };
 

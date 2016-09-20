@@ -136,8 +136,8 @@ vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
 
   vkPixelFormat shadowBufferFormat = ePF_R16G16F;
   m_shadowBufferSize = 1024;
-  m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false);
-  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false);
+  m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, (vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize, 3, false);
+  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, (vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize, 3, false);
 
   ISampler *colorSampler = renderer->CreateSampler();
   colorSampler->SetFilter(eFM_MinMagLinear);
@@ -151,7 +151,7 @@ vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
   colorSampler->Release();
 
   m_shadowBuffer = static_cast<IRenderTarget*>(renderer->CreateRenderTarget());
-  m_shadowBuffer->Initialize(m_shadowBufferSize, m_shadowBufferSize);
+  m_shadowBuffer->Initialize((vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize);
   m_shadowBuffer->AddColorTexture(m_colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
   m_shadowBuffer->Finilize();

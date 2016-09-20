@@ -70,6 +70,7 @@ struct VKE_API IGraphics : public IObject
   virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out) = 0;
   virtual void SetSkeleton(const vkSkeleton *skeleton) = 0;
   virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices) = 0;
+  virtual void SetSkeletonBoneMapping(const vkUInt32 *mapping, vkSize numberOfMappings) = 0;
   virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices) = 0;
   /**
    * @}

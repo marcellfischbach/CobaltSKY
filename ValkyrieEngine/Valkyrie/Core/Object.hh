@@ -175,7 +175,7 @@ T* vkNewClassInstance(const vkClass *clazz)
 #include <Valkyrie/Core/Object.refl.hh>
 
 VK_CLASS();
-class VKE_API vkObject : public virtual IObject
+class VKE_API vkObject : public IObject
 {
   VK_CLASS_GEN;
 

@@ -67,6 +67,9 @@ public:
   virtual void Set(const vkVector2f *vs, vkSize num);
   virtual void Set(const vkVector3f *vs, vkSize num);
   virtual void Set(const vkVector4f *vs, vkSize num);
+  virtual void Set(const vkInt32 *vs, vkSize num);
+  virtual void Set(const vkUInt32 *vs, vkSize num);
+  virtual void Set(const float *vs, vkSize num);
 
   virtual void Set(const vkMatrix3f &m);
   virtual void Set(const vkMatrix3f *ms, vkSize num);

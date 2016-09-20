@@ -14,7 +14,7 @@
 using std::string;
 
 VK_INTERFACE();
-struct VKE_API IShaderAttribute : public virtual IObject
+struct VKE_API IShaderAttribute : public IObject
 {
   VK_CLASS_GEN;
 
@@ -41,6 +41,10 @@ struct VKE_API IShaderAttribute : public virtual IObject
   virtual void Set(const vkVector2f *v, vkSize num) = 0;
   virtual void Set(const vkVector3f *v, vkSize num) = 0;
   virtual void Set(const vkVector4f *v, vkSize num) = 0;
+  virtual void Set(const vkInt32 *vs, vkSize num) = 0;
+  virtual void Set(const vkUInt32 *vs, vkSize num) = 0;
+  virtual void Set(const float *vs, vkSize num) = 0;
+
 
   virtual void Set(const vkMatrix3f &m) = 0;
   virtual void Set(const vkMatrix3f *ms, vkSize num) = 0;
@@ -51,7 +55,7 @@ struct VKE_API IShaderAttribute : public virtual IObject
 };
 
 VK_INTERFACE();
-struct VKE_API IShaderStream : public virtual IObject
+struct VKE_API IShaderStream : public IObject
 {
   VK_CLASS_GEN;
 
@@ -72,7 +76,7 @@ struct VKE_API IShaderStream : public virtual IObject
 };
 
 VK_INTERFACE();
-struct VKE_API IShader : public virtual IObject
+struct VKE_API IShader : public IObject
 {
   VK_CLASS_GEN;
 

@@ -42,7 +42,7 @@ struct vkVertexElement
 * @brief Interface for controlling how the vertex data should be passed into the shading system.
 */
 VK_INTERFACE();
-struct VKE_API IVertexDeclaration : public virtual IObject
+struct VKE_API IVertexDeclaration : public IObject
 {
   VK_CLASS_GEN;
 

@@ -35,7 +35,7 @@ enum vkTextMode
  *        datasources.
  */
 VK_INTERFACE();
-struct VKE_API IFile : public virtual IObject
+struct VKE_API IFile : public IObject
 {
   VK_CLASS_GEN;
 

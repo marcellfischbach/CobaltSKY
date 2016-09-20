@@ -22,6 +22,21 @@ public:
 };
 
 VK_CLASS()
+class VKE_API vkSkinnedMeshAssetXMLLoader : public vkBaseXMLLoader
+{
+  VK_CLASS_GEN_OBJECT;
+public:
+  vkSkinnedMeshAssetXMLLoader();
+  virtual ~vkSkinnedMeshAssetXMLLoader();
+
+
+  bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+
+};
+
+VK_CLASS()
 class VKE_API vkSubMeshAssetLoader : public IAssetLoader
 {
   VK_CLASS_GEN_OBJECT;
@@ -33,3 +48,4 @@ public:
   virtual const vkClass *EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
   IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
 };
+

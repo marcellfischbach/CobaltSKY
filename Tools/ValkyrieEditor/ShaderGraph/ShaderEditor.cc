@@ -44,6 +44,10 @@ void ShaderEditorWidget::on_cbBlendBinaryGradient_stateChanged(int state)
   SyncToGraph();
 }
 
+void ShaderEditorWidget::on_cbSkinnedMaterial_stateChanged(int state)
+{
+  SyncToGraph();
+}
 
 void ShaderEditorWidget::on_cbDiscardAlpha_stateChanged(int state)
 {
@@ -78,6 +82,9 @@ void ShaderEditorWidget::SyncFromGraph()
   m_syncGuard = true;
   m_gui.cbBlendBinaryGradient->setChecked(shaderGraph->IsBlendOutWithBinaryGradient());
 
+  m_gui.cbSkinnedMaterial->setChecked(shaderGraph->IsSkinnedMaterial());
+  m_gui.sbMaxBones->setValue(shaderGraph->GetMaxBones());
+
   m_gui.cbDiscardAlpha->setChecked(shaderGraph->IsDiscardAlpha());
   m_gui.cbDiscardAlphaCompareMode->setCurrentIndex(shaderGraph->GetDiscardAlphaCompareMode());
   m_gui.sbDiscardAlphaThreshold->setValue(shaderGraph->GetDiscardAlphaThreshold());
@@ -99,6 +106,8 @@ void ShaderEditorWidget::SyncToGraph()
   }
 
   shaderGraph->SetBlendOutWithBinaryGradient(m_gui.cbBlendBinaryGradient->isChecked());
+  shaderGraph->SetSkinnedMaterial(m_gui.cbSkinnedMaterial->isChecked());
+  shaderGraph->SetMaxBones(m_gui.sbMaxBones->value());
 
   shaderGraph->SetDiscardAlpha(m_gui.cbDiscardAlpha->isChecked());
   shaderGraph->SetDiscardAlpha(m_gui.sbDiscardAlphaThreshold->value(),

@@ -32,6 +32,7 @@ private:
   bool m_syncGuard;
 private slots:
   void on_cbBlendBinaryGradient_stateChanged(int state);
+  void on_cbSkinnedMaterial_stateChanged(int state);
   void on_cbDiscardAlpha_stateChanged(int state);
   void on_cbDiscardAlphaCompareMode_currentIndexChanged(int index);
   void on_sbDiscardAlphaThreshold_valueChanged(double value);

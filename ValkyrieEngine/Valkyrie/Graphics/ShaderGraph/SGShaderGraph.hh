@@ -48,6 +48,12 @@ public:
   void SetBlendOutWithBinaryGradient(bool blendOutWithBinaryGradient);
   bool IsBlendOutWithBinaryGradient() const;
 
+  void SetSkinnedMaterial(bool skinnedMaterial);
+  bool IsSkinnedMaterial() const;
+
+  void SetMaxBones(unsigned maxBones);
+  unsigned GetMaxBones() const;
+
   void SetDiscardAlpha(bool discardAlpha);
   void SetDiscardAlpha(float discardAlphaThreshold, vkCompareMode discardAlphaCompareMode);
   bool IsDiscardAlpha() const;
@@ -69,6 +75,9 @@ private:
   vkSGNode *GetNode(vkSGOutput *output);
   bool ValidateNode(vkSGOutput *output);
   bool m_blendOutWithBinaryGradient;
+  bool m_skinnedMaterial;
+  unsigned m_maxBones;
+
   vkSGOutput *m_diffuse;
   vkSGOutput *m_roughness;
 
@@ -176,6 +185,29 @@ VK_FORCEINLINE bool vkSGShaderGraph::IsBlendOutWithBinaryGradient() const
 {
   return m_blendOutWithBinaryGradient;
 }
+
+
+VK_FORCEINLINE void vkSGShaderGraph::SetSkinnedMaterial(bool skinnedMaterial)
+{
+  m_skinnedMaterial = skinnedMaterial;
+}
+
+VK_FORCEINLINE bool vkSGShaderGraph::IsSkinnedMaterial() const
+{
+  return m_skinnedMaterial;
+}
+
+
+VK_FORCEINLINE void vkSGShaderGraph::SetMaxBones(unsigned maxBones)
+{
+  m_maxBones = maxBones;
+}
+
+VK_FORCEINLINE unsigned vkSGShaderGraph::GetMaxBones() const
+{
+  return m_maxBones;
+}
+
 
 VK_FORCEINLINE void vkSGShaderGraph::SetNormal(vkSGOutput *normal)
 {

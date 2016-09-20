@@ -24,6 +24,8 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_renderTarget(0)
   , m_skeletonMatrices(0)
   , m_numberOfSkeletonMatrices(0)
+  , m_skeletonBoneMapping(0)
+  , m_numberOfSkeletonBoneMappings(0)
   , m_shaderGraphFactory(0)
 {
   glewExperimental = true;
@@ -452,6 +454,12 @@ void vkGraphicsGL4::SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numbe
   m_numberOfSkeletonMatrices = numberOfMatrices;
 }
 
+void vkGraphicsGL4::SetSkeletonBoneMapping(const vkUInt32 *boneMapping, vkSize numberOfBoneMappings)
+{
+  m_skeletonBoneMapping = boneMapping;
+  m_numberOfSkeletonBoneMappings = numberOfBoneMappings;
+}
+
 
 void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices)
 {
@@ -518,6 +526,27 @@ void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
   }
 }
 
+void vkGraphicsGL4::BindSkeleton()
+{
+  if (m_skeletonMatrices && m_numberOfSkeletonMatrices)
+  {
+
+    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatsSkeleton);
+    if (attrib)
+    {
+      attrib->Set(m_skeletonMatrices, m_numberOfSkeletonMatrices);
+    }
+  }
+  if (m_skeletonBoneMapping && m_numberOfSkeletonBoneMappings)
+  {
+    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_SkeletonMapping);
+    if (attrib)
+    {
+      attrib->Set(m_skeletonBoneMapping, m_numberOfSkeletonBoneMappings);
+    }
+  }
+}
+
 void vkGraphicsGL4::BindMatrices()
 {
   if (!m_program)
@@ -534,15 +563,7 @@ void vkGraphicsGL4::BindMatrices()
     }
   }
 
-  if (m_skeletonMatrices && m_numberOfSkeletonMatrices)
-  {
-
-    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatsSkeleton);
-    if (attrib)
-    {
-      attrib->Set(m_skeletonMatrices, m_numberOfSkeletonMatrices);
-    }
-  }
+  
   static vkShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
   IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
   if (attrib)

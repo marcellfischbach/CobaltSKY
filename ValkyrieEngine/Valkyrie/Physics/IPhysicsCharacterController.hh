@@ -8,7 +8,7 @@
 struct ITransformationCallback;
 
 VK_INTERFACE()
-struct VKE_API IPhysicsCharacterController : public virtual IObject
+struct VKE_API IPhysicsCharacterController : public IObject
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsCharacterController () { }

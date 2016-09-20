@@ -13,6 +13,8 @@ vkSGShaderGraph::vkSGShaderGraph()
   , m_discardAlphaThreshold(0.0f)
   , m_discardAlphaCompareMode(eCM_Less)
   , m_normal(0)
+  , m_skinnedMaterial(false)
+  , m_maxBones(64)
 {
 
 }
@@ -164,11 +166,11 @@ bool vkSGShaderGraph::ContainsNode(const vkSGNode *node) const
 
 int vkSGShaderGraph::GetIndexOfNode(const vkSGNode *node) const
 {
-  for (int i=0, in=m_allNodes.size(); i<in; ++i)
+  for (vkSize i=0, in=m_allNodes.size(); i<in; ++i)
   {
     if (m_allNodes[i] == node)
     {
-      return i;
+      return (int)i;
     }
   }
 

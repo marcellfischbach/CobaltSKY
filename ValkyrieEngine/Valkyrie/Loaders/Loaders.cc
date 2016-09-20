@@ -33,6 +33,7 @@ void vkLoaders::Register(vkResourceManager *mgr)
   mgr->RegisterLoader(new vkSamplerAssetXMLLoader());
   mgr->RegisterLoader(new vkTextureAssetXMLLoader());
   mgr->RegisterLoader(new vkMeshAssetXMLLoader());
+  mgr->RegisterLoader(new vkSkinnedMeshAssetXMLLoader());
   mgr->RegisterLoader(new vkCollisionAssetXMLLoader());
 
   // image loaders

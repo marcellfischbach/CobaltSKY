@@ -153,7 +153,7 @@ vkInt16 vkMaterial::GetIndex(const vkString &parameterName) const
   {
     if (m_params[i].m_name == parameterName)
     {
-      return i;
+      return (vkInt16)i;
     }
   }
   return -1;

@@ -3,6 +3,7 @@
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scan.hh>
 #include <Valkyrie/Entity/Scene.hh>
+#include <Valkyrie/Animation/Skeleton.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
@@ -197,5 +198,37 @@ void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntit
     {
       entityScan->ScanRenderState(this);
     }
+  }
+}
+
+
+
+vkSkinnedMeshState::vkSkinnedMeshState()
+  : vkStaticMeshState()
+  , m_skeleton(0)
+{
+
+}
+
+
+vkSkinnedMeshState::~vkSkinnedMeshState()
+{
+  VK_RELEASE(m_skeleton);
+}
+
+
+void vkSkinnedMeshState::SetSkeleton(vkSkeleton *skeleton)
+{
+  VK_SET(m_skeleton, skeleton);
+}
+
+
+void vkSkinnedMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
+{
+  if (m_skeleton)
+  {
+    graphics->SetSkeleton(m_skeleton);
+
+    vkStaticMeshState::Render(graphics, pass);
   }
 }

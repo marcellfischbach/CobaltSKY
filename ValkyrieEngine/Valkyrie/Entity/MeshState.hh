@@ -10,6 +10,7 @@
 
 class vkMesh;
 class vkMaterialInstance;
+class vkSkeleton;
 /**
 * \ingroup entity
 */
@@ -71,6 +72,27 @@ private:
   float m_friction;
   float m_restitution;
 };
+
+
+VK_CLASS()
+class VKE_API vkSkinnedMeshState : public vkStaticMeshState
+{
+  VK_CLASS_GEN;
+public:
+  vkSkinnedMeshState();
+  virtual ~vkSkinnedMeshState();
+
+  void SetSkeleton(vkSkeleton *skeleton);
+  vkSkeleton *GetSkeleton();
+  const vkSkeleton *GetSkeleton() const;
+
+  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
+
+private:
+  vkSkeleton *m_skeleton;
+};
+
+
 
 VK_FORCEINLINE vkMesh *vkStaticMeshState::GetMesh()
 {
@@ -136,3 +158,14 @@ VK_FORCEINLINE float vkStaticMeshState::GetRestitution() const
 {
   return m_restitution;
 }
+
+VK_FORCEINLINE vkSkeleton *vkSkinnedMeshState::GetSkeleton()
+{
+  return m_skeleton;
+}
+
+VK_FORCEINLINE const vkSkeleton *vkSkinnedMeshState::GetSkeleton() const
+{
+  return m_skeleton;
+}
+

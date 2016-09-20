@@ -42,14 +42,14 @@ struct Bone
 static void Debug(const aiScene* scene);
 static void Debug(const aiScene *scene, aiNode* node, int i);
 static void Debug(aiMesh* mesh);
-static void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene);
-static void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
+static void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene);
+static void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 static void CollectSkeleton(Bone &skeleton, const aiScene *scene, aiNode *node);
 static void CollectCollisions(std::vector<Shape> &collisions, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix);
 static QDomElement CreateSkeletonElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, Bone &bone, const QString &dataName);
-static QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const QString &dataName);
+static QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, const QString &dataName);
 static QDomElement CreateShapesElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Shape> &collisions, const QString &dataName);
-static void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh);
+static void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh, std::map<vkString, vkUInt8> &boneIndices);
 static bool ExportEntity(const aiScene *scene, 
                          bool meshes, const QString &meshSuffix, std::vector<unsigned> &materialIndices,
                          bool skeleton, const QString &skeletonSuffix, 
@@ -142,13 +142,15 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
   std::vector<Mesh> meshes;
   std::vector<Shape> collisions;
   std::vector<unsigned> materialIndices;
+  std::map<vkString, vkUInt8> boneIndices;
   Bone skeleton;
   skeleton.name = "undefined";
-  CollectData(meshes, materialIndices, skeleton, collisions, scene);
+  CollectData(meshes, materialIndices, boneIndices, skeleton, collisions, scene);
 
   bool hasMesh = false;
   bool hasCollider = false;
   bool hasSkeleton = false;
+  bool hasSkin = false;
 
   unsigned numDatas = 0;
   if (meshes.size() > 0)
@@ -166,6 +168,13 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
     hasCollider = true;
     numDatas++;
   }
+  if (boneIndices.size() > 0)
+  {
+    hasSkin = true;
+  }
+
+ 
+
 
 
   assetmanager::AssetWriter writer;
@@ -182,11 +191,18 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
 
   // maybe make that a skinned mesh state later when there is a skeleton attached
   entityStateElement.setAttribute("name", info.baseName());
-  entityStateElement.setAttribute("class", "vkStaticMeshState");
+  if (hasSkin)
+  {
+    entityStateElement.setAttribute("class", "vkSkinnedMeshState");
+  }
+  else
+  {
+    entityStateElement.setAttribute("class", "vkStaticMeshState");
+  }
 
   if (hasMesh)
   {
-    QDomElement meshElement = CreateMeshElement(doc, writer, scene, meshes, materialIndices, dataFileName);
+    QDomElement meshElement = CreateMeshElement(doc, writer, scene, meshes, materialIndices, boneIndices, dataFileName);
     entityStateElement.appendChild(meshElement);
 
     QDomElement materialsElement = doc.createElement("materials");
@@ -230,6 +246,7 @@ bool Importer::Import(const QFileInfo &info, const QDir &outputDir)
   }
   writer.Output(dataOutputFile);
   dataOutputFile->Close();
+  return true;
 }
 
 void ExportBone(Bone &bone, QDomElement parentElement, QDomDocument doc)
@@ -259,10 +276,11 @@ QDomElement CreateSkeletonElement(QDomDocument doc, assetmanager::AssetWriter &w
   return skeletonElement;
 }
 
-QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const QString &dataName)
+QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &writer, const aiScene *scene, std::vector<Mesh> &meshes,std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, const QString &dataName)
 {
-
-  QDomElement meshElement = doc.createElement("mesh");
+  QDomElement meshElement = boneIndices.size() != 0
+    ? doc.createElement("skinnedMesh")
+    : doc.createElement("mesh");
   QDomElement materialSlotsElement = doc.createElement("materialSlots");
   QDomElement globalIndicesElement = doc.createElement("globalIndices");
   QDomElement subMeshesElement = doc.createElement("subMeshes");
@@ -271,6 +289,18 @@ QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &write
   meshElement.appendChild(globalIndicesElement);
   meshElement.appendChild(subMeshesElement);
 
+  if (boneIndices.size() > 0)
+  {
+    QDomElement bonesElement = doc.createElement("bones");
+    meshElement.appendChild(bonesElement);
+    for (std::map<vkString, vkUInt8>::iterator it = boneIndices.begin(); it != boneIndices.end(); ++it)
+    {
+      QDomElement boneElement = doc.createElement("bone");
+      boneElement.setAttribute("name", QString(it->first.c_str()));
+      boneElement.setAttribute("id", it->second);
+      bonesElement.appendChild(boneElement);
+    }
+  }
 
   //
   // export the material names 
@@ -308,7 +338,7 @@ QDomElement CreateMeshElement(QDomDocument doc, assetmanager::AssetWriter &write
     //transpose(inverse(modelView))
     mesh.matrix.Inverted(normalMatrix);
     normalMatrix.Transpose();
-    WriteMeshToOutputStream(outputStream, mesh.matrix, normalMatrix, mesh.mesh);
+    WriteMeshToOutputStream(outputStream, mesh.matrix, normalMatrix, mesh.mesh, boneIndices);
 
     writer.AddEntry(ValidateName(vkString(mesh.mesh->mName.C_Str())), "SUBMESH", outputStream.GetSize(), outputStream.GetBuffer());
   }
@@ -510,7 +540,7 @@ vkString ValidateName(const vkString &name)
 }
 
 
-void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh)
+void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f &matrix, const vkMatrix4f &normalMatrix, aiMesh *mesh, std::map<vkString, vkUInt8> &boneIndices)
 {
   outputStream
     << (vkUInt32)VK_VERSION(1, 0, 0)
@@ -534,7 +564,7 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
   }
   if (mesh->HasTangentsAndBitangents())
   {
-    numVertexDeclarations+=2;
+    numVertexDeclarations += 2;
     stride += sizeof(float) * 6;
   }
   for (unsigned i = 0; i < mesh->GetNumUVChannels(); ++i)
@@ -546,6 +576,13 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
   if (mesh->GetNumColorChannels() > 0)
   {
     numVertexDeclarations++;
+    stride += sizeof(float) * 4;
+  }
+
+  if (boneIndices.size() > 0)
+  {
+    numVertexDeclarations += 2;
+    stride += sizeof(vkUInt8) * 4;
     stride += sizeof(float) * 4;
   }
 
@@ -617,6 +654,96 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
     offset += 4 * sizeof(float);
   }
 
+
+  if (boneIndices.size() > 0)
+  {
+    outputStream
+      << (vkUInt32)eVST_BoneIndex
+      << (vkUInt32)eDT_UnsignedByte
+      << (vkSize)4
+      << offset
+      << stride
+      << (vkUInt8)0;
+    offset += 4 * sizeof(vkUInt8);
+
+    outputStream
+      << (vkUInt32)eVST_BoneWeight
+      << (vkUInt32)eDT_Float
+      << (vkSize)4
+      << offset
+      << stride
+      << (vkUInt8)0;
+    offset += 4 * sizeof(float);
+  }
+
+  struct VertexBoneWeight
+  {
+    vkUInt8 boneIdx;
+    float weight;
+    VertexBoneWeight()
+      : boneIdx(0)
+      , weight(0.0f)
+    {
+    }
+  };
+
+  struct VertexWeight
+  {
+    VertexBoneWeight weights[4];
+    void Add(vkUInt8 boneIdx, float weight)
+    {
+      unsigned minIdx = 0;
+      float minWeight = weights[minIdx].weight;
+      for (unsigned i=0; i<4; ++i)
+      {
+        VertexBoneWeight &vbw = weights[i];
+        if (vbw.weight < minWeight)
+        {
+          minWeight = vbw.weight;
+          minIdx = i;
+        }
+      }
+      if (minWeight < weight)
+      {
+        weights[minIdx].boneIdx = boneIdx;
+        weights[minIdx].weight = weight;
+      }
+    }
+
+    void Normalize()
+    {
+      float weightSum = 0.0f;
+      for (unsigned i = 0; i < 4; ++i)
+      {
+        VertexBoneWeight &vbw = weights[i];
+        weightSum += vbw.weight;
+      }
+      if (weightSum != 0.0f)
+      {
+        for (unsigned i = 0; i < 4; ++i)
+        {
+          VertexBoneWeight &vbw = weights[i];
+          vbw.weight /= weightSum;
+        }
+      }
+    }
+  };
+
+
+  VertexWeight *vertexWeights = new VertexWeight[mesh->mNumVertices];
+  if (boneIndices.size() > 0)
+  {
+    for (unsigned i = 0, in = mesh->mNumBones; i < in; ++i)
+    {
+      aiBone *bone = mesh->mBones[i];
+      for (unsigned w = 0; w < bone->mNumWeights; ++w)
+      {
+        aiVertexWeight &vw = bone->mWeights[w];
+        vertexWeights[vw.mVertexId].Add(i, vw.mWeight);
+      }
+    }
+  }
+
   //
   // now output the vertices
   outputStream 
@@ -661,6 +788,21 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
     {
       aiColor4D &col = mesh->mColors[0][i];
       outputStream << col.r << col.g << col.b << col.a;
+    }
+
+    if (boneIndices.size() > 0)
+    {
+      vertexWeights[i].Normalize();
+      outputStream
+        << (vkUInt8)vertexWeights[i].weights[0].boneIdx
+        << (vkUInt8)vertexWeights[i].weights[1].boneIdx
+        << (vkUInt8)vertexWeights[i].weights[2].boneIdx
+        << (vkUInt8)vertexWeights[i].weights[3].boneIdx;
+      outputStream
+        << vertexWeights[i].weights[0].weight
+        << vertexWeights[i].weights[1].weight
+        << vertexWeights[i].weights[2].weight
+        << vertexWeights[i].weights[3].weight;
     }
   }
 
@@ -707,7 +849,7 @@ void WriteMeshToOutputStream(vkAssetOutputStream &outputStream, const vkMatrix4f
 
 
 int indent = 0;
-void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene)
+void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, Bone &skeleton, std::vector<Shape> &collisions, const aiScene *scene)
 {
   vkMatrix4f parentMatrix;
   aiNode *root = scene->mRootNode;
@@ -727,13 +869,13 @@ void CollectData(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndic
     }
     else
     {
-      CollectMeshes(meshes, materialIndices, scene, child, parentMatrix);
+      CollectMeshes(meshes, materialIndices, boneIndices, scene, child, parentMatrix);
     }
     indent--;
   }
 }
 
-void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix)
+void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialIndices, std::map<vkString, vkUInt8> &boneIndices, const aiScene *scene, aiNode *node, const vkMatrix4f &parentMatrix)
 {
   vkMatrix4f M(node->mTransformation.mData);
   M.Transpose();
@@ -746,6 +888,16 @@ void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialInd
     m.matrix = M;
     meshes.push_back(m);
 
+    for (unsigned b = 0, nb = mesh->mNumBones; b < nb; ++b)
+    {
+      vkString boneName = vkString(mesh->mBones[b]->mName.C_Str());
+      std::map<vkString, vkUInt8>::iterator it = boneIndices.find(boneName);
+      if (it == boneIndices.end())
+      {
+        boneIndices[boneName] = boneIndices.size();
+      }
+    }
+
 
     if (!contains(materialIndices, mesh->mMaterialIndex))
     {
@@ -755,7 +907,7 @@ void CollectMeshes(std::vector<Mesh> &meshes, std::vector<unsigned> &materialInd
   for (unsigned i = 0; i < node->mNumChildren; ++i)
   {
     aiNode *child = node->mChildren[i];
-    CollectMeshes(meshes, materialIndices, scene, child, M);
+    CollectMeshes(meshes, materialIndices, boneIndices, scene, child, M);
   }
 }
 

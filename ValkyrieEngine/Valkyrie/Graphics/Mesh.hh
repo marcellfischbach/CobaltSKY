@@ -4,6 +4,7 @@
 #include <Valkyrie/Enums.hh>
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
+#include <map>
 #include <vector>
 #include <Valkyrie/Graphics/Mesh.refl.hh>
 
@@ -12,8 +13,8 @@ struct IGraphics;
 struct IVertexBuffer;
 struct IVertexDeclaration;
 
-
 class vkMaterialInstance;
+class vkSkeleton;
 
 VK_CLASS()
 class VKE_API vkSubMesh : public vkObject
@@ -24,7 +25,7 @@ public:
   vkSubMesh();
   virtual ~vkSubMesh();
 
-  void Render(IGraphics *renderer);
+  virtual void Render(IGraphics *renderer);
 
   void SetPrimitiveType(vkPrimitiveType type);
   void SetIndexType(vkDataType indexType);
@@ -80,10 +81,10 @@ public:
   const vkString &GetMaterialName(vkSize idx) const;
   vkUInt32 GetMaterialIndex(const vkString &materialName) const;
 
-  void Render(IGraphics *renderer, vkRenderPass pass, vkUInt32 numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
+  virtual void Render(IGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
 
 
-private:
+protected:
   struct Data
   {
     vkSubMesh *m_mesh;
@@ -106,6 +107,31 @@ private:
 };
 
 
+
+
+VK_CLASS()
+class VKE_API vkSkinnedMesh : public vkMesh
+{
+  VK_CLASS_GEN;
+
+public:
+  vkSkinnedMesh();
+  virtual ~vkSkinnedMesh();
+
+  void AddBoneName(const vkString &boneName, vkUInt8 boneIndex);
+  void GenerateMapping(const vkSkeleton *skeleton);
+
+  virtual void Render(IGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0) override;
+
+private:
+  std::map<vkString, vkUInt8> m_boneNameMapping;
+
+  vkUInt32 *m_boneIdxMapping;
+  vkSize m_numberOfIndexMapping;
+
+};
+
+
 VK_FORCEINLINE vkSize vkMesh::GetNumberOfMaterials() const
 {
   return m_numberOfMaterials;
@@ -115,4 +141,7 @@ VK_FORCEINLINE const vkBoundingBox &vkMesh::GetBoundingBox() const
 {
   return m_boundingBox;
 }
+
+
+
 

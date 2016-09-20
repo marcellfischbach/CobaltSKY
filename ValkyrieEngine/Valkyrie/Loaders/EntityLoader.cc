@@ -472,8 +472,8 @@ IObject *vkRenderStateXMLLoader::Load(TiXmlElement *element, const vkResourceLoc
   TiXmlElement *fadeOutElement = element->FirstChildElement("fadeOut");
   if (fadeOutElement && fadeOutElement->Attribute("near") && fadeOutElement->Attribute("far"))
   {
-    float near = atof(fadeOutElement->Attribute("near"));
-    float far= atof(fadeOutElement->Attribute("far"));
+    float near = (float)atof(fadeOutElement->Attribute("near"));
+    float far = (float)atof(fadeOutElement->Attribute("far"));
     renderState->SetFadeOut(near, far);
   }
   return vkSpatialStateXMLLoader::Load(element, locator, userData);
