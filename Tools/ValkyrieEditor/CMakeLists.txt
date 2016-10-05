@@ -131,6 +131,20 @@ source_group(
     ${EDITOR_MESH_SOURCES}
     )
 
+
+set(EDITOR_NODE_GRAPH_SOURCES
+    NodeGraph/NodeGraph.cc
+    NodeGraph/NodeGraph.hh
+    )
+
+
+source_group(
+    "Editor\\NodeGraph"
+    FILES
+    ${EDITOR_NODE_GRAPH_SOURCES}
+    )
+
+
 set(EDITOR_SCENEWIDGET_SOURCES
     SceneWidget/Camera.cc
     SceneWidget/Camera.hh
@@ -246,6 +260,7 @@ set(ALL_SOURCES
     ${EDITOR_GRAPH_SOURCES}
     ${EDITOR_MATERIAL_INSTANCE_SOURCES}
     ${EDITOR_MESH_SOURCES}
+    ${EDITOR_NODE_GRAPH_SOURCES}
     ${EDITOR_SCENEWIDGET_SOURCES}
     ${EDITOR_SHADERGRAPH_SOURCES}
     ${EDITOR_STATICMESH_SOURCES}

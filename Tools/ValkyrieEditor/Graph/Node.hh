@@ -9,6 +9,7 @@
 #include <Valkyrie/Types.hh>
 #include <QImage>
 #include <QGraphicsPixmapItem>
+#include <QGraphicsWidget>
 
 
 class QGraphicsItem;
@@ -237,5 +238,32 @@ inline void Node::SetShowImage(bool showImage)
 {
   m_showImage = showImage;
 }
+
+
+class Headline : public QGraphicsWidget
+{
+  Q_OBJECT
+public:
+  Headline (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+  QSizeF sizeHint (Qt::SizeHint which, const QSizeF &constraint) const;
+};
+
+
+class GraphNode : public QGraphicsWidget
+{
+  Q_OBJECT
+public:
+  GraphNode (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  virtual ~GraphNode ();
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
+
+
+private:
+  Headline *m_headLine;
+};
 
 }

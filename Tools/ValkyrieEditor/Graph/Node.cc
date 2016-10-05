@@ -10,7 +10,8 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qtextdocument.h>
-
+#include <QPainter>
+#include <QGraphicsGridLayout>
 
 #define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define VK_MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -960,6 +961,61 @@ void Node::NameChanged()
 {
   emit m_scene->NodeNameChanged(this);
 }
+
+
+Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+{
+
+}
+
+void Headline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  QGraphicsWidget::paint(painter, option, widget);
+
+  painter->fillRect(rect(), QColor(225, 0, 0));
+}
+
+QSizeF Headline::sizeHint (Qt::SizeHint which, const QSizeF &constraint) const
+{
+  switch (which)
+  {
+  case Qt::MinimumSize:
+  case Qt::PreferredSize:
+    return QSizeF(0.0f, 25.0f);
+  case Qt::MaximumSize:
+      return QSizeF(FLT_MAX, 25.0f);
+  default:
+      break;
+  }
+
+  return QSizeF(0.0f, 25.0f);
+}
+
+
+GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+{
+  m_headLine = new Headline(this);
+
+  QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
+  layout->addItem(m_headLine, 0, 0, 1, 2);
+}
+
+GraphNode::~GraphNode ()
+{
+
+}
+
+
+void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  QGraphicsWidget::paint(painter, option, widget);
+
+  painter->fillRect(rect(), QColor(225, 225, 225));
+}
+
+
 
 }
 
