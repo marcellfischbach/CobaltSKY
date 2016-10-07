@@ -31,9 +31,10 @@ void NodeGraphScene::AddNode(Node *node)
 {
   m_nodes.append(node);
   node->SetScene(this);
-  //addItem(node->GetItem());\
+  //addItem(node->GetItem());
 
   GraphNode *gn = new GraphNode();
+//  gn->setGeometry(0, 0, 200, 100);
   addItem (gn);
 
   if (!m_silent)

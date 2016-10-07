@@ -8,6 +8,7 @@
 #include <Graph/Direction.h>
 #include <Valkyrie/Types.hh>
 #include <QImage>
+#include <QGraphicsGridLayout>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsWidget>
 
@@ -239,6 +240,63 @@ inline void Node::SetShowImage(bool showImage)
   m_showImage = showImage;
 }
 
+class TextItem : public QGraphicsLayoutItem, public QGraphicsSimpleTextItem
+{
+public:
+  TextItem (QGraphicsItem *parent);
+  ~TextItem();
+
+  void setGeometry(const QRectF &geom) Q_DECL_OVERRIDE;
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const Q_DECL_OVERRIDE;
+  QRectF boundingRect() const Q_DECL_OVERRIDE;
+};
+
+class FlowInOutItem : public QGraphicsWidget
+{
+public:
+  FlowInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~FlowInOutItem();
+
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+private:
+  bool m_connected;
+};
+
+class AttribInOutItem : public QGraphicsWidget
+{
+public:
+  AttribInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribInOutItem();
+
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+private:
+  bool m_connected;
+  bool m_visible;
+};
+
+class AttribInput : public QGraphicsWidget
+{
+public:
+  AttribInput(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribInput();
+
+  void SetName(const QString &name);
+  void SetValue (const QString &value);
+private:
+  void UpdateText ();
+private:
+  AttribInOutItem *m_anchor;
+  TextItem *m_text;
+
+  QString m_value;
+  QString m_name;
+};
 
 class Headline : public QGraphicsWidget
 {
@@ -246,11 +304,18 @@ class Headline : public QGraphicsWidget
 public:
   Headline (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
 
+  void AddFlowItem();
+
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-  QSizeF sizeHint (Qt::SizeHint which, const QSizeF &constraint) const;
-};
 
+
+private:
+  QGraphicsGridLayout *m_layout;
+  FlowInOutItem *m_flowIn;
+  TextItem *m_text;
+  FlowInOutItem *m_flowOut;
+};
 
 class GraphNode : public QGraphicsWidget
 {
@@ -261,9 +326,21 @@ public:
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
+  void AddInput (AttribInput *input);
+  void FinishInput ();
 
 private:
+  QGraphicsGridLayout *m_layout;
   Headline *m_headLine;
+
+  int m_leftCount;
+  QGraphicsWidget *m_left;
+  QGraphicsGridLayout *m_leftLayout;
+
+  int m_rightCount;
+  QGraphicsWidget *m_right;
+  QGraphicsGridLayout *m_rightLayout;
+  bool m_selected;
 };
 
 }

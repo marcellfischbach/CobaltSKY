@@ -963,43 +963,259 @@ void Node::NameChanged()
 }
 
 
-Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
+TextItem::TextItem(QGraphicsItem *parent)
+  : QGraphicsLayoutItem(), QGraphicsSimpleTextItem(parent)
+{
+}
+
+TextItem::~TextItem()
+{
+}
+
+QRectF TextItem::boundingRect() const
+{
+  return QFontMetricsF(font()).boundingRect(text());
+}
+
+void TextItem::setGeometry(const QRectF &geom)
+{
+  prepareGeometryChange();
+  QGraphicsLayoutItem::setGeometry(geom);
+  setPos(geom.topLeft());
+}
+
+QSizeF TextItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+  QRectF r = QFontMetricsF(font()).boundingRect(text());
+  switch (which)
+  {
+  case Qt::MinimumSize:
+  case Qt::PreferredSize:
+    return QSizeF (r.width(), r.height());
+  case Qt::MaximumSize:
+    return QSizeF(FLT_MAX, r.height());
+  }
+  return QSizeF (r.width(), r.height());
+}
+
+
+FlowInOutItem::FlowInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
+  , m_connected (false)
+{
+}
+
+
+
+FlowInOutItem::~FlowInOutItem()
 {
 
+}
+
+QSizeF FlowInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+  return QSizeF(21.0f, 16.0f);
+}
+
+void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  float scale = 4.0f;
+
+  QPainterPath drawPath(QPointF(2.0f, 2.0f));
+  drawPath.lineTo(13.0f, 2.0f);
+  drawPath.lineTo(19.0f, 8.0f);
+  drawPath.lineTo(13.0f, 14.0f);
+  drawPath.lineTo(2.0f, 14.0f);
+  drawPath.lineTo(2.0f, 2.0f);
+  painter->setPen(QColor(255, 255, 255));
+  painter->drawPath(drawPath);
+
+  if (m_connected)
+  {
+    QPainterPath fillPath(QPointF(4.0f, 4.0f));
+    fillPath.lineTo(12.0f, 4.0f);
+    fillPath.lineTo(16.0f, 8.0f);
+    fillPath.lineTo(12.0f, 12.0f);
+    fillPath.lineTo(4.0f, 12.0f);
+    fillPath.lineTo(4.0f, 4.0f);
+    painter->fillPath(fillPath, QColor(255, 255, 255));
+  }
+}
+
+
+
+
+AttribInOutItem::AttribInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+  , m_connected (false)
+  , m_visible(true)
+{
+}
+
+
+
+AttribInOutItem::~AttribInOutItem()
+{
+
+}
+
+QSizeF AttribInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+  return QSizeF(16.0f, 16.0f);
+}
+
+void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  if (!m_visible)
+  {
+    return;
+  }
+
+  QPainterPath drawPath;
+  drawPath.addEllipse(QRectF(2.0f, 2.0f, 12.0f, 12.0f));
+  painter->setPen(QColor(64, 64, 64));
+  painter->drawPath(drawPath);
+
+  if (m_connected)
+  {
+    QPainterPath fillPath;
+    fillPath.addEllipse(QRectF(4.0f, 4.0f, 8.0f, 8.0f));
+    painter->fillPath(fillPath, QColor(64, 64, 64));
+  }
+}
+
+
+AttribInput::AttribInput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+  , m_name("Attribute")
+  , m_value("10.0")
+{
+  QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
+  layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
+
+  m_anchor = new AttribInOutItem(this);
+  m_text = new TextItem(this);
+  m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  m_text->setPen(QColor(64, 64, 64));
+
+  layout->addItem(m_anchor, 0, 0, 1, 1);
+  layout->addItem(m_text, 0, 1, 1, 1);
+
+  UpdateText();
+}
+
+AttribInput::~AttribInput()
+{
+
+}
+
+void AttribInput::SetName(const QString &name)
+{
+  m_name = name;
+  UpdateText ();
+}
+
+void AttribInput::SetValue(const QString &value)
+{
+  m_value = value;
+  UpdateText();
+}
+
+void AttribInput::UpdateText()
+{
+  QString text = "";
+  if (m_value.length() != 0)
+  {
+    text += QString("[%1] ").arg(m_value);
+  }
+  text += m_name;
+  m_text->setText(text);
+}
+
+
+Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+  , m_flowIn(0)
+  , m_flowOut(0)
+{
+  setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+
+  m_text = new TextItem(this);
+
+  m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  m_text->setText("Test Node");
+
+
+  m_layout = new QGraphicsGridLayout(this);
+  m_layout->setContentsMargins(2.0, 2.0, 2.0, 2.0);
+  m_layout->setHorizontalSpacing(6.0);
+  m_layout->addItem(m_text, 0, 1, 1, 1, Qt::AlignVCenter);
+
+  m_layout->setColumnStretchFactor(0, 0);
+  m_layout->setColumnStretchFactor(1, 1);
+  m_layout->setColumnStretchFactor(2, 0);
+}
+
+void Headline::AddFlowItem()
+{
+  m_flowIn = new FlowInOutItem(this);
+  m_flowOut = new FlowInOutItem(this);
+
+  m_layout->addItem(m_flowIn, 0, 0, 1, 1);
+  m_layout->addItem(m_flowOut, 0, 2, 1, 1);
 }
 
 void Headline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   QGraphicsWidget::paint(painter, option, widget);
 
-  painter->fillRect(rect(), QColor(225, 0, 0));
+  QLinearGradient lg (rect().left(), 0.0f, rect().right(), 0.0f);
+  lg.setColorAt(0.0f, QColor(225, 0, 0));
+  lg.setColorAt(1.0f, QColor(225, 128, 128));
+
+  painter->fillRect(rect(), QBrush(lg));
 }
 
-QSizeF Headline::sizeHint (Qt::SizeHint which, const QSizeF &constraint) const
-{
-  switch (which)
-  {
-  case Qt::MinimumSize:
-  case Qt::PreferredSize:
-    return QSizeF(0.0f, 25.0f);
-  case Qt::MaximumSize:
-      return QSizeF(FLT_MAX, 25.0f);
-  default:
-      break;
-  }
 
-  return QSizeF(0.0f, 25.0f);
-}
 
 
 GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
+  , m_selected(false)
 {
-  m_headLine = new Headline(this);
 
-  QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
-  layout->addItem(m_headLine, 0, 0, 1, 2);
+  m_layout = new QGraphicsGridLayout(this);
+  m_layout->setHorizontalSpacing(0);
+  m_layout->setVerticalSpacing(0);
+  m_layout->setContentsMargins(2.0f, 2.0f, 2.0f, 2.0f);
+
+
+  m_headLine = new Headline(this);
+  m_headLine->AddFlowItem();
+  m_layout->addItem(m_headLine, 0, 0, 1, 2);
+
+  m_leftCount = 0;
+  m_left = new QGraphicsWidget(this);
+  m_left->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+  m_leftLayout = new QGraphicsGridLayout(m_left);
+  m_leftLayout->setContentsMargins(0, 0, 0, 0);
+
+  m_layout->addItem(m_left, 1, 0, 1, 1);
+
+  m_rightCount = 0;
+  m_right= new QGraphicsWidget(this);
+  m_right->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+  m_rightLayout = new QGraphicsGridLayout(m_right);
+  m_rightLayout->setContentsMargins(0, 0, 0, 0);
+
+  m_layout->addItem(m_right, 1, 1, 1, 1);
+
+  m_layout->setColumnStretchFactor(0, 1);
+  m_layout->setColumnStretchFactor(1, 1);
+
+  AddInput(new AttribInput(this));
+  AddInput(new AttribInput(this));
+  FinishInput();
 }
 
 GraphNode::~GraphNode ()
@@ -1011,11 +1227,29 @@ GraphNode::~GraphNode ()
 void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   QGraphicsWidget::paint(painter, option, widget);
+  if (m_selected)
+  {
+    painter->fillRect(rect(), QColor(225, 225, 128));
+  }
 
-  painter->fillRect(rect(), QColor(225, 225, 225));
+  painter->fillRect(m_layout->contentsRect(), QColor(225, 225, 225));
 }
 
 
+void GraphNode::AddInput(AttribInput *input)
+{
+  input->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  m_leftLayout->addItem(input, m_leftCount, 0);
+  m_leftCount++;
+}
+
+void GraphNode::FinishInput()
+{
+  QGraphicsWidget *widget = new QGraphicsWidget(this);
+  widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_leftLayout->addItem(widget, m_leftCount, 0);
+  m_leftCount++;
+}
 
 }
 
