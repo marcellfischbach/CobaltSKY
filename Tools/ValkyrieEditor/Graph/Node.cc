@@ -972,6 +972,13 @@ TextItem::~TextItem()
 {
 }
 
+void TextItem::SetColor(const QColor &color)
+{
+  QPen lpen(pen());
+  lpen.setColor(color);
+  setPen(lpen);
+}
+
 QRectF TextItem::boundingRect() const
 {
   return QFontMetricsF(font()).boundingRect(text());
@@ -996,6 +1003,25 @@ QSizeF TextItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
     return QSizeF(FLT_MAX, r.height());
   }
   return QSizeF (r.width(), r.height());
+}
+
+SpacerItem::SpacerItem(QGraphicsLayoutItem *parent, int direction)
+  : QGraphicsLayoutItem(parent)
+{
+  if (direction == 0)
+  {
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+  }
+  else
+  {
+    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
+  }
+}
+
+
+QSizeF SpacerItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+  return QSizeF(1.0f, 1.0f);
 }
 
 
@@ -1050,6 +1076,7 @@ AttribInOutItem::AttribInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   , m_connected (false)
   , m_visible(true)
 {
+  setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 }
 
 
@@ -1070,6 +1097,8 @@ void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
   {
     return;
   }
+
+  painter->fillRect(contentsRect(), QColor(128, 128, 128));
 
   QPainterPath drawPath;
   drawPath.addEllipse(QRectF(2.0f, 2.0f, 12.0f, 12.0f));
@@ -1096,12 +1125,20 @@ AttribInput::AttribInput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_anchor = new AttribInOutItem(this);
   m_text = new TextItem(this);
   m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  m_text->setPen(QColor(64, 64, 64));
+  m_text->SetColor(QColor(64, 64, 64));
 
-  layout->addItem(m_anchor, 0, 0, 1, 1);
-  layout->addItem(m_text, 0, 1, 1, 1);
+  SpacerItem *spacer = new SpacerItem(this, 0);
 
   UpdateText();
+
+  layout->addItem(m_anchor, 0, 0, 1, 1);
+  layout->addItem(m_text, 0, 1, 1, 1, Qt::AlignLeft);
+  layout->addItem(spacer, 0, 2, 1, 1);
+
+  layout->setColumnStretchFactor(0, 0);
+  layout->setColumnStretchFactor(1, 0);
+  layout->setColumnStretchFactor(2, 1);
+
 }
 
 AttribInput::~AttribInput()
@@ -1130,6 +1167,44 @@ void AttribInput::UpdateText()
   }
   text += m_name;
   m_text->setText(text);
+  m_text->update();
+}
+
+
+
+AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : QGraphicsWidget(parent, wFlags)
+  , m_name("Attribute")
+{
+  QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
+  layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
+
+  m_text = new TextItem(this);
+  m_text->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_text->SetColor(QColor(64, 64, 64));
+  m_text->setText(m_name);
+  m_anchor = new AttribInOutItem(this);
+
+
+  layout->addItem(m_text, 0, 0, Qt::AlignRight);
+  layout->addItem(m_anchor, 0, 1);
+
+}
+
+AttribOutput::~AttribOutput()
+{
+
+}
+
+void AttribOutput::SetName(const QString &name)
+{
+  m_name = name;
+  m_text->setText(m_name);
+}
+
+void AttribOutput::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+  painter->fillRect(contentsRect(), QColor(128, 0, 0));
 }
 
 
@@ -1141,7 +1216,6 @@ Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 
   m_text = new TextItem(this);
-
   m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_text->setText("Test Node");
 
@@ -1200,7 +1274,8 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_leftLayout = new QGraphicsGridLayout(m_left);
   m_leftLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_layout->addItem(m_left, 1, 0, 1, 1);
+  m_layout->addItem(m_left, 1, 0);
+
 
   m_rightCount = 0;
   m_right= new QGraphicsWidget(this);
@@ -1208,14 +1283,32 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_rightLayout = new QGraphicsGridLayout(m_right);
   m_rightLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_layout->addItem(m_right, 1, 1, 1, 1);
+  m_layout->addItem(m_right, 1, 1);
 
-  m_layout->setColumnStretchFactor(0, 1);
-  m_layout->setColumnStretchFactor(1, 1);
 
-  AddInput(new AttribInput(this));
-  AddInput(new AttribInput(this));
+  AttribInput *input0 = new AttribInput(this);
+  input0->SetValue("1.0");
+  input0->SetName("uv");
+  AddInput(input0);
   FinishInput();
+
+  AttribOutput *outputC = new AttribOutput(this);
+  AttribOutput *outputR = new AttribOutput(this);
+  AttribOutput *outputG = new AttribOutput(this);
+  AttribOutput *outputB = new AttribOutput(this);
+  AttribOutput *outputA = new AttribOutput(this);
+
+  outputC->SetName("color");
+  outputR->SetName("red");
+  outputG->SetName("green");
+  outputB->SetName("blue");
+  outputA->SetName("alpha");
+  AddOutput(outputC);
+  AddOutput(outputR);
+  AddOutput(outputG);
+  AddOutput(outputB);
+  AddOutput(outputA);
+  FinishOutput();
 }
 
 GraphNode::~GraphNode ()
@@ -1250,6 +1343,22 @@ void GraphNode::FinishInput()
   m_leftLayout->addItem(widget, m_leftCount, 0);
   m_leftCount++;
 }
+
+void GraphNode::AddOutput(AttribOutput *output)
+{
+  //output->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  m_rightLayout->addItem(output, m_rightCount, 0, Qt::AlignRight);
+  m_rightCount++;
+}
+
+void GraphNode::FinishOutput()
+{
+  QGraphicsWidget *widget = new QGraphicsWidget(this);
+  widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_rightLayout->addItem(widget, m_rightCount, 0);
+  m_rightCount++;
+}
+
 
 }
 

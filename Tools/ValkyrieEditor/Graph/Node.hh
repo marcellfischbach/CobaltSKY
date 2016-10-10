@@ -246,9 +246,19 @@ public:
   TextItem (QGraphicsItem *parent);
   ~TextItem();
 
+  void SetColor(const QColor &color);
+
   void setGeometry(const QRectF &geom) Q_DECL_OVERRIDE;
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const Q_DECL_OVERRIDE;
   QRectF boundingRect() const Q_DECL_OVERRIDE;
+};
+
+class SpacerItem : public QGraphicsLayoutItem
+{
+public:
+  SpacerItem (QGraphicsLayoutItem *parent, int direction);
+
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const Q_DECL_OVERRIDE;
 };
 
 class FlowInOutItem : public QGraphicsWidget
@@ -298,6 +308,25 @@ private:
   QString m_name;
 };
 
+
+class AttribOutput : public QGraphicsWidget
+{
+public:
+  AttribOutput(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribOutput();
+
+  void SetName(const QString &name);
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+private:
+  TextItem *m_text;
+  AttribInOutItem *m_anchor;
+
+  QString m_name;
+};
+
+
 class Headline : public QGraphicsWidget
 {
   Q_OBJECT
@@ -329,6 +358,9 @@ public:
   void AddInput (AttribInput *input);
   void FinishInput ();
 
+  void AddOutput(AttribOutput *output);
+  void FinishOutput();
+
 private:
   QGraphicsGridLayout *m_layout;
   Headline *m_headLine;
@@ -336,6 +368,8 @@ private:
   int m_leftCount;
   QGraphicsWidget *m_left;
   QGraphicsGridLayout *m_leftLayout;
+
+  QGraphicsWidget *m_centerFit;
 
   int m_rightCount;
   QGraphicsWidget *m_right;
