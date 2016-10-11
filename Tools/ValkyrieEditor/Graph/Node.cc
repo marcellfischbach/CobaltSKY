@@ -977,6 +977,7 @@ void TextItem::SetColor(const QColor &color)
   QPen lpen(pen());
   lpen.setColor(color);
   setPen(lpen);
+  update();
 }
 
 QRectF TextItem::boundingRect() const
@@ -1028,7 +1029,9 @@ QSizeF SpacerItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 FlowInOutItem::FlowInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
   , m_connected (false)
+  , m_hover(false)
 {
+  setAcceptHoverEvents(true);
 }
 
 
@@ -1043,9 +1046,27 @@ QSizeF FlowInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) con
   return QSizeF(21.0f, 16.0f);
 }
 
+
+void FlowInOutItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+  m_hover = true;
+  QGraphicsItem::hoverEnterEvent(event);
+}
+
+void FlowInOutItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+  m_hover = false;
+  QGraphicsItem::hoverEnterEvent(event);
+}
+
 void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   float scale = 4.0f;
+
+  if (m_hover)
+  {
+    painter->fillRect(contentsRect(), QColor(128, 128, 128));
+  }
 
   QPainterPath drawPath(QPointF(2.0f, 2.0f));
   drawPath.lineTo(13.0f, 2.0f);
@@ -1075,8 +1096,11 @@ AttribInOutItem::AttribInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
   , m_connected (false)
   , m_visible(true)
+  , m_hover (false)
+  , m_color(64, 64, 64)
 {
   setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+  setAcceptHoverEvents(true);
 }
 
 
@@ -1086,10 +1110,29 @@ AttribInOutItem::~AttribInOutItem()
 
 }
 
+void AttribInOutItem::SetColor(const QColor &color)
+{
+  m_color = color;
+}
+
 QSizeF AttribInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
   return QSizeF(16.0f, 16.0f);
 }
+
+void AttribInOutItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+  m_hover = true;
+  QGraphicsItem::hoverEnterEvent(event);
+}
+
+void AttribInOutItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+  m_hover = false;
+  QGraphicsItem::hoverEnterEvent(event);
+}
+
+
 
 void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -1098,18 +1141,21 @@ void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     return;
   }
 
-  painter->fillRect(contentsRect(), QColor(128, 128, 128));
+  if (m_hover)
+  {
+    painter->fillRect(contentsRect(), QColor(128, 128, 128));
+  }
 
   QPainterPath drawPath;
   drawPath.addEllipse(QRectF(2.0f, 2.0f, 12.0f, 12.0f));
-  painter->setPen(QColor(64, 64, 64));
+  painter->setPen(m_color);
   painter->drawPath(drawPath);
 
   if (m_connected)
   {
     QPainterPath fillPath;
     fillPath.addEllipse(QRectF(4.0f, 4.0f, 8.0f, 8.0f));
-    painter->fillPath(fillPath, QColor(64, 64, 64));
+    painter->fillPath(fillPath, m_color);
   }
 }
 
@@ -1158,6 +1204,12 @@ void AttribInput::SetValue(const QString &value)
   UpdateText();
 }
 
+void AttribInput::SetColor(const QColor &color)
+{
+  m_text->SetColor(color);
+  m_anchor->SetColor(color);
+}
+
 void AttribInput::UpdateText()
 {
   QString text = "";
@@ -1202,9 +1254,11 @@ void AttribOutput::SetName(const QString &name)
   m_text->setText(m_name);
 }
 
-void AttribOutput::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+
+void AttribOutput::SetColor(const QColor &color)
 {
-  painter->fillRect(contentsRect(), QColor(128, 0, 0));
+  m_text->SetColor(color);
+  m_anchor->SetColor(color);
 }
 
 
@@ -1290,13 +1344,16 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   input0->SetValue("1.0");
   input0->SetName("uv");
   AddInput(input0);
-  FinishInput();
+//  FinishInput();
 
   AttribOutput *outputC = new AttribOutput(this);
   AttribOutput *outputR = new AttribOutput(this);
   AttribOutput *outputG = new AttribOutput(this);
   AttribOutput *outputB = new AttribOutput(this);
   AttribOutput *outputA = new AttribOutput(this);
+  outputR->SetColor(QColor(128, 0, 0));
+  outputG->SetColor(QColor(0, 128, 0));
+  outputB->SetColor(QColor(0, 0, 128));
 
   outputC->SetName("color");
   outputR->SetName("red");
@@ -1308,7 +1365,7 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   AddOutput(outputG);
   AddOutput(outputB);
   AddOutput(outputA);
-  FinishOutput();
+//  FinishOutput();
 }
 
 GraphNode::~GraphNode ()

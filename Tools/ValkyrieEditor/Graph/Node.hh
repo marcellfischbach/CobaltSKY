@@ -269,10 +269,14 @@ public:
 
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
+  virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
+  virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
+
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private:
   bool m_connected;
+  bool m_hover;
 };
 
 class AttribInOutItem : public QGraphicsWidget
@@ -281,13 +285,20 @@ public:
   AttribInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
   ~AttribInOutItem();
 
+  void SetColor(const QColor &color);
+
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+  virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
+  virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
+
 private:
   bool m_connected;
   bool m_visible;
+  bool m_hover;
+  QColor m_color;
 };
 
 class AttribInput : public QGraphicsWidget
@@ -298,6 +309,8 @@ public:
 
   void SetName(const QString &name);
   void SetValue (const QString &value);
+  void SetColor(const QColor &color);
+
 private:
   void UpdateText ();
 private:
@@ -316,8 +329,7 @@ public:
   ~AttribOutput();
 
   void SetName(const QString &name);
-
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+  void SetColor(const QColor &color);
 
 private:
   TextItem *m_text;
