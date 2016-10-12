@@ -34,6 +34,7 @@ void NodeGraphScene::AddNode(Node *node)
   //addItem(node->GetItem());
 
   GraphNode *gn = new GraphNode();
+  m_graphNodes.append(gn);
 //  gn->setGeometry(0, 0, 200, 100);
   addItem (gn);
 
@@ -350,5 +351,72 @@ void NodeGraphScene::EmitCurrentNodeChanged()
     emit NodeSelected(m_currentSelectedNode);
   }
 }
+
+
+void NodeGraphScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsScene::mousePressEvent(event);
+
+  QGraphicsItem *item = itemAt(event->scenePos(), QTransform());
+  if (!item && !event->modifiers().testFlag(Qt::ShiftModifier) && !event->modifiers().testFlag(Qt::ControlModifier))
+  {
+    ClearSelection();
+  }
+
+}
+
+
+void NodeGraphScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsScene::mouseMoveEvent(event);
+}
+
+
+
+void NodeGraphScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsScene::mouseReleaseEvent(event);
+}
+
+
+void NodeGraphScene::ClearSelection ()
+{
+  for (auto node : m_graphNodes)
+  {
+    node->SetSelected(false);
+  }
+}
+
+
+void NodeGraphScene::SelectNode(GraphNode *node, Qt::KeyboardModifiers modifiers)
+{
+  if (!modifiers.testFlag(Qt::ShiftModifier) && !modifiers.testFlag(Qt::ControlModifier))
+  {
+    ClearSelection ();
+  }
+  node->SetSelected(true);
+}
+
+
+void NodeGraphScene::StartMoving()
+{
+  for (auto node : m_graphNodes)
+  {
+    node->SetMotionStart(node->pos());
+  }
+
+}
+
+void NodeGraphScene::MoveSelectedNodes(const QPointF &direction)
+{
+  for (auto node : m_graphNodes)
+  {
+    if (node->IsSelected())
+    {
+      node->setPos(node->GetMotionStart() + direction);
+    }
+  }
+}
+
 
 }

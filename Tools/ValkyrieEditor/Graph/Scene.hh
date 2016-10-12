@@ -8,6 +8,7 @@
 namespace graph
 {
 
+class GraphNode;
 class Node;
 class NodeConnection;
 class NodeGraphScene : public QGraphicsScene
@@ -42,11 +43,22 @@ public:
   void MoveConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);
   void StopConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);
 
+  void ClearSelection ();
+  void SelectNode (GraphNode *node, Qt::KeyboardModifiers modifiers);
+
+  void StartMoving ();
+  void MoveSelectedNodes (const QPointF &direction);
+
+protected:
+  void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
   QPointF TestForAnchorMatch(const QPointF &p, Node *node, Direction dir);
   QGraphicsPathItem *GetCurrentConnectionPath();
   QList<Node*> m_nodes;
+  QList<GraphNode*> m_graphNodes;
   QList<NodeConnection*> m_connections;
   QGraphicsPathItem *m_currentConnectionPath;
 
@@ -56,6 +68,7 @@ private:
 
   void ResetConstValues();
   void EmitCurrentNodeChanged ();
+
 
 signals:
   void NodeSelected(graph::Node *node);

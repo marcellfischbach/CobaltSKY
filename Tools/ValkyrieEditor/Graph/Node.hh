@@ -240,6 +240,7 @@ inline void Node::SetShowImage(bool showImage)
   m_showImage = showImage;
 }
 
+class GraphNode;
 class TextItem : public QGraphicsLayoutItem, public QGraphicsSimpleTextItem
 {
 public:
@@ -251,6 +252,11 @@ public:
   void setGeometry(const QRectF &geom) Q_DECL_OVERRIDE;
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const Q_DECL_OVERRIDE;
   QRectF boundingRect() const Q_DECL_OVERRIDE;
+
+  void SetGraphNode (GraphNode *graphNode);
+
+private:
+  GraphNode *m_graphNode;
 };
 
 class SpacerItem : public QGraphicsLayoutItem
@@ -259,6 +265,11 @@ public:
   SpacerItem (QGraphicsLayoutItem *parent, int direction);
 
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const Q_DECL_OVERRIDE;
+
+  void SetGraphNode (GraphNode *graphNode);
+
+private:
+  GraphNode *m_graphNode;
 };
 
 class FlowInOutItem : public QGraphicsWidget
@@ -267,6 +278,8 @@ public:
   FlowInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
   ~FlowInOutItem();
 
+  void SetGraphNode (GraphNode *graphNode);
+
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
   virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
@@ -274,9 +287,14 @@ public:
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+
+
+
 private:
   bool m_connected;
   bool m_hover;
+
+  GraphNode *m_graphNode;
 };
 
 class AttribInOutItem : public QGraphicsWidget
@@ -286,6 +304,7 @@ public:
   ~AttribInOutItem();
 
   void SetColor(const QColor &color);
+  void SetGraphNode (GraphNode *graphNode);
 
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
@@ -294,11 +313,13 @@ public:
   virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
   virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
 
+
 private:
   bool m_connected;
   bool m_visible;
   bool m_hover;
   QColor m_color;
+  GraphNode *m_graphNode;
 };
 
 class AttribInput : public QGraphicsWidget
@@ -310,6 +331,7 @@ public:
   void SetName(const QString &name);
   void SetValue (const QString &value);
   void SetColor(const QColor &color);
+  void SetGraphNode (GraphNode *graphNode);
 
 private:
   void UpdateText ();
@@ -319,6 +341,9 @@ private:
 
   QString m_value;
   QString m_name;
+
+  GraphNode *m_graphNode;
+
 };
 
 
@@ -330,12 +355,14 @@ public:
 
   void SetName(const QString &name);
   void SetColor(const QColor &color);
+  void SetGraphNode (GraphNode *graphNode);
 
 private:
   TextItem *m_text;
   AttribInOutItem *m_anchor;
 
   QString m_name;
+  GraphNode *m_graphNode;
 };
 
 
@@ -345,10 +372,15 @@ class Headline : public QGraphicsWidget
 public:
   Headline (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
 
-  void AddFlowItem();
+  void AddFlowInItem();
+  void AddFlowOutItem ();
+  void SetGraphNode (GraphNode *graphNode);
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
+  void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 
 private:
@@ -356,6 +388,9 @@ private:
   FlowInOutItem *m_flowIn;
   TextItem *m_text;
   FlowInOutItem *m_flowOut;
+
+  GraphNode *m_graphNode;
+  QPointF m_motionStartPosition;
 };
 
 class GraphNode : public QGraphicsWidget
@@ -368,10 +403,15 @@ public:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
   void AddInput (AttribInput *input);
-  void FinishInput ();
-
   void AddOutput(AttribOutput *output);
-  void FinishOutput();
+
+  bool IsHeadLine(const QPointF &scenePos) const;
+  void SetSelected (bool selected);
+  bool IsSelected () const;
+
+
+  void SetMotionStart(const QPointF &motionStart);
+  const QPointF &GetMotionStart () const;
 
 private:
   QGraphicsGridLayout *m_layout;
@@ -387,6 +427,9 @@ private:
   QGraphicsWidget *m_right;
   QGraphicsGridLayout *m_rightLayout;
   bool m_selected;
+
+  QPointF m_motionStart;
+
 };
 
 }
