@@ -12,6 +12,9 @@
 #include <qtextdocument.h>
 #include <QPainter>
 #include <QGraphicsGridLayout>
+#include <QDrag>
+#include <QApplication>
+#include <QMimeData>
 
 #define VK_MAX(a, b) ((a) > (b) ? (a) : (b))
 #define VK_MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -1032,13 +1035,114 @@ QSizeF SpacerItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 }
 
 
-FlowInOutItem::FlowInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+InOutItem::InOutItem(Type type, Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
+  , m_type(type)
+  , m_direction(direction)
   , m_connected (false)
   , m_hover(false)
   , m_graphNode(0)
+  , m_visible(true)
 {
-  setAcceptHoverEvents(true);
+
+}
+
+InOutItem::~InOutItem()
+{
+
+}
+
+void InOutItem::SetVisible(bool visible)
+{
+  m_visible = visible;
+}
+
+bool InOutItem::IsVisible() const
+{
+  return m_visible;
+}
+
+void InOutItem::Hover(const QPointF &scenePos)
+{
+  bool hover = mapRectToScene(contentsRect()).contains(scenePos);
+  if (m_hover != hover)
+  {
+    m_hover = hover;
+    update ();
+  }
+}
+
+void InOutItem::SetGraphNode(GraphNode *graphNode)
+{
+  m_graphNode = graphNode;
+}
+
+
+
+
+InOutItem *InOutItem::FindInOutItem(const QPointF &scenePos)
+{
+  if (mapRectToScene(contentsRect()).contains(scenePos))
+  {
+    return this;
+  }
+  return 0;
+}
+
+InOutItem::Type InOutItem::GetType() const
+{
+  return m_type;
+}
+
+
+InOutItem::Direction InOutItem::GetDirection() const
+{
+  return m_direction;
+}
+
+
+
+void InOutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsWidget::mousePressEvent(event);
+  if (m_graphNode)
+  {
+    NodeGraphScene *nodeGraphScene = static_cast<NodeGraphScene*>(m_graphNode->scene());
+    nodeGraphScene->StartConnection(this);
+    event->accept();
+  }
+}
+
+void InOutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsWidget::mouseMoveEvent(event);
+
+  if (m_graphNode)
+  {
+    NodeGraphScene *nodeGraphScene = static_cast<NodeGraphScene*>(m_graphNode->scene());
+    nodeGraphScene->MoveConnection(event->scenePos());
+  }
+}
+
+void InOutItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+  QGraphicsWidget::mouseReleaseEvent(event);
+
+  if (m_graphNode)
+  {
+    NodeGraphScene *nodeGraphScene = static_cast<NodeGraphScene*>(m_graphNode->scene());
+    nodeGraphScene->AttachConnect(event->scenePos());
+  }
+}
+
+
+
+
+
+
+FlowInOutItem::FlowInOutItem(InOutItem::Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : InOutItem(eT_Flow, direction, parent, wFlags)
+{
 }
 
 
@@ -1048,28 +1152,11 @@ FlowInOutItem::~FlowInOutItem()
 
 }
 
-void FlowInOutItem::SetGraphNode(GraphNode *graphNode)
-{
-  m_graphNode = graphNode;
-}
-
 QSizeF FlowInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
   return QSizeF(21.0f, 16.0f);
 }
 
-
-void FlowInOutItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{
-  m_hover = true;
-  QGraphicsItem::hoverEnterEvent(event);
-}
-
-void FlowInOutItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-{
-  m_hover = false;
-  QGraphicsItem::hoverEnterEvent(event);
-}
 
 void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -1104,16 +1191,11 @@ void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 
 
-AttribInOutItem::AttribInOutItem(QGraphicsItem *parent, Qt::WindowFlags wFlags)
-  : QGraphicsWidget(parent, wFlags)
-  , m_connected (false)
-  , m_visible(true)
-  , m_hover (false)
+AttribInOutItem::AttribInOutItem(Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : InOutItem(eT_Attrib, direction, parent, wFlags)
   , m_color(64, 64, 64)
-  , m_graphNode(0)
 {
   setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-  setAcceptHoverEvents(true);
 }
 
 
@@ -1128,29 +1210,11 @@ void AttribInOutItem::SetColor(const QColor &color)
   m_color = color;
 }
 
-void AttribInOutItem::SetGraphNode(GraphNode *graphNode)
-{
-  m_graphNode = graphNode;
-}
 
 QSizeF AttribInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
   return QSizeF(16.0f, 16.0f);
 }
-
-void AttribInOutItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{
-  m_hover = true;
-  QGraphicsItem::hoverEnterEvent(event);
-}
-
-void AttribInOutItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-{
-  m_hover = false;
-  QGraphicsItem::hoverEnterEvent(event);
-}
-
-
 
 void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -1187,7 +1251,7 @@ AttribInput::AttribInput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
   layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
 
-  m_anchor = new AttribInOutItem(this);
+  m_anchor = new AttribInOutItem(InOutItem::eD_In, this);
   m_text = new TextItem(this);
   m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_text->SetColor(QColor(64, 64, 64));
@@ -1249,6 +1313,24 @@ void AttribInput::SetGraphNode(GraphNode *graphNode)
   m_anchor->SetGraphNode(graphNode);
 }
 
+void AttribInput::Hover(const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    m_anchor->Hover(scenePos);
+  }
+}
+
+
+InOutItem *AttribInput::FindInOutItem (const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    return m_anchor->FindInOutItem(scenePos);
+  }
+  return 0;
+}
+
 
 AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
@@ -1262,7 +1344,7 @@ AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_text->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_text->SetColor(QColor(64, 64, 64));
   m_text->setText(m_name);
-  m_anchor = new AttribInOutItem(this);
+  m_anchor = new AttribInOutItem(InOutItem::eD_Out, this);
 
 
   layout->addItem(m_text, 0, 0, Qt::AlignRight);
@@ -1295,6 +1377,25 @@ void AttribOutput::SetGraphNode(GraphNode *graphNode)
   m_anchor->SetGraphNode(graphNode);
 }
 
+void AttribOutput::Hover(const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    m_anchor->Hover(scenePos);
+  }
+
+}
+
+InOutItem *AttribOutput::FindInOutItem (const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    return m_anchor->FindInOutItem(scenePos);
+  }
+  return 0;
+}
+
+
 Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
   , m_flowIn(0)
@@ -1320,7 +1421,7 @@ Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 void Headline::AddFlowInItem()
 {
-  m_flowIn = new FlowInOutItem(this);
+  m_flowIn = new FlowInOutItem(InOutItem::eD_In, this);
   m_flowIn->SetGraphNode(m_graphNode);
 
   m_layout->addItem(m_flowIn, 0, 0, 1, 1);
@@ -1328,7 +1429,7 @@ void Headline::AddFlowInItem()
 
 void Headline::AddFlowOutItem()
 {
-  m_flowOut = new FlowInOutItem(this);
+  m_flowOut = new FlowInOutItem(InOutItem::eD_Out, this);
   m_flowOut->SetGraphNode(m_graphNode);
 
   m_layout->addItem(m_flowOut, 0, 2, 1, 1);
@@ -1347,6 +1448,40 @@ void Headline::SetGraphNode(GraphNode *graphNode)
     m_flowOut->SetGraphNode(graphNode);
   }
 }
+
+void Headline::Hover(const QPointF &scenePos)
+{
+  if (m_flowIn)
+  {
+    m_flowIn->Hover(scenePos);
+  }
+  if (m_flowOut)
+  {
+    m_flowOut->Hover(scenePos);
+  }
+}
+
+InOutItem *Headline::FindInOutItem (const QPointF &scenePos)
+{
+  if (m_flowIn)
+  {
+    InOutItem *item = m_flowIn->FindInOutItem(scenePos);
+    if (item)
+    {
+      return item;
+    }
+  }
+  if (m_flowOut)
+  {
+    InOutItem *item = m_flowOut->FindInOutItem(scenePos);
+    if (item)
+    {
+      return item;
+    }
+  }
+  return 0;
+}
+
 
 void Headline::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -1407,6 +1542,8 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
   m_headLine = new Headline(this);
   m_headLine->SetGraphNode(this);
+  m_headLine->AddFlowInItem();
+  m_headLine->AddFlowOutItem();
   m_layout->addItem(m_headLine, 0, 0, 1, 2);
 
   m_leftCount = 0;
@@ -1425,6 +1562,8 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_rightLayout->setContentsMargins(0, 0, 0, 0);
 
   m_layout->addItem(m_right, 1, 1);
+
+
 
 
   AttribInput *input0 = new AttribInput(this);
@@ -1480,12 +1619,54 @@ const QPointF &GraphNode::GetMotionStart() const
 }
 
 
+void GraphNode::Hover(const QPointF &scenePos)
+{
+  m_headLine->Hover(scenePos);
+  for (auto input : m_inputs)
+  {
+    input->Hover (scenePos);
+  }
+  for (auto output : m_outputs)
+  {
+    output->Hover (scenePos);
+  }
+}
+
+InOutItem *GraphNode::FindInOutItem(const QPointF &scenePos)
+{
+  for (auto input : m_inputs)
+  {
+    InOutItem *item = input->FindInOutItem(scenePos);
+    if (item)
+    {
+      return item;
+    }
+  }
+  for (auto output : m_outputs)
+  {
+    InOutItem *item = output->FindInOutItem(scenePos);
+    if (item)
+    {
+      return item;
+    }
+  }
+  InOutItem *item = m_headLine->FindInOutItem(scenePos);
+  if (item)
+  {
+    return item;
+  }
+
+  return 0;
+}
+
+
+
 void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   QGraphicsWidget::paint(painter, option, widget);
   if (m_selected)
   {
-    painter->fillRect(rect(), QColor(225, 225, 128));
+    painter->fillRect(rect(), QColor(255, 255, 255));
   }
 
   painter->fillRect(m_layout->contentsRect(), QColor(225, 225, 225));
@@ -1494,6 +1675,7 @@ void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
 void GraphNode::AddInput(AttribInput *input)
 {
+  m_inputs.append(input);
   input->SetGraphNode(this);
   m_leftLayout->addItem(input, m_leftCount, 0);
   m_leftCount++;
@@ -1501,6 +1683,7 @@ void GraphNode::AddInput(AttribInput *input)
 
 void GraphNode::AddOutput(AttribOutput *output)
 {
+  m_outputs.append(output);
   output->SetGraphNode(this);
   m_rightLayout->addItem(output, m_rightCount, 0, Qt::AlignRight);
   m_rightCount++;

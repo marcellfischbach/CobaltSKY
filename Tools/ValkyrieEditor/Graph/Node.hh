@@ -272,54 +272,79 @@ private:
   GraphNode *m_graphNode;
 };
 
-class FlowInOutItem : public QGraphicsWidget
+class InOutItem : public QGraphicsWidget
 {
 public:
-  FlowInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~FlowInOutItem();
+  enum Type
+  {
+    eT_Attrib,
+    eT_Flow,
+  };
 
+  enum Direction
+  {
+    eD_In,
+    eD_Out,
+  };
+
+public:
+  InOutItem (Type type, Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~InOutItem();
+
+  void SetVisible (bool visible);
+  bool IsVisible () const;
   void SetGraphNode (GraphNode *graphNode);
+  void Hover(const QPointF &scenePos);
+  InOutItem *FindInOutItem(const QPointF &scenePos);
 
-  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+  Type GetType () const;
+  Direction GetDirection () const;
 
-  virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
-  virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
-
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-
+protected:
+  virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+  virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 
-private:
+protected:
   bool m_connected;
   bool m_hover;
+  bool m_visible;
+
+  Type m_type;
+  Direction m_direction;
 
   GraphNode *m_graphNode;
 };
 
-class AttribInOutItem : public QGraphicsWidget
+
+
+class FlowInOutItem : public InOutItem
 {
 public:
-  AttribInOutItem (QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~AttribInOutItem();
-
-  void SetColor(const QColor &color);
-  void SetGraphNode (GraphNode *graphNode);
+  FlowInOutItem (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~FlowInOutItem();
 
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+};
 
-  virtual void hoverEnterEvent (QGraphicsSceneHoverEvent* event);
-  virtual void hoverLeaveEvent (QGraphicsSceneHoverEvent* event);
+class AttribInOutItem : public InOutItem
+{
+public:
 
+public:
+  AttribInOutItem (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribInOutItem();
+
+  void SetColor(const QColor &color);
+
+  QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private:
-  bool m_connected;
-  bool m_visible;
-  bool m_hover;
   QColor m_color;
-  GraphNode *m_graphNode;
 };
 
 class AttribInput : public QGraphicsWidget
@@ -332,6 +357,8 @@ public:
   void SetValue (const QString &value);
   void SetColor(const QColor &color);
   void SetGraphNode (GraphNode *graphNode);
+  void Hover(const QPointF &scenePos);
+  InOutItem *FindInOutItem (const QPointF &scenePos);
 
 private:
   void UpdateText ();
@@ -356,6 +383,8 @@ public:
   void SetName(const QString &name);
   void SetColor(const QColor &color);
   void SetGraphNode (GraphNode *graphNode);
+  void Hover(const QPointF &scenePos);
+  InOutItem *FindInOutItem (const QPointF &scenePos);
 
 private:
   TextItem *m_text;
@@ -375,6 +404,9 @@ public:
   void AddFlowInItem();
   void AddFlowOutItem ();
   void SetGraphNode (GraphNode *graphNode);
+
+  void Hover(const QPointF &scenePos);
+  InOutItem *FindInOutItem (const QPointF &scenePos);
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -402,6 +434,9 @@ public:
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
+  void Hover (const QPointF &scenePos);
+  InOutItem *FindInOutItem (const QPointF &scenePos);
+
   void AddInput (AttribInput *input);
   void AddOutput(AttribOutput *output);
 
@@ -414,6 +449,10 @@ public:
   const QPointF &GetMotionStart () const;
 
 private:
+
+  QList<AttribInput*> m_inputs;
+  QList<AttribOutput*> m_outputs;
+
   QGraphicsGridLayout *m_layout;
   Headline *m_headLine;
 

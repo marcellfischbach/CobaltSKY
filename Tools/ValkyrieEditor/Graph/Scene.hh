@@ -11,6 +11,8 @@ namespace graph
 class GraphNode;
 class Node;
 class NodeConnection;
+class AttribInOutItem;
+class InOutItem;
 class NodeGraphScene : public QGraphicsScene
 {
   Q_OBJECT
@@ -43,6 +45,12 @@ public:
   void MoveConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);
   void StopConnection(Node *node, int idx, Direction dir, const QPointF &p0, const QPointF &p1);
 
+
+
+  void StartConnection(InOutItem *item);
+  void MoveConnection(const QPointF &scenePos);
+  void AttachConnect (const QPointF &scenePos);
+
   void ClearSelection ();
   void SelectNode (GraphNode *node, Qt::KeyboardModifiers modifiers);
 
@@ -55,14 +63,17 @@ protected:
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
+  InOutItem *FindInOutItem(const QPointF& scenePos);
   QPointF TestForAnchorMatch(const QPointF &p, Node *node, Direction dir);
   QGraphicsPathItem *GetCurrentConnectionPath();
   QList<Node*> m_nodes;
-  QList<GraphNode*> m_graphNodes;
   QList<NodeConnection*> m_connections;
-  QGraphicsPathItem *m_currentConnectionPath;
-
   graph::Node *m_currentSelectedNode;
+
+
+  QList<GraphNode*> m_graphNodes;
+  QGraphicsPathItem *m_currentConnectionPath;
+  InOutItem *m_currentInOutItem;
 
   bool m_silent;
 

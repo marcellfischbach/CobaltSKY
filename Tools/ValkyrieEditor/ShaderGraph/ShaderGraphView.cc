@@ -41,6 +41,7 @@ public:
     , m_view(view)
   {
     setAcceptDrops(true);
+    setMouseTracking(true);
   }
 
 protected:

@@ -4,6 +4,7 @@
 #include <Graph/Connection.hh>
 #include <Graph/Node.hh>
 #include <QGraphicsSceneDragDropEvent>
+#include <QPainterPath>
 
 namespace graph
 {
@@ -13,8 +14,13 @@ NodeGraphScene::NodeGraphScene(QObject *parent)
   , m_currentConnectionPath(0)
   , m_currentSelectedNode(0)
   , m_silent (false)
+  , m_currentInOutItem(0)
 {
   setSceneRect(QRect(-2000, -2000, 4000, 4000));
+
+  m_currentConnectionPath = new QGraphicsPathItem();
+  m_currentConnectionPath->setPen(QPen(QColor(255, 255, 255), 2.0f));
+  addItem(m_currentConnectionPath);
 }
 
 void NodeGraphScene::SetSilent(bool silent)
@@ -369,6 +375,10 @@ void NodeGraphScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void NodeGraphScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsScene::mouseMoveEvent(event);
+  for (auto node : m_graphNodes)
+  {
+    node->Hover(event->scenePos());
+  }
 }
 
 
@@ -376,6 +386,44 @@ void NodeGraphScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void NodeGraphScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsScene::mouseReleaseEvent(event);
+}
+
+
+void NodeGraphScene::StartConnection(InOutItem *item)
+{
+  m_currentInOutItem = item;
+}
+
+void NodeGraphScene::MoveConnection(const QPointF &scenePos)
+{
+  QPointF endPos = scenePos;
+  if (!m_currentInOutItem)
+  {
+    return;
+  }
+
+  QPointF startPos = m_currentInOutItem->mapToScene(m_currentInOutItem->contentsRect().center());
+
+  InOutItem *endItem = FindInOutItem(scenePos);
+  if (endItem && endItem->GetType() == m_currentInOutItem->GetType() && endItem->GetDirection() != m_currentInOutItem->GetDirection())
+  {
+    endPos = endItem->mapToScene(endItem->contentsRect().center());
+  }
+
+  QPainterPath path;
+  path.moveTo(startPos);
+
+  float cx = (startPos.x() + endPos.x()) / 2.0f;
+  float cy0 = startPos.y();
+  float cy1 = endPos.y();
+  path.cubicTo(QPointF(cx, cy0), QPointF(cx, cy1), endPos);
+  m_currentConnectionPath->setPath(path);
+}
+
+void NodeGraphScene::AttachConnect(const QPointF &scenePos)
+{
+  QPainterPath path;
+  m_currentConnectionPath->setPath(path);
 }
 
 
@@ -416,6 +464,19 @@ void NodeGraphScene::MoveSelectedNodes(const QPointF &direction)
       node->setPos(node->GetMotionStart() + direction);
     }
   }
+}
+
+InOutItem *NodeGraphScene::FindInOutItem(const QPointF &scenePos)
+{
+  for (auto node : m_graphNodes)
+  {
+    InOutItem *item = node->FindInOutItem(scenePos);
+    if (item)
+    {
+      return item;
+    }
+  }
+  return 0;
 }
 
 
