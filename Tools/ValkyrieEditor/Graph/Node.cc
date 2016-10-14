@@ -1034,8 +1034,100 @@ QSizeF SpacerItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
   return QSizeF(1.0f, 1.0f);
 }
 
+AnchorConnectionItem::AnchorConnectionItem(QGraphicsItem *parent, AnchorWidget *anchorA, AnchorWidget *anchorB)
+  : QObject()
+  , QGraphicsPathItem(parent)
+  , m_anchorA(anchorA)
+  , m_anchorB(anchorB)
+{
+  if (m_anchorA)
+  {
+    m_anchorA->AddConnection(this);
+    connect (m_anchorA->GetGraphNode(), SIGNAL(geometryChanged()), this, SLOT(AnchorChanged ()));
+  }
+  if (m_anchorB)
+  {
+    m_anchorB->AddConnection(this);
+    connect (m_anchorB->GetGraphNode(), SIGNAL(geometryChanged()), this, SLOT(AnchorChanged ()));
+  }
 
-InOutItem::InOutItem(Type type, Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  QPen pen = QPen(QColor(225, 225, 225), 2.0f);
+  setPen(pen);
+
+  AnchorChanged();
+}
+
+AnchorConnectionItem::~AnchorConnectionItem()
+{
+  if (m_anchorA)
+  {
+    m_anchorA->RemoveConnection(this);
+    m_anchorA = 0;
+  }
+  if (m_anchorB)
+  {
+    m_anchorB->RemoveConnection(this);
+    m_anchorB = 0;
+  }
+}
+
+AnchorWidget *AnchorConnectionItem::GetInputWidget()
+{
+  if (m_anchorA && m_anchorA->GetDirection() == AnchorWidget::eD_In)
+  {
+    return m_anchorA;
+  }
+  else if (m_anchorB && m_anchorB->GetDirection() == AnchorWidget::eD_In)
+  {
+    return m_anchorB;
+  }
+  return 0;
+}
+
+
+AnchorWidget *AnchorConnectionItem::GetOutputWidget()
+{
+  if (m_anchorA && m_anchorA->GetDirection() == AnchorWidget::eD_Out)
+  {
+    return m_anchorA;
+  }
+  else if (m_anchorB && m_anchorB->GetDirection() == AnchorWidget::eD_Out)
+  {
+    return m_anchorB;
+  }
+  return 0;
+}
+
+bool AnchorConnectionItem::IsEqual(AnchorWidget *anchorA, AnchorWidget *anchorB)
+{
+  return m_anchorA == anchorA && m_anchorB == anchorB ||
+      m_anchorA == anchorB && m_anchorB == anchorA;
+}
+
+void AnchorConnectionItem::AnchorChanged()
+{
+  if (!m_anchorA || !m_anchorB)
+  {
+    return;
+  }
+
+
+  QPointF startPos = m_anchorA->mapToScene(m_anchorA->contentsRect().center());
+  QPointF endPos = m_anchorB->mapToScene(m_anchorB->contentsRect().center());
+  QPainterPath path;
+  path.moveTo(startPos);
+
+  float cx = (startPos.x() + endPos.x()) / 2.0f;
+  float cy0 = startPos.y();
+  float cy1 = endPos.y();
+  path.cubicTo(QPointF(cx, cy0), QPointF(cx, cy1), endPos);
+  setPath(path);
+}
+
+
+
+
+AnchorWidget::AnchorWidget(Type type, Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
   , m_type(type)
   , m_direction(direction)
@@ -1047,22 +1139,22 @@ InOutItem::InOutItem(Type type, Direction direction, QGraphicsItem *parent, Qt::
 
 }
 
-InOutItem::~InOutItem()
+AnchorWidget::~AnchorWidget()
 {
 
 }
 
-void InOutItem::SetVisible(bool visible)
+void AnchorWidget::SetVisible(bool visible)
 {
   m_visible = visible;
 }
 
-bool InOutItem::IsVisible() const
+bool AnchorWidget::IsVisible() const
 {
   return m_visible;
 }
 
-void InOutItem::Hover(const QPointF &scenePos)
+void AnchorWidget::Hover(const QPointF &scenePos)
 {
   bool hover = mapRectToScene(contentsRect()).contains(scenePos);
   if (m_hover != hover)
@@ -1072,7 +1164,44 @@ void InOutItem::Hover(const QPointF &scenePos)
   }
 }
 
-void InOutItem::SetGraphNode(GraphNode *graphNode)
+
+void AnchorWidget::AddConnection(AnchorConnectionItem *connection)
+{
+  if (m_connections.contains(connection))
+  {
+    return;
+  }
+  m_connections.append(connection);
+
+  bool connected = !m_connections.isEmpty();
+  if (m_connected != connected)
+  {
+    m_connected = connected;\
+    update();
+  }
+}
+
+
+void AnchorWidget::RemoveConnection(AnchorConnectionItem *connection)
+{
+  if (!m_connections.contains(connection))
+  {
+    return;
+  }
+  m_connections.removeAll(connection);
+
+
+  bool connected = !m_connections.isEmpty();
+  if (m_connected != connected)
+  {
+    m_connected = connected;\
+    update();
+  }
+}
+
+
+
+void AnchorWidget::SetGraphNode(GraphNode *graphNode)
 {
   m_graphNode = graphNode;
 }
@@ -1080,7 +1209,7 @@ void InOutItem::SetGraphNode(GraphNode *graphNode)
 
 
 
-InOutItem *InOutItem::FindInOutItem(const QPointF &scenePos)
+AnchorWidget *AnchorWidget::FindAnchorWidget(const QPointF &scenePos)
 {
   if (mapRectToScene(contentsRect()).contains(scenePos))
   {
@@ -1089,20 +1218,34 @@ InOutItem *InOutItem::FindInOutItem(const QPointF &scenePos)
   return 0;
 }
 
-InOutItem::Type InOutItem::GetType() const
+AnchorWidget::Type AnchorWidget::GetType() const
 {
   return m_type;
 }
 
 
-InOutItem::Direction InOutItem::GetDirection() const
+AnchorWidget::Direction AnchorWidget::GetDirection() const
 {
   return m_direction;
 }
 
+GraphNode *AnchorWidget::GetGraphNode()
+{
+  return m_graphNode;
+}
+
+size_t AnchorWidget::GetNumberOfConnections() const
+{
+  return m_connections.size();
+}
+
+AnchorConnectionItem *AnchorWidget::GetConnection(size_t idx)
+{
+  return m_connections[idx];
+}
 
 
-void InOutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void AnchorWidget::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsWidget::mousePressEvent(event);
   if (m_graphNode)
@@ -1113,7 +1256,7 @@ void InOutItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
   }
 }
 
-void InOutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void AnchorWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsWidget::mouseMoveEvent(event);
 
@@ -1124,7 +1267,7 @@ void InOutItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
   }
 }
 
-void InOutItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void AnchorWidget::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
   QGraphicsWidget::mouseReleaseEvent(event);
 
@@ -1140,25 +1283,32 @@ void InOutItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 
 
-FlowInOutItem::FlowInOutItem(InOutItem::Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
-  : InOutItem(eT_Flow, direction, parent, wFlags)
+FlowAnchorWidget::FlowAnchorWidget(AnchorWidget::Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : AnchorWidget(eT_Flow, direction, parent, wFlags)
 {
 }
 
 
 
-FlowInOutItem::~FlowInOutItem()
+FlowAnchorWidget::~FlowAnchorWidget()
 {
 
 }
 
-QSizeF FlowInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+
+void FlowAnchorWidget::SetColor(const QColor &color)
+{
+  m_color = color;
+}
+
+
+QSizeF FlowAnchorWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
   return QSizeF(21.0f, 16.0f);
 }
 
 
-void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void FlowAnchorWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   float scale = 4.0f;
 
@@ -1173,7 +1323,7 @@ void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
   drawPath.lineTo(13.0f, 14.0f);
   drawPath.lineTo(2.0f, 14.0f);
   drawPath.lineTo(2.0f, 2.0f);
-  painter->setPen(QColor(255, 255, 255));
+  painter->setPen(m_color);
   painter->drawPath(drawPath);
 
   if (m_connected)
@@ -1184,15 +1334,15 @@ void FlowInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     fillPath.lineTo(12.0f, 12.0f);
     fillPath.lineTo(4.0f, 12.0f);
     fillPath.lineTo(4.0f, 4.0f);
-    painter->fillPath(fillPath, QColor(255, 255, 255));
+    painter->fillPath(fillPath, m_color);
   }
 }
 
 
 
 
-AttribInOutItem::AttribInOutItem(Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
-  : InOutItem(eT_Attrib, direction, parent, wFlags)
+AttribAnchorWidget::AttribAnchorWidget(Direction direction, QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : AnchorWidget(eT_Attrib, direction, parent, wFlags)
   , m_color(64, 64, 64)
 {
   setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
@@ -1200,23 +1350,23 @@ AttribInOutItem::AttribInOutItem(Direction direction, QGraphicsItem *parent, Qt:
 
 
 
-AttribInOutItem::~AttribInOutItem()
+AttribAnchorWidget::~AttribAnchorWidget()
 {
 
 }
 
-void AttribInOutItem::SetColor(const QColor &color)
+void AttribAnchorWidget::SetColor(const QColor &color)
 {
   m_color = color;
 }
 
 
-QSizeF AttribInOutItem::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+QSizeF AttribAnchorWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
   return QSizeF(16.0f, 16.0f);
 }
 
-void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void AttribAnchorWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   if (!m_visible)
   {
@@ -1241,17 +1391,35 @@ void AttribInOutItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
   }
 }
 
-
-AttribInput::AttribInput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+ContentWidget::ContentWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   : QGraphicsWidget(parent, wFlags)
+  , m_graphNode(0)
+{
+
+}
+
+ContentWidget::~ContentWidget()
+{
+
+}
+
+void ContentWidget::SetGraphNode(GraphNode *graphNode)
+{
+  m_graphNode = graphNode;
+}
+
+
+
+
+AttribInputWidget::AttribInputWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : ContentWidget(parent, wFlags)
   , m_name("Attribute")
   , m_value("10.0")
-  , m_graphNode(0)
 {
   QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
   layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
 
-  m_anchor = new AttribInOutItem(InOutItem::eD_In, this);
+  m_anchor = new AttribAnchorWidget(AnchorWidget::eD_In, this);
   m_text = new TextItem(this);
   m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_text->SetColor(QColor(64, 64, 64));
@@ -1270,30 +1438,31 @@ AttribInput::AttribInput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 }
 
-AttribInput::~AttribInput()
+
+AttribInputWidget::~AttribInputWidget()
 {
 
 }
 
-void AttribInput::SetName(const QString &name)
+void AttribInputWidget::SetName(const QString &name)
 {
   m_name = name;
   UpdateText ();
 }
 
-void AttribInput::SetValue(const QString &value)
+void AttribInputWidget::SetValue(const QString &value)
 {
   m_value = value;
   UpdateText();
 }
 
-void AttribInput::SetColor(const QColor &color)
+void AttribInputWidget::SetColor(const QColor &color)
 {
   m_text->SetColor(color);
   m_anchor->SetColor(color);
 }
 
-void AttribInput::UpdateText()
+void AttribInputWidget::UpdateText()
 {
   QString text = "";
   if (m_value.length() != 0)
@@ -1306,14 +1475,14 @@ void AttribInput::UpdateText()
 }
 
 
-void AttribInput::SetGraphNode(GraphNode *graphNode)
+void AttribInputWidget::SetGraphNode(GraphNode *graphNode)
 {
-  m_graphNode = graphNode;
+  ContentWidget::SetGraphNode(graphNode);
   m_text->SetGraphNode(graphNode);
   m_anchor->SetGraphNode(graphNode);
 }
 
-void AttribInput::Hover(const QPointF &scenePos)
+void AttribInputWidget::Hover(const QPointF &scenePos)
 {
   if (m_anchor)
   {
@@ -1322,20 +1491,19 @@ void AttribInput::Hover(const QPointF &scenePos)
 }
 
 
-InOutItem *AttribInput::FindInOutItem (const QPointF &scenePos)
+AnchorWidget *AttribInputWidget::FindAnchorWidget (const QPointF &scenePos)
 {
   if (m_anchor)
   {
-    return m_anchor->FindInOutItem(scenePos);
+    return m_anchor->FindAnchorWidget(scenePos);
   }
   return 0;
 }
 
 
-AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
-  : QGraphicsWidget(parent, wFlags)
+AttribOutputWidget::AttribOutputWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : ContentWidget(parent, wFlags)
   , m_name("Attribute")
-  , m_graphNode(0)
 {
   QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
   layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
@@ -1344,7 +1512,7 @@ AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   m_text->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
   m_text->SetColor(QColor(64, 64, 64));
   m_text->setText(m_name);
-  m_anchor = new AttribInOutItem(InOutItem::eD_Out, this);
+  m_anchor = new AttribAnchorWidget(AnchorWidget::eD_Out, this);
 
 
   layout->addItem(m_text, 0, 0, Qt::AlignRight);
@@ -1352,32 +1520,32 @@ AttribOutput::AttribOutput(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 }
 
-AttribOutput::~AttribOutput()
+AttribOutputWidget::~AttribOutputWidget()
 {
 
 }
 
-void AttribOutput::SetName(const QString &name)
+void AttribOutputWidget::SetName(const QString &name)
 {
   m_name = name;
   m_text->setText(m_name);
 }
 
 
-void AttribOutput::SetColor(const QColor &color)
+void AttribOutputWidget::SetColor(const QColor &color)
 {
   m_text->SetColor(color);
   m_anchor->SetColor(color);
 }
 
-void AttribOutput::SetGraphNode(GraphNode *graphNode)
+void AttribOutputWidget::SetGraphNode(GraphNode *graphNode)
 {
-  m_graphNode = graphNode;
+  ContentWidget::SetGraphNode(graphNode);
   m_text->SetGraphNode(graphNode);
   m_anchor->SetGraphNode(graphNode);
 }
 
-void AttribOutput::Hover(const QPointF &scenePos)
+void AttribOutputWidget::Hover(const QPointF &scenePos)
 {
   if (m_anchor)
   {
@@ -1386,14 +1554,80 @@ void AttribOutput::Hover(const QPointF &scenePos)
 
 }
 
-InOutItem *AttribOutput::FindInOutItem (const QPointF &scenePos)
+AnchorWidget *AttribOutputWidget::FindAnchorWidget (const QPointF &scenePos)
 {
   if (m_anchor)
   {
-    return m_anchor->FindInOutItem(scenePos);
+    return m_anchor->FindAnchorWidget(scenePos);
   }
   return 0;
 }
+
+
+
+
+
+FlowOutputWidget::FlowOutputWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags)
+  : ContentWidget(parent, wFlags)
+  , m_name("Attribute")
+{
+  QGraphicsGridLayout *layout = new QGraphicsGridLayout(this);
+  layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
+
+  m_text = new TextItem(this);
+  m_text->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+  m_text->SetColor(QColor(64, 64, 64));
+  m_text->setText(m_name);
+  m_anchor = new FlowAnchorWidget(AnchorWidget::eD_Out, this);
+
+
+  layout->addItem(m_text, 0, 0, Qt::AlignRight);
+  layout->addItem(m_anchor, 0, 1);
+
+}
+
+FlowOutputWidget::~FlowOutputWidget()
+{
+
+}
+
+void FlowOutputWidget::SetName(const QString &name)
+{
+  m_name = name;
+  m_text->setText(m_name);
+}
+
+
+void FlowOutputWidget::SetGraphNode(GraphNode *graphNode)
+{
+  ContentWidget::SetGraphNode(graphNode);
+  m_text->SetGraphNode(graphNode);
+  m_anchor->SetGraphNode(graphNode);
+}
+
+void FlowOutputWidget::Hover(const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    m_anchor->Hover(scenePos);
+  }
+
+}
+
+void FlowOutputWidget::SetColor(const QColor &color)
+{
+  m_anchor->SetColor(color);
+}
+
+AnchorWidget *FlowOutputWidget::FindAnchorWidget (const QPointF &scenePos)
+{
+  if (m_anchor)
+  {
+    return m_anchor->FindAnchorWidget(scenePos);
+  }
+  return 0;
+}
+
 
 
 Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
@@ -1421,7 +1655,7 @@ Headline::Headline (QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 void Headline::AddFlowInItem()
 {
-  m_flowIn = new FlowInOutItem(InOutItem::eD_In, this);
+  m_flowIn = new FlowAnchorWidget(AnchorWidget::eD_In, this);
   m_flowIn->SetGraphNode(m_graphNode);
 
   m_layout->addItem(m_flowIn, 0, 0, 1, 1);
@@ -1429,7 +1663,7 @@ void Headline::AddFlowInItem()
 
 void Headline::AddFlowOutItem()
 {
-  m_flowOut = new FlowInOutItem(InOutItem::eD_Out, this);
+  m_flowOut = new FlowAnchorWidget(AnchorWidget::eD_Out, this);
   m_flowOut->SetGraphNode(m_graphNode);
 
   m_layout->addItem(m_flowOut, 0, 2, 1, 1);
@@ -1461,11 +1695,11 @@ void Headline::Hover(const QPointF &scenePos)
   }
 }
 
-InOutItem *Headline::FindInOutItem (const QPointF &scenePos)
+AnchorWidget *Headline::FindAnchorWidget (const QPointF &scenePos)
 {
   if (m_flowIn)
   {
-    InOutItem *item = m_flowIn->FindInOutItem(scenePos);
+    AnchorWidget *item = m_flowIn->FindAnchorWidget(scenePos);
     if (item)
     {
       return item;
@@ -1473,7 +1707,7 @@ InOutItem *Headline::FindInOutItem (const QPointF &scenePos)
   }
   if (m_flowOut)
   {
-    InOutItem *item = m_flowOut->FindInOutItem(scenePos);
+    AnchorWidget *item = m_flowOut->FindAnchorWidget(scenePos);
     if (item)
     {
       return item;
@@ -1566,16 +1800,17 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
 
 
 
-  AttribInput *input0 = new AttribInput(this);
+  AttribInputWidget *input0 = new AttribInputWidget(this);
   input0->SetValue("1.0");
   input0->SetName("uv");
   AddInput(input0);
 
-  AttribOutput *outputC = new AttribOutput(this);
-  AttribOutput *outputR = new AttribOutput(this);
-  AttribOutput *outputG = new AttribOutput(this);
-  AttribOutput *outputB = new AttribOutput(this);
-  AttribOutput *outputA = new AttribOutput(this);
+  AttribOutputWidget *outputC = new AttribOutputWidget(this);
+  AttribOutputWidget *outputR = new AttribOutputWidget(this);
+  AttribOutputWidget *outputG = new AttribOutputWidget(this);
+  AttribOutputWidget *outputB = new AttribOutputWidget(this);
+  AttribOutputWidget *outputA = new AttribOutputWidget(this);
+  FlowOutputWidget *flowOutput = new FlowOutputWidget(this);
   outputR->SetColor(QColor(128, 0, 0));
   outputG->SetColor(QColor(0, 128, 0));
   outputB->SetColor(QColor(0, 0, 128));
@@ -1590,6 +1825,7 @@ GraphNode::GraphNode(QGraphicsItem *parent, Qt::WindowFlags wFlags)
   AddOutput(outputG);
   AddOutput(outputB);
   AddOutput(outputA);
+  AddOutput(flowOutput);
 }
 
 GraphNode::~GraphNode ()
@@ -1622,35 +1858,23 @@ const QPointF &GraphNode::GetMotionStart() const
 void GraphNode::Hover(const QPointF &scenePos)
 {
   m_headLine->Hover(scenePos);
-  for (auto input : m_inputs)
+  for (auto content : m_contents)
   {
-    input->Hover (scenePos);
-  }
-  for (auto output : m_outputs)
-  {
-    output->Hover (scenePos);
+    content->Hover (scenePos);
   }
 }
 
-InOutItem *GraphNode::FindInOutItem(const QPointF &scenePos)
+AnchorWidget *GraphNode::FindAnchorWidget(const QPointF &scenePos)
 {
-  for (auto input : m_inputs)
+  for (auto content : m_contents)
   {
-    InOutItem *item = input->FindInOutItem(scenePos);
+    AnchorWidget *item = content->FindAnchorWidget(scenePos);
     if (item)
     {
       return item;
     }
   }
-  for (auto output : m_outputs)
-  {
-    InOutItem *item = output->FindInOutItem(scenePos);
-    if (item)
-    {
-      return item;
-    }
-  }
-  InOutItem *item = m_headLine->FindInOutItem(scenePos);
+  AnchorWidget *item = m_headLine->FindAnchorWidget(scenePos);
   if (item)
   {
     return item;
@@ -1673,17 +1897,17 @@ void GraphNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 }
 
 
-void GraphNode::AddInput(AttribInput *input)
+void GraphNode::AddInput(ContentWidget *input)
 {
-  m_inputs.append(input);
+  m_contents.append(input);
   input->SetGraphNode(this);
   m_leftLayout->addItem(input, m_leftCount, 0);
   m_leftCount++;
 }
 
-void GraphNode::AddOutput(AttribOutput *output)
+void GraphNode::AddOutput(ContentWidget *output)
 {
-  m_outputs.append(output);
+  m_contents.append(output);
   output->SetGraphNode(this);
   m_rightLayout->addItem(output, m_rightCount, 0, Qt::AlignRight);
   m_rightCount++;

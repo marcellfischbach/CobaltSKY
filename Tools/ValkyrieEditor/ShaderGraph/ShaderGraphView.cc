@@ -157,6 +157,76 @@ private:
 };
 
 
+class ShaderGraphScene : public graph::NodeGraphScene
+{
+public:
+  ShaderGraphScene(QObject *parent = 0)
+    : graph::NodeGraphScene(parent)
+  {
+
+  }
+
+  virtual void OnConnectionAdded (graph::AnchorConnectionItem *connection)
+  {
+    graph::AnchorWidget *widget = connection->GetInputWidget();
+    if (widget && widget->GetType() != graph::AnchorWidget::eT_Attrib)
+    {
+      widget = 0;
+    }
+    if (!widget)
+    {
+      widget = connection->GetOutputWidget();
+      if (widget && widget->GetType() != graph::AnchorWidget::eT_Flow)
+      {
+        widget = 0;
+      }
+    }
+    if (!widget)
+    {
+      return;
+    }
+
+    QList<graph::AnchorConnectionItem*> connections;
+    for (size_t i=0, in=widget->GetNumberOfConnections(); i<in; ++i)
+    {
+      graph::AnchorConnectionItem *con = widget->GetConnection(i);
+      if (con != connection)
+      {
+        connections.append(con);
+      }
+    }
+    for (auto con : connections)
+    {
+      RemoveConnection(con);
+    }
+  }
+
+  virtual void OnConnectionCanceled(graph::AnchorWidget *anchor)
+  {
+    if (anchor &&
+        (
+          anchor->GetType() == graph::AnchorWidget::eT_Attrib && anchor->GetDirection() == graph::AnchorWidget::eD_In ||
+          anchor->GetType() == graph::AnchorWidget::eT_Flow && anchor->GetDirection() == graph::AnchorWidget::eD_Out
+          )
+        )
+    {
+      QList<graph::AnchorConnectionItem*> connections;
+      for (size_t i=0, in=anchor->GetNumberOfConnections(); i<in; ++i)
+      {
+        graph::AnchorConnectionItem *con = anchor->GetConnection(i);
+        connections.append(con);
+      }
+      for (auto con : connections)
+      {
+        RemoveConnection(con);
+      }
+
+    }
+  }
+
+};
+
+
 ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_editorWidget(0)
@@ -173,7 +243,7 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
 
 
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
-  m_scene = new graph::NodeGraphScene();
+  m_scene = new ShaderGraphScene();
   connect(m_scene, SIGNAL(NodeAdded(graph::Node*)), this, SLOT(NodeAdded(graph::Node*)));
   connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node*, int)), this, SLOT(NodeConnectedLooseInput(graph::Node*, int)));
   connect(m_scene, SIGNAL(NodesConnected(graph::Node*, int, graph::Node*, int)), this, SLOT(NodesConnected(graph::Node*, int, graph::Node*, int)));

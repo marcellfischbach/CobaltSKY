@@ -14,7 +14,7 @@ NodeGraphScene::NodeGraphScene(QObject *parent)
   , m_currentConnectionPath(0)
   , m_currentSelectedNode(0)
   , m_silent (false)
-  , m_currentInOutItem(0)
+  , m_currentAnchorWidget(0)
 {
   setSceneRect(QRect(-2000, -2000, 4000, 4000));
 
@@ -389,23 +389,23 @@ void NodeGraphScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 
-void NodeGraphScene::StartConnection(InOutItem *item)
+void NodeGraphScene::StartConnection(AnchorWidget *item)
 {
-  m_currentInOutItem = item;
+  m_currentAnchorWidget = item;
 }
 
 void NodeGraphScene::MoveConnection(const QPointF &scenePos)
 {
   QPointF endPos = scenePos;
-  if (!m_currentInOutItem)
+  if (!m_currentAnchorWidget)
   {
     return;
   }
 
-  QPointF startPos = m_currentInOutItem->mapToScene(m_currentInOutItem->contentsRect().center());
+  QPointF startPos = m_currentAnchorWidget->mapToScene(m_currentAnchorWidget->contentsRect().center());
 
-  InOutItem *endItem = FindInOutItem(scenePos);
-  if (endItem && endItem->GetType() == m_currentInOutItem->GetType() && endItem->GetDirection() != m_currentInOutItem->GetDirection())
+  AnchorWidget *endItem = FindAnchorWidget(scenePos);
+  if (IsConnectable(m_currentAnchorWidget, endItem))
   {
     endPos = endItem->mapToScene(endItem->contentsRect().center());
   }
@@ -424,7 +424,61 @@ void NodeGraphScene::AttachConnect(const QPointF &scenePos)
 {
   QPainterPath path;
   m_currentConnectionPath->setPath(path);
+
+  AnchorWidget *startItem = m_currentAnchorWidget;
+  m_currentAnchorWidget = 0;
+
+  AnchorWidget *endItem = FindAnchorWidget(scenePos);
+  if (!IsConnectable(startItem, endItem))
+  {
+    OnConnectionCanceled(startItem);
+    return;
+  }
+
+  AddConnection(startItem, endItem);
+  m_currentAnchorWidget = 0;
 }
+
+AnchorConnectionItem *NodeGraphScene::AddConnection (AnchorWidget *anchorA, AnchorWidget *anchorB)
+{
+  AnchorConnectionItem *anchorConnection = new AnchorConnectionItem(0, anchorA, anchorB);
+  addItem(anchorConnection);
+  m_connectionItems.append(anchorConnection);
+  OnConnectionAdded(anchorConnection);
+  return anchorConnection;
+}
+
+bool NodeGraphScene::RemoveConnection(AnchorWidget *anchorA, AnchorWidget *anchorB)
+{
+  for (auto connection : m_connectionItems)
+  {
+    if (connection->IsEqual(anchorA, anchorB))
+    {
+      return RemoveConnection(connection);
+    }
+  }
+  return false;
+}
+
+bool NodeGraphScene::RemoveConnection(AnchorConnectionItem *connection)
+{
+  int numRemoved = m_connectionItems.removeAll(connection);
+  removeItem(connection);
+  OnConnectionRemoved(connection);
+  delete connection;
+  return numRemoved;
+}
+
+bool NodeGraphScene::IsConnectable(AnchorWidget *anchorA, AnchorWidget *anchorB) const
+{
+  if (!anchorA || !anchorB)
+  {
+    return false;
+  }
+
+  return anchorA->GetType() == anchorB->GetType() && anchorA->GetDirection() != anchorB->GetDirection();
+}
+
 
 
 void NodeGraphScene::ClearSelection ()
@@ -466,11 +520,11 @@ void NodeGraphScene::MoveSelectedNodes(const QPointF &direction)
   }
 }
 
-InOutItem *NodeGraphScene::FindInOutItem(const QPointF &scenePos)
+AnchorWidget *NodeGraphScene::FindAnchorWidget(const QPointF &scenePos)
 {
   for (auto node : m_graphNodes)
   {
-    InOutItem *item = node->FindInOutItem(scenePos);
+    AnchorWidget *item = node->FindAnchorWidget(scenePos);
     if (item)
     {
       return item;

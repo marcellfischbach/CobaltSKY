@@ -11,6 +11,7 @@
 #include <QGraphicsGridLayout>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsWidget>
+#include <QGraphicsPathItem>
 
 
 class QGraphicsItem;
@@ -240,6 +241,7 @@ inline void Node::SetShowImage(bool showImage)
   m_showImage = showImage;
 }
 
+
 class GraphNode;
 class TextItem : public QGraphicsLayoutItem, public QGraphicsSimpleTextItem
 {
@@ -272,7 +274,29 @@ private:
   GraphNode *m_graphNode;
 };
 
-class InOutItem : public QGraphicsWidget
+class AnchorWidget;
+class AnchorConnectionItem : public QObject, public QGraphicsPathItem
+{
+  Q_OBJECT
+public:
+  AnchorConnectionItem(QGraphicsItem *parent, AnchorWidget *anchorA, AnchorWidget *anchorB);
+  ~AnchorConnectionItem ();
+
+  AnchorWidget *GetInputWidget ();
+  AnchorWidget *GetOutputWidget ();
+
+  bool IsEqual(AnchorWidget *anchorA, AnchorWidget *anchorB);
+
+private slots:
+  void AnchorChanged();
+
+private:
+  AnchorWidget *m_anchorA;
+  AnchorWidget *m_anchorB;
+
+};
+
+class AnchorWidget : public QGraphicsWidget
 {
 public:
   enum Type
@@ -288,17 +312,23 @@ public:
   };
 
 public:
-  InOutItem (Type type, Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~InOutItem();
+  AnchorWidget (Type type, Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AnchorWidget();
 
   void SetVisible (bool visible);
   bool IsVisible () const;
   void SetGraphNode (GraphNode *graphNode);
   void Hover(const QPointF &scenePos);
-  InOutItem *FindInOutItem(const QPointF &scenePos);
+  void AddConnection (AnchorConnectionItem *connection);
+  void RemoveConnection (AnchorConnectionItem *connection);
+  AnchorWidget *FindAnchorWidget(const QPointF &scenePos);
 
   Type GetType () const;
   Direction GetDirection () const;
+  GraphNode *GetGraphNode ();
+
+  size_t GetNumberOfConnections () const;
+  AnchorConnectionItem *GetConnection (size_t idx);
 
 protected:
   virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -307,6 +337,7 @@ protected:
 
 
 protected:
+  QList<AnchorConnectionItem*> m_connections;
   bool m_connected;
   bool m_hover;
   bool m_visible;
@@ -319,24 +350,28 @@ protected:
 
 
 
-class FlowInOutItem : public InOutItem
+class FlowAnchorWidget : public AnchorWidget
 {
 public:
-  FlowInOutItem (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~FlowInOutItem();
+  FlowAnchorWidget (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~FlowAnchorWidget();
+
+  void SetColor(const QColor &color);
+
 
   QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const;
-
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+private:
+  QColor m_color;
 };
 
-class AttribInOutItem : public InOutItem
+class AttribAnchorWidget : public AnchorWidget
 {
 public:
 
 public:
-  AttribInOutItem (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~AttribInOutItem();
+  AttribAnchorWidget (Direction direction, QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribAnchorWidget();
 
   void SetColor(const QColor &color);
 
@@ -347,52 +382,88 @@ private:
   QColor m_color;
 };
 
-class AttribInput : public QGraphicsWidget
+
+class ContentWidget : public QGraphicsWidget
 {
 public:
-  AttribInput(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~AttribInput();
+  ContentWidget(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~ContentWidget();
+
+  virtual void Hover(const QPointF &scenePos) = 0;
+  virtual void SetGraphNode (GraphNode *graphNode);
+  virtual AnchorWidget *FindAnchorWidget(const QPointF &scenePos) = 0;
+
+protected:
+  GraphNode *m_graphNode;
+};
+
+
+class AttribInputWidget : public ContentWidget
+{
+public:
+  AttribInputWidget(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribInputWidget();
 
   void SetName(const QString &name);
   void SetValue (const QString &value);
   void SetColor(const QColor &color);
-  void SetGraphNode (GraphNode *graphNode);
-  void Hover(const QPointF &scenePos);
-  InOutItem *FindInOutItem (const QPointF &scenePos);
+  virtual void Hover(const QPointF &scenePos);
+  virtual void SetGraphNode (GraphNode *graphNode);
+  virtual AnchorWidget *FindAnchorWidget (const QPointF &scenePos);
 
 private:
   void UpdateText ();
 private:
-  AttribInOutItem *m_anchor;
+  AttribAnchorWidget *m_anchor;
   TextItem *m_text;
 
   QString m_value;
   QString m_name;
 
-  GraphNode *m_graphNode;
 
 };
 
 
-class AttribOutput : public QGraphicsWidget
+class AttribOutputWidget : public ContentWidget
 {
 public:
-  AttribOutput(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
-  ~AttribOutput();
+  AttribOutputWidget(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~AttribOutputWidget();
 
   void SetName(const QString &name);
   void SetColor(const QColor &color);
-  void SetGraphNode (GraphNode *graphNode);
-  void Hover(const QPointF &scenePos);
-  InOutItem *FindInOutItem (const QPointF &scenePos);
+  virtual void Hover(const QPointF &scenePos);
+  virtual void SetGraphNode (GraphNode *graphNode);
+  virtual AnchorWidget *FindAnchorWidget (const QPointF &scenePos);
 
 private:
   TextItem *m_text;
-  AttribInOutItem *m_anchor;
+  AttribAnchorWidget *m_anchor;
 
   QString m_name;
-  GraphNode *m_graphNode;
 };
+
+
+
+class FlowOutputWidget : public ContentWidget
+{
+public:
+  FlowOutputWidget(QGraphicsItem *parent = Q_NULLPTR, Qt::WindowFlags wFlags = Qt::WindowFlags());
+  ~FlowOutputWidget();
+
+  void SetName(const QString &name);
+  void Hover(const QPointF &scenePos);
+  void SetColor(const QColor &color);
+  virtual void SetGraphNode (GraphNode *graphNode);
+  virtual AnchorWidget *FindAnchorWidget (const QPointF &scenePos);
+
+private:
+  TextItem *m_text;
+  FlowAnchorWidget *m_anchor;
+
+  QString m_name;
+};
+
 
 
 class Headline : public QGraphicsWidget
@@ -406,7 +477,7 @@ public:
   void SetGraphNode (GraphNode *graphNode);
 
   void Hover(const QPointF &scenePos);
-  InOutItem *FindInOutItem (const QPointF &scenePos);
+  AnchorWidget *FindAnchorWidget (const QPointF &scenePos);
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
@@ -417,9 +488,9 @@ public:
 
 private:
   QGraphicsGridLayout *m_layout;
-  FlowInOutItem *m_flowIn;
+  FlowAnchorWidget *m_flowIn;
   TextItem *m_text;
-  FlowInOutItem *m_flowOut;
+  FlowAnchorWidget *m_flowOut;
 
   GraphNode *m_graphNode;
   QPointF m_motionStartPosition;
@@ -435,10 +506,10 @@ public:
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
   void Hover (const QPointF &scenePos);
-  InOutItem *FindInOutItem (const QPointF &scenePos);
+  AnchorWidget *FindAnchorWidget (const QPointF &scenePos);
 
-  void AddInput (AttribInput *input);
-  void AddOutput(AttribOutput *output);
+  void AddInput (ContentWidget *input);
+  void AddOutput(ContentWidget *output);
 
   bool IsHeadLine(const QPointF &scenePos) const;
   void SetSelected (bool selected);
@@ -450,8 +521,7 @@ public:
 
 private:
 
-  QList<AttribInput*> m_inputs;
-  QList<AttribOutput*> m_outputs;
+  QList<ContentWidget*> m_contents;
 
   QGraphicsGridLayout *m_layout;
   Headline *m_headLine;

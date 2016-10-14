@@ -11,8 +11,9 @@ namespace graph
 class GraphNode;
 class Node;
 class NodeConnection;
-class AttribInOutItem;
-class InOutItem;
+class AttribAnchorWidget;
+class AnchorWidget;
+class AnchorConnectionItem;
 class NodeGraphScene : public QGraphicsScene
 {
   Q_OBJECT
@@ -47,10 +48,12 @@ public:
 
 
 
-  void StartConnection(InOutItem *item);
+  void StartConnection(AnchorWidget *item);
   void MoveConnection(const QPointF &scenePos);
   void AttachConnect (const QPointF &scenePos);
-
+  AnchorConnectionItem *AddConnection (AnchorWidget *anchorA, AnchorWidget *anchorB);
+  bool RemoveConnection (AnchorWidget *anchorA, AnchorWidget *anchorB);
+  bool RemoveConnection (AnchorConnectionItem *connection);
   void ClearSelection ();
   void SelectNode (GraphNode *node, Qt::KeyboardModifiers modifiers);
 
@@ -62,8 +65,13 @@ protected:
   void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
+  virtual bool IsConnectable(AnchorWidget *anchorA, AnchorWidget *anchorB) const;
+  virtual void OnConnectionAdded (AnchorConnectionItem *connection) { };
+  virtual void OnConnectionCanceled (AnchorWidget *anchor) { };
+  virtual void OnConnectionRemoved(AnchorConnectionItem *connection) { };
+
 private:
-  InOutItem *FindInOutItem(const QPointF& scenePos);
+  AnchorWidget *FindAnchorWidget(const QPointF& scenePos);
   QPointF TestForAnchorMatch(const QPointF &p, Node *node, Direction dir);
   QGraphicsPathItem *GetCurrentConnectionPath();
   QList<Node*> m_nodes;
@@ -73,7 +81,8 @@ private:
 
   QList<GraphNode*> m_graphNodes;
   QGraphicsPathItem *m_currentConnectionPath;
-  InOutItem *m_currentInOutItem;
+  AnchorWidget *m_currentAnchorWidget;
+  QList<AnchorConnectionItem*> m_connectionItems;
 
   bool m_silent;
 
