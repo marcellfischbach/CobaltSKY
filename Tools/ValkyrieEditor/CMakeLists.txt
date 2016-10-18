@@ -79,9 +79,6 @@ source_group(
     )
 
 set(EDITOR_GRAPH_SOURCES
-    Graph/Connection.cc
-    Graph/Connection.hh
-    Graph/Direction.h
     Graph/Node.cc
     Graph/Node.hh
     Graph/Scene.cc
@@ -176,6 +173,8 @@ set(EDITOR_SHADERGRAPH_SOURCES
     ShaderGraph/PreviewWidget.hh
     ShaderGraph/ShaderEditor.cc
     ShaderGraph/ShaderEditor.hh
+    ShaderGraph/ShaderGraphScene.cc
+    ShaderGraph/ShaderGraphScene.hh
     ShaderGraph/ShaderGraphView.cc
     ShaderGraph/ShaderGraphView.hh
     ShaderGraph/SGNode.cc

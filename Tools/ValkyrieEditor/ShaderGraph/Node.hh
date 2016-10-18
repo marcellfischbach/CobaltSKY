@@ -5,7 +5,7 @@
 namespace shadergraph
 {
 
-class Node : public graph::Node
+class Node : public graph::GraphNode
 {
 public:
   enum Type

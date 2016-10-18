@@ -4,11 +4,11 @@
 #include <ShaderGraph/NodeSelector.hh>
 #include <ShaderGraph/PreviewWidget.hh>
 #include <ShaderGraph/ShaderEditor.hh>
+#include <ShaderGraph/ShaderGraphScene.hh>
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/AssetWriter.hh>
 #include <AssetManager/Utils.hh>
-#include <Graph/Connection.hh>
 #include <Graph/Node.hh>
 #include <Editor.hh>
 #include <qgridlayout.h>
@@ -157,76 +157,6 @@ private:
 };
 
 
-class ShaderGraphScene : public graph::NodeGraphScene
-{
-public:
-  ShaderGraphScene(QObject *parent = 0)
-    : graph::NodeGraphScene(parent)
-  {
-
-  }
-
-  virtual void OnConnectionAdded (graph::AnchorConnectionItem *connection)
-  {
-    graph::AnchorWidget *widget = connection->GetInputWidget();
-    if (widget && widget->GetType() != graph::AnchorWidget::eT_Attrib)
-    {
-      widget = 0;
-    }
-    if (!widget)
-    {
-      widget = connection->GetOutputWidget();
-      if (widget && widget->GetType() != graph::AnchorWidget::eT_Flow)
-      {
-        widget = 0;
-      }
-    }
-    if (!widget)
-    {
-      return;
-    }
-
-    QList<graph::AnchorConnectionItem*> connections;
-    for (size_t i=0, in=widget->GetNumberOfConnections(); i<in; ++i)
-    {
-      graph::AnchorConnectionItem *con = widget->GetConnection(i);
-      if (con != connection)
-      {
-        connections.append(con);
-      }
-    }
-    for (auto con : connections)
-    {
-      RemoveConnection(con);
-    }
-  }
-
-  virtual void OnConnectionCanceled(graph::AnchorWidget *anchor)
-  {
-    if (anchor &&
-        (
-          anchor->GetType() == graph::AnchorWidget::eT_Attrib && anchor->GetDirection() == graph::AnchorWidget::eD_In ||
-          anchor->GetType() == graph::AnchorWidget::eT_Flow && anchor->GetDirection() == graph::AnchorWidget::eD_Out
-          )
-        )
-    {
-      QList<graph::AnchorConnectionItem*> connections;
-      for (size_t i=0, in=anchor->GetNumberOfConnections(); i<in; ++i)
-      {
-        graph::AnchorConnectionItem *con = anchor->GetConnection(i);
-        connections.append(con);
-      }
-      for (auto con : connections)
-      {
-        RemoveConnection(con);
-      }
-
-    }
-  }
-
-};
-
-
 ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_editorWidget(0)
@@ -243,12 +173,14 @@ ShaderGraphWidget::ShaderGraphWidget(QWidget *parent)
 
 
   m_view->setBackgroundBrush(QBrush(QColor(32, 32, 32)));
-  m_scene = new ShaderGraphScene();
+  m_scene = new shadergraph::ShaderGraphScene();
+  /*
   connect(m_scene, SIGNAL(NodeAdded(graph::Node*)), this, SLOT(NodeAdded(graph::Node*)));
   connect(m_scene, SIGNAL(NodeConnectedLooseInput(graph::Node*, int)), this, SLOT(NodeConnectedLooseInput(graph::Node*, int)));
   connect(m_scene, SIGNAL(NodesConnected(graph::Node*, int, graph::Node*, int)), this, SLOT(NodesConnected(graph::Node*, int, graph::Node*, int)));
   connect(m_scene, SIGNAL(NodeRemoved(graph::Node*)), this, SLOT(NodeRemoved(graph::Node*)));
   connect(m_scene, SIGNAL(NodeSelected(graph::Node*)), this, SLOT(NodeSelected(graph::Node*)));
+  */
   m_view->setScene(m_scene);
 
 
@@ -294,12 +226,13 @@ void ShaderGraphWidget::Set(const vkResourceLocator &resourceLocator)
 
 void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
 {
-  m_scene->SetSilent(true);
+
   // create a full copy of the src shader
   m_shaderGraph = new vkSGShaderGraph();
   SyncGraph(shaderGraph, m_shaderGraph);
-
-
+  m_scene->Setup(m_shaderGraph, metaData);
+}
+/*
 
   // now create the graph node for the shader
   m_shaderGraphNode = new shadergraph::SGShaderGraphNode(m_shaderGraph);
@@ -377,6 +310,7 @@ void ShaderGraphWidget::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData 
 
   m_scene->SetSilent(false);
 }
+*/
 
 
 void ShaderGraphWidget::SyncGraph(const vkSGShaderGraph *src, vkSGShaderGraph *dst)
@@ -495,6 +429,7 @@ void  ShaderGraphWidget::keyReleaseEvent(QKeyEvent *event)
   }
   else if (event->key() == Qt::Key_Delete)
   {
+    /*
     graph::Node *selectedNode = m_scene->GetSelectedNode();
     if (!selectedNode)
     {
@@ -504,6 +439,7 @@ void  ShaderGraphWidget::keyReleaseEvent(QKeyEvent *event)
     {
       m_scene->RemoveSelectedNode();
     }
+    */
   }
 }
 
@@ -526,10 +462,10 @@ void ShaderGraphWidget::ViewRightClicked(const QPoint &p)
   popupNodeSelector();
 }
 
-graph::Node *ShaderGraphWidget::AddNode(const vkClass *clazz)
+graph::GraphNode *ShaderGraphWidget::AddNode(const vkClass *clazz)
 {
   vkSGNode *node = clazz->CreateInstance<vkSGNode>();
-  graph::Node *sgNode = AddNode(node, m_newNodePosition);
+  graph::GraphNode *sgNode = AddNode(node, m_newNodePosition);
   VK_RELEASE(node);
   return sgNode;
 }
@@ -547,147 +483,17 @@ void ShaderGraphWidget::AddTexture2D(const vkResourceLocator &locator, const QPo
   VK_RELEASE(txt2D);
 }
 
-graph::Node *ShaderGraphWidget::AddNode(vkSGNode *node, const vkVector2f &pos)
+graph::GraphNode *ShaderGraphWidget::AddNode(vkSGNode *node, const vkVector2f &pos)
 {
   if (!node)
   {
     return 0;
   }
   shadergraph::SGNode *sgNode = new shadergraph::SGNode(node);
-  if (!sgNode->Initialize())
-  {
-    delete sgNode;
-    return 0;
-  }
 
   m_scene->AddNode(sgNode);
-  sgNode->SetPosition(QPointF(pos.x, pos.y));
+  sgNode->setPos(QPointF(pos.x, pos.y));
   return sgNode;
-}
-
-void ShaderGraphWidget::NodeSelected(graph::Node *node)
-{
-  QWidget *currentEditor = m_gui.saAttributes->takeWidget();
-  if (currentEditor)
-  {
-    currentEditor->deleteLater();
-    currentEditor = 0;
-  }
-
-  if (node)
-  {
-    shadergraph::Node *sgNode = static_cast<shadergraph::Node*>(node);
-    if (sgNode->GetType() == shadergraph::Node::eT_ShaderGraph)
-    {
-      shadergraph::ShaderEditorWidget *editorWidget = new shadergraph::ShaderEditorWidget(this);
-      editorWidget->SetShader(static_cast<shadergraph::SGShaderGraphNode*>(node));
-      currentEditor = editorWidget;
-    }
-    else
-    {
-      shadergraph::NodeEditorWidget *editorWidget = new shadergraph::NodeEditorWidget(this);
-      editorWidget->SetNode(static_cast<shadergraph::SGNode*>(node));
-      currentEditor = editorWidget;
-    }
-  }
-
-  if (currentEditor)
-  {
-    m_gui.saAttributes->setWidget(currentEditor);
-  }
-}
-
-
-void ShaderGraphWidget::NodeRemoved(graph::Node *node)
-{
-  shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
-
-  vkSGNode *vksgNode = sgNode->GetNode();
-
-  for (vkSize i=0, in=vksgNode->GetNumberOfInputs(); i<in; ++i)
-  {
-    vkSGInput *input = vksgNode->GetInput(i);
-    input->SetInput(0);
-  }
-
-  for (vkSize i=0, in=m_shaderGraph->GetNumberOfTotalNodes(); i<in; ++i)
-  {
-    vkSGNode *n = m_shaderGraph->GetNode(i);
-    for (vkSize j=0, jn=n->GetNumberOfInputs(); j<jn; ++j)
-    {
-      vkSGInput *input = n->GetInput(j);
-      vkSGOutput *output = input->GetInput();
-      if (output && output->GetNode() == vksgNode)
-      {
-        input->SetInput(0);
-      }
-    }
-  }
-
-  for (unsigned i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
-  {
-    vkSGShaderGraph::InputType inputType =  (vkSGShaderGraph::InputType)i;
-    vkSGOutput *output = m_shaderGraph->GetInput((vkSGShaderGraph::InputType)i);
-    if (output && output->GetNode() == vksgNode)
-    {
-      m_shaderGraph->SetInput(inputType, 0);
-    }
-  }
-}
-
-
-void ShaderGraphWidget::NodeAdded(graph::Node *node)
-{
-  shadergraph::Node *shadergraph_node = static_cast<shadergraph::Node*>(node);
-
-  if (shadergraph_node->GetType() == shadergraph::Node::eT_Node)
-  {
-    vkSGNode *sgNode = static_cast<shadergraph::SGNode*>(shadergraph_node)->GetNode();
-    if (!m_shaderGraph->ContainsNode(sgNode))
-    {
-      m_shaderGraph->AddNode(sgNode);
-    }
-  }
-}
-
-void ShaderGraphWidget::NodeConnectedLooseInput(graph::Node *inputNode, int inputIdx)
-{
-  shadergraph::Node *node = static_cast<shadergraph::Node*>(inputNode);
-
-  if (node->GetType() == shadergraph::Node::eT_Node)
-  {
-    shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(node);
-    vkSGNode *vksgNode = sgNode->GetNode();
-    vksgNode->SetInput(inputIdx, (vkSGNode*)0);
-  }
-  else if (node->GetType() == shadergraph::Node::eT_ShaderGraph)
-  {
-    shadergraph::SGShaderGraphNode *sgNode = static_cast<shadergraph::SGShaderGraphNode*>(node);
-    vkSGShaderGraph *shaderGraph = sgNode->GetShaderGraph();
-    shaderGraph->SetInput((vkSGShaderGraph::InputType)inputIdx, 0);
-  }
-
-  m_scene->DisconnectInput(inputNode, inputIdx);
-}
-
-void ShaderGraphWidget::NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx)
-{
-  shadergraph::SGNode *sgNode = static_cast<shadergraph::SGNode*>(outNode);
-  vkSGOutput *output = sgNode->GetNode()->GetOutput(outIdx);
-
-  shadergraph::Node *node = static_cast<shadergraph::Node*>(inNode);
-  if (node->GetType() == shadergraph::Node::eT_Node)
-  {
-    shadergraph::SGNode *sgInNode = static_cast<shadergraph::SGNode*>(node);
-    vkSGNode *vksgNode = sgInNode->GetNode();
-    vksgNode->GetInput(inIdx)->SetInput(output);
-  }
-  else if (node->GetType() == shadergraph::Node::eT_ShaderGraph)
-  {
-    shadergraph::SGShaderGraphNode *sgInNode = static_cast<shadergraph::SGShaderGraphNode*>(node);
-    vkSGShaderGraph *shaderGraph = sgInNode->GetShaderGraph();
-    shaderGraph->SetInput((vkSGShaderGraph::InputType)inIdx, output);
-  }
 }
 
 
@@ -786,7 +592,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
 
 
-  QPointF shaderGraphPos = m_shaderGraphNode->GetItem()->pos();
+  QPointF shaderGraphPos = m_shaderGraphNode->pos();
 
 
   QDomElement metaShaderGraphShaderGraphElement = doc.createElement("shaderGraph");
@@ -801,7 +607,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
   QVector<vkSGInput*> inputs;
   for (size_t i = 0, in = m_scene->GetNumberOfNodes(); i < in; ++i)
   {
-    graph::Node *graphNode = m_scene->GetNode(i);
+    graph::GraphNode *graphNode = m_scene->GetNode(i);
     if (graphNode == m_shaderGraphNode)
     {
       continue;
@@ -909,7 +715,7 @@ void ShaderGraphWidget::on_pbSave_clicked(bool)
 
     nodesElement.appendChild(nodeElement);
 
-    QPointF pos = graphNode->GetItem()->pos();
+    QPointF pos = graphNode->pos();
     QDomElement metaNodeElement = doc.createElement("node");
     metaNodeElement.setAttribute("id", index);
     metaNodeElement.

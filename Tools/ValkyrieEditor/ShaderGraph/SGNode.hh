@@ -4,6 +4,7 @@
 #include <Valkyrie/Core/Object.hh>
 #include <Valkyrie/Core/ResourceManager.hh>
 #include <Valkyrie/Enums.hh>
+#include <QMap>
 
 class vkSGNode;
 class vkSGResourceNode;
@@ -18,10 +19,6 @@ class SGNode : public Node
 {
 public:
   SGNode(vkSGNode *node);
-  void AddConnection(graph::NodeConnection* connection);
-
-  void RemoveConnection(graph::NodeConnection* connection);
-
   void UpdateResource ();
 
   const vkSGNode *GetNode () const
@@ -38,6 +35,9 @@ public:
 private:
   vkSGNode *m_node;
   vkSGResourceNode *m_res;
+
+  QMap<QString, graph::AttribInputWidget*> m_inputs;
+  QMap<QString, graph::AttribOutputWidget*> m_outputs;
 
 };
 

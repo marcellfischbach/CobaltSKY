@@ -15,6 +15,7 @@ namespace shadergraph
 class SGNode;
 class SGShaderGraphNode;
 class PreviewWidget;
+class ShaderGraphScene;
 }
 
 class vkSGNode;
@@ -43,20 +44,15 @@ protected:
   void keyReleaseEvent(QKeyEvent *event);
 
 private:
-  graph::Node *AddNode(vkSGNode *node, const vkVector2f &pos);
+  graph::GraphNode *AddNode(vkSGNode *node, const vkVector2f &pos);
 
   void SyncGraph (const vkSGShaderGraph *src, vkSGShaderGraph *dst);
   void SyncNodes (const vkSGShaderGraph *src, vkSGShaderGraph *dst);
   vkSGNode *Copy (const vkSGNode* node);
 
 private slots:
-  void NodeSelected(graph::Node *node);
   void ViewRightClicked(const QPoint&);
-  graph::Node *AddNode(const vkClass *clazz);
-  void NodeRemoved(graph::Node* node);
-  void NodeAdded (graph::Node *node);
-  void NodeConnectedLooseInput(graph::Node *inputNode, int inIdx);
-  void NodesConnected(graph::Node *outNode, int outIdx, graph::Node *inNode, int inIdx);
+  graph::GraphNode *AddNode(const vkClass *clazz);
 
 
   void on_pbSave_clicked(bool checked);
@@ -70,7 +66,7 @@ private:
 
   Ui::ShaderGraphView m_gui;
   QGraphicsView *m_view;
-  graph::NodeGraphScene *m_scene;
+  shadergraph::ShaderGraphScene *m_scene;
 
   vkSGShaderGraph* m_shaderGraph;
   shadergraph::SGShaderGraphNode *m_shaderGraphNode;
