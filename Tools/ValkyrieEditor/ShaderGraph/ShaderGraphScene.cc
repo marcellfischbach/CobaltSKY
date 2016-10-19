@@ -14,7 +14,10 @@ ShaderGraphScene::ShaderGraphScene(QObject *parent)
   : graph::NodeGraphScene(parent)
   , m_shaderGraphNode(0)
 {
-
+  connect(this, SIGNAL(NodeAdded(graph::GraphNode *)), this, SLOT(NodeAdded(graph::GraphNode *)));
+  connect(this, SIGNAL(NodeRemoved(graph::GraphNode *)), this, SLOT(NodeRemoved(graph::GraphNode *)));
+  connect(this, SIGNAL(ConnectionAdded(graph::AnchorConnectionItem *)), this, SLOT(ConnectionAdded(graph::AnchorConnectionItem *)));
+  connect(this, SIGNAL(ConnectionRemoved(graph::AnchorConnectionItem *)), this, SLOT(ConnectionRemoved(graph::AnchorConnectionItem *)));
 }
 
 void ShaderGraphScene::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *metaData)
@@ -24,6 +27,8 @@ void ShaderGraphScene::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *
   {
     delete m_shaderGraphNode;
   }
+
+  bool blocked = blockSignals(true);
 
   m_shaderGraphNode = new SGShaderGraphNode(shaderGraph);
   AddNode(m_shaderGraphNode);
@@ -91,11 +96,17 @@ void ShaderGraphScene::Setup(vkSGShaderGraph *shaderGraph, ShaderGraphMetaData *
     }
 
   }
+  blockSignals(blocked);
+}
 
+SGShaderGraphNode *ShaderGraphScene::GetShaderGraphNode()
+{
+  return m_shaderGraphNode;
 }
 
 void ShaderGraphScene::OnConnectionAdded (graph::AnchorConnectionItem *connection)
 {
+  graph::NodeGraphScene::OnConnectionAdded(connection);
   graph::AnchorWidget *widget = connection->GetInputWidget();
   if (widget && widget->GetType() != graph::AnchorWidget::eT_Attrib)
   {
@@ -127,6 +138,7 @@ void ShaderGraphScene::OnConnectionAdded (graph::AnchorConnectionItem *connectio
   {
     RemoveConnection(con);
   }
+
 }
 
 void ShaderGraphScene::OnConnectionCanceled(graph::AnchorWidget *anchor)
@@ -151,5 +163,95 @@ void ShaderGraphScene::OnConnectionCanceled(graph::AnchorWidget *anchor)
 
   }
 }
+
+void ShaderGraphScene::NodeAdded(graph::GraphNode *node)
+{
+  Node *n = static_cast<Node*>(node);
+  if (n->GetType() != shadergraph::Node::eT_Node)
+  {
+    return;
+  }
+
+  SGNode *sgNode = static_cast<SGNode*>(n);
+  vkSGNode *vksgNode = sgNode->GetNode();
+  m_shaderGraphNode->GetShaderGraph()->AddNode(vksgNode);
+
+}
+
+void ShaderGraphScene::NodeRemoved(graph::GraphNode *node)
+{
+  Node *n = static_cast<Node*>(node);
+  if (n->GetType() != shadergraph::Node::eT_Node)
+  {
+    return;
+  }
+
+  SGNode *sgNode = static_cast<SGNode*>(n);
+  vkSGNode *vksgNode = sgNode->GetNode();
+  m_shaderGraphNode->GetShaderGraph()->RemoveNode(vksgNode);
+}
+
+void ShaderGraphScene::ConnectionAdded(graph::AnchorConnectionItem *anchor)
+{
+  if (!anchor || !anchor->IsValid())
+  {
+    return;
+  }
+  graph::AnchorWidget *outputWidget = anchor->GetOutputWidget();
+  graph::AnchorWidget *inputWidget = anchor->GetInputWidget();
+  int outputIdx = outputWidget->GetContentWidget()->GetIndex();
+  int inputIdx = inputWidget->GetContentWidget()->GetIndex();
+
+  Node *nO = static_cast<Node*>(outputWidget->GetGraphNode());
+  Node *nI = static_cast<Node*>(inputWidget->GetGraphNode());
+
+  if (nI->GetType() == shadergraph::Node::eT_ShaderGraph)
+  {
+    vkSGOutput *output = static_cast<SGNode*>(nO)->GetNode()->GetOutput(outputIdx);
+    m_shaderGraphNode->GetShaderGraph()->SetInput((vkSGShaderGraph::InputType)inputIdx, output);
+  }
+  else
+  {
+    static_cast<SGNode*>(nI)->GetNode()->SetInput(inputIdx, static_cast<SGNode*>(nO)->GetNode(), outputIdx);
+  }
+
+}
+
+void ShaderGraphScene::ConnectionRemoved(graph::AnchorConnectionItem *anchor)
+{
+  if (!anchor || !anchor->IsValid())
+  {
+    return;
+  }
+  graph::AnchorWidget *inputWidget = anchor->GetInputWidget();
+  graph::AnchorWidget *outputWidget = anchor->GetOutputWidget();
+  int inputIdx = inputWidget->GetContentWidget()->GetIndex();
+  int outputIdx = outputWidget->GetContentWidget()->GetIndex();
+
+  Node *nI = static_cast<Node*>(inputWidget->GetGraphNode());
+  Node *nO = static_cast<Node*>(outputWidget->GetGraphNode());
+
+
+  vkSGOutput *output = static_cast<SGNode*>(nO)->GetNode()->GetOutput(outputIdx);
+
+  if (nI->GetType() == shadergraph::Node::eT_ShaderGraph)
+  {
+    vkSGOutput *currentOutput = m_shaderGraphNode->GetShaderGraph()->GetInput((vkSGShaderGraph::InputType)inputIdx);
+    if (currentOutput == output)
+    {
+      m_shaderGraphNode->GetShaderGraph()->SetInput((vkSGShaderGraph::InputType)inputIdx, 0);
+    }
+  }
+  else
+  {
+    vkSGNode *vksgNode = static_cast<SGNode*>(nI)->GetNode();
+    vkSGInput *currentInput = vksgNode->GetInput(inputIdx);
+    if (currentInput && currentInput->GetInput() == output)
+    {
+      static_cast<SGNode*>(nI)->GetNode()->SetInput(inputIdx, 0, 0);
+    }
+  }
+}
+
 
 }

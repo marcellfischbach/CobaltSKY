@@ -23,9 +23,11 @@ NodeGraphScene::NodeGraphScene(QObject *parent)
 
 void NodeGraphScene::Clear ()
 {
-  removeItem(m_currentConnectionPath);
-  clear();
-  addItem(m_currentConnectionPath);
+  for (auto node : m_graphNodes)
+  {
+    RemoveNode(node);
+  }
+  m_graphNodes.clear();
 }
 
 void NodeGraphScene::AddNode(GraphNode *node)
@@ -33,7 +35,7 @@ void NodeGraphScene::AddNode(GraphNode *node)
 
   m_graphNodes.append(node);
   addItem (node);
-
+  OnNodeAdded(node);
 }
 
 void NodeGraphScene::RemoveSelectedNodes()
@@ -72,6 +74,7 @@ void NodeGraphScene::RemoveNode(GraphNode *node)
     RemoveConnection(connection);
   }
 
+  m_graphNodes.removeAll(node);
   removeItem(node);
   OnNodeRemoved(node);
 }
@@ -272,6 +275,7 @@ void NodeGraphScene::ClearSelection ()
   {
     node->SetSelected(false);
   }
+  m_currentSelectedNode = 0;
 }
 
 
@@ -279,9 +283,19 @@ void NodeGraphScene::SelectNode(GraphNode *node, Qt::KeyboardModifiers modifiers
 {
   if (!modifiers.testFlag(Qt::ShiftModifier) && !modifiers.testFlag(Qt::ControlModifier))
   {
-    ClearSelection ();
+    for (auto node : m_graphNodes)
+    {
+      node->SetSelected(false);
+    }
   }
+
   node->SetSelected(true);
+  if (m_currentSelectedNode != node)
+  {
+    m_currentSelectedNode = node;
+    emit NodeSelected(m_currentSelectedNode);
+  }
+
 }
 
 

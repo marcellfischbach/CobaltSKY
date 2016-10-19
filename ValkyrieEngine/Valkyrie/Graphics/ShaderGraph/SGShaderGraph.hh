@@ -70,6 +70,8 @@ public:
   const vkSGNode *GetNode(size_t idx) const;
   bool ContainsNode(const vkSGNode *node) const;
   int GetIndexOfNode(const vkSGNode *node) const;
+  void RemoveNode(vkSGNode *node);
+  void RemoveNode(size_t idx);
 
 private:
   vkSGNode *GetNode(vkSGOutput *output);

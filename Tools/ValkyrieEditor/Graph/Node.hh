@@ -16,7 +16,8 @@
 class QGraphicsItem;
 namespace graph
 {
-
+class ContentWidget;
+class AnchorWidget;
 class GraphNode;
 class TextItem : public QGraphicsLayoutItem, public QGraphicsSimpleTextItem
 {
@@ -49,7 +50,6 @@ private:
   GraphNode *m_graphNode;
 };
 
-class AnchorWidget;
 class AnchorConnectionItem : public QObject, public QGraphicsPathItem
 {
   Q_OBJECT
@@ -64,6 +64,8 @@ public:
   AnchorWidget *GetAnchorB();
 
   bool IsEqual(AnchorWidget *anchorA, AnchorWidget *anchorB);
+
+  bool IsValid();
 
 private slots:
   void AnchorChanged();
@@ -97,6 +99,7 @@ public:
   void SetVisible (bool visible);
   bool IsVisible () const;
   void SetGraphNode (GraphNode *graphNode);
+  void SetContentWidget(ContentWidget *contentWidget);
   void Hover(const QPointF &scenePos);
   void AddConnection (AnchorConnectionItem *connection);
   void RemoveConnection (AnchorConnectionItem *connection);
@@ -105,6 +108,7 @@ public:
   Type GetType () const;
   Direction GetDirection () const;
   GraphNode *GetGraphNode ();
+  ContentWidget *GetContentWidget();
 
   size_t GetNumberOfConnections () const;
   AnchorConnectionItem *GetConnection (size_t idx);
@@ -125,7 +129,7 @@ protected:
 
   Type m_type;
   Direction m_direction;
-
+  ContentWidget *m_contentWidget;
   GraphNode *m_graphNode;
 
 signals:

@@ -201,3 +201,25 @@ void shadergraph::SGNode::UpdateResource()
   }
 
 }
+
+void shadergraph::SGNode::Sync()
+{
+  for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
+  {
+    vkSGInput *input = m_node->GetInput(i);
+    QString inputName(input->GetName().c_str());
+
+    if (m_inputs.find(inputName) == m_inputs.end())
+    {
+      continue;
+    }
+    graph::AttribInputWidget *inputWidget = m_inputs[inputName];
+    if (input->CanInputConst())
+    {
+      inputWidget->SetValue(QString::asprintf("%f", input->GetConst()));
+    }
+
+  }
+
+  update();
+}

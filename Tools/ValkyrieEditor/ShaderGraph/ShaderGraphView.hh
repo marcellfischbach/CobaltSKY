@@ -53,6 +53,7 @@ private:
 private slots:
   void ViewRightClicked(const QPoint&);
   graph::GraphNode *AddNode(const vkClass *clazz);
+  void NodeSelected(graph::GraphNode *graphNode);
 
 
   void on_pbSave_clicked(bool checked);
@@ -69,7 +70,6 @@ private:
   shadergraph::ShaderGraphScene *m_scene;
 
   vkSGShaderGraph* m_shaderGraph;
-  shadergraph::SGShaderGraphNode *m_shaderGraphNode;
 
   shadergraph::PreviewWidget *m_previewWidget;
 

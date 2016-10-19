@@ -31,6 +31,7 @@ public:
     return m_node;
   }
 
+  void Sync();
 
 private:
   vkSGNode *m_node;

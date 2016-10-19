@@ -63,6 +63,7 @@ private:
   QGraphicsPathItem *m_currentConnectionPath;
   AnchorWidget *m_currentAnchorWidget;
   QList<AnchorConnectionItem*> m_connectionItems;
+  GraphNode *m_currentSelectedNode;
 
 
 signals:
@@ -70,8 +71,8 @@ signals:
   void NodeAdded(graph::GraphNode *node);
   void NodeRemoved(graph::GraphNode *node);
 
-  void ConnectionAdded (AnchorConnectionItem *anchor);
-  void ConnectionRemoved (AnchorConnectionItem *anchor);
+  void ConnectionAdded (graph::AnchorConnectionItem *anchor);
+  void ConnectionRemoved (graph::AnchorConnectionItem *anchor);
 };
 
 }

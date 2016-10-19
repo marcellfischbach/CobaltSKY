@@ -176,3 +176,24 @@ int vkSGShaderGraph::GetIndexOfNode(const vkSGNode *node) const
 
   return -1;
 }
+
+void vkSGShaderGraph::RemoveNode(vkSGNode *node)
+{
+  int i = GetIndexOfNode(node);
+  RemoveNode((size_t)i);
+}
+
+void vkSGShaderGraph::RemoveNode(size_t idx)
+{
+  std::vector<vkSGNode*>::iterator it = m_allNodes.begin() + idx;
+  if (it != m_allNodes.end())
+  {
+    vkSGNode *node = *it;
+    if (node)
+    {
+      node->Release();
+    }
+  }
+  m_allNodes.erase(it);
+}
+

@@ -22,22 +22,22 @@
       </nodes>
       <inputs>
         <shaderGraph input="Diffuse">
-          <node output="0" id="0"/>
+          <node id="0" output="0"/>
         </shaderGraph>
         <shaderGraph input="Normal">
-          <node output="0" id="1"/>
+          <node id="1" output="0"/>
         </shaderGraph>
-        <node input="0" id="0">
-          <node output="0" id="4"/>
+        <node id="0" input="0">
+          <node id="4" output="0"/>
         </node>
-        <node input="0" id="1">
-          <node output="0" id="4"/>
+        <node id="1" input="0">
+          <node id="4" output="0"/>
         </node>
-        <node input="0" id="4">
-          <node output="0" id="2"/>
+        <node id="4" input="0">
+          <node id="2" output="0"/>
         </node>
-        <node input="1" id="4">
-          <node output="0" id="3"/>
+        <node id="4" input="1">
+          <node id="3" output="0"/>
         </node>
       </inputs>
       <attributes>
@@ -53,10 +53,10 @@
     <shaderGraphMeta>
       <nodes>
         <node id="0">
-          <pos>-216.000000, -184.000000</pos>
+          <pos>-212.000000, -157.000000</pos>
         </node>
         <node id="1">
-          <pos>-218.000000, 21.000000</pos>
+          <pos>-203.000000, -12.000000</pos>
         </node>
         <node id="2">
           <pos>-763.000000, -180.000000</pos>
@@ -66,6 +66,22 @@
         </node>
         <node id="4">
           <pos>-468.000000, -151.000000</pos>
+        </node>
+      </nodes>
+      <shaderGraph>
+        <pos>67.000000, -62.000000</pos>
+      </shaderGraph>
+    </shaderGraphMeta>
+  </meta>
+</asset>
+ id="3">
+          <pos>-830.000000, -36.000000</pos>
+        </node>
+        <node id="4">
+          <pos>-468.000000, -151.000000</pos>
+        </node>
+        <node id="5">
+          <pos>79.000000, -183.000000</pos>
         </node>
       </nodes>
       <shaderGraph>

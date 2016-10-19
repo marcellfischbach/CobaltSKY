@@ -172,6 +172,11 @@ bool AnchorConnectionItem::IsEqual(AnchorWidget *anchorA, AnchorWidget *anchorB)
       m_anchorA == anchorB && m_anchorB == anchorA;
 }
 
+bool AnchorConnectionItem::IsValid() 
+{
+  return m_anchorA && m_anchorA->GetGraphNode() && m_anchorB && m_anchorB->GetGraphNode();
+}
+
 void AnchorConnectionItem::AnchorChanged()
 {
   if (!m_anchorA || !m_anchorB)
@@ -202,6 +207,7 @@ AnchorWidget::AnchorWidget(Type type, Direction direction, QGraphicsItem *parent
   , m_connected (false)
   , m_hover(false)
   , m_graphNode(0)
+  , m_contentWidget(0)
   , m_visible(true)
 {
 
@@ -279,7 +285,10 @@ void AnchorWidget::SetGraphNode(GraphNode *graphNode)
   m_graphNode = graphNode;
 }
 
-
+void AnchorWidget::SetContentWidget(ContentWidget *contentWidget)
+{
+  m_contentWidget = contentWidget;
+}
 
 
 AnchorWidget *AnchorWidget::FindAnchorWidget(const QPointF &scenePos)
@@ -305,6 +314,11 @@ AnchorWidget::Direction AnchorWidget::GetDirection() const
 GraphNode *AnchorWidget::GetGraphNode()
 {
   return m_graphNode;
+}
+
+ContentWidget *AnchorWidget::GetContentWidget()
+{
+  return m_contentWidget;
 }
 
 size_t AnchorWidget::GetNumberOfConnections() const
@@ -520,6 +534,7 @@ AttribInputWidget::AttribInputWidget(QGraphicsItem *parent, Qt::WindowFlags wFla
   layout->setContentsMargins(0.0f, 0.0f, 0.0f, 0.0f);
 
   m_anchor = new AttribAnchorWidget(AnchorWidget::eD_In, this);
+  m_anchor->SetContentWidget(this);
   m_text = new TextItem(this);
   m_text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_text->SetColor(QColor(64, 64, 64));
@@ -625,6 +640,7 @@ AttribOutputWidget::AttribOutputWidget(QGraphicsItem *parent, Qt::WindowFlags wF
   m_text->SetColor(QColor(64, 64, 64));
   m_text->setText(m_name);
   m_anchor = new AttribAnchorWidget(AnchorWidget::eD_Out, this);
+  m_anchor->SetContentWidget(this);
 
 
   layout->addItem(m_text, 0, 0, Qt::AlignRight);
@@ -695,6 +711,7 @@ FlowOutputWidget::FlowOutputWidget(QGraphicsItem *parent, Qt::WindowFlags wFlags
   m_text->SetColor(QColor(64, 64, 64));
   m_text->setText(m_name);
   m_anchor = new FlowAnchorWidget(AnchorWidget::eD_Out, this);
+  m_anchor->SetContentWidget(this);
 
 
   layout->addItem(m_text, 0, 0, Qt::AlignRight);
