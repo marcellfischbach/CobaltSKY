@@ -14,7 +14,7 @@ class vkBulletJoint;
 
 
 VK_CLASS()
-class VKBULLET_API vkBulletDynamicCollider : public IPhysicsDynamicCollider
+class VKBULLET_API vkBulletDynamicCollider : public VK_SUPER(IPhysicsDynamicCollider)
 {
   VK_CLASS_GEN_OBJECT;
 

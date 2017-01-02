@@ -37,7 +37,7 @@ struct VKE_API IParticleStepper : public IObject
 
 
 VK_CLASS()
-class VKE_API vkParticleState : public vkRenderState
+class VKE_API vkParticleState : public VK_SUPER(vkRenderState)
 {
   VK_CLASS_GEN;
 public:
@@ -106,7 +106,7 @@ enum vkParticleRotationMode
 
 
 VK_CLASS()
-class VKE_API vkDefaultParticleEmitter : public IParticleEmitter
+class VKE_API vkDefaultParticleEmitter : public VK_SUPER(IParticleEmitter)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -180,7 +180,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkDefaultParticleStepper : public IParticleStepper
+class VKE_API vkDefaultParticleStepper : public VK_SUPER(IParticleStepper)
 {
   VK_CLASS_GEN_OBJECT;
 public:

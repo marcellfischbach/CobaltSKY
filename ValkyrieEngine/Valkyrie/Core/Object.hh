@@ -4,6 +4,7 @@
 
 #define VK_CLASS(...)
 #define VK_INTERFACE(...)
+#define VK_SUPER(Cls) Cls
 #define VK_PROPERTY(...) public: 
 #define VK_CLASS_GEN public: \
     virtual const vkClass *GetClass () const;\
@@ -174,7 +175,7 @@ T* vkNewClassInstance(const vkClass *clazz)
 
 #include <Valkyrie/Core/Object.refl.hh>
 
-VK_CLASS();
+VK_CLASS()
 class VKE_API vkObject : public IObject
 {
   VK_CLASS_GEN;

@@ -92,7 +92,7 @@ private:
 
 
 VK_INTERFACE()
-class VKGL4_API vkSGNodeGL4 : public vkObject
+class VKGL4_API vkSGNodeGL4 : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:
@@ -149,7 +149,7 @@ private:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGVarGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGVarGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -163,7 +163,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGVarFloatGL4 : public vkSGVarGL4
+class VKGL4_API vkSGVarFloatGL4 : public VK_SUPER(vkSGVarGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -172,7 +172,7 @@ public:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGVarFloat2GL4 : public vkSGVarGL4
+class VKGL4_API vkSGVarFloat2GL4 : public VK_SUPER(vkSGVarGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -181,7 +181,7 @@ public:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGVarFloat3GL4 : public vkSGVarGL4
+class VKGL4_API vkSGVarFloat3GL4 : public VK_SUPER(vkSGVarGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -191,7 +191,7 @@ public:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGVarFloat4GL4 : public vkSGVarGL4
+class VKGL4_API vkSGVarFloat4GL4 : public VK_SUPER(vkSGVarGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -201,7 +201,7 @@ public:
 
 
 VK_CLASS()
-class VKGL4_API vkSGConstFloatGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGConstFloatGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -214,7 +214,7 @@ protected:
 
 
 VK_CLASS()
-class VKGL4_API vkSGConstFloat2GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGConstFloat2GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -226,7 +226,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGConstFloat3GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGConstFloat3GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -238,7 +238,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGConstFloat4GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGConstFloat4GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -250,7 +250,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGFloat2GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGFloat2GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -262,7 +262,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGFloat3GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGFloat3GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -274,7 +274,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGFloat4GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGFloat4GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -287,7 +287,7 @@ protected:
 
 
 VK_CLASS()
-class VKGL4_API vkSGSplitFloat2GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGSplitFloat2GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -300,7 +300,7 @@ protected:
 
 
 VK_CLASS()
-class VKGL4_API vkSGSplitFloat3GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGSplitFloat3GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -312,7 +312,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGSplitFloat4GL4 : public vkSGNodeGL4
+class VKGL4_API vkSGSplitFloat4GL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -324,7 +324,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGAddGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGAddGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -336,7 +336,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGSubGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGSubGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -348,7 +348,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGMulGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGMulGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -360,7 +360,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGDivGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGDivGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -372,7 +372,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGDotGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGDotGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -384,7 +384,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGCrossGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGCrossGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -396,7 +396,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGLerpGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGLerpGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -408,7 +408,7 @@ protected:
 };
 
 VK_CLASS()
-class VKGL4_API vkSGDefaultTextureCoordinateGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGDefaultTextureCoordinateGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:
@@ -422,7 +422,7 @@ protected:
 
 
 VK_CLASS()
-class VKGL4_API vkSGTexture2DGL4 : public vkSGNodeGL4
+class VKGL4_API vkSGTexture2DGL4 : public VK_SUPER(vkSGNodeGL4)
 {
   VK_CLASS_GEN;
 public:

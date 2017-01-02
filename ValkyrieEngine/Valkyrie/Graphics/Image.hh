@@ -9,7 +9,7 @@
 
 
 VK_CLASS();
-class VKE_API vkImage : public vkObject
+class VKE_API vkImage : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 

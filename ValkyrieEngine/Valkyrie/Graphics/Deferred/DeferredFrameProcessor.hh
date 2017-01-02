@@ -17,7 +17,7 @@ class vkGeometryMesh;
 class vkParticleRenderer;
 
 VK_INTERFACE()
-class VKE_API vkDeferredFrameProcessor : public  IFrameProcessor
+class VKE_API vkDeferredFrameProcessor : public  VK_SUPER(IFrameProcessor)
 {
   VK_CLASS_GEN_OBJECT;
 public:

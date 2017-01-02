@@ -13,7 +13,7 @@ struct ISampler;
 */
 
 VK_CLASS()
-class VKE_API vkSamplerAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkSamplerAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -30,8 +30,8 @@ public:
 /**
 * \ingroup loading
 */
-VK_CLASS();
-class VKE_API vkTextureAssetXMLLoader : public vkBaseXMLLoader
+VK_CLASS()
+class VKE_API vkTextureAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

@@ -36,7 +36,7 @@ struct VKE_API IPhysicsCharacterController : public IObject
 
 
 VK_INTERFACE ()
-struct VKE_API IPhysicsCapsuleCharacterController : public IPhysicsCharacterController
+struct VKE_API IPhysicsCapsuleCharacterController : public VK_SUPER(IPhysicsCharacterController)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsCapsuleCharacterController() { }

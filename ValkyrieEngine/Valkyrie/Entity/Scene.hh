@@ -10,7 +10,7 @@ struct IPhysicsScene;
 class vkEntity;
 
 VK_CLASS()
-class VKE_API vkEntityScene : public vkObject
+class VKE_API vkEntityScene : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

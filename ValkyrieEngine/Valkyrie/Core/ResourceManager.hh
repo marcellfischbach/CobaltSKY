@@ -49,7 +49,7 @@ struct VKE_API IFileLoader : public IObject
 
 
 VK_CLASS()
-class VKE_API vkAssetFileLoader : public IFileLoader
+class VKE_API vkAssetFileLoader : public VK_SUPER(IFileLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -76,7 +76,7 @@ struct VKE_API IAssetLoader : public IObject
 
 
 VK_CLASS()
-class VKE_API vkXMLFileLoader : public IFileLoader
+class VKE_API vkXMLFileLoader : public VK_SUPER(IFileLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -102,7 +102,7 @@ struct VKE_API IXMLLoader : public IObject
 
 
 VK_INTERFACE()
-class VKE_API vkBaseXMLLoader : public IXMLLoader
+class VKE_API vkBaseXMLLoader : public VK_SUPER(IXMLLoader)
 {
   VK_CLASS_GEN_OBJECT;
 protected:
@@ -123,7 +123,7 @@ protected:
 };
 
 VK_CLASS()
-class VKE_API vkAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

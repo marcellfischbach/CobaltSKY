@@ -18,7 +18,7 @@ class vkPhysicsShapeContainer;
 
 
 VK_INTERFACE()
-class VKE_API vkColliderState : public vkSpatialState
+class VKE_API vkColliderState : public VK_SUPER(vkSpatialState)
 {
   VK_CLASS_GEN;
 public:
@@ -51,7 +51,7 @@ private:
 
 
 VK_INTERFACE()
-class VKE_API vkBaseColliderState : public vkColliderState
+class VKE_API vkBaseColliderState : public VK_SUPER(vkColliderState)
 {
   VK_CLASS_GEN;
 public:
@@ -77,7 +77,7 @@ private:
 };
 
 VK_CLASS()
-class VKE_API vkStaticColliderState : public vkBaseColliderState
+class VKE_API vkStaticColliderState : public VK_SUPER(vkBaseColliderState)
 {
 VK_CLASS_GEN;
 public:
@@ -100,7 +100,7 @@ private:
 class vkDynamicColliderStateTransformationCallback;
 
 VK_CLASS()
-class VKE_API vkDynamicColliderState : public vkBaseColliderState
+class VKE_API vkDynamicColliderState : public VK_SUPER(vkBaseColliderState)
 {
   VK_CLASS_GEN;
 public:

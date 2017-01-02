@@ -7,7 +7,7 @@
 #include <Valkyrie/Physics/PhysicsShapeContainer.refl.hh>
 
 VK_CLASS()
-class VKE_API vkPhysicsShapeContainer : public vkObject
+class VKE_API vkPhysicsShapeContainer : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

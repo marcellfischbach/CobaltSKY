@@ -9,7 +9,7 @@
 struct IPhysicsCapsuleCharacterController;
 class vkCharacterEntityTransformationCallback;
 VK_CLASS()
-class VKE_API vkCharacterEntity : public vkEntity
+class VKE_API vkCharacterEntity : public VK_SUPER(vkEntity)
 {
   VK_CLASS_GEN;
 public:

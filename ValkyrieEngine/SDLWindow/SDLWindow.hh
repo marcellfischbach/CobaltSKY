@@ -11,7 +11,7 @@ class SDLKeyboard;
 class SDLMouse;
 
 VK_CLASS()
-class VKSDL_API SDLWindow : public IWindow
+class VKSDL_API SDLWindow : public VK_SUPER(IWindow)
 {
   VK_CLASS_GEN_OBJECT;
 public:

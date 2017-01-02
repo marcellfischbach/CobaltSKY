@@ -16,7 +16,7 @@ struct IShaderAttribute;
 struct ITexture;
 
 VK_CLASS()
-class VKE_API vkPostProcessor : public vkObject
+class VKE_API vkPostProcessor : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:
@@ -56,7 +56,7 @@ private:
 
 
 VK_INTERFACE()
-class VKE_API vkPostProcess : public vkObject
+class VKE_API vkPostProcess : public VK_SUPER(vkObject)
 {
   friend class vkPostProcessor;
   VK_CLASS_GEN;
@@ -121,7 +121,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkGenericShaderPostProcess : public vkPostProcess
+class VKE_API vkGenericShaderPostProcess : public VK_SUPER(vkPostProcess)
 {
   VK_CLASS_GEN;
 public:

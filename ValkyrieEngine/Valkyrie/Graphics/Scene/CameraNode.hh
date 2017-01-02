@@ -7,8 +7,8 @@
 
 class vkCamera;
 
-VK_CLASS();
-class VKE_API vkCameraNode : public vkSpatialNode
+VK_CLASS()
+class VKE_API vkCameraNode : public VK_SUPER(vkSpatialNode)
 {
   VK_CLASS_GEN;
 public:

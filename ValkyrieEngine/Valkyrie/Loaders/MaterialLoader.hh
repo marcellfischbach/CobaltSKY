@@ -9,7 +9,7 @@
 * \ingroup loading
 */
 VK_CLASS()
-class VKE_API vkMaterialAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkMaterialAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

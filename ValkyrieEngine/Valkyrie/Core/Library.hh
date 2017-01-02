@@ -10,7 +10,7 @@
 struct vkLibraryPriv;
 
 VK_CLASS();
-class vkLibrary : public vkObject
+class vkLibrary : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

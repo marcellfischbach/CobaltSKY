@@ -19,7 +19,7 @@ struct IEntityScan;
 */
 
 VK_INTERFACE()
-class VKE_API vkGeometryData : public vkObject
+class VKE_API vkGeometryData : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 
@@ -56,7 +56,7 @@ private:
 */
 
 VK_CLASS()
-class VKE_API vkGeometryMesh : public vkGeometryData
+class VKE_API vkGeometryMesh : public VK_SUPER(vkGeometryData)
 {
   VK_CLASS_GEN;
 

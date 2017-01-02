@@ -10,8 +10,8 @@ struct IGraphics;
 class vkMaterialInstance;
 class vkMesh;
 
-VK_CLASS();
-class VKE_API vkGeometryNode : public vkSpatialNode
+VK_CLASS()
+class VKE_API vkGeometryNode : public VK_SUPER(vkSpatialNode)
 {
   VK_CLASS_GEN;
 public:

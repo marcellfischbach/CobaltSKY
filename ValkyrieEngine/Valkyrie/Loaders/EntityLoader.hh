@@ -10,7 +10,7 @@ class vkEntity;
 class vkEntityState;
 
 VK_CLASS()
-class vkEntityStateLoaderData : public vkObject
+class vkEntityStateLoaderData : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
   vkEntityStateLoaderData () : vkObject () { }
@@ -23,11 +23,11 @@ public:
 
 
 
-VK_CLASS();
+VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityMasterXMLLoader : public vkBaseXMLLoader
+class VKE_API vkEntityMasterXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -44,11 +44,11 @@ public:
 };
 
 
-VK_CLASS();
+VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityStateMasterXMLLoader : public vkBaseXMLLoader
+class VKE_API vkEntityStateMasterXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -65,11 +65,11 @@ public:
 };
 
 
-VK_CLASS();
+VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityXMLLoader: public vkBaseXMLLoader
+class VKE_API vkEntityXMLLoader: public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -85,11 +85,11 @@ public:
 };
 
 
-VK_CLASS();
+VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkEntityStateXMLLoader : public vkBaseXMLLoader
+class VKE_API vkEntityStateXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -110,7 +110,7 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkSpatialStateXMLLoader : public vkEntityStateXMLLoader
+class VKE_API vkSpatialStateXMLLoader : public VK_SUPER(vkEntityStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -128,7 +128,7 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkRenderStateXMLLoader : public vkSpatialStateXMLLoader
+class VKE_API vkRenderStateXMLLoader : public VK_SUPER(vkSpatialStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -146,7 +146,7 @@ VK_CLASS()
 /**
 * \ingroup loading
 */
-class VKE_API vkStaticMeshStateXMLLoader : public vkRenderStateXMLLoader
+class VKE_API vkStaticMeshStateXMLLoader : public VK_SUPER(vkRenderStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -162,7 +162,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkColliderStateXMLLoader : public vkSpatialStateXMLLoader
+class VKE_API vkColliderStateXMLLoader : public VK_SUPER(vkSpatialStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -177,7 +177,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkBaseColliderStateXMLLoader : public vkColliderStateXMLLoader
+class VKE_API vkBaseColliderStateXMLLoader : public VK_SUPER(vkColliderStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -192,7 +192,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkDynamicColliderStateXMLLoader : public vkBaseColliderStateXMLLoader
+class VKE_API vkDynamicColliderStateXMLLoader : public VK_SUPER(vkBaseColliderStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -207,7 +207,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkStaticColliderStateXMLLoader : public vkBaseColliderStateXMLLoader
+class VKE_API vkStaticColliderStateXMLLoader : public VK_SUPER(vkBaseColliderStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -221,7 +221,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkJointStateXMLLoader : public vkSpatialStateXMLLoader
+class VKE_API vkJointStateXMLLoader : public VK_SUPER(vkSpatialStateXMLLoader)
 {
   VK_CLASS_GEN;
 public:
@@ -234,7 +234,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkHingeJointStateXMLLoader : public vkJointStateXMLLoader
+class VKE_API vkHingeJointStateXMLLoader : public VK_SUPER(vkJointStateXMLLoader)
 {
   VK_CLASS_GEN;
   vkHingeJointStateXMLLoader();

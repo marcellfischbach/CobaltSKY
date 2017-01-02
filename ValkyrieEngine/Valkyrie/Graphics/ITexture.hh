@@ -67,7 +67,7 @@ struct VKE_API ITexture : public IObject
 };
 
 VK_INTERFACE();
-struct VKE_API ITexture2D : public virtual ITexture
+struct VKE_API ITexture2D : public virtual VK_SUPER(ITexture)
 {
   VK_CLASS_GEN;
   ITexture2D() : ITexture() { }
@@ -82,7 +82,7 @@ struct VKE_API ITexture2D : public virtual ITexture
 };
 
 VK_INTERFACE();
-struct VKE_API ITexture2DArray : public virtual ITexture
+struct VKE_API ITexture2DArray : public virtual VK_SUPER(ITexture)
 {
   VK_CLASS_GEN;
   ITexture2DArray() : ITexture() { }
@@ -102,7 +102,7 @@ struct VKE_API ITexture2DArray : public virtual ITexture
 
 
 VK_INTERFACE();
-struct VKE_API ITextureCube : public virtual ITexture
+struct VKE_API ITextureCube : public virtual VK_SUPER(ITexture)
 {
   VK_CLASS_GEN;
   ITextureCube() : ITexture() { }

@@ -17,8 +17,8 @@ struct IIndexBuffer;
 /**
 * \ingroup loading
 */
-VK_CLASS();
-class VKE_API vkStaticMeshLoader : public IFileLoader
+VK_CLASS()
+class VKE_API vkStaticMeshLoader : public VK_SUPER(IFileLoader)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -55,7 +55,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkStaticMeshAssetLoader : public IAssetLoader
+class VKE_API vkStaticMeshAssetLoader : public VK_SUPER(IAssetLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:

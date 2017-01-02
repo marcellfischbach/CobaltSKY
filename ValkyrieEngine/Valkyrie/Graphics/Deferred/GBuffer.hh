@@ -10,8 +10,8 @@ struct ITexture2D;
 struct IRenderTarget;
 struct ISampler;
 
-VK_INTERFACE();
-class VKE_API vkGBuffer : public vkObject
+VK_INTERFACE()
+class VKE_API vkGBuffer : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

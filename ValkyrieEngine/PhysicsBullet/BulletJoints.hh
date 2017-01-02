@@ -8,7 +8,7 @@
 
 
 VK_INTERFACE()
-class VKBULLET_API vkBulletJoint : public virtual IPhysicsJoint
+class VKBULLET_API vkBulletJoint : public virtual VK_SUPER(IPhysicsJoint)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -43,7 +43,7 @@ private:
 };
 
 VK_CLASS()
-class VKBULLET_API vkBulletHingeJoint : public  vkBulletJoint, public  IPhysicsHingeJoint
+class VKBULLET_API vkBulletHingeJoint : public  VK_SUPER(vkBulletJoint), public VK_SUPER(IPhysicsHingeJoint)
 {
   VK_CLASS_GEN;
 public:

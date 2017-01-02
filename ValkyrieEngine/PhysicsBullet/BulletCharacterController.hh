@@ -12,7 +12,7 @@ class btPairCachingGhostObject;
 class vkBulletScene;
 
 VK_CLASS()
-class VKBULLET_API vkBulletCapsuleCharacterController : public IPhysicsCapsuleCharacterController
+class VKBULLET_API vkBulletCapsuleCharacterController : public VK_SUPER(IPhysicsCapsuleCharacterController)
 {
   VK_CLASS_GEN_OBJECT;
 public:

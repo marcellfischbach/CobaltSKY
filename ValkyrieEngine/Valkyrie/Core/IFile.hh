@@ -34,7 +34,7 @@ enum vkTextMode
  * @brief Generic interface for handling IO operations on file-like
  *        datasources.
  */
-VK_INTERFACE();
+VK_INTERFACE()
 struct VKE_API IFile : public IObject
 {
   VK_CLASS_GEN;

@@ -5,7 +5,7 @@
 #include <SDLWindow/SDLKeyboard.refl.hh>
 
 VK_CLASS()
-class SDLKeyboard : public IKeyboard
+class SDLKeyboard : public VK_SUPER(IKeyboard)
 {
   VK_CLASS_GEN_OBJECT;
 public:

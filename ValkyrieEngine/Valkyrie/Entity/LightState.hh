@@ -10,7 +10,7 @@ class vkLight;
 */
 
 VK_CLASS()
-class VKE_API vkLightState : public vkSpatialState
+class VKE_API vkLightState : public VK_SUPER(vkSpatialState)
 {
   VK_CLASS_GEN;
 public:

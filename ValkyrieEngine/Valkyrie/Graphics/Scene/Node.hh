@@ -11,8 +11,8 @@
 class vkGroupNode;
 struct IGraphics;
 
-VK_INTERFACE();
-class VKE_API vkNode : public vkObject
+VK_INTERFACE()
+class VKE_API vkNode : public VK_SUPER(vkObject)
 {
   friend class vkGroupNode;
   VK_CLASS_GEN;

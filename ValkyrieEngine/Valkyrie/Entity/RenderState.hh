@@ -12,7 +12,7 @@ struct IGraphics;
 */
 
 VK_INTERFACE()
-class VKE_API vkRenderState : public vkSpatialState
+class VKE_API vkRenderState : public VK_SUPER(vkSpatialState)
 {
   VK_CLASS_GEN;
 public:

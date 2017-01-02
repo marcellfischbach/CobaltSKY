@@ -7,7 +7,7 @@
 
 struct vkThreadPriv;
 VK_INTERFACE();
-class VKE_API vkThread : public vkObject
+class VKE_API vkThread : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 

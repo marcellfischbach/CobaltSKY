@@ -117,7 +117,7 @@ private:
 };
 
 VK_CLASS()
-class VKE_API vkSGNode : public vkObject
+class VKE_API vkSGNode : public VK_SUPER(vkObject)
 {
 
   VK_CLASS_GEN;
@@ -228,7 +228,7 @@ private:
 };
 
 VK_CLASS()
-class VKE_API vkSGResourceNode : public vkSGNode
+class VKE_API vkSGResourceNode : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -271,7 +271,7 @@ private:
 };
 
 VK_CLASS()
-class VKE_API vkSGVarFloat : public vkSGResourceNode
+class VKE_API vkSGVarFloat : public VK_SUPER(vkSGResourceNode)
 {
   VK_CLASS_GEN;
 public:
@@ -281,7 +281,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGVarFloat2 : public vkSGResourceNode
+class VKE_API vkSGVarFloat2 : public VK_SUPER(vkSGResourceNode)
 {
   VK_CLASS_GEN;
 public:
@@ -290,7 +290,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGVarFloat3 : public vkSGResourceNode
+class VKE_API vkSGVarFloat3 : public VK_SUPER(vkSGResourceNode)
 {
   VK_CLASS_GEN;
 public:
@@ -300,7 +300,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGVarFloat4 : public vkSGResourceNode
+class VKE_API vkSGVarFloat4 : public VK_SUPER(vkSGResourceNode)
 {
   VK_CLASS_GEN;
 public:
@@ -309,7 +309,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGConstFloat : public vkSGNode
+class VKE_API vkSGConstFloat : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -318,7 +318,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGConstFloat2 : public vkSGNode
+class VKE_API vkSGConstFloat2 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -327,7 +327,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGConstFloat3 : public vkSGNode
+class VKE_API vkSGConstFloat3 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -336,7 +336,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGConstFloat4 : public vkSGNode
+class VKE_API vkSGConstFloat4 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -346,7 +346,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGFloat2 : public vkSGNode
+class VKE_API vkSGFloat2 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -355,7 +355,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGFloat3 : public vkSGNode
+class VKE_API vkSGFloat3 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -364,7 +364,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGFloat4 : public vkSGNode
+class VKE_API vkSGFloat4 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -374,7 +374,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGSplitFloat2 : public vkSGNode
+class VKE_API vkSGSplitFloat2 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -385,7 +385,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGSplitFloat3 : public vkSGNode
+class VKE_API vkSGSplitFloat3 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -396,7 +396,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGSplitFloat4 : public vkSGNode
+class VKE_API vkSGSplitFloat4 : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -408,7 +408,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGAdd : public vkSGNode
+class VKE_API vkSGAdd : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -420,7 +420,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGSub : public vkSGNode
+class VKE_API vkSGSub : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -432,7 +432,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGMul : public vkSGNode
+class VKE_API vkSGMul : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -444,7 +444,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGDiv : public vkSGNode
+class VKE_API vkSGDiv : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -455,7 +455,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGDot : public vkSGNode
+class VKE_API vkSGDot : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -466,7 +466,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGCross : public vkSGNode
+class VKE_API vkSGCross : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -478,7 +478,7 @@ public:
 
 
 VK_CLASS()
-class VKE_API vkSGLerp : public vkSGNode
+class VKE_API vkSGLerp : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -488,7 +488,7 @@ public:
   virtual bool Validate();
 };
 VK_CLASS()
-class VKE_API vkSGDefaultTextureCoordinate : public vkSGNode
+class VKE_API vkSGDefaultTextureCoordinate : public VK_SUPER(vkSGNode)
 {
   VK_CLASS_GEN;
 public:
@@ -498,7 +498,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSGTexture2D : public vkSGResourceNode
+class VKE_API vkSGTexture2D : public VK_SUPER(vkSGResourceNode)
 {
   VK_CLASS_GEN;
 public:

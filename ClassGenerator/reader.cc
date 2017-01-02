@@ -95,7 +95,7 @@ static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
   bool readName = false;
   std::string lastToken = "";
   Class *clazz = 0;
-  bool readSuperNames = false;
+  bool readSuperName = false;
   
   for (size_t in = source->GetNumberOfLines(); i < in; ++i)
   {
@@ -128,15 +128,20 @@ static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
         clazz->SetInterface(interf);
         clazz->SetName(lastToken);
         readName = false;
-        readSuperNames = true;
+        readSuperName = false;
       }
-      else if (token == "public" || token == "protected" || token == "private" || token == "virtual" || token == ",")
+      else if (token == "public" || token == "protected" || token == "private" || token == "virtual" || token == "," || token == "(" || token == ")")
       {
         continue;
       }
-      else if (readSuperNames && clazz)
+      else if (token == "VK_SUPER")
+      {
+        readSuperName = true;
+      }
+      else if (readSuperName && clazz)
       {
         clazz->AddSuperClass(token);
+        readSuperName = false;
       }
 
 

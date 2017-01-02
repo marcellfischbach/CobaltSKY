@@ -11,7 +11,7 @@ class vkDynamicColliderState;
 struct IPhysicsHingeJoint;
 
 VK_INTERFACE()
-class VKE_API vkJointState : public vkSpatialState
+class VKE_API vkJointState : public VK_SUPER(vkSpatialState)
 {
   VK_CLASS_GEN;
 public:
@@ -50,7 +50,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkHingeJointState : public vkJointState
+class VKE_API vkHingeJointState : public VK_SUPER(vkJointState)
 {
   VK_CLASS_GEN;
 public:

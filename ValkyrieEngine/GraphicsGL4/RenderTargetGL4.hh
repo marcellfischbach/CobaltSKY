@@ -8,8 +8,8 @@
 
 class vkTextureGL4;
 
-VK_CLASS();
-class VKGL4_API vkRenderTargetGL4 : public IRenderTarget
+VK_CLASS()
+class VKGL4_API vkRenderTargetGL4 : public VK_SUPER(IRenderTarget)
 {
   VK_CLASS_GEN_OBJECT;
 

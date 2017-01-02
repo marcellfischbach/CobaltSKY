@@ -16,7 +16,7 @@ class vkParticle;
 
 
 VK_CLASS()
-class VKE_API vkParticle : public vkObject
+class VKE_API vkParticle : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 

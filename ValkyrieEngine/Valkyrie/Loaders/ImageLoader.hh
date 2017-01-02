@@ -9,8 +9,8 @@
 /**
 * \ingroup loading
 */
-VK_CLASS();
-class VKE_API vkPNGImageFileLoader : public IFileLoader
+VK_CLASS()
+class VKE_API vkPNGImageFileLoader : public VK_SUPER(IFileLoader)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -27,8 +27,8 @@ public:
 
 
 
-VK_CLASS();
-class VKE_API vkPNGImageAssetLoader : public IAssetLoader
+VK_CLASS()
+class VKE_API vkPNGImageAssetLoader : public VK_SUPER(IAssetLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:

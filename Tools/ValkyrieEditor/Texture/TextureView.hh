@@ -48,7 +48,7 @@ private:
 };
 
 VK_CLASS()
-class TextureViewFactory : public IEditorViewFactory
+class TextureViewFactory : public VK_SUPER(IEditorViewFactory)
 {
   VK_CLASS_GEN_OBJECT;
 public:

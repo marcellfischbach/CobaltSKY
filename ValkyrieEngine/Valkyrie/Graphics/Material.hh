@@ -17,7 +17,7 @@
 struct ITexture;
 
 VK_CLASS();
-class VKE_API vkMaterial : public vkObject
+class VKE_API vkMaterial : public VK_SUPER(vkObject)
 {
   friend class vkMaterialInstance;
   VK_CLASS_GEN;
@@ -87,7 +87,7 @@ private:
 
 
 VK_CLASS();
-class VKE_API vkMaterialInstance : public vkObject
+class VKE_API vkMaterialInstance : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 
@@ -143,7 +143,7 @@ private:
 };
 
 VK_CLASS()
-class VKE_API vkMultiMaterial : public vkObject
+class VKE_API vkMultiMaterial : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

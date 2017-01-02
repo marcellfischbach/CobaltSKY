@@ -17,7 +17,7 @@ class vkMaterialInstance;
 class vkSkeleton;
 
 VK_CLASS()
-class VKE_API vkSubMesh : public vkObject
+class VKE_API vkSubMesh : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 
@@ -56,7 +56,7 @@ private:
 const vkUInt32 vkInvalidMaterialIndex = ~0x00;
 
 VK_CLASS()
-class VKE_API vkMesh : public vkObject
+class VKE_API vkMesh : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:
@@ -110,7 +110,7 @@ protected:
 
 
 VK_CLASS()
-class VKE_API vkSkinnedMesh : public vkMesh
+class VKE_API vkSkinnedMesh : public VK_SUPER(vkMesh)
 {
   VK_CLASS_GEN;
 

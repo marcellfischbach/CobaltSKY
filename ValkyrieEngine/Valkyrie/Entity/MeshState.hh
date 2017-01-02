@@ -16,7 +16,7 @@ class vkSkeleton;
 */
 
 VK_CLASS()
-class VKE_API vkStaticMeshState : public vkRenderState
+class VKE_API vkStaticMeshState : public VK_SUPER(vkRenderState)
 {
   VK_CLASS_GEN;
 public:
@@ -75,7 +75,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkSkinnedMeshState : public vkStaticMeshState
+class VKE_API vkSkinnedMeshState : public VK_SUPER(vkStaticMeshState)
 {
   VK_CLASS_GEN;
 public:

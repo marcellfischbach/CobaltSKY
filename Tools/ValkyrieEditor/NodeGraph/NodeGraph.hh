@@ -66,7 +66,7 @@ private:
 };
 
 VK_CLASS()
-class NodeGraphViewFactory : public IEditorViewFactory
+class NodeGraphViewFactory : public VK_SUPER(IEditorViewFactory)
 {
   VK_CLASS_GEN_OBJECT;
 public:

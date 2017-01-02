@@ -6,7 +6,7 @@
 #include <AssetManager/EditorIcon.refl.hh>
 
 VK_CLASS()
-class EditorIcon : public vkObject
+class EditorIcon : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

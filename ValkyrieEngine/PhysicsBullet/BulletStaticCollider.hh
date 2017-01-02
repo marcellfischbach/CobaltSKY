@@ -13,7 +13,7 @@ class btCollisionShape;
 class btCompoundShape;
 
 VK_CLASS()
-class VKBULLET_API vkBulletStaticCollider : public IPhysicsStaticCollider
+class VKBULLET_API vkBulletStaticCollider : public VK_SUPER(IPhysicsStaticCollider)
 {
   VK_CLASS_GEN_OBJECT;
 

@@ -6,7 +6,7 @@
 #include <GraphicsGL4/VertexBufferGL4.refl.hh>
 
 VK_CLASS();
-class VertexBufferGL4 : public IVertexBuffer
+class VertexBufferGL4 : public VK_SUPER(IVertexBuffer)
 {
   VK_CLASS_GEN_OBJECT;
 public:

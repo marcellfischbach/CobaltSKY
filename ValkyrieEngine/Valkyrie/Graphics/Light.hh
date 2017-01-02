@@ -9,7 +9,7 @@
 
 
 VK_INTERFACE()
-class VKE_API vkLight : public vkObject
+class VKE_API vkLight : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 
@@ -44,7 +44,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkPointLight : public vkLight
+class VKE_API vkPointLight : public VK_SUPER(vkLight)
 {
   VK_CLASS_GEN;
 public:
@@ -64,7 +64,7 @@ private:
 
 
 VK_CLASS()
-class VKE_API vkDirectionalLight : public vkLight
+class VKE_API vkDirectionalLight : public VK_SUPER(vkLight)
 {
   VK_CLASS_GEN;
 public:

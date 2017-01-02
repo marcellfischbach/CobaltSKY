@@ -7,7 +7,7 @@
 #include <PhysicsBullet/BulletShape.refl.hh>
 
 VK_CLASS()
-class VKBULLET_API vkBulletShape : public IPhysicsShape
+class VKBULLET_API vkBulletShape : public VK_SUPER(IPhysicsShape)
 {
   VK_CLASS_GEN_OBJECT;
 public:

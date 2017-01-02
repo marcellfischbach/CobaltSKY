@@ -13,8 +13,8 @@ class vkTextureGL4;
 class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
-VK_CLASS();
-class VKGL4_API vkGraphicsGL4 : public IGraphics
+VK_CLASS()
+class VKGL4_API vkGraphicsGL4 : public VK_SUPER(IGraphics)
 {
   VK_CLASS_GEN_OBJECT;
 public:

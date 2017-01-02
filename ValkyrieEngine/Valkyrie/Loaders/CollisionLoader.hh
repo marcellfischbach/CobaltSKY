@@ -10,7 +10,7 @@
 
 
 VK_CLASS()
-class VKE_API vkCollisionAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkCollisionAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

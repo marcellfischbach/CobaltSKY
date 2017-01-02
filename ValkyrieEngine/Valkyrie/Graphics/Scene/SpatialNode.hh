@@ -5,8 +5,8 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Graphics/Scene/SpatialNode.refl.hh>
 
-VK_CLASS();
-class VKE_API vkSpatialNode : public vkNode
+VK_CLASS()
+class VKE_API vkSpatialNode : public VK_SUPER(vkNode)
 {
   VK_CLASS_GEN;
 

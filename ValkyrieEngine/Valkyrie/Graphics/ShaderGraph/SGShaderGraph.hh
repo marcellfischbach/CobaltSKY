@@ -8,7 +8,7 @@ class vkSGNode;
 class vkSGOutput;
 
 VK_CLASS()
-class VKE_API vkSGShaderGraph : public vkMaterial
+class VKE_API vkSGShaderGraph : public VK_SUPER(vkMaterial)
 {
   VK_CLASS_GEN;
 public:

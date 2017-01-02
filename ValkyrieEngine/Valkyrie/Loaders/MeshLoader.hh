@@ -7,7 +7,7 @@
 
 
 VK_CLASS()
-class VKE_API vkMeshAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkMeshAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -22,7 +22,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSkinnedMeshAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkSkinnedMeshAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -37,7 +37,7 @@ public:
 };
 
 VK_CLASS()
-class VKE_API vkSubMeshAssetLoader : public IAssetLoader
+class VKE_API vkSubMeshAssetLoader : public VK_SUPER(IAssetLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:

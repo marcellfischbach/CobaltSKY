@@ -12,7 +12,7 @@ class vkBulletDynamicCollider;
 class vkBulletCapsuleCharacterController;
 
 VK_CLASS()
-class VKBULLET_API vkBulletScene : public IPhysicsScene
+class VKBULLET_API vkBulletScene : public VK_SUPER(IPhysicsScene)
 {
   VK_CLASS_GEN_OBJECT;
 public:

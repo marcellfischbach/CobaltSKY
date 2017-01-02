@@ -8,8 +8,8 @@
 
 struct IGraphics;
 class vkLight;
-VK_CLASS();
-class VKE_API vkLightNode : public vkSpatialNode
+VK_CLASS()
+class VKE_API vkLightNode : public VK_SUPER(vkSpatialNode)
 {
   VK_CLASS_GEN;
 public:

@@ -6,7 +6,7 @@
 
 
 VK_CLASS()
-class MetaDataLoader : public IAssetLoader
+class MetaDataLoader : public VK_SUPER(IAssetLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -21,7 +21,7 @@ public:
 
 
 VK_CLASS()
-class ShaderGraphMetaDataAssetXMLLoader : public vkBaseXMLLoader
+class ShaderGraphMetaDataAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

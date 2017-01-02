@@ -38,7 +38,7 @@ struct VKE_API IPhysicsCollider : public IObject
 };
 
 VK_INTERFACE()
-struct VKE_API IPhysicsTriggerCollider : public IPhysicsCollider
+struct VKE_API IPhysicsTriggerCollider : public VK_SUPER(IPhysicsCollider)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsTriggerCollider() { }
@@ -46,7 +46,7 @@ struct VKE_API IPhysicsTriggerCollider : public IPhysicsCollider
 };
 
 VK_INTERFACE()
-struct VKE_API IPhysicsBaseCollider : public IPhysicsCollider
+struct VKE_API IPhysicsBaseCollider : public VK_SUPER(IPhysicsCollider)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsBaseCollider() { }
@@ -60,7 +60,7 @@ struct VKE_API IPhysicsBaseCollider : public IPhysicsCollider
 };
 
 VK_INTERFACE()
-struct VKE_API IPhysicsDynamicCollider  : public IPhysicsBaseCollider
+struct VKE_API IPhysicsDynamicCollider  : public VK_SUPER(IPhysicsBaseCollider)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsDynamicCollider () { }
@@ -82,7 +82,7 @@ struct VKE_API IPhysicsDynamicCollider  : public IPhysicsBaseCollider
 };
 
 VK_INTERFACE()
-struct VKE_API IPhysicsStaticCollider : public IPhysicsBaseCollider
+struct VKE_API IPhysicsStaticCollider : public VK_SUPER(IPhysicsBaseCollider)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsStaticCollider() { }

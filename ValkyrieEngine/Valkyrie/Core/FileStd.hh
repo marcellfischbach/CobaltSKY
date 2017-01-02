@@ -13,8 +13,8 @@
 /**
  * @brief Reading and writing standard files within the filesystem.
  */
-VK_CLASS();
-class VKE_API vkFileStd : public IFile
+VK_CLASS()
+class VKE_API vkFileStd : public VK_SUPER(IFile)
 {
   VK_CLASS_GEN_OBJECT;
 public:

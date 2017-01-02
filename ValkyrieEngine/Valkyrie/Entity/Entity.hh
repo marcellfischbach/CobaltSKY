@@ -23,7 +23,7 @@ struct IPhysicsBody;
  * \ingroup entity
  */
 VK_CLASS()
-class VKE_API vkEntity : public vkObject
+class VKE_API vkEntity : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

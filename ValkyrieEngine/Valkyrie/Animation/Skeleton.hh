@@ -8,7 +8,7 @@
 const vkSize vkInvalidBoneIdx = ~0x00;
 
 VK_CLASS()
-class VKE_API vkSkeleton : public vkObject
+class VKE_API vkSkeleton : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

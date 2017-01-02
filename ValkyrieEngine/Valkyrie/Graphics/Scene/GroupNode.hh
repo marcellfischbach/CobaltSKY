@@ -5,8 +5,8 @@
 #include <vector>
 #include <Valkyrie/Graphics/Scene/GroupNode.refl.hh>
 
-VK_CLASS();
-class VKE_API vkGroupNode : public vkNode
+VK_CLASS()
+class VKE_API vkGroupNode : public VK_SUPER(vkNode)
 {
   friend class vkNode;
   VK_CLASS_GEN;

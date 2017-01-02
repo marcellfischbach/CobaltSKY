@@ -10,7 +10,7 @@ class vkSGShaderGraph;
 
 
 VK_CLASS()
-class VKE_API vkShaderGraphAssetXMLLoader : public vkBaseXMLLoader
+class VKE_API vkShaderGraphAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

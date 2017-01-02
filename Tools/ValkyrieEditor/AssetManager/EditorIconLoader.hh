@@ -22,7 +22,7 @@ public:
 */
 
 VK_CLASS()
-class EditorIconAssetXMLLoader : public vkBaseXMLLoader
+class EditorIconAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN_OBJECT;
 public:

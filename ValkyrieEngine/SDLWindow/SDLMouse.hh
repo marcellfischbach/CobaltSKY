@@ -5,7 +5,7 @@
 #include <SDLWindow/SDLMouse.refl.hh>
 
 VK_CLASS()
-class SDLMouse : public IMouse
+class SDLMouse : public VK_SUPER(IMouse)
 {
   VK_CLASS_GEN_OBJECT;
 public:

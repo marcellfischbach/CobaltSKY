@@ -8,7 +8,7 @@
 
 
 VK_CLASS()
-class VKBULLET_API vkBulletSystem : public IPhysicsSystem
+class VKBULLET_API vkBulletSystem : public VK_SUPER(IPhysicsSystem)
 {
   VK_CLASS_GEN_OBJECT;
 

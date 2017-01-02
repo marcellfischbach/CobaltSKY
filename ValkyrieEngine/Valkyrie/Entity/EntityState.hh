@@ -18,7 +18,7 @@ struct IGraphics;
 */
 
 VK_INTERFACE()
-class VKE_API vkEntityState : public vkObject
+class VKE_API vkEntityState : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 

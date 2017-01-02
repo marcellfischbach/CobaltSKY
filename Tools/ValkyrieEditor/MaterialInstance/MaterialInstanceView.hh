@@ -44,7 +44,7 @@ private:
 
 
 VK_CLASS()
-class MaterialInstanceViewFactory : public IEditorViewFactory
+class MaterialInstanceViewFactory : public VK_SUPER(IEditorViewFactory)
 {
   VK_CLASS_GEN_OBJECT;
 public:

@@ -8,7 +8,7 @@
 class vkSGNodeGL4;
 class vkGraphicsGL4;
 
-class VKGL4_API vkShaderGraphGL4 : public ISGShaderGraphFactory
+class VKGL4_API vkShaderGraphGL4 : public VK_SUPER(ISGShaderGraphFactory)
 {
 public:
   vkShaderGraphGL4(vkGraphicsGL4 *graphics);

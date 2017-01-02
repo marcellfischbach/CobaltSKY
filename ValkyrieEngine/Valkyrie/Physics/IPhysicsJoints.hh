@@ -22,7 +22,7 @@ struct VKE_API IPhysicsJoint : public IObject
 
 
 VK_INTERFACE()
-struct VKE_API IPhysicsHingeJoint : public virtual IPhysicsJoint
+struct VKE_API IPhysicsHingeJoint : public virtual VK_SUPER(IPhysicsJoint)
 {
   VK_CLASS_GEN;
   virtual ~IPhysicsHingeJoint() { }

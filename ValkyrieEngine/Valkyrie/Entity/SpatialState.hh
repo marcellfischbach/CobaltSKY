@@ -50,7 +50,7 @@ private:
 * \ingroup entity
 */
 VK_CLASS()
-class VKE_API vkSpatialState : public vkEntityState
+class VKE_API vkSpatialState : public VK_SUPER(vkEntityState)
 {
   friend class vkEntity;
   VK_CLASS_GEN;

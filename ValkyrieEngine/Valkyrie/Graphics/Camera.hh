@@ -12,7 +12,7 @@
 struct IGraphics;
 
 VK_CLASS();
-class VKE_API vkCamera : public vkObject
+class VKE_API vkCamera : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:

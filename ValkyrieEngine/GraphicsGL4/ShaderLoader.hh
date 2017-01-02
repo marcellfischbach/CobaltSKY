@@ -6,8 +6,8 @@
 #include <GraphicsGL4/ShaderLoader.refl.hh>
 
 
-VK_CLASS();
-class VKGL4_API vkShaderGL4Loader : public IFileLoader
+VK_CLASS()
+class VKGL4_API vkShaderGL4Loader : public VK_SUPER(IFileLoader)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -22,8 +22,8 @@ public:
 
 };
 
-VK_CLASS();
-class VKGL4_API vkProgramGL4Loader : public vkBaseXMLLoader
+VK_CLASS()
+class VKGL4_API vkProgramGL4Loader : public VK_SUPER(vkBaseXMLLoader)
 {
   VK_CLASS_GEN;
 public:

@@ -5,8 +5,8 @@
 #include <GL/glew.h>
 #include <GraphicsGL4/IndexBufferGL4.refl.hh>
 
-VK_CLASS();
-class IndexBufferGL4 : public IIndexBuffer
+VK_CLASS()
+class IndexBufferGL4 : public VK_SUPER(IIndexBuffer)
 {
   VK_CLASS_GEN_OBJECT;
 public:

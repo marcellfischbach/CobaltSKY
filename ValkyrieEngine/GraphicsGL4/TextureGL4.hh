@@ -7,7 +7,7 @@
 #include <GraphicsGL4/TextureGL4.refl.hh>
 
 VK_CLASS();
-class VKGL4_API vkSamplerGL4 : public ISampler
+class VKGL4_API vkSamplerGL4 : public VK_SUPER(ISampler)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -65,8 +65,8 @@ private:
   vkTextureCompareFunc m_textureCompareFunc;
 };
 
-VK_INTERFACE();
-class VKGL4_API vkTextureGL4 : public virtual ITexture
+VK_INTERFACE()
+class VKGL4_API vkTextureGL4 : public virtual VK_SUPER(ITexture)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -98,8 +98,8 @@ private:
 
 };
 
-VK_CLASS();
-class VKGL4_API vkTexture2DGL4 : public vkTextureGL4, public ITexture2D
+VK_CLASS()
+class VKGL4_API vkTexture2DGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITexture2D)
 {
   VK_CLASS_GEN;
 public:
@@ -125,7 +125,7 @@ private:
 };
 
 VK_CLASS();
-class VKGL4_API vkTexture2DArrayGL4 : public vkTextureGL4, public ITexture2DArray
+class VKGL4_API vkTexture2DArrayGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITexture2DArray)
 {
   VK_CLASS_GEN;
 public:
@@ -154,7 +154,7 @@ private:
 
 
 VK_CLASS();
-class VKGL4_API vkTextureCubeGL4 : public vkTextureGL4, public ITextureCube
+class VKGL4_API vkTextureCubeGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITextureCube)
 {
   VK_CLASS_GEN;
 public:

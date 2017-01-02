@@ -9,7 +9,7 @@
 #include <vector>
 #include <GraphicsGL4/Shader.refl.hh>
 
-VK_CLASS();
+VK_CLASS()
 class vkShaderGL4 : public IObject
 {
   VK_CLASS_GEN_OBJECT;
@@ -36,8 +36,8 @@ private:
 };
 
 
-VK_CLASS();
-class vkShaderAttributeGL4 : public IShaderAttribute
+VK_CLASS()
+class vkShaderAttributeGL4 : public VK_SUPER(IShaderAttribute)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -91,8 +91,8 @@ private:
 };
 
 
-VK_CLASS();
-class vkShaderStreamGL4 : public IShaderStream
+VK_CLASS()
+class vkShaderStreamGL4 : public VK_SUPER(IShaderStream)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -126,8 +126,8 @@ private:
 };
 
 
-VK_CLASS();
-class vkProgramGL4 : public IShader
+VK_CLASS()
+class vkProgramGL4 : public VK_SUPER(IShader)
 {
   VK_CLASS_GEN_OBJECT;
 

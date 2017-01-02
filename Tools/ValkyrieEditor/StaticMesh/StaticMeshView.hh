@@ -46,7 +46,7 @@ private:
 };
 
 VK_CLASS()
-class StaticMeshViewFactory : public IEditorViewFactory
+class StaticMeshViewFactory : public VK_SUPER(IEditorViewFactory)
 {
   VK_CLASS_GEN_OBJECT;
 public:

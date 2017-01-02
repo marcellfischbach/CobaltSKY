@@ -100,7 +100,7 @@ private:
 };
 
 VK_CLASS()
-class ShaderGraphViewFactory : public IEditorViewFactory
+class ShaderGraphViewFactory : public VK_SUPER(IEditorViewFactory)
 {
   VK_CLASS_GEN_OBJECT;
 public:
