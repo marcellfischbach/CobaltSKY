@@ -3,7 +3,7 @@
 
 
 shadergraph::Node::Node(shadergraph::Node::Type type) 
-  : graph::Node()
+  : graph::GraphNode()
   , m_type(type) 
 { 
 }

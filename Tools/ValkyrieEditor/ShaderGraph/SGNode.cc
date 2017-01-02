@@ -2,7 +2,6 @@
 #include <ShaderGraph/SGNode.hh>
 #include <ShaderGraph/SGShaderGraphNode.hh>
 #include <AssetManager/EditorIcon.hh>
-#include <Graph/Connection.hh>
 #include <Graph/Scene.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
@@ -99,30 +98,44 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
     return;
   }
 
-  SetMinWidth(100.0f);
 
   QString category, name;
   Split(m_node->GetName(), category, name);
 
   SetLabel(name);
-  SetBackgroundColor(getTypeColor(category));
+  SetHeadlineColor(getTypeColor(category));
 
   m_res = vkQueryClass<vkSGResourceNode>(m_node);
 
   if (m_res && m_res->GetResourceType() == eSPT_Texture)
   {
+    // TODO: Add image input element here
+    /*
     SetShowImage(true);
     EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_res->GetDefaultTextureResource().GetResourceFile(), "preview"));
     if (icon)
     {
       SetImage(icon->GetImage());
     }
+    */
   }
 
   for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
   {
     vkSGInput *input = m_node->GetInput(i);
     QString inputName(input->GetName().c_str());
+
+    graph::AttribInputWidget *inputWidget  = new graph::AttribInputWidget();
+    inputWidget->SetName(inputName);
+    inputWidget->SetValue("");
+    inputWidget->SetIndex(input->GetIdx());
+    if (input->CanInputConst())
+    {
+      inputWidget->SetValue(QString::asprintf("%f", input->GetConst()));
+    }
+
+    // TODO: need to handle manual input later
+    /*
     graph::Node::InputMode mode;
     if (input->CanInputConst())
     {
@@ -133,6 +146,10 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
       mode = (graph::Node::InputMode)(mode | graph::Node::eIM_Output);
     }
     AddInput(inputName, inputName, mode);
+    */
+
+    AddInput (inputWidget);
+    m_inputs[inputName] = inputWidget;
   }
 
 
@@ -143,32 +160,34 @@ shadergraph::SGNode::SGNode(vkSGNode *node)
     vkSGOutput *output = m_node->GetOutput(i);
     QString outputName(output->GetName().c_str());
 
-    AddOutput(outputName, outputName);
-  }
-
-}
-
-void shadergraph::SGNode::AddConnection(graph::NodeConnection* connection)
-{
-  if (connection->GetInputNode() == this)
-  {
-    if (GetScene())
+    graph::AttribOutputWidget *outputWidget = new graph::AttribOutputWidget();
+    outputWidget->SetName(outputName);
+    outputWidget->SetIndex(output->GetIdx());
+    if (outputName == "r")
     {
-      GetScene()->DisconnectInput(this, connection->GetInputIdx());
+      outputWidget->SetColor(QColor(128, 0, 0));
     }
+    else if (outputName == "g")
+    {
+      outputWidget->SetColor(QColor(0, 128, 0));
+    }
+    else if (outputName == "b")
+    {
+      outputWidget->SetColor(QColor(0, 0, 128));
+    }
+
+    AddOutput(outputWidget);
+    m_outputs[outputName] = outputWidget;
   }
-  shadergraph::Node::AddConnection(connection);
+
 }
 
-void shadergraph::SGNode::RemoveConnection(graph::NodeConnection* connection)
-{
-  shadergraph::Node::RemoveConnection(connection);
-}
 
 void shadergraph::SGNode::UpdateResource()
 {
   if (m_res && m_res->GetResourceType() == eSPT_Texture)
   {
+    /*
     EditorIcon *icon = vkResourceManager::Get()->Load<EditorIcon>(vkResourceLocator(m_res->GetDefaultTextureResource().GetResourceFile(), "preview"));
     if (icon)
     {
@@ -178,6 +197,29 @@ void shadergraph::SGNode::UpdateResource()
     {
       SetImage(QImage(":/icons/Resources/NoIcon64.png"));
     }
+    */
   }
 
+}
+
+void shadergraph::SGNode::Sync()
+{
+  for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
+  {
+    vkSGInput *input = m_node->GetInput(i);
+    QString inputName(input->GetName().c_str());
+
+    if (m_inputs.find(inputName) == m_inputs.end())
+    {
+      continue;
+    }
+    graph::AttribInputWidget *inputWidget = m_inputs[inputName];
+    if (input->CanInputConst())
+    {
+      inputWidget->SetValue(QString::asprintf("%f", input->GetConst()));
+    }
+
+  }
+
+  update();
 }

@@ -230,6 +230,7 @@ void NodeEditorWidget::SetNode(SGNode *node)
     {
       QLabel *lblInputName = new QLabel(QString(n->GetInput(i)->GetName().c_str()), this);
       QDoubleSpinBox *sbInputValue = new QDoubleSpinBox(this);
+      connect(sbInputValue, SIGNAL(valueChanged(double)), this, SLOT(DoubleChanged(double)));
 
       layout->addWidget(lblInputName, row, 0, 1, 1);
       layout->addWidget(sbInputValue, row++, 1, 1, 1);
@@ -319,6 +320,17 @@ void NodeEditorWidget::SyncFromNode()
 
   }
 
+  vkSGNode *sgNode = m_node->GetNode();
+  for (int i = 0; i<sgNode->GetNumberOfInputs(); ++i)
+  {
+    if (sgNode->GetInput(i)->CanInputConst())
+    {
+      QDoubleSpinBox *sbInputValue = m_constInputs[i];
+      sbInputValue->setValue(sgNode->GetInput(i)->GetConst());
+    }
+  }
+
+
 
   m_syncGuard = false;
 }
@@ -382,6 +394,18 @@ void NodeEditorWidget::SyncToNode()
     m_node->UpdateResource();
 
   }
+
+  vkSGNode *sgNode = m_node->GetNode();
+  for (int i = 0; i<sgNode->GetNumberOfInputs(); ++i)
+  {
+    if (sgNode->GetInput(i)->CanInputConst())
+    {
+      QDoubleSpinBox *sbInputValue = m_constInputs[i];
+      sgNode->GetInput(i)->SetConst(sbInputValue->value());
+    }
+  }
+  m_node->Sync();
+
 }
 
 

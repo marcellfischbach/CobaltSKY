@@ -8,6 +8,7 @@ class vkSGShaderGraph;
 namespace graph
 {
 class Connection;
+class AttribInputWidget;
 }
 namespace shadergraph
 {
@@ -17,8 +18,6 @@ class SGShaderGraphNode : public Node
 public:
   SGShaderGraphNode(vkSGShaderGraph *graph);
 
-  void AddConnection(graph::NodeConnection* connection);
-  void RemoveConnection(graph::NodeConnection* connection);
 
 
 public:
@@ -34,6 +33,11 @@ public:
 
 private:
   vkSGShaderGraph *m_graph;
+
+  graph::AttribInputWidget *m_inputDiffuse;
+  graph::AttribInputWidget *m_inputAlpha;
+  graph::AttribInputWidget *m_inputRoughness;
+  graph::AttribInputWidget *m_inputNormal;
 };
 
 }
