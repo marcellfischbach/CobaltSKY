@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>Resources/Import16.png</file>
+        <file>Resources/Import24.png</file>
+    </qresource>
+</RCC>
