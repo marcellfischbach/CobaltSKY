@@ -297,7 +297,7 @@ set(SOURCE_GRAPHICS_SHADERGRAPH
 
 
 source_group(
-    "ValkyrieEngine\\Graphics\\ShaderGraph"
+    "ValkyrieEngine\\Graphics\\shadergraph"
     FILES
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     )
