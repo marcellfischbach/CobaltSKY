@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/IRenderTarget.refl.hh>
 

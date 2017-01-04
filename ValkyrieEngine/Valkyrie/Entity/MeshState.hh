@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Entity/RenderState.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Entity/MeshState.refl.hh>

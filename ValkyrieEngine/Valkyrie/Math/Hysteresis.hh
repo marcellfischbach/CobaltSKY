@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Defs.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vkdefs.hh>
 
 template<typename T>
 class VKE_API vkHysteresis

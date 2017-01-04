@@ -2,8 +2,8 @@
 
 
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Core/Collection.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/Core/vkcollection.hh>
+#include <Valkyrie/vkenums.hh>
 
 struct IGraphics;
 struct IRenderTarget;

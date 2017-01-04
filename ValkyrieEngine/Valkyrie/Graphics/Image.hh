@@ -1,9 +1,9 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Defs.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vkdefs.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/vkenums.hh>
 #include <vector>
 #include <Valkyrie/Graphics/Image.refl.hh>
 

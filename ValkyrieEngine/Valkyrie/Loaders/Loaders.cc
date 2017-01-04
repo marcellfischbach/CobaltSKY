@@ -9,7 +9,7 @@
 #include <Valkyrie/Loaders/ShaderGraphLoader.hh>
 #include <Valkyrie/Loaders/StaticMeshLoader.hh>
 #include <Valkyrie/Loaders/TextureLoader.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
 
 
 vkLoaders::vkLoaders()

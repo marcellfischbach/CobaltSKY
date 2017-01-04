@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/Material.refl.hh>
 
 #include <vector>

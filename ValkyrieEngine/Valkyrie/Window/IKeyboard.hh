@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Window/IKeyboard.refl.hh>
 
 VK_INTERFACE()

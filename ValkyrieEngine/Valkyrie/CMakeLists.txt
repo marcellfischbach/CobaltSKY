@@ -5,17 +5,17 @@ add_definitions(-DVK_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
 set(SOURCE
-    Defs.hh
-    Diamond.hh
-    Engine.hh
-    Engine.cc
-    Enums.hh
-    Export.hh
-    Module.cc
-    Module.hh
-    Time.cc
-    Time.hh
-    Types.hh
+    vkdefs.hh
+    vkdiamond.hh
+    vkengine.hh
+    vkengine.cc
+    vkenums.hh
+    vkexport.hh
+    vkmodule.cc
+    vkmodule.hh
+    vktime.cc
+    vktime.hh
+    vktypes.hh
     )
 
 source_group(
@@ -26,8 +26,8 @@ source_group(
 
 
 set(SOURCE_ANIMATION
-    Animation/Skeleton.cc
-    Animation/Skeleton.hh
+    Animation/vkskeleton.cc
+    Animation/vkskeleton.hh
     )
 
 
@@ -38,31 +38,33 @@ source_group(
     )
 
 set(SOURCE_CORE
-    Core/AssetStream.cc
-    Core/AssetStream.hh
-    Core/ClassRegistry.cc
-    Core/ClassRegistry.hh
-    Core/Collection.hh
-    Core/FileInfo.cc
-    Core/FileInfo.hh
-    Core/FileStd.cc
-    Core/FileStd.hh
-    Core/IFile.hh
-    Core/Library.cc
-    Core/Library.hh
-    Core/Object.cc
-    Core/Object.hh
-    Core/ResourceManager.cc
-    Core/ResourceManager.hh
-    Core/Settings.cc
-    Core/Settings.hh
-    Core/String.hh
-    Core/Thread.cc
-    Core/Thread.hh
-    Core/VFS.cc
-    Core/VFS.hh
-    Core/Xml.cc
-    Core/Xml.hh
+    Core/ifile.hh
+    Core/vkassetinputstream.cc
+    Core/vkassetinputstream.hh
+    Core/vkassetoutputstream.cc
+    Core/vkassetoutputstream.hh
+    Core/vkclass.cc
+    Core/vkclass.hh
+    Core/vkclassregistry.cc
+    Core/vkclassregistry.hh
+    Core/vkcollection.hh
+    Core/vkfileinfo.cc
+    Core/vkfileinfo.hh
+    Core/vkfilestd.cc
+    Core/vkfilestd.hh
+    Core/vklibrary.cc
+    Core/vklibrary.hh
+    Core/vkresourcemanager.cc
+    Core/vkresourcemanager.hh
+    Core/vksettings.cc
+    Core/vksettings.hh
+    Core/vkstring.hh
+    Core/vkthread.cc
+    Core/vkthread.hh
+    Core/vkvfs.cc
+    Core/vkvfs.hh
+    Core/vkxml.cc
+    Core/vkxml.hh
     )
 
 

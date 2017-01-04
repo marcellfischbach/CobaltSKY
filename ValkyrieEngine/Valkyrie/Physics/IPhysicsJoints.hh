@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Diamond.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/vkdiamond.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsJoints.refl.hh>
 

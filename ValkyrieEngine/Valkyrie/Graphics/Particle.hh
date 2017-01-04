@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/Particle.refl.hh>
 
 struct IGraphics;

@@ -2,8 +2,8 @@
 
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Defs.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vkdefs.hh>
 #include <math.h>
 
 

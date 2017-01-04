@@ -1,11 +1,11 @@
 
 
 #include <Valkyrie/Loaders/TextureLoader.hh>
-#include <Valkyrie/Core/ClassRegistry.hh>
+#include <Valkyrie/Core/vkclassregistry.hh>
 #include <Valkyrie/Graphics/Image.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 #include <png.h>
 
 

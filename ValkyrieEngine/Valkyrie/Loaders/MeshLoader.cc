@@ -7,7 +7,7 @@
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>
 
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 #include <algorithm>
 
 

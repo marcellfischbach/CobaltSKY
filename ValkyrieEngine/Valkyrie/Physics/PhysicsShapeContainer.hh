@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <vector>
 #include <Valkyrie/Physics/PhysicsShapeContainer.refl.hh>

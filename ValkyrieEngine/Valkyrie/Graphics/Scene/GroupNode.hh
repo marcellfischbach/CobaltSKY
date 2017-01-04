@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Graphics/Scene/Node.hh>
 #include <vector>
 #include <Valkyrie/Graphics/Scene/GroupNode.refl.hh>

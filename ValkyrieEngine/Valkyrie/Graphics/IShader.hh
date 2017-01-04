@@ -1,14 +1,14 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/String.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/Core/vkstring.hh>
 #include <Valkyrie/Graphics/ShaderID.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/IShader.refl.hh>
 
 using std::string;

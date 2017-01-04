@@ -1,8 +1,8 @@
 
 #include <Valkyrie/Loaders/MaterialInstanceLoader.hh>
-#include <Valkyrie/Core/ClassRegistry.hh>
+#include <Valkyrie/Core/vkclassregistry.hh>
 #include <Valkyrie/Graphics/Material.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <map>

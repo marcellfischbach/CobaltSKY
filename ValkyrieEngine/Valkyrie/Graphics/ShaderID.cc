@@ -1,6 +1,6 @@
 
 #include <Valkyrie/Graphics/ShaderID.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <map>
 
 class vkShaderAttributeIDManager

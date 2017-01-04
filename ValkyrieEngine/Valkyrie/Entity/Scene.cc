@@ -3,7 +3,7 @@
 #include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 vkEntityScene::vkEntityScene()
   : vkObject()

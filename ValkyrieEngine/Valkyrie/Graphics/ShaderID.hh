@@ -2,9 +2,9 @@
 
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/String.hh>
-#include <Valkyrie/Types.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/vktypes.hh>
 
 
 

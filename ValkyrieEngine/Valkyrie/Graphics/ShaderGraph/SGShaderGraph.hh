@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.refl.hh>
 

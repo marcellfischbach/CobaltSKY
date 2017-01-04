@@ -3,7 +3,7 @@
 #include <Valkyrie/Entity/Scene.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 #include <Valkyrie/Physics/IPhysicsCharacterController.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>

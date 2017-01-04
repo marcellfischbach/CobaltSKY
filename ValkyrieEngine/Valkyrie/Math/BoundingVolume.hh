@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 

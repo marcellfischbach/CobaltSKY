@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/LightState.refl.hh>
 

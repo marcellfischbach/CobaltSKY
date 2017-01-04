@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
-#include <Valkyrie/Enums.hh>
-#include <Valkyrie/Core/Collection.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vkenums.hh>
+#include <Valkyrie/Core/vkcollection.hh>
 #include <Valkyrie/Graphics/IFrameProcessor.hh>
 #include <Valkyrie/Graphics/Deferred/DefaultCollector.hh>
 #include <Valkyrie/Graphics/Deferred/DeferredFrameProcessor.refl.hh>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
 #include <Valkyrie/Graphics/Scene/CameraNode.refl.hh>
 

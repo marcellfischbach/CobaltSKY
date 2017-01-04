@@ -3,7 +3,7 @@
 
 #include <GraphicsGL4/Export.hh>
 #include <GraphicsGL4/Enums.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <GL/glew.h>
 #include <vector>

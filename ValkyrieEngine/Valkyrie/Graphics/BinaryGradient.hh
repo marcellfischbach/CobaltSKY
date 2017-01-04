@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Types.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vktypes.hh>
 #include <Valkyrie/Math/Color.hh>
 
 struct ITexture2D;

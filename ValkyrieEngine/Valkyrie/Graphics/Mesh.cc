@@ -6,7 +6,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/IVertexBuffer.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
-#include <Valkyrie/Animation/Skeleton.hh>
+#include <Valkyrie/Animation/vkskeleton.hh>
 #include <algorithm>
 
 vkSubMesh::vkSubMesh()

@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
 #include <Valkyrie/Loaders/EntityLoader.refl.hh>
 
 class vkEntity;

@@ -4,7 +4,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 ITexture2DArray *vkBinaryGradient::static_textureArray = 0;
 

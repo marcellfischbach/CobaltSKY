@@ -3,7 +3,7 @@
 #include <Valkyrie/Entity/Scan.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Math/Clipper.hh>
-#include <Valkyrie/Time.hh>
+#include <Valkyrie/vktime.hh>
 #include <Valkyrie/Entity/ColliderState.hh>
 
 vkSpatialState::vkSpatialState()

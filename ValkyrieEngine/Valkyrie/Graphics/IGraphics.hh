@@ -1,10 +1,10 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/String.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/Core/vkstring.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/IGraphics.refl.hh>
 
 struct IFrameProcessor;

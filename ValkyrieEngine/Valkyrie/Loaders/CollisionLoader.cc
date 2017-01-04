@@ -3,8 +3,8 @@
 #include <Valkyrie/Loaders/CollisionLoader.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
-#include <Valkyrie/Engine.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkengine.hh>
+#include <Valkyrie/vkenums.hh>
 
 vkCollisionAssetXMLLoader::vkCollisionAssetXMLLoader()
   : vkBaseXMLLoader()

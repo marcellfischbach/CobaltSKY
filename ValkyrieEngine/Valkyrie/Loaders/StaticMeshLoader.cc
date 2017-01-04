@@ -8,8 +8,8 @@
 #include <Valkyrie/Graphics/IVertexDeclaration.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
-#include <Valkyrie/Engine.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkengine.hh>
+#include <Valkyrie/vkenums.hh>
 #include <map>
 #include <vector>
 

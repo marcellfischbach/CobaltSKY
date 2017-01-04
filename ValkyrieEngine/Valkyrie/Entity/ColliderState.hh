@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Entity/EntityState.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Entity/ColliderState.refl.hh>
 
 

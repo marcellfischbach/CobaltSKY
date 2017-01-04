@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <Valkyrie/Math/Plane.hh>
 #include <Valkyrie/Math/Vector.hh>

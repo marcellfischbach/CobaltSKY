@@ -2,7 +2,7 @@
 #include <Valkyrie/Loaders/MaterialLoader.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 
 

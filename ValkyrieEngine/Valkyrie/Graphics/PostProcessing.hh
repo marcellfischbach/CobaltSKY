@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
-#include <Valkyrie/Core/String.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/Core/vkstring.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <vector>
 #include <map>

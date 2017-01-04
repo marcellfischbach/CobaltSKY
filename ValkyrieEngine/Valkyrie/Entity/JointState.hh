@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Entity/JointState.refl.hh>

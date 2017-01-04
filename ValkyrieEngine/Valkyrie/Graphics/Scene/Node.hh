@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Graphics/Scene/Scan.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <Valkyrie/Math/Clipper.hh>

@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/Scene/SpatialNode.hh>
 #include <Valkyrie/Graphics/Scene/GeometryNode.refl.hh>
 

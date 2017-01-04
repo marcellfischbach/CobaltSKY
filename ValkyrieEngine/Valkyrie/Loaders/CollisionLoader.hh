@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/vkexport.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 

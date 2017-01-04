@@ -6,7 +6,7 @@
 #include <Valkyrie/Entity/SpatialState.hh>
 #include <Valkyrie/Entity/Transformation.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 vkID nextID = 1;
 

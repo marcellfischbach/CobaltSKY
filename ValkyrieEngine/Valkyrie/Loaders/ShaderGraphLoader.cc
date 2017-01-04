@@ -1,9 +1,9 @@
 
 #include <Valkyrie/Loaders/ShaderGraphLoader.hh>
-#include <Valkyrie/Core/ClassRegistry.hh>
+#include <Valkyrie/Core/vkclassregistry.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <map>
 

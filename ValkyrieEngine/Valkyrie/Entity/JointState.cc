@@ -5,7 +5,7 @@
 #include <Valkyrie/Physics/IPhysicsJoints.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <Valkyrie/Physics/IPhysicsSystem.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 
 

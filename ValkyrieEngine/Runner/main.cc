@@ -1,20 +1,20 @@
 
 
 #include <stdio.h>
-#include <Valkyrie/Engine.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
-#include <Valkyrie/Core/Settings.hh>
-#include <Valkyrie/Core/VFS.hh>
+#include <Valkyrie/vkengine.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/Core/vksettings.hh>
+#include <Valkyrie/Core/vkvfs.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <PhysicsBullet/BulletSystem.hh>
 #include <stdio.h>
-#include <Valkyrie/Time.hh>
-#include <Valkyrie/Animation/Skeleton.hh>
-#include <Valkyrie/Core/ClassRegistry.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/vktime.hh>
+#include <Valkyrie/Animation/vkskeleton.hh>
+#include <Valkyrie/Core/vkclassregistry.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
 #include <Valkyrie/Entity/Character.hh>
 #include <Valkyrie/Entity/ColliderState.hh>
 #include <Valkyrie/Entity/Entity.hh>

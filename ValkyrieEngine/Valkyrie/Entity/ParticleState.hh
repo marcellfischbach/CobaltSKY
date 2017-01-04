@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <Valkyrie/Export.hh>
+#include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Entity/RenderState.hh>
-#include <Valkyrie/Enums.hh>
+#include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Entity/ParticleState.refl.hh>
 #include <Valkyrie/Graphics/Particle.hh>
 #include <Valkyrie/Math/RandomRange.hh>

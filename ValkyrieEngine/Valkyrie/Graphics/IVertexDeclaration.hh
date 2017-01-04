@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Valkyrie/Enums.hh>
-#include <Valkyrie/Types.hh>
-#include <Valkyrie/Core/Object.hh>
+#include <Valkyrie/vkenums.hh>
+#include <Valkyrie/vktypes.hh>
+#include <Valkyrie/Core/vkclass.hh>
 #include <Valkyrie/Graphics/IVertexDeclaration.refl.hh>
 
 /**

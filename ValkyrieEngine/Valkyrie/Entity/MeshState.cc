@@ -3,12 +3,12 @@
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scan.hh>
 #include <Valkyrie/Entity/Scene.hh>
-#include <Valkyrie/Animation/Skeleton.hh>
+#include <Valkyrie/Animation/vkskeleton.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
-#include <Valkyrie/Engine.hh>
+#include <Valkyrie/vkengine.hh>
 
 vkStaticMeshState::vkStaticMeshState()
   : vkRenderState()

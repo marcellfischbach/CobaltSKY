@@ -5,7 +5,7 @@
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
-#include <Valkyrie/Core/ResourceManager.hh>
+#include <Valkyrie/Core/vkresourcemanager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/RenderState.hh>
