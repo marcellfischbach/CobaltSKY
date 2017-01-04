@@ -97,37 +97,37 @@ source_group(
     )
 
 set(SOURCE_ENTITY
-    Entity/Character.cc
-    Entity/Character.hh
-    Entity/ColliderState.cc
-    Entity/ColliderState.hh
-    Entity/Entity.cc
-    Entity/Entity.hh
-    Entity/EntityState.cc
-    Entity/EntityState.hh
-    Entity/Geometry.cc
-    Entity/Geometry.hh
-    Entity/JointState.cc
-    Entity/JointState.hh
-    Entity/LightState.cc
-    Entity/LightState.hh
-    Entity/MeshState.cc
-    Entity/MeshState.hh
-    Entity/ParticleState.cc
-    Entity/ParticleState.hh
-    Entity/RenderState.cc
-    Entity/RenderState.hh
-    Entity/Scan.hh
-    Entity/Scene.cc
-    Entity/Scene.hh
-    Entity/SpatialState.cc
-    Entity/SpatialState.hh
-    Entity/Transformation.cc
-    Entity/Transformation.hh
+    entity/ientityscan.hh
+    entity/vkcharacterentity.cc
+    entity/vkcharacterentity.hh
+    entity/vkcolliderstate.cc
+    entity/vkcolliderstate.hh
+    entity/vkentity.cc
+    entity/vkentity.hh
+    entity/vkentityscene.cc
+    entity/vkentityscene.hh
+    entity/vkentitystate.cc
+    entity/vkentitystate.hh
+    entity/vkgeometrydata.cc
+    entity/vkgeometrydata.hh
+    entity/vkjointstate.cc
+    entity/vkjointstate.hh
+    entity/vklightstate.cc
+    entity/vklightstate.hh
+    entity/vkparticlestate.cc
+    entity/vkparticlestate.hh
+    entity/vkrenderstate.cc
+    entity/vkrenderstate.hh
+    entity/vkspatialstate.cc
+    entity/vkspatialstate.hh
+    entity/vkstaticmeshmtate.cc
+    entity/vkstaticmeshmtate.hh
+    entity/vktransformation.cc
+    entity/vktransformation.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Entity"
+    "ValkyrieEngine\\entity"
     FILES
     ${SOURCE_ENTITY}
     )
