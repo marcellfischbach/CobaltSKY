@@ -187,16 +187,20 @@ source_group(
 		
 
 set(SOURCE_GRAPHICS_DEFERRED
-    Graphics/Deferred/DefaultCollector.cc
-    Graphics/Deferred/DefaultCollector.hh
-    Graphics/Deferred/DeferredFrameProcessor.cc
-    Graphics/Deferred/DeferredFrameProcessor.hh
-    Graphics/Deferred/GBuffer.cc
-    Graphics/Deferred/GBuffer.hh
-    Graphics/Deferred/LightRenderer.cc
-    Graphics/Deferred/LightRenderer.hh
-    Graphics/Deferred/ParticleRenderer.cc
-    Graphics/Deferred/ParticleRenderer.hh
+    Graphics/Deferred/vkdefaultcollector.cc
+    Graphics/Deferred/vkdefaultcollector.hh
+    Graphics/Deferred/vkdeferredframeprocessor.cc
+    Graphics/Deferred/vkdeferredframeprocessor.hh
+    Graphics/Deferred/vkdirectionallightrenderer.cc
+    Graphics/Deferred/vkdirectionallightrenderer.hh
+    Graphics/Deferred/vkgbuffer.cc
+    Graphics/Deferred/vkgbuffer.hh
+    Graphics/Deferred/vklightrenderer.cc
+    Graphics/Deferred/vklightrenderer.hh
+    Graphics/Deferred/vkparticlerenderer.cc
+    Graphics/Deferred/vkparticlerenderer.hh
+    Graphics/Deferred/vkpointlightrenderer.cc
+    Graphics/Deferred/vkpointlightrenderer.hh
 )
 
 source_group(
@@ -207,19 +211,19 @@ source_group(
 		
 
 set(SOURCE_GRAPHICS_SCENE
-    Graphics/Scene/CameraNode.cc
-    Graphics/Scene/CameraNode.hh
-    Graphics/Scene/GeometryNode.cc
-    Graphics/Scene/GeometryNode.hh
-    Graphics/Scene/GroupNode.cc
-    Graphics/Scene/GroupNode.hh
-    Graphics/Scene/LightNode.cc
-    Graphics/Scene/LightNode.hh
-    Graphics/Scene/Node.cc
-    Graphics/Scene/Node.hh
-    Graphics/Scene/Scan.hh
-    Graphics/Scene/SpatialNode.cc
-    Graphics/Scene/SpatialNode.hh
+    Graphics/Scene/iscancallback.hh
+    Graphics/Scene/vkcameranode.cc
+    Graphics/Scene/vkcameranode.hh
+    Graphics/Scene/vkgeometrynode.cc
+    Graphics/Scene/vkgeometrynode.hh
+    Graphics/Scene/vkgroupnode.cc
+    Graphics/Scene/vkgroupnode.hh
+    Graphics/Scene/vklightnode.cc
+    Graphics/Scene/vklightnode.hh
+    Graphics/Scene/vknode.cc
+    Graphics/Scene/vknode.hh
+    Graphics/Scene/vkspatialnode.cc
+    Graphics/Scene/vkspatialnode.hh
     )
 
 source_group(

@@ -2,7 +2,8 @@
 
 #include <PhysicsBullet/BulletCharacterController.hh>
 #include <PhysicsBullet/BulletScene.hh>
-#include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/entity/itransformationcallback.hh>
+#include <Valkyrie/entity/vktransformation.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>

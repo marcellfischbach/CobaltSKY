@@ -5,7 +5,6 @@
 *.user
 /docs/ValkyrieEngine.vpp~14
 /docs/ValkyrieEngine.vpp~15
-/ValkyrieEngine/Valkyrie/Entity/ITransformationCallback.hh
 /data/TestInstance.asset
 /data/temple.fbx
 /data/mine.fbx
