@@ -2,7 +2,7 @@
 
 
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkstring.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <map>
 #include <set>

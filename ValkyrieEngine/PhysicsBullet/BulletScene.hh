@@ -2,7 +2,7 @@
 
 #include <PhysicsBullet/Export.hh>
 #include <Valkyrie/vkdefs.hh>
-#include <Valkyrie/Core/vkcollection.hh>
+#include <Valkyrie/core/vkcollection.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <PhysicsBullet/BulletScene.refl.hh>

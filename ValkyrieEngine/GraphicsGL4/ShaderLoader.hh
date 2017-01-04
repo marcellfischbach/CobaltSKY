@@ -2,7 +2,7 @@
 
 
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <GraphicsGL4/ShaderLoader.refl.hh>
 
 

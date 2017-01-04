@@ -54,6 +54,8 @@ set(SOURCE_CORE
     core/vkfilestd.hh
     core/vklibrary.cc
     core/vklibrary.hh
+    core/vkresourcelocator.cc
+    core/vkresourcelocator.hh
     core/vkresourcemanager.cc
     core/vkresourcemanager.hh
     core/vksettings.cc
@@ -72,6 +74,26 @@ source_group(
     "ValkyrieEngine\\core"
     FILES
     ${SOURCE_CORE}
+    )
+
+set(SOURCE_CORE_RESOURCE
+    core/resource/iassetloader.hh
+    core/resource/ifileloader.hh
+    core/resource/ixmlloader.hh
+    core/resource/vkassetfileloader.hh
+    core/resource/vkassetfileloader.cc
+    core/resource/vkassetxmlloader.hh
+    core/resource/vkassetxmlloader.cc
+    core/resource/vkbasexmlloader.hh
+    core/resource/vkbasexmlloader.cc
+    core/resource/vkxmlfileloader.hh
+    core/resource/vkxmlfileloader.cc
+    )
+
+source_group(
+    "ValkyrieEngine\\core\\resource"
+    FILES
+    ${SOURCE_CORE_RESOURCE}
     )
 
 set(SOURCE_ENTITY
@@ -285,6 +307,7 @@ set(ALL_SOURCES
     ${SOURCE}
     ${SOURCE_ANIMATION}
     ${SOURCE_CORE}
+    ${SOURCE_CORE_RESOURCE}
     ${SOURCE_ENTITY}
     ${SOURCE_GRAPHICS}
     ${SOURCE_GRAPHICS_DEFERRED}

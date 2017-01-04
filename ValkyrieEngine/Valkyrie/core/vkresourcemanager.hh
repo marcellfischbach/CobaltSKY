@@ -4,10 +4,19 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/core/vkassetinputstream.hh>
 #include <Valkyrie/core/ifile.hh>
+#include <Valkyrie/core/vkassetinputstream.hh>
 #include <Valkyrie/core/vkclass.hh>
+#include <Valkyrie/core/vkresourcelocator.hh>
 #include <Valkyrie/core/vkstring.hh>
+#include <Valkyrie/core/resource/iassetloader.hh>
+#include <Valkyrie/core/resource/ifileloader.hh>
+#include <Valkyrie/core/resource/ixmlloader.hh>
+#include <Valkyrie/core/resource/vkassetfileloader.hh>
+#include <Valkyrie/core/resource/vkassetxmlloader.hh>
+#include <Valkyrie/core/resource/vkbasexmlloader.hh>
+#include <Valkyrie/core/resource/vkxmlfileloader.hh>
+
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <tixml\tinyxml.h>
@@ -17,124 +26,7 @@
 
 
 
-class VKE_API vkResourceLocator
-{
-public:
-  vkResourceLocator(const vkString &resourceFile = "", const vkString &resourceName = "");
-  explicit vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName);
-  
-  const vkString &GetResourceFile() const;
-  const vkString &GetResourceName() const;
 
-  bool operator< (const vkResourceLocator &o) const;
-  bool operator== (const vkResourceLocator &o) const;
-
-  bool IsValid () const;
-
-private:
-  vkString m_resourceFile;
-  vkString m_resourceName;
-
-};
-
-VK_INTERFACE()
-struct VKE_API IFileLoader : public IObject
-{
-  VK_CLASS_GEN;
-
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-};
-
-
-VK_CLASS()
-class VKE_API vkAssetFileLoader : public VK_SUPER(IFileLoader)
-{
-  VK_CLASS_GEN_OBJECT;
-public:
-  vkAssetFileLoader();
-  virtual ~vkAssetFileLoader();
-
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-};
-
-
-VK_INTERFACE()
-struct VKE_API IAssetLoader : public IObject
-{
-  VK_CLASS_GEN;
-  virtual ~ IAssetLoader() { }
-
-  virtual bool CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual const vkClass *EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-};
-
-
-VK_CLASS()
-class VKE_API vkXMLFileLoader : public VK_SUPER(IFileLoader)
-{
-  VK_CLASS_GEN_OBJECT;
-public:
-  vkXMLFileLoader();
-  virtual ~vkXMLFileLoader();
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-  IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-};
-
-
-VK_INTERFACE()
-struct VKE_API IXMLLoader : public IObject
-{
-  VK_CLASS_GEN;
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-};
-
-
-
-VK_INTERFACE()
-class VKE_API vkBaseXMLLoader : public VK_SUPER(IXMLLoader)
-{
-  VK_CLASS_GEN_OBJECT;
-protected:
-  vkBaseXMLLoader();
-  virtual ~vkBaseXMLLoader();
-
-  TiXmlElement *FindElement(TiXmlElement *root, const vkString &elementName, const vkString &name = "") const;
-  TiXmlElement *FindElementByTagName(TiXmlElement *root, const vkString &elementName) const;
-
-  vkResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, vkResourceLoadingMode defaultMode = eRLM_Shared, vkResourceLoadingMode alterInline = eRLM_Inline) const;
-
-  bool LoadBool(const char *str) const;
-  float LoadFloat(const char *str) const;
-  vkVector2f LoadVector2f(const char *str) const;
-  vkVector3f LoadVector3f(const char *str) const;
-  vkVector4f LoadVector4f(const char *str) const;
-  vkColor4f LoadColor4f(const char *str) const;
-};
-
-VK_CLASS()
-class VKE_API vkAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
-{
-  VK_CLASS_GEN;
-public:
-  vkAssetXMLLoader();
-  virtual ~vkAssetXMLLoader();
-
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-
-};
 
 class VKE_API vkResourceManager
 {

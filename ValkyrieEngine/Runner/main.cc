@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <Valkyrie/vkengine.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
-#include <Valkyrie/Core/vksettings.hh>
-#include <Valkyrie/Core/vkvfs.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
+#include <Valkyrie/core/vksettings.hh>
+#include <Valkyrie/core/vkvfs.hh>
 #include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
@@ -12,9 +12,9 @@
 #include <PhysicsBullet/BulletSystem.hh>
 #include <stdio.h>
 #include <Valkyrie/vktime.hh>
-#include <Valkyrie/Animation/vkskeleton.hh>
-#include <Valkyrie/Core/vkclassregistry.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/animation/vkskeleton.hh>
+#include <Valkyrie/core/vkclassregistry.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Entity/Character.hh>
 #include <Valkyrie/Entity/ColliderState.hh>
 #include <Valkyrie/Entity/Entity.hh>
