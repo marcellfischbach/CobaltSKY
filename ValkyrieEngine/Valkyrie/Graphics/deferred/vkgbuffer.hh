@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkdefs.hh>
-#include <Valkyrie/Graphics/deferred/GBuffer.refl.hh>
+#include <Valkyrie/Graphics/deferred/vkgbuffer.refl.hh>
 
 struct IGraphics;
 struct ITexture2D;

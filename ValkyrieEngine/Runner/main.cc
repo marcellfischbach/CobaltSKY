@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/core/vksettings.hh>
 #include <Valkyrie/core/vkvfs.hh>
-#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
+#include <Valkyrie/Graphics/shadergraph/vksgnode.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
@@ -47,8 +47,8 @@
 #include <Valkyrie/Graphics/scene/vkgeometrynode.hh>
 #include <Valkyrie/Graphics/scene/vkgroupnode.hh>
 #include <Valkyrie/Graphics/scene/vklightnode.hh>
-#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
-#include <Valkyrie/Graphics/ShaderGraph/vksgshadergraph.hh>
+#include <Valkyrie/Graphics/shadergraph/vksgnode.hh>
+#include <Valkyrie/Graphics/shadergraph/vksgshadergraph.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
@@ -57,7 +57,7 @@
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
-#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
+#include <Valkyrie/Graphics/shadergraph/vksgnode.hh>
 
 
 int initialize();
