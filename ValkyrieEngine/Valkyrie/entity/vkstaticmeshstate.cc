@@ -1,8 +1,8 @@
 
-#include <Valkyrie/Entity/MeshState.hh>
-#include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/Scan.hh>
-#include <Valkyrie/Entity/Scene.hh>
+#include <Valkyrie/entity/vkstaticmeshstate.hh>
+#include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/ientityscan.hh>
+#include <Valkyrie/entity/vkentityscene.hh>
 #include <Valkyrie/animation/vkskeleton.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>

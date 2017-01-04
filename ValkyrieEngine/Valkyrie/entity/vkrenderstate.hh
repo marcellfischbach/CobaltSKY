@@ -2,9 +2,9 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Entity/RenderState.refl.hh>
+#include <Valkyrie/entity/vkrenderstate.refl.hh>
 
 struct IGraphics;
 /**

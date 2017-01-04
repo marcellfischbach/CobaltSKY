@@ -1,11 +1,15 @@
 
 #include <Valkyrie/Loaders/EntityLoader.hh>
-#include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/EntityState.hh>
-#include <Valkyrie/Entity/JointState.hh>
-#include <Valkyrie/Entity/LightState.hh>
-#include <Valkyrie/Entity/MeshState.hh>
-#include <Valkyrie/Entity/ColliderState.hh>
+#include <Valkyrie/entity/vkbasecolliderstate.hh>
+#include <Valkyrie/entity/vkcolliderstate.hh>
+#include <Valkyrie/entity/vkdynamiccolliderstate.hh>
+#include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vkentitystate.hh>
+#include <Valkyrie/entity/vkhingejointstate.hh>
+#include <Valkyrie/entity/vkjointstate.hh>
+#include <Valkyrie/entity/vklightstate.hh>
+#include <Valkyrie/entity/vkstaticcolliderstate.hh>
+#include <Valkyrie/entity/vkstaticmeshstate.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>

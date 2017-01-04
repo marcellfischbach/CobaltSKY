@@ -455,3 +455,26 @@ enum vkRenderDestination
   eRD_Depth,
   eRD_Stencil
 };
+
+enum vkParticleSpawnMode
+{
+  ePSM_Point,
+  ePSM_Box,
+  ePSM_Sphere,
+};
+
+enum vkParticleSizeMode
+{
+  ePSM_Constant,
+  ePSM_Linear,
+  ePSM_Triangle,
+  ePSM_Saw,
+  ePSM_Pulse,
+};
+
+enum vkParticleRotationMode
+{
+  ePRM_Pos,
+  ePRM_Neg,
+  ePRM_Both,
+};

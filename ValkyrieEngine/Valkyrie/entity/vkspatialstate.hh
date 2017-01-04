@@ -1,12 +1,11 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/EntityState.hh>
-#include <Valkyrie/Entity/SpatialState.refl.hh>
-#include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/entity/vkentitystate.hh>
+#include <Valkyrie/entity/vktransformation.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <vector>
-#include <Valkyrie/Entity/SpatialState.refl.hh>
+#include <Valkyrie/entity/vkspatialstate.refl.hh>
 
 struct vkScanConfig;
 

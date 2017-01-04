@@ -1,8 +1,9 @@
 
-#include <Valkyrie/Entity/Character.hh>
-#include <Valkyrie/Entity/Scene.hh>
-#include <Valkyrie/Entity/SpatialState.hh>
-#include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/entity/vkcharacterentity.hh>
+#include <Valkyrie/entity/itransformationcallback.hh>
+#include <Valkyrie/entity/vkentityscene.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
+#include <Valkyrie/entity/vktransformation.hh>
 #include <Valkyrie/vkengine.hh>
 
 #include <Valkyrie/Physics/IPhysicsCharacterController.hh>

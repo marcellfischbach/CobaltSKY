@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/SpatialState.hh>
-#include <Valkyrie/Entity/LightState.refl.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
+#include <Valkyrie/entity/vklightstate.refl.hh>
 
 class vkLight;
 /**

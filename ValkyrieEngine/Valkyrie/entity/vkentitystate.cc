@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Entity/EntityState.hh>
+#include <Valkyrie/entity/vkentitystate.hh>
 
 
 vkEntityState::vkEntityState()

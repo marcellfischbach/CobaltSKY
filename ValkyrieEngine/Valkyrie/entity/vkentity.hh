@@ -5,7 +5,7 @@
 #include <Valkyrie/vkdefs.hh>
 #include <vector>
 
-#include <Valkyrie/Entity/Entity.refl.hh>
+#include <Valkyrie/entity/vkentity.refl.hh>
 
 class vkBoundingBox;
 class vkClipper;

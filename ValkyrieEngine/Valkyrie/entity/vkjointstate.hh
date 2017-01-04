@@ -2,13 +2,12 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Entity/JointState.refl.hh>
+#include <Valkyrie/entity/vkjointstate.refl.hh>
 
 
 class vkDynamicColliderState;
-struct IPhysicsHingeJoint;
 
 VK_INTERFACE()
 class VKE_API vkJointState : public VK_SUPER(vkSpatialState)
@@ -48,25 +47,6 @@ private:
   TransformReference m_transformReference;
 };
 
-
-VK_CLASS()
-class VKE_API vkHingeJointState : public VK_SUPER(vkJointState)
-{
-  VK_CLASS_GEN;
-public:
-  vkHingeJointState();
-  virtual ~vkHingeJointState();
-
-protected:
-  virtual void UpdateTransformation();
-
-  virtual void OnAssembled();
-  virtual void OnAttachedToScene(vkEntityScene *scene);
-  virtual void OnDetachedFromScene(vkEntityScene *scene);
-
-private:
-  IPhysicsHingeJoint *m_hingeJoint;
-};
 
 
 VK_FORCEINLINE vkDynamicColliderState *vkJointState::GetColliderA()

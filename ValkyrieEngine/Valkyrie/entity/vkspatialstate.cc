@@ -1,10 +1,10 @@
 
-#include <Valkyrie/Entity/SpatialState.hh>
-#include <Valkyrie/Entity/Scan.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
+#include <Valkyrie/entity/ientityscan.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Math/Clipper.hh>
 #include <Valkyrie/vktime.hh>
-#include <Valkyrie/Entity/ColliderState.hh>
+#include <Valkyrie/entity/vkcolliderstate.hh>
 
 vkSpatialState::vkSpatialState()
   : vkEntityState()

@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Entity/Transformation.hh>
+#include <Valkyrie/entity/vktransformation.hh>
 
 vkTransformation::vkTransformation()
   : m_matrix(0)

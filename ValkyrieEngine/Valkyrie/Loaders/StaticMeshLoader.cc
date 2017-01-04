@@ -1,6 +1,7 @@
 
 #include <Valkyrie/Loaders/StaticMeshLoader.hh>
-#include <Valkyrie/Entity/Geometry.hh>
+#include <Valkyrie/entity/vkgeometrydata.hh>
+#include <Valkyrie/entity/vkgeometrymesh.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/IIndexBuffer.hh>

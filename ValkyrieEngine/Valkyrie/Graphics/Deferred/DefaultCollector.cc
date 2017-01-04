@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/Graphics/Deferred/DefaultCollector.hh>
-#include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/entity/vkrenderstate.hh>
 
 vkDefaultCollector::vkDefaultCollector(vkCollection<vkRenderState*> *renderStates,
                                        vkCollection<vkLightState*> *lightStates)

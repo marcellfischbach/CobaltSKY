@@ -6,9 +6,9 @@
 #include <Valkyrie/Graphics/IRenderTarget.hh>
 #include <Valkyrie/Graphics/IShader.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
-#include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/Geometry.hh>
-#include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vkgeometrydata.hh>
+#include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/Graphics/Camera.hh>
 #include <Valkyrie/Graphics/Light.hh>
 #include <Valkyrie/Math/Clipper.hh>

@@ -1,8 +1,8 @@
 
 
-#include <Valkyrie/Entity/Scene.hh>
-#include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/SpatialState.hh>
+#include <Valkyrie/entity/vkentityscene.hh>
+#include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vkspatialstate.hh>
 #include <Valkyrie/vkengine.hh>
 
 vkEntityScene::vkEntityScene()

@@ -2,11 +2,11 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
-#include <Valkyrie/Entity/MeshState.refl.hh>
+#include <Valkyrie/entity/vkstaticmeshstate.refl.hh>
 
 class vkMesh;
 class vkMaterialInstance;

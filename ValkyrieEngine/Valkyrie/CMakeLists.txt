@@ -96,12 +96,24 @@ source_group(
     ${SOURCE_CORE_RESOURCE}
     )
 
+
 set(SOURCE_ENTITY
     entity/ientityscan.hh
+    entity/iparticleemitter.hh
+    entity/iparticlestepper.hh
+    entity/itransformationcallback.hh
+    entity/vkbasecolliderstate.cc
+    entity/vkbasecolliderstate.hh
     entity/vkcharacterentity.cc
     entity/vkcharacterentity.hh
     entity/vkcolliderstate.cc
     entity/vkcolliderstate.hh
+    entity/vkdefaultparticleemitter.cc
+    entity/vkdefaultparticleemitter.hh
+    entity/vkdefaultparticlestepper.cc
+    entity/vkdefaultparticlestepper.hh
+    entity/vkdynamiccolliderstate.cc
+    entity/vkdynamiccolliderstate.hh
     entity/vkentity.cc
     entity/vkentity.hh
     entity/vkentityscene.cc
@@ -110,6 +122,10 @@ set(SOURCE_ENTITY
     entity/vkentitystate.hh
     entity/vkgeometrydata.cc
     entity/vkgeometrydata.hh
+    entity/vkgeometrymesh.cc
+    entity/vkgeometrymesh.hh
+    entity/vkhingejointstate.cc
+    entity/vkhingejointstate.hh
     entity/vkjointstate.cc
     entity/vkjointstate.hh
     entity/vklightstate.cc
@@ -120,8 +136,10 @@ set(SOURCE_ENTITY
     entity/vkrenderstate.hh
     entity/vkspatialstate.cc
     entity/vkspatialstate.hh
-    entity/vkstaticmeshmtate.cc
-    entity/vkstaticmeshmtate.hh
+    entity/vkstaticcolliderstate.cc
+    entity/vkstaticcolliderstate.hh
+    entity/vkstaticmeshstate.cc
+    entity/vkstaticmeshstate.hh
     entity/vktransformation.cc
     entity/vktransformation.hh
     )

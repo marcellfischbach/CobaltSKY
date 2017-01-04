@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 
 

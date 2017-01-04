@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/core/vkcollection.hh>
-#include <Valkyrie/Entity/Scan.hh>
+#include <Valkyrie/entity/ientityscan.hh>
 
 class vkRenderState;
 class vkDefaultCollector : public IEntityScan

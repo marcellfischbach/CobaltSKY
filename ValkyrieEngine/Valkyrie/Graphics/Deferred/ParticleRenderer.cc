@@ -2,7 +2,7 @@
 
 #include <Valkyrie/Graphics/Deferred/ParticleRenderer.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Entity/RenderState.hh>
+#include <Valkyrie/entity/vkrenderstate.hh>
 
 vkParticleRenderer::vkParticleRenderer()
 {

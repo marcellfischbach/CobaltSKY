@@ -1,6 +1,6 @@
 
-#include <Valkyrie/Entity/LightState.hh>
-#include <Valkyrie/Entity/Scan.hh>
+#include <Valkyrie/entity/vklightstate.hh>
+#include <Valkyrie/entity/ientityscan.hh>
 #include <Valkyrie/Graphics/Light.hh>
 
 

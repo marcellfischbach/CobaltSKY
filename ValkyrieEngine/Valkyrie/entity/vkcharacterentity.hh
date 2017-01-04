@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Entity/Entity.hh>
-#include <Valkyrie/Entity/Transformation.hh>
-#include <Valkyrie/Entity/Character.refl.hh>
+#include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vktransformation.hh>
+#include <Valkyrie/entity/vkcharacterentity.refl.hh>
 
 
 struct IPhysicsCapsuleCharacterController;

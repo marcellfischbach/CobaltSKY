@@ -4,7 +4,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkdefs.hh>
 #include <Valkyrie/vktypes.hh>
-#include <Valkyrie/Entity/EntityState.refl.hh>
+#include <Valkyrie/entity/vkentitystate.refl.hh>
 
 class vkClipper;
 class vkEntity;
