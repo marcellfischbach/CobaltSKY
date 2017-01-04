@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Core/vkassetoutputstream.hh>
+#include <Valkyrie/core/vkassetoutputstream.hh>
 
 
 

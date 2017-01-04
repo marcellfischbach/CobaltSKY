@@ -2,9 +2,9 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <string>
-#include <Valkyrie/Core/vklibrary.refl.hh>
+#include <Valkyrie/core/vklibrary.refl.hh>
 
 
 struct vkLibraryPriv;

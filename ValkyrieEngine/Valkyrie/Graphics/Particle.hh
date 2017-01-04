@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Graphics/Particle.refl.hh>

@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Core/vkthread.hh>
+#include <Valkyrie/core/vkthread.hh>
 #include <Windows.h>
 
 #ifdef VK_WIN32

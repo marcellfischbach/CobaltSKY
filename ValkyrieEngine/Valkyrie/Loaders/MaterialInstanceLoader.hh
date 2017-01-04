@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Loaders/MaterialInstanceLoader.refl.hh>
 
 class vkMaterialInstance;

@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <map>
 
 class VKE_API vkClassRegistry

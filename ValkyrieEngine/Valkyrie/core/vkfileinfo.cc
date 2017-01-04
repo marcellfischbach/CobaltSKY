@@ -1,4 +1,4 @@
-#include <Valkyrie/Core/vkfileinfo.hh>
+#include <Valkyrie/core/vkfileinfo.hh>
 
 #include <stdlib.h>
 #include <string.h>

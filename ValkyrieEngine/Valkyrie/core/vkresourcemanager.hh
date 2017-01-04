@@ -4,16 +4,16 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Core/vkassetinputstream.hh>
-#include <Valkyrie/Core/ifile.hh>
-#include <Valkyrie/Core/vkclass.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkassetinputstream.hh>
+#include <Valkyrie/core/ifile.hh>
+#include <Valkyrie/core/vkclass.hh>
+#include <Valkyrie/core/vkstring.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <tixml\tinyxml.h>
 #include <map>
 #include <vector>
-#include <Valkyrie/Core/vkresourcemanager.refl.hh>
+#include <Valkyrie/core/vkresourcemanager.refl.hh>
 
 
 

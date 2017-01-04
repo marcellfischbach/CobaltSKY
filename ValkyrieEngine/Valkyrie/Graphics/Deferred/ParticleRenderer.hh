@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Core/vkcollection.hh>
+#include <Valkyrie/core/vkcollection.hh>
 
 struct IGraphics;
 class vkRenderState;

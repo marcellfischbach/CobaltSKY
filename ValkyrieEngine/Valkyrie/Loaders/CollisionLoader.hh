@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 

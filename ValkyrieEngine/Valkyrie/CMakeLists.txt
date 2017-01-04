@@ -32,44 +32,44 @@ set(SOURCE_ANIMATION
 
 
 source_group(
-    "ValkyrieEngine\\Animation"
+    "ValkyrieEngine\\animation"
     FILES
     ${SOURCE_ANIMATION}
     )
 
 set(SOURCE_CORE
-    Core/ifile.hh
-    Core/vkassetinputstream.cc
-    Core/vkassetinputstream.hh
-    Core/vkassetoutputstream.cc
-    Core/vkassetoutputstream.hh
-    Core/vkclass.cc
-    Core/vkclass.hh
-    Core/vkclassregistry.cc
-    Core/vkclassregistry.hh
-    Core/vkcollection.hh
-    Core/vkfileinfo.cc
-    Core/vkfileinfo.hh
-    Core/vkfilestd.cc
-    Core/vkfilestd.hh
-    Core/vklibrary.cc
-    Core/vklibrary.hh
-    Core/vkresourcemanager.cc
-    Core/vkresourcemanager.hh
-    Core/vksettings.cc
-    Core/vksettings.hh
-    Core/vkstring.hh
-    Core/vkthread.cc
-    Core/vkthread.hh
-    Core/vkvfs.cc
-    Core/vkvfs.hh
-    Core/vkxml.cc
-    Core/vkxml.hh
+    core/ifile.hh
+    core/vkassetinputstream.cc
+    core/vkassetinputstream.hh
+    core/vkassetoutputstream.cc
+    core/vkassetoutputstream.hh
+    core/vkclass.cc
+    core/vkclass.hh
+    core/vkclassregistry.cc
+    core/vkclassregistry.hh
+    core/vkcollection.hh
+    core/vkfileinfo.cc
+    core/vkfileinfo.hh
+    core/vkfilestd.cc
+    core/vkfilestd.hh
+    core/vklibrary.cc
+    core/vklibrary.hh
+    core/vkresourcemanager.cc
+    core/vkresourcemanager.hh
+    core/vksettings.cc
+    core/vksettings.hh
+    core/vkstring.hh
+    core/vkthread.cc
+    core/vkthread.hh
+    core/vkvfs.cc
+    core/vkvfs.hh
+    core/vkxml.cc
+    core/vkxml.hh
     )
 
 
 source_group(
-    "ValkyrieEngine\\Core"
+    "ValkyrieEngine\\core"
     FILES
     ${SOURCE_CORE}
     )

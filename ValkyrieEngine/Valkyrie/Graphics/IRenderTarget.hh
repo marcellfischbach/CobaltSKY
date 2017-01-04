@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <Valkyrie/Graphics/IRenderTarget.refl.hh>

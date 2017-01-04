@@ -9,7 +9,7 @@
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>
-#include <Valkyrie/Core/vkclassregistry.hh>
+#include <Valkyrie/core/vkclassregistry.hh>
 
 
 // ***********************************************************************************************

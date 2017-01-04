@@ -1,7 +1,7 @@
 
 #include <Valkyrie/Graphics/Deferred/DeferredFrameProcessor.hh>
-#include <Valkyrie/Core/vkcollection.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkcollection.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Geometry.hh>
 #include <Valkyrie/Entity/LightState.hh>

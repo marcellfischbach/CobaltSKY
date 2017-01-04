@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkclass.hh>
+#include <Valkyrie/core/vkstring.hh>
 
-#include <Valkyrie/Core/ifile.refl.hh>
+#include <Valkyrie/core/ifile.refl.hh>
 
 /**
  * \addtogroup engine

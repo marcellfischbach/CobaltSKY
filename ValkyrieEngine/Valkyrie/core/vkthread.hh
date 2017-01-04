@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 
-#include <Valkyrie/Core/vkthread.refl.hh>
+#include <Valkyrie/core/vkthread.refl.hh>
 
 struct vkThreadPriv;
 VK_INTERFACE();

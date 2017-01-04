@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Animation/vkskeleton.hh>
+#include <Valkyrie/animation/vkskeleton.hh>
 
 
 vkSkeleton::vkSkeleton()

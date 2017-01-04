@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Core/vklibrary.hh>
+#include <Valkyrie/core/vklibrary.hh>
 
 #include <Windows.h>
 

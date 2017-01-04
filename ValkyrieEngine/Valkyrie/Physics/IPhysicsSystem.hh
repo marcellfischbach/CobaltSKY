@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Physics/IPhysicsShape.hh>
 #include <Valkyrie/Physics/IPhysicsSystem.refl.hh>
 

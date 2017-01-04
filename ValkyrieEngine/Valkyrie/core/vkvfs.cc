@@ -1,7 +1,7 @@
 
-#include <Valkyrie/Core/vkvfs.hh>
-#include <Valkyrie/Core/vkfilestd.hh>
-#include <Valkyrie/Core/vksettings.hh>
+#include <Valkyrie/core/vkvfs.hh>
+#include <Valkyrie/core/vkfilestd.hh>
+#include <Valkyrie/core/vksettings.hh>
 // #include <cscore/cssettings.h>
 
 // #include <csini/csiini.h>

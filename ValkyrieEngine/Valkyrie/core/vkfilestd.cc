@@ -1,6 +1,6 @@
 
 #include <assert.h>
-#include <Valkyrie/Core/vkfilestd.hh>
+#include <Valkyrie/core/vkfilestd.hh>
 #include <stdlib.h>
 #include <string.h>
 

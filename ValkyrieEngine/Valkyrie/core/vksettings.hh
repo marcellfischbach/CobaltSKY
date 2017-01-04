@@ -3,7 +3,7 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkstring.hh>
 #include <tixml/tinyxml.h>
 
 

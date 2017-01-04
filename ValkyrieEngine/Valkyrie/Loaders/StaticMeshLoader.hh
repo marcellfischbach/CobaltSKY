@@ -3,7 +3,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Loaders/StaticMeshLoader.refl.hh>
 
 class vkGeometryData;

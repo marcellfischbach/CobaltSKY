@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Animation/vkskeleton.refl.hh>
+#include <Valkyrie/animation/vkskeleton.refl.hh>
 
 const vkSize vkInvalidBoneIdx = ~0x00;
 

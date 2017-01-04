@@ -2,8 +2,8 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkclass.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkclass.hh>
+#include <Valkyrie/core/vkstring.hh>
 #include <Valkyrie/Graphics/ShaderID.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Matrix.hh>

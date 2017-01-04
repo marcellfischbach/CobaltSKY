@@ -173,7 +173,7 @@ T* vkNewClassInstance(const vkClass *clazz)
   return reinterpret_cast<T*>(clazz->CreateInstance());
 }
 
-#include <Valkyrie/Core/vkclass.refl.hh>
+#include <Valkyrie/core/vkclass.refl.hh>
 
 VK_CLASS()
 class VKE_API vkObject : public IObject

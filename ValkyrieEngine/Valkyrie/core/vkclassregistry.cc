@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Core/vkclassregistry.hh>
+#include <Valkyrie/core/vkclassregistry.hh>
 
 
 vkClassRegistry::vkClassRegistry()

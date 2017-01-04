@@ -1,6 +1,6 @@
 
 #include <Valkyrie/Loaders/MaterialInstanceLoader.hh>
-#include <Valkyrie/Core/vkclassregistry.hh>
+#include <Valkyrie/core/vkclassregistry.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/vkengine.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>

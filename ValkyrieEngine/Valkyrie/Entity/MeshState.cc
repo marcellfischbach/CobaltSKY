@@ -3,7 +3,7 @@
 #include <Valkyrie/Entity/Entity.hh>
 #include <Valkyrie/Entity/Scan.hh>
 #include <Valkyrie/Entity/Scene.hh>
-#include <Valkyrie/Animation/vkskeleton.hh>
+#include <Valkyrie/animation/vkskeleton.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Graphics/Material.hh>
 #include <Valkyrie/Graphics/Mesh.hh>

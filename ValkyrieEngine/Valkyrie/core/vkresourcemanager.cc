@@ -1,7 +1,7 @@
 
-#include <Valkyrie/Core/vkresourcemanager.hh>
-#include <Valkyrie/Core/vkclassregistry.hh>
-#include <Valkyrie/Core/vkvfs.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkclassregistry.hh>
+#include <Valkyrie/core/vkvfs.hh>
 
 
 

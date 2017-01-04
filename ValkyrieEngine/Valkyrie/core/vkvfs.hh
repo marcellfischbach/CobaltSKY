@@ -2,8 +2,8 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/ifile.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/ifile.hh>
+#include <Valkyrie/core/vkstring.hh>
 #include <map>
 
 

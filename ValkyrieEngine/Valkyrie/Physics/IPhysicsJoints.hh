@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Core/vkclass.hh>
+#include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkdiamond.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>

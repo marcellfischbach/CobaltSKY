@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Core/vkassetinputstream.hh>
+#include <Valkyrie/core/vkassetinputstream.hh>
 
 
 vkAssetInputStream::vkAssetInputStream(const vkUInt8 *buffer, vkSize bufferSize)

@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Core/vkcollection.hh>
+#include <Valkyrie/core/vkcollection.hh>
 #include <Valkyrie/vkenums.hh>
 
 struct IGraphics;

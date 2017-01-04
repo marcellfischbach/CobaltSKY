@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Core/vkstring.hh>
+#include <Valkyrie/core/vkstring.hh>
 
 class VKE_API vkFileInfo
 {

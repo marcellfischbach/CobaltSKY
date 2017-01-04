@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkdefs.hh>
-#include <Valkyrie/Core/vkresourcemanager.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Graphics/IGraphics.hh>
 #include <Valkyrie/Physics/IPhysicsSystem.hh>
 #include <Valkyrie/Window/IWindow.hh>
