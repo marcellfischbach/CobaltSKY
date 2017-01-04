@@ -187,58 +187,114 @@ source_group(
 		
 
 set(SOURCE_GRAPHICS_DEFERRED
-    Graphics/Deferred/vkdefaultcollector.cc
-    Graphics/Deferred/vkdefaultcollector.hh
-    Graphics/Deferred/vkdeferredframeprocessor.cc
-    Graphics/Deferred/vkdeferredframeprocessor.hh
-    Graphics/Deferred/vkdirectionallightrenderer.cc
-    Graphics/Deferred/vkdirectionallightrenderer.hh
-    Graphics/Deferred/vkgbuffer.cc
-    Graphics/Deferred/vkgbuffer.hh
-    Graphics/Deferred/vklightrenderer.cc
-    Graphics/Deferred/vklightrenderer.hh
-    Graphics/Deferred/vkparticlerenderer.cc
-    Graphics/Deferred/vkparticlerenderer.hh
-    Graphics/Deferred/vkpointlightrenderer.cc
-    Graphics/Deferred/vkpointlightrenderer.hh
+    Graphics/deferred/vkdefaultcollector.cc
+    Graphics/deferred/vkdefaultcollector.hh
+    Graphics/deferred/vkdeferredframeprocessor.cc
+    Graphics/deferred/vkdeferredframeprocessor.hh
+    Graphics/deferred/vkdirectionallightrenderer.cc
+    Graphics/deferred/vkdirectionallightrenderer.hh
+    Graphics/deferred/vkgbuffer.cc
+    Graphics/deferred/vkgbuffer.hh
+    Graphics/deferred/vklightrenderer.cc
+    Graphics/deferred/vklightrenderer.hh
+    Graphics/deferred/vkparticlerenderer.cc
+    Graphics/deferred/vkparticlerenderer.hh
+    Graphics/deferred/vkpointlightrenderer.cc
+    Graphics/deferred/vkpointlightrenderer.hh
 )
 
 source_group(
-    "ValkyrieEngine\\Graphics\\Deferred"
+    "ValkyrieEngine\\Graphics\\deferred"
     FILES
     ${SOURCE_GRAPHICS_DEFERRED}
     )
 		
 
 set(SOURCE_GRAPHICS_SCENE
-    Graphics/Scene/iscancallback.hh
-    Graphics/Scene/vkcameranode.cc
-    Graphics/Scene/vkcameranode.hh
-    Graphics/Scene/vkgeometrynode.cc
-    Graphics/Scene/vkgeometrynode.hh
-    Graphics/Scene/vkgroupnode.cc
-    Graphics/Scene/vkgroupnode.hh
-    Graphics/Scene/vklightnode.cc
-    Graphics/Scene/vklightnode.hh
-    Graphics/Scene/vknode.cc
-    Graphics/Scene/vknode.hh
-    Graphics/Scene/vkspatialnode.cc
-    Graphics/Scene/vkspatialnode.hh
+    Graphics/scene/iscancallback.hh
+    Graphics/scene/vkcameranode.cc
+    Graphics/scene/vkcameranode.hh
+    Graphics/scene/vkgeometrynode.cc
+    Graphics/scene/vkgeometrynode.hh
+    Graphics/scene/vkgroupnode.cc
+    Graphics/scene/vkgroupnode.hh
+    Graphics/scene/vklightnode.cc
+    Graphics/scene/vklightnode.hh
+    Graphics/scene/vknode.cc
+    Graphics/scene/vknode.hh
+    Graphics/scene/vkspatialnode.cc
+    Graphics/scene/vkspatialnode.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Graphics\\Scene"
+    "ValkyrieEngine\\Graphics\\scene"
     FILES
     ${SOURCE_GRAPHICS_SCENE}
     )
 
 
 set(SOURCE_GRAPHICS_SHADERGRAPH
-    Graphics/ShaderGraph/SGNode.cc
-    Graphics/ShaderGraph/SGNode.hh
-    Graphics/ShaderGraph/SGShaderGraph.cc
-    Graphics/ShaderGraph/SGShaderGraph.hh
+    Graphics/ShaderGraph/vksgadd.cc
+    Graphics/ShaderGraph/vksgadd.hh
+    Graphics/ShaderGraph/vksgconstfloat1.cc
+    Graphics/ShaderGraph/vksgconstfloat1.hh
+    Graphics/ShaderGraph/vksgconstfloat2.cc
+    Graphics/ShaderGraph/vksgconstfloat2.hh
+    Graphics/ShaderGraph/vksgconstfloat3.cc
+    Graphics/ShaderGraph/vksgconstfloat3.hh
+    Graphics/ShaderGraph/vksgconstfloat4.cc
+    Graphics/ShaderGraph/vksgconstfloat4.hh
+    Graphics/ShaderGraph/vksgcross.cc
+    Graphics/ShaderGraph/vksgcross.hh
+    Graphics/ShaderGraph/vksgdefaulttexturecoordinate.cc
+    Graphics/ShaderGraph/vksgdefaulttexturecoordinate.hh
+    Graphics/ShaderGraph/vksgdiv.cc
+    Graphics/ShaderGraph/vksgdiv.hh
+    Graphics/ShaderGraph/vksgdot.cc
+    Graphics/ShaderGraph/vksgdot.hh
+    Graphics/ShaderGraph/vksgenums.hh
+    Graphics/ShaderGraph/vksgfloat2.cc
+    Graphics/ShaderGraph/vksgfloat2.hh
+    Graphics/ShaderGraph/vksgfloat3.cc
+    Graphics/ShaderGraph/vksgfloat3.hh
+    Graphics/ShaderGraph/vksgfloat4.cc
+    Graphics/ShaderGraph/vksgfloat4.hh
+    Graphics/ShaderGraph/vksginput.cc
+    Graphics/ShaderGraph/vksginput.hh
+    Graphics/ShaderGraph/vksglerp.cc
+    Graphics/ShaderGraph/vksglerp.hh
+    Graphics/ShaderGraph/vksgmul.cc
+    Graphics/ShaderGraph/vksgmul.hh
+    Graphics/ShaderGraph/vksgnode.cc
+    Graphics/ShaderGraph/vksgnode.hh
+    Graphics/ShaderGraph/vksgnodes.cc
+    Graphics/ShaderGraph/vksgnodes.hh
+    Graphics/ShaderGraph/vksgoutput.cc
+    Graphics/ShaderGraph/vksgoutput.hh
+    Graphics/ShaderGraph/vksgresourcenode.cc
+    Graphics/ShaderGraph/vksgresourcenode.hh
+    Graphics/ShaderGraph/vksgshadergraph.cc
+    Graphics/ShaderGraph/vksgshadergraph.hh
+    Graphics/ShaderGraph/vksgsplitfloat2.cc
+    Graphics/ShaderGraph/vksgsplitfloat2.hh
+    Graphics/ShaderGraph/vksgsplitfloat3.cc
+    Graphics/ShaderGraph/vksgsplitfloat3.hh
+    Graphics/ShaderGraph/vksgsplitfloat4.cc
+    Graphics/ShaderGraph/vksgsplitfloat4.hh
+    Graphics/ShaderGraph/vksgsub.cc
+    Graphics/ShaderGraph/vksgsub.hh
+    Graphics/ShaderGraph/vksgtexture2d.cc
+    Graphics/ShaderGraph/vksgtexture2d.hh
+    Graphics/ShaderGraph/vksgvarfloat1.cc
+    Graphics/ShaderGraph/vksgvarfloat1.hh
+    Graphics/ShaderGraph/vksgvarfloat2.cc
+    Graphics/ShaderGraph/vksgvarfloat2.hh
+    Graphics/ShaderGraph/vksgvarfloat3.cc
+    Graphics/ShaderGraph/vksgvarfloat3.hh
+    Graphics/ShaderGraph/vksgvarfloat4.cc
+    Graphics/ShaderGraph/vksgvarfloat4.hh
     )
+
 
 source_group(
     "ValkyrieEngine\\Graphics\\ShaderGraph"

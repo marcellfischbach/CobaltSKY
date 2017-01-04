@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/core/vksettings.hh>
 #include <Valkyrie/core/vkvfs.hh>
-#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
 #include <SDLWindow/SDLWindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
@@ -42,13 +42,13 @@
 #include <Valkyrie/Graphics/Mesh.hh>
 #include <Valkyrie/Graphics/Particle.hh>
 #include <Valkyrie/Graphics/PostProcessing.hh>
-#include <Valkyrie/Graphics/Deferred/vkdeferredframeprocessor.hh>
-#include <Valkyrie/Graphics/Scene/vkcameranode.hh>
-#include <Valkyrie/Graphics/Scene/vkgeometrynode.hh>
-#include <Valkyrie/Graphics/Scene/vkgroupnode.hh>
-#include <Valkyrie/Graphics/Scene/vklightnode.hh>
-#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
-#include <Valkyrie/Graphics/ShaderGraph/SGShaderGraph.hh>
+#include <Valkyrie/Graphics/deferred/vkdeferredframeprocessor.hh>
+#include <Valkyrie/Graphics/scene/vkcameranode.hh>
+#include <Valkyrie/Graphics/scene/vkgeometrynode.hh>
+#include <Valkyrie/Graphics/scene/vkgroupnode.hh>
+#include <Valkyrie/Graphics/scene/vklightnode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/vksgshadergraph.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
 #include <Valkyrie/Physics/IPhysicsCollider.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
@@ -57,7 +57,7 @@
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>
-#include <Valkyrie/Graphics/ShaderGraph/SGNode.hh>
+#include <Valkyrie/Graphics/ShaderGraph/vksgnode.hh>
 
 
 int initialize();
@@ -755,42 +755,7 @@ void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IK
   character->SetWalkDirection(direction);
 }
 
-vkMaterial *create_red_shader(IGraphics *graphics)
-{
-  vkSGShaderGraph *shader = new vkSGShaderGraph();
 
-  vkSGConstFloat3 *constRed = new vkSGConstFloat3();
-  constRed->SetInput(0, 1.0f);
-  constRed->SetInput(1, 0.0f);
-  constRed->SetInput(2, 0.0f);
-  shader->SetDiffuse(constRed->GetOutput(0));
-
-  if (!graphics->GetShaderGraphFactory()->GenerateShaderGraph(shader))
-  {
-    delete shader;
-    shader = 0;
-  }
-  return shader;
-}
-
-
-vkMaterial *create_green_shader(IGraphics *graphics)
-{
-  vkSGShaderGraph *shader = new vkSGShaderGraph();
-
-  vkSGConstFloat3 *constRed = new vkSGConstFloat3();
-  constRed->SetInput(0, 0.0f);
-  constRed->SetInput(1, 1.0f);
-  constRed->SetInput(2, 0.0f);
-  shader->SetDiffuse(constRed->GetOutput(0));
-
-  if (!graphics->GetShaderGraphFactory()->GenerateShaderGraph(shader))
-  {
-    delete shader;
-    shader = 0;
-  }
-  return shader;
-}
 
 vkEntityScene *create_scene(IGraphics *graphics)
 {
@@ -865,239 +830,6 @@ vkEntityScene *create_scene(IGraphics *graphics)
   return entityScene;
 }
 
-
-vkEntityScene *create_scene2(IGraphics *graphics)
-{
-  /*
-  ITexture2D *dirtTexture = vkResourceManager::Get()->GetOrLoad<ITexture2D>(vkResourceLocator("materials/textures/fieldstone_diffuse.xasset"));
-  ITexture2DArray *testArray = vkResourceManager::Get()->GetOrLoad<ITexture2DArray>(vkResourceLocator("materials/textures/test_array.xasset"));
-  */
-
-  vkMaterial *testMaterial = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("materials/my_material.xasset"));
-  vkMaterialInstance *testInstance = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("materials/my_material_instance.xasset"));
-
-  vkMaterial *constRedMaterial = create_red_shader(graphics);
-  vkMaterial *constGreenMaterial = create_green_shader(graphics);
-  vkMaterialInstance *constRedMaterialInst = new vkMaterialInstance();
-  constRedMaterialInst->SetMaterial(constRedMaterial);
-  vkMaterialInstance *constGreenMaterialInst = new vkMaterialInstance();
-  constGreenMaterialInst->SetMaterial(constGreenMaterial);
-  vkMultiMaterial *shaderGraphMaterial = new vkMultiMaterial();
-  shaderGraphMaterial->AddMaterialInstance(constRedMaterialInst);
-  shaderGraphMaterial->AddMaterialInstance(constGreenMaterialInst);
-
-  vkMaterial *myMaterial = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/my_material.asset"));
-  vkMaterialInstance *myMaterialInst = new vkMaterialInstance();
-  myMaterialInst->SetMaterial(myMaterial);
-
-
-  vkMaterialInstance *materialFieldstoneInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStone"));
-  vkMaterialInstance *materialFieldstoneRedInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneRed"));
-  vkMaterialInstance *materialFieldstoneGreenInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneGreen"));
-  vkMaterialInstance *materialFieldstoneBlueInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneBlue"));
-  vkMaterialInstance *materialRedSkelInst = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "RedSkeleton"));
-
-  vkMaterialInstance *materialUnshaded = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", "FieldStoneUnshaded"));
-  vkMaterialInstance *materialParticle = vkResourceManager::Get()->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/particle_unlit.xml"));
-
-  ISampler *testSampler = vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator("default_sampler.xml"));
-
-  vkMultiMaterial *materialFieldStone = new vkMultiMaterial(materialFieldstoneInst);
-  vkMultiMaterial *materialFieldStoneRed = new vkMultiMaterial(materialFieldstoneRedInst);
-  vkMultiMaterial *materialFieldStoneGreen = new vkMultiMaterial(materialFieldstoneGreenInst);
-  vkMultiMaterial *materialFieldStoneBlue = new vkMultiMaterial(materialFieldstoneBlueInst);
-
-  vkMultiMaterial *mineMaterial = new vkMultiMaterial();
-  mineMaterial->AddMaterialInstance(materialFieldstoneInst);
-  mineMaterial->AddMaterialInstance(materialFieldstoneRedInst);
-
-  vkEntityScene *entityScene = new vkEntityScene();
-
-
-  srand(4567898);
-  float x = (float)rand() / (float)RAND_MAX;
-  float y = (float)rand() / (float)RAND_MAX;
-  float z = (float)rand() / (float)RAND_MAX;
-
-
-  
-  vkPhysGeometry boxGeometry;
-  boxGeometry.Type = ePGT_Box;
-  boxGeometry.Dimensions.Set(200.0f, 200.0f, 4.0f);
-  IPhysicsShape *boxShape = vkEng->CreateShape(boxGeometry);
-
-  vkStaticColliderState *staticState = new vkStaticColliderState();
-  staticState->AttachShape(boxShape);
-  staticState->SetFriction(10.0f);
-  staticState->SetRestitution(0.5f);
-
-  /* create the plane mesh */
-  vkSubMesh *planeMeshInst = createPlaneMesh(graphics, 100.0f, 2.0);
-  vkMesh *planeMesh = new vkMesh();
-  planeMesh->AddMesh(planeMeshInst);
-  planeMesh->OptimizeDataStruct();
-  planeMesh->UpdateBoundingBox();
-
-  vkStaticMeshState *planeState = new vkStaticMeshState();
-  planeState->SetMesh(planeMesh);
-  planeState->SetMaterial(materialFieldstoneInst, 0);
-  planeState->SetCastShadow(true);
-
-  vkEntity *planeEntity = new vkEntity();
-  planeEntity->SetRootState(staticState);
-  planeEntity->AddState(staticState);
-  planeEntity->AddState(planeState, staticState);
-
-  entityScene->AddEntity(planeEntity);
-
-  numParticles = 100;
-  particle = CreateParticle(graphics, numParticles);
-  vkParticleState *particleState = new vkParticleState();
-  particleState->SetRenderQueue(eRQ_Particles);
-  particleState->SetParticle(particle);
-  particleState->SetShadingMode(ePSM_Shaded);
-  particleState->SetMaterial(materialParticle);
-
-  vkDefaultParticleEmitter *emitter = new vkDefaultParticleEmitter();
-  emitter->SetParticlesPerSecond(1.0f);
-  emitter->SetTimeToLive(vkRandomRange::Value(10.0f));
-  emitter->SetInitialTime(vkRandomRange::Range(0.0f, 2.0f));
-  emitter->SetSpawnSphere(vkVector3f(0, 0, 1), vkRandomRange::Range(0.0f, 2.0f));
-  emitter->SetInitialDirection(vkVector3f(0, 0, 1), vkRandomRange::Range(0.0f, M_PI / 2.0f), vkRandomRange::Value(1.0f));
-  emitter->SetInitialRotation(vkRandomRange::Range(-M_PI, M_PI));
-  emitter->SetRotationSpeed(vkRandomRange::Range(0.0, M_PI * 0.1f));
-  emitter->SetRotationMode(ePRM_Both);
-  emitter->SetSizeX(vkRandomRange::Range(2.0, 10.0f));
-  emitter->SetSizeY(vkRandomRange::Value(2.0f, 1.0f));
-  emitter->SetSyncSize(true);
-  particleState->SetEmitter(emitter);
-  emitter->Release();
-
-  vkDefaultParticleStepper *stepper = new vkDefaultParticleStepper();
-  stepper->SetGravity(vkVector3f(0.0f, 0.0f, 1.0f));// -9.81f));
-  stepper->SetSizeCicleTime(8.0f);
-  stepper->SetSizeMode(ePSM_Linear);
-  stepper->SetTextPageTime(1.0f);
-  stepper->SetNumberOfTextPages(4);
-  particleState->SetStepper(stepper);
-  stepper->Release();
-
-  vkEntity *particleEntity = new vkEntity();
-  particleEntity->SetRootState(particleState);
-  particleEntity->AddState(particleState);
-
-  entityScene->AddEntity(particleEntity);
-
-  // create the skeleton mesh
-  vkSubMesh *skelMeshInst = create_skeleton_mesh(graphics, 5.0);
-  vkMesh *skelMesh = new vkMesh();
-  skelMesh->AddMesh(skelMeshInst);
-  skelMesh->OptimizeDataStruct();
-  skelMesh->UpdateBoundingBox();
-
-  vkStaticMeshState *skelState = new vkStaticMeshState();
-  skelState->SetMesh(skelMesh);
-  skelState->SetMaterial(materialRedSkelInst);
-  skelState->SetCastShadow(true);
-
-  vkEntity *skelEntity = new vkEntity();
-  skelEntity->SetRootState(skelState);
-  skelEntity->AddState(skelState);
-
-  skelEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 4.0f));
-  skelEntity->FinishTransformation();
-
-  vkSkeleton *skeleton = new vkSkeleton();
-  skeleton->PrepareBones(3);
-  vkMatrix4f *mats = skeleton->GetMatrices();
-  mats[0].SetIdentity();
-  mats[1].SetIdentity();
-  mats[1].SetTranslation(vkVector3f(0.0f, 5.0f, 0.0f));
-  mats[2].SetIdentity();
-  mats[2].SetTranslation(vkVector3f(0.0f, 10.0f, 0.0f));
-  mats[2].SetRotationX(3.1415f / 4.0f);
-
-  graphics->SetSkeleton(skeleton);
-
-  entityScene->AddEntity(skelEntity);
-
-
-
-  vkEntity *signEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/sign.xml"));
-  signEntity->SetClippingRange(-FLT_MAX, 50.0f);
-  signEntity->GetTransformation().SetTranslation(vkVector3f(0.0f, 0.0f, 0.0f));
-  signEntity->FinishTransformation();
-  entityScene->AddEntity(signEntity);
-
-#if 1
-
-  for (int i = 0; i < 10; ++i)
-  {
-    float x = (float)rand() / (float)RAND_MAX;
-    float y = (float)rand() / (float)RAND_MAX;
-    float z = (float)rand() / (float)RAND_MAX;
-    float t = (float)rand() / (float)RAND_MAX;
-
-    vkEntity *mineEntity = vkResourceManager::Get()->Load<vkEntity>(vkResourceLocator("${entities}/mine.xml"));
-    vkStaticMeshState *meshState = vkQueryClass<vkStaticMeshState>(mineEntity->GetState(1));
-    if (i % 2)
-    {
-      meshState->SetRenderQueue(eRQ_Forward);
-      meshState->SetShadingMode(eSM_Unlit);
-      meshState->SetMaterial(materialUnshaded, 0);
-      meshState->SetMaterial(materialUnshaded, 1);
-    }
-
-    mineEntity->SetClippingRange(-FLT_MAX, 50.0f);
-    mineEntity->GetTransformation().SetTranslation(vkVector3f(-40.0f + x * 80.0f, -40.0f + y * 80.0f, 10.0f + z * 20.0f));
-    mineEntity->GetTransformation().SetRotation(vkVector3f(x, y, z), t);
-    mineEntity->FinishTransformation();
-    entityScene->AddEntity(mineEntity);
-
-
-
-
-  }
-
-#endif
-
-
-  directionalLight = new vkDirectionalLight();
-  directionalLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
-  directionalLight->SetArbDirection(vkVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(true);
-  directionalLight->SetShadowIntensity(0.0f);
-
-  vkLightState *directionalLightState = new vkLightState();
-  directionalLightState->SetLight(directionalLight);
-
-  vkEntity *directionalLightEntity = new vkEntity();
-  directionalLightEntity->SetRootState(directionalLightState);
-  directionalLightEntity->AddState(directionalLightState);
-  entityScene->AddEntity(directionalLightEntity);
-
-
-  vkDirectionalLight *directionalBackLight = new vkDirectionalLight();
-  directionalBackLight->SetColor(vkColor4f(1.0f, 1.0f, 1.0f));
-  directionalBackLight->SetArbDirection(vkVector3f(1.0f, 1.0f, -1.0f));
-  directionalBackLight->SetCastShadow(false);
-  directionalBackLight->SetEnergy(0.25f);
-  directionalBackLight->SetShadowIntensity(0.0f);
-
-  vkLightState *directionalBackLightState = new vkLightState();
-  directionalBackLightState->SetLight(directionalBackLight);
-
-  vkEntity *directionalBackLightEntity = new vkEntity();
-  directionalBackLightEntity->SetRootState(directionalBackLightState);
-  directionalBackLightEntity->AddState(directionalBackLightState);
-  //entityScene->AddEntity(directionalBackLightEntity);
-
-  entityScene->GetRoot()->FinishTransformation();
-
-  entityScene->GetRoot()->UpdateBoundingBox();
-
-  return entityScene;
-}
 
 IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height, vkPixelFormat colorFormat, bool createDepthTexture)
 {

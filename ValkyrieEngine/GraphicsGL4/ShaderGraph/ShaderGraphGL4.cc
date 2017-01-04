@@ -2,6 +2,7 @@
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphNodeGL4.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
+#include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Graphics/ITexture.hh>
 #include <iostream>
 #include <sstream>
