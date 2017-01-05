@@ -1,10 +1,10 @@
 
 #include <Valkyrie/Loaders/ShaderGraphLoader.hh>
 #include <Valkyrie/core/vkclassregistry.hh>
-#include <Valkyrie/Graphics/shadergraph/vksgnodes.hh>
-#include <Valkyrie/Graphics/shadergraph/vksgshadergraph.hh>
+#include <Valkyrie/graphics/shadergraph/vksgnodes.hh>
+#include <Valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <Valkyrie/vkengine.hh>
-#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/graphics/igraphics.hh>
 #include <map>
 
 

@@ -1,9 +1,9 @@
 
 #include <Valkyrie/entity/vkparticlestate.hh>
-#include <Valkyrie/Graphics/igraphics.hh>
-#include <Valkyrie/Graphics/ivertexbuffer.hh>
-#include <Valkyrie/Graphics/vkmaterialinstance.hh>
-#include <Valkyrie/Graphics/vkparticle.hh>
+#include <Valkyrie/graphics/igraphics.hh>
+#include <Valkyrie/graphics/ivertexbuffer.hh>
+#include <Valkyrie/graphics/vkmaterialinstance.hh>
+#include <Valkyrie/graphics/vkparticle.hh>
 #include <Valkyrie/entity/ientityscan.hh>
 #include <math.h>
 

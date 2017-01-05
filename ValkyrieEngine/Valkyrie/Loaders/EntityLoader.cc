@@ -11,10 +11,10 @@
 #include <Valkyrie/entity/vkstaticcolliderstate.hh>
 #include <Valkyrie/entity/vkstaticmeshstate.hh>
 #include <Valkyrie/Physics/PhysicsShapeContainer.hh>
-#include <Valkyrie/Graphics/vkmaterialinstance.hh>
-#include <Valkyrie/Graphics/vkmesh.hh>
-#include <Valkyrie/Graphics/vksubmesh.hh>
-#include <Valkyrie/Graphics/vkskinnedmesh.hh>
+#include <Valkyrie/graphics/vkmaterialinstance.hh>
+#include <Valkyrie/graphics/vkmesh.hh>
+#include <Valkyrie/graphics/vksubmesh.hh>
+#include <Valkyrie/graphics/vkskinnedmesh.hh>
 #include <Valkyrie/core/vkclassregistry.hh>
 
 

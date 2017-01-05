@@ -1,13 +1,13 @@
 
 
 #include <Valkyrie/Loaders/MeshLoader.hh>
-#include <Valkyrie/Graphics/vkmesh.hh>
-#include <Valkyrie/Graphics/vkskinnedmesh.hh>
-#include <Valkyrie/Graphics/vksubmesh.hh>
-#include <Valkyrie/Graphics/igraphics.hh>
-#include <Valkyrie/Graphics/ivertexbuffer.hh>
-#include <Valkyrie/Graphics/ivertexdeclaration.hh>
-#include <Valkyrie/Graphics/iindexbuffer.hh>
+#include <Valkyrie/graphics/vkmesh.hh>
+#include <Valkyrie/graphics/vkskinnedmesh.hh>
+#include <Valkyrie/graphics/vksubmesh.hh>
+#include <Valkyrie/graphics/igraphics.hh>
+#include <Valkyrie/graphics/ivertexbuffer.hh>
+#include <Valkyrie/graphics/ivertexdeclaration.hh>
+#include <Valkyrie/graphics/iindexbuffer.hh>
 
 #include <Valkyrie/vkengine.hh>
 #include <algorithm>

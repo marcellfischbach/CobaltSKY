@@ -4,9 +4,9 @@
 #include <Valkyrie/entity/ientityscan.hh>
 #include <Valkyrie/entity/vkentityscene.hh>
 #include <Valkyrie/animation/vkskeleton.hh>
-#include <Valkyrie/Graphics/igraphics.hh>
-#include <Valkyrie/Graphics/vkmaterialinstance.hh>
-#include <Valkyrie/Graphics/vkmesh.hh>
+#include <Valkyrie/graphics/igraphics.hh>
+#include <Valkyrie/graphics/vkmaterialinstance.hh>
+#include <Valkyrie/graphics/vkmesh.hh>
 #include <Valkyrie/Physics/IPhysicsScene.hh>
 #include <Valkyrie/vkengine.hh>
 

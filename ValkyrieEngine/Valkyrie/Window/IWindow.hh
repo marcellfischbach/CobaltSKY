@@ -4,7 +4,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vktypes.hh>
 #include <Valkyrie/Window/IWindow.refl.hh>
-#include <Valkyrie/Graphics/vkimage.hh>
+#include <Valkyrie/graphics/vkimage.hh>
 
 struct IKeyboard;
 struct IMouse;

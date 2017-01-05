@@ -1,9 +1,9 @@
 
 #include <Valkyrie/entity/vkgeometrymesh.hh>
-#include <Valkyrie/Graphics/igraphics.hh>
-#include <Valkyrie/Graphics/vkmaterial.hh>
-#include <Valkyrie/Graphics/vkmultimaterial.hh>
-#include <Valkyrie/Graphics/vkmesh.hh>
+#include <Valkyrie/graphics/igraphics.hh>
+#include <Valkyrie/graphics/vkmaterial.hh>
+#include <Valkyrie/graphics/vkmultimaterial.hh>
+#include <Valkyrie/graphics/vkmesh.hh>
 
 
 

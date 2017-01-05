@@ -1,8 +1,8 @@
 #pragma once
 
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/Graphics/shadergraph/vksgshadergraph.hh>
-#include <Valkyrie/Graphics/shadergraph/vksgnode.hh>
+#include <Valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <Valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <map>
 
 class vkSGNodeGL4;

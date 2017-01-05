@@ -3,7 +3,7 @@
 #include <GraphicsGL4/ShaderGraph/ShaderGraphNodeGL4.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
-#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/graphics/itexture.hh>
 #include <iostream>
 #include <sstream>
 

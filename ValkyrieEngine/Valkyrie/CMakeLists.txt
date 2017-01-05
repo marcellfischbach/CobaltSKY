@@ -151,57 +151,57 @@ source_group(
     )
 
 set(SOURCE_GRAPHICS
-    Graphics/iframeprocessor.hh
-    Graphics/igraphics.hh
-    Graphics/iindexbuffer.hh
-    Graphics/irendertarget.hh
-    Graphics/ishader.hh
-    Graphics/ishaderattribute.hh
-    Graphics/ishaderstream.hh
-		Graphics/isampler.hh
-    Graphics/itexture.hh
-    Graphics/itexture2d.hh
-    Graphics/itexture2darray.hh
-    Graphics/itexturecube.hh
-    Graphics/ivertexbuffer.hh
-    Graphics/ivertexdeclaration.hh
-    Graphics/vkbinarygradient.cc
-    Graphics/vkbinarygradient.hh
-    Graphics/vkcamera.cc
-    Graphics/vkcamera.hh
-    Graphics/vkdirectionallight.cc
-    Graphics/vkdirectionallight.hh
-    Graphics/vkgenericshaderpostprocess.cc
-    Graphics/vkgenericshaderpostprocess.hh
-    Graphics/vkimage.cc
-    Graphics/vkimage.hh
-    Graphics/vklight.cc
-    Graphics/vklight.hh
-    Graphics/vkmaterial.cc
-    Graphics/vkmaterial.hh
-    Graphics/vkmaterialinstance.cc
-    Graphics/vkmaterialinstance.hh
-    Graphics/vkmultimaterial.cc
-    Graphics/vkmultimaterial.hh
-    Graphics/vkmesh.cc
-    Graphics/vkmesh.hh
-    Graphics/vkparticle.cc
-    Graphics/vkparticle.hh
-    Graphics/vkpointlight.cc
-    Graphics/vkpointlight.hh
-    Graphics/vkpostprocess.cc
-    Graphics/vkpostprocess.hh
-    Graphics/vkpostprocessoutput.hh
-    Graphics/vkpostprocessor.cc
-    Graphics/vkpostprocessor.hh
-    Graphics/vkskinnedmesh.cc
-    Graphics/vkskinnedmesh.hh
-    Graphics/vksubmesh.cc
-    Graphics/vksubmesh.hh
-    Graphics/vkshaderattributeid.cc
-    Graphics/vkshaderattributeid.hh
-    Graphics/vkshaderstreamid.cc
-    Graphics/vkshaderstreamid.hh
+    graphics/iframeprocessor.hh
+    graphics/igraphics.hh
+    graphics/iindexbuffer.hh
+    graphics/irendertarget.hh
+    graphics/ishader.hh
+    graphics/ishaderattribute.hh
+    graphics/ishaderstream.hh
+		graphics/isampler.hh
+    graphics/itexture.hh
+    graphics/itexture2d.hh
+    graphics/itexture2darray.hh
+    graphics/itexturecube.hh
+    graphics/ivertexbuffer.hh
+    graphics/ivertexdeclaration.hh
+    graphics/vkbinarygradient.cc
+    graphics/vkbinarygradient.hh
+    graphics/vkcamera.cc
+    graphics/vkcamera.hh
+    graphics/vkdirectionallight.cc
+    graphics/vkdirectionallight.hh
+    graphics/vkgenericshaderpostprocess.cc
+    graphics/vkgenericshaderpostprocess.hh
+    graphics/vkimage.cc
+    graphics/vkimage.hh
+    graphics/vklight.cc
+    graphics/vklight.hh
+    graphics/vkmaterial.cc
+    graphics/vkmaterial.hh
+    graphics/vkmaterialinstance.cc
+    graphics/vkmaterialinstance.hh
+    graphics/vkmultimaterial.cc
+    graphics/vkmultimaterial.hh
+    graphics/vkmesh.cc
+    graphics/vkmesh.hh
+    graphics/vkparticle.cc
+    graphics/vkparticle.hh
+    graphics/vkpointlight.cc
+    graphics/vkpointlight.hh
+    graphics/vkpostprocess.cc
+    graphics/vkpostprocess.hh
+    graphics/vkpostprocessoutput.hh
+    graphics/vkpostprocessor.cc
+    graphics/vkpostprocessor.hh
+    graphics/vkskinnedmesh.cc
+    graphics/vkskinnedmesh.hh
+    graphics/vksubmesh.cc
+    graphics/vksubmesh.hh
+    graphics/vkshaderattributeid.cc
+    graphics/vkshaderattributeid.hh
+    graphics/vkshaderstreamid.cc
+    graphics/vkshaderstreamid.hh
     )
 
 source_group(
@@ -212,117 +212,117 @@ source_group(
 		
 
 set(SOURCE_GRAPHICS_DEFERRED
-    Graphics/deferred/vkdefaultcollector.cc
-    Graphics/deferred/vkdefaultcollector.hh
-    Graphics/deferred/vkdeferredframeprocessor.cc
-    Graphics/deferred/vkdeferredframeprocessor.hh
-    Graphics/deferred/vkdirectionallightrenderer.cc
-    Graphics/deferred/vkdirectionallightrenderer.hh
-    Graphics/deferred/vkgbuffer.cc
-    Graphics/deferred/vkgbuffer.hh
-    Graphics/deferred/vklightrenderer.cc
-    Graphics/deferred/vklightrenderer.hh
-    Graphics/deferred/vkparticlerenderer.cc
-    Graphics/deferred/vkparticlerenderer.hh
-    Graphics/deferred/vkpointlightrenderer.cc
-    Graphics/deferred/vkpointlightrenderer.hh
+    graphics/deferred/vkdefaultcollector.cc
+    graphics/deferred/vkdefaultcollector.hh
+    graphics/deferred/vkdeferredframeprocessor.cc
+    graphics/deferred/vkdeferredframeprocessor.hh
+    graphics/deferred/vkdirectionallightrenderer.cc
+    graphics/deferred/vkdirectionallightrenderer.hh
+    graphics/deferred/vkgbuffer.cc
+    graphics/deferred/vkgbuffer.hh
+    graphics/deferred/vklightrenderer.cc
+    graphics/deferred/vklightrenderer.hh
+    graphics/deferred/vkparticlerenderer.cc
+    graphics/deferred/vkparticlerenderer.hh
+    graphics/deferred/vkpointlightrenderer.cc
+    graphics/deferred/vkpointlightrenderer.hh
 )
 
 source_group(
-    "ValkyrieEngine\\Graphics\\deferred"
+    "ValkyrieEngine\\graphics\\deferred"
     FILES
     ${SOURCE_GRAPHICS_DEFERRED}
     )
 		
 
 set(SOURCE_GRAPHICS_SCENE
-    Graphics/scene/iscancallback.hh
-    Graphics/scene/vkcameranode.cc
-    Graphics/scene/vkcameranode.hh
-    Graphics/scene/vkgeometrynode.cc
-    Graphics/scene/vkgeometrynode.hh
-    Graphics/scene/vkgroupnode.cc
-    Graphics/scene/vkgroupnode.hh
-    Graphics/scene/vklightnode.cc
-    Graphics/scene/vklightnode.hh
-    Graphics/scene/vknode.cc
-    Graphics/scene/vknode.hh
-    Graphics/scene/vkspatialnode.cc
-    Graphics/scene/vkspatialnode.hh
+    graphics/scene/iscancallback.hh
+    graphics/scene/vkcameranode.cc
+    graphics/scene/vkcameranode.hh
+    graphics/scene/vkgeometrynode.cc
+    graphics/scene/vkgeometrynode.hh
+    graphics/scene/vkgroupnode.cc
+    graphics/scene/vkgroupnode.hh
+    graphics/scene/vklightnode.cc
+    graphics/scene/vklightnode.hh
+    graphics/scene/vknode.cc
+    graphics/scene/vknode.hh
+    graphics/scene/vkspatialnode.cc
+    graphics/scene/vkspatialnode.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Graphics\\scene"
+    "ValkyrieEngine\\graphics\\scene"
     FILES
     ${SOURCE_GRAPHICS_SCENE}
     )
 
 
 set(SOURCE_GRAPHICS_SHADERGRAPH
-    Graphics/shadergraph/vksgadd.cc
-    Graphics/shadergraph/vksgadd.hh
-    Graphics/shadergraph/vksgconstfloat1.cc
-    Graphics/shadergraph/vksgconstfloat1.hh
-    Graphics/shadergraph/vksgconstfloat2.cc
-    Graphics/shadergraph/vksgconstfloat2.hh
-    Graphics/shadergraph/vksgconstfloat3.cc
-    Graphics/shadergraph/vksgconstfloat3.hh
-    Graphics/shadergraph/vksgconstfloat4.cc
-    Graphics/shadergraph/vksgconstfloat4.hh
-    Graphics/shadergraph/vksgcross.cc
-    Graphics/shadergraph/vksgcross.hh
-    Graphics/shadergraph/vksgdefaulttexturecoordinate.cc
-    Graphics/shadergraph/vksgdefaulttexturecoordinate.hh
-    Graphics/shadergraph/vksgdiv.cc
-    Graphics/shadergraph/vksgdiv.hh
-    Graphics/shadergraph/vksgdot.cc
-    Graphics/shadergraph/vksgdot.hh
-    Graphics/shadergraph/vksgenums.hh
-    Graphics/shadergraph/vksgfloat2.cc
-    Graphics/shadergraph/vksgfloat2.hh
-    Graphics/shadergraph/vksgfloat3.cc
-    Graphics/shadergraph/vksgfloat3.hh
-    Graphics/shadergraph/vksgfloat4.cc
-    Graphics/shadergraph/vksgfloat4.hh
-    Graphics/shadergraph/vksginput.cc
-    Graphics/shadergraph/vksginput.hh
-    Graphics/shadergraph/vksglerp.cc
-    Graphics/shadergraph/vksglerp.hh
-    Graphics/shadergraph/vksgmul.cc
-    Graphics/shadergraph/vksgmul.hh
-    Graphics/shadergraph/vksgnode.cc
-    Graphics/shadergraph/vksgnode.hh
-    Graphics/shadergraph/vksgnodes.cc
-    Graphics/shadergraph/vksgnodes.hh
-    Graphics/shadergraph/vksgoutput.cc
-    Graphics/shadergraph/vksgoutput.hh
-    Graphics/shadergraph/vksgresourcenode.cc
-    Graphics/shadergraph/vksgresourcenode.hh
-    Graphics/shadergraph/vksgshadergraph.cc
-    Graphics/shadergraph/vksgshadergraph.hh
-    Graphics/shadergraph/vksgsplitfloat2.cc
-    Graphics/shadergraph/vksgsplitfloat2.hh
-    Graphics/shadergraph/vksgsplitfloat3.cc
-    Graphics/shadergraph/vksgsplitfloat3.hh
-    Graphics/shadergraph/vksgsplitfloat4.cc
-    Graphics/shadergraph/vksgsplitfloat4.hh
-    Graphics/shadergraph/vksgsub.cc
-    Graphics/shadergraph/vksgsub.hh
-    Graphics/shadergraph/vksgtexture2d.cc
-    Graphics/shadergraph/vksgtexture2d.hh
-    Graphics/shadergraph/vksgvarfloat1.cc
-    Graphics/shadergraph/vksgvarfloat1.hh
-    Graphics/shadergraph/vksgvarfloat2.cc
-    Graphics/shadergraph/vksgvarfloat2.hh
-    Graphics/shadergraph/vksgvarfloat3.cc
-    Graphics/shadergraph/vksgvarfloat3.hh
-    Graphics/shadergraph/vksgvarfloat4.cc
-    Graphics/shadergraph/vksgvarfloat4.hh
+    graphics/shadergraph/vksgadd.cc
+    graphics/shadergraph/vksgadd.hh
+    graphics/shadergraph/vksgconstfloat1.cc
+    graphics/shadergraph/vksgconstfloat1.hh
+    graphics/shadergraph/vksgconstfloat2.cc
+    graphics/shadergraph/vksgconstfloat2.hh
+    graphics/shadergraph/vksgconstfloat3.cc
+    graphics/shadergraph/vksgconstfloat3.hh
+    graphics/shadergraph/vksgconstfloat4.cc
+    graphics/shadergraph/vksgconstfloat4.hh
+    graphics/shadergraph/vksgcross.cc
+    graphics/shadergraph/vksgcross.hh
+    graphics/shadergraph/vksgdefaulttexturecoordinate.cc
+    graphics/shadergraph/vksgdefaulttexturecoordinate.hh
+    graphics/shadergraph/vksgdiv.cc
+    graphics/shadergraph/vksgdiv.hh
+    graphics/shadergraph/vksgdot.cc
+    graphics/shadergraph/vksgdot.hh
+    graphics/shadergraph/vksgenums.hh
+    graphics/shadergraph/vksgfloat2.cc
+    graphics/shadergraph/vksgfloat2.hh
+    graphics/shadergraph/vksgfloat3.cc
+    graphics/shadergraph/vksgfloat3.hh
+    graphics/shadergraph/vksgfloat4.cc
+    graphics/shadergraph/vksgfloat4.hh
+    graphics/shadergraph/vksginput.cc
+    graphics/shadergraph/vksginput.hh
+    graphics/shadergraph/vksglerp.cc
+    graphics/shadergraph/vksglerp.hh
+    graphics/shadergraph/vksgmul.cc
+    graphics/shadergraph/vksgmul.hh
+    graphics/shadergraph/vksgnode.cc
+    graphics/shadergraph/vksgnode.hh
+    graphics/shadergraph/vksgnodes.cc
+    graphics/shadergraph/vksgnodes.hh
+    graphics/shadergraph/vksgoutput.cc
+    graphics/shadergraph/vksgoutput.hh
+    graphics/shadergraph/vksgresourcenode.cc
+    graphics/shadergraph/vksgresourcenode.hh
+    graphics/shadergraph/vksgshadergraph.cc
+    graphics/shadergraph/vksgshadergraph.hh
+    graphics/shadergraph/vksgsplitfloat2.cc
+    graphics/shadergraph/vksgsplitfloat2.hh
+    graphics/shadergraph/vksgsplitfloat3.cc
+    graphics/shadergraph/vksgsplitfloat3.hh
+    graphics/shadergraph/vksgsplitfloat4.cc
+    graphics/shadergraph/vksgsplitfloat4.hh
+    graphics/shadergraph/vksgsub.cc
+    graphics/shadergraph/vksgsub.hh
+    graphics/shadergraph/vksgtexture2d.cc
+    graphics/shadergraph/vksgtexture2d.hh
+    graphics/shadergraph/vksgvarfloat1.cc
+    graphics/shadergraph/vksgvarfloat1.hh
+    graphics/shadergraph/vksgvarfloat2.cc
+    graphics/shadergraph/vksgvarfloat2.hh
+    graphics/shadergraph/vksgvarfloat3.cc
+    graphics/shadergraph/vksgvarfloat3.hh
+    graphics/shadergraph/vksgvarfloat4.cc
+    graphics/shadergraph/vksgvarfloat4.hh
     )
 
 
 source_group(
-    "ValkyrieEngine\\Graphics\\shadergraph"
+    "ValkyrieEngine\\graphics\\shadergraph"
     FILES
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     )

@@ -11,7 +11,7 @@
 #include <GraphicsGL4/DefinesGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <Valkyrie/animation/vkskeleton.hh>
-#include <Valkyrie/Graphics/vkbinarygradient.hh>
+#include <Valkyrie/graphics/vkbinarygradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
 
