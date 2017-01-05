@@ -3,8 +3,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vktypes.hh>
-#include <Valkyrie/Window/IWindow.refl.hh>
 #include <Valkyrie/graphics/vkimage.hh>
+#include <Valkyrie/Window/iwindow.refl.hh>
 
 struct IKeyboard;
 struct IMouse;

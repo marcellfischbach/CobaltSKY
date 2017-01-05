@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDLWindow/Export.hh>
-#include <Valkyrie/Window/IMouse.hh>
+#include <Valkyrie/Window/imouse.hh>
 #include <SDLWindow/SDLMouse.refl.hh>
 
 VK_CLASS()

@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Window/IKeyboard.refl.hh>
+#include <Valkyrie/Window/ikeyboard.refl.hh>
 
 VK_INTERFACE()
 struct VKE_API IKeyboard : public IObject
