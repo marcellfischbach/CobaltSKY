@@ -1,8 +1,8 @@
 
 #include <Valkyrie/entity/vkstaticcolliderstate.hh>
 #include <Valkyrie/entity/vkentityscene.hh>
-#include <Valkyrie/Physics/IPhysicsCollider.hh>
-#include <Valkyrie/Physics/IPhysicsScene.hh>
+#include <Valkyrie/Physics/iphysicsstaticcollider.hh>
+#include <Valkyrie/Physics/iphysicsscene.hh>
 #include <Valkyrie/vkengine.hh>
 
 vkStaticColliderState::vkStaticColliderState()

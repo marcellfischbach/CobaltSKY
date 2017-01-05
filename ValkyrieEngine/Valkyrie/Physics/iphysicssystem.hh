@@ -3,8 +3,8 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Physics/IPhysicsShape.hh>
-#include <Valkyrie/Physics/IPhysicsSystem.refl.hh>
+#include <Valkyrie/Physics/iphysicsshape.hh>
+#include <Valkyrie/Physics/iphysicssystem.refl.hh>
 
 struct IPhysicsScene;
 struct IPhysicsCapsuleCharacterController;

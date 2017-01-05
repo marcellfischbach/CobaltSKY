@@ -2,7 +2,7 @@
 
 #include <PhysicsBullet/Export.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Physics/IPhysicsShape.hh>
+#include <Valkyrie/Physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
 #include <PhysicsBullet/BulletShape.refl.hh>
 

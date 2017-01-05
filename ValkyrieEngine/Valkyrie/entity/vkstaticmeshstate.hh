@@ -4,13 +4,12 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Physics/IPhysicsCollider.hh>
-#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
+#include <Valkyrie/Physics/iphysicsstaticcollider.hh>
+#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/entity/vkstaticmeshstate.refl.hh>
 
 class vkMesh;
 class vkMaterialInstance;
-class vkSkeleton;
 /**
 * \ingroup entity
 */
@@ -72,26 +71,6 @@ private:
   float m_friction;
   float m_restitution;
 };
-
-
-VK_CLASS()
-class VKE_API vkSkinnedMeshState : public VK_SUPER(vkStaticMeshState)
-{
-  VK_CLASS_GEN;
-public:
-  vkSkinnedMeshState();
-  virtual ~vkSkinnedMeshState();
-
-  void SetSkeleton(vkSkeleton *skeleton);
-  vkSkeleton *GetSkeleton();
-  const vkSkeleton *GetSkeleton() const;
-
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
-
-private:
-  vkSkeleton *m_skeleton;
-};
-
 
 
 VK_FORCEINLINE vkMesh *vkStaticMeshState::GetMesh()
@@ -157,15 +136,5 @@ VK_FORCEINLINE float vkStaticMeshState::GetFriction() const
 VK_FORCEINLINE float vkStaticMeshState::GetRestitution() const
 {
   return m_restitution;
-}
-
-VK_FORCEINLINE vkSkeleton *vkSkinnedMeshState::GetSkeleton()
-{
-  return m_skeleton;
-}
-
-VK_FORCEINLINE const vkSkeleton *vkSkinnedMeshState::GetSkeleton() const
-{
-  return m_skeleton;
 }
 

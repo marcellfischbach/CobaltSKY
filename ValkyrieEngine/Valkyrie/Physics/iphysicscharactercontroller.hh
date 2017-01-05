@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Physics/IPhysicsCharacterController.refl.hh>
+#include <Valkyrie/Physics/iphysicscharactercontroller.refl.hh>
 
 struct ITransformationCallback;
 
@@ -32,15 +32,5 @@ struct VKE_API IPhysicsCharacterController : public IObject
 
   virtual void SetMaxSlope(float maxSlope) = 0;  
 
-};
-
-
-VK_INTERFACE ()
-struct VKE_API IPhysicsCapsuleCharacterController : public VK_SUPER(IPhysicsCharacterController)
-{
-  VK_CLASS_GEN;
-  virtual ~IPhysicsCapsuleCharacterController() { }
-
-  virtual void Initialize(float height, float radius) = 0;
 };
 

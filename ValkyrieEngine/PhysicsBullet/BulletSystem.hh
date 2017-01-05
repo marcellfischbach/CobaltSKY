@@ -2,7 +2,7 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/Physics/IPhysicsSystem.hh>
+#include <Valkyrie/Physics/iphysicssystem.hh>
 #include <PhysicsBullet/BulletSystem.refl.hh>
 
 

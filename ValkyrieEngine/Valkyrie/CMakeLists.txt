@@ -140,6 +140,8 @@ set(SOURCE_ENTITY
     entity/vkstaticcolliderstate.hh
     entity/vkstaticmeshstate.cc
     entity/vkstaticmeshstate.hh
+    entity/vkskinnedmeshstate.cc
+    entity/vkskinnedmeshstate.hh
     entity/vktransformation.cc
     entity/vktransformation.hh
     )
@@ -377,18 +379,25 @@ source_group(
     )
 
 set(SOURCE_PHYSICS
-    PHysics/IPhysicsCharacterController.hh
-    Physics/IPhysicsCollider.hh
-    Physics/IPhysicsJoints.hh
-    Physics/IPhysicsScene.hh
-    Physics/IPhysicsShape.hh
-    Physics/IPhysicsSystem.hh
-    Physics/PhysicsShapeContainer.cc
-    Physics/PhysicsShapeContainer.hh
+    Physics/iphysicsbasecollider.hh
+    Physics/iphysicscharactercontroller.hh
+    Physics/iphysicscapsulecharactercontroller.hh
+    Physics/iphysicscollider.hh
+    Physics/iphysicsdynamiccollider.hh
+    Physics/iphysicsjoint.hh
+    Physics/iphysicshingejoint.hh
+    Physics/iphysicsscene.hh
+    Physics/iphysicsshape.hh
+    Physics/iphysicsstaticcollider.hh
+    Physics/iphysicssystem.hh
+    Physics/iphysicsstaticcollider.hh
+    Physics/iphysicstriggercollider.hh
+    Physics/vkphysicsshapecontainer.cc
+    Physics/vkphysicsshapecontainer.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Physics"
+    "ValkyrieEngine\\physics"
     FILES
     ${SOURCE_PHYSICS}
     )

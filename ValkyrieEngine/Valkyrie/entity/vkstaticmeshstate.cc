@@ -7,7 +7,7 @@
 #include <Valkyrie/graphics/igraphics.hh>
 #include <Valkyrie/graphics/vkmaterialinstance.hh>
 #include <Valkyrie/graphics/vkmesh.hh>
-#include <Valkyrie/Physics/IPhysicsScene.hh>
+#include <Valkyrie/Physics/iphysicsscene.hh>
 #include <Valkyrie/vkengine.hh>
 
 vkStaticMeshState::vkStaticMeshState()
@@ -201,34 +201,3 @@ void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntit
   }
 }
 
-
-
-vkSkinnedMeshState::vkSkinnedMeshState()
-  : vkStaticMeshState()
-  , m_skeleton(0)
-{
-
-}
-
-
-vkSkinnedMeshState::~vkSkinnedMeshState()
-{
-  VK_RELEASE(m_skeleton);
-}
-
-
-void vkSkinnedMeshState::SetSkeleton(vkSkeleton *skeleton)
-{
-  VK_SET(m_skeleton, skeleton);
-}
-
-
-void vkSkinnedMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
-{
-  if (m_skeleton)
-  {
-    graphics->SetSkeleton(m_skeleton);
-
-    vkStaticMeshState::Render(graphics, pass);
-  }
-}

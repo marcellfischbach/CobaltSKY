@@ -3,7 +3,7 @@
 #include <PhysicsBullet/BulletShape.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletJoints.hh>
-#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
+#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/entity/vktransformation.hh>
 #include <Valkyrie/entity/vkcolliderstate.hh>
 

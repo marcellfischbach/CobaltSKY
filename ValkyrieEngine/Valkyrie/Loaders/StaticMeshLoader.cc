@@ -12,7 +12,7 @@
 #include <Valkyrie/graphics/ivertexbuffer.hh>
 #include <Valkyrie/graphics/ivertexdeclaration.hh>
 #include <Valkyrie/graphics/igraphics.hh>
-#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
+#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/vkengine.hh>
 #include <Valkyrie/vkenums.hh>
 #include <map>

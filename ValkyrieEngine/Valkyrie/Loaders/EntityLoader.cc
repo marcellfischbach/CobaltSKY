@@ -10,7 +10,7 @@
 #include <Valkyrie/entity/vklightstate.hh>
 #include <Valkyrie/entity/vkstaticcolliderstate.hh>
 #include <Valkyrie/entity/vkstaticmeshstate.hh>
-#include <Valkyrie/Physics/PhysicsShapeContainer.hh>
+#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/graphics/vkmaterialinstance.hh>
 #include <Valkyrie/graphics/vkmesh.hh>
 #include <Valkyrie/graphics/vksubmesh.hh>

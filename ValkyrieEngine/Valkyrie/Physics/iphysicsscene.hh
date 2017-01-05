@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Physics/IPhysicsScene.refl.hh>
+#include <Valkyrie/Physics/iphysicsscene.refl.hh>
 
 struct IPhysicsCharacterController;
 struct IPhysicsDynamicCollider;

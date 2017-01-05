@@ -55,10 +55,10 @@
 #include <Valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <Valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <Valkyrie/Loaders/Loaders.hh>
-#include <Valkyrie/Physics/IPhysicsCollider.hh>
-#include <Valkyrie/Physics/IPhysicsScene.hh>
-#include <Valkyrie/Physics/IPhysicsShape.hh>
-#include <Valkyrie/Physics/IPhysicsSystem.hh>
+#include <Valkyrie/Physics/iphysicscollider.hh>
+#include <Valkyrie/Physics/iphysicsscene.hh>
+#include <Valkyrie/Physics/iphysicsshape.hh>
+#include <Valkyrie/Physics/iphysicssystem.hh>
 #include <Valkyrie/Window/IKeyboard.hh>
 #include <Valkyrie/Window/IMouse.hh>
 #include <math.h>

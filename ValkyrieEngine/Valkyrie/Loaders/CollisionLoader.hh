@@ -4,7 +4,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Physics/IPhysicsShape.hh>
+#include <Valkyrie/Physics/iphysicsshape.hh>
 
 #include <Valkyrie/Loaders/CollisionLoader.refl.hh>
 
