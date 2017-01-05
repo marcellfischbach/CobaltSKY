@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkboundingbox.hh>
+#include <Valkyrie/math/vkboundingbox.hh>
 #include <Valkyrie/graphics/vksubmesh.refl.hh>
 
 

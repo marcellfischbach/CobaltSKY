@@ -14,7 +14,7 @@
 #include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/graphics/vkcamera.hh>
 #include <Valkyrie/graphics/vklight.hh>
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkclipper.hh>
 
 
 vkLightRenderer::vkLightRenderer(IGraphics *renderer)

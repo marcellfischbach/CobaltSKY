@@ -2,7 +2,7 @@
 #include <Valkyrie/entity/vkspatialstate.hh>
 #include <Valkyrie/entity/ientityscan.hh>
 #include <Valkyrie/graphics/igraphics.hh>
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkclipper.hh>
 #include <Valkyrie/vktime.hh>
 #include <Valkyrie/entity/vkcolliderstate.hh>
 

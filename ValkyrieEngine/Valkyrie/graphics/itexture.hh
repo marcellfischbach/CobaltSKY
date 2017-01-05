@@ -6,7 +6,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/graphics/itexture.refl.hh>
 
 struct ISampler;

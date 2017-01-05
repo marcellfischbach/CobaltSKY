@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkclipper.hh>
 
 
 vkClipper::vkClipper()

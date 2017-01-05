@@ -3,9 +3,9 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkplaneclipper.hh>
-#include <Valkyrie/Math/vkmatrix.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkplaneclipper.hh>
+#include <Valkyrie/math/vkmatrix.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/graphics/vkcamera.refl.hh>
 
 

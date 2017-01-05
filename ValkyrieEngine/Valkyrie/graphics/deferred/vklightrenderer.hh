@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <Valkyrie/Math/vkmatrix.hh>
+#include <Valkyrie/math/vkmatrix.hh>
 #include <Valkyrie/core/vkcollection.hh>
 #include <Valkyrie/vkenums.hh>
 

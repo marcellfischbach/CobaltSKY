@@ -3,8 +3,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/graphics/scene/iscancallback.hh>
-#include <Valkyrie/Math/vkboundingbox.hh>
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkboundingbox.hh>
+#include <Valkyrie/math/vkclipper.hh>
 #include <Valkyrie/graphics/scene/vknode.refl.hh>
 
 

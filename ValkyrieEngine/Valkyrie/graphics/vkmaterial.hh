@@ -3,9 +3,9 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkcolor4f.hh>
-#include <Valkyrie/Math/vkmatrix.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkcolor4f.hh>
+#include <Valkyrie/math/vkmatrix.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/graphics/vkmaterial.refl.hh>
 

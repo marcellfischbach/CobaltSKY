@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDLWindow/Export.hh>
-#include <Valkyrie/Window/ikeyboard.hh>
+#include <Valkyrie/window/ikeyboard.hh>
 #include <SDLWindow/SDLKeyboard.refl.hh>
 
 VK_CLASS()

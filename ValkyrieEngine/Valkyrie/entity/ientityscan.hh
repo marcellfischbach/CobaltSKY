@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkvector.hh>
 
 class vkRenderState;
 class vkLightState;

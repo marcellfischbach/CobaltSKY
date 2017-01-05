@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkdefs.hh>
-#include <Valkyrie/Math/vkvector2f.hh>
+#include <Valkyrie/math/vkvector2f.hh>
 #include <math.h>
 #include <stdio.h>
 

@@ -4,7 +4,7 @@
 #include <Valkyrie/graphics/igraphics.hh>
 #include <Valkyrie/graphics/vkmesh.hh>
 #include <Valkyrie/graphics/vkmaterial.hh>
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkclipper.hh>
 
 vkGeometryData::vkGeometryData()
   : vkObject()

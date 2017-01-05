@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Math/vkboundingbox.hh>
-#include <Valkyrie/Math/vkvector3f.hh>
+#include <Valkyrie/math/vkboundingbox.hh>
+#include <Valkyrie/math/vkvector3f.hh>
 #include <vector>
 
 class VKE_API vkClipper

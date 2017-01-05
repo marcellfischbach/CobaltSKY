@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Math/vkplaneclipper.hh>
+#include <Valkyrie/math/vkplaneclipper.hh>
 
 vkPlaneClipper::vkPlaneClipper()
 {

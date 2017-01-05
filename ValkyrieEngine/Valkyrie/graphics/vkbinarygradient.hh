@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vktypes.hh>
-#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/math/vkcolor4f.hh>
 #include <Valkyrie/graphics/itexture2d.hh>
 #include <Valkyrie/graphics/itexture2darray.hh>
 

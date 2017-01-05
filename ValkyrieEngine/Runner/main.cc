@@ -59,8 +59,8 @@
 #include <Valkyrie/physics/iphysicsscene.hh>
 #include <Valkyrie/physics/iphysicsshape.hh>
 #include <Valkyrie/physics/iphysicssystem.hh>
-#include <Valkyrie/Window/ikeyboard.hh>
-#include <Valkyrie/Window/imouse.hh>
+#include <Valkyrie/window/ikeyboard.hh>
+#include <Valkyrie/window/imouse.hh>
 #include <math.h>
 #include <Valkyrie/graphics/shadergraph/vksgnode.hh>
 

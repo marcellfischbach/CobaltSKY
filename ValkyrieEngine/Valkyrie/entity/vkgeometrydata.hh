@@ -4,7 +4,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkmatrix.hh>
+#include <Valkyrie/math/vkmatrix.hh>
 #include <Valkyrie/entity/vkgeometrydata.refl.hh>
 
 class vkClipper;

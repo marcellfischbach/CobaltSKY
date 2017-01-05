@@ -3,7 +3,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/entity/vkspatialstate.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/entity/vkjointstate.refl.hh>
 
 

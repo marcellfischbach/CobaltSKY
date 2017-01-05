@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkdefs.hh>
 #include <Valkyrie/vktypes.hh>
-#include <Valkyrie/Math/vkvector4f.hh>
+#include <Valkyrie/math/vkvector4f.hh>
 
 struct VKE_API vkMatrix4f
 {

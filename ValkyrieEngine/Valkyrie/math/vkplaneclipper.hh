@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Math/vkclipper.hh>
-#include <Valkyrie/Math/vkplane.hh>
+#include <Valkyrie/math/vkclipper.hh>
+#include <Valkyrie/math/vkplane.hh>
 
 class VKE_API vkPlaneClipper : public vkClipper
 {

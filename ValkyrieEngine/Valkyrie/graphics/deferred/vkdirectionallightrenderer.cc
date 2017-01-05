@@ -15,7 +15,7 @@
 #include <Valkyrie/entity/vkentity.hh>
 #include <Valkyrie/entity/vkgeometrydata.hh>
 #include <Valkyrie/entity/vkrenderstate.hh>
-#include <Valkyrie/Math/vkclipper.hh>
+#include <Valkyrie/math/vkclipper.hh>
 
 
 

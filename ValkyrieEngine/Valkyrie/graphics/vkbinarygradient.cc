@@ -2,7 +2,7 @@
 
 #include <Valkyrie/graphics/vkbinarygradient.hh>
 #include <Valkyrie/graphics/igraphics.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/vkengine.hh>
 
 ITexture2DArray *vkBinaryGradient::static_textureArray = 0;

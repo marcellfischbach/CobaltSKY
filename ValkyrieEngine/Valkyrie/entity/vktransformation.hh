@@ -2,7 +2,7 @@
 
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Math/vkmatrix4f.hh>
+#include <Valkyrie/math/vkmatrix4f.hh>
 
 /**
 * \ingroup entity

@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/entity/vkentitystate.hh>
 #include <Valkyrie/entity/vktransformation.hh>
-#include <Valkyrie/Math/vkboundingbox.hh>
+#include <Valkyrie/math/vkboundingbox.hh>
 #include <vector>
 #include <Valkyrie/entity/vkspatialstate.refl.hh>
 

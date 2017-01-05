@@ -3,8 +3,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/vkmatrix.hh>
-#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/math/vkmatrix.hh>
+#include <Valkyrie/math/vkvector.hh>
 #include <Valkyrie/physics/iphysicsshape.refl.hh>
 
 

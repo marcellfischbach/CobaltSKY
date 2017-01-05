@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Math/vkvector3f.hh>
+#include <Valkyrie/math/vkvector3f.hh>
 
 struct VKE_API vkPlane
 {

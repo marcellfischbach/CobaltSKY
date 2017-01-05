@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Math/vkboundingbox.hh>
+#include <Valkyrie/math/vkboundingbox.hh>
 #include <float.h>
 
 vkBoundingBox::vkBoundingBox()
