@@ -331,26 +331,36 @@ source_group(
 
 
 set(SOURCE_LOADERS
-    Loaders/CollisionLoader.cc
-    Loaders/CollisionLoader.hh
+    Loaders/vkcollisionassetxmlloader.cc
+    Loaders/vkcollisionassetxmlloader.hh
     Loaders/EntityLoader.cc
     Loaders/EntityLoader.hh
-    Loaders/Loaders.cc
-    Loaders/Loaders.hh
-    Loaders/ImageLoader.cc
-    Loaders/ImageLoader.hh
-    Loaders/MaterialLoader.cc
-    Loaders/MaterialLoader.hh
-    Loaders/MaterialInstanceLoader.cc
-    Loaders/MaterialInstanceLoader.hh
-    Loaders/MeshLoader.cc
-    Loaders/MeshLoader.hh
-    Loaders/ShaderGraphLoader.cc
-    Loaders/ShaderGraphLoader.hh
-    Loaders/StaticMeshLoader.cc
-    Loaders/StaticMeshLoader.hh
-    Loaders/TextureLoader.cc
-    Loaders/TextureLoader.hh
+    Loaders/vkloaders.cc
+    Loaders/vkloaders.hh
+    Loaders/vkmaterialinstanceassetxmlloader.cc
+    Loaders/vkmaterialinstanceassetxmlloader.hh
+    Loaders/vkmaterialassetxmlloader.cc
+    Loaders/vkmaterialassetxmlloader.hh
+    Loaders/vkmeshassetxmlloader.cc
+    Loaders/vkmeshassetxmlloader.hh
+    Loaders/vkpngimageassetloader.cc
+    Loaders/vkpngimageassetloader.hh
+    Loaders/vkpngimagefileloader.cc
+    Loaders/vkpngimagefileloader.hh
+    Loaders/vksamplerassetxmlloader.cc
+    Loaders/vksamplerassetxmlloader.hh
+    Loaders/vkshadergraphassetxmlloader.cc
+    Loaders/vkshadergraphassetxmlloader.hh
+    Loaders/vkstaticmeshloader.cc
+    Loaders/vkstaticmeshloader.hh
+    Loaders/vkstaticmeshassetloader.cc
+    Loaders/vkstaticmeshassetloader.hh
+    Loaders/vktextureassetxmlloader.cc
+    Loaders/vktextureassetxmlloader.hh
+    Loaders/vkskinnedmeshassetxmlloader.cc
+    Loaders/vkskinnedmeshassetxmlloader.hh
+    Loaders/vksubmeshassetxmlloader.cc
+    Loaders/vksubmeshassetxmlloader.hh
     )
 
 source_group(
@@ -359,6 +369,43 @@ source_group(
     ${SOURCE_LOADERS}
     )
 
+set(SOURCE_LOADERS_ENTITY
+    Loaders/entity/vkbasecolliderstatexmlloader.cc
+    Loaders/entity/vkbasecolliderstatexmlloader.hh
+    Loaders/entity/vkcolliderstatexmlloader.cc
+    Loaders/entity/vkcolliderstatexmlloader.hh
+    Loaders/entity/vkdynamiccolliderstatexmlloader.cc
+    Loaders/entity/vkdynamiccolliderstatexmlloader.hh
+    Loaders/entity/vkentityloaderregistry.cc
+    Loaders/entity/vkentityloaderregistry.hh
+    Loaders/entity/vkentitymasterxmlloader.cc
+    Loaders/entity/vkentitymasterxmlloader.hh
+    Loaders/entity/vkentitystateloaderdata.hh
+    Loaders/entity/vkentitystatemasterxmlloader.cc
+    Loaders/entity/vkentitystatemasterxmlloader.hh
+    Loaders/entity/vkentitystatexmlloader.cc
+    Loaders/entity/vkentitystatexmlloader.hh
+    Loaders/entity/vkentityxmlloader.cc
+    Loaders/entity/vkentityxmlloader.hh
+    Loaders/entity/vkhingejointstatexmlloader.cc
+    Loaders/entity/vkhingejointstatexmlloader.hh
+    Loaders/entity/vkjointstatexmlloader.cc
+    Loaders/entity/vkjointstatexmlloader.hh
+    Loaders/entity/vkrenderstatexmlloader.cc
+    Loaders/entity/vkrenderstatexmlloader.hh
+    Loaders/entity/vkspatialstatexmlloader.cc
+    Loaders/entity/vkspatialstatexmlloader.hh
+    Loaders/entity/vkstaticcolliderstatexmlloader.cc
+    Loaders/entity/vkstaticcolliderstatexmlloader.hh
+    Loaders/entity/vkstaticmeshstatexmlloader.cc
+    Loaders/entity/vkstaticmeshstatexmlloader.hh
+    )
+    
+source_group(
+    "ValkyrieEngine\\Loaders\\entity"
+    FILES
+    ${SOURCE_LOADERS_ENTITY}
+    )
 set(SOURCE_MATH
     math/vkboundingbox.cc
     math/vkboundingbox.hh
@@ -433,6 +480,7 @@ set(ALL_SOURCES
     ${SOURCE_GRAPHICS_SCENE}
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     ${SOURCE_LOADERS}
+    ${SOURCE_LOADERS_ENTITY}
     ${SOURCE_MATH}
     ${SOURCE_PHYSICS}
     ${SOURCE_WINDOW}

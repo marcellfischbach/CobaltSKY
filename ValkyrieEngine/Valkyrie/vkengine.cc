@@ -3,7 +3,7 @@
 #include <Valkyrie/vkengine.hh>
 #include <Valkyrie/vkmodule.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
-#include <Valkyrie/Loaders/Loaders.hh>
+#include <Valkyrie/Loaders/vkloaders.hh>
 
 vkEngine *vkEngine::static_instance = 0;
 
