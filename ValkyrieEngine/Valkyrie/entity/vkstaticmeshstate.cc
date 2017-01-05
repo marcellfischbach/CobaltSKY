@@ -7,7 +7,7 @@
 #include <Valkyrie/graphics/igraphics.hh>
 #include <Valkyrie/graphics/vkmaterialinstance.hh>
 #include <Valkyrie/graphics/vkmesh.hh>
-#include <Valkyrie/Physics/iphysicsscene.hh>
+#include <Valkyrie/physics/iphysicsscene.hh>
 #include <Valkyrie/vkengine.hh>
 
 vkStaticMeshState::vkStaticMeshState()

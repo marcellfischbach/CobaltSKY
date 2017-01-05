@@ -4,8 +4,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/entity/vkrenderstate.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Physics/iphysicsstaticcollider.hh>
-#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
+#include <Valkyrie/physics/iphysicsstaticcollider.hh>
+#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/entity/vkstaticmeshstate.refl.hh>
 
 class vkMesh;

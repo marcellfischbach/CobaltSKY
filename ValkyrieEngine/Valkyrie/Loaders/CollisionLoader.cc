@@ -1,8 +1,8 @@
 
 
 #include <Valkyrie/Loaders/CollisionLoader.hh>
-#include <Valkyrie/Physics/iphysicsshape.hh>
-#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
+#include <Valkyrie/physics/iphysicsshape.hh>
+#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
 #include <Valkyrie/vkengine.hh>
 #include <Valkyrie/vkenums.hh>
 

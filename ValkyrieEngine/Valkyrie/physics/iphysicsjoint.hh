@@ -3,8 +3,8 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkdiamond.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Physics/iphysicscollider.hh>
-#include <Valkyrie/Physics/iphysicsjoint.refl.hh>
+#include <Valkyrie/physics/iphysicscollider.hh>
+#include <Valkyrie/physics/iphysicsjoint.refl.hh>
 
 
 VK_INTERFACE()

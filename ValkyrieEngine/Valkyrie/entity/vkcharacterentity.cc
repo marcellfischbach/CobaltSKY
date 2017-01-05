@@ -6,8 +6,8 @@
 #include <Valkyrie/entity/vktransformation.hh>
 #include <Valkyrie/vkengine.hh>
 
-#include <Valkyrie/Physics/iphysicscapsulecharactercontroller.hh>
-#include <Valkyrie/Physics/iphysicsscene.hh>
+#include <Valkyrie/physics/iphysicscapsulecharactercontroller.hh>
+#include <Valkyrie/physics/iphysicsscene.hh>
 
 class vkCharacterEntityTransformationCallback : public ITransformationCallback
 {

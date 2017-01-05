@@ -1,8 +1,8 @@
 #pragma once
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Physics/iphysicsjoint.hh>
+#include <Valkyrie/physics/iphysicsjoint.hh>
 
-#include <Valkyrie/Physics/iphysicshingejoint.refl.hh>
+#include <Valkyrie/physics/iphysicshingejoint.refl.hh>
 
 VK_INTERFACE()
 struct VKE_API IPhysicsHingeJoint : public virtual VK_SUPER(IPhysicsJoint)

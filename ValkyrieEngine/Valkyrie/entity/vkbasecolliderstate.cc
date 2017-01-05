@@ -1,6 +1,6 @@
 
 #include <Valkyrie/entity/vkbasecolliderstate.hh>
-#include <Valkyrie/Physics/iphysicsbasecollider.hh>
+#include <Valkyrie/physics/iphysicsbasecollider.hh>
 
 
 vkBaseColliderState::vkBaseColliderState()

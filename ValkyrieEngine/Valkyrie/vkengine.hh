@@ -4,7 +4,7 @@
 #include <Valkyrie/vkdefs.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/graphics/igraphics.hh>
-#include <Valkyrie/Physics/iphysicssystem.hh>
+#include <Valkyrie/physics/iphysicssystem.hh>
 #include <Valkyrie/Window/IWindow.hh>
 
 

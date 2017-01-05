@@ -26,8 +26,8 @@ source_group(
 
 
 set(SOURCE_ANIMATION
-    Animation/vkskeleton.cc
-    Animation/vkskeleton.hh
+    animation/vkskeleton.cc
+    animation/vkskeleton.hh
     )
 
 
@@ -379,21 +379,21 @@ source_group(
     )
 
 set(SOURCE_PHYSICS
-    Physics/iphysicsbasecollider.hh
-    Physics/iphysicscharactercontroller.hh
-    Physics/iphysicscapsulecharactercontroller.hh
-    Physics/iphysicscollider.hh
-    Physics/iphysicsdynamiccollider.hh
-    Physics/iphysicsjoint.hh
-    Physics/iphysicshingejoint.hh
-    Physics/iphysicsscene.hh
-    Physics/iphysicsshape.hh
-    Physics/iphysicsstaticcollider.hh
-    Physics/iphysicssystem.hh
-    Physics/iphysicsstaticcollider.hh
-    Physics/iphysicstriggercollider.hh
-    Physics/vkphysicsshapecontainer.cc
-    Physics/vkphysicsshapecontainer.hh
+    physics/iphysicsbasecollider.hh
+    physics/iphysicscharactercontroller.hh
+    physics/iphysicscapsulecharactercontroller.hh
+    physics/iphysicscollider.hh
+    physics/iphysicsdynamiccollider.hh
+    physics/iphysicsjoint.hh
+    physics/iphysicshingejoint.hh
+    physics/iphysicsscene.hh
+    physics/iphysicsshape.hh
+    physics/iphysicsstaticcollider.hh
+    physics/iphysicssystem.hh
+    physics/iphysicsstaticcollider.hh
+    physics/iphysicstriggercollider.hh
+    physics/vkphysicsshapecontainer.cc
+    physics/vkphysicsshapecontainer.hh
     )
 
 source_group(

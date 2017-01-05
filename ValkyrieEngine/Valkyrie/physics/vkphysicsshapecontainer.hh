@@ -2,9 +2,9 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Physics/iphysicsshape.hh>
+#include <Valkyrie/physics/iphysicsshape.hh>
 #include <vector>
-#include <Valkyrie/Physics/vkphysicsshapecontainer.refl.hh>
+#include <Valkyrie/physics/vkphysicsshapecontainer.refl.hh>
 
 VK_CLASS()
 class VKE_API vkPhysicsShapeContainer : public VK_SUPER(vkObject)

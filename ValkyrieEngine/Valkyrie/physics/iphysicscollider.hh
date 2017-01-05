@@ -7,7 +7,7 @@
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/entity/itransformationcallback.hh>
 #include <Valkyrie/entity/vktransformation.hh>
-#include <Valkyrie/Physics/iphysicscollider.refl.hh>
+#include <Valkyrie/physics/iphysicscollider.refl.hh>
 
 
 class vkDynamicColliderState;

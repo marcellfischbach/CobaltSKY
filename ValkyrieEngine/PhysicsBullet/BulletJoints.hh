@@ -3,7 +3,7 @@
 #include <PhysicsBullet/Export.hh>
 #include <PhysicsBullet/BulletDynamicCollider.hh>
 
-#include <Valkyrie/Physics/iphysicshingejoint.hh>
+#include <Valkyrie/physics/iphysicshingejoint.hh>
 #include <PhysicsBullet/BulletJoints.refl.hh>
 
 

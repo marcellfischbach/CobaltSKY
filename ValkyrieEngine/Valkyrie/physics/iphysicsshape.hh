@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Physics/iphysicsshape.refl.hh>
+#include <Valkyrie/physics/iphysicsshape.refl.hh>
 
 
 struct vkPhysGeometryHeightFieldData

@@ -2,8 +2,8 @@
 #include <Valkyrie/entity/vkdynamiccolliderstate.hh>
 #include <Valkyrie/entity/vkentityscene.hh>
 #include <Valkyrie/entity/itransformationcallback.hh>
-#include <Valkyrie/Physics/iphysicsdynamiccollider.hh>
-#include <Valkyrie/Physics/iphysicsscene.hh>
+#include <Valkyrie/physics/iphysicsdynamiccollider.hh>
+#include <Valkyrie/physics/iphysicsscene.hh>
 #include <Valkyrie/vkengine.hh>
 
 class vkDynamicColliderStateTransformationCallback : public ITransformationCallback

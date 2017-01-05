@@ -2,9 +2,9 @@
 #include <Valkyrie/entity/vkhingejointstate.hh>
 #include <Valkyrie/entity/vkdynamiccolliderstate.hh>
 #include <Valkyrie/entity/vkentityscene.hh>
-#include <Valkyrie/Physics/iphysicscollider.hh>
-#include <Valkyrie/Physics/iphysicshingejoint.hh>
-#include <Valkyrie/Physics/iphysicsscene.hh>
+#include <Valkyrie/physics/iphysicscollider.hh>
+#include <Valkyrie/physics/iphysicshingejoint.hh>
+#include <Valkyrie/physics/iphysicsscene.hh>
 #include <Valkyrie/vkengine.hh>
 
 

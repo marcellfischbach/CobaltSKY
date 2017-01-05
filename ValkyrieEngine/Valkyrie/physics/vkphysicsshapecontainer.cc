@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Physics/vkphysicsshapecontainer.hh>
+#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
 
 
 vkPhysicsShapeContainer::vkPhysicsShapeContainer()

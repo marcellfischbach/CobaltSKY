@@ -1,7 +1,7 @@
 #pragma once
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Physics/iphysicsbasecollider.hh>
-#include <Valkyrie/Physics/iphysicsdynamiccollider.refl.hh>
+#include <Valkyrie/physics/iphysicsbasecollider.hh>
+#include <Valkyrie/physics/iphysicsdynamiccollider.refl.hh>
 
 VK_INTERFACE()
 struct VKE_API IPhysicsDynamicCollider : public VK_SUPER(IPhysicsBaseCollider)
