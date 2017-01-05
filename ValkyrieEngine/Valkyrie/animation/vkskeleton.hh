@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/vkmatrix4f.hh>
 #include <Valkyrie/animation/vkskeleton.refl.hh>
 
 const vkSize vkInvalidBoneIdx = ~0x00;

@@ -3,8 +3,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/Color.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/Math/vkvector.hh>
 #include <Valkyrie/graphics/vklight.refl.hh>
 
 

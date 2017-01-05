@@ -6,7 +6,7 @@
 #include <Valkyrie/graphics/shadergraph/vksgoutput.hh>
 #include <Valkyrie/vkdefs.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkvector.hh>
 
 #include <Valkyrie/core/vkstring.hh>
 #include <vector>

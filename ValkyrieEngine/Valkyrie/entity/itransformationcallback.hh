@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/vkmatrix.hh>
 
 struct VKE_API ITransformationCallback
 {

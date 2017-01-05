@@ -3,9 +3,9 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/entity/iparticleemitter.hh>
-#include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Math/RandomRange.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkmatrix.hh>
+#include <Valkyrie/Math/vkrandomrange.hh>
+#include <Valkyrie/Math/vkvector.hh>
 #include <Valkyrie/vkenums.hh>
 
 #include <Valkyrie/entity/vkdefaultparticleemitter.refl.hh>

@@ -2,9 +2,12 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vktypes.hh>
-#include <Valkyrie/Math/Color.hh>
-#include <Valkyrie/Math/Matrix.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/Math/vkmatrix3f.hh>
+#include <Valkyrie/Math/vkmatrix4f.hh>
+#include <Valkyrie/Math/vkvector2f.hh>
+#include <Valkyrie/Math/vkvector3f.hh>
+#include <Valkyrie/Math/vkvector4f.hh>
 
 
 class VKE_API vkAssetOutputStream

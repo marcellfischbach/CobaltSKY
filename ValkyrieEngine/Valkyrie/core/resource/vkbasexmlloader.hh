@@ -3,8 +3,10 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/resource/ixmlloader.hh>
-#include <Valkyrie/Math/Color.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/Math/vkvector2f.hh>
+#include <Valkyrie/Math/vkvector3f.hh>
+#include <Valkyrie/Math/vkvector4f.hh>
 
 #include <Valkyrie/core/resource/vkbasexmlloader.refl.hh>
 

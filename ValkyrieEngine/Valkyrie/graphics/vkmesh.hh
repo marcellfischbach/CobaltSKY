@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Math/BoundingVolume.hh>
+#include <Valkyrie/Math/vkboundingbox.hh>
 #include <map>
 #include <vector>
 #include <Valkyrie/graphics/vkmesh.refl.hh>

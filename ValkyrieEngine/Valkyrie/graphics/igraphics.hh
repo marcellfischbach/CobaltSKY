@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/core/vkstring.hh>
-#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/vkmatrix.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/graphics/igraphics.refl.hh>
 

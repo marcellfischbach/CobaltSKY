@@ -2,7 +2,7 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/graphics/scene/vknode.hh>
-#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/vkmatrix.hh>
 #include <Valkyrie/graphics/scene/vkspatialnode.refl.hh>
 
 VK_CLASS()

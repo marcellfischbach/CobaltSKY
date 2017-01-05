@@ -17,8 +17,8 @@
 #include <Valkyrie/core/resource/vkbasexmlloader.hh>
 #include <Valkyrie/core/resource/vkxmlfileloader.hh>
 
-#include <Valkyrie/Math/Color.hh>
-#include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/Math/vkvector.hh>
 #include <tixml\tinyxml.h>
 #include <map>
 #include <vector>

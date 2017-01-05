@@ -360,20 +360,27 @@ source_group(
     )
 
 set(SOURCE_MATH
-    Math/BoundingVolume.cc
-    Math/BoundingVolume.hh
-    Math/Clipper.cc
-    Math/Clipper.hh
-    Math/Color.hh
-    Math/Hysteresis.hh
-    Math/Matrix.hh
-    Math/Plane.hh
-    Math/RandomRange.hh
-    Math/Vector.hh
+    math/vkboundingbox.cc
+    math/vkboundingbox.hh
+    math/vkclipper.cc
+    math/vkclipper.hh
+    math/vkcolor4f.hh
+    math/vkhysteresis.hh
+    math/vkmatrix.hh
+    math/vkmatrix3f.hh
+    math/vkmatrix4f.hh
+    math/vkplane.hh
+    math/vkplaneclipper.cc
+    math/vkplaneclipper.hh
+    math/vkrandomrange.hh
+    math/vkvector.hh
+    math/vkvector2f.hh
+    math/vkvector3f.hh
+    math/vkvector4f.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Math"
+    "ValkyrieEngine\\math"
     FILES
     ${SOURCE_MATH}
     )
@@ -403,9 +410,9 @@ source_group(
     )
 
 set(SOURCE_WINDOW
-    Window/ikeyboard.hh
-    Window/imouse.hh
-    Window/iwindow.hh
+    window/ikeyboard.hh
+    window/imouse.hh
+    window/iwindow.hh
     )
 
 source_group(

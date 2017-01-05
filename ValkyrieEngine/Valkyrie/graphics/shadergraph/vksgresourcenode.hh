@@ -5,9 +5,9 @@
 #include <Valkyrie/core/vkresourcelocator.hh>
 #include <Valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Math/Color.hh>
-#include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Math/Matrix.hh>
+#include <Valkyrie/Math/vkcolor4f.hh>
+#include <Valkyrie/Math/vkvector.hh>
+#include <Valkyrie/Math/vkmatrix.hh>
 
 #include <Valkyrie/graphics/shadergraph/vksgresourcenode.refl.hh>
 
