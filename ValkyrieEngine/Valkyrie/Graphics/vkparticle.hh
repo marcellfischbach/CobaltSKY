@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Graphics/Particle.refl.hh>
+#include <Valkyrie/Graphics/vkparticle.refl.hh>
 
 struct IGraphics;
 struct IVertexBuffer;

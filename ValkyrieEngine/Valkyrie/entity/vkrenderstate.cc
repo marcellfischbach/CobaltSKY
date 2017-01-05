@@ -1,7 +1,7 @@
 
 
 #include <Valkyrie/entity/vkrenderstate.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
 
 
 vkRenderState::vkRenderState()

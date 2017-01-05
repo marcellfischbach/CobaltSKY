@@ -1,6 +1,6 @@
 
-#include <Valkyrie/Graphics/Camera.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Graphics/vkcamera.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
 
 
 vkCamera::vkCamera()

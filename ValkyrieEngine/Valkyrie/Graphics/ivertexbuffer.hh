@@ -3,7 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Graphics/IVertexBuffer.refl.hh>
+#include <Valkyrie/Graphics/ivertexbuffer.refl.hh>
 
 VK_INTERFACE();
 struct VKE_API IVertexBuffer : public IObject

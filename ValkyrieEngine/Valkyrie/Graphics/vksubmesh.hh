@@ -4,6 +4,7 @@
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/BoundingVolume.hh>
+#include <Valkyrie/Graphics/vksubmesh.refl.hh>
 
 
 

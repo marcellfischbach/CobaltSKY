@@ -1,5 +1,7 @@
 
 #include <Valkyrie/Graphics/vkpostprocessor.hh>
+#include <Valkyrie/Graphics/vkpostprocess.hh>
+#include <Valkyrie/Graphics/itexture.hh>
 
 
 vkPostProcessor::vkPostProcessor()
@@ -15,7 +17,7 @@ vkPostProcessor::~vkPostProcessor()
 }
 
 
-void vkPostProcessor::SetInput(OriginOutput originOutput, ITexture *texture)
+void vkPostProcessor::SetInput(vkPostProcessOutput originOutput, ITexture *texture)
 {
   if (!texture)
   {
@@ -25,12 +27,12 @@ void vkPostProcessor::SetInput(OriginOutput originOutput, ITexture *texture)
   m_originInputs[originOutput] = texture;
 }
 
-const ITexture *vkPostProcessor::GetInput(OriginOutput originOutput) const
+const ITexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput) const
 {
   return m_originInputs[originOutput];
 }
 
-ITexture *vkPostProcessor::GetInput(OriginOutput originOutput)
+ITexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput)
 {
   return m_originInputs[originOutput];
 }

@@ -5,6 +5,7 @@
 #include <Valkyrie/vktypes.hh>
 #include <Valkyrie/vkenums.hh>
 
+#include <Valkyrie/Graphics/ishaderstream.refl.hh>
 
 VK_INTERFACE();
 struct VKE_API IShaderStream : public IObject

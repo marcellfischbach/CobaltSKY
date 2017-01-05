@@ -1,7 +1,8 @@
 #pragma once
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/itexturecube.refl.hh>
 
 
 VK_INTERFACE();

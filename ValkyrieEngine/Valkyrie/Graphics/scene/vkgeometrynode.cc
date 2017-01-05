@@ -1,9 +1,9 @@
 
 
 #include <Valkyrie/Graphics/scene/vkgeometrynode.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/Material.hh>
-#include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/vkmaterialinstance.hh>
+#include <Valkyrie/Graphics/vkmesh.hh>
 
 
 vkGeometryNode::vkGeometryNode(vkMesh *mesh, vkMaterialInstance *material)

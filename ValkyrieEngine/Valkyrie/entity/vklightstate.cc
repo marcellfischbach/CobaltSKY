@@ -1,7 +1,7 @@
 
 #include <Valkyrie/entity/vklightstate.hh>
 #include <Valkyrie/entity/ientityscan.hh>
-#include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/vklight.hh>
 
 
 

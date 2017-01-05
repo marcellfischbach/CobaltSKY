@@ -5,6 +5,8 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Vector.hh>
 
+#include <Valkyrie/Graphics/isampler.refl.hh>
+
 VK_INTERFACE();
 struct VKE_API ISampler : public IObject
 {

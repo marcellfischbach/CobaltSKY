@@ -6,15 +6,19 @@
 #include <Valkyrie/entity/vkgeometrydata.hh>
 #include <Valkyrie/entity/vklightstate.hh>
 #include <Valkyrie/entity/vkrenderstate.hh>
-#include <Valkyrie/Graphics/Camera.hh>
-#include <Valkyrie/Graphics/Light.hh>
-#include <Valkyrie/Graphics/Material.hh>
-#include <Valkyrie/Graphics/Mesh.hh>
-#include <Valkyrie/Graphics/PostProcessing.hh>
-#include <Valkyrie/Graphics/IRenderTarget.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/IShader.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/vkcamera.hh>
+#include <Valkyrie/Graphics/vklight.hh>
+#include <Valkyrie/Graphics/vkmaterial.hh>
+#include <Valkyrie/Graphics/vkmesh.hh>
+#include <Valkyrie/Graphics/vkpostprocess.hh>
+#include <Valkyrie/Graphics/vkpostprocessoutput.hh>
+#include <Valkyrie/Graphics/vkpostprocessor.hh>
+#include <Valkyrie/Graphics/irendertarget.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/ishader.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/itexture2d.hh>
+#include <Valkyrie/Graphics/itexture2darray.hh>
 #include <Valkyrie/Graphics/deferred/vkdirectionallightrenderer.hh>
 #include <Valkyrie/Graphics/deferred/vkgbuffer.hh>
 #include <Valkyrie/Graphics/deferred/vkparticlerenderer.hh>
@@ -249,13 +253,13 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   {
     // rebind the camera because it might be switched by a light renderer
     camera->Apply(m_renderer);
-    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_Depth, m_gbuffer->GetDepth());
-    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
-    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
-    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());
-    m_postProcessor->SetInput(vkPostProcessor::eOO_GBuffer_SSSSpec, m_gbuffer->GetSSSSpec());
-    m_postProcessor->SetInput(vkPostProcessor::eOO_FinalTarget_Color, target->GetColorBuffer(0));
-    m_postProcessor->SetInput(vkPostProcessor::eOO_FinalTarget_Depth, target->GetDepthBuffer());
+    m_postProcessor->SetInput(ePPO_GBuffer_Depth, m_gbuffer->GetDepth());
+    m_postProcessor->SetInput(ePPO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
+    m_postProcessor->SetInput(ePPO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
+    m_postProcessor->SetInput(ePPO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());
+    m_postProcessor->SetInput(ePPO_GBuffer_SSSSpec, m_gbuffer->GetSSSSpec());
+    m_postProcessor->SetInput(ePPO_FinalTarget_Color, target->GetColorBuffer(0));
+    m_postProcessor->SetInput(ePPO_FinalTarget_Depth, target->GetDepthBuffer());
     m_postProcessor->Render(m_renderer);
   }
 

@@ -1,10 +1,10 @@
 
 
-#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/vkmaterial.hh>
 #include <Valkyrie/Graphics/igraphics.hh>
 #include <Valkyrie/Graphics/ishader.hh>
 #include <Valkyrie/Graphics/ishaderattribute.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/itexture.hh>
 
 
 vkMaterial::vkMaterial()

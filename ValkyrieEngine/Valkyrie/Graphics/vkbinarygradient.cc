@@ -1,8 +1,7 @@
 
 
-#include <Valkyrie/Graphics/BinaryGradient.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/vkbinarygradient.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/vkengine.hh>
 

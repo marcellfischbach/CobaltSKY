@@ -4,7 +4,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkcollection.hh>
-#include <Valkyrie/Graphics/IFrameProcessor.hh>
+#include <Valkyrie/Graphics/iframeprocessor.hh>
 #include <Valkyrie/Graphics/deferred/vkdefaultcollector.hh>
 #include <Valkyrie/Graphics/deferred/vkdeferredframeprocessor.refl.hh>
 

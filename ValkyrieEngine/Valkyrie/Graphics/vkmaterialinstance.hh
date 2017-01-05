@@ -5,6 +5,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
+#include <Valkyrie/Graphics/vkmaterialinstance.refl.hh>
 
 class vkMaterial;
 struct IGraphics;

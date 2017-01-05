@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Graphics/ShaderID.hh>
+#include <Valkyrie/Graphics/vkshaderattributeid.hh>
 #include <Valkyrie/vkenums.hh>
 #include <map>
 

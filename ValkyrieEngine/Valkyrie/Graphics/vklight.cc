@@ -1,5 +1,5 @@
 
-#include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/vklight.hh>
 
 
 vkLight::vkLight(vkLightType type)

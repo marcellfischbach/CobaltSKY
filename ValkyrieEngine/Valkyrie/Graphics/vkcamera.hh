@@ -6,7 +6,7 @@
 #include <Valkyrie/Math/Clipper.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Graphics/Camera.refl.hh>
+#include <Valkyrie/Graphics/vkcamera.refl.hh>
 
 
 struct IGraphics;

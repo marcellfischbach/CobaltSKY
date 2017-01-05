@@ -7,7 +7,7 @@
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Graphics/ITexture.refl.hh>
+#include <Valkyrie/Graphics/itexture.refl.hh>
 
 struct ISampler;
 

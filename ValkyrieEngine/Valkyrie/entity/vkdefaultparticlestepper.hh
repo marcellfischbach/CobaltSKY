@@ -5,7 +5,7 @@
 #include <Valkyrie/entity/iparticlestepper.hh>
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Graphics/Particle.hh>
+#include <Valkyrie/Graphics/vkparticle.hh>
 
 #include <Valkyrie/entity/vkdefaultparticlestepper.refl.hh>
 

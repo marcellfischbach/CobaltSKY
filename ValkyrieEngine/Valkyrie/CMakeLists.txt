@@ -151,36 +151,61 @@ source_group(
     )
 
 set(SOURCE_GRAPHICS
-    Graphics/BinaryGradient.cc
-    Graphics/BinaryGradient.hh
-    Graphics/Camera.cc
-    Graphics/Camera.hh
-    Graphics/IFrameProcessor.hh
-    Graphics/IGraphics.hh
-    Graphics/IIndexBuffer.hh
-    Graphics/Image.cc
-    Graphics/Image.hh
-    Graphics/IRenderTarget.hh
-    Graphics/IShader.hh
-    Graphics/ITexture.hh
-    Graphics/IVertexBuffer.hh
-    Graphics/IVertexDeclaration.hh
-    Graphics/Light.cc
-    Graphics/Light.hh
-    Graphics/Material.cc
-    Graphics/Material.hh
-    Graphics/Mesh.cc
-    Graphics/Mesh.hh
-    Graphics/Particle.cc
-    Graphics/Particle.hh
-    Graphics/PostProcessing.cc
-    Graphics/PostProcessing.hh
-    Graphics/ShaderID.cc
-    Graphics/ShaderID.hh
+    Graphics/iframeprocessor.hh
+    Graphics/igraphics.hh
+    Graphics/iindexbuffer.hh
+    Graphics/irendertarget.hh
+    Graphics/ishader.hh
+    Graphics/ishaderattribute.hh
+    Graphics/ishaderstream.hh
+		Graphics/isampler.hh
+    Graphics/itexture.hh
+    Graphics/itexture2d.hh
+    Graphics/itexture2darray.hh
+    Graphics/itexturecube.hh
+    Graphics/ivertexbuffer.hh
+    Graphics/ivertexdeclaration.hh
+    Graphics/vkbinarygradient.cc
+    Graphics/vkbinarygradient.hh
+    Graphics/vkcamera.cc
+    Graphics/vkcamera.hh
+    Graphics/vkdirectionallight.cc
+    Graphics/vkdirectionallight.hh
+    Graphics/vkgenericshaderpostprocess.cc
+    Graphics/vkgenericshaderpostprocess.hh
+    Graphics/vkimage.cc
+    Graphics/vkimage.hh
+    Graphics/vklight.cc
+    Graphics/vklight.hh
+    Graphics/vkmaterial.cc
+    Graphics/vkmaterial.hh
+    Graphics/vkmaterialinstance.cc
+    Graphics/vkmaterialinstance.hh
+    Graphics/vkmultimaterial.cc
+    Graphics/vkmultimaterial.hh
+    Graphics/vkmesh.cc
+    Graphics/vkmesh.hh
+    Graphics/vkparticle.cc
+    Graphics/vkparticle.hh
+    Graphics/vkpointlight.cc
+    Graphics/vkpointlight.hh
+    Graphics/vkpostprocess.cc
+    Graphics/vkpostprocess.hh
+    Graphics/vkpostprocessoutput.hh
+    Graphics/vkpostprocessor.cc
+    Graphics/vkpostprocessor.hh
+    Graphics/vkskinnedmesh.cc
+    Graphics/vkskinnedmesh.hh
+    Graphics/vksubmesh.cc
+    Graphics/vksubmesh.hh
+    Graphics/vkshaderattributeid.cc
+    Graphics/vkshaderattributeid.hh
+    Graphics/vkshaderstreamid.cc
+    Graphics/vkshaderstreamid.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Graphics"
+    "ValkyrieEngine\\graphics"
     FILES
     ${SOURCE_GRAPHICS}
     )

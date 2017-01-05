@@ -4,6 +4,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Graphics/vkpostprocessoutput.hh>
 #include <set>
+#include <Valkyrie/Graphics/vkpostprocessor.refl.hh>
 
 class vkPostProcess;
 struct IGraphics;

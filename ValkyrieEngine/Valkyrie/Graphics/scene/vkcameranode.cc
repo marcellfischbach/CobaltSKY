@@ -1,6 +1,6 @@
 
 #include <Valkyrie/Graphics/scene/vkcameranode.hh>
-#include <Valkyrie/Graphics/Camera.hh>
+#include <Valkyrie/Graphics/vkcamera.hh>
 
 
 vkCameraNode::vkCameraNode()

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/vkmaterial.hh>
 #include <Valkyrie/Graphics/shadergraph/vksgshadergraph.refl.hh>
 
 class vkSGNode;

@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Graphics/Image.hh>
+#include <Valkyrie/Graphics/vkimage.hh>
 
 
 vkImage::vkImage()

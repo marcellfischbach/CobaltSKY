@@ -1,6 +1,6 @@
 
 
-#include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/vkmesh.hh>
 #include <Valkyrie/Graphics/vkmaterialinstance.hh>
 #include <Valkyrie/Graphics/vksubmesh.hh>
 #include <algorithm>

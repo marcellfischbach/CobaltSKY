@@ -6,7 +6,7 @@
 #include <Valkyrie/Math/BoundingVolume.hh>
 #include <map>
 #include <vector>
-#include <Valkyrie/Graphics/Mesh.refl.hh>
+#include <Valkyrie/Graphics/vkmesh.refl.hh>
 
 struct IIndexBuffer;
 struct IGraphics;

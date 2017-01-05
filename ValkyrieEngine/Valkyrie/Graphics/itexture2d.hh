@@ -2,7 +2,8 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/itexture2d.refl.hh>
 
 VK_INTERFACE();
 struct VKE_API ITexture2D : public virtual VK_SUPER(ITexture)

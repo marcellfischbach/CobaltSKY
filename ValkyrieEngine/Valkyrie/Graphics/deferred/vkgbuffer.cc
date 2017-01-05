@@ -1,8 +1,9 @@
 
 #include <Valkyrie/Graphics/deferred/vkgbuffer.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/IRenderTarget.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/irendertarget.hh>
+#include <Valkyrie/Graphics/itexture2d.hh>
+#include <Valkyrie/Graphics/isampler.hh>
 #include <stdio.h>
 
 

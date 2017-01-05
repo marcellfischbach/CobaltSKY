@@ -2,15 +2,18 @@
 #include <Valkyrie/Graphics/deferred/vklightrenderer.hh>
 #include <Valkyrie/Graphics/deferred/vkdefaultcollector.hh>
 #include <Valkyrie/Graphics/deferred/vkgbuffer.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/IRenderTarget.hh>
-#include <Valkyrie/Graphics/IShader.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/irendertarget.hh>
+#include <Valkyrie/Graphics/ishader.hh>
+#include <Valkyrie/Graphics/ishaderattribute.hh>
+#include <Valkyrie/Graphics/isampler.hh>
+#include <Valkyrie/Graphics/itexture2d.hh>
 #include <Valkyrie/core/vkresourcemanager.hh>
 #include <Valkyrie/entity/vkentity.hh>
 #include <Valkyrie/entity/vkgeometrydata.hh>
 #include <Valkyrie/entity/vkrenderstate.hh>
-#include <Valkyrie/Graphics/Camera.hh>
-#include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/vkcamera.hh>
+#include <Valkyrie/Graphics/vklight.hh>
 #include <Valkyrie/Math/Clipper.hh>
 
 

@@ -3,6 +3,7 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <vector>
+#include <Valkyrie/Graphics/vkmultimaterial.refl.hh>
 
 class vkMaterialInstance;
 

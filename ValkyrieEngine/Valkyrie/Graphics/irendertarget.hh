@@ -2,8 +2,8 @@
 
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkexport.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
-#include <Valkyrie/Graphics/IRenderTarget.refl.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/irendertarget.refl.hh>
 
 
 VK_INTERFACE();

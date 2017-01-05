@@ -1,7 +1,8 @@
 
 #include <Valkyrie/Loaders/MaterialLoader.hh>
-#include <Valkyrie/Graphics/Material.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/vkmaterial.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/ishader.hh>
 #include <Valkyrie/vkengine.hh>
 
 

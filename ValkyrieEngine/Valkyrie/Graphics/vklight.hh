@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/Math/Color.hh>
 #include <Valkyrie/Math/Vector.hh>
-#include <Valkyrie/Graphics/Light.refl.hh>
+#include <Valkyrie/Graphics/vklight.refl.hh>
 
 
 VK_INTERFACE()

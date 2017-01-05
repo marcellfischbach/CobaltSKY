@@ -3,9 +3,8 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/vktypes.hh>
 #include <Valkyrie/Math/Color.hh>
-
-struct ITexture2D;
-struct ITexture2DArray;
+#include <Valkyrie/Graphics/itexture2d.hh>
+#include <Valkyrie/Graphics/itexture2darray.hh>
 
 class VKE_API vkBinaryGradient
 {

@@ -1,6 +1,6 @@
 
 #include <Valkyrie/Graphics/vkmaterialinstance.hh>
-#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/vkmaterial.hh>
 #include <Valkyrie/Graphics/igraphics.hh>
 #include <Valkyrie/Graphics/ishaderattribute.hh>
 #include <Valkyrie/Graphics/itexture.hh>

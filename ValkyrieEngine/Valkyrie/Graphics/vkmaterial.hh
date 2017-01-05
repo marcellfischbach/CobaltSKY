@@ -7,7 +7,7 @@
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Graphics/Material.refl.hh>
+#include <Valkyrie/Graphics/vkmaterial.refl.hh>
 
 #include <vector>
 

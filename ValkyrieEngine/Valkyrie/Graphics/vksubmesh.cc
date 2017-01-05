@@ -1,7 +1,7 @@
 
 #include <Valkyrie/Graphics/vksubmesh.hh>
 #include <Valkyrie/Graphics/igraphics.hh>
-#include <Valkyrie/Graphics/IIndexBuffer.hh>
+#include <Valkyrie/Graphics/iindexbuffer.hh>
 #include <Valkyrie/Graphics/ivertexbuffer.hh>
 #include <Valkyrie/Graphics/ivertexdeclaration.hh>
 

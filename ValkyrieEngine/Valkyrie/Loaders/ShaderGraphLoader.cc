@@ -4,7 +4,7 @@
 #include <Valkyrie/Graphics/shadergraph/vksgnodes.hh>
 #include <Valkyrie/Graphics/shadergraph/vksgshadergraph.hh>
 #include <Valkyrie/vkengine.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
 #include <map>
 
 

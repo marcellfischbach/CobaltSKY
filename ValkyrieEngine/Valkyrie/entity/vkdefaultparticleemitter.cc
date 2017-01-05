@@ -1,6 +1,6 @@
 
 #include <Valkyrie/entity/vkdefaultparticleemitter.hh>
-#include <Valkyrie/Graphics/Particle.hh>
+#include <Valkyrie/Graphics/vkparticle.hh>
 
 vkDefaultParticleEmitter::vkDefaultParticleEmitter()
   : IParticleEmitter()

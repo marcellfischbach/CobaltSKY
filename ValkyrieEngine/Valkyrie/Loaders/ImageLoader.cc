@@ -1,7 +1,7 @@
 
 
 #include <Valkyrie/Loaders/ImageLoader.hh>
-#include <Valkyrie/Graphics/Image.hh>
+#include <Valkyrie/Graphics/vkimage.hh>
 #include <Valkyrie/core/vkclassregistry.hh>
 #include <png.h>
 

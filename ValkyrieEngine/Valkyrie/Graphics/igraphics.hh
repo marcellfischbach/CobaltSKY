@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkstring.hh>
 #include <Valkyrie/Math/Matrix.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Graphics/IGraphics.refl.hh>
+#include <Valkyrie/Graphics/igraphics.refl.hh>
 
 struct IFrameProcessor;
 struct IRenderTarget;

@@ -2,9 +2,13 @@
 
 #include <Valkyrie/Loaders/TextureLoader.hh>
 #include <Valkyrie/core/vkclassregistry.hh>
-#include <Valkyrie/Graphics/Image.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/ITexture.hh>
+#include <Valkyrie/Graphics/vkimage.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/itexture.hh>
+#include <Valkyrie/Graphics/itexture2d.hh>
+#include <Valkyrie/Graphics/itexture2darray.hh>
+#include <Valkyrie/Graphics/itexturecube.hh>
+#include <Valkyrie/Graphics/isampler.hh>
 #include <Valkyrie/vkengine.hh>
 #include <png.h>
 

@@ -2,7 +2,8 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/vklight.hh>
+#include <Valkyrie/Graphics/vkdirectionallight.refl.hh>
 
 VK_CLASS()
 class VKE_API vkDirectionalLight : public VK_SUPER(vkLight)

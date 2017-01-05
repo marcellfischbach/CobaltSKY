@@ -3,7 +3,7 @@
 #include <Valkyrie/vkenums.hh>
 #include <Valkyrie/vktypes.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Graphics/IVertexDeclaration.refl.hh>
+#include <Valkyrie/Graphics/ivertexdeclaration.refl.hh>
 
 /**
 * @brief One element within the entire vertex declaration

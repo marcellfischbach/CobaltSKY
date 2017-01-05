@@ -1,10 +1,10 @@
 
 
-#include <Valkyrie/Graphics/Particle.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
-#include <Valkyrie/Graphics/IVertexBuffer.hh>
-#include <Valkyrie/Graphics/IVertexDeclaration.hh>
-#include <Valkyrie/Graphics/Material.hh>
+#include <Valkyrie/Graphics/vkparticle.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
+#include <Valkyrie/Graphics/ivertexbuffer.hh>
+#include <Valkyrie/Graphics/ivertexdeclaration.hh>
+#include <Valkyrie/Graphics/vkmaterialinstance.hh>
 #include <stddef.h>
 
 static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphics)

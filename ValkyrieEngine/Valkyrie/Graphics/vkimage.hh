@@ -5,7 +5,7 @@
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/vkenums.hh>
 #include <vector>
-#include <Valkyrie/Graphics/Image.refl.hh>
+#include <Valkyrie/Graphics/vkimage.refl.hh>
 
 
 VK_CLASS();

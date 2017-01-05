@@ -7,6 +7,7 @@
 #include <Valkyrie/Math/Vector.hh>
 #include <Valkyrie/Math/Matrix.hh>
 
+#include <Valkyrie/Graphics/ishaderattribute.refl.hh>
 
 VK_INTERFACE();
 struct VKE_API IShaderAttribute : public IObject

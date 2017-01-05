@@ -1,8 +1,8 @@
 
 
-#include <Valkyrie/Graphics/PostProcessing.hh>
+#include <Valkyrie/Graphics/vkpostprocess.hh>
 #include <Valkyrie/Graphics/vkpostprocessor.hh>
-#include <Valkyrie/Graphics/IRenderTarget.hh>
+#include <Valkyrie/Graphics/irendertarget.hh>
 #include <Valkyrie/Graphics/ishader.hh>
 #include <Valkyrie/Graphics/ishaderattribute.hh>
 #include <Valkyrie/Graphics/itexture.hh>

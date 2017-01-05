@@ -1,7 +1,8 @@
 
 
 #include <Valkyrie/Graphics/scene/vklightnode.hh>
-#include <Valkyrie/Graphics/Light.hh>
+#include <Valkyrie/Graphics/vkdirectionallight.hh>
+#include <Valkyrie/Graphics/vkpointlight.hh>
 #include <Valkyrie/Graphics/scene/iscancallback.hh>
 
 vkLightNode::vkLightNode()

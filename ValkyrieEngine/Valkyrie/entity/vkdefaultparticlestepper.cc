@@ -1,6 +1,6 @@
 
 #include <Valkyrie/entity/vkdefaultparticlestepper.hh>
-#include <Valkyrie/Graphics/IVertexBuffer.hh>
+#include <Valkyrie/Graphics/ivertexbuffer.hh>
 
 vkDefaultParticleStepper::vkDefaultParticleStepper()
   : IParticleStepper()

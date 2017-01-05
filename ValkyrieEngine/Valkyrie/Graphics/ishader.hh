@@ -4,9 +4,10 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/core/vkstring.hh>
-#include <Valkyrie/Graphics/ShaderID.hh>
+#include <Valkyrie/Graphics/vkshaderattributeid.hh>
+#include <Valkyrie/Graphics/vkshaderstreamid.hh>
 #include <Valkyrie/vkenums.hh>
-#include <Valkyrie/Graphics/IShader.refl.hh>
+#include <Valkyrie/Graphics/ishader.refl.hh>
 
 struct IShaderAttribute;
 struct IShaderStream;

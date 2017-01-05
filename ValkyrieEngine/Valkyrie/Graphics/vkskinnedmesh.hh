@@ -2,7 +2,8 @@
 
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/Graphics/Mesh.hh>
+#include <Valkyrie/Graphics/vkmesh.hh>
+#include <Valkyrie/Graphics/vkskinnedmesh.refl.hh>
 
 VK_CLASS()
 class VKE_API vkSkinnedMesh : public VK_SUPER(vkMesh)

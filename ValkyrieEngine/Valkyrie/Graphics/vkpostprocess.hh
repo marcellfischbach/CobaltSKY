@@ -3,12 +3,12 @@
 #include <Valkyrie/vkexport.hh>
 #include <Valkyrie/core/vkclass.hh>
 #include <Valkyrie/core/vkstring.hh>
-#include <Valkyrie/Graphics/IGraphics.hh>
+#include <Valkyrie/Graphics/igraphics.hh>
 #include <Valkyrie/Graphics/vkpostprocessoutput.hh>
 #include <vector>
 #include <map>
 #include <set>
-#include <Valkyrie/Graphics/PostProcessing.refl.hh>
+#include <Valkyrie/Graphics/vkpostprocess.refl.hh>
 
 
 class vkPostProcess;
@@ -79,22 +79,6 @@ private:
   vkPostProcessor *m_postProcessor;
 
   IShader *m_shader;
-
-};
-
-
-VK_CLASS()
-class VKE_API vkGenericShaderPostProcess : public VK_SUPER(vkPostProcess)
-{
-  VK_CLASS_GEN;
-public:
-  vkGenericShaderPostProcess();
-  virtual ~vkGenericShaderPostProcess();
-
-  virtual bool Render(IGraphics *graphics);
-
-  void SetShader(IShader *shader);
-
 
 };
 
