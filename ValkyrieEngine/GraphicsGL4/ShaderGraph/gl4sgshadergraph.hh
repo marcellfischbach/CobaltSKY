@@ -4,6 +4,7 @@
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <map>
+#include <GraphicsGL4/ShaderGraph/gl4sgshadergraph.refl.hh>
 
 class vkSGNodeGL4;
 class vkGraphicsGL4;

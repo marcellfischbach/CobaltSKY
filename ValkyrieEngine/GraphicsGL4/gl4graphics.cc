@@ -17,7 +17,7 @@
 #include <GraphicsGL4/gl4defines.hh>
 #include <GraphicsGL4/gl4vertexbuffer.hh>
 #include <GraphicsGL4/gl4vertexdeclaration.hh>
-#include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
+#include <GraphicsGL4/ShaderGraph/gl4sgshadergraph.hh>
 #include <valkyrie/animation/vkskeleton.hh>
 #include <valkyrie/graphics/vkbinarygradient.hh>
 #include <GL/glew.h>

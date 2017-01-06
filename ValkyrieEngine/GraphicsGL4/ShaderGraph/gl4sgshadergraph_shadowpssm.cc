@@ -1,9 +1,12 @@
-#include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
-#include <GraphicsGL4/ShaderGraph/ShaderGraphNodeGL4.hh>
+#include <GraphicsGL4/ShaderGraph/gl4sgshadergraph.hh>
+#include <GraphicsGL4/ShaderGraph/gl4sgshadergraphctx.hh>
 #include <GraphicsGL4/gl4shader.hh>
 #include <GraphicsGL4/gl4program.hh>
+#include <valkyrie/graphics/shadergraph/vksginput.hh>
+#include <valkyrie/graphics/shadergraph/vksgoutput.hh>
 #include <iostream>
 #include <sstream>
+#include <set>
 
 static const char *compareMode[] = {
   "<=",

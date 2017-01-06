@@ -8,7 +8,7 @@
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <windowsdl/sdlwindow.hh>
 #include <GraphicsGL4/gl4graphics.hh>
-#include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
+#include <GraphicsGL4/ShaderGraph/gl4sgshadergraph.hh>
 #include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>
 #include <valkyrie/vktime.hh>
