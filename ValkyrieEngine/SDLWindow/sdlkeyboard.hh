@@ -1,11 +1,11 @@
 #pragma once
 
-#include <SDLWindow/Export.hh>
+#include <SDLWindow/sdlexport.hh>
 #include <valkyrie/window/ikeyboard.hh>
-#include <SDLWindow/SDLKeyboard.refl.hh>
+#include <SDLWindow/sdlkeyboard.refl.hh>
 
 VK_CLASS()
-class SDLKeyboard : public VK_SUPER(IKeyboard)
+class VKWINDOWSDL_API SDLKeyboard : public VK_SUPER(IKeyboard)
 {
   VK_CLASS_GEN_OBJECT;
 public:

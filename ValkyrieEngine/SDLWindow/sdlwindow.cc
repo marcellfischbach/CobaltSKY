@@ -1,8 +1,8 @@
 
 
-#include <SDLWindow/SDLWindow.hh>
-#include <SDLWindow/SDLKeyboard.hh>
-#include <SDLWindow/SDLMouse.hh>
+#include <SDLWindow/sdlwindow.hh>
+#include <SDLWindow/sdlkeyboard.hh>
+#include <SDLWindow/sdlmouse.hh>
 #include <Windows.h>
 #include <GL/GL.h>
 

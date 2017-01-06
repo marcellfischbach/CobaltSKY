@@ -20,7 +20,7 @@ set(SOURCE
     )
 
 source_group(
-    "ValkyrieEngine"
+    "valkyrie"
     FILES
     ${SOURCE}
     )
@@ -33,7 +33,7 @@ set(SOURCE_ANIMATION
 
 
 source_group(
-    "ValkyrieEngine\\animation"
+    "valkyrie\\animation"
     FILES
     ${SOURCE_ANIMATION}
     )
@@ -72,7 +72,7 @@ set(SOURCE_CORE
 
 
 source_group(
-    "ValkyrieEngine\\core"
+    "valkyrie\\core"
     FILES
     ${SOURCE_CORE}
     )
@@ -92,7 +92,7 @@ set(SOURCE_CORE_RESOURCE
     )
 
 source_group(
-    "ValkyrieEngine\\core\\resource"
+    "valkyrie\\core\\resource"
     FILES
     ${SOURCE_CORE_RESOURCE}
     )
@@ -148,7 +148,7 @@ set(SOURCE_ENTITY
     )
 
 source_group(
-    "ValkyrieEngine\\entity"
+    "valkyrie\\entity"
     FILES
     ${SOURCE_ENTITY}
     )
@@ -208,7 +208,7 @@ set(SOURCE_GRAPHICS
     )
 
 source_group(
-    "ValkyrieEngine\\graphics"
+    "valkyrie\\graphics"
     FILES
     ${SOURCE_GRAPHICS}
     )
@@ -232,7 +232,7 @@ set(SOURCE_GRAPHICS_DEFERRED
 )
 
 source_group(
-    "ValkyrieEngine\\graphics\\deferred"
+    "valkyrie\\graphics\\deferred"
     FILES
     ${SOURCE_GRAPHICS_DEFERRED}
     )
@@ -255,7 +255,7 @@ set(SOURCE_GRAPHICS_SCENE
     )
 
 source_group(
-    "ValkyrieEngine\\graphics\\scene"
+    "valkyrie\\graphics\\scene"
     FILES
     ${SOURCE_GRAPHICS_SCENE}
     )
@@ -325,45 +325,45 @@ set(SOURCE_GRAPHICS_SHADERGRAPH
 
 
 source_group(
-    "ValkyrieEngine\\graphics\\shadergraph"
+    "valkyrie\\graphics\\shadergraph"
     FILES
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     )
 
 
 set(SOURCE_LOADERS
-    Loaders/vkcollisionassetxmlloader.cc
-    Loaders/vkcollisionassetxmlloader.hh
-    Loaders/vkloaders.cc
-    Loaders/vkloaders.hh
-    Loaders/vkmaterialinstanceassetxmlloader.cc
-    Loaders/vkmaterialinstanceassetxmlloader.hh
-    Loaders/vkmaterialassetxmlloader.cc
-    Loaders/vkmaterialassetxmlloader.hh
-    Loaders/vkmeshassetxmlloader.cc
-    Loaders/vkmeshassetxmlloader.hh
-    Loaders/vkpngimageassetloader.cc
-    Loaders/vkpngimageassetloader.hh
-    Loaders/vkpngimagefileloader.cc
-    Loaders/vkpngimagefileloader.hh
-    Loaders/vksamplerassetxmlloader.cc
-    Loaders/vksamplerassetxmlloader.hh
-    Loaders/vkshadergraphassetxmlloader.cc
-    Loaders/vkshadergraphassetxmlloader.hh
-    Loaders/vkstaticmeshloader.cc
-    Loaders/vkstaticmeshloader.hh
-    Loaders/vkstaticmeshassetloader.cc
-    Loaders/vkstaticmeshassetloader.hh
-    Loaders/vktextureassetxmlloader.cc
-    Loaders/vktextureassetxmlloader.hh
-    Loaders/vkskinnedmeshassetxmlloader.cc
-    Loaders/vkskinnedmeshassetxmlloader.hh
-    Loaders/vksubmeshassetxmlloader.cc
-    Loaders/vksubmeshassetxmlloader.hh
+    loaders/vkcollisionassetxmlloader.cc
+    loaders/vkcollisionassetxmlloader.hh
+    loaders/vkloaders.cc
+    loaders/vkloaders.hh
+    loaders/vkmaterialinstanceassetxmlloader.cc
+    loaders/vkmaterialinstanceassetxmlloader.hh
+    loaders/vkmaterialassetxmlloader.cc
+    loaders/vkmaterialassetxmlloader.hh
+    loaders/vkmeshassetxmlloader.cc
+    loaders/vkmeshassetxmlloader.hh
+    loaders/vkpngimageassetloader.cc
+    loaders/vkpngimageassetloader.hh
+    loaders/vkpngimagefileloader.cc
+    loaders/vkpngimagefileloader.hh
+    loaders/vksamplerassetxmlloader.cc
+    loaders/vksamplerassetxmlloader.hh
+    loaders/vkshadergraphassetxmlloader.cc
+    loaders/vkshadergraphassetxmlloader.hh
+    loaders/vkstaticmeshloader.cc
+    loaders/vkstaticmeshloader.hh
+    loaders/vkstaticmeshassetloader.cc
+    loaders/vkstaticmeshassetloader.hh
+    loaders/vktextureassetxmlloader.cc
+    loaders/vktextureassetxmlloader.hh
+    loaders/vkskinnedmeshassetxmlloader.cc
+    loaders/vkskinnedmeshassetxmlloader.hh
+    loaders/vksubmeshassetxmlloader.cc
+    loaders/vksubmeshassetxmlloader.hh
     )
 
 source_group(
-    "ValkyrieEngine\\Loaders"
+    "valkyrie\\loaders"
     FILES
     ${SOURCE_LOADERS}
     )
@@ -401,7 +401,7 @@ set(SOURCE_LOADERS_ENTITY
     )
     
 source_group(
-    "ValkyrieEngine\\loaders\\entity"
+    "valkyrie\\loaders\\entity"
     FILES
     ${SOURCE_LOADERS_ENTITY}
     )
@@ -427,7 +427,7 @@ set(SOURCE_MATH
     )
 
 source_group(
-    "ValkyrieEngine\\math"
+    "valkyrie\\math"
     FILES
     ${SOURCE_MATH}
     )
@@ -451,7 +451,7 @@ set(SOURCE_PHYSICS
     )
 
 source_group(
-    "ValkyrieEngine\\physics"
+    "valkyrie\\physics"
     FILES
     ${SOURCE_PHYSICS}
     )
@@ -463,7 +463,7 @@ set(SOURCE_WINDOW
     )
 
 source_group(
-    "ValkyrieEngine\\window"
+    "valkyrie\\window"
     FILES
     ${SOURCE_WINDOW}
     )

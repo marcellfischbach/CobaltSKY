@@ -1,23 +1,23 @@
 
 
-add_definitions(-DVKSDL_EXPORT)
+add_definitions(-DVKWINDOWSDL_EXPORT)
 
 set(SOURCE
-  Export.hh
-  Module.cc
-  Module.hh
-  SDLButtonMap.hh
-  SDLKeyMap.hh
-  SDLKeyboard.cc
-  SDLKeyboard.hh
-  SDLMouse.cc
-  SDLMouse.hh
-  SDLWindow.hh
-  SDLWindow.cc
+  sdlexport.hh
+  sdlwindowmodule.cc
+  sdlwindowmodule.hh
+  sdlbuttonMap.hh
+  sdlkeymap.hh
+  sdlkeyboard.cc
+  sdlkeyboard.hh
+  sdlmouse.cc
+  sdlmouse.hh
+  sdlwindow.hh
+  sdlwindow.cc
   )
 
 source_group(
-	"ValkyrieEngine-SDLWindow"
+	"windowsdl"
 	FILES
 	${SOURCE}
 	)
@@ -26,15 +26,15 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-add_library(ValkyrieEngine-SDLWindow SHARED
+add_library(ValkyrieEngine-WindowSDL SHARED
 	${ALL_SOURCES}
 	)
 
-target_link_libraries(ValkyrieEngine-SDLWindow
+target_link_libraries(ValkyrieEngine-WindowSDL
   ValkyrieEngine
 	${SDL_LIBRARY}
 	${OPENGL_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-SDLWindow SDLWindow VKSDL_API ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieEngine-WindowSDL SDLWindow VKWINDOWSDL_API ALL_SOURCES)
 

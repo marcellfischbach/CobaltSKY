@@ -1,5 +1,5 @@
 
-#include <SDLWindow/SDLKeyboard.hh>
+#include <SDLWindow/sdlkeyboard.hh>
 #include <SDL.h>
 
 static vkKey keyMap[SDL_NUM_SCANCODES];

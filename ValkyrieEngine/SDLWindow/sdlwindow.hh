@@ -1,17 +1,17 @@
 
 #pragma once
 
-#include <SDLWindow/Export.hh>
+#include <SDLWindow/sdlexport.hh>
 #include <valkyrie/window/iwindow.hh>
 #include <SDL.h>
 #include <string>
-#include <SDLWindow/SDLWindow.refl.hh>
+#include <SDLWindow/sdlwindow.refl.hh>
 
 class SDLKeyboard;
 class SDLMouse;
 
 VK_CLASS()
-class VKSDL_API SDLWindow : public VK_SUPER(IWindow)
+class VKWINDOWSDL_API SDLWindow : public VK_SUPER(IWindow)
 {
   VK_CLASS_GEN_OBJECT;
 public:

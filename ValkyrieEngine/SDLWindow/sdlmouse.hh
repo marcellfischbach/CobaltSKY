@@ -1,11 +1,11 @@
 #pragma once
 
-#include <SDLWindow/Export.hh>
+#include <SDLWindow/sdlexport.hh>
 #include <valkyrie/window/imouse.hh>
-#include <SDLWindow/SDLMouse.refl.hh>
+#include <SDLWindow/sdlmouse.refl.hh>
 
 VK_CLASS()
-class SDLMouse : public VK_SUPER(IMouse)
+class VKWINDOWSDL_API SDLMouse : public VK_SUPER(IMouse)
 {
   VK_CLASS_GEN_OBJECT;
 public:
