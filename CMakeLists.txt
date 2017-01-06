@@ -33,8 +33,15 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
 #	set(${outlist} ${out} PARENT_SCOPE)
 #endfunction(VK_MOC)
 
+
 function(VK_INSTALL_MOCCER target prefix api inlist)
     if (MSVC_IDE)
+			set(FILENAME "${CMAKE_CURRENT_BINARY_DIR}/.vkmoc")
+			message("MocFileName: ${FILENAME}")
+		file(REMOVE "${FILENAME}")
+		foreach(file ${${inlist}})
+			file(APPEND "${FILENAME}" ${file} "\n")
+		endforeach(file)
 	add_custom_command (TARGET ${target} PRE_BUILD
 										COMMAND ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${${inlist}}
 										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

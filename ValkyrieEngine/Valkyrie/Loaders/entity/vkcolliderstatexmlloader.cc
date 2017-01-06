@@ -2,6 +2,7 @@
 #include <Valkyrie/Loaders/entity/vkcolliderstatexmlloader.hh>
 #include <Valkyrie/Loaders/entity/vkentitystateloaderdata.hh>
 #include <Valkyrie/entity/vkcolliderstate.hh>
+#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
 
 
 

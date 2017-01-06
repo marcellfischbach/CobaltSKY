@@ -4,6 +4,7 @@ add_definitions(-DVKE_EXPORT)
 add_definitions(-DVK_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
+
 set(SOURCE
     vkdefs.hh
     vkdiamond.hh
@@ -374,10 +375,10 @@ set(SOURCE_LOADERS_ENTITY
     Loaders/entity/vkbasecolliderstatexmlloader.hh
     Loaders/entity/vkcolliderstatexmlloader.cc
     Loaders/entity/vkcolliderstatexmlloader.hh
-    Loaders/entity/vkdynamiccolliderstatexmlloader.cc
-    Loaders/entity/vkdynamiccolliderstatexmlloader.hh
     Loaders/entity/vkentityloaderregistry.cc
     Loaders/entity/vkentityloaderregistry.hh
+    Loaders/entity/vkdynamiccolliderstatexmlloader.cc
+    Loaders/entity/vkdynamiccolliderstatexmlloader.hh
     Loaders/entity/vkentitymasterxmlloader.cc
     Loaders/entity/vkentitymasterxmlloader.hh
     Loaders/entity/vkentitystateloaderdata.hh

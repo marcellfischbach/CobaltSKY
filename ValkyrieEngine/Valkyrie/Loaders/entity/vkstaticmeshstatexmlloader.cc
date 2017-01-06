@@ -1,5 +1,6 @@
 #include <Valkyrie/Loaders/entity/vkstaticmeshstatexmlloader.hh>
 #include <Valkyrie/Loaders/entity/vkentitystateloaderdata.hh>
+#include <Valkyrie/graphics/vkmaterialinstance.hh>
 #include <Valkyrie/graphics/vkmesh.hh>
 #include <Valkyrie/entity/vkstaticmeshstate.hh>
 

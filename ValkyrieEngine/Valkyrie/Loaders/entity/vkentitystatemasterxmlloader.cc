@@ -4,6 +4,7 @@
 #include <Valkyrie/Loaders/entity/vkentitystatexmlloader.hh>
 #include <Valkyrie/Loaders/entity/vkentityloaderregistry.hh>
 #include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vkentitystate.hh>
 #include <Valkyrie/core/vkclassregistry.hh>
 
 // ***********************************************************************************************

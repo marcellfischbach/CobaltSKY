@@ -7,7 +7,7 @@
 #include "cache.hh"
 #include "class.hh"
 #include <ShlObj.h>
-
+#include <fstream>
 
 static void replaceSlash(std::string &path)
 {
@@ -214,12 +214,11 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   return result;
 }
 
-
 int main(int argc, char **argv)
 {
   if (argc < 4)
   {
-    printf("Usage %s <prefix> <api> <bindir> [infile ...]", argv[0]);
+    printf("Usage %s <prefix> <api> <bindir>", argv[0]);
     return -1;
   }
 
@@ -256,14 +255,19 @@ int main(int argc, char **argv)
   KnownClassesCache knownClassesCache;
   knownClassesCache.Init(knownClassesCacheFileName);
 
+  std::string masterFileName = binDir + "/.vkmoc";
+
   std::vector<Data> datas;
-  for (int i = 4; i < argc; ++i)
+
+  std::ifstream masterStream(masterFileName);
+
+  std::string line;
+  while (std::getline(masterStream, line))
   {
     Data d;
     d.sourceFile = 0;
     d.reader = 0;
-    d.inputHeaderFilename = std::string(argv[i]);
-
+    d.inputHeaderFilename = line;
     if (processedFilesCache.TouchFile(d.inputHeaderFilename))
     {
       if (!getOutputFilenames(d.inputHeaderFilename, binDir, d.outputHeaderFilename, d.outputSourceFilename, false))

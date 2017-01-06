@@ -2,6 +2,7 @@
 #include <Valkyrie/Loaders/entity/vkentitystateloaderdata.hh>
 #include <Valkyrie/entity/vkjointstate.hh>
 #include <Valkyrie/entity/vkentity.hh>
+#include <Valkyrie/entity/vkdynamiccolliderstate.hh>
 
 
 vkJointStateXMLLoader::vkJointStateXMLLoader()
