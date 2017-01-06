@@ -54,7 +54,7 @@
 #include <Valkyrie/graphics/scene/vklightnode.hh>
 #include <Valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <Valkyrie/graphics/shadergraph/vksgshadergraph.hh>
-#include <Valkyrie/Loaders/vkloaders.hh>
+#include <Valkyrie/loaders/vkloaders.hh>
 #include <Valkyrie/physics/iphysicscollider.hh>
 #include <Valkyrie/physics/iphysicsscene.hh>
 #include <Valkyrie/physics/iphysicsshape.hh>
