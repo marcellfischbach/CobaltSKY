@@ -2,8 +2,8 @@
 #include <PhysicsBullet/BulletStaticCollider.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletShape.hh>
-#include <Valkyrie/physics/iphysicsshape.hh>
-#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
+#include <valkyrie/physics/iphysicsshape.hh>
+#include <valkyrie/physics/vkphysicsshapecontainer.hh>
 
 
 vkBulletStaticCollider::vkBulletStaticCollider()

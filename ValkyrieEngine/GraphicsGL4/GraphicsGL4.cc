@@ -10,8 +10,8 @@
 #include <GraphicsGL4/MappingGL4.hh>
 #include <GraphicsGL4/DefinesGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
-#include <Valkyrie/animation/vkskeleton.hh>
-#include <Valkyrie/graphics/vkbinarygradient.hh>
+#include <valkyrie/animation/vkskeleton.hh>
+#include <valkyrie/graphics/vkbinarygradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
 

@@ -2,11 +2,11 @@
 
 
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/graphics/itexture.hh>
-#include <Valkyrie/graphics/itexture2d.hh>
-#include <Valkyrie/graphics/itexture2darray.hh>
-#include <Valkyrie/graphics/itexturecube.hh>
-#include <Valkyrie/graphics/isampler.hh>
+#include <valkyrie/graphics/itexture.hh>
+#include <valkyrie/graphics/itexture2d.hh>
+#include <valkyrie/graphics/itexture2darray.hh>
+#include <valkyrie/graphics/itexturecube.hh>
+#include <valkyrie/graphics/isampler.hh>
 #include <GL/glew.h>
 #include <GraphicsGL4/TextureGL4.refl.hh>
 

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/vkdefs.hh>
-#include <Valkyrie/core/vkcollection.hh>
-#include <Valkyrie/physics/iphysicsscene.hh>
+#include <valkyrie/vkdefs.hh>
+#include <valkyrie/core/vkcollection.hh>
+#include <valkyrie/physics/iphysicsscene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <PhysicsBullet/BulletScene.refl.hh>
 

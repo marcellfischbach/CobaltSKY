@@ -3,10 +3,10 @@
 
 #include <GraphicsGL4/Export.hh>
 #include <GraphicsGL4/Enums.hh>
-#include <Valkyrie/core/vkclass.hh>
-#include <Valkyrie/graphics/ishader.hh>
-#include <Valkyrie/graphics/ishaderattribute.hh>
-#include <Valkyrie/graphics/ishaderstream.hh>
+#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/graphics/ishader.hh>
+#include <valkyrie/graphics/ishaderattribute.hh>
+#include <valkyrie/graphics/ishaderstream.hh>
 #include <GL/glew.h>
 #include <vector>
 #include <GraphicsGL4/Shader.refl.hh>

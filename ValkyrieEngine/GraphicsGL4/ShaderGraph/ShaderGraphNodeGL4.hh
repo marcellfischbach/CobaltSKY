@@ -2,8 +2,8 @@
 
 
 #include <GraphicsGL4/Export.hh>
-#include <Valkyrie/core/vkstring.hh>
-#include <Valkyrie/graphics/shadergraph/vksgnodes.hh>
+#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/graphics/shadergraph/vksgnodes.hh>
 #include <map>
 #include <set>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphNodeGL4.refl.hh>

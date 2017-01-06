@@ -2,7 +2,7 @@
 #pragma once
 
 #include <SDLWindow/Export.hh>
-#include <Valkyrie/window/iwindow.hh>
+#include <valkyrie/window/iwindow.hh>
 #include <SDL.h>
 #include <string>
 #include <SDLWindow/SDLWindow.refl.hh>

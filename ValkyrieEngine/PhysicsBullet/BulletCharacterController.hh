@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/physics/iphysicscapsulecharactercontroller.hh>
+#include <valkyrie/physics/iphysicscapsulecharactercontroller.hh>
 #include <PhysicsBullet/BulletCharacterController.refl.hh>
 
 

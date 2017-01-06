@@ -3,9 +3,9 @@
 #include <PhysicsBullet/BulletShape.hh>
 #include <PhysicsBullet/BulletScene.hh>
 #include <PhysicsBullet/BulletJoints.hh>
-#include <Valkyrie/physics/vkphysicsshapecontainer.hh>
-#include <Valkyrie/entity/vktransformation.hh>
-#include <Valkyrie/entity/vkcolliderstate.hh>
+#include <valkyrie/physics/vkphysicsshapecontainer.hh>
+#include <valkyrie/entity/vktransformation.hh>
+#include <valkyrie/entity/vkcolliderstate.hh>
 
 vkBulletDynamicCollider::vkBulletDynamicCollider()
   : IPhysicsDynamicCollider()

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Valkyrie/core/vkclass.hh>
+#include <valkyrie/core/vkclass.hh>
 #include <Editor.refl.hh>
 
 

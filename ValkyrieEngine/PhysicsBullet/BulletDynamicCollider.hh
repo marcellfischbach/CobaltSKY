@@ -1,7 +1,7 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/physics/iphysicsdynamiccollider.hh>
+#include <valkyrie/physics/iphysicsdynamiccollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
 #include <PhysicsBullet/BulletDynamicCollider.refl.hh>

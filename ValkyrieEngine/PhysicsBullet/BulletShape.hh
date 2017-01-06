@@ -1,8 +1,8 @@
 #pragma once
 
 #include <PhysicsBullet/Export.hh>
-#include <Valkyrie/math/vkmatrix.hh>
-#include <Valkyrie/physics/iphysicsshape.hh>
+#include <valkyrie/math/vkmatrix.hh>
+#include <valkyrie/physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
 #include <PhysicsBullet/BulletShape.refl.hh>
 
