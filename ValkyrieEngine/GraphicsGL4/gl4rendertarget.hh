@@ -1,15 +1,15 @@
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/irendertarget.hh>
 #include <vector>
 #include <GL/glew.h>
-#include <GraphicsGL4/RenderTargetGL4.refl.hh>
+#include <GraphicsGL4/gl4rendertarget.refl.hh>
 
 class vkTextureGL4;
 
 VK_CLASS()
-class VKGL4_API vkRenderTargetGL4 : public VK_SUPER(IRenderTarget)
+class VKGRAPHICSGL4_API vkRenderTargetGL4 : public VK_SUPER(IRenderTarget)
 {
   VK_CLASS_GEN_OBJECT;
 

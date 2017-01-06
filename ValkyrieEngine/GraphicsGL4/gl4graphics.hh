@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/igraphics.hh>
-#include <GraphicsGL4/GraphicsGL4.refl.hh>
+#include <GraphicsGL4/gl4graphics.refl.hh>
 
 class IndexBufferGL4;
 class vkProgramGL4;
@@ -14,7 +14,7 @@ class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
 VK_CLASS()
-class VKGL4_API vkGraphicsGL4 : public VK_SUPER(IGraphics)
+class VKGRAPHICSGL4_API vkGraphicsGL4 : public VK_SUPER(IGraphics)
 {
   VK_CLASS_GEN_OBJECT;
 public:

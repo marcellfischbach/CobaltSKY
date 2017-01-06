@@ -7,7 +7,7 @@
 #include <valkyrie/core/vkvfs.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <windowsdl/sdlwindow.hh>
-#include <GraphicsGL4/GraphicsGL4.hh>
+#include <GraphicsGL4/gl4graphics.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
 #include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>

@@ -1,7 +1,7 @@
 
-#include <GraphicsGL4/IndexBufferGL4.hh>
-#include <GraphicsGL4/DefinesGL4.hh>
-#include <GraphicsGL4/MappingGL4.hh>
+#include <GraphicsGL4/gl4indexbuffer.hh>
+#include <GraphicsGL4/gl4defines.hh>
+#include <GraphicsGL4/gl4mapping.hh>
 
 static GLuint current_mapped_buffer;
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/ivertexdeclaration.hh>
-#include <GraphicsGL4/VertexDeclarationGL4.refl.hh>
+#include <GraphicsGL4/gl4vertexdeclaration.refl.hh>
 
 
 class vkProgramGL4;
-VK_CLASS();
+VK_CLASS()
 class vkVertexDeclarationGL4 : public VK_SUPER(IVertexDeclaration)
 {
   VK_CLASS_GEN_OBJECT;

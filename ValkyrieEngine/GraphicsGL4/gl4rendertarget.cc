@@ -1,7 +1,7 @@
 
-#include <GraphicsGL4/RenderTargetGL4.hh>
-#include <GraphicsGL4/TextureGL4.hh>
-#include <GraphicsGL4/DefinesGL4.hh>
+#include <GraphicsGL4/gl4rendertarget.hh>
+#include <GraphicsGL4/gl4texture.hh>
+#include <GraphicsGL4/gl4defines.hh>
 
 vkRenderTargetGL4::vkRenderTargetGL4()
   : IRenderTarget()

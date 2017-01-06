@@ -1,5 +1,5 @@
 
-#include <GraphicsGL4/Module.hh>
+#include <GraphicsGL4/gl4module.hh>
 
 #include <GraphicsGL4/master.refl.cc>
 

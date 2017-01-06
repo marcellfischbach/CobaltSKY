@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <map>
@@ -8,7 +8,7 @@
 class vkSGNodeGL4;
 class vkGraphicsGL4;
 
-class VKGL4_API vkShaderGraphGL4 : public VK_SUPER(ISGShaderGraphFactory)
+class VKGRAPHICSGL4_API vkShaderGraphGL4 : public VK_SUPER(ISGShaderGraphFactory)
 {
 public:
   vkShaderGraphGL4(vkGraphicsGL4 *graphics);

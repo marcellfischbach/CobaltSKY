@@ -1,9 +1,9 @@
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/iindexbuffer.hh>
 #include <GL/glew.h>
-#include <GraphicsGL4/IndexBufferGL4.refl.hh>
+#include <GraphicsGL4/gl4indexbuffer.refl.hh>
 
 VK_CLASS()
 class IndexBufferGL4 : public VK_SUPER(IIndexBuffer)

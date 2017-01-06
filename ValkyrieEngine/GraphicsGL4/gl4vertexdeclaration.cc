@@ -1,6 +1,7 @@
 
-#include <GraphicsGL4/VertexDeclarationGL4.hh>
-#include <GraphicsGL4/Shader.hh>
+#include <GraphicsGL4/gl4vertexdeclaration.hh>
+#include <GraphicsGL4/gl4program.hh>
+#include <GraphicsGL4/gl4shader.hh>
 #include <assert.h>
 #include <map>
 

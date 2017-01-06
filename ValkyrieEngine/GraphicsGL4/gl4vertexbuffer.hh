@@ -1,9 +1,9 @@
 #pragma once
 
-#include <GraphicsGL4/Export.hh>
+#include <GraphicsGL4/gl4export.hh>
 #include <valkyrie/graphics/ivertexbuffer.hh>
 #include <GL/glew.h>
-#include <GraphicsGL4/VertexBufferGL4.refl.hh>
+#include <GraphicsGL4/gl4vertexbuffer.refl.hh>
 
 VK_CLASS();
 class VertexBufferGL4 : public VK_SUPER(IVertexBuffer)

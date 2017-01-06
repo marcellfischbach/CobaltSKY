@@ -4,6 +4,8 @@
 #include <assert.h>
 #include <stdio.h>
 
+#define VK_GL_OFFSET(offset)  ((const GLvoid*)((unsigned long)offset))
+
 #if 1
 #ifdef _DEBUG 
 #	define VK_CHECK_GL_ERROR \
