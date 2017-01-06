@@ -1,10 +1,10 @@
 #pragma once
 
-#include <PhysicsBullet/bulletexport.hh>
+#include <physicsbullet/bulletexport.hh>
 #include <valkyrie/physics/iphysicsdynamiccollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
-#include <PhysicsBullet/bulletdynamiccollider.refl.hh>
+#include <physicsbullet/bulletdynamiccollider.refl.hh>
 
 class btRigidBody;
 class btCollisionShape;

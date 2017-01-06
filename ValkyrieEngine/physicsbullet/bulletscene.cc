@@ -1,10 +1,10 @@
 
 
-#include <PhysicsBullet/bulletscene.hh>
-#include <PhysicsBullet/bulletcapsulecharactercontroller.hh>
-#include <PhysicsBullet/bulletdynamiccollider.hh>
-#include <PhysicsBullet/bulletjoint.hh>
-#include <PhysicsBullet/bulletstaticcollider.hh>
+#include <physicsbullet/bulletscene.hh>
+#include <physicsbullet/bulletcapsulecharactercontroller.hh>
+#include <physicsbullet/bulletdynamiccollider.hh>
+#include <physicsbullet/bulletjoint.hh>
+#include <physicsbullet/bulletstaticcollider.hh>
 
 vkBulletScene::vkBulletScene()
   : IPhysicsScene()

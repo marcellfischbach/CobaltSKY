@@ -1,10 +1,10 @@
 #pragma once
 
-#include <PhysicsBullet/bulletexport.hh>
+#include <physicsbullet/bulletexport.hh>
 #include <valkyrie/math/vkmatrix.hh>
 #include <valkyrie/physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
-#include <PhysicsBullet/bulletshape.refl.hh>
+#include <physicsbullet/bulletshape.refl.hh>
 
 VK_CLASS()
 class VKBULLETPHYSICS_API vkBulletShape : public VK_SUPER(IPhysicsShape)

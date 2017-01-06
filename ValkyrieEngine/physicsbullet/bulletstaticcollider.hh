@@ -1,10 +1,10 @@
 #pragma once
 
-#include <PhysicsBullet/bulletexport.hh>
+#include <physicsbullet/bulletexport.hh>
 #include <valkyrie/physics/iphysicsstaticcollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
-#include <PhysicsBullet/bulletstaticcollider.refl.hh>
+#include <physicsbullet/bulletstaticcollider.refl.hh>
 
 class vkBulletScene;
 class vkBulletShape;

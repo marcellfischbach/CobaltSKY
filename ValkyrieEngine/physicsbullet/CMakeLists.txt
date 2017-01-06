@@ -25,7 +25,7 @@ set(SOURCE
   )
 
 source_group(
-	"PhysicsBullet"
+	"physicsbullet"
 	FILES
 	${SOURCE}
 	)
@@ -39,7 +39,7 @@ set(ALL_SOURCES
 
 
 source_group(
-	"PhysicsBullet\\MOC_sources"
+	"physicsbullet\\MOC_sources"
 	FILES
 	${MOC_SOURCES}
 	)

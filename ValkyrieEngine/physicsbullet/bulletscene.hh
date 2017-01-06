@@ -1,11 +1,11 @@
 #pragma once
 
-#include <PhysicsBullet/bulletexport.hh>
+#include <physicsbullet/bulletexport.hh>
 #include <valkyrie/vkdefs.hh>
 #include <valkyrie/core/vkcollection.hh>
 #include <valkyrie/physics/iphysicsscene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
-#include <PhysicsBullet/bulletscene.refl.hh>
+#include <physicsbullet/bulletscene.refl.hh>
 
 class vkBulletBody;
 class vkBulletDynamicCollider;

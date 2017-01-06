@@ -9,7 +9,7 @@
 #include <windowsdl/sdlwindow.hh>
 #include <GraphicsGL4/GraphicsGL4.hh>
 #include <GraphicsGL4/ShaderGraph/ShaderGraphGL4.hh>
-#include <PhysicsBullet/BulletSystem.hh>
+#include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>
 #include <valkyrie/vktime.hh>
 #include <valkyrie/animation/vkskeleton.hh>

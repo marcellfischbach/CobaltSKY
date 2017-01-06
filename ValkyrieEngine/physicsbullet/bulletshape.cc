@@ -1,6 +1,6 @@
 
 
-#include <PhysicsBullet/bulletshape.hh>
+#include <physicsbullet/bulletshape.hh>
 
 vkBulletShape::vkBulletShape()
   : IPhysicsShape()

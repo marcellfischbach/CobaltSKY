@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include <PhysicsBullet/bulletexport.hh>
+#include <physicsbullet/bulletexport.hh>
 #include <valkyrie/physics/iphysicssystem.hh>
-#include <PhysicsBullet/bulletsystem.refl.hh>
+#include <physicsbullet/bulletsystem.refl.hh>
 
 
 
