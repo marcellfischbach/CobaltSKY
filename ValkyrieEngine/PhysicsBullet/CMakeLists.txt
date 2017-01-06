@@ -1,27 +1,28 @@
 
 
-add_definitions(-DVKBULLET_EXPORT)
+add_definitions(-DVKBULLETPHYSICS_EXPORT)
 
 set(SOURCE
-  Export.hh
-  BulletCharacterController.cc
-  BulletCharacterController.hh
-  BulletDynamicCollider.cc
-  BulletDynamicCollider.hh
-  BulletJoints.cc
-  BulletJoints.hh
-  BulletScene.cc
-  BulletScene.hh
-  BulletShape.cc
-  BulletShape.hh
-  BulletStaticCollider.cc
-  BulletStaticCollider.hh
-  BulletSystem.cc
-  BulletSystem.hh
-  Module.cc
-  Module.hh
+  bulletexport.hh
+  bulletcapsulecharactercontroller.cc
+  bulletcapsulecharactercontroller.hh
+  bulletdynamiccollider.cc
+  bulletdynamiccollider.hh
+  bullethingejoint.cc
+  bullethingejoint.hh
+  bulletjoint.cc
+  bulletjoint.hh
+  bulletscene.cc
+  bulletscene.hh
+  bulletshape.cc
+  bulletshape.hh
+  bulletstaticcollider.cc
+  bulletstaticcollider.hh
+  bulletsystem.cc
+  bulletsystem.hh
+  bulletmodule.cc
+  bulletmodule.hh
   )
-
 
 source_group(
 	"PhysicsBullet"
@@ -52,5 +53,5 @@ target_link_libraries(ValkyrieEngine-PhysicsBullet
 	${BULLET_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-PhysicsBullet PhysicsBullet VKBULLET_API ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieEngine-PhysicsBullet physicsbullet VKBULLETPHYSICS_API ALL_SOURCES)
 

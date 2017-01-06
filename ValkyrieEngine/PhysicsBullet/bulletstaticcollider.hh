@@ -1,10 +1,10 @@
 #pragma once
 
-#include <PhysicsBullet/Export.hh>
+#include <PhysicsBullet/bulletexport.hh>
 #include <valkyrie/physics/iphysicsstaticcollider.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <vector>
-#include <PhysicsBullet/BulletStaticCollider.refl.hh>
+#include <PhysicsBullet/bulletstaticcollider.refl.hh>
 
 class vkBulletScene;
 class vkBulletShape;
@@ -13,7 +13,7 @@ class btCollisionShape;
 class btCompoundShape;
 
 VK_CLASS()
-class VKBULLET_API vkBulletStaticCollider : public VK_SUPER(IPhysicsStaticCollider)
+class VKBULLETPHYSICS_API vkBulletStaticCollider : public VK_SUPER(IPhysicsStaticCollider)
 {
   VK_CLASS_GEN_OBJECT;
 

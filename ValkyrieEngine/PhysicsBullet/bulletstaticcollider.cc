@@ -1,7 +1,7 @@
 
-#include <PhysicsBullet/BulletStaticCollider.hh>
-#include <PhysicsBullet/BulletScene.hh>
-#include <PhysicsBullet/BulletShape.hh>
+#include <PhysicsBullet/bulletstaticcollider.hh>
+#include <PhysicsBullet/bulletscene.hh>
+#include <PhysicsBullet/bulletshape.hh>
 #include <valkyrie/physics/iphysicsshape.hh>
 #include <valkyrie/physics/vkphysicsshapecontainer.hh>
 

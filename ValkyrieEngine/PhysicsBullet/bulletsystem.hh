@@ -1,14 +1,14 @@
 
 #pragma once
 
-#include <PhysicsBullet/Export.hh>
+#include <PhysicsBullet/bulletexport.hh>
 #include <valkyrie/physics/iphysicssystem.hh>
-#include <PhysicsBullet/BulletSystem.refl.hh>
+#include <PhysicsBullet/bulletsystem.refl.hh>
 
 
 
 VK_CLASS()
-class VKBULLET_API vkBulletSystem : public VK_SUPER(IPhysicsSystem)
+class VKBULLETPHYSICS_API vkBulletSystem : public VK_SUPER(IPhysicsSystem)
 {
   VK_CLASS_GEN_OBJECT;
 

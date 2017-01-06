@@ -1,13 +1,13 @@
 #pragma once
 
-#include <PhysicsBullet/Export.hh>
+#include <PhysicsBullet/bulletexport.hh>
 #include <valkyrie/math/vkmatrix.hh>
 #include <valkyrie/physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
-#include <PhysicsBullet/BulletShape.refl.hh>
+#include <PhysicsBullet/bulletshape.refl.hh>
 
 VK_CLASS()
-class VKBULLET_API vkBulletShape : public VK_SUPER(IPhysicsShape)
+class VKBULLETPHYSICS_API vkBulletShape : public VK_SUPER(IPhysicsShape)
 {
   VK_CLASS_GEN_OBJECT;
 public:

@@ -5,7 +5,7 @@ set(SOURCE
   )
 
 source_group(
-	"ValkyrieRunner"
+	"runner"
 	FILES
 	${SOURCE}
 	)
@@ -26,5 +26,5 @@ target_link_libraries(ValkyrieRunner
   )
 
 
-VK_INSTALL_MOCCER(ValkyrieRunner Runner " " ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieRunner runner " " ALL_SOURCES)
 

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <PhysicsBullet/Export.hh>
+#include <PhysicsBullet/bulletexport.hh>
 #include <valkyrie/vkdefs.hh>
 #include <valkyrie/core/vkcollection.hh>
 #include <valkyrie/physics/iphysicsscene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
-#include <PhysicsBullet/BulletScene.refl.hh>
+#include <PhysicsBullet/bulletscene.refl.hh>
 
 class vkBulletBody;
 class vkBulletDynamicCollider;
 class vkBulletCapsuleCharacterController;
 
 VK_CLASS()
-class VKBULLET_API vkBulletScene : public VK_SUPER(IPhysicsScene)
+class VKBULLETPHYSICS_API vkBulletScene : public VK_SUPER(IPhysicsScene)
 {
   VK_CLASS_GEN_OBJECT;
 public:

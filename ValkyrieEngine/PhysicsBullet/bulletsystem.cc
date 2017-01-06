@@ -1,12 +1,12 @@
 
 
-#include <PhysicsBullet/BulletSystem.hh>
-#include <PhysicsBullet/BulletCharacterController.hh>
-#include <PhysicsBullet/BulletDynamicCollider.hh>
-#include <PhysicsBullet/BulletJoints.hh>
-#include <PhysicsBullet/BulletStaticCollider.hh>
-#include <PhysicsBullet/BulletScene.hh>
-#include <PhysicsBullet/BulletShape.hh>
+#include <PhysicsBullet/bulletsystem.hh>
+#include <PhysicsBullet/bulletcapsulecharactercontroller.hh>
+#include <PhysicsBullet/bulletdynamiccollider.hh>
+#include <PhysicsBullet/bullethingejoint.hh>
+#include <PhysicsBullet/bulletstaticcollider.hh>
+#include <PhysicsBullet/bulletscene.hh>
+#include <PhysicsBullet/bulletshape.hh>
 
 vkBulletSystem::vkBulletSystem()
   : IPhysicsSystem ()

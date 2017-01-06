@@ -1,8 +1,8 @@
 
-#include <PhysicsBullet/BulletDynamicCollider.hh>
-#include <PhysicsBullet/BulletShape.hh>
-#include <PhysicsBullet/BulletScene.hh>
-#include <PhysicsBullet/BulletJoints.hh>
+#include <PhysicsBullet/bulletdynamiccollider.hh>
+#include <PhysicsBullet/bulletshape.hh>
+#include <PhysicsBullet/bulletscene.hh>
+#include <PhysicsBullet/bulletjoint.hh>
 #include <valkyrie/physics/vkphysicsshapecontainer.hh>
 #include <valkyrie/entity/vktransformation.hh>
 #include <valkyrie/entity/vkcolliderstate.hh>
