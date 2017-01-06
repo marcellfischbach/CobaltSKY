@@ -496,5 +496,5 @@ target_link_libraries(ValkyrieEngine
     ${PNG_LIBRARIES}
     )
 
-VK_INSTALL_MOCCER(ValkyrieEngine Valkyrie VKE_API ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieEngine valkyrie VKE_API ALL_SOURCES)
 

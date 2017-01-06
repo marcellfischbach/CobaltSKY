@@ -1,5 +1,5 @@
 
-#include <SDLWindow/sdlmouse.hh>
+#include <windowsdl/sdlmouse.hh>
 #include <SDL.h>
 
 static vkButton buttonMap[32];
@@ -12,7 +12,7 @@ SDLMouse::SDLMouse()
   memset(m_prev, 0, sizeof(m_prev));
   memset(buttonMap, 0, sizeof(buttonMap));
   m_posX = m_posY = m_relX = m_relY = 0;
-#include <SDLWindow/sdlbuttonmap.hh>
+#include <windowsdl/sdlbuttonmap.hh>
 }
 
 SDLMouse::~SDLMouse()

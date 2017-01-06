@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SDLWindow/sdlexport.hh>
+#include <windowsdl/sdlexport.hh>
 #include <valkyrie/window/ikeyboard.hh>
-#include <SDLWindow/sdlkeyboard.refl.hh>
+#include <windowsdl/sdlkeyboard.refl.hh>
 
 VK_CLASS()
 class VKWINDOWSDL_API SDLKeyboard : public VK_SUPER(IKeyboard)

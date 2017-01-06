@@ -36,5 +36,5 @@ target_link_libraries(ValkyrieEngine-WindowSDL
 	${OPENGL_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-WindowSDL SDLWindow VKWINDOWSDL_API ALL_SOURCES)
+VK_INSTALL_MOCCER(ValkyrieEngine-WindowSDL windowsdl VKWINDOWSDL_API ALL_SOURCES)
 

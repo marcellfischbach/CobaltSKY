@@ -1,11 +1,11 @@
 
 #pragma once
 
-#include <SDLWindow/sdlexport.hh>
+#include <windowsdl/sdlexport.hh>
 #include <valkyrie/window/iwindow.hh>
 #include <SDL.h>
 #include <string>
-#include <SDLWindow/sdlwindow.refl.hh>
+#include <windowsdl/sdlwindow.refl.hh>
 
 class SDLKeyboard;
 class SDLMouse;

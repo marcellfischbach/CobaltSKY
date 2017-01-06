@@ -383,7 +383,7 @@ int main(int argc, char **argv)
     masterSource += includeOrigin + "\n";
     //masterSource += includeHeaders + "\n";
     masterSource += includeSources + "\n";
-    masterSource += "#include <Valkyrie/Core/vkclassregistry.hh>\n";
+    masterSource += "#include <valkyrie/core/vkclassregistry.hh>\n";
     masterSource += "\n\n";
     masterSource += "\n\n\n";
     masterSource += "static void register_classes ()\n";

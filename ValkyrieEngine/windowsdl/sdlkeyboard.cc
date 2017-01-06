@@ -1,5 +1,5 @@
 
-#include <SDLWindow/sdlkeyboard.hh>
+#include <windowsdl/sdlkeyboard.hh>
 #include <SDL.h>
 
 static vkKey keyMap[SDL_NUM_SCANCODES];
@@ -11,7 +11,7 @@ SDLKeyboard::SDLKeyboard()
   memset(m_current, 0, sizeof(m_current));
   memset(m_prev, 0, sizeof(m_prev));
   memset(keyMap, 0, sizeof(keyMap));
-#include <SDLWindow/SDLKeyMap.hh>
+#include <windowsdl/SDLKeyMap.hh>
 }
 
 SDLKeyboard::~SDLKeyboard()

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SDLWindow/sdlexport.hh>
+#include <windowsdl/sdlexport.hh>
 #include <valkyrie/window/imouse.hh>
-#include <SDLWindow/sdlmouse.refl.hh>
+#include <windowsdl/sdlmouse.refl.hh>
 
 VK_CLASS()
 class VKWINDOWSDL_API SDLMouse : public VK_SUPER(IMouse)
