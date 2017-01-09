@@ -11,7 +11,7 @@ class SDLKeyboard;
 class SDLMouse;
 
 VK_CLASS()
-class VKWINDOWSDL_API SDLWindow : public VK_SUPER(IWindow)
+class VKWINDOWSDL_API SDLWindow : public VK_SUPER(iWindow)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -31,8 +31,8 @@ public:
 
   virtual void SetIcon(const vkImage *image);
 
-  virtual const IKeyboard *GetKeyboard() const;
-  virtual const IMouse *GetMouse() const;
+  virtual const iKeyboard *GetKeyboard() const;
+  virtual const iMouse *GetMouse() const;
 
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;

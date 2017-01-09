@@ -7,7 +7,7 @@
 #include <graphicsgl4/gl4texture.refl.hh>
 
 VK_INTERFACE()
-class VKGRAPHICSGL4_API vkTextureGL4 : public virtual VK_SUPER(ITexture)
+class VKGRAPHICSGL4_API vkTextureGL4 : public virtual VK_SUPER(iTexture)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -17,9 +17,9 @@ public:
 
   virtual vkTextureType GetType() const ;
 
-  virtual void SetSampler(ISampler *sampler);
-  virtual ISampler *GetSampler();
-  virtual const ISampler *GetSampler() const;
+  virtual void SetSampler(iSampler *sampler);
+  virtual iSampler *GetSampler();
+  virtual const iSampler *GetSampler() const;
 
   virtual void GenerateMipMaps();
 
@@ -35,7 +35,7 @@ protected:
 private:
   vkTextureType m_type;
 
-  ISampler *m_sampler;
+  iSampler *m_sampler;
 
 };
 

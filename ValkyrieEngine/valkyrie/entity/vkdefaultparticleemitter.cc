@@ -3,7 +3,7 @@
 #include <valkyrie/graphics/vkparticle.hh>
 
 vkDefaultParticleEmitter::vkDefaultParticleEmitter()
-  : IParticleEmitter()
+  : iParticleEmitter()
   , m_particlesPerSecond(0)
   , m_initialTime(vkRandomRange::Value(0.0f))
   , m_timeToLive(vkRandomRange::Value(10.0f))

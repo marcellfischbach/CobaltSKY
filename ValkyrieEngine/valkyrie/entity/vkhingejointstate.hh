@@ -7,7 +7,7 @@
 #include <valkyrie/entity/vkhingejointstate.refl.hh>
 
 
-struct IPhysicsHingeJoint;
+struct iPhysicsHingeJoint;
 
 VK_CLASS()
 class VKE_API vkHingeJointState : public VK_SUPER(vkJointState)
@@ -25,5 +25,5 @@ protected:
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 
 private:
-  IPhysicsHingeJoint *m_hingeJoint;
+  iPhysicsHingeJoint *m_hingeJoint;
 };

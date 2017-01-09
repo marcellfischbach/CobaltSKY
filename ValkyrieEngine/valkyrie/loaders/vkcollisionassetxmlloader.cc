@@ -17,18 +17,18 @@ vkCollisionAssetXMLLoader::~vkCollisionAssetXMLLoader()
 }
 
 
-bool vkCollisionAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkCollisionAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkString(element->Value()) == vkString("collider") ||
     vkString(element->Value()) == vkString("shapes");
 }
 
-const vkClass *vkCollisionAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkCollisionAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkPhysicsShapeContainer::GetStaticClass();
 }
 
-IObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkPhysicsShapeContainer *container = new vkPhysicsShapeContainer();
 
@@ -85,7 +85,7 @@ IObject *vkCollisionAssetXMLLoader::Load(TiXmlElement *element, const vkResource
     {
       continue;
     }
-    IPhysicsShape *shape = vkEng->CreateShape(geometryDesc);
+    iPhysicsShape *shape = vkEng->CreateShape(geometryDesc);
     shape->SetLocalTransform(localTransform);
     container->AddShape(shape);
   }

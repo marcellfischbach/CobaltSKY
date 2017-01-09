@@ -8,7 +8,7 @@
 
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletSystem : public VK_SUPER(IPhysicsSystem)
+class VKBULLETPHYSICS_API vkBulletSystem : public VK_SUPER(iPhysicsSystem)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -18,16 +18,16 @@ public:
 
   virtual void Initialize();
 
-  virtual IPhysicsScene *CreateScene();
+  virtual iPhysicsScene *CreateScene();
 
-  virtual IPhysicsDynamicCollider *CreateDynamicCollider();
-  virtual IPhysicsStaticCollider *CreateStaticCollider();
-  virtual IPhysicsTriggerCollider *CreateTriggerCollider();
-  virtual IPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
+  virtual iPhysicsDynamicCollider *CreateDynamicCollider();
+  virtual iPhysicsStaticCollider *CreateStaticCollider();
+  virtual iPhysicsTriggerCollider *CreateTriggerCollider();
+  virtual iPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
 
-  virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
+  virtual iPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
 
-  virtual IPhysicsJoint *CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB);
+  virtual iPhysicsJoint *CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB);
 
 };
 

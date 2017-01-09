@@ -6,7 +6,7 @@
 #include <valkyrie/graphics/ivertexbuffer.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API IVertexBuffer : public IObject
+struct VKE_API iVertexBuffer : public iObject
 {
   VK_CLASS_GEN;
 

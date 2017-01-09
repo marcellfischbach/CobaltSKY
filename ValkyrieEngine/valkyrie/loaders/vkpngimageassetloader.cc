@@ -9,7 +9,7 @@
 
 
 vkPNGImageAssetLoader::vkPNGImageAssetLoader()
-  : IAssetLoader()
+  : iAssetLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -21,12 +21,12 @@ vkPNGImageAssetLoader::~vkPNGImageAssetLoader()
 
 
 
-bool vkPNGImageAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData) const
+bool vkPNGImageAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, iObject *userData) const
 {
   return typeID == vkString("PNG");
 }
 
-const vkClass *vkPNGImageAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkPNGImageAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkImage::GetStaticClass();
 }
@@ -44,7 +44,7 @@ void read_data_from_ifile(png_structp png_ptr,
     return;
   }
 
-  IFile *file = static_cast<IFile*>(io);
+  iFile *file = static_cast<iFile*>(io);
   file->Read(outBytes, (long)byteCountToRead);
 }
 
@@ -63,7 +63,7 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 }
 }
 
-IObject *vkPNGImageAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkPNGImageAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)

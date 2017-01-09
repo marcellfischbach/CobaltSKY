@@ -61,12 +61,12 @@ void vkBulletJoint::SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDyna
   }
 }
 
-IPhysicsDynamicCollider *vkBulletJoint::GetColliderA() const
+iPhysicsDynamicCollider *vkBulletJoint::GetColliderA() const
 {
   return m_colliderA;
 }
 
-IPhysicsDynamicCollider *vkBulletJoint::GetColliderB() const
+iPhysicsDynamicCollider *vkBulletJoint::GetColliderB() const
 {
   return m_colliderB;
 }

@@ -16,7 +16,7 @@ vkPhysicsShapeContainer::~vkPhysicsShapeContainer()
   m_shapes.clear();
 }
 
-void vkPhysicsShapeContainer::AddShape(IPhysicsShape *shape)
+void vkPhysicsShapeContainer::AddShape(iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -43,7 +43,7 @@ vkSize vkPhysicsShapeContainer::GetNumberOfShapes() const
   return m_shapes.size();
 }
 
-IPhysicsShape* vkPhysicsShapeContainer::GetShape(vkSize idx)
+iPhysicsShape* vkPhysicsShapeContainer::GetShape(vkSize idx)
 {
   if (idx >= m_shapes.size())
   {
@@ -52,7 +52,7 @@ IPhysicsShape* vkPhysicsShapeContainer::GetShape(vkSize idx)
   return m_shapes[idx];
 }
 
-const IPhysicsShape* vkPhysicsShapeContainer::GetShape(vkSize idx) const
+const iPhysicsShape* vkPhysicsShapeContainer::GetShape(vkSize idx) const
 {
   if (idx >= m_shapes.size())
   {

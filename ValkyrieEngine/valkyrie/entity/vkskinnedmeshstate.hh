@@ -17,7 +17,7 @@ public:
   vkSkeleton *GetSkeleton();
   const vkSkeleton *GetSkeleton() const;
 
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
+  virtual void Render(iGraphics *graphics, vkRenderPass pass) const;
 
 private:
   vkSkeleton *m_skeleton;

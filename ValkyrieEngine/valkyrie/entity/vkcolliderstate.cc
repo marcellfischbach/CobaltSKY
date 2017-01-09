@@ -23,12 +23,12 @@ vkColliderState::~vkColliderState()
   VK_RELEASE(m_collider);
 }
 
-void vkColliderState::SetCollider(IPhysicsCollider *collider)
+void vkColliderState::SetCollider(iPhysicsCollider *collider)
 {
   VK_SET(m_collider, collider);
 }
 
-void vkColliderState::AttachShape(IPhysicsShape* shape)
+void vkColliderState::AttachShape(iPhysicsShape* shape)
 {
   if (m_collider)
   {
@@ -36,7 +36,7 @@ void vkColliderState::AttachShape(IPhysicsShape* shape)
   }
 }
 
-void vkColliderState::DetachShape(IPhysicsShape *shape)
+void vkColliderState::DetachShape(iPhysicsShape *shape)
 {
   if (m_collider)
   {

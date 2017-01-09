@@ -6,7 +6,7 @@
 #include <vector>
 #include <valkyrie/entity/vkentityscene.refl.hh>
 
-struct IPhysicsScene;
+struct iPhysicsScene;
 class vkEntity;
 
 VK_CLASS()
@@ -23,25 +23,25 @@ public:
   vkEntity *GetRoot();
   const vkEntity *GetRoot() const;
 
-  IPhysicsScene *GetPhysicsScene();
-  const IPhysicsScene *GetPhysicsScene() const;
+  iPhysicsScene *GetPhysicsScene();
+  const iPhysicsScene *GetPhysicsScene() const;
 
   void Update(float tpf);
 
 private:
   vkEntity* m_rootEntity;
-  IPhysicsScene *m_physicsScene;
+  iPhysicsScene *m_physicsScene;
 
 };
 
 
-VK_FORCEINLINE IPhysicsScene *vkEntityScene::GetPhysicsScene()
+VK_FORCEINLINE iPhysicsScene *vkEntityScene::GetPhysicsScene()
 {
   return m_physicsScene;
 }
 
 
-VK_FORCEINLINE const IPhysicsScene *vkEntityScene::GetPhysicsScene() const
+VK_FORCEINLINE const iPhysicsScene *vkEntityScene::GetPhysicsScene() const
 {
   return m_physicsScene;
 }

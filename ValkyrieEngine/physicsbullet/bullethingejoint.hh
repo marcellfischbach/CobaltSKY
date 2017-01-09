@@ -11,7 +11,7 @@ class vkBulletDynamicCollider;
 
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletHingeJoint : public  VK_SUPER(vkBulletJoint), public VK_SUPER(IPhysicsHingeJoint)
+class VKBULLETPHYSICS_API vkBulletHingeJoint : public  VK_SUPER(vkBulletJoint), public VK_SUPER(iPhysicsHingeJoint)
 {
   VK_CLASS_GEN;
 public:

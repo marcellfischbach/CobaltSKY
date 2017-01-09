@@ -8,7 +8,7 @@
 #include <valkyrie/entity/vkcolliderstate.hh>
 
 vkBulletDynamicCollider::vkBulletDynamicCollider()
-  : IPhysicsDynamicCollider()
+  : iPhysicsDynamicCollider()
   , m_kinematic(true)
   , m_friction(0.0f)
   , m_restitution(0.0f)
@@ -39,7 +39,7 @@ vkBulletDynamicCollider::~vkBulletDynamicCollider()
 }
 
 
-void vkBulletDynamicCollider::AttachShape(IPhysicsShape *shape)
+void vkBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -83,7 +83,7 @@ void vkBulletDynamicCollider::AttachShape(IPhysicsShape *shape)
   UpdateInertia();
  }
 
-void vkBulletDynamicCollider::DetachShape(IPhysicsShape *shape)
+void vkBulletDynamicCollider::DetachShape(iPhysicsShape *shape)
 {
   // not implemented yet
 }
@@ -129,7 +129,7 @@ void vkBulletDynamicCollider::FinishTransformation()
   m_body->updateInertiaTensor();
 }
 
-void vkBulletDynamicCollider::SetTransformationCallback(ITransformationCallback *callback)
+void vkBulletDynamicCollider::SetTransformationCallback(iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }

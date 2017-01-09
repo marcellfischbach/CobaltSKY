@@ -66,38 +66,38 @@ vkParticleShadingMode vkParticleState::GetShadingMode() const
   return m_shadingMode;
 }
 
-void vkParticleState::SetEmitter(IParticleEmitter *emitter)
+void vkParticleState::SetEmitter(iParticleEmitter *emitter)
 {
   VK_SET(m_emitter, emitter);
 }
 
-IParticleEmitter *vkParticleState::GetEmitter()
+iParticleEmitter *vkParticleState::GetEmitter()
 {
   return m_emitter;
 }
 
-const IParticleEmitter *vkParticleState::GetEmitter() const
+const iParticleEmitter *vkParticleState::GetEmitter() const
 {
   return m_emitter;
 }
 
-void vkParticleState::SetStepper(IParticleStepper *stepper)
+void vkParticleState::SetStepper(iParticleStepper *stepper)
 {
   VK_SET(m_stepper,  stepper);
 }
 
-IParticleStepper *vkParticleState::GetStepper()
+iParticleStepper *vkParticleState::GetStepper()
 {
   return m_stepper;
 }
 
-const IParticleStepper *vkParticleState::GetStepper() const
+const iParticleStepper *vkParticleState::GetStepper() const
 {
   return m_stepper;
 }
 
 
-void vkParticleState::Render(IGraphics *graphics, vkRenderPass pass)  const
+void vkParticleState::Render(iGraphics *graphics, vkRenderPass pass)  const
 {
   vkRenderState::Render(graphics, pass);
   if (m_particle && m_materialInstance)
@@ -116,7 +116,7 @@ void vkParticleState::Render(IGraphics *graphics, vkRenderPass pass)  const
   }
 }
 
-void vkParticleState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
+void vkParticleState::PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config)
 {
   if (m_materialInstance && m_particle)
   {

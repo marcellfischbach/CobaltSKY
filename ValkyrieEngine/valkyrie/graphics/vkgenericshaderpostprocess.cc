@@ -17,13 +17,13 @@ vkGenericShaderPostProcess::~vkGenericShaderPostProcess()
 }
 
 
-void vkGenericShaderPostProcess::SetShader(IShader *shader)
+void vkGenericShaderPostProcess::SetShader(iShader *shader)
 {
   vkPostProcess::SetShader(shader);
 }
 
 
-bool vkGenericShaderPostProcess::Render(IGraphics *graphics)
+bool vkGenericShaderPostProcess::Render(iGraphics *graphics)
 {
   if (!vkPostProcess::Render(graphics))
   {

@@ -19,7 +19,7 @@
 
 
 
-vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
+vkDirectionalLightRenderer::vkDirectionalLightRenderer(iGraphics *renderer)
   : vkLightRenderer(renderer)
   , m_colorBuffer(0)
   , m_colorBufferBlur(0)
@@ -50,7 +50,7 @@ vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
   m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, (vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize, 3, false);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, (vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize, 3, false);
 
-  ISampler *colorSampler = renderer->CreateSampler();
+  iSampler *colorSampler = renderer->CreateSampler();
   colorSampler->SetFilter(eFM_MinMagLinear);
   colorSampler->SetAddressU(eTAM_ClampBorder);
   colorSampler->SetAddressV(eTAM_ClampBorder);
@@ -61,7 +61,7 @@ vkDirectionalLightRenderer::vkDirectionalLightRenderer(IGraphics *renderer)
 
   colorSampler->Release();
 
-  m_shadowBuffer = static_cast<IRenderTarget*>(renderer->CreateRenderTarget());
+  m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize((vkUInt16)m_shadowBufferSize, (vkUInt16)m_shadowBufferSize);
   m_shadowBuffer->AddColorTexture(m_colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
@@ -79,7 +79,7 @@ vkDirectionalLightRenderer::~vkDirectionalLightRenderer()
 
 
 
-void vkDirectionalLightRenderer::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkDirectionalLightRenderer::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, iRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);

@@ -14,15 +14,15 @@ public:
   vkPhysicsShapeContainer();
   virtual ~vkPhysicsShapeContainer();
 
-  void AddShape(IPhysicsShape *shape);
+  void AddShape(iPhysicsShape *shape);
   void RemoveShape(vkSize idx);
 
   vkSize GetNumberOfShapes() const;
-  IPhysicsShape *GetShape(vkSize idx);
-  const IPhysicsShape *GetShape(vkSize idx) const;
+  iPhysicsShape *GetShape(vkSize idx);
+  const iPhysicsShape *GetShape(vkSize idx) const;
 
 private:
-  std::vector<IPhysicsShape*> m_shapes;
+  std::vector<iPhysicsShape*> m_shapes;
 
 };
 

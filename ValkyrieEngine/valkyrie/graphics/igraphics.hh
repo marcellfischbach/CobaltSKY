@@ -7,18 +7,18 @@
 #include <valkyrie/vkenums.hh>
 #include <valkyrie/graphics/igraphics.refl.hh>
 
-struct IFrameProcessor;
-struct IRenderTarget;
-struct IIndexBuffer;
-struct IVertexBuffer;
-struct IVertexDeclaration;
-struct ISampler;
+struct iFrameProcessor;
+struct iRenderTarget;
+struct iIndexBuffer;
+struct iVertexBuffer;
+struct iVertexDeclaration;
+struct iSampler;
 struct ISGShaderGraphFactory;
-struct IShader;
-struct ITexture;
-struct ITexture2D;
-struct ITexture2DArray;
-struct ITextureCube;
+struct iShader;
+struct iTexture;
+struct iTexture2D;
+struct iTexture2DArray;
+struct iTextureCube;
 struct vkVertexElement;
 class vkSkeleton;
 
@@ -30,7 +30,7 @@ class vkSkeleton;
 
 
 VK_INTERFACE()
-struct VKE_API IGraphics : public IObject
+struct VKE_API iGraphics : public iObject
 {
   VK_CLASS_GEN;
 
@@ -40,15 +40,15 @@ struct VKE_API IGraphics : public IObject
    * \name Create of render buffers and render states
    * @{
    */
-  virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
-  virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
-  virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements) = 0;
-  virtual IRenderTarget *CreateRenderTarget() = 0;
-  virtual ISampler *CreateSampler() = 0;
-  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps) = 0;
-  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) = 0;
-  virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) = 0;
-  virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) = 0;
+  virtual iIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
+  virtual iVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) = 0;
+  virtual iVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements) = 0;
+  virtual iRenderTarget *CreateRenderTarget() = 0;
+  virtual iSampler *CreateSampler() = 0;
+  virtual iTexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps) = 0;
+  virtual iTexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) = 0;
+  virtual iTextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) = 0;
+  virtual iShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) = 0;
   /**
    * @}
    */
@@ -80,16 +80,16 @@ struct VKE_API IGraphics : public IObject
     * \name The rendering API
     * @{
     */
-  virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration) = 0;
-  virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer) = 0;
-  virtual void SetIndexBuffer(IIndexBuffer *indexBuffer) = 0;
-  virtual void SetShader(IShader *shader) = 0;
+  virtual void SetVertexDeclaration(iVertexDeclaration *vertexDeclaration) = 0;
+  virtual void SetVertexBuffer(vkUInt16 streamIdx, iVertexBuffer *vertexBuffer) = 0;
+  virtual void SetIndexBuffer(iIndexBuffer *indexBuffer) = 0;
+  virtual void SetShader(iShader *shader) = 0;
   virtual void FreeTextures() = 0;
   virtual void InvalidateTextures() = 0;
-  virtual vkTextureUnit BindTexture(ITexture *texture) = 0;
-  virtual void SetTexture(vkTextureUnit unit, ITexture *texture) = 0;
-  virtual void SetSampler(vkTextureUnit unit, ISampler *sampler) = 0;
-  virtual void SetRenderTarget(IRenderTarget *renderTarget) = 0;
+  virtual vkTextureUnit BindTexture(iTexture *texture) = 0;
+  virtual void SetTexture(vkTextureUnit unit, iTexture *texture) = 0;
+  virtual void SetSampler(vkTextureUnit unit, iSampler *sampler) = 0;
+  virtual void SetRenderTarget(iRenderTarget *renderTarget) = 0;
 
   virtual void SetBlendEnabled(bool enabled) = 0;
   virtual bool IsBlendEnabled() const = 0;
@@ -113,11 +113,11 @@ struct VKE_API IGraphics : public IObject
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0) = 0;
   virtual void SetViewport(vkUInt16 width, vkUInt16 height) = 0;
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height) = 0;
-  virtual void SetViewport(IRenderTarget *viewport) = 0;
+  virtual void SetViewport(iRenderTarget *viewport) = 0;
   virtual void Render(vkPrimitiveType type, vkUInt32 count) = 0;
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType) = 0;
   virtual void RenderFullScreenFrame() = 0;
-  virtual void RenderFullScreenFrame(ITexture2D* textureColor) = 0;
+  virtual void RenderFullScreenFrame(iTexture2D* textureColor) = 0;
   virtual void BindValues() = 0;
   /**
    * @}

@@ -25,7 +25,7 @@
 
 
 vkGraphicsGL4::vkGraphicsGL4()
-  : IGraphics()
+  : iGraphics()
   , m_vertexDeclaration(0)
   , m_indexBuffer(0)
   , m_program(0)
@@ -126,7 +126,7 @@ void vkGraphicsGL4::ResetDefaults ()
 
 
 
-IIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+iIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
 {
   IndexBufferGL4 *indexBuffer = new IndexBufferGL4();
   if (!indexBuffer->CreateBuffer(size, data, mode))
@@ -140,7 +140,7 @@ IIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vk
 
 
 
-IVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+iVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
 {
   VertexBufferGL4 *vertexBuffer = new VertexBufferGL4();
   if (!vertexBuffer->CreateBuffer(size, data, mode))
@@ -152,7 +152,7 @@ IVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, 
   return vertexBuffer;
 }
 
-IVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement *elements)
+iVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement *elements)
 {
   vkVertexDeclarationGL4 *decl = new vkVertexDeclarationGL4();
   if (!decl->Create(elements))
@@ -164,12 +164,12 @@ IVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement
   return decl;
 }
 
-IRenderTarget *vkGraphicsGL4::CreateRenderTarget()
+iRenderTarget *vkGraphicsGL4::CreateRenderTarget()
 {
   return new vkRenderTargetGL4();
 }
 
-ISampler *vkGraphicsGL4::CreateSampler()
+iSampler *vkGraphicsGL4::CreateSampler()
 {
   vkSamplerGL4 *sampler = new vkSamplerGL4();
   if (!sampler->Initialize())
@@ -181,7 +181,7 @@ ISampler *vkGraphicsGL4::CreateSampler()
   return sampler;
 }
 
-ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
+iTexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
 {
   vkTexture2DGL4 *texture = new vkTexture2DGL4();
   if (!texture->Initialize(format, width, height, mipmaps))
@@ -193,7 +193,7 @@ ITexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width,
 }
 
 
-ITexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
+iTexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
 {
   vkTexture2DArrayGL4 *texture = new vkTexture2DArrayGL4();
   if (!texture->Initialize(format, width, height, layers, mipmaps))
@@ -204,7 +204,7 @@ ITexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUIn
   return texture;
 }
 
-ITextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
+iTextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
 {
   vkTextureCubeGL4 *texture = new vkTextureCubeGL4();
   if (!texture->Initialize(format, width, height, depth))
@@ -217,7 +217,7 @@ ITextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 wi
 
 
 
-IShader *vkGraphicsGL4::CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode)
+iShader *vkGraphicsGL4::CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode)
 {
   vkProgramGL4 *program = new vkProgramGL4();
 
@@ -539,7 +539,7 @@ void vkGraphicsGL4::BindSkeleton()
   if (m_skeletonMatrices && m_numberOfSkeletonMatrices)
   {
 
-    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatsSkeleton);
+    iShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatsSkeleton);
     if (attrib)
     {
       attrib->Set(m_skeletonMatrices, m_numberOfSkeletonMatrices);
@@ -547,7 +547,7 @@ void vkGraphicsGL4::BindSkeleton()
   }
   if (m_skeletonBoneMapping && m_numberOfSkeletonBoneMappings)
   {
-    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_SkeletonMapping);
+    iShaderAttribute *attrib = m_program->GetAttribute(eVAT_SkeletonMapping);
     if (attrib)
     {
       attrib->Set(m_skeletonBoneMapping, m_numberOfSkeletonBoneMappings);
@@ -563,7 +563,7 @@ void vkGraphicsGL4::BindMatrices()
   }
   for (vkUInt32 i = 0; i < eMT_COUNT; ++i)
   {
-    IShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatProj + i);
+    iShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatProj + i);
     if (attrib)
     {
       RecalculateMatrix((vkMatrixType)i);
@@ -573,7 +573,7 @@ void vkGraphicsGL4::BindMatrices()
 
   
   static vkShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
-  IShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
+  iShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
   if (attrib)
   {
     attrib->Set(m_shadowMatricesProjView, m_numberOfShadowMatrices);
@@ -604,13 +604,13 @@ void vkGraphicsGL4::BindMatrices()
 }
 
 
-void vkGraphicsGL4::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
+void vkGraphicsGL4::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
 {
   vkVertexDeclarationGL4 *decl = static_cast<vkVertexDeclarationGL4*>(vertexDeclaration);
   VK_SET(m_vertexDeclaration, decl);
 }
 
-void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer)
+void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, iVertexBuffer *vertexBuffer)
 {
   assert(streamIdx < 16);
 
@@ -618,14 +618,14 @@ void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuf
   VK_SET(m_vertexBuffer[streamIdx], vb);
 }
 
-void vkGraphicsGL4::SetIndexBuffer(IIndexBuffer *indexBuffer)
+void vkGraphicsGL4::SetIndexBuffer(iIndexBuffer *indexBuffer)
 {
   IndexBufferGL4 *ib = static_cast<IndexBufferGL4*>(indexBuffer);
   VK_SET(m_indexBuffer, ib);
 }
 
 
-void vkGraphicsGL4::SetShader(IShader *shader)
+void vkGraphicsGL4::SetShader(iShader *shader)
 {
   VK_CHECK_GL_ERROR;
   vkProgramGL4 *prog = static_cast<vkProgramGL4*>(shader);
@@ -647,7 +647,7 @@ void vkGraphicsGL4::SetShader(IShader *shader)
   VK_CHECK_GL_ERROR;
 }
 
-vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
+vkTextureUnit vkGraphicsGL4::BindTexture(iTexture *texture)
 {
   VK_CHECK_GL_ERROR;
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
@@ -671,7 +671,7 @@ vkTextureUnit vkGraphicsGL4::BindTexture(ITexture *texture)
   return unit;
 }
 
-void vkGraphicsGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
+void vkGraphicsGL4::SetTexture(vkTextureUnit unit, iTexture *texture)
 {
   VK_CHECK_GL_ERROR;
   vkTextureGL4 *textureGL = texture ? vkQueryClass<vkTextureGL4>(texture) : 0;
@@ -688,7 +688,7 @@ void vkGraphicsGL4::SetTexture(vkTextureUnit unit, ITexture *texture)
   VK_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
+void vkGraphicsGL4::SetSampler(vkTextureUnit unit, iSampler *sampler)
 {
   vkSamplerGL4 *samplerGL = sampler ? vkQueryClass<vkSamplerGL4>(sampler) : 0;
   if (m_samplers[unit] != samplerGL)
@@ -699,7 +699,7 @@ void vkGraphicsGL4::SetSampler(vkTextureUnit unit, ISampler *sampler)
   }
 }
 
-void vkGraphicsGL4::SetRenderTarget(IRenderTarget *renderTarget)
+void vkGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 {
   VK_CHECK_GL_ERROR;
   vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
@@ -924,7 +924,7 @@ void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 h
   m_viewportHeight = height;
 }
 
-void vkGraphicsGL4::SetViewport(IRenderTarget *renderTarget)
+void vkGraphicsGL4::SetViewport(iRenderTarget *renderTarget)
 {
   SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
 }
@@ -940,7 +940,7 @@ void vkGraphicsGL4::BindValues()
   /* ******************************************* */
   /*    Bind data for the fading gradient        */
   /* ******************************************* */
-  IShaderAttribute *attribBinaryGradient = m_program->GetAttribute(eVAT_BinaryGradient);
+  iShaderAttribute *attribBinaryGradient = m_program->GetAttribute(eVAT_BinaryGradient);
   if (attribBinaryGradient)
   {
     vkTextureUnit tu = BindTexture(vkBinaryGradient::GetBinaryGradient());
@@ -950,18 +950,18 @@ void vkGraphicsGL4::BindValues()
     }
   }
 
-  IShaderAttribute *attributeBinaryGradientToScreen = m_program->GetAttribute(eVAT_BinaryGradientToScreen);
+  iShaderAttribute *attributeBinaryGradientToScreen = m_program->GetAttribute(eVAT_BinaryGradientToScreen);
   if (attributeBinaryGradientToScreen)
   {
     attributeBinaryGradientToScreen->Set((float)m_viewportWidth / 8.0f, (float)m_viewportHeight / 8.0f);
   }
 
-  IShaderAttribute *attributeFadeInOutValue = m_program->GetAttribute(eVAT_FadeInOutValue);
+  iShaderAttribute *attributeFadeInOutValue = m_program->GetAttribute(eVAT_FadeInOutValue);
   if (attributeFadeInOutValue)
   {
     attributeFadeInOutValue->Set(m_fadeInOutValue);
   }
-  IShaderAttribute *attributeFadeInOutDist = m_program->GetAttribute(eVAT_FadeInOutDist);
+  iShaderAttribute *attributeFadeInOutDist = m_program->GetAttribute(eVAT_FadeInOutDist);
   if (attributeFadeInOutDist)
   {
     attributeFadeInOutDist->Set(m_fadeInOutDistances);
@@ -970,13 +970,13 @@ void vkGraphicsGL4::BindValues()
   /* ******************************************* */
   /*    Bind other data                          */
   /* ******************************************* */
-  IShaderAttribute *attributeViewportSize = m_program->GetAttribute(eVAT_ViewportSize);
+  iShaderAttribute *attributeViewportSize = m_program->GetAttribute(eVAT_ViewportSize);
   if (attributeViewportSize)
   {
     attributeViewportSize->Set((float)m_viewportWidth, (float)m_viewportHeight);
   }
 
-  IShaderAttribute *attributeViewportSizeInv = m_program->GetAttribute(eVAT_ViewportSizeInv);
+  iShaderAttribute *attributeViewportSizeInv = m_program->GetAttribute(eVAT_ViewportSizeInv);
   if (attributeViewportSizeInv)
   {
     attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
@@ -1013,12 +1013,12 @@ void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDa
   VK_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(ITexture2D *texture)
+void vkGraphicsGL4::RenderFullScreenFrame(iTexture2D *texture)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture);
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture)
+void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2D *texture)
 {
   VK_CHECK_GL_ERROR;
   static vkShaderAttributeID attrDiffuseID("Diffuse");
@@ -1051,12 +1051,12 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   VK_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(ITexture2DArray *texture, int layer)
+void vkGraphicsGL4::RenderFullScreenFrame(iTexture2DArray *texture, int layer)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture, layer);
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer)
+void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2DArray *texture, int layer)
 {
   VK_CHECK_GL_ERROR;
   static vkShaderAttributeID attrDiffuseID("Diffuse");

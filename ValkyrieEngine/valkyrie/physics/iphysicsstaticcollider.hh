@@ -5,9 +5,9 @@
 #include <valkyrie/physics/iphysicsstaticcollider.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IPhysicsStaticCollider : public VK_SUPER(IPhysicsBaseCollider)
+struct VKE_API iPhysicsStaticCollider : public VK_SUPER(iPhysicsBaseCollider)
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsStaticCollider() { }
+  virtual ~iPhysicsStaticCollider() { }
 
 };

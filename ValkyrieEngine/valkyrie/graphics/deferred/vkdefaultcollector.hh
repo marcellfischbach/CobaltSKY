@@ -4,7 +4,7 @@
 #include <valkyrie/entity/ientityscan.hh>
 
 class vkRenderState;
-class vkDefaultCollector : public IEntityScan
+class vkDefaultCollector : public iEntityScan
 {
 public:
   vkDefaultCollector(vkCollection<vkRenderState*> *renderStates,

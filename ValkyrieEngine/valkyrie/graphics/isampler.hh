@@ -8,7 +8,7 @@
 #include <valkyrie/graphics/isampler.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API ISampler : public IObject
+struct VKE_API iSampler : public iObject
 {
   VK_CLASS_GEN;
 

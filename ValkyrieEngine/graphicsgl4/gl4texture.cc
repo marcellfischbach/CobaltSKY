@@ -8,7 +8,7 @@
 
 
 vkTextureGL4::vkTextureGL4(vkTextureType type)
-  : ITexture()
+  : iTexture()
   , m_name(0)
   , m_type(type)
   , m_target(textureTypeMap[type])
@@ -36,17 +36,17 @@ bool vkTextureGL4::Initialize()
   return m_name != 0;
 }
 
-void vkTextureGL4::SetSampler(ISampler *sampler)
+void vkTextureGL4::SetSampler(iSampler *sampler)
 {
   VK_SET(m_sampler, sampler);
 }
 
-ISampler *vkTextureGL4::GetSampler()
+iSampler *vkTextureGL4::GetSampler()
 {
   return m_sampler;
 }
 
-const ISampler *vkTextureGL4::GetSampler() const
+const iSampler *vkTextureGL4::GetSampler() const
 {
   return m_sampler;
 }

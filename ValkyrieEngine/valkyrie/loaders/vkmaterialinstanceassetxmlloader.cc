@@ -22,17 +22,17 @@ vkMaterialInstanceAssetXMLLoader::~vkMaterialInstanceAssetXMLLoader()
 
 }
 
-bool vkMaterialInstanceAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkMaterialInstanceAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkString(element->Value()) == vkString("materialInstance");
 }
 
-const vkClass *vkMaterialInstanceAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkMaterialInstanceAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkMaterialInstance::GetStaticClass();
 }
 
-IObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkMaterialInstance *materialInstance = new vkMaterialInstance();
 
@@ -97,7 +97,7 @@ IObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkR
       }
       else if (tagName == vkString("locator"))
       {
-        ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator(vkString(valueElement->GetText())));
+        iTexture *texture = vkResourceManager::Get()->GetOrLoad<iTexture>(vkResourceLocator(vkString(valueElement->GetText())));
         materialInstance->Set(index, texture);
       }
     }

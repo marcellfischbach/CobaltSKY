@@ -16,13 +16,13 @@ class VKE_API vkEngine
 public:
   vkEngine();
 
-  void SetWindow(IWindow *window);
-  void SetRenderer(IGraphics *renderer);
-  void SetPhysicsSystem(IPhysicsSystem *physicsSystem);
+  void SetWindow(iWindow *window);
+  void SetRenderer(iGraphics *renderer);
+  void SetPhysicsSystem(iPhysicsSystem *physicsSystem);
 
-  IWindow *GetWindow() const;
-  IGraphics *GetRenderer() const;
-  IPhysicsSystem *GetPhysicsSystem() const;
+  iWindow *GetWindow() const;
+  iGraphics *GetRenderer() const;
+  iPhysicsSystem *GetPhysicsSystem() const;
 
   bool Initialize();
   bool SetupTestScene();
@@ -32,7 +32,7 @@ public:
    * @{
    */
 
-  inline IObject *Get(const vkString &resourceName, bool forceInstance = false) const
+  inline iObject *Get(const vkString &resourceName, bool forceInstance = false) const
   {
     return Get(vkResourceLocator(resourceName), forceInstance);
   }
@@ -43,7 +43,7 @@ public:
   }
 
 
-  inline IObject *Get(const vkResourceLocator &locator, bool forceInstance = false) const
+  inline iObject *Get(const vkResourceLocator &locator, bool forceInstance = false) const
   {
     return vkResourceManager::Get()->Aquire(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
   }
@@ -54,24 +54,24 @@ public:
     return vkResourceManager::Get()->Aquire<T>(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
   }
 
-  virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
-  virtual IRenderTarget *CreateRenderTarget();
-  virtual ISampler *CreateSampler();
-  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
-  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
-  virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
-  virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode);
+  virtual iIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
+  virtual iVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
+  virtual iVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
+  virtual iRenderTarget *CreateRenderTarget();
+  virtual iSampler *CreateSampler();
+  virtual iTexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
+  virtual iTexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
+  virtual iTextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
+  virtual iShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode);
 
 
-  virtual IPhysicsScene *CreateScene();
-  virtual IPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
-  virtual IPhysicsDynamicCollider *CreateDynamicCollider();
-  virtual IPhysicsStaticCollider *CreateStaticCollider();
-  virtual IPhysicsTriggerCollider *CreateTriggerCollider();
-  virtual IPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
-  virtual IPhysicsJoint *CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB);
+  virtual iPhysicsScene *CreateScene();
+  virtual iPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
+  virtual iPhysicsDynamicCollider *CreateDynamicCollider();
+  virtual iPhysicsStaticCollider *CreateStaticCollider();
+  virtual iPhysicsTriggerCollider *CreateTriggerCollider();
+  virtual iPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
+  virtual iPhysicsJoint *CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB);
   /** 
    * @}
    */
@@ -80,24 +80,24 @@ public:
   static vkEngine *static_instance;
 private:
 
-  IWindow *m_window;  
-  IGraphics *m_renderer;
-  IPhysicsSystem *m_physicsSystem;
+  iWindow *m_window;  
+  iGraphics *m_renderer;
+  iPhysicsSystem *m_physicsSystem;
 
 };
 
 
-VK_FORCEINLINE IWindow *vkEngine::GetWindow() const
+VK_FORCEINLINE iWindow *vkEngine::GetWindow() const
 {
   return m_window;
 }
 
-VK_FORCEINLINE IGraphics *vkEngine::GetRenderer() const
+VK_FORCEINLINE iGraphics *vkEngine::GetRenderer() const
 {
   return m_renderer;
 }
 
-VK_FORCEINLINE IPhysicsSystem *vkEngine::GetPhysicsSystem() const
+VK_FORCEINLINE iPhysicsSystem *vkEngine::GetPhysicsSystem() const
 {
   return m_physicsSystem;
 }

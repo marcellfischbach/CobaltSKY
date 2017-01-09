@@ -13,7 +13,7 @@ class btCollisionShape;
 class btCompoundShape;
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletStaticCollider : public VK_SUPER(IPhysicsStaticCollider)
+class VKBULLETPHYSICS_API vkBulletStaticCollider : public VK_SUPER(iPhysicsStaticCollider)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -22,7 +22,7 @@ public:
   virtual ~vkBulletStaticCollider();
 
   /**
-  * \name IPhysicsCollider interface
+  * \name iPhysicsCollider interface
   * @{
   */
   virtual vkPhysicsColliderType GetType() const;
@@ -31,8 +31,8 @@ public:
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
 
-  virtual void AttachShape(IPhysicsShape *shape);
-  virtual void DetachShape(IPhysicsShape *shape);
+  virtual void AttachShape(iPhysicsShape *shape);
+  virtual void DetachShape(iPhysicsShape *shape);
 
   virtual void AttachShape(vkPhysicsShapeContainer *shapes);
   virtual void DetachShape(vkPhysicsShapeContainer *shapes);
@@ -42,7 +42,7 @@ public:
   */
 
   /**
-  * \name IPhysicsBaseCollider interface
+  * \name iPhysicsBaseCollider interface
   * @{
   */
   virtual void SetFriction(float friction);

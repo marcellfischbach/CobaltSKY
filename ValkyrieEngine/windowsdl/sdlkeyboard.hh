@@ -5,7 +5,7 @@
 #include <windowsdl/sdlkeyboard.refl.hh>
 
 VK_CLASS()
-class VKWINDOWSDL_API SDLKeyboard : public VK_SUPER(IKeyboard)
+class VKWINDOWSDL_API SDLKeyboard : public VK_SUPER(iKeyboard)
 {
   VK_CLASS_GEN_OBJECT;
 public:

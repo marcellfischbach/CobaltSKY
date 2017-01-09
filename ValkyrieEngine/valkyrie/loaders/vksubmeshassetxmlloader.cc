@@ -11,7 +11,7 @@
 #include <algorithm>
 
 vkSubMeshAssetLoader::vkSubMeshAssetLoader()
-  : IAssetLoader()
+  : iAssetLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -21,17 +21,17 @@ vkSubMeshAssetLoader::~vkSubMeshAssetLoader()
 
 }
 
-bool vkSubMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData)const
+bool vkSubMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, iObject *userData)const
 {
   return typeID == vkString("SUBMESH");
 }
 
-const vkClass *vkSubMeshAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkSubMeshAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkSubMesh::GetStaticClass();
 }
 
-IObject *vkSubMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkSubMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   vkUInt32 version;
 
@@ -76,7 +76,7 @@ IObject *vkSubMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
       stream));
   }
   vertexElements.push_back(vkVertexElement());
-  IVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(vertexElements.data());
+  iVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(vertexElements.data());
   subMesh->SetVertexDeclaration(vertexDeclaration);
   VK_RELEASE(vertexDeclaration);
 
@@ -90,7 +90,7 @@ IObject *vkSubMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
     inputStream >> vertexBufferSize;
     unsigned char *buffer = new unsigned char[vertexBufferSize];
     inputStream.Read(buffer, vertexBufferSize);
-    IVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
+    iVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
     subMesh->AddVertexBuffer(vertexBuffer);
     VK_RELEASE(vertexBuffer);
     delete[] buffer;
@@ -120,7 +120,7 @@ IObject *vkSubMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkRes
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    IIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    iIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
     delete[] buffer;
     subMesh->SetIndexBuffer(indexBuffer, count, offset);
   }

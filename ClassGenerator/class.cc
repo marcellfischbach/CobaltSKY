@@ -50,7 +50,7 @@ Property Class::GetProperty(size_t idx) const
 
 void Class::AddSuperClass(const std::string &superName)
 {
-  if (superName != "IObject")
+  if (superName != "iObject")
   {
     m_superClasses.push_back(superName);
   }

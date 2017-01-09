@@ -10,7 +10,7 @@
 #include <graphicsgl4/gl4shaderattribute.refl.hh>
 
 VK_CLASS()
-class vkShaderAttributeGL4 : public VK_SUPER(IShaderAttribute)
+class vkShaderAttributeGL4 : public VK_SUPER(iShaderAttribute)
 {
   VK_CLASS_GEN_OBJECT;
 

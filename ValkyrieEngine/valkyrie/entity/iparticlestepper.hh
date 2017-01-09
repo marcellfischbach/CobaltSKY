@@ -8,11 +8,11 @@
 class vkParticle;
 
 VK_INTERFACE()
-struct VKE_API IParticleStepper : public IObject
+struct VKE_API iParticleStepper : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IParticleStepper() { }
+  virtual ~iParticleStepper() { }
 
   virtual void Update(float tpf, vkParticle *particle) = 0;
 };

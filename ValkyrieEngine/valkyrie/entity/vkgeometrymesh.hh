@@ -34,11 +34,11 @@ public:
 
   void UpdateTransformation(const vkMatrix4f &parentTransform);
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
   virtual vkGeometryData *Clone();
 
-  void Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod = 0);
+  void Render(iGraphics *graphics, vkRenderPass pass, vkUInt8 lod = 0);
 private:
   vkMatrix4f m_localTransform;
   vkMatrix4f m_globalTransform;

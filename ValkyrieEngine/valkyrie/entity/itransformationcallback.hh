@@ -3,9 +3,9 @@
 #include <valkyrie/vkexport.hh>
 #include <valkyrie/math/vkmatrix.hh>
 
-struct VKE_API ITransformationCallback
+struct VKE_API iTransformationCallback
 {
-  virtual ~ITransformationCallback() { }
+  virtual ~iTransformationCallback() { }
 
   virtual void TransformationChanged(const vkMatrix4f &transformation) = 0;
 

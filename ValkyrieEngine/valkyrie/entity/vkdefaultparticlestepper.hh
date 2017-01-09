@@ -10,7 +10,7 @@
 #include <valkyrie/entity/vkdefaultparticlestepper.refl.hh>
 
 VK_CLASS()
-class VKE_API vkDefaultParticleStepper : public VK_SUPER(IParticleStepper)
+class VKE_API vkDefaultParticleStepper : public VK_SUPER(iParticleStepper)
 {
   VK_CLASS_GEN_OBJECT;
 public:

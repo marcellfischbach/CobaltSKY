@@ -159,7 +159,7 @@ void vkMaterialInstance::Set(vkUInt16 idx, const vkColor4f &c)
   param.m_float[3] = c.a;
 }
 
-void vkMaterialInstance::Set(vkUInt16 idx, ITexture *texture)
+void vkMaterialInstance::Set(vkUInt16 idx, iTexture *texture)
 {
   if (idx >= m_parameters.size())
   {
@@ -236,7 +236,7 @@ vkColor4f vkMaterialInstance::GetColor4(vkUInt16 idx)
                    param.m_float[3]);
 }
 
-ITexture *vkMaterialInstance::GetTexture(vkUInt16 idx)
+iTexture *vkMaterialInstance::GetTexture(vkUInt16 idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -246,13 +246,13 @@ ITexture *vkMaterialInstance::GetTexture(vkUInt16 idx)
   return m_parameters[idx].m_texture;
 }
 
-bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
+bool vkMaterialInstance::Bind(iGraphics *renderer, vkRenderPass pass)
 {
   if (!m_material)
   {
     return false;
   }
-  IShader *shader = m_material->Bind(renderer, pass);
+  iShader *shader = m_material->Bind(renderer, pass);
   if (!shader)
   {
     return false;
@@ -267,7 +267,7 @@ bool vkMaterialInstance::Bind(IGraphics *renderer, vkRenderPass pass)
     }
     else
     {
-      IShaderAttribute *attr = m_material->GetAttribute((vkSize)i, pass);
+      iShaderAttribute *attr = m_material->GetAttribute((vkSize)i, pass);
       if (attr)
       {
         switch (param.m_paramType)

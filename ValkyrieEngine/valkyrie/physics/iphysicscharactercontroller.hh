@@ -5,15 +5,15 @@
 #include <valkyrie/math/vkmatrix.hh>
 #include <valkyrie/physics/iphysicscharactercontroller.refl.hh>
 
-struct ITransformationCallback;
+struct iTransformationCallback;
 
 VK_INTERFACE()
-struct VKE_API IPhysicsCharacterController : public IObject
+struct VKE_API iPhysicsCharacterController : public iObject
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsCharacterController () { }
+  virtual ~iPhysicsCharacterController () { }
 
-  virtual void SetTransformationCallback(ITransformationCallback *transformationCallback) = 0;
+  virtual void SetTransformationCallback(iTransformationCallback *transformationCallback) = 0;
 
   virtual void Warp(const vkMatrix4f &transformation) = 0;
   virtual void WarpToPosition(const vkVector3f &newPosition) = 0;

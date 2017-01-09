@@ -12,7 +12,7 @@ class vkBulletDynamicCollider;
 class vkBulletCapsuleCharacterController;
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletScene : public VK_SUPER(IPhysicsScene)
+class VKBULLETPHYSICS_API vkBulletScene : public VK_SUPER(iPhysicsScene)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -22,17 +22,17 @@ public:
   bool Initialize(bool softBody);
 
 
-  virtual void AddStaticCollider(IPhysicsStaticCollider *collider);
-  virtual void RemoveStaticCollider(IPhysicsStaticCollider *collider);
+  virtual void AddStaticCollider(iPhysicsStaticCollider *collider);
+  virtual void RemoveStaticCollider(iPhysicsStaticCollider *collider);
 
-  virtual void AddDynamicCollider(IPhysicsDynamicCollider *collider);
-  virtual void RemoveDynamicCollider(IPhysicsDynamicCollider *collider);
+  virtual void AddDynamicCollider(iPhysicsDynamicCollider *collider);
+  virtual void RemoveDynamicCollider(iPhysicsDynamicCollider *collider);
 
-  virtual void AddCharacterController(IPhysicsCharacterController *controller);
-  virtual void RemoveCharacterController(IPhysicsCharacterController *controller);
+  virtual void AddCharacterController(iPhysicsCharacterController *controller);
+  virtual void RemoveCharacterController(iPhysicsCharacterController *controller);
 
-  virtual void AddJoint(IPhysicsJoint *joint);
-  virtual void RemoveJoint(IPhysicsJoint *joint);
+  virtual void AddJoint(iPhysicsJoint *joint);
+  virtual void RemoveJoint(iPhysicsJoint *joint);
 
   virtual void StepSimulation(float tpf = 1.0f / 60.0f);
   virtual void UpdateColliders();

@@ -6,7 +6,7 @@
 #include <valkyrie/physics/iphysicsscene.hh>
 #include <valkyrie/vkengine.hh>
 
-class vkDynamicColliderStateTransformationCallback : public ITransformationCallback
+class vkDynamicColliderStateTransformationCallback : public iTransformationCallback
 {
 public:
   vkDynamicColliderStateTransformationCallback(vkDynamicColliderState *state)

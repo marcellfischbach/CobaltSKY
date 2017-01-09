@@ -23,18 +23,18 @@ vkShaderGraphAssetXMLLoader::~vkShaderGraphAssetXMLLoader()
 
 }
 
-bool vkShaderGraphAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkShaderGraphAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString tagName(element->Value());
   return tagName == vkString("shaderGraph");
 }
 
-const vkClass *vkShaderGraphAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkShaderGraphAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkSGShaderGraph::GetStaticClass();
 }
 
-IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkSGShaderGraph *shaderGraph = new vkSGShaderGraph();
 
@@ -285,7 +285,7 @@ IObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
   }
 
 
-  IGraphics *graphics = vkEng->GetRenderer();
+  iGraphics *graphics = vkEng->GetRenderer();
   if (graphics)
   {
     graphics->GetShaderGraphFactory()->GenerateShaderGraph(shaderGraph);

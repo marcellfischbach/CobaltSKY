@@ -6,7 +6,7 @@
 
 vkTextureCubeGL4::vkTextureCubeGL4()
   : vkTextureGL4(eTT_TextureCube)
-  , ITextureCube()
+  , iTextureCube()
 {
 
 }

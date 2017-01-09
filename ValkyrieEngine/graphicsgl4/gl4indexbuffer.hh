@@ -6,7 +6,7 @@
 #include <graphicsgl4/gl4indexbuffer.refl.hh>
 
 VK_CLASS()
-class IndexBufferGL4 : public VK_SUPER(IIndexBuffer)
+class IndexBufferGL4 : public VK_SUPER(iIndexBuffer)
 {
   VK_CLASS_GEN_OBJECT;
 public:

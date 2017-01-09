@@ -9,7 +9,7 @@ class vkLightState;
 * \ingroup entity
 */
 
-struct IEntityScan
+struct iEntityScan
 {
 
   virtual void ScanRenderState(vkRenderState *renderState) = 0;

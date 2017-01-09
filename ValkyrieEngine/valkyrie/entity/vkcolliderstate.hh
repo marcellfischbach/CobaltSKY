@@ -8,8 +8,8 @@
 #include <valkyrie/entity/vkcolliderstate.refl.hh>
 
 
-struct IPhysicsShape;
-struct IPhysicsCollider;
+struct iPhysicsShape;
+struct iPhysicsCollider;
 class vkPhysicsShapeContainer;
 
 
@@ -21,14 +21,14 @@ public:
   virtual ~vkColliderState();
 
 
-  void AttachShape(IPhysicsShape *shape);
-  void DetachShape(IPhysicsShape *shape);
+  void AttachShape(iPhysicsShape *shape);
+  void DetachShape(iPhysicsShape *shape);
 
   void AttachShape(vkPhysicsShapeContainer *shapes);
   void DetachShape(vkPhysicsShapeContainer *shapes);
 
-  IPhysicsCollider *GetCollider();
-  const IPhysicsCollider *GetCollider() const;
+  iPhysicsCollider *GetCollider();
+  const iPhysicsCollider *GetCollider() const;
 
 
 protected:
@@ -36,22 +36,22 @@ protected:
 
   virtual void UpdateTransformation();
 
-  void SetCollider(IPhysicsCollider *collider);
+  void SetCollider(iPhysicsCollider *collider);
 
   bool m_updateTransformationGuard;
 
 private:
-  IPhysicsCollider *m_collider;
+  iPhysicsCollider *m_collider;
 
 };
 
 
-VK_FORCEINLINE IPhysicsCollider *vkColliderState::GetCollider()
+VK_FORCEINLINE iPhysicsCollider *vkColliderState::GetCollider()
 {
   return m_collider;
 }
 
-VK_FORCEINLINE const IPhysicsCollider *vkColliderState::GetCollider() const
+VK_FORCEINLINE const iPhysicsCollider *vkColliderState::GetCollider() const
 {
   return m_collider;
 }

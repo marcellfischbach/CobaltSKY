@@ -39,17 +39,17 @@ vkMeshAssetXMLLoader::~vkMeshAssetXMLLoader()
 
 
 
-bool vkMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkString(element->Value()) == vkString("mesh");
 }
 
-const vkClass *vkMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkMesh::GetStaticClass();
 }
 
-IObject *vkMeshAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkMeshAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkMesh *mesh = new vkMesh();
 

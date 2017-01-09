@@ -7,9 +7,9 @@
 #include <valkyrie/vkenums.hh>
 #include <valkyrie/graphics/vkparticle.refl.hh>
 
-struct IGraphics;
-struct IVertexBuffer;
-struct IVertexDeclaration;
+struct iGraphics;
+struct iVertexBuffer;
+struct iVertexDeclaration;
 
 class vkMaterialInstance;
 class vkParticle;
@@ -39,11 +39,11 @@ public:
   vkParticle();
   virtual ~vkParticle();
 
-  bool Initialize(IGraphics *renderer, vkSize numberOfParticles);
+  bool Initialize(iGraphics *renderer, vkSize numberOfParticles);
 
   void SetParticleData(unsigned numParticles, const ParticleData *data);
-  IVertexBuffer *GetParticleBuffer();
-  const IVertexBuffer *GetParticleBuffer() const;
+  iVertexBuffer *GetParticleBuffer();
+  const iVertexBuffer *GetParticleBuffer() const;
 
   void SetNumberOfParticles(vkSize numParticles);
   vkSize GetNumberOfParticles() const;
@@ -56,12 +56,12 @@ public:
   const ParticleData *GetParticleData() const;
   void UnlockParticleData();
 
-  void Render(IGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material);
+  void Render(iGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material);
 
 
 private:
-  IVertexDeclaration *m_vertexDeclaration;
-  IVertexBuffer *m_buffer;
+  iVertexDeclaration *m_vertexDeclaration;
+  iVertexBuffer *m_buffer;
 
   vkSize m_numParticles;
   vkSize m_numRenderParticles;

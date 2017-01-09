@@ -8,15 +8,15 @@
 
 
 VK_INTERFACE()
-struct VKE_API IPhysicsJoint : public IObject
+struct VKE_API iPhysicsJoint : public iObject
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsJoint() { }
+  virtual ~iPhysicsJoint() { }
 
   virtual vkPhysicsJointType GetType() const = 0;
 
-  virtual IPhysicsDynamicCollider *GetColliderA() const = 0;
-  virtual IPhysicsDynamicCollider *GetColliderB() const = 0;
+  virtual iPhysicsDynamicCollider *GetColliderA() const = 0;
+  virtual iPhysicsDynamicCollider *GetColliderB() const = 0;
 
 };
 

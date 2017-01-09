@@ -12,13 +12,13 @@ public:
   virtual ~vkBinaryGradient();
 
   
-  static ITexture2D *GetBinaryGradientLevel1();
-  static ITexture2DArray *GetBinaryGradient();
+  static iTexture2D *GetBinaryGradientLevel1();
+  static iTexture2DArray *GetBinaryGradient();
 
 private:
   vkBinaryGradient();
 
   
-  static ITexture2D *static_texture1;
-  static ITexture2DArray *static_textureArray;
+  static iTexture2D *static_texture1;
+  static iTexture2DArray *static_textureArray;
 };

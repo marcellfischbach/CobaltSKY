@@ -84,12 +84,12 @@ public:
 
   void UpdateBoundingBox();
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
 protected:
   virtual void UpdateTransformation();
   virtual void FillBoundingBox (vkBoundingBox &bbox);
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
   void PerformTransformation();
 

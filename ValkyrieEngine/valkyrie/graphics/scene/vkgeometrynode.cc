@@ -33,7 +33,7 @@ void vkGeometryNode::SetMaterial(vkMaterialInstance *material)
 }
 
 
-void vkGeometryNode::Render(IGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
+void vkGeometryNode::Render(iGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {
@@ -53,7 +53,7 @@ void vkGeometryNode::Render(IGraphics *renderer, vkRenderPass pass, vkUInt8 lod)
   */
 }
 
-void vkGeometryNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback)
+void vkGeometryNode::PrivScan(const vkClipper *clipper, iGraphics *renderer, iScanCallback *callback)
 {
   callback->ScanGeometryNode(this);
 }

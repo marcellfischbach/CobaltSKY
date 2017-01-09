@@ -9,7 +9,7 @@
 
 
 VK_CLASS();
-class VKGRAPHICSGL4_API vkTextureCubeGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITextureCube)
+class VKGRAPHICSGL4_API vkTextureCubeGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(iTextureCube)
 {
   VK_CLASS_GEN;
 public:
@@ -20,7 +20,7 @@ public:
   bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
 
 
-  // Implementation of the ITexture2DArray interface
+  // Implementation of the iTexture2DArray interface
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
   virtual vkUInt16 GetDepth() const;

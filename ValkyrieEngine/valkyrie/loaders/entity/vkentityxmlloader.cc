@@ -25,17 +25,17 @@ vkEntityXMLLoader::~vkEntityXMLLoader()
 }
 
 
-bool vkEntityXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkEntityXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return userData != 0;
 }
 
-const vkClass *vkEntityXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkEntityXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkEntity::GetStaticClass();
 }
 
-IObject *vkEntityXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkEntityXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkEntity *entity = vkQueryClass<vkEntity>(userData);
   if (!entity)

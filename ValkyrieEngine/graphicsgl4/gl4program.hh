@@ -16,7 +16,7 @@ class vkShaderStreamGL4;
 
 
 VK_CLASS()
-class vkProgramGL4 : public VK_SUPER(IShader)
+class vkProgramGL4 : public VK_SUPER(iShader)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -30,13 +30,13 @@ public:
   virtual void RegisterStream(const vkShaderStreamID &id);
 
   virtual vkUInt32 GetNumberOfAttributes() const;
-  virtual IShaderAttribute *GetAttribute(vkUInt32 idx);
-  virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id);
-  virtual IShaderAttribute *GetAttribute(const vkString &attributeName);
+  virtual iShaderAttribute *GetAttribute(vkUInt32 idx);
+  virtual iShaderAttribute *GetAttribute(const vkShaderAttributeID &id);
+  virtual iShaderAttribute *GetAttribute(const vkString &attributeName);
 
   virtual vkUInt16 GetNumberOfStreams() const;
-  virtual IShaderStream *GetStream(const vkShaderStreamID &id);
-  virtual IShaderStream *GetStream(const vkString &streamName);
+  virtual iShaderStream *GetStream(const vkShaderStreamID &id);
+  virtual iShaderStream *GetStream(const vkString &streamName);
 
 
   void AttachShader(vkShaderGL4 *shader);

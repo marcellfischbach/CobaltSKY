@@ -9,27 +9,27 @@
 #include <valkyrie/vkenums.hh>
 #include <valkyrie/graphics/ishader.refl.hh>
 
-struct IShaderAttribute;
-struct IShaderStream;
+struct iShaderAttribute;
+struct iShaderStream;
 
 
 VK_INTERFACE();
-struct VKE_API IShader : public IObject
+struct VKE_API iShader : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IShader() { }
+  virtual ~iShader() { }
 
   virtual void RegisterAttribute(const vkShaderAttributeID &id) = 0;
   virtual void RegisterStream(const vkShaderStreamID &id) = 0;
 
   virtual vkUInt32 GetNumberOfAttributes() const = 0;
-  virtual IShaderAttribute *GetAttribute(const vkShaderAttributeID &id) = 0;
-  virtual IShaderAttribute *GetAttribute(const vkString &attributeName) = 0;
+  virtual iShaderAttribute *GetAttribute(const vkShaderAttributeID &id) = 0;
+  virtual iShaderAttribute *GetAttribute(const vkString &attributeName) = 0;
 
   virtual vkUInt16 GetNumberOfStreams() const = 0;
-  virtual IShaderStream *GetStream(const vkShaderStreamID &id) = 0;
-  virtual IShaderStream *GetStream(const vkString &streamName) = 0;
+  virtual iShaderStream *GetStream(const vkShaderStreamID &id) = 0;
+  virtual iShaderStream *GetStream(const vkString &streamName) = 0;
 
 };
 

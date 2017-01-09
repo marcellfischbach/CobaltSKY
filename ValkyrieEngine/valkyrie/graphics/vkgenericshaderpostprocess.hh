@@ -13,9 +13,9 @@ public:
   vkGenericShaderPostProcess();
   virtual ~vkGenericShaderPostProcess();
 
-  virtual bool Render(IGraphics *graphics);
+  virtual bool Render(iGraphics *graphics);
 
-  void SetShader(IShader *shader);
+  void SetShader(iShader *shader);
 
 
 };

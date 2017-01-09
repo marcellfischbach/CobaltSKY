@@ -28,7 +28,7 @@ vkSubMesh::~vkSubMesh()
     m_indexBuffer->Release();
   }
 
-  for (IVertexBuffer *vertexBuffer : m_vertexBuffer)
+  for (iVertexBuffer *vertexBuffer : m_vertexBuffer)
   {
     vertexBuffer->Release();
   }
@@ -44,12 +44,12 @@ void vkSubMesh::SetIndexType(vkDataType indexType)
   m_indexType = indexType;
 }
 
-void vkSubMesh::SetVertexDeclaration(IVertexDeclaration *vertexDeclaration)
+void vkSubMesh::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
 {
   VK_SET(m_vertexDeclaration, vertexDeclaration);
 }
 
-void vkSubMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
+void vkSubMesh::AddVertexBuffer(iVertexBuffer *vertexBuffer)
 {
   if (vertexBuffer)
   {
@@ -58,7 +58,7 @@ void vkSubMesh::AddVertexBuffer(IVertexBuffer *vertexBuffer)
   m_vertexBuffer.push_back(vertexBuffer);
 }
 
-void vkSubMesh::SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset)
+void vkSubMesh::SetIndexBuffer(iIndexBuffer *indexBuffer, vkSize count, vkSize offset)
 {
   VK_SET(m_indexBuffer, indexBuffer);
 
@@ -77,7 +77,7 @@ const vkBoundingBox &vkSubMesh::GetBoundingBox() const
 }
 
 
-void vkSubMesh::Render(IGraphics *renderer)
+void vkSubMesh::Render(iGraphics *renderer)
 {
   renderer->SetIndexBuffer(m_indexBuffer);
   for (vkSize i = 0, in = m_vertexBuffer.size(); i < in; ++i)

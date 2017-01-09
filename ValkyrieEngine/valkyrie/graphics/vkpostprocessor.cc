@@ -17,7 +17,7 @@ vkPostProcessor::~vkPostProcessor()
 }
 
 
-void vkPostProcessor::SetInput(vkPostProcessOutput originOutput, ITexture *texture)
+void vkPostProcessor::SetInput(vkPostProcessOutput originOutput, iTexture *texture)
 {
   if (!texture)
   {
@@ -27,12 +27,12 @@ void vkPostProcessor::SetInput(vkPostProcessOutput originOutput, ITexture *textu
   m_originInputs[originOutput] = texture;
 }
 
-const ITexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput) const
+const iTexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput) const
 {
   return m_originInputs[originOutput];
 }
 
-ITexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput)
+iTexture *vkPostProcessor::GetInput(vkPostProcessOutput originOutput)
 {
   return m_originInputs[originOutput];
 }
@@ -57,7 +57,7 @@ void vkPostProcessor::BuildSet(vkPostProcess *process, std::set<vkPostProcess*> 
 }
 
 
-bool vkPostProcessor::BuildPostProcessing(IGraphics *graphics)
+bool vkPostProcessor::BuildPostProcessing(iGraphics *graphics)
 {
   // build a set containing all post processes that are used within the process tree
   std::set<vkPostProcess*> processes;
@@ -150,7 +150,7 @@ bool vkPostProcessor::BuildPostProcessing(IGraphics *graphics)
 }
 
 
-IRenderTarget *vkPostProcessor::GetOutput()
+iRenderTarget *vkPostProcessor::GetOutput()
 {
   if (m_finalProcess)
   {
@@ -159,7 +159,7 @@ IRenderTarget *vkPostProcessor::GetOutput()
   return 0;
 }
 
-void vkPostProcessor::Render(IGraphics *graphics)
+void vkPostProcessor::Render(iGraphics *graphics)
 {
   for (size_t i = 0, in = m_processes.size(); i < in; ++i)
   {

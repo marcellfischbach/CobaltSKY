@@ -10,7 +10,7 @@
 #include <graphicsgl4/gl4shaderstream.refl.hh>
 
 VK_CLASS()
-class vkShaderStreamGL4 : public VK_SUPER(IShaderStream)
+class vkShaderStreamGL4 : public VK_SUPER(iShaderStream)
 {
   VK_CLASS_GEN_OBJECT;
 public:

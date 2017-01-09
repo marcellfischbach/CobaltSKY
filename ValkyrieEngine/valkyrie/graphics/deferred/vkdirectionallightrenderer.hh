@@ -2,16 +2,16 @@
 
 #include <valkyrie/graphics/deferred/vklightrenderer.hh>
 
-struct ITexture2DArray;
+struct iTexture2DArray;
 class vkDirectionalLight;
 
 class vkDirectionalLightRenderer : public vkLightRenderer
 {
 public:
-  vkDirectionalLightRenderer(IGraphics *renderer);
+  vkDirectionalLightRenderer(iGraphics *renderer);
   virtual ~vkDirectionalLightRenderer();
 
-  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, iRenderTarget *target);
 
 private:
   void RenderShadow(vkEntity *root, vkCamera *camera, const vkDirectionalLight *light);
@@ -36,24 +36,24 @@ private:
   vkVector3f m_distances;
 
   LightProgram m_programNoShadow;
-  IShaderAttribute *m_attrLightDirectionNoShadow;
+  iShaderAttribute *m_attrLightDirectionNoShadow;
   void BindDirectionalLightNoShadow(vkDirectionalLight *directionalLight);
 
   LightProgram m_programPSSM;
-  IShaderAttribute *m_attrLightDirectionPSSM;
-  IShaderAttribute *m_attrDisancesPSSM;
-  IShaderAttribute *m_attrShadowMatsProjView;
-  IShaderAttribute *m_attrShadowMatsProj;
-  IShaderAttribute *m_attrShadowMatsView;
-  IShaderAttribute *m_attrShadowMap;
-  IShaderAttribute *m_attrShadowColorMap;
-  IShaderAttribute *m_attrShadowMapSizeInv;
-  IShaderAttribute *m_attrMapBias;
-  IShaderAttribute *m_attrShadowIntensity;
-  IShaderAttribute *m_attrShadowProjNearFar;
-  ITexture2DArray *m_colorBuffer;
-  ITexture2DArray *m_depthBuffer;
-  ITexture2DArray *m_colorBufferBlur;
+  iShaderAttribute *m_attrLightDirectionPSSM;
+  iShaderAttribute *m_attrDisancesPSSM;
+  iShaderAttribute *m_attrShadowMatsProjView;
+  iShaderAttribute *m_attrShadowMatsProj;
+  iShaderAttribute *m_attrShadowMatsView;
+  iShaderAttribute *m_attrShadowMap;
+  iShaderAttribute *m_attrShadowColorMap;
+  iShaderAttribute *m_attrShadowMapSizeInv;
+  iShaderAttribute *m_attrMapBias;
+  iShaderAttribute *m_attrShadowIntensity;
+  iShaderAttribute *m_attrShadowProjNearFar;
+  iTexture2DArray *m_colorBuffer;
+  iTexture2DArray *m_depthBuffer;
+  iTexture2DArray *m_colorBufferBlur;
   void BindDirectionalLightPSSM(vkDirectionalLight *directionalLight);
 
 };

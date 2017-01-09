@@ -12,7 +12,7 @@
 
 
 VK_INTERFACE()
-class VKE_API vkBaseXMLLoader : public VK_SUPER(IXMLLoader)
+class VKE_API vkBaseXMLLoader : public VK_SUPER(iXMLLoader)
 {
   VK_CLASS_GEN_OBJECT;
 protected:

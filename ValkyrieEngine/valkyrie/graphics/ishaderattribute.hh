@@ -10,11 +10,11 @@
 #include <valkyrie/graphics/ishaderattribute.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API IShaderAttribute : public IObject
+struct VKE_API iShaderAttribute : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IShaderAttribute() {}
+  virtual ~iShaderAttribute() {}
 
   virtual const vkString &GetName() const = 0;
 

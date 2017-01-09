@@ -46,7 +46,7 @@ enum GeometryType
 };
 
 vkStaticMeshLoader::vkStaticMeshLoader()
-  : IFileLoader()
+  : iFileLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -57,19 +57,19 @@ vkStaticMeshLoader::~vkStaticMeshLoader()
 }
 
 
-bool vkStaticMeshLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkStaticMeshLoader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   return file->GetExtension() == vkString("staticmesh");
 }
 
 
-const vkClass *vkStaticMeshLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkStaticMeshLoader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkMesh::GetStaticClass();
 }
 
 
-IObject *vkStaticMeshLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkStaticMeshLoader::Load(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   // start at the beginning (should already be there)
   file->Seek(eSP_Set, 0L);
@@ -124,7 +124,7 @@ IObject *vkStaticMeshLoader::Load(IFile *file, const vkResourceLocator &locator,
 
 }
 
-IObject *vkStaticMeshLoader::ReadEntry(std::map<vkString, HeaderEntry> &entries, const vkString &entryName, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkStaticMeshLoader::ReadEntry(std::map<vkString, HeaderEntry> &entries, const vkString &entryName, vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   std::map<vkString, HeaderEntry>::iterator it = entries.find(entryName);
   if (it == entries.end())
@@ -166,7 +166,7 @@ IObject *vkStaticMeshLoader::ReadEntry(std::map<vkString, HeaderEntry> &entries,
 }
 
 
-vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   std::map<vkString, vkUInt32> materialIDs;
   std::map<vkUInt32, vkString> materialNames;
@@ -202,7 +202,7 @@ vkMesh *vkStaticMeshLoader::ReadMesh(vkUInt32 fileVersion, IFile *file, const vk
 }
 
 
-bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   vkSubMesh *subMesh = new vkSubMesh();
 
@@ -210,7 +210,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
   file->Read(&materialIndex, sizeof(vkUInt32));
   file->Read(&LOD, sizeof(vkUInt32));
 
-  IVertexDeclaration *decl = ReadVertexDeclaration(file);
+  iVertexDeclaration *decl = ReadVertexDeclaration(file);
 
   if (!decl)
   {
@@ -234,7 +234,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
     unsigned char *buffer = new unsigned char[numVertices * stride];
     file->Read(buffer, numVertices * stride);
 
-    IVertexBuffer *vb = vkEng->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
+    iVertexBuffer *vb = vkEng->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
     delete[] buffer;
     if (!vb)
     {
@@ -267,7 +267,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
   }
   unsigned char *buffer = new unsigned char[numIndices * idxSize];
   file->Read(buffer, numIndices * idxSize);
-  IIndexBuffer *ib = vkEng->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
+  iIndexBuffer *ib = vkEng->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
   delete[] buffer;
   if (!ib)
   {
@@ -293,7 +293,7 @@ bool vkStaticMeshLoader::ReadSubMesh(vkMesh *mesh, vkUInt32 fileVersion, IFile *
 }
 
 
-IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
+iVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(iFile *file) const
 {
   vkUInt32 numVertexDeclarations;
   file->Read(&numVertexDeclarations, sizeof(vkUInt32));
@@ -315,13 +315,13 @@ IVertexDeclaration *vkStaticMeshLoader::ReadVertexDeclaration(IFile *file) const
   }
   elements.push_back(vkVertexElement());
 
-  IVertexDeclaration *decl = vkEng->CreateVertexDeclaration(elements.data());
+  iVertexDeclaration *decl = vkEng->CreateVertexDeclaration(elements.data());
 
   return decl;
 }
 
 
-vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   vkPhysicsShapeContainer *container = new vkPhysicsShapeContainer();
   vkUInt32 numShapes;
@@ -341,7 +341,7 @@ vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion,
         memset(&geom, 0, sizeof(geom));
         geom.Type = type;
         file->Read(&geom.Dimensions, sizeof(vkVector3f));
-        IPhysicsShape *shape = vkEng->CreateShape(geom);
+        iPhysicsShape *shape = vkEng->CreateShape(geom);
         shape->SetLocalTransform(trans);
         container->AddShape(shape);
       }
@@ -356,7 +356,7 @@ vkPhysicsShapeContainer *vkStaticMeshLoader::ReadCollision(vkUInt32 fileVersion,
 }
 
 
-vkGeometryData* vkStaticMeshLoader::ReadGeometry(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+vkGeometryData* vkStaticMeshLoader::ReadGeometry(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   vkUInt32 type;
   file->Read(&type, sizeof(vkUInt32));
@@ -380,7 +380,7 @@ vkGeometryData* vkStaticMeshLoader::ReadGeometry(std::map<vkString, HeaderEntry>
 }
 
 
-vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, IFile *file, const vkResourceLocator &locator, IObject *userData) const
+vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEntry> &entries, vkUInt32 fileVersion, iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   enum ReadMode
   {
@@ -393,7 +393,7 @@ vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEn
   vkUInt32 readMode;
   file->Read(&readMode, sizeof(vkUInt32));
 
-  IObject *meshObj = 0;
+  iObject *meshObj = 0;
   switch (readMode)
   {
   case eRM_Internal:
@@ -440,7 +440,7 @@ vkGeometryMesh* vkStaticMeshLoader::ReadGeometryMesh(std::map<vkString, HeaderEn
   return geometryMesh;
 }
 
-vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(IFile *file) const
+vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(iFile *file) const
 {
   vkUInt32 numberOfMaterials;
   file->Read(&numberOfMaterials, sizeof(vkUInt32));
@@ -459,7 +459,7 @@ vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(IFile *file) const
   return multiMaterial;
 }
 
-vkString vkStaticMeshLoader::ReadString(IFile *file) const
+vkString vkStaticMeshLoader::ReadString(iFile *file) const
 {
   vkUInt32 length;
   file->Read(&length, sizeof(vkUInt32));

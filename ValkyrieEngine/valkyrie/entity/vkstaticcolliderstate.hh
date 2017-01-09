@@ -5,7 +5,7 @@
 #include <valkyrie/entity/vkbasecolliderstate.hh>
 #include <valkyrie/entity/vkstaticcolliderstate.refl.hh>
 
-struct IPhysicsStaticCollider;
+struct iPhysicsStaticCollider;
 
 
 VK_CLASS()
@@ -16,24 +16,24 @@ public:
   vkStaticColliderState();
   virtual ~vkStaticColliderState();
 
-  IPhysicsStaticCollider *GetStaticCollider();
-  const IPhysicsStaticCollider *GetStaticCollider() const;
+  iPhysicsStaticCollider *GetStaticCollider();
+  const iPhysicsStaticCollider *GetStaticCollider() const;
 
 protected:
   virtual void OnAttachedToScene(vkEntityScene *scene);
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 
 private:
-  IPhysicsStaticCollider *m_staticCollider;
+  iPhysicsStaticCollider *m_staticCollider;
 
 };
 
-VK_FORCEINLINE IPhysicsStaticCollider *vkStaticColliderState::GetStaticCollider()
+VK_FORCEINLINE iPhysicsStaticCollider *vkStaticColliderState::GetStaticCollider()
 {
   return m_staticCollider;
 }
 
-VK_FORCEINLINE const IPhysicsStaticCollider *vkStaticColliderState::GetStaticCollider() const
+VK_FORCEINLINE const iPhysicsStaticCollider *vkStaticColliderState::GetStaticCollider() const
 {
   return m_staticCollider;
 }

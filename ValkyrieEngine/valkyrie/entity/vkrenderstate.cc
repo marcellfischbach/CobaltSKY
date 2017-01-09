@@ -45,7 +45,7 @@ vkShadingMode vkRenderState::GetShadingMode() const
   return m_shadingMode;
 }
 
-void vkRenderState::Render(IGraphics *graphics, vkRenderPass pass) const
+void vkRenderState::Render(iGraphics *graphics, vkRenderPass pass) const
 {
   graphics->SetRenderFadeInOut(m_renderStartFade, m_renderEndFade);
   graphics->SetRenderFadeInOutValue(m_distanceState.GetFadeValue());

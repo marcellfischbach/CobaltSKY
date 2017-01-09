@@ -11,7 +11,7 @@
 #include <valkyrie/entity/vkdefaultparticleemitter.refl.hh>
 
 VK_CLASS()
-class VKE_API vkDefaultParticleEmitter : public VK_SUPER(IParticleEmitter)
+class VKE_API vkDefaultParticleEmitter : public VK_SUPER(iParticleEmitter)
 {
   VK_CLASS_GEN_OBJECT;
 public:

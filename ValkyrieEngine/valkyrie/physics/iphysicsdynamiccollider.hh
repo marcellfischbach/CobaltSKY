@@ -4,12 +4,12 @@
 #include <valkyrie/physics/iphysicsdynamiccollider.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IPhysicsDynamicCollider : public VK_SUPER(IPhysicsBaseCollider)
+struct VKE_API iPhysicsDynamicCollider : public VK_SUPER(iPhysicsBaseCollider)
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsDynamicCollider() { }
+  virtual ~iPhysicsDynamicCollider() { }
 
-  virtual void SetTransformationCallback(ITransformationCallback *callback) = 0;
+  virtual void SetTransformationCallback(iTransformationCallback *callback) = 0;
 
   virtual void SetKinematic(bool kinematic) = 0;
   virtual bool IsKinematic() const = 0;

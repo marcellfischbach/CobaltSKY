@@ -5,7 +5,7 @@
 #include <windowsdl/sdlmouse.refl.hh>
 
 VK_CLASS()
-class VKWINDOWSDL_API SDLMouse : public VK_SUPER(IMouse)
+class VKWINDOWSDL_API SDLMouse : public VK_SUPER(iMouse)
 {
   VK_CLASS_GEN_OBJECT;
 public:

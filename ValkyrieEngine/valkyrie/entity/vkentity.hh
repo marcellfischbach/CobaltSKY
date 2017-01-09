@@ -15,9 +15,9 @@ class vkSpatialState;
 class vkTransformation;
 
 struct vkScanConfig;
-struct IEntityScan;
-struct IGraphics;
-struct IPhysicsBody;
+struct iEntityScan;
+struct iGraphics;
+struct iPhysicsBody;
 
 /**
  * \ingroup entity
@@ -61,7 +61,7 @@ public:
 
   static vkID GetNextID();
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
   void AttachEntity(vkEntity *entity, vkSpatialState *parentState = 0);
   void AttachEntity(vkEntity *entity, const vkString &parentStateName);

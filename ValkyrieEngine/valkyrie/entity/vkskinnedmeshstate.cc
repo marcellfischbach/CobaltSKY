@@ -24,7 +24,7 @@ void vkSkinnedMeshState::SetSkeleton(vkSkeleton *skeleton)
 }
 
 
-void vkSkinnedMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
+void vkSkinnedMeshState::Render(iGraphics *graphics, vkRenderPass pass) const
 {
   if (m_skeleton)
   {

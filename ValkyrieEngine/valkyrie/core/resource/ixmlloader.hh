@@ -9,12 +9,12 @@ class vkResourceLocator;
 
 
 VK_INTERFACE()
-struct VKE_API IXMLLoader : public IObject
+struct VKE_API iXMLLoader : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
+  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
 };
 

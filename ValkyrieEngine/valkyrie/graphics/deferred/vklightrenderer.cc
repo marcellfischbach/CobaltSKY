@@ -17,7 +17,7 @@
 #include <valkyrie/math/vkclipper.hh>
 
 
-vkLightRenderer::vkLightRenderer(IGraphics *renderer)
+vkLightRenderer::vkLightRenderer(iGraphics *renderer)
   : m_renderer(renderer)
 {
   m_depthSampler = m_renderer->CreateSampler();
@@ -39,7 +39,7 @@ vkLightRenderer::~vkLightRenderer()
 
 void vkLightRenderer::InitializeLightProgram(LightProgram *lightProgram, const vkResourceLocator &locator)
 {
-  lightProgram->program = vkResourceManager::Get()->GetOrLoad<IShader>(locator);
+  lightProgram->program = vkResourceManager::Get()->GetOrLoad<iShader>(locator);
   if (lightProgram->program)
   {
     lightProgram->gbuffer.attrDiffuseRoughness = lightProgram->program->GetAttribute(vkShaderAttributeID("DiffuseRoughness"));

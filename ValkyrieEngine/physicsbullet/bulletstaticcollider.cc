@@ -7,7 +7,7 @@
 
 
 vkBulletStaticCollider::vkBulletStaticCollider()
-  : IPhysicsStaticCollider()
+  : iPhysicsStaticCollider()
   , m_friction(0.0f)
   , m_restitution(0.0f)
 {
@@ -31,7 +31,7 @@ vkBulletStaticCollider::~vkBulletStaticCollider()
   m_shapes.clear();
 }
 
-void vkBulletStaticCollider::AttachShape(IPhysicsShape *shape)
+void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -61,7 +61,7 @@ void vkBulletStaticCollider::AttachShape(IPhysicsShape *shape)
   m_shapes.push_back(data);
 }
 
-void vkBulletStaticCollider::DetachShape(IPhysicsShape *shape)
+void vkBulletStaticCollider::DetachShape(iPhysicsShape *shape)
 {
   // not implemented yet
 }

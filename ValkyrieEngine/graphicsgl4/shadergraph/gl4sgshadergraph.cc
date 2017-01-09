@@ -196,7 +196,7 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
       break;
     case eSPT_Texture:
       {
-        ITexture *texture = vkResourceManager::Get()->GetOrLoad<ITexture>(resNode->GetDefaultTextureResource());
+        iTexture *texture = vkResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
         graph->SetDefault(idx, texture);
       }
       break;

@@ -179,7 +179,7 @@ void vkStaticMeshState::FillBoundingBox(vkBoundingBox &bbox)
 
 }
 
-void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
+void vkStaticMeshState::Render(iGraphics *graphics, vkRenderPass pass) const
 {
   if (m_mesh)
   {
@@ -190,7 +190,7 @@ void vkStaticMeshState::Render(IGraphics *graphics, vkRenderPass pass) const
 }
 
 
-void vkStaticMeshState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
+void vkStaticMeshState::PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config)
 {
   if (m_materials && m_mesh)
   {

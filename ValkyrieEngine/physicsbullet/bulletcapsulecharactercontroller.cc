@@ -13,7 +13,7 @@
 
 
 vkBulletCapsuleCharacterController::vkBulletCapsuleCharacterController()
-  : IPhysicsCapsuleCharacterController()
+  : iPhysicsCapsuleCharacterController()
   , m_characterController(0)
   , m_ghostObject(0)
   , m_transformationCallback(0)
@@ -42,7 +42,7 @@ void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
 
 }
 
-void vkBulletCapsuleCharacterController::SetTransformationCallback(ITransformationCallback *callback)
+void vkBulletCapsuleCharacterController::SetTransformationCallback(iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }

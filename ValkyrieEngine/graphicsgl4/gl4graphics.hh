@@ -14,22 +14,22 @@ class VertexBufferGL4;
 class vkVertexDeclarationGL4;
 
 VK_CLASS()
-class VKGRAPHICSGL4_API vkGraphicsGL4 : public VK_SUPER(IGraphics)
+class VKGRAPHICSGL4_API vkGraphicsGL4 : public VK_SUPER(iGraphics)
 {
   VK_CLASS_GEN_OBJECT;
 public:
   vkGraphicsGL4();
   virtual void ResetDefaults();
 
-  virtual IIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual IVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual IVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
-  virtual IRenderTarget *CreateRenderTarget();
-  virtual ISampler *CreateSampler();
-  virtual ITexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
-  virtual ITexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
-  virtual ITextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
-  virtual IShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode);
+  virtual iIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
+  virtual iVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
+  virtual iVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
+  virtual iRenderTarget *CreateRenderTarget();
+  virtual iSampler *CreateSampler();
+  virtual iTexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
+  virtual iTexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
+  virtual iTextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
+  virtual iShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode);
 
   virtual ISGShaderGraphFactory* GetShaderGraphFactory();
 
@@ -49,16 +49,16 @@ public:
 
   virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices);
 
-  virtual void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
-  virtual void SetVertexBuffer(vkUInt16 streamIdx, IVertexBuffer *vertexBuffer);
-  virtual void SetIndexBuffer(IIndexBuffer *indexBuffer);
-  virtual void SetShader(IShader *shader);
+  virtual void SetVertexDeclaration(iVertexDeclaration *vertexDeclaration);
+  virtual void SetVertexBuffer(vkUInt16 streamIdx, iVertexBuffer *vertexBuffer);
+  virtual void SetIndexBuffer(iIndexBuffer *indexBuffer);
+  virtual void SetShader(iShader *shader);
   virtual void FreeTextures();
   virtual void InvalidateTextures();
-  virtual vkTextureUnit BindTexture(ITexture *texture);
-  virtual void SetTexture(vkTextureUnit unit, ITexture *texture);
-  virtual void SetSampler(vkTextureUnit unit, ISampler *sampler);
-  virtual void SetRenderTarget(IRenderTarget *renderTarget);
+  virtual vkTextureUnit BindTexture(iTexture *texture);
+  virtual void SetTexture(vkTextureUnit unit, iTexture *texture);
+  virtual void SetSampler(vkTextureUnit unit, iSampler *sampler);
+  virtual void SetRenderTarget(iRenderTarget *renderTarget);
 
   virtual void SetBlendEnabled(bool enabled);
   virtual bool IsBlendEnabled() const;
@@ -80,17 +80,17 @@ public:
   virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
   virtual void SetViewport(vkUInt16 width, vkUInt16 height);
   virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
-  virtual void SetViewport(IRenderTarget *viewport);
+  virtual void SetViewport(iRenderTarget *viewport);
   virtual void Render(vkPrimitiveType type, vkUInt32 count);
   virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
   virtual void BindValues();
 
   virtual void RenderFullScreenFrame();
-  virtual void RenderFullScreenFrame(ITexture2D *texture);
-  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2D *texture);
+  virtual void RenderFullScreenFrame(iTexture2D *texture);
+  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2D *texture);
 
-  virtual void RenderFullScreenFrame(ITexture2DArray *texture, int layer);
-  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, ITexture2DArray *texture, int layer);
+  virtual void RenderFullScreenFrame(iTexture2DArray *texture, int layer);
+  virtual void RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2DArray *texture, int layer);
 
   void AssetGraphicsErrors() const;
 

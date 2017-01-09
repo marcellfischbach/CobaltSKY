@@ -16,13 +16,13 @@ vkStaticColliderStateXMLLoader::~vkStaticColliderStateXMLLoader()
 
 }
 
-const vkClass *vkStaticColliderStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkStaticColliderStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkStaticColliderState::GetStaticClass();
 }
 
 
-IObject *vkStaticColliderStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkStaticColliderStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!userData || !element)
   {

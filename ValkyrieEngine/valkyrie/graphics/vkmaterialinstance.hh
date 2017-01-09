@@ -8,8 +8,8 @@
 #include <valkyrie/graphics/vkmaterialinstance.refl.hh>
 
 class vkMaterial;
-struct IGraphics;
-struct ITexture;
+struct iGraphics;
+struct iTexture;
 
 VK_CLASS();
 class VKE_API vkMaterialInstance : public VK_SUPER(vkObject)
@@ -26,7 +26,7 @@ public:
 
   vkInt16 GetIndex(const vkString &parametername) const;
 
-  bool Bind(IGraphics *renderer, vkRenderPass pass);
+  bool Bind(iGraphics *renderer, vkRenderPass pass);
 
   void SetInherited(vkUInt16 idx, bool inherited);
   bool IsInherited(vkUInt16 idx) const;
@@ -36,14 +36,14 @@ public:
   void Set(vkUInt16 idx, const vkVector3f &v);
   void Set(vkUInt16 idx, const vkVector4f &v);
   void Set(vkUInt16 idx, const vkColor4f &c);
-  void Set(vkUInt16 idx, ITexture *texture);
+  void Set(vkUInt16 idx, iTexture *texture);
 
   float GetFloat(vkUInt16 idx);
   vkVector2f GetFloat2(vkUInt16 idx);
   vkVector3f GetFloat3(vkUInt16 idx);
   vkVector4f GetFloat4(vkUInt16 idx);
   vkColor4f GetColor4(vkUInt16 idx);
-  ITexture *GetTexture(vkUInt16 idx);
+  iTexture *GetTexture(vkUInt16 idx);
 
 private:
   vkMaterial *m_material;
@@ -56,7 +56,7 @@ private:
     {
       float m_float[16];
       int m_int[16];
-      ITexture *m_texture;
+      iTexture *m_texture;
       // Add Texture later.
     };
     ShaderParameter();

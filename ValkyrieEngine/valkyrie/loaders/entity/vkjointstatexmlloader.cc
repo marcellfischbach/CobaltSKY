@@ -17,12 +17,12 @@ vkJointStateXMLLoader::~vkJointStateXMLLoader()
 }
 
 
-const vkClass *vkJointStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkJointStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkJointState::GetStaticClass();
 }
 
-IObject *vkJointStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkJointStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
   vkJointState *jointState = vkQueryClass<vkJointState>(data->state);

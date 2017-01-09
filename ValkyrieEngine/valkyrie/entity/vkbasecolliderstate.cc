@@ -15,7 +15,7 @@ vkBaseColliderState::~vkBaseColliderState()
   VK_RELEASE(m_baseCollider);
 }
 
-void vkBaseColliderState::SetBaseCollider(IPhysicsBaseCollider *baseCollider)
+void vkBaseColliderState::SetBaseCollider(iPhysicsBaseCollider *baseCollider)
 {
   VK_SET(m_baseCollider, baseCollider);
   SetCollider(m_baseCollider);

@@ -6,7 +6,7 @@
 #include <valkyrie/window/ikeyboard.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IKeyboard : public IObject
+struct VKE_API iKeyboard : public iObject
 {
   VK_CLASS_GEN;
 

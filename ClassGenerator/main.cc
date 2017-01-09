@@ -21,7 +21,7 @@ std::string CreateHeaderFile(Class *clazz, const std::string &api)
   result += "  \n";
   result += "  static " + className + " *Get();\n";
   result += "  \n";
-  result += "  virtual IObject   *CreateInstance() const;\n";
+  result += "  virtual iObject   *CreateInstance() const;\n";
   result += "  \n";
   result += "  \n";
   result += "};\n";
@@ -51,7 +51,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "  {\n";
     result += "  }\n";
     result += "  \n";
-    result += "  virtual void SetValue(IObject *object, void *data) const\n";
+    result += "  virtual void SetValue(iObject *object, void *data) const\n";
     result += "  {\n";
     result += "    " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (d)\n";
@@ -61,7 +61,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "    }\n";
     result += "  }\n";
     result += "  \n";
-    result += "  virtual const void *GetValue(const IObject *object) const\n";
+    result += "  virtual const void *GetValue(const iObject *object) const\n";
     result += "  {\n";
     result += "    const " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (!d) return 0;\n";
@@ -95,7 +95,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   }
   result += "}\n";
   result += "\n";
-  result += "IObject *" + className + "::CreateInstance() const\n";
+  result += "iObject *" + className + "::CreateInstance() const\n";
   result += "{\n";
   if (clazz->IsInterface())
   {
@@ -103,7 +103,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   }
   else
   {
-    result += "  return static_cast<IObject*>(new " + clazz->GetName() + "());\n";
+    result += "  return static_cast<iObject*>(new " + clazz->GetName() + "());\n";
   }
   result += "}\n";
   result += "\n";

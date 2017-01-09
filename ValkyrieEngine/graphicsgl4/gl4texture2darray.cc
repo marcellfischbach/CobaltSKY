@@ -6,7 +6,7 @@
 
 vkTexture2DArrayGL4::vkTexture2DArrayGL4()
   : vkTextureGL4(eTT_Texture2DArray)
-  , ITexture2DArray()
+  , iTexture2DArray()
 {
 
 }

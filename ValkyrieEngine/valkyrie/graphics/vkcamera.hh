@@ -9,7 +9,7 @@
 #include <valkyrie/graphics/vkcamera.refl.hh>
 
 
-struct IGraphics;
+struct iGraphics;
 
 VK_CLASS();
 class VKE_API vkCamera : public VK_SUPER(vkObject)
@@ -39,7 +39,7 @@ public:
 
   vkClipper *GetClipper();
 
-  void Apply(IGraphics *renderer);
+  void Apply(iGraphics *renderer);
 
   void GetPlanePoints(float distance, vkVector3f *points) const;
 
@@ -47,7 +47,7 @@ public:
 
 private:
   void UpdateProjectionValues();
-  void UpdateProjectionMatrices(IGraphics *renderer);
+  void UpdateProjectionMatrices(iGraphics *renderer);
 
   vkVector3f m_eye;
   vkVector3f m_spot;

@@ -8,10 +8,10 @@
 
 
 
-struct IGraphics;
-struct IIndexBuffer;
-struct IVertexBuffer;
-struct IVertexDeclaration;
+struct iGraphics;
+struct iIndexBuffer;
+struct iVertexBuffer;
+struct iVertexDeclaration;
 
 
 
@@ -24,25 +24,25 @@ public:
   vkSubMesh();
   virtual ~vkSubMesh();
 
-  virtual void Render(IGraphics *renderer);
+  virtual void Render(iGraphics *renderer);
 
   void SetPrimitiveType(vkPrimitiveType type);
   void SetIndexType(vkDataType indexType);
-  void SetVertexDeclaration(IVertexDeclaration *vertexDeclaration);
-  void AddVertexBuffer(IVertexBuffer *vertexBuffer);
-  void SetIndexBuffer(IIndexBuffer *indexBuffer, vkSize count, vkSize offset = 0);
+  void SetVertexDeclaration(iVertexDeclaration *vertexDeclaration);
+  void AddVertexBuffer(iVertexBuffer *vertexBuffer);
+  void SetIndexBuffer(iIndexBuffer *indexBuffer, vkSize count, vkSize offset = 0);
 
   void SetBoundingBox(const vkBoundingBox &bbox);
   const vkBoundingBox& GetBoundingBox() const;
 
 private:
 
-  IIndexBuffer *m_indexBuffer;
+  iIndexBuffer *m_indexBuffer;
   vkSize        m_offset;
   vkSize        m_count;
 
-  IVertexDeclaration *m_vertexDeclaration;
-  std::vector<IVertexBuffer*> m_vertexBuffer;
+  iVertexDeclaration *m_vertexDeclaration;
+  std::vector<iVertexBuffer*> m_vertexBuffer;
 
   vkDataType m_indexType;
   vkPrimitiveType m_primitiveType;

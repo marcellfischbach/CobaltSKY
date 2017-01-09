@@ -6,7 +6,7 @@
 #include <valkyrie/vkenums.hh>
 #include <valkyrie/entity/vkrenderstate.refl.hh>
 
-struct IGraphics;
+struct iGraphics;
 /**
 * \ingroup entity
 */
@@ -27,7 +27,7 @@ public:
   void SetShadingMode (vkShadingMode shadingMode);
   vkShadingMode GetShadingMode() const;
 
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
+  virtual void Render(iGraphics *graphics, vkRenderPass pass) const;
 
 private:
   float m_renderStartFade;

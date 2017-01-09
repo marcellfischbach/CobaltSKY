@@ -14,7 +14,7 @@
  * @brief Reading and writing standard files within the filesystem.
  */
 VK_CLASS()
-class VKE_API vkFileStd : public VK_SUPER(IFile)
+class VKE_API vkFileStd : public VK_SUPER(iFile)
 {
   VK_CLASS_GEN_OBJECT;
 public:

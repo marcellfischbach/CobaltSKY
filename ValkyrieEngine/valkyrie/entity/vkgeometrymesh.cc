@@ -49,12 +49,12 @@ void vkGeometryMesh::SetMaterial(vkMultiMaterial *material)
 }
 
 
-void vkGeometryMesh::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
+void vkGeometryMesh::Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config)
 {
   //entityScan->ScanGeometry(this);
 }
 
-void vkGeometryMesh::Render(IGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
+void vkGeometryMesh::Render(iGraphics *graphics, vkRenderPass pass, vkUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {

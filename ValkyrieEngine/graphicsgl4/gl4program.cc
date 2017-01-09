@@ -9,7 +9,7 @@
 
 
 vkProgramGL4::vkProgramGL4()
-  : IShader()
+  : iShader()
   , m_name(0)
 {
   VK_CLASS_GEN_CONSTR;
@@ -98,7 +98,7 @@ vkUInt32 vkProgramGL4::GetNumberOfAttributes() const
   return (vkUInt32)m_attributes.size();
 }
 
-IShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
+iShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
 {
   if (idx >= m_attributes.size())
   {
@@ -113,7 +113,7 @@ IShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
   return attr;
 }
 
-IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
+iShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
 {
   if (id.GetID() >= m_attributes.size())
   {
@@ -133,7 +133,7 @@ IShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
   return attr;
 }
 
-IShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
+iShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
 {
   for (size_t i = 0, in = m_namedAttributes.size(); i < in; ++i)
   {
@@ -167,7 +167,7 @@ vkUInt16 vkProgramGL4::GetNumberOfStreams() const
   return (vkUInt16)m_streams.size();
 }
 
-IShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
+iShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
 {
   if (id.GetID() >= m_streams.size())
   {
@@ -188,7 +188,7 @@ IShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
 }
 
 
-IShaderStream *vkProgramGL4::GetStream(const vkString &name)
+iShaderStream *vkProgramGL4::GetStream(const vkString &name)
 {
   for (size_t i = 0, in = m_namedStreams.size(); i < in; ++i)
   {

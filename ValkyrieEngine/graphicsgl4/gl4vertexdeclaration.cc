@@ -139,7 +139,7 @@ void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, vo
   {
     while (elements && elements->Valid)
     {
-      IShaderStream *s = shader->GetStream(elements->StreamDefinition);
+      iShaderStream *s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         s->Set(elements->Size,
@@ -163,7 +163,7 @@ void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
   {
     while (elements && elements->Valid)
     {
-      IShaderStream* s = shader->GetStream(elements->StreamDefinition);
+      iShaderStream* s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         s->Disable();

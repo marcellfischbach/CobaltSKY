@@ -12,7 +12,7 @@
 #include <graphicsgl4/gl4shader.refl.hh>
 
 VK_CLASS()
-class vkShaderGL4 : public IObject
+class vkShaderGL4 : public iObject
 {
   VK_CLASS_GEN_OBJECT;
 public:

@@ -19,24 +19,24 @@ vkEngine::vkEngine()
 }
 
 
-void vkEngine::SetWindow(IWindow *window)
+void vkEngine::SetWindow(iWindow *window)
 {
   VK_SET(m_window, window);
 }
 
-void vkEngine::SetRenderer(IGraphics *renderer)
+void vkEngine::SetRenderer(iGraphics *renderer)
 {
   VK_SET(m_renderer, renderer);
 }
 
-void vkEngine::SetPhysicsSystem(IPhysicsSystem *physicsSystem)
+void vkEngine::SetPhysicsSystem(iPhysicsSystem *physicsSystem)
 {
   VK_SET(m_physicsSystem, physicsSystem);
 }
 
 
 
-IIndexBuffer *vkEngine::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) 
+iIndexBuffer *vkEngine::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode) 
 {
   if (m_renderer)
   {
@@ -46,7 +46,7 @@ IIndexBuffer *vkEngine::CreateIndexBuffer(vkSize size, const void *data, vkBuffe
 }
 
 
-IVertexBuffer *vkEngine::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) 
+iVertexBuffer *vkEngine::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode) 
 {
   if (m_renderer)
   {
@@ -55,7 +55,7 @@ IVertexBuffer *vkEngine::CreateVertexBuffer(vkSize size, const void *data, vkBuf
   return 0;
 }
 
-IVertexDeclaration *vkEngine::CreateVertexDeclaration(const vkVertexElement *elements) 
+iVertexDeclaration *vkEngine::CreateVertexDeclaration(const vkVertexElement *elements) 
 {
   if (m_renderer)
   {
@@ -64,7 +64,7 @@ IVertexDeclaration *vkEngine::CreateVertexDeclaration(const vkVertexElement *ele
   return 0;
 }
 
-IRenderTarget *vkEngine::CreateRenderTarget() 
+iRenderTarget *vkEngine::CreateRenderTarget() 
 {
   if (m_renderer)
   {
@@ -73,7 +73,7 @@ IRenderTarget *vkEngine::CreateRenderTarget()
   return 0;
 }
 
-ISampler *vkEngine::CreateSampler()
+iSampler *vkEngine::CreateSampler()
 {
   if (m_renderer)
   {
@@ -82,7 +82,7 @@ ISampler *vkEngine::CreateSampler()
   return 0;
 }
 
-ITexture2D *vkEngine::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
+iTexture2D *vkEngine::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
 { 
   if (m_renderer)
   {
@@ -91,7 +91,7 @@ ITexture2D *vkEngine::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUI
   return 0;
 }
 
-ITexture2DArray *vkEngine::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) 
+iTexture2DArray *vkEngine::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps) 
 {
   if (m_renderer)
   {
@@ -100,7 +100,7 @@ ITexture2DArray *vkEngine::CreateTexture2DArray(vkPixelFormat format, vkUInt16 w
   return 0;
 }
 
-ITextureCube *vkEngine::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) 
+iTextureCube *vkEngine::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth) 
 {
   if (m_renderer)
   {
@@ -109,7 +109,7 @@ ITextureCube *vkEngine::CreateTextureCube(vkPixelFormat format, vkUInt16 width, 
   return 0;
 }
 
-IShader *vkEngine::CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) 
+iShader *vkEngine::CreateShader(const vkString &vertexCode, const vkString &tessCtrl, const vkString &tessEval, const vkString &geometry, const vkString &fragmentCode) 
 {
   if (m_renderer)
   {
@@ -122,7 +122,7 @@ IShader *vkEngine::CreateShader(const vkString &vertexCode, const vkString &tess
 
 
 
-IPhysicsScene *vkEngine::CreateScene()
+iPhysicsScene *vkEngine::CreateScene()
 {
   if (m_physicsSystem)
   {
@@ -131,7 +131,7 @@ IPhysicsScene *vkEngine::CreateScene()
   return 0;
 }
 
-IPhysicsShape *vkEngine::CreateShape(const vkPhysGeometry &geometry)
+iPhysicsShape *vkEngine::CreateShape(const vkPhysGeometry &geometry)
 {
   if (m_physicsSystem)
   {
@@ -140,7 +140,7 @@ IPhysicsShape *vkEngine::CreateShape(const vkPhysGeometry &geometry)
   return 0;
 }
 
-IPhysicsDynamicCollider *vkEngine::CreateDynamicCollider()
+iPhysicsDynamicCollider *vkEngine::CreateDynamicCollider()
 {
   if (m_physicsSystem)
   {
@@ -149,7 +149,7 @@ IPhysicsDynamicCollider *vkEngine::CreateDynamicCollider()
   return 0;
 }
 
-IPhysicsStaticCollider *vkEngine::CreateStaticCollider()
+iPhysicsStaticCollider *vkEngine::CreateStaticCollider()
 {
   if (m_physicsSystem)
   {
@@ -158,7 +158,7 @@ IPhysicsStaticCollider *vkEngine::CreateStaticCollider()
   return 0;
 }
 
-IPhysicsTriggerCollider *vkEngine::CreateTriggerCollider()
+iPhysicsTriggerCollider *vkEngine::CreateTriggerCollider()
 {
   if (m_physicsSystem)
   {
@@ -167,7 +167,7 @@ IPhysicsTriggerCollider *vkEngine::CreateTriggerCollider()
   return 0;
 }
 
-IPhysicsCapsuleCharacterController *vkEngine::CreateCapsulseCharacterController()
+iPhysicsCapsuleCharacterController *vkEngine::CreateCapsulseCharacterController()
 {
   if (m_physicsSystem)
   {
@@ -176,7 +176,7 @@ IPhysicsCapsuleCharacterController *vkEngine::CreateCapsulseCharacterController(
   return 0;
 }
 
-IPhysicsJoint *vkEngine::CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB)
+iPhysicsJoint *vkEngine::CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
 {
   if (m_physicsSystem)
   {

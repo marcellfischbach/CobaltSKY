@@ -7,7 +7,7 @@
 
 
 vkXMLFileLoader::vkXMLFileLoader()
-  : IFileLoader()
+  : iFileLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -16,7 +16,7 @@ vkXMLFileLoader::~vkXMLFileLoader()
 {
 }
 
-bool vkXMLFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkXMLFileLoader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   const vkString extension = file->GetExtension();
   return extension == vkString("xml")
@@ -24,7 +24,7 @@ bool vkXMLFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IOb
 }
 
 
-const vkClass *vkXMLFileLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkXMLFileLoader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   const vkString extension = file->GetExtension();
   if (extension != vkString("xml") && extension != vkString("xasset"))
@@ -60,7 +60,7 @@ const vkClass *vkXMLFileLoader::EvalClass(IFile *file, const vkResourceLocator &
   return vkResourceManager::Get()->EvalClass(document.RootElement(), locator);
 }
 
-IObject *vkXMLFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkXMLFileLoader::Load(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   const vkString extension = file->GetExtension();
   if (extension != vkString("xml") && extension != vkString("xasset"))

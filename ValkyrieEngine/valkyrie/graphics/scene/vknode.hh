@@ -9,7 +9,7 @@
 
 
 class vkGroupNode;
-struct IGraphics;
+struct iGraphics;
 
 VK_INTERFACE()
 class VKE_API vkNode : public VK_SUPER(vkObject)
@@ -58,14 +58,14 @@ public:
   bool AttachTo(vkGroupNode *parent);
   void DetachFromParent();
 
-  virtual void Scan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
+  virtual void Scan(const vkClipper *clipper, iGraphics *renderer, iScanCallback *callback);
 
   virtual void UpdateStates();
 
 protected:
   vkNode();
 
-  virtual void PrivScan (const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
+  virtual void PrivScan (const vkClipper *clipper, iGraphics *renderer, iScanCallback *callback);
 
   void FlagUpdateBoundingBox();
 

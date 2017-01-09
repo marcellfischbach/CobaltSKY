@@ -5,7 +5,7 @@
 #include <valkyrie/math/vkvector.hh>
 #include <valkyrie/vkengine.hh>
 
-ITexture2DArray *vkBinaryGradient::static_textureArray = 0;
+iTexture2DArray *vkBinaryGradient::static_textureArray = 0;
 
 static float assign_pattern(const char* pattern, void *colors)
 {
@@ -314,7 +314,7 @@ vkBinaryGradient::~vkBinaryGradient()
 
 }
 
-ITexture2D *vkBinaryGradient::GetBinaryGradientLevel1()
+iTexture2D *vkBinaryGradient::GetBinaryGradientLevel1()
 {
   if (!static_textureArray)
   {
@@ -323,7 +323,7 @@ ITexture2D *vkBinaryGradient::GetBinaryGradientLevel1()
 }
 
 
-ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
+iTexture2DArray *vkBinaryGradient::GetBinaryGradient()
 {
   if (!static_textureArray)
   {
@@ -352,7 +352,7 @@ ITexture2DArray *vkBinaryGradient::GetBinaryGradient()
       create_pattern16(&colors[i++ * 64]);
       static_textureArray->CopyData(0, format, colors);
 
-      ISampler *sampler = vkEng->CreateSampler();
+      iSampler *sampler = vkEng->CreateSampler();
       /*
       sampler->SetAddressU(eTAM_Repeat);
       sampler->SetAddressV(eTAM_Repeat);

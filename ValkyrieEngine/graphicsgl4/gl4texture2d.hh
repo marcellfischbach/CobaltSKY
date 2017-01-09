@@ -8,7 +8,7 @@
 #include <graphicsgl4/gl4texture2d.refl.hh>
 
 VK_CLASS()
-class VKGRAPHICSGL4_API vkTexture2DGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITexture2D)
+class VKGRAPHICSGL4_API vkTexture2DGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(iTexture2D)
 {
   VK_CLASS_GEN;
 public:
@@ -19,7 +19,7 @@ public:
   bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
 
 
-  // Implementation of the ITexture2D interface
+  // Implementation of the iTexture2D interface
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
 

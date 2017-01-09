@@ -15,14 +15,14 @@ vkAssetXMLLoader::~vkAssetXMLLoader()
 
 }
 
-bool vkAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString tagName(element->Value());
   return tagName == vkString("asset");
 }
 
 
-const vkClass *vkAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   TiXmlElement *dataElement = FindElementByTagName(element, locator.GetResourceName());
   if (!dataElement)
@@ -39,7 +39,7 @@ const vkClass *vkAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResour
   return vkResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
-IObject *vkAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   TiXmlElement *dataElement = FindElementByTagName(element, locator.GetResourceName());
   if (!dataElement)

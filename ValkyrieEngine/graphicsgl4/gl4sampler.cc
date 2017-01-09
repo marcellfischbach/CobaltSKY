@@ -5,7 +5,7 @@
 
 
 vkSamplerGL4::vkSamplerGL4()
-  : ISampler()
+  : iSampler()
 {
   VK_CLASS_GEN_CONSTR;
 }

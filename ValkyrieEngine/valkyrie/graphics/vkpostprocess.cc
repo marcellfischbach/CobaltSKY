@@ -27,7 +27,7 @@ vkPostProcess::~vkPostProcess()
 
 }
 
-void vkPostProcess::SetShader(IShader *shader)
+void vkPostProcess::SetShader(iShader *shader)
 {
   VK_SET(m_shader, shader);
 }
@@ -44,7 +44,7 @@ void vkPostProcess::SetInputBindingName(int idx, const vkString &inputName)
 }
 
 
-int vkPostProcess::BindInput(ITexture *texture, const vkString &inputName)
+int vkPostProcess::BindInput(iTexture *texture, const vkString &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -90,17 +90,17 @@ int vkPostProcess::BindInput(vkPostProcessOutput originOutput, const vkString &i
   return res;
 }
 
-void vkPostProcess::SetOutput(IRenderTarget *output)
+void vkPostProcess::SetOutput(iRenderTarget *output)
 {
   VK_SET(m_output, output);
 }
 
-IRenderTarget *vkPostProcess::GetOutput()
+iRenderTarget *vkPostProcess::GetOutput()
 {
   return m_output;
 }
 
-bool vkPostProcess::BindShader(IGraphics *graphics)
+bool vkPostProcess::BindShader(iGraphics *graphics)
 {
   if (!m_shader)
   {
@@ -110,7 +110,7 @@ bool vkPostProcess::BindShader(IGraphics *graphics)
   return true;
 }
 
-bool vkPostProcess::BindInputs(IGraphics *graphics)
+bool vkPostProcess::BindInputs(iGraphics *graphics)
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -138,7 +138,7 @@ bool vkPostProcess::BindInputs(IGraphics *graphics)
     {
     case eTT_Texture2D:
       {
-        ITexture2D *txt2D = vkQueryClass<ITexture2D>(input.m_texture);
+        iTexture2D *txt2D = vkQueryClass<iTexture2D>(input.m_texture);
         if (input.m_attrInputSize)
         {
           input.m_attrInputSize->Set((float)txt2D->GetWidth(), (float)txt2D->GetHeight());
@@ -154,7 +154,7 @@ bool vkPostProcess::BindInputs(IGraphics *graphics)
   return true;
 }
 
-bool vkPostProcess::BindOutput(IGraphics *graphics)
+bool vkPostProcess::BindOutput(iGraphics *graphics)
 {
   if (!m_output)
   {
@@ -165,7 +165,7 @@ bool vkPostProcess::BindOutput(IGraphics *graphics)
   return true;
 }
 
-bool vkPostProcess::Initialize(IGraphics *graphics)
+bool vkPostProcess::Initialize(iGraphics *graphics)
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -181,7 +181,7 @@ bool vkPostProcess::Initialize(IGraphics *graphics)
   return true;
 }
 
-bool vkPostProcess::Render(IGraphics *graphics)
+bool vkPostProcess::Render(iGraphics *graphics)
 {
   bool success = BindShader(graphics) && BindInputs(graphics) && BindOutput(graphics) ;
   if (!success)

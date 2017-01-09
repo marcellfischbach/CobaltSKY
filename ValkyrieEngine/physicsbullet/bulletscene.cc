@@ -7,7 +7,7 @@
 #include <physicsbullet/bulletstaticcollider.hh>
 
 vkBulletScene::vkBulletScene()
-  : IPhysicsScene()
+  : iPhysicsScene()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -75,7 +75,7 @@ bool vkBulletScene::Initialize(bool softBody)
 }
 
 
-void vkBulletScene::AddDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
+void vkBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
 {
   vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
@@ -84,7 +84,7 @@ void vkBulletScene::AddDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
   }
 }
 
-void vkBulletScene::RemoveDynamicCollider(IPhysicsDynamicCollider *dynamicCollider)
+void vkBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
 {
   vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
@@ -93,7 +93,7 @@ void vkBulletScene::RemoveDynamicCollider(IPhysicsDynamicCollider *dynamicCollid
   }
 }
 
-void vkBulletScene::AddStaticCollider(IPhysicsStaticCollider *staticCollider)
+void vkBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
   vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
   if (btCollider)
@@ -102,7 +102,7 @@ void vkBulletScene::AddStaticCollider(IPhysicsStaticCollider *staticCollider)
   }
 }
 
-void vkBulletScene::RemoveStaticCollider(IPhysicsStaticCollider *staticCollider)
+void vkBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
   vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
   if (btCollider)
@@ -111,7 +111,7 @@ void vkBulletScene::RemoveStaticCollider(IPhysicsStaticCollider *staticCollider)
   }
 }
 
-void vkBulletScene::AddCharacterController(IPhysicsCharacterController *controller)
+void vkBulletScene::AddCharacterController(iPhysicsCharacterController *controller)
 {
   vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
   if (capsController)
@@ -121,7 +121,7 @@ void vkBulletScene::AddCharacterController(IPhysicsCharacterController *controll
   }
 }
 
-void vkBulletScene::RemoveCharacterController(IPhysicsCharacterController *controller)
+void vkBulletScene::RemoveCharacterController(iPhysicsCharacterController *controller)
 {
   vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
   if (capsController)
@@ -139,7 +139,7 @@ void vkBulletScene::RemoveCharacterController(IPhysicsCharacterController *contr
 }
 
 
-void vkBulletScene::AddJoint(IPhysicsJoint *joint)
+void vkBulletScene::AddJoint(iPhysicsJoint *joint)
 {
   vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
   if (j)
@@ -149,7 +149,7 @@ void vkBulletScene::AddJoint(IPhysicsJoint *joint)
 }
 
 
-void vkBulletScene::RemoveJoint(IPhysicsJoint *joint)
+void vkBulletScene::RemoveJoint(iPhysicsJoint *joint)
 {
   vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
   if (j)

@@ -12,16 +12,16 @@
 
 class vkDynamicColliderState;
 class vkPhysicsShapeContainer;
-struct IPhysicsShape;
+struct iPhysicsShape;
 class vkEntity;
 
 
 VK_INTERFACE()
-struct VKE_API IPhysicsCollider : public IObject
+struct VKE_API iPhysicsCollider : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IPhysicsCollider () { }
+  virtual ~iPhysicsCollider () { }
 
   virtual vkPhysicsColliderType GetType() const = 0;
 
@@ -30,8 +30,8 @@ struct VKE_API IPhysicsCollider : public IObject
   virtual void FinishTransformation() = 0;
 
 
-  virtual void AttachShape(IPhysicsShape *shape) = 0;
-  virtual void DetachShape(IPhysicsShape *shape) = 0;
+  virtual void AttachShape(iPhysicsShape *shape) = 0;
+  virtual void DetachShape(iPhysicsShape *shape) = 0;
 
   virtual void AttachShape(vkPhysicsShapeContainer *shapes) = 0;
   virtual void DetachShape(vkPhysicsShapeContainer *shapes) = 0;

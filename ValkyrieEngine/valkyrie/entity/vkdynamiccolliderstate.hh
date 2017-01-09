@@ -6,8 +6,8 @@
 
 #include <valkyrie/entity/vkdynamiccolliderstate.refl.hh>
 
-struct IPhysicsTriggerCollider;
-struct IPhysicsDynamicCollider;
+struct iPhysicsTriggerCollider;
+struct iPhysicsDynamicCollider;
 class vkDynamicColliderStateTransformationCallback;
 
 VK_CLASS()
@@ -18,8 +18,8 @@ public:
   vkDynamicColliderState();
   virtual ~vkDynamicColliderState();
 
-  IPhysicsDynamicCollider *GetDynamicCollider();
-  const IPhysicsDynamicCollider *GetDynamicCollider() const;
+  iPhysicsDynamicCollider *GetDynamicCollider();
+  const iPhysicsDynamicCollider *GetDynamicCollider() const;
 
   virtual void SetKinematic(bool kinematic);
   virtual bool IsKinematic() const;
@@ -40,16 +40,16 @@ protected:
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 
 private:
-  IPhysicsDynamicCollider *m_dynamicCollider;
+  iPhysicsDynamicCollider *m_dynamicCollider;
   vkDynamicColliderStateTransformationCallback *m_callback;
 };
 
-VK_FORCEINLINE IPhysicsDynamicCollider *vkDynamicColliderState::GetDynamicCollider()
+VK_FORCEINLINE iPhysicsDynamicCollider *vkDynamicColliderState::GetDynamicCollider()
 {
   return m_dynamicCollider;
 }
 
-VK_FORCEINLINE const IPhysicsDynamicCollider *vkDynamicColliderState::GetDynamicCollider() const
+VK_FORCEINLINE const iPhysicsDynamicCollider *vkDynamicColliderState::GetDynamicCollider() const
 {
   return m_dynamicCollider;
 }

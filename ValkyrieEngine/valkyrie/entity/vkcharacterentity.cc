@@ -9,7 +9,7 @@
 #include <valkyrie/physics/iphysicscapsulecharactercontroller.hh>
 #include <valkyrie/physics/iphysicsscene.hh>
 
-class vkCharacterEntityTransformationCallback : public ITransformationCallback
+class vkCharacterEntityTransformationCallback : public iTransformationCallback
 {
 public:
   vkCharacterEntityTransformationCallback(vkCharacterEntity *entity)

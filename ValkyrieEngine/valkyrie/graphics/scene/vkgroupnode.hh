@@ -18,7 +18,7 @@ public:
   virtual void UpdateStates();
 
 protected:
-  virtual void PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback);
+  virtual void PrivScan(const vkClipper *clipper, iGraphics *renderer, iScanCallback *callback);
 
   virtual void UpdateBoundingBox(vkBoundingBox &bbox);
 private:

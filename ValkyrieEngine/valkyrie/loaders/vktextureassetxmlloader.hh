@@ -6,7 +6,7 @@
 #include <valkyrie/loaders/vktextureassetxmlloader.refl.hh>
 
 class vkImage;
-struct ISampler;
+struct iSampler;
 
 
 
@@ -21,18 +21,18 @@ public:
   vkTextureAssetXMLLoader();
   virtual ~vkTextureAssetXMLLoader();
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
 private:
   vkTextureType GetTextureType(const vkString &typeName) const;
 
 
-  IObject *LoadTexture2D(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  IObject *LoadTexture2DArray(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  vkImage *LoadImage(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  ISampler *LoadSampler(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  iObject *LoadTexture2D(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  iObject *LoadTexture2DArray(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  vkImage *LoadImage(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  iSampler *LoadSampler(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 };
 
 

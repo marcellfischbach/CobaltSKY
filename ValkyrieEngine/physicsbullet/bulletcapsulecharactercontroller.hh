@@ -12,7 +12,7 @@ class btPairCachingGhostObject;
 class vkBulletScene;
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletCapsuleCharacterController : public VK_SUPER(IPhysicsCapsuleCharacterController)
+class VKBULLETPHYSICS_API vkBulletCapsuleCharacterController : public VK_SUPER(iPhysicsCapsuleCharacterController)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -22,7 +22,7 @@ public:
   virtual void Initialize(float height, float radius);
 
 
-  virtual void SetTransformationCallback(ITransformationCallback *transformationCallback);
+  virtual void SetTransformationCallback(iTransformationCallback *transformationCallback);
 
   virtual void Warp(const vkMatrix4f &transformation);
   virtual void WarpToPosition(const vkVector3f &newPosition);
@@ -46,7 +46,7 @@ public:
 
   void UpdateCallbacks();
 protected:
-  ITransformationCallback *m_transformationCallback;
+  iTransformationCallback *m_transformationCallback;
   btCapsuleShape *m_capsuleShape;
   btPairCachingGhostObject *m_ghostObject;
   btKinematicCharacterController *m_characterController;

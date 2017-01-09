@@ -29,7 +29,7 @@ vkTextureAssetXMLLoader::~vkTextureAssetXMLLoader()
 }
 
 
-bool vkTextureAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkTextureAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString tagName(element->Value());
   return tagName == vkString("texture1d")
@@ -40,21 +40,21 @@ bool vkTextureAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLoc
     || tagName == vkString("texturecube");
 }
 
-const vkClass *vkTextureAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkTextureAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkTextureType type = GetTextureType(vkString(element->Value()));
   switch (type)
   {
   case eTT_Texture2D:
-    return ITexture2D::GetStaticClass();
+    return iTexture2D::GetStaticClass();
   case eTT_Texture2DArray:
-    return ITexture2DArray::GetStaticClass();
+    return iTexture2DArray::GetStaticClass();
   }
   return 0;
 }
 
 
-IObject  *vkTextureAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject  *vkTextureAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
 
   vkTextureType type = GetTextureType(vkString(element->Value()));
@@ -69,17 +69,17 @@ IObject  *vkTextureAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
   return 0;
 }
 
-IObject *vkTextureAssetXMLLoader::LoadTexture2D(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkTextureAssetXMLLoader::LoadTexture2D(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   TiXmlElement *samplerElement = element->FirstChildElement("sampler");
-  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
+  iSampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
   vkImage *image = LoadImage(element->FirstChildElement("image"), locator, userData);
   if (!image)
   {
     return 0;
   }
 
-  ITexture2D *texture = vkEng->CreateTexture2D(image->GetPixelFormat(),
+  iTexture2D *texture = vkEng->CreateTexture2D(image->GetPixelFormat(),
                                                                         image->GetWidth(),
                                                                         image->GetHeight(),
                                                                         image->GetNumberOfLevels () > 1);
@@ -95,10 +95,10 @@ IObject *vkTextureAssetXMLLoader::LoadTexture2D(TiXmlElement *element, const vkR
   return texture;
 }
 
-IObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   TiXmlElement *samplerElement = element->FirstChildElement("sampler");
-  ISampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
+  iSampler *sampler = LoadSampler(element->FirstChildElement("sampler"), locator, userData);
 
 
   unsigned numImages = 0;
@@ -108,7 +108,7 @@ IObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, cons
   }
 
   unsigned layer = 0;
-  ITexture2DArray *texture = 0;
+  iTexture2DArray *texture = 0;
   vkPixelFormat pixelFormat;
   for (TiXmlElement *imageElement = element->FirstChildElement("image"); imageElement; imageElement = imageElement->NextSiblingElement("image"))
   {
@@ -162,7 +162,7 @@ IObject *vkTextureAssetXMLLoader::LoadTexture2DArray(TiXmlElement *element, cons
 }
 
 
-ISampler *vkTextureAssetXMLLoader::LoadSampler(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iSampler *vkTextureAssetXMLLoader::LoadSampler(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!element)
   {
@@ -171,27 +171,27 @@ ISampler *vkTextureAssetXMLLoader::LoadSampler(TiXmlElement *element, const vkRe
 
   
   vkResourceLoadingMode rlm = GetResourceLoadingMode(element);
-  ISampler *sampler = 0;
+  iSampler *sampler = 0;
   switch (rlm)
   {
   case eRLM_Shared:
-    sampler = vkResourceManager::Get()->GetOrLoad<ISampler>(vkResourceLocator(vkString(element->GetText())));
+    sampler = vkResourceManager::Get()->GetOrLoad<iSampler>(vkResourceLocator(vkString(element->GetText())));
     VK_ADDREF(sampler);
     break;
     
   case eRLM_Instance:
-    sampler = vkResourceManager::Get()->Load<ISampler>(vkResourceLocator(vkString(element->GetText())));
+    sampler = vkResourceManager::Get()->Load<iSampler>(vkResourceLocator(vkString(element->GetText())));
     break;
 
   case eRLM_Inline:
-    sampler = vkResourceManager::Get()->Load<ISampler>(element, locator, userData);
+    sampler = vkResourceManager::Get()->Load<iSampler>(element, locator, userData);
     break;
   }
 
   return sampler;
 }
 
-vkImage *vkTextureAssetXMLLoader::LoadImage(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+vkImage *vkTextureAssetXMLLoader::LoadImage(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!element)
   {

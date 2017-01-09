@@ -14,13 +14,13 @@ vkHingeJointStateXMLLoader::~vkHingeJointStateXMLLoader()
 
 }
 
-const vkClass *vkHingeJointStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkHingeJointStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkHingeJointState::GetStaticClass();
 }
 
 
-IObject *vkHingeJointStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkHingeJointStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkJointStateXMLLoader::Load(element, locator, userData);
 }

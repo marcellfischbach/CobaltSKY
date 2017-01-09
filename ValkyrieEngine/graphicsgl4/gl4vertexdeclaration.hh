@@ -7,7 +7,7 @@
 
 class vkProgramGL4;
 VK_CLASS()
-class vkVertexDeclarationGL4 : public VK_SUPER(IVertexDeclaration)
+class vkVertexDeclarationGL4 : public VK_SUPER(iVertexDeclaration)
 {
   VK_CLASS_GEN_OBJECT;
 public:

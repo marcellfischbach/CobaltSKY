@@ -4,7 +4,7 @@
 class vkGeometryNode;
 class vkLightNode;
 
-struct IScanCallback
+struct iScanCallback
 {
 
   virtual bool ScanGeometryNode(vkGeometryNode *geometryNode) = 0;

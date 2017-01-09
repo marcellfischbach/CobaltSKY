@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 
-vkGBuffer::vkGBuffer(IGraphics *renderer)
+vkGBuffer::vkGBuffer(iGraphics *renderer)
   : vkObject ()
   , m_renderer(renderer)
   , m_diffuseRoughness(0)
@@ -38,14 +38,14 @@ bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
   VK_RELEASE(m_depth);
   VK_RELEASE(m_renderTarget);
 
-  m_diffuseRoughness = vkQueryClass<ITexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
-  m_normalLightMode = vkQueryClass<ITexture2D>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false));
-  m_emissiveMetallic = vkQueryClass<ITexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
-  m_sssSpec = vkQueryClass<ITexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
-  m_depth = vkQueryClass<ITexture2D>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false));
+  m_diffuseRoughness = vkQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_normalLightMode = vkQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false));
+  m_emissiveMetallic = vkQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_sssSpec = vkQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false));
+  m_depth = vkQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false));
 
-  ISampler *colorSampler = vkGBuffer::GetColorSampler(m_renderer);
-  ISampler *depthSampler = vkGBuffer::GetDepthSampler(m_renderer);
+  iSampler *colorSampler = vkGBuffer::GetColorSampler(m_renderer);
+  iSampler *depthSampler = vkGBuffer::GetDepthSampler(m_renderer);
 
   m_diffuseRoughness->SetSampler(colorSampler);
   m_normalLightMode->SetSampler(colorSampler);
@@ -54,7 +54,7 @@ bool vkGBuffer::Resize(vkUInt16 width, vkUInt16 height)
   m_depth->SetSampler(depthSampler);
 
 
-  m_renderTarget = vkQueryClass<IRenderTarget>(m_renderer->CreateRenderTarget());
+  m_renderTarget = vkQueryClass<iRenderTarget>(m_renderer->CreateRenderTarget());
   m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(m_diffuseRoughness);
   m_renderTarget->AddColorTexture(m_normalLightMode);
@@ -82,7 +82,7 @@ bool vkGBuffer::IsValid() const
   return m_renderTarget != 0;
 }
 
-bool vkGBuffer::Bind(IGraphics *renderer)
+bool vkGBuffer::Bind(iGraphics *renderer)
 {
   if (!m_renderTarget)
   {
@@ -97,9 +97,9 @@ bool vkGBuffer::Bind(IGraphics *renderer)
 
 
 
-ISampler *vkGBuffer::GetColorSampler(IGraphics *renderer)
+iSampler *vkGBuffer::GetColorSampler(iGraphics *renderer)
 {
-  static ISampler *sampler = 0;
+  static iSampler *sampler = 0;
   if (!sampler)
   {
     sampler = renderer->CreateSampler();
@@ -113,9 +113,9 @@ ISampler *vkGBuffer::GetColorSampler(IGraphics *renderer)
 }
 
 
-ISampler *vkGBuffer::GetDepthSampler(IGraphics *renderer)
+iSampler *vkGBuffer::GetDepthSampler(iGraphics *renderer)
 {
-  static ISampler *sampler = 0;
+  static iSampler *sampler = 0;
   if (!sampler)
   {
     sampler = renderer->CreateSampler();

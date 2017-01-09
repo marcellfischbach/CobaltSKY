@@ -19,7 +19,7 @@ vkProgramGL4Loader::~vkProgramGL4Loader()
 }
 
 
-bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString tagName(element->Value());
 
@@ -28,12 +28,12 @@ bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator 
 
 
 
-const vkClass *vkProgramGL4Loader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkProgramGL4Loader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkProgramGL4::GetStaticClass();
 }
 
-IObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (vkString(element->Value()) != vkString("program"))
   {

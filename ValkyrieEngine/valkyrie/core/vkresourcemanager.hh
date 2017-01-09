@@ -44,8 +44,8 @@ public:
    *
    * \return The object
    */
-  IObject *Load(const vkResourceLocator &locator, IObject *userData = 0) const;
-  const vkClass *EvalClass(const vkResourceLocator &locator, IObject *userData = 0) const;
+  iObject *Load(const vkResourceLocator &locator, iObject *userData = 0) const;
+  const vkClass *EvalClass(const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -58,9 +58,9 @@ public:
   *
   * \return The object
   */
-  IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  iObject *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const;
 
-  const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -73,10 +73,10 @@ public:
   *
   * \return The object
   */
-  IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
 
-  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a asset \a file.
@@ -90,13 +90,13 @@ public:
   *
   * \return The object
   */
-  IObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
-  const vkClass *EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const;
+  iObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const;
+  const vkClass *EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   template<typename T>
-  T *Load(const vkResourceLocator &locator, IObject *userData = 0) const
+  T *Load(const vkResourceLocator &locator, iObject *userData = 0) const
   {
-    IObject *object = Load(locator, userData);
+    iObject *object = Load(locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -110,9 +110,9 @@ public:
   }
 
   template<typename T>
-  T *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const
+  T *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const
   {
-    IObject *object = Load(file, locator, userData);
+    iObject *object = Load(file, locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -126,9 +126,9 @@ public:
   }
 
   template<typename T>
-  T *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const
+  T *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const
   {
-    IObject *object = Load(element, locator, userData);
+    iObject *object = Load(element, locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -142,9 +142,9 @@ public:
   }
 
   template<typename T>
-  T *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData = 0) const
+  T *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const
   {
-    IObject *object = Load(typeID, inputStream, locator, userData);
+    iObject *object = Load(typeID, inputStream, locator, userData);
     if (object)
     {
       T* t_instance = vkQueryClass<T>(object);
@@ -167,7 +167,7 @@ public:
    * 
    * \return The object or \a null if there is no such object registered.
    */
-  IObject *Get(const vkResourceLocator &resourceLocator) const;
+  iObject *Get(const vkResourceLocator &resourceLocator) const;
 
 
   /**
@@ -177,7 +177,7 @@ public:
    *
    * \return The resource locator
    */
-  vkResourceLocator Get(IObject *object) const;
+  vkResourceLocator Get(iObject *object) const;
 
   /**
   * \brief Get the object from the resource cache. 
@@ -190,9 +190,9 @@ public:
   *
   * \return The object or \a null if there is no such object registered.
   */
-  IObject *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0);
+  iObject *GetOrLoad(const vkResourceLocator &resourceLocator, iObject *userData = 0);
 
-  VK_FORCEINLINE IObject *Aquire(const vkResourceLocator &resourceLocator, IObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
+  VK_FORCEINLINE iObject *Aquire(const vkResourceLocator &resourceLocator, iObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
   {
     switch (mode)
     {
@@ -210,7 +210,7 @@ public:
   template<typename T>
   T *Get(const vkResourceLocator &resourceLocator) const
   {
-    IObject *object = Get(resourceLocator);
+    iObject *object = Get(resourceLocator);
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
@@ -220,9 +220,9 @@ public:
   }
 
   template<typename T>
-  T *GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData = 0)
+  T *GetOrLoad(const vkResourceLocator &resourceLocator, iObject *userData = 0)
   {
-    IObject *object = GetOrLoad(resourceLocator, userData);
+    iObject *object = GetOrLoad(resourceLocator, userData);
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
@@ -232,9 +232,9 @@ public:
   }
 
   template<typename T>
-  T *Aquire(const vkResourceLocator &resourceLocator, IObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
+  T *Aquire(const vkResourceLocator &resourceLocator, iObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
   {
-    IObject *object = Aquire(resourceLocator, userData, mode);
+    iObject *object = Aquire(resourceLocator, userData, mode);
     if (object)
     {
       T *t_instance = vkQueryClass<T>(object);
@@ -247,23 +247,23 @@ public:
     return 0;
   }
 
-  void RegisterLoader(IXMLLoader *loader);
-  void RegisterLoader(IFileLoader *loader);
-  void RegisterLoader(IAssetLoader *loader);
+  void RegisterLoader(iXMLLoader *loader);
+  void RegisterLoader(iFileLoader *loader);
+  void RegisterLoader(iAssetLoader *loader);
 
-  bool RegisterObject(const vkResourceLocator &locator, IObject *object);
+  bool RegisterObject(const vkResourceLocator &locator, iObject *object);
   void DeregisterObject(const vkResourceLocator &locator);
-  void DeregisterObject(IObject *object);
+  void DeregisterObject(iObject *object);
 
 private:
   vkResourceManager();
 
-  std::vector<IFileLoader*> m_fileLoaders;
-  std::vector<IXMLLoader*> m_xmlLoaders;
-  std::vector<IAssetLoader*> m_assetLoaders;
+  std::vector<iFileLoader*> m_fileLoaders;
+  std::vector<iXMLLoader*> m_xmlLoaders;
+  std::vector<iAssetLoader*> m_assetLoaders;
 
-  std::map<vkResourceLocator, IObject*> m_objects;
-  std::map<IObject*, vkResourceLocator> m_resources;
+  std::map<vkResourceLocator, iObject*> m_objects;
+  std::map<iObject*, vkResourceLocator> m_resources;
 
 };
 

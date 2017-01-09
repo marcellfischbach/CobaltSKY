@@ -8,7 +8,7 @@
 #include <graphicsgl4/gl4sampler.refl.hh>
 
 VK_CLASS();
-class VKGRAPHICSGL4_API vkSamplerGL4 : public VK_SUPER(ISampler)
+class VKGRAPHICSGL4_API vkSamplerGL4 : public VK_SUPER(iSampler)
 {
   VK_CLASS_GEN_OBJECT;
 

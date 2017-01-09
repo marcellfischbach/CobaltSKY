@@ -5,10 +5,10 @@
 #include <valkyrie/physics/iphysicsbasecollider.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IPhysicsBaseCollider : public VK_SUPER(IPhysicsCollider)
+struct VKE_API iPhysicsBaseCollider : public VK_SUPER(iPhysicsCollider)
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsBaseCollider() { }
+  virtual ~iPhysicsBaseCollider() { }
 
   virtual void SetFriction(float friction) = 0;
   virtual float GetFriction() const = 0;

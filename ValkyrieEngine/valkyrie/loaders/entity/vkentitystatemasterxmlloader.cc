@@ -29,12 +29,12 @@ vkEntityStateMasterXMLLoader::~vkEntityStateMasterXMLLoader()
 }
 
 
-bool vkEntityStateMasterXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkEntityStateMasterXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return std::string(element->Value()) == std::string("entityState");
 }
 
-const vkClass *vkEntityStateMasterXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkEntityStateMasterXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!element->Attribute("class"))
   {
@@ -45,7 +45,7 @@ const vkClass *vkEntityStateMasterXMLLoader::EvalClass(TiXmlElement *element, co
 }
 
 
-IObject *vkEntityStateMasterXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkEntityStateMasterXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!element->Attribute("class"))
   {
@@ -73,7 +73,7 @@ IObject *vkEntityStateMasterXMLLoader::Load(TiXmlElement *element, const vkResou
   data.entity = entity;
   data.state = entityState;
 
-  IObject *obj = loader->Load(element, locator, &data);
+  iObject *obj = loader->Load(element, locator, &data);
   //entityState->Create();
   return obj;
 

@@ -41,7 +41,7 @@ public:
   * \name Functions for opening files
   * @{
   */
-  IFile* Open (const vkString& filename, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
+  iFile* Open (const vkString& filename, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
   /**
   * @}
   */

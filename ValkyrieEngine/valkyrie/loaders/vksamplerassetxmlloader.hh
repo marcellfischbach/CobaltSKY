@@ -5,7 +5,7 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/loaders/vksamplerassetxmlloader.refl.hh>
 
-struct ISampler;
+struct iSampler;
 
 /**
 * \ingroup loading
@@ -19,8 +19,8 @@ public:
   vkSamplerAssetXMLLoader();
   virtual ~vkSamplerAssetXMLLoader();
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  virtual IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
 };

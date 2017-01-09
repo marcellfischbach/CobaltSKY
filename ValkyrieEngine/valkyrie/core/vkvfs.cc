@@ -152,7 +152,7 @@ const vkString &vkVFS::GetRootPath() const
   return m_rootPath;
 }
 
-IFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMode)
+iFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMode)
 {
   std::string finalFilename = GetAbsolutPath(filename);
   if (filename.length() == 0)

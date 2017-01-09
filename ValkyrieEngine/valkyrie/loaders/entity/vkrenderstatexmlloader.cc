@@ -26,13 +26,13 @@ vkRenderStateXMLLoader::~vkRenderStateXMLLoader()
 
 }
 
-const vkClass *vkRenderStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkRenderStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkRenderState::GetStaticClass();
 }
 
 
-IObject *vkRenderStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkRenderStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkEntityStateLoaderData *data = vkQueryClass<vkEntityStateLoaderData>(userData);
   vkRenderState *renderState = vkQueryClass<vkRenderState>(data->state);

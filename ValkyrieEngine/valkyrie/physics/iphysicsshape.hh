@@ -38,10 +38,10 @@ struct vkPhysGeometry
 
 
 VK_INTERFACE()
-struct VKE_API IPhysicsShape : public IObject
+struct VKE_API iPhysicsShape : public iObject
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsShape () { }
+  virtual ~iPhysicsShape () { }
 
   virtual const vkPhysGeometry &GetGeometry() const = 0;
 

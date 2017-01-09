@@ -21,7 +21,7 @@ public:
   vkLight *GetLight();
   const vkLight *GetLight() const;
 
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 protected:
   virtual void FillBoundingBox(vkBoundingBox &bbox);
 

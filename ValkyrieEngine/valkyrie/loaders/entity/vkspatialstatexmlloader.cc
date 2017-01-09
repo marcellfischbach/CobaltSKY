@@ -27,13 +27,13 @@ vkSpatialStateXMLLoader::~vkSpatialStateXMLLoader()
 }
 
 
-const vkClass *vkSpatialStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkSpatialStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkSpatialState::GetStaticClass();
 }
 
 
-IObject *vkSpatialStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkSpatialStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!userData || !element)
   {

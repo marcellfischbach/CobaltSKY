@@ -14,7 +14,7 @@ vkParticleRenderer::~vkParticleRenderer()
 
 }
 
-void vkParticleRenderer::Render(IGraphics *renderer, vkCollection<vkRenderState*> &particles)
+void vkParticleRenderer::Render(iGraphics *renderer, vkCollection<vkRenderState*> &particles)
 {
   renderer->SetBlendEnabled(true);
   renderer->SetDepthMask(false);

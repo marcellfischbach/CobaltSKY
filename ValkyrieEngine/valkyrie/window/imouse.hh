@@ -7,7 +7,7 @@
 #include <valkyrie/window/imouse.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IMouse : public IObject
+struct VKE_API iMouse : public iObject
 {
   VK_CLASS_GEN;
 

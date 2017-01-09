@@ -15,8 +15,8 @@ public:
   virtual ~vkMeshAssetXMLLoader();
 
 
-  bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
-  IObject *Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData = 0) const;
+  bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
 };

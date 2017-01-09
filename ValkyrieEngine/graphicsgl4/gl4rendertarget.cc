@@ -4,7 +4,7 @@
 #include <graphicsgl4/gl4defines.hh>
 
 vkRenderTargetGL4::vkRenderTargetGL4()
-  : IRenderTarget()
+  : iRenderTarget()
   , m_name(0)
   , m_depthTexture(0)
   , m_provided(false)
@@ -13,7 +13,7 @@ vkRenderTargetGL4::vkRenderTargetGL4()
 }
 
 vkRenderTargetGL4::vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 height)
-  : IRenderTarget()
+  : iRenderTarget()
   , m_name(name)
   , m_depthTexture(0)
   , m_width(width)
@@ -79,7 +79,7 @@ void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
 
-void vkRenderTargetGL4::AddColorTexture(ITexture *color)
+void vkRenderTargetGL4::AddColorTexture(iTexture *color)
 {
   VK_CHECK_GL_ERROR;
   vkTextureGL4 *coloGL4 = vkQueryClass<vkTextureGL4>(color);
@@ -94,7 +94,7 @@ void vkRenderTargetGL4::AddColorTexture(ITexture *color)
   VK_CHECK_GL_ERROR;
 }
 
-void vkRenderTargetGL4::SetDepthTexture(ITexture *depth)
+void vkRenderTargetGL4::SetDepthTexture(iTexture *depth)
 {
   vkTextureGL4 *depthGL4 = vkQueryClass<vkTextureGL4>(depth);
   if (depthGL4 != m_depthTexture)
@@ -129,7 +129,7 @@ bool vkRenderTargetGL4::Finilize()
   return r == GL_FRAMEBUFFER_COMPLETE;
 }
 
-ITexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
+iTexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
 {
   if (idx >= m_colorTextures.size())
   {
@@ -139,7 +139,7 @@ ITexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
   return m_colorTextures[idx];
 }
 
-ITexture *vkRenderTargetGL4::GetDepthBuffer() const
+iTexture *vkRenderTargetGL4::GetDepthBuffer() const
 {
   return m_depthTexture;
 }

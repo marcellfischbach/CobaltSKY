@@ -15,7 +15,7 @@ vkSamplerAssetXMLLoader::~vkSamplerAssetXMLLoader()
 
 }
 
-bool vkSamplerAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkSamplerAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkString(element->Value()) == vkString("sampler");
 }
@@ -91,14 +91,14 @@ vkTextureCompareFunc evalCompareFunc(const vkString &compareString)
 
 }
 
-const vkClass *vkSamplerAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkSamplerAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
-  return ISampler::GetStaticClass();
+  return iSampler::GetStaticClass();
 }
 
-IObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
-  ISampler *sampler = vkEng->CreateSampler();
+  iSampler *sampler = vkEng->CreateSampler();
   if (!sampler)
   {
     return 0;

@@ -6,7 +6,7 @@
 
 
 vkShaderAttributeGL4::vkShaderAttributeGL4()
-  : IShaderAttribute()
+  : iShaderAttribute()
   , m_name("")
   , m_location(-1)
   , m_arrayIndex(0)

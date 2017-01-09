@@ -4,15 +4,15 @@
 #include <valkyrie/core/vkclass.hh>
 #include <valkyrie/core/resource/ifileloader.refl.hh>
 
-struct IFile;
+struct iFile;
 class vkResourceLocator;
 
 VK_INTERFACE()
-struct VKE_API IFileLoader : public IObject
+struct VKE_API iFileLoader : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual bool CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual const vkClass *EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
-  virtual IObject *Load(IFile *file, const vkResourceLocator &locator, IObject *userData = 0) const = 0;
+  virtual bool CanLoad(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
+  virtual const vkClass *EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
+  virtual iObject *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const = 0;
 };

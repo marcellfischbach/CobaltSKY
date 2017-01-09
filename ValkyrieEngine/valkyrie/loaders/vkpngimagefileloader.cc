@@ -7,7 +7,7 @@
 #include <png.h>
 
 vkPNGImageFileLoader::vkPNGImageFileLoader()
-  : IFileLoader()
+  : iFileLoader()
 {
 
 }
@@ -18,7 +18,7 @@ vkPNGImageFileLoader::~vkPNGImageFileLoader()
 }
 
 
-bool vkPNGImageFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkPNGImageFileLoader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   return file->GetExtension() == vkString("png");
 }
@@ -36,7 +36,7 @@ void read_data_from_ifile(png_structp png_ptr,
     return;
   }
 
-  IFile *file = static_cast<IFile*>(io);
+  iFile *file = static_cast<iFile*>(io);
   file->Read(outBytes, (long)byteCountToRead);
 }
 
@@ -55,13 +55,13 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 }
 }
 
-const vkClass *vkPNGImageFileLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkPNGImageFileLoader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkImage::GetStaticClass();
 }
 
 
-IObject *vkPNGImageFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkPNGImageFileLoader::Load(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)

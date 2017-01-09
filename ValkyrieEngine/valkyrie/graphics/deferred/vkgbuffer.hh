@@ -5,59 +5,59 @@
 #include <valkyrie/vkdefs.hh>
 #include <valkyrie/graphics/deferred/vkgbuffer.refl.hh>
 
-struct IGraphics;
-struct ITexture2D;
-struct IRenderTarget;
-struct ISampler;
+struct iGraphics;
+struct iTexture2D;
+struct iRenderTarget;
+struct iSampler;
 
 VK_INTERFACE()
 class VKE_API vkGBuffer : public VK_SUPER(vkObject)
 {
   VK_CLASS_GEN;
 public:
-  vkGBuffer(IGraphics *renderer);
+  vkGBuffer(iGraphics *renderer);
   virtual ~vkGBuffer();
 
   bool Resize(vkUInt16 width, vkUInt16 height);
 
-  bool Bind(IGraphics *renderer);
+  bool Bind(iGraphics *renderer);
 
   bool IsValid() const;
 
-  VK_FORCEINLINE ITexture2D *GetDiffuseRoughness()
+  VK_FORCEINLINE iTexture2D *GetDiffuseRoughness()
   {
     return m_diffuseRoughness;
   }
 
-  VK_FORCEINLINE ITexture2D *GetNormalLightMode()
+  VK_FORCEINLINE iTexture2D *GetNormalLightMode()
   {
     return m_normalLightMode;
   }
 
-  VK_FORCEINLINE ITexture2D *GetEmissiveMetallic()
+  VK_FORCEINLINE iTexture2D *GetEmissiveMetallic()
   {
     return m_emissiveMetallic;
   }
 
-  VK_FORCEINLINE ITexture2D *GetSSSSpec()
+  VK_FORCEINLINE iTexture2D *GetSSSSpec()
   {
     return m_sssSpec;
   }
 
-  VK_FORCEINLINE ITexture2D *GetDepth()
+  VK_FORCEINLINE iTexture2D *GetDepth()
   {
     return m_depth;
   }
 
-  static ISampler *GetColorSampler(IGraphics *renderer);
-  static ISampler *GetDepthSampler(IGraphics *renderer);
+  static iSampler *GetColorSampler(iGraphics *renderer);
+  static iSampler *GetDepthSampler(iGraphics *renderer);
 
 private:
-  ITexture2D *m_diffuseRoughness;
-  ITexture2D *m_normalLightMode;
-  ITexture2D *m_emissiveMetallic;
-  ITexture2D *m_sssSpec;
-  ITexture2D *m_depth;
-  IRenderTarget *m_renderTarget;
-  IGraphics *m_renderer;
+  iTexture2D *m_diffuseRoughness;
+  iTexture2D *m_normalLightMode;
+  iTexture2D *m_emissiveMetallic;
+  iTexture2D *m_sssSpec;
+  iTexture2D *m_depth;
+  iRenderTarget *m_renderTarget;
+  iGraphics *m_renderer;
 };

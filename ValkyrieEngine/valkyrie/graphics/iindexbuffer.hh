@@ -6,7 +6,7 @@
 #include <valkyrie/graphics/iindexbuffer.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API IIndexBuffer : public IObject
+struct VKE_API iIndexBuffer : public iObject
 {
   VK_CLASS_GEN;
 

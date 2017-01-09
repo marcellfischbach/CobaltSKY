@@ -11,11 +11,11 @@ class vkParticle;
 */
 
 VK_INTERFACE()
-struct VKE_API IParticleEmitter : public IObject
+struct VKE_API iParticleEmitter : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IParticleEmitter() { }
+  virtual ~iParticleEmitter() { }
 
   virtual void Update(float tpf, vkParticle *particle) = 0;
 

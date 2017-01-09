@@ -8,7 +8,7 @@
 
 
 VK_INTERFACE()
-class VKBULLETPHYSICS_API vkBulletJoint : public virtual VK_SUPER(IPhysicsJoint)
+class VKBULLETPHYSICS_API vkBulletJoint : public virtual VK_SUPER(iPhysicsJoint)
 {
   VK_CLASS_GEN_OBJECT;
 public:
@@ -16,8 +16,8 @@ public:
 
   virtual vkPhysicsJointType GetType() const;
 
-  virtual IPhysicsDynamicCollider *GetColliderA() const;
-  virtual IPhysicsDynamicCollider *GetColliderB() const;
+  virtual iPhysicsDynamicCollider *GetColliderA() const;
+  virtual iPhysicsDynamicCollider *GetColliderB() const;
 
   btTypedConstraint *GetConstraint();
   const btTypedConstraint *GetConstraint() const;

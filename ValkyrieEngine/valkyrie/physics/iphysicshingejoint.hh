@@ -5,10 +5,10 @@
 #include <valkyrie/physics/iphysicshingejoint.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IPhysicsHingeJoint : public virtual VK_SUPER(IPhysicsJoint)
+struct VKE_API iPhysicsHingeJoint : public virtual VK_SUPER(iPhysicsJoint)
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsHingeJoint() { }
+  virtual ~iPhysicsHingeJoint() { }
 
 
   virtual void SetFrameA(const vkMatrix4f &frame) = 0;

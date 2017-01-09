@@ -13,10 +13,10 @@
 
 #define vkInvalidShaderParamIndex (~0x00)
 
-struct IGraphics;
-struct IShader;
-struct IShaderAttribute;
-struct ITexture;
+struct iGraphics;
+struct iShader;
+struct iShaderAttribute;
+struct iTexture;
 
 VK_CLASS();
 class VKE_API vkMaterial : public VK_SUPER(vkObject)
@@ -28,14 +28,14 @@ public:
   vkMaterial();
   virtual ~vkMaterial();
 
-  void SetShader(vkRenderPass pass, IShader *shader);
-  IShader *GetShader(vkRenderPass pass);
-  const IShader *GetShader(vkRenderPass pass) const;
+  void SetShader(vkRenderPass pass, iShader *shader);
+  iShader *GetShader(vkRenderPass pass);
+  const iShader *GetShader(vkRenderPass pass) const;
 
   vkSize GetNumberOfParameters() const;
   vkShaderParameterType GetParamType(vkSize idx) const;
   vkString GetParamName (vkSize idx) const;
-  IShaderAttribute *GetAttribute(vkSize idx, vkRenderPass pass) const;
+  iShaderAttribute *GetAttribute(vkSize idx, vkRenderPass pass) const;
 
   vkInt16 GetIndex(const vkString &parametername) const;
 
@@ -47,7 +47,7 @@ public:
   void SetDefault(vkSize idx, int def);
   void SetDefault(vkSize idx, const vkMatrix3f &def);
   void SetDefault(vkSize idx, const vkMatrix4f &def);
-  void SetDefault(vkSize idx, ITexture *def);
+  void SetDefault(vkSize idx, iTexture *def);
 
   float GetDefaultFloat(vkSize idx) const;
   vkVector2f GetDefaultVector2(vkSize idx) const;
@@ -57,33 +57,33 @@ public:
   int GetDefaultInt(vkSize idx) const;
   vkMatrix3f GetDefaultMatrix3(vkSize idx) const;
   vkMatrix4f GetDefaultMatrix4(vkSize idx) const;
-  ITexture* GetDefaultTexture(vkSize idx) const;
+  iTexture* GetDefaultTexture(vkSize idx) const;
 
   void ClearParameters();
   vkSize RegisterParam(const vkString &parameterName, vkShaderParameterType type);
 
-  IShader *Bind(IGraphics *renderer, vkRenderPass pass);
+  iShader *Bind(iGraphics *renderer, vkRenderPass pass);
 protected:
-  void BindParameter(IGraphics *renderer, vkRenderPass pass, vkSize idx);
+  void BindParameter(iGraphics *renderer, vkRenderPass pass, vkSize idx);
 
 private:
   struct Param
   {
     vkString m_name;
-    IShaderAttribute *m_attribute[eRP_COUNT];
+    iShaderAttribute *m_attribute[eRP_COUNT];
     vkShaderParameterType m_type;
     union
     {
       float m_defaultFloat[16];
       int m_defaultInt[16];
-      ITexture *m_defaultTexture;
+      iTexture *m_defaultTexture;
     };
     Param(const vkString &name, vkShaderParameterType type);
   };
 
   std::vector<Param> m_params;
 
-  IShader *m_shaders[eRP_COUNT];
+  iShader *m_shaders[eRP_COUNT];
 
 };
 

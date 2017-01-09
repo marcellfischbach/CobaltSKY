@@ -8,10 +8,10 @@
 #include <vector>
 #include <valkyrie/graphics/vkmesh.refl.hh>
 
-struct IIndexBuffer;
-struct IGraphics;
-struct IVertexBuffer;
-struct IVertexDeclaration;
+struct iIndexBuffer;
+struct iGraphics;
+struct iVertexBuffer;
+struct iVertexDeclaration;
 
 class vkMaterialInstance;
 class vkSkeleton;
@@ -47,7 +47,7 @@ public:
   const vkString &GetMaterialName(vkSize idx) const;
   vkUInt32 GetMaterialIndex(const vkString &materialName) const;
 
-  virtual void Render(IGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
+  virtual void Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
 
 
 protected:

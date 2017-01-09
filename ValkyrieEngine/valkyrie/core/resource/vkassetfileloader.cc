@@ -6,7 +6,7 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 
 vkAssetFileLoader::vkAssetFileLoader()
-  : IFileLoader()
+  : iFileLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -16,14 +16,14 @@ vkAssetFileLoader::~vkAssetFileLoader()
 
 }
 
-bool vkAssetFileLoader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+bool vkAssetFileLoader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString extension = file->GetExtension();
   return extension == vkString("asset")
     || extension == vkString("data");
 }
 
-const vkClass *vkAssetFileLoader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkAssetFileLoader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   char magicNumber[9];
   file->Read(magicNumber, 8);
@@ -63,7 +63,7 @@ const vkClass *vkAssetFileLoader::EvalClass(IFile *file, const vkResourceLocator
       file->Read(buffer, length);
 
       vkAssetInputStream is(buffer, (vkSize)length);
-      IObject *obj = 0;
+      iObject *obj = 0;
 
       const vkClass *cls = vkResourceManager::Get()->EvalClass(entry.typeID, is, locator, userData);
       delete[] buffer;
@@ -75,7 +75,7 @@ const vkClass *vkAssetFileLoader::EvalClass(IFile *file, const vkResourceLocator
   return 0;
 }
 
-IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkAssetFileLoader::Load(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   char magicNumber[9];
   file->Read(magicNumber, 8);
@@ -115,7 +115,7 @@ IObject *vkAssetFileLoader::Load(IFile *file, const vkResourceLocator &locator, 
       file->Read(buffer, length);
 
       vkAssetInputStream is(buffer, (vkSize)length);
-      IObject *obj = 0;
+      iObject *obj = 0;
 
       obj = vkResourceManager::Get()->Load(entry.typeID, is, locator, userData);
       delete[] buffer;

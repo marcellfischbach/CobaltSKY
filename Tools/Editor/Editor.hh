@@ -8,7 +8,7 @@ class MainWindow;
 class AssetManagerWidget;
 
 VK_INTERFACE()
-class Editor : public IObject
+class Editor : public iObject
 {
   VK_CLASS_GEN_OBJECT;
 public:

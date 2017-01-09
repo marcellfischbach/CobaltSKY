@@ -8,7 +8,7 @@
 
 vkBulletHingeJoint::vkBulletHingeJoint()
   : vkBulletJoint(ePJT_Hinge)
-  , IPhysicsHingeJoint()
+  , iPhysicsHingeJoint()
 {
 
 }

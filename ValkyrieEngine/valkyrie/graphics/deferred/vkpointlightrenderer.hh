@@ -3,17 +3,17 @@
 #include <valkyrie/graphics/deferred/vklightrenderer.hh>
 
 
-struct ITexture2DArray;
+struct iTexture2DArray;
 class vkPointLight;
 
 
 class vkPointLightRenderer : public vkLightRenderer
 {
 public:
-  vkPointLightRenderer(IGraphics *renderer);
+  vkPointLightRenderer(iGraphics *renderer);
   virtual ~vkPointLightRenderer();
 
-  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target);
+  virtual void Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, iRenderTarget *target);
 
 private:
   void RenderShadow(vkEntity *root, const vkPointLight *light);
@@ -25,19 +25,19 @@ private:
   vkVector2f m_shadowNearFar[6];
 
   LightProgram m_programNoShadow;
-  IShaderAttribute *m_attrLightPositionNoShadow;
-  IShaderAttribute *m_attrLightRangeNoShadow;
+  iShaderAttribute *m_attrLightPositionNoShadow;
+  iShaderAttribute *m_attrLightRangeNoShadow;
   void BindPointLightNo(vkPointLight *pointLight);
 
 
   LightProgram m_programCubeShadow;
-  IShaderAttribute *m_attrLightPositionCubeShadow;
-  IShaderAttribute *m_attrLightRangeCubeShadow;
-  IShaderAttribute *m_attrShadowMats;
-  IShaderAttribute *m_attrShadowMap;
-  IShaderAttribute *m_attrMapBias;
-  IShaderAttribute *m_attrShadowIntensity;
-  ITexture2DArray *m_depthBuffer;
+  iShaderAttribute *m_attrLightPositionCubeShadow;
+  iShaderAttribute *m_attrLightRangeCubeShadow;
+  iShaderAttribute *m_attrShadowMats;
+  iShaderAttribute *m_attrShadowMap;
+  iShaderAttribute *m_attrMapBias;
+  iShaderAttribute *m_attrShadowIntensity;
+  iTexture2DArray *m_depthBuffer;
   void BindPointLightCubeShadow(vkPointLight *pointLight);
 
 };

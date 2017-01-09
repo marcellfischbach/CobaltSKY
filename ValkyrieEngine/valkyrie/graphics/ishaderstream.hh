@@ -8,11 +8,11 @@
 #include <valkyrie/graphics/ishaderstream.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API IShaderStream : public IObject
+struct VKE_API iShaderStream : public iObject
 {
   VK_CLASS_GEN;
 
-  virtual ~IShaderStream() { }
+  virtual ~iShaderStream() { }
 
   virtual const vkString &GetName() const = 0;
 

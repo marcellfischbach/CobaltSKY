@@ -67,24 +67,24 @@
 
 int initialize();
 int main_loop();
-vkEntityScene *create_scene(IGraphics *graphics);
-vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height);
-vkSubMesh* createCubeMesh(IGraphics *renderer, float size);
-vkSubMesh *create_skeleton_mesh(IGraphics *renderer, float size);
-vkPostProcessor *createPostProcessor(IGraphics *graphics);
-void UpdateCamera(vkCamera *cameraNode, vkCharacterEntity *character, const IMouse *mouser, const IKeyboard *keyboard);
-void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard, float tpf);
+vkEntityScene *create_scene(iGraphics *graphics);
+vkSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height);
+vkSubMesh* createCubeMesh(iGraphics *renderer, float size);
+vkSubMesh *create_skeleton_mesh(iGraphics *renderer, float size);
+vkPostProcessor *createPostProcessor(iGraphics *graphics);
+void UpdateCamera(vkCamera *cameraNode, vkCharacterEntity *character, const iMouse *mouser, const iKeyboard *keyboard);
+void UpdateCharacter(vkCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf);
 
 SDLWindow *window = 0;
 vkGraphicsGL4 *graphicsGL4 = 0;
 vkBulletSystem *bulletSystem = 0;
-const IKeyboard *keyboard = 0;
-const IMouse *mouse = 0;
+const iKeyboard *keyboard = 0;
+const iMouse *mouse = 0;
 vkCamera *camera = 0;
 vkCharacterEntity *character = 0;
-IFrameProcessor* fp = 0;
+iFrameProcessor* fp = 0;
 vkEntityScene *scene;
-IRenderTarget *rt = 0;
+iRenderTarget *rt = 0;
 vkDirectionalLight *directionalLight;
 vkParticle *particle;
 vkSize numParticles;
@@ -143,7 +143,7 @@ int initialize()
     return -1;
   }
 
-  ITexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768, false);
+  iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768, false);
   rt = graphicsGL4->CreateRenderTarget();
   rt->Initialize(1366, 768);
   rt->AddColorTexture(color0);
@@ -153,7 +153,7 @@ int initialize()
     printf("Unable to create render target!!!\n");
   }
 
-  ISampler *sampler = graphicsGL4->CreateSampler();
+  iSampler *sampler = graphicsGL4->CreateSampler();
   sampler->SetFilter(eFM_MinMagNearest);
   color0->SetSampler(sampler);
 
@@ -238,8 +238,8 @@ int main_loop()
 
 
     scene->GetRoot()->UpdateBoundingBox();
-    IRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
-    ITexture2D *colorTarget = vkQueryClass<ITexture2D>(target->GetColorBuffer(0));
+    iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
+    iTexture2D *colorTarget = vkQueryClass<iTexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 
@@ -286,7 +286,7 @@ vkMatrix4f create_matrix(const vkVector3f &eye, const vkVector3f &spot, const vk
 
 
 
-vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
+vkSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -336,13 +336,13 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
     vkVertexElement()
   };
 
-  IVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  IVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  IVertexBuffer *tanb = renderer->CreateVertexBuffer(sizeof(tangentBuffer), tangentBuffer, eBDM_Static);
-  IVertexBuffer *binb = renderer->CreateVertexBuffer(sizeof(biNormalBuffer), biNormalBuffer, eBDM_Static);
-  IVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
+  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
+  iVertexBuffer *tanb = renderer->CreateVertexBuffer(sizeof(tangentBuffer), tangentBuffer, eBDM_Static);
+  iVertexBuffer *binb = renderer->CreateVertexBuffer(sizeof(biNormalBuffer), biNormalBuffer, eBDM_Static);
+  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
+  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
+  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
   vkBoundingBox bbox;
   bbox.Add(vkVector3f(-s, -s, 0));
@@ -364,7 +364,7 @@ vkSubMesh* createPlaneMesh(IGraphics *renderer, float size, float height)
   return mesh;
 }
 
-vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
+vkSubMesh* createCubeMesh(iGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -483,11 +483,11 @@ vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
     vkVertexElement()
   };
 
-  IVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  IVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  IVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
+  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
+  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
+  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
+  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
   vkBoundingBox bbox;
   bbox.Add(vkVector3f(-s, -s, -s));
@@ -508,7 +508,7 @@ vkSubMesh* createCubeMesh(IGraphics *renderer, float size)
 }
 
 
-vkSubMesh* create_skeleton_mesh(IGraphics *renderer, float size)
+vkSubMesh* create_skeleton_mesh(iGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -578,13 +578,13 @@ vkSubMesh* create_skeleton_mesh(IGraphics *renderer, float size)
     vkVertexElement()
   };
 
-  IVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  IVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  IVertexBuffer *bwb = renderer->CreateVertexBuffer(sizeof(boneWeightBuffer), boneWeightBuffer, eBDM_Static);
-  IVertexBuffer *bib = renderer->CreateVertexBuffer(sizeof(boneIndexBuffer), boneIndexBuffer, eBDM_Static);
-  IVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  IIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  IVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
+  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
+  iVertexBuffer *bwb = renderer->CreateVertexBuffer(sizeof(boneWeightBuffer), boneWeightBuffer, eBDM_Static);
+  iVertexBuffer *bib = renderer->CreateVertexBuffer(sizeof(boneIndexBuffer), boneIndexBuffer, eBDM_Static);
+  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
+  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
+  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
   vkBoundingBox bbox;
   bbox.Add(vkVector3f(-s * 4, -s * 4, -s * 4));
@@ -606,7 +606,7 @@ vkSubMesh* create_skeleton_mesh(IGraphics *renderer, float size)
   return mesh;
 }
 
-vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
+vkParticle *CreateParticle(iGraphics *graphics, vkSize numParticles)
 {
   vkParticle *particle = new vkParticle();
   if (particle->Initialize(graphics, numParticles))
@@ -636,7 +636,7 @@ vkParticle *CreateParticle(IGraphics *graphics, vkSize numParticles)
 }
 
 
-void UpdateCamera(vkCamera *cam, vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard)
+void UpdateCamera(vkCamera *cam, vkCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard)
 {
   if (character)
   {
@@ -714,7 +714,7 @@ void UpdateCamera(vkCamera *cam, vkCharacterEntity *character, const IMouse *mou
 }
 
 
-void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IKeyboard *keyboard, float tpf)
+void UpdateCharacter(vkCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf)
 {
   if (!character)
   {
@@ -762,7 +762,7 @@ void UpdateCharacter(vkCharacterEntity *character, const IMouse *mouse, const IK
 
 
 
-vkEntityScene *create_scene(IGraphics *graphics)
+vkEntityScene *create_scene(iGraphics *graphics)
 {
   vkStaticMeshState *templeMeshState = vkEng->Get<vkStaticMeshState>("models/temple.xasset");
   vkStaticMeshState *groundMeshState = vkEng->Get<vkStaticMeshState>("models/ground_plane.xasset");
@@ -836,26 +836,26 @@ vkEntityScene *create_scene(IGraphics *graphics)
 }
 
 
-IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height, vkPixelFormat colorFormat, bool createDepthTexture)
+iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height, vkPixelFormat colorFormat, bool createDepthTexture)
 {
-  static ISampler *colorSampler = 0;
+  static iSampler *colorSampler = 0;
   if (!colorSampler)
   {
     colorSampler = graphics->CreateSampler();
     colorSampler->SetFilter(eFM_MinMagNearest);
   }
 
-  IRenderTarget *target = graphics->CreateRenderTarget();
+  iRenderTarget *target = graphics->CreateRenderTarget();
   target->Initialize(width, height);
 
-  ITexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
+  iTexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
   colorTexture->SetSampler(colorSampler);
   target->AddColorTexture(colorTexture);
 
 
   if (createDepthTexture)
   {
-    static ISampler *depthSampler = 0;
+    static iSampler *depthSampler = 0;
     if (!depthSampler)
     {
       depthSampler = graphics->CreateSampler();
@@ -863,7 +863,7 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
       depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
       depthSampler->SetTextureCompareMode(eTCM_CompareToR);
     }
-    ITexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
+    iTexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
     depthTexture->SetSampler(depthSampler);
     target->SetDepthTexture(depthTexture);
 
@@ -882,15 +882,15 @@ IRenderTarget *createTarget(IGraphics *graphics, unsigned width, unsigned height
 }
 
 
-vkPostProcessor *createPostProcessor(IGraphics *graphics)
+vkPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   vkPostProcessor *pp = 0;
 #if 0
   pp = new vkPostProcessor();
-  IShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
-  IShader *combineShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "CombineMult"));
-  IShader *blurVertShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
-  IShader *blurHoriShader = vkResourceManager::Get()->GetOrLoad<IShader>(vkResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
+  iShader *fsaoShader = vkResourceManager::Get()->GetOrLoad<iShader>(vkResourceLocator("${shaders}/post.xml", "FSAO"));
+  iShader *combineShader = vkResourceManager::Get()->GetOrLoad<iShader>(vkResourceLocator("${shaders}/post.xml", "CombineMult"));
+  iShader *blurVertShader = vkResourceManager::Get()->GetOrLoad<iShader>(vkResourceLocator("${shaders}/post.xml", "BlurVertLo"));
+  iShader *blurHoriShader = vkResourceManager::Get()->GetOrLoad<iShader>(vkResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
 
   vkGenericShaderPostProcess *fsaoPP = new vkGenericShaderPostProcess();
   fsaoPP->BindInput(vkPostProcessor::eOO_FinalTarget_Color, "Color");

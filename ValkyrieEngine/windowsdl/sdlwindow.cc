@@ -107,13 +107,13 @@ void SDLWindow::SetIcon(const vkImage *image)
 
 }
 
-const IKeyboard *SDLWindow::GetKeyboard() const
+const iKeyboard *SDLWindow::GetKeyboard() const
 {
   return m_keyboard;
 }
 
 
-const IMouse *SDLWindow::GetMouse() const
+const iMouse *SDLWindow::GetMouse() const
 {
   return m_mouse;
 }

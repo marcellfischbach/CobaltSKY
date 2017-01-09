@@ -9,20 +9,20 @@
 #include <valkyrie/math/vkvector.hh>
 #include <valkyrie/graphics/itexture.refl.hh>
 
-struct ISampler;
+struct iSampler;
 
 VK_INTERFACE();
-struct VKE_API ITexture : public IObject
+struct VKE_API iTexture : public iObject
 {
   VK_CLASS_GEN;
-  ITexture() : IObject() { }
-  virtual ~ITexture() { }
+  iTexture() : iObject() { }
+  virtual ~iTexture() { }
 
   virtual vkTextureType GetType() const = 0;
 
-  virtual void SetSampler(ISampler *sampler) = 0;
-  virtual ISampler* GetSampler() = 0;
-  virtual const ISampler* GetSampler() const = 0;
+  virtual void SetSampler(iSampler *sampler) = 0;
+  virtual iSampler* GetSampler() = 0;
+  virtual const iSampler* GetSampler() const = 0;
 
   virtual void GenerateMipMaps() = 0;
 

@@ -8,20 +8,20 @@
 #include <valkyrie/graphics/deferred/vkdefaultcollector.hh>
 #include <valkyrie/graphics/deferred/vkdeferredframeprocessor.refl.hh>
 
-struct IShader;
+struct iShader;
 class vkGBuffer;
-struct IGraphics;
+struct iGraphics;
 class vkLight;
 class vkLightRenderer;
 class vkGeometryMesh;
 class vkParticleRenderer;
 
 VK_INTERFACE()
-class VKE_API vkDeferredFrameProcessor : public  VK_SUPER(IFrameProcessor)
+class VKE_API vkDeferredFrameProcessor : public  VK_SUPER(iFrameProcessor)
 {
   VK_CLASS_GEN_OBJECT;
 public:
-  vkDeferredFrameProcessor(IGraphics *renderer);
+  vkDeferredFrameProcessor(iGraphics *renderer);
   virtual ~vkDeferredFrameProcessor();
 
   bool Resize(vkUInt16 width, vkUInt16 height);
@@ -29,7 +29,7 @@ public:
 
   void SetPostProcessor(vkPostProcessor *processor);
 
-  IRenderTarget *Render(vkEntity *root, vkCamera *camera, IRenderTarget *target);
+  iRenderTarget *Render(vkEntity *root, vkCamera *camera, iRenderTarget *target);
 
 private:
   void RenderGBuffer(vkEntity *root);
@@ -38,14 +38,14 @@ private:
 private:
   vkCollection<vkRenderState*> m_renderStates[eRQ_COUNT];
   vkCollection<vkLightState*> m_lightStates;
-  IGraphics *m_renderer;
+  iGraphics *m_renderer;
 
   vkPostProcessor *m_postProcessor;
 
   vkGBuffer *m_gbuffer;
 
-  IShader *m_simplePresentShader;
-  IShader *m_directionLightShader;
+  iShader *m_simplePresentShader;
+  iShader *m_directionLightShader;
 
   vkLightRenderer *m_lightRenderers[eLT_Count];
   vkParticleRenderer *m_particleRenderer;

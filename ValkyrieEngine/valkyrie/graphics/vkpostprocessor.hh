@@ -7,9 +7,9 @@
 #include <valkyrie/graphics/vkpostprocessor.refl.hh>
 
 class vkPostProcess;
-struct IGraphics;
-struct IRenderTarget;
-struct ITexture;
+struct iGraphics;
+struct iRenderTarget;
+struct iTexture;
 
 VK_CLASS()
 class VKE_API vkPostProcessor : public VK_SUPER(vkObject)
@@ -21,22 +21,22 @@ public:
   vkPostProcessor();
   virtual ~vkPostProcessor();
 
-  void SetInput(vkPostProcessOutput originOutput, ITexture *texture);
-  const ITexture *GetInput(vkPostProcessOutput originOutput) const;
-  ITexture *GetInput(vkPostProcessOutput originOutput);
+  void SetInput(vkPostProcessOutput originOutput, iTexture *texture);
+  const iTexture *GetInput(vkPostProcessOutput originOutput) const;
+  iTexture *GetInput(vkPostProcessOutput originOutput);
 
   void SetFinalProcess(vkPostProcess *postProcess);
-  bool BuildPostProcessing(IGraphics *graphics);
+  bool BuildPostProcessing(iGraphics *graphics);
 
-  void Render(IGraphics *graphics);
+  void Render(iGraphics *graphics);
 
-  IRenderTarget *GetOutput();
+  iRenderTarget *GetOutput();
 
 
 private:
   void BuildSet(vkPostProcess *process, std::set<vkPostProcess*> &processes);
   vkPostProcess *m_finalProcess;
   std::vector<vkPostProcess*> m_processes;
-  ITexture *m_originInputs[ePPO_COUNT];
+  iTexture *m_originInputs[ePPO_COUNT];
 };
 

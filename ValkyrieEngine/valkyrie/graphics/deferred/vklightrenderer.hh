@@ -5,48 +5,48 @@
 #include <valkyrie/core/vkcollection.hh>
 #include <valkyrie/vkenums.hh>
 
-struct IGraphics;
-struct IRenderTarget;
-struct ISampler;
-struct IShaderAttribute;
+struct iGraphics;
+struct iRenderTarget;
+struct iSampler;
+struct iShaderAttribute;
 class vkCamera;
 class vkClipper;
 class vkEntity;
 class vkGBuffer;
 class vkLight;
-struct IShader;
+struct iShader;
 class vkRenderState;
-struct IRenderTarget;
+struct iRenderTarget;
 class vkResourceLocator;
 
 
 class vkLightRenderer
 {
 public:
-  vkLightRenderer(IGraphics *renderer);
+  vkLightRenderer(iGraphics *renderer);
   virtual ~vkLightRenderer();
 
-  virtual void Render(vkEntity *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target) = 0;
+  virtual void Render(vkEntity *node, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, iRenderTarget *target) = 0;
 
-  IRenderTarget *GetShadowBuffer();
+  iRenderTarget *GetShadowBuffer();
 
 protected:
 
   struct GBufferAttribs
   {
-    IShaderAttribute *attrDiffuseRoughness;
-    IShaderAttribute *attrNormalLightMode;
-    IShaderAttribute *attrEmissiveMetallic;
-    IShaderAttribute *attrSSSSpecular;
-    IShaderAttribute *attrDepth;
+    iShaderAttribute *attrDiffuseRoughness;
+    iShaderAttribute *attrNormalLightMode;
+    iShaderAttribute *attrEmissiveMetallic;
+    iShaderAttribute *attrSSSSpecular;
+    iShaderAttribute *attrDepth;
   };
 
   struct LightProgram
   {
-    IShader *program;
+    iShader *program;
     GBufferAttribs gbuffer;
-    IShaderAttribute *attrColor;
-    IShaderAttribute *attrEnergy;
+    iShaderAttribute *attrColor;
+    iShaderAttribute *attrEnergy;
   };
 
   void InitializeLightProgram(LightProgram *lightProgram, const vkResourceLocator &locator);
@@ -58,21 +58,21 @@ protected:
 protected:
   void CalcShadowIntensity(const vkLight *light);
   vkCollection<vkRenderState*> m_renderStates[eRQ_COUNT];
-  IGraphics *m_renderer;
+  iGraphics *m_renderer;
   float m_mapBias;
 
   // shadow buffer
   float m_shadowBufferSize;
-  IRenderTarget *m_shadowBuffer;
+  iRenderTarget *m_shadowBuffer;
   vkVector2f m_shadowIntensity;
 
-  ISampler *m_depthSampler;
+  iSampler *m_depthSampler;
 };
 
 
 
 
-VK_FORCEINLINE IRenderTarget *vkLightRenderer::GetShadowBuffer()
+VK_FORCEINLINE iRenderTarget *vkLightRenderer::GetShadowBuffer()
 {
   return m_shadowBuffer;
 }

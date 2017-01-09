@@ -46,14 +46,14 @@ public:
   virtual void UpdateTransformation();
 
 
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
+  virtual void Render(iGraphics *graphics, vkRenderPass pass) const;
 
 protected:
   virtual void OnAttachedToScene(vkEntityScene *scene);
   virtual void OnDetachedFromScene(vkEntityScene *scene);
 
   virtual void FillBoundingBox(vkBoundingBox &bbox);
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
 private:
 
@@ -66,7 +66,7 @@ private:
   vkSize m_numberOfMaterialSlots;
   vkMaterialInstance **m_materials;
 
-  IPhysicsStaticCollider *m_staticCollider;
+  iPhysicsStaticCollider *m_staticCollider;
   vkPhysicsShapeContainer *m_shapes;
   float m_friction;
   float m_restitution;

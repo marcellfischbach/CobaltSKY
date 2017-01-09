@@ -10,8 +10,8 @@ class vkClipper;
 class vkEntity;
 class vkEntityScene;
 class vkSpatialState;
-struct IEntityScan;
-struct IGraphics;
+struct iEntityScan;
+struct iGraphics;
 
 /**
 * \ingroup entity

@@ -22,7 +22,7 @@ vkResourceManager::vkResourceManager()
 }
 
 
-void vkResourceManager::RegisterLoader(IFileLoader *loader)
+void vkResourceManager::RegisterLoader(iFileLoader *loader)
 {
   if (loader)
   {
@@ -31,7 +31,7 @@ void vkResourceManager::RegisterLoader(IFileLoader *loader)
   }
 }
 
-void vkResourceManager::RegisterLoader(IXMLLoader *loader)
+void vkResourceManager::RegisterLoader(iXMLLoader *loader)
 {
   if (loader)
   {
@@ -40,7 +40,7 @@ void vkResourceManager::RegisterLoader(IXMLLoader *loader)
   }
 }
 
-void vkResourceManager::RegisterLoader(IAssetLoader *loader)
+void vkResourceManager::RegisterLoader(iAssetLoader *loader)
 {
   if (loader)
   {
@@ -49,23 +49,23 @@ void vkResourceManager::RegisterLoader(IAssetLoader *loader)
   }
 }
 
-IObject *vkResourceManager::Load(const vkResourceLocator &locator, IObject *userData) const
+iObject *vkResourceManager::Load(const vkResourceLocator &locator, iObject *userData) const
 {
-  IFile *file = vkVFS::Get()->Open(locator.GetResourceFile());
+  iFile *file = vkVFS::Get()->Open(locator.GetResourceFile());
   if (!file)
   {
     return 0;
   }
 
-  IObject *object = Load(file, locator, userData);
+  iObject *object = Load(file, locator, userData);
   file->Release();
 
   return object;
 }
 
-const vkClass *vkResourceManager::EvalClass(const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkResourceManager::EvalClass(const vkResourceLocator &locator, iObject *userData) const
 {
-  IFile *file = vkVFS::Get()->Open(locator.GetResourceFile());
+  iFile *file = vkVFS::Get()->Open(locator.GetResourceFile());
   if (!file)
   {
     return 0;
@@ -77,14 +77,14 @@ const vkClass *vkResourceManager::EvalClass(const vkResourceLocator &locator, IO
   return cls;
 }
 
-IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkResourceManager::Load(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i=m_fileLoaders.size()-1; i>=0; --i)
   {
-    const IFileLoader *loader = m_fileLoaders[i];
+    const iFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
     {
-      IObject *obj = loader->Load(file, locator, userData);
+      iObject *obj = loader->Load(file, locator, userData);
       return obj;
 
     }
@@ -92,11 +92,11 @@ IObject *vkResourceManager::Load(IFile *file, const vkResourceLocator &locator, 
   return 0;
 }
 
-const vkClass *vkResourceManager::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkResourceManager::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_fileLoaders.size() - 1; i >= 0; --i)
   {
-    const IFileLoader *loader = m_fileLoaders[i];
+    const iFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
     {
       return loader->EvalClass(file, locator, userData);
@@ -106,25 +106,25 @@ const vkClass *vkResourceManager::EvalClass(IFile *file, const vkResourceLocator
 }
 
 
-IObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkResourceManager::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
   {
-    const IXMLLoader *loader = m_xmlLoaders[i];
+    const iXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
     {
-      IObject *obj = loader->Load(element, locator, userData);
+      iObject *obj = loader->Load(element, locator, userData);
       return obj;
     }
   }
   return 0;
 }
 
-const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
   {
-    const IXMLLoader *loader = m_xmlLoaders[i];
+    const iXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
     {
       return loader->EvalClass(element, locator, userData);
@@ -134,25 +134,25 @@ const vkClass *vkResourceManager::EvalClass(TiXmlElement *element, const vkResou
 }
 
 
-IObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkResourceManager::Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {
-    const IAssetLoader *loader = m_assetLoaders[i];
+    const iAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))
     {
-      IObject *obj = loader->Load(inputStream, locator, userData);
+      iObject *obj = loader->Load(inputStream, locator, userData);
       return obj;
     }
   }
   return 0;
 }
 
-const vkClass *vkResourceManager::EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkResourceManager::EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {
-    const IAssetLoader *loader = m_assetLoaders[i];
+    const iAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))
     {
       return loader->EvalClass(inputStream, locator, userData);
@@ -161,9 +161,9 @@ const vkClass *vkResourceManager::EvalClass(const vkString &typeID, vkAssetInput
   return 0;
 }
 
-IObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
+iObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
 {
-  std::map<vkResourceLocator, IObject*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<vkResourceLocator, iObject*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
@@ -171,9 +171,9 @@ IObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
   return 0;
 }
 
-vkResourceLocator vkResourceManager::Get(IObject *object) const
+vkResourceLocator vkResourceManager::Get(iObject *object) const
 {
-  std::map<IObject*, vkResourceLocator>::const_iterator it = m_resources.find(object);
+  std::map<iObject*, vkResourceLocator>::const_iterator it = m_resources.find(object);
   if (it != m_resources.end())
   {
     return it->second;
@@ -184,15 +184,15 @@ vkResourceLocator vkResourceManager::Get(IObject *object) const
 
 
 
-IObject *vkResourceManager::GetOrLoad(const vkResourceLocator &resourceLocator, IObject *userData)
+iObject *vkResourceManager::GetOrLoad(const vkResourceLocator &resourceLocator, iObject *userData)
 {
-  std::map<vkResourceLocator, IObject*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<vkResourceLocator, iObject*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
   }
 
-  IObject *object = Load(resourceLocator, userData);
+  iObject *object = Load(resourceLocator, userData);
   if (!object)
   {
     return 0;
@@ -206,14 +206,14 @@ IObject *vkResourceManager::GetOrLoad(const vkResourceLocator &resourceLocator, 
 
 
 
-bool vkResourceManager::RegisterObject(const vkResourceLocator &resourceLocator, IObject *object)
+bool vkResourceManager::RegisterObject(const vkResourceLocator &resourceLocator, iObject *object)
 {
   if (!object)
   {
     return false;
   }
 
-  std::map<vkResourceLocator, IObject*>::iterator it = m_objects.find(resourceLocator);
+  std::map<vkResourceLocator, iObject*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return false;
@@ -228,13 +228,13 @@ bool vkResourceManager::RegisterObject(const vkResourceLocator &resourceLocator,
 
 void vkResourceManager::DeregisterObject(const vkResourceLocator &resourceLocator)
 {
-  std::map<vkResourceLocator, IObject*>::iterator it = m_objects.find(resourceLocator);
+  std::map<vkResourceLocator, iObject*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
-    IObject *object = it->second;
+    iObject *object = it->second;
     if (object)
     {
-      std::map<IObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
+      std::map<iObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
       if (rit != m_resources.end())
       {
         m_resources.erase(rit);
@@ -247,18 +247,18 @@ void vkResourceManager::DeregisterObject(const vkResourceLocator &resourceLocato
   }
 }
 
-void vkResourceManager::DeregisterObject(IObject *object)
+void vkResourceManager::DeregisterObject(iObject *object)
 {
   if (!object)
   {
     return;
   }
 
-  std::map<IObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
+  std::map<iObject*, vkResourceLocator>::iterator rit = m_resources.find(object);
   if (rit != m_resources.end())
   {
     const vkResourceLocator &resourceLocator = rit->second;
-    std::map<vkResourceLocator, IObject*>::iterator it = m_objects.find(resourceLocator);
+    std::map<vkResourceLocator, iObject*>::iterator it = m_objects.find(resourceLocator);
     if (it != m_objects.end())
     {
       m_objects.erase(it);

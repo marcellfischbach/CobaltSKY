@@ -24,7 +24,7 @@ void vkLightNode::SetLight(vkLight *light)
 
 
 
-void vkLightNode::PrivScan(const vkClipper *clipper, IGraphics *renderer, IScanCallback *callback)
+void vkLightNode::PrivScan(const vkClipper *clipper, iGraphics *renderer, iScanCallback *callback)
 {
   callback->ScanLightNode(this);
 }

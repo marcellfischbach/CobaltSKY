@@ -21,7 +21,7 @@
 
 
 vkStaticMeshAssetLoader::vkStaticMeshAssetLoader()
-  : IAssetLoader()
+  : iAssetLoader()
 {
   VK_CLASS_GEN_CONSTR;
 }
@@ -31,17 +31,17 @@ vkStaticMeshAssetLoader::~vkStaticMeshAssetLoader()
 
 }
 
-bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, IObject *userData) const
+bool vkStaticMeshAssetLoader::CanLoad(const vkString &typeID, const vkResourceLocator &locator, iObject *userData) const
 {
   return typeID == vkString("MESH");// && name == vkString("DATA");
 }
 
-const vkClass *vkStaticMeshAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkStaticMeshAssetLoader::EvalClass(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkMesh::GetStaticClass();
 }
 
-IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData) const
 {
   vkUInt32 version, numMaterials, numSubMeshes, numIndices;
   inputStream >> version;
@@ -66,7 +66,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
 
   //
   // read and create the global index buffers that can be shared among multiple submeshes
-  std::vector<IIndexBuffer*> globalIndexBuffers;
+  std::vector<iIndexBuffer*> globalIndexBuffers;
   inputStream >> numIndices;
   for (vkUInt32 i = 0; i < numIndices; ++i)
   {
@@ -74,7 +74,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    IIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    iIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
     globalIndexBuffers.push_back(indexBuffer);
     delete[] buffer;
   }
@@ -116,7 +116,7 @@ IObject *vkStaticMeshAssetLoader::Load(vkAssetInputStream &inputStream, const vk
 }
 
 
-vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream, std::vector<IIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, IObject *userData) const
+vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const vkResourceLocator &locator, iObject *userData) const
 {
   vkSubMesh *subMesh = new vkSubMesh();
 
@@ -154,7 +154,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
       stream));
   }
   vertexElements.push_back(vkVertexElement());
-  IVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(vertexElements.data());
+  iVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(vertexElements.data());
   subMesh->SetVertexDeclaration(vertexDeclaration);
   VK_RELEASE(vertexDeclaration);
 
@@ -168,7 +168,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
     inputStream >> vertexBufferSize;
     unsigned char *buffer = new unsigned char[vertexBufferSize];
     inputStream.Read(buffer, vertexBufferSize);
-    IVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
+    iVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
     subMesh->AddVertexBuffer(vertexBuffer);
     VK_RELEASE(vertexBuffer);
     delete[] buffer;
@@ -194,7 +194,7 @@ vkSubMesh *vkStaticMeshAssetLoader::ReadSubMesh(vkAssetInputStream &inputStream,
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    IIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    iIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
     delete[] buffer;
     subMesh->SetIndexBuffer(indexBuffer, count, offset);
   }

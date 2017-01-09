@@ -3,7 +3,7 @@
 #include <valkyrie/graphics/ivertexbuffer.hh>
 
 vkDefaultParticleStepper::vkDefaultParticleStepper()
-  : IParticleStepper()
+  : iParticleStepper()
   , m_sizeMode(ePSM_Linear)
   , m_gravity(0.0f, 0.0f, 0.0f)
   , m_numTextPages(1)

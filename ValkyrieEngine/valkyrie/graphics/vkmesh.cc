@@ -139,7 +139,7 @@ vkMesh::LOD &vkMesh::GetLOD(vkUInt8 lod)
   return m_lods[lod];
 }
 
-void vkMesh::Render(IGraphics *renderer, vkRenderPass pass, vkSize numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
+void vkMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {

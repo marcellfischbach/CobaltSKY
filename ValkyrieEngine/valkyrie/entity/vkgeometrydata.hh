@@ -12,8 +12,8 @@ class vkMultiMaterial;
 class vkMesh;
 
 struct vkScanConfig;
-struct IGraphics;
-struct IEntityScan;
+struct iGraphics;
+struct iEntityScan;
 /**
 * \ingroup entity
 */
@@ -31,7 +31,7 @@ public:
   void SetName(const vkString &name);
   const vkString &GetName() const;
 
-  virtual void Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config) = 0;
+  virtual void Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config) = 0;
 
   virtual void UpdateTransformation(const vkMatrix4f &parentTransformation) = 0;
 

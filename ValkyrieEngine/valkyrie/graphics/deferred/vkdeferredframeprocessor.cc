@@ -25,8 +25,8 @@
 #include <valkyrie/graphics/deferred/vkpointlightrenderer.hh>
 #include <algorithm>
 
-vkDeferredFrameProcessor::vkDeferredFrameProcessor(IGraphics *renderer)
-  : IFrameProcessor()
+vkDeferredFrameProcessor::vkDeferredFrameProcessor(iGraphics *renderer)
+  : iFrameProcessor()
   , m_renderer(renderer)
   , m_gbuffer(0)
   , m_postProcessor(0)
@@ -63,14 +63,14 @@ bool vkDeferredFrameProcessor::Initialize()
 
   vkResourceManager *mgr = vkResourceManager::Get();
 
-  m_simplePresentShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/SimplePresent.xasset"));
+  m_simplePresentShader = mgr->GetOrLoad<iShader>(vkResourceLocator("${shaders}/deferred/SimplePresent.xasset"));
   if (!m_simplePresentShader)
   {
     return false;
   }
   m_simplePresentShader->AddRef();
 
-  m_directionLightShader = mgr->GetOrLoad<IShader>(vkResourceLocator("${shaders}/deferred/DirectionalLight.xasset"));
+  m_directionLightShader = mgr->GetOrLoad<iShader>(vkResourceLocator("${shaders}/deferred/DirectionalLight.xasset"));
   if (!m_directionLightShader)
   {
     return false;
@@ -162,7 +162,7 @@ void vkDeferredFrameProcessor::RenderGBuffer(vkEntity *root)
   }
 }
 
-IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, IRenderTarget *target)
+iRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera, iRenderTarget *target)
 {
   for (unsigned i = 0; i < eRQ_COUNT; i++)
   {
@@ -263,7 +263,7 @@ IRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
     m_postProcessor->Render(m_renderer);
   }
 
-  ITexture2DArray *txt = vkQueryClass<ITexture2DArray>(m_lightRenderers[eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));
+  iTexture2DArray *txt = vkQueryClass<iTexture2DArray>(m_lightRenderers[eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));
   //m_renderer->RenderFullScreenFrame(m_gbuffer->GetDiffuseRoughness());
   //m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0, 0.25, txt, 0);
   //m_renderer->RenderFullScreenFrame(0.25f, 0.5, 0.0, 0.25, txt, 3);

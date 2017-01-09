@@ -39,17 +39,17 @@ vkSkinnedMeshAssetXMLLoader::~vkSkinnedMeshAssetXMLLoader()
 
 
 
-bool vkSkinnedMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkSkinnedMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkString(element->Value()) == vkString("skinnedMesh");
 }
 
-const vkClass *vkSkinnedMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkSkinnedMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkSkinnedMesh::GetStaticClass();
 }
 
-IObject *vkSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkSkinnedMesh *mesh = new vkSkinnedMesh();
 

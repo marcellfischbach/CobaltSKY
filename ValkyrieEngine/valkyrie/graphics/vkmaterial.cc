@@ -27,7 +27,7 @@ vkMaterial::~vkMaterial()
 }
 
 
-void vkMaterial::SetShader(vkRenderPass pass, IShader *shader)
+void vkMaterial::SetShader(vkRenderPass pass, iShader *shader)
 {
   VK_SET(m_shaders[pass], shader);
 }
@@ -43,7 +43,7 @@ vkSize vkMaterial::RegisterParam(const vkString &parameterName, vkShaderParamete
   Param param(parameterName, type);
   for (vkSize i = 0; i < eRP_COUNT; ++i)
   {
-    IShader *shader = m_shaders[i];
+    iShader *shader = m_shaders[i];
     if (shader)
     {
       param.m_attribute[(vkRenderPass)i] = shader->GetAttribute(parameterName);
@@ -54,19 +54,19 @@ vkSize vkMaterial::RegisterParam(const vkString &parameterName, vkShaderParamete
   return idx;
 }
 
-IShader *vkMaterial::GetShader(vkRenderPass pass)
+iShader *vkMaterial::GetShader(vkRenderPass pass)
 {
   return m_shaders[pass];
 }
 
-const IShader *vkMaterial::GetShader(vkRenderPass pass) const
+const iShader *vkMaterial::GetShader(vkRenderPass pass) const
 {
   return m_shaders[pass];
 }
 
-IShader *vkMaterial::Bind(IGraphics *renderer, vkRenderPass pass)
+iShader *vkMaterial::Bind(iGraphics *renderer, vkRenderPass pass)
 {
-  IShader *shader = m_shaders[pass];
+  iShader *shader = m_shaders[pass];
 
   renderer->SetShader(shader);
 
@@ -75,10 +75,10 @@ IShader *vkMaterial::Bind(IGraphics *renderer, vkRenderPass pass)
   return shader;
 }
 
-void vkMaterial::BindParameter(IGraphics *renderer, vkRenderPass pass, vkSize idx)
+void vkMaterial::BindParameter(iGraphics *renderer, vkRenderPass pass, vkSize idx)
 {
   Param &param = m_params[idx];
-  IShaderAttribute *attribute = param.m_attribute[pass];
+  iShaderAttribute *attribute = param.m_attribute[pass];
   if (attribute)
   {
     switch (param.m_type)
@@ -145,7 +145,7 @@ vkString vkMaterial::GetParamName(vkSize idx) const
 }
 
 
-IShaderAttribute *vkMaterial::GetAttribute(vkSize idx, vkRenderPass pass) const
+iShaderAttribute *vkMaterial::GetAttribute(vkSize idx, vkRenderPass pass) const
 {
   return m_params[idx].m_attribute[pass];
 }
@@ -212,7 +212,7 @@ void vkMaterial::SetDefault(vkSize idx, const vkMatrix4f &def)
   memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 16);
 }
 
-void vkMaterial::SetDefault(vkSize idx, ITexture *texture)
+void vkMaterial::SetDefault(vkSize idx, iTexture *texture)
 {
   VK_SET(m_params[idx].m_defaultTexture, texture);
 }
@@ -253,7 +253,7 @@ vkMatrix4f vkMaterial::GetDefaultMatrix4(vkSize idx) const
   return vkMatrix4f(m_params[idx].m_defaultFloat);
 }
 
-ITexture *vkMaterial::GetDefaultTexture(vkSize idx) const
+iTexture *vkMaterial::GetDefaultTexture(vkSize idx) const
 {
   return m_params[idx].m_defaultTexture;
 }

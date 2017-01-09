@@ -21,7 +21,7 @@ vkCamera::~vkCamera()
 
 }
 
-void vkCamera::Apply(IGraphics *renderer) 
+void vkCamera::Apply(iGraphics *renderer) 
 {
   renderer->SetViewMatrix(m_cameraMatrix);
   renderer->SetViewMatrixInv(m_cameraMatrixInv);
@@ -41,7 +41,7 @@ void vkCamera::UpdateCameraMatrices()
   m_cameraMatrixInv.SetLookAtInv(m_eye, m_spot, m_up);
 }
 
-void vkCamera::UpdateProjectionMatrices(IGraphics *renderer)
+void vkCamera::UpdateProjectionMatrices(iGraphics *renderer)
 {
   switch (m_projectionMode)
   {

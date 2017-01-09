@@ -18,7 +18,7 @@
 
 
 
-vkPointLightRenderer::vkPointLightRenderer(IGraphics *renderer)
+vkPointLightRenderer::vkPointLightRenderer(iGraphics *renderer)
   : vkLightRenderer(renderer)
 {
   InitializeLightProgram(&m_programNoShadow, vkResourceLocator("${shaders}/deferred/PointLight.xasset"));
@@ -37,13 +37,13 @@ vkPointLightRenderer::vkPointLightRenderer(IGraphics *renderer)
   m_mapBias = 0.99f;
 
   vkUInt16 bufferSize = 1024;
-  ITexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false);
+  iTexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6, false);
 
   colorBuffer->SetSampler(vkGBuffer::GetColorSampler(renderer));
   m_depthBuffer->SetSampler(m_depthSampler);
 
-  m_shadowBuffer = static_cast<IRenderTarget*>(renderer->CreateRenderTarget());
+  m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
   m_shadowBuffer->AddColorTexture(colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
@@ -62,7 +62,7 @@ vkPointLightRenderer::~vkPointLightRenderer()
 
 
 
-void vkPointLightRenderer::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, IRenderTarget *target)
+void vkPointLightRenderer::Render(vkEntity *root, vkCamera *camera, vkLight *light, vkGBuffer *gbuffer, iRenderTarget *target)
 {
   vkBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);

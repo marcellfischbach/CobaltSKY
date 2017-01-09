@@ -29,10 +29,10 @@ void vkHingeJointState::OnAssembled()
   // create the joint
   vkDynamicColliderState *colA = GetColliderA();
   vkDynamicColliderState *colB = GetColliderB();
-  IPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
-  IPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
-  IPhysicsJoint *joint = vkEng->CreateJoint(ePJT_Hinge, colliderA, colliderB);
-  m_hingeJoint = vkQueryClass<IPhysicsHingeJoint>(joint);
+  iPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
+  iPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
+  iPhysicsJoint *joint = vkEng->CreateJoint(ePJT_Hinge, colliderA, colliderB);
+  m_hingeJoint = vkQueryClass<iPhysicsHingeJoint>(joint);
   if (!m_hingeJoint)
   {
     return;

@@ -229,7 +229,7 @@ const vkSpatialState *vkSpatialState::FindState(const vkString &stateName) const
 }
 
 
-void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
+void vkSpatialState::Scan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config)
 {
   if (clipper && false)
   {
@@ -271,7 +271,7 @@ void vkSpatialState::Scan(vkClipper *clipper, IGraphics *graphics, IEntityScan *
   }
 }
 
-void vkSpatialState::PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config)
+void vkSpatialState::PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config)
 {
 
 }

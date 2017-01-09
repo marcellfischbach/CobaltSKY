@@ -7,9 +7,9 @@
 #include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <stddef.h>
 
-static IVertexDeclaration* create_particle_vertex_declaration(IGraphics *graphics)
+static iVertexDeclaration* create_particle_vertex_declaration(iGraphics *graphics)
 {
-  static IVertexDeclaration *result = 0;
+  static iVertexDeclaration *result = 0;
   if (!result)
   {
 
@@ -48,7 +48,7 @@ vkParticle::~vkParticle()
   m_vertexDeclaration = 0;
 }
 
-bool vkParticle::Initialize(IGraphics *graphics, vkSize numPartilces)
+bool vkParticle::Initialize(iGraphics *graphics, vkSize numPartilces)
 {
   SetNumberOfParticles(numPartilces);
 
@@ -67,12 +67,12 @@ void vkParticle::SetParticleData(unsigned numParticles, const vkParticle::Partic
   }
 }
 
-IVertexBuffer *vkParticle::GetParticleBuffer()
+iVertexBuffer *vkParticle::GetParticleBuffer()
 {
   return m_buffer;
 }
 
-const IVertexBuffer *vkParticle::GetParticleBuffer() const
+const iVertexBuffer *vkParticle::GetParticleBuffer() const
 {
   return m_buffer;
 }
@@ -103,7 +103,7 @@ vkSize vkParticle::GetNumberOfRenderParticles() const
 
 
 
-void vkParticle::Render(IGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material)
+void vkParticle::Render(iGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material)
 {
   if (material->Bind(renderer, pass))
   {

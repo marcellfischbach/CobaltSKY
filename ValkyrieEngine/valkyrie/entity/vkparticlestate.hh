@@ -34,18 +34,18 @@ public:
   void SetShadingMode(vkParticleShadingMode shadingMode);
   vkParticleShadingMode GetShadingMode() const;
 
-  void SetEmitter(IParticleEmitter *emitter);
-  IParticleEmitter *GetEmitter();
-  const IParticleEmitter *GetEmitter() const;
+  void SetEmitter(iParticleEmitter *emitter);
+  iParticleEmitter *GetEmitter();
+  const iParticleEmitter *GetEmitter() const;
 
-  void SetStepper(IParticleStepper *emitter);
-  IParticleStepper *GetStepper();
-  const IParticleStepper *GetStepper() const;
+  void SetStepper(iParticleStepper *emitter);
+  iParticleStepper *GetStepper();
+  const iParticleStepper *GetStepper() const;
 
 
   virtual void Update(float tpf);
-  virtual void Render(IGraphics *graphics, vkRenderPass pass) const;
-  virtual void PrivScan(vkClipper *clipper, IGraphics *graphics, IEntityScan *entityScan, const vkScanConfig &config);
+  virtual void Render(iGraphics *graphics, vkRenderPass pass) const;
+  virtual void PrivScan(vkClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const vkScanConfig &config);
 
 
 private:
@@ -55,7 +55,7 @@ private:
 
   vkParticleShadingMode m_shadingMode;
 
-  IParticleEmitter *m_emitter;
-  IParticleStepper *m_stepper;
+  iParticleEmitter *m_emitter;
+  iParticleStepper *m_stepper;
 
 };

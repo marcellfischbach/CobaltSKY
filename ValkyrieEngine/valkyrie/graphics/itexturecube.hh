@@ -6,12 +6,12 @@
 
 
 VK_INTERFACE();
-struct VKE_API ITextureCube : public virtual VK_SUPER(ITexture)
+struct VKE_API iTextureCube : public virtual VK_SUPER(iTexture)
 {
   VK_CLASS_GEN;
-  ITextureCube() : ITexture() { }
+  iTextureCube() : iTexture() { }
 
-  virtual ~ITextureCube() { }
+  virtual ~iTextureCube() { }
 
   virtual vkUInt16 GetWidth() const = 0;
   virtual vkUInt16 GetHeight() const = 0;

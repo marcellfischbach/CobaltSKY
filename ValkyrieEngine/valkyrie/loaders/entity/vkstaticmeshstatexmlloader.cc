@@ -27,13 +27,13 @@ vkStaticMeshStateXMLLoader::~vkStaticMeshStateXMLLoader()
 
 }
 
-const vkClass *vkStaticMeshStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkStaticMeshStateXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkStaticMeshState::GetStaticClass();
 }
 
 
-IObject *vkStaticMeshStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkStaticMeshStateXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (!userData || !element)
   {

@@ -6,7 +6,7 @@
 #include <valkyrie/entity/vkcharacterentity.refl.hh>
 
 
-struct IPhysicsCapsuleCharacterController;
+struct iPhysicsCapsuleCharacterController;
 class vkCharacterEntityTransformationCallback;
 VK_CLASS()
 class VKE_API vkCharacterEntity : public VK_SUPER(vkEntity)
@@ -39,7 +39,7 @@ protected:
 
 private:
   vkCharacterEntityTransformationCallback *m_callback;
-  IPhysicsCapsuleCharacterController *m_characterController;
+  iPhysicsCapsuleCharacterController *m_characterController;
 
   float m_radius;
   float m_height;

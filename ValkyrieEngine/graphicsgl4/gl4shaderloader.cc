@@ -14,7 +14,7 @@ vkShaderGL4Loader::~vkShaderGL4Loader()
 {
 }
 
-bool vkShaderGL4Loader::CanLoad(IFile *file, const vkResourceLocator &locator, IObject *) const
+bool vkShaderGL4Loader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *) const
 {
   vkString ext = file->GetExtension();
   return
@@ -26,12 +26,12 @@ bool vkShaderGL4Loader::CanLoad(IFile *file, const vkResourceLocator &locator, I
     ext == vkString("comp");
 }
 
-const vkClass *vkShaderGL4Loader::EvalClass(IFile *file, const vkResourceLocator &locator, IObject *) const
+const vkClass *vkShaderGL4Loader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *) const
 {
   return vkShaderGL4::GetStaticClass();
 }
 
-IObject *vkShaderGL4Loader::Load(IFile *file, const vkResourceLocator &locator, IObject *) const
+iObject *vkShaderGL4Loader::Load(iFile *file, const vkResourceLocator &locator, iObject *) const
 {
   vkString ext = file->GetExtension();
 

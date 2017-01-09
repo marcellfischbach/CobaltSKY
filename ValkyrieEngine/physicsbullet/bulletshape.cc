@@ -3,7 +3,7 @@
 #include <physicsbullet/bulletshape.hh>
 
 vkBulletShape::vkBulletShape()
-  : IPhysicsShape()
+  : iPhysicsShape()
 {
   VK_CLASS_GEN_CONSTR;
 }

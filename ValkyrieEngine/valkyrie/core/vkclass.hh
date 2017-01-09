@@ -47,10 +47,10 @@
 
 class vkClass;
 
-struct VKE_API IObject
+struct VKE_API iObject
 {
-  IObject () { }
-  virtual ~IObject() { }
+  iObject () { }
+  virtual ~iObject() { }
   virtual const vkClass *GetClass() const = 0;
 
   virtual void AddRef() = 0;
@@ -62,7 +62,7 @@ struct VKE_API IObject
 };
 
 template<typename T>
-T* vkQueryClass(IObject *object)
+T* vkQueryClass(iObject *object)
 {
   if (!object)
   {
@@ -72,7 +72,7 @@ T* vkQueryClass(IObject *object)
 }
 
 template<typename T>
-const T* vkQueryClass(const IObject *object)
+const T* vkQueryClass(const iObject *object)
 {
   if (!object)
   {
@@ -89,14 +89,14 @@ public:
   const std::string &GetTypeName() const;
 
   template<typename T>
-  void Set(IObject *object, T& t) const
+  void Set(iObject *object, T& t) const
   {
     void *value = reinterpret_cast<void*>(&t);
     SetValue(object, value);
   }
 
   template<typename T>
-  const T &Get(IObject *object) const
+  const T &Get(iObject *object) const
   {
     const void *data = GetValue(object);
     return *reinterpret_cast<const T*>(data);
@@ -105,8 +105,8 @@ public:
 protected:
   vkProperty(const std::string &typeName, const std::string &name);
 
-  virtual void SetValue(IObject *object, void *data) const = 0;
-  virtual const void *GetValue(const IObject *object) const = 0;
+  virtual void SetValue(iObject *object, void *data) const = 0;
+  virtual const void *GetValue(const iObject *object) const = 0;
 
 
 private:
@@ -119,11 +119,11 @@ private:
 class VKE_API vkClass
 {
 public:
-  virtual IObject *CreateInstance() const = 0;
+  virtual iObject *CreateInstance() const = 0;
   template<typename T>
   T *CreateInstance() const
   {
-    IObject *obj = CreateInstance();
+    iObject *obj = CreateInstance();
     if (!obj)
     {
       return 0;
@@ -176,7 +176,7 @@ T* vkNewClassInstance(const vkClass *clazz)
 #include <valkyrie/core/vkclass.refl.hh>
 
 VK_CLASS()
-class VKE_API vkObject : public IObject
+class VKE_API vkObject : public iObject
 {
   VK_CLASS_GEN;
 

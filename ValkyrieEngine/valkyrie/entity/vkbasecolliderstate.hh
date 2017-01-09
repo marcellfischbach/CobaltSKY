@@ -6,7 +6,7 @@
 
 #include <valkyrie/entity/vkbasecolliderstate.refl.hh>
 
-struct IPhysicsBaseCollider;
+struct iPhysicsBaseCollider;
 
 VK_INTERFACE()
 class VKE_API vkBaseColliderState : public VK_SUPER(vkColliderState)
@@ -21,26 +21,26 @@ public:
   void SetRestitution(float restitution);
   float GetRestitution() const;
 
-  IPhysicsBaseCollider *GetBaseCollider();
-  const IPhysicsBaseCollider *GetBaseCollider() const;
+  iPhysicsBaseCollider *GetBaseCollider();
+  const iPhysicsBaseCollider *GetBaseCollider() const;
 
 protected:
   vkBaseColliderState();
 
-  void SetBaseCollider(IPhysicsBaseCollider *baseCollider);
+  void SetBaseCollider(iPhysicsBaseCollider *baseCollider);
 
 private:
 
-  IPhysicsBaseCollider *m_baseCollider;
+  iPhysicsBaseCollider *m_baseCollider;
 };
 
 
-VK_FORCEINLINE IPhysicsBaseCollider *vkBaseColliderState::GetBaseCollider()
+VK_FORCEINLINE iPhysicsBaseCollider *vkBaseColliderState::GetBaseCollider()
 {
   return m_baseCollider;
 }
 
-VK_FORCEINLINE const IPhysicsBaseCollider *vkBaseColliderState::GetBaseCollider() const
+VK_FORCEINLINE const iPhysicsBaseCollider *vkBaseColliderState::GetBaseCollider() const
 {
   return m_baseCollider;
 }

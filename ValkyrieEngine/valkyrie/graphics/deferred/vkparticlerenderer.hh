@@ -2,7 +2,7 @@
 
 #include <valkyrie/core/vkcollection.hh>
 
-struct IGraphics;
+struct iGraphics;
 class vkRenderState;
 
 class vkParticleRenderer
@@ -11,6 +11,6 @@ public:
   vkParticleRenderer();
   virtual ~vkParticleRenderer();
 
-  void Render(IGraphics *renderer, vkCollection<vkRenderState*> &particles);
+  void Render(iGraphics *renderer, vkCollection<vkRenderState*> &particles);
 };
 

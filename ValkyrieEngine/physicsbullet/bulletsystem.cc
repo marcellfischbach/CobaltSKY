@@ -9,7 +9,7 @@
 #include <physicsbullet/bulletshape.hh>
 
 vkBulletSystem::vkBulletSystem()
-  : IPhysicsSystem ()
+  : iPhysicsSystem ()
 {
 
 }
@@ -27,7 +27,7 @@ void vkBulletSystem::Initialize()
 }
 
 
-IPhysicsScene *vkBulletSystem::CreateScene()
+iPhysicsScene *vkBulletSystem::CreateScene()
 {
   vkBulletScene *scene = new vkBulletScene(); 
   if (!scene->Initialize(false))
@@ -39,25 +39,25 @@ IPhysicsScene *vkBulletSystem::CreateScene()
 }
 
 
-IPhysicsDynamicCollider *vkBulletSystem::CreateDynamicCollider()
+iPhysicsDynamicCollider *vkBulletSystem::CreateDynamicCollider()
 {
   vkBulletDynamicCollider *dyn = new vkBulletDynamicCollider();
   return dyn;
 }
 
-IPhysicsStaticCollider *vkBulletSystem::CreateStaticCollider()
+iPhysicsStaticCollider *vkBulletSystem::CreateStaticCollider()
 {
   vkBulletStaticCollider *stat = new vkBulletStaticCollider();
   return stat;
 }
 
-IPhysicsTriggerCollider *vkBulletSystem::CreateTriggerCollider()
+iPhysicsTriggerCollider *vkBulletSystem::CreateTriggerCollider()
 {
   return 0;
 }
 
 
-IPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
+iPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
 {
   vkBulletShape *shape = new vkBulletShape();
   if (!shape->Initialize(geometry))
@@ -69,14 +69,14 @@ IPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
   return shape;
 }
 
-IPhysicsCapsuleCharacterController *vkBulletSystem::CreateCapsulseCharacterController()
+iPhysicsCapsuleCharacterController *vkBulletSystem::CreateCapsulseCharacterController()
 {
   vkBulletCapsuleCharacterController *controller = new vkBulletCapsuleCharacterController();
   return controller;
 }
 
 
-IPhysicsJoint *vkBulletSystem::CreateJoint(vkPhysicsJointType type, IPhysicsDynamicCollider *colliderA, IPhysicsDynamicCollider *colliderB)
+iPhysicsJoint *vkBulletSystem::CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
 {
   vkBulletDynamicCollider *colA = vkQueryClass<vkBulletDynamicCollider>(colliderA);
   vkBulletDynamicCollider *colB = vkQueryClass<vkBulletDynamicCollider>(colliderB);

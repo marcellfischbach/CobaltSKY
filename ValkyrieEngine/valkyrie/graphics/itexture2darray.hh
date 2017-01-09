@@ -6,12 +6,12 @@
 #include <valkyrie/graphics/itexture2darray.refl.hh>
 
 VK_INTERFACE();
-struct VKE_API ITexture2DArray : public virtual VK_SUPER(ITexture)
+struct VKE_API iTexture2DArray : public virtual VK_SUPER(iTexture)
 {
   VK_CLASS_GEN;
-  ITexture2DArray() : ITexture() { }
+  iTexture2DArray() : iTexture() { }
 
-  virtual ~ITexture2DArray() { }
+  virtual ~iTexture2DArray() { }
 
   virtual vkUInt16 GetWidth() const = 0;
   virtual vkUInt16 GetHeight() const = 0;

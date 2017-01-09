@@ -4,9 +4,9 @@
 #include <valkyrie/physics/iphysicstriggercollider.refl.hh>
 
 VK_INTERFACE()
-struct VKE_API IPhysicsTriggerCollider : public VK_SUPER(IPhysicsCollider)
+struct VKE_API iPhysicsTriggerCollider : public VK_SUPER(iPhysicsCollider)
 {
   VK_CLASS_GEN;
-  virtual ~IPhysicsTriggerCollider() { }
+  virtual ~iPhysicsTriggerCollider() { }
 
 };

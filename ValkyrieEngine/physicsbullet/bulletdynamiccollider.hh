@@ -14,7 +14,7 @@ class vkBulletJoint;
 
 
 VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletDynamicCollider : public VK_SUPER(IPhysicsDynamicCollider)
+class VKBULLETPHYSICS_API vkBulletDynamicCollider : public VK_SUPER(iPhysicsDynamicCollider)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -23,7 +23,7 @@ public:
   virtual ~vkBulletDynamicCollider();
 
   /**
-   * \name IPhysicsCollider interface
+   * \name iPhysicsCollider interface
    * @{
    */
   virtual vkPhysicsColliderType GetType() const;
@@ -31,11 +31,11 @@ public:
   virtual const vkMatrix4f &GetMatrix() const;
   virtual vkTransformation GetTransform();
   virtual void FinishTransformation();
-  virtual void SetTransformationCallback(ITransformationCallback *callback);
+  virtual void SetTransformationCallback(iTransformationCallback *callback);
 
 
-  virtual void AttachShape(IPhysicsShape *shape);
-  virtual void DetachShape(IPhysicsShape *shape);
+  virtual void AttachShape(iPhysicsShape *shape);
+  virtual void DetachShape(iPhysicsShape *shape);
 
   virtual void AttachShape(vkPhysicsShapeContainer *shapes);
   virtual void DetachShape(vkPhysicsShapeContainer *shapes);
@@ -45,7 +45,7 @@ public:
    */
 
    /**
-    * \name IPhysicsBaseCollider interface
+    * \name iPhysicsBaseCollider interface
     * @{
     */
   virtual void SetFriction(float friction);
@@ -59,7 +59,7 @@ public:
    */
 
    /**
-    * \name IPhysicsDynamicCollider interface
+    * \name iPhysicsDynamicCollider interface
     * @{
     */
 
@@ -105,9 +105,9 @@ private:
 
 
   void UpdateInertia();
-  std::vector<IPhysicsShape*> m_shapes;
+  std::vector<iPhysicsShape*> m_shapes;
 
-  ITransformationCallback *m_transformationCallback;
+  iTransformationCallback *m_transformationCallback;
   //vkDynamicColliderState *m_dynamicColliderState;
   vkMatrix4f m_transformation;
 

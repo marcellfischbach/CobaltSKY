@@ -8,7 +8,7 @@
 #include <graphicsgl4/gl4texture2darray.refl.hh>
 
 VK_CLASS();
-class VKGRAPHICSGL4_API vkTexture2DArrayGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(ITexture2DArray)
+class VKGRAPHICSGL4_API vkTexture2DArrayGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(iTexture2DArray)
 {
   VK_CLASS_GEN;
 public:
@@ -19,7 +19,7 @@ public:
   bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
 
 
-  // Implementation of the ITexture2DArray interface
+  // Implementation of the iTexture2DArray interface
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
   virtual vkUInt16 GetLayers() const;

@@ -18,7 +18,7 @@ vkMaterialAssetXMLLoader::~vkMaterialAssetXMLLoader()
 }
 
 
-bool vkMaterialAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+bool vkMaterialAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   vkString tagName(element->Value());
 
@@ -47,13 +47,13 @@ vkShaderParameterType get_shader_parameter_type(const vkString &name)
 }
 }
 
-const vkClass *vkMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+const vkClass *vkMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   return vkMaterial::GetStaticClass();
 }
 
 
-IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, IObject *userData) const
+iObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
   if (vkString(element->Value()) != vkString("material"))
   {
@@ -121,7 +121,7 @@ IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
     }
 
     vkResourceLocator shaderLocator(passElement->GetText());
-    IShader *shader = vkResourceManager::Get()->GetOrLoad<IShader>(shaderLocator);
+    iShader *shader = vkResourceManager::Get()->GetOrLoad<iShader>(shaderLocator);
     if (!shader)
     {
       material->Release();
@@ -240,15 +240,15 @@ IObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
       case eSPT_Texture:
         {
           vkResourceLoadingMode rlm = GetResourceLoadingMode(parameterElement);
-          ITexture *texture = 0;
+          iTexture *texture = 0;
           switch (rlm)
           {
           case eRLM_Shared:
-            texture = vkResourceManager::Get()->GetOrLoad<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            texture = vkResourceManager::Get()->GetOrLoad<iTexture>(vkResourceLocator(parameterElement->GetText()));
             material->SetDefault(idx, texture);
             break;
           case eRLM_Instance:
-            texture = vkResourceManager::Get()->Load<ITexture>(vkResourceLocator(parameterElement->GetText()));
+            texture = vkResourceManager::Get()->Load<iTexture>(vkResourceLocator(parameterElement->GetText()));
             material->SetDefault(idx, texture);
             if (texture) texture->Release();
             break;

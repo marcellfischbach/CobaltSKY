@@ -9,7 +9,7 @@
 class vkTextureGL4;
 
 VK_CLASS()
-class VKGRAPHICSGL4_API vkRenderTargetGL4 : public VK_SUPER(IRenderTarget)
+class VKGRAPHICSGL4_API vkRenderTargetGL4 : public VK_SUPER(iRenderTarget)
 {
   VK_CLASS_GEN_OBJECT;
 
@@ -26,15 +26,15 @@ public:
   vkUInt16 GetHeight() const;
 
 
-  void AddColorTexture(ITexture *color);
-  void SetDepthTexture(ITexture *depth);
+  void AddColorTexture(iTexture *color);
+  void SetDepthTexture(iTexture *depth);
   void SetDepthBuffer(vkUInt16 width, vkUInt16 height);
   void Initialize(vkUInt16 width, vkUInt16 height);
   bool Finilize();
 
 
-  virtual ITexture *GetColorBuffer(vkUInt8 buffer) const;
-  virtual ITexture *GetDepthBuffer() const;
+  virtual iTexture *GetColorBuffer(vkUInt8 buffer) const;
+  virtual iTexture *GetDepthBuffer() const;
 
 private:
   vkUInt16 m_width;

@@ -297,10 +297,10 @@ void KnownClassesCache::Add(const std::string &fileName, const std::string &clas
 
 bool KnownClassesCache::ContainsClass(const std::string &className) const
 {
-  if (className == "IObject" || className == "vkObject")
+  if (className == "iObject" || className == "vkObject")
   {
-    // instances of IObject or vkObject are actually not within the cache...
-    // but they are ofcourse implementations of IObject
+    // instances of iObject or vkObject are actually not within the cache...
+    // but they are ofcourse implementations of iObject
     return true;
   }
 

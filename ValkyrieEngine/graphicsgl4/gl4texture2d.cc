@@ -5,7 +5,7 @@
 
 vkTexture2DGL4::vkTexture2DGL4()
   : vkTextureGL4(eTT_Texture2D)
-  , ITexture2D()
+  , iTexture2D()
 {
 
 }
