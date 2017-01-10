@@ -34,7 +34,7 @@
      <item>
       <widget class="QPushButton" name="pbImport">
        <property name="text">
-        <string>PushButton</string>
+        <string>Import</string>
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">

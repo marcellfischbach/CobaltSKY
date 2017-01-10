@@ -14,10 +14,10 @@ set(CMAKE_AUTOMOC ON)
 
 set(EDITOR_SOURCES
     main.cc
-    Editor.cc
-    Editor.hh
-    MainWindow.cc
-    MainWindow.hh
+    editor.cc
+    editor.hh
+    mainwindow.cc
+    mainwindow.hh
     )
 
 source_group(
@@ -26,14 +26,15 @@ source_group(
     ${EDITOR_SOURCES}
     )
 
-
 set(ASSETMANAGER_SOURCES
-    AssetManager/AssetManager.cc
-    AssetManager/AssetManager.hh
+    AssetManager/assetmanagerdock.cc
+    AssetManager/assetmanagerdock.hh
+    AssetManager/assetmanagerwidget.cc
+    AssetManager/assetmanagerwidget.hh
     )
 
 set(ASSETMANAGER_UI
-    AssetManager/AssetManager.ui
+    AssetManager/assetmanagerwidget.ui
     )
 
 source_group(
