@@ -27,18 +27,18 @@ source_group(
     )
 
 set(ASSETMANAGER_SOURCES
-    AssetManager/assetmanagerdock.cc
-    AssetManager/assetmanagerdock.hh
-    AssetManager/assetmanagerwidget.cc
-    AssetManager/assetmanagerwidget.hh
+    assetmanager/assetmanagerdock.cc
+    assetmanager/assetmanagerdock.hh
+    assetmanager/assetmanagerwidget.cc
+    assetmanager/assetmanagerwidget.hh
     )
 
 set(ASSETMANAGER_UI
-    AssetManager/assetmanagerwidget.ui
+    assetmanager/assetmanagerwidget.ui
     )
 
 source_group(
-    "Editor\\AssetManager"
+    "Editor\\assetmanager"
     FILES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_UI}
