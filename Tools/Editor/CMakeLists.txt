@@ -29,6 +29,8 @@ source_group(
 set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagerdock.cc
     assetmanager/assetmanagerdock.hh
+    assetmanager/assetmanagerfoldermodel.cc
+    assetmanager/assetmanagerfoldermodel.hh
     assetmanager/assetmanagerwidget.cc
     assetmanager/assetmanagerwidget.hh
     )
