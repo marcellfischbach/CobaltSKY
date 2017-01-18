@@ -1,6 +1,7 @@
 
 #include <assetmanager/assetmanagerdock.hh>
-#include <Editor.hh>
+#include <AssetManager/assetmanagerwidget.hh>
+#include <editor.hh>
 
 AssetManagerDock::AssetManagerDock(QWidget *parent)
   : QDockWidget(tr("AssetManager"), parent)

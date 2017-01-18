@@ -2,7 +2,7 @@
 
 #include <valkyrie/core/vkclass.hh>
 #include <Editor.refl.hh>
-
+#include <QDir>
 
 class MainWindow;
 class AssetManagerWidget;
@@ -19,10 +19,20 @@ public:
   MainWindow *GetMainWindow();
   AssetManagerWidget *GetAssetManager ();
 
+  inline const QDir& GetRootPath() const
+  {
+    return m_rootPath;
+  }
+
+  QRect GetScreenSize();
+
 private:
   Editor();
 
 
   MainWindow *m_mainWindow;
   AssetManagerWidget *m_assetManager;
+
+  QDir m_rootPath;
+
 };

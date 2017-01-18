@@ -16,17 +16,20 @@ set(EDITOR_SOURCES
     main.cc
     editor.cc
     editor.hh
+    iasseteditor.hh
     mainwindow.cc
     mainwindow.hh
     )
 
 source_group(
-    "Editor"
+    "editor"
     FILES
     ${EDITOR_SOURCES}
     )
 
 set(ASSETMANAGER_SOURCES
+    assetmanager/assetmanagercontentmodel.cc
+    assetmanager/assetmanagercontentmodel.hh
     assetmanager/assetmanagerdock.cc
     assetmanager/assetmanagerdock.hh
     assetmanager/assetmanagerfoldermodel.cc
@@ -40,7 +43,7 @@ set(ASSETMANAGER_UI
     )
 
 source_group(
-    "Editor\\assetmanager"
+    "editor\\assetmanager"
     FILES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_UI}

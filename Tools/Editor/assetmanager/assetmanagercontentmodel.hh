@@ -1,17 +1,19 @@
 #pragma once
 
-
 #include <QAbstractItemModel>
 #include <QDir>
+#include <QList>
 
-class AssetManagerFolderModelEntry;
+class AssetManagerContentModelEntry;
 
-class AssetManagerFolderModel : public QAbstractItemModel
+class AssetManagerContentModel : public QAbstractItemModel
 {
   Q_OBJECT
 public:
-  AssetManagerFolderModel();
-  virtual ~AssetManagerFolderModel();
+  AssetManagerContentModel();
+  virtual ~AssetManagerContentModel();
+
+  void SetDir(const QDir &dir);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
@@ -19,9 +21,10 @@ public:
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-  QDir GetDir(const QModelIndex &index) const;
 
 private:
+  void CleanupEntries();
 
-  AssetManagerFolderModelEntry *m_root;
+  QDir m_dir;
+  QList<AssetManagerContentModelEntry*> m_entries;
 };

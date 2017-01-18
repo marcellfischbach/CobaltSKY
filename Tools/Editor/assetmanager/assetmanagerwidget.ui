@@ -38,7 +38,7 @@
        </property>
        <property name="icon">
         <iconset resource="../resources.qrc">
-         <normaloff>:/icons/Resources/Import16.png</normaloff>:/icons/Resources/Import16.png</iconset>
+         <normaloff>:/icons/resources/Import16.png</normaloff>:/icons/resources/Import16.png</iconset>
        </property>
       </widget>
      </item>
@@ -68,8 +68,46 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeView" name="treeView"/>
-     <widget class="QListView" name="listView"/>
+     <widget class="QTreeView" name="treeView">
+      <property name="indentation">
+       <number>16</number>
+      </property>
+      <property name="rootIsDecorated">
+       <bool>true</bool>
+      </property>
+      <property name="animated">
+       <bool>true</bool>
+      </property>
+      <property name="allColumnsShowFocus">
+       <bool>true</bool>
+      </property>
+      <attribute name="headerVisible">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+     <widget class="QListView" name="listView">
+      <property name="alternatingRowColors">
+       <bool>false</bool>
+      </property>
+      <property name="flow">
+       <enum>QListView::LeftToRight</enum>
+      </property>
+      <property name="isWrapping" stdset="0">
+       <bool>true</bool>
+      </property>
+      <property name="viewMode">
+       <enum>QListView::IconMode</enum>
+      </property>
+      <property name="uniformItemSizes">
+       <bool>true</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="selectionRectVisible">
+       <bool>true</bool>
+      </property>
+     </widget>
     </widget>
    </item>
   </layout>

@@ -2,5 +2,6 @@
     <qresource prefix="/icons">
         <file>resources/Import16.png</file>
         <file>resources/Import24.png</file>
+        <file>resources/UnknownAsset64.png</file>
     </qresource>
 </RCC>

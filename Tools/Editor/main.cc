@@ -5,9 +5,17 @@
 #include <master.refl.cc>
 #include <qsurfaceformat.h>
 
+#include <valkyrie/vkengine.hh>
+#include <valkyrie/core/vksettings.hh>
+#include <valkyrie/core/vkvfs.hh>
+
 
 int main (int argc, char **argv)
 {
+  vkSettings::Initialize(argc, argv);
+  vkVFS::Get()->Initialize(argc, argv);
+
+
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
   QApplication app(argc, argv);
   register_classes();
