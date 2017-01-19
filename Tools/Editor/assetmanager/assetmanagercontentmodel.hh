@@ -3,6 +3,7 @@
 #include <QAbstractItemModel>
 #include <QDir>
 #include <QList>
+#include <valkyrie/core/vkstring.hh>
 
 class AssetManagerContentModelEntry;
 
@@ -21,7 +22,7 @@ public:
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-
+  vkString GetEntry(const QModelIndex &index) const;
 private:
   void CleanupEntries();
 

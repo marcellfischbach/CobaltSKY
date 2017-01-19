@@ -9,29 +9,39 @@ class AssetManagerContentModelEntry
 public:
   AssetManagerContentModelEntry(const QDir &dir, const QString &fileName)
     : m_dir(dir)
-    , m_fileName(fileName)
+    , m_entryName(fileName)
   {
     m_pixmap = QPixmap(":/icons/resources/UnknownAsset64.png");
+    QString fn = m_dir.absoluteFilePath(m_entryName);
+    m_fileName = (const char*)fn.toLatin1();
   }
 
-  const QString &GetFileName() const
+  vkString GetFileName() const
   {
-    return m_fileName;
+    return  m_fileName;
+    
   }
 
   const QPixmap &GetIcon() const
   {
     return m_pixmap;
   }
+
+  const QString &GetEntryName() const
+  {
+    return m_entryName;
+  }
     
 
 private:
   QDir m_dir;
-  QString m_fileName;
+  QString m_entryName;
   QPixmap m_pixmap;
+  vkString m_fileName;
 };
 
 #define FROM_INDEX(e) reinterpret_cast<AssetManagerContentModelEntry*>(e.internalPointer());
+#define CONST_FROM_INDEX(e) reinterpret_cast<const AssetManagerContentModelEntry*>(e.internalPointer());
 
 AssetManagerContentModel::AssetManagerContentModel()
   : QAbstractItemModel()
@@ -111,11 +121,21 @@ QVariant AssetManagerContentModel::data(const QModelIndex &index, int role) cons
     switch (role)
     {
     case Qt::DisplayRole:
-      return QVariant(entry->GetFileName());
+      return QVariant(entry->GetEntryName());
     case Qt::DecorationRole:
       return QVariant(entry->GetIcon());
     }
   }
   return QVariant();
+}
+
+vkString AssetManagerContentModel::GetEntry(const QModelIndex &index) const
+{
+  const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
+  if (!entry)
+  {
+    return "";
+  }
+  return entry->GetFileName();
 }
 

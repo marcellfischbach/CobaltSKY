@@ -1,8 +1,11 @@
 #pragma once
 
 #include <valkyrie/core/vkclass.hh>
+#include <iasseteditorfactory.hh>
 #include <Editor.refl.hh>
 #include <QDir>
+#include <vector>
+#include <map>
 
 class MainWindow;
 class AssetManagerWidget;
@@ -24,15 +27,22 @@ public:
     return m_rootPath;
   }
 
+  void AddEditorFactory(iAssetEditorFactory *factory);
+  void OpenAsset(const AssetDescriptor &descriptor);
+
+
   QRect GetScreenSize();
 
 private:
   Editor();
+
+  iAssetEditorFactory *FindFactory(const AssetDescriptor &descriptor);
 
 
   MainWindow *m_mainWindow;
   AssetManagerWidget *m_assetManager;
 
   QDir m_rootPath;
-
+  std::vector<iAssetEditorFactory*> m_editorFactories;
+  std::map<AssetDescriptor, iAssetEditor*> m_openEditors;
 };

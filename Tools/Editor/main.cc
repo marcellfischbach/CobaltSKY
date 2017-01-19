@@ -1,8 +1,7 @@
 
 #include <stdio.h>
 #include <qapplication.h>
-#include <Editor.hh>
-#include <master.refl.cc>
+#include <editor.hh>
 #include <qsurfaceformat.h>
 
 #include <valkyrie/vkengine.hh>
@@ -18,7 +17,7 @@ int main (int argc, char **argv)
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
   QApplication app(argc, argv);
-  register_classes();
+
 
   QSurfaceFormat format;
   format.setRedBufferSize(8);
@@ -38,6 +37,7 @@ int main (int argc, char **argv)
 
 
   Editor *editor = Editor::Get();
+
   if (!editor->Initialize(argc, argv))
   {
     return -1;

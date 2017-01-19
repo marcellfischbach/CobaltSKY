@@ -2,7 +2,10 @@
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <assetmanager/assetmanagerfoldermodel.hh>
-#include <Editor.hh>
+#include <assetdescriptor.hh>
+#include <editor.hh>
+#include <QDomDocument>
+#include <QFile>
 
 
 AssetManagerWidget::AssetManagerWidget()
@@ -47,6 +50,52 @@ void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
   QDir dir = m_folderModel->GetDir(index);
   m_contentModel->SetDir(dir);
+}
+
+
+void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
+{
+  vkString fileName = m_contentModel->GetEntry(index);
+  if (fileName.length() == 0)
+  {
+    return;
+  }
+
+  OpenAsset(fileName);
+}
+
+void AssetManagerWidget::OpenAsset(const vkString &fileName)
+{
+  QDomDocument doc("mydocument");
+  QFile file(QString(fileName.c_str()));
+  if (!file.open(QIODevice::ReadOnly))
+  {
+    return;
+  }
+  if (!doc.setContent(&file)) 
+  {
+    file.close();
+    return;
+  }
+  file.close();
+
+  QDomElement assetElement = doc.documentElement();
+  if (assetElement.isNull() || assetElement.tagName() != QString("asset"))
+  {
+    return;
+  }
+
+  QDomElement dataElement = assetElement.firstChildElement("data");
+  if (dataElement.isNull())
+  {
+    return;
+  }
+
+  QDomElement typeElement = dataElement.firstChildElement();
+  vkString type = (const char*)typeElement.tagName().toLatin1();
+
+  AssetDescriptor descriptor(fileName, type);
+  Editor::Get()->OpenAsset(descriptor);
 }
 
 

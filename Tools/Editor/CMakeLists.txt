@@ -13,10 +13,17 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 set(EDITOR_SOURCES
+    abstractasseteditor.cc
+    abstractasseteditor.hh
+    assetdescriptor.cc
+    assetdescriptor.hh
     main.cc
     editor.cc
     editor.hh
+    editormodule.cc
+    editormodule.hh
     iasseteditor.hh
+    iasseteditorfactory.hh
     mainwindow.cc
     mainwindow.hh
     )
@@ -49,8 +56,34 @@ source_group(
     ${ASSETMANAGER_UI}
     )
 
+
+
+set(SAMPLEREDITOR_SOURCES
+    samplereditor/samplereditor.cc
+    samplereditor/samplereditor.hh
+    samplereditor/samplereditorfactory.cc
+    samplereditor/samplereditorfactory.hh
+    samplereditor/samplereditorwidget.cc
+    samplereditor/samplereditorwidget.hh
+    )
+
+set(SAMPLEREDITOR_UI
+    samplereditor/samplereditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\samplereditor"
+    FILES
+    ${SAMPLEREDITOR_SOURCES}
+    ${SAMPLEREDITOR_UI}
+    )
+
+
+
 set(ALL_UI
     ${ASSETMANAGER_UI}
+    ${SAMPLEREDITOR_UI}
     )
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
@@ -59,6 +92,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
+    ${SAMPLEREDITOR_SOURCES}
     )
 
 add_executable(
