@@ -32,7 +32,7 @@ int main (int argc, char **argv)
   format.setProfile(QSurfaceFormat::CoreProfile);
   //format.setOption(QSurfaceFormat::DeprecatedFunctions, true);
 
-  //QSurfaceFormat::setDefaultFormat(format);
+  QSurfaceFormat::setDefaultFormat(format);
 
 
 
