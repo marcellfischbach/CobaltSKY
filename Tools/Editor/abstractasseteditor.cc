@@ -30,6 +30,8 @@ void AbstractAssetEditor::SetAssetDescriptor(const AssetDescriptor &descriptor)
   {
     m_name = m_name.substr(idx + 1);
   }
+
+  OpenAsset();
 }
 
 const AssetDescriptor &AbstractAssetEditor::GetAssetDescriptor() const

@@ -41,6 +41,10 @@ vkGraphicsGL4::vkGraphicsGL4()
   {
     printf("Initialize GLEW failed\n");
   }
+  else
+  {
+    printf("Initialize GLEW successful.\n");
+  }
 
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)

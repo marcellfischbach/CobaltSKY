@@ -1,12 +1,18 @@
 
 #include <assetdescriptor.hh>
+#include <editor.hh>
 
 
 AssetDescriptor::AssetDescriptor(const vkString &assetFileName, const vkString &assetType)
   : m_assetFileName(assetFileName)
   , m_assetType(assetType)
 {
+  m_assetResourceName = Editor::Get()->ConvertToResourcePath(assetFileName);
+}
 
+const vkString &AssetDescriptor::GetAssetResourceName() const
+{
+  return m_assetResourceName;
 }
 
 const vkString &AssetDescriptor::GetAssetFileName() const

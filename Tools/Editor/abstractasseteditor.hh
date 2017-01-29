@@ -21,6 +21,9 @@ public:
 
   virtual const vkString &GetName() const;
 
+protected:
+  virtual void OpenAsset() = 0;
+
 private:
   AssetDescriptor m_assetDescriptor;
 

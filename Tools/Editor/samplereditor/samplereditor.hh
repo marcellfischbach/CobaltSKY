@@ -17,7 +17,13 @@ public:
   SamplerEditor();
   ~SamplerEditor();
 
+  void Apply();
+  void Save();
+  void Reset();
+  void CheckDirty();
 
+protected:
+  void OpenAsset();
 
 private:
   SamplerEditorWidget *m_widget;

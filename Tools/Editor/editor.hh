@@ -6,9 +6,13 @@
 #include <QDir>
 #include <vector>
 #include <map>
+#include <QOpenGLContext>
 
 class MainWindow;
 class AssetManagerWidget;
+class vkEngine;
+class vkGraphicsGL4;
+struct iPhysicsSystem;
 
 VK_INTERFACE()
 class Editor : public iObject
@@ -27,11 +31,18 @@ public:
     return m_rootPath;
   }
 
+  vkString ConvertToResourcePath(const vkString &filePath) const;
+
   void AddEditorFactory(iAssetEditorFactory *factory);
   void OpenAsset(const AssetDescriptor &descriptor);
 
 
   QRect GetScreenSize();
+
+  QOpenGLContext *GetOpenGLContext()
+  {
+    return m_openglContext;
+  }
 
 private:
   Editor();
@@ -45,4 +56,10 @@ private:
   QDir m_rootPath;
   std::vector<iAssetEditorFactory*> m_editorFactories;
   std::map<AssetDescriptor, iAssetEditor*> m_openEditors;
+
+  vkEngine *m_engine;
+  vkGraphicsGL4 *m_graphics;
+  iPhysicsSystem *m_physicsSystem;
+  QOpenGLContext *m_openglContext;
+
 };

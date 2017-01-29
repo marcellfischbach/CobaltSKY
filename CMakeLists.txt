@@ -43,14 +43,14 @@ function(VK_INSTALL_MOCCER target prefix api inlist)
 	endforeach(file)
   if (MSVC_IDE)
 		add_custom_command (TARGET ${target} PRE_BUILD
-												COMMAND ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} 
+												COMMAND ${ValkyrieEngine_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} 
 												WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 												)
 
 	else()
 		set(TARGET_NAME "${target}-MOC")
 		add_custom_target(${TARGET_NAME}
-											COMMAND ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
+											COMMAND ${ValkyrieEngine_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
 											WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										)
 		add_dependencies(${target} ${TARGET_NAME})
