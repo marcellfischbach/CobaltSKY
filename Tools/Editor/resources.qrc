@@ -3,5 +3,17 @@
         <file>resources/Import16.png</file>
         <file>resources/Import24.png</file>
         <file>resources/UnknownAsset64.png</file>
+				<file>resources/apply16.png</file>
+				<file>resources/apply24.png</file>
+				<file>resources/apply32.png</file>
+				<file>resources/apply48.png</file>
+				<file>resources/revert16.png</file>
+				<file>resources/revert24.png</file>
+				<file>resources/revert32.png</file>
+				<file>resources/revert48.png</file>
+				<file>resources/save16.png</file>
+				<file>resources/save24.png</file>
+				<file>resources/save32.png</file>
+				<file>resources/save48.png</file>
     </qresource>
 </RCC>

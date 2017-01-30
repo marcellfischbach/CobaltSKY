@@ -79,11 +79,34 @@ source_group(
     ${SAMPLEREDITOR_UI}
     )
 
+    
+set(TEXTUREEDITOR_SOURCES
+    textureeditor/textureeditor.cc
+    textureeditor/textureeditor.hh
+    textureeditor/textureeditorfactory.cc
+    textureeditor/textureeditorfactory.hh
+    textureeditor/textureeditorwidget.cc
+    textureeditor/textureeditorwidget.hh
+    )
+
+set(TEXTUREEDITOR_UI
+    textureeditor/textureeditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\textureeditor"
+    FILES
+    ${TEXTUREEDITOR_SOURCES}
+    ${TEXTUREEDITOR_UI}
+    )
+
 
 
 set(ALL_UI
     ${ASSETMANAGER_UI}
     ${SAMPLEREDITOR_UI}
+    ${TEXTUREEDITOR_UI}
     )
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
@@ -93,6 +116,7 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
+    ${TEXTUREEDITOR_SOURCES}
     )
 
 add_executable(

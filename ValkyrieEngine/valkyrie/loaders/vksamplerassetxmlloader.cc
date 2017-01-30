@@ -123,7 +123,7 @@ iObject *vkSamplerAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLo
     sampler->SetMinLOD(atoi(minLodElement->GetText()));
   }
 
-  TiXmlElement *maxLodElement = element->FirstChildElement("maxlLOD");
+  TiXmlElement *maxLodElement = element->FirstChildElement("maxLOD");
   if (maxLodElement)
   {
     sampler->SetMaxLOD(atoi(maxLodElement->GetText()));

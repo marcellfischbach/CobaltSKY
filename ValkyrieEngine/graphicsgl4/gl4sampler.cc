@@ -37,7 +37,7 @@ bool vkSamplerGL4::Initialize()
   m_addressV = eTAM_Repeat;
   m_addressW = eTAM_Repeat;
   m_minLOD = -1000;
-  m_maxLOD = -1000;
+  m_maxLOD = 1000;
   m_anisotropy = 1.0f;
   m_borderColor = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f);
   m_textureCompareMode = eTCM_CompareToR;

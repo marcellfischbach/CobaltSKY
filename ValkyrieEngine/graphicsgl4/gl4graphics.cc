@@ -45,6 +45,17 @@ vkGraphicsGL4::vkGraphicsGL4()
   {
     printf("Initialize GLEW successful.\n");
   }
+  //
+  // it appears glewInit ends up with an invalid enum pending in the error state
+  // so we clear that state here so we can start up clean
+  glGetError();
+  
+  printf("OpenGL Stats:\n");
+  printf("  Vendor  : %s\n", (const char *)glGetString(GL_VENDOR));
+  printf("  Renderer: %s\n", (const char *)glGetString(GL_RENDERER));
+  printf("  Version : %s\n", (const char *)glGetString(GL_VERSION));
+  printf("  GLSL    : %s\n", (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
+
 
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)

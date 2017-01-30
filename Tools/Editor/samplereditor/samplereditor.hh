@@ -5,6 +5,10 @@
 #include <assetdescriptor.hh>
 
 #include <samplereditor/samplereditor.refl.hh>
+#include <valkyrie/vkenums.hh>
+
+#include <QDomDocument>
+#include <QDomElement>
 
 class SamplerEditorWidget;
 
@@ -25,6 +29,22 @@ public:
 protected:
   void OpenAsset();
 
+private:
+  void MergeFile();
+  void ReplaceFile();
+
+  void SetFilter(QDomDocument doc, QDomElement element);
+  void SetAnisotropy(QDomDocument doc, QDomElement element);
+  void SetMinLOD(QDomDocument doc, QDomElement element);
+  void SetMaxLOD(QDomDocument doc, QDomElement element);
+  void SetAddressU(QDomDocument doc, QDomElement element);
+  void SetAddressV(QDomDocument doc, QDomElement element);
+  void SetAddressW(QDomDocument doc, QDomElement element);
+  void SetAddress(QDomDocument doc, vkTextureAddressMode mode, QDomElement element);
+  void SetBorderColor(QDomDocument doc, QDomElement element);
+  void SetTextureCompareMode(QDomDocument doc, QDomElement element);
+  void SetTextureCompareFunc(QDomDocument doc, QDomElement element);
+  void RemoveChildren(QDomElement element);
 private:
   SamplerEditorWidget *m_widget;
 };
