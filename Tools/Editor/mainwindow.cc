@@ -34,3 +34,18 @@ bool MainWindow::ShowEditor(iAssetEditor *editor)
   m_tab->setCurrentIndex(idx);
   return true;
 }
+
+void MainWindow::ShowWidget(QWidget *widget)
+{
+  if (!widget)
+  {
+    return;
+  }
+
+  int idx = m_tab->indexOf(widget);
+  if (idx == -1)
+  {
+    idx = m_tab->addTab(widget, "OpenGL-Test");
+  }
+  m_tab->setCurrentIndex(idx);
+}

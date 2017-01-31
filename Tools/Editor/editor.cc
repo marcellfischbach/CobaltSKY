@@ -3,6 +3,7 @@
 #include <editormodule.hh>
 #include <iasseteditor.hh>
 #include <mainwindow.hh>
+#include <renderwidget.hh>
 #include <assetmanager/assetmanagerdock.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <valkyrie/core/vkvfs.hh>
@@ -13,7 +14,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QOpenGLWidget>
+
 Editor::Editor()
   : m_mainWindow(0)
 {
@@ -26,34 +27,38 @@ bool Editor::Initialize(int argc, char **argv)
   EditorModule::Initialize();
 
   m_rootPath = QDir(QString(vkVFS::Get()->GetRootPath().c_str()));
-  printf("RootPath: %s\n", (const char*)m_rootPath.dirName().toLatin1());
-
-
-  m_mainWindow = new MainWindow();
-  QOpenGLWidget *openGLWidget = new QOpenGLWidget(m_mainWindow);
-
-
-  m_assetManager = new AssetManagerWidget();
-
-  m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));
-  m_mainWindow->showMaximized();
-  openGLWidget->setVisible(false);
-
-
-  m_openglContext = openGLWidget->context();
-  openGLWidget->makeCurrent();
-  printf("Context: %p\n", m_openglContext);
 
   m_engine = new vkEngine();
-
-  m_graphics = new vkGraphicsGL4();
-  m_engine->SetRenderer(m_graphics);
-
   m_physicsSystem = new vkBulletSystem();
   m_physicsSystem->Initialize();
   m_engine->SetPhysicsSystem(m_physicsSystem);
 
+  m_mainWindow = new MainWindow();
+
+  RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
+  m_mainWindow->ShowWidget(renderWidget);
+
+  m_assetManager = new AssetManagerWidget();
+  m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));
+  //m_mainWindow->showMaximized();
+  m_mainWindow->resize(1024, 768);
+  m_mainWindow->setVisible(true);
+  //renderWidget->setVisible(false);
+
+
+
   return true;
+}
+
+vkGraphicsGL4 *Editor::GetGraphics()
+{
+  if (!m_graphics)
+  {
+    m_graphics = new vkGraphicsGL4();
+    m_engine->SetRenderer(m_graphics);
+  }
+
+  return m_graphics;
 }
 
 MainWindow *Editor::GetMainWindow()

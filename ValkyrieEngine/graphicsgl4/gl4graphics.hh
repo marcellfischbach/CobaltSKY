@@ -107,6 +107,8 @@ private:
 private:
   void RecalculateMatrix(vkMatrixType type);
 
+  vkUInt32 m_vao;
+
   vkVertexDeclarationGL4 *m_vertexDeclaration;
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];

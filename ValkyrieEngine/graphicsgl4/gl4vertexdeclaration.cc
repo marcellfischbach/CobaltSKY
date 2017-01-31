@@ -2,6 +2,7 @@
 #include <graphicsgl4/gl4vertexdeclaration.hh>
 #include <graphicsgl4/gl4program.hh>
 #include <graphicsgl4/gl4shader.hh>
+#include <graphicsgl4/gl4defines.hh>
 #include <assert.h>
 #include <map>
 
@@ -146,7 +147,9 @@ void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, vo
                elements->Stride,
                VOIDPTR(ptr, elements->Offset),
                elements->Type);
+        VK_CHECK_GL_ERROR;
         s->Enable();
+        VK_CHECK_GL_ERROR;
       }
       elements++;
     }

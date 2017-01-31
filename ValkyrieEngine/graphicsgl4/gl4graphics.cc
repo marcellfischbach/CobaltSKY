@@ -36,6 +36,7 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_numberOfSkeletonBoneMappings(0)
   , m_shaderGraphFactory(0)
 {
+  VK_CLASS_GEN_CONSTR;
   glewExperimental = true;
   if (glewInit() != GLEW_OK)
   {
@@ -74,14 +75,10 @@ vkGraphicsGL4::vkGraphicsGL4()
 
   InitFullScreenData();
 
+
   ResetDefaults();
 
   m_shaderGraphFactory = new vkShaderGraphGL4(this);
-
-
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
 
 
 }
@@ -89,7 +86,6 @@ vkGraphicsGL4::vkGraphicsGL4()
 
 void vkGraphicsGL4::ResetDefaults ()
 {
-  VK_CLASS_GEN_CONSTR;
   VK_CHECK_GL_ERROR;
   m_depthMask = true;
   glDepthMask(true);
@@ -104,6 +100,7 @@ void vkGraphicsGL4::ResetDefaults ()
   glDepthFunc(GL_LEQUAL);
 
 
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClearDepth(1.0);
   VK_CHECK_GL_ERROR;
 
@@ -136,7 +133,11 @@ void vkGraphicsGL4::ResetDefaults ()
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
 
-
+  if (!glIsVertexArray(m_vao))
+  {
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+  }
 }
 
 
@@ -928,8 +929,6 @@ void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDe
 void vkGraphicsGL4::SetViewport(vkUInt16 width, vkUInt16 height)
 {
   SetViewport(0, 0, width, height);
-  m_viewportWidth = width;
-  m_viewportHeight = height;
 }
 
 void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
@@ -1133,8 +1132,11 @@ bool vkGraphicsGL4::BindVertexDeclaration()
       return false;
     }
 
+    VK_CHECK_GL_ERROR;
     m_vertexBuffer[i]->Bind();
+    VK_CHECK_GL_ERROR;
     m_vertexDeclaration->BindStream(m_program, i, 0);
+    VK_CHECK_GL_ERROR;
   }
 
   VK_CHECK_GL_ERROR;

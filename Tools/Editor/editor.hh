@@ -44,6 +44,9 @@ public:
     return m_openglContext;
   }
 
+  vkGraphicsGL4 *GetGraphics();
+ 
+
 private:
   Editor();
 

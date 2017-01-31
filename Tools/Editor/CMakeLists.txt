@@ -26,6 +26,8 @@ set(EDITOR_SOURCES
     iasseteditorfactory.hh
     mainwindow.cc
     mainwindow.hh
+    renderwidget.cc
+    renderwidget.hh
     )
 
 source_group(
@@ -85,6 +87,8 @@ set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.hh
     textureeditor/textureeditorfactory.cc
     textureeditor/textureeditorfactory.hh
+    textureeditor/textureeditorrenderwidget.cc
+    textureeditor/textureeditorrenderwidget.hh
     textureeditor/textureeditorwidget.cc
     textureeditor/textureeditorwidget.hh
     )

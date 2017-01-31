@@ -16,7 +16,6 @@ int main (int argc, char **argv)
 
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
-  QApplication app(argc, argv);
 
 
   QSurfaceFormat format;
@@ -34,6 +33,7 @@ int main (int argc, char **argv)
 
   QSurfaceFormat::setDefaultFormat(format);
 
+  QApplication app(argc, argv);
 
 
   Editor *editor = Editor::Get();

@@ -13,6 +13,7 @@ public:
   ~MainWindow();
 
   bool ShowEditor(iAssetEditor *editor);
+  void ShowWidget(QWidget *widget);
 
 private:
   QTabWidget *m_tab;
