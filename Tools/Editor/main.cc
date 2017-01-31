@@ -29,6 +29,7 @@ int main (int argc, char **argv)
   format.setMinorVersion(4);
   format.setRenderableType(QSurfaceFormat::OpenGL);
   format.setProfile(QSurfaceFormat::CoreProfile);
+  format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
   //format.setOption(QSurfaceFormat::DeprecatedFunctions, true);
 
   QSurfaceFormat::setDefaultFormat(format);

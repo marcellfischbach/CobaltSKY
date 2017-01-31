@@ -22,6 +22,7 @@ public:
   // Implementation of the iTexture2D interface
   virtual vkUInt16 GetWidth() const;
   virtual vkUInt16 GetHeight() const;
+  virtual vkUInt16 GetNumberOfLODs() const;
 
   virtual bool CopyData(vkUInt8 layer, vkPixelFormat format, const void *data);
 
@@ -30,5 +31,5 @@ private:
 
   vkUInt16 m_width;
   vkUInt16 m_height;
-
+  vkUInt16 m_lods;
 };

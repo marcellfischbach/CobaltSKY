@@ -1,6 +1,6 @@
 #include <textureeditor/textureeditorwidget.hh>
 #include <textureeditor/textureeditor.hh>
-
+#include <valkyrie/graphics/itexture2d.hh>
 
 
 TextureEditorWidget::TextureEditorWidget(TextureEditor *parent)
@@ -19,6 +19,7 @@ TextureEditorWidget::~TextureEditorWidget()
 void TextureEditorWidget::SetTexture(iTexture2D *texture)
 {
   m_gui.openGLWidget->SetTexture(texture);
+  m_gui.spLOD->setMaximum(texture->GetNumberOfLODs() - 1);
 }
 
 

@@ -199,7 +199,7 @@ void TextureEditorRenderWidget::paintGL()
     attrColorTrans->Set(colorTrans);
   }
 
-  gr->Clear(true, vkVector4f(0.0f, 0.0f, 0.5f, 0.0f));
+  gr->Clear(true, vkVector4f(0.0f, 0.0f, 0.5f, 1.0f));
 
   gr->RenderIndexed(ePT_Triangles, 6, eDT_UnsignedShort);
 

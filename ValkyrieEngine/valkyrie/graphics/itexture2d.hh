@@ -15,6 +15,7 @@ struct VKE_API iTexture2D : public virtual VK_SUPER(iTexture)
 
   virtual vkUInt16 GetWidth() const = 0;
   virtual vkUInt16 GetHeight() const = 0;
+  virtual vkUInt16 GetNumberOfLODs() const = 0;
 
   virtual bool CopyData(vkUInt8 lod, vkPixelFormat format, const void *data) = 0;
 

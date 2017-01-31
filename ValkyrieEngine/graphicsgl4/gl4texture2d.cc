@@ -43,6 +43,7 @@ bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 h
       break;
     }
   }
+  m_lods = lod;
   VK_CHECK_GL_ERROR;
 
   return true;
@@ -83,5 +84,9 @@ vkUInt16 vkTexture2DGL4::GetHeight() const
   return m_height;
 }
 
+vkUInt16 vkTexture2DGL4::GetNumberOfLODs() const
+{
+  return m_lods;
+}
 
 

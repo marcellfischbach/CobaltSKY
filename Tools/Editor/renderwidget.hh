@@ -17,6 +17,11 @@ public:
     m_name = name;
   }
 
+  void SetClear(bool clear)
+  {
+    m_clear = clear;
+  }
+
 protected:
   void initializeGL();
   void paintGL();
@@ -26,5 +31,7 @@ private:
   QString m_name;
   GLuint m_vao;
   vkRenderTargetGL4 *m_renderTarget;
+
+  bool m_clear;
 };
 

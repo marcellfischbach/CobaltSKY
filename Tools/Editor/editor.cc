@@ -36,7 +36,9 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow = new MainWindow();
 
   RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
+  renderWidget->SetClear(true);
   m_mainWindow->ShowWidget(renderWidget);
+
 
   m_assetManager = new AssetManagerWidget();
   m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));

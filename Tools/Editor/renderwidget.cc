@@ -14,8 +14,9 @@ RenderWidget::RenderWidget(QWidget *parent, Qt::WindowFlags f)
   : QOpenGLWidget(parent, f)
   , m_name("Unnamed")
   , m_renderTarget(0)
+  , m_clear(false)
 {
-
+  setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
 }
 
 RenderWidget::~RenderWidget()
@@ -41,8 +42,16 @@ void RenderWidget::paintGL()
   {
     m_renderTarget->Setup(defaultFramebufferObject(), width(), height());
   }
-  vkEng->GetRenderer()->SetRenderTarget(m_renderTarget);
-  vkEng->GetRenderer()->SetViewport(m_renderTarget);
+  iGraphics *gr = vkEng->GetRenderer();
+  
+  gr->SetRenderTarget(m_renderTarget);
+  gr->SetViewport(m_renderTarget);
+  gr->ResetDefaults();
+
+  if (m_clear)
+  {
+    gr->Clear(true, vkVector4f (0.0f, 0.0f, 0.5f, 1.0f));
+  }
 }
 
 

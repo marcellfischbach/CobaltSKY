@@ -99,9 +99,8 @@ void vkGraphicsGL4::ResetDefaults ()
   m_depthFunc = eCM_LessOrEqual;
   glDepthFunc(GL_LEQUAL);
 
-
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-  glClearDepth(1.0);
+  SetClearColorValue(vkVector4f(0.0f, 0.0f, 0.0f, 0.0f));
+  SetClearDepthValue(1.0f);
   VK_CHECK_GL_ERROR;
 
   glGetError();
