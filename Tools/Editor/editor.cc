@@ -11,6 +11,7 @@
 #include <graphicsgl4/gl4graphics.hh>
 #include <physicsbullet/bulletsystem.hh>
 
+#include <nodegraph/nodegraphwidget.hh>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -39,7 +40,10 @@ bool Editor::Initialize(int argc, char **argv)
   renderWidget->SetClear(true);
   m_mainWindow->ShowWidget(renderWidget);
 
+  NodeGraphWidget *nodeGraphWidget = new NodeGraphWidget(m_mainWindow);
+  m_mainWindow->ShowWidget(nodeGraphWidget);
 
+  
   m_assetManager = new AssetManagerWidget();
   m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));
   //m_mainWindow->showMaximized();
@@ -47,6 +51,9 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
+  renderWidget->makeCurrent();
+  printf("Context: %p\n", renderWidget->context());
+  GetGraphics();
 
 
   return true;

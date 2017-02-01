@@ -59,6 +59,22 @@ source_group(
     )
 
 
+set(NODEGRAPH_SOURCES
+    nodegraph/nodegraphnode.cc
+    nodegraph/nodegraphnode.hh
+    nodegraph/nodegraphwidget.cc
+    nodegraph/nodegraphwidget.hh
+    )
+
+
+source_group(
+    "editor\\nodegraph"
+    FILES
+    ${NODEGRAPH_SOURCES}
+    )
+
+
+
 
 set(SAMPLEREDITOR_SOURCES
     samplereditor/samplereditor.cc
@@ -119,6 +135,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
+    ${NODEGRAPH_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}
     )

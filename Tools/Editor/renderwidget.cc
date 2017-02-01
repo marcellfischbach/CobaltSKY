@@ -26,6 +26,7 @@ RenderWidget::~RenderWidget()
 
 void RenderWidget::initializeGL()
 {
+  printf("RenderWidget::initializeGL\n");
   Editor::Get()->GetGraphics()->ResetDefaults();
 
 }
