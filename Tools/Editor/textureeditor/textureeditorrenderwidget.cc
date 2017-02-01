@@ -190,7 +190,6 @@ void TextureEditorRenderWidget::paintGL()
   if (attrDiffuse)
   {
     vkTextureUnit unit = gr->BindTexture(m_texture);
-    printf("unit: %d %p=>%d\n", unit,m_texture, vkQueryClass<vkTexture2DGL4>(m_texture)->GetName());
     attrDiffuse->Set(unit);
   }
   iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);

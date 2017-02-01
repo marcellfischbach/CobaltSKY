@@ -15,6 +15,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QOffscreenSurface>
 
 Editor::Editor()
   : m_mainWindow(0)
@@ -51,8 +52,15 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
-  renderWidget->makeCurrent();
-  printf("Context: %p\n", renderWidget->context());
+  QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
+  offscreenSurface->create();
+
+  QOpenGLContext *context = new QOpenGLContext(m_mainWindow);
+  context->setFormat(QSurfaceFormat::defaultFormat());
+  context->setShareContext(QOpenGLContext::globalShareContext());
+  context->create();
+  context->makeCurrent(offscreenSurface);
+
   GetGraphics();
 
 

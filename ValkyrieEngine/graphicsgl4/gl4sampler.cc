@@ -32,7 +32,7 @@ bool vkSamplerGL4::Initialize()
   GLfloat color[] = { 0.0f, 0.0f, 0.0f, 0.0f };
   glSamplerParameterfv(m_name, GL_TEXTURE_BORDER_COLOR, color);
 
-  m_filterMode = eFM_MinMagMipNearest;
+  m_filterMode = eFM_MinMagNearest;
   m_addressU = eTAM_Repeat;
   m_addressV = eTAM_Repeat;
   m_addressW = eTAM_Repeat;
