@@ -60,6 +60,8 @@ source_group(
 
 
 set(NODEGRAPH_SOURCES
+    nodegraph/nodegraphheader.cc
+    nodegraph/nodegraphheader.hh
     nodegraph/nodegraphnode.cc
     nodegraph/nodegraphnode.hh
     nodegraph/nodegraphwidget.cc
