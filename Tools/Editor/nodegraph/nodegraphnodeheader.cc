@@ -1,6 +1,6 @@
 
 
-#include <nodegraph/nodegraphheader.hh>
+#include <nodegraph/nodegraphnodeheader.hh>
 #include <QFontMetrics>
 #include <QPainter>
 
@@ -8,7 +8,7 @@
 #define CONNECTOR_WIDTH 20
 #define CONNECTOR_SPACING 4
 
-NodeGraphHeader::NodeGraphHeader()
+NodeGraphNodeHeader::NodeGraphNodeHeader()
   : m_inShow(false)
   , m_inConnected(false)
   , m_outShow(false)
@@ -19,12 +19,12 @@ NodeGraphHeader::NodeGraphHeader()
 }
 
 
-void NodeGraphHeader::SetFont(const QFont &font)
+void NodeGraphNodeHeader::SetFont(const QFont &font)
 {
   m_font = font;
 }
 
-QRectF NodeGraphHeader::GetMinSize() const
+QRectF NodeGraphNodeHeader::GetMinSize() const
 {
   unsigned height = 0;
   unsigned width = 0;
@@ -49,7 +49,7 @@ QRectF NodeGraphHeader::GetMinSize() const
 }
 
 
-void NodeGraphHeader::paint(QPainter *painter, unsigned width, unsigned height)
+void NodeGraphNodeHeader::Paint(QPainter *painter, unsigned width, unsigned height)
 {
   painter->setPen(QPen(QColor(64, 64, 64)));
   unsigned x = 0;

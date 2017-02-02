@@ -1,7 +1,7 @@
 
 
 #include <nodegraph/nodegraphwidget.hh>
-#include <nodegraph/nodegraphheader.hh>
+#include <nodegraph/nodegraphnodeheader.hh>
 #include <nodegraph/nodegraphnode.hh>
 
 #include <QPaintEvent>
@@ -11,7 +11,7 @@ NodeGraphWidget::NodeGraphWidget(QWidget *parent)
   : QWidget(parent)
 {
   NodeGraphNode *node0 = new NodeGraphNode();
-  node0->SetBounding(QRect(100, 100, 200, 100));
+  node0->SetLocation(100, 100);
   node0->GetHeader()->SetInShow(true);
   node0->GetHeader()->SetOutShow(true);
   node0->GetHeader()->SetName("Node0");
@@ -20,7 +20,7 @@ NodeGraphWidget::NodeGraphWidget(QWidget *parent)
 
 
   NodeGraphNode *node1 = new NodeGraphNode();
-  node1->SetBounding(QRect(400, 100, 200, 100));
+  node1->SetLocation(400, 100);
   node1->GetHeader()->SetName("Node1");
   node1->Layout();
   AddNode(node1);

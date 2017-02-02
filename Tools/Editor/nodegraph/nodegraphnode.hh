@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QRect>
 
-class NodeGraphHeader;
+class NodeGraphNodeHeader;
 class NodeGraphNode
 {
 public:
@@ -26,7 +26,7 @@ public:
     return m_bounding;
   }
 
-  NodeGraphHeader* GetHeader()
+  NodeGraphNodeHeader* GetHeader()
   {
     return m_header;
   }
@@ -34,5 +34,5 @@ public:
 
 private:
   QRectF m_bounding;
-  NodeGraphHeader *m_header;
+  NodeGraphNodeHeader *m_header;
 };

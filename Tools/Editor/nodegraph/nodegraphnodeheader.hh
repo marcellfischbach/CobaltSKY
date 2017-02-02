@@ -5,11 +5,11 @@
 
 class QPainter;
 
-class NodeGraphHeader
+class NodeGraphNodeHeader
 {
 public:
-  NodeGraphHeader();
-  ~NodeGraphHeader();
+  NodeGraphNodeHeader();
+  ~NodeGraphNodeHeader();
 
   QRectF GetMinSize() const;
 
@@ -55,7 +55,7 @@ public:
     m_name = name;
   }
 
-  void paint(QPainter *painter, unsigned width, unsigned height);
+  void Paint(QPainter *painter, unsigned width, unsigned height);
 
 private:
   bool m_inShow;

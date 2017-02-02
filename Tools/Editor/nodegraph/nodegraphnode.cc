@@ -1,10 +1,10 @@
 
 
 #include <nodegraph/nodegraphnode.hh>
-#include <nodegraph/nodegraphheader.hh>
+#include <nodegraph/nodegraphnodeheader.hh>
 
 NodeGraphNode::NodeGraphNode()
-  : m_header(new NodeGraphHeader())
+  : m_header(new NodeGraphNodeHeader())
 {
 
 }
@@ -30,7 +30,7 @@ void NodeGraphNode::paint(QPainter *painter)
 
   painter->fillRect(0, 0, m_bounding.width(), m_bounding.height(), QColor(128, 128, 128, 255));
 
-  m_header->paint(painter, m_bounding.width(), m_bounding.height());
+  m_header->Paint(painter, m_bounding.width(), m_bounding.height());
 
   painter->setTransform(currentTransform, false);
 }
