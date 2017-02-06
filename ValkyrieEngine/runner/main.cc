@@ -165,6 +165,7 @@ int initialize()
   camera->SetEye(vkVector3f(7.814438f, 8.341354f, 7.872684f));
   camera->SetSpot(vkVector3f(0, 0, 0));
   camera->SetUp(vkVector3f(0, 0, 1));
+  camera->SetFar(10.0f * 1000 * 1000);
   camera->UpdateCameraMatrices();
 
 

@@ -2,6 +2,7 @@
 
 #include <nodegraph/nodegraphnode.hh>
 #include <nodegraph/nodegraphnodeheader.hh>
+#include <nodegraph/nodegraphnodeproperty.hh>
 
 NodeGraphNode::NodeGraphNode()
   : m_header(new NodeGraphNodeHeader())
@@ -17,6 +18,16 @@ NodeGraphNode::~NodeGraphNode()
 void NodeGraphNode::SetLocation(float x, float y)
 {
   m_bounding = QRectF(x, y, m_bounding.width(), m_bounding.height());
+}
+
+void NodeGraphNode::AddInputProperty(NodeGraphNodeProperty *nodeProperty)
+{
+  m_inputProperties.push_back(nodeProperty);
+}
+
+void NodeGraphNode::AddOutputProperty(NodeGraphNodeProperty *nodeProperty)
+{
+  m_outputProperties.push_back(nodeProperty);
 }
 
 void NodeGraphNode::paint(QPainter *painter)
@@ -38,6 +49,36 @@ void NodeGraphNode::paint(QPainter *painter)
 void NodeGraphNode::Layout()
 {
   QRectF headerSize = m_header->GetMinSize();
-  m_bounding.setWidth(headerSize.width());
-  m_bounding.setHeight(headerSize.height());
+
+  float leftWidth = 0.0f;
+  float leftHeight = 0.0f;
+  float rightWidth = 0.0f;
+  float rightHeight = 0.0f;
+
+  for (NodeGraphNodeProperty *prop : m_inputProperties)
+  {
+    QRectF size = prop->GetMinSize();
+    leftWidth = size.width() > leftWidth ? size.width() : leftWidth;
+    leftHeight += size.height();
+  }
+
+  for (NodeGraphNodeProperty *prop : m_outputProperties)
+  {
+    QRectF size = prop->GetMinSize();
+    rightWidth = size.width() > rightWidth ? size.width() : rightWidth;
+    rightHeight += size.height();
+  }
+
+  float propsHeight = leftHeight > rightHeight ? leftHeight : rightHeight;
+  float propsWidth = leftWidth + rightWidth;
+
+  float boundingHeight = headerSize.height() + propsHeight;
+  float boundingWidth = headerSize.width() > propsWidth ? headerSize.width() : propsWidth;
+
+  m_layoutLeftWidth = leftWidth;
+  m_layoutRightWidth = rightWidth;
+
+  m_bounding.setWidth(boundingWidth);
+  m_bounding.setHeight(boundingHeight);
+
 }
