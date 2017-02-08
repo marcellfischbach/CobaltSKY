@@ -4,6 +4,7 @@
 #include <QRect>
 #include <vector>
 
+class NodeGraphNodeAnchor;
 class NodeGraphNodeHeader;
 class NodeGraphNodeProperty;
 class NodeGraphNode
@@ -11,6 +12,9 @@ class NodeGraphNode
 public:
   NodeGraphNode();
   ~NodeGraphNode();
+
+  bool TestHandle(const QPointF &point) const;
+  NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
 
   void Layout();
 
@@ -23,6 +27,7 @@ public:
     m_bounding = bounding;
   }
 
+  void AddProperty(NodeGraphNodeProperty *nodeProperty);
   void AddInputProperty(NodeGraphNodeProperty *nodeProperty);
   void AddOutputProperty(NodeGraphNodeProperty *nodeProperty);
 

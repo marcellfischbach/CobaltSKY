@@ -62,11 +62,17 @@ source_group(
 set(NODEGRAPH_SOURCES
     nodegraph/nodegraphnode.cc
     nodegraph/nodegraphnode.hh
+    nodegraph/nodegraphnodeanchor.cc
+    nodegraph/nodegraphnodeanchor.hh
     nodegraph/nodegraphnodeheader.cc
     nodegraph/nodegraphnodeheader.hh
+    nodegraph/nodegraphnodeimageproperty.cc
+    nodegraph/nodegraphnodeimageproperty.hh
     nodegraph/nodegraphnodeproperty.cc
     nodegraph/nodegraphnodeproperty.hh
     nodegraph/nodegraphnodepropertytype.hh
+    nodegraph/nodegraphnodevalueproperty.cc
+    nodegraph/nodegraphnodevalueproperty.hh
     nodegraph/nodegraphwidget.cc
     nodegraph/nodegraphwidget.hh
     )

@@ -7,24 +7,27 @@
 #include <QString>
 
 class QPainter;
+class NodeGraphNodeAnchor;
 class NodeGraphNodeProperty
 {
 public:
   NodeGraphNodeProperty();
   ~NodeGraphNodeProperty();
 
-  QRectF GetMinSize() const;
-
-  void Paint(QPainter *painter);
+  virtual QRectF GetMinSize() = 0;
+  virtual void Paint(QPainter *painter) = 0;
+  virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const = 0;
 
   void SetFont(const QFont &font)
   {
     m_font = font;
+    m_minSizeDirty = true;
   }
 
   void SetType(NodeGraphNodePropertyType type)
   {
     m_type = type;
+    m_minSizeDirty = true;
   }
   NodeGraphNodePropertyType GetType() const
   {
@@ -34,57 +37,29 @@ public:
   void SetName(const QString &name)
   {
     m_name = name;
+    m_minSizeDirty = true;
   }
   const QString &GetName() const
   {
     return m_name;
   }
 
-  void SetAnchorShow(bool anchorShow)
+
+  void SetBounds(const QRectF &bounds)
   {
-    m_anchorShow = anchorShow;
+    m_bounds = bounds;
+    UpdateBounds();
   }
 
-  bool IsAnchorShow() const
-  {
-    return m_anchorShow;
-  }
+protected:
+  virtual void UpdateBounds() { }
 
-  void SetAnchorConnected(bool anchorConnected)
-  {
-    m_anchorConnected = anchorConnected;
-  }
-
-  bool IsAnchorConnected() const
-  {
-    return m_anchorConnected;
-  }
-
-  void SetShowValue(bool showValue)
-  {
-    m_showValue = showValue;
-  }
-
-  bool IsShowValue() const
-  {
-    return m_showValue;
-  }
-
-  void SetValue(float value)
-  {
-    m_value = value;
-  }
-
-  float GetValue() const
-  {
-    return m_value;
-  }
-private:
+protected:
   NodeGraphNodePropertyType m_type;
   QString m_name;
   QFont m_font;
-  float m_value;
-  bool m_showValue;
-  bool m_anchorShow;
-  bool m_anchorConnected;
+  bool m_minSizeDirty;
+  QRectF m_minSize;
+
+  QRectF m_bounds;
 };

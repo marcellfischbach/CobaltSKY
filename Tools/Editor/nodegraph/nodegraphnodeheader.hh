@@ -2,14 +2,19 @@
 
 #include <QFont>
 #include <QString>
+#include <QRectF>
 
 class QPainter;
 
+class NodeGraphNodeAnchor;
 class NodeGraphNodeHeader
 {
 public:
   NodeGraphNodeHeader();
   ~NodeGraphNodeHeader();
+
+  NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
+  bool Test(const QPointF &point) const;
 
   QRectF GetMinSize() const;
 
@@ -55,7 +60,16 @@ public:
     m_name = name;
   }
 
-  void Paint(QPainter *painter, unsigned width, unsigned height);
+  void SetBounds(const QRectF &bounds)
+  {
+    m_bounds = bounds;
+    UpdateBounds();
+  }
+
+  void Paint(QPainter *painter);
+
+protected:
+  virtual void UpdateBounds();
 
 private:
   bool m_inShow;
@@ -66,4 +80,9 @@ private:
 
   QString m_name;
   QFont m_font;
+
+  QRectF m_bounds;
+
+  NodeGraphNodeAnchor *m_leftAnchor;
+  NodeGraphNodeAnchor *m_rightAnchor;
 };
