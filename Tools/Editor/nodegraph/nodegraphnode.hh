@@ -20,7 +20,12 @@ public:
 
   void paint(QPainter *painter);
 
-  void SetLocation(float x, float y);
+  void SetLocation(const QPointF &point);
+  void SetOffset(const QPointF &point);
+  void CommitOffset();
+  void CancelOffset();
+
+  void UpdateBounding();
 
   void SetBounding(const QRectF &bounding)
   {
@@ -41,8 +46,22 @@ public:
     return m_header;
   }
 
+  void SetSelected(bool selected)
+  {
+    m_selected = selected;
+  }
+
+  bool IsSelected() const
+  {
+    return m_selected;
+  }
+
+  void SetAllAnchorsDisconnected();
 
 private:
+  bool m_selected;
+  QPointF m_position;
+  QPointF m_offset;
   QRectF m_bounding;
   NodeGraphNodeHeader *m_header;
   float m_layoutLeftWidth;
@@ -50,5 +69,7 @@ private:
 
   std::vector<NodeGraphNodeProperty *> m_inputProperties;
   std::vector<NodeGraphNodeProperty *> m_outputProperties;
+
+  static float GridSize;
 
 };

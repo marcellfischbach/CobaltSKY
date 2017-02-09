@@ -41,10 +41,6 @@ bool Editor::Initialize(int argc, char **argv)
   renderWidget->SetClear(true);
   m_mainWindow->ShowWidget(renderWidget);
 
-  NodeGraphWidget *nodeGraphWidget = new NodeGraphWidget(m_mainWindow);
-  m_mainWindow->ShowWidget(nodeGraphWidget);
-
-  
   m_assetManager = new AssetManagerWidget();
   m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));
   //m_mainWindow->showMaximized();

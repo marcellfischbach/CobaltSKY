@@ -73,6 +73,8 @@ set(NODEGRAPH_SOURCES
     nodegraph/nodegraphnodepropertytype.hh
     nodegraph/nodegraphnodevalueproperty.cc
     nodegraph/nodegraphnodevalueproperty.hh
+    nodegraph/nodegraphvetoevent.cc
+    nodegraph/nodegraphvetoevent.hh
     nodegraph/nodegraphwidget.cc
     nodegraph/nodegraphwidget.hh
     )
@@ -109,6 +111,30 @@ source_group(
     )
 
     
+
+set(SHADERGRAPHEDITOR_SOURCES
+    shadergrapheditor/shadergrapheditor.cc
+    shadergrapheditor/shadergrapheditor.hh
+    shadergrapheditor/shadergrapheditorfactory.cc
+    shadergrapheditor/shadergrapheditorfactory.hh
+    shadergrapheditor/shadergrapheditorwidget.cc
+    shadergrapheditor/shadergrapheditorwidget.hh
+    )
+
+set(SHADERGRAPHEDITOR_UI
+    shadergrapheditor/shadergrapheditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\shadergrapheditor"
+    FILES
+    ${SHADERGRAPHEDITOR_SOURCES}
+    ${SHADERGRAPHEDITOR_UI}
+    )
+
+    
+    
 set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.cc
     textureeditor/textureeditor.hh
@@ -137,6 +163,7 @@ source_group(
 set(ALL_UI
     ${ASSETMANAGER_UI}
     ${SAMPLEREDITOR_UI}
+    ${SHADERGRAPHEDITOR_UI}
     ${TEXTUREEDITOR_UI}
     )
 
@@ -148,6 +175,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
+    ${SHADERGRAPHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}
     )
 

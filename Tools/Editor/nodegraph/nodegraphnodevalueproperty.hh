@@ -7,13 +7,14 @@
 class NodeGraphNodeValueProperty : public NodeGraphNodeProperty
 {
 public:
-  NodeGraphNodeValueProperty();
+  NodeGraphNodeValueProperty(NodeGraphNode *node);
   virtual ~NodeGraphNodeValueProperty();
 
 
   virtual QRectF GetMinSize();
   virtual void Paint(QPainter *painter);
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
+  virtual void SetAllAnchorsDisconnected();
 
   void SetAnchorShow(bool anchorShow)
   {
@@ -24,16 +25,6 @@ public:
   bool IsAnchorShow() const
   {
     return m_anchorShow;
-  }
-
-  void SetAnchorConnected(bool anchorConnected)
-  {
-    m_anchorConnected = anchorConnected;
-  }
-
-  bool IsAnchorConnected() const
-  {
-    return m_anchorConnected;
   }
 
   void SetShowValue(bool showValue)
@@ -89,7 +80,6 @@ private:
   float m_value;
   bool m_showValue;
   bool m_anchorShow;
-  bool m_anchorConnected;
 
   QColor m_anchorColor;
   QColor m_textColor;

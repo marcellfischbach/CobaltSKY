@@ -7,16 +7,19 @@
 #include <QString>
 
 class QPainter;
+class NodeGraphNode;
 class NodeGraphNodeAnchor;
 class NodeGraphNodeProperty
 {
 public:
-  NodeGraphNodeProperty();
+  NodeGraphNodeProperty(NodeGraphNode *node);
   ~NodeGraphNodeProperty();
 
   virtual QRectF GetMinSize() = 0;
   virtual void Paint(QPainter *painter) = 0;
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const = 0;
+
+  virtual void SetAllAnchorsDisconnected() = 0;
 
   void SetFont(const QFont &font)
   {
@@ -51,10 +54,16 @@ public:
     UpdateBounds();
   }
 
+  NodeGraphNode *GetNode() const
+  {
+    return m_node;
+  }
+
 protected:
   virtual void UpdateBounds() { }
 
 protected:
+  NodeGraphNode *m_node;
   NodeGraphNodePropertyType m_type;
   QString m_name;
   QFont m_font;

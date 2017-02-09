@@ -3,8 +3,8 @@
 #include <QPainter>
 
 
-NodeGraphNodeImageProperty::NodeGraphNodeImageProperty()
-  : NodeGraphNodeProperty()
+NodeGraphNodeImageProperty::NodeGraphNodeImageProperty(NodeGraphNode *node)
+  : NodeGraphNodeProperty(node)
 {
 
 }

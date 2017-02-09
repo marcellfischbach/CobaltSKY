@@ -6,12 +6,13 @@
 class NodeGraphNodeImageProperty : public NodeGraphNodeProperty
 {
 public:
-  NodeGraphNodeImageProperty();
+  NodeGraphNodeImageProperty(NodeGraphNode *node);
   virtual ~NodeGraphNodeImageProperty();
 
   virtual QRectF GetMinSize();
   virtual void Paint(QPainter *painter);
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const { return 0; }
+  virtual void SetAllAnchorsDisconnected() {}
 
   void SetImage(const QImage &image)
   {

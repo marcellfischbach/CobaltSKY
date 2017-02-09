@@ -5,6 +5,7 @@
 
 #include <editor.hh>
 #include <samplereditor/samplereditorfactory.hh>
+#include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <textureeditor/textureeditorfactory.hh>
 
 void EditorModule::Initialize()
@@ -14,5 +15,6 @@ void EditorModule::Initialize()
 
   Editor *editor = Editor::Get();
   editor->AddEditorFactory(new SamplerEditorFactory());
+  editor->AddEditorFactory(new ShaderGraphEditorFactory());
   editor->AddEditorFactory(new TextureEditorFactory());
 }

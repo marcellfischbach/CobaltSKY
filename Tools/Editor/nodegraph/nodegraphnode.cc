@@ -4,8 +4,11 @@
 #include <nodegraph/nodegraphnodeheader.hh>
 #include <nodegraph/nodegraphnodeproperty.hh>
 
+float NodeGraphNode::GridSize = 20.0f;
+
 NodeGraphNode::NodeGraphNode()
   : m_header(new NodeGraphNodeHeader())
+  , m_selected(false)
 {
 
 }
@@ -43,9 +46,37 @@ NodeGraphNodeAnchor *NodeGraphNode::GetAnchor(const QPointF &point) const
   return 0;
 }
 
-void NodeGraphNode::SetLocation(float x, float y)
+void NodeGraphNode::SetLocation(const QPointF &point)
 {
-  m_bounding = QRectF(x, y, m_bounding.width(), m_bounding.height());
+  m_position.setX((int)(point.x() / GridSize) * GridSize);
+  m_position.setY((int)(point.y() / GridSize) * GridSize);
+  UpdateBounding();
+}
+
+void NodeGraphNode::SetOffset(const QPointF &point)
+{
+  m_offset.setX((int)(point.x() / GridSize) * GridSize);
+  m_offset.setY((int)(point.y() / GridSize) * GridSize);
+  UpdateBounding();
+}
+
+void NodeGraphNode::CommitOffset()
+{
+  m_position += m_offset;
+  m_offset = QPointF(0.0f, 0.0f);
+  UpdateBounding();
+}
+
+void NodeGraphNode::CancelOffset()
+{
+  m_offset = QPointF(0.0f, 0.0f);
+  UpdateBounding();
+}
+
+void NodeGraphNode::UpdateBounding()
+{
+  QPointF p = m_position + m_offset;
+  m_bounding = QRectF(p.x(), p.y(), m_bounding.width(), m_bounding.height());
 }
 
 void NodeGraphNode::AddProperty(NodeGraphNodeProperty *nodeProperty)
@@ -84,6 +115,11 @@ void NodeGraphNode::paint(QPainter *painter)
 
 
   painter->fillRect(0, 0, m_bounding.width(), m_bounding.height(), QColor(0, 0, 0, 255));
+  if (m_selected)
+  {
+    painter->setPen(QPen(QColor(255, 255, 0, 255)));
+    painter->drawRect(-1, -1, m_bounding.width() + 2, m_bounding.height() + 2);
+  }
 
   QRectF headerSize = m_header->GetMinSize();
   m_header->Paint(painter);
@@ -169,4 +205,16 @@ void NodeGraphNode::Layout()
   }
 
 
+}
+
+void NodeGraphNode::SetAllAnchorsDisconnected()
+{
+  for (NodeGraphNodeProperty *prop : m_inputProperties)
+  {
+    prop->SetAllAnchorsDisconnected();
+  }
+  for (NodeGraphNodeProperty *prop : m_outputProperties)
+  {
+    prop->SetAllAnchorsDisconnected();
+  }
 }

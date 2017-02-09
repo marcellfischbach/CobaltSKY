@@ -9,18 +9,18 @@
 #define ANCHOR_SPACING 4
 
 
-NodeGraphNodeValueProperty::NodeGraphNodeValueProperty()
-  : NodeGraphNodeProperty()
+NodeGraphNodeValueProperty::NodeGraphNodeValueProperty(NodeGraphNode *node)
+  : NodeGraphNodeProperty(node)
   , m_anchorColor(255, 255, 255, 255)
   , m_textColor(255, 255, 255, 255)
   , m_anchor(0)
+  , m_anchorShow(false)
 {
 
 }
 
 NodeGraphNodeValueProperty::~NodeGraphNodeValueProperty()
 {
-
 
 }
 
@@ -33,7 +33,8 @@ void NodeGraphNodeValueProperty::UpdateBounds()
   }
   else if (m_anchorShow && !m_anchor)
   {
-    m_anchor = new NodeGraphNodeAnchor();
+    m_anchor = new NodeGraphNodeAnchor(m_node);
+    m_anchor->SetType(m_type);
   }
 
   int x = (int)m_bounds.x();
@@ -105,13 +106,13 @@ void NodeGraphNodeValueProperty::PaintInput(QPainter *painter)
   unsigned width = (unsigned)m_bounds.width();
   unsigned height = (unsigned)m_bounds.height();
   int lx = x;
-  if (m_anchorShow)
+  if (m_anchor)
   {
     painter->setPen(QPen(m_anchorColor));
     painter->drawEllipse(QPointF(x + ANCHOR_RADIUS_2 + 0.5f, y + height / 2 + 0.5f), ANCHOR_RADIUS_2 - 4, ANCHOR_RADIUS_2 - 4);
     lx += ANCHOR_RADIUS;
 
-    if (m_anchorConnected)
+    if (m_anchor->IsConnected())
     {
       QPainterPath path;
       path.addEllipse(QPointF(x + ANCHOR_RADIUS_2 + 0.5f, y + height / 2 + 0.5f), ANCHOR_RADIUS_2 - 6, ANCHOR_RADIUS_2 - 6);
@@ -139,10 +140,10 @@ void NodeGraphNodeValueProperty::PaintOutput(QPainter *painter)
 
   painter->setPen(QPen(m_anchorColor));
   painter->drawEllipse(QPoint(x + width - ANCHOR_RADIUS_2 + 0.5f, y + height / 2 + 0.5f), ANCHOR_RADIUS_2 - 4, ANCHOR_RADIUS_2 - 4);
-  if (m_anchorConnected)
+  if (m_anchor && m_anchor->IsConnected())
   {
     QPainterPath path;
-    path.addEllipse(QPointF(x + width - ANCHOR_RADIUS_2 + 0.5f, y + height / 2 + 0.5f), ANCHOR_RADIUS_2 - 6, ANCHOR_RADIUS_2 - 6);
+    path.addEllipse(QPointF(x + width - ANCHOR_RADIUS_2 , y + height / 2 ), ANCHOR_RADIUS_2 - 6, ANCHOR_RADIUS_2 - 6);
     painter->fillPath(path, QBrush(m_anchorColor));
   }
   int rx = x + width - ANCHOR_RADIUS;
@@ -159,4 +160,12 @@ NodeGraphNodeAnchor *NodeGraphNodeValueProperty::GetAnchor(const QPointF &point)
     return m_anchor;
   }
   return 0;
+}
+
+void NodeGraphNodeValueProperty::SetAllAnchorsDisconnected()
+{
+  if (m_anchor)
+  {
+    m_anchor->SetConnected(false);
+  }
 }
