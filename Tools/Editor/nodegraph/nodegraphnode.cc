@@ -117,8 +117,11 @@ void NodeGraphNode::paint(QPainter *painter)
   painter->fillRect(0, 0, m_bounding.width(), m_bounding.height(), QColor(0, 0, 0, 255));
   if (m_selected)
   {
-    painter->setPen(QPen(QColor(255, 255, 0, 255)));
-    painter->drawRect(-1, -1, m_bounding.width() + 2, m_bounding.height() + 2);
+    QPen pen(QColor(255, 255, 0, 255));
+    pen.setWidthF(2.0f);
+    painter->setPen(pen);
+
+    painter->drawRect(-1.0f, -1.0f, m_bounding.width() + 2, m_bounding.height() + 2);
   }
 
   QRectF headerSize = m_header->GetMinSize();
