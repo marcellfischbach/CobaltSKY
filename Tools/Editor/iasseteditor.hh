@@ -4,6 +4,7 @@
 #include <assetdescriptor.hh>
 #include <iasseteditor.refl.hh>
 #include <QWidget>
+#include <set>
 
 VK_INTERFACE()
 struct iAssetEditor : public iObject
@@ -17,4 +18,6 @@ struct iAssetEditor : public iObject
   virtual QWidget *GetWidget() = 0;
 
   virtual const vkString &GetName() const = 0;
+
+  virtual const std::set<vkString> &GetVisibleDockItems() const = 0;
 };

@@ -10,6 +10,7 @@ ShaderGraphEditor::ShaderGraphEditor()
   VK_CLASS_GEN_CONSTR;
   m_widget = new ShaderGraphEditorWidget(this);
   SetWidget(m_widget);
+  AddDockItemName("TestDock02");
 }
 
 ShaderGraphEditor::~ShaderGraphEditor()

@@ -56,3 +56,13 @@ const vkString &AbstractAssetEditor::GetName() const
   return m_name;
 }
 
+void AbstractAssetEditor::AddDockItemName(const vkString &dockItemName)
+{
+  m_visibleDockItems.insert(dockItemName);
+}
+
+const std::set<vkString> &AbstractAssetEditor::GetVisibleDockItems() const
+{
+  return m_visibleDockItems;
+}
+

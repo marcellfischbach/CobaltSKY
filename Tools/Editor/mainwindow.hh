@@ -15,6 +15,10 @@ public:
   bool ShowEditor(iAssetEditor *editor);
   void ShowWidget(QWidget *widget);
 
+  QWidget *GetCurrentTab () const;
+private slots:
+void on_tab_currentChanged(int index);
+
 private:
   QTabWidget *m_tab;
 };

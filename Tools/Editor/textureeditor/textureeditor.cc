@@ -12,6 +12,8 @@ TextureEditor::TextureEditor()
   VK_CLASS_GEN_CONSTR;
   m_widget = new TextureEditorWidget(this);
   SetWidget(m_widget);
+
+  AddDockItemName("TestDock01");
 }
 
 TextureEditor::~TextureEditor()

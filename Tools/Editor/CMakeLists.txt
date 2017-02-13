@@ -15,6 +15,8 @@ set(CMAKE_AUTOMOC ON)
 set(EDITOR_SOURCES
     abstractasseteditor.cc
     abstractasseteditor.hh
+    abstractdockitem.cc
+    abstractdockitem.hh
     assetdescriptor.cc
     assetdescriptor.hh
     main.cc
@@ -24,6 +26,7 @@ set(EDITOR_SOURCES
     editormodule.hh
     iasseteditor.hh
     iasseteditorfactory.hh
+    idockitem.hh
     mainwindow.cc
     mainwindow.hh
     renderwidget.cc
@@ -157,6 +160,20 @@ source_group(
     ${TEXTUREEDITOR_SOURCES}
     ${TEXTUREEDITOR_UI}
     )
+       
+set(TOOLBOX_SOURCES
+    toolbox/toolbox.cc
+    toolbox/toolbox.hh
+    )
+
+
+source_group(
+    "editor\\toolbox"
+    FILES
+    ${TOOLBOX_SOURCES}
+    )
+
+
 
 
 
@@ -177,6 +194,7 @@ set(ALL_SOURCES
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}
+    ${TOOLBOX_SOURCES}
     )
 
 add_executable(

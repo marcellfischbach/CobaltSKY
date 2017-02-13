@@ -20,9 +20,11 @@ public:
   virtual QWidget *GetWidget();
 
   virtual const vkString &GetName() const;
+  virtual const std::set<vkString> &GetVisibleDockItems() const;
 
 protected:
   virtual void OpenAsset() = 0;
+  void AddDockItemName(const vkString &dockItemName);
 
 private:
   AssetDescriptor m_assetDescriptor;
@@ -30,4 +32,5 @@ private:
   QWidget *m_widget;
 
   vkString m_name;
+  std::set<vkString> m_visibleDockItems;
 };

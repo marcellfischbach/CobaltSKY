@@ -3,19 +3,21 @@
 #include <QTabWidget>
 
 #include <iasseteditor.hh>
+#include <editor.hh>
 
 MainWindow::MainWindow()
   : QMainWindow()
 {
   m_tab = new QTabWidget(this);
   setCentralWidget(m_tab);
+
+  connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(on_tab_currentChanged(int)));
 }
 
 MainWindow::~MainWindow()
 {
 
 }
-
 
 bool MainWindow::ShowEditor(iAssetEditor *editor)
 {
@@ -48,4 +50,14 @@ void MainWindow::ShowWidget(QWidget *widget)
     idx = m_tab->addTab(widget, "OpenGL-Test");
   }
   m_tab->setCurrentIndex(idx);
+}
+
+QWidget *MainWindow::GetCurrentTab() const
+{
+  return m_tab->currentWidget();
+}
+
+void MainWindow::on_tab_currentChanged(int idx)
+{
+  Editor::Get()->UpdateVisibleDockItemsFromCurrentEditor();
 }

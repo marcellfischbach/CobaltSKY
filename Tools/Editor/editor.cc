@@ -2,6 +2,7 @@
 #include <editor.hh>
 #include <editormodule.hh>
 #include <iasseteditor.hh>
+#include <idockitem.hh>
 #include <mainwindow.hh>
 #include <renderwidget.hh>
 #include <assetmanager/assetmanagerdock.hh>
@@ -16,6 +17,29 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QOffscreenSurface>
+#include <abstractdockitem.hh>
+
+class Test1DockItem : public AbstractDockItem
+{
+public:
+  Test1DockItem()
+    : AbstractDockItem("TestDock01", "Test Dock 01", Qt::LeftDockWidgetArea)
+  {
+    QFrame *frame = new QFrame();
+    SetWidget(frame);
+  }
+};
+
+class Test2DockItem : public AbstractDockItem
+{
+public:
+  Test2DockItem()
+    : AbstractDockItem("TestDock02", "Test Dock 02", Qt::LeftDockWidgetArea)
+  {
+    QFrame *frame = new QFrame();
+    SetWidget(frame);
+  }
+};
 
 Editor::Editor()
   : m_mainWindow(0)
@@ -47,6 +71,9 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->resize(1024, 768);
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
+
+  AddDockItem(new Test1DockItem());
+  AddDockItem(new Test2DockItem());
 
   QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
   offscreenSurface->create();
@@ -113,12 +140,28 @@ void Editor::OpenAsset(const AssetDescriptor &desc)
   }
 
 
-  if (m_mainWindow->ShowEditor(editor))
+  m_openEditors[desc] = editor;
+  if (!m_mainWindow->ShowEditor(editor))
   {
-    m_openEditors[desc] = editor;
+    m_openEditors.erase(desc);
   }
 
 
+}
+
+iAssetEditor *Editor::FindCurrentEditor()
+{
+  QWidget *tabWidget = m_mainWindow->GetCurrentTab();
+  for (std::map<AssetDescriptor, iAssetEditor*>::iterator it = m_openEditors.begin();
+       it != m_openEditors.end();
+       ++it)
+  {
+    if (it->second->GetWidget() == tabWidget)
+    {
+      return it->second;
+    }
+  }
+  return 0;
 }
 
 vkString Editor::ConvertToResourcePath(const vkString &filePath) const
@@ -165,4 +208,32 @@ QRect Editor::GetScreenSize()
   int screen = desktop->screenNumber(m_mainWindow);
   QWidget *widget = desktop->screen(screen);
   return QRect(0, 0, widget->width(), widget->height());
+}
+
+
+void Editor::AddDockItem(iDockItem *dockItem)
+{
+  m_dockItems.push_back(dockItem);
+  m_mainWindow->addDockWidget(dockItem->GetDockArea(), dockItem->GetDockWidget());
+}
+
+
+void Editor::UpdateVisibleDockItemsFromCurrentEditor()
+{
+  std::set<vkString> dockNames;
+  iAssetEditor *currentEditor = FindCurrentEditor();
+  if (currentEditor)
+  {
+    dockNames = currentEditor->GetVisibleDockItems();
+  }
+
+  UpdateVisibleDockItems(dockNames);
+}
+void Editor::UpdateVisibleDockItems(const std::set<vkString> &dockNames)
+{
+  for (iDockItem *dockItem : m_dockItems)
+  {
+    bool visible = dockNames.find(dockItem->GetName()) != dockNames.end();
+    dockItem->GetDockWidget()->setVisible(visible);
+  }
 }

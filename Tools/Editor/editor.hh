@@ -6,6 +6,7 @@
 #include <QDir>
 #include <vector>
 #include <map>
+#include <set>
 #include <QOpenGLContext>
 
 class MainWindow;
@@ -13,6 +14,8 @@ class AssetManagerWidget;
 class vkEngine;
 class vkGraphicsGL4;
 struct iPhysicsSystem;
+struct iDockItem;
+
 
 VK_INTERFACE()
 class Editor : public iObject
@@ -36,6 +39,7 @@ public:
   void AddEditorFactory(iAssetEditorFactory *factory);
   void OpenAsset(const AssetDescriptor &descriptor);
 
+  iAssetEditor *FindCurrentEditor();
 
   QRect GetScreenSize();
 
@@ -46,7 +50,11 @@ public:
 
   vkGraphicsGL4 *GetGraphics();
  
+  void AddDockItem(iDockItem *item);
+  void UpdateVisibleDockItemsFromCurrentEditor();
+  void UpdateVisibleDockItems(const std::set<vkString> &visibleDocks);
 
+  
 private:
   Editor();
 
@@ -64,5 +72,6 @@ private:
   vkGraphicsGL4 *m_graphics;
   iPhysicsSystem *m_physicsSystem;
   QOpenGLContext *m_openglContext;
+  std::vector<iDockItem*> m_dockItems;
 
 };

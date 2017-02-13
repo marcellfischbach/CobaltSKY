@@ -15,6 +15,9 @@ SamplerEditor::SamplerEditor()
   VK_CLASS_GEN_CONSTR;
   m_widget = new SamplerEditorWidget(this);
   SetWidget(m_widget);
+
+  AddDockItemName("TestDock01");
+  AddDockItemName("TestDock02");
 }
 
 SamplerEditor::~SamplerEditor()
