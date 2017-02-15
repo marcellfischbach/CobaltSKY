@@ -120,11 +120,16 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditor.hh
     shadergrapheditor/shadergrapheditorfactory.cc
     shadergrapheditor/shadergrapheditorfactory.hh
+    shadergrapheditor/shadergrapheditortoolbox.cc
+    shadergrapheditor/shadergrapheditortoolbox.hh
+    shadergrapheditor/shadergrapheditortoolboxmodel.cc
+    shadergrapheditor/shadergrapheditortoolboxmodel.hh
     shadergrapheditor/shadergrapheditorwidget.cc
     shadergrapheditor/shadergrapheditorwidget.hh
     )
 
 set(SHADERGRAPHEDITOR_UI
+    shadergrapheditor/shadergrapheditortoolbox.ui
     shadergrapheditor/shadergrapheditorwidget.ui
     )
 

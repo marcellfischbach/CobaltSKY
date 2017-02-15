@@ -13,6 +13,7 @@
 #include <physicsbullet/bulletsystem.hh>
 
 #include <nodegraph/nodegraphwidget.hh>
+#include <toolbox/toolbox.hh>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -72,8 +73,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
-  AddDockItem(new Test1DockItem());
-  AddDockItem(new Test2DockItem());
+  AddDockItem(new Toolbox());
 
   QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
   offscreenSurface->create();
@@ -217,11 +217,33 @@ void Editor::AddDockItem(iDockItem *dockItem)
   m_mainWindow->addDockWidget(dockItem->GetDockArea(), dockItem->GetDockWidget());
 }
 
+iDockItem *Editor::GetDockItem(const vkString &dockItemName) const
+{
+  for (iDockItem *dockItem : m_dockItems)
+  {
+    if (dockItem->GetName() == dockItemName)
+    {
+      return dockItem;
+    }
+  }
+  return 0;
+}
 
-void Editor::UpdateVisibleDockItemsFromCurrentEditor()
+void Editor::CurrentEditorChanged()
+{
+  iAssetEditor *currentEditor = FindCurrentEditor();
+
+  UpdateVisibleDockItemsFromEditor(currentEditor);
+
+  if (currentEditor)
+  {
+    currentEditor->PopulateDockItems();
+  }
+}
+
+void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
 {
   std::set<vkString> dockNames;
-  iAssetEditor *currentEditor = FindCurrentEditor();
   if (currentEditor)
   {
     dockNames = currentEditor->GetVisibleDockItems();

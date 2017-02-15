@@ -66,3 +66,7 @@ const std::set<vkString> &AbstractAssetEditor::GetVisibleDockItems() const
   return m_visibleDockItems;
 }
 
+void AbstractAssetEditor::PopulateDockItems()
+{
+  // don't do anything... override in subclasses
+}

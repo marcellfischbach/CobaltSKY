@@ -51,7 +51,9 @@ public:
   vkGraphicsGL4 *GetGraphics();
  
   void AddDockItem(iDockItem *item);
-  void UpdateVisibleDockItemsFromCurrentEditor();
+  iDockItem *GetDockItem(const vkString &dockItemName) const;
+  void CurrentEditorChanged();
+  void UpdateVisibleDockItemsFromEditor(iAssetEditor *editor);
   void UpdateVisibleDockItems(const std::set<vkString> &visibleDocks);
 
   

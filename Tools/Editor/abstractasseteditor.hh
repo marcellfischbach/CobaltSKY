@@ -21,6 +21,7 @@ public:
 
   virtual const vkString &GetName() const;
   virtual const std::set<vkString> &GetVisibleDockItems() const;
+  virtual void PopulateDockItems();
 
 protected:
   virtual void OpenAsset() = 0;

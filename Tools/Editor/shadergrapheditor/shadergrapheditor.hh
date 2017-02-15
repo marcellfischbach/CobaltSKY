@@ -7,6 +7,7 @@
 #include <shadergrapheditor/shadergrapheditor.refl.hh>
 #include <valkyrie/vkenums.hh>
 
+class ShaderGraphEditorToolbox;
 class ShaderGraphEditorWidget;
 
 VK_CLASS()
@@ -18,10 +19,12 @@ public:
   ShaderGraphEditor();
   ~ShaderGraphEditor();
 
+  virtual void PopulateDockItems();
 
 protected:
   void OpenAsset();
 
 private:
+  ShaderGraphEditorToolbox *m_toolbox;
   ShaderGraphEditorWidget *m_widget;
 };

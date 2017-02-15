@@ -20,4 +20,5 @@ struct iAssetEditor : public iObject
   virtual const vkString &GetName() const = 0;
 
   virtual const std::set<vkString> &GetVisibleDockItems() const = 0;
+  virtual void PopulateDockItems() = 0;
 };

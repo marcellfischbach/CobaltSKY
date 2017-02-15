@@ -59,5 +59,5 @@ QWidget *MainWindow::GetCurrentTab() const
 
 void MainWindow::on_tab_currentChanged(int idx)
 {
-  Editor::Get()->UpdateVisibleDockItemsFromCurrentEditor();
+  Editor::Get()->CurrentEditorChanged();
 }

@@ -1,7 +1,9 @@
 
 #include <shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
-
+#include <editor.hh>
+#include <toolbox/toolbox.hh>
 
 
 ShaderGraphEditor::ShaderGraphEditor()
@@ -10,7 +12,9 @@ ShaderGraphEditor::ShaderGraphEditor()
   VK_CLASS_GEN_CONSTR;
   m_widget = new ShaderGraphEditorWidget(this);
   SetWidget(m_widget);
-  AddDockItemName("TestDock02");
+
+  m_toolbox = new ShaderGraphEditorToolbox();
+  AddDockItemName(TOOLBOX_DOCK_NAME);
 }
 
 ShaderGraphEditor::~ShaderGraphEditor()
@@ -27,4 +31,10 @@ void ShaderGraphEditor::OpenAsset()
   iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator(descriptor.GetAssetResourceName()));
   m_widget->SetTexture(texture);
   */
+}
+
+void ShaderGraphEditor::PopulateDockItems()
+{
+  Toolbox *toolbox = static_cast<Toolbox*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
+  toolbox->SetContent(m_toolbox);
 }
