@@ -15,10 +15,12 @@ NodeGraphWidget::NodeGraphWidget(QWidget *parent)
   : QWidget(parent)
   , m_dragAnchor(0)
   , m_moveSelectedNodes(false)
+  , m_armTranslation(false)
   , m_rubberBand(false)
   , m_scale(1.0f)
   , m_translate(0.0f, 0.0f)
 {
+  setFocusPolicy(Qt::StrongFocus);
 }
 
 NodeGraphWidget::~NodeGraphWidget()
@@ -36,6 +38,11 @@ void NodeGraphWidget::AddNode(NodeGraphNode *node)
 
 void NodeGraphWidget::RemoveNode(NodeGraphNode *node)
 {
+  QList<NodeGraphNodeAnchor*> anchors = node->GetAllAnchors();
+  for (NodeGraphNodeAnchor *anchor : anchors)
+  {
+    DisconnectAll(anchor);
+  }
   m_nodes.removeAll(node);
 
   repaint();
@@ -332,6 +339,27 @@ void NodeGraphWidget::mouseReleaseEvent(QMouseEvent *event)
   }
 }
 
+void NodeGraphWidget::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_Delete)
+  {
+    QList<NodeGraphNode*> nodes(m_selectedNodes);
+    NodeGraphVetoEvent veto;
+    emit RequestRemoveNode(nodes, &veto);
+    if (veto.IsVeto())
+    {
+      return;
+    }
+    m_selectedNodes.clear();
+    for (NodeGraphNode *node : nodes)
+    {
+      RemoveNode(node);
+      delete node;
+    }
+    nodes.clear();
+  }
+}
+
 void NodeGraphWidget::wheelEvent(QWheelEvent *event)
 {
   int delta = event->angleDelta().y();
@@ -352,6 +380,38 @@ void NodeGraphWidget::wheelEvent(QWheelEvent *event)
   }
   emit ScaleChanged(m_scale);
   repaint();
+}
+
+
+void NodeGraphWidget::dragEnterEvent(QDragEnterEvent *event)
+{
+  NodeGraphAcceptEvent accept;
+  emit CheckDrag(event, &accept);
+  if (accept.IsAccepted())
+  {
+    event->accept();
+  }
+}
+
+void NodeGraphWidget::dragMoveEvent(QDragMoveEvent *event)
+{
+  NodeGraphAcceptEvent accept;
+  emit CheckDrag(event, &accept);
+  if (accept.IsAccepted())
+  {
+    event->accept();
+  }
+}
+
+void NodeGraphWidget::dropEvent(QDropEvent *event)
+{
+  NodeGraphAcceptEvent accept;
+  emit CheckDrag(event, &accept);
+  if (accept.IsAccepted())
+  {
+    emit DragDropped(event);
+    event->accept();
+  }
 }
 
 void NodeGraphWidget::SelectByRubberBand()
@@ -434,4 +494,11 @@ bool NodeGraphWidget::Connection::operator==(const NodeGraphWidget::Connection &
     || m_anchorA == other.m_anchorB && m_anchorB == other.m_anchorA;
 }
 
+
+
+
+QPointF NodeGraphWidget::GetLocalCoordinate(const QPoint &screenCoordinate)
+{
+  return map(screenCoordinate);
+}
 

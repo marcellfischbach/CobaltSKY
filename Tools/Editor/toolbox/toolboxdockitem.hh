@@ -7,11 +7,11 @@
 
 class QGridLayout;
 class QFrame;
-class Toolbox : public AbstractDockItem
+class ToolboxDockItem : public AbstractDockItem
 {
 public:
-	Toolbox();
-	virtual ~Toolbox();
+  ToolboxDockItem();
+	virtual ~ToolboxDockItem();
 
   void SetContent(QWidget *widget);
 

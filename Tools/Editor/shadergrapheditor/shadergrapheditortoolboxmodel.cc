@@ -2,6 +2,8 @@
 
 #include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 #include <valkyrie/graphics/shadergraph/vksgnodes.hh>
+#include <QMimeData>
+#include <QDataStream>
 
 
 ShaderGraphEditorToolboxModel::ShaderGraphEditorToolboxModel()
@@ -25,7 +27,7 @@ void ShaderGraphEditorToolboxModel::CreateModelData(const QString &filter)
   for (const vkSGNodes::Entry &entry : nodes->GetEntries())
   {
     QString v(entry.name.c_str());
-    if (filter.isEmpty() || v.contains(filter))
+    if (filter.isEmpty() || v.contains(filter, Qt::CaseInsensitive))
     {
       Data *data = fromString(entry.name);
       data->cls = entry.clazz;
@@ -140,5 +142,43 @@ QVariant ShaderGraphEditorToolboxModel::data(const QModelIndex &index, int role)
     break;
   }
   return QVariant();
+}
+
+Qt::ItemFlags ShaderGraphEditorToolboxModel::flags(const QModelIndex &index) const
+{
+  Qt::ItemFlags flags = QAbstractItemModel::flags(index);
+  Data *data = reinterpret_cast<Data*>(index.internalPointer());
+  if (data && data->cls)
+  {
+    flags |= Qt::ItemIsDragEnabled;
+  }
+  return flags;
+}
+
+QStringList ShaderGraphEditorToolboxModel::mimeTypes() const
+{
+  QStringList types;
+  types << SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME;
+  return types;
+}
+
+QMimeData *ShaderGraphEditorToolboxModel::mimeData(const QModelIndexList &indexes) const
+{
+  QMimeData *mimeData = new QMimeData();
+  QByteArray encodedData;
+
+  QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+  for(const QModelIndex &index : indexes) 
+  {
+    Data *data = reinterpret_cast<Data*>(index.internalPointer());
+    if (data && data->cls)
+    {
+      stream << QString(data->cls->GetName().c_str());
+    }
+  }
+
+  mimeData->setData(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME, encodedData);
+  return mimeData;
 }
 

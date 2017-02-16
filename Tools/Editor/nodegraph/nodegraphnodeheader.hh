@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColor>
 #include <QFont>
 #include <QString>
 #include <QRectF>
@@ -66,6 +67,19 @@ public:
     UpdateBounds();
   }
 
+  void SetColor0(const QColor &color)
+  {
+    m_color0 = color;
+  }
+  void SetColor1(const QColor &color)
+  {
+    m_color1 = color;
+  }
+  void SetTestColor(const QColor &color)
+  {
+    m_textColor = color;
+  }
+
   void Paint(QPainter *painter);
 
 protected:
@@ -85,4 +99,8 @@ private:
 
   NodeGraphNodeAnchor *m_leftAnchor;
   NodeGraphNodeAnchor *m_rightAnchor;
+
+  QColor m_color0;
+  QColor m_color1;
+  QColor m_textColor;
 };

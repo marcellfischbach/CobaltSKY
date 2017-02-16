@@ -3,7 +3,8 @@
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <editor.hh>
-#include <toolbox/toolbox.hh>
+#include <toolbox/toolboxdockitem.hh>
+#include <properties/propertiesdockitem.hh>
 
 
 ShaderGraphEditor::ShaderGraphEditor()
@@ -15,6 +16,8 @@ ShaderGraphEditor::ShaderGraphEditor()
 
   m_toolbox = new ShaderGraphEditorToolbox();
   AddDockItemName(TOOLBOX_DOCK_NAME);
+
+  AddDockItemName(PROPERTIES_DOCK_NAME);
 }
 
 ShaderGraphEditor::~ShaderGraphEditor()
@@ -35,6 +38,6 @@ void ShaderGraphEditor::OpenAsset()
 
 void ShaderGraphEditor::PopulateDockItems()
 {
-  Toolbox *toolbox = static_cast<Toolbox*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
+  ToolboxDockItem *toolbox = static_cast<ToolboxDockItem*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
   toolbox->SetContent(m_toolbox);
 }

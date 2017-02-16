@@ -17,6 +17,9 @@ NodeGraphNodeHeader::NodeGraphNodeHeader()
   , m_name("Unnamed")
   , m_leftAnchor(0)
   , m_rightAnchor(0)
+  , m_color0(0, 0, 0)
+  , m_color1(0, 0, 0)
+  , m_textColor(255, 255, 255)
 {
 
 }
@@ -86,10 +89,10 @@ void NodeGraphNodeHeader::Paint(QPainter *painter)
   unsigned height = (unsigned)m_bounds.height();
 
   QLinearGradient linGrad(0, 0, width, 0);
-  linGrad.setColorAt(0.0f, QColor(255, 0, 0));
-  linGrad.setColorAt(1.0f, QColor(0, 0, 0));
+  linGrad.setColorAt(0.0f, m_color0);
+  linGrad.setColorAt(1.0f, m_color1);
   painter->fillRect(x, y, width, height, linGrad);
-  painter->setPen(QPen(QColor(255, 255, 255)));
+  painter->setPen(QPen(m_textColor));
   unsigned lx = x + CONNECTOR_SPACING;
   unsigned rx = x + width - CONNECTOR_SPACING;
 

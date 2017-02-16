@@ -13,34 +13,15 @@
 #include <physicsbullet/bulletsystem.hh>
 
 #include <nodegraph/nodegraphwidget.hh>
-#include <toolbox/toolbox.hh>
+#include <toolbox/toolboxdockitem.hh>
+#include <properties/propertiesdockitem.hh>
 
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QOffscreenSurface>
 #include <abstractdockitem.hh>
 
-class Test1DockItem : public AbstractDockItem
-{
-public:
-  Test1DockItem()
-    : AbstractDockItem("TestDock01", "Test Dock 01", Qt::LeftDockWidgetArea)
-  {
-    QFrame *frame = new QFrame();
-    SetWidget(frame);
-  }
-};
 
-class Test2DockItem : public AbstractDockItem
-{
-public:
-  Test2DockItem()
-    : AbstractDockItem("TestDock02", "Test Dock 02", Qt::LeftDockWidgetArea)
-  {
-    QFrame *frame = new QFrame();
-    SetWidget(frame);
-  }
-};
 
 Editor::Editor()
   : m_mainWindow(0)
@@ -73,7 +54,8 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
-  AddDockItem(new Toolbox());
+  AddDockItem(new ToolboxDockItem());
+  AddDockItem(new PropertiesDockItem());
 
   QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
   offscreenSurface->create();

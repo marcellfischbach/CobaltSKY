@@ -11,10 +11,11 @@ class NodeGraphNode
 {
 public:
   NodeGraphNode();
-  ~NodeGraphNode();
+  virtual ~NodeGraphNode();
 
   bool TestHandle(const QPointF &point) const;
   NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
+  QList<NodeGraphNodeAnchor*> GetAllAnchors() const;
 
   void Layout();
 

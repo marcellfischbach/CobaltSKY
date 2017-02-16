@@ -1,9 +1,12 @@
 #pragma once
 
 
-#include <QWidget>
 
 #include <QList>
+#include <QMimeData>
+#include <QWidget>
+
+#include <nodegraph/nodegraphacceptevent.hh>
 #include <nodegraph/nodegraphvetoevent.hh>
 
 
@@ -25,12 +28,17 @@ public:
 
   void ClearSelection();
 
+  QPointF GetLocalCoordinate(const QPoint &screenCoord);
 protected:
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
   void wheelEvent(QWheelEvent *event);
   void paintEvent(QPaintEvent *event);
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dragMoveEvent(QDragMoveEvent *event);
+  void dropEvent(QDropEvent *event);
 
   NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
 
@@ -39,10 +47,14 @@ signals:
   void CheckConnection(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB, NodeGraphVetoEvent *veto);
   void AboutToConnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void Connected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
+  void RequestRemoveNode(QList<NodeGraphNode*> node, NodeGraphVetoEvent *veto);
 
   void AboutToDisconnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void Disconnected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void ScaleChanged(float scale);
+
+  void CheckDrag(const QDropEvent *event, NodeGraphAcceptEvent *accept);
+  void DragDropped(const QDropEvent *event);
 
 private:
   struct Connection

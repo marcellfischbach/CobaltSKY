@@ -3,7 +3,12 @@
 #include <QAbstractItemModel>
 #include <vector>
 #include <valkyrie/core/vkstring.hh>
+
+#define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/vkClassName"
+
 class vkClass;
+
+
 
 class ShaderGraphEditorToolboxModel : public QAbstractItemModel
 {
@@ -17,7 +22,9 @@ public:
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+  virtual QStringList mimeTypes() const;
+  virtual QMimeData *ShaderGraphEditorToolboxModel::mimeData(const QModelIndexList &indexes) const;
   void CreateModelData(const QString &filter);
 private:
   struct Data

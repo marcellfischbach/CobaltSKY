@@ -63,6 +63,8 @@ source_group(
 
 
 set(NODEGRAPH_SOURCES
+    nodegraph/nodegraphacceptevent.cc
+    nodegraph/nodegraphacceptevent.hh
     nodegraph/nodegraphnode.cc
     nodegraph/nodegraphnode.hh
     nodegraph/nodegraphnodeanchor.cc
@@ -82,6 +84,7 @@ set(NODEGRAPH_SOURCES
     nodegraph/nodegraphwidget.hh
     )
 
+    
 
 source_group(
     "editor\\nodegraph"
@@ -89,6 +92,19 @@ source_group(
     ${NODEGRAPH_SOURCES}
     )
 
+
+           
+set(PROPERTIES_SOURCES
+    properties/propertiesdockitem.cc
+    properties/propertiesdockitem.hh
+    )
+
+
+source_group(
+    "editor\\properties"
+    FILES
+    ${PROPERTIES_SOURCES}
+    )
 
 
 
@@ -120,6 +136,10 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditor.hh
     shadergrapheditor/shadergrapheditorfactory.cc
     shadergrapheditor/shadergrapheditorfactory.hh
+    shadergrapheditor/shadergrapheditornode.cc
+    shadergrapheditor/shadergrapheditornode.hh
+    shadergrapheditor/shadergrapheditorproperties.cc
+    shadergrapheditor/shadergrapheditorproperties.hh
     shadergrapheditor/shadergrapheditortoolbox.cc
     shadergrapheditor/shadergrapheditortoolbox.hh
     shadergrapheditor/shadergrapheditortoolboxmodel.cc
@@ -167,8 +187,8 @@ source_group(
     )
        
 set(TOOLBOX_SOURCES
-    toolbox/toolbox.cc
-    toolbox/toolbox.hh
+    toolbox/toolboxdockitem.cc
+    toolbox/toolboxdockitem.hh
     )
 
 
@@ -196,6 +216,7 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
     ${NODEGRAPH_SOURCES}
+    ${PROPERTIES_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}

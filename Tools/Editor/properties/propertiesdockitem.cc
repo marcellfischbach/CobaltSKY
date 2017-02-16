@@ -1,11 +1,11 @@
 
 
-#include <toolbox/toolbox.hh>
+#include <properties/propertiesdockitem.hh>
 #include <QFrame>
 #include <QGridLayout>
 
-Toolbox::Toolbox()
-  : AbstractDockItem(TOOLBOX_DOCK_NAME, "Toolbox", Qt::LeftDockWidgetArea)
+PropertiesDockItem::PropertiesDockItem()
+  : AbstractDockItem(PROPERTIES_DOCK_NAME, "Properties", Qt::RightDockWidgetArea)
   , m_content(0)
 {
   m_frame = new QFrame();
@@ -14,12 +14,12 @@ Toolbox::Toolbox()
   SetWidget(m_frame);
 }
 
-Toolbox::~Toolbox()
+PropertiesDockItem::~PropertiesDockItem()
 {
 
 }
 
-void Toolbox::SetContent(QWidget *content)
+void PropertiesDockItem::SetContent(QWidget *content)
 {
   if (m_content)
   {

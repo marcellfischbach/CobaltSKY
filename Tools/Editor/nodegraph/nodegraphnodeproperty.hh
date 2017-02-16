@@ -18,6 +18,7 @@ public:
   virtual QRectF GetMinSize() = 0;
   virtual void Paint(QPainter *painter) = 0;
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const = 0;
+  virtual void CollectAllAnchors(QList<NodeGraphNodeAnchor*> &result) const = 0;
 
   virtual void SetAllAnchorsDisconnected() = 0;
 

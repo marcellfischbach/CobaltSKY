@@ -37,6 +37,11 @@ void NodeGraphNodeValueProperty::UpdateBounds()
     m_anchor->SetType(m_type);
   }
 
+  if (!m_anchor)
+  {
+    return;
+  }
+
   int x = (int)m_bounds.x();
   int y = (int)m_bounds.y();
   unsigned width = (unsigned)m_bounds.width();
@@ -160,6 +165,11 @@ NodeGraphNodeAnchor *NodeGraphNodeValueProperty::GetAnchor(const QPointF &point)
     return m_anchor;
   }
   return 0;
+}
+
+void NodeGraphNodeValueProperty::CollectAllAnchors(QList<NodeGraphNodeAnchor*> &result) const
+{
+  result.append(m_anchor);
 }
 
 void NodeGraphNodeValueProperty::SetAllAnchorsDisconnected()

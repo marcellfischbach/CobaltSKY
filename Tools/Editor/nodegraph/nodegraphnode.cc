@@ -15,7 +15,19 @@ NodeGraphNode::NodeGraphNode()
 
 NodeGraphNode::~NodeGraphNode()
 {
+  delete m_header;
+  m_header = 0;
 
+  for (NodeGraphNodeProperty *prop : m_inputProperties)
+  {
+    delete prop;
+  }
+  m_inputProperties.clear();
+  for (NodeGraphNodeProperty *prop : m_outputProperties)
+  {
+    delete prop;
+  }
+  m_outputProperties.clear();
 }
 
 bool NodeGraphNode::TestHandle(const QPointF &point) const
@@ -44,6 +56,21 @@ NodeGraphNodeAnchor *NodeGraphNode::GetAnchor(const QPointF &point) const
     }
   }
   return 0;
+}
+
+QList<NodeGraphNodeAnchor*> NodeGraphNode::GetAllAnchors() const
+{
+  QList<NodeGraphNodeAnchor*> result;
+
+  for (NodeGraphNodeProperty *prop : m_inputProperties)
+  {
+    prop->CollectAllAnchors(result);
+  }
+  for (NodeGraphNodeProperty *prop : m_outputProperties)
+  {
+    prop->CollectAllAnchors(result);
+  }
+  return result;
 }
 
 void NodeGraphNode::SetLocation(const QPointF &point)
