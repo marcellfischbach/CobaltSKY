@@ -629,7 +629,7 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
 #EXCLUDE                = ../../ValkyrieEngine/csengine/gfx/gl4 ../../src/csengine/compute/cl ../../src/csengine/physics ../../src/csengine/phys/physx3 ../../src/csengine/phys/bullet2
-EXCLUDE                = 
+EXCLUDE                = ../../ValkrieEngine/graphicsgl4 ../../ValkyrieEngine/physicsbullet ../../ValkyrieEngine/runner ../../ValkyrieEngine/windowssdl
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -792,7 +792,7 @@ COLS_IN_ALPHA_INDEX    = 3
 # The IGNORE_PREFIX tag can be used to specify one or more prefixes that
 # should be ignored while generating the index headers.
 
-IGNORE_PREFIX          = I vk Ti
+IGNORE_PREFIX          = i vk Ti
 
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output

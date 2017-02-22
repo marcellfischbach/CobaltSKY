@@ -94,6 +94,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     prop->SetValue(input->GetConst());
     prop->SetName(QString(input->GetName().c_str()));
     AddInputProperty(prop);
+    m_valueProperties[i] = prop;
   }
 
   for (vkSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
@@ -126,5 +127,24 @@ vkSGShaderGraph *ShaderGraphEditorNode::GetShaderGraph() const
 vkSGNode *ShaderGraphEditorNode::GetSGNode() const
 {
   return m_sgNode;
+}
+
+
+void ShaderGraphEditorNode::UpdateConstInputValues()
+{
+  if (!m_sgNode)
+  {
+    return;
+  }
+  for (std::map<unsigned, NodeGraphNodeValueProperty*>::iterator it = m_valueProperties.begin();
+    it != m_valueProperties.end();
+    ++it) 
+  {
+    vkSGInput *input = m_sgNode->GetInput(it->first);
+    if (input && it->second)
+    {
+      it->second->SetValue(input->GetConst());
+    }
+  }
 }
 

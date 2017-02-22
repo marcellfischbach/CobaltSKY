@@ -192,13 +192,17 @@ void NodeGraphWidget::paintEvent(QPaintEvent *event)
 
 }
 
-void NodeGraphWidget::ClearSelection()
+void NodeGraphWidget::ClearSelection(bool emitSignal)
 {
   for (NodeGraphNode *node : m_selectedNodes)
   {
     node->SetSelected(false);
   }
   m_selectedNodes.clear();
+  if (emitSignal)
+  {
+    emit SelectionChanged(m_selectedNodes);
+  }
 }
 
 void NodeGraphWidget::mousePressEvent(QMouseEvent *event)
@@ -220,9 +224,10 @@ void NodeGraphWidget::mousePressEvent(QMouseEvent *event)
         {
           if (!addSelection)
           {
-            ClearSelection();
+            ClearSelection(false);
           }
           m_selectedNodes.push_back(node);
+          emit SelectionChanged(m_selectedNodes);
           node->SetSelected(true);
           SortNodesBySelection();
         }
@@ -246,7 +251,7 @@ void NodeGraphWidget::mousePressEvent(QMouseEvent *event)
     }
     m_rubberBand = true;
   }
-  else if (event->button() == Qt::MiddleButton)
+  else if (event->button() == Qt::RightButton)
   {
     m_armTranslation = true;
     m_transStart = event->pos();
@@ -331,7 +336,7 @@ void NodeGraphWidget::mouseReleaseEvent(QMouseEvent *event)
 
     repaint();
   }
-  if (event->button() == Qt::MiddleButton)
+  if (event->button() == Qt::RightButton)
   { 
     m_armTranslation = false;
     m_translate += m_translateOffset;
@@ -357,6 +362,7 @@ void NodeGraphWidget::keyReleaseEvent(QKeyEvent *event)
       delete node;
     }
     nodes.clear();
+    emit SelectionChanged(m_selectedNodes);
   }
 }
 
@@ -423,6 +429,7 @@ void NodeGraphWidget::SelectByRubberBand()
     {
       node->SetSelected(true);
       m_selectedNodes.push_back(node);
+      emit SelectionChanged(m_selectedNodes);
     }
   }
 }
@@ -471,6 +478,10 @@ void NodeGraphWidget::UpdateAnchorConnectionState()
   {
     con.m_anchorA->SetConnected(true);
     con.m_anchorB->SetConnected(true);
+  }
+  for (NodeGraphNode *node : m_nodes)
+  {
+    node->Layout();
   }
 }
 

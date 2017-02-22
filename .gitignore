@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
@@ -12,3 +12,4 @@
 /data/models/mine2.staticmesh
 /data/models/mine.asset
 /data/materials/AnotherMaterial.asset
+.vs/

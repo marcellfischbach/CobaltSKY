@@ -26,7 +26,7 @@ public:
   void Disconnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void DisconnectAll(NodeGraphNodeAnchor *anchor);
 
-  void ClearSelection();
+  void ClearSelection(bool emitSignal = true);
 
   QPointF GetLocalCoordinate(const QPoint &screenCoord);
 protected:
@@ -56,6 +56,7 @@ signals:
   void CheckDrag(const QDropEvent *event, NodeGraphAcceptEvent *accept);
   void DragDropped(const QDropEvent *event);
 
+  void SelectionChanged(const QList<NodeGraphNode*> &nodes);
 private:
   struct Connection
   {

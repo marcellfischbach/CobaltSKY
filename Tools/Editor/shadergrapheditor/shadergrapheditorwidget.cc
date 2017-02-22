@@ -34,6 +34,11 @@ ShaderGraphEditorWidget::~ShaderGraphEditorWidget()
 }
 
 
+void ShaderGraphEditorWidget::RepaintGraph()
+{
+  m_gui.nodeGraph->repaint();
+}
+
 
 void ShaderGraphEditorWidget::on_nodeGraph_CheckConnection(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB, NodeGraphVetoEvent *veto)
 {
@@ -120,4 +125,16 @@ void ShaderGraphEditorWidget::on_nodeGraph_RequestRemoveNode(QList<NodeGraphNode
       return;
     }
   }
+}
+
+
+void ShaderGraphEditorWidget::on_nodeGraph_SelectionChanged(const QList<NodeGraphNode*> &nodes)
+{
+  QList<ShaderGraphEditorNode*> editorNodes;
+  for (NodeGraphNode *node : nodes)
+  {
+    editorNodes.push_back(static_cast<ShaderGraphEditorNode*>(node));
+  }
+
+  emit SelectionChanged(editorNodes);
 }

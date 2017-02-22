@@ -76,6 +76,7 @@ protected:
 private:
   void PaintInput(QPainter *painter);
   void PaintOutput(QPainter *painter);
+  QString GetZeroStrippedValue();
 
 private:
   float m_value;

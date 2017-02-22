@@ -7,6 +7,7 @@
 #include <shadergrapheditor/shadergrapheditor.refl.hh>
 #include <valkyrie/vkenums.hh>
 
+class ShaderGraphEditorProperties;
 class ShaderGraphEditorToolbox;
 class ShaderGraphEditorWidget;
 
@@ -25,6 +26,7 @@ protected:
   void OpenAsset();
 
 private:
+  ShaderGraphEditorProperties *m_properties;
   ShaderGraphEditorToolbox *m_toolbox;
   ShaderGraphEditorWidget *m_widget;
 };

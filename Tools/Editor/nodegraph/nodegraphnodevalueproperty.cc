@@ -70,10 +70,10 @@ QRectF NodeGraphNodeValueProperty::GetMinSize()
       height = height < ANCHOR_RADIUS ? ANCHOR_RADIUS : height;
     }
 
-    QString text = "";
-    if (m_showValue && m_type == eNGNPT_Input)
+    QString text = " ";
+    if (m_showValue && m_type == eNGNPT_Input && (!m_anchorShow || !m_anchor || !m_anchor->IsConnected()))
     {
-      text += QString("[%1] ").arg(m_value, 0, 'f');
+      text += QString("[%1] ").arg(GetZeroStrippedValue());
     }
     text += m_name;
 
@@ -125,10 +125,10 @@ void NodeGraphNodeValueProperty::PaintInput(QPainter *painter)
     }
   }
 
-  QString text = "";
-  if (m_showValue && m_type == eNGNPT_Input)
+  QString text = " ";
+  if (m_showValue && m_type == eNGNPT_Input && (!m_anchorShow || !m_anchor->IsConnected()))
   {
-    text += QString("[%1] ").arg(m_value, 0, 'f');
+    text += QString("[%1] ").arg(GetZeroStrippedValue());
   }
   text += m_name;
   painter->setPen(QPen(m_textColor));
@@ -178,4 +178,15 @@ void NodeGraphNodeValueProperty::SetAllAnchorsDisconnected()
   {
     m_anchor->SetConnected(false);
   }
+}
+
+
+QString NodeGraphNodeValueProperty::GetZeroStrippedValue()
+{
+  QString str("%1");
+  str = str.arg(m_value, 0, 'f');
+  while (str.length() > 2 && str[str.length() - 1] == '0' && str[str.length() - 2] != '.') {
+    str = str.left(str.length() - 1);
+  }
+  return str;
 }
