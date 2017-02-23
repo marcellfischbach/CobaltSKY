@@ -136,6 +136,10 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditor.hh
     shadergrapheditor/shadergrapheditorfactory.cc
     shadergrapheditor/shadergrapheditorfactory.hh
+    shadergrapheditor/shadergrapheditormeta.cc
+    shadergrapheditor/shadergrapheditormeta.hh
+    shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
+    shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
     shadergrapheditor/shadergrapheditornode.cc
     shadergrapheditor/shadergrapheditornode.hh
     shadergrapheditor/shadergrapheditorproperties.cc

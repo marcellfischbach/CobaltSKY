@@ -10,10 +10,12 @@ public:
   NodeGraphNodeValueProperty(NodeGraphNode *node);
   virtual ~NodeGraphNodeValueProperty();
 
+  virtual void Initialize();
 
   virtual QRectF GetMinSize();
   virtual void Paint(QPainter *painter);
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const;
+  NodeGraphNodeAnchor *GetAnchor() const;
   virtual void CollectAllAnchors(QList<NodeGraphNodeAnchor*> &result) const;
   virtual void SetAllAnchorsDisconnected();
 

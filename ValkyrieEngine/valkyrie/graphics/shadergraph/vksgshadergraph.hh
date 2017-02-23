@@ -73,6 +73,8 @@ public:
   void RemoveNode(vkSGNode *node);
   void RemoveNode(size_t idx);
 
+  vkSGShaderGraph *Copy(vkSGShaderGraph *dest) const;
+
 private:
   vkSGNode *GetNode(vkSGOutput *output);
   bool ValidateNode(vkSGOutput *output);

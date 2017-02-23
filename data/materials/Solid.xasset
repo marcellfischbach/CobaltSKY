@@ -74,20 +74,3 @@
     </shaderGraphMeta>
   </meta>
 </asset>
- id="3">
-          <pos>-830.000000, -36.000000</pos>
-        </node>
-        <node id="4">
-          <pos>-468.000000, -151.000000</pos>
-        </node>
-        <node id="5">
-          <pos>79.000000, -183.000000</pos>
-        </node>
-      </nodes>
-      <shaderGraph>
-        <pos>67.000000, -62.000000</pos>
-      </shaderGraph>
-    </shaderGraphMeta>
-  </meta>
-</asset>
->

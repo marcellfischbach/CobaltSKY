@@ -24,21 +24,29 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
   propDiffuse->SetAnchorShow(true);
   propDiffuse->SetShowValue(false);
   propDiffuse->SetName("Diffuse");
+  propDiffuse->Initialize();
+  m_inputAnchors[vkSGShaderGraph::eIT_Diffuse] = propDiffuse->GetAnchor();
 
   NodeGraphNodeValueProperty *propAlpha = new NodeGraphNodeValueProperty(this);
   propAlpha->SetAnchorShow(true);
   propAlpha->SetShowValue(false);
   propAlpha->SetName("Alpha");
+  propAlpha->Initialize();
+  m_inputAnchors[vkSGShaderGraph::eIT_Alpha] = propAlpha->GetAnchor();
 
   NodeGraphNodeValueProperty *propRoughness = new NodeGraphNodeValueProperty(this);
   propRoughness->SetAnchorShow(true);
   propRoughness->SetShowValue(false);
   propRoughness->SetName("Roughness");
+  propRoughness->Initialize();
+  m_inputAnchors[vkSGShaderGraph::eIT_Roughness] = propRoughness->GetAnchor();
 
   NodeGraphNodeValueProperty *propNormal = new NodeGraphNodeValueProperty(this);
   propNormal->SetAnchorShow(true);
   propNormal->SetShowValue(false);
   propNormal->SetName("Normal");
+  propNormal->Initialize();
+  m_inputAnchors[vkSGShaderGraph::eIT_Normal] = propNormal->GetAnchor();
 
 
   AddInputProperty(propDiffuse);
@@ -93,8 +101,10 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     prop->SetAnchorShow(input->CanInputNode());
     prop->SetValue(input->GetConst());
     prop->SetName(QString(input->GetName().c_str()));
+    prop->Initialize();
     AddInputProperty(prop);
     m_valueProperties[i] = prop;
+    m_inputAnchors[input->GetIdx()] = prop->GetAnchor();
   }
 
   for (vkSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
@@ -104,7 +114,9 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     prop->SetShowValue(false);
     prop->SetAnchorShow(true);
     prop->SetName(QString(output->GetName().c_str()));
+    prop->Initialize();
     AddOutputProperty(prop);
+    m_outputAnchors[output->GetIdx()] = prop->GetAnchor();
   }
 
   Layout();
@@ -117,6 +129,26 @@ ShaderGraphEditorNode::~ShaderGraphEditorNode()
   VK_RELEASE(m_shaderGraph);
 }
 
+NodeGraphNodeAnchor* ShaderGraphEditorNode::GetInputAnchor(vkUInt32 idx) const
+{
+  std::map<vkUInt32, NodeGraphNodeAnchor*>::const_iterator it = m_inputAnchors.find(idx);
+  if (it == m_inputAnchors.end())
+  {
+    return 0;
+  }
+  return it->second;
+}
+
+
+NodeGraphNodeAnchor* ShaderGraphEditorNode::GetOutputAnchor(vkUInt32 idx) const
+{
+  std::map<vkUInt32, NodeGraphNodeAnchor*>::const_iterator it = m_outputAnchors.find(idx);
+  if (it == m_outputAnchors.end())
+  {
+    return 0;
+  }
+  return it->second;
+}
 
 vkSGShaderGraph *ShaderGraphEditorNode::GetShaderGraph() const
 {

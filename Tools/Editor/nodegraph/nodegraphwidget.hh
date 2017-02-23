@@ -19,6 +19,8 @@ public:
   NodeGraphWidget(QWidget *parent = 0);
   ~NodeGraphWidget();
 
+  void Clear();
+
   void AddNode(NodeGraphNode *node);
   void RemoveNode(NodeGraphNode *node);
 

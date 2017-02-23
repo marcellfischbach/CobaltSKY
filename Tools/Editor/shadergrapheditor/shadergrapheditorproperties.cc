@@ -80,8 +80,8 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
 
 void ShaderGraphEditorProperties::Cleanup()
 {
-  for (std::map<unsigned, QDoubleSpinBox*>::iterator it = m_spinBoxes.begin(); 
-    it != m_spinBoxes.end(); 
+  for (std::map<unsigned, QDoubleSpinBox*>::iterator it = m_spinBoxes.begin();
+    it != m_spinBoxes.end();
     ++it)
   {
     it->second->disconnect(this);

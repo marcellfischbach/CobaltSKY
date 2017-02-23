@@ -15,6 +15,9 @@ public:
   ShaderGraphEditorNode(vkSGNode *node);
   virtual ~ShaderGraphEditorNode();
 
+  NodeGraphNodeAnchor* GetInputAnchor(vkUInt32 idx) const;
+  NodeGraphNodeAnchor* GetOutputAnchor(vkUInt32 idx) const;
+
   vkSGShaderGraph *GetShaderGraph() const;
   vkSGNode *GetSGNode() const;
 
@@ -25,5 +28,7 @@ private:
   vkSGNode *m_sgNode;
 
   std::map<unsigned, NodeGraphNodeValueProperty*> m_valueProperties;
+  std::map<vkUInt32, NodeGraphNodeAnchor *> m_inputAnchors;
+  std::map<vkUInt32, NodeGraphNodeAnchor *> m_outputAnchors;
 };
 

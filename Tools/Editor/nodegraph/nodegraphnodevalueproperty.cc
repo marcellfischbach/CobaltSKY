@@ -24,7 +24,7 @@ NodeGraphNodeValueProperty::~NodeGraphNodeValueProperty()
 
 }
 
-void NodeGraphNodeValueProperty::UpdateBounds()
+void NodeGraphNodeValueProperty::Initialize()
 {
   if (!m_anchorShow && m_anchor)
   {
@@ -34,9 +34,16 @@ void NodeGraphNodeValueProperty::UpdateBounds()
   else if (m_anchorShow && !m_anchor)
   {
     m_anchor = new NodeGraphNodeAnchor(m_node);
-    m_anchor->SetType(m_type);
   }
 
+  if (m_anchor)
+  {
+    m_anchor->SetType(m_type);
+  }
+}
+
+void NodeGraphNodeValueProperty::UpdateBounds()
+{
   if (!m_anchor)
   {
     return;
@@ -165,6 +172,12 @@ NodeGraphNodeAnchor *NodeGraphNodeValueProperty::GetAnchor(const QPointF &point)
     return m_anchor;
   }
   return 0;
+}
+
+
+NodeGraphNodeAnchor *NodeGraphNodeValueProperty::GetAnchor() const
+{
+  return m_anchor;
 }
 
 void NodeGraphNodeValueProperty::CollectAllAnchors(QList<NodeGraphNodeAnchor*> &result) const

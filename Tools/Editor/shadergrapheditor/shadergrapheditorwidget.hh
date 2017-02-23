@@ -4,7 +4,9 @@
 #include <QList>
 #include <ui_shadergrapheditorwidget.h>
 
+class vkSGShaderGraph;
 class ShaderGraphEditor;
+class ShaderGraphEditorMeta;
 class ShaderGraphEditorNode;
 class ShaderGraphEditorWidget : public QWidget
 {
@@ -12,6 +14,8 @@ class ShaderGraphEditorWidget : public QWidget
 public:
   ShaderGraphEditorWidget(ShaderGraphEditor *parent);
   virtual ~ShaderGraphEditorWidget();
+
+  void SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
 
 public slots:
 void RepaintGraph();
@@ -28,6 +32,8 @@ private slots:
 private:
   Ui::ShaderGraphEditorWidget m_gui;
   ShaderGraphEditor *m_editor;
+  vkSGShaderGraph *m_shaderGraph;
+  vkSGShaderGraph *m_shaderGraphCopy;
 
 signals:
   void SelectionChanged(const QList<ShaderGraphEditorNode*> &nodes);

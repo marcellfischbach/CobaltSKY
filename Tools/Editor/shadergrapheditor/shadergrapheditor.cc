@@ -1,11 +1,14 @@
 
 #include <shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <editor.hh>
 #include <toolbox/toolboxdockitem.hh>
 #include <properties/propertiesdockitem.hh>
+#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
 
 ShaderGraphEditor::ShaderGraphEditor()
@@ -34,13 +37,17 @@ ShaderGraphEditor::~ShaderGraphEditor()
 
 void ShaderGraphEditor::OpenAsset()
 {
-  /*
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator(descriptor.GetAssetResourceName()));
-  m_widget->SetTexture(texture);
-  */
+  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->Aquire<vkSGShaderGraph>(vkResourceLocator(descriptor.GetAssetResourceName()));
+
+  vkResourceLocator metaLocator(descriptor.GetAssetResourceName(), "meta");
+  ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
+  m_widget->SetShaderGraph(shaderGraph, meta);
+
+  VK_RELEASE(meta);
+
 }
 
 void ShaderGraphEditor::PopulateDockItems()

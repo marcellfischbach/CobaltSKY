@@ -15,6 +15,8 @@ public:
   NodeGraphNodeProperty(NodeGraphNode *node);
   ~NodeGraphNodeProperty();
 
+  virtual void Initialize() { }
+
   virtual QRectF GetMinSize() = 0;
   virtual void Paint(QPainter *painter) = 0;
   virtual NodeGraphNodeAnchor *GetAnchor(const QPointF &point) const = 0;
@@ -32,7 +34,9 @@ public:
   {
     m_type = type;
     m_minSizeDirty = true;
+    Initialize();
   }
+
   NodeGraphNodePropertyType GetType() const
   {
     return m_type;

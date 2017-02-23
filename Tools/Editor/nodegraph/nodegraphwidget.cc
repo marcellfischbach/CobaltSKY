@@ -28,6 +28,17 @@ NodeGraphWidget::~NodeGraphWidget()
 
 }
 
+void NodeGraphWidget::Clear()
+{
+  m_selectedNodes.clear();
+  m_connections.clear();
+  m_dragAnchor = 0;
+  for (NodeGraphNode *node : m_nodes)
+  {
+    delete node;
+  }
+  m_nodes.clear();
+}
 
 void NodeGraphWidget::AddNode(NodeGraphNode *node)
 {
@@ -379,6 +390,10 @@ void NodeGraphWidget::wheelEvent(QWheelEvent *event)
   else if (delta > 0)
   {
     m_scale /= 0.9f;
+    if (m_scale > 1.0f)
+    {
+      m_scale = 1.0f;
+    }
   }
   else
   {

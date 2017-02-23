@@ -2,6 +2,7 @@
 
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
+#include <map>
 
 
 vkSGShaderGraph::vkSGShaderGraph()
@@ -197,3 +198,69 @@ void vkSGShaderGraph::RemoveNode(size_t idx)
   m_allNodes.erase(it);
 }
 
+vkSGShaderGraph *vkSGShaderGraph::Copy(vkSGShaderGraph *dest) const
+{
+  if (!dest)
+  {
+    dest = new vkSGShaderGraph();
+  }
+
+  dest->m_allNodes.clear();
+
+  //
+  // create a duplicate of all nodes
+  std::map<const vkSGNode*, vkSGNode*> mapping;
+  for (vkSGNode *node : m_allNodes)
+  {
+    vkSGNode *newNode = node->GetClass()->CreateInstance<vkSGNode>();
+    dest->m_allNodes.push_back(newNode);
+    mapping[node] = newNode;
+  }
+  for (vkSGNode *node : m_allNodes)
+  {
+    vkSGNode *newNode = mapping[node];
+    for (vkSize i=0, in = node->GetNumberOfInputs(); i < in; ++i)
+    {
+      vkSGInput *input = node->GetInput(i);
+      vkSGInput *newInput = newNode->GetInput(i);
+
+      if (input->CanInputConst())
+      {
+        newInput->SetConst(input->GetConst());
+      }
+
+      vkSGOutput *output = input->GetInput();
+      if (output)
+      {
+        vkSGNode *outputNode = output->GetNode();
+        vkSGNode *newOutputNode = mapping[outputNode];
+        vkSGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
+        newInput->SetInput(newOutput);
+      }
+    }
+  }
+
+  for (vkSize i = 0; i < eIT_COUNT; ++i)
+  {
+    const vkSGOutput *output = GetInput((InputType)i);
+    if (output)
+    {
+      const vkSGNode *outputNode = output->GetNode();
+      vkSGNode *newOutputNode = mapping[outputNode];
+      vkSGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
+      dest->SetInput((InputType)i, newOutput);
+    }
+  }
+
+
+  //
+  // mirror the scalar attributes of the shader graph
+  dest->m_blendOutWithBinaryGradient = m_blendOutWithBinaryGradient;
+  dest->m_skinnedMaterial = m_skinnedMaterial;
+  dest->m_maxBones = m_maxBones;
+  dest->m_discardAlpha = m_discardAlpha;
+  dest->m_discardAlphaCompareMode = m_discardAlphaCompareMode;
+  dest->m_discardAlphaThreshold = m_discardAlphaThreshold;
+
+  return dest;
+}

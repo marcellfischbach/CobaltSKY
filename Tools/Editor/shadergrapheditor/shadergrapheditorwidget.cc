@@ -1,6 +1,7 @@
 
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
 #include <shadergrapheditor/shadergrapheditornode.hh>
 #include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 
@@ -13,12 +14,15 @@
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/core/vkclassregistry.hh>
 #include <valkyrie/graphics/igraphics.hh>
+#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
 #include <QDropEvent>
 
 ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
   : QWidget()
   , m_editor(editor)
+  , m_shaderGraph(0)
+  , m_shaderGraphCopy(new vkSGShaderGraph())
 {
   m_gui.setupUi(this);
   on_nodeGraph_ScaleChanged(1.0f);
@@ -30,7 +34,77 @@ ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
 
 ShaderGraphEditorWidget::~ShaderGraphEditorWidget()
 {
+  VK_RELEASE(m_shaderGraph);
+  VK_RELEASE(m_shaderGraphCopy);
+}
 
+void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta)
+{
+  VK_SET(m_shaderGraph, shaderGraph);
+  if (!m_shaderGraph)
+  {
+    return;
+  }
+
+  m_shaderGraphCopy = m_shaderGraph->Copy(m_shaderGraphCopy);
+
+  m_gui.nodeGraph->Clear();
+  ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(m_shaderGraphCopy);
+  vkVector2f shaderGraphNodePos = meta->GetPos();
+  shaderGraphNode->SetLocation(QPointF(shaderGraphNodePos.x, shaderGraphNodePos.y));
+  m_gui.nodeGraph->AddNode(shaderGraphNode);
+
+  std::map<vkSGNode *, ShaderGraphEditorNode*> mapping;
+  for (vkSize i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *node = m_shaderGraphCopy->GetNode(i);
+
+    ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(node);
+    vkVector2f nodePos = meta->GetPos(i);
+    editorNode->SetLocation(QPointF(nodePos.x, nodePos.y));
+    m_gui.nodeGraph->AddNode(editorNode);
+
+    mapping[node] = editorNode;
+  }
+
+  for (vkSize i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *node = m_shaderGraphCopy->GetNode(i);
+    for (vkSize j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
+    {
+      vkSGInput* input = node->GetInput(j);
+      vkSGOutput *output = input->GetInput();
+      if (output)
+      {
+        vkSGNode *outputNode = output->GetNode();
+
+        ShaderGraphEditorNode* editorNode = mapping[node];
+        ShaderGraphEditorNode* editorOutputNode = mapping[outputNode];
+
+        NodeGraphNodeAnchor *outputAnchor = editorOutputNode->GetOutputAnchor(output->GetIdx());
+        NodeGraphNodeAnchor *inputAnchor = editorNode->GetInputAnchor(input->GetIdx());
+
+        m_gui.nodeGraph->Connect(outputAnchor, inputAnchor);
+      }
+    }
+  }
+
+  for (vkSize i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i) 
+  {
+    vkSGShaderGraph::InputType inputType = (vkSGShaderGraph::InputType)i;
+    vkSGOutput *output = m_shaderGraphCopy->GetInput(inputType);
+    if (output)
+    {
+      vkSGNode *outputNode = output->GetNode();
+      ShaderGraphEditorNode* editorOutputNode = mapping[outputNode];
+
+      NodeGraphNodeAnchor *outputAnchor = editorOutputNode->GetOutputAnchor(output->GetIdx());
+      NodeGraphNodeAnchor *inputAnchor = shaderGraphNode->GetInputAnchor(i);
+
+      m_gui.nodeGraph->Connect(outputAnchor, inputAnchor);
+    }
+
+  }
 }
 
 
