@@ -2,9 +2,10 @@
 #include <nodegraph/nodegraphnodeanchor.hh>
 #include <nodegraph/nodegraphnode.hh>
 
-NodeGraphNodeAnchor::NodeGraphNodeAnchor(NodeGraphNode *node)
+NodeGraphNodeAnchor::NodeGraphNodeAnchor(NodeGraphNode *node, NodeGraphNodeProperty *prop)
   : m_node(node)
   , m_connected(false)
+  , m_prop(prop)
 {
 
 

@@ -42,9 +42,9 @@
       </inputs>
       <attributes>
         <blendOutWithBinaryGradient enabled="0"/>
-        <discardAlpha>
-          <threshold>0.000000</threshold>
-          <mode mode="Less"/>
+        <discardAlpha enabled="1">
+          <threshold>0.500000</threshold>
+          <mode>Less</mode>
         </discardAlpha>
       </attributes>
     </shaderGraph>

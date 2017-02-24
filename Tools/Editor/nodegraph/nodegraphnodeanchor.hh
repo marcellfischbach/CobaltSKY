@@ -4,10 +4,11 @@
 #include <nodegraph/nodegraphnodepropertytype.hh>
 
 class NodeGraphNode;
+class NodeGraphNodeProperty;
 class NodeGraphNodeAnchor
 {
 public:
-  NodeGraphNodeAnchor(NodeGraphNode *node);
+  NodeGraphNodeAnchor(NodeGraphNode *node, NodeGraphNodeProperty *prop);
 
   void SetBounds(const QRectF &bounds)
   {
@@ -46,7 +47,10 @@ public:
   QPointF GetCenter() const;
   QPointF GetAbsCenter() const;
 
-  
+  NodeGraphNodeProperty *GetProperty() const
+  {
+    return m_prop;
+  }
 
   bool Test(const QPointF &point) const;
 
@@ -56,5 +60,6 @@ private:
   bool m_connected;
 
   NodeGraphNodePropertyType m_type;
+  NodeGraphNodeProperty *m_prop;
 
 };

@@ -24,6 +24,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
   propDiffuse->SetAnchorShow(true);
   propDiffuse->SetShowValue(false);
   propDiffuse->SetName("Diffuse");
+  propDiffuse->SetIdx(vkSGShaderGraph::eIT_Diffuse);
   propDiffuse->Initialize();
   m_inputAnchors[vkSGShaderGraph::eIT_Diffuse] = propDiffuse->GetAnchor();
 
@@ -31,6 +32,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
   propAlpha->SetAnchorShow(true);
   propAlpha->SetShowValue(false);
   propAlpha->SetName("Alpha");
+  propAlpha->SetIdx(vkSGShaderGraph::eIT_Alpha);
   propAlpha->Initialize();
   m_inputAnchors[vkSGShaderGraph::eIT_Alpha] = propAlpha->GetAnchor();
 
@@ -38,6 +40,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
   propRoughness->SetAnchorShow(true);
   propRoughness->SetShowValue(false);
   propRoughness->SetName("Roughness");
+  propRoughness->SetIdx(vkSGShaderGraph::eIT_Roughness);
   propRoughness->Initialize();
   m_inputAnchors[vkSGShaderGraph::eIT_Roughness] = propRoughness->GetAnchor();
 
@@ -45,6 +48,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
   propNormal->SetAnchorShow(true);
   propNormal->SetShowValue(false);
   propNormal->SetName("Normal");
+  propNormal->SetIdx(vkSGShaderGraph::eIT_Normal);
   propNormal->Initialize();
   m_inputAnchors[vkSGShaderGraph::eIT_Normal] = propNormal->GetAnchor();
 
@@ -90,6 +94,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
   if (resource)
   {
     NodeGraphNodeImageProperty *prop = new NodeGraphNodeImageProperty(this);
+    prop->SetIdx(-1);
     AddInputProperty(prop);
   }
   for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
@@ -101,6 +106,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     prop->SetAnchorShow(input->CanInputNode());
     prop->SetValue(input->GetConst());
     prop->SetName(QString(input->GetName().c_str()));
+    prop->SetIdx(input->GetIdx());
     prop->Initialize();
     AddInputProperty(prop);
     m_valueProperties[i] = prop;
@@ -114,6 +120,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     prop->SetShowValue(false);
     prop->SetAnchorShow(true);
     prop->SetName(QString(output->GetName().c_str()));
+    prop->SetIdx(output->GetIdx());
     prop->Initialize();
     AddOutputProperty(prop);
     m_outputAnchors[output->GetIdx()] = prop->GetAnchor();

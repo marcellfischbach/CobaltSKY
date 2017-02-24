@@ -220,6 +220,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "}" << std::endl
     << std::endl;
   vkString vertexShaderSources = ss.str();
+  printf("VertexShader:\n%s\n", vertexShaderSources.c_str());
 
   ss = std::ostringstream();
   ss << ""
@@ -275,6 +276,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "}" << std::endl
     << std::endl;
   vkString fragmentShaderSources = ss.str();
+  printf("FragmentShader:\n%s\n", fragmentShaderSources.c_str());
 
   ss.clear();
 

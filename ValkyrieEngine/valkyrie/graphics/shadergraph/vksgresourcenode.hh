@@ -19,6 +19,8 @@ public:
   vkSGResourceNode();
   virtual ~vkSGResourceNode();
 
+  virtual vkSGNode *Copy(vkSGNode *node) const;
+
   void SetResourceName(const vkString &resourceName);
   const vkString &GetResourceName() const;
 

@@ -50,6 +50,7 @@ signals:
   void AboutToConnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void Connected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void RequestRemoveNode(QList<NodeGraphNode*> node, NodeGraphVetoEvent *veto);
+  void NodeRemoved(NodeGraphNode *node);
 
   void AboutToDisconnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void Disconnected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);

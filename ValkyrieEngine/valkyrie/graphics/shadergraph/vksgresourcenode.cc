@@ -13,6 +13,20 @@ vkSGResourceNode::~vkSGResourceNode()
 
 }
 
+vkSGNode *vkSGResourceNode::Copy(vkSGNode *node) const
+{
+  vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+  if (resourceNode)
+  {
+    resourceNode->m_resourceName = m_resourceName;
+    resourceNode->m_resourceType = m_resourceType;
+    memcpy(resourceNode->m_defaultFloats, m_defaultFloats, sizeof(m_defaultFloats));
+    memcpy(resourceNode->m_defaultInts, m_defaultInts, sizeof(m_defaultInts));
+    resourceNode->m_defaultTextureResource = m_defaultTextureResource;
+  }
+  return vkSGNode::Copy(node);
+}
+
 void vkSGResourceNode::SetResourceName(const vkString &resourceName)
 {
   m_resourceName = resourceName;

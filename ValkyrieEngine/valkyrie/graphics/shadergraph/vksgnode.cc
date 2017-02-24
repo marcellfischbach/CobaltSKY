@@ -25,7 +25,11 @@ vkSGNode::~vkSGNode()
 
 }
 
-
+vkSGNode *vkSGNode::Copy(vkSGNode *node) const
+{
+  node->m_name = m_name;
+  return node;
+}
 
 void vkSGNode::AddInput(vkSGInput *input)
 {

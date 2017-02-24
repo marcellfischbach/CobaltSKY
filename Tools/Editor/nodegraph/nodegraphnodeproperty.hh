@@ -64,6 +64,16 @@ public:
     return m_node;
   }
 
+  void SetIdx(int idx)
+  {
+    m_idx = idx;
+  }
+
+  int GetIdx() const
+  {
+    return m_idx;
+  }
+
 protected:
   virtual void UpdateBounds() { }
 
@@ -76,4 +86,5 @@ protected:
   QRectF m_minSize;
 
   QRectF m_bounds;
+  int m_idx;
 };

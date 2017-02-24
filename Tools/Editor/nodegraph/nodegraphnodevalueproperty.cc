@@ -33,7 +33,7 @@ void NodeGraphNodeValueProperty::Initialize()
   }
   else if (m_anchorShow && !m_anchor)
   {
-    m_anchor = new NodeGraphNodeAnchor(m_node);
+    m_anchor = new NodeGraphNodeAnchor(m_node, this);
   }
 
   if (m_anchor)

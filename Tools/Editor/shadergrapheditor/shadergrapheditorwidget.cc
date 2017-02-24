@@ -23,6 +23,7 @@ ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
   , m_editor(editor)
   , m_shaderGraph(0)
   , m_shaderGraphCopy(new vkSGShaderGraph())
+  , m_updateGuard(false)
 {
   m_gui.setupUi(this);
   on_nodeGraph_ScaleChanged(1.0f);
@@ -46,6 +47,7 @@ void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, Shade
     return;
   }
 
+  m_updateGuard = true;
   m_shaderGraphCopy = m_shaderGraph->Copy(m_shaderGraphCopy);
 
   m_gui.nodeGraph->Clear();
@@ -105,6 +107,7 @@ void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, Shade
     }
 
   }
+  m_updateGuard = false;
 }
 
 
@@ -136,6 +139,69 @@ void ShaderGraphEditorWidget::on_nodeGraph_AboutToConnect(NodeGraphNodeAnchor *a
     m_gui.nodeGraph->DisconnectAll(anchorB);
   }
 }
+
+
+void ShaderGraphEditorWidget::on_nodeGraph_Connected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB)
+{
+  if (m_updateGuard)
+  {
+    return;
+  }
+  NodeGraphNodeAnchor *outputAnchor = anchorA->GetType() == eNGNPT_Output ? anchorA : anchorB;
+  NodeGraphNodeAnchor *inputAnchor = anchorA->GetType() == eNGNPT_Input ? anchorA : anchorB;
+
+  ShaderGraphEditorNode *editorNodeOutput = static_cast<ShaderGraphEditorNode*>(outputAnchor->GetNode());
+  ShaderGraphEditorNode *editorNodeInput = static_cast<ShaderGraphEditorNode*>(inputAnchor->GetNode());
+
+  if (editorNodeInput->GetShaderGraph())
+  {
+    // make the connection to the shader graph
+    vkSGNode *nodeOutput = editorNodeOutput->GetSGNode();
+    vkSGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
+
+    vkSGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
+    shaderGraph->SetInput((vkSGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), output);
+  }
+  else
+  {
+    // make the connection between two nodes
+    vkSGNode *nodeOutput = editorNodeOutput->GetSGNode();
+    vkSGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
+
+    vkSGNode *nodeInput = editorNodeInput->GetSGNode();
+    vkSGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
+
+    input->SetInput(output);
+  }
+}
+
+void ShaderGraphEditorWidget::on_nodeGraph_Disconnected(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB)
+{
+  if (m_updateGuard)
+  {
+    return;
+  }
+
+  printf("Disconnected: %p %p\n", anchorA, anchorB);
+  NodeGraphNodeAnchor *inputAnchor = anchorA->GetType() == eNGNPT_Input ? anchorA : anchorB;
+
+  ShaderGraphEditorNode *editorNodeInput = static_cast<ShaderGraphEditorNode*>(inputAnchor->GetNode());
+
+  if (editorNodeInput->GetShaderGraph())
+  {
+    // make the connection to the shader graph
+    vkSGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
+    shaderGraph->SetInput((vkSGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), 0);
+  }
+  else
+  {
+    // make the connection between two nodes
+    vkSGNode *nodeInput = editorNodeInput->GetSGNode();
+    vkSGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
+    input->SetInput(0);
+  }
+}
+
 
 
 void ShaderGraphEditorWidget::on_nodeGraph_CheckLooseDisconnect(NodeGraphNodeAnchor *anchor, NodeGraphVetoEvent *veto)
@@ -181,6 +247,8 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
+    m_shaderGraphCopy->AddNode(node);
+
     ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(node);
     m_gui.nodeGraph->AddNode(editorNode);
     editorNode->SetLocation(m_gui.nodeGraph->GetLocalCoordinate(event->pos()));
@@ -201,6 +269,21 @@ void ShaderGraphEditorWidget::on_nodeGraph_RequestRemoveNode(QList<NodeGraphNode
   }
 }
 
+void ShaderGraphEditorWidget::on_nodeGraph_NodeRemoved(NodeGraphNode* node)
+{
+  if (!node)
+  {
+    return;
+  }
+  printf("RemoveNode: %p\n", node);
+  ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(node);
+  vkSGNode *sgNode = editorNode->GetSGNode();
+  if (!sgNode)
+  {
+    m_shaderGraphCopy->RemoveNode(sgNode);
+  }
+}
+
 
 void ShaderGraphEditorWidget::on_nodeGraph_SelectionChanged(const QList<NodeGraphNode*> &nodes)
 {
@@ -211,4 +294,20 @@ void ShaderGraphEditorWidget::on_nodeGraph_SelectionChanged(const QList<NodeGrap
   }
 
   emit SelectionChanged(editorNodes);
+}
+
+void ShaderGraphEditorWidget::on_pbApply_clicked()
+{
+  if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy))
+  {
+    printf("Successfully compiled\n");
+  }
+  else
+  {
+    printf("Compiled with errors\n");
+    return;
+  }
+
+  m_shaderGraph = m_shaderGraphCopy->Copy(m_shaderGraph);
+  vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
 }

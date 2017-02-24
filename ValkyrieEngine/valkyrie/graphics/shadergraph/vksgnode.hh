@@ -23,6 +23,7 @@ public:
   vkSGNode();
   virtual ~vkSGNode();
 
+  virtual vkSGNode *Copy(vkSGNode *node) const;
   const vkString &GetName() const;
 
   //void SetBindingName(const vkString &bindingName);

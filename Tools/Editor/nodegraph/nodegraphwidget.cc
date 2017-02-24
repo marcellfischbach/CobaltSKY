@@ -55,7 +55,7 @@ void NodeGraphWidget::RemoveNode(NodeGraphNode *node)
     DisconnectAll(anchor);
   }
   m_nodes.removeAll(node);
-
+  emit NodeRemoved(node);
   repaint();
 }
 

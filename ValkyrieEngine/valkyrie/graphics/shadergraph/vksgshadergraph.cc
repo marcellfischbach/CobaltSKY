@@ -2,6 +2,7 @@
 
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
+#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <map>
 
 
@@ -213,6 +214,8 @@ vkSGShaderGraph *vkSGShaderGraph::Copy(vkSGShaderGraph *dest) const
   for (vkSGNode *node : m_allNodes)
   {
     vkSGNode *newNode = node->GetClass()->CreateInstance<vkSGNode>();
+    newNode = node->Copy(newNode);
+
     dest->m_allNodes.push_back(newNode);
     mapping[node] = newNode;
   }
