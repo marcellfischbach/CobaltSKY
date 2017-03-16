@@ -51,7 +51,7 @@ iObject *ShaderGraphEditorMetaAssetXMLLoader::Load(TiXmlElement *element, const 
       }
     }
 
-    TiXmlElement *shaderGraphElement = nodesElement->FirstChildElement("shaderGraph");
+    TiXmlElement *shaderGraphElement = element->FirstChildElement("shaderGraph");
     if (shaderGraphElement)
     {
       vkVector2f pos;

@@ -59,6 +59,49 @@ void NodeGraphWidget::RemoveNode(NodeGraphNode *node)
   repaint();
 }
 
+size_t NodeGraphWidget::GetNumberOfNodes() const
+{
+  return m_nodes.size();
+}
+
+NodeGraphNode *NodeGraphWidget::GetNode(size_t idx) const
+{
+  return m_nodes[idx];
+}
+
+size_t NodeGraphWidget::GetNumberOfConnections() const
+{
+  return m_connections.size();
+}
+
+const NodeGraphWidget::Conn NodeGraphWidget::GetConnection(size_t idx) const
+{
+  const Connection &connection = m_connections[idx];
+
+  Conn conn;
+  if (connection.m_anchorA->GetProperty()->GetType() == eNGNPT_Input)
+  {
+    conn.inputNode = connection.m_anchorA->GetNode();
+    conn.inputNodeInputIdx = connection.m_anchorA->GetProperty()->GetIdx();
+  }
+  else if (connection.m_anchorA->GetProperty()->GetType() == eNGNPT_Output)
+  {
+    conn.outputNode = connection.m_anchorA->GetNode();
+    conn.outputNodeOutputIdx = connection.m_anchorA->GetProperty()->GetIdx();
+  }
+  if (connection.m_anchorB->GetProperty()->GetType() == eNGNPT_Input)
+  {
+    conn.inputNode = connection.m_anchorB->GetNode();
+    conn.inputNodeInputIdx = connection.m_anchorB->GetProperty()->GetIdx();
+  }
+  else if (connection.m_anchorB->GetProperty()->GetType() == eNGNPT_Output)
+  {
+    conn.outputNode = connection.m_anchorB->GetNode();
+    conn.outputNodeOutputIdx = connection.m_anchorB->GetProperty()->GetIdx();
+  }
+  return conn;
+}
+
 void NodeGraphWidget::Connect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB)
 {
   Connection con;

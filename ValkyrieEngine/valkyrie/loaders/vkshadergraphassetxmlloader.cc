@@ -265,7 +265,7 @@ iObject *vkShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const vkResour
         {
           threshold = LoadFloat(thresholdElement->GetText());
         }
-        if (modeElement)
+        if (modeElement && modeElement->GetText())
         {
           vkString cmpStr(modeElement->GetText());
 #define CMP(cmp)  (cmpStr == #cmp)  compareMode = eCM_##cmp

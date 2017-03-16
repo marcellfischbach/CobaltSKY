@@ -22,6 +22,10 @@ public:
   void paint(QPainter *painter);
 
   void SetLocation(const QPointF &point);
+  const QPointF &GetLocation() const
+  {
+    return m_position;
+  }
   void SetOffset(const QPointF &point);
   void CommitOffset();
   void CancelOffset();

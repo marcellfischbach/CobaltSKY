@@ -15,6 +15,16 @@ class NodeGraphNodeAnchor;
 class NodeGraphWidget : public QWidget
 {
   Q_OBJECT
+
+public:
+  struct Conn
+  {
+    NodeGraphNode *outputNode;
+    unsigned outputNodeOutputIdx;
+
+    NodeGraphNode *inputNode;
+    unsigned inputNodeInputIdx;
+  };
 public:
   NodeGraphWidget(QWidget *parent = 0);
   ~NodeGraphWidget();
@@ -23,6 +33,12 @@ public:
 
   void AddNode(NodeGraphNode *node);
   void RemoveNode(NodeGraphNode *node);
+
+  size_t GetNumberOfNodes() const;
+  NodeGraphNode *GetNode(size_t idx) const;
+
+  size_t GetNumberOfConnections() const;
+  const Conn GetConnection(size_t idx) const;
 
   void Connect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);
   void Disconnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB);

@@ -14,9 +14,15 @@
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/core/vkclassregistry.hh>
 #include <valkyrie/graphics/igraphics.hh>
+#include <valkyrie/graphics/shadergraph/vksgnode.hh>
+#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomText>
 #include <QDropEvent>
+#include <QFile>
 
 ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
   : QWidget()
@@ -91,7 +97,7 @@ void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, Shade
     }
   }
 
-  for (vkSize i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i) 
+  for (vkSize i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
   {
     vkSGShaderGraph::InputType inputType = (vkSGShaderGraph::InputType)i;
     vkSGOutput *output = m_shaderGraphCopy->GetInput(inputType);
@@ -119,10 +125,10 @@ void ShaderGraphEditorWidget::RepaintGraph()
 
 void ShaderGraphEditorWidget::on_nodeGraph_CheckConnection(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB, NodeGraphVetoEvent *veto)
 {
-  if (!anchorA 
-      || !anchorB
-      || anchorA->GetType() == anchorB->GetType()
-      || anchorA->GetNode() == anchorB->GetNode())
+  if (!anchorA
+    || !anchorB
+    || anchorA->GetType() == anchorB->GetType()
+    || anchorA->GetNode() == anchorB->GetNode())
   {
     veto->Veto();
   }
@@ -131,7 +137,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckConnection(NodeGraphNodeAnchor *
 void ShaderGraphEditorWidget::on_nodeGraph_AboutToConnect(NodeGraphNodeAnchor *anchorA, NodeGraphNodeAnchor *anchorB)
 {
   if (anchorA->GetType() == eNGNPT_Input)
-  { 
+  {
     m_gui.nodeGraph->DisconnectAll(anchorA);
   }
   if (anchorB->GetType() == eNGNPT_Input)
@@ -298,6 +304,342 @@ void ShaderGraphEditorWidget::on_nodeGraph_SelectionChanged(const QList<NodeGrap
 
 void ShaderGraphEditorWidget::on_pbApply_clicked()
 {
+  Apply();
+}
+
+
+void ShaderGraphEditorWidget::on_pbSave_clicked()
+{
+  if (!Apply())
+  {
+    return;
+  }
+
+  QDomDocument doc;
+
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement shaderGraphElement = doc.createElement("shaderGraph");
+  QDomElement metaElement = doc.createElement("meta");
+  QDomElement shaderGraphMetaElement = doc.createElement("shaderGraphMeta");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  assetElement.appendChild(metaElement);
+  dataElement.appendChild(shaderGraphElement);
+  metaElement.appendChild(shaderGraphMetaElement);
+
+
+  QDomElement nodesElement = doc.createElement("nodes");
+  shaderGraphElement.appendChild(nodesElement);
+
+  QDomElement inputsElement = doc.createElement("inputs");
+  shaderGraphElement.appendChild(inputsElement);
+
+  QDomElement metaNodesElement = doc.createElement("nodes");
+  shaderGraphMetaElement.appendChild(metaNodesElement);
+
+  size_t nodeId = 0;
+  std::map<vkSGNode*, size_t> nodeMap;
+  for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfNodes(); i < in; ++i)
+  {
+    ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(m_gui.nodeGraph->GetNode(i));
+    vkSGNode *node = editorNode->GetSGNode();
+    if (node)
+    {
+
+      nodeMap[node] = nodeId;
+
+      QDomElement nodeElement = doc.createElement("node");
+      nodeElement.setAttribute("id", nodeId);
+      nodeElement.setAttribute("class", QString(node->GetClass()->GetName().c_str()));
+      nodesElement.appendChild(nodeElement);
+
+      vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+      if (resourceNode)
+      {
+        QDomElement resourceElement = doc.createElement("resource");
+        resourceElement.setAttribute("name", QString(resourceNode->GetResourceName().c_str()));
+        nodeElement.appendChild(resourceElement);
+
+        switch (resourceNode->GetResourceType())
+        {
+        case eSPT_Float:
+          resourceElement.appendChild(doc.createElement("float"))
+            .appendChild(doc.createTextNode(QString("%1")
+              .arg((double)resourceNode->GetDefaultFloats()[0], 0, 'f')));
+          break;
+        case eSPT_Vector2:
+          resourceElement.appendChild(doc.createElement("float2"))
+            .appendChild(doc.createTextNode(QString("%1, %2")
+              .arg((double)resourceNode->GetDefaultFloats()[0], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[1], 0, 'f')
+            ));
+          break;
+        case eSPT_Vector3:
+          resourceElement.appendChild(doc.createElement("float3"))
+            .appendChild(doc.createTextNode(QString("%1, %2, %3")
+              .arg((double)resourceNode->GetDefaultFloats()[0], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[1], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[2], 0, 'f')
+            ));
+          break;
+        case eSPT_Vector4:
+          resourceElement.appendChild(doc.createElement("float4"))
+            .appendChild(doc.createTextNode(QString("%1, %2, %3, %4")
+              .arg((double)resourceNode->GetDefaultFloats()[0], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[1], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[2], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[3], 0, 'f')
+            ));
+          break;
+        case eSPT_Int:
+          resourceElement.appendChild(doc.createElement("int"))
+            .appendChild(doc.createTextNode(QString("%1")
+              .arg(resourceNode->GetDefaultInts()[0])
+            ));
+          break;
+        case eSPT_IVector2:
+          resourceElement.appendChild(doc.createElement("int2"))
+            .appendChild(doc.createTextNode(QString("%1, %2")
+              .arg(resourceNode->GetDefaultInts()[0])
+              .arg(resourceNode->GetDefaultInts()[1])
+            ));
+          break;
+        case eSPT_IVector3:
+          resourceElement.appendChild(doc.createElement("int3"))
+            .appendChild(doc.createTextNode(QString("%1, %2, %3")
+              .arg(resourceNode->GetDefaultInts()[0])
+              .arg(resourceNode->GetDefaultInts()[1])
+              .arg(resourceNode->GetDefaultInts()[2])
+            ));
+          break;
+        case eSPT_IVector4:
+          resourceElement.appendChild(doc.createElement("int4"))
+            .appendChild(doc.createTextNode(QString("%1, %2, %3, %4")
+              .arg(resourceNode->GetDefaultInts()[0])
+              .arg(resourceNode->GetDefaultInts()[1])
+              .arg(resourceNode->GetDefaultInts()[2])
+              .arg(resourceNode->GetDefaultInts()[3])
+            ));
+          break;
+        case eSPT_Color4:
+          resourceElement.appendChild(doc.createElement("color4"))
+            .appendChild(doc.createTextNode(QString("%1, %2, %3, %4")
+              .arg((double)resourceNode->GetDefaultFloats()[0], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[1], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[2], 0, 'f')
+              .arg((double)resourceNode->GetDefaultFloats()[3], 0, 'f')
+            ));
+          break;
+        case eSPT_Matrix3:
+          break;
+        case eSPT_Matrix4:
+          break;
+        case eSPT_Texture:
+          resourceElement.appendChild(doc.createElement("locator"))
+            .appendChild(doc.createTextNode(QString(
+              resourceNode->GetDefaultTextureResource().GetResourceFile().c_str()
+            )));
+          break;
+        }
+      }
+      nodeElement = doc.createElement("node");
+      nodeElement.setAttribute("id", nodeId);
+      metaNodesElement.appendChild(nodeElement);
+
+      nodeElement.appendChild(doc.createElement("pos"))
+        .appendChild(doc.createTextNode(QString("%1, %2")
+          .arg(editorNode->GetLocation().x(), 0, 'f')
+          .arg(editorNode->GetLocation().y(), 0, 'f')));
+
+      nodeId++;
+    }
+    vkSGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
+    if (shaderGraph)
+    {
+      QDomElement attributesElement = doc.createElement("attributes");
+      shaderGraphElement.appendChild(attributesElement);
+
+      QDomElement blendOutWithBinaryGradientElement = doc.createElement("blendOutWithBinaryGradient");
+      if (shaderGraph->IsBlendOutWithBinaryGradient())
+      {
+        blendOutWithBinaryGradientElement.setAttribute("enabled", "true");
+      }
+      attributesElement.appendChild(blendOutWithBinaryGradientElement);
+
+      QDomElement discardAlphaElement = doc.createElement("discardAlpha");
+      if (shaderGraph->IsDiscardAlpha())
+      {
+        discardAlphaElement.setAttribute("enabled", "true");
+      }
+      attributesElement.appendChild(discardAlphaElement);
+
+
+      discardAlphaElement.appendChild(doc.createElement("threshold")).
+        appendChild(doc.createTextNode(QString("%1").arg((double)shaderGraph->GetDiscardAlphaThreshold(), 0, 'f')));
+
+      QString modeString;
+      switch (shaderGraph->GetDiscardAlphaCompareMode())
+      {
+      case eCM_LessOrEqual: modeString = "LessOrEqual"; break;
+      case eCM_GreaterOrEqual: modeString = "GreaterOrEqual"; break;
+      case eCM_Less: modeString = "Less"; break;
+      case eCM_Greater: modeString = "Greater"; break;
+      case eCM_Equal: modeString = "Equal"; break;
+      case eCM_NotEqual: modeString = "NotEqual"; break;
+      case eCM_Never: modeString = "Never"; break;
+      case eCM_Always: modeString = "Always"; break;
+      }
+      discardAlphaElement.appendChild(doc.createElement("mode"))
+        .appendChild(doc.createTextNode(modeString));
+
+
+
+      QDomElement metaShaderGraphElement = doc.createElement("shaderGraph");
+      shaderGraphMetaElement.appendChild(metaShaderGraphElement);
+      metaShaderGraphElement.appendChild(doc.createElement("pos"))
+        .appendChild(doc.createTextNode(QString("%1, %2")
+          .arg(editorNode->GetLocation().x(), 0, 'f')
+          .arg(editorNode->GetLocation().y(), 0, 'f')));
+
+
+    }
+
+
+  }
+
+  for (size_t i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    vkSGNode *node = m_shaderGraphCopy->GetNode(i);
+    for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
+    {
+      QDomElement inputElement = doc.createElement("node");
+      inputElement.setAttribute("id", nodeMap[node]);
+      inputElement.setAttribute("input", j);
+      inputsElement.appendChild(inputElement);
+
+      vkSGInput *input = node->GetInput(j);
+      vkSGOutput *output = input->GetInput();
+      if (output)
+      {
+        vkSGNode *outputNode = output->GetNode();
+
+        QDomElement outputElement = doc.createElement("node");
+        outputElement.setAttribute("id", nodeMap[outputNode]);
+        outputElement.setAttribute("output", output->GetIdx());
+        inputElement.appendChild(outputElement);
+      }
+      else
+      {
+        QDomElement floatElement = doc.createElement("float");
+        floatElement.appendChild(doc.createTextNode(QString("%1").arg((double)input->GetConst(), 0, 'f')));
+        inputElement.appendChild(floatElement);
+      }
+    }
+  }
+
+  for (size_t i = 0; i < vkSGShaderGraph::eIT_COUNT; ++i)
+  {
+    vkSGOutput *output = m_shaderGraphCopy->GetInput((vkSGShaderGraph::InputType)i);
+    if (output)
+    {
+      QDomElement sgElement = doc.createElement("shaderGraph");
+      switch (i)
+      {
+      case vkSGShaderGraph::eIT_Diffuse:
+        sgElement.setAttribute("input", "Diffuse");
+        break;
+      case vkSGShaderGraph::eIT_Alpha:
+        sgElement.setAttribute("input", "Alpha");
+        break;
+      case vkSGShaderGraph::eIT_Roughness:
+        sgElement.setAttribute("input", "Roughness");
+        break;
+      case vkSGShaderGraph::eIT_Normal:
+        sgElement.setAttribute("input", "Normal");
+        break;
+      }
+      inputsElement.appendChild(sgElement);
+
+      vkSGNode *outputNode = output->GetNode();
+      nodeId = nodeMap[outputNode];
+
+      QDomElement outputElement = doc.createElement("node");
+      outputElement.setAttribute("id", nodeId);
+      outputElement.setAttribute("output", output->GetIdx());
+      sgElement.appendChild(outputElement);
+    }
+  }
+
+  /* Old handling of inputs
+  for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfConnections(); i < in; ++i)
+  {
+    const NodeGraphWidget::Conn conn = m_gui.nodeGraph->GetConnection(i);
+    ShaderGraphEditorNode *inputNode = static_cast<ShaderGraphEditorNode*>(conn.inputNode);
+    ShaderGraphEditorNode *outputNode = static_cast<ShaderGraphEditorNode*>(conn.outputNode);
+
+    if (!inputNode || !outputNode)
+    {
+      continue;
+    }
+    QDomElement inputElement;
+    if (inputNode->GetShaderGraph())
+    {
+      inputElement = doc.createElement("shaderGraph");
+      switch (conn.inputNodeInputIdx)
+      {
+      case vkSGShaderGraph::eIT_Diffuse:
+        inputElement.setAttribute("input", "Diffuse");
+        break;
+      case vkSGShaderGraph::eIT_Alpha:
+        inputElement.setAttribute("input", "Alpha");
+        break;
+      case vkSGShaderGraph::eIT_Roughness:
+        inputElement.setAttribute("input", "Roughness");
+        break;
+      case vkSGShaderGraph::eIT_Normal:
+        inputElement.setAttribute("input", "Normal");
+        break;
+      }
+    }
+    else if (inputNode->GetSGNode())
+    {
+      inputElement = doc.createElement("node");
+      inputElement.setAttribute("id", nodeMap[inputNode]);
+      inputElement.setAttribute("input", conn.inputNodeInputIdx);
+    }
+    else
+    {
+      continue;
+    }
+    if (!outputNode->GetSGNode())
+    {
+      continue;
+    }
+    inputsElement.appendChild(inputElement);
+
+    QDomElement outputElement = doc.createElement("node");
+    outputElement.setAttribute("id", nodeMap[outputNode]);
+    outputElement.setAttribute("output", conn.outputNodeOutputIdx);
+    inputElement.appendChild(outputElement);
+  }
+  */
+
+
+
+  printf("XML:\n%s\n", (const char*)doc.toString(2).toLatin1());
+  QFile file(QString(m_editor->GetAssetDescriptor().GetAssetFileName().c_str()));
+  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    file.write(doc.toString(2).toLatin1());
+    file.close();
+  }
+}
+
+
+bool ShaderGraphEditorWidget::Apply()
+{
   if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy))
   {
     printf("Successfully compiled\n");
@@ -305,9 +647,38 @@ void ShaderGraphEditorWidget::on_pbApply_clicked()
   else
   {
     printf("Compiled with errors\n");
-    return;
+    return false;
   }
 
   m_shaderGraph = m_shaderGraphCopy->Copy(m_shaderGraph);
   vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
+  return true;
+}
+
+ShaderGraphEditorNode *ShaderGraphEditorWidget::GetEditorNode(vkSGNode* node)
+{
+  for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfNodes(); i < in; ++i)
+  {
+    NodeGraphNode *nodeGraphNode = m_gui.nodeGraph->GetNode(i);
+    ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(nodeGraphNode);
+    if (editorNode->GetSGNode() == node)
+    {
+      return editorNode;
+    }
+  }
+  return 0;
+}
+
+ShaderGraphEditorNode *ShaderGraphEditorWidget::GetShaderGraphNode()
+{
+  for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfNodes(); i < in; ++i)
+  {
+    NodeGraphNode *nodeGraphNode = m_gui.nodeGraph->GetNode(i);
+    ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(nodeGraphNode);
+    if (editorNode->GetSGNode() == 0 && editorNode->GetShaderGraph())
+    {
+      return editorNode;
+    }
+  }
+  return 0;
 }
