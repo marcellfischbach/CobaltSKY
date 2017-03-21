@@ -21,7 +21,9 @@ public:
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
   virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
+  virtual QStringList mimeTypes() const;
+  virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
+  virtual Qt::ItemFlags flags(const QModelIndex &index) const;
   vkString GetEntry(const QModelIndex &index) const;
 private:
   void CleanupEntries();

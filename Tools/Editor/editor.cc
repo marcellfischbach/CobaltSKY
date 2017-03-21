@@ -13,6 +13,7 @@
 #include <physicsbullet/bulletsystem.hh>
 
 #include <nodegraph/nodegraphwidget.hh>
+#include <explorer/explorerdockitem.hh>
 #include <toolbox/toolboxdockitem.hh>
 #include <properties/propertiesdockitem.hh>
 
@@ -54,6 +55,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
+  AddDockItem(new ExplorerDockItem());
   AddDockItem(new ToolboxDockItem());
   AddDockItem(new PropertiesDockItem());
 
@@ -135,8 +137,8 @@ iAssetEditor *Editor::FindCurrentEditor()
 {
   QWidget *tabWidget = m_mainWindow->GetCurrentTab();
   for (std::map<AssetDescriptor, iAssetEditor*>::iterator it = m_openEditors.begin();
-       it != m_openEditors.end();
-       ++it)
+    it != m_openEditors.end();
+    ++it)
   {
     if (it->second->GetWidget() == tabWidget)
     {

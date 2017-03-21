@@ -3,6 +3,7 @@
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <editor.hh>
 #include <QPixmap>
+#include <QMimeData>
 
 class AssetManagerContentModelEntry
 {
@@ -127,6 +128,39 @@ QVariant AssetManagerContentModel::data(const QModelIndex &index, int role) cons
     }
   }
   return QVariant();
+}
+
+QStringList AssetManagerContentModel::mimeTypes() const
+{
+  printf("mimeTypes\n");
+  QStringList result;
+  result << "valkyrie_editor/asset_resource";
+  return result;
+}
+
+QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) const
+{
+  printf("mimeData: %d\n", indexes.size());
+  if (indexes.size() != 1)
+  {
+    return 0;
+  }
+  const QModelIndex &index = indexes[0];
+  const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
+
+  QMimeData *mimeData = new QMimeData();
+  mimeData->setData(QString("valkyrie_editor/asset_resource"), QString(entry->GetFileName().c_str()).toLatin1());
+  return mimeData;
+}
+
+Qt::ItemFlags AssetManagerContentModel::flags(const QModelIndex &index) const
+{
+  Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+
+  if (index.isValid())
+    return Qt::ItemIsDragEnabled | defaultFlags;
+  else
+    return defaultFlags;
 }
 
 vkString AssetManagerContentModel::GetEntry(const QModelIndex &index) const

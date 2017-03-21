@@ -61,6 +61,20 @@ source_group(
     ${ASSETMANAGER_UI}
     )
 
+           
+set(EXPLORER_SOURCES
+    explorer/explorerdockitem.cc
+    explorer/explorerdockitem.hh
+    )
+
+
+source_group(
+    "editor\\explorer"
+    FILES
+    ${EXPLORER_SOURCES}
+    )
+
+
 
 set(NODEGRAPH_SOURCES
     nodegraph/nodegraphacceptevent.cc
@@ -219,6 +233,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
+    ${EXPLORER_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${PROPERTIES_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
