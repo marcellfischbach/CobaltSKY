@@ -21,7 +21,7 @@ public:
   vkSGShaderGraph *GetShaderGraph() const;
   vkSGNode *GetSGNode() const;
 
-  void UpdateConstInputValues();
+  void UpdateValues();
 
 private:
   vkSGShaderGraph *m_shaderGraph;

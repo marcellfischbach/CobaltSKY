@@ -20,6 +20,7 @@ public:
   QRectF GetMinSize() const;
 
   void SetFont(const QFont &font);
+  void SetSubFont(const QFont &subFont);
 
   void SetInShow(bool inShow)
   {
@@ -61,6 +62,12 @@ public:
     m_name = name;
   }
 
+  void SetSubName(const QString &subName)
+  {
+    m_subName = subName;
+  }
+
+
   void SetBounds(const QRectF &bounds)
   {
     m_bounds = bounds;
@@ -93,7 +100,9 @@ private:
   bool m_outConnected;
 
   QString m_name;
+  QString m_subName;
   QFont m_font;
+  QFont m_subFont;
 
   QRectF m_bounds;
 

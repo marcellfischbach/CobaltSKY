@@ -8,6 +8,7 @@
 #define CONNECTOR_HEIGHT 20
 #define CONNECTOR_WIDTH 20
 #define CONNECTOR_SPACING 4
+#define HEADER_TITLE_SPACING  2
 
 NodeGraphNodeHeader::NodeGraphNodeHeader()
   : m_inShow(false)
@@ -21,7 +22,9 @@ NodeGraphNodeHeader::NodeGraphNodeHeader()
   , m_color1(0, 0, 0)
   , m_textColor(255, 255, 255)
 {
-
+  m_font.setPointSize(10);
+  m_subFont.setPointSize(8);
+  m_subFont.setItalic(true);
 }
 
 NodeGraphNodeHeader::~NodeGraphNodeHeader()
@@ -56,6 +59,11 @@ void NodeGraphNodeHeader::SetFont(const QFont &font)
   m_font = font;
 }
 
+void NodeGraphNodeHeader::SetSubFont(const QFont &subFont)
+{
+  m_subFont = subFont;
+}
+
 QRectF NodeGraphNodeHeader::GetMinSize() const
 {
   unsigned height = 0;
@@ -66,10 +74,24 @@ QRectF NodeGraphNodeHeader::GetMinSize() const
     width += CONNECTOR_WIDTH;
   }
 
+
   QFontMetrics fm(m_font);
+  QFontMetrics fmSub(m_subFont);
   unsigned textHeight = fm.height();
+  unsigned textWidth = fm.width(m_name);
+  textHeight += HEADER_TITLE_SPACING;
+  if (!m_subName.isEmpty())
+  {
+    textHeight += fmSub.height();
+    textHeight += HEADER_TITLE_SPACING;
+    unsigned subWidth = fmSub.width(m_subName);
+    textWidth = textWidth < subWidth ? subWidth : textWidth;
+  }
+  textHeight += HEADER_TITLE_SPACING;
+
+
   height = height < textHeight ? textHeight : height;
-  width += fm.width(m_name);
+  width += textWidth;
   width += CONNECTOR_SPACING * 2;
   if (m_outShow)
   {
@@ -126,8 +148,10 @@ void NodeGraphNodeHeader::Paint(QPainter *painter)
     rx -= CONNECTOR_WIDTH;
   }
 
-
-  painter->drawText(lx, y, rx - lx, height, Qt::AlignLeft | Qt::AlignVCenter, m_name);
-
+  painter->setFont(m_font);
+  painter->drawText(lx, y + HEADER_TITLE_SPACING, rx - lx, height- 2* HEADER_TITLE_SPACING, Qt::AlignLeft | Qt::AlignTop, m_name);
+  painter->setFont(m_subFont);
+  painter->drawText(lx, y + HEADER_TITLE_SPACING, rx - lx, height - 2 * HEADER_TITLE_SPACING, Qt::AlignLeft | Qt::AlignBottom, m_subName);
+  painter->setFont(QFont());
 }
 

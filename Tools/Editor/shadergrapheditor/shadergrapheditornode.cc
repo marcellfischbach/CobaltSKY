@@ -93,7 +93,10 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
   vkSGResourceNode *resource = vkQueryClass<vkSGResourceNode>(node);
   if (resource)
   {
+    GetHeader()->SetSubName(QString(resource->GetResourceName().c_str()));
+
     NodeGraphNodeImageProperty *prop = new NodeGraphNodeImageProperty(this);
+
     prop->SetIdx(-1);
     AddInputProperty(prop);
   }
@@ -169,7 +172,7 @@ vkSGNode *ShaderGraphEditorNode::GetSGNode() const
 }
 
 
-void ShaderGraphEditorNode::UpdateConstInputValues()
+void ShaderGraphEditorNode::UpdateValues()
 {
   if (!m_sgNode)
   {
@@ -184,6 +187,12 @@ void ShaderGraphEditorNode::UpdateConstInputValues()
     {
       it->second->SetValue(input->GetConst());
     }
+  }
+
+  vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(m_sgNode);
+  if (resourceNode)
+  {
+    GetHeader()->SetSubName(QString(resourceNode->GetResourceName().c_str()));
   }
 }
 

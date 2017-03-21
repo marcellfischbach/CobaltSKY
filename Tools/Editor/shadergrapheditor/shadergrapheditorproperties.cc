@@ -54,6 +54,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     lo->setVerticalSpacing(3);
     int row = 0;
 
+    bool needSeparator = false;
     vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
     if (resourceNode)
     {
@@ -159,13 +160,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         row++;
       }
 
-      QFrame *line = new QFrame(m_group);
-      line->setObjectName(QStringLiteral("line"));
-      line->setFrameShape(QFrame::HLine);
-      line->setFrameShadow(QFrame::Sunken);
-
-      lo->addWidget(line, row, 0, 1, 2);
-      row++;
+      needSeparator = true;
     }
 
     for (vkSize i = 0, in = sgNode->GetNumberOfInputs(); i < in; ++i)
@@ -173,6 +168,17 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
       vkSGInput *input = sgNode->GetInput(i);
       if (input->CanInputConst())
       {
+        if (needSeparator)
+        {
+          QFrame *line = new QFrame(m_group);
+          line->setObjectName(QStringLiteral("line"));
+          line->setFrameShape(QFrame::HLine);
+          line->setFrameShadow(QFrame::Sunken);
+
+          lo->addWidget(line, row, 0, 1, 2);
+          row++;
+          needSeparator = false;
+        }
         QLabel *label = new QLabel(m_group);
         label->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
         label->setText(QString(input->GetName().c_str()));
@@ -227,7 +233,7 @@ void ShaderGraphEditorProperties::SpinBox_valueChanged(double value)
     }
   }
 
-  m_node->UpdateConstInputValues();
+  m_node->UpdateValues();
   m_node->Layout();
   emit NodeChanged();
 }
@@ -247,6 +253,7 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
     {
       resourceNode->SetResourceName(vkString((const char*)name.toLatin1()));
 
+      m_node->UpdateValues();
       m_node->Layout();
       emit NodeChanged();
     }
