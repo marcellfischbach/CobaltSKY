@@ -61,19 +61,6 @@ source_group(
     ${ASSETMANAGER_UI}
     )
 
-           
-set(EXPLORER_SOURCES
-    explorer/explorerdockitem.cc
-    explorer/explorerdockitem.hh
-    )
-
-
-source_group(
-    "editor\\explorer"
-    FILES
-    ${EXPLORER_SOURCES}
-    )
-
 
 
 set(NODEGRAPH_SOURCES
@@ -107,7 +94,20 @@ source_group(
     )
 
 
-           
+                    
+set(OUTLINER_SOURCES
+    outliner/outlinerdockitem.cc
+    outliner/outlinerdockitem.hh
+    )
+
+
+source_group(
+    "editor\\outliner"
+    FILES
+    ${OUTLINER_SOURCES}
+    )
+
+  
 set(PROPERTIES_SOURCES
     properties/propertiesdockitem.cc
     properties/propertiesdockitem.hh
@@ -233,8 +233,8 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
-    ${EXPLORER_SOURCES}
     ${NODEGRAPH_SOURCES}
+    ${OUTLINER_SOURCES}
     ${PROPERTIES_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
