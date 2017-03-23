@@ -1,11 +1,11 @@
 
 
-#include <explorer/explorerdockitem.hh>
+#include <outliner/outlinerdockitem.hh>
 #include <QFrame>
 #include <QGridLayout>
 
-ExplorerDockItem::ExplorerDockItem()
-  : AbstractDockItem(EXPLORER_DOCK_NAME, "Explorer", Qt::RightDockWidgetArea)
+OutlinerDockItem::OutlinerDockItem()
+  : AbstractDockItem(OUTLINER_DOCK_NAME, "Outliner", Qt::RightDockWidgetArea)
   , m_content(0)
 {
   m_frame = new QFrame();
@@ -14,12 +14,12 @@ ExplorerDockItem::ExplorerDockItem()
   SetWidget(m_frame);
 }
 
-ExplorerDockItem::~ExplorerDockItem()
+OutlinerDockItem::~OutlinerDockItem()
 {
 
 }
 
-void ExplorerDockItem::SetContent(QWidget *content)
+void OutlinerDockItem::SetContent(QWidget *content)
 {
   if (m_content)
   {

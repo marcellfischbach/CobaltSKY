@@ -5,7 +5,7 @@
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <editor.hh>
-#include <explorer/explorerdockitem.hh>
+#include <outliner/outlinerdockitem.hh>
 #include <toolbox/toolboxdockitem.hh>
 #include <properties/propertiesdockitem.hh>
 #include <valkyrie/core/vkresourcemanager.hh>
@@ -25,7 +25,7 @@ ShaderGraphEditor::ShaderGraphEditor()
   m_properties = new ShaderGraphEditorProperties();
   AddDockItemName(PROPERTIES_DOCK_NAME);
 
-  AddDockItemName(EXPLORER_DOCK_NAME);
+  AddDockItemName(OUTLINER_DOCK_NAME);
 
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
     m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
