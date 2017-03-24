@@ -16,7 +16,7 @@ public:
   ShaderGraphEditorWidget(ShaderGraphEditor *parent);
   virtual ~ShaderGraphEditorWidget();
 
-  void SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
+  vkSGShaderGraph *SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
 
 public slots:
 void RepaintGraph();

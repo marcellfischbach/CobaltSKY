@@ -13,7 +13,7 @@
 #include <physicsbullet/bulletsystem.hh>
 
 #include <nodegraph/nodegraphwidget.hh>
-#include <explorer/explorerdockitem.hh>
+#include <outliner/outlinerdockitem.hh>
 #include <toolbox/toolboxdockitem.hh>
 #include <properties/propertiesdockitem.hh>
 
@@ -55,7 +55,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
-  AddDockItem(new ExplorerDockItem());
+  AddDockItem(new OutlinerDockItem());
   AddDockItem(new ToolboxDockItem());
   AddDockItem(new PropertiesDockItem());
 

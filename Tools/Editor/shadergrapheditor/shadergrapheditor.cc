@@ -1,6 +1,7 @@
 
 #include <shadergrapheditor/shadergrapheditor.hh>
 #include <shadergrapheditor/shadergrapheditormeta.hh>
+#include <shadergrapheditor/shadergrapheditoroutliner.hh>
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
@@ -25,10 +26,14 @@ ShaderGraphEditor::ShaderGraphEditor()
   m_properties = new ShaderGraphEditorProperties();
   AddDockItemName(PROPERTIES_DOCK_NAME);
 
+  m_outliner = new ShaderGraphEditorOutliner();
   AddDockItemName(OUTLINER_DOCK_NAME);
 
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
     m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
+
+  QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
+    m_outliner, SLOT(SetSelectedNodes(const QList<ShaderGraphEditorNode*>&)));
 
   QObject::connect(m_properties, SIGNAL(NodeChanged()), m_widget, SLOT(RepaintGraph()));
 }
@@ -47,7 +52,8 @@ void ShaderGraphEditor::OpenAsset()
 
   vkResourceLocator metaLocator(descriptor.GetAssetResourceName(), "meta");
   ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
-  m_widget->SetShaderGraph(shaderGraph, meta);
+  vkSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
+  m_outliner->SetShaderGraph(graph);
 
   VK_RELEASE(meta);
 
@@ -60,4 +66,8 @@ void ShaderGraphEditor::PopulateDockItems()
 
   PropertiesDockItem *properties = static_cast<PropertiesDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
   properties->SetContent(m_properties);
+
+  OutlinerDockItem *outliner = static_cast<OutlinerDockItem*>(Editor::Get()->GetDockItem(OUTLINER_DOCK_NAME));
+  outliner->SetContent(m_outliner);
+
 }

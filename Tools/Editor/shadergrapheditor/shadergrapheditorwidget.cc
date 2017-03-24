@@ -45,12 +45,12 @@ ShaderGraphEditorWidget::~ShaderGraphEditorWidget()
   VK_RELEASE(m_shaderGraphCopy);
 }
 
-void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta)
+vkSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta)
 {
   VK_SET(m_shaderGraph, shaderGraph);
   if (!m_shaderGraph)
   {
-    return;
+    return 0;
   }
 
   m_updateGuard = true;
@@ -114,6 +114,7 @@ void ShaderGraphEditorWidget::SetShaderGraph(vkSGShaderGraph *shaderGraph, Shade
 
   }
   m_updateGuard = false;
+  return m_shaderGraphCopy;
 }
 
 

@@ -3,15 +3,15 @@
 
 #include <abstractdockitem.hh>
 
-#define EXPLORER_DOCK_NAME "Eplorer"
+#define OUTLINER_DOCK_NAME "Outliner"
 
 class QGridLayout;
 class QFrame;
-class ExplorerDockItem : public AbstractDockItem
+class OutlinerDockItem : public AbstractDockItem
 {
 public:
-  ExplorerDockItem();
-	virtual ~ExplorerDockItem();
+  OutlinerDockItem();
+	virtual ~OutlinerDockItem();
 
   void SetContent(QWidget *widget);
 

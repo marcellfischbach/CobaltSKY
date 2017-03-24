@@ -156,6 +156,10 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
     shadergrapheditor/shadergrapheditornode.cc
     shadergrapheditor/shadergrapheditornode.hh
+    shadergrapheditor/shadergrapheditoroutliner.cc
+    shadergrapheditor/shadergrapheditoroutliner.hh
+    shadergrapheditor/shadergrapheditoroutlinertablemodel.cc
+    shadergrapheditor/shadergrapheditoroutlinertablemodel.hh
     shadergrapheditor/shadergrapheditorproperties.cc
     shadergrapheditor/shadergrapheditorproperties.hh
     shadergrapheditor/shadergrapheditortoolbox.cc
@@ -167,6 +171,7 @@ set(SHADERGRAPHEDITOR_SOURCES
     )
 
 set(SHADERGRAPHEDITOR_UI
+    shadergrapheditor/shadergrapheditoroutliner.ui
     shadergrapheditor/shadergrapheditortoolbox.ui
     shadergrapheditor/shadergrapheditorwidget.ui
     )
