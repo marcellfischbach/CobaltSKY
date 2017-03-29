@@ -2,6 +2,7 @@
 
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditornode.hh>
+#include <components/assetresourcewidget.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
@@ -75,6 +76,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
       lo->addWidget(label, row, 0, 1, 1);
       QDoubleSpinBox *doubleSpinBox;
       QSpinBox *spinBox;
+      AssetResourceWidget *assetResourceWidget;
       m_spinBoxDefaultFloatResource.clear();
 
       switch (resourceNode->GetResourceType())
@@ -154,6 +156,12 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         connect(doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(DefaultFloat_valueChanged(double)));
         m_spinBoxDefaultFloatResource.push_back(doubleSpinBox);
         lo->addWidget(doubleSpinBox, row++, 1, 1, 1);
+        break;
+
+      case eSPT_Texture:
+        assetResourceWidget = new AssetResourceWidget(m_group);
+        assetResourceWidget->SetResourceLocator(resourceNode->GetDefaultTextureResource());
+        lo->addWidget(assetResourceWidget, row++, 1, 1, 1);
         break;
 
       default:

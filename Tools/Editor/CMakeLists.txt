@@ -61,6 +61,23 @@ source_group(
     ${ASSETMANAGER_UI}
     )
 
+set(COMPONENTS_SOURCES
+    components/assetresourcewidget.cc
+    components/assetresourcewidget.hh
+    )
+
+set(COMPONENTS_UI
+    components/assetresourcewidget.ui
+    )
+
+
+source_group(
+    "editor\\components"
+    FILES
+    ${COMPONENTS_SOURCES}
+    ${COMPONENTS_UI}
+    )
+
 
 
 set(NODEGRAPH_SOURCES
@@ -227,6 +244,7 @@ source_group(
 
 set(ALL_UI
     ${ASSETMANAGER_UI}
+    ${COMPONENTS_UI}
     ${SAMPLEREDITOR_UI}
     ${SHADERGRAPHEDITOR_UI}
     ${TEXTUREEDITOR_UI}
@@ -238,6 +256,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
+    ${COMPONENTS_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${OUTLINER_SOURCES}
     ${PROPERTIES_SOURCES}
