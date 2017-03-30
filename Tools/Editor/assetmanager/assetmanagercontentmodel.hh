@@ -6,6 +6,7 @@
 #include <valkyrie/core/vkstring.hh>
 
 class AssetManagerContentModelEntry;
+class vkClass;
 
 class AssetManagerContentModel : public QAbstractItemModel
 {
@@ -27,6 +28,9 @@ public:
   vkString GetEntry(const QModelIndex &index) const;
 private:
   void CleanupEntries();
+  vkString ExtractResourceName(const vkString &fileName) const;
+  vkString ReadType(const vkString &fileName) const;
+  const vkClass *ReadClass(const vkString &fileName) const;
 
   QDir m_dir;
   QList<AssetManagerContentModelEntry*> m_entries;

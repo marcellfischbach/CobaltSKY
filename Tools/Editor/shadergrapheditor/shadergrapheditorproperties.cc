@@ -6,6 +6,7 @@
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/itexture.hh>
 
 #include <QGridLayout>
 #include <QLineEdit>
@@ -161,6 +162,9 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
       case eSPT_Texture:
         assetResourceWidget = new AssetResourceWidget(m_group);
         assetResourceWidget->SetResourceLocator(resourceNode->GetDefaultTextureResource());
+        assetResourceWidget->AddValidClass(iTexture::GetStaticClass());
+        connect(assetResourceWidget, SIGNAL(ResourceChanged(const vkResourceLocator&)),
+          this, SLOT(ResourceChanged(const vkResourceLocator &)));
         lo->addWidget(assetResourceWidget, row++, 1, 1, 1);
         break;
 
@@ -317,3 +321,25 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
   m_node->Layout();
   emit NodeChanged();
 }
+
+void ShaderGraphEditorProperties::ResourceChanged(const vkResourceLocator &locator)
+{
+  if (!m_node)
+  {
+    return;
+  }
+
+  vkSGNode *node = m_node->GetSGNode();
+  if (node)
+  {
+    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+    if (resourceNode)
+    {
+      resourceNode->SetDefaultTextureResource(locator);
+    }
+  }
+
+  m_node->Layout();
+  emit NodeChanged();
+}
+

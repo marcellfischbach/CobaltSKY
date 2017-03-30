@@ -30,7 +30,11 @@
     <number>3</number>
    </property>
    <item row="0" column="0">
-    <widget class="QLineEdit" name="lineEdit"/>
+    <widget class="AssetResourceLineEdit" name="lineEdit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="pushButton">
@@ -54,6 +58,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AssetResourceLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">components/assetresourcelineedit.hh</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources.qrc"/>
  </resources>

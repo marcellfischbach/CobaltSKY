@@ -8,6 +8,7 @@ class QDoubleSpinBox;
 class QGridLayout;
 class QSpinBox;
 class ShaderGraphEditorNode;
+class vkResourceLocator;
 class ShaderGraphEditorProperties : public QWidget
 {
   Q_OBJECT;
@@ -24,6 +25,7 @@ private slots:
   void Resource_nameChanged(const QString &text);
   void DefaultFloat_valueChanged(double value);
   void DefaultInt_valueChanged(int value);
+  void ResourceChanged(const vkResourceLocator &locator);
 
 signals:
   void NodeChanged();

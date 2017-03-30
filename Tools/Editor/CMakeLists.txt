@@ -29,6 +29,8 @@ set(EDITOR_SOURCES
     idockitem.hh
     mainwindow.cc
     mainwindow.hh
+    mimehelper.cc
+    mimehelper.hh
     renderwidget.cc
     renderwidget.hh
     )
@@ -62,6 +64,8 @@ source_group(
     )
 
 set(COMPONENTS_SOURCES
+    components/assetresourcelineedit.cc
+    components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
     )

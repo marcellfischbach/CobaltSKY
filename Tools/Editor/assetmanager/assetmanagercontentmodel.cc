@@ -4,6 +4,12 @@
 #include <editor.hh>
 #include <QPixmap>
 #include <QMimeData>
+#include <mimehelper.hh>
+#include <valkyrie/core/ifile.hh>
+#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/vkresourcemanager.hh>
+#include <QDomDocument>
+#include <QFile>
 
 class AssetManagerContentModelEntry
 {
@@ -20,7 +26,7 @@ public:
   vkString GetFileName() const
   {
     return  m_fileName;
-    
+
   }
 
   const QPixmap &GetIcon() const
@@ -32,7 +38,7 @@ public:
   {
     return m_entryName;
   }
-    
+
 
 private:
   QDir m_dir;
@@ -134,7 +140,9 @@ QStringList AssetManagerContentModel::mimeTypes() const
 {
   printf("mimeTypes\n");
   QStringList result;
-  result << "valkyrie_editor/asset_resource";
+  result << QString(MimeHelper::GetResourceLocatorMimeType().c_str());
+  result << QString(MimeHelper::GetResourceTypeMimeType().c_str());
+  result << QString(MimeHelper::GetClassMimeType().c_str());
   return result;
 }
 
@@ -148,9 +156,11 @@ QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) co
   const QModelIndex &index = indexes[0];
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
 
-  QMimeData *mimeData = new QMimeData();
-  mimeData->setData(QString("valkyrie_editor/asset_resource"), QString(entry->GetFileName().c_str()).toLatin1());
-  return mimeData;
+  QMimeData *data = new QMimeData();
+  MimeHelper::PutResourceLocatorMimeData(data, ExtractResourceName(entry->GetFileName()));
+  MimeHelper::PutResourceTypeMimeData(data, ReadType(entry->GetFileName()));
+  MimeHelper::PutClassMimeData(data, ReadClass(entry->GetFileName()));
+  return data;
 }
 
 Qt::ItemFlags AssetManagerContentModel::flags(const QModelIndex &index) const
@@ -173,3 +183,48 @@ vkString AssetManagerContentModel::GetEntry(const QModelIndex &index) const
   return entry->GetFileName();
 }
 
+vkString AssetManagerContentModel::ExtractResourceName(const vkString &fileName) const
+{
+  return Editor::Get()->ConvertToResourcePath(fileName);
+}
+
+vkString AssetManagerContentModel::ReadType(const vkString &fileName) const
+{
+
+  QFile file(QString(fileName.c_str()));
+  file.open(QIODevice::ReadOnly);
+  QDomDocument doc;
+  QString errorMesage;
+  int line, column;
+  if (!doc.setContent(&file, &errorMesage, &line, &column))
+  {
+    printf("unable to parse %s '%s' %d:%d\n", fileName.c_str(), (const char*)errorMesage.toLatin1(), line, column);
+    return "";
+  }
+
+  QDomElement assetElement = doc.documentElement();
+  if (assetElement.isNull () || assetElement.tagName() != QString("asset"))
+  {
+    return "";
+  }
+
+  QDomElement dataElement = assetElement.firstChildElement("data");
+  if (dataElement.isNull())
+  {
+    return "";
+  }
+
+  QDomElement typeElement = dataElement.firstChildElement();
+  if (typeElement.isNull())
+  {
+    return "";
+  }
+
+  return vkString((const char*)typeElement.tagName().toLatin1());
+}
+
+const vkClass *AssetManagerContentModel::ReadClass(const vkString &fileName) const
+{
+  vkString &resourceName = Editor::Get()->ConvertToResourcePath(fileName);
+  return vkResourceManager::Get()->EvalClass(vkResourceLocator(resourceName));
+}
