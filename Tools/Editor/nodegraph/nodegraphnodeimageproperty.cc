@@ -33,8 +33,11 @@ void NodeGraphNodeImageProperty::Paint(QPainter *painter)
   }
   int x = m_bounds.x();
   int y = m_bounds.y();
-
-  painter->fillRect(x, y, m_image.width() + 2, m_image.height() + 2, QBrush(QColor(255, 255, 255)));
-  painter->fillRect(x+1, y+1, m_image.width(), m_image.height(), QBrush(QColor(0, 0, 0)));
-  painter->drawImage(x, y, m_image);
+  bool antiAlias = painter->testRenderHint(QPainter::Antialiasing);
+  painter->setRenderHint(QPainter::Antialiasing, false);
+  painter->fillRect(x, y, m_image.width() + 1, m_image.height() + 1, QBrush(QColor(0, 0, 0)));
+  painter->setPen(QPen(QColor(255, 255, 255), 1.0));
+  painter->drawRect(x, y, m_image.width() + 1, m_image.height() + 1);
+  painter->drawImage(x+1, y, m_image);
+  painter->setRenderHint(QPainter::Antialiasing, antiAlias);
 }

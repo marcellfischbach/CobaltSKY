@@ -7,8 +7,9 @@
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <editor.hh>
 #include <outliner/outlinerdockitem.hh>
-#include <toolbox/toolboxdockitem.hh>
+#include <preview/previewdockitem.hh>
 #include <properties/propertiesdockitem.hh>
+#include <toolbox/toolboxdockitem.hh>
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
@@ -28,6 +29,8 @@ ShaderGraphEditor::ShaderGraphEditor()
 
   m_outliner = new ShaderGraphEditorOutliner();
   AddDockItemName(OUTLINER_DOCK_NAME);
+
+  AddDockItemName(PREVIEW_DOCK_NAME);
 
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
     m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));

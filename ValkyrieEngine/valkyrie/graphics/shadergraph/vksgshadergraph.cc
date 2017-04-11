@@ -92,6 +92,8 @@ bool vkSGShaderGraph::Validate()
 
   success &= ValidateNode(m_diffuse);
   success &= ValidateNode(m_alpha);
+  success &= ValidateNode(m_roughness);
+  success &= ValidateNode(m_normal);
 
   return success;
 }

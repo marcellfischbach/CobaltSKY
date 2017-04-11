@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nodegraph/nodegraphnode.hh>
+#include <valkyrie/core/vkresourcelocator.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <map>
@@ -26,6 +27,8 @@ public:
 private:
   vkSGShaderGraph *m_shaderGraph;
   vkSGNode *m_sgNode;
+
+  vkResourceLocator m_texturePreviewResourceLocator;
 
   std::map<unsigned, NodeGraphNodeValueProperty*> m_valueProperties;
   std::map<vkUInt32, NodeGraphNodeAnchor *> m_inputAnchors;

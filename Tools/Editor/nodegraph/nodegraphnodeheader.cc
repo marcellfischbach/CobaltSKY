@@ -105,6 +105,9 @@ QRectF NodeGraphNodeHeader::GetMinSize() const
 
 void NodeGraphNodeHeader::Paint(QPainter *painter)
 {
+  bool antiAlias = painter->testRenderHint(QPainter::Antialiasing);
+  painter->setRenderHint(QPainter::Antialiasing, false);
+
   int x = (int)m_bounds.x();
   int y = (int)m_bounds.y();
   unsigned width = (unsigned)m_bounds.width();
@@ -117,6 +120,8 @@ void NodeGraphNodeHeader::Paint(QPainter *painter)
   painter->setPen(QPen(m_textColor));
   unsigned lx = x + CONNECTOR_SPACING;
   unsigned rx = x + width - CONNECTOR_SPACING;
+  painter->setRenderHint(QPainter::Antialiasing, antiAlias);
+
 
   if (m_inShow)
   {

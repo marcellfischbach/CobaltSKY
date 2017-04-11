@@ -22,6 +22,8 @@ set(EDITOR_SOURCES
     main.cc
     editor.cc
     editor.hh
+    editorimage.cc
+    editorimage.hh
     editormodule.cc
     editormodule.hh
     iasseteditor.hh
@@ -68,6 +70,8 @@ set(COMPONENTS_SOURCES
     components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
+    components/sceneview.cc
+    components/sceneview.hh
     )
 
 set(COMPONENTS_UI
@@ -82,6 +86,17 @@ source_group(
     ${COMPONENTS_UI}
     )
 
+set(LOADERS_SOURCES
+    loaders/loaderseditoriconassetxmlloader.cc
+    loaders/loaderseditoriconassetxmlloader.hh
+    )
+
+
+source_group(
+    "editor\\loaders"
+    FILES
+    ${LOADERS_SOURCES}
+    )
 
 
 set(NODEGRAPH_SOURCES
@@ -126,6 +141,21 @@ source_group(
     "editor\\outliner"
     FILES
     ${OUTLINER_SOURCES}
+    )
+
+                    
+set(PREVIEW_SOURCES
+    preview/previewdockitem.cc
+    preview/previewdockitem.hh
+    preview/previewsceneview.cc
+    preview/previewsceneview.hh
+    )
+
+
+source_group(
+    "editor\\preview"
+    FILES
+    ${PREVIEW_SOURCES}
     )
 
   
@@ -261,8 +291,10 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
     ${COMPONENTS_SOURCES}
+    ${LOADERS_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${OUTLINER_SOURCES}
+    ${PREVIEW_SOURCES}
     ${PROPERTIES_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}

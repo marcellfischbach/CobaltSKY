@@ -1,15 +1,19 @@
 
 
 #include <shadergrapheditor/shadergrapheditornode.hh>
+#include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 #include <nodegraph/nodegraphnodeheader.hh>
 #include <nodegraph/nodegraphnodeimageproperty.hh>
 #include <nodegraph/nodegraphnodevalueproperty.hh>
+#include <editorimage.hh>
 #include <QMap>
 #include <QColor>
 
+
+static const int IDX_TEXTURE_IMAGE = -1;
 
 
 ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
@@ -93,11 +97,9 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
   vkSGResourceNode *resource = vkQueryClass<vkSGResourceNode>(node);
   if (resource)
   {
-    GetHeader()->SetSubName(QString(resource->GetResourceName().c_str()));
-
     NodeGraphNodeImageProperty *prop = new NodeGraphNodeImageProperty(this);
 
-    prop->SetIdx(-1);
+    prop->SetIdx(IDX_TEXTURE_IMAGE);
     AddInputProperty(prop);
   }
   for (vkSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
@@ -107,7 +109,6 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     NodeGraphNodeValueProperty *prop = new NodeGraphNodeValueProperty(this);
     prop->SetShowValue(input->CanInputConst());
     prop->SetAnchorShow(input->CanInputNode());
-    prop->SetValue(input->GetConst());
     prop->SetName(QString(input->GetName().c_str()));
     prop->SetIdx(input->GetIdx());
     prop->Initialize();
@@ -128,6 +129,8 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGNode *node)
     AddOutputProperty(prop);
     m_outputAnchors[output->GetIdx()] = prop->GetAnchor();
   }
+
+  UpdateValues();
 
   Layout();
 
@@ -192,6 +195,21 @@ void ShaderGraphEditorNode::UpdateValues()
   vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(m_sgNode);
   if (resourceNode)
   {
+    NodeGraphNodeProperty *prop = GetInputProperty(IDX_TEXTURE_IMAGE);
+    if (prop)
+    {
+      if (resourceNode->GetDefaultTextureResource() != m_texturePreviewResourceLocator)
+      {
+        NodeGraphNodeImageProperty *imgProp = static_cast<NodeGraphNodeImageProperty*>(prop);
+        vkResourceLocator locator(resourceNode->GetDefaultTextureResource(), "preview");
+        EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(locator);
+        if (editorImage)
+        {
+          imgProp->SetImage(editorImage->GetImage());
+        }
+        m_texturePreviewResourceLocator = resourceNode->GetDefaultTextureResource();
+      }
+    }
     GetHeader()->SetSubName(QString(resourceNode->GetResourceName().c_str()));
   }
 }

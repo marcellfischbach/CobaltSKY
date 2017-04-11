@@ -40,6 +40,8 @@ public:
   void AddProperty(NodeGraphNodeProperty *nodeProperty);
   void AddInputProperty(NodeGraphNodeProperty *nodeProperty);
   void AddOutputProperty(NodeGraphNodeProperty *nodeProperty);
+  NodeGraphNodeProperty *GetInputProperty(int idx);
+  NodeGraphNodeProperty *GetOutputProperty(int idx);
 
   const QRectF &GetBounding() const
   {

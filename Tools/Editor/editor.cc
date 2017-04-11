@@ -14,8 +14,9 @@
 
 #include <nodegraph/nodegraphwidget.hh>
 #include <outliner/outlinerdockitem.hh>
-#include <toolbox/toolboxdockitem.hh>
+#include <preview/previewdockitem.hh>
 #include <properties/propertiesdockitem.hh>
+#include <toolbox/toolboxdockitem.hh>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -55,9 +56,6 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
-  AddDockItem(new OutlinerDockItem());
-  AddDockItem(new ToolboxDockItem());
-  AddDockItem(new PropertiesDockItem());
 
   QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
   offscreenSurface->create();
@@ -67,6 +65,15 @@ bool Editor::Initialize(int argc, char **argv)
   context->setShareContext(QOpenGLContext::globalShareContext());
   context->create();
   context->makeCurrent(offscreenSurface);
+  printf("MainContext: %p\n", context);
+
+  // left docks
+  AddDockItem(new PreviewDockItem());
+  AddDockItem(new ToolboxDockItem());
+
+  // right docks
+  AddDockItem(new OutlinerDockItem());
+  AddDockItem(new PropertiesDockItem());
 
   GetGraphics();
 

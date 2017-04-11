@@ -132,6 +132,31 @@ void NodeGraphNode::AddOutputProperty(NodeGraphNodeProperty *nodeProperty)
   m_outputProperties.push_back(nodeProperty);
 }
 
+NodeGraphNodeProperty *NodeGraphNode::GetInputProperty(int idx)
+{
+  for (NodeGraphNodeProperty *prop : m_inputProperties)
+  {
+    if (prop && prop->GetIdx() == idx)
+    {
+      return prop;
+    }
+  }
+  return 0;
+}
+
+NodeGraphNodeProperty *NodeGraphNode::GetOutputProperty(int idx)
+{
+  for (NodeGraphNodeProperty *prop : m_outputProperties)
+  {
+    if (prop && prop->GetIdx() == idx)
+    {
+      return prop;
+    }
+  }
+  return 0;
+}
+
+
 void NodeGraphNode::paint(QPainter *painter)
 {
   QTransform currentTransform = painter->transform();
@@ -140,7 +165,8 @@ void NodeGraphNode::paint(QPainter *painter)
   localTransform.translate(m_bounding.left(), m_bounding.top());
   painter->setTransform(localTransform, true);
 
-
+  bool antiAlias = painter->testRenderHint(QPainter::Antialiasing);
+  painter->setRenderHint(QPainter::Antialiasing, false);
   painter->fillRect(0, 0, m_bounding.width(), m_bounding.height(), QColor(0, 0, 0, 255));
   if (m_selected)
   {
@@ -150,6 +176,7 @@ void NodeGraphNode::paint(QPainter *painter)
 
     painter->drawRect(-1.0f, -1.0f, m_bounding.width() + 2, m_bounding.height() + 2);
   }
+  painter->setRenderHint(QPainter::Antialiasing, antiAlias);
 
   QRectF headerSize = m_header->GetMinSize();
   m_header->Paint(painter);

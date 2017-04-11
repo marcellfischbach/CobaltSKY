@@ -14,6 +14,10 @@ public:
 
   bool operator< (const vkResourceLocator &o) const;
   bool operator== (const vkResourceLocator &o) const;
+  bool operator!= (const vkResourceLocator &o) const
+  {
+    return !(*this == o);
+  }
 
   bool IsValid() const;
 

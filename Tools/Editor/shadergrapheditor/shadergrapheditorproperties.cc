@@ -293,6 +293,7 @@ void ShaderGraphEditorProperties::DefaultFloat_valueChanged(double value)
     }
   }
 
+  m_node->UpdateValues();
   m_node->Layout();
   emit NodeChanged();
 }
@@ -318,6 +319,7 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
     }
   }
 
+  m_node->UpdateValues();
   m_node->Layout();
   emit NodeChanged();
 }
@@ -339,6 +341,7 @@ void ShaderGraphEditorProperties::ResourceChanged(const vkResourceLocator &locat
     }
   }
 
+  m_node->UpdateValues();
   m_node->Layout();
   emit NodeChanged();
 }

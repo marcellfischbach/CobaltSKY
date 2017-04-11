@@ -11,12 +11,16 @@
 #include <nodegraph/nodegraphnodeimageproperty.hh>
 #include <nodegraph/nodegraphnodevalueproperty.hh>
 
+#include <mimehelper.hh>
+
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/core/vkclassregistry.hh>
 #include <valkyrie/graphics/igraphics.hh>
+#include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/vksgtexture2d.hh>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -226,16 +230,47 @@ void ShaderGraphEditorWidget::on_nodeGraph_ScaleChanged(float scale)
 
 }
 
+
 void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, NodeGraphAcceptEvent *accept)
 {
+  // check the mime from the toolbox
   if (event->mimeData()->hasFormat(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME))
   {
+    accept->Accept();
+    return;
+  }
+  else
+  {
+
+    const QMimeData *data = event->mimeData();
+    if (!data)
+    {
+      return;
+    }
+
+    const vkClass *cls = MimeHelper::GetClass(data);
+    if (!cls)
+    {
+      return;
+    }
+
+    if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+    {
+      if (!MimeHelper::HasResourceLocator(data))
+      {
+        return;
+      }
+    }
+
     accept->Accept();
   }
 }
 
+
 void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
 {
+  ShaderGraphEditorNode *editorNode = 0;
+
   if (event->mimeData()->hasFormat(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME))
   {
     QByteArray ba = event->mimeData()->data(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME);
@@ -256,7 +291,44 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
 
     m_shaderGraphCopy->AddNode(node);
 
-    ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(node);
+    editorNode = new ShaderGraphEditorNode(node);
+  }
+  else
+  {
+
+
+    const QMimeData *data = event->mimeData();
+    if (!data)
+    {
+      return;
+    }
+
+    const vkClass *cls = MimeHelper::GetClass(data);
+    if (!cls)
+    {
+      return;
+    }
+
+    if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+    {
+      if (!MimeHelper::HasResourceLocator(data))
+      {
+        return;
+      }
+    }
+    vkResourceLocator locator = MimeHelper::GetResourceLocator(data);
+
+    vkSGTexture2D *txtNode = new vkSGTexture2D();
+    txtNode->SetDefaultTextureResource(locator);
+    txtNode->SetResourceName("<unnamed>");
+
+    m_shaderGraphCopy->AddNode(txtNode);
+
+    editorNode = new ShaderGraphEditorNode(txtNode);
+  }
+
+  if (editorNode)
+  {
     m_gui.nodeGraph->AddNode(editorNode);
     editorNode->SetLocation(m_gui.nodeGraph->GetLocalCoordinate(event->pos()));
     m_gui.nodeGraph->repaint();

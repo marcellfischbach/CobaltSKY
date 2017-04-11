@@ -10,6 +10,7 @@
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <textureeditor/textureeditorfactory.hh>
 
+#include <loaders/loaderseditoriconassetxmlloader.hh>
 
 void EditorModule::Initialize()
 {
@@ -24,5 +25,5 @@ void EditorModule::Initialize()
 
   vkResourceManager *mgr = vkResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
-
+  mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
 }

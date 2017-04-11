@@ -2,6 +2,7 @@
 
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <editor.hh>
+#include <editorimage.hh>
 #include <QPixmap>
 #include <QMimeData>
 #include <mimehelper.hh>
@@ -18,9 +19,24 @@ public:
     : m_dir(dir)
     , m_entryName(fileName)
   {
-    m_pixmap = QPixmap(":/icons/resources/UnknownAsset64.png");
     QString fn = m_dir.absoluteFilePath(m_entryName);
     m_fileName = (const char*)fn.toLatin1();
+    vkString res = Editor::Get()->ConvertToResourcePath(m_fileName);
+    vkResourceLocator previewLocator(res, "preview");
+    EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
+    printf("Res: %s => %p\n", res.c_str(), editorImage);
+    if (editorImage)
+    {
+      QImage img = editorImage->GetImage();
+      if (!img.isNull())
+      {
+        m_pixmap = QPixmap::fromImage(img);
+      }
+    }
+    if (m_pixmap.isNull())
+    {
+      m_pixmap = QPixmap(":/icons/resources/UnknownAsset64.png");
+    }
   }
 
   vkString GetFileName() const
