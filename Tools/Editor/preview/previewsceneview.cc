@@ -5,10 +5,12 @@
 #include <valkyrie/entity/vkentityscene.hh>
 #include <valkyrie/entity/vklightstate.hh>
 #include <valkyrie/entity/vkstaticmeshstate.hh>
+#include <valkyrie/graphics/ivertexdeclaration.hh>
 #include <valkyrie/graphics/vkdirectionallight.hh>
 #include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vksubmesh.hh>
+#include <valkyrie/vkengine.hh>
 
 PreviewSceneView::PreviewSceneView(QWidget *parent)
   : SceneView(parent)
@@ -45,7 +47,7 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
     vkVector3f co;
     vkVector3f no;
     vkVector3f ta;
-    vkVector3f bt;
+    vkVector3f bn;
     vkVector2f tx;
   };
   
@@ -71,7 +73,7 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
         cos(angleR),
         0.0f
       );
-      vertices[i].bt = vkVector3f::Cross(vertices[i].no, vertices[i].ta);
+      vertices[i].bn = vkVector3f::Cross(vertices[i].no, vertices[i].ta);
       vertices[i].tx = vkVector2f(factR, factV);
     }
   }
@@ -99,5 +101,17 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
     }
   }
 
+  vkVertexElement elements[] = {
+    vkVertexElement(eVST_Position, eDT_Float, 3, 0, sizeof(Vertex), 0),
+    vkVertexElement(eVST_Normal,   eDT_Float, 3, sizeof(vkVector3f), sizeof(Vertex), 0),
+    vkVertexElement(eVST_Tangent,  eDT_Float, 3, 2 * sizeof(vkVector3f), sizeof(Vertex), 0),
+    vkVertexElement(eVST_BiNormal, eDT_Float, 3, 3 * sizeof(vkVector3f), sizeof(Vertex), 0),
+    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(vkVector3f), sizeof(Vertex), 0),
+    vkVertexElement()
+  };
+
+  iVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, eBDM_Static);
+  iIndexBuffer *indexBuffe = vkEng->CreateIndexBuffer(sizeof(unsigned short))
+  
 
 }
