@@ -69,6 +69,7 @@ void vkRenderTargetGL4::Setup(GLuint name, vkUInt16 width, vkUInt16 height)
   m_name = name;
   m_width = width;
   m_height = height;
+  m_provided = true;
 }
 
 void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)

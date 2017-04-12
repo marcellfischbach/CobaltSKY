@@ -2,6 +2,7 @@
 #include <shadergrapheditor/shadergrapheditor.hh>
 #include <shadergrapheditor/shadergrapheditormeta.hh>
 #include <shadergrapheditor/shadergrapheditoroutliner.hh>
+#include <shadergrapheditor/shadergrapheditorpreview.hh>
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
@@ -30,6 +31,7 @@ ShaderGraphEditor::ShaderGraphEditor()
   m_outliner = new ShaderGraphEditorOutliner();
   AddDockItemName(OUTLINER_DOCK_NAME);
 
+  m_preview = new ShaderGraphEditorPreview();
   AddDockItemName(PREVIEW_DOCK_NAME);
 
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
@@ -69,6 +71,9 @@ void ShaderGraphEditor::PopulateDockItems()
 
   PropertiesDockItem *properties = static_cast<PropertiesDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
   properties->SetContent(m_properties);
+
+  PreviewDockItem *preview = static_cast<PreviewDockItem*>(Editor::Get()->GetDockItem(PREVIEW_DOCK_NAME));
+  preview->SetContent(m_preview);
 
   OutlinerDockItem *outliner = static_cast<OutlinerDockItem*>(Editor::Get()->GetDockItem(OUTLINER_DOCK_NAME));
   outliner->SetContent(m_outliner);

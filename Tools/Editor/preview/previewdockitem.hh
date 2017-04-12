@@ -7,7 +7,7 @@
 
 class QGridLayout;
 class QFrame;
-class PreviewSceneView;
+class QWidget;
   
 class PreviewDockItem : public AbstractDockItem
 {
@@ -15,8 +15,10 @@ public:
   PreviewDockItem();
   virtual ~PreviewDockItem();
 
+  void SetContent(QWidget *widget);
+
 private:
   QFrame *m_frame;
-  PreviewSceneView *m_sceneView;
+  QWidget *m_content;
   QGridLayout *m_gridLayout;
 };

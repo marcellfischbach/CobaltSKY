@@ -324,7 +324,6 @@ ISGShaderGraphFactory *vkGraphicsGL4::GetShaderGraphFactory()
 
 void vkGraphicsGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
 {
-  matrix.Debug("ProjectionMatrix:");
   m_matrices[eMT_MatProj] = matrix;
   m_matrixNeedsRecalculation[eMT_MatProjInv] = true;
   m_matrixNeedsRecalculation[eMT_MatProjView] = true;

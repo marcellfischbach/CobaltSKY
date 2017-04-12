@@ -196,7 +196,7 @@ iRenderTarget *vkDeferredFrameProcessor::Render(vkEntity *root, vkCamera *camera
   //glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
-  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 0.0f), false, 1.0f, false, 0);
+  m_renderer->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 1.0f), false, 1.0f, false, 0);
 
 
   m_renderer->SetBlendEnabled(true);

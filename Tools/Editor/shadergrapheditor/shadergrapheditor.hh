@@ -8,6 +8,7 @@
 #include <valkyrie/vkenums.hh>
 
 class ShaderGraphEditorOutliner;
+class ShaderGraphEditorPreview;
 class ShaderGraphEditorProperties;
 class ShaderGraphEditorToolbox;
 class ShaderGraphEditorWidget;
@@ -28,6 +29,7 @@ protected:
 
 private:
   ShaderGraphEditorOutliner *m_outliner;
+  ShaderGraphEditorPreview *m_preview;
   ShaderGraphEditorProperties *m_properties;
   ShaderGraphEditorToolbox *m_toolbox;
   ShaderGraphEditorWidget *m_widget;

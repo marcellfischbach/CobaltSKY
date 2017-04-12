@@ -211,6 +211,10 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditoroutliner.hh
     shadergrapheditor/shadergrapheditoroutlinertablemodel.cc
     shadergrapheditor/shadergrapheditoroutlinertablemodel.hh
+    shadergrapheditor/shadergrapheditorpreview.cc
+    shadergrapheditor/shadergrapheditorpreview.hh
+    shadergrapheditor/shadergrapheditorpreviewsceneview.cc
+    shadergrapheditor/shadergrapheditorpreviewsceneview.hh
     shadergrapheditor/shadergrapheditorproperties.cc
     shadergrapheditor/shadergrapheditorproperties.hh
     shadergrapheditor/shadergrapheditortoolbox.cc
@@ -223,6 +227,7 @@ set(SHADERGRAPHEDITOR_SOURCES
 
 set(SHADERGRAPHEDITOR_UI
     shadergrapheditor/shadergrapheditoroutliner.ui
+    shadergrapheditor/shadergrapheditorpreview.ui
     shadergrapheditor/shadergrapheditortoolbox.ui
     shadergrapheditor/shadergrapheditorwidget.ui
     )
@@ -308,6 +313,7 @@ add_executable(
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}
     )
+
 
 target_link_libraries(Editor
     Qt5::Core

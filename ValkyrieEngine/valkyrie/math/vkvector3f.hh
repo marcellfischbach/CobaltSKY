@@ -128,6 +128,16 @@ public:
     return *this;
   }
 
+  VK_FORCEINLINE vkVector3f operator*(float v) const
+  {
+    return vkVector3f(x*v, y*v, z*v);
+  }
+
+  VK_FORCEINLINE vkVector3f operator/(float v) const
+  {
+    return vkVector3f(x/v, y/v, z/v);
+  }
+
   VK_FORCEINLINE static vkVector3f &Add(const vkVector3f &v0, const vkVector3f &v1, vkVector3f &r)
   {
     r.x = v0.x + v1.x;
