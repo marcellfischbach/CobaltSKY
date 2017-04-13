@@ -725,6 +725,8 @@ bool ShaderGraphEditorWidget::Apply()
 
   m_shaderGraph = m_shaderGraphCopy->Copy(m_shaderGraph);
   vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
+
+  emit ShaderGraphChanged();
   return true;
 }
 

@@ -41,6 +41,16 @@ const vkEntityScene *SceneView::GetScene() const
   return m_scene;
 }
 
+const vkCamera *SceneView::GetCamera() const
+{
+  return m_camera;
+}
+
+vkCamera *SceneView::GetCamera() 
+{
+  return m_camera;
+}
+
 void SceneView::initializeGL()
 {
   context()->setShareContext(QOpenGLContext::globalShareContext());

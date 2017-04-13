@@ -18,8 +18,11 @@ public:
   const vkEntityScene *GetScene() const;
   vkEntityScene *GetScene();
 
+  const vkCamera *GetCamera() const;
+  vkCamera *GetCamera();
+
 protected:
-  void initializeGL();
+  virtual void initializeGL();
   void paintGL();
   void resizeGL(int w, int h);
 

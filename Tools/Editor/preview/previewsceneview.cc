@@ -21,6 +21,7 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
   //
   // create the light within the scene
   m_light = new vkDirectionalLight();
+  m_light->SetArbDirection(vkVector3f(1, 1, 1));
   m_lightState = new vkLightState();
   m_lightState->SetLight(m_light);
   m_lightEntity = new vkEntity();
@@ -39,7 +40,7 @@ PreviewSceneView::~PreviewSceneView()
 
 vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, vkMaterialInstance *materialInstance)
 {
-  unsigned numVertices = (numR+1) * (numV+1);
+  unsigned numVertices = (numR + 1) * (numV + 1);
   unsigned numIndices = numR * numV * 3 * 2;
 
   struct Vertex
@@ -50,7 +51,7 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
     vkVector3f bn;
     vkVector2f tx;
   };
-  
+
   Vertex *vertices = new Vertex[numVertices];
 
   for (unsigned v = 0, i = 0; v <= numV; ++v)
@@ -73,7 +74,7 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
         cos(angleR),
         0.0f
       );
-      vertices[i].bn = vkVector3f::Cross(vertices[i].no, vertices[i].ta);
+      vkVector3f::Cross(vertices[i].no, vertices[i].ta, vertices[i].bn);
       vertices[i].tx = vkVector2f(factR, factV);
     }
   }
@@ -111,7 +112,33 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
   };
 
   iVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, eBDM_Static);
-  iIndexBuffer *indexBuffe = vkEng->CreateIndexBuffer(sizeof(unsigned short))
-  
+  iIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(sizeof(unsigned short) * numIndices, indices, eBDM_Static);
+  iVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(elements);
 
+  vkBoundingBox bbox;
+  bbox.Add(vkVector3f(radius, radius, radius));
+  bbox.Add(vkVector3f(-radius, -radius, -radius));
+  bbox.Finish();
+
+  vkSubMesh *subMesh = new vkSubMesh();
+  subMesh->SetPrimitiveType(ePT_Triangles);
+  subMesh->SetBoundingBox(bbox);
+  subMesh->SetIndexType(eDT_UnsignedShort);
+  subMesh->SetVertexDeclaration(vertexDeclaration);
+  subMesh->AddVertexBuffer(vertexBuffer);
+  subMesh->SetIndexBuffer(indexBuffer, numIndices);
+
+  vkMesh *mesh = new vkMesh();
+  mesh->AddMesh(subMesh);
+
+  vkStaticMeshState *staticMeshState = new vkStaticMeshState();
+  staticMeshState->SetMesh(mesh);
+  staticMeshState->SetMaterial(materialInstance);
+
+  vkEntity *entity = new vkEntity();
+  entity->AddState(staticMeshState);
+  entity->SetRootState(staticMeshState);
+  entity->FinishTransformation();
+
+  return entity;
 }

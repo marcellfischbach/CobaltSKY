@@ -1,4 +1,4 @@
-
+#include <GL/glew.h>
 #include <editor.hh>
 #include <editormodule.hh>
 #include <iasseteditor.hh>

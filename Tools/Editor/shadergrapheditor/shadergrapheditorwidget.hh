@@ -50,4 +50,5 @@ private:
 
 signals:
   void SelectionChanged(const QList<ShaderGraphEditorNode*> &nodes);
+  void ShaderGraphChanged();
 };

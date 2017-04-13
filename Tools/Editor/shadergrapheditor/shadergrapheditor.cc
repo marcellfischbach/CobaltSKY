@@ -41,6 +41,7 @@ ShaderGraphEditor::ShaderGraphEditor()
     m_outliner, SLOT(SetSelectedNodes(const QList<ShaderGraphEditorNode*>&)));
 
   QObject::connect(m_properties, SIGNAL(NodeChanged()), m_widget, SLOT(RepaintGraph()));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphChanged()), m_preview, SLOT(ShaderGraphChanged()));
 }
 
 ShaderGraphEditor::~ShaderGraphEditor()
@@ -59,6 +60,7 @@ void ShaderGraphEditor::OpenAsset()
   ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
   vkSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
+  m_preview->SetShaderGraph(shaderGraph);
 
   VK_RELEASE(meta);
 
