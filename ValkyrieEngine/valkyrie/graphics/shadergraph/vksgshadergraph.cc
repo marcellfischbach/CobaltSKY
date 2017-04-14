@@ -208,7 +208,7 @@ vkSGShaderGraph *vkSGShaderGraph::Copy(vkSGShaderGraph *dest) const
     dest = new vkSGShaderGraph();
   }
 
-  dest->m_allNodes.clear();
+  dest->Clear();
 
   //
   // create a duplicate of all nodes

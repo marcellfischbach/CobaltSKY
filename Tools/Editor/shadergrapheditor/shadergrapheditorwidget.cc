@@ -713,6 +713,8 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
 bool ShaderGraphEditorWidget::Apply()
 {
+  printf("Apply\n");
+  printf("Compile shader graph copy\n");
   if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy))
   {
     printf("Successfully compiled\n");
@@ -724,7 +726,9 @@ bool ShaderGraphEditorWidget::Apply()
   }
 
   m_shaderGraph = m_shaderGraphCopy->Copy(m_shaderGraph);
-  vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
+  printf("Compile shader graph\n");
+  bool result = vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
+  printf("Compile done: %d\n", result);
 
   emit ShaderGraphChanged();
   return true;

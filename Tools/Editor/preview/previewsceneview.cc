@@ -21,7 +21,7 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
   //
   // create the light within the scene
   m_light = new vkDirectionalLight();
-  m_light->SetArbDirection(vkVector3f(1, 1, 1));
+  m_light->SetArbDirection(vkVector3f(-1, -1, -1));
   m_lightState = new vkLightState();
   m_lightState->SetLight(m_light);
   m_lightEntity = new vkEntity();
