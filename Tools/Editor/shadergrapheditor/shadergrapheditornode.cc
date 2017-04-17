@@ -23,6 +23,9 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph)
 {
   VK_SET(m_shaderGraph, shaderGraph);
   GetHeader()->SetName("Shader");
+  GetHeader()->SetColor0(QColor(128, 128, 128));
+  GetHeader()->SetColor1(QColor(0, 0, 0));
+
 
   NodeGraphNodeValueProperty *propDiffuse = new NodeGraphNodeValueProperty(this);
   propDiffuse->SetAnchorShow(true);

@@ -2,6 +2,7 @@
 
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditornode.hh>
+#include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
 #include <components/assetresourcewidget.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
@@ -12,6 +13,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QDoubleSpinBox>
+#include <QScrollArea>
 
 ShaderGraphEditorProperties::ShaderGraphEditorProperties()
   : QWidget()
@@ -19,6 +21,9 @@ ShaderGraphEditorProperties::ShaderGraphEditorProperties()
 {
   QGridLayout *layout = new QGridLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);
+  m_scrollArea = new QScrollArea(this);
+  m_scrollArea->setWidgetResizable(true);
+  layout->addWidget(m_scrollArea);
 }
 
 ShaderGraphEditorProperties::~ShaderGraphEditorProperties()
@@ -32,7 +37,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
   Cleanup();
   if (m_group)
   {
-    layout()->removeWidget(m_group);
+    m_scrollArea->setWidget(0);
     delete m_group;
     m_group = 0;
   }
@@ -48,7 +53,6 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
   if (sgNode)
   {
     m_group = new QWidget();
-    layout()->addWidget(m_group);
 
     QGridLayout *lo = new QGridLayout(m_group);
     lo->setContentsMargins(3, 3, 3, 3);
@@ -208,6 +212,19 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     }
 
     lo->addItem(new QSpacerItem(1, 1, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding), row, 0, 1, 2);
+  }
+
+  vkSGShaderGraph *sgShaderGraph = m_node->GetShaderGraph();
+  if (sgShaderGraph)
+  {
+    ShaderGraphEditorShaderGraphProperties *props = new ShaderGraphEditorShaderGraphProperties();
+    props->SetShaderGraph(sgShaderGraph);
+    m_group = props;
+  }
+
+  if (m_group)
+  {
+    m_scrollArea->setWidget(m_group);
   }
 }
 

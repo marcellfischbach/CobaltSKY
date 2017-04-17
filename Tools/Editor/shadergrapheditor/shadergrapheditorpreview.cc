@@ -2,10 +2,12 @@
 #include <shadergrapheditor/shadergrapheditorpreview.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
+
 ShaderGraphEditorPreview::ShaderGraphEditorPreview(QWidget *parent)
   : QWidget(parent)
 {
   m_gui.setupUi(this);
+
 }
 
 ShaderGraphEditorPreview::~ShaderGraphEditorPreview()

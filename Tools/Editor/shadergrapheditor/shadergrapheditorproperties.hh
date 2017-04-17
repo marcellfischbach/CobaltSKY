@@ -6,6 +6,7 @@
 
 class QDoubleSpinBox;
 class QGridLayout;
+class QScrollArea;
 class QSpinBox;
 class ShaderGraphEditorNode;
 class vkResourceLocator;
@@ -34,6 +35,7 @@ private:
   void Cleanup();
   ShaderGraphEditorNode *m_node;
   QWidget *m_group;
+  QScrollArea *m_scrollArea;
   std::map<unsigned, QDoubleSpinBox*> m_spinBoxes;
   std::vector<QDoubleSpinBox*> m_spinBoxDefaultFloatResource;
   std::vector<QSpinBox*> m_spinBoxDefaultIntResource;

@@ -320,7 +320,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
 
     vkSGTexture2D *txtNode = new vkSGTexture2D();
     txtNode->SetDefaultTextureResource(locator);
-    txtNode->SetResourceName("<unnamed>");
+    txtNode->SetResourceName(ExtractName(locator));
 
     m_shaderGraphCopy->AddNode(txtNode);
 
@@ -713,6 +713,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
 bool ShaderGraphEditorWidget::Apply()
 {
+
   printf("Apply\n");
   printf("Compile shader graph copy\n");
   if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy))
@@ -760,4 +761,18 @@ ShaderGraphEditorNode *ShaderGraphEditorWidget::GetShaderGraphNode()
     }
   }
   return 0;
+}
+
+
+vkString ShaderGraphEditorWidget::ExtractName(const vkResourceLocator &locator)
+{
+  QString name(locator.GetResourceFile().c_str());
+  name = name.replace("\\", "/");
+  int idx_s = name.lastIndexOf("/");
+  int idx_e = name.lastIndexOf(".");
+  if (idx_s != -1 && idx_e != -1)
+  {
+    name = name.mid(idx_s + 1, idx_e - idx_s - 1);
+  }
+  return vkString((const char*)name.toLatin1());
 }

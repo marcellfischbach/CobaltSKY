@@ -1,6 +1,7 @@
 
 
 #include <shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
+#include <preview/previewcameraorbithandler.hh>
 #include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <valkyrie/graphics/vkcamera.hh>
 #include <valkyrie/entity/vkentityscene.hh>
@@ -23,6 +24,8 @@ void ShaderGraphEditorPreviewSceneView::initializeGL()
   camera->SetSpot(vkVector3f(0, 0, 0));
   camera->SetUp(vkVector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
+
+  AddInputHandler(new PreviewCameraOrbitHandler(camera));
 }
 
 

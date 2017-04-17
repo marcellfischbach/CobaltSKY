@@ -156,6 +156,7 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
   GenerateShadow(graph, 3, eRP_ShadowPSSM);
   GenerateShadow(graph, 6, eRP_ShadowCube);
 
+  printf("Generate ShaderGraph\n");
   for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
     vkSGNode *node = graph->GetNode(i);
@@ -195,11 +196,11 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
       graph->SetDefault(idx, vkColor4f(floats[0], floats[1], floats[2], floats[3]));
       break;
     case eSPT_Texture:
-      {
-        iTexture *texture = vkResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
-        graph->SetDefault(idx, texture);
-      }
-      break;
+    {
+      iTexture *texture = vkResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
+      graph->SetDefault(idx, texture);
+    }
+    break;
     case eSPT_Int:
     case eSPT_IVector2:
     case eSPT_IVector3:
@@ -216,7 +217,7 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
 void vkShaderGraphGL4::DebugCode(const vkString &title, const vkString &code)
 {
   printf("%s\n", title.c_str());
-  
+
   unsigned line = 1;
   printf("(%02d) ", line++);
   for (size_t i = 0, in = code.length(); i < in; ++i)

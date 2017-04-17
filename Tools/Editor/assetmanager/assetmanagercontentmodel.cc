@@ -24,7 +24,6 @@ public:
     vkString res = Editor::Get()->ConvertToResourcePath(m_fileName);
     vkResourceLocator previewLocator(res, "preview");
     EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
-    printf("Res: %s => %p\n", res.c_str(), editorImage);
     if (editorImage)
     {
       QImage img = editorImage->GetImage();

@@ -1,6 +1,7 @@
 
 
 #include <components/sceneview.hh>
+#include <components/sceneviewinputhandler.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 #include <valkyrie/vkengine.hh>
@@ -24,6 +25,11 @@ SceneView::SceneView(QWidget *parent)
 SceneView::~SceneView()
 {
 
+}
+
+void SceneView::AddInputHandler(SceneViewInputHandler *handler)
+{
+  m_handlers.push_back(handler);
 }
 
 void SceneView::SetScene(vkEntityScene *scene)
@@ -125,4 +131,40 @@ void SceneView::resizeGL(int width, int height)
   //
   // the camera projection will change aswell
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
+}
+
+void SceneView::mousePressEvent(QMouseEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->mousePressEvent(event);
+  }
+  repaint();
+}
+
+void SceneView::mouseReleaseEvent(QMouseEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->mouseReleaseEvent(event);
+  }
+  repaint();
+}
+
+void SceneView::mouseMoveEvent(QMouseEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->mouseMoveEvent(event);
+  }
+  repaint();
+}
+
+void SceneView::wheelEvent(QWheelEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->wheelEvent(event);
+  }
+  repaint();
 }

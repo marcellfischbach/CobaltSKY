@@ -2,8 +2,10 @@
 
 #include <QWidget>
 #include <QList>
+#include <valkyrie/core/vkstring.hh>
 #include <ui_shadergrapheditorwidget.h>
 
+class vkResourceLocator;
 class vkSGNode;
 class vkSGShaderGraph;
 class ShaderGraphEditor;
@@ -38,6 +40,7 @@ private slots:
   void on_pbSave_clicked();
 
 private:
+  vkString ExtractName(const vkResourceLocator &locator);
   bool Apply();
   ShaderGraphEditorNode *GetEditorNode(vkSGNode *node);
   ShaderGraphEditorNode *GetShaderGraphNode();

@@ -72,6 +72,7 @@ set(COMPONENTS_SOURCES
     components/assetresourcewidget.hh
     components/sceneview.cc
     components/sceneview.hh
+    components/sceneviewinputhandler.hh
     )
 
 set(COMPONENTS_UI
@@ -145,6 +146,8 @@ source_group(
 
                     
 set(PREVIEW_SOURCES
+    preview/previewcameraorbithandler.cc
+    preview/previewcameraorbithandler.hh
     preview/previewdockitem.cc
     preview/previewdockitem.hh
     preview/previewsceneview.cc
@@ -217,6 +220,8 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditorpreviewsceneview.hh
     shadergrapheditor/shadergrapheditorproperties.cc
     shadergrapheditor/shadergrapheditorproperties.hh
+    shadergrapheditor/shadergrapheditorshadergraphproperties.cc
+    shadergrapheditor/shadergrapheditorshadergraphproperties.hh
     shadergrapheditor/shadergrapheditortoolbox.cc
     shadergrapheditor/shadergrapheditortoolbox.hh
     shadergrapheditor/shadergrapheditortoolboxmodel.cc
@@ -228,6 +233,7 @@ set(SHADERGRAPHEDITOR_SOURCES
 set(SHADERGRAPHEDITOR_UI
     shadergrapheditor/shadergrapheditoroutliner.ui
     shadergrapheditor/shadergrapheditorpreview.ui
+    shadergrapheditor/shadergrapheditorshadergraphproperties.ui
     shadergrapheditor/shadergrapheditortoolbox.ui
     shadergrapheditor/shadergrapheditorwidget.ui
     )
