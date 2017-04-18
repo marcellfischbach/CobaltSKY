@@ -433,9 +433,9 @@ void NodeGraphWidget::wheelEvent(QWheelEvent *event)
   else if (delta > 0)
   {
     m_scale /= 0.9f;
-    if (m_scale > 1.0f)
+    if (m_scale > 4.0f)
     {
-      m_scale = 1.0f;
+      m_scale = 4.0f;
     }
   }
   else

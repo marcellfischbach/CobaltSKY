@@ -24,6 +24,8 @@ public:
   vkMaterial *GetMaterial();
   const vkMaterial  *GetMaterial() const;
 
+  void RebuildMaterialParameters();
+
   vkInt16 GetIndex(const vkString &parametername) const;
 
   bool Bind(iGraphics *renderer, vkRenderPass pass);

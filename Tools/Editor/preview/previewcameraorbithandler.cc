@@ -37,7 +37,6 @@ void PreviewCameraOrbitHandler::mouseMoveEvent(QMouseEvent *event)
   if (m_rotationArmed)
   {
     QPoint d = event->globalPos() - m_mousePos;
-    printf("D: %d %d\n", d.x(), d.y());
     m_rotH -= (float)d.x() / 100.0f;
     m_rotV += (float)d.y() / 100.0f;
     if (m_rotV < -1.5f)

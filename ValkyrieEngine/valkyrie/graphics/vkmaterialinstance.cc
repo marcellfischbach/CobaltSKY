@@ -24,12 +24,17 @@ vkMaterialInstance::~vkMaterialInstance()
 void vkMaterialInstance::SetMaterial(vkMaterial *material)
 {
   VK_SET(m_material, material);
-  if (material)
+  RebuildMaterialParameters();
+}
+
+void vkMaterialInstance::RebuildMaterialParameters()
+{
+  if (m_material)
   {
     m_parameters.clear();
-    for (vkSize i = 0, in = material->GetNumberOfParameters(); i < in; ++i)
+    for (vkSize i = 0, in = m_material->GetNumberOfParameters(); i < in; ++i)
     {
-      vkShaderParameterType type = material->GetParamType(i);
+      vkShaderParameterType type = m_material->GetParamType(i);
       ShaderParameter param;
       param.m_inherit = true;
       param.m_paramType = type;

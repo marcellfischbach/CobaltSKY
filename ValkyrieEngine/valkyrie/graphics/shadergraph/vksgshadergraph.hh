@@ -96,11 +96,18 @@ private:
 
 };
 
+struct VKE_API iSGShaderGraphLogger
+{
+  virtual void LogSourceCode(const vkString &renderPass, const vkString &shaderType, const vkString &sourceCode) = 0;
+  virtual void LogInfo(const vkString &renderPass, const vkString &msg) = 0;
+  virtual void LogError(const vkString &renderPass, const vkString &msg) = 0;
+};
+
 struct VKE_API ISGShaderGraphFactory 
 {
   virtual ~ISGShaderGraphFactory() { }
 
-  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph) = 0;
+  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger = 0) = 0;
 };
 
 

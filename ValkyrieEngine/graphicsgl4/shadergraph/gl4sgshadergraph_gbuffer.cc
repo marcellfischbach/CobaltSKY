@@ -17,7 +17,7 @@ static const char *compareMode[] = {
   "!="
 };
 
-void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
+void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger)
 {
   graph->SetShader(eRP_GBuffer, 0);
 
@@ -31,7 +31,10 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   vkSGOutput *alphaOutput = graph->GetAlpha();
   if (!diffuseOutput)
   {
-    printf("No diffuse output assigned\n");
+    if (logger)
+    {
+      logger->LogInfo("GBuffer", "No diffuse output assigned");
+    }
     return;
   }
   if (diffuseOutput->GetDataType() == eSGDT_Float4)
@@ -48,7 +51,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   }
   else if (diffuseOutput->GetDataType() == eSGDT_Float2)
   {
-    printf("Invalid input type for diffuse\n");
+    logger->LogInfo("GBuffer", "Invalid input type for diffuse");
     return;
   }
   else if (diffuseOutput->GetDataType() == eSGDT_Float)
@@ -76,7 +79,7 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     }
     else if (normalOutput->GetDataType() == eSGDT_Float2)
     {
-      printf("Invalid input type for diffuse\n");
+      logger->LogInfo("GBuffer", "Invalid input type for diffuse");
       return;
     }
     else if (normalOutput->GetDataType() == eSGDT_Float)
@@ -220,8 +223,10 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "}" << std::endl
     << std::endl;
   vkString vertexShaderSources = ss.str();
-  printf("VertexShader:\n%s\n", vertexShaderSources.c_str());
-
+  if (logger)
+  {
+    logger->LogSourceCode("GBuffer", "VertexShader", vertexShaderSources);
+  }
   ss = std::ostringstream();
   ss << ""
     << "#version 330" << std::endl
@@ -276,7 +281,10 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
     << "}" << std::endl
     << std::endl;
   vkString fragmentShaderSources = ss.str();
-  printf("FragmentShader:\n%s\n", fragmentShaderSources.c_str());
+  if (logger)
+  {
+    logger->LogSourceCode("GBuffer", "FragmentShader", fragmentShaderSources);
+  }
 
   ss.clear();
 
@@ -286,8 +294,10 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
-    DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
-    printf("Unable to compile vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError("GBuffer.Vertex", vertexShader->GetCompileErrorLog());
+    }
     vertexShader->Release();
     return;
   }
@@ -297,8 +307,11 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
-    DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
-    printf("Unable to compile vertex shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError("GBuffer.Fragment", fragmentShader->GetCompileErrorLog());
+    }
+
     vertexShader->Release();
     fragmentShader->Release();
     return;
@@ -309,9 +322,11 @@ void vkShaderGraphGL4::GenerateGBuffer(vkSGShaderGraph *graph)
   gBufferShader->AttachShader(fragmentShader);
   if (!gBufferShader->Link())
   {
-    DebugCode("GBuffer.Vertex", vertexShaderSources.c_str());
-    DebugCode("GBuffer.Fragment", fragmentShaderSources.c_str());
-    printf("Unable to link shader:\n%s\n", gBufferShader->GetLinkErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError("GBuffer.Link", gBufferShader->GetLinkErrorLog());
+    }
+
     vertexShader->Release();
     fragmentShader->Release();
     gBufferShader->Release();

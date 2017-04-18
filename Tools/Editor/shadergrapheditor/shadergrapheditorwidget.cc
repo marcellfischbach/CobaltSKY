@@ -770,7 +770,7 @@ vkString ShaderGraphEditorWidget::ExtractName(const vkResourceLocator &locator)
   name = name.replace("\\", "/");
   int idx_s = name.lastIndexOf("/");
   int idx_e = name.lastIndexOf(".");
-  if (idx_s != -1 && idx_e != -1)
+  if (idx_e != -1)
   {
     name = name.mid(idx_s + 1, idx_e - idx_s - 1);
   }

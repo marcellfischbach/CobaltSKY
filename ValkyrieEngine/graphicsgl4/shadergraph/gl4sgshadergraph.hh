@@ -25,11 +25,11 @@ public:
   vkSGNodeGL4 *CreateNode(const vkClass *nodeClass);
 
 
-  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph);
+  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger);
 
 private:
-  void GenerateGBuffer(vkSGShaderGraph *graph);
-  void GenerateShadow(vkSGShaderGraph *graph, unsigned layers, vkRenderPass renderPass);
+  void GenerateGBuffer(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger);
+  void GenerateShadow(vkSGShaderGraph *graph, unsigned layers, vkRenderPass renderPass, iSGShaderGraphLogger *logger);
 
   void DebugCode(const vkString &title, const vkString &source);
 

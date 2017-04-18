@@ -118,7 +118,7 @@ void vkMaterial::BindParameter(iGraphics *renderer, vkRenderPass pass, vkSize id
       break;
     case eSPT_Texture:
       {
-        vkTextureUnit unit = renderer->BindTexture(param.m_defaultTexture);
+      vkTextureUnit unit = renderer->BindTexture(param.m_defaultTexture);
         if (unit != eTU_Invalid)
         {
           attribute->Set((vkInt32)unit);

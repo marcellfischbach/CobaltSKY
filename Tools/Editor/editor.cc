@@ -81,12 +81,19 @@ bool Editor::Initialize(int argc, char **argv)
   return true;
 }
 
+#include <valkyrie/graphics/itexture2d.hh>
 vkGraphicsGL4 *Editor::GetGraphics()
 {
   if (!m_graphics)
   {
     m_graphics = new vkGraphicsGL4();
     m_engine->SetRenderer(m_graphics);
+
+
+    iTexture2D *texture0 = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator("materials/textures/dirt_diffuse.xasset"));
+    iTexture2D *texture1 = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator("materials/textures/fieldstone_diffuse.xasset"));
+    printf("DirtDiffuse: %p\n", texture0);
+    printf("FieldstoneDiffuse: %p\n", texture0);
   }
 
   return m_graphics;

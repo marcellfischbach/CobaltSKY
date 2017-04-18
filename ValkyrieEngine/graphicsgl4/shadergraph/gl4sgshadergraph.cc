@@ -143,7 +143,7 @@ vkString vkShaderGraphGL4::CreateCode(vkSGOutput *output)
 
 
 
-bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
+bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger)
 {
   if (!graph->Validate())
   {
@@ -151,12 +151,11 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph)
   }
   graph->ClearParameters();
 
-  GenerateGBuffer(graph);
+  GenerateGBuffer(graph, logger);
   //GenerateShadow(graph, 1, eRP_ShadowGeneric);
-  GenerateShadow(graph, 3, eRP_ShadowPSSM);
-  GenerateShadow(graph, 6, eRP_ShadowCube);
+  GenerateShadow(graph, 3, eRP_ShadowPSSM, logger);
+  GenerateShadow(graph, 6, eRP_ShadowCube, logger);
 
-  printf("Generate ShaderGraph\n");
   for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
     vkSGNode *node = graph->GetNode(i);

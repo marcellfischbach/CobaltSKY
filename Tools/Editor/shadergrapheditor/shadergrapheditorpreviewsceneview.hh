@@ -12,6 +12,7 @@ public:
   virtual ~ShaderGraphEditorPreviewSceneView();
 
   void SetMaterial(vkMaterial *material);
+  void UpdateMaterial();
 
 protected:
   virtual void initializeGL();

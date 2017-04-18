@@ -17,8 +17,18 @@ static const char *compareMode[] = {
   "!="
 };
 
-void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers, vkRenderPass renderPass)
+void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers, vkRenderPass renderPass, iSGShaderGraphLogger *logger)
 {
+  vkString passName;
+  switch (renderPass)
+  {
+  case eRP_ShadowPSSM:
+    passName = "ShadowPSSM";
+    break;
+  case eRP_ShadowCube:
+    passName = "ShadowCube";
+    break;
+  }
   graph->SetShader(renderPass, 0);
 
   std::set<vkSGOutput*> outputs;
@@ -104,6 +114,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << "}" << std::endl
     << std::endl;
   vkString vertexShaderSources = ss.str();
+  if (logger)
+  {
+    logger->LogSourceCode(passName, "VertexShader", vertexShaderSources);
+  }
 
   ss = std::ostringstream();
   ss << ""
@@ -142,6 +156,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   }
   ss << "}" << std::endl;
   vkString geometryShaderSources = ss.str();
+  if (logger)
+  {
+    logger->LogSourceCode(passName, "GeometryShader", geometryShaderSources);
+  }
 
 
 
@@ -193,6 +211,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ss << "}" << std::endl
     << std::endl;
   vkString fragmentShaderSources = ss.str();
+  if (logger)
+  {
+    logger->LogSourceCode(passName, "FragmentShader", fragmentShaderSources);
+  }
 
   ss.clear();
 
@@ -206,8 +228,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
-    DebugCode("PSSM.Vertex", vertexShaderSources.c_str());
-    printf("Error vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError(passName+".Vertex", vertexShader->GetCompileErrorLog());
+    }
+
     vertexShader->Release();
     return;
   }
@@ -217,8 +242,10 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   geometryShader->SetSource(geometryShaderSources);
   if (!geometryShader->Compile())
   {
-    DebugCode("PSSM.Geometry", geometryShaderSources.c_str());
-    printf("Error geometry shader:\n%s\n", geometryShader->GetCompileErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError(passName + ".Geometry", geometryShader->GetCompileErrorLog());
+    }
     vertexShader->Release();
     geometryShader->Release();
     return;
@@ -229,8 +256,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
-    DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
-    printf("Error fragment shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
+    if (logger)
+    {
+      logger->LogError(passName + ".Fragment", fragmentShader->GetCompileErrorLog());
+    }
+
     vertexShader->Release();
     geometryShader->Release();
     fragmentShader->Release();
@@ -243,12 +273,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   shadowShader->AttachShader(fragmentShader);
   if (!shadowShader->Link())
   {
+    if (logger)
+    {
+      logger->LogError(passName + ".Link", shadowShader->GetLinkErrorLog());
+    }
 
-    DebugCode("PSSM.Vertex", vertexShaderSources.c_str());
-    DebugCode("PSSM.Geometry", geometryShaderSources.c_str());
-    DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
-
-    printf("Error link:\n%s\n", shadowShader->GetLinkErrorLog().c_str());
     vertexShader->Release();
     geometryShader->Release();
     fragmentShader->Release();

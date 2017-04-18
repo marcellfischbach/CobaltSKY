@@ -22,5 +22,6 @@ void ShaderGraphEditorPreview::SetShaderGraph(vkSGShaderGraph *shaderGraph)
 
 void ShaderGraphEditorPreview::ShaderGraphChanged()
 {
+  m_gui.openGLWidget->UpdateMaterial();
   m_gui.openGLWidget->repaint();
 }

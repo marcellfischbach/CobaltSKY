@@ -38,3 +38,8 @@ void ShaderGraphEditorPreviewSceneView::SetMaterial(vkMaterial *material)
 {
   m_materialInstance->SetMaterial(material);
 }
+
+void ShaderGraphEditorPreviewSceneView::UpdateMaterial()
+{
+  m_materialInstance->RebuildMaterialParameters();
+}
