@@ -1,7 +1,7 @@
 <asset>
   <data>
     <sampler>
-      <filter>MinMagNearest</filter>
+      <filter>Anisotropic</filter>
       <anisotropy>6</anisotropy>
       <minLOD>-1000</minLOD>
       <maxLOD>1000</maxLOD>

@@ -15,6 +15,7 @@
 #include <graphicsgl4/shadergraph/gl4sglerp.hh>
 #include <graphicsgl4/shadergraph/gl4sgmul.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
+#include <graphicsgl4/shadergraph/gl4sgnormalize.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/shadergraph/gl4sgsplitfloat2.hh>
@@ -45,6 +46,7 @@
 #include <valkyrie/graphics/shadergraph/vksgfloat4.hh>
 #include <valkyrie/graphics/shadergraph/vksglerp.hh>
 #include <valkyrie/graphics/shadergraph/vksgmul.hh>
+#include <valkyrie/graphics/shadergraph/vksgnormalize.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgsplitfloat2.hh>
 #include <valkyrie/graphics/shadergraph/vksgsplitfloat3.hh>
@@ -96,6 +98,7 @@ vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
     m_classMapping.push_back(Map(vkSGDot::GetStaticClass(), vkSGDotGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGCross::GetStaticClass(), vkSGCrossGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGLerp::GetStaticClass(), vkSGLerpGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(vkSGNormalize::GetStaticClass(), vkSGNormalizeGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGDefaultTextureCoordinate::GetStaticClass(), vkSGDefaultTextureCoordinateGL4::GetStaticClass()));
     m_classMapping.push_back(Map(vkSGTexture2D::GetStaticClass(), vkSGTexture2DGL4::GetStaticClass()));
     initialized = true;

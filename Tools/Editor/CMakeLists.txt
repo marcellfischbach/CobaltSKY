@@ -150,6 +150,8 @@ set(PREVIEW_SOURCES
     preview/previewcameraorbithandler.hh
     preview/previewdockitem.cc
     preview/previewdockitem.hh
+    preview/previewlightorbithandler.cc
+    preview/previewlightorbithandler.hh
     preview/previewsceneview.cc
     preview/previewsceneview.hh
     )

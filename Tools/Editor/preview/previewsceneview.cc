@@ -1,6 +1,7 @@
 
 
 #include <preview/previewsceneview.hh>
+#include <preview/previewlightorbithandler.hh>
 #include <valkyrie/entity/vkentity.hh>
 #include <valkyrie/entity/vkentityscene.hh>
 #include <valkyrie/entity/vklightstate.hh>
@@ -29,11 +30,17 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
   m_lightEntity->AddState(m_lightState);
   m_lightEntity->FinishTransformation();
   scene->AddEntity(m_lightEntity);
+
+  m_lightHandler = new PreviewLightOrbitHandler(m_light);
+  AddInputHandler(m_lightHandler);
 }
 
 PreviewSceneView::~PreviewSceneView()
 {
-
+  VK_RELEASE(m_light);
+  VK_RELEASE(m_lightState);
+  VK_RELEASE(m_lightEntity);
+  delete m_lightHandler;
 }
 
 
@@ -74,7 +81,7 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
         cos(angleR),
         0.0f
       );
-      vkVector3f::Cross(vertices[i].no, vertices[i].ta, vertices[i].bn);
+      vkVector3f::Cross(vertices[i].ta, vertices[i].no, vertices[i].bn);
       vertices[i].tx = vkVector2f(factR, factV);
     }
   }

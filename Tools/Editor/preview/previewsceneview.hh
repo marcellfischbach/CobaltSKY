@@ -6,6 +6,7 @@ class vkDirectionalLight;
 class vkEntity;
 class vkLightState;
 class vkMaterialInstance;
+class PreviewLightOrbitHandler;
 class PreviewSceneView : public SceneView
 {
 public:
@@ -16,8 +17,9 @@ protected:
   vkEntity *CreateSphere(float radius, unsigned numR, unsigned numH, vkMaterialInstance *materialInstance);
 
 private:
-  vkDirectionalLight *m_light;
-  vkLightState *m_lightState;
-  vkEntity *m_lightEntity;
+  vkDirectionalLight *m_light = 0;
+  vkLightState *m_lightState = 0;
+  vkEntity *m_lightEntity = 0;
 
+  PreviewLightOrbitHandler *m_lightHandler = 0;
 };

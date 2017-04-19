@@ -35,6 +35,7 @@ vkSGNodes::vkSGNodes()
   m_entries.push_back(Entry(VK_DOT_NAME, vkSGDot::GetStaticClass()));
   m_entries.push_back(Entry(VK_CROSS_NAME, vkSGCross::GetStaticClass()));
   m_entries.push_back(Entry(VK_LERP_NAME, vkSGLerp::GetStaticClass()));
+  m_entries.push_back(Entry(VK_NORMALIZE_NAME, vkSGNormalize::GetStaticClass()));
 
   m_entries.push_back(Entry(VK_DEFAULT_TEXTURE_COORDINATE_NAME, vkSGDefaultTextureCoordinate::GetStaticClass()));
   m_entries.push_back(Entry(VK_TEXTURE2D_NAME, vkSGTexture2D::GetStaticClass()));

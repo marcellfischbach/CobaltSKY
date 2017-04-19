@@ -82,6 +82,8 @@ set(SOURCE_SHADERGRAPH
   shadergraph/gl4sgfloateval.hh
   shadergraph/gl4sglerp.cc
   shadergraph/gl4sglerp.hh
+  shadergraph/gl4sgnormalize.cc
+  shadergraph/gl4sgnormalize.hh
   shadergraph/gl4sgmul.cc
   shadergraph/gl4sgmul.hh
   shadergraph/gl4sgnode.cc

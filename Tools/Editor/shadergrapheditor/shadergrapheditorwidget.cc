@@ -17,6 +17,7 @@
 #include <valkyrie/core/vkclassregistry.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/itexture2d.hh>
+#include <valkyrie/graphics/shadergraph/vksgdefaultconsolelogger.hh>
 #include <valkyrie/graphics/shadergraph/vksgnode.hh>
 #include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
@@ -716,7 +717,8 @@ bool ShaderGraphEditorWidget::Apply()
 
   printf("Apply\n");
   printf("Compile shader graph copy\n");
-  if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy))
+  vkSGDefaultConsoleLogger logger;
+  if (vkEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy, &logger))
   {
     printf("Successfully compiled\n");
   }

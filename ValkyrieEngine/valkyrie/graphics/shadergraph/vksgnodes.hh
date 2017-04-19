@@ -18,6 +18,7 @@
 #include <valkyrie/graphics/shadergraph/vksgfloat4.hh>
 #include <valkyrie/graphics/shadergraph/vksglerp.hh>
 #include <valkyrie/graphics/shadergraph/vksgmul.hh>
+#include <valkyrie/graphics/shadergraph/vksgnormalize.hh>
 #include <valkyrie/graphics/shadergraph/vksgsplitfloat2.hh>
 #include <valkyrie/graphics/shadergraph/vksgsplitfloat3.hh>
 #include <valkyrie/graphics/shadergraph/vksgsplitfloat4.hh>

@@ -274,6 +274,8 @@ set(SOURCE_GRAPHICS_SHADERGRAPH
     graphics/shadergraph/vksgconstfloat4.hh
     graphics/shadergraph/vksgcross.cc
     graphics/shadergraph/vksgcross.hh
+    graphics/shadergraph/vksgdefaultconsolelogger.cc
+    graphics/shadergraph/vksgdefaultconsolelogger.hh
     graphics/shadergraph/vksgdefaulttexturecoordinate.cc
     graphics/shadergraph/vksgdefaulttexturecoordinate.hh
     graphics/shadergraph/vksgdiv.cc
@@ -297,6 +299,8 @@ set(SOURCE_GRAPHICS_SHADERGRAPH
     graphics/shadergraph/vksgnode.hh
     graphics/shadergraph/vksgnodes.cc
     graphics/shadergraph/vksgnodes.hh
+    graphics/shadergraph/vksgnormalize.cc
+    graphics/shadergraph/vksgnormalize.hh
     graphics/shadergraph/vksgoutput.cc
     graphics/shadergraph/vksgoutput.hh
     graphics/shadergraph/vksgresourcenode.cc
