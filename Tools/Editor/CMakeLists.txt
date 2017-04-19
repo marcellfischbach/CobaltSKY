@@ -50,6 +50,9 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagerdock.hh
     assetmanager/assetmanagerfoldermodel.cc
     assetmanager/assetmanagerfoldermodel.hh
+    assetmanager/assetmanagernewhandler.hh
+    assetmanager/assetmanagernewmanager.cc
+    assetmanager/assetmanagernewmanager.hh
     assetmanager/assetmanagerwidget.cc
     assetmanager/assetmanagerwidget.hh
     )
@@ -210,8 +213,12 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditormeta.hh
     shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
     shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
+    shadergrapheditor/shadergrapheditornewhandler.cc
+    shadergrapheditor/shadergrapheditornewhandler.hh
     shadergrapheditor/shadergrapheditornode.cc
     shadergrapheditor/shadergrapheditornode.hh
+    shadergrapheditor/shadergrapheditornewhandler.cc
+    shadergrapheditor/shadergrapheditornewhandler.hh
     shadergrapheditor/shadergrapheditoroutliner.cc
     shadergrapheditor/shadergrapheditoroutliner.hh
     shadergrapheditor/shadergrapheditoroutlinertablemodel.cc

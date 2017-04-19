@@ -58,6 +58,10 @@ void ShaderGraphEditor::OpenAsset()
 
   vkResourceLocator metaLocator(descriptor.GetAssetResourceName(), "meta");
   ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
+  if (!meta)
+  { 
+    meta = new ShaderGraphEditorMeta();
+  }
   vkSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
   m_preview->SetShaderGraph(shaderGraph);

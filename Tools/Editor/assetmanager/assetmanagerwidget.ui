@@ -32,6 +32,13 @@
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
+      <widget class="QPushButton" name="pbNewAsset">
+       <property name="text">
+        <string>New Asset</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="pbImport">
        <property name="text">
         <string>Import</string>

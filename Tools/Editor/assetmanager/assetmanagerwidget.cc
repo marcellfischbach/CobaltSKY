@@ -2,10 +2,13 @@
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <assetmanager/assetmanagerfoldermodel.hh>
+#include <assetmanager/assetmanagernewhandler.hh>
+#include <assetmanager/assetmanagernewmanager.hh>
 #include <assetdescriptor.hh>
 #include <editor.hh>
 #include <QDomDocument>
 #include <QFile>
+#include <QMenu>
 
 
 AssetManagerWidget::AssetManagerWidget()
@@ -15,6 +18,7 @@ AssetManagerWidget::AssetManagerWidget()
 
   m_folderModel = new AssetManagerFolderModel();
   m_contentModel = new AssetManagerContentModel();
+  m_currentDir = Editor::Get()->GetRootPath();
 
   m_gui.treeView->setModel(m_folderModel);
   m_gui.listView->setModel(m_contentModel);
@@ -50,6 +54,7 @@ void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
   QDir dir = m_folderModel->GetDir(index);
   m_contentModel->SetDir(dir);
+  m_currentDir = dir;
 }
 
 
@@ -99,5 +104,28 @@ void AssetManagerWidget::OpenAsset(const vkString &fileName)
 }
 
 
+void AssetManagerWidget::on_pbNewAsset_clicked(bool)
+{
+  QMenu menu(m_gui.pbNewAsset);
+  std::map<QAction*, AssetManagerNewHandler*> actions;
 
+  const std::vector<AssetManagerNewHandler*> &handlers = AssetManagerNewManager::Get()->GetHandlers();
+  for (AssetManagerNewHandler* handler : handlers)
+  {
+    QAction *action = menu.addAction(handler->GetTypeName());
+    actions[action] = handler;
+  }
+  QPoint pos = m_gui.pbNewAsset->mapToGlobal(QPoint(0, 0));
+  QAction *action = menu.exec(QCursor::pos());
+  if (!action)
+  {
+    return;
+  }
+
+  AssetManagerNewHandler *handler = actions[action];
+  if (handler)
+  {
+    handler->CreateNewAsset(m_currentDir, "New_" + handler->GetTypeName());
+  }
+}
 

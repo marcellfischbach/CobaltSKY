@@ -5,7 +5,9 @@
 
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <editor.hh>
+#include <assetmanager/assetmanagernewmanager.hh>
 #include <samplereditor/samplereditorfactory.hh>
+#include <shadergrapheditor/shadergrapheditornewhandler.hh>
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <textureeditor/textureeditorfactory.hh>
@@ -22,6 +24,8 @@ void EditorModule::Initialize()
   editor->AddEditorFactory(new ShaderGraphEditorFactory());
   editor->AddEditorFactory(new TextureEditorFactory());
 
+  AssetManagerNewManager *newManager = AssetManagerNewManager::Get();
+  newManager->RegisterNewHandler(new ShaderGraphEditorNewHandler());
 
   vkResourceManager *mgr = vkResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
