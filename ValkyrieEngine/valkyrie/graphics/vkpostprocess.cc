@@ -9,7 +9,7 @@
 #include <valkyrie/graphics/itexture2d.hh>
 #include <set>
 #include <map>
-
+#include <string.h>
 
 
 vkPostProcess::vkPostProcess()

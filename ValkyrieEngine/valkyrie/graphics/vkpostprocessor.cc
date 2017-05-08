@@ -2,7 +2,7 @@
 #include <valkyrie/graphics/vkpostprocessor.hh>
 #include <valkyrie/graphics/vkpostprocess.hh>
 #include <valkyrie/graphics/itexture.hh>
-
+#include <string.h>
 
 vkPostProcessor::vkPostProcessor()
   : vkObject()

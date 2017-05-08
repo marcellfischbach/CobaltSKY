@@ -4,6 +4,7 @@
 #include <valkyrie/core/vkclass.hh>
 #include <valkyrie/vkdefs.hh>
 #include <vector>
+#include <float.h>
 
 #include <valkyrie/entity/vkentity.refl.hh>
 

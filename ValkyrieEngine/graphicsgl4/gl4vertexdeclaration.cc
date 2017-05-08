@@ -7,7 +7,7 @@
 #include <map>
 
 
-#define VOIDPTR(base, offset) (void*)(((long)base) + offset)
+#define VOIDPTR(base, offset) reinterpret_cast<const void*>((long long)base + static_cast<long>(offset))
 
 namespace
 {
@@ -143,10 +143,20 @@ void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, vo
       iShaderStream *s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
-        s->Set(elements->Size,
-               elements->Stride,
-               VOIDPTR(ptr, elements->Offset),
-               elements->Type);
+        if (ptr)
+        {
+          s->Set(elements->Size,
+                 elements->Stride,
+                 VOIDPTR(ptr, elements->Offset),
+                 elements->Type);
+        }
+        else
+        {
+          s->Set(elements->Size,
+                 elements->Stride,
+                 elements->Offset,
+                 elements->Type);
+        }
         VK_CHECK_GL_ERROR;
         s->Enable();
         VK_CHECK_GL_ERROR;

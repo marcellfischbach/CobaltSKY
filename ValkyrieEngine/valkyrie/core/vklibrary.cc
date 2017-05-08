@@ -61,6 +61,6 @@ void vkLibrary::Close()
 void *vkLibrary::GetProcAddress(const std::string &procName)
 {
 #ifdef VK_WIN32
-  return ::GetProcAddress(m_priv->m_libModule, procName.c_str());
+  return reinterpret_cast<void*>(::GetProcAddress(m_priv->m_libModule, procName.c_str()));
 #endif
 }

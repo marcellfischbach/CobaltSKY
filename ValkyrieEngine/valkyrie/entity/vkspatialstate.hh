@@ -6,6 +6,7 @@
 #include <valkyrie/math/vkboundingbox.hh>
 #include <vector>
 #include <valkyrie/entity/vkspatialstate.refl.hh>
+#include <float.h>
 
 struct vkScanConfig;
 

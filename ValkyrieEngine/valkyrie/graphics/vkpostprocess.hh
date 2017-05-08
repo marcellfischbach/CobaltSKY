@@ -12,6 +12,7 @@
 
 
 class vkPostProcess;
+class vkPostProcessor;
 struct iRenderTarget;
 struct iShaderAttribute;
 struct iTexture;

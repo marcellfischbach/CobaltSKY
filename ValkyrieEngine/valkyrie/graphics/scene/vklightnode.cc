@@ -4,6 +4,7 @@
 #include <valkyrie/graphics/vkdirectionallight.hh>
 #include <valkyrie/graphics/vkpointlight.hh>
 #include <valkyrie/graphics/scene/iscancallback.hh>
+#include <float.h>
 
 vkLightNode::vkLightNode()
   : vkSpatialNode()

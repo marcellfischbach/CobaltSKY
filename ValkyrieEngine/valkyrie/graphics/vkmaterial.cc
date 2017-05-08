@@ -5,7 +5,7 @@
 #include <valkyrie/graphics/ishader.hh>
 #include <valkyrie/graphics/ishaderattribute.hh>
 #include <valkyrie/graphics/itexture.hh>
-
+#include <string.h>
 
 vkMaterial::vkMaterial()
   : vkObject ()

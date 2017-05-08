@@ -85,9 +85,9 @@
 find_path(SDL_INCLUDE_DIR SDL.h
   HINTS
     ENV SDLDIR
-  PATH_SUFFIXES SDL SDL12 SDL11
+  PATH_SUFFIXES SDL SDL12 SDL11 SDL2
                 # path suffixes to search inside ENV{SDLDIR}
-                include/SDL include/SDL12 include/SDL11 include
+                include/SDL include/SDL12 include/SDL11 include/SDL2 include
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
