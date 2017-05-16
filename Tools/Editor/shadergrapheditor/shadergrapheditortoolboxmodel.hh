@@ -24,7 +24,7 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
   virtual QStringList mimeTypes() const;
-  virtual QMimeData *ShaderGraphEditorToolboxModel::mimeData(const QModelIndexList &indexes) const;
+  virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   void CreateModelData(const QString &filter);
 private:
   struct Data

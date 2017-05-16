@@ -91,6 +91,9 @@ vkSize numParticles;
 
 int main(int argc, char **argv)
 {
+  void *ptr = 0;
+  printf ("Size of (*ptr) = %d\n",sizeof(ptr));
+  fflush(stdout);
 
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);

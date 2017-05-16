@@ -81,4 +81,4 @@ include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)
 
 add_subdirectory(3rdparty)
 add_subdirectory(ValkyrieEngine)
-#add_subdirectory(Tools)
+add_subdirectory(Tools)

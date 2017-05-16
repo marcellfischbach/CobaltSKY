@@ -240,6 +240,6 @@ vkString AssetManagerContentModel::ReadType(const vkString &fileName) const
 
 const vkClass *AssetManagerContentModel::ReadClass(const vkString &fileName) const
 {
-  vkString &resourceName = Editor::Get()->ConvertToResourcePath(fileName);
+  vkString resourceName = Editor::Get()->ConvertToResourcePath(fileName);
   return vkResourceManager::Get()->EvalClass(vkResourceLocator(resourceName));
 }

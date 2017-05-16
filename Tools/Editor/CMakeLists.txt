@@ -8,6 +8,11 @@ find_package(assimp)
 include_directories(${ASSIMP_INCLUDE_DIR})
 include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS})
 
+message("QtCore   : ${Qt5Core_INCLUDE_DIRS}")
+message("QtWidgets: ${Qt5Widgets_INCLUDE_DIRS}")
+message("QtOpenGL : ${Qt5OpenGL_INCLUDE_DIRS}")
+message("QtXml    : ${Qt5Xml_INCLUDE_DIRS}")
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOMOC ON)

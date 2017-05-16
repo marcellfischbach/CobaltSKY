@@ -22,7 +22,7 @@ public:
     }
   }
 
-  AssetManagerFolderModelEntry::~AssetManagerFolderModelEntry()
+  ~AssetManagerFolderModelEntry()
   {
     for (AssetManagerFolderModelEntry *entry : m_entries)
     {
