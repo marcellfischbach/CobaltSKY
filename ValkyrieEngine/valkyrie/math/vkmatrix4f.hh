@@ -604,6 +604,7 @@ public:
     printf("  %f %f %f %f\n", m10, m11, m12, m13);
     printf("  %f %f %f %f\n", m20, m21, m22, m23);
     printf("  %f %f %f %f\n", m30, m31, m32, m33);
+    fflush(stdout);
   }
 
 

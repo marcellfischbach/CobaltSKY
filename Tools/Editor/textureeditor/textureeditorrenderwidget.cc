@@ -41,6 +41,7 @@ const char *FragmentShaderProgram =
 "void main ()\n"
 "{\n"
 "  vk_FragColor = vk_ColorTrans * texture(vk_Diffuse, fragTexCoord, vk_LOD);\n"
+//"  vk_FragColor.a = 1.0;\n"
 "}\n";
 
 
@@ -171,6 +172,8 @@ void TextureEditorRenderWidget::paintGL()
     atoc, atoc, atoc, a
     );
 
+  colorTrans.Debug("ColorTrans");
+
   iShaderAttribute *attrOffset = m_shader->GetAttribute(m_idOffset);
   if (attrOffset)
   {
@@ -190,6 +193,7 @@ void TextureEditorRenderWidget::paintGL()
   if (attrDiffuse)
   {
     vkTextureUnit unit = gr->BindTexture(m_texture);
+    printf ("Bound unit: %d\n", unit);
     attrDiffuse->Set(unit);
   }
   iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);
@@ -198,7 +202,10 @@ void TextureEditorRenderWidget::paintGL()
     attrColorTrans->Set(colorTrans);
   }
 
-  gr->Clear(true, vkVector4f(0.0f, 0.0f, 0.5f, 1.0f));
+  gr->SetBlendEnabled(true);
+  gr->SetBlendMode(eBM_SrcAlpha, eBM_InvSrcAlpha);
+  gr->SetColorMask(true, true, true, true);
+  gr->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 1.0f));
 
   gr->RenderIndexed(ePT_Triangles, 6, eDT_UnsignedShort);
 

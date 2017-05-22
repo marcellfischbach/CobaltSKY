@@ -253,7 +253,10 @@ void Editor::UpdateVisibleDockItems(const std::set<vkString> &dockNames)
 {
   for (iDockItem *dockItem : m_dockItems)
   {
-    bool visible = dockNames.find(dockItem->GetName()) != dockNames.end();
-    dockItem->GetDockWidget()->setVisible(visible);
+    bool needed = dockNames.find(dockItem->GetName()) != dockNames.end();
+    if (!needed)
+    {
+      dockItem->SetEmptyContent();
+    }
   }
 }

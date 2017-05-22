@@ -11,4 +11,5 @@ struct iDockItem
   virtual QDockWidget *GetDockWidget() const = 0;
   virtual Qt::DockWidgetArea GetDockArea() const = 0;
   virtual const vkString &GetName() const = 0;
+  virtual void SetEmptyContent() = 0;
 };

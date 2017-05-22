@@ -1,5 +1,6 @@
 #pragma once
 
+
 enum vkBufferAccessMode
 {
   eBAM_Read,

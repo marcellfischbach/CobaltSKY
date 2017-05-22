@@ -1,4 +1,3 @@
-#pragma once
 
 #include <valkyrie/vkexport.hh>
 
