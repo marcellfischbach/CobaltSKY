@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <editor.hh>
+#include <basicdockitem.hh>
 #include <editormodule.hh>
 #include <iasseteditor.hh>
 #include <idockitem.hh>
@@ -11,12 +12,6 @@
 #include <valkyrie/vkengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <physicsbullet/bulletsystem.hh>
-
-#include <nodegraph/nodegraphwidget.hh>
-#include <outliner/outlinerdockitem.hh>
-#include <preview/previewdockitem.hh>
-#include <properties/propertiesdockitem.hh>
-#include <toolbox/toolboxdockitem.hh>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -68,12 +63,12 @@ bool Editor::Initialize(int argc, char **argv)
   printf("MainContext: %p\n", context);
 
   // left docks
-  AddDockItem(new PreviewDockItem());
-  AddDockItem(new ToolboxDockItem());
+  AddDockItem(new BasicDockItem(PREVIEW_DOCK_NAME, QObject::tr("Preview"), Qt::LeftDockWidgetArea));
+  AddDockItem(new BasicDockItem(TOOLBOX_DOCK_NAME, QObject::tr("Toolbox"), Qt::LeftDockWidgetArea));
 
   // right docks
-  AddDockItem(new OutlinerDockItem());
-  AddDockItem(new PropertiesDockItem());
+  AddDockItem(new BasicDockItem(OUTLINER_DOCK_NAME, QObject::tr("Outliner"), Qt::RightDockWidgetArea));
+  AddDockItem(new BasicDockItem(PROPERTIES_DOCK_NAME, QObject::tr("Properties"), Qt::RightDockWidgetArea));
 
   GetGraphics();
 

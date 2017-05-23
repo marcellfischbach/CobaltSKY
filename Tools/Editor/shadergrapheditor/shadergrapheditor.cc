@@ -6,11 +6,8 @@
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
+#include <basicdockitem.hh>
 #include <editor.hh>
-#include <outliner/outlinerdockitem.hh>
-#include <preview/previewdockitem.hh>
-#include <properties/propertiesdockitem.hh>
-#include <toolbox/toolboxdockitem.hh>
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
 
@@ -72,16 +69,16 @@ void ShaderGraphEditor::OpenAsset()
 
 void ShaderGraphEditor::PopulateDockItems()
 {
-  ToolboxDockItem *toolbox = static_cast<ToolboxDockItem*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
+  BasicDockItem *toolbox = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
   toolbox->SetContent(m_toolbox);
 
-  PropertiesDockItem *properties = static_cast<PropertiesDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
+  BasicDockItem *properties = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
   properties->SetContent(m_properties);
 
-  PreviewDockItem *preview = static_cast<PreviewDockItem*>(Editor::Get()->GetDockItem(PREVIEW_DOCK_NAME));
+  BasicDockItem *preview = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PREVIEW_DOCK_NAME));
   preview->SetContent(m_preview);
 
-  OutlinerDockItem *outliner = static_cast<OutlinerDockItem*>(Editor::Get()->GetDockItem(OUTLINER_DOCK_NAME));
+  BasicDockItem *outliner = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(OUTLINER_DOCK_NAME));
   outliner->SetContent(m_outliner);
 
 }

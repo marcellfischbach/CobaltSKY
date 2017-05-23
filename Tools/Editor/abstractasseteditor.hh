@@ -23,6 +23,8 @@ public:
   virtual const std::set<vkString> &GetVisibleDockItems() const;
   virtual void PopulateDockItems();
 
+  virtual void CloseRequest() override;
+
 protected:
   virtual void OpenAsset() = 0;
   void AddDockItemName(const vkString &dockItemName);
@@ -32,6 +34,7 @@ private:
 
   QWidget *m_widget;
 
+  bool m_dirty;
   vkString m_name;
   std::set<vkString> m_visibleDockItems;
 };

@@ -24,6 +24,9 @@ set(EDITOR_SOURCES
     abstractdockitem.hh
     assetdescriptor.cc
     assetdescriptor.hh
+    basicdockitem.cc
+    basicdockitem.hh
+    dockitems.hh
     main.cc
     editor.cc
     editor.hh
@@ -140,24 +143,9 @@ source_group(
 
 
                     
-set(OUTLINER_SOURCES
-    outliner/outlinerdockitem.cc
-    outliner/outlinerdockitem.hh
-    )
-
-
-source_group(
-    "editor\\outliner"
-    FILES
-    ${OUTLINER_SOURCES}
-    )
-
-                    
 set(PREVIEW_SOURCES
     preview/previewcameraorbithandler.cc
     preview/previewcameraorbithandler.hh
-    preview/previewdockitem.cc
-    preview/previewdockitem.hh
     preview/previewlightorbithandler.cc
     preview/previewlightorbithandler.hh
     preview/previewsceneview.cc
@@ -169,19 +157,6 @@ source_group(
     "editor\\preview"
     FILES
     ${PREVIEW_SOURCES}
-    )
-
-  
-set(PROPERTIES_SOURCES
-    properties/propertiesdockitem.cc
-    properties/propertiesdockitem.hh
-    )
-
-
-source_group(
-    "editor\\properties"
-    FILES
-    ${PROPERTIES_SOURCES}
     )
 
 
@@ -284,22 +259,6 @@ source_group(
     ${TEXTUREEDITOR_SOURCES}
     ${TEXTUREEDITOR_UI}
     )
-       
-set(TOOLBOX_SOURCES
-    toolbox/toolboxdockitem.cc
-    toolbox/toolboxdockitem.hh
-    )
-
-
-source_group(
-    "editor\\toolbox"
-    FILES
-    ${TOOLBOX_SOURCES}
-    )
-
-
-
-
 
 set(ALL_UI
     ${ASSETMANAGER_UI}
@@ -318,13 +277,10 @@ set(ALL_SOURCES
     ${COMPONENTS_SOURCES}
     ${LOADERS_SOURCES}
     ${NODEGRAPH_SOURCES}
-    ${OUTLINER_SOURCES}
     ${PREVIEW_SOURCES}
-    ${PROPERTIES_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}
-    ${TOOLBOX_SOURCES}
     )
 
 add_executable(

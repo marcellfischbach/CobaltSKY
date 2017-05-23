@@ -1,9 +1,13 @@
 
 
 #include <abstractasseteditor.hh>
+#include <QMessageBox>
+#include <editor.hh>
+#include <mainwindow.hh>
 
 AbstractAssetEditor::AbstractAssetEditor()
   : iAssetEditor()
+  , m_dirty(true)
 {
 }
 
@@ -70,3 +74,23 @@ void AbstractAssetEditor::PopulateDockItems()
 {
   // don't do anything... override in subclasses
 }
+
+void AbstractAssetEditor::CloseRequest()
+{
+  if (m_dirty)
+  {
+    int res = QMessageBox::question(Editor::Get()->GetMainWindow(),
+                          QObject::tr("Valkyrie Editor"),
+                          QObject::tr("Close without saving?"),
+                          QMessageBox::Yes,
+                          QMessageBox::Cancel);
+    if (res != QMessageBox::Yes)
+    {
+      return;
+    }
+  }
+
+  Editor::Get()->GetMainWindow()->CloseEditor(this, true);
+}
+
+

@@ -1,12 +1,13 @@
 
 
-#include <outliner/outlinerdockitem.hh>
+#include <basicdockitem.hh>
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
+#include <QScrollArea>
 
-OutlinerDockItem::OutlinerDockItem()
-  : AbstractDockItem(OUTLINER_DOCK_NAME, "Outliner", Qt::RightDockWidgetArea)
+BasicDockItem::BasicDockItem(const vkString &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea)
+  : AbstractDockItem(dockName, dockTitle, dockArea)
     , m_content(0)
     , m_emptyLabel(0)
 {
@@ -14,14 +15,17 @@ OutlinerDockItem::OutlinerDockItem()
   m_gridLayout = new QGridLayout(m_frame);
   m_gridLayout->setContentsMargins(0, 0, 0, 0);
   SetWidget(m_frame);
+//  SetEmptyContent();
+  SetContent(new QScrollArea(m_frame));
+//  GetDockWidget()->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::MinimumExpanding);
 }
 
-OutlinerDockItem::~OutlinerDockItem()
+BasicDockItem::~BasicDockItem()
 {
 
 }
 
-void OutlinerDockItem::SetContent(QWidget *content)
+void BasicDockItem::SetContent(QWidget *content)
 {
   if (m_content)
   {
@@ -35,7 +39,7 @@ void OutlinerDockItem::SetContent(QWidget *content)
   }
 }
 
-void OutlinerDockItem::SetEmptyContent()
+void BasicDockItem::SetEmptyContent()
 {
   if (!m_emptyLabel)
   {
