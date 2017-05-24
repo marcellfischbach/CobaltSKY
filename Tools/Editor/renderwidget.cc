@@ -6,8 +6,8 @@
 
 #include <GL/glew.h>
 
-#include <renderwidget.hh>
 #include <QOpenGLContext>
+#include <renderwidget.hh>
 #include <editor.hh>
 
 RenderWidget::RenderWidget(QWidget *parent, Qt::WindowFlags f)

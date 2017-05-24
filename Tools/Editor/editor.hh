@@ -7,7 +7,6 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <QOpenGLContext>
 
 class MainWindow;
 class AssetManagerWidget;
@@ -43,10 +42,6 @@ public:
 
   QRect GetScreenSize();
 
-  QOpenGLContext *GetOpenGLContext()
-  {
-    return m_openglContext;
-  }
 
   vkGraphicsGL4 *GetGraphics();
  
@@ -73,7 +68,6 @@ private:
   vkEngine *m_engine;
   vkGraphicsGL4 *m_graphics;
   iPhysicsSystem *m_physicsSystem;
-  QOpenGLContext *m_openglContext;
   std::vector<iDockItem*> m_dockItems;
 
 };

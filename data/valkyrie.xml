@@ -1,12 +1,17 @@
 <settings>
 	<vfs>
-		<rootPath>.</rootPath>
-		<shaders>materials/gl4</shaders>
-		<materials>materials</materials>
-		<textures>materials/textures</textures>
-		<fonts>fonts</fonts>
-		<models>models</models>
-		<entities>entities</entities>
+		<rootPaths>
+			<rootPath name="Data" priority="10">.</rootPath>
+			<rootPath name="Debug" priority="0">debug</rootPath>
+		</rootPaths>
+		<resolutions>
+			<resolution name="shaders">materials/gl4</resolution>
+			<resolution name="materials">materials</resolution>
+			<resolution name="textures">materials/textures</resolution>
+			<resolution name="fonts">fonts</resolution>
+			<resolution name="models">models</resolution>
+			<resolution name="entities">entities</resolution>
+		</resolutions>
 	</vfs>
 	
 	<bullet>

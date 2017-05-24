@@ -35,8 +35,8 @@ void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
   m_ghostObject->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 
 
-  m_characterController = new btKinematicCharacterController(m_ghostObject, m_capsuleShape, height / 8.0f, 2 /* Z-Axis up */);
-  m_characterController->setGravity(9.81f);
+  m_characterController = new btKinematicCharacterController(m_ghostObject, m_capsuleShape, height / 8.0f, btVector3(0.0, 0.0, 1.));
+  m_characterController->setGravity(btVector3 (0.0f, 0.0f, -9.81f));
   m_characterController->setJumpSpeed(7.0f);
 //  m_characterController->setGravity(0.01);
 
@@ -129,7 +129,7 @@ bool vkBulletCapsuleCharacterController::CanJump() const
 
 void vkBulletCapsuleCharacterController::Jump()
 {
-  m_characterController->jump();
+  m_characterController->jump(btVector3(0, 0, 0));
 }
 
 void vkBulletCapsuleCharacterController::SetJumpSpeed(float jumpSpeed)
@@ -150,7 +150,7 @@ void vkBulletCapsuleCharacterController::SetGravity(const vkVector3f &gravity)
 
 void vkBulletCapsuleCharacterController::SetGravity(float gravity)
 {
-  m_characterController->setGravity(gravity);
+  m_characterController->setGravity(btVector3(0.0f, 0.0f, -gravity));
 }
 
 void vkBulletCapsuleCharacterController::SetMaxSlope(float maxSlope)

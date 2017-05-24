@@ -2,9 +2,59 @@
 #include <valkyrie/core/vkvfs.hh>
 #include <valkyrie/core/vkfilestd.hh>
 #include <valkyrie/core/vksettings.hh>
+#include <algorithm>
 // #include <cscore/cssettings.h>
 
 // #include <csini/csiini.h>
+
+
+vkVFS::Entry::Entry()
+  : m_name("")
+  , m_path("")
+  , m_absPath("")
+  , m_priority(0)
+{
+}
+
+void vkVFS::Entry::SetName(const std::string &name)
+{
+  m_name = name;
+}
+
+const std::string &vkVFS::Entry::GetName() const
+{
+  return m_name;
+}
+
+void vkVFS::Entry::SetPath(const std::string &path)
+{
+  m_path = path;
+}
+
+const std::string &vkVFS::Entry::GetPath() const
+{
+  return m_path;
+}
+
+void vkVFS::Entry::SetAbsPath(const std::string &absPath)
+{
+  m_absPath = absPath;
+}
+
+const std::string &vkVFS::Entry::GetAbsPath() const
+{
+  return m_absPath;
+}
+
+void vkVFS::Entry::SetPriority(int priority)
+{
+  m_priority = priority;
+}
+
+int vkVFS::Entry::GetPriority() const
+{
+  return m_priority;
+}
 
 
 vkVFS::vkVFS()
@@ -22,25 +72,54 @@ bool vkVFS::Initialize(int argc, char** argv)
   vkSettings *settings = vkSettings::Get();
   if (settings && settings->HasGroup("vfs"))
   {
-    TiXmlElement *group = settings->GetGroup("vfs");
-    for (TiXmlElement *element = group->FirstChildElement();
-    element;
-      element = element->NextSiblingElement())
+    TiXmlElement *vfsElement = settings->GetGroup("vfs");
+    TiXmlElement *rootPathsElement = vfsElement->FirstChildElement("rootPaths");
+    if (rootPathsElement)
     {
+      for (TiXmlElement *rootPathElement = rootPathsElement->FirstChildElement("rootPath");
+           rootPathElement;
+           rootPathElement = rootPathElement->NextSiblingElement("rootPath"))
+      {
+        if (rootPathElement->GetText() != 0)
+        {
+          Entry entry;
+          entry.SetPath(rootPathElement->GetText());
+          entry.SetAbsPath(std::string(settings->GetRootPath()) + "/" + entry.GetPath());
+          if (rootPathElement->Attribute("name"))
+          {
+            entry.SetName(rootPathElement->Attribute("name"));
+          }
+          if (rootPathElement->Attribute("priority"))
+          {
+            entry.SetPriority(atoi(rootPathElement->Attribute("priority")));
+          }
 
-      vkString vfsName(element->Value());
-      vkString pathName(element->GetText());
-      if (vfsName == vkString("rootPath"))
-      {
-        vkString rootPath = vkString(settings->GetRootPath()) + vkString("/") + pathName;
-        SetRootPath(rootPath);
+          m_entries.push_back(entry);
+        }
       }
-      else
+    }
+
+    TiXmlElement *resolutionsElement = vfsElement->FirstChildElement("resolutions");
+    if (resolutionsElement)
+    {
+      for (TiXmlElement *resolutionElement = resolutionsElement->FirstChildElement();
+           resolutionElement;
+           resolutionElement = resolutionElement->NextSiblingElement())
       {
+        if (!resolutionElement->Attribute("name") || !resolutionElement->GetText())
+        {
+          continue;
+        }
+
+        vkString vfsName(resolutionElement->Attribute("name"));
+        vkString pathName(resolutionElement->GetText());
         AddPath(vfsName, pathName);
       }
     }
   }
+
+  // now sort the entries, so that the highes priority is on top
+  std::sort(m_entries.begin(), m_entries.end(), [](const Entry& e0, const Entry &e1) { return e1.GetPriority() < e0.GetPriority(); });
 
   return true;
 
@@ -142,32 +221,41 @@ vkString vkVFS::GetPathResolution(const vkString &pathName) const
   return res;
 }
 
-void vkVFS::SetRootPath(const vkString &rootPath)
-{
-  m_rootPath = rootPath;
-}
+//void vkVFS::SetRootPath(const vkString &rootPath)
+//{
+//  m_rootPath = rootPath;
+//}
 
-const vkString &vkVFS::GetRootPath() const
-{
-  return m_rootPath;
-}
+//const vkString &vkVFS::GetRootPath() const
+//{
+//  return m_rootPath;
+//}
 
 iFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMode)
 {
-  std::string finalFilename = GetAbsolutPath(filename);
+  std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
   {
+    printf ("Unable to solve filename: %s\n", filename.c_str());
     return 0;
   }
+
+
 
   vkFileStd* file = new vkFileStd();
-  if (!file->Open(finalFilename.c_str(), mode, textMode))
+  for (Entry &entry : m_entries)
   {
-    delete file;
-    return 0;
+    std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
+    if (file->Open(absFileName.c_str(), mode, textMode))
+    {
+      printf ("Opened: %s\n", absFileName.c_str());
+      return file;
+    }
   }
 
-  return file;
+  delete file;
+  printf ("Unable to open: %s\n", finalFilename.c_str());
+  return 0;
 }
 
 
@@ -179,5 +267,16 @@ vkString vkVFS::GetAbsolutPath(const vkString &filename)
     return "";
   }
 
-  return m_rootPath + std::string("/") + res;
+  return res;
+}
+
+
+vkSize vkVFS::GetNumberOfEntries() const
+{
+  return m_entries.size();
+}
+
+const vkVFS::Entry &vkVFS::GetEntry(vkSize idx) const
+{
+  return m_entries[idx];
 }

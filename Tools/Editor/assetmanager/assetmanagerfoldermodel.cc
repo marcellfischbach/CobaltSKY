@@ -1,25 +1,45 @@
 
 #include <assetmanager/assetmanagerfoldermodel.hh>
 #include <editor.hh>
+#include <valkyrie/core/vkvfs.hh>
 #include <QDir>
 #include <QList>
 
 class AssetManagerFolderModelEntry
 {
 public:
-  AssetManagerFolderModelEntry(const QDir &dir, AssetManagerFolderModelEntry *parent = 0)
-    : m_dir (dir)
-    , m_parent (parent)
-    , m_scanned(false)
+  enum Type
   {
-    if (!m_parent)
-    {
-      m_name = QString("(%1)").arg(QObject::tr("root"));
-    }
-    else
-    {
-      m_name = m_dir.dirName();
-    }
+    Root,
+    Entry,
+    Dir,
+  };
+
+  AssetManagerFolderModelEntry()
+    : m_dir (QDir())
+    , m_parent (0)
+    , m_scanned (true)
+    , m_type(Root)
+  {
+    m_name = QObject::tr("AssetManager");
+  }
+
+  AssetManagerFolderModelEntry(const vkVFS::Entry &entry)
+    : m_parent(0)
+    , m_scanned(false)
+    , m_type(Entry)
+  {
+    m_dir = QDir(entry.GetAbsPath().c_str());
+    m_name = QString(entry.GetName().c_str());
+  }
+
+  AssetManagerFolderModelEntry(const QDir &dir)
+    : m_dir (dir)
+    , m_parent (0)
+    , m_scanned(false)
+    , m_type(Dir)
+  {
+    m_name = m_dir.dirName();
   }
 
   ~AssetManagerFolderModelEntry()
@@ -29,6 +49,12 @@ public:
       delete entry;
     }
     m_entries.clear();
+  }
+
+  void AddEntry (AssetManagerFolderModelEntry *entry)
+  {
+    m_entries.push_back(entry);
+    entry->m_parent = this;
   }
 
   const QString &GetName() const
@@ -76,14 +102,16 @@ private:
     {
       QDir dir(m_dir);
       dir.cd(subFolder);
-      m_entries.push_back(new AssetManagerFolderModelEntry(dir, this));
+      AddEntry(new AssetManagerFolderModelEntry(dir));
     }
     m_scanned = true;
   }
 
 
+  Type m_type;
   QDir m_dir;
   QString m_name;
+  QString m_entryName;
 
   AssetManagerFolderModelEntry* m_parent;
   QList<AssetManagerFolderModelEntry*> m_entries;
@@ -96,7 +124,16 @@ private:
 AssetManagerFolderModel::AssetManagerFolderModel()
   : QAbstractItemModel()
 {
-  m_root = new AssetManagerFolderModelEntry(Editor::Get()->GetRootPath());
+  printf ("AssetManagerFolgerModel::AssetManagerFolderMode\n");
+  fflush(stdout);
+  m_root = new AssetManagerFolderModelEntry();
+  for (vkSize i = 0, in= vkVFS::Get()->GetNumberOfEntries(); i<in; ++i)
+  {
+    const vkVFS::Entry &entry = vkVFS::Get()->GetEntry(i);
+    m_root->AddEntry(new AssetManagerFolderModelEntry(entry));
+  }
+  printf ("AssetManagerFolgerModel::AssetManagerFolderMode - done\n");
+  fflush(stdout);
 }
 
 AssetManagerFolderModel::~AssetManagerFolderModel()

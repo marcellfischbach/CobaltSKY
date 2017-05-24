@@ -1,17 +1,16 @@
 #pragma once
 
-#include <GL/glew.h>
 #include <QOpenGLWidget>
 
 #include <vector>
 
 struct iFrameProcessor;
+struct iGraphics;
 struct iSampler;
 class vkEntityScene;
-class vkRenderTargetGL4;
 class vkCamera;
-class vkGraphicsGL4;
 struct SceneViewInputHandler;
+class QTVKOnscreenRenderTarget;
 class SceneView : public QOpenGLWidget
 {
 public:
@@ -41,9 +40,9 @@ protected:
 private:
   vkCamera *m_camera = 0;
   vkEntityScene *m_scene = 0;
-  vkGraphicsGL4 *m_graphics = 0;
+  iGraphics *m_graphics = 0;
   iFrameProcessor* m_frameProcessor = 0;
-  vkRenderTargetGL4 *m_onscreenTarget = 0;
+  QTVKOnscreenRenderTarget *m_onscreenTarget = 0;
 
   std::vector<SceneViewInputHandler*> m_handlers;
 };

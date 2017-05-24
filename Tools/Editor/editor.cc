@@ -1,7 +1,7 @@
-#include <GL/glew.h>
 #include <editor.hh>
 #include <basicdockitem.hh>
 #include <editormodule.hh>
+#include <glcontext.hh>
 #include <iasseteditor.hh>
 #include <idockitem.hh>
 #include <mainwindow.hh>
@@ -31,7 +31,7 @@ bool Editor::Initialize(int argc, char **argv)
 {
   EditorModule::Initialize();
 
-  m_rootPath = QDir(QString(vkVFS::Get()->GetRootPath().c_str()));
+//  m_rootPath = QDir(QString(vkVFS::Get()->GetRootPath().c_str()));
 
   m_engine = new vkEngine();
   m_physicsSystem = new vkBulletSystem();
@@ -51,16 +51,8 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->setVisible(true);
   //renderWidget->setVisible(false);
 
+  GLContext::Get()->Initialize(m_mainWindow);
 
-  QOffscreenSurface *offscreenSurface = new QOffscreenSurface();
-  offscreenSurface->create();
-
-  QOpenGLContext *context = new QOpenGLContext(m_mainWindow);
-  context->setFormat(QSurfaceFormat::defaultFormat());
-  context->setShareContext(QOpenGLContext::globalShareContext());
-  context->create();
-  context->makeCurrent(offscreenSurface);
-  printf("MainContext: %p\n", context);
 
   // left docks
   AddDockItem(new BasicDockItem(PREVIEW_DOCK_NAME, QObject::tr("Preview"), Qt::LeftDockWidgetArea));
@@ -83,12 +75,6 @@ vkGraphicsGL4 *Editor::GetGraphics()
   {
     m_graphics = new vkGraphicsGL4();
     m_engine->SetRenderer(m_graphics);
-
-
-    iTexture2D *texture0 = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator("materials/textures/dirt_diffuse.xasset"));
-    iTexture2D *texture1 = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator("materials/textures/fieldstone_diffuse.xasset"));
-    printf("DirtDiffuse: %p\n", texture0);
-    printf("FieldstoneDiffuse: %p\n", texture0);
   }
 
   return m_graphics;

@@ -34,6 +34,8 @@ set(EDITOR_SOURCES
     editorimage.hh
     editormodule.cc
     editormodule.hh
+    glcontext.cc
+    glcontext.hh
     iasseteditor.hh
     iasseteditorfactory.hh
     idockitem.hh
@@ -81,6 +83,8 @@ set(COMPONENTS_SOURCES
     components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
+    components/qtvkonscreenrendertarget.cc
+    components/qtvkonscreenrendertarget.hh
     components/sceneview.cc
     components/sceneview.hh
     components/sceneviewinputhandler.hh

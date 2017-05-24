@@ -24,6 +24,8 @@ vkFileStd::~vkFileStd ()
 
 bool vkFileStd::Open (const char *filename, vkOpenMode mode, vkTextMode textMode)
 {
+  m_read = false;
+  m_write = false;
   switch (mode)
   {
   case eOM_Read:
@@ -58,7 +60,6 @@ bool vkFileStd::Open (const char *filename, vkOpenMode mode, vkTextMode textMode
 
   if (!m_file)
   {
-    printf ("ceFileStd::Open: File %s no found\n", filename); fflush (stdout);
     return false;
   }
 

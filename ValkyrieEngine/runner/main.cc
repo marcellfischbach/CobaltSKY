@@ -756,6 +756,7 @@ void UpdateCharacter(vkCharacterEntity *character, const iMouse *mouse, const iK
 
 
   vkMatrix4f mat = character->GetTransformation().GetTransformation(mat);
+  vkVector3f pos;
 
   vkVector3f direction(sx, sy, 0.0f);
   vkMatrix4f::Mult(mat, direction, direction);

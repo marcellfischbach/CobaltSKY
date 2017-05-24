@@ -68,7 +68,7 @@ private:
 AssetManagerContentModel::AssetManagerContentModel()
   : QAbstractItemModel()
 {
-  SetDir(Editor::Get()->GetRootPath());
+  SetDir(QDir());
 }
 
 AssetManagerContentModel::~AssetManagerContentModel()
@@ -108,7 +108,7 @@ void AssetManagerContentModel::CleanupEntries()
 
 QModelIndex AssetManagerContentModel::index(int row, int column, const QModelIndex &parent) const
 {
-  if (parent.isValid() || column != 0)
+  if (parent.isValid() || column != 0 || row >= m_entries.size())
   {
     return QModelIndex();
   }
@@ -127,7 +127,8 @@ int AssetManagerContentModel::rowCount(const QModelIndex &parent) const
   {
     return 0;
   }
-  return m_entries.size();
+  int num = m_entries.size();
+  return num;
 }
 
 int AssetManagerContentModel::columnCount(const QModelIndex &parent) const

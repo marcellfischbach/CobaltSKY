@@ -1,23 +1,26 @@
 
 
 #include <components/sceneview.hh>
+#include <components/qtvkonscreenrendertarget.hh>
 #include <components/sceneviewinputhandler.hh>
-#include <graphicsgl4/gl4graphics.hh>
-#include <graphicsgl4/gl4rendertarget.hh>
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/entity/vkentity.hh>
 #include <valkyrie/entity/vkentityscene.hh>
 #include <valkyrie/graphics/iframeprocessor.hh>
+#include <valkyrie/graphics/igraphics.hh>
+#include <valkyrie/graphics/irendertarget.hh>
 #include <valkyrie/graphics/isampler.hh>
 #include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/vkcamera.hh>
 #include <valkyrie/graphics/deferred/vkdeferredframeprocessor.hh>
 #include <editor.hh>
 #include <QPaintEvent>
+#include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
 
 SceneView::SceneView(QWidget *parent)
   : QOpenGLWidget(parent)
+  , m_onscreenTarget(new QTVKOnscreenRenderTarget())
 {
 
 }
@@ -61,7 +64,7 @@ void SceneView::initializeGL()
 {
   context()->setShareContext(QOpenGLContext::globalShareContext());
 
-  m_graphics = vkQueryClass<vkGraphicsGL4>(vkEng->GetRenderer());
+  m_graphics = vkEng->GetRenderer();
   m_graphics->ResetDefaults();
 
 
@@ -87,15 +90,11 @@ void SceneView::initializeGL()
     return;
   }
 
-  m_onscreenTarget = new vkRenderTargetGL4(0, width(), height());
-
 }
 
 void SceneView::paintGL()
 {
-  GLint name;
-  glGetIntegerv(GL_FRAMEBUFFER_BINDING, &name);
-  m_onscreenTarget->Setup(name, width(), height());
+  m_onscreenTarget->Setup(width(), height());
 
   vkEntity *root = 0;
   if (m_scene)
@@ -105,7 +104,7 @@ void SceneView::paintGL()
   }
   iTexture2D *colorTarget = 0;
 
-  iRenderTarget *target = m_frameProcessor->Render(root, m_camera, m_onscreenTarget);
+  iRenderTarget *target = m_frameProcessor->Render(root, m_camera, m_onscreenTarget->GetRenderTarget());
   colorTarget = vkQueryClass<iTexture2D>(target->GetColorBuffer(0));
   /*
   //
