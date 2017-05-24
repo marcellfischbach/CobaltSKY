@@ -82,3 +82,4 @@ void ShaderGraphEditor::PopulateDockItems()
   outliner->SetContent(m_outliner);
 
 }
+

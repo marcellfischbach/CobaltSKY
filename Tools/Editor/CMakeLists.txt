@@ -246,6 +246,8 @@ set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.hh
     textureeditor/textureeditorfactory.cc
     textureeditor/textureeditorfactory.hh
+    textureeditor/textureeditorproperties.cc
+    textureeditor/textureeditorproperties.hh
     textureeditor/textureeditorrenderwidget.cc
     textureeditor/textureeditorrenderwidget.hh
     textureeditor/textureeditorwidget.cc

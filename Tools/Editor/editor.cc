@@ -147,20 +147,26 @@ vkString Editor::ConvertToResourcePath(const vkString &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));
 
-  QString canonicalRoot = m_rootPath.canonicalPath();
-  QString canonicalAssetDir = assetDir.canonicalPath();
-
-  if (!canonicalAssetDir.startsWith(canonicalRoot))
+  for (unsigned i = 0, in = vkVFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
-    return filePath;
-  }
+    const vkVFS::Entry &entry = vkVFS::Get()->GetEntry(i);
+    QDir dir(QString(entry.GetAbsPath().c_str()));
+    QString canonicalRoot = dir.canonicalPath();
+    QString canonicalAssetDir = assetDir.canonicalPath();
 
-  QString vfsPath = canonicalAssetDir.mid(canonicalRoot.length());
-  while (vfsPath.startsWith("/"))
-  {
-    vfsPath = vfsPath.mid(1);
+    if (!canonicalAssetDir.startsWith(canonicalRoot))
+    {
+      continue;
+    }
+
+    QString vfsPath = canonicalAssetDir.mid(canonicalRoot.length());
+    while (vfsPath.startsWith("/"))
+    {
+      vfsPath = vfsPath.mid(1);
+    }
+    return vkString((const char*)vfsPath.toLatin1());
   }
-  return vkString((const char*)vfsPath.toLatin1());
+  return filePath;
 }
 
 iAssetEditorFactory *Editor::FindFactory(const AssetDescriptor &desc)
