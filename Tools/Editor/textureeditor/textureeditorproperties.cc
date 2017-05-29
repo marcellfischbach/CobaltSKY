@@ -24,7 +24,7 @@ void TextureEditorProperties::SetTexture(iTexture *texture)
   VK_SET(m_texture, texture);
   if (m_texture)
   {
-    m_samplerWidget->SetResourceLocator()
+//    m_samplerWidget->SetResourceLocator()
   }
 }
 

@@ -248,7 +248,6 @@ iFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMod
     std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
     if (file->Open(absFileName.c_str(), mode, textMode))
     {
-      printf ("Opened: %s\n", absFileName.c_str());
       return file;
     }
   }

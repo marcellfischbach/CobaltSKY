@@ -42,10 +42,6 @@ vkGraphicsGL4::vkGraphicsGL4()
   {
     printf("Initialize GLEW failed\n");
   }
-  else
-  {
-    printf("Initialize GLEW successful.\n");
-  }
   //
   // it appears glewInit ends up with an invalid enum pending in the error state
   // so we clear that state here so we can start up clean

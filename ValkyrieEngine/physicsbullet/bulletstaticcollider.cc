@@ -53,7 +53,7 @@ void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
 
   vkMatrix4f global;
   vkMatrix4f::Mult(m_transformation, data.localTransform, global);
-  global.Debug("Global");
+  // global.Debug("Global");
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&global.m00));
   data.object->setWorldTransform(trans);
@@ -104,7 +104,7 @@ void vkBulletStaticCollider::FinishTransformation()
     vkMatrix4f global;
     vkMatrix4f::Mult(m_transformation, data.localTransform, global);
 
-    global.Debug("Final global");
+    // global.Debug("Final global");
     btTransform trans;
     trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&global.m00));
     data.object->setWorldTransform(trans);

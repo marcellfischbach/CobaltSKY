@@ -270,7 +270,3 @@ void vkResourceManager::DeregisterObject(iObject *object)
 }
 
 
-vkResourceLocator vkResourceManager::GetResourceLocatorOfResource(iObject *resource)
-{
-  //std::map<iObject*, vkResourceLocator
-}

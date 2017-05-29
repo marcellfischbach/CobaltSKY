@@ -255,7 +255,6 @@ public:
   void DeregisterObject(const vkResourceLocator &locator);
   void DeregisterObject(iObject *object);
 
-  vkResourceLocator GetResourceLocatorOfResource(iObject *object) const;
 
 private:
   vkResourceManager();

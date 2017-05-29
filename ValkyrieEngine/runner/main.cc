@@ -91,10 +91,6 @@ vkSize numParticles;
 
 int main(int argc, char **argv)
 {
-  void *ptr = 0;
-  printf ("Size of (*ptr) = %d\n",sizeof(ptr));
-  fflush(stdout);
-
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
   vkEngine engine;
@@ -187,7 +183,7 @@ int initialize()
   }
 
   vkPostProcessor *pp = createPostProcessor(graphicsGL4);
-  printf("PP: %p\n", pp);
+  printf("Using post processor: %s\n", (pp ? "yes" : "no"));
   fp->SetPostProcessor(pp);
 
   mouse = window->GetMouse();
