@@ -14,7 +14,7 @@ public:
   iRenderTarget *GetRenderTarget ();
 
 private:
-  vkRenderTargetGL4 *m_renderTarget;
+  vkRenderTargetGL4 *m_renderTarget = 0;
 };
 
 #endif // QTVKONSCREENRENDERTARGET_HH

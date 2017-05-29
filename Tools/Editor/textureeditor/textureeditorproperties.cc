@@ -1,6 +1,8 @@
 
 #include <textureeditor/textureeditorproperties.hh>
 #include <components/assetresourcewidget.hh>
+#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/graphics/isampler.hh>
 #include <valkyrie/graphics/itexture.hh>
 
 #include <QFrame>
@@ -24,7 +26,8 @@ void TextureEditorProperties::SetTexture(iTexture *texture)
   VK_SET(m_texture, texture);
   if (m_texture)
   {
-//    m_samplerWidget->SetResourceLocator()
+    vkResourceLocator locator = vkResourceManager::Get()->GetLocator(texture->GetSampler());
+    m_samplerWidget->SetResourceLocator(locator);
   }
 }
 
@@ -39,9 +42,11 @@ void TextureEditorProperties::InitGUI()
   QLabel *label = new QLabel(tr("Sampler"), frame);
   m_samplerWidget = new AssetResourceWidget(frame);
   m_samplerWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
+  m_samplerWidget->AddValidClass(iSampler::GetStaticClass());
+  connect(m_samplerWidget, SIGNAL(ResourceChanged(const vkResourceLocator &)), this, SIGNAL(SamplerChanged(const vkResourceLocator &)));
 
-  frameLayout->addWidget(label, 0, 0, 1, 1, Qt::AlignLeft);
-  frameLayout->addWidget(m_samplerWidget, 0, 1, 1, 1, Qt::AlignLeft);
+  frameLayout->addWidget(label, 0, 0, 1, 1);
+  frameLayout->addWidget(m_samplerWidget, 0, 1, 1, 1);
 
   frameLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding), 1, 0, 1, 2);
 

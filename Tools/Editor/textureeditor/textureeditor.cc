@@ -18,6 +18,9 @@ TextureEditor::TextureEditor()
 
   m_properties = new TextureEditorProperties();
   AddDockItemName(PROPERTIES_DOCK_NAME);
+
+  QObject::connect(m_properties, SIGNAL(SamplerChanged(const vkResourceLocator &)),
+    m_widget, SLOT(SamplerChanged(const vkResourceLocator &)));
 }
 
 TextureEditor::~TextureEditor()
@@ -32,6 +35,7 @@ void TextureEditor::OpenAsset()
 
   iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator(descriptor.GetAssetResourceName()));
   m_widget->SetTexture(texture);
+  m_properties->SetTexture(texture);
 }
 
 void TextureEditor::PopulateDockItems()

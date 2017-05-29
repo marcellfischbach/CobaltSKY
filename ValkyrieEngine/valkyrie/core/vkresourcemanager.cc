@@ -60,6 +60,7 @@ iObject *vkResourceManager::Load(const vkResourceLocator &locator, iObject *user
   iObject *object = Load(file, locator, userData);
   file->Release();
 
+  printf("Resourcemanager: Load: %s:%s => %p\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str(), object);
   return object;
 }
 
@@ -171,7 +172,7 @@ iObject *vkResourceManager::Get(const vkResourceLocator &resourceLocator) const
   return 0;
 }
 
-vkResourceLocator vkResourceManager::Get(iObject *object) const
+vkResourceLocator vkResourceManager::GetLocator(iObject *object) const
 {
   std::map<iObject*, vkResourceLocator>::const_iterator it = m_resources.find(object);
   if (it != m_resources.end())

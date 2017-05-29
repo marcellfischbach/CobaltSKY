@@ -6,6 +6,7 @@
 
 class TextureEditor;
 struct iTexture2D;
+class vkResourceLocator;
 class TextureEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -14,7 +15,8 @@ public:
   virtual ~TextureEditorWidget();
 
   void SetTexture(iTexture2D *texture);
-
+public slots:
+void SamplerChanged(const vkResourceLocator &locator);
 private slots:
 void on_pbRed_toggled(bool checked);
 void on_pbGreen_toggled(bool checked);
@@ -25,5 +27,5 @@ void on_spLOD_valueChanged(int value);
 private:
   TextureEditor *m_editor;
   Ui::TextureEditorWidget m_gui;
-
+  iTexture2D *m_texture;
 };

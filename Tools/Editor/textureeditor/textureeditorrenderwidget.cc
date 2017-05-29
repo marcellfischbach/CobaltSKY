@@ -172,7 +172,6 @@ void TextureEditorRenderWidget::paintGL()
     atoc, atoc, atoc, a
     );
 
-  colorTrans.Debug("ColorTrans");
 
   iShaderAttribute *attrOffset = m_shader->GetAttribute(m_idOffset);
   if (attrOffset)
@@ -193,7 +192,6 @@ void TextureEditorRenderWidget::paintGL()
   if (attrDiffuse)
   {
     vkTextureUnit unit = gr->BindTexture(m_texture);
-    printf ("Bound unit: %d\n", unit);
     attrDiffuse->Set(unit);
   }
   iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);

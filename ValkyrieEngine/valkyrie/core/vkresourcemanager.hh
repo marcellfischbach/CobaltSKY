@@ -177,7 +177,7 @@ public:
    *
    * \return The resource locator
    */
-  vkResourceLocator Get(iObject *object) const;
+  vkResourceLocator GetLocator(iObject *object) const;
 
   /**
   * \brief Get the object from the resource cache. 
@@ -194,14 +194,21 @@ public:
 
   VK_FORCEINLINE iObject *Aquire(const vkResourceLocator &resourceLocator, iObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
   {
+    iObject* res = 0;
     switch (mode)
     {
     case eRLM_Shared:
-      return GetOrLoad(resourceLocator, userData);
+      res = GetOrLoad(resourceLocator, userData);
+      break;
     case eRLM_Instance:
-      return Load(resourceLocator, userData);
+      res = Load(resourceLocator, userData);
+      break;
     }
-    return 0;
+    if (res)
+    {
+      m_resources[res] = resourceLocator;
+    }
+    return res;
   }
 
 
