@@ -66,6 +66,7 @@ endif()
 find_package(OpenGL)
 find_package(PNG)
 
+include(${ValkyrieEngine_SOURCE_DIR}/Scripts/Findassimp.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
 include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindPhysX3.cmake)

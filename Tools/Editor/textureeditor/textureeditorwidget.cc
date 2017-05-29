@@ -3,6 +3,10 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/isampler.hh>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+
 
 
 TextureEditorWidget::TextureEditorWidget(TextureEditor *parent)
@@ -64,3 +68,69 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
   m_gui.openGLWidget->SetLOD(value);
 }
 
+void TextureEditorWidget::on_pbSave_clicked()
+{
+  QString filename(m_editor->GetAssetDescriptor().GetAssetFileName().c_str());
+
+  QFile file(filename);
+  QDomDocument doc;
+  if (!doc.setContent(&file))
+  {
+    file.close();
+    printf("Unable to save\n");
+    //SaveNew();
+    return;
+  }
+  file.close();
+
+  QDomElement assetElement = doc.documentElement();
+  if (assetElement.isNull() || assetElement.tagName() != QString("asset"))
+  {
+    printf("Malformed asset\n");
+    // SaveNew ();
+    return;
+  }
+
+  QDomElement dataElement = assetElement.firstChildElement("data");
+  if (dataElement.isNull())
+  {
+    printf("Malformed asset\n");
+    // SaveNew ();
+    return;
+  }
+
+
+  QDomElement texture2dElement = dataElement.firstChildElement("texture2d");
+  if (texture2dElement.isNull())
+  {
+    printf("Malformed asset\n");
+    // SaveNew ();
+    return;
+  }
+
+
+  QDomElement samplerElement = texture2dElement.firstChildElement("sampler");
+  if (samplerElement.isNull())
+  {
+    printf("Malformed asset\n");
+    // SaveNew ();
+    return;
+  }
+
+  QDomNode child;
+  while (!(child = samplerElement.firstChild()).isNull())
+  {
+    samplerElement.removeChild(child);
+  }
+
+  vkResourceLocator samplerLocator = vkResourceManager::Get()->GetLocator(m_texture->GetSampler());
+  QDomText text = doc.createTextNode(QString(samplerLocator.GetResourceFile().c_str()));
+  samplerElement.appendChild(text);
+
+  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    file.write(doc.toString(2).toLatin1());
+    file.close();
+  }
+
+}

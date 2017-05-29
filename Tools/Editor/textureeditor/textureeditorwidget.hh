@@ -23,6 +23,7 @@ void on_pbGreen_toggled(bool checked);
 void on_pbBlue_toggled(bool checked);
 void on_pbAlpha_toggled(bool checked);
 void on_spLOD_valueChanged(int value);
+void on_pbSave_clicked();
 
 private:
   TextureEditor *m_editor;

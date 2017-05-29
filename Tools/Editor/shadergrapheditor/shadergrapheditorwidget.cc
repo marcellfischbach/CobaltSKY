@@ -703,6 +703,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
 
   printf("XML:\n%s\n", (const char*)doc.toString(2).toLatin1());
+  printf("FileName: %s\n", m_editor->GetAssetDescriptor().GetAssetFileName().c_str());
   QFile file(QString(m_editor->GetAssetDescriptor().GetAssetFileName().c_str()));
   if (file.open(QIODevice::WriteOnly | QIODevice::Text))
   {

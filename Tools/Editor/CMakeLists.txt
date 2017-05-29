@@ -3,7 +3,7 @@ find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(Qt5Xml)
-find_package(assimp)
+#find_package(assimp)
 
 include_directories(${ASSIMP_INCLUDE_DIR})
 include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS})
