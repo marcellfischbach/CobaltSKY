@@ -22,9 +22,6 @@ public:
     QString fn = m_dir.absoluteFilePath(m_entryName);
     m_fileName = (const char*)fn.toLatin1();
     vkString res = Editor::Get()->ConvertToResourcePath(m_fileName);
-    printf("fn: %s => %s\n",
-      (const char*)fn.toLatin1(),
-      res.c_str());
     vkResourceLocator previewLocator(res, "preview");
     EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
     if (editorImage)

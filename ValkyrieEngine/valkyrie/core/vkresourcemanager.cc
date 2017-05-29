@@ -60,7 +60,6 @@ iObject *vkResourceManager::Load(const vkResourceLocator &locator, iObject *user
   iObject *object = Load(file, locator, userData);
   file->Release();
 
-  printf("Resourcemanager: Load: %s:%s => %p\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str(), object);
   return object;
 }
 

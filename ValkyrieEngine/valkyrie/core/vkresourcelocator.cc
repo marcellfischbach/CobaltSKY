@@ -14,6 +14,16 @@ vkResourceLocator::vkResourceLocator(const vkString &resourceFile, const vkStrin
       m_resourceFile = m_resourceFile.substr(0, idx);
     }
   }
+
+  int i = 0;
+  int idx = m_resourceFile.length();
+  while (m_resourceFile[i] == '.' || m_resourceFile[i] == '/')
+  {
+    i++;
+    idx--;
+  }
+  m_resourceFile = m_resourceFile.substr(i, idx);
+
 }
 
 vkResourceLocator::vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName)
@@ -31,6 +41,11 @@ const vkString &vkResourceLocator::GetResourceFile() const
 const vkString &vkResourceLocator::GetResourceName() const
 {
   return m_resourceName;
+}
+
+vkString vkResourceLocator::GetDebugName() const
+{
+  return m_resourceFile + ":" + m_resourceName;
 }
 
 bool vkResourceLocator::operator<(const vkResourceLocator &o) const
