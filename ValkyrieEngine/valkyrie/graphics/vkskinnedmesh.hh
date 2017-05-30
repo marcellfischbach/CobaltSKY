@@ -17,7 +17,7 @@ public:
   void AddBoneName(const vkString &boneName, vkUInt8 boneIndex);
   void GenerateMapping(const vkSkeleton *skeleton);
 
-  virtual void Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0) override;
+  virtual void Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterial **material, vkUInt8 lod = 0) override;
 
 private:
   std::map<vkString, vkUInt8> m_boneNameMapping;

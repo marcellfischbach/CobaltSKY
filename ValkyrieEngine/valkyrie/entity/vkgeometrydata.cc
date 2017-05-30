@@ -3,7 +3,7 @@
 #include <valkyrie/entity/ientityscan.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/vkmesh.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/math/vkclipper.hh>
 
 vkGeometryData::vkGeometryData()

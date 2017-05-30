@@ -1,6 +1,6 @@
 
 #include <valkyrie/graphics/vkmultimaterial.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 
 
 vkMultiMaterial::vkMultiMaterial()
@@ -9,7 +9,7 @@ vkMultiMaterial::vkMultiMaterial()
 
 }
 
-vkMultiMaterial::vkMultiMaterial(vkMaterialInstance *instance)
+vkMultiMaterial::vkMultiMaterial(vkMaterial *instance)
   : vkObject()
 {
   AddMaterialInstance(instance);
@@ -26,7 +26,7 @@ vkMultiMaterial::~vkMultiMaterial()
 
 
 
-void vkMultiMaterial::AddMaterialInstance(vkMaterialInstance *instance)
+void vkMultiMaterial::AddMaterialInstance(vkMaterial *instance)
 {
   if (instance)
   {
@@ -40,7 +40,7 @@ vkSize vkMultiMaterial::GetNumberOfInstances() const
   return m_instances.size();
 }
 
-vkMaterialInstance *vkMultiMaterial::GetMaterialInstance(vkSize idx)
+vkMaterial *vkMultiMaterial::GetMaterialInstance(vkSize idx)
 {
   if (idx >= m_instances.size())
   {
@@ -49,7 +49,7 @@ vkMaterialInstance *vkMultiMaterial::GetMaterialInstance(vkSize idx)
   return m_instances[idx];
 }
 
-const vkMaterialInstance *vkMultiMaterial::GetMaterialInstance(vkSize idx) const
+const vkMaterial *vkMultiMaterial::GetMaterialInstance(vkSize idx) const
 {
   if (idx >= m_instances.size())
   {

@@ -63,6 +63,8 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagernewhandler.hh
     assetmanager/assetmanagernewmanager.cc
     assetmanager/assetmanagernewmanager.hh
+    assetmanager/assetmanagerresourcescanner.cc
+    assetmanager/assetmanagerresourcescanner.hh
     assetmanager/assetmanagerwidget.cc
     assetmanager/assetmanagerwidget.hh
     )

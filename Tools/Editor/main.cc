@@ -8,12 +8,17 @@
 #include <valkyrie/core/vksettings.hh>
 #include <valkyrie/core/vkvfs.hh>
 
+#include <assetmanager/assetmanagerresourcescanner.hh>
+
 
 int main (int argc, char **argv)
 {
   vkSettings::Initialize(argc, argv);
   vkVFS::Get()->Initialize(argc, argv);
 
+
+  AssetManagerResourceScanner scanner;
+  scanner.Scan();
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 

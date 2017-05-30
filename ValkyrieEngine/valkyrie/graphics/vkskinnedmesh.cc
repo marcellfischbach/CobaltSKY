@@ -19,7 +19,7 @@ vkSkinnedMesh::~vkSkinnedMesh()
 
 
 
-void vkSkinnedMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod)
+void vkSkinnedMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterial **material, vkUInt8 lod)
 {
   if (m_boneIdxMapping && m_numberOfIndexMapping > 0)
   {

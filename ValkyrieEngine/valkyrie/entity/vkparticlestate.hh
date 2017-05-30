@@ -10,7 +10,7 @@
 #include <valkyrie/entity/vkparticlestate.refl.hh>
 
 class vkParticle;
-class vkMaterialInstance;
+class vkMaterial;
 
 
 
@@ -27,9 +27,9 @@ public:
   vkParticle *GetParticle();
   const vkParticle *GetParticle() const;
 
-  void SetMaterial(vkMaterialInstance *materialInstance);
-  vkMaterialInstance *GetMaterial();
-  const vkMaterialInstance *GetMaterial() const;
+  void SetMaterial(vkMaterial *materialInstance);
+  vkMaterial *GetMaterial();
+  const vkMaterial *GetMaterial() const;
 
   void SetShadingMode(vkParticleShadingMode shadingMode);
   vkParticleShadingMode GetShadingMode() const;
@@ -51,7 +51,7 @@ public:
 private:
   bool m_castShadow;
   vkParticle *m_particle;
-  vkMaterialInstance *m_materialInstance;
+  vkMaterial *m_materialInstance;
 
   vkParticleShadingMode m_shadingMode;
 

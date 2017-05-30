@@ -41,7 +41,7 @@
 #include <valkyrie/graphics/itexture.hh>
 #include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/vklight.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vksubmesh.hh>
 #include <valkyrie/graphics/vkparticle.hh>

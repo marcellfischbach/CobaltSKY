@@ -1,90 +1,70 @@
 #pragma once
 
-
 #include <valkyrie/vkexport.hh>
+#include <valkyrie/vkenums.hh>
 #include <valkyrie/core/vkclass.hh>
 #include <valkyrie/math/vkcolor4f.hh>
-#include <valkyrie/math/vkmatrix.hh>
 #include <valkyrie/math/vkvector.hh>
-#include <valkyrie/vkenums.hh>
 #include <valkyrie/graphics/vkmaterial.refl.hh>
 
-#include <vector>
-
-#define vkInvalidShaderParamIndex (~0x00)
-
+class vkMaterialDef;
 struct iGraphics;
-struct iShader;
-struct iShaderAttribute;
 struct iTexture;
 
 VK_CLASS();
 class VKE_API vkMaterial : public VK_SUPER(vkObject)
 {
-  friend class vkMaterialInstance;
   VK_CLASS_GEN;
 
 public:
   vkMaterial();
   virtual ~vkMaterial();
 
-  void SetShader(vkRenderPass pass, iShader *shader);
-  iShader *GetShader(vkRenderPass pass);
-  const iShader *GetShader(vkRenderPass pass) const;
+  void SetMaterial(vkMaterialDef *material);
+  vkMaterialDef *GetMaterial();
+  const vkMaterialDef  *GetMaterial() const;
 
-  vkSize GetNumberOfParameters() const;
-  vkShaderParameterType GetParamType(vkSize idx) const;
-  vkString GetParamName (vkSize idx) const;
-  iShaderAttribute *GetAttribute(vkSize idx, vkRenderPass pass) const;
+  void RebuildMaterialParameters();
 
   vkInt16 GetIndex(const vkString &parametername) const;
 
-  void SetDefault(vkSize idx, float def);
-  void SetDefault(vkSize idx, const vkVector2f &def);
-  void SetDefault(vkSize idx, const vkVector3f &def);
-  void SetDefault(vkSize idx, const vkVector4f &def);
-  void SetDefault(vkSize idx, const vkColor4f &def);
-  void SetDefault(vkSize idx, int def);
-  void SetDefault(vkSize idx, const vkMatrix3f &def);
-  void SetDefault(vkSize idx, const vkMatrix4f &def);
-  void SetDefault(vkSize idx, iTexture *def);
+  bool Bind(iGraphics *renderer, vkRenderPass pass);
 
-  float GetDefaultFloat(vkSize idx) const;
-  vkVector2f GetDefaultVector2(vkSize idx) const;
-  vkVector3f GetDefaultVector3(vkSize idx) const;
-  vkVector4f GetDefaultVector4(vkSize idx) const;
-  vkColor4f GetDefaultColor4(vkSize idx) const;
-  int GetDefaultInt(vkSize idx) const;
-  vkMatrix3f GetDefaultMatrix3(vkSize idx) const;
-  vkMatrix4f GetDefaultMatrix4(vkSize idx) const;
-  iTexture* GetDefaultTexture(vkSize idx) const;
+  void SetInherited(vkUInt16 idx, bool inherited);
+  bool IsInherited(vkUInt16 idx) const;
 
-  void ClearParameters();
-  vkSize RegisterParam(const vkString &parameterName, vkShaderParameterType type);
+  void Set(vkUInt16 idx, float v);
+  void Set(vkUInt16 idx, const vkVector2f &v);
+  void Set(vkUInt16 idx, const vkVector3f &v);
+  void Set(vkUInt16 idx, const vkVector4f &v);
+  void Set(vkUInt16 idx, const vkColor4f &c);
+  void Set(vkUInt16 idx, iTexture *texture);
 
-  iShader *Bind(iGraphics *renderer, vkRenderPass pass);
-protected:
-  void BindParameter(iGraphics *renderer, vkRenderPass pass, vkSize idx);
+  float GetFloat(vkUInt16 idx);
+  vkVector2f GetFloat2(vkUInt16 idx);
+  vkVector3f GetFloat3(vkUInt16 idx);
+  vkVector4f GetFloat4(vkUInt16 idx);
+  vkColor4f GetColor4(vkUInt16 idx);
+  iTexture *GetTexture(vkUInt16 idx);
 
 private:
-  struct Param
+  vkMaterialDef *m_material;
+
+  struct ShaderParameter
   {
-    vkString m_name;
-    iShaderAttribute *m_attribute[eRP_COUNT];
-    vkShaderParameterType m_type;
+    bool m_inherit;
+    vkShaderParameterType m_paramType;
     union
     {
-      float m_defaultFloat[16];
-      int m_defaultInt[16];
-      iTexture *m_defaultTexture;
+      float m_float[16];
+      int m_int[16];
+      iTexture *m_texture;
+      // Add Texture later.
     };
-    Param(const vkString &name, vkShaderParameterType type);
+    ShaderParameter();
   };
 
-  std::vector<Param> m_params;
+  std::vector<ShaderParameter> m_parameters;
 
-  iShader *m_shaders[eRP_COUNT];
 
 };
-
-

@@ -180,10 +180,10 @@ set(SOURCE_GRAPHICS
     graphics/vkimage.hh
     graphics/vklight.cc
     graphics/vklight.hh
+    graphics/vkmaterialdef.cc
+    graphics/vkmaterialdef.hh
     graphics/vkmaterial.cc
     graphics/vkmaterial.hh
-    graphics/vkmaterialinstance.cc
-    graphics/vkmaterialinstance.hh
     graphics/vkmultimaterial.cc
     graphics/vkmultimaterial.hh
     graphics/vkmesh.cc

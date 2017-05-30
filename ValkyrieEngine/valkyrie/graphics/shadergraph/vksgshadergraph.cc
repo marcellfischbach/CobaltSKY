@@ -7,7 +7,7 @@
 
 
 vkSGShaderGraph::vkSGShaderGraph()
-  : vkMaterial()
+  : vkMaterialDef()
   , m_diffuse(0)
   , m_roughness(0)
   , m_alpha(0)

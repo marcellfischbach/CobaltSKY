@@ -2,8 +2,8 @@
 #include <valkyrie/loaders/vkstaticmeshassetloader.hh>
 #include <valkyrie/entity/vkgeometrydata.hh>
 #include <valkyrie/entity/vkgeometrymesh.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/vkmaterial.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vkmultimaterial.hh>
 #include <valkyrie/graphics/vkskinnedmesh.hh>

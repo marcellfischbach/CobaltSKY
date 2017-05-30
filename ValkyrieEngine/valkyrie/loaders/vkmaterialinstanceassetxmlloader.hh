@@ -5,7 +5,7 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/loaders/vkmaterialinstanceassetxmlloader.refl.hh>
 
-class vkMaterialInstance;
+class vkMaterial;
 
 
 VK_CLASS()

@@ -1,8 +1,8 @@
 
 #include <valkyrie/loaders/vkmaterialinstanceassetxmlloader.hh>
 #include <valkyrie/core/vkclassregistry.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/vkmaterial.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/itexture.hh>
@@ -29,12 +29,12 @@ bool vkMaterialInstanceAssetXMLLoader::CanLoad(TiXmlElement *element, const vkRe
 
 const vkClass *vkMaterialInstanceAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
-  return vkMaterialInstance::GetStaticClass();
+  return vkMaterial::GetStaticClass();
 }
 
 iObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
-  vkMaterialInstance *materialInstance = new vkMaterialInstance();
+  vkMaterial *materialInstance = new vkMaterial();
 
   TiXmlElement *materialElement = element->FirstChildElement("material");
   if (!materialElement)
@@ -42,7 +42,7 @@ iObject *vkMaterialInstanceAssetXMLLoader::Load(TiXmlElement *element, const vkR
     return materialInstance;
   }
 
-  vkMaterial *material = vkResourceManager::Get()->GetOrLoad<vkMaterial>(vkResourceLocator(vkString(materialElement->GetText())));
+  vkMaterialDef *material = vkResourceManager::Get()->GetOrLoad<vkMaterialDef>(vkResourceLocator(vkString(materialElement->GetText())));
   if (!material)
   {
     return materialInstance;

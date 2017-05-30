@@ -9,7 +9,7 @@
 #include <valkyrie/entity/vkstaticmeshstate.refl.hh>
 
 class vkMesh;
-class vkMaterialInstance;
+class vkMaterial;
 /**
 * \ingroup entity
 */
@@ -27,9 +27,9 @@ public:
   const vkMesh *GetMesh() const;
 
   vkSize GetNumberOfMaterialsSlots() const;
-  void SetMaterial(vkMaterialInstance *material, vkSize slot = 0);
-  vkMaterialInstance *GetMaterial(vkSize slot = 0);
-  const vkMaterialInstance *GetMaterial(vkSize slot = 0) const;
+  void SetMaterial(vkMaterial *material, vkSize slot = 0);
+  vkMaterial *GetMaterial(vkSize slot = 0);
+  const vkMaterial *GetMaterial(vkSize slot = 0) const;
 
   void SetColliderShape(vkPhysicsShapeContainer *shapes);
   vkPhysicsShapeContainer *GetColliderShape();
@@ -64,7 +64,7 @@ private:
   vkMesh* m_mesh;
 
   vkSize m_numberOfMaterialSlots;
-  vkMaterialInstance **m_materials;
+  vkMaterial **m_materials;
 
   iPhysicsStaticCollider *m_staticCollider;
   vkPhysicsShapeContainer *m_shapes;
@@ -88,7 +88,7 @@ VK_FORCEINLINE vkSize vkStaticMeshState::GetNumberOfMaterialsSlots() const
   return m_numberOfMaterialSlots;
 }
 
-VK_FORCEINLINE vkMaterialInstance *vkStaticMeshState::GetMaterial(vkSize slot)
+VK_FORCEINLINE vkMaterial *vkStaticMeshState::GetMaterial(vkSize slot)
 {
   if (slot >= m_numberOfMaterialSlots)
   {
@@ -97,7 +97,7 @@ VK_FORCEINLINE vkMaterialInstance *vkStaticMeshState::GetMaterial(vkSize slot)
   return m_materials[slot];
 }
 
-VK_FORCEINLINE const vkMaterialInstance *vkStaticMeshState::GetMaterial(vkSize slot) const
+VK_FORCEINLINE const vkMaterial *vkStaticMeshState::GetMaterial(vkSize slot) const
 {
   if (slot >= m_numberOfMaterialSlots)
   {

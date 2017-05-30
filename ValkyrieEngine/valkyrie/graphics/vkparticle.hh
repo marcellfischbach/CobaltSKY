@@ -11,7 +11,7 @@ struct iGraphics;
 struct iVertexBuffer;
 struct iVertexDeclaration;
 
-class vkMaterialInstance;
+class vkMaterial;
 class vkParticle;
 
 
@@ -56,7 +56,7 @@ public:
   const ParticleData *GetParticleData() const;
   void UnlockParticleData();
 
-  void Render(iGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material);
+  void Render(iGraphics *renderer, vkRenderPass pass, vkMaterial *material);
 
 
 private:

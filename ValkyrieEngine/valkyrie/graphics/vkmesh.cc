@@ -1,7 +1,7 @@
 
 
 #include <valkyrie/graphics/vkmesh.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vksubmesh.hh>
 #include <algorithm>
 
@@ -139,14 +139,14 @@ vkMesh::LOD &vkMesh::GetLOD(vkUInt8 lod)
   return m_lods[lod];
 }
 
-void vkMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numberOfMaterials, vkMaterialInstance **materials, vkUInt8 lodIdx)
+void vkMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numberOfMaterials, vkMaterial **materials, vkUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {
     return;
   }
 
-  vkMaterialInstance *activeInstance = 0;
+  vkMaterial *activeInstance = 0;
 
   LOD &lod = m_lods[lodIdx];
   for (vkSize i = 0, in = lod.m_meshes.size(); i < in; ++i)
@@ -160,7 +160,7 @@ void vkMesh::Render(iGraphics *renderer, vkRenderPass pass, vkSize numberOfMater
       {
         continue;
       }
-      vkMaterialInstance *nextMaterial = materials[data.m_materialIndex];
+      vkMaterial *nextMaterial = materials[data.m_materialIndex];
       if (nextMaterial == 0)
       {
         continue;

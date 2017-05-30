@@ -1,6 +1,6 @@
 #include <valkyrie/loaders/entity/vkstaticmeshstatexmlloader.hh>
 #include <valkyrie/loaders/entity/vkentitystateloaderdata.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/entity/vkstaticmeshstate.hh>
 
@@ -70,7 +70,7 @@ iObject *vkStaticMeshStateXMLLoader::Load(TiXmlElement *element, const vkResourc
       {
         const char *txt = materialElement->GetText();
         vkResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
-        vkMaterialInstance *material = vkResourceManager::Get()->Aquire<vkMaterialInstance>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+        vkMaterial *material = vkResourceManager::Get()->Aquire<vkMaterial>(vkResourceLocator(vkString(txt)), 0, loadingMode);
         int slot = 0;
         if (materialElement->Attribute("slot"))
         {
@@ -95,7 +95,7 @@ iObject *vkStaticMeshStateXMLLoader::Load(TiXmlElement *element, const vkResourc
       {
         const char *txt = materialElement->GetText();
         vkResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
-        vkMaterialInstance *material = vkResourceManager::Get()->Aquire<vkMaterialInstance>(vkResourceLocator(vkString(txt)), 0, loadingMode);
+        vkMaterial *material = vkResourceManager::Get()->Aquire<vkMaterial>(vkResourceLocator(vkString(txt)), 0, loadingMode);
         staticMeshState->SetMaterial(material, 0);
       }
     }

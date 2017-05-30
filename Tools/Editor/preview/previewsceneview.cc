@@ -8,7 +8,7 @@
 #include <valkyrie/entity/vkstaticmeshstate.hh>
 #include <valkyrie/graphics/ivertexdeclaration.hh>
 #include <valkyrie/graphics/vkdirectionallight.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vksubmesh.hh>
 #include <valkyrie/vkengine.hh>
@@ -45,7 +45,7 @@ PreviewSceneView::~PreviewSceneView()
 
 
 
-vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, vkMaterialInstance *materialInstance)
+vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, vkMaterial *materialInstance)
 {
   unsigned numVertices = (numR + 1) * (numV + 1);
   unsigned numIndices = numR * numV * 3 * 2;

@@ -8,7 +8,7 @@
 #include <valkyrie/entity/vkrenderstate.hh>
 #include <valkyrie/graphics/vkcamera.hh>
 #include <valkyrie/graphics/vklight.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vkpostprocess.hh>
 #include <valkyrie/graphics/vkpostprocessoutput.hh>
@@ -105,9 +105,9 @@ void vkDeferredFrameProcessor::SetPostProcessor(vkPostProcessor *postProcessor)
 struct Data
 {
   const vkMatrix4f *matrix;
-  vkMaterialInstance *material;
+  vkMaterial *material;
   vkSubMesh *mesh;
-  Data(const vkMatrix4f *matrix, vkMaterialInstance *material, vkSubMesh *mesh)
+  Data(const vkMatrix4f *matrix, vkMaterial *material, vkSubMesh *mesh)
     : matrix(matrix)
     , material(material)
     , mesh(mesh)

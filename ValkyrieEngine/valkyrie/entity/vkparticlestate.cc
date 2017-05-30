@@ -2,7 +2,7 @@
 #include <valkyrie/entity/vkparticlestate.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/ivertexbuffer.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkparticle.hh>
 #include <valkyrie/entity/ientityscan.hh>
 #include <math.h>
@@ -41,17 +41,17 @@ const vkParticle *vkParticleState::GetParticle() const
 }
 
 
-void vkParticleState::SetMaterial(vkMaterialInstance *material)
+void vkParticleState::SetMaterial(vkMaterial *material)
 {
   VK_SET(m_materialInstance, material);
 }
 
-vkMaterialInstance *vkParticleState::GetMaterial()
+vkMaterial *vkParticleState::GetMaterial()
 {
   return m_materialInstance;
 }
 
-const vkMaterialInstance *vkParticleState::GetMaterial() const
+const vkMaterial *vkParticleState::GetMaterial() const
 {
   return m_materialInstance;
 }

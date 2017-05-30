@@ -7,7 +7,7 @@
 #include <valkyrie/graphics/scene/vkgeometrynode.refl.hh>
 
 struct iGraphics;
-class vkMaterialInstance;
+class vkMaterial;
 class vkMesh;
 
 VK_CLASS()
@@ -15,7 +15,7 @@ class VKE_API vkGeometryNode : public VK_SUPER(vkSpatialNode)
 {
   VK_CLASS_GEN;
 public:
-  vkGeometryNode(vkMesh *mesh = 0, vkMaterialInstance *material = 0);
+  vkGeometryNode(vkMesh *mesh = 0, vkMaterial *material = 0);
   virtual ~vkGeometryNode();
 
 
@@ -23,9 +23,9 @@ public:
   vkMesh *GetMesh();
   const vkMesh *GetMesh() const;
 
-  void SetMaterial(vkMaterialInstance *material);
-  vkMaterialInstance *GetMaterial();
-  const vkMaterialInstance *GetMaterial() const;
+  void SetMaterial(vkMaterial *material);
+  vkMaterial *GetMaterial();
+  const vkMaterial *GetMaterial() const;
 
   void Render(iGraphics *renderer, vkRenderPass renderPass, vkUInt8 lod = 0);
 
@@ -36,7 +36,7 @@ protected:
 
 private:
   vkMesh *m_mesh;
-  vkMaterialInstance *m_material;
+  vkMaterial *m_material;
 
 };
 
@@ -52,12 +52,12 @@ VK_FORCEINLINE const vkMesh *vkGeometryNode::GetMesh() const
 }
 
 
-VK_FORCEINLINE vkMaterialInstance *vkGeometryNode::GetMaterial()
+VK_FORCEINLINE vkMaterial *vkGeometryNode::GetMaterial()
 {
   return m_material;
 }
 
-VK_FORCEINLINE const vkMaterialInstance *vkGeometryNode::GetMaterial() const
+VK_FORCEINLINE const vkMaterial *vkGeometryNode::GetMaterial() const
 {
   return m_material;
 }

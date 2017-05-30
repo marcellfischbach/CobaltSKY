@@ -2,11 +2,11 @@
 
 #include <valkyrie/graphics/scene/vkgeometrynode.hh>
 #include <valkyrie/graphics/igraphics.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 
 
-vkGeometryNode::vkGeometryNode(vkMesh *mesh, vkMaterialInstance *material)
+vkGeometryNode::vkGeometryNode(vkMesh *mesh, vkMaterial *material)
   : vkSpatialNode()
   , m_mesh(0)
   , m_material(0)
@@ -27,7 +27,7 @@ void vkGeometryNode::SetMesh(vkMesh* mesh)
 }
 
 
-void vkGeometryNode::SetMaterial(vkMaterialInstance *material)
+void vkGeometryNode::SetMaterial(vkMaterial *material)
 {
   VK_SET(m_material, material);
 }

@@ -2,8 +2,8 @@
 #include <valkyrie/loaders/vkstaticmeshloader.hh>
 #include <valkyrie/entity/vkgeometrydata.hh>
 #include <valkyrie/entity/vkgeometrymesh.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/vkmaterial.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/graphics/vkmultimaterial.hh>
 #include <valkyrie/graphics/vkskinnedmesh.hh>
@@ -450,7 +450,7 @@ vkMultiMaterial *vkStaticMeshLoader::ReadMultiMaterial(iFile *file) const
   for (vkUInt32 i = 0; i < numberOfMaterials; ++i)
   {
     vkString name = ReadString(file);
-    vkMaterialInstance *inst = mgr->GetOrLoad<vkMaterialInstance>(vkResourceLocator("${materials}/materials.xml", name));
+    vkMaterial *inst = mgr->GetOrLoad<vkMaterial>(vkResourceLocator("${materials}/materials.xml", name));
     if (inst)
     {
       multiMaterial->AddMaterialInstance(inst);

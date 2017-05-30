@@ -1,14 +1,14 @@
 #pragma once
 
 #include <valkyrie/vkexport.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/shadergraph/vksgshadergraph.refl.hh>
 
 class vkSGNode;
 class vkSGOutput;
 
 VK_CLASS()
-class VKE_API vkSGShaderGraph : public VK_SUPER(vkMaterial)
+class VKE_API vkSGShaderGraph : public VK_SUPER(vkMaterialDef)
 {
   VK_CLASS_GEN;
 public:

@@ -1,6 +1,6 @@
 
 #include <valkyrie/loaders/vkmaterialassetxmlloader.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
+#include <valkyrie/graphics/vkmaterialdef.hh>
 #include <valkyrie/graphics/itexture.hh>
 #include <valkyrie/graphics/ishader.hh>
 #include <valkyrie/vkengine.hh>
@@ -49,7 +49,7 @@ vkShaderParameterType get_shader_parameter_type(const vkString &name)
 
 const vkClass *vkMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
 {
-  return vkMaterial::GetStaticClass();
+  return vkMaterialDef::GetStaticClass();
 }
 
 
@@ -60,7 +60,7 @@ iObject *vkMaterialAssetXMLLoader::Load(TiXmlElement *element, const vkResourceL
     return 0;
   }
   
-  vkMaterial *material = new vkMaterial();
+  vkMaterialDef *material = new vkMaterialDef();
 
   TiXmlElement *passesElement = element->FirstChildElement("passes");
   if (!passesElement)

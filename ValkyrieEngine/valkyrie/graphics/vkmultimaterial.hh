@@ -5,7 +5,7 @@
 #include <vector>
 #include <valkyrie/graphics/vkmultimaterial.refl.hh>
 
-class vkMaterialInstance;
+class vkMaterial;
 
 VK_CLASS()
 class VKE_API vkMultiMaterial : public VK_SUPER(vkObject)
@@ -13,15 +13,15 @@ class VKE_API vkMultiMaterial : public VK_SUPER(vkObject)
   VK_CLASS_GEN;
 public:
   vkMultiMaterial();
-  vkMultiMaterial(vkMaterialInstance *instance);
+  vkMultiMaterial(vkMaterial *instance);
   virtual ~vkMultiMaterial();
 
-  void AddMaterialInstance(vkMaterialInstance *instance);
+  void AddMaterialInstance(vkMaterial *instance);
   vkSize GetNumberOfInstances() const;
-  vkMaterialInstance *GetMaterialInstance(vkSize idx = 0);
-  const vkMaterialInstance *GetMaterialInstance(vkSize idx = 0) const;
+  vkMaterial *GetMaterialInstance(vkSize idx = 0);
+  const vkMaterial *GetMaterialInstance(vkSize idx = 0) const;
 
 private:
-  std::vector<vkMaterialInstance *> m_instances;
+  std::vector<vkMaterial *> m_instances;
 
 };

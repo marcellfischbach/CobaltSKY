@@ -2,13 +2,13 @@
 
 #include <shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
 #include <preview/previewcameraorbithandler.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkcamera.hh>
 #include <valkyrie/entity/vkentityscene.hh>
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)
-  , m_materialInstance(new vkMaterialInstance())
+  , m_materialInstance(new vkMaterial())
 {
 }
 
@@ -34,7 +34,7 @@ ShaderGraphEditorPreviewSceneView::~ShaderGraphEditorPreviewSceneView()
   VK_RELEASE(m_materialInstance);
 }
 
-void ShaderGraphEditorPreviewSceneView::SetMaterial(vkMaterial *material)
+void ShaderGraphEditorPreviewSceneView::SetMaterial(vkMaterialDef *material)
 {
   m_materialInstance->SetMaterial(material);
 }

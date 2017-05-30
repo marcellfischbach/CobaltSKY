@@ -4,7 +4,7 @@
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/ivertexbuffer.hh>
 #include <valkyrie/graphics/ivertexdeclaration.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <stddef.h>
 
 static iVertexDeclaration* create_particle_vertex_declaration(iGraphics *graphics)
@@ -103,7 +103,7 @@ vkSize vkParticle::GetNumberOfRenderParticles() const
 
 
 
-void vkParticle::Render(iGraphics *renderer, vkRenderPass pass, vkMaterialInstance *material)
+void vkParticle::Render(iGraphics *renderer, vkRenderPass pass, vkMaterial *material)
 {
   if (material->Bind(renderer, pass))
   {

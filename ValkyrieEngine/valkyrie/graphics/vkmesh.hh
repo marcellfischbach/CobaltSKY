@@ -13,7 +13,7 @@ struct iGraphics;
 struct iVertexBuffer;
 struct iVertexDeclaration;
 
-class vkMaterialInstance;
+class vkMaterial;
 class vkSkeleton;
 class vkSubMesh;
 
@@ -47,7 +47,7 @@ public:
   const vkString &GetMaterialName(vkSize idx) const;
   vkUInt32 GetMaterialIndex(const vkString &materialName) const;
 
-  virtual void Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterialInstance **material, vkUInt8 lod = 0);
+  virtual void Render(iGraphics *renderer, vkRenderPass pass, vkSize numMaterials, vkMaterial **material, vkUInt8 lod = 0);
 
 
 protected:

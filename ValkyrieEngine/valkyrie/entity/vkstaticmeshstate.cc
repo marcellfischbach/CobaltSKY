@@ -5,7 +5,7 @@
 #include <valkyrie/entity/vkentityscene.hh>
 #include <valkyrie/animation/vkskeleton.hh>
 #include <valkyrie/graphics/igraphics.hh>
-#include <valkyrie/graphics/vkmaterialinstance.hh>
+#include <valkyrie/graphics/vkmaterial.hh>
 #include <valkyrie/graphics/vkmesh.hh>
 #include <valkyrie/physics/iphysicsscene.hh>
 #include <valkyrie/vkengine.hh>
@@ -51,7 +51,7 @@ void vkStaticMeshState::SetMesh(vkMesh *mesh)
   UpdateBoundingBox();
 }
 
-void vkStaticMeshState::SetMaterial(vkMaterialInstance *material, vkSize slot)
+void vkStaticMeshState::SetMaterial(vkMaterial *material, vkSize slot)
 {
   if (slot >= m_numberOfMaterialSlots)
   {
@@ -71,8 +71,8 @@ void vkStaticMeshState::UpdateMaterialSlots()
   }
 
   // create new material slots
-  vkMaterialInstance **materials = new vkMaterialInstance*[numberOfSlots];
-  memset(materials, 0, sizeof(vkMaterialInstance*) * numberOfSlots);
+  vkMaterial **materials = new vkMaterial*[numberOfSlots];
+  memset(materials, 0, sizeof(vkMaterial*) * numberOfSlots);
 
   // copy all slots that remain from the old to the new
   for (vkUInt32 i = 0; i < numberOfSlots && i < m_numberOfMaterialSlots; ++i)
