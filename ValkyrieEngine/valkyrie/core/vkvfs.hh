@@ -12,7 +12,7 @@ using std::map;
 using std::vector;
 
 
-class csSettings;
+class vkSettings;
 
 /**
 * \addtogroup engine
@@ -52,6 +52,7 @@ public:
   static vkVFS* Get ();
 
   bool Initialize(int argc, char** argv);
+  bool Initialize(vkSettings *settings);
 
   bool HasPath (const vkString &vfsName) const;
   void AddPath (const vkString &vfsName, const vkString &path);

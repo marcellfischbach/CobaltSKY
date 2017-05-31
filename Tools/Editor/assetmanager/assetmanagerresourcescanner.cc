@@ -25,16 +25,12 @@ void AssetManagerResourceScanner::Scan()
   {
     ScanReference(assetName);
   }
+}
 
 
-  for (auto it = m_resourceReferences.begin(); it != m_resourceReferences.end(); ++it)
-  {
-    printf("References: %s\n", it->first.c_str());
-    for (auto refs : it->second)
-    {
-      printf("    %s\n", refs.c_str());
-    }
-  }
+void AssetManagerResourceScanner::AddResourceName(const std::string &resourceName)
+{
+  m_allResourceNames.insert(resourceName);
 }
 
 void AssetManagerResourceScanner::Scan(const vkString &rootPath, const vkString &relPath)
@@ -103,7 +99,7 @@ void AssetManagerResourceScanner::ScanReference(const std::string &assetName, co
     std::set<std::string>::iterator it = m_allResourceNames.find(locator.GetResourceFile());
     if (it != m_allResourceNames.end())
     {
-      m_resourceReferences[locator.GetResourceFile()].insert(assetName);
+      m_dependencies.insert(std::pair<std::string, std::string>(assetName, locator.GetResourceFile()));
     }
   }
 

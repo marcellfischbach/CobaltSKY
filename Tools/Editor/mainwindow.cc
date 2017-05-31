@@ -4,17 +4,13 @@
 
 #include <iasseteditor.hh>
 #include <editor.hh>
+#include <project/project.hh>
 
 MainWindow::MainWindow()
   : QMainWindow()
 {
-  m_tab = new QTabWidget(this);
-  m_tab->setTabsClosable(true);
-  m_tab->setMovable(true);
-  setCentralWidget(m_tab);
+  m_gui.setupUi(this);
 
-  connect(m_tab, SIGNAL(currentChanged(int)), this, SLOT(on_tab_currentChanged(int)));
-  connect(m_tab, SIGNAL(tabCloseRequested(int)), this, SLOT(on_tab_tabCloseRequest(int)));
 }
 
 MainWindow::~MainWindow()
@@ -30,14 +26,14 @@ bool MainWindow::ShowEditor(iAssetEditor *editor)
   }
 
   QWidget *widget = editor->GetWidget();
-  int idx = m_tab->indexOf(widget);
+  int idx = m_gui.tabWidget->indexOf(widget);
   if (idx == -1)
   {
-    idx = m_tab->addTab(widget, QString(editor->GetName().c_str()));
+    idx = m_gui.tabWidget->addTab(widget, QString(editor->GetName().c_str()));
     m_editors.push_back(editor);
   }
 
-  m_tab->setCurrentIndex(idx);
+  m_gui.tabWidget->setCurrentIndex(idx);
   return true;
 }
 
@@ -48,12 +44,12 @@ void MainWindow::ShowWidget(QWidget *widget)
     return;
   }
 
-  int idx = m_tab->indexOf(widget);
+  int idx = m_gui.tabWidget->indexOf(widget);
   if (idx == -1)
   {
-    idx = m_tab->addTab(widget, "OpenGL-Test");
+    idx = m_gui.tabWidget->addTab(widget, "OpenGL-Test");
   }
-  m_tab->setCurrentIndex(idx);
+  m_gui.tabWidget->setCurrentIndex(idx);
 }
 
 void MainWindow::CloseEditor(iAssetEditor *editor, bool force)
@@ -73,26 +69,26 @@ void MainWindow::CloseEditor(iAssetEditor *editor, bool force)
     }
   }
 
-  int idx = m_tab->indexOf(editor->GetWidget());
+  int idx = m_gui.tabWidget->indexOf(editor->GetWidget());
   if (idx != -1)
   {
-    m_tab->removeTab(idx);
+    m_gui.tabWidget->removeTab(idx);
   }
 }
 
 QWidget *MainWindow::GetCurrentTab() const
 {
-  return m_tab->currentWidget();
+  return m_gui.tabWidget->currentWidget();
 }
 
-void MainWindow::on_tab_currentChanged(int idx)
+void MainWindow::on_tabWidget_currentChanged(int idx)
 {
   Editor::Get()->CurrentEditorChanged();
 }
 
-void MainWindow::on_tab_tabCloseRequest(int idx)
+void MainWindow::on_tabWidget_tabCloseRequested(int idx)
 {
-  QWidget *widget = m_tab->widget(idx);
+  QWidget *widget = m_gui.tabWidget->widget(idx);
   if (!widget)
   {
     return;
@@ -107,5 +103,10 @@ void MainWindow::on_tab_tabCloseRequest(int idx)
     }
   }
 
-  m_tab->removeTab(idx);
+  m_gui.tabWidget->removeTab(idx);
+}
+
+void MainWindow::on_actionRebuild_dependency_tree_triggered(bool)
+{
+  Editor::Get()->GetProject()->GetDependencyTree().RebuildDependencyTree();
 }

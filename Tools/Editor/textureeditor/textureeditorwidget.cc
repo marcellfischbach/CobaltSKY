@@ -3,6 +3,8 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/isampler.hh>
+#include <editor.hh>
+#include <project/project.hh>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
@@ -133,4 +135,5 @@ void TextureEditorWidget::on_pbSave_clicked()
     file.close();
   }
 
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetAssetResourceName());
 }

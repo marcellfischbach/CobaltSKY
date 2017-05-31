@@ -12,6 +12,8 @@
 #include <nodegraph/nodegraphnodevalueproperty.hh>
 
 #include <mimehelper.hh>
+#include <editor.hh>
+#include <project/project.hh>
 
 #include <valkyrie/vkengine.hh>
 #include <valkyrie/core/vkclassregistry.hh>
@@ -710,6 +712,9 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     file.write(doc.toString(2).toLatin1());
     file.close();
   }
+
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetAssetResourceName());
+
 }
 
 

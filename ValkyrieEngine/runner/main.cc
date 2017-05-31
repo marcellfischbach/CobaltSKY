@@ -91,8 +91,8 @@ vkSize numParticles;
 
 int main(int argc, char **argv)
 {
-  vkSettings::Initialize(argc, argv);
-  vkVFS::Get()->Initialize(argc, argv);
+  vkSettings::Get()->Initialize(argc, argv);
+  vkVFS::Get()->Initialize(vkSettings::Get());
   vkEngine engine;
 
   // initialize the window

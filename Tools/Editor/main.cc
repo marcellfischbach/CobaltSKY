@@ -13,12 +13,8 @@
 
 int main (int argc, char **argv)
 {
-  vkSettings::Initialize(argc, argv);
-  vkVFS::Get()->Initialize(argc, argv);
 
 
-  AssetManagerResourceScanner scanner;
-  scanner.Scan();
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 
@@ -43,6 +39,7 @@ int main (int argc, char **argv)
 
 
   Editor *editor = Editor::Get();
+
 
   if (!editor->Initialize(argc, argv))
   {

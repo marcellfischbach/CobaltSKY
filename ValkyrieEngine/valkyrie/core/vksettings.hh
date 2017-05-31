@@ -12,10 +12,10 @@ class VKE_API vkSettings
 
 public:
 
-  static bool Initialize (int argc, char** argv);
-  static bool Initialize (const char* configFileName);
   static vkSettings* Get ();
 
+  bool Initialize(int argc, char** argv);
+  bool Initialize(const char* configFileName);
   const char* GetRootPath () const;
 
   bool HasGroup (const char* group);

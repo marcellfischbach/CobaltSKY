@@ -14,7 +14,7 @@ class vkEngine;
 class vkGraphicsGL4;
 struct iPhysicsSystem;
 struct iDockItem;
-
+class Project;
 
 VK_INTERFACE()
 class Editor : public iObject
@@ -51,6 +51,18 @@ public:
   void UpdateVisibleDockItemsFromEditor(iAssetEditor *editor);
   void UpdateVisibleDockItems(const std::set<vkString> &visibleDocks);
 
+  void CloseProject();
+  void OpenProject(const std::string &projectPath);
+  Project *GetProject()
+  {
+    return m_project;
+  }
+  const Project *GetProject() const
+  {
+    return m_project;
+  }
+
+
   
 private:
   Editor();
@@ -70,4 +82,5 @@ private:
   iPhysicsSystem *m_physicsSystem;
   std::vector<iDockItem*> m_dockItems;
 
+  Project *m_project = 0;
 };

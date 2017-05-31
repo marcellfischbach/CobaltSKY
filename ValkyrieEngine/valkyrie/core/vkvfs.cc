@@ -69,7 +69,11 @@ vkVFS* vkVFS::Get()
 
 bool vkVFS::Initialize(int argc, char** argv)
 {
-  vkSettings *settings = vkSettings::Get();
+  return false;
+}
+
+bool vkVFS::Initialize(vkSettings *settings)
+{
   if (settings && settings->HasGroup("vfs"))
   {
     TiXmlElement *vfsElement = settings->GetGroup("vfs");

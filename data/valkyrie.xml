@@ -1,8 +1,7 @@
 <settings>
 	<vfs>
 		<rootPaths>
-			<rootPath name="Data" priority="10">.</rootPath>
-			<rootPath name="Debug" priority="0">debug</rootPath>
+			<rootPath name="ValkyrieDemo" priority="10">.</rootPath>
 		</rootPaths>
 		<resolutions>
 			<resolution name="shaders">materials/gl4</resolution>

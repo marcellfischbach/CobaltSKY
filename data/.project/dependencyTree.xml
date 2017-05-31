@@ -1,0 +1,38 @@
+<dependencyTree>
+  <resources>
+    <resource asset="Test.xasset"/>
+    <resource asset="default_sampler.xasset"/>
+    <resource asset="materials/GroundFieldStone.xasset"/>
+    <resource asset="materials/Narf.xasset"/>
+    <resource asset="materials/Solid.xasset"/>
+    <resource asset="materials/TempleDirt.xasset"/>
+    <resource asset="materials/default_sampler.xasset"/>
+    <resource asset="materials/gl4/commons/ForwardUnlit.xasset"/>
+    <resource asset="materials/gl4/commons/unlit.xasset"/>
+    <resource asset="materials/gl4/deferred/DirectionalLight.xasset"/>
+    <resource asset="materials/gl4/deferred/DirectionalLightPSSM.xasset"/>
+    <resource asset="materials/gl4/deferred/PointLight.xasset"/>
+    <resource asset="materials/gl4/deferred/PointLightCubeShadow.xasset"/>
+    <resource asset="materials/gl4/deferred/SimplePresent.xasset"/>
+    <resource asset="materials/gl4/renderer/ArrayPresent.xasset"/>
+    <resource asset="materials/gl4/renderer/SimplePresent.xasset"/>
+    <resource asset="materials/grass_blades.xasset"/>
+    <resource asset="materials/textures/dirt_diffuse.xasset"/>
+    <resource asset="materials/textures/fieldstone_diffuse.xasset"/>
+    <resource asset="materials/textures/fieldstone_normal.xasset"/>
+    <resource asset="models/ground_plane.xasset"/>
+    <resource asset="models/temple.xasset"/>
+  </resources>
+  <dependencies>
+    <dependency asset="materials/GroundFieldStone.xasset" dependsOn="materials/Solid.xasset"/>
+    <dependency asset="materials/Solid.xasset" dependsOn="materials/textures/fieldstone_diffuse.xasset"/>
+    <dependency asset="materials/Solid.xasset" dependsOn="materials/textures/fieldstone_normal.xasset"/>
+    <dependency asset="materials/TempleDirt.xasset" dependsOn="materials/Solid.xasset"/>
+    <dependency asset="materials/grass_blades.xasset" dependsOn="default_sampler.xasset"/>
+    <dependency asset="materials/textures/dirt_diffuse.xasset" dependsOn="default_sampler.xasset"/>
+    <dependency asset="materials/textures/fieldstone_diffuse.xasset" dependsOn="default_sampler.xasset"/>
+    <dependency asset="materials/textures/fieldstone_normal.xasset" dependsOn="default_sampler.xasset"/>
+    <dependency asset="models/ground_plane.xasset" dependsOn="materials/GroundFieldStone.xasset"/>
+    <dependency asset="models/temple.xasset" dependsOn="materials/TempleDirt.xasset"/>
+  </dependencies>
+</dependencyTree>

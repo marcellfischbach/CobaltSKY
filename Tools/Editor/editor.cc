@@ -6,6 +6,8 @@
 #include <idockitem.hh>
 #include <mainwindow.hh>
 #include <renderwidget.hh>
+#include <project/project.hh>
+#include <valkyrie/core/vksettings.hh>
 #include <assetmanager/assetmanagerdock.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <valkyrie/core/vkvfs.hh>
@@ -30,6 +32,25 @@ Editor::Editor()
 bool Editor::Initialize(int argc, char **argv)
 {
   EditorModule::Initialize();
+
+  std::string projectPath = "";
+  for (int i = 0; i < argc; ++i)
+  {
+    if (std::string("--project") == std::string(argv[i]) && (i+1) < argc)
+    {
+      projectPath = std::string(argv[++i]);
+    }
+  }
+  if (projectPath.length() == 0)
+  {
+    return false;
+  }
+
+  std::string settingsPath = projectPath + "/valkyrie.xml";
+
+  vkSettings::Get()->Initialize(settingsPath.c_str());
+  vkVFS::Get()->Initialize(vkSettings::Get());
+
 
 //  m_rootPath = QDir(QString(vkVFS::Get()->GetRootPath().c_str()));
 
@@ -64,6 +85,8 @@ bool Editor::Initialize(int argc, char **argv)
 
   GetGraphics();
 
+
+  OpenProject(projectPath);
 
   return true;
 }
@@ -246,4 +269,20 @@ void Editor::UpdateVisibleDockItems(const std::set<vkString> &dockNames)
       dockItem->SetEmptyContent();
     }
   }
+}
+
+void Editor::CloseProject()
+{
+  if (m_project)
+  {
+    //m_project->Close();
+    delete m_project;
+  }
+}
+
+void Editor::OpenProject(const std::string &projectPath)
+{
+  CloseProject();
+  m_project = new Project();
+  m_project->Open(projectPath);
 }

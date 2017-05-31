@@ -47,10 +47,15 @@ set(EDITOR_SOURCES
     renderwidget.hh
     )
 
+set(EDITOR_UI
+    mainwindow.ui
+    )
+
 source_group(
     "editor"
     FILES
     ${EDITOR_SOURCES}
+    ${EDITOR_UI}
     )
 
 set(ASSETMANAGER_SOURCES
@@ -166,6 +171,19 @@ source_group(
     )
 
 
+set(PROJECT_SOURCES
+    project/project.cc
+    project/project.hh
+    project/projectdependencytree.cc
+    project/projectdependencytree.hh
+    )
+
+source_group(
+    "editor\\project"
+    FILES
+    ${PROJECT_SOURCES}
+    )
+
 
 set(SAMPLEREDITOR_SOURCES
     samplereditor/samplereditor.cc
@@ -269,6 +287,7 @@ source_group(
     )
 
 set(ALL_UI
+    ${EDITOR_UI}
     ${ASSETMANAGER_UI}
     ${COMPONENTS_UI}
     ${SAMPLEREDITOR_UI}
@@ -286,6 +305,7 @@ set(ALL_SOURCES
     ${LOADERS_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${PREVIEW_SOURCES}
+    ${PROJECT_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}

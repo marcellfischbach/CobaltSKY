@@ -8,6 +8,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
+#include <editor.hh>
+#include <project/project.hh>
 
 SamplerEditor::SamplerEditor()
   : AbstractAssetEditor()
@@ -191,6 +193,8 @@ void SamplerEditor::MergeFile()
     file.write(xml.toLatin1());
     file.close();
   }
+
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(GetAssetDescriptor().GetAssetResourceName());
 
 }
 

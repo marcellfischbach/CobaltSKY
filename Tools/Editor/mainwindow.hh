@@ -2,6 +2,7 @@
 
 #include <QMainWindow>
 #include <list>
+#include <ui_mainwindow.h>
 
 class QTabWidget;
 
@@ -20,11 +21,13 @@ public:
 
   QWidget *GetCurrentTab () const;
 private slots:
-  void on_tab_currentChanged(int index);
-  void on_tab_tabCloseRequest(int index);
+  void on_tabWidget_currentChanged(int index);
+  void on_tabWidget_tabCloseRequested(int index);
+
+  void on_actionRebuild_dependency_tree_triggered(bool);
 
 private:
-  QTabWidget *m_tab;
+  Ui::MainWindow m_gui;
 
   std::list<iAssetEditor*> m_editors;
 };

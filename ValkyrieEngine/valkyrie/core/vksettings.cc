@@ -37,23 +37,14 @@ static vkString strip_path (const vkString &path)
 
 bool vkSettings::Initialize(const char *configFileName)
 {
-  if (vkSettings::static_instances)
-  {
-    delete vkSettings::static_instances;
-    vkSettings::static_instances = 0;
-  }
-
-  vkSettings* settings = new vkSettings ();
-  settings->m_document = new TiXmlDocument();
-  if (!settings->m_document->LoadFile(configFileName))
+  m_document = new TiXmlDocument();
+  if (!m_document->LoadFile(configFileName))
   {
     printf("Unable to open config file: %s\n", configFileName);
-    delete settings;
     return false;
   }
-  settings->_rootPath = strip_path(configFileName);
+  _rootPath = strip_path(configFileName);
 
-  vkSettings::static_instances = settings;
   return true;
 }
 
@@ -61,6 +52,10 @@ bool vkSettings::Initialize(const char *configFileName)
 
 vkSettings* vkSettings::Get()
 {
+  if (!vkSettings::static_instances)
+  {
+    vkSettings::static_instances = new vkSettings(); 
+  }
   return vkSettings::static_instances;
 }
 
