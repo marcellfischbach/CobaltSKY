@@ -6,11 +6,14 @@
 class VKE_API vkResourceLocator
 {
 public:
-  vkResourceLocator(const vkString &resourceFile = "", const vkString &resourceName = "");
+  vkResourceLocator(const vkString &encodedResourceName = "");
+  vkResourceLocator(const vkString &resourceFile, const vkString &resourceName, const vkString &resourceEntry = "");
   explicit vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName);
+  vkResourceLocator(const vkResourceLocator &other);
 
   const vkString &GetResourceFile() const;
   const vkString &GetResourceName() const;
+  const vkString &GetResourceEntry() const;
 
   vkString GetDebugName() const;
 
@@ -24,6 +27,8 @@ public:
   bool IsValid() const;
 
 private:
+  void FixResourceFile();
+  vkString m_resourceEntry;
   vkString m_resourceFile;
   vkString m_resourceName;
 

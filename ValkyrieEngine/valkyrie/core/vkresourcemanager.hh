@@ -33,6 +33,13 @@ class VKE_API vkResourceManager
 
 public:
   static vkResourceManager *Get();
+  /**
+   * \brief Register a user defined resource manager.
+   *
+   * When needing a differen resource manager (adding or overriding functions)
+   * you can register your own implementation of the resource manager here.
+   */
+  static void Register(vkResourceManager *resourceManager);
 
   /**
    * \brief Load an object from the \a locator.
@@ -44,8 +51,8 @@ public:
    *
    * \return The object
    */
-  iObject *Load(const vkResourceLocator &locator, iObject *userData = 0) const;
-  const vkClass *EvalClass(const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(const vkResourceLocator &locator, iObject *userData = 0);
+  virtual const vkClass *EvalClass(const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -58,9 +65,9 @@ public:
   *
   * \return The object
   */
-  iObject *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0);
 
-  const vkClass *EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual const vkClass *EvalClass(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -73,10 +80,10 @@ public:
   *
   * \return The object
   */
-  iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0);
 
 
-  const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   /**
   * \brief Load an object from the \a asset \a file.
@@ -90,11 +97,11 @@ public:
   *
   * \return The object
   */
-  iObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const;
-  const vkClass *EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0);
+  virtual const vkClass *EvalClass(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const;
 
   template<typename T>
-  T *Load(const vkResourceLocator &locator, iObject *userData = 0) const
+  T *Load(const vkResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(locator, userData);
     if (object)
@@ -110,7 +117,7 @@ public:
   }
 
   template<typename T>
-  T *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0) const
+  T *Load(iFile *file, const vkResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(file, locator, userData);
     if (object)
@@ -126,7 +133,7 @@ public:
   }
 
   template<typename T>
-  T *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const
+  T *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(element, locator, userData);
     if (object)
@@ -142,7 +149,7 @@ public:
   }
 
   template<typename T>
-  T *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0) const
+  T *Load(const vkString &typeID, vkAssetInputStream &inputStream, const vkResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(typeID, inputStream, locator, userData);
     if (object)
@@ -167,7 +174,7 @@ public:
    * 
    * \return The object or \a null if there is no such object registered.
    */
-  iObject *Get(const vkResourceLocator &resourceLocator) const;
+  virtual iObject *Get(const vkResourceLocator &resourceLocator) const;
 
 
   /**
@@ -177,7 +184,7 @@ public:
    *
    * \return The resource locator
    */
-  vkResourceLocator GetLocator(iObject *object) const;
+  virtual vkResourceLocator GetLocator(iObject *object) const;
 
   /**
   * \brief Get the object from the resource cache. 
@@ -190,27 +197,9 @@ public:
   *
   * \return The object or \a null if there is no such object registered.
   */
-  iObject *GetOrLoad(const vkResourceLocator &resourceLocator, iObject *userData = 0);
+  virtual iObject *GetOrLoad(const vkResourceLocator &resourceLocator, iObject *userData = 0);
 
-  VK_FORCEINLINE iObject *Aquire(const vkResourceLocator &resourceLocator, iObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared)
-  {
-    iObject* res = 0;
-    switch (mode)
-    {
-    case eRLM_Shared:
-      res = GetOrLoad(resourceLocator, userData);
-      break;
-    case eRLM_Instance:
-      res = Load(resourceLocator, userData);
-      break;
-    }
-    if (res)
-    {
-      m_resources[res] = resourceLocator;
-    }
-    return res;
-  }
-
+  virtual iObject *Aquire(const vkResourceLocator &resourceLocator, iObject *userData = 0, vkResourceLoadingMode mode = eRLM_Shared);
 
 
 
@@ -254,17 +243,25 @@ public:
     return 0;
   }
 
-  void RegisterLoader(iXMLLoader *loader);
-  void RegisterLoader(iFileLoader *loader);
-  void RegisterLoader(iAssetLoader *loader);
+  virtual void RegisterLoader(iXMLLoader *loader);
+  virtual void RegisterLoader(iFileLoader *loader);
+  virtual void RegisterLoader(iAssetLoader *loader);
 
-  bool RegisterObject(const vkResourceLocator &locator, iObject *object);
-  void DeregisterObject(const vkResourceLocator &locator);
-  void DeregisterObject(iObject *object);
+  virtual bool RegisterObject(const vkResourceLocator &locator, iObject *object);
+  virtual void UnregisterObject(const vkResourceLocator &locator);
+  virtual void UnregisterObject(iObject *object);
+
+  virtual void RegisterResource(iObject *object, const vkResourceLocator &locator);
+  virtual void UnregisterResource(iObject *object);
 
 
-private:
+protected:
   vkResourceManager();
+  virtual ~vkResourceManager() {}
+
+  virtual iFile *Open(const vkResourceLocator &locator) const;
+
+protected:
 
   std::vector<iFileLoader*> m_fileLoaders;
   std::vector<iXMLLoader*> m_xmlLoaders;
@@ -273,6 +270,7 @@ private:
   std::map<vkResourceLocator, iObject*> m_objects;
   std::map<iObject*, vkResourceLocator> m_resources;
 
+  static vkResourceManager *s_instance;
 };
 
 

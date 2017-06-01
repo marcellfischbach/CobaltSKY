@@ -705,15 +705,15 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
 
   printf("XML:\n%s\n", (const char*)doc.toString(2).toLatin1());
-  printf("FileName: %s\n", m_editor->GetAssetDescriptor().GetAssetFileName().c_str());
-  QFile file(QString(m_editor->GetAssetDescriptor().GetAssetFileName().c_str()));
+  printf("FileName: %s\n", m_editor->GetAssetDescriptor().GetLocator().GetResourceFile().c_str());
+  QFile file(m_editor->GetResourceFileName());
   if (file.open(QIODevice::WriteOnly | QIODevice::Text))
   {
     file.write(doc.toString(2).toLatin1());
     file.close();
   }
 
-  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetAssetResourceName());
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
 
 }
 

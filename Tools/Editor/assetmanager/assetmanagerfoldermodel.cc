@@ -1,5 +1,6 @@
 
 #include <assetmanager/assetmanagerfoldermodel.hh>
+#include <valkyrie/core/vkresourcelocator.hh>
 #include <editor.hh>
 #include <valkyrie/core/vkvfs.hh>
 #include <QDir>
@@ -16,9 +17,9 @@ public:
   };
 
   AssetManagerFolderModelEntry()
-    : m_dir (QDir())
-    , m_parent (0)
-    , m_scanned (true)
+    : m_dir(QDir())
+    , m_parent(0)
+    , m_scanned(true)
     , m_type(Root)
   {
     m_name = QObject::tr("AssetManager");
@@ -34,8 +35,8 @@ public:
   }
 
   AssetManagerFolderModelEntry(const QDir &dir)
-    : m_dir (dir)
-    , m_parent (0)
+    : m_dir(dir)
+    , m_parent(0)
     , m_scanned(false)
     , m_type(Dir)
   {
@@ -51,7 +52,7 @@ public:
     m_entries.clear();
   }
 
-  void AddEntry (AssetManagerFolderModelEntry *entry)
+  void AddEntry(AssetManagerFolderModelEntry *entry)
   {
     m_entries.push_back(entry);
     entry->m_parent = this;
@@ -78,7 +79,7 @@ public:
     return m_parent;
   }
 
- 
+
   int Index()
   {
     if (m_parent)
@@ -86,6 +87,30 @@ public:
       return m_parent->m_entries.indexOf(this);
     }
     return 0;
+  }
+
+  vkResourceLocator GetResourceLocator() const
+  {
+    switch (m_type)
+    {
+    case Root:
+      return vkResourceLocator();
+    case Entry:
+      return vkResourceLocator("", "", vkString((const char*)m_name.toLatin1()));
+    case Dir:
+      if (!m_parent)
+      {
+        return vkResourceLocator();
+      }
+      else
+      {
+        vkResourceLocator parentLocator = m_parent->GetResourceLocator();
+        return vkResourceLocator(
+          parentLocator.GetResourceFile() + "/" + vkString((const char*)m_name.toLatin1()),
+          "",
+          parentLocator.GetResourceEntry());
+      }
+    }
   }
 
 private:
@@ -124,16 +149,12 @@ private:
 AssetManagerFolderModel::AssetManagerFolderModel()
   : QAbstractItemModel()
 {
-  printf ("AssetManagerFolgerModel::AssetManagerFolderMode\n");
-  fflush(stdout);
   m_root = new AssetManagerFolderModelEntry();
-  for (vkSize i = 0, in= vkVFS::Get()->GetNumberOfEntries(); i<in; ++i)
+  for (vkSize i = 0, in = vkVFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
     const vkVFS::Entry &entry = vkVFS::Get()->GetEntry(i);
     m_root->AddEntry(new AssetManagerFolderModelEntry(entry));
   }
-  printf ("AssetManagerFolgerModel::AssetManagerFolderMode - done\n");
-  fflush(stdout);
 }
 
 AssetManagerFolderModel::~AssetManagerFolderModel()
@@ -208,4 +229,14 @@ QDir AssetManagerFolderModel::GetDir(const QModelIndex &index) const
   }
   AssetManagerFolderModelEntry *entry = FROM_INDEX(index);
   return entry->GetDir();
+}
+
+vkResourceLocator AssetManagerFolderModel::GetResourceLocator(const QModelIndex &index) const
+{
+  if (!index.isValid())
+  {
+    return vkResourceLocator();
+  }
+  AssetManagerFolderModelEntry *entry = FROM_INDEX(index);
+  return entry->GetResourceLocator();
 }

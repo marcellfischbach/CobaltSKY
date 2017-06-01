@@ -2,51 +2,39 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node class="vkSGVarFloat2" id="0">
+        <node id="0" class="vkSGVarFloat2">
           <resource name="Multiplier">
-            <float2>10.000000, 10.000000</float2>
+            <float2>20.000000, 20.000000</float2>
           </resource>
         </node>
-        <node class="vkSGDefaultTextureCoordinate" id="1"/>
-        <node class="vkSGMul" id="2"/>
-        <node class="vkSGTexture2D" id="3">
+        <node id="1" class="vkSGTexture2D">
           <resource name="Diffuse">
             <locator>materials/textures/fieldstone_diffuse.xasset</locator>
           </resource>
         </node>
-        <node class="vkSGTexture2D" id="4">
+        <node id="2" class="vkSGTexture2D">
           <resource name="Normal">
             <locator>materials/textures/fieldstone_normal.xasset</locator>
           </resource>
         </node>
+        <node id="3" class="vkSGMul"/>
+        <node id="4" class="vkSGDefaultTextureCoordinate"/>
       </nodes>
       <inputs>
         <node input="0" id="3">
-          <node output="0" id="2"/>
+          <node id="0" output="0"/>
+        </node>
+        <node input="1" id="3">
+          <node id="4" output="0"/>
+        </node>
+        <node input="0" id="1">
+          <node id="3" output="0"/>
         </node>
         <node input="0" id="2">
-          <node output="0" id="0"/>
-        </node>
-        <node input="1" id="2">
-          <node output="0" id="1"/>
-        </node>
-        <node input="0" id="4">
-          <node output="0" id="2"/>
-        </node>
-        <node input="0" id="0">
-          <float>1.000000</float>
-        </node>
-        <node input="1" id="0">
-          <float>1.000000</float>
-        </node>
-        <node input="2" id="0">
-          <float>1.000000</float>
+          <node id="3" output="0"/>
         </node>
         <shaderGraph input="Diffuse">
-          <node output="0" id="3"/>
-        </shaderGraph>
-        <shaderGraph input="Normal">
-          <node output="0" id="4"/>
+          <node id="1" output="0"/>
         </shaderGraph>
       </inputs>
       <attributes>
@@ -65,16 +53,16 @@
           <pos>-680.000000, -120.000000</pos>
         </node>
         <node id="1">
-          <pos>-920.000000, 0.000000</pos>
-        </node>
-        <node id="2">
-          <pos>-580.000000, -80.000000</pos>
-        </node>
-        <node id="3">
           <pos>-340.000000, -200.000000</pos>
         </node>
-        <node id="4">
+        <node id="2">
           <pos>-340.000000, -20.000000</pos>
+        </node>
+        <node id="3">
+          <pos>-580.000000, -80.000000</pos>
+        </node>
+        <node id="4">
+          <pos>-920.000000, 0.000000</pos>
         </node>
       </nodes>
       <shaderGraph>

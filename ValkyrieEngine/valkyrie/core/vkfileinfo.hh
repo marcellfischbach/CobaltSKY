@@ -1,23 +1,25 @@
 #pragma once
 
 #include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkstring.hh>
+#include <string>
 
 class VKE_API vkFileInfo
 {
 
 
 public:
-	vkFileInfo(const char* filename);
+	vkFileInfo(const std::string &filename);
 
-	const char* GetName () const;
-	const char* GetExtension () const;
-	const char* GetLocation () const;
+	const std::string &GetName () const;
+	const std::string &GetExtension () const;
+	const std::string &GetLocation () const;
 
+  bool Exists() const;
+  static bool Exists(const std::string &filename);
 private:
-  vkString m_name;
-  vkString m_extension;
-  vkString m_location;
-
+  std::string m_name;
+  std::string m_extension;
+  std::string m_location;
+  std::string m_filname;
 };
 

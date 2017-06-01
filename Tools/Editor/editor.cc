@@ -1,6 +1,7 @@
 #include <editor.hh>
 #include <basicdockitem.hh>
 #include <editormodule.hh>
+#include <editorresourcemanager.hh>
 #include <glcontext.hh>
 #include <iasseteditor.hh>
 #include <idockitem.hh>
@@ -31,7 +32,12 @@ Editor::Editor()
 
 bool Editor::Initialize(int argc, char **argv)
 {
+  // we use a specialized resource manager within the editor
+  vkResourceManager::Register(new EditorResourceManager());
+
+
   EditorModule::Initialize();
+
 
   std::string projectPath = "";
   for (int i = 0; i < argc; ++i)

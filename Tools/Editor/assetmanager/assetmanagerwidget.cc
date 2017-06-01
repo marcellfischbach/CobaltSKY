@@ -6,6 +6,7 @@
 #include <assetmanager/assetmanagernewmanager.hh>
 #include <assetdescriptor.hh>
 #include <editor.hh>
+#include <valkyrie/core/vkvfs.hh>
 #include <QDomDocument>
 #include <QFile>
 #include <QMenu>
@@ -53,26 +54,30 @@ void AssetManagerWidget::on_treeView_clicked(const QModelIndex &index)
 void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
   QDir dir = m_folderModel->GetDir(index);
-  m_contentModel->SetDir(dir);
+  vkResourceLocator locator = m_folderModel->GetResourceLocator(index);
+  printf("Locator: %s\n", locator.GetDebugName().c_str());
+  //m_contentModel->SetDir(dir);
+  m_contentModel->SetResourceLocator(locator);
   m_currentDir = dir;
 }
 
 
 void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
 {
-  vkString fileName = m_contentModel->GetEntry(index);
-  if (fileName.length() == 0)
+  vkResourceLocator locator = m_contentModel->GetLocator(index);
+  if (!locator.IsValid())
   {
     return;
   }
 
-  OpenAsset(fileName);
+  OpenAsset(locator);
 }
 
-void AssetManagerWidget::OpenAsset(const vkString &fileName)
+void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
 {
   QDomDocument doc("mydocument");
-  QFile file(QString(fileName.c_str()));
+  vkString absFilePath = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  QFile file(QString(absFilePath.c_str()));
   if (!file.open(QIODevice::ReadOnly))
   {
     return;
@@ -99,7 +104,7 @@ void AssetManagerWidget::OpenAsset(const vkString &fileName)
   QDomElement typeElement = dataElement.firstChildElement();
   vkString type = (const char*)typeElement.tagName().toLatin1();
 
-  AssetDescriptor descriptor(fileName, type);
+  AssetDescriptor descriptor(locator, type);
   Editor::Get()->OpenAsset(descriptor);
 }
 

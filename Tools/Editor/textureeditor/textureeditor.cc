@@ -33,7 +33,7 @@ void TextureEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(vkResourceLocator(descriptor.GetAssetResourceName()));
+  iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(descriptor.GetLocator());
   m_widget->SetTexture(texture);
   m_properties->SetTexture(texture);
 }

@@ -24,15 +24,15 @@
     <resource asset="models/temple.xasset"/>
   </resources>
   <dependencies>
-    <dependency asset="materials/GroundFieldStone.xasset" dependsOn="materials/Solid.xasset"/>
-    <dependency asset="materials/Solid.xasset" dependsOn="materials/textures/fieldstone_diffuse.xasset"/>
-    <dependency asset="materials/Solid.xasset" dependsOn="materials/textures/fieldstone_normal.xasset"/>
-    <dependency asset="materials/TempleDirt.xasset" dependsOn="materials/Solid.xasset"/>
-    <dependency asset="materials/grass_blades.xasset" dependsOn="default_sampler.xasset"/>
-    <dependency asset="materials/textures/dirt_diffuse.xasset" dependsOn="default_sampler.xasset"/>
-    <dependency asset="materials/textures/fieldstone_diffuse.xasset" dependsOn="default_sampler.xasset"/>
-    <dependency asset="materials/textures/fieldstone_normal.xasset" dependsOn="default_sampler.xasset"/>
-    <dependency asset="models/ground_plane.xasset" dependsOn="materials/GroundFieldStone.xasset"/>
-    <dependency asset="models/temple.xasset" dependsOn="materials/TempleDirt.xasset"/>
+    <dependency dependsOn="materials/Solid.xasset" asset="materials/GroundFieldStone.xasset"/>
+    <dependency dependsOn="materials/textures/fieldstone_diffuse.xasset" asset="materials/Solid.xasset"/>
+    <dependency dependsOn="materials/textures/fieldstone_normal.xasset" asset="materials/Solid.xasset"/>
+    <dependency dependsOn="materials/Solid.xasset" asset="materials/TempleDirt.xasset"/>
+    <dependency dependsOn="default_sampler.xasset" asset="materials/grass_blades.xasset"/>
+    <dependency dependsOn="default_sampler.xasset" asset="materials/textures/dirt_diffuse.xasset"/>
+    <dependency dependsOn="materials/default_sampler.xasset" asset="materials/textures/fieldstone_diffuse.xasset"/>
+    <dependency dependsOn="default_sampler.xasset" asset="materials/textures/fieldstone_normal.xasset"/>
+    <dependency dependsOn="materials/GroundFieldStone.xasset" asset="models/ground_plane.xasset"/>
+    <dependency dependsOn="materials/TempleDirt.xasset" asset="models/temple.xasset"/>
   </dependencies>
 </dependencyTree>

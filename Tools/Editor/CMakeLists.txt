@@ -34,6 +34,8 @@ set(EDITOR_SOURCES
     editorimage.hh
     editormodule.cc
     editormodule.hh
+    editorresourcemanager.cc
+    editorresourcemanager.hh
     glcontext.cc
     glcontext.hh
     iasseteditor.hh

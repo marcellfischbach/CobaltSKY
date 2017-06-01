@@ -4,6 +4,7 @@
 #include <QDir>
 #include <QList>
 #include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/vkresourcelocator.hh>
 
 class AssetManagerContentModelEntry;
 class vkClass;
@@ -15,7 +16,7 @@ public:
   AssetManagerContentModel();
   virtual ~AssetManagerContentModel();
 
-  void SetDir(const QDir &dir);
+  void SetResourceLocator(const vkResourceLocator &locator);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
@@ -25,13 +26,11 @@ public:
   virtual QStringList mimeTypes() const;
   virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-  vkString GetEntry(const QModelIndex &index) const;
+  vkResourceLocator GetLocator(const QModelIndex &index) const;
 private:
   void CleanupEntries();
-  vkString ExtractResourceName(const vkString &fileName) const;
-  vkString ReadType(const vkString &fileName) const;
-  const vkClass *ReadClass(const vkString &fileName) const;
+  vkString ReadType(const vkResourceLocator &fileName) const;
 
-  QDir m_dir;
+  vkResourceLocator m_locator;
   QList<AssetManagerContentModelEntry*> m_entries;
 };

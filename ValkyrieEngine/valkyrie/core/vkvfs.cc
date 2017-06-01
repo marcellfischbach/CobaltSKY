@@ -1,6 +1,7 @@
 
 #include <valkyrie/core/vkvfs.hh>
 #include <valkyrie/core/vkfilestd.hh>
+#include <valkyrie/core/vkfileinfo.hh>
 #include <valkyrie/core/vksettings.hh>
 #include <algorithm>
 // #include <cscore/cssettings.h>
@@ -69,7 +70,34 @@ vkVFS* vkVFS::Get()
 
 bool vkVFS::Initialize(int argc, char** argv)
 {
+  for (int i = 0; i < argc - 1; ++i)
+  {
+    if (std::string(argv[i]) == std::string("--vfs"))
+    {
+      LoadConfig(std::string(argv[i + 1]));
+      i++;
+    }
+  }
+
   return false;
+}
+
+bool vkVFS::LoadConfig(const std::string &configFileName)
+{
+  vkFileInfo fileInfo(configFileName.c_str());
+  TiXmlDocument doc;
+  if (!doc.LoadFile(configFileName.c_str()))
+  {
+    return false;
+  }
+
+  const TiXmlElement *rootElement = doc.RootElement();
+  if (!rootElement)
+  {
+    return false;
+  }
+
+  return LoadConfig(rootElement, fileInfo.GetLocation());
 }
 
 bool vkVFS::Initialize(vkSettings *settings)
@@ -77,10 +105,16 @@ bool vkVFS::Initialize(vkSettings *settings)
   if (settings && settings->HasGroup("vfs"))
   {
     TiXmlElement *vfsElement = settings->GetGroup("vfs");
-    TiXmlElement *rootPathsElement = vfsElement->FirstChildElement("rootPaths");
+    return LoadConfig(vfsElement, settings->GetRootPath());
+  }
+}
+
+bool vkVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath)
+{
+    const TiXmlElement *rootPathsElement = vfsElement->FirstChildElement("rootPaths");
     if (rootPathsElement)
     {
-      for (TiXmlElement *rootPathElement = rootPathsElement->FirstChildElement("rootPath");
+      for (const TiXmlElement *rootPathElement = rootPathsElement->FirstChildElement("rootPath");
            rootPathElement;
            rootPathElement = rootPathElement->NextSiblingElement("rootPath"))
       {
@@ -88,7 +122,7 @@ bool vkVFS::Initialize(vkSettings *settings)
         {
           Entry entry;
           entry.SetPath(rootPathElement->GetText());
-          entry.SetAbsPath(std::string(settings->GetRootPath()) + "/" + entry.GetPath());
+          entry.SetAbsPath(basePath + std::string("/") + entry.GetPath());
           if (rootPathElement->Attribute("name"))
           {
             entry.SetName(rootPathElement->Attribute("name"));
@@ -103,10 +137,10 @@ bool vkVFS::Initialize(vkSettings *settings)
       }
     }
 
-    TiXmlElement *resolutionsElement = vfsElement->FirstChildElement("resolutions");
+    const TiXmlElement *resolutionsElement = vfsElement->FirstChildElement("resolutions");
     if (resolutionsElement)
     {
-      for (TiXmlElement *resolutionElement = resolutionsElement->FirstChildElement();
+      for (const TiXmlElement *resolutionElement = resolutionsElement->FirstChildElement();
            resolutionElement;
            resolutionElement = resolutionElement->NextSiblingElement())
       {
@@ -120,7 +154,6 @@ bool vkVFS::Initialize(vkSettings *settings)
         AddPath(vfsName, pathName);
       }
     }
-  }
 
   // now sort the entries, so that the highes priority is on top
   std::sort(m_entries.begin(), m_entries.end(), [](const Entry& e0, const Entry &e1) { return e1.GetPriority() < e0.GetPriority(); });
@@ -225,6 +258,42 @@ vkString vkVFS::GetPathResolution(const vkString &pathName) const
   return res;
 }
 
+vkString vkVFS::GetAbsolutePath(const vkString &path) const
+{
+  vkString finalName = GetPathResolution(path);
+  for (auto entry : m_entries)
+  {
+    vkString absPath = entry.GetAbsPath() + "/" + finalName;
+    if (vkFileInfo::Exists(absPath))
+    {
+      return absPath;
+    }
+  }
+  return "";
+}
+
+vkString vkVFS::GetAbsolutePath(const vkString &path, const vkString &entryName) const
+{
+  if (entryName.empty())
+  {
+    return GetAbsolutePath(path);
+  }
+  vkString finalName = GetPathResolution(path);
+  for (auto entry : m_entries)
+  {
+    if (entry.GetName() == entryName)
+    {
+      vkString absPath = entry.GetAbsPath() + "/" + finalName;
+      if (vkFileInfo::Exists(absPath))
+      {
+        return absPath;
+      }
+      break;
+    }
+  }
+  return "";
+}
+
 //void vkVFS::SetRootPath(const vkString &rootPath)
 //{
 //  m_rootPath = rootPath;
@@ -262,15 +331,57 @@ iFile *vkVFS::Open(const vkString &filename, vkOpenMode mode, vkTextMode textMod
 }
 
 
-vkString vkVFS::GetAbsolutPath(const vkString &filename)
+iFile *vkVFS::Open(const vkString &filename, const vkString &entryName, vkOpenMode mode, vkTextMode textMode)
 {
-  vkString res = GetPathResolution(filename);
-  if (res.length() == 0)
+  std::string finalFilename = GetPathResolution(filename);
+  if (filename.length() == 0)
   {
-    return "";
+    printf("Unable to solve filename: %s\n", filename.c_str());
+    return 0;
   }
 
-  return res;
+
+
+  vkFileStd* file = new vkFileStd();
+  for (Entry &entry : m_entries)
+  {
+    if (entry.GetName() == entryName)
+    {
+      std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
+      if (file->Open(absFileName.c_str(), mode, textMode))
+      {
+        return file;
+      }
+      break;
+    }
+  }
+
+  delete file;
+  printf("Unable to open: %s\n", finalFilename.c_str());
+  return 0;
+}
+
+
+
+const vkVFS::Entry *vkVFS::FindEntryForFilename(const std::string &filename) const
+{
+  std::string finalFilename = GetPathResolution(filename);
+  if (filename.length() == 0)
+  {
+    printf("Unable to solve filename: %s\n", filename.c_str());
+    return 0;
+  }
+
+  for (const Entry &entry : m_entries)
+  {
+    std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
+    if (vkFileInfo::Exists(absFileName))
+    {
+      return &entry;
+    }
+  }
+
+  return 0;
 }
 
 

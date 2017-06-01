@@ -3,6 +3,7 @@
 #include <QDir>
 #include <QWidget>
 #include <ui_assetmanagerwidget.h>
+#include <valkyrie/core/vkresourcelocator.hh>
 #include <valkyrie/core/vkstring.hh>
 #include <map>
 
@@ -17,7 +18,7 @@ public:
   AssetManagerWidget();
   ~AssetManagerWidget();
 
-  void OpenAsset(const vkString &filename);
+  void OpenAsset(const vkResourceLocator &locator);
 
 protected slots:
 

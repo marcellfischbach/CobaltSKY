@@ -3,21 +3,15 @@
 #include <editor.hh>
 
 
-AssetDescriptor::AssetDescriptor(const vkString &assetFileName, const vkString &assetType)
-  : m_assetFileName(assetFileName)
+AssetDescriptor::AssetDescriptor(const vkResourceLocator &locator, const vkString &assetType)
+  : m_locator(locator)
   , m_assetType(assetType)
 {
-  m_assetResourceName = Editor::Get()->ConvertToResourcePath(assetFileName);
 }
 
-const vkString &AssetDescriptor::GetAssetResourceName() const
+const vkResourceLocator &AssetDescriptor::GetLocator() const
 {
-  return m_assetResourceName;
-}
-
-const vkString &AssetDescriptor::GetAssetFileName() const
-{
-  return m_assetFileName;
+  return m_locator;
 }
 
 const vkString &AssetDescriptor::GetAssetType() const
@@ -28,11 +22,11 @@ const vkString &AssetDescriptor::GetAssetType() const
 
 bool AssetDescriptor::operator<(const AssetDescriptor &other) const
 {
-  return m_assetFileName < other.m_assetFileName;
+  return m_locator < other.m_locator;
 }
 
 bool AssetDescriptor::operator==(const AssetDescriptor &other) const
 {
-  return m_assetFileName == other.m_assetFileName;
+  return m_locator == other.m_locator;
 }
 

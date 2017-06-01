@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <valkyrie/vkengine.hh>
+#include <valkyrie/core/vkfileinfo.hh>
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <valkyrie/core/vksettings.hh>
 #include <valkyrie/core/vkvfs.hh>
@@ -94,6 +95,19 @@ int main(int argc, char **argv)
   vkSettings::Get()->Initialize(argc, argv);
   vkVFS::Get()->Initialize(vkSettings::Get());
   vkEngine engine;
+
+  const vkVFS::Entry *entry = vkVFS::Get()->FindEntryForFilename("materials/solid.xasset");
+  if (entry)
+  {
+    printf("Entry: %s @ %s\n",
+      entry->GetName().c_str(),
+      entry->GetAbsPath().c_str()
+    );
+  }
+  else
+  {
+    printf("no entry\n");
+  }
 
   // initialize the window
   window = new SDLWindow();

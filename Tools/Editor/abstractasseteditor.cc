@@ -4,6 +4,9 @@
 #include <QMessageBox>
 #include <editor.hh>
 #include <mainwindow.hh>
+#include <valkyrie/core/vkfileinfo.hh>
+#include <valkyrie/core/vkvfs.hh>
+#include <QFile>
 
 AbstractAssetEditor::AbstractAssetEditor()
   : iAssetEditor()
@@ -19,21 +22,10 @@ AbstractAssetEditor::~AbstractAssetEditor()
 void AbstractAssetEditor::SetAssetDescriptor(const AssetDescriptor &descriptor)
 {
   m_assetDescriptor = descriptor;
-  m_name = descriptor.GetAssetFileName();
+  vkFileInfo info(descriptor.GetLocator().GetResourceFile());
+  m_name = info.GetName();
 
-  size_t idx = m_name.find_last_of('/');
-  if (idx == -1)
-  {
-    idx = m_name.find_last_of("\\");
-  }
-  if (idx == -1)
-  {
-    m_name = "Unknown";
-  }
-  else
-  {
-    m_name = m_name.substr(idx + 1);
-  }
+  
 
   OpenAsset();
 }
@@ -94,3 +86,10 @@ void AbstractAssetEditor::CloseRequest()
 }
 
 
+QString AbstractAssetEditor::GetResourceFileName() const
+{
+  const vkResourceLocator &loc = GetAssetDescriptor().GetLocator();
+  vkString absFileName = vkVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+  QString fileName(absFileName.c_str());
+  return fileName;
+}

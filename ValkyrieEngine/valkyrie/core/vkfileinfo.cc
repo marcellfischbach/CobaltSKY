@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 
 
@@ -18,18 +19,17 @@ namespace
   }
 }
 
-vkFileInfo::vkFileInfo (const char *filename)
+vkFileInfo::vkFileInfo (const std::string &filename)
 {
-
   m_location = "";
   m_name = "";
   m_extension = "";
-  std::string tmpname = std::string (filename);
+  std::string tmpname = filename;
 
   const char* locptr = tmpname.c_str ();
   const char* extptr = 0;
   const char* nameptr = 0;
-  int length = (int)tmpname.length ();;
+  int length = (int)tmpname.length ();
   for (int i = length - 1; i >= 0; --i)
   {
 
@@ -72,18 +72,28 @@ vkFileInfo::vkFileInfo (const char *filename)
 
 }
 
-const char* vkFileInfo::GetName () const
+const std::string &vkFileInfo::GetName () const
 {
-  return m_name.c_str ();
+  return m_name;
 }
 
-const char* vkFileInfo::GetExtension () const
+const std::string &vkFileInfo::GetExtension () const
 {
-  return m_extension.c_str ();
+  return m_extension;
 }
 
-const char* vkFileInfo::GetLocation () const
+const std::string &vkFileInfo::GetLocation () const
 {
-  return m_location.c_str ();
+  return m_location;
 }
 
+bool vkFileInfo::Exists() const
+{
+  return vkFileInfo::Exists(m_filname);
+}
+
+bool vkFileInfo::Exists(const std::string &filename)
+{
+  struct stat s;
+  return stat(filename.c_str(), &s) == 0;
+}

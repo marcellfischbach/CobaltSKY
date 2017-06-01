@@ -2,20 +2,19 @@
 
 
 #include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/vkresourcelocator.hh>
 
 class AssetDescriptor
 {
 public:
-  AssetDescriptor(const vkString &assetFileName = vkString(""), const vkString &assetType = vkString(""));
+  AssetDescriptor(const vkResourceLocator &locator = vkResourceLocator(), const vkString &assetType = vkString(""));
 
-  const vkString &GetAssetResourceName() const;
-  const vkString &GetAssetFileName() const;
+  const vkResourceLocator &GetLocator() const;
   const vkString &GetAssetType() const;
 
   bool operator<(const AssetDescriptor &other) const;
   bool operator==(const AssetDescriptor &other) const;
 private:
-  vkString m_assetResourceName;
-  vkString m_assetFileName;
+  vkResourceLocator m_locator;
   vkString m_assetType;
 };

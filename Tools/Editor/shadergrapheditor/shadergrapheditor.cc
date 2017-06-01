@@ -51,9 +51,9 @@ void ShaderGraphEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->Aquire<vkSGShaderGraph>(vkResourceLocator(descriptor.GetAssetResourceName()));
+  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->Aquire<vkSGShaderGraph>(descriptor.GetLocator());
 
-  vkResourceLocator metaLocator(descriptor.GetAssetResourceName(), "meta");
+  vkResourceLocator metaLocator(descriptor.GetLocator(), "meta");
   ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
   if (!meta)
   { 

@@ -72,9 +72,7 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
 
 void TextureEditorWidget::on_pbSave_clicked()
 {
-  QString filename(m_editor->GetAssetDescriptor().GetAssetFileName().c_str());
-
-  QFile file(filename);
+  QFile file(m_editor->GetResourceFileName());
   QDomDocument doc;
   if (!doc.setContent(&file))
   {
@@ -135,5 +133,5 @@ void TextureEditorWidget::on_pbSave_clicked()
     file.close();
   }
 
-  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetAssetResourceName());
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
 }

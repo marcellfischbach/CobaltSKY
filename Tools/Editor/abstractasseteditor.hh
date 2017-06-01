@@ -4,6 +4,7 @@
 #include <assetdescriptor.hh>
 
 #include <abstractasseteditor.refl.hh>
+#include <QFile>
 
 VK_INTERFACE()
 class AbstractAssetEditor : public iAssetEditor
@@ -15,6 +16,7 @@ public:
 
   virtual void SetAssetDescriptor(const AssetDescriptor &assetDescriptor);
   const AssetDescriptor &GetAssetDescriptor() const;
+  QString GetResourceFileName() const;
 
   void SetWidget(QWidget *widget);
   virtual QWidget *GetWidget();
@@ -28,6 +30,7 @@ public:
 protected:
   virtual void OpenAsset() = 0;
   void AddDockItemName(const vkString &dockItemName);
+
 
 private:
   AssetDescriptor m_assetDescriptor;

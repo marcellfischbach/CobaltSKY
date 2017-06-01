@@ -3,6 +3,7 @@
 #include <samplereditor/samplereditorwidget.hh>
 
 #include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/vkvfs.hh>
 #include <valkyrie/graphics/isampler.hh>
 
 #include <QDomDocument>
@@ -32,7 +33,7 @@ void SamplerEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  iSampler *sampler = vkResourceManager::Get()->Aquire<iSampler>(vkResourceLocator(descriptor.GetAssetResourceName()));
+  iSampler *sampler = vkResourceManager::Get()->Aquire<iSampler>(descriptor.GetLocator());
   m_widget->SetSampler(sampler);
 }
 
@@ -52,12 +53,12 @@ void SamplerEditor::Save()
 
 void SamplerEditor::MergeFile()
 {
-  QString fileName(GetAssetDescriptor().GetAssetFileName().c_str());
-  QFile file(fileName);
+  QString absFileName = GetResourceFileName();
+  QFile file(absFileName);
   QDomDocument doc;
   if (!doc.setContent(&file))
   {
-    printf("Unable to open asset: %s\n", GetAssetDescriptor().GetAssetResourceName().c_str());
+    printf("Unable to open asset: %s\n", (const char*)absFileName.toLatin1());
     ReplaceFile();
     return;
   }
@@ -194,7 +195,7 @@ void SamplerEditor::MergeFile()
     file.close();
   }
 
-  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(GetAssetDescriptor().GetAssetResourceName());
+  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 
 }
 
@@ -240,7 +241,7 @@ void SamplerEditor::ReplaceFile()
   samplerElement.appendChild(compareFuncElement);
 
   QString xml = doc.toString(2);
-  QString fileName(GetAssetDescriptor().GetAssetFileName().c_str());
+  QString fileName(GetResourceFileName());
   QFile file(fileName);
   if (file.open(QIODevice::WriteOnly | QIODevice::Text))
   {

@@ -13,6 +13,7 @@ using std::vector;
 
 
 class vkSettings;
+class TiXmlElement;
 
 /**
 * \addtogroup engine
@@ -51,6 +52,7 @@ public:
 
   static vkVFS* Get ();
 
+  bool LoadConfig(const std::string &configFilename);
   bool Initialize(int argc, char** argv);
   bool Initialize(vkSettings *settings);
 
@@ -60,23 +62,27 @@ public:
   void RemovePath (const vkString &vfsName);
 
   vkString GetPathResolution (const vkString &path) const;
-
+  vkString GetAbsolutePath(const vkString &path) const;
+  vkString GetAbsolutePath(const vkString &path, const vkString &entryName) const;
 
   /**
   * \name Functions for opening files
   * @{
   */
-  iFile* Open (const vkString& filename, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
+  iFile* Open(const vkString& filename, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
+  iFile* Open(const vkString& filename, const vkString &entryName, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
   /**
   * @}
   */
-  vkString GetAbsolutPath(const vkString &path);
+
+  const Entry *FindEntryForFilename(const std::string &filename) const;
 
   vkSize GetNumberOfEntries () const;
   const Entry &GetEntry (vkSize idx) const;
 
 private:
   vkVFS ();
+  bool LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath);
 
   static vkString ExtractSymbol (const vkString &path, unsigned idx, unsigned &length);
 

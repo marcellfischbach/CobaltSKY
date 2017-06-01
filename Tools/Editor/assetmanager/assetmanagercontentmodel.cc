@@ -7,6 +7,7 @@
 #include <QMimeData>
 #include <mimehelper.hh>
 #include <valkyrie/core/ifile.hh>
+#include <valkyrie/core/vkfileinfo.hh>
 #include <valkyrie/core/vkvfs.hh>
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <QDomDocument>
@@ -15,14 +16,15 @@
 class AssetManagerContentModelEntry
 {
 public:
-  AssetManagerContentModelEntry(const QDir &dir, const QString &fileName)
-    : m_dir(dir)
-    , m_entryName(fileName)
+  AssetManagerContentModelEntry(const vkResourceLocator &locator)
+    : m_locator(locator)
   {
-    QString fn = m_dir.absoluteFilePath(m_entryName);
-    m_fileName = (const char*)fn.toLatin1();
-    vkString res = Editor::Get()->ConvertToResourcePath(m_fileName);
-    vkResourceLocator previewLocator(res, "preview");
+    vkFileInfo info(locator.GetResourceFile());
+
+    m_entryName = QString(info.GetName().c_str());
+    printf("EntryName: %s\n", info.GetName().c_str());
+
+    vkResourceLocator previewLocator(locator, "preview");
     EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
     if (editorImage)
     {
@@ -38,12 +40,6 @@ public:
     }
   }
 
-  vkString GetFileName() const
-  {
-    return  m_fileName;
-
-  }
-
   const QPixmap &GetIcon() const
   {
     return m_pixmap;
@@ -54,12 +50,15 @@ public:
     return m_entryName;
   }
 
+  const vkResourceLocator &GetLocator() const
+  {
+    return m_locator;
+  }
 
 private:
-  QDir m_dir;
   QString m_entryName;
   QPixmap m_pixmap;
-  vkString m_fileName;
+  vkResourceLocator m_locator;
 };
 
 #define FROM_INDEX(e) reinterpret_cast<AssetManagerContentModelEntry*>(e.internalPointer());
@@ -68,7 +67,6 @@ private:
 AssetManagerContentModel::AssetManagerContentModel()
   : QAbstractItemModel()
 {
-  SetDir(QDir());
 }
 
 AssetManagerContentModel::~AssetManagerContentModel()
@@ -76,22 +74,37 @@ AssetManagerContentModel::~AssetManagerContentModel()
   CleanupEntries();
 }
 
-void AssetManagerContentModel::SetDir(const QDir &dir)
+
+void AssetManagerContentModel::SetResourceLocator(const vkResourceLocator &locator)
 {
-  if (dir == m_dir)
+  if (m_locator == locator)
   {
     return;
   }
+
+
+  m_locator = locator;
+  vkString absFileName = "";
+  if (!locator.GetResourceEntry().empty())
+  {
+    absFileName = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  }
+  else
+  {
+    absFileName = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile());
+  }
+
   beginResetModel();
   CleanupEntries();
-
-  m_dir = dir;
+  QDir dir (QString(absFileName.c_str()));
   QStringList nameFilters;
   nameFilters.append("*.xasset");
   QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
   for (const QString &fileName : fileNames)
   {
-    m_entries.push_back(new AssetManagerContentModelEntry(m_dir, fileName));
+    vkString resourceFileName = locator.GetResourceFile() + "/" + vkString((const char*)fileName.toLatin1());
+    vkResourceLocator fileLocator(resourceFileName, "", locator.GetResourceEntry());
+    m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
   }
 
   endResetModel();
@@ -172,10 +185,13 @@ QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) co
   const QModelIndex &index = indexes[0];
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
 
+  const vkResourceLocator &locator = entry->GetLocator();
+  const vkClass *cls = vkResourceManager::Get()->EvalClass(locator);
+
   QMimeData *data = new QMimeData();
-  MimeHelper::PutResourceLocatorMimeData(data, ExtractResourceName(entry->GetFileName()));
-  MimeHelper::PutResourceTypeMimeData(data, ReadType(entry->GetFileName()));
-  MimeHelper::PutClassMimeData(data, ReadClass(entry->GetFileName()));
+  MimeHelper::PutResourceLocatorMimeData(data, locator.GetResourceFile());
+  MimeHelper::PutResourceTypeMimeData(data, ReadType(locator));
+  MimeHelper::PutClassMimeData(data, cls);
   return data;
 }
 
@@ -189,32 +205,27 @@ Qt::ItemFlags AssetManagerContentModel::flags(const QModelIndex &index) const
     return defaultFlags;
 }
 
-vkString AssetManagerContentModel::GetEntry(const QModelIndex &index) const
+vkResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index) const
 {
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
   if (!entry)
   {
-    return "";
+    return vkResourceLocator();
   }
-  return entry->GetFileName();
+  return entry->GetLocator();
 }
 
-vkString AssetManagerContentModel::ExtractResourceName(const vkString &fileName) const
+vkString AssetManagerContentModel::ReadType(const vkResourceLocator &locator) const
 {
-  return Editor::Get()->ConvertToResourcePath(fileName);
-}
-
-vkString AssetManagerContentModel::ReadType(const vkString &fileName) const
-{
-
-  QFile file(QString(fileName.c_str()));
+  vkString path = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  QFile file(QString(path.c_str()));
   file.open(QIODevice::ReadOnly);
   QDomDocument doc;
   QString errorMesage;
   int line, column;
   if (!doc.setContent(&file, &errorMesage, &line, &column))
   {
-    printf("unable to parse %s '%s' %d:%d\n", fileName.c_str(), (const char*)errorMesage.toLatin1(), line, column);
+    printf("unable to parse %s '%s' %d:%d\n", path.c_str(), (const char*)errorMesage.toLatin1(), line, column);
     return "";
   }
 
@@ -237,10 +248,4 @@ vkString AssetManagerContentModel::ReadType(const vkString &fileName) const
   }
 
   return vkString((const char*)typeElement.tagName().toLatin1());
-}
-
-const vkClass *AssetManagerContentModel::ReadClass(const vkString &fileName) const
-{
-  vkString resourceName = Editor::Get()->ConvertToResourcePath(fileName);
-  return vkResourceManager::Get()->EvalClass(vkResourceLocator(resourceName));
 }
