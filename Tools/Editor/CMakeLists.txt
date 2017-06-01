@@ -70,6 +70,10 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagernewhandler.hh
     assetmanager/assetmanagernewmanager.cc
     assetmanager/assetmanagernewmanager.hh
+    assetmanager/assetmanagerrenamedialog.cc
+    assetmanager/assetmanagerrenamedialog.hh
+    assetmanager/assetmanagerrenamer.cc
+    assetmanager/assetmanagerrenamer.hh
     assetmanager/assetmanagerresourcescanner.cc
     assetmanager/assetmanagerresourcescanner.hh
     assetmanager/assetmanagerwidget.cc
@@ -78,6 +82,7 @@ set(ASSETMANAGER_SOURCES
 
 set(ASSETMANAGER_UI
     assetmanager/assetmanagerwidget.ui
+    assetmanager/assetmanagerrenamedialog.ui
     )
 
 source_group(

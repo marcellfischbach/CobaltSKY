@@ -21,6 +21,7 @@ QString ShaderGraphEditorNewHandler::GetTypeName() const
 
 bool ShaderGraphEditorNewHandler::CreateNewAsset(const QDir &dir, const QString &assetName)
 {
+  printf("Create new shader graph: %s\n", (const char*)assetName.toLatin1());
   QString filePath = dir.absoluteFilePath(assetName + ".xasset");
   QFile file(filePath);
   if (!file.open(QIODevice::WriteOnly))

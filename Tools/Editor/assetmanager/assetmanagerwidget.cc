@@ -73,6 +73,16 @@ void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
   OpenAsset(locator);
 }
 
+#include <QMenu>
+
+void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &pos)
+{
+  QMenu menu;
+
+  menu.addAction("");
+//  menu.exec(mapToGlobal(pos));
+}
+
 void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
 {
   QDomDocument doc("mydocument");
@@ -112,13 +122,12 @@ void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
 void AssetManagerWidget::on_pbNewAsset_clicked(bool)
 {
   QMenu menu(m_gui.pbNewAsset);
-  std::map<QAction*, AssetManagerNewHandler*> actions;
 
   const std::vector<AssetManagerNewHandler*> &handlers = AssetManagerNewManager::Get()->GetHandlers();
   for (AssetManagerNewHandler* handler : handlers)
   {
     QAction *action = menu.addAction(handler->GetTypeName());
-    actions[action] = handler;
+    action->setData(QVariant::fromValue<void*>(handler));
   }
   QPoint pos = m_gui.pbNewAsset->mapToGlobal(QPoint(0, 0));
   QAction *action = menu.exec(QCursor::pos());
@@ -127,7 +136,7 @@ void AssetManagerWidget::on_pbNewAsset_clicked(bool)
     return;
   }
 
-  AssetManagerNewHandler *handler = actions[action];
+  AssetManagerNewHandler *handler = static_cast<AssetManagerNewHandler*>(action->data().value<void*>());
   if (handler)
   {
     handler->CreateNewAsset(m_currentDir, "New_" + handler->GetTypeName());

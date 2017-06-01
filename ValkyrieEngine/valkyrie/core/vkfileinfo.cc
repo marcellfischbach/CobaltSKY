@@ -55,7 +55,11 @@ vkFileInfo::vkFileInfo (const std::string &filename)
     tmpname[i] = char_to_lower (tmpname[i]);
   }
 
-  if (locptr)
+  if (!nameptr)
+  {
+    m_name = locptr;
+  }
+  else if (locptr)
   {
     m_location = locptr;
   }
