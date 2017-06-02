@@ -2,8 +2,9 @@
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <assetmanager/assetmanagerfoldermodel.hh>
-#include <assetmanager/assetmanagernewhandler.hh>
-#include <assetmanager/assetmanagernewmanager.hh>
+#include <assetmanager/assetmanageraction.hh>
+#include <assetmanager/assetmanageractionmanager.hh>
+#include <assetmanager/actions/assetmanagernewaction.hh>
 #include <assetdescriptor.hh>
 #include <editor.hh>
 #include <valkyrie/core/vkvfs.hh>
@@ -14,6 +15,7 @@
 
 AssetManagerWidget::AssetManagerWidget()
   : QWidget()
+  , m_logger("AssetManagerWidget")
 {
   m_gui.setupUi(this);
 
@@ -73,14 +75,26 @@ void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
   OpenAsset(locator);
 }
 
-#include <QMenu>
-
 void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 {
   QMenu menu;
+  FillStdMenu(&menu);
 
-  menu.addAction("");
-//  menu.exec(mapToGlobal(pos));
+  QMenu *newMenu = menu.addMenu(tr("New"));
+  FillNewMenu(newMenu);
+
+
+  QAction *action = menu.exec(QCursor::pos());
+  if (!action)
+  {
+    return;
+  }
+
+  AssetManagerAction *handler = static_cast<AssetManagerAction*>(action->data().value<void*>());
+  if (handler)
+  {
+    handler->PerformAction(this);
+  }
 }
 
 void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
@@ -118,17 +132,26 @@ void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
   Editor::Get()->OpenAsset(descriptor);
 }
 
+const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelectedAssets() const
+{
+  QList<const AssetManagerContentModelEntry*> entries;
+  for (auto index : m_gui.listView->selectionModel()->selection().indexes())
+  {
+    const AssetManagerContentModelEntry *entry = m_contentModel->GetEntry(index);
+    if (entry)
+    {
+      entries.append(entry);
+    }
+  }
+  return entries;
+}
+
 
 void AssetManagerWidget::on_pbNewAsset_clicked(bool)
 {
   QMenu menu(m_gui.pbNewAsset);
+  FillNewMenu(&menu);
 
-  const std::vector<AssetManagerNewHandler*> &handlers = AssetManagerNewManager::Get()->GetHandlers();
-  for (AssetManagerNewHandler* handler : handlers)
-  {
-    QAction *action = menu.addAction(handler->GetTypeName());
-    action->setData(QVariant::fromValue<void*>(handler));
-  }
   QPoint pos = m_gui.pbNewAsset->mapToGlobal(QPoint(0, 0));
   QAction *action = menu.exec(QCursor::pos());
   if (!action)
@@ -136,10 +159,38 @@ void AssetManagerWidget::on_pbNewAsset_clicked(bool)
     return;
   }
 
-  AssetManagerNewHandler *handler = static_cast<AssetManagerNewHandler*>(action->data().value<void*>());
+  AssetManagerAction *handler = static_cast<AssetManagerAction*>(action->data().value<void*>());
   if (handler)
   {
-    handler->CreateNewAsset(m_currentDir, "New_" + handler->GetTypeName());
+    handler->PerformAction(this);
   }
 }
 
+void AssetManagerWidget::FillStdMenu(QMenu *menu)
+{
+  const std::vector<AssetManagerAction*> &actions = AssetManagerActionManager::Get()->GetActions();
+  for (AssetManagerAction* action : actions)
+  {
+    if (action->ShouldShow(this))
+    {
+      QAction* qAction = menu->addAction(action->GetMenuEntryName(this));
+      qAction->setEnabled(action->IsEnabled(this));
+      qAction->setData(QVariant::fromValue<void*>(action));
+    }
+  }
+}
+
+void AssetManagerWidget::FillNewMenu(QMenu *menu)
+{
+  const std::vector<AssetManagerNewAction*> &actions = AssetManagerActionManager::Get()->GetNewActions();
+  for (AssetManagerNewAction* action : actions)
+  {
+    if (action->ShouldShow(this))
+    {
+      QAction* qAction = menu->addAction(action->GetMenuEntryName(this));
+      qAction->setEnabled(action->IsEnabled(this));
+      qAction->setData(QVariant::fromValue<void*>(action));
+    }
+  }
+
+}

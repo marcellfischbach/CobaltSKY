@@ -27,6 +27,8 @@ public:
   virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
   vkResourceLocator GetLocator(const QModelIndex &index) const;
+
+  const AssetManagerContentModelEntry *GetEntry(const QModelIndex &index) const;
 private:
   void CleanupEntries();
   vkString ReadType(const vkResourceLocator &fileName) const;

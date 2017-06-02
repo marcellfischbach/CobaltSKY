@@ -12,6 +12,13 @@ public:
   AssetManagerRenameDialog(QWidget *parent = 0);
   virtual ~AssetManagerRenameDialog();
 
+  void SetName(const QString &name);
+  QString GetName() const;
+
+private slots:
+void on_pbOK_clicked();
+void on_pbCancel_clicked();
+
 private:
   Ui::AssetManagerRenameDialog m_gui;
 };

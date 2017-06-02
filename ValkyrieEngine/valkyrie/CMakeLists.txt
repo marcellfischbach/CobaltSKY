@@ -55,6 +55,8 @@ set(SOURCE_CORE
     core/vkfilestd.hh
     core/vklibrary.cc
     core/vklibrary.hh
+    core/vklogger.cc
+    core/vklogger.hh
     core/vkresourcelocator.cc
     core/vkresourcelocator.hh
     core/vkresourcemanager.cc

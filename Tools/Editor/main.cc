@@ -5,6 +5,7 @@
 #include <qsurfaceformat.h>
 
 #include <valkyrie/vkengine.hh>
+#include <valkyrie/core/vklogger.hh>
 #include <valkyrie/core/vksettings.hh>
 #include <valkyrie/core/vkvfs.hh>
 
@@ -13,8 +14,6 @@
 
 int main (int argc, char **argv)
 {
-
-
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 

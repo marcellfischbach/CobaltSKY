@@ -93,6 +93,9 @@
       </attribute>
      </widget>
      <widget class="QListView" name="listView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="dragEnabled">
        <bool>true</bool>
       </property>
@@ -101,6 +104,9 @@
       </property>
       <property name="defaultDropAction">
        <enum>Qt::IgnoreAction</enum>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
       </property>
       <property name="flow">
        <enum>QListView::LeftToRight</enum>

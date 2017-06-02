@@ -50,6 +50,12 @@ public:
     int m_priority;
   };
 
+  enum ExistenceCheck
+  {
+    CheckExistence,
+    DontCheckExistence,
+  };
+
   static vkVFS* Get ();
 
   bool LoadConfig(const std::string &configFilename);
@@ -63,7 +69,7 @@ public:
 
   vkString GetPathResolution (const vkString &path) const;
   vkString GetAbsolutePath(const vkString &path) const;
-  vkString GetAbsolutePath(const vkString &path, const vkString &entryName) const;
+  vkString GetAbsolutePath(const vkString &path, const vkString &entryName, ExistenceCheck checkExistence = CheckExistence) const;
 
   /**
   * \name Functions for opening files

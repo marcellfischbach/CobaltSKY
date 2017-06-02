@@ -272,7 +272,7 @@ vkString vkVFS::GetAbsolutePath(const vkString &path) const
   return "";
 }
 
-vkString vkVFS::GetAbsolutePath(const vkString &path, const vkString &entryName) const
+vkString vkVFS::GetAbsolutePath(const vkString &path, const vkString &entryName, ExistenceCheck checkExistence) const
 {
   if (entryName.empty())
   {
@@ -284,7 +284,7 @@ vkString vkVFS::GetAbsolutePath(const vkString &path, const vkString &entryName)
     if (entry.GetName() == entryName)
     {
       vkString absPath = entry.GetAbsPath() + "/" + finalName;
-      if (vkFileInfo::Exists(absPath))
+      if (vkFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
       {
         return absPath;
       }

@@ -1,6 +1,7 @@
 
 
 #include <assetmanager/assetmanagercontentmodel.hh>
+#include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <editor.hh>
 #include <editorimage.hh>
 #include <QPixmap>
@@ -12,54 +13,6 @@
 #include <valkyrie/core/vkresourcemanager.hh>
 #include <QDomDocument>
 #include <QFile>
-
-class AssetManagerContentModelEntry
-{
-public:
-  AssetManagerContentModelEntry(const vkResourceLocator &locator)
-    : m_locator(locator)
-  {
-    vkFileInfo info(locator.GetResourceFile());
-
-    m_entryName = QString(info.GetName().c_str());
-    printf("EntryName: %s\n", info.GetName().c_str());
-
-    vkResourceLocator previewLocator(locator, "preview");
-    EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
-    if (editorImage)
-    {
-      QImage img = editorImage->GetImage();
-      if (!img.isNull())
-      {
-        m_pixmap = QPixmap::fromImage(img);
-      }
-    }
-    if (m_pixmap.isNull())
-    {
-      m_pixmap = QPixmap(":/icons/resources/UnknownAsset64.png");
-    }
-  }
-
-  const QPixmap &GetIcon() const
-  {
-    return m_pixmap;
-  }
-
-  const QString &GetEntryName() const
-  {
-    return m_entryName;
-  }
-
-  const vkResourceLocator &GetLocator() const
-  {
-    return m_locator;
-  }
-
-private:
-  QString m_entryName;
-  QPixmap m_pixmap;
-  vkResourceLocator m_locator;
-};
 
 #define FROM_INDEX(e) reinterpret_cast<AssetManagerContentModelEntry*>(e.internalPointer());
 #define CONST_FROM_INDEX(e) reinterpret_cast<const AssetManagerContentModelEntry*>(e.internalPointer());
@@ -213,6 +166,11 @@ vkResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index)
     return vkResourceLocator();
   }
   return entry->GetLocator();
+}
+
+const AssetManagerContentModelEntry *AssetManagerContentModel::GetEntry(const QModelIndex &index) const
+{
+  return CONST_FROM_INDEX(index);
 }
 
 vkString AssetManagerContentModel::ReadType(const vkResourceLocator &locator) const

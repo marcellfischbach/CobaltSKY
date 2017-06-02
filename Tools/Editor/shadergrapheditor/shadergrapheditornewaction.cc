@@ -1,26 +1,39 @@
 
-#include <shadergrapheditor/shadergrapheditornewhandler.hh>
+#include <shadergrapheditor/shadergrapheditornewaction.hh>
+#include <QString>
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
 
-ShaderGraphEditorNewHandler::ShaderGraphEditorNewHandler()
+ShaderGraphEditorNewAction::ShaderGraphEditorNewAction()
 {
 
 }
 
-ShaderGraphEditorNewHandler::~ShaderGraphEditorNewHandler()
+ShaderGraphEditorNewAction::~ShaderGraphEditorNewAction()
 {
 
 }
 
-QString ShaderGraphEditorNewHandler::GetTypeName() const
+bool ShaderGraphEditorNewAction::ShouldShow(AssetManagerWidget *assetManager) const
 {
-  return "Material";
+  return true;
 }
 
-bool ShaderGraphEditorNewHandler::CreateNewAsset(const QDir &dir, const QString &assetName)
+bool ShaderGraphEditorNewAction::IsEnabled(AssetManagerWidget *assetManager) const
 {
+  return true;
+}
+
+QString ShaderGraphEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
+{
+  return QString("New material");
+}
+
+bool ShaderGraphEditorNewAction::PerformAction(AssetManagerWidget *assetManager) const
+{
+  return true;
+  /*
   printf("Create new shader graph: %s\n", (const char*)assetName.toLatin1());
   QString filePath = dir.absoluteFilePath(assetName + ".xasset");
   QFile file(filePath);
@@ -48,4 +61,5 @@ bool ShaderGraphEditorNewHandler::CreateNewAsset(const QDir &dir, const QString 
   file.write(content.toLatin1());
   file.close();
   return true;
+  */
 }

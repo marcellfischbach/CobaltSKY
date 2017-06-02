@@ -61,17 +61,17 @@ source_group(
     )
 
 set(ASSETMANAGER_SOURCES
+    assetmanager/assetmanageraction.hh
+    assetmanager/assetmanageractionmanager.cc
+    assetmanager/assetmanageractionmanager.hh
     assetmanager/assetmanagercontentmodel.cc
     assetmanager/assetmanagercontentmodel.hh
+    assetmanager/assetmanagercontentmodelentry.cc
+    assetmanager/assetmanagercontentmodelentry.hh
     assetmanager/assetmanagerdock.cc
     assetmanager/assetmanagerdock.hh
     assetmanager/assetmanagerfoldermodel.cc
     assetmanager/assetmanagerfoldermodel.hh
-    assetmanager/assetmanagernewhandler.hh
-    assetmanager/assetmanagernewmanager.cc
-    assetmanager/assetmanagernewmanager.hh
-    assetmanager/assetmanagerrenamedialog.cc
-    assetmanager/assetmanagerrenamedialog.hh
     assetmanager/assetmanagerrenamer.cc
     assetmanager/assetmanagerrenamer.hh
     assetmanager/assetmanagerresourcescanner.cc
@@ -82,7 +82,6 @@ set(ASSETMANAGER_SOURCES
 
 set(ASSETMANAGER_UI
     assetmanager/assetmanagerwidget.ui
-    assetmanager/assetmanagerrenamedialog.ui
     )
 
 source_group(
@@ -90,6 +89,25 @@ source_group(
     FILES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_UI}
+    )
+
+set(ASSETMANAGER_ACTIONS_SOURCES
+    assetmanager/actions/assetmanagerrenameaction.cc
+    assetmanager/actions/assetmanagerrenameaction.hh
+    assetmanager/actions/assetmanagerrenamedialog.cc
+    assetmanager/actions/assetmanagerrenamedialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_UI
+    assetmanager/actions/assetmanagerrenamedialog.ui
+    )
+
+
+source_group(
+    "editor\\assetmanager\\actions"
+    FILES
+    ${ASSETMANAGER_ACTIONS_SOURCES}
+    ${ASSETMANAGER_ACTIONS_UI}
     )
 
 set(COMPONENTS_SOURCES
@@ -224,12 +242,10 @@ set(SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor/shadergrapheditormeta.hh
     shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
     shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
-    shadergrapheditor/shadergrapheditornewhandler.cc
-    shadergrapheditor/shadergrapheditornewhandler.hh
+    shadergrapheditor/shadergrapheditornewaction.cc
+    shadergrapheditor/shadergrapheditornewaction.hh
     shadergrapheditor/shadergrapheditornode.cc
     shadergrapheditor/shadergrapheditornode.hh
-    shadergrapheditor/shadergrapheditornewhandler.cc
-    shadergrapheditor/shadergrapheditornewhandler.hh
     shadergrapheditor/shadergrapheditoroutliner.cc
     shadergrapheditor/shadergrapheditoroutliner.hh
     shadergrapheditor/shadergrapheditoroutlinertablemodel.cc
@@ -296,11 +312,13 @@ source_group(
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
+    ${ASSETMANAGER_ACTIONS_UI}
     ${COMPONENTS_UI}
     ${SAMPLEREDITOR_UI}
     ${SHADERGRAPHEDITOR_UI}
     ${TEXTUREEDITOR_UI}
     )
+
 
 qt5_wrap_ui(ALL_UI_SOURCES ${ALL_UI})
 qt5_add_resources(RESOURCES_SOURCES resources.qrc)
@@ -308,6 +326,7 @@ qt5_add_resources(RESOURCES_SOURCES resources.qrc)
 set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
+    ${ASSETMANAGER_ACTIONS_SOURCES}
     ${COMPONENTS_SOURCES}
     ${LOADERS_SOURCES}
     ${NODEGRAPH_SOURCES}
