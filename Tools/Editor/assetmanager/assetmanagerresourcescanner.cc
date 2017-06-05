@@ -18,36 +18,35 @@ void AssetManagerResourceScanner::Scan()
   for (vkSize i = 0, in = vkVFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
     const vkVFS::Entry &entry = vkVFS::Get()->GetEntry(i);
-    Scan(entry.GetAbsPath(), "");
+    Scan(entry, "");
   }
 
-  for (const std::string &assetName : m_allResourceNames)
+  for (const vkResourceLocator &assetName : m_allResourceLocators)
   {
     ScanReference(assetName);
   }
 }
 
 
-void AssetManagerResourceScanner::AddResourceName(const std::string &resourceName)
+void AssetManagerResourceScanner::AddResource(const vkResourceLocator &resource)
 {
-  m_allResourceNames.insert(resourceName);
+  m_allResourceLocators.insert(resource);
 }
 
-void AssetManagerResourceScanner::Scan(const vkString &rootPath, const vkString &relPath)
+void AssetManagerResourceScanner::Scan(const vkVFS::Entry &entry, const vkString &relPath)
 {
-  vkString absPath = rootPath + "/" + relPath;
+  vkString absPath = entry.GetAbsPath() + "/" + relPath;
   QDir dir(QString(absPath.c_str()));
 
   QStringList filter;
   filter << "*.xasset";
-  
-  QStringList entries = dir.entryList(filter, QDir::Files);
-  for (const QString &entry : entries)
+
+  QStringList entryFiles = dir.entryList(filter, QDir::Files);
+  for (const QString &entryFile : entryFiles)
   {
-    vkString assetFileName = relPath + "/" + vkString((const char*)entry.toLatin1());
-    vkResourceLocator locator(assetFileName);
-    printf("Asset: %s\n", locator.GetResourceFile().c_str());
-    m_allResourceNames.insert(locator.GetResourceFile());
+    vkString assetFileName = relPath + "/" + vkString((const char*)entryFile.toLatin1());
+    //m_allResourceLocators.insert(vkResourceLocator(assetFileName, "", entry.GetName()));
+    m_allResourceLocators.insert(vkResourceLocator(assetFileName));
   }
 
 
@@ -55,14 +54,14 @@ void AssetManagerResourceScanner::Scan(const vkString &rootPath, const vkString 
   for (const QString &path : paths)
   {
     vkString resourcePath = relPath + "/" + vkString((const char*)path.toLatin1());
-    Scan(rootPath, resourcePath);
+    Scan(entry, resourcePath);
   }
 
 }
 
-void AssetManagerResourceScanner::ScanReference(const std::string &assetName)
+void AssetManagerResourceScanner::ScanReference(const vkResourceLocator &locator)
 {
-  iFile *file = vkVFS::Get()->Open(assetName);
+  iFile *file = vkVFS::Get()->Open(locator);
   if (!file)
   {
     return;
@@ -82,29 +81,30 @@ void AssetManagerResourceScanner::ScanReference(const std::string &assetName)
   if (document.Error())
   {
     printf("Unable to parse xml file: %s\n%s\n",
-      assetName.c_str(), document.ErrorDesc());
+      locator.GetDebugName(), document.ErrorDesc());
     return;
   }
 
-  ScanReference(assetName, document.RootElement());
+  ScanReference(locator, document.RootElement());
+
 }
 
-void AssetManagerResourceScanner::ScanReference(const std::string &assetName, const TiXmlElement *element)
+void AssetManagerResourceScanner::ScanReference(const vkResourceLocator &locator, const TiXmlElement *element)
 {
   const char *textStr = element->GetText();
   if (textStr)
   {
     std::string text(textStr);
-    vkResourceLocator locator(text);
-    std::set<std::string>::iterator it = m_allResourceNames.find(locator.GetResourceFile());
-    if (it != m_allResourceNames.end())
+    vkResourceLocator refLocator(text);
+    std::set<vkResourceLocator>::iterator it = m_allResourceLocators.find(refLocator);
+    if (it != m_allResourceLocators.end())
     {
-      m_dependencies.insert(std::pair<std::string, std::string>(assetName, locator.GetResourceFile()));
+      m_references.insert(std::pair<vkResourceLocator, vkResourceLocator>(locator, refLocator));
     }
   }
 
   for (const TiXmlElement *child = element->FirstChildElement(); child; child = child->NextSiblingElement())
   {
-    ScanReference(assetName, child);
+    ScanReference(locator, child);
   }
 }

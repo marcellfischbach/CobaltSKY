@@ -66,6 +66,16 @@ vkResourceLocator::vkResourceLocator(const vkResourceLocator &resource, const vk
   FixResourceFile();
 }
 
+vkResourceLocator vkResourceLocator::AsAnonymous() const
+{
+  return vkResourceLocator(m_resourceFile, m_resourceName, "");
+}
+
+vkResourceLocator vkResourceLocator::AsFileName() const
+{
+  return vkResourceLocator(m_resourceFile, "", "");
+}
+
 const vkString &vkResourceLocator::GetResourceFile() const
 {
   return m_resourceFile;
@@ -81,6 +91,19 @@ const vkString &vkResourceLocator::GetResourceEntry() const
   return m_resourceEntry;
 }
 
+vkString vkResourceLocator::GetText() const
+{
+  vkString result = m_resourceFile;
+  if (!m_resourceName.empty())
+  {
+    result += std::string(":") + m_resourceName;
+  }
+  if (!m_resourceEntry.empty())
+  {
+    result += std::string("@") + m_resourceEntry;
+  }
+  return result;
+}
 
 vkString vkResourceLocator::GetDebugName() const
 {

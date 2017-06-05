@@ -3,6 +3,7 @@
 
 #include <valkyrie/vkexport.hh>
 #include <valkyrie/core/ifile.hh>
+#include <valkyrie/core/vkresourcelocator.hh>
 #include <valkyrie/core/vkstring.hh>
 #include <map>
 #include <vector>
@@ -70,13 +71,14 @@ public:
   vkString GetPathResolution (const vkString &path) const;
   vkString GetAbsolutePath(const vkString &path) const;
   vkString GetAbsolutePath(const vkString &path, const vkString &entryName, ExistenceCheck checkExistence = CheckExistence) const;
-
+  vkString GetAbsolutePath(const vkResourceLocator &locator, ExistenceCheck checkExistence = CheckExistence) const;
   /**
   * \name Functions for opening files
   * @{
   */
   iFile* Open(const vkString& filename, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
   iFile* Open(const vkString& filename, const vkString &entryName, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
+  iFile *Open(const vkResourceLocator &locator, vkOpenMode mode = eOM_Read, vkTextMode textMode = eTM_Binary);
   /**
   * @}
   */

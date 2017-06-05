@@ -22,12 +22,12 @@ void Project::Close()
 }
 
 
-ProjectDependencyTree &Project::GetDependencyTree()
+ProjectReferenceTree &Project::GetDependencyTree()
 {
   return m_dependencyTree;
 }
 
-const ProjectDependencyTree &Project::GetDependencyTree() const
+const ProjectReferenceTree &Project::GetDependencyTree() const
 {
   return m_dependencyTree;
 }

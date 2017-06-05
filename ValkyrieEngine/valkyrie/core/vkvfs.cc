@@ -294,6 +294,30 @@ vkString vkVFS::GetAbsolutePath(const vkString &path, const vkString &entryName,
   return "";
 }
 
+
+vkString vkVFS::GetAbsolutePath(const vkResourceLocator &locator, ExistenceCheck checkExistence) const
+{
+  if (locator.GetResourceEntry().empty())
+  {
+    return GetAbsolutePath(locator.GetResourceFile());
+  }
+  vkString finalName = GetPathResolution(locator.GetResourceFile());
+  for (auto entry : m_entries)
+  {
+    if (entry.GetName() == locator.GetResourceEntry())
+    {
+      vkString absPath = entry.GetAbsPath() + "/" + finalName;
+      if (vkFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
+      {
+        return absPath;
+      }
+      break;
+    }
+  }
+  return "";
+}
+
+
 //void vkVFS::SetRootPath(const vkString &rootPath)
 //{
 //  m_rootPath = rootPath;
@@ -361,6 +385,16 @@ iFile *vkVFS::Open(const vkString &filename, const vkString &entryName, vkOpenMo
   return 0;
 }
 
+
+iFile *vkVFS::Open(const vkResourceLocator &locator, vkOpenMode mode, vkTextMode textMode)
+{
+  if (locator.GetResourceEntry().empty())
+  {
+    return Open(locator.GetResourceFile());
+  }
+  
+  return Open(locator.GetResourceFile(), locator.GetResourceEntry());
+}
 
 
 const vkVFS::Entry *vkVFS::FindEntryForFilename(const std::string &filename) const

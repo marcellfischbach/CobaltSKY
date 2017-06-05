@@ -1,7 +1,7 @@
 #pragma once
 
 #include <valkyrie/core/vkstring.hh>
-#include <project/projectdependencytree.hh>
+#include <project/projectreferencetree.hh>
 
 
 class Project
@@ -12,9 +12,9 @@ public:
   void Open(const std::string &projectPath);
   void Close();
 
-  ProjectDependencyTree &GetDependencyTree();
-  const ProjectDependencyTree &GetDependencyTree() const;
+  ProjectReferenceTree &GetDependencyTree();
+  const ProjectReferenceTree &GetDependencyTree() const;
 
 private:
-  ProjectDependencyTree m_dependencyTree;
+  ProjectReferenceTree m_dependencyTree;
 };

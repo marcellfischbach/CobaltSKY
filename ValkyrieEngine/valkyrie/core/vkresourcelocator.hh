@@ -11,10 +11,14 @@ public:
   explicit vkResourceLocator(const vkResourceLocator &resource, const vkString &resourceName);
   vkResourceLocator(const vkResourceLocator &other);
 
+  vkResourceLocator AsAnonymous() const;
+  vkResourceLocator AsFileName() const;
+
   const vkString &GetResourceFile() const;
   const vkString &GetResourceName() const;
   const vkString &GetResourceEntry() const;
 
+  vkString GetText() const;
   vkString GetDebugName() const;
 
   bool operator< (const vkResourceLocator &o) const;

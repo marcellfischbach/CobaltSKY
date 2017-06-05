@@ -199,8 +199,8 @@ source_group(
 set(PROJECT_SOURCES
     project/project.cc
     project/project.hh
-    project/projectdependencytree.cc
-    project/projectdependencytree.hh
+    project/projectreferencetree.cc
+    project/projectreferencetree.hh
     )
 
 source_group(
