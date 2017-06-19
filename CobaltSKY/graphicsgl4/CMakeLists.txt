@@ -125,15 +125,15 @@ set(ALL_SOURCES
 	)
 
 
-add_library(ValkyrieEngine-GraphicsGL4 SHARED
+add_library(CobaltSKY-GraphicsGL4 SHARED
 	${ALL_SOURCES}
 	)
 
-target_link_libraries(ValkyrieEngine-GraphicsGL4
-  ValkyrieEngine
+target_link_libraries(CobaltSKY-GraphicsGL4
+  CobaltSKY
 	${OPENGL_LIBRARIES}
 	${GLEW_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(ValkyrieEngine-GraphicsGL4 graphicsgl4 CSGRAPHICSGL4_API ALL_SOURCES)
+CS_INSTALL_MOCCER(CobaltSKY-GraphicsGL4 graphicsgl4 CSGRAPHICSGL4_API ALL_SOURCES)
 

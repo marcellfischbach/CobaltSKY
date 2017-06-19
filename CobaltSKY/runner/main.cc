@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 #else
   //posX = 2000;
 #endif
-  if (!window->InitializeOpenGL("ValkyrieEngine Runner", 1366, 768, posX, posY, false, 4, 4))
+  if (!window->InitializeOpenGL("CobaltSKY Runner", 1366, 768, posX, posY, false, 4, 4))
   {
     delete window;
     return -1;

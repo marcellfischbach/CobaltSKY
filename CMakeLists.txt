@@ -2,18 +2,18 @@
 cmake_minimum_required(VERSION 3.3)
 
 
-project(ValkyrieEngine)
+project(CobaltSKY)
 
 
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
-set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CobaltSKY_BINARY_DIR}/bin)
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CobaltSKY_BINARY_DIR}/bin)
 
 
 #function(CS_MOC prefix api inlist outlist)
@@ -43,14 +43,14 @@ function(CS_INSTALL_MOCCER target prefix api inlist)
 	endforeach(file)
   if (MSVC_IDE)
 		add_custom_command (TARGET ${target} PRE_BUILD
-												COMMAND ${ValkyrieEngine_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} 
+												COMMAND ${CobaltSKY_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} 
 												WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 												)
 
 	else()
 		set(TARGET_NAME "${target}-MOC")
 		add_custom_target(${TARGET_NAME}
-											COMMAND ${ValkyrieEngine_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
+											COMMAND ${CobaltSKY_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
 											WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										)
 		add_dependencies(${target} ${TARGET_NAME})
@@ -66,20 +66,20 @@ endif()
 find_package(OpenGL)
 find_package(PNG)
 
-include(${ValkyrieEngine_SOURCE_DIR}/Scripts/Findassimp.cmake)
-include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindGLEW.cmake)
-include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindSDL2.cmake)
-include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindPhysX3.cmake)
-include(${ValkyrieEngine_SOURCE_DIR}/Scripts/FindBullet.cmake)
+include(${CobaltSKY_SOURCE_DIR}/Scripts/Findassimp.cmake)
+include(${CobaltSKY_SOURCE_DIR}/Scripts/FindGLEW.cmake)
+include(${CobaltSKY_SOURCE_DIR}/Scripts/FindSDL2.cmake)
+include(${CobaltSKY_SOURCE_DIR}/Scripts/FindPhysX3.cmake)
+include(${CobaltSKY_SOURCE_DIR}/Scripts/FindBullet.cmake)
 
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PNG_INCLUDE_DIRS})
 include_directories(${BULLET_INCLUDE_DIRS})
-include_directories(${ValkyrieEngine_SOURCE_DIR}/3rdparty)
-include_directories(${ValkyrieEngine_SOURCE_DIR}/ValkyrieEngine)
-include_directories(${ValkyrieEngine_BINARY_DIR}/ValkyrieEngine)
+include_directories(${CobaltSKY_SOURCE_DIR}/3rdparty)
+include_directories(${CobaltSKY_SOURCE_DIR}/CobaltSKY)
+include_directories(${CobaltSKY_BINARY_DIR}/CobaltSKY)
 
 
 add_subdirectory(3rdparty)
-add_subdirectory(ValkyrieEngine)
+add_subdirectory(CobaltSKY)
 add_subdirectory(Tools)

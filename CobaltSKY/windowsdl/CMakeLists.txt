@@ -26,15 +26,15 @@ set(ALL_SOURCES
 	${SOURCE}
 	)
 
-add_library(ValkyrieEngine-WindowSDL SHARED
+add_library(CobaltSKY-WindowSDL SHARED
 	${ALL_SOURCES}
 	)
 
-target_link_libraries(ValkyrieEngine-WindowSDL
-  ValkyrieEngine
+target_link_libraries(CobaltSKY-WindowSDL
+  CobaltSKY
 	${SDL_LIBRARY}
 	${OPENGL_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(ValkyrieEngine-WindowSDL windowsdl CSWINDOWSDL_API ALL_SOURCES)
+CS_INSTALL_MOCCER(CobaltSKY-WindowSDL windowsdl CSWINDOWSDL_API ALL_SOURCES)
 

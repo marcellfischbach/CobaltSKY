@@ -493,14 +493,14 @@ set(ALL_SOURCES
     )
 
 
-add_library(ValkyrieEngine SHARED
+add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
 
-target_link_libraries(ValkyrieEngine
+target_link_libraries(CobaltSKY
     TiXml
     ${PNG_LIBRARIES}
     )
 
-CS_INSTALL_MOCCER(ValkyrieEngine valkyrie CSE_API ALL_SOURCES)
+CS_INSTALL_MOCCER(CobaltSKY valkyrie CSE_API ALL_SOURCES)
 

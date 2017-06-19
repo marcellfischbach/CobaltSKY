@@ -350,9 +350,9 @@ target_link_libraries(Editor
     Qt5::Widgets
     Qt5::OpenGL
     Qt5::Xml
-    ValkyrieEngine
-    ValkyrieEngine-GraphicsGL4
-    ValkyrieEngine-PhysicsBullet
+    CobaltSKY
+    CobaltSKY-GraphicsGL4
+    CobaltSKY-PhysicsBullet
     ${ASSIMP_LIBRARY}
     )
 

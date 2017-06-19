@@ -44,14 +44,14 @@ source_group(
 	${MOC_SOURCES}
 	)
 
-add_library(ValkyrieEngine-PhysicsBullet SHARED
+add_library(CobaltSKY-PhysicsBullet SHARED
 	${ALL_SOURCES}
 	)
 
-target_link_libraries(ValkyrieEngine-PhysicsBullet
-	ValkyrieEngine
+target_link_libraries(CobaltSKY-PhysicsBullet
+	CobaltSKY
 	${BULLET_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(ValkyrieEngine-PhysicsBullet physicsbullet CSBULLETPHYSICS_API ALL_SOURCES)
+CS_INSTALL_MOCCER(CobaltSKY-PhysicsBullet physicsbullet CSBULLETPHYSICS_API ALL_SOURCES)
 
