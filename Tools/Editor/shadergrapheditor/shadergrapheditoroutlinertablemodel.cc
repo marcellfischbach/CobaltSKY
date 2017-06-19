@@ -1,8 +1,8 @@
 
 #include <shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
-#include <valkyrie/graphics/shadergraph/vksgnode.hh>
-#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/cssgnode.hh>
+#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 
 ShaderGraphEditorOutlinerTableModel::ShaderGraphEditorOutlinerTableModel()
   : QAbstractItemModel()
@@ -16,7 +16,7 @@ ShaderGraphEditorOutlinerTableModel::~ShaderGraphEditorOutlinerTableModel()
 
 }
 
-void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(vkSGShaderGraph *shaderGraph)
+void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(csSGShaderGraph *shaderGraph)
 {
   beginResetModel();
   m_shaderGraph = shaderGraph;
@@ -75,9 +75,9 @@ QVariant ShaderGraphEditorOutlinerTableModel::data(const QModelIndex &index, int
     }
     else 
     {
-      vkSGNode *node = m_shaderGraph->GetNode(index.row() - 1);
-      vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
-      const vkClass *cls = node->GetClass();
+      csSGNode *node = m_shaderGraph->GetNode(index.row() - 1);
+      csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+      const csClass *cls = node->GetClass();
       switch (index.column())
       {
       case 0:
@@ -112,14 +112,14 @@ QVariant ShaderGraphEditorOutlinerTableModel::headerData(int section, Qt::Orient
 }
 
 
-QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(vkSGShaderGraph *graph, int column)
+QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(csSGShaderGraph *graph, int column)
 {
   return createIndex(0, column, (void*)this);
 }
 
-QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(vkSGNode *node, int column)
+QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(csSGNode *node, int column)
 {
-  for (vkSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  for (csSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
     if (m_shaderGraph->GetNode(i) == node)
     {

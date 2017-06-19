@@ -1,13 +1,13 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
+#include <valkyrie/csexport.hh>
 #include <valkyrie/physics/iphysicscharactercontroller.hh>
 #include <valkyrie/physics/iphysicscapsulecharactercontroller.refl.hh>
 
-VK_INTERFACE()
-struct VKE_API iPhysicsCapsuleCharacterController : public VK_SUPER(iPhysicsCharacterController)
+CS_INTERFACE()
+struct CSE_API iPhysicsCapsuleCharacterController : public CS_SUPER(iPhysicsCharacterController)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   virtual ~iPhysicsCapsuleCharacterController() { }
 
   virtual void Initialize(float height, float radius) = 0;

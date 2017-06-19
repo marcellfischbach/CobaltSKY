@@ -2,21 +2,21 @@
 
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <graphicsgl4/gl4programloader.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkProgramGL4Loader : public VK_SUPER(vkBaseXMLLoader)
+CS_CLASS()
+class CSGRAPHICSGL4_API csProgramGL4Loader : public CS_SUPER(csBaseXMLLoader)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkProgramGL4Loader();
-  virtual ~vkProgramGL4Loader();
+  csProgramGL4Loader();
+  virtual ~csProgramGL4Loader();
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
 
 private:
   TiXmlElement *FindTechnique(TiXmlElement *element) const;

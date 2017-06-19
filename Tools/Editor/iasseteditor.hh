@@ -1,15 +1,15 @@
 #pragma once
 
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <assetdescriptor.hh>
 #include <iasseteditor.refl.hh>
 #include <QWidget>
 #include <set>
 
-VK_INTERFACE()
+CS_INTERFACE()
 struct iAssetEditor : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   iAssetEditor() : iObject() { }
   virtual ~iAssetEditor() { }
 
@@ -17,9 +17,9 @@ struct iAssetEditor : public iObject
 
   virtual QWidget *GetWidget() = 0;
 
-  virtual const vkString &GetName() const = 0;
+  virtual const csString &GetName() const = 0;
 
-  virtual const std::set<vkString> &GetVisibleDockItems() const = 0;
+  virtual const std::set<csString> &GetVisibleDockItems() const = 0;
   virtual void PopulateDockItems() = 0;
 
   virtual void CloseRequest () = 0;

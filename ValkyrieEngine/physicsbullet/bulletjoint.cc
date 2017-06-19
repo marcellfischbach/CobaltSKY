@@ -4,7 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-vkBulletJoint::vkBulletJoint(vkPhysicsJointType type)
+csBulletJoint::csBulletJoint(csPhysicsJointType type)
   : m_type(type)
   , m_colliderA(0)
   , m_colliderB(0)
@@ -12,34 +12,34 @@ vkBulletJoint::vkBulletJoint(vkPhysicsJointType type)
 
 }
 
-vkBulletJoint::~vkBulletJoint()
+csBulletJoint::~csBulletJoint()
 {
 
 }
 
 
-vkPhysicsJointType vkBulletJoint::GetType() const
+csPhysicsJointType csBulletJoint::GetType() const
 {
   return m_type;
 }
 
-void vkBulletJoint::SetConstraint(btTypedConstraint *constraint)
+void csBulletJoint::SetConstraint(btTypedConstraint *constraint)
 {
   m_constraint = constraint;
 }
 
-btTypedConstraint *vkBulletJoint::GetConstraint()
+btTypedConstraint *csBulletJoint::GetConstraint()
 {
   return m_constraint;
 }
 
 
-const btTypedConstraint *vkBulletJoint::GetConstraint() const
+const btTypedConstraint *csBulletJoint::GetConstraint() const
 {
   return m_constraint;
 }
 
-void vkBulletJoint::SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDynamicCollider *colliderB)
+void csBulletJoint::SetCollider(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB)
 {
   if (m_colliderA)
   {
@@ -49,8 +49,8 @@ void vkBulletJoint::SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDyna
   {
     m_colliderB->RemoveJoint(this);
   }
-  VK_SET(m_colliderA, colliderA);
-  VK_SET(m_colliderB, colliderB);
+  CS_SET(m_colliderA, colliderA);
+  CS_SET(m_colliderB, colliderB);
   if (m_colliderA)
   {
     m_colliderA->AddJoint(this);
@@ -61,23 +61,23 @@ void vkBulletJoint::SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDyna
   }
 }
 
-iPhysicsDynamicCollider *vkBulletJoint::GetColliderA() const
+iPhysicsDynamicCollider *csBulletJoint::GetColliderA() const
 {
   return m_colliderA;
 }
 
-iPhysicsDynamicCollider *vkBulletJoint::GetColliderB() const
+iPhysicsDynamicCollider *csBulletJoint::GetColliderB() const
 {
   return m_colliderB;
 }
 
-void vkBulletJoint::AttachToScene(vkBulletScene *scene)
+void csBulletJoint::AttachToScene(csBulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->addConstraint(m_constraint, true);
 }
 
-void vkBulletJoint::DetachFromScene(vkBulletScene* scene)
+void csBulletJoint::DetachFromScene(csBulletScene* scene)
 {
   if (m_colliderA)
   {

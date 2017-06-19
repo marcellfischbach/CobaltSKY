@@ -1,13 +1,13 @@
 
 #version 330
 
-in vec4 vk_Position;
-in vec2 vk_TexCoord0;
+in vec4 cs_Position;
+in vec2 cs_TexCoord0;
 
 out vec2 texCoord;
 
 void main ()
 {
-	gl_Position = vk_Position;
-	texCoord = vk_TexCoord0;
+	gl_Position = cs_Position;
+	texCoord = cs_TexCoord0;
 }

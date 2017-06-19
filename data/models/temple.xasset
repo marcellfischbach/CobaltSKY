@@ -1,6 +1,6 @@
 <asset>
   <data>
-    <entityState name="temple" class="vkStaticMeshState">
+    <entityState name="temple" class="csStaticMeshState">
       <mesh>
         <materialSlots>
           <materialSlot name="TempleDirt" id="0"/>

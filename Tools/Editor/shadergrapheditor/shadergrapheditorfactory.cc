@@ -5,7 +5,7 @@
 
 bool ShaderGraphEditorFactory::CanEdit(const AssetDescriptor &descriptor) const
 {
-  return descriptor.GetAssetType() == vkString("shaderGraph");
+  return descriptor.GetAssetType() == csString("shaderGraph");
 }
 
 iAssetEditor *ShaderGraphEditorFactory::CreateEditor(const AssetDescriptor &descriptor) const

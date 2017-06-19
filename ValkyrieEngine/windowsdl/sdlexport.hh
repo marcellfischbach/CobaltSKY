@@ -1,12 +1,12 @@
 
 #pragma once
 
-#ifdef VK_WIN32
+#ifdef CS_WIN32
 
-#ifdef VKWINDOWSDL_EXPORT
-#define VKWINDOWSDL_API __declspec(dllexport)
+#ifdef CSWINDOWSDL_EXPORT
+#define CSWINDOWSDL_API __declspec(dllexport)
 #else
-#define VKWINDOWSDL_API __declspec(dllimport)
+#define CSWINDOWSDL_API __declspec(dllimport)
 #endif
 
 #pragma warning( disable : 4251 )
@@ -14,7 +14,7 @@
 
 #else
 
-#define VKSDL_API
+#define CSSDL_API
 
 #endif
 

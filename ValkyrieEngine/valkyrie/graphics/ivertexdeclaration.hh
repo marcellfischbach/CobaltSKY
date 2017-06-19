@@ -1,30 +1,30 @@
 #pragma once
 
-#include <valkyrie/vkenums.hh>
-#include <valkyrie/vktypes.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/csenums.hh>
+#include <valkyrie/cstypes.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/ivertexdeclaration.refl.hh>
 
 /**
 * @brief One element within the entire vertex declaration
 */
-struct vkVertexElement
+struct csVertexElement
 {
-  vkVertexStreamType    StreamDefinition;
-  vkDataType                  Type;
-  vkSize                      Size;
-  vkUInt32                    Offset;
-  vkSize                      Stride;
-  vkUInt8                    Stream;
+  csVertexStreamType    StreamDefinition;
+  csDataType                  Type;
+  csSize                      Size;
+  csUInt32                    Offset;
+  csSize                      Stride;
+  csUInt8                    Stream;
   bool                        Valid;
 
-  vkVertexElement()
+  csVertexElement()
     : Valid(false)
   {
 
   }
 
-  vkVertexElement(vkVertexStreamType streamDefinition, vkDataType type, vkSize size, vkUInt32 offset, vkSize stride, vkUInt8 stream)
+  csVertexElement(csVertexStreamType streamDefinition, csDataType type, csSize size, csUInt32 offset, csSize stride, csUInt8 stream)
     : StreamDefinition(streamDefinition)
     , Type(type)
     , Size(size)
@@ -41,15 +41,15 @@ struct vkVertexElement
 /**
 * @brief Interface for controlling how the vertex data should be passed into the shading system.
 */
-VK_INTERFACE();
-struct VKE_API iVertexDeclaration : public iObject
+CS_INTERFACE();
+struct CSE_API iVertexDeclaration : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
   virtual unsigned GetNumberOfStreams() const = 0;
-  virtual const vkVertexElement* GetElements(vkUInt8 stream) const = 0;
-  virtual const vkVertexElement* GetElement(vkVertexStreamType streamDefinition, vkUInt8 stream) const = 0;
-  virtual vkSize GetStride(vkUInt8 stream) const = 0;
-  virtual vkSize GetTotalSize() const = 0;
+  virtual const csVertexElement* GetElements(csUInt8 stream) const = 0;
+  virtual const csVertexElement* GetElement(csVertexStreamType streamDefinition, csUInt8 stream) const = 0;
+  virtual csSize GetStride(csUInt8 stream) const = 0;
+  virtual csSize GetTotalSize() const = 0;
 };
 

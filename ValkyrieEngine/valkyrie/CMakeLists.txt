@@ -1,22 +1,22 @@
 
 
-add_definitions(-DVKE_EXPORT)
-add_definitions(-DVK_BUILD_EDITOR)
+add_definitions(-DCSE_EXPORT)
+add_definitions(-DCS_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
 
 set(SOURCE
-    vkdefs.hh
-    vkdiamond.hh
-    vkengine.hh
-    vkengine.cc
-    vkenums.hh
-    vkexport.hh
-    vkmodule.cc
-    vkmodule.hh
-    vktime.cc
-    vktime.hh
-    vktypes.hh
+    csdefs.hh
+    csdiamond.hh
+    csengine.hh
+    csengine.cc
+    csenums.hh
+    csexport.hh
+    csmodule.cc
+    csmodule.hh
+    cstime.cc
+    cstime.hh
+    cstypes.hh
     )
 
 source_group(
@@ -27,8 +27,8 @@ source_group(
 
 
 set(SOURCE_ANIMATION
-    animation/vkskeleton.cc
-    animation/vkskeleton.hh
+    animation/csskeleton.cc
+    animation/csskeleton.hh
     )
 
 
@@ -40,36 +40,36 @@ source_group(
 
 set(SOURCE_CORE
     core/ifile.hh
-    core/vkassetinputstream.cc
-    core/vkassetinputstream.hh
-    core/vkassetoutputstream.cc
-    core/vkassetoutputstream.hh
-    core/vkclass.cc
-    core/vkclass.hh
-    core/vkclassregistry.cc
-    core/vkclassregistry.hh
-    core/vkcollection.hh
-    core/vkfileinfo.cc
-    core/vkfileinfo.hh
-    core/vkfilestd.cc
-    core/vkfilestd.hh
-    core/vklibrary.cc
-    core/vklibrary.hh
-    core/vklogger.cc
-    core/vklogger.hh
-    core/vkresourcelocator.cc
-    core/vkresourcelocator.hh
-    core/vkresourcemanager.cc
-    core/vkresourcemanager.hh
-    core/vksettings.cc
-    core/vksettings.hh
-    core/vkstring.hh
-    core/vkthread.cc
-    core/vkthread.hh
-    core/vkvfs.cc
-    core/vkvfs.hh
-    core/vkxml.cc
-    core/vkxml.hh
+    core/csassetinputstream.cc
+    core/csassetinputstream.hh
+    core/csassetoutputstream.cc
+    core/csassetoutputstream.hh
+    core/csclass.cc
+    core/csclass.hh
+    core/csclassregistry.cc
+    core/csclassregistry.hh
+    core/cscollection.hh
+    core/csfileinfo.cc
+    core/csfileinfo.hh
+    core/csfilestd.cc
+    core/csfilestd.hh
+    core/cslibrary.cc
+    core/cslibrary.hh
+    core/cslogger.cc
+    core/cslogger.hh
+    core/csresourcelocator.cc
+    core/csresourcelocator.hh
+    core/csresourcemanager.cc
+    core/csresourcemanager.hh
+    core/cssettings.cc
+    core/cssettings.hh
+    core/csstring.hh
+    core/csthread.cc
+    core/csthread.hh
+    core/csvfs.cc
+    core/csvfs.hh
+    core/csxml.cc
+    core/csxml.hh
     )
 
 
@@ -83,14 +83,14 @@ set(SOURCE_CORE_RESOURCE
     core/resource/iassetloader.hh
     core/resource/ifileloader.hh
     core/resource/ixmlloader.hh
-    core/resource/vkassetfileloader.hh
-    core/resource/vkassetfileloader.cc
-    core/resource/vkassetxmlloader.hh
-    core/resource/vkassetxmlloader.cc
-    core/resource/vkbasexmlloader.hh
-    core/resource/vkbasexmlloader.cc
-    core/resource/vkxmlfileloader.hh
-    core/resource/vkxmlfileloader.cc
+    core/resource/csassetfileloader.hh
+    core/resource/csassetfileloader.cc
+    core/resource/csassetxmlloader.hh
+    core/resource/csassetxmlloader.cc
+    core/resource/csbasexmlloader.hh
+    core/resource/csbasexmlloader.cc
+    core/resource/csxmlfileloader.hh
+    core/resource/csxmlfileloader.cc
     )
 
 source_group(
@@ -105,48 +105,48 @@ set(SOURCE_ENTITY
     entity/iparticleemitter.hh
     entity/iparticlestepper.hh
     entity/itransformationcallback.hh
-    entity/vkbasecolliderstate.cc
-    entity/vkbasecolliderstate.hh
-    entity/vkcharacterentity.cc
-    entity/vkcharacterentity.hh
-    entity/vkcolliderstate.cc
-    entity/vkcolliderstate.hh
-    entity/vkdefaultparticleemitter.cc
-    entity/vkdefaultparticleemitter.hh
-    entity/vkdefaultparticlestepper.cc
-    entity/vkdefaultparticlestepper.hh
-    entity/vkdynamiccolliderstate.cc
-    entity/vkdynamiccolliderstate.hh
-    entity/vkentity.cc
-    entity/vkentity.hh
-    entity/vkentityscene.cc
-    entity/vkentityscene.hh
-    entity/vkentitystate.cc
-    entity/vkentitystate.hh
-    entity/vkgeometrydata.cc
-    entity/vkgeometrydata.hh
-    entity/vkgeometrymesh.cc
-    entity/vkgeometrymesh.hh
-    entity/vkhingejointstate.cc
-    entity/vkhingejointstate.hh
-    entity/vkjointstate.cc
-    entity/vkjointstate.hh
-    entity/vklightstate.cc
-    entity/vklightstate.hh
-    entity/vkparticlestate.cc
-    entity/vkparticlestate.hh
-    entity/vkrenderstate.cc
-    entity/vkrenderstate.hh
-    entity/vkspatialstate.cc
-    entity/vkspatialstate.hh
-    entity/vkstaticcolliderstate.cc
-    entity/vkstaticcolliderstate.hh
-    entity/vkstaticmeshstate.cc
-    entity/vkstaticmeshstate.hh
-    entity/vkskinnedmeshstate.cc
-    entity/vkskinnedmeshstate.hh
-    entity/vktransformation.cc
-    entity/vktransformation.hh
+    entity/csbasecolliderstate.cc
+    entity/csbasecolliderstate.hh
+    entity/cscharacterentity.cc
+    entity/cscharacterentity.hh
+    entity/cscolliderstate.cc
+    entity/cscolliderstate.hh
+    entity/csdefaultparticleemitter.cc
+    entity/csdefaultparticleemitter.hh
+    entity/csdefaultparticlestepper.cc
+    entity/csdefaultparticlestepper.hh
+    entity/csdynamiccolliderstate.cc
+    entity/csdynamiccolliderstate.hh
+    entity/csentity.cc
+    entity/csentity.hh
+    entity/csentityscene.cc
+    entity/csentityscene.hh
+    entity/csentitystate.cc
+    entity/csentitystate.hh
+    entity/csgeometrydata.cc
+    entity/csgeometrydata.hh
+    entity/csgeometrymesh.cc
+    entity/csgeometrymesh.hh
+    entity/cshingejointstate.cc
+    entity/cshingejointstate.hh
+    entity/csjointstate.cc
+    entity/csjointstate.hh
+    entity/cslightstate.cc
+    entity/cslightstate.hh
+    entity/csparticlestate.cc
+    entity/csparticlestate.hh
+    entity/csrenderstate.cc
+    entity/csrenderstate.hh
+    entity/csspatialstate.cc
+    entity/csspatialstate.hh
+    entity/csstaticcolliderstate.cc
+    entity/csstaticcolliderstate.hh
+    entity/csstaticmeshstate.cc
+    entity/csstaticmeshstate.hh
+    entity/csskinnedmeshstate.cc
+    entity/csskinnedmeshstate.hh
+    entity/cstransformation.cc
+    entity/cstransformation.hh
     )
 
 source_group(
@@ -170,43 +170,43 @@ set(SOURCE_GRAPHICS
     graphics/itexturecube.hh
     graphics/ivertexbuffer.hh
     graphics/ivertexdeclaration.hh
-    graphics/vkbinarygradient.cc
-    graphics/vkbinarygradient.hh
-    graphics/vkcamera.cc
-    graphics/vkcamera.hh
-    graphics/vkdirectionallight.cc
-    graphics/vkdirectionallight.hh
-    graphics/vkgenericshaderpostprocess.cc
-    graphics/vkgenericshaderpostprocess.hh
-    graphics/vkimage.cc
-    graphics/vkimage.hh
-    graphics/vklight.cc
-    graphics/vklight.hh
-    graphics/vkmaterialdef.cc
-    graphics/vkmaterialdef.hh
-    graphics/vkmaterial.cc
-    graphics/vkmaterial.hh
-    graphics/vkmultimaterial.cc
-    graphics/vkmultimaterial.hh
-    graphics/vkmesh.cc
-    graphics/vkmesh.hh
-    graphics/vkparticle.cc
-    graphics/vkparticle.hh
-    graphics/vkpointlight.cc
-    graphics/vkpointlight.hh
-    graphics/vkpostprocess.cc
-    graphics/vkpostprocess.hh
-    graphics/vkpostprocessoutput.hh
-    graphics/vkpostprocessor.cc
-    graphics/vkpostprocessor.hh
-    graphics/vkskinnedmesh.cc
-    graphics/vkskinnedmesh.hh
-    graphics/vksubmesh.cc
-    graphics/vksubmesh.hh
-    graphics/vkshaderattributeid.cc
-    graphics/vkshaderattributeid.hh
-    graphics/vkshaderstreamid.cc
-    graphics/vkshaderstreamid.hh
+    graphics/csbinarygradient.cc
+    graphics/csbinarygradient.hh
+    graphics/cscamera.cc
+    graphics/cscamera.hh
+    graphics/csdirectionallight.cc
+    graphics/csdirectionallight.hh
+    graphics/csgenericshaderpostprocess.cc
+    graphics/csgenericshaderpostprocess.hh
+    graphics/csimage.cc
+    graphics/csimage.hh
+    graphics/cslight.cc
+    graphics/cslight.hh
+    graphics/csmaterialdef.cc
+    graphics/csmaterialdef.hh
+    graphics/csmaterial.cc
+    graphics/csmaterial.hh
+    graphics/csmultimaterial.cc
+    graphics/csmultimaterial.hh
+    graphics/csmesh.cc
+    graphics/csmesh.hh
+    graphics/csparticle.cc
+    graphics/csparticle.hh
+    graphics/cspointlight.cc
+    graphics/cspointlight.hh
+    graphics/cspostprocess.cc
+    graphics/cspostprocess.hh
+    graphics/cspostprocessoutput.hh
+    graphics/cspostprocessor.cc
+    graphics/cspostprocessor.hh
+    graphics/csskinnedmesh.cc
+    graphics/csskinnedmesh.hh
+    graphics/cssubmesh.cc
+    graphics/cssubmesh.hh
+    graphics/csshaderattributeid.cc
+    graphics/csshaderattributeid.hh
+    graphics/csshaderstreamid.cc
+    graphics/csshaderstreamid.hh
     )
 
 source_group(
@@ -217,20 +217,20 @@ source_group(
 		
 
 set(SOURCE_GRAPHICS_DEFERRED
-    graphics/deferred/vkdefaultcollector.cc
-    graphics/deferred/vkdefaultcollector.hh
-    graphics/deferred/vkdeferredframeprocessor.cc
-    graphics/deferred/vkdeferredframeprocessor.hh
-    graphics/deferred/vkdirectionallightrenderer.cc
-    graphics/deferred/vkdirectionallightrenderer.hh
-    graphics/deferred/vkgbuffer.cc
-    graphics/deferred/vkgbuffer.hh
-    graphics/deferred/vklightrenderer.cc
-    graphics/deferred/vklightrenderer.hh
-    graphics/deferred/vkparticlerenderer.cc
-    graphics/deferred/vkparticlerenderer.hh
-    graphics/deferred/vkpointlightrenderer.cc
-    graphics/deferred/vkpointlightrenderer.hh
+    graphics/deferred/csdefaultcollector.cc
+    graphics/deferred/csdefaultcollector.hh
+    graphics/deferred/csdeferredframeprocessor.cc
+    graphics/deferred/csdeferredframeprocessor.hh
+    graphics/deferred/csdirectionallightrenderer.cc
+    graphics/deferred/csdirectionallightrenderer.hh
+    graphics/deferred/csgbuffer.cc
+    graphics/deferred/csgbuffer.hh
+    graphics/deferred/cslightrenderer.cc
+    graphics/deferred/cslightrenderer.hh
+    graphics/deferred/csparticlerenderer.cc
+    graphics/deferred/csparticlerenderer.hh
+    graphics/deferred/cspointlightrenderer.cc
+    graphics/deferred/cspointlightrenderer.hh
 )
 
 source_group(
@@ -242,18 +242,18 @@ source_group(
 
 set(SOURCE_GRAPHICS_SCENE
     graphics/scene/iscancallback.hh
-    graphics/scene/vkcameranode.cc
-    graphics/scene/vkcameranode.hh
-    graphics/scene/vkgeometrynode.cc
-    graphics/scene/vkgeometrynode.hh
-    graphics/scene/vkgroupnode.cc
-    graphics/scene/vkgroupnode.hh
-    graphics/scene/vklightnode.cc
-    graphics/scene/vklightnode.hh
-    graphics/scene/vknode.cc
-    graphics/scene/vknode.hh
-    graphics/scene/vkspatialnode.cc
-    graphics/scene/vkspatialnode.hh
+    graphics/scene/cscameranode.cc
+    graphics/scene/cscameranode.hh
+    graphics/scene/csgeometrynode.cc
+    graphics/scene/csgeometrynode.hh
+    graphics/scene/csgroupnode.cc
+    graphics/scene/csgroupnode.hh
+    graphics/scene/cslightnode.cc
+    graphics/scene/cslightnode.hh
+    graphics/scene/csnode.cc
+    graphics/scene/csnode.hh
+    graphics/scene/csspatialnode.cc
+    graphics/scene/csspatialnode.hh
     )
 
 source_group(
@@ -264,69 +264,69 @@ source_group(
 
 
 set(SOURCE_GRAPHICS_SHADERGRAPH
-    graphics/shadergraph/vksgadd.cc
-    graphics/shadergraph/vksgadd.hh
-    graphics/shadergraph/vksgconstfloat1.cc
-    graphics/shadergraph/vksgconstfloat1.hh
-    graphics/shadergraph/vksgconstfloat2.cc
-    graphics/shadergraph/vksgconstfloat2.hh
-    graphics/shadergraph/vksgconstfloat3.cc
-    graphics/shadergraph/vksgconstfloat3.hh
-    graphics/shadergraph/vksgconstfloat4.cc
-    graphics/shadergraph/vksgconstfloat4.hh
-    graphics/shadergraph/vksgcross.cc
-    graphics/shadergraph/vksgcross.hh
-    graphics/shadergraph/vksgdefaultconsolelogger.cc
-    graphics/shadergraph/vksgdefaultconsolelogger.hh
-    graphics/shadergraph/vksgdefaulttexturecoordinate.cc
-    graphics/shadergraph/vksgdefaulttexturecoordinate.hh
-    graphics/shadergraph/vksgdiv.cc
-    graphics/shadergraph/vksgdiv.hh
-    graphics/shadergraph/vksgdot.cc
-    graphics/shadergraph/vksgdot.hh
-    graphics/shadergraph/vksgenums.hh
-    graphics/shadergraph/vksgfloat2.cc
-    graphics/shadergraph/vksgfloat2.hh
-    graphics/shadergraph/vksgfloat3.cc
-    graphics/shadergraph/vksgfloat3.hh
-    graphics/shadergraph/vksgfloat4.cc
-    graphics/shadergraph/vksgfloat4.hh
-    graphics/shadergraph/vksginput.cc
-    graphics/shadergraph/vksginput.hh
-    graphics/shadergraph/vksglerp.cc
-    graphics/shadergraph/vksglerp.hh
-    graphics/shadergraph/vksgmul.cc
-    graphics/shadergraph/vksgmul.hh
-    graphics/shadergraph/vksgnode.cc
-    graphics/shadergraph/vksgnode.hh
-    graphics/shadergraph/vksgnodes.cc
-    graphics/shadergraph/vksgnodes.hh
-    graphics/shadergraph/vksgnormalize.cc
-    graphics/shadergraph/vksgnormalize.hh
-    graphics/shadergraph/vksgoutput.cc
-    graphics/shadergraph/vksgoutput.hh
-    graphics/shadergraph/vksgresourcenode.cc
-    graphics/shadergraph/vksgresourcenode.hh
-    graphics/shadergraph/vksgshadergraph.cc
-    graphics/shadergraph/vksgshadergraph.hh
-    graphics/shadergraph/vksgsplitfloat2.cc
-    graphics/shadergraph/vksgsplitfloat2.hh
-    graphics/shadergraph/vksgsplitfloat3.cc
-    graphics/shadergraph/vksgsplitfloat3.hh
-    graphics/shadergraph/vksgsplitfloat4.cc
-    graphics/shadergraph/vksgsplitfloat4.hh
-    graphics/shadergraph/vksgsub.cc
-    graphics/shadergraph/vksgsub.hh
-    graphics/shadergraph/vksgtexture2d.cc
-    graphics/shadergraph/vksgtexture2d.hh
-    graphics/shadergraph/vksgvarfloat1.cc
-    graphics/shadergraph/vksgvarfloat1.hh
-    graphics/shadergraph/vksgvarfloat2.cc
-    graphics/shadergraph/vksgvarfloat2.hh
-    graphics/shadergraph/vksgvarfloat3.cc
-    graphics/shadergraph/vksgvarfloat3.hh
-    graphics/shadergraph/vksgvarfloat4.cc
-    graphics/shadergraph/vksgvarfloat4.hh
+    graphics/shadergraph/cssgadd.cc
+    graphics/shadergraph/cssgadd.hh
+    graphics/shadergraph/cssgconstfloat1.cc
+    graphics/shadergraph/cssgconstfloat1.hh
+    graphics/shadergraph/cssgconstfloat2.cc
+    graphics/shadergraph/cssgconstfloat2.hh
+    graphics/shadergraph/cssgconstfloat3.cc
+    graphics/shadergraph/cssgconstfloat3.hh
+    graphics/shadergraph/cssgconstfloat4.cc
+    graphics/shadergraph/cssgconstfloat4.hh
+    graphics/shadergraph/cssgcross.cc
+    graphics/shadergraph/cssgcross.hh
+    graphics/shadergraph/cssgdefaultconsolelogger.cc
+    graphics/shadergraph/cssgdefaultconsolelogger.hh
+    graphics/shadergraph/cssgdefaulttexturecoordinate.cc
+    graphics/shadergraph/cssgdefaulttexturecoordinate.hh
+    graphics/shadergraph/cssgdiv.cc
+    graphics/shadergraph/cssgdiv.hh
+    graphics/shadergraph/cssgdot.cc
+    graphics/shadergraph/cssgdot.hh
+    graphics/shadergraph/cssgenums.hh
+    graphics/shadergraph/cssgfloat2.cc
+    graphics/shadergraph/cssgfloat2.hh
+    graphics/shadergraph/cssgfloat3.cc
+    graphics/shadergraph/cssgfloat3.hh
+    graphics/shadergraph/cssgfloat4.cc
+    graphics/shadergraph/cssgfloat4.hh
+    graphics/shadergraph/cssginput.cc
+    graphics/shadergraph/cssginput.hh
+    graphics/shadergraph/cssglerp.cc
+    graphics/shadergraph/cssglerp.hh
+    graphics/shadergraph/cssgmul.cc
+    graphics/shadergraph/cssgmul.hh
+    graphics/shadergraph/cssgnode.cc
+    graphics/shadergraph/cssgnode.hh
+    graphics/shadergraph/cssgnodes.cc
+    graphics/shadergraph/cssgnodes.hh
+    graphics/shadergraph/cssgnormalize.cc
+    graphics/shadergraph/cssgnormalize.hh
+    graphics/shadergraph/cssgoutput.cc
+    graphics/shadergraph/cssgoutput.hh
+    graphics/shadergraph/cssgresourcenode.cc
+    graphics/shadergraph/cssgresourcenode.hh
+    graphics/shadergraph/cssgshadergraph.cc
+    graphics/shadergraph/cssgshadergraph.hh
+    graphics/shadergraph/cssgsplitfloat2.cc
+    graphics/shadergraph/cssgsplitfloat2.hh
+    graphics/shadergraph/cssgsplitfloat3.cc
+    graphics/shadergraph/cssgsplitfloat3.hh
+    graphics/shadergraph/cssgsplitfloat4.cc
+    graphics/shadergraph/cssgsplitfloat4.hh
+    graphics/shadergraph/cssgsub.cc
+    graphics/shadergraph/cssgsub.hh
+    graphics/shadergraph/cssgtexture2d.cc
+    graphics/shadergraph/cssgtexture2d.hh
+    graphics/shadergraph/cssgvarfloat1.cc
+    graphics/shadergraph/cssgvarfloat1.hh
+    graphics/shadergraph/cssgvarfloat2.cc
+    graphics/shadergraph/cssgvarfloat2.hh
+    graphics/shadergraph/cssgvarfloat3.cc
+    graphics/shadergraph/cssgvarfloat3.hh
+    graphics/shadergraph/cssgvarfloat4.cc
+    graphics/shadergraph/cssgvarfloat4.hh
     )
 
 
@@ -338,34 +338,34 @@ source_group(
 
 
 set(SOURCE_LOADERS
-    loaders/vkcollisionassetxmlloader.cc
-    loaders/vkcollisionassetxmlloader.hh
-    loaders/vkloaders.cc
-    loaders/vkloaders.hh
-    loaders/vkmaterialinstanceassetxmlloader.cc
-    loaders/vkmaterialinstanceassetxmlloader.hh
-    loaders/vkmaterialassetxmlloader.cc
-    loaders/vkmaterialassetxmlloader.hh
-    loaders/vkmeshassetxmlloader.cc
-    loaders/vkmeshassetxmlloader.hh
-    loaders/vkpngimageassetloader.cc
-    loaders/vkpngimageassetloader.hh
-    loaders/vkpngimagefileloader.cc
-    loaders/vkpngimagefileloader.hh
-    loaders/vksamplerassetxmlloader.cc
-    loaders/vksamplerassetxmlloader.hh
-    loaders/vkshadergraphassetxmlloader.cc
-    loaders/vkshadergraphassetxmlloader.hh
-    loaders/vkstaticmeshloader.cc
-    loaders/vkstaticmeshloader.hh
-    loaders/vkstaticmeshassetloader.cc
-    loaders/vkstaticmeshassetloader.hh
-    loaders/vktextureassetxmlloader.cc
-    loaders/vktextureassetxmlloader.hh
-    loaders/vkskinnedmeshassetxmlloader.cc
-    loaders/vkskinnedmeshassetxmlloader.hh
-    loaders/vksubmeshassetxmlloader.cc
-    loaders/vksubmeshassetxmlloader.hh
+    loaders/cscollisionassetxmlloader.cc
+    loaders/cscollisionassetxmlloader.hh
+    loaders/csloaders.cc
+    loaders/csloaders.hh
+    loaders/csmaterialinstanceassetxmlloader.cc
+    loaders/csmaterialinstanceassetxmlloader.hh
+    loaders/csmaterialassetxmlloader.cc
+    loaders/csmaterialassetxmlloader.hh
+    loaders/csmeshassetxmlloader.cc
+    loaders/csmeshassetxmlloader.hh
+    loaders/cspngimageassetloader.cc
+    loaders/cspngimageassetloader.hh
+    loaders/cspngimagefileloader.cc
+    loaders/cspngimagefileloader.hh
+    loaders/cssamplerassetxmlloader.cc
+    loaders/cssamplerassetxmlloader.hh
+    loaders/csshadergraphassetxmlloader.cc
+    loaders/csshadergraphassetxmlloader.hh
+    loaders/csstaticmeshloader.cc
+    loaders/csstaticmeshloader.hh
+    loaders/csstaticmeshassetloader.cc
+    loaders/csstaticmeshassetloader.hh
+    loaders/cstextureassetxmlloader.cc
+    loaders/cstextureassetxmlloader.hh
+    loaders/csskinnedmeshassetxmlloader.cc
+    loaders/csskinnedmeshassetxmlloader.hh
+    loaders/cssubmeshassetxmlloader.cc
+    loaders/cssubmeshassetxmlloader.hh
     )
 
 source_group(
@@ -375,35 +375,35 @@ source_group(
     )
 
 set(SOURCE_LOADERS_ENTITY
-    loaders/entity/vkbasecolliderstatexmlloader.cc
-    loaders/entity/vkbasecolliderstatexmlloader.hh
-    loaders/entity/vkcolliderstatexmlloader.cc
-    loaders/entity/vkcolliderstatexmlloader.hh
-    loaders/entity/vkentityloaderregistry.cc
-    loaders/entity/vkentityloaderregistry.hh
-    loaders/entity/vkdynamiccolliderstatexmlloader.cc
-    loaders/entity/vkdynamiccolliderstatexmlloader.hh
-    loaders/entity/vkentitymasterxmlloader.cc
-    loaders/entity/vkentitymasterxmlloader.hh
-    loaders/entity/vkentitystateloaderdata.hh
-    loaders/entity/vkentitystatemasterxmlloader.cc
-    loaders/entity/vkentitystatemasterxmlloader.hh
-    loaders/entity/vkentitystatexmlloader.cc
-    loaders/entity/vkentitystatexmlloader.hh
-    loaders/entity/vkentityxmlloader.cc
-    loaders/entity/vkentityxmlloader.hh
-    loaders/entity/vkhingejointstatexmlloader.cc
-    loaders/entity/vkhingejointstatexmlloader.hh
-    loaders/entity/vkjointstatexmlloader.cc
-    loaders/entity/vkjointstatexmlloader.hh
-    loaders/entity/vkrenderstatexmlloader.cc
-    loaders/entity/vkrenderstatexmlloader.hh
-    loaders/entity/vkspatialstatexmlloader.cc
-    loaders/entity/vkspatialstatexmlloader.hh
-    loaders/entity/vkstaticcolliderstatexmlloader.cc
-    loaders/entity/vkstaticcolliderstatexmlloader.hh
-    loaders/entity/vkstaticmeshstatexmlloader.cc
-    loaders/entity/vkstaticmeshstatexmlloader.hh
+    loaders/entity/csbasecolliderstatexmlloader.cc
+    loaders/entity/csbasecolliderstatexmlloader.hh
+    loaders/entity/cscolliderstatexmlloader.cc
+    loaders/entity/cscolliderstatexmlloader.hh
+    loaders/entity/csentityloaderregistry.cc
+    loaders/entity/csentityloaderregistry.hh
+    loaders/entity/csdynamiccolliderstatexmlloader.cc
+    loaders/entity/csdynamiccolliderstatexmlloader.hh
+    loaders/entity/csentitymasterxmlloader.cc
+    loaders/entity/csentitymasterxmlloader.hh
+    loaders/entity/csentitystateloaderdata.hh
+    loaders/entity/csentitystatemasterxmlloader.cc
+    loaders/entity/csentitystatemasterxmlloader.hh
+    loaders/entity/csentitystatexmlloader.cc
+    loaders/entity/csentitystatexmlloader.hh
+    loaders/entity/csentityxmlloader.cc
+    loaders/entity/csentityxmlloader.hh
+    loaders/entity/cshingejointstatexmlloader.cc
+    loaders/entity/cshingejointstatexmlloader.hh
+    loaders/entity/csjointstatexmlloader.cc
+    loaders/entity/csjointstatexmlloader.hh
+    loaders/entity/csrenderstatexmlloader.cc
+    loaders/entity/csrenderstatexmlloader.hh
+    loaders/entity/csspatialstatexmlloader.cc
+    loaders/entity/csspatialstatexmlloader.hh
+    loaders/entity/csstaticcolliderstatexmlloader.cc
+    loaders/entity/csstaticcolliderstatexmlloader.hh
+    loaders/entity/csstaticmeshstatexmlloader.cc
+    loaders/entity/csstaticmeshstatexmlloader.hh
     )
     
 source_group(
@@ -413,23 +413,23 @@ source_group(
     )
 
 set(SOURCE_MATH
-    math/vkboundingbox.cc
-    math/vkboundingbox.hh
-    math/vkclipper.cc
-    math/vkclipper.hh
-    math/vkcolor4f.hh
-    math/vkhysteresis.hh
-    math/vkmatrix.hh
-    math/vkmatrix3f.hh
-    math/vkmatrix4f.hh
-    math/vkplane.hh
-    math/vkplaneclipper.cc
-    math/vkplaneclipper.hh
-    math/vkrandomrange.hh
-    math/vkvector.hh
-    math/vkvector2f.hh
-    math/vkvector3f.hh
-    math/vkvector4f.hh
+    math/csboundingbox.cc
+    math/csboundingbox.hh
+    math/csclipper.cc
+    math/csclipper.hh
+    math/cscolor4f.hh
+    math/cshysteresis.hh
+    math/csmatrix.hh
+    math/csmatrix3f.hh
+    math/csmatrix4f.hh
+    math/csplane.hh
+    math/csplaneclipper.cc
+    math/csplaneclipper.hh
+    math/csrandomrange.hh
+    math/csvector.hh
+    math/csvector2f.hh
+    math/csvector3f.hh
+    math/csvector4f.hh
     )
 
 source_group(
@@ -452,8 +452,8 @@ set(SOURCE_PHYSICS
     physics/iphysicssystem.hh
     physics/iphysicsstaticcollider.hh
     physics/iphysicstriggercollider.hh
-    physics/vkphysicsshapecontainer.cc
-    physics/vkphysicsshapecontainer.hh
+    physics/csphysicsshapecontainer.cc
+    physics/csphysicsshapecontainer.hh
     )
 
 source_group(
@@ -502,5 +502,5 @@ target_link_libraries(ValkyrieEngine
     ${PNG_LIBRARIES}
     )
 
-VK_INSTALL_MOCCER(ValkyrieEngine valkyrie VKE_API ALL_SOURCES)
+CS_INSTALL_MOCCER(ValkyrieEngine valkyrie CSE_API ALL_SOURCES)
 

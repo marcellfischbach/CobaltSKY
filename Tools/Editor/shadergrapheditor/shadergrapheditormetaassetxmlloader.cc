@@ -6,7 +6,7 @@
 
 
 ShaderGraphEditorMetaAssetXMLLoader::ShaderGraphEditorMetaAssetXMLLoader()
-  : vkBaseXMLLoader()
+  : csBaseXMLLoader()
 {
 
 }
@@ -17,18 +17,18 @@ ShaderGraphEditorMetaAssetXMLLoader::~ShaderGraphEditorMetaAssetXMLLoader()
 
 }
 
-bool ShaderGraphEditorMetaAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+bool ShaderGraphEditorMetaAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  vkString tagName(element->Value());
-  return tagName == vkString("shaderGraphMeta");
+  csString tagName(element->Value());
+  return tagName == csString("shaderGraphMeta");
 }
 
-const vkClass *ShaderGraphEditorMetaAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+const csClass *ShaderGraphEditorMetaAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
   return ShaderGraphEditorMeta::GetStaticClass();
 }
 
-iObject *ShaderGraphEditorMetaAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+iObject *ShaderGraphEditorMetaAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
   ShaderGraphEditorMeta *meta = new ShaderGraphEditorMeta();
   TiXmlElement *nodesElement = element->FirstChildElement("nodes");
@@ -38,7 +38,7 @@ iObject *ShaderGraphEditorMetaAssetXMLLoader::Load(TiXmlElement *element, const 
       nodeElement;
       nodeElement = nodeElement->NextSiblingElement("node"))
     {
-      vkVector2f pos;
+      csVector2f pos;
       TiXmlElement *posElement = nodeElement->FirstChildElement("pos");
       if (posElement)
       {
@@ -54,7 +54,7 @@ iObject *ShaderGraphEditorMetaAssetXMLLoader::Load(TiXmlElement *element, const 
     TiXmlElement *shaderGraphElement = element->FirstChildElement("shaderGraph");
     if (shaderGraphElement)
     {
-      vkVector2f pos;
+      csVector2f pos;
       TiXmlElement *posElement = shaderGraphElement->FirstChildElement("pos");
       if (posElement)
       {

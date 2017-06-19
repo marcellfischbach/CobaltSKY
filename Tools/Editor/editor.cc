@@ -8,11 +8,11 @@
 #include <mainwindow.hh>
 #include <renderwidget.hh>
 #include <project/project.hh>
-#include <valkyrie/core/vksettings.hh>
+#include <valkyrie/core/cssettings.hh>
 #include <assetmanager/assetmanagerdock.hh>
 #include <assetmanager/assetmanagerwidget.hh>
-#include <valkyrie/core/vkvfs.hh>
-#include <valkyrie/vkengine.hh>
+#include <valkyrie/core/csvfs.hh>
+#include <valkyrie/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <physicsbullet/bulletsystem.hh>
 
@@ -26,14 +26,14 @@
 Editor::Editor()
   : m_mainWindow(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
 
 bool Editor::Initialize(int argc, char **argv)
 {
   // we use a specialized resource manager within the editor
-  vkResourceManager::Register(new EditorResourceManager());
+  csResourceManager::Register(new EditorResourceManager());
 
 
   EditorModule::Initialize();
@@ -54,14 +54,14 @@ bool Editor::Initialize(int argc, char **argv)
 
   std::string settingsPath = projectPath + "/valkyrie.xml";
 
-  vkSettings::Get()->Initialize(settingsPath.c_str());
-  vkVFS::Get()->Initialize(vkSettings::Get());
+  csSettings::Get()->Initialize(settingsPath.c_str());
+  csVFS::Get()->Initialize(csSettings::Get());
 
 
-//  m_rootPath = QDir(QString(vkVFS::Get()->GetRootPath().c_str()));
+//  m_rootPath = QDir(QString(csVFS::Get()->GetRootPath().c_str()));
 
-  m_engine = new vkEngine();
-  m_physicsSystem = new vkBulletSystem();
+  m_engine = new csEngine();
+  m_physicsSystem = new csBulletSystem();
   m_physicsSystem->Initialize();
   m_engine->SetPhysicsSystem(m_physicsSystem);
 
@@ -98,11 +98,11 @@ bool Editor::Initialize(int argc, char **argv)
 }
 
 #include <valkyrie/graphics/itexture2d.hh>
-vkGraphicsGL4 *Editor::GetGraphics()
+csGraphicsGL4 *Editor::GetGraphics()
 {
   if (!m_graphics)
   {
-    m_graphics = new vkGraphicsGL4();
+    m_graphics = new csGraphicsGL4();
     m_engine->SetRenderer(m_graphics);
   }
 
@@ -172,13 +172,13 @@ iAssetEditor *Editor::FindCurrentEditor()
   return 0;
 }
 
-vkString Editor::ConvertToResourcePath(const vkString &filePath) const
+csString Editor::ConvertToResourcePath(const csString &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));
 
-  for (unsigned i = 0, in = vkVFS::Get()->GetNumberOfEntries(); i < in; ++i)
+  for (unsigned i = 0, in = csVFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
-    const vkVFS::Entry &entry = vkVFS::Get()->GetEntry(i);
+    const csVFS::Entry &entry = csVFS::Get()->GetEntry(i);
     QDir dir(QString(entry.GetAbsPath().c_str()));
     QString canonicalRoot = dir.canonicalPath();
     QString canonicalAssetDir = assetDir.canonicalPath();
@@ -193,7 +193,7 @@ vkString Editor::ConvertToResourcePath(const vkString &filePath) const
     {
       vfsPath = vfsPath.mid(1);
     }
-    return vkString((const char*)vfsPath.toLatin1());
+    return csString((const char*)vfsPath.toLatin1());
   }
   return filePath;
 }
@@ -231,7 +231,7 @@ void Editor::AddDockItem(iDockItem *dockItem)
   m_mainWindow->addDockWidget(dockItem->GetDockArea(), dockItem->GetDockWidget());
 }
 
-iDockItem *Editor::GetDockItem(const vkString &dockItemName) const
+iDockItem *Editor::GetDockItem(const csString &dockItemName) const
 {
   for (iDockItem *dockItem : m_dockItems)
   {
@@ -257,7 +257,7 @@ void Editor::CurrentEditorChanged()
 
 void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
 {
-  std::set<vkString> dockNames;
+  std::set<csString> dockNames;
   if (currentEditor)
   {
     dockNames = currentEditor->GetVisibleDockItems();
@@ -265,7 +265,7 @@ void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
 
   UpdateVisibleDockItems(dockNames);
 }
-void Editor::UpdateVisibleDockItems(const std::set<vkString> &dockNames)
+void Editor::UpdateVisibleDockItems(const std::set<csString> &dockNames)
 {
   for (iDockItem *dockItem : m_dockItems)
   {

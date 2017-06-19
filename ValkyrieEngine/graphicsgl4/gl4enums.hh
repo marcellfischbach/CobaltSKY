@@ -2,7 +2,7 @@
 
 
 
-enum vkShaderType
+enum csShaderType
 {
   eST_Vertex,
   eST_TessCtrl,

@@ -22,7 +22,7 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
   m_gui.treeView->clearSelection();
   for (ShaderGraphEditorNode *editorNode : nodes)
   {
-    vkSGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
+    csSGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
     if (shaderGraph)
     {
       for (unsigned i = 0; i < columnCount; ++i)
@@ -31,7 +31,7 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
       }
     }
 
-    vkSGNode *node = editorNode->GetSGNode();
+    csSGNode *node = editorNode->GetSGNode();
     if (node)
     {
       for (unsigned i = 0; i < columnCount; ++i)
@@ -43,7 +43,7 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
 }
 
 
-void ShaderGraphEditorOutliner::SetShaderGraph(vkSGShaderGraph *shaderGraph)
+void ShaderGraphEditorOutliner::SetShaderGraph(csSGShaderGraph *shaderGraph)
 {
   m_model->SetShaderGraph(shaderGraph);
 }

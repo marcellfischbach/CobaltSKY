@@ -1,20 +1,20 @@
 #pragma once
 
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <loaders/loaderseditoriconassetxmlloader.refl.hh>
 
-VK_CLASS()
-class LoadersEditorIconAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
+CS_CLASS()
+class LoadersEditorIconAssetXMLLoader : public CS_SUPER(csBaseXMLLoader)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
   LoadersEditorIconAssetXMLLoader();
   virtual ~LoadersEditorIconAssetXMLLoader();
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
 
 
 };

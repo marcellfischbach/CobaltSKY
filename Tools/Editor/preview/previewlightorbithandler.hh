@@ -3,11 +3,11 @@
 #include <components/sceneviewinputhandler.hh>
 #include <QPoint>
 
-class vkDirectionalLight;
+class csDirectionalLight;
 class PreviewLightOrbitHandler : public SceneViewInputHandler
 {
 public:
-  PreviewLightOrbitHandler(vkDirectionalLight *light);
+  PreviewLightOrbitHandler(csDirectionalLight *light);
   virtual ~PreviewLightOrbitHandler();
 
   virtual void mousePressEvent(QMouseEvent *event);
@@ -25,6 +25,6 @@ private:
   float m_rotV = 0.0f;
 
 
-  vkDirectionalLight *m_light= 0;
+  csDirectionalLight *m_light= 0;
   QPoint m_mousePos;
 };

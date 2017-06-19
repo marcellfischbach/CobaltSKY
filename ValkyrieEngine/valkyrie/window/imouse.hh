@@ -1,26 +1,26 @@
 #pragma once
 
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/csenums.hh>
 #include <valkyrie/window/imouse.refl.hh>
 
-VK_INTERFACE()
-struct VKE_API iMouse : public iObject
+CS_INTERFACE()
+struct CSE_API iMouse : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
-  virtual bool IsButtonDown(vkButton button) const = 0;
-  virtual bool IsButtonUp(vkButton button) const = 0;
+  virtual bool IsButtonDown(csButton button) const = 0;
+  virtual bool IsButtonUp(csButton button) const = 0;
 
-  virtual bool IsButtonPressed(vkButton button) const = 0;
-  virtual bool IsButtonReleased(vkButton button) const = 0;
+  virtual bool IsButtonPressed(csButton button) const = 0;
+  virtual bool IsButtonReleased(csButton button) const = 0;
 
-  virtual vkInt32 GetPosX() const = 0;
-  virtual vkInt32 GetPosY() const = 0;
+  virtual csInt32 GetPosX() const = 0;
+  virtual csInt32 GetPosY() const = 0;
 
-  virtual vkInt32 GetRelX() const = 0;
-  virtual vkInt32 GetRelY() const = 0;
+  virtual csInt32 GetRelX() const = 0;
+  virtual csInt32 GetRelY() const = 0;
 };
 

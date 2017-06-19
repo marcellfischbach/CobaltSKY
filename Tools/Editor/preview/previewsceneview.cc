@@ -2,30 +2,30 @@
 
 #include <preview/previewsceneview.hh>
 #include <preview/previewlightorbithandler.hh>
-#include <valkyrie/entity/vkentity.hh>
-#include <valkyrie/entity/vkentityscene.hh>
-#include <valkyrie/entity/vklightstate.hh>
-#include <valkyrie/entity/vkstaticmeshstate.hh>
+#include <valkyrie/entity/csentity.hh>
+#include <valkyrie/entity/csentityscene.hh>
+#include <valkyrie/entity/cslightstate.hh>
+#include <valkyrie/entity/csstaticmeshstate.hh>
 #include <valkyrie/graphics/ivertexdeclaration.hh>
-#include <valkyrie/graphics/vkdirectionallight.hh>
-#include <valkyrie/graphics/vkmaterial.hh>
-#include <valkyrie/graphics/vkmesh.hh>
-#include <valkyrie/graphics/vksubmesh.hh>
-#include <valkyrie/vkengine.hh>
+#include <valkyrie/graphics/csdirectionallight.hh>
+#include <valkyrie/graphics/csmaterial.hh>
+#include <valkyrie/graphics/csmesh.hh>
+#include <valkyrie/graphics/cssubmesh.hh>
+#include <valkyrie/csengine.hh>
 
 PreviewSceneView::PreviewSceneView(QWidget *parent)
   : SceneView(parent)
 {
-  vkEntityScene *scene = new vkEntityScene();
+  csEntityScene *scene = new csEntityScene();
   SetScene(scene);
 
   //
   // create the light within the scene
-  m_light = new vkDirectionalLight();
-  m_light->SetArbDirection(vkVector3f(-1, -1, -1));
-  m_lightState = new vkLightState();
+  m_light = new csDirectionalLight();
+  m_light->SetArbDirection(csVector3f(-1, -1, -1));
+  m_lightState = new csLightState();
   m_lightState->SetLight(m_light);
-  m_lightEntity = new vkEntity();
+  m_lightEntity = new csEntity();
   m_lightEntity->SetRootState(m_lightState);
   m_lightEntity->AddState(m_lightState);
   m_lightEntity->FinishTransformation();
@@ -37,26 +37,26 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
 
 PreviewSceneView::~PreviewSceneView()
 {
-  VK_RELEASE(m_light);
-  VK_RELEASE(m_lightState);
-  VK_RELEASE(m_lightEntity);
+  CS_RELEASE(m_light);
+  CS_RELEASE(m_lightState);
+  CS_RELEASE(m_lightEntity);
   delete m_lightHandler;
 }
 
 
 
-vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, vkMaterial *materialInstance)
+csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, csMaterial *materialInstance)
 {
   unsigned numVertices = (numR + 1) * (numV + 1);
   unsigned numIndices = numR * numV * 3 * 2;
 
   struct Vertex
   {
-    vkVector3f co;
-    vkVector3f no;
-    vkVector3f ta;
-    vkVector3f bn;
-    vkVector2f tx;
+    csVector3f co;
+    csVector3f no;
+    csVector3f ta;
+    csVector3f bn;
+    csVector2f tx;
   };
 
   Vertex *vertices = new Vertex[numVertices];
@@ -70,19 +70,19 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
       float factR = (float)r / (float)numR;
       float angleR = factR * 2.0f * 3.141569f;
 
-      vertices[i].no = vkVector3f(
+      vertices[i].no = csVector3f(
         cos(angleR) * sin(angleV),
         sin(angleR) * sin(angleV),
         cos(angleV)
       );
       vertices[i].co = vertices[i].no * radius;
-      vertices[i].ta = vkVector3f(
+      vertices[i].ta = csVector3f(
         -sin(angleR),
         cos(angleR),
         0.0f
       );
-      vkVector3f::Cross(vertices[i].ta, vertices[i].no, vertices[i].bn);
-      vertices[i].tx = vkVector2f(factR, factV);
+      csVector3f::Cross(vertices[i].ta, vertices[i].no, vertices[i].bn);
+      vertices[i].tx = csVector2f(factR, factV);
     }
   }
 
@@ -109,25 +109,25 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
     }
   }
 
-  vkVertexElement elements[] = {
-    vkVertexElement(eVST_Position, eDT_Float, 3, 0, sizeof(Vertex), 0),
-    vkVertexElement(eVST_Normal,   eDT_Float, 3, sizeof(vkVector3f), sizeof(Vertex), 0),
-    vkVertexElement(eVST_Tangent,  eDT_Float, 3, 2 * sizeof(vkVector3f), sizeof(Vertex), 0),
-    vkVertexElement(eVST_BiNormal, eDT_Float, 3, 3 * sizeof(vkVector3f), sizeof(Vertex), 0),
-    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(vkVector3f), sizeof(Vertex), 0),
-    vkVertexElement()
+  csVertexElement elements[] = {
+    csVertexElement(eVST_Position, eDT_Float, 3, 0, sizeof(Vertex), 0),
+    csVertexElement(eVST_Normal,   eDT_Float, 3, sizeof(csVector3f), sizeof(Vertex), 0),
+    csVertexElement(eVST_Tangent,  eDT_Float, 3, 2 * sizeof(csVector3f), sizeof(Vertex), 0),
+    csVertexElement(eVST_BiNormal, eDT_Float, 3, 3 * sizeof(csVector3f), sizeof(Vertex), 0),
+    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(csVector3f), sizeof(Vertex), 0),
+    csVertexElement()
   };
 
-  iVertexBuffer *vertexBuffer = vkEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, eBDM_Static);
-  iIndexBuffer *indexBuffer = vkEng->CreateIndexBuffer(sizeof(unsigned short) * numIndices, indices, eBDM_Static);
-  iVertexDeclaration *vertexDeclaration = vkEng->CreateVertexDeclaration(elements);
+  iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, eBDM_Static);
+  iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(sizeof(unsigned short) * numIndices, indices, eBDM_Static);
+  iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(elements);
 
-  vkBoundingBox bbox;
-  bbox.Add(vkVector3f(radius, radius, radius));
-  bbox.Add(vkVector3f(-radius, -radius, -radius));
+  csBoundingBox bbox;
+  bbox.Add(csVector3f(radius, radius, radius));
+  bbox.Add(csVector3f(-radius, -radius, -radius));
   bbox.Finish();
 
-  vkSubMesh *subMesh = new vkSubMesh();
+  csSubMesh *subMesh = new csSubMesh();
   subMesh->SetPrimitiveType(ePT_Triangles);
   subMesh->SetBoundingBox(bbox);
   subMesh->SetIndexType(eDT_UnsignedShort);
@@ -135,14 +135,14 @@ vkEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
   subMesh->AddVertexBuffer(vertexBuffer);
   subMesh->SetIndexBuffer(indexBuffer, numIndices);
 
-  vkMesh *mesh = new vkMesh();
+  csMesh *mesh = new csMesh();
   mesh->AddMesh(subMesh);
 
-  vkStaticMeshState *staticMeshState = new vkStaticMeshState();
+  csStaticMeshState *staticMeshState = new csStaticMeshState();
   staticMeshState->SetMesh(mesh);
   staticMeshState->SetMaterial(materialInstance);
 
-  vkEntity *entity = new vkEntity();
+  csEntity *entity = new csEntity();
   entity->AddState(staticMeshState);
   entity->SetRootState(staticMeshState);
   entity->FinishTransformation();

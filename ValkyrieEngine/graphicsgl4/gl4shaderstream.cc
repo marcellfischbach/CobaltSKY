@@ -3,82 +3,82 @@
 #include <graphicsgl4/gl4defines.hh>
 #include <graphicsgl4/gl4mapping.hh>
 
-vkShaderStreamGL4::vkShaderStreamGL4()
+csShaderStreamGL4::csShaderStreamGL4()
   : m_name("")
   , m_location(-1)
   , m_arrayIndex(0)
   , m_absLocation(-1)
   , m_valid(false)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkShaderStreamGL4::~vkShaderStreamGL4()
+csShaderStreamGL4::~csShaderStreamGL4()
 {
 
 }
 
-void vkShaderStreamGL4::SetName(const vkString &name)
+void csShaderStreamGL4::SetName(const csString &name)
 {
   m_name = name;
 }
 
-const vkString &vkShaderStreamGL4::GetName() const
+const csString &csShaderStreamGL4::GetName() const
 {
   return m_name;
 }
 
-void vkShaderStreamGL4::SetValid(bool valid)
+void csShaderStreamGL4::SetValid(bool valid)
 {
   m_valid = valid;
 }
 
-bool vkShaderStreamGL4::IsValid() const
+bool csShaderStreamGL4::IsValid() const
 {
   return m_valid;
 }
 
-void vkShaderStreamGL4::SetLocation(GLint location)
+void csShaderStreamGL4::SetLocation(GLint location)
 {
   m_location = location;
   m_absLocation = m_location + m_arrayIndex;
 }
 
 
-GLint vkShaderStreamGL4::GetLocation() const
+GLint csShaderStreamGL4::GetLocation() const
 {
   return m_location;
 }
 
-void vkShaderStreamGL4::SetArrayIndex(vkUInt32 arrayIndex)
+void csShaderStreamGL4::SetArrayIndex(csUInt32 arrayIndex)
 {
   m_arrayIndex = arrayIndex;
   m_absLocation = m_location + m_arrayIndex;
 }
 
-void vkShaderStreamGL4::Set(vkSize size, vkSize stride, vkSize offset, vkDataType type)
+void csShaderStreamGL4::Set(csSize size, csSize stride, csSize offset, csDataType type)
 {
-  glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, VK_GL_OFFSET(offset));
+  glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, CS_GL_OFFSET(offset));
 }
 
-void vkShaderStreamGL4::Set(vkSize size, vkSize stride, const void *data, vkDataType type)
+void csShaderStreamGL4::Set(csSize size, csSize stride, const void *data, csDataType type)
 {
   glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, (const GLvoid*)data);
 }
 
 
-void vkShaderStreamGL4::SetFrequency(vkUInt8 frequency)
+void csShaderStreamGL4::SetFrequency(csUInt8 frequency)
 {
   glVertexAttribDivisor(m_absLocation, frequency);
 }
 
-void vkShaderStreamGL4::Enable()
+void csShaderStreamGL4::Enable()
 {
   glEnableVertexAttribArray(m_absLocation);
 
 }
 
-void vkShaderStreamGL4::Disable()
+void csShaderStreamGL4::Disable()
 {
   glDisableVertexAttribArray(m_absLocation);
 

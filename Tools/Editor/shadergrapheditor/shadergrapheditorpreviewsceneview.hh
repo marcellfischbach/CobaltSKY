@@ -3,20 +3,20 @@
 
 #include <preview/previewsceneview.hh>
 
-class vkMaterialDef;
-class vkMaterial;
+class csMaterialDef;
+class csMaterial;
 class ShaderGraphEditorPreviewSceneView : public PreviewSceneView
 {
 public:
   ShaderGraphEditorPreviewSceneView(QWidget *parent);
   virtual ~ShaderGraphEditorPreviewSceneView();
 
-  void SetMaterial(vkMaterialDef *material);
+  void SetMaterial(csMaterialDef *material);
   void UpdateMaterial();
 
 protected:
   virtual void initializeGL();
 
 private:
-  vkMaterial *m_materialInstance;
+  csMaterial *m_materialInstance;
 };

@@ -1,18 +1,18 @@
 
 
 #include <components/sceneview.hh>
-#include <components/qtvkonscreenrendertarget.hh>
+#include <components/qtcsonscreenrendertarget.hh>
 #include <components/sceneviewinputhandler.hh>
-#include <valkyrie/vkengine.hh>
-#include <valkyrie/entity/vkentity.hh>
-#include <valkyrie/entity/vkentityscene.hh>
+#include <valkyrie/csengine.hh>
+#include <valkyrie/entity/csentity.hh>
+#include <valkyrie/entity/csentityscene.hh>
 #include <valkyrie/graphics/iframeprocessor.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/irendertarget.hh>
 #include <valkyrie/graphics/isampler.hh>
 #include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/graphics/vkcamera.hh>
-#include <valkyrie/graphics/deferred/vkdeferredframeprocessor.hh>
+#include <valkyrie/graphics/cscamera.hh>
+#include <valkyrie/graphics/deferred/csdeferredframeprocessor.hh>
 #include <editor.hh>
 #include <QPaintEvent>
 #include <QOpenGLContext>
@@ -20,7 +20,7 @@
 
 SceneView::SceneView(QWidget *parent)
   : QOpenGLWidget(parent)
-  , m_onscreenTarget(new QTVKOnscreenRenderTarget())
+  , m_onscreenTarget(new QTCSOnscreenRenderTarget())
 {
 
 }
@@ -35,27 +35,27 @@ void SceneView::AddInputHandler(SceneViewInputHandler *handler)
   m_handlers.push_back(handler);
 }
 
-void SceneView::SetScene(vkEntityScene *scene)
+void SceneView::SetScene(csEntityScene *scene)
 {
-  VK_SET(m_scene, scene);
+  CS_SET(m_scene, scene);
 }
 
-vkEntityScene *SceneView::GetScene()
-{
-  return m_scene;
-}
-
-const vkEntityScene *SceneView::GetScene() const
+csEntityScene *SceneView::GetScene()
 {
   return m_scene;
 }
 
-const vkCamera *SceneView::GetCamera() const
+const csEntityScene *SceneView::GetScene() const
+{
+  return m_scene;
+}
+
+const csCamera *SceneView::GetCamera() const
 {
   return m_camera;
 }
 
-vkCamera *SceneView::GetCamera() 
+csCamera *SceneView::GetCamera() 
 {
   return m_camera;
 }
@@ -64,7 +64,7 @@ void SceneView::initializeGL()
 {
   context()->setShareContext(QOpenGLContext::globalShareContext());
 
-  m_graphics = vkEng->GetRenderer();
+  m_graphics = csEng->GetRenderer();
   m_graphics->ResetDefaults();
 
 
@@ -76,14 +76,14 @@ void SceneView::initializeGL()
 
   //
   // the camera for viewing the scene
-  m_camera = new vkCamera();
+  m_camera = new csCamera();
   m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
   m_camera->UpdateCameraMatrices();
 
 
   //
   // create the frameprocessor that will render the scene
-  m_frameProcessor = new vkDeferredFrameProcessor(m_graphics);
+  m_frameProcessor = new csDeferredFrameProcessor(m_graphics);
   if (!m_frameProcessor->Initialize())
   {
     printf("Unable to initialize frame processor\n");
@@ -96,7 +96,7 @@ void SceneView::paintGL()
 {
   m_onscreenTarget->Setup(width(), height());
 
-  vkEntity *root = 0;
+  csEntity *root = 0;
   if (m_scene)
   {
     root = m_scene->GetRoot();
@@ -105,14 +105,14 @@ void SceneView::paintGL()
   iTexture2D *colorTarget = 0;
 
   iRenderTarget *target = m_frameProcessor->Render(root, m_camera, m_onscreenTarget->GetRenderTarget());
-  colorTarget = vkQueryClass<iTexture2D>(target->GetColorBuffer(0));
+  colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
   /*
   //
   // now render this image onscreen
   m_graphics->SetRenderTarget(m_onscreenTarget);
   m_graphics->SetViewport(m_onscreenTarget);
 
-  m_graphics->Clear(true, vkVector4f(0, 0, 0, 1), true, 1.0f);
+  m_graphics->Clear(true, csVector4f(0, 0, 0, 1), true, 1.0f);
   m_graphics->RenderFullScreenFrame(colorTarget);
   */
 }

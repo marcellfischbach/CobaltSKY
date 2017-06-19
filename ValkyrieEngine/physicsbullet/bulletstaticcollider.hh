@@ -6,36 +6,36 @@
 #include <vector>
 #include <physicsbullet/bulletstaticcollider.refl.hh>
 
-class vkBulletScene;
-class vkBulletShape;
+class csBulletScene;
+class csBulletShape;
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletStaticCollider : public VK_SUPER(iPhysicsStaticCollider)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletStaticCollider : public CS_SUPER(iPhysicsStaticCollider)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
-  vkBulletStaticCollider();
-  virtual ~vkBulletStaticCollider();
+  csBulletStaticCollider();
+  virtual ~csBulletStaticCollider();
 
   /**
   * \name iPhysicsCollider interface
   * @{
   */
-  virtual vkPhysicsColliderType GetType() const;
+  virtual csPhysicsColliderType GetType() const;
 
-  virtual const vkMatrix4f &GetMatrix() const;
-  virtual vkTransformation GetTransform();
+  virtual const csMatrix4f &GetMatrix() const;
+  virtual csTransformation GetTransform();
   virtual void FinishTransformation();
 
   virtual void AttachShape(iPhysicsShape *shape);
   virtual void DetachShape(iPhysicsShape *shape);
 
-  virtual void AttachShape(vkPhysicsShapeContainer *shapes);
-  virtual void DetachShape(vkPhysicsShapeContainer *shapes);
+  virtual void AttachShape(csPhysicsShapeContainer *shapes);
+  virtual void DetachShape(csPhysicsShapeContainer *shapes);
 
   /**
   * @}
@@ -55,13 +55,13 @@ public:
   * @}
   */
 
-  void AttachToScene(vkBulletScene *scene);
-  void DetachFromScene(vkBulletScene *scene);
+  void AttachToScene(csBulletScene *scene);
+  void DetachFromScene(csBulletScene *scene);
 
 
 private:
 
-  vkMatrix4f m_transformation;
+  csMatrix4f m_transformation;
 
   float m_friction;
   float m_restitution;
@@ -72,34 +72,34 @@ private:
     {
       localTransform.SetIdentity();
     }
-    vkBulletShape *shape;
+    csBulletShape *shape;
     btCollisionShape *btShape;
     btCollisionObject *object;
-    vkMatrix4f localTransform;
+    csMatrix4f localTransform;
   };
 
   std::vector<Data> m_shapes;
-  vkBulletScene *m_scene;
+  csBulletScene *m_scene;
 
 };
 
 
-VK_FORCEINLINE vkPhysicsColliderType vkBulletStaticCollider::GetType() const
+CS_FORCEINLINE csPhysicsColliderType csBulletStaticCollider::GetType() const
 {
   return ePCT_Static;
 }
 
-VK_FORCEINLINE const vkMatrix4f &vkBulletStaticCollider::GetMatrix() const
+CS_FORCEINLINE const csMatrix4f &csBulletStaticCollider::GetMatrix() const
 {
   return m_transformation;
 }
 
-VK_FORCEINLINE float vkBulletStaticCollider::GetFriction() const
+CS_FORCEINLINE float csBulletStaticCollider::GetFriction() const
 {
   return m_friction;
 }
 
-VK_FORCEINLINE float vkBulletStaticCollider::GetRestitution() const
+CS_FORCEINLINE float csBulletStaticCollider::GetRestitution() const
 {
   return m_restitution;
 }

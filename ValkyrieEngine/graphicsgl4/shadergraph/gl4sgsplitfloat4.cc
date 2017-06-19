@@ -3,22 +3,22 @@
 
 
 
-vkSGSplitFloat4GL4::vkSGSplitFloat4GL4()
-  : vkSGNodeGL4()
+csSGSplitFloat4GL4::csSGSplitFloat4GL4()
+  : csSGNodeGL4()
 {
   SetDoubleInlineEvaluateInput();
 }
 
-void vkSGSplitFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGSplitFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *node = GetNode();
-  vkSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  csSGNode *node = GetNode();
+  csSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
   if (!inputNode)
   {
     return;
   }
 
-  vkString exp = ctx.GetInputValue(node->GetInput(0));
+  csString exp = ctx.GetInputValue(node->GetInput(0));
   ctx.SetOutputValue(node->GetOutput(0), exp);
   ctx.SetOutputValue(node->GetOutput(1), exp);
   ctx.SetOutputValue(node->GetOutput(2), exp);

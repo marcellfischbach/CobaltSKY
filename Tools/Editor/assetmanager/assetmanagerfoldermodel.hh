@@ -3,7 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QDir>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 class AssetManagerFolderModelEntry;
 
@@ -21,7 +21,7 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
   QDir GetDir(const QModelIndex &index) const;
-  vkResourceLocator GetResourceLocator(const QModelIndex &index) const;
+  csResourceLocator GetResourceLocator(const QModelIndex &index) const;
 
 private:
 

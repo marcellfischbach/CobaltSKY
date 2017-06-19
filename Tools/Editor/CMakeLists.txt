@@ -115,8 +115,8 @@ set(COMPONENTS_SOURCES
     components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
-    components/qtvkonscreenrendertarget.cc
-    components/qtvkonscreenrendertarget.hh
+    components/qtcsonscreenrendertarget.cc
+    components/qtcsonscreenrendertarget.hh
     components/sceneview.cc
     components/sceneview.hh
     components/sceneviewinputhandler.hh
@@ -356,4 +356,4 @@ target_link_libraries(Editor
     ${ASSIMP_LIBRARY}
     )
 
-VK_INSTALL_MOCCER(Editor NO_PREFIX NO_API ALL_SOURCES)
+CS_INSTALL_MOCCER(Editor NO_PREFIX NO_API ALL_SOURCES)

@@ -8,38 +8,38 @@
 
 
 
-vkProgramGL4Loader::vkProgramGL4Loader()
-  : vkBaseXMLLoader()
+csProgramGL4Loader::csProgramGL4Loader()
+  : csBaseXMLLoader()
 {
 }
 
-vkProgramGL4Loader::~vkProgramGL4Loader()
+csProgramGL4Loader::~csProgramGL4Loader()
 {
 
 }
 
 
-bool vkProgramGL4Loader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+bool csProgramGL4Loader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  vkString tagName(element->Value());
+  csString tagName(element->Value());
 
-  return tagName == vkString("program");
+  return tagName == csString("program");
 }
 
 
 
-const vkClass *vkProgramGL4Loader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+const csClass *csProgramGL4Loader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return vkProgramGL4::GetStaticClass();
+  return csProgramGL4::GetStaticClass();
 }
 
-iObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  if (vkString(element->Value()) != vkString("program"))
+  if (csString(element->Value()) != csString("program"))
   {
     return 0;
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   TiXmlElement *techniqueElement = FindTechnique(element);
   if (!techniqueElement)
@@ -47,15 +47,15 @@ iObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
     return 0;
   }
 
-  vkResourceManager *resourceManager = vkResourceManager::Get();
+  csResourceManager *resourceManager = csResourceManager::Get();
 
-  vkProgramGL4 *program = new vkProgramGL4();
+  csProgramGL4 *program = new csProgramGL4();
   for (TiXmlElement *shaderElement = techniqueElement->FirstChildElement("shader");
        shaderElement;
        shaderElement = shaderElement->NextSiblingElement("shader"))
   {
-    vkResourceLocator locator(vkString(shaderElement->GetText()));
-    vkShaderGL4 *shader = resourceManager->GetOrLoad<vkShaderGL4>(locator);
+    csResourceLocator locator(csString(shaderElement->GetText()));
+    csShaderGL4 *shader = resourceManager->GetOrLoad<csShaderGL4>(locator);
     if (!shader)
     {
       program->Release();
@@ -76,18 +76,18 @@ iObject *vkProgramGL4Loader::Load(TiXmlElement *element, const vkResourceLocator
   return program;
 }
 
-TiXmlElement *vkProgramGL4Loader::FindTechnique(TiXmlElement *element) const
+TiXmlElement *csProgramGL4Loader::FindTechnique(TiXmlElement *element) const
 {
   if (!element)
   {
     return 0;
   }
-  vkString elementName(element->Value());
-  if (elementName == vkString("program"))
+  csString elementName(element->Value());
+  if (elementName == csString("program"))
   {
     return FindTechnique(element->FirstChildElement("techniques"));
   }
-  else if (elementName == vkString("techniques"))
+  else if (elementName == csString("techniques"))
   {
     for (TiXmlElement *techniqueElement = element->FirstChildElement("technique");
          techniqueElement;
@@ -100,7 +100,7 @@ TiXmlElement *vkProgramGL4Loader::FindTechnique(TiXmlElement *element) const
       }
     }
   }
-  else if (elementName == vkString("technique"))
+  else if (elementName == csString("technique"))
   {
     // do technique validation later.. for now just return the first technique 
     return element;

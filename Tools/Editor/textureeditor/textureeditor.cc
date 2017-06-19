@@ -6,21 +6,21 @@
 #include <editor.hh>
 
 #include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 
 
 TextureEditor::TextureEditor()
   : AbstractAssetEditor()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
   m_widget = new TextureEditorWidget(this);
   SetWidget(m_widget);
 
   m_properties = new TextureEditorProperties();
   AddDockItemName(PROPERTIES_DOCK_NAME);
 
-  QObject::connect(m_properties, SIGNAL(SamplerChanged(const vkResourceLocator &)),
-    m_widget, SLOT(SamplerChanged(const vkResourceLocator &)));
+  QObject::connect(m_properties, SIGNAL(SamplerChanged(const csResourceLocator &)),
+    m_widget, SLOT(SamplerChanged(const csResourceLocator &)));
 }
 
 TextureEditor::~TextureEditor()
@@ -33,7 +33,7 @@ void TextureEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  iTexture2D *texture = vkResourceManager::Get()->Aquire<iTexture2D>(descriptor.GetLocator());
+  iTexture2D *texture = csResourceManager::Get()->Aquire<iTexture2D>(descriptor.GetLocator());
   m_widget->SetTexture(texture);
   m_properties->SetTexture(texture);
 }

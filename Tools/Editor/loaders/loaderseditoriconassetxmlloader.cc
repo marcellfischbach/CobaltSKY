@@ -1,10 +1,10 @@
 
 #include <loaders/loaderseditoriconassetxmlloader.hh>
 #include <editorimage.hh>
-#include <valkyrie/graphics/vkimage.hh>
+#include <valkyrie/graphics/csimage.hh>
 
 LoadersEditorIconAssetXMLLoader::LoadersEditorIconAssetXMLLoader()
-  : vkBaseXMLLoader()
+  : csBaseXMLLoader()
 {
 
 }
@@ -15,22 +15,22 @@ LoadersEditorIconAssetXMLLoader::~LoadersEditorIconAssetXMLLoader()
 }
 
 
-bool LoadersEditorIconAssetXMLLoader::CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+bool LoadersEditorIconAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  vkString tagName(element->Value());
+  csString tagName(element->Value());
 
-  return tagName == vkString("editorIcon");
+  return tagName == csString("editorIcon");
 }
 
-const vkClass *LoadersEditorIconAssetXMLLoader::EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+const csClass *LoadersEditorIconAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
   return EditorImage::GetStaticClass();
 }
 
-iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData) const
+iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  vkString tagName(element->Value());
-  if (tagName != vkString("editorIcon"))
+  csString tagName(element->Value());
+  if (tagName != csString("editorIcon"))
   {
     return 0;
   }
@@ -41,10 +41,10 @@ iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const vkRe
     return 0;
   }
 
-  vkString resource(imageElement->GetText());
-  vkResourceLocator imageLocator(resource);
+  csString resource(imageElement->GetText());
+  csResourceLocator imageLocator(resource);
 
-  vkImage *image = vkResourceManager::Get()->Aquire<vkImage>(imageLocator);
+  csImage *image = csResourceManager::Get()->Aquire<csImage>(imageLocator);
   return new EditorImage(image);
 }
 

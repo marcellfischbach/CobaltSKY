@@ -5,22 +5,22 @@
 
 
 
-void vkSGFloat3GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGFloat3GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *n = GetNode();
-  vkString src[] = {
+  csSGNode *n = GetNode();
+  csString src[] = {
     n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "",
     n->GetInput(2)->GetInput() ? ctx.GetInputValue(n->GetInput(2)) : ""
   };
 
-  vkString attr[] = {
+  csString attr[] = {
     n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetAttr() : "",
     n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetAttr() : "",
     n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetAttr() : ""
   };
 
-  vkSGDataType dt[] = {
+  csSGDataType dt[] = {
     n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
     n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
     n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetDataType() : eSGDT_Inval,

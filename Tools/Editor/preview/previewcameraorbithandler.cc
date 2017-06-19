@@ -1,12 +1,12 @@
 
 #include <preview/previewcameraorbithandler.hh>
-#include <valkyrie/graphics/vkcamera.hh>
+#include <valkyrie/graphics/cscamera.hh>
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-PreviewCameraOrbitHandler::PreviewCameraOrbitHandler(vkCamera *camera)
+PreviewCameraOrbitHandler::PreviewCameraOrbitHandler(csCamera *camera)
 {
-  VK_SET(m_camera, camera);
+  CS_SET(m_camera, camera);
   UpdateCamera();
 }
 
@@ -73,18 +73,18 @@ void PreviewCameraOrbitHandler::wheelEvent(QWheelEvent *event)
 
 void PreviewCameraOrbitHandler::UpdateCamera()
 {
-  vkMatrix4f M, rH, rV;
+  csMatrix4f M, rH, rV;
 
 
   rH.SetRotationZ(m_rotH);
   rV.SetRotationX(m_rotV);
-  vkMatrix4f::Mult(rH, rV, M);
+  csMatrix4f::Mult(rH, rV, M);
 
 
-  vkVector3f p(0.0f, 0.0f, 0.0f);
-  vkVector3f y;
-  vkVector3f e = vkVector3f::MulAdd(p, M.GetYAxis(y), m_cameraDistance, e);
-  vkVector3f u(0.0f, 0.0f, 1.0f);
+  csVector3f p(0.0f, 0.0f, 0.0f);
+  csVector3f y;
+  csVector3f e = csVector3f::MulAdd(p, M.GetYAxis(y), m_cameraDistance, e);
+  csVector3f u(0.0f, 0.0f, 1.0f);
 
   m_camera->SetEye(e);
   m_camera->SetSpot(p);

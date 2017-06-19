@@ -1,29 +1,29 @@
 #pragma once
 
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/math/vkvector2f.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/math/csvector2f.hh>
 #include <shadergrapheditor/shadergrapheditormeta.refl.hh>
 
 #include <map>
 
-VK_CLASS()
-class ShaderGraphEditorMeta : public VK_SUPER(iObject)
+CS_CLASS()
+class ShaderGraphEditorMeta : public CS_SUPER(iObject)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
   ShaderGraphEditorMeta();
   virtual ~ShaderGraphEditorMeta();
 
-  void SetPos(const vkVector2f &pos);
-  void SetPos(vkSize idx, const vkVector2f &pos);
+  void SetPos(const csVector2f &pos);
+  void SetPos(csSize idx, const csVector2f &pos);
 
-  vkVector2f GetPos() const;
-  vkVector2f GetPos(vkSize idx) const;
+  csVector2f GetPos() const;
+  csVector2f GetPos(csSize idx) const;
 
 private:
 
-  vkVector2f m_pos;
+  csVector2f m_pos;
 
-  std::map<vkSize, vkVector2f> m_poss;
+  std::map<csSize, csVector2f> m_poss;
 };
 

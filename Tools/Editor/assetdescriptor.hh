@@ -1,20 +1,20 @@
 #pragma once
 
 
-#include <valkyrie/core/vkstring.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csstring.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 class AssetDescriptor
 {
 public:
-  AssetDescriptor(const vkResourceLocator &locator = vkResourceLocator(), const vkString &assetType = vkString(""));
+  AssetDescriptor(const csResourceLocator &locator = csResourceLocator(), const csString &assetType = csString(""));
 
-  const vkResourceLocator &GetLocator() const;
-  const vkString &GetAssetType() const;
+  const csResourceLocator &GetLocator() const;
+  const csString &GetAssetType() const;
 
   bool operator<(const AssetDescriptor &other) const;
   bool operator==(const AssetDescriptor &other) const;
 private:
-  vkResourceLocator m_locator;
-  vkString m_assetType;
+  csResourceLocator m_locator;
+  csString m_assetType;
 };

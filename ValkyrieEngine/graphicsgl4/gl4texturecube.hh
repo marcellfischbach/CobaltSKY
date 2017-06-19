@@ -8,30 +8,30 @@
 #include <graphicsgl4/gl4texturecube.refl.hh>
 
 
-VK_CLASS();
-class VKGRAPHICSGL4_API vkTextureCubeGL4 : public VK_SUPER(vkTextureGL4), public VK_SUPER(iTextureCube)
+CS_CLASS();
+class CSGRAPHICSGL4_API csTextureCubeGL4 : public CS_SUPER(csTextureGL4), public CS_SUPER(iTextureCube)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
 
-  vkTextureCubeGL4();
-  virtual ~vkTextureCubeGL4();
+  csTextureCubeGL4();
+  virtual ~csTextureCubeGL4();
 
-  bool Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
+  bool Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth);
 
 
   // Implementation of the iTexture2DArray interface
-  virtual vkUInt16 GetWidth() const;
-  virtual vkUInt16 GetHeight() const;
-  virtual vkUInt16 GetDepth() const;
+  virtual csUInt16 GetWidth() const;
+  virtual csUInt16 GetHeight() const;
+  virtual csUInt16 GetDepth() const;
 
-  virtual bool CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelFormat format, const void *data);
+  virtual bool CopyData(csTextureCubeFace face, csUInt8 lod, csPixelFormat format, const void *data);
 
 private:
-  vkPixelFormat m_format;
+  csPixelFormat m_format;
 
-  vkUInt16 m_width;
-  vkUInt16 m_height;
-  vkUInt16 m_depth;
+  csUInt16 m_width;
+  csUInt16 m_height;
+  csUInt16 m_depth;
 };
 

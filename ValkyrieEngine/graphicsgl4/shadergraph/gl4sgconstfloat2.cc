@@ -2,9 +2,9 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <sstream>
 
-void vkSGConstFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGConstFloat2GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *n = GetNode();
+  csSGNode *n = GetNode();
 
   std::ostringstream ss;
   ss << "vec2("

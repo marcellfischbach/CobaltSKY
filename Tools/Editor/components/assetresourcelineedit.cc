@@ -6,8 +6,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <mimehelper.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 AssetResourceLineEdit::AssetResourceLineEdit(QWidget *parent)
   : QLineEdit(parent)
@@ -33,12 +33,12 @@ void AssetResourceLineEdit::dragEnterEvent(QDragEnterEvent *event)
   {
     return;
   }
-  const vkClass *cls = MimeHelper::GetClass(mimeData);
+  const csClass *cls = MimeHelper::GetClass(mimeData);
   if (!cls)
   {
     return;
   }
-  for (const vkClass *validClass : m_validClasses)
+  for (const csClass *validClass : m_validClasses)
   {
     if (cls->IsInstanceOf(validClass))
     {
@@ -56,12 +56,12 @@ void AssetResourceLineEdit::dropEvent(QDropEvent *event)
     return;
   }
 
-  vkResourceLocator locator = MimeHelper::GetResourceLocator(data);
+  csResourceLocator locator = MimeHelper::GetResourceLocator(data);
   emit ResourceChanged(locator);
 }
 
 
-void AssetResourceLineEdit::AddValidClass(const vkClass *cls)
+void AssetResourceLineEdit::AddValidClass(const csClass *cls)
 {
   m_validClasses << cls;
 }

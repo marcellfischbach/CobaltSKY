@@ -55,7 +55,7 @@ void ProjectReferenceTree::LoadDependencyTree()
         if (resourceElement.hasAttribute("locator"))
         {
           std::string resourceLocator = std::string((const char*)resourceElement.attribute("locator").toLatin1());
-          m_allResources.insert(vkResourceLocator(resourceLocator));
+          m_allResources.insert(csResourceLocator(resourceLocator));
         }
       }
     }
@@ -73,8 +73,8 @@ void ProjectReferenceTree::LoadDependencyTree()
           std::string resource = std::string((const char*)referenceElement.attribute("resource").toLatin1());
           std::string references= std::string((const char*)referenceElement.attribute("references").toLatin1());
 
-          vkResourceLocator resourceLocator(resource);
-          vkResourceLocator referencesLocator(references);
+          csResourceLocator resourceLocator(resource);
+          csResourceLocator referencesLocator(references);
 
           m_referencedBy[referencesLocator].insert(resourceLocator);
           m_references[resourceLocator].insert(referencesLocator);
@@ -129,8 +129,8 @@ void ProjectReferenceTree::RebuildDependencyTree()
   printf("Rebuild dependency tree\n");
   AssetManagerResourceScanner scanner;
   scanner.Scan();
-  const std::set<vkResourceLocator> &allResources = scanner.GetAllResources();
-  const std::set<std::pair<vkResourceLocator, vkResourceLocator>> &references = scanner.GetReferences();
+  const std::set<csResourceLocator> &allResources = scanner.GetAllResources();
+  const std::set<std::pair<csResourceLocator, csResourceLocator>> &references = scanner.GetReferences();
   m_allResources.clear();
   m_references.clear();
   m_referencedBy.clear();
@@ -148,7 +148,7 @@ void ProjectReferenceTree::RebuildDependencyTree()
   StoreDependencyTree();
 }
 
-void ProjectReferenceTree::UpdateDependencyTree(const vkResourceLocator &resourceLocator)
+void ProjectReferenceTree::UpdateDependencyTree(const csResourceLocator &resourceLocator)
 {
   m_references.erase(resourceLocator);
 
@@ -164,7 +164,7 @@ void ProjectReferenceTree::UpdateDependencyTree(const vkResourceLocator &resourc
   }
 
   scanner.ScanReference(resourceLocator);
-  const std::set<std::pair<vkResourceLocator, vkResourceLocator>> &references = scanner.GetReferences();
+  const std::set<std::pair<csResourceLocator, csResourceLocator>> &references = scanner.GetReferences();
   for (auto reference : references)
   {
     m_referencedBy[reference.second].insert(reference.first);
@@ -173,7 +173,7 @@ void ProjectReferenceTree::UpdateDependencyTree(const vkResourceLocator &resourc
   StoreDependencyTree();
 }
 
-void ProjectReferenceTree::Rename(const vkResourceLocator &from, const vkResourceLocator &to)
+void ProjectReferenceTree::Rename(const csResourceLocator &from, const csResourceLocator &to)
 {
   if (m_allResources.find(from) != m_allResources.end())
   {
@@ -185,12 +185,12 @@ void ProjectReferenceTree::Rename(const vkResourceLocator &from, const vkResourc
   StoreDependencyTree();
 }
 
-void ProjectReferenceTree::Rename(std::map<vkResourceLocator, std::set<vkResourceLocator>> &references, const vkResourceLocator &from, const vkResourceLocator &to)
+void ProjectReferenceTree::Rename(std::map<csResourceLocator, std::set<csResourceLocator>> &references, const csResourceLocator &from, const csResourceLocator &to)
 {
-  std::map<vkResourceLocator, std::set<vkResourceLocator>>::iterator it = references.find(from);
+  std::map<csResourceLocator, std::set<csResourceLocator>>::iterator it = references.find(from);
   if (it != references.end())
   {
-    std::set<vkResourceLocator> res = it->second;
+    std::set<csResourceLocator> res = it->second;
     references.erase(it);
     references[to] = res;
   }
@@ -205,22 +205,22 @@ void ProjectReferenceTree::Rename(std::map<vkResourceLocator, std::set<vkResourc
   }
 }
 
-std::set<vkResourceLocator> ProjectReferenceTree::GetReference(const vkResourceLocator &resource) const
+std::set<csResourceLocator> ProjectReferenceTree::GetReference(const csResourceLocator &resource) const
 {
-  std::map<vkResourceLocator, std::set<vkResourceLocator>>::const_iterator it = m_references.find(resource);
+  std::map<csResourceLocator, std::set<csResourceLocator>>::const_iterator it = m_references.find(resource);
   if (it == m_references.end())
   {
-    return std::set<vkResourceLocator>();
+    return std::set<csResourceLocator>();
   }
   return it->second;
 }
 
-std::set<vkResourceLocator> ProjectReferenceTree::GetReferencedBy(const vkResourceLocator &resource) const
+std::set<csResourceLocator> ProjectReferenceTree::GetReferencedBy(const csResourceLocator &resource) const
 {
-  std::map<vkResourceLocator, std::set<vkResourceLocator>>::const_iterator it = m_referencedBy.find(resource);
+  std::map<csResourceLocator, std::set<csResourceLocator>>::const_iterator it = m_referencedBy.find(resource);
   if (it == m_referencedBy.end())
   {
-    return std::set<vkResourceLocator>();
+    return std::set<csResourceLocator>();
   }
   return it->second;
 }

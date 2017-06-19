@@ -11,7 +11,7 @@ SDLWindow::SDLWindow()
   , m_keyboard(new SDLKeyboard())
   , m_mouse(new SDLMouse())
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
 SDLWindow::~SDLWindow()
@@ -24,13 +24,13 @@ SDLWindow::~SDLWindow()
 
 bool SDLWindow::InitializeOpenGL(
   const std::string &title,
-  vkUInt16 width,
-  vkUInt16 height,
-  vkInt16 posX,
-  vkInt16 posY,
+  csUInt16 width,
+  csUInt16 height,
+  csInt16 posX,
+  csInt16 posY,
   bool fullscreen,
-  vkUInt8 openGLMajor,
-  vkUInt8 openGLMinor)
+  csUInt8 openGLMajor,
+  csUInt8 openGLMinor)
 {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE);
 
@@ -88,9 +88,9 @@ bool SDLWindow::InitializeOpenGL(
 
 }
 
-void SDLWindow::SetIcon(const vkImage *image)
+void SDLWindow::SetIcon(const csImage *image)
 {
-  vkUInt8 *buffer = new vkUInt8[image->GetWidth() * image->GetHeight() * 4];
+  csUInt8 *buffer = new csUInt8[image->GetWidth() * image->GetHeight() * 4];
   memcpy(buffer, image->GetData(), image->GetWidth() * image->GetHeight() * 4);
   SDL_Surface *iconSurface = SDL_CreateRGBSurfaceFrom(buffer, 
                                                       image->GetWidth(), 
@@ -165,27 +165,27 @@ bool SDLWindow::Present()
   return true;
 }
 
-vkUInt16 SDLWindow::GetWidth() const
+csUInt16 SDLWindow::GetWidth() const
 {
   return m_width;
 }
 
-vkUInt16 SDLWindow::GetHeight() const
+csUInt16 SDLWindow::GetHeight() const
 {
   return m_height;
 }
 
-vkInt16 SDLWindow::GetPosX() const
+csInt16 SDLWindow::GetPosX() const
 {
   return m_posX;
 }
 
-vkInt16 SDLWindow::GetPosY() const
+csInt16 SDLWindow::GetPosY() const
 {
   return m_posY;
 }
 
-vkUInt32 SDLWindow::GetTicks() const
+csUInt32 SDLWindow::GetTicks() const
 {
   return SDL_GetTicks();
 }

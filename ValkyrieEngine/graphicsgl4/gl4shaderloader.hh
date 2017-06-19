@@ -2,22 +2,22 @@
 
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <graphicsgl4/gl4shaderloader.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkShaderGL4Loader : public VK_SUPER(iFileLoader)
+CS_CLASS()
+class CSGRAPHICSGL4_API csShaderGL4Loader : public CS_SUPER(iFileLoader)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
-  vkShaderGL4Loader();
-  virtual ~vkShaderGL4Loader();
+  csShaderGL4Loader();
+  virtual ~csShaderGL4Loader();
 
-  virtual bool CanLoad(iFile *file, const vkResourceLocator &locator, iObject * userData = 0) const;
-  virtual const vkClass *EvalClass(iFile *file, const vkResourceLocator &locator, iObject * userData = 0) const;
-  virtual iObject *Load(iFile *file, const vkResourceLocator &locator, iObject * userData = 0) const;
+  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
+  virtual iObject *Load(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
 
 
 };

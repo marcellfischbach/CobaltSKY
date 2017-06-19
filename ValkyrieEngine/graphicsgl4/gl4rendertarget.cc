@@ -3,16 +3,16 @@
 #include <graphicsgl4/gl4texture.hh>
 #include <graphicsgl4/gl4defines.hh>
 
-vkRenderTargetGL4::vkRenderTargetGL4()
+csRenderTargetGL4::csRenderTargetGL4()
   : iRenderTarget()
   , m_name(0)
   , m_depthTexture(0)
   , m_provided(false)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkRenderTargetGL4::vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 height)
+csRenderTargetGL4::csRenderTargetGL4(GLuint name, csUInt16 width, csUInt16 height)
   : iRenderTarget()
   , m_name(name)
   , m_depthTexture(0)
@@ -20,10 +20,10 @@ vkRenderTargetGL4::vkRenderTargetGL4(GLuint name, vkUInt16 width, vkUInt16 heigh
   , m_height(height)
   , m_provided(true)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkRenderTargetGL4::~vkRenderTargetGL4()
+csRenderTargetGL4::~csRenderTargetGL4()
 {
   if (!m_provided)
   {
@@ -38,33 +38,33 @@ vkRenderTargetGL4::~vkRenderTargetGL4()
       m_depthBuffer = 0;
     }
 
-    VK_RELEASE(m_depthTexture);
+    CS_RELEASE(m_depthTexture);
     m_depthTexture = 0;
 
-    for (vkTextureGL4 *txt : m_colorTextures)
+    for (csTextureGL4 *txt : m_colorTextures)
     {
-      VK_RELEASE(txt);
+      CS_RELEASE(txt);
     }
     m_colorTextures.clear();
   }
 }
 
-void vkRenderTargetGL4::Bind()
+void csRenderTargetGL4::Bind()
 {
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
 
-vkUInt16 vkRenderTargetGL4::GetWidth() const
+csUInt16 csRenderTargetGL4::GetWidth() const
 {
   return m_width;
 }
 
-vkUInt16 vkRenderTargetGL4::GetHeight() const
+csUInt16 csRenderTargetGL4::GetHeight() const
 {
   return m_height;
 }
 
-void vkRenderTargetGL4::Setup(GLuint name, vkUInt16 width, vkUInt16 height)
+void csRenderTargetGL4::Setup(GLuint name, csUInt16 width, csUInt16 height)
 {
   m_name = name;
   m_width = width;
@@ -72,7 +72,7 @@ void vkRenderTargetGL4::Setup(GLuint name, vkUInt16 width, vkUInt16 height)
   m_provided = true;
 }
 
-void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)
+void csRenderTargetGL4::Initialize(csUInt16 width, csUInt16 height)
 {
   m_width = width;
   m_height = height;
@@ -80,10 +80,10 @@ void vkRenderTargetGL4::Initialize(vkUInt16 width, vkUInt16 height)
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
 }
 
-void vkRenderTargetGL4::AddColorTexture(iTexture *color)
+void csRenderTargetGL4::AddColorTexture(iTexture *color)
 {
-  VK_CHECK_GL_ERROR;
-  vkTextureGL4 *coloGL4 = vkQueryClass<vkTextureGL4>(color);
+  CS_CHECK_GL_ERROR;
+  csTextureGL4 *coloGL4 = csQueryClass<csTextureGL4>(color);
   if (coloGL4)
   {
     color->AddRef();
@@ -92,25 +92,25 @@ void vkRenderTargetGL4::AddColorTexture(iTexture *color)
 
   }
 
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-void vkRenderTargetGL4::SetDepthTexture(iTexture *depth)
+void csRenderTargetGL4::SetDepthTexture(iTexture *depth)
 {
-  vkTextureGL4 *depthGL4 = vkQueryClass<vkTextureGL4>(depth);
+  csTextureGL4 *depthGL4 = csQueryClass<csTextureGL4>(depth);
   if (depthGL4 != m_depthTexture)
   {
-    VK_SET(m_depthTexture, depthGL4);
+    CS_SET(m_depthTexture, depthGL4);
     if (depthGL4)
     {
       glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
-      VK_CHECK_GL_ERROR;
+      CS_CHECK_GL_ERROR;
     }
   }
 }
 
 
-void vkRenderTargetGL4::SetDepthBuffer(vkUInt16 width, vkUInt16 height)
+void csRenderTargetGL4::SetDepthBuffer(csUInt16 width, csUInt16 height)
 {
   glGenRenderbuffers(1, &m_depthBuffer);
   glBindRenderbuffer(GL_RENDERBUFFER, m_depthBuffer);
@@ -119,18 +119,18 @@ void vkRenderTargetGL4::SetDepthBuffer(vkUInt16 width, vkUInt16 height)
 }
 
 
-bool vkRenderTargetGL4::Finilize()
+bool csRenderTargetGL4::Finilize()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   GLenum r = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   return r == GL_FRAMEBUFFER_COMPLETE;
 }
 
-iTexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
+iTexture *csRenderTargetGL4::GetColorBuffer(csUInt8 idx) const
 {
   if (idx >= m_colorTextures.size())
   {
@@ -140,7 +140,7 @@ iTexture *vkRenderTargetGL4::GetColorBuffer(vkUInt8 idx) const
   return m_colorTextures[idx];
 }
 
-iTexture *vkRenderTargetGL4::GetDepthBuffer() const
+iTexture *csRenderTargetGL4::GetDepthBuffer() const
 {
   return m_depthTexture;
 }

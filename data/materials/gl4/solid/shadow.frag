@@ -1,19 +1,19 @@
 
 #version 330
 
-layout(location = 0) out vec4 vk_FragColor;
+layout(location = 0) out vec4 cs_FragColor;
 
 in vec2 inFragTexCoord;
 in vec3 inFragNormal;
 
-uniform sampler2D vk_Diffuse;
-uniform vec4 vk_Color;
+uniform sampler2D cs_Diffuse;
+uniform vec4 cs_Color;
 
-void vk_fade_in_out_test();
+void cs_fade_in_out_test();
 
 void main ()
 {
-	vk_fade_in_out_test();
+	cs_fade_in_out_test();
 	
-	vk_FragColor = vec4(1, 1, 1, 1);
+	cs_FragColor = vec4(1, 1, 1, 1);
 }

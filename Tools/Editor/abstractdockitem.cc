@@ -4,7 +4,7 @@
 #include <editor.hh>
 #include <mainwindow.hh>
 
-AbstractDockItem::AbstractDockItem(const vkString &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea)
+AbstractDockItem::AbstractDockItem(const csString &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea)
   : iDockItem()
   , m_widget(0)
   , m_dockArea(dockArea)
@@ -14,7 +14,7 @@ AbstractDockItem::AbstractDockItem(const vkString &dockName, const QString &dock
 }
 
 
-AbstractDockItem::AbstractDockItem(const vkString &dockName, const QString &dockTitle, QWidget *widget, Qt::DockWidgetArea dockArea)
+AbstractDockItem::AbstractDockItem(const csString &dockName, const QString &dockTitle, QWidget *widget, Qt::DockWidgetArea dockArea)
   : iDockItem()
   , m_widget(widget)
   , m_dockArea(dockArea)
@@ -48,7 +48,7 @@ Qt::DockWidgetArea AbstractDockItem::GetDockArea() const
   return m_dockArea;
 }
 
-const vkString &AbstractDockItem::GetName() const
+const csString &AbstractDockItem::GetName() const
 {
   return m_dockName;
 }

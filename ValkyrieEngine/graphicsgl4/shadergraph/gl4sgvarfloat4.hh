@@ -6,11 +6,11 @@
 #include <graphicsgl4/shadergraph/gl4sgvarfloat4.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGVarFloat4GL4 : public VK_SUPER(vkSGVarGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGVarFloat4GL4 : public CS_SUPER(csSGVarGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGVarFloat4GL4() : vkSGVarGL4("vec4") { }
-  virtual ~vkSGVarFloat4GL4() { }
+  csSGVarFloat4GL4() : csSGVarGL4("vec4") { }
+  virtual ~csSGVarFloat4GL4() { }
 };

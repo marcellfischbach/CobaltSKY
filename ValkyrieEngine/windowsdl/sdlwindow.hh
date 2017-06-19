@@ -10,10 +10,10 @@
 class SDLKeyboard;
 class SDLMouse;
 
-VK_CLASS()
-class VKWINDOWSDL_API SDLWindow : public VK_SUPER(iWindow)
+CS_CLASS()
+class CSWINDOWSDL_API SDLWindow : public CS_SUPER(iWindow)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
 
   SDLWindow();
@@ -21,35 +21,35 @@ public:
 
   bool InitializeOpenGL(
     const std::string &title,
-    vkUInt16 width,
-    vkUInt16 height,
-    vkInt16 posX,
-    vkInt16 posY,
+    csUInt16 width,
+    csUInt16 height,
+    csInt16 posX,
+    csInt16 posY,
     bool fullscreen,
-    vkUInt8 openGLMajor,
-    vkUInt8 openGLMinor);
+    csUInt8 openGLMajor,
+    csUInt8 openGLMinor);
 
-  virtual void SetIcon(const vkImage *image);
+  virtual void SetIcon(const csImage *image);
 
   virtual const iKeyboard *GetKeyboard() const;
   virtual const iMouse *GetMouse() const;
 
-  virtual vkUInt16 GetWidth() const;
-  virtual vkUInt16 GetHeight() const;
+  virtual csUInt16 GetWidth() const;
+  virtual csUInt16 GetHeight() const;
 
-  virtual vkInt16 GetPosX() const;
-  virtual vkInt16 GetPosY() const;
+  virtual csInt16 GetPosX() const;
+  virtual csInt16 GetPosY() const;
 
-  virtual vkUInt32 GetTicks() const;
+  virtual csUInt32 GetTicks() const;
 
   virtual bool UpdateEvents();
   virtual bool Present();
 private:
-  vkUInt16 m_width;
-  vkUInt16 m_height;
+  csUInt16 m_width;
+  csUInt16 m_height;
 
-  vkInt16 m_posX;
-  vkInt16 m_posY;
+  csInt16 m_posX;
+  csInt16 m_posY;
 
   SDL_Window *m_window;
   SDL_GLContext m_context;

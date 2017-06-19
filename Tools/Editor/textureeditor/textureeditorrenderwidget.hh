@@ -1,7 +1,7 @@
 #pragma once
 
 #include <renderwidget.hh>
-#include <valkyrie/graphics/vkshaderattributeid.hh>
+#include <valkyrie/graphics/csshaderattributeid.hh>
 
 
 struct iTexture2D;
@@ -35,11 +35,11 @@ private:
   iVertexBuffer *m_vertexBuffer;
   iIndexBuffer *m_indexBuffer;
 
-  vkShaderAttributeID m_idOffset;
-  vkShaderAttributeID m_idScale;
-  vkShaderAttributeID m_idDiffuse;
-  vkShaderAttributeID m_idLOD;
-  vkShaderAttributeID m_idColorTrans;
+  csShaderAttributeID m_idOffset;
+  csShaderAttributeID m_idScale;
+  csShaderAttributeID m_idDiffuse;
+  csShaderAttributeID m_idLOD;
+  csShaderAttributeID m_idColorTrans;
 
   float m_lod;
   bool m_red;

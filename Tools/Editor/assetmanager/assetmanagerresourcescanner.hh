@@ -1,8 +1,8 @@
 #pragma once
 
-#include <valkyrie/core/vkstring.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/csstring.hh>
+#include <valkyrie/core/csresourcelocator.hh>
+#include <valkyrie/core/csvfs.hh>
 #include <string>
 #include <vector>
 #include <map>
@@ -15,25 +15,25 @@ public:
   AssetManagerResourceScanner();
 
   void Scan();
-  void ScanReference(const vkResourceLocator &locator);
-  void AddResource(const vkResourceLocator &locator);
+  void ScanReference(const csResourceLocator &locator);
+  void AddResource(const csResourceLocator &locator);
 
-  const std::set <vkResourceLocator> &GetAllResources() const
+  const std::set <csResourceLocator> &GetAllResources() const
   {
     return m_allResourceLocators;
   }
 
-  const std::set<std::pair<vkResourceLocator, vkResourceLocator>> &GetReferences() const
+  const std::set<std::pair<csResourceLocator, csResourceLocator>> &GetReferences() const
   {
     return m_references;
   }
 
 private:
 
-  void Scan(const vkVFS::Entry &entry, const vkString &relPath);
-  void ScanReference(const vkResourceLocator &assetName, const TiXmlElement *element);
+  void Scan(const csVFS::Entry &entry, const csString &relPath);
+  void ScanReference(const csResourceLocator &assetName, const TiXmlElement *element);
 
   
-  std::set<vkResourceLocator> m_allResourceLocators;
-  std::set<std::pair<vkResourceLocator, vkResourceLocator>> m_references;
+  std::set<csResourceLocator> m_allResourceLocators;
+  std::set<std::pair<csResourceLocator, csResourceLocator>> m_references;
 };

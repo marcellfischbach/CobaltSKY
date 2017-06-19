@@ -3,8 +3,8 @@
 #include <physicsbullet/bulletcapsulecharactercontroller.hh>
 #include <physicsbullet/bulletscene.hh>
 #include <valkyrie/entity/itransformationcallback.hh>
-#include <valkyrie/entity/vktransformation.hh>
-#include <valkyrie/math/vkmatrix.hh>
+#include <valkyrie/entity/cstransformation.hh>
+#include <valkyrie/math/csmatrix.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
 #include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
@@ -12,7 +12,7 @@
 
 
 
-vkBulletCapsuleCharacterController::vkBulletCapsuleCharacterController()
+csBulletCapsuleCharacterController::csBulletCapsuleCharacterController()
   : iPhysicsCapsuleCharacterController()
   , m_characterController(0)
   , m_ghostObject(0)
@@ -21,13 +21,13 @@ vkBulletCapsuleCharacterController::vkBulletCapsuleCharacterController()
 
 }
 
-vkBulletCapsuleCharacterController::~vkBulletCapsuleCharacterController()
+csBulletCapsuleCharacterController::~csBulletCapsuleCharacterController()
 {
 
 }
 
 
-void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
+void csBulletCapsuleCharacterController::Initialize(float height, float radius)
 {
   m_capsuleShape = new btCapsuleShapeZ(radius, height - 2.0f * radius);
   m_ghostObject = new btPairCachingGhostObject();
@@ -42,12 +42,12 @@ void vkBulletCapsuleCharacterController::Initialize(float height, float radius)
 
 }
 
-void vkBulletCapsuleCharacterController::SetTransformationCallback(iTransformationCallback *callback)
+void csBulletCapsuleCharacterController::SetTransformationCallback(iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
 
-void vkBulletCapsuleCharacterController::AttachToScene(vkBulletScene *scene)
+void csBulletCapsuleCharacterController::AttachToScene(csBulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->addCharacter(m_characterController);
@@ -57,26 +57,26 @@ void vkBulletCapsuleCharacterController::AttachToScene(vkBulletScene *scene)
 }
 
 
-void vkBulletCapsuleCharacterController::DetachFromScene(vkBulletScene *scene)
+void csBulletCapsuleCharacterController::DetachFromScene(csBulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->removeCharacter(m_characterController);
   world->removeCollisionObject(m_ghostObject);
 }
 
-void vkBulletCapsuleCharacterController::UpdateCallbacks()
+void csBulletCapsuleCharacterController::UpdateCallbacks()
 {
   if (m_transformationCallback)
   {
-    vkMatrix4f trans;
+    csMatrix4f trans;
     m_ghostObject->getWorldTransform().getOpenGLMatrix(static_cast<btScalar*>(&trans.m00));
     m_transformationCallback->TransformationChanged(trans);
   }
 }
 
-void vkBulletCapsuleCharacterController::Warp(const vkMatrix4f &transformation)
+void csBulletCapsuleCharacterController::Warp(const csMatrix4f &transformation)
 {
-  vkVector3f translation;
+  csVector3f translation;
   transformation.GetTranslation(translation);
   WarpToPosition(translation);
 
@@ -85,28 +85,28 @@ void vkBulletCapsuleCharacterController::Warp(const vkMatrix4f &transformation)
   m_ghostObject->setWorldTransform(trans);
 }
 
-void vkBulletCapsuleCharacterController::WarpToPosition(const vkVector3f &position)
+void csBulletCapsuleCharacterController::WarpToPosition(const csVector3f &position)
 {
   m_characterController->warp(btVector3(position.x, position.y, position.z));
 }
 
-void vkBulletCapsuleCharacterController::SetLocalWalkDirection(const vkVector3f &direction)
+void csBulletCapsuleCharacterController::SetLocalWalkDirection(const csVector3f &direction)
 {
   btTransform trans = m_ghostObject->getWorldTransform();
-  vkMatrix4f mat;
+  csMatrix4f mat;
   trans.getOpenGLMatrix(static_cast<btScalar*>(&mat.m00));
-  vkVector3f absDir = vkMatrix4f::Mult(mat, direction, absDir);
+  csVector3f absDir = csMatrix4f::Mult(mat, direction, absDir);
 
   m_characterController->setWalkDirection(btVector3(absDir.x, absDir.y, absDir.z));
 }
 
 
-void vkBulletCapsuleCharacterController::SetGlobalWalkDirection(const vkVector3f &direction)
+void csBulletCapsuleCharacterController::SetGlobalWalkDirection(const csVector3f &direction)
 {
   m_characterController->setWalkDirection(btVector3(direction.x, direction.y, direction.z));
 }
 
-void vkBulletCapsuleCharacterController::Rotate(float angle)
+void csBulletCapsuleCharacterController::Rotate(float angle)
 {
   btTransform trans = m_ghostObject->getWorldTransform();
   btTransform r;
@@ -117,43 +117,43 @@ void vkBulletCapsuleCharacterController::Rotate(float angle)
 }
 
 
-bool vkBulletCapsuleCharacterController::IsOnGround() const
+bool csBulletCapsuleCharacterController::IsOnGround() const
 {
   return m_characterController->onGround();
 }
 
-bool vkBulletCapsuleCharacterController::CanJump() const
+bool csBulletCapsuleCharacterController::CanJump() const
 {
   return m_characterController->canJump();
 }
 
-void vkBulletCapsuleCharacterController::Jump()
+void csBulletCapsuleCharacterController::Jump()
 {
   m_characterController->jump(btVector3(0, 0, 0));
 }
 
-void vkBulletCapsuleCharacterController::SetJumpSpeed(float jumpSpeed)
+void csBulletCapsuleCharacterController::SetJumpSpeed(float jumpSpeed)
 {
   m_characterController->setJumpSpeed(jumpSpeed);
 }
 
-void vkBulletCapsuleCharacterController::SetMaxFallSpeed(float fallSpeed)
+void csBulletCapsuleCharacterController::SetMaxFallSpeed(float fallSpeed)
 {
   m_characterController->setFallSpeed(fallSpeed);
 }
 
-void vkBulletCapsuleCharacterController::SetGravity(const vkVector3f &gravity)
+void csBulletCapsuleCharacterController::SetGravity(const csVector3f &gravity)
 {
   // m_characterController->setGravity()
 }
 
 
-void vkBulletCapsuleCharacterController::SetGravity(float gravity)
+void csBulletCapsuleCharacterController::SetGravity(float gravity)
 {
   m_characterController->setGravity(btVector3(0.0f, 0.0f, -gravity));
 }
 
-void vkBulletCapsuleCharacterController::SetMaxSlope(float maxSlope)
+void csBulletCapsuleCharacterController::SetMaxSlope(float maxSlope)
 {
   m_characterController->setMaxSlope(maxSlope);
 }

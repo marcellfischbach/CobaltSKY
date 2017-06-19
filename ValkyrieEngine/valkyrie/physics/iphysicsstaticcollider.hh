@@ -1,13 +1,13 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
+#include <valkyrie/csexport.hh>
 #include <valkyrie/physics/iphysicsbasecollider.hh>
 #include <valkyrie/physics/iphysicsstaticcollider.refl.hh>
 
-VK_INTERFACE()
-struct VKE_API iPhysicsStaticCollider : public VK_SUPER(iPhysicsBaseCollider)
+CS_INTERFACE()
+struct CSE_API iPhysicsStaticCollider : public CS_SUPER(iPhysicsBaseCollider)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   virtual ~iPhysicsStaticCollider() { }
 
 };

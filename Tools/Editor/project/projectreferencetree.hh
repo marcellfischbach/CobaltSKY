@@ -4,8 +4,8 @@
 #include <map>
 #include <set>
 #include <string>
-#include <valkyrie/core/vkstring.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csstring.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 class ProjectReferenceTree
 {
@@ -16,20 +16,20 @@ public:
   void Close();
 
   void RebuildDependencyTree();
-  void UpdateDependencyTree(const vkResourceLocator &resourceName);
+  void UpdateDependencyTree(const csResourceLocator &resourceName);
 
-  void Rename(const vkResourceLocator &from, const vkResourceLocator &to);
-  std::set<vkResourceLocator> GetReference(const vkResourceLocator &resource) const;
-  std::set<vkResourceLocator> GetReferencedBy(const vkResourceLocator &resource) const;
+  void Rename(const csResourceLocator &from, const csResourceLocator &to);
+  std::set<csResourceLocator> GetReference(const csResourceLocator &resource) const;
+  std::set<csResourceLocator> GetReferencedBy(const csResourceLocator &resource) const;
 
 
 private:
   void LoadDependencyTree();
   void StoreDependencyTree();
-  void Rename(std::map<vkResourceLocator, std::set<vkResourceLocator>> &references, const vkResourceLocator &from, const vkResourceLocator &to);
+  void Rename(std::map<csResourceLocator, std::set<csResourceLocator>> &references, const csResourceLocator &from, const csResourceLocator &to);
   std::string m_projectPath;
 
-  std::set<vkResourceLocator> m_allResources;
-  std::map<vkResourceLocator, std::set<vkResourceLocator>> m_references;
-  std::map<vkResourceLocator, std::set<vkResourceLocator>> m_referencedBy;
+  std::set<csResourceLocator> m_allResources;
+  std::map<csResourceLocator, std::set<csResourceLocator>> m_references;
+  std::map<csResourceLocator, std::set<csResourceLocator>> m_referencedBy;
 };

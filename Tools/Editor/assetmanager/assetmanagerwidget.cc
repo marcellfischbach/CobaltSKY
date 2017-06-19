@@ -7,7 +7,7 @@
 #include <assetmanager/actions/assetmanagernewaction.hh>
 #include <assetdescriptor.hh>
 #include <editor.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/csvfs.hh>
 #include <QDomDocument>
 #include <QFile>
 #include <QMenu>
@@ -56,7 +56,7 @@ void AssetManagerWidget::on_treeView_clicked(const QModelIndex &index)
 void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
   QDir dir = m_folderModel->GetDir(index);
-  vkResourceLocator locator = m_folderModel->GetResourceLocator(index);
+  csResourceLocator locator = m_folderModel->GetResourceLocator(index);
   printf("Locator: %s\n", locator.GetDebugName().c_str());
   //m_contentModel->SetDir(dir);
   m_contentModel->SetResourceLocator(locator);
@@ -66,7 +66,7 @@ void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 
 void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
 {
-  vkResourceLocator locator = m_contentModel->GetLocator(index);
+  csResourceLocator locator = m_contentModel->GetLocator(index);
   if (!locator.IsValid())
   {
     return;
@@ -97,10 +97,10 @@ void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &po
   }
 }
 
-void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
+void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
 {
   QDomDocument doc("mydocument");
-  vkString absFilePath = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  csString absFilePath = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   QFile file(QString(absFilePath.c_str()));
   if (!file.open(QIODevice::ReadOnly))
   {
@@ -126,7 +126,7 @@ void AssetManagerWidget::OpenAsset(const vkResourceLocator &locator)
   }
 
   QDomElement typeElement = dataElement.firstChildElement();
-  vkString type = (const char*)typeElement.tagName().toLatin1();
+  csString type = (const char*)typeElement.tagName().toLatin1();
 
   AssetDescriptor descriptor(locator, type);
   Editor::Get()->OpenAsset(descriptor);

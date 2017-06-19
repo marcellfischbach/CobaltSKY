@@ -3,14 +3,14 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgfloat3.refl.hh>
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGFloat3GL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGFloat3GL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGFloat3GL4() : vkSGNodeGL4() { }
-  virtual ~vkSGFloat3GL4() { }
+  csSGFloat3GL4() : csSGNodeGL4() { }
+  virtual ~csSGFloat3GL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

@@ -1,6 +1,6 @@
 
 #include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 
 ShaderGraphEditorShaderGraphProperties::ShaderGraphEditorShaderGraphProperties(QWidget *parent)
   : QWidget(parent)
@@ -20,13 +20,13 @@ ShaderGraphEditorShaderGraphProperties::ShaderGraphEditorShaderGraphProperties(Q
 
 ShaderGraphEditorShaderGraphProperties::~ShaderGraphEditorShaderGraphProperties()
 {
-  VK_RELEASE(m_shaderGraph);
+  CS_RELEASE(m_shaderGraph);
 }
 
 
-void ShaderGraphEditorShaderGraphProperties::SetShaderGraph(vkSGShaderGraph *shaderGraph)
+void ShaderGraphEditorShaderGraphProperties::SetShaderGraph(csSGShaderGraph *shaderGraph)
 {
-  VK_SET(m_shaderGraph, shaderGraph);
+  CS_SET(m_shaderGraph, shaderGraph);
 
   if (!m_shaderGraph)
   {
@@ -78,7 +78,7 @@ void ShaderGraphEditorShaderGraphProperties::on_sbAlphaThreshold_valueChanged(do
   }
   m_shaderGraph->SetDiscardAlpha(
     (float)m_gui.sbAlphaThreshold->value(),
-    (vkCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
+    (csCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
   );
 
 }
@@ -92,7 +92,7 @@ void ShaderGraphEditorShaderGraphProperties::on_cbAlphaCompareMode_currentIndexC
 
   m_shaderGraph->SetDiscardAlpha(
     (float)m_gui.sbAlphaThreshold->value(),
-    (vkCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
+    (csCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
   );
 }
 

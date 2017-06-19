@@ -4,8 +4,8 @@
 #include <QMessageBox>
 #include <editor.hh>
 #include <mainwindow.hh>
-#include <valkyrie/core/vkfileinfo.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/csfileinfo.hh>
+#include <valkyrie/core/csvfs.hh>
 #include <QFile>
 
 AbstractAssetEditor::AbstractAssetEditor()
@@ -22,7 +22,7 @@ AbstractAssetEditor::~AbstractAssetEditor()
 void AbstractAssetEditor::SetAssetDescriptor(const AssetDescriptor &descriptor)
 {
   m_assetDescriptor = descriptor;
-  vkFileInfo info(descriptor.GetLocator().GetResourceFile());
+  csFileInfo info(descriptor.GetLocator().GetResourceFile());
   m_name = info.GetName();
 
   
@@ -47,17 +47,17 @@ QWidget *AbstractAssetEditor::GetWidget()
   return m_widget;
 }
 
-const vkString &AbstractAssetEditor::GetName() const
+const csString &AbstractAssetEditor::GetName() const
 {
   return m_name;
 }
 
-void AbstractAssetEditor::AddDockItemName(const vkString &dockItemName)
+void AbstractAssetEditor::AddDockItemName(const csString &dockItemName)
 {
   m_visibleDockItems.insert(dockItemName);
 }
 
-const std::set<vkString> &AbstractAssetEditor::GetVisibleDockItems() const
+const std::set<csString> &AbstractAssetEditor::GetVisibleDockItems() const
 {
   return m_visibleDockItems;
 }
@@ -88,8 +88,8 @@ void AbstractAssetEditor::CloseRequest()
 
 QString AbstractAssetEditor::GetResourceFileName() const
 {
-  const vkResourceLocator &loc = GetAssetDescriptor().GetLocator();
-  vkString absFileName = vkVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+  const csResourceLocator &loc = GetAssetDescriptor().GetLocator();
+  csString absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
   QString fileName(absFileName.c_str());
   return fileName;
 }

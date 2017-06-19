@@ -1,31 +1,31 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/graphics/shadergraph/vksgnode.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/graphics/shadergraph/cssgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.refl.hh>
 
-class vkShaderGraphCtx;
+class csShaderGraphCtx;
 
 
 
-VK_INTERFACE()
-class VKGRAPHICSGL4_API vkSGNodeGL4 : public VK_SUPER(vkObject)
+CS_INTERFACE()
+class CSGRAPHICSGL4_API csSGNodeGL4 : public CS_SUPER(csObject)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGNodeGL4();
-  virtual ~vkSGNodeGL4();
+  csSGNodeGL4();
+  virtual ~csSGNodeGL4();
 
-  void SetNode(vkSGNode *node)
+  void SetNode(csSGNode *node)
   {
     m_node = node;
   }
 
-  virtual bool EvaluateInline(vkShaderGraphCtx &ctx);
-  virtual bool Evaluate(vkShaderGraphCtx &ctx);
+  virtual bool EvaluateInline(csShaderGraphCtx &ctx);
+  virtual bool Evaluate(csShaderGraphCtx &ctx);
 
-  vkSGNode* GetNode()
+  csSGNode* GetNode()
   {
     return m_node;
   }
@@ -44,24 +44,24 @@ public:
   }
 
 
-  vkString AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, const vkString &exp, const vkString &type);
+  csString AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const csString &exp, const csString &type);
 
-  static vkSGDataType GetHigher(vkSGDataType dtA, vkSGDataType dtB);
-  static vkString GetDataTypeVar(vkSGDataType dt);
+  static csSGDataType GetHigher(csSGDataType dtA, csSGDataType dtB);
+  static csString GetDataTypeVar(csSGDataType dt);
 
 protected:
-  virtual void PrivEvaluate(vkShaderGraphCtx &ctx) = 0;
+  virtual void PrivEvaluate(csShaderGraphCtx &ctx) = 0;
   void SetDoubleInlineEvaluateInput();
 
 private:
   bool m_forceInline;
   bool m_inline;
-  vkSGNode *m_node;
+  csSGNode *m_node;
   bool m_inlineEvaluated;
   bool m_evaluated;
   bool m_doubleInlineEvaluateInput;
 
-  vkString GetFloat(vkShaderGraphCtx &ctx, int x);
-  vkString GetInt(vkShaderGraphCtx &ctx, int x);
+  csString GetFloat(csShaderGraphCtx &ctx, int x);
+  csString GetInt(csShaderGraphCtx &ctx, int x);
 
 };

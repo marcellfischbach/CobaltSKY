@@ -1,14 +1,14 @@
 #version 330
 
-layout(location = 0) out vec4 vk_FragColor;
+layout(location = 0) out vec4 cs_FragColor;
 
-uniform sampler2D vk_Color0;
-uniform sampler2D vk_Color1;
+uniform sampler2D cs_Color0;
+uniform sampler2D cs_Color1;
 
 in vec2 inFragTexCoord0;
 
 void main ()
 {
-	vk_FragColor = texture(vk_Color0, inFragTexCoord0) 
-	             + texture(vk_Color1, inFragTexCoord0);
+	cs_FragColor = texture(cs_Color0, inFragTexCoord0) 
+	             + texture(cs_Color1, inFragTexCoord0);
 }

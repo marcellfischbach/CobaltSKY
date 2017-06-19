@@ -1,9 +1,9 @@
 #pragma once
 
-#include <valkyrie/math/vkvector.hh>
+#include <valkyrie/math/csvector.hh>
 
-class vkRenderState;
-class vkLightState;
+class csRenderState;
+class csLightState;
 
 /**
 * \ingroup entity
@@ -12,9 +12,9 @@ class vkLightState;
 struct iEntityScan
 {
 
-  virtual void ScanRenderState(vkRenderState *renderState) = 0;
+  virtual void ScanRenderState(csRenderState *renderState) = 0;
 
-  virtual void ScanLightState(vkLightState *lightState) = 0;
+  virtual void ScanLightState(csLightState *lightState) = 0;
 
 };
 
@@ -22,11 +22,11 @@ struct iEntityScan
 * \ingroup entity
 */
 
-struct vkScanConfig
+struct csScanConfig
 {
 
   bool ScanShadowCasters;
   bool ScanNonShadowCasters;
 
-  vkVector3f MainCameraPosition;
+  csVector3f MainCameraPosition;
 };

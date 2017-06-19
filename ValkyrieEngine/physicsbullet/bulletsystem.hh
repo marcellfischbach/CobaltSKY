@@ -7,14 +7,14 @@
 
 
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletSystem : public VK_SUPER(iPhysicsSystem)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletSystem : public CS_SUPER(iPhysicsSystem)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
-  vkBulletSystem();
-  virtual ~vkBulletSystem();
+  csBulletSystem();
+  virtual ~csBulletSystem();
 
   virtual void Initialize();
 
@@ -25,9 +25,9 @@ public:
   virtual iPhysicsTriggerCollider *CreateTriggerCollider();
   virtual iPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
 
-  virtual iPhysicsShape *CreateShape(const vkPhysGeometry &geometry);
+  virtual iPhysicsShape *CreateShape(const csPhysGeometry &geometry);
 
-  virtual iPhysicsJoint *CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB);
+  virtual iPhysicsJoint *CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB);
 
 };
 

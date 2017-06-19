@@ -1,24 +1,24 @@
 #pragma once
 
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 class QDomDocument;
 class QDomElement;
 class AssetManagerRenamer
 {
 public:
-  AssetManagerRenamer(const vkResourceLocator &from, const vkResourceLocator &to);
+  AssetManagerRenamer(const csResourceLocator &from, const csResourceLocator &to);
 
   bool Execute();
 
 private:
-  void Rename(const vkResourceLocator &from, const vkResourceLocator &to);
-  void Rename(const vkResourceLocator &resource, const vkResourceLocator &from, const vkResourceLocator &to);
-  void Rename(QDomDocument doc, QDomElement element, const vkResourceLocator &from, const vkResourceLocator &to);
-  void MoveTheFile(const vkResourceLocator &from, const vkResourceLocator &to);
+  void Rename(const csResourceLocator &from, const csResourceLocator &to);
+  void Rename(const csResourceLocator &resource, const csResourceLocator &from, const csResourceLocator &to);
+  void Rename(QDomDocument doc, QDomElement element, const csResourceLocator &from, const csResourceLocator &to);
+  void MoveTheFile(const csResourceLocator &from, const csResourceLocator &to);
 
 private:
-  vkResourceLocator m_from;
-  vkResourceLocator m_to;
+  csResourceLocator m_from;
+  csResourceLocator m_to;
 
 };

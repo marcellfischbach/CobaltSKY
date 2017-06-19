@@ -3,17 +3,17 @@
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletshape.hh>
 #include <valkyrie/physics/iphysicsshape.hh>
-#include <valkyrie/physics/vkphysicsshapecontainer.hh>
+#include <valkyrie/physics/csphysicsshapecontainer.hh>
 
 
-vkBulletStaticCollider::vkBulletStaticCollider()
+csBulletStaticCollider::csBulletStaticCollider()
   : iPhysicsStaticCollider()
   , m_friction(0.0f)
   , m_restitution(0.0f)
 {
 }
 
-vkBulletStaticCollider::~vkBulletStaticCollider()
+csBulletStaticCollider::~csBulletStaticCollider()
 {
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
@@ -31,7 +31,7 @@ vkBulletStaticCollider::~vkBulletStaticCollider()
   m_shapes.clear();
 }
 
-void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
+void csBulletStaticCollider::AttachShape(iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -40,7 +40,7 @@ void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
 
   shape->AddRef();
 
-  vkBulletShape *btShape = static_cast<vkBulletShape*>(shape);
+  csBulletShape *btShape = static_cast<csBulletShape*>(shape);
 
   Data data;
   data.btShape = btShape->GetBulletShape();
@@ -51,8 +51,8 @@ void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
   data.object->setFriction(m_friction);
   data.object->setRestitution(m_restitution);
 
-  vkMatrix4f global;
-  vkMatrix4f::Mult(m_transformation, data.localTransform, global);
+  csMatrix4f global;
+  csMatrix4f::Mult(m_transformation, data.localTransform, global);
   // global.Debug("Global");
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&global.m00));
@@ -61,48 +61,48 @@ void vkBulletStaticCollider::AttachShape(iPhysicsShape *shape)
   m_shapes.push_back(data);
 }
 
-void vkBulletStaticCollider::DetachShape(iPhysicsShape *shape)
+void csBulletStaticCollider::DetachShape(iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void vkBulletStaticCollider::AttachShape(vkPhysicsShapeContainer *shapes)
+void csBulletStaticCollider::AttachShape(csPhysicsShapeContainer *shapes)
 {
   if (!shapes)
   {
     return;
   }
-  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  for (csSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
     AttachShape(shapes->GetShape(i));
   }
 }
 
-void vkBulletStaticCollider::DetachShape(vkPhysicsShapeContainer *shapes)
+void csBulletStaticCollider::DetachShape(csPhysicsShapeContainer *shapes)
 {
   if (!shapes)
   {
     return;
   }
-  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  for (csSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
     DetachShape(shapes->GetShape(i));
   }
 }
 
-vkTransformation vkBulletStaticCollider::GetTransform()
+csTransformation csBulletStaticCollider::GetTransform()
 {
-  return vkTransformation(&m_transformation, 0, 0, 0);
+  return csTransformation(&m_transformation, 0, 0, 0);
 }
 
 
-void vkBulletStaticCollider::FinishTransformation()
+void csBulletStaticCollider::FinishTransformation()
 {
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
     Data &data = m_shapes[i];
-    vkMatrix4f global;
-    vkMatrix4f::Mult(m_transformation, data.localTransform, global);
+    csMatrix4f global;
+    csMatrix4f::Mult(m_transformation, data.localTransform, global);
 
     // global.Debug("Final global");
     btTransform trans;
@@ -113,7 +113,7 @@ void vkBulletStaticCollider::FinishTransformation()
 
 
 
-void vkBulletStaticCollider::SetFriction(float friction)
+void csBulletStaticCollider::SetFriction(float friction)
 {
   m_friction = friction;
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
@@ -123,7 +123,7 @@ void vkBulletStaticCollider::SetFriction(float friction)
   }
 }
 
-void vkBulletStaticCollider::SetRestitution(float restitution)
+void csBulletStaticCollider::SetRestitution(float restitution)
 {
   m_restitution = restitution;
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
@@ -135,7 +135,7 @@ void vkBulletStaticCollider::SetRestitution(float restitution)
 
 
 
-void vkBulletStaticCollider::AttachToScene(vkBulletScene *scene)
+void csBulletStaticCollider::AttachToScene(csBulletScene *scene)
 {
   m_scene = scene;
   if (m_scene && m_scene->GetBulletScene())
@@ -149,7 +149,7 @@ void vkBulletStaticCollider::AttachToScene(vkBulletScene *scene)
   }
 }
 
-void vkBulletStaticCollider::DetachFromScene(vkBulletScene *scene)
+void csBulletStaticCollider::DetachFromScene(csBulletScene *scene)
 {
   if (m_scene && m_scene->GetBulletScene())
   {

@@ -1,22 +1,22 @@
 #pragma once
 
 
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <QImage>
 #include <editorimage.refl.hh>
 
-class vkImage;
+class csImage;
 
 
-VK_CLASS()
-class EditorImage : public VK_SUPER(iObject)
+CS_CLASS()
+class EditorImage : public CS_SUPER(iObject)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  EditorImage(vkImage *image = 0);
+  EditorImage(csImage *image = 0);
   virtual ~EditorImage();
 
-  void SetImage(vkImage *image);
+  void SetImage(csImage *image);
 
   QImage GetImage() const
   {

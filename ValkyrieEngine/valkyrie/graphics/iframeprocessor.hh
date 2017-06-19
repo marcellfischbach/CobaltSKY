@@ -1,28 +1,28 @@
 
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/iframeprocessor.refl.hh>
 
 
-class vkCamera;
-class vkNode;
-class vkEntity;
-class vkPostProcessor;
+class csCamera;
+class csNode;
+class csEntity;
+class csPostProcessor;
 struct iRenderTarget;
 
-VK_INTERFACE();
-struct VKE_API iFrameProcessor : public iObject
+CS_INTERFACE();
+struct CSE_API iFrameProcessor : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   iFrameProcessor() : iObject() { }
 
-  virtual bool Resize(vkUInt16 width, vkUInt16 height) = 0;
+  virtual bool Resize(csUInt16 width, csUInt16 height) = 0;
   virtual bool Initialize() = 0;
 
-  virtual void SetPostProcessor(vkPostProcessor *processor) = 0;
+  virtual void SetPostProcessor(csPostProcessor *processor) = 0;
 
-  virtual iRenderTarget *Render(vkEntity *root, vkCamera *camera, iRenderTarget *target = 0) = 0;
+  virtual iRenderTarget *Render(csEntity *root, csCamera *camera, iRenderTarget *target = 0) = 0;
 
 };

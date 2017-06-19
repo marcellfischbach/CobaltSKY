@@ -3,11 +3,11 @@
 #include <physicsbullet/bulletshape.hh>
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletjoint.hh>
-#include <valkyrie/physics/vkphysicsshapecontainer.hh>
-#include <valkyrie/entity/vktransformation.hh>
-#include <valkyrie/entity/vkcolliderstate.hh>
+#include <valkyrie/physics/csphysicsshapecontainer.hh>
+#include <valkyrie/entity/cstransformation.hh>
+#include <valkyrie/entity/cscolliderstate.hh>
 
-vkBulletDynamicCollider::vkBulletDynamicCollider()
+csBulletDynamicCollider::csBulletDynamicCollider()
   : iPhysicsDynamicCollider()
   , m_kinematic(true)
   , m_friction(0.0f)
@@ -20,7 +20,7 @@ vkBulletDynamicCollider::vkBulletDynamicCollider()
   , m_compoundShape(0)
   , m_transformationCallback(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 
   m_motionState.m_parent = this;
 
@@ -30,7 +30,7 @@ vkBulletDynamicCollider::vkBulletDynamicCollider()
 }
 
 
-vkBulletDynamicCollider::~vkBulletDynamicCollider()
+csBulletDynamicCollider::~csBulletDynamicCollider()
 {
   if (m_body)
   {
@@ -39,7 +39,7 @@ vkBulletDynamicCollider::~vkBulletDynamicCollider()
 }
 
 
-void vkBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
+void csBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -50,7 +50,7 @@ void vkBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
   m_shapes.push_back(shape);
   shape->AddRef();
 
-  vkBulletShape *btShape = static_cast<vkBulletShape*>(shape);
+  csBulletShape *btShape = static_cast<csBulletShape*>(shape);
 
 
   // now check if we just have to attach the shape or if this is already a compound shape
@@ -83,45 +83,45 @@ void vkBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
   UpdateInertia();
  }
 
-void vkBulletDynamicCollider::DetachShape(iPhysicsShape *shape)
+void csBulletDynamicCollider::DetachShape(iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void vkBulletDynamicCollider::AttachShape(vkPhysicsShapeContainer *shapes)
+void csBulletDynamicCollider::AttachShape(csPhysicsShapeContainer *shapes)
 {
   if (!shapes)
   {
     return;
   }
 
-  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  for (csSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
     AttachShape(shapes->GetShape(i));
   }
 }
 
-void vkBulletDynamicCollider::DetachShape(vkPhysicsShapeContainer *shapes)
+void csBulletDynamicCollider::DetachShape(csPhysicsShapeContainer *shapes)
 {
   if (!shapes)
   {
     return;
   }
 
-  for (vkSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
+  for (csSize i = 0, in = shapes->GetNumberOfShapes(); i < in; ++i)
   {
     DetachShape(shapes->GetShape(i));
   }
 }
 
 
-vkTransformation vkBulletDynamicCollider::GetTransform()
+csTransformation csBulletDynamicCollider::GetTransform()
 {
-  return vkTransformation(&m_transformation, 0, 0, 0);
+  return csTransformation(&m_transformation, 0, 0, 0);
 }
 
 
-void vkBulletDynamicCollider::FinishTransformation()
+void csBulletDynamicCollider::FinishTransformation()
 {
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_transformation.m00));
@@ -129,12 +129,12 @@ void vkBulletDynamicCollider::FinishTransformation()
   m_body->updateInertiaTensor();
 }
 
-void vkBulletDynamicCollider::SetTransformationCallback(iTransformationCallback *callback)
+void csBulletDynamicCollider::SetTransformationCallback(iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
 
-void vkBulletDynamicCollider::SetKinematic(bool kinematic)
+void csBulletDynamicCollider::SetKinematic(bool kinematic)
 {
   m_kinematic = kinematic;
 
@@ -148,27 +148,27 @@ void vkBulletDynamicCollider::SetKinematic(bool kinematic)
   }
 }
 
-void vkBulletDynamicCollider::SetFriction(float friction)
+void csBulletDynamicCollider::SetFriction(float friction)
 {
   m_friction = friction;
   m_body->setFriction(friction);
 }
 
-void vkBulletDynamicCollider::SetRestitution(float restitution)
+void csBulletDynamicCollider::SetRestitution(float restitution)
 {
   m_restitution = restitution;
   m_body->setRestitution(restitution);
 }
 
 
-void vkBulletDynamicCollider::SetMass(float mass)
+void csBulletDynamicCollider::SetMass(float mass)
 {
   m_mass = mass;
 
   UpdateInertia();
 }
 
-void vkBulletDynamicCollider::SetInertia(const vkVector3f &inertia)
+void csBulletDynamicCollider::SetInertia(const csVector3f &inertia)
 {
   m_inertia = inertia;
   m_autoInertia = false;
@@ -176,14 +176,14 @@ void vkBulletDynamicCollider::SetInertia(const vkVector3f &inertia)
   UpdateInertia();
 }
 
-void vkBulletDynamicCollider::SetAutoInertia(bool autoInertia)
+void csBulletDynamicCollider::SetAutoInertia(bool autoInertia)
 {
   m_autoInertia = autoInertia;
 
   UpdateInertia();
 }
 
-void vkBulletDynamicCollider::UpdateInertia()
+void csBulletDynamicCollider::UpdateInertia()
 {
   if (m_autoInertia)
   {
@@ -192,11 +192,11 @@ void vkBulletDynamicCollider::UpdateInertia()
     {
       btVector3 btInertia;
       shape->calculateLocalInertia(m_mass, btInertia);
-      m_inertia = vkVector3f(btInertia.getX(), btInertia.getY(), btInertia.getZ());
+      m_inertia = csVector3f(btInertia.getX(), btInertia.getY(), btInertia.getZ());
     }
     else
     {
-      m_inertia = vkVector3f(0.0f, 0.0f, 0.0f);
+      m_inertia = csVector3f(0.0f, 0.0f, 0.0f);
     }
   }
 
@@ -206,7 +206,7 @@ void vkBulletDynamicCollider::UpdateInertia()
 }
 
 
-void vkBulletDynamicCollider::AttachToScene(vkBulletScene *scene)
+void csBulletDynamicCollider::AttachToScene(csBulletScene *scene)
 {
   m_scene = scene;
   if (m_scene && m_scene->GetBulletScene())
@@ -215,7 +215,7 @@ void vkBulletDynamicCollider::AttachToScene(vkBulletScene *scene)
   }
 }
 
-void vkBulletDynamicCollider::DetachFromScene(vkBulletScene *scene)
+void csBulletDynamicCollider::DetachFromScene(csBulletScene *scene)
 {
   if (m_scene && m_scene->GetBulletScene())
   {
@@ -228,12 +228,12 @@ void vkBulletDynamicCollider::DetachFromScene(vkBulletScene *scene)
 
 
 
-void vkBulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldTrans) const
+void csBulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldTrans) const
 {
   worldTrans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_parent->m_transformation.m00));
 }
 
-void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& worldTrans)
+void csBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& worldTrans)
 {
   worldTrans.getOpenGLMatrix(static_cast<btScalar*>(&m_parent->m_transformation.m00));
 
@@ -245,7 +245,7 @@ void vkBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& 
   // inform bullet system that this dynamic collider has changed
 }
 
-void vkBulletDynamicCollider::PropagateTransformation()
+void csBulletDynamicCollider::PropagateTransformation()
 {
   if (m_transformationCallback)
   {
@@ -254,7 +254,7 @@ void vkBulletDynamicCollider::PropagateTransformation()
 }
 
 
-void vkBulletDynamicCollider::DetachJoints(vkBulletScene *scene)
+void csBulletDynamicCollider::DetachJoints(csBulletScene *scene)
 {
   for (size_t i = 0, in = m_joints.size(); i < in; ++i)
   {
@@ -262,13 +262,13 @@ void vkBulletDynamicCollider::DetachJoints(vkBulletScene *scene)
   }
 }
 
-void vkBulletDynamicCollider::AddJoint(vkBulletJoint *joint)
+void csBulletDynamicCollider::AddJoint(csBulletJoint *joint)
 {
   m_joints.push_back(joint);
 }
 
 
-void vkBulletDynamicCollider::RemoveJoint(vkBulletJoint *joint)
+void csBulletDynamicCollider::RemoveJoint(csBulletJoint *joint)
 {
   for (size_t i = 0, in = m_joints.size(); i < in; ++i)
   {

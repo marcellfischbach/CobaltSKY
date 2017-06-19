@@ -2,8 +2,8 @@
 #include <samplereditor/samplereditor.hh>
 #include <samplereditor/samplereditorwidget.hh>
 
-#include <valkyrie/core/vkresourcemanager.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/csresourcemanager.hh>
+#include <valkyrie/core/csvfs.hh>
 #include <valkyrie/graphics/isampler.hh>
 
 #include <QDomDocument>
@@ -15,7 +15,7 @@
 SamplerEditor::SamplerEditor()
   : AbstractAssetEditor()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
   m_widget = new SamplerEditorWidget(this);
   SetWidget(m_widget);
 
@@ -33,7 +33,7 @@ void SamplerEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  iSampler *sampler = vkResourceManager::Get()->Aquire<iSampler>(descriptor.GetLocator());
+  iSampler *sampler = csResourceManager::Get()->Aquire<iSampler>(descriptor.GetLocator());
   m_widget->SetSampler(sampler);
 }
 
@@ -323,7 +323,7 @@ void SamplerEditor::SetAddressW(QDomDocument doc, QDomElement element)
 }
 
 
-void SamplerEditor::SetAddress(QDomDocument doc, vkTextureAddressMode address, QDomElement element)
+void SamplerEditor::SetAddress(QDomDocument doc, csTextureAddressMode address, QDomElement element)
 {
   QString text;
   switch (address)
@@ -340,7 +340,7 @@ void SamplerEditor::SetAddress(QDomDocument doc, vkTextureAddressMode address, Q
 void SamplerEditor::SetBorderColor(QDomDocument doc, QDomElement element)
 {
   RemoveChildren(element);
-  vkVector4f col = m_widget->GetBorderColor();
+  csVector4f col = m_widget->GetBorderColor();
   QString text = QString("%1 %2 %3 %4").arg(col.x).arg(col.y).arg(col.z).arg(col.w);
   element.appendChild(doc.createTextNode(text));
 }

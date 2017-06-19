@@ -1,38 +1,38 @@
 
 #include <mimehelper.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/core/vkclassregistry.hh>
+#include <valkyrie/core/csresourcelocator.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/core/csclassregistry.hh>
 #include <QMimeData>
 
-#define VK_RESOURCE_LOCATOR_MIME_TYPE "vk-application/resource_locator"
-#define VK_RESOURCE_TYPE_MIME_TYPE "vk-application/resource_type"
-#define VK_CLASS_MIME_TYPE "vk-application/class"
+#define CS_RESOURCE_LOCATOR_MIME_TYPE "cs-application/resource_locator"
+#define CS_RESOURCE_TYPE_MIME_TYPE "cs-application/resource_type"
+#define CS_CLASS_MIME_TYPE "cs-application/class"
 
-vkString MimeHelper::GetResourceLocatorMimeType()
+csString MimeHelper::GetResourceLocatorMimeType()
 {
-  return VK_RESOURCE_LOCATOR_MIME_TYPE;
+  return CS_RESOURCE_LOCATOR_MIME_TYPE;
 }
 
-void MimeHelper::PutResourceLocatorMimeData(QMimeData *mimeData, const vkResourceLocator &locator)
+void MimeHelper::PutResourceLocatorMimeData(QMimeData *mimeData, const csResourceLocator &locator)
 {
   if (!mimeData)
   {
     return;
   }
   mimeData->setData(
-    QString(VK_RESOURCE_LOCATOR_MIME_TYPE),
+    QString(CS_RESOURCE_LOCATOR_MIME_TYPE),
     QString(locator.GetResourceFile().c_str()).toLatin1());
 }
 
-void MimeHelper::PutResourceLocatorMimeData(QMimeData *mimeData, const vkString &resourceName)
+void MimeHelper::PutResourceLocatorMimeData(QMimeData *mimeData, const csString &resourceName)
 {
   if (!mimeData)
   {
     return;
   }
   mimeData->setData(
-    QString(VK_RESOURCE_LOCATOR_MIME_TYPE),
+    QString(CS_RESOURCE_LOCATOR_MIME_TYPE),
     QString(resourceName.c_str()).toLatin1());
 
 }
@@ -43,28 +43,28 @@ bool MimeHelper::HasResourceLocator(const QMimeData *mimeData)
   {
     return false;
   }
-  return mimeData->hasFormat(VK_RESOURCE_LOCATOR_MIME_TYPE);
+  return mimeData->hasFormat(CS_RESOURCE_LOCATOR_MIME_TYPE);
 }
 
-vkResourceLocator MimeHelper::GetResourceLocator(const QMimeData *mimeData, const vkString &resource)
+csResourceLocator MimeHelper::GetResourceLocator(const QMimeData *mimeData, const csString &resource)
 {
-  QByteArray ba = mimeData->data(VK_RESOURCE_LOCATOR_MIME_TYPE);
+  QByteArray ba = mimeData->data(CS_RESOURCE_LOCATOR_MIME_TYPE);
   QString name(ba);
 
-  return vkResourceLocator(
-    vkString((const char*)name.toLatin1()),
+  return csResourceLocator(
+    csString((const char*)name.toLatin1()),
     resource);
 }
 
-vkString MimeHelper::GetResourceTypeMimeType()
+csString MimeHelper::GetResourceTypeMimeType()
 {
-  return VK_RESOURCE_TYPE_MIME_TYPE;
+  return CS_RESOURCE_TYPE_MIME_TYPE;
 }
 
-void MimeHelper::PutResourceTypeMimeData(QMimeData *mimeData, const vkString &type)
+void MimeHelper::PutResourceTypeMimeData(QMimeData *mimeData, const csString &type)
 {
   mimeData->setData(
-    QString(VK_RESOURCE_TYPE_MIME_TYPE),
+    QString(CS_RESOURCE_TYPE_MIME_TYPE),
     QString(type.c_str()).toLatin1());
   
 }
@@ -76,28 +76,28 @@ bool MimeHelper::HasResourceType(const QMimeData *data)
     return false;
   }
 
-  return data->hasFormat(VK_RESOURCE_TYPE_MIME_TYPE);
+  return data->hasFormat(CS_RESOURCE_TYPE_MIME_TYPE);
 }
 
-vkString MimeHelper::GetResourceType(const QMimeData *mimeData)
+csString MimeHelper::GetResourceType(const QMimeData *mimeData)
 {
-  QByteArray ba = mimeData->data(VK_RESOURCE_LOCATOR_MIME_TYPE);
+  QByteArray ba = mimeData->data(CS_RESOURCE_LOCATOR_MIME_TYPE);
   QString name(ba);
 
-  return vkString((const char*)name.toLatin1());
+  return csString((const char*)name.toLatin1());
 }
 
 
 
-vkString MimeHelper::GetClassMimeType()
+csString MimeHelper::GetClassMimeType()
 {
-  return VK_CLASS_MIME_TYPE;
+  return CS_CLASS_MIME_TYPE;
 }
 
-void MimeHelper::PutClassMimeData(QMimeData *mimeData, const vkClass *cls)
+void MimeHelper::PutClassMimeData(QMimeData *mimeData, const csClass *cls)
 {
   mimeData->setData(
-    QString(VK_CLASS_MIME_TYPE),
+    QString(CS_CLASS_MIME_TYPE),
     QString(cls->GetName().c_str()).toLatin1());
 
 }
@@ -109,13 +109,13 @@ bool MimeHelper::HasClass(const QMimeData *data)
     return false;
   }
 
-  return data->hasFormat(VK_CLASS_MIME_TYPE);
+  return data->hasFormat(CS_CLASS_MIME_TYPE);
 }
 
-const vkClass *MimeHelper::GetClass(const QMimeData *mimeData)
+const csClass *MimeHelper::GetClass(const QMimeData *mimeData)
 {
-  QByteArray ba = mimeData->data(VK_CLASS_MIME_TYPE);
+  QByteArray ba = mimeData->data(CS_CLASS_MIME_TYPE);
   QString name(ba);
 
-  return vkClassRegistry::Get()->GetClass(vkString((const char*)name.toLatin1()));
+  return csClassRegistry::Get()->GetClass(csString((const char*)name.toLatin1()));
 }

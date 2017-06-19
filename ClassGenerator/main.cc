@@ -14,7 +14,7 @@ std::string CreateHeaderFile(Class *clazz, const std::string &api)
   std::string result = "";
   result += "\n";
   result += "\n";
-  result += "class " + api + " " + className + " : public vkClass\n";
+  result += "class " + api + " " + className + " : public csClass\n";
   result += "{\n";
   result += "public:\n";
   result += "  " + className + "();\n";
@@ -43,17 +43,17 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   {
     Property prop = clazz->GetProperty(i);
     std::string propClassName = className + "_" + prop.GetPropertyName();
-    result += "class " + api + " " + propClassName + " : public vkProperty\n";
+    result += "class " + api + " " + propClassName + " : public csProperty\n";
     result += "{\n";
     result += "public:\n";
     result += "  " + propClassName + "() \n";
-    result += "    : vkProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
+    result += "    : csProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
     result += "  {\n";
     result += "  }\n";
     result += "  \n";
     result += "  virtual void SetValue(iObject *object, void *data) const\n";
     result += "  {\n";
-    result += "    " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
+    result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (d)\n";
     result += "    {\n";
     result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
@@ -63,7 +63,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "  \n";
     result += "  virtual const void *GetValue(const iObject *object) const\n";
     result += "  {\n";
-    result += "    const " + clazz->GetName() + " *d = vkQueryClass<" + clazz->GetName() + ">(object);\n";
+    result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (!d) return 0;\n";
     result += "    return reinterpret_cast<const void*>(&d->" + prop.GetPropertyName() + ");\n";
     result += "  }\n";
@@ -79,7 +79,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   result += "}\n";
   result += "\n";
   result += className + "::" + className + "()\n";
-  result += "  : vkClass(\"" + clazz->GetName() + "\")\n";
+  result += "  : csClass(\"" + clazz->GetName() + "\")\n";
   result += "{\n";
   for (size_t i = 0, in = clazz->GetNumberOfSuperClasses(); i < in; ++i)
   {
@@ -107,17 +107,17 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   }
   result += "}\n";
   result += "\n";
-  result += "const vkClass *" + clazz->GetName() + "::GetClass () const\n";
+  result += "const csClass *" + clazz->GetName() + "::GetClass () const\n";
   result += "{\n";
   result += "  return " + className + "::Get();\n";
   result += "}\n";
   result += "\n";
-  result += "const vkClass *" + clazz->GetName() + "::GetStaticClass ()\n";
+  result += "const csClass *" + clazz->GetName() + "::GetStaticClass ()\n";
   result += "{\n";
   result += "  return " + className + "::Get();\n";
   result += "}\n";
   result += "\n";
-  result += "void *" + clazz->GetName() + "::QueryClass(const vkClass* clazz) \n";
+  result += "void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) \n";
   result += "{\n";
   result += "  if (clazz == " + className + "::Get ())\n";
   result += "  {\n";
@@ -139,7 +139,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   result += "}\n";
   result += "\n";
   result += "\n";
-  result += "const void *" + clazz->GetName() + "::QueryClass(const vkClass* clazz) const\n";
+  result += "const void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) const\n";
   result += "{\n";
   result += "  if (clazz == " + className + "::Get ())\n";
   result += "  {\n";

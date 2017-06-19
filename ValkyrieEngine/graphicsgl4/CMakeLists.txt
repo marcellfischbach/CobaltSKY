@@ -1,6 +1,6 @@
 
 
-add_definitions(-DVKGRAPHICSGL4_EXPORT)
+add_definitions(-DCSGRAPHICSGL4_EXPORT)
 
 
 set(SOURCE
@@ -135,5 +135,5 @@ target_link_libraries(ValkyrieEngine-GraphicsGL4
 	${GLEW_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-GraphicsGL4 graphicsgl4 VKGRAPHICSGL4_API ALL_SOURCES)
+CS_INSTALL_MOCCER(ValkyrieEngine-GraphicsGL4 graphicsgl4 CSGRAPHICSGL4_API ALL_SOURCES)
 

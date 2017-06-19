@@ -4,41 +4,41 @@
 #include <valkyrie/window/imouse.hh>
 #include <windowsdl/sdlmouse.refl.hh>
 
-VK_CLASS()
-class VKWINDOWSDL_API SDLMouse : public VK_SUPER(iMouse)
+CS_CLASS()
+class CSWINDOWSDL_API SDLMouse : public CS_SUPER(iMouse)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
 
   SDLMouse();
   virtual ~SDLMouse();
 
   void UpdateButtons();
-  void SetButtonDown(vkUInt8 key);
-  void SetButtonUp(vkUInt8 key);
+  void SetButtonDown(csUInt8 key);
+  void SetButtonUp(csUInt8 key);
 
-  bool IsButtonDown(vkButton button) const;
-  bool IsButtonUp(vkButton button) const;
+  bool IsButtonDown(csButton button) const;
+  bool IsButtonUp(csButton button) const;
 
-  bool IsButtonPressed(vkButton button) const;
-  bool IsButtonReleased(vkButton button) const;
+  bool IsButtonPressed(csButton button) const;
+  bool IsButtonReleased(csButton button) const;
 
-  virtual vkInt32 GetPosX() const;
-  virtual vkInt32 GetPosY() const;
+  virtual csInt32 GetPosX() const;
+  virtual csInt32 GetPosY() const;
 
-  virtual vkInt32 GetRelX() const;
-  virtual vkInt32 GetRelY() const;
+  virtual csInt32 GetRelX() const;
+  virtual csInt32 GetRelY() const;
 
 
   void UpdateMotion();
-  void SetMotion(vkInt32 x, vkInt32 y, vkInt32 relX, vkInt32 relY);
+  void SetMotion(csInt32 x, csInt32 y, csInt32 relX, csInt32 relY);
 
 private:
   bool m_current[eB_COUNT];
   bool m_prev[eB_COUNT];
 
-  vkInt32 m_posX;
-  vkInt32 m_posY;
-  vkInt32 m_relX;
-  vkInt32 m_relY;
+  csInt32 m_posX;
+  csInt32 m_posY;
+  csInt32 m_relX;
+  csInt32 m_relY;
 };

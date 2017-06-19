@@ -15,7 +15,7 @@ static bool isClassLine(const std::string &line)
 {
   if (line.length() >= 8)
   {
-    if (line.substr(0, 8) == std::string("VK_CLASS"))
+    if (line.substr(0, 8) == std::string("CS_CLASS"))
     {
       if (line.length() == 8)
       {
@@ -36,7 +36,7 @@ static bool isInterfaceLine(const std::string &line)
 {
   if (line.length() >= 12)
   {
-    if (line.substr(0, 12) == std::string("VK_INTERFACE"))
+    if (line.substr(0, 12) == std::string("CS_INTERFACE"))
     {
       if (line.length() == 12)
       {
@@ -58,7 +58,7 @@ static bool isPropertyLine(const std::string &line)
 {
   if (line.length() >= 11)
   {
-    return line.substr(0, 11) == std::string("VK_PROPERTY");
+    return line.substr(0, 11) == std::string("CS_PROPERTY");
   }
   return false;
 }
@@ -134,7 +134,7 @@ static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
       {
         continue;
       }
-      else if (token == "VK_SUPER")
+      else if (token == "CS_SUPER")
       {
         readSuperName = true;
       }

@@ -4,9 +4,9 @@
 #include <shadergrapheditor/shadergrapheditornode.hh>
 #include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
 #include <components/assetresourcewidget.hh>
-#include <valkyrie/graphics/shadergraph/vksgnode.hh>
-#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/cssgnode.hh>
+#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 #include <valkyrie/graphics/itexture.hh>
 
 #include <QGridLayout>
@@ -49,7 +49,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
 
   m_node = nodes[0];
 
-  vkSGNode *sgNode = m_node->GetSGNode();
+  csSGNode *sgNode = m_node->GetSGNode();
   if (sgNode)
   {
     m_group = new QWidget();
@@ -61,7 +61,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     int row = 0;
 
     bool needSeparator = false;
-    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(sgNode);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(sgNode);
     if (resourceNode)
     {
       QLabel *label = new QLabel(m_group);
@@ -167,8 +167,8 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         assetResourceWidget = new AssetResourceWidget(m_group);
         assetResourceWidget->SetResourceLocator(resourceNode->GetDefaultTextureResource());
         assetResourceWidget->AddValidClass(iTexture::GetStaticClass());
-        connect(assetResourceWidget, SIGNAL(ResourceChanged(const vkResourceLocator&)),
-          this, SLOT(ResourceChanged(const vkResourceLocator &)));
+        connect(assetResourceWidget, SIGNAL(ResourceChanged(const csResourceLocator&)),
+          this, SLOT(ResourceChanged(const csResourceLocator &)));
         lo->addWidget(assetResourceWidget, row++, 1, 1, 1);
         break;
 
@@ -179,9 +179,9 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
       needSeparator = true;
     }
 
-    for (vkSize i = 0, in = sgNode->GetNumberOfInputs(); i < in; ++i)
+    for (csSize i = 0, in = sgNode->GetNumberOfInputs(); i < in; ++i)
     {
-      vkSGInput *input = sgNode->GetInput(i);
+      csSGInput *input = sgNode->GetInput(i);
       if (input->CanInputConst())
       {
         if (needSeparator)
@@ -214,7 +214,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     lo->addItem(new QSpacerItem(1, 1, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding), row, 0, 1, 2);
   }
 
-  vkSGShaderGraph *sgShaderGraph = m_node->GetShaderGraph();
+  csSGShaderGraph *sgShaderGraph = m_node->GetShaderGraph();
   if (sgShaderGraph)
   {
     ShaderGraphEditorShaderGraphProperties *props = new ShaderGraphEditorShaderGraphProperties();
@@ -247,14 +247,14 @@ void ShaderGraphEditorProperties::SpinBox_valueChanged(double value)
     return;
   }
 
-  vkSGNode *node = m_node->GetSGNode();
+  csSGNode *node = m_node->GetSGNode();
   if (node)
   {
     for (std::map<unsigned, QDoubleSpinBox*>::iterator it = m_spinBoxes.begin();
       it != m_spinBoxes.end();
       ++it)
     {
-      vkSGInput *input = node->GetInput(it->first);
+      csSGInput *input = node->GetInput(it->first);
       if (input->CanInputConst())
       {
         input->SetConst(it->second->value());
@@ -274,13 +274,13 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
     return;
   }
 
-  vkSGNode *node = m_node->GetSGNode();
+  csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
-      resourceNode->SetResourceName(vkString((const char*)name.toLatin1()));
+      resourceNode->SetResourceName(csString((const char*)name.toLatin1()));
 
       m_node->UpdateValues();
       m_node->Layout();
@@ -296,10 +296,10 @@ void ShaderGraphEditorProperties::DefaultFloat_valueChanged(double value)
     return;
   }
 
-  vkSGNode *node = m_node->GetSGNode();
+  csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -322,10 +322,10 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
     return;
   }
 
-  vkSGNode *node = m_node->GetSGNode();
+  csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -341,17 +341,17 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
   emit NodeChanged();
 }
 
-void ShaderGraphEditorProperties::ResourceChanged(const vkResourceLocator &locator)
+void ShaderGraphEditorProperties::ResourceChanged(const csResourceLocator &locator)
 {
   if (!m_node)
   {
     return;
   }
 
-  vkSGNode *node = m_node->GetSGNode();
+  csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    vkSGResourceNode *resourceNode = vkQueryClass<vkSGResourceNode>(node);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       resourceNode->SetDefaultTextureResource(locator);

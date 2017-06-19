@@ -3,11 +3,11 @@
 #include <QAbstractItemModel>
 #include <QDir>
 #include <QList>
-#include <valkyrie/core/vkstring.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csstring.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 class AssetManagerContentModelEntry;
-class vkClass;
+class csClass;
 
 class AssetManagerContentModel : public QAbstractItemModel
 {
@@ -16,7 +16,7 @@ public:
   AssetManagerContentModel();
   virtual ~AssetManagerContentModel();
 
-  void SetResourceLocator(const vkResourceLocator &locator);
+  void SetResourceLocator(const csResourceLocator &locator);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
@@ -26,13 +26,13 @@ public:
   virtual QStringList mimeTypes() const;
   virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-  vkResourceLocator GetLocator(const QModelIndex &index) const;
+  csResourceLocator GetLocator(const QModelIndex &index) const;
 
   const AssetManagerContentModelEntry *GetEntry(const QModelIndex &index) const;
 private:
   void CleanupEntries();
-  vkString ReadType(const vkResourceLocator &fileName) const;
+  csString ReadType(const csResourceLocator &fileName) const;
 
-  vkResourceLocator m_locator;
+  csResourceLocator m_locator;
   QList<AssetManagerContentModelEntry*> m_entries;
 };

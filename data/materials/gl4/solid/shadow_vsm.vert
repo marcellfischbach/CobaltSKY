@@ -1,11 +1,11 @@
 
 #version 330
 
-in vec4 vk_Position;
-//in vec3 vk_Normal;
-//in vec2 vk_TexCoord0;
+in vec4 cs_Position;
+//in vec3 cs_Normal;
+//in vec2 cs_TexCoord0;
 
-uniform mat4 vk_MatModel;
+uniform mat4 cs_MatModel;
 
 
 // out vec2 inGeomTexCoord;
@@ -13,7 +13,7 @@ uniform mat4 vk_MatModel;
 
 void main ()
 {
-	gl_Position = vk_MatModel * vk_Position;
-	//inGeomNormal = mat3(vk_MatModel) * vk_Normal;
-	//inGeomTexCoord = vk_TexCoord0;
+	gl_Position = cs_MatModel * cs_Position;
+	//inGeomNormal = mat3(cs_MatModel) * cs_Normal;
+	//inGeomTexCoord = cs_TexCoord0;
 }

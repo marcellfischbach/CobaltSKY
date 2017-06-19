@@ -5,14 +5,14 @@
 #include <graphicsgl4/shadergraph/gl4sgtexture2d.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGTexture2DGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGTexture2DGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGTexture2DGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGTexture2DGL4() { }
+  csSGTexture2DGL4() : csSGNodeGL4() { }
+  virtual ~csSGTexture2DGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

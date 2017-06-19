@@ -1,19 +1,19 @@
 #pragma once
 
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/vkdiamond.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/csdiamond.hh>
+#include <valkyrie/csenums.hh>
 #include <valkyrie/physics/iphysicscollider.hh>
 #include <valkyrie/physics/iphysicsjoint.refl.hh>
 
 
-VK_INTERFACE()
-struct VKE_API iPhysicsJoint : public iObject
+CS_INTERFACE()
+struct CSE_API iPhysicsJoint : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   virtual ~iPhysicsJoint() { }
 
-  virtual vkPhysicsJointType GetType() const = 0;
+  virtual csPhysicsJointType GetType() const = 0;
 
   virtual iPhysicsDynamicCollider *GetColliderA() const = 0;
   virtual iPhysicsDynamicCollider *GetColliderB() const = 0;

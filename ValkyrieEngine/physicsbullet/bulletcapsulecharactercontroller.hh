@@ -9,25 +9,25 @@ class btCapsuleShape;
 class btKinematicCharacterController;
 class btPairCachingGhostObject;
 
-class vkBulletScene;
+class csBulletScene;
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletCapsuleCharacterController : public VK_SUPER(iPhysicsCapsuleCharacterController)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletCapsuleCharacterController : public CS_SUPER(iPhysicsCapsuleCharacterController)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  vkBulletCapsuleCharacterController();
-  virtual ~vkBulletCapsuleCharacterController();
+  csBulletCapsuleCharacterController();
+  virtual ~csBulletCapsuleCharacterController();
 
   virtual void Initialize(float height, float radius);
 
 
   virtual void SetTransformationCallback(iTransformationCallback *transformationCallback);
 
-  virtual void Warp(const vkMatrix4f &transformation);
-  virtual void WarpToPosition(const vkVector3f &newPosition);
-  virtual void SetLocalWalkDirection(const vkVector3f &direction);
-  virtual void SetGlobalWalkDirection(const vkVector3f &direction);
+  virtual void Warp(const csMatrix4f &transformation);
+  virtual void WarpToPosition(const csVector3f &newPosition);
+  virtual void SetLocalWalkDirection(const csVector3f &direction);
+  virtual void SetGlobalWalkDirection(const csVector3f &direction);
   virtual void Rotate(float angle);
 
   virtual bool IsOnGround() const;
@@ -36,13 +36,13 @@ public:
   virtual void SetJumpSpeed(float jumpSpeed);
 
   virtual void SetMaxFallSpeed(float maxFallSpeed);
-  virtual void SetGravity(const vkVector3f &gravity);
+  virtual void SetGravity(const csVector3f &gravity);
   virtual void SetGravity(float gravity);
 
   virtual void SetMaxSlope(float maxSlope);
 
-  void AttachToScene(vkBulletScene *scene);
-  void DetachFromScene(vkBulletScene *scene);
+  void AttachToScene(csBulletScene *scene);
+  void DetachFromScene(csBulletScene *scene);
 
   void UpdateCallbacks();
 protected:

@@ -4,7 +4,7 @@
 
 struct iTexture;
 class AssetResourceWidget;
-class vkResourceLocator;
+class csResourceLocator;
 class TextureEditorProperties : public QWidget
 {
   Q_OBJECT;
@@ -15,7 +15,7 @@ public:
   void SetTexture(iTexture *texture);
 
 signals:
-  void SamplerChanged(const vkResourceLocator &locator);
+  void SamplerChanged(const csResourceLocator &locator);
 private:
   void InitGUI();
   AssetResourceWidget *m_samplerWidget = 0;

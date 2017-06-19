@@ -7,56 +7,56 @@
 #include <physicsbullet/bullethingejoint.refl.hh>
 
 
-class vkBulletDynamicCollider;
+class csBulletDynamicCollider;
 
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletHingeJoint : public  VK_SUPER(vkBulletJoint), public VK_SUPER(iPhysicsHingeJoint)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletHingeJoint : public  CS_SUPER(csBulletJoint), public CS_SUPER(iPhysicsHingeJoint)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkBulletHingeJoint();
-  virtual ~vkBulletHingeJoint();
+  csBulletHingeJoint();
+  virtual ~csBulletHingeJoint();
 
-  bool Initialize(vkBulletDynamicCollider *colliderA, vkBulletDynamicCollider *colliderB);
+  bool Initialize(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB);
 
-  virtual void SetFrameA(const vkMatrix4f &frame);
-  virtual const vkMatrix4f &GetFrameA() const;
+  virtual void SetFrameA(const csMatrix4f &frame);
+  virtual const csMatrix4f &GetFrameA() const;
 
-  virtual void SetFrameB(const vkMatrix4f &frame);
-  virtual const vkMatrix4f &GetFrameB() const;
+  virtual void SetFrameB(const csMatrix4f &frame);
+  virtual const csMatrix4f &GetFrameB() const;
 
-  virtual void SetFrames(const vkMatrix4f &frameA, const vkMatrix4f &frameB);
+  virtual void SetFrames(const csMatrix4f &frameA, const csMatrix4f &frameB);
 
   btHingeConstraint *GetHingeConstraint();
   const btHingeConstraint *GetHingeConstraint() const;
 
 private:
-  vkMatrix4f m_frameA;
-  vkMatrix4f m_frameB;
+  csMatrix4f m_frameA;
+  csMatrix4f m_frameB;
 
   btHingeConstraint *m_hingeConstraints;
 };
 
 
 
-VK_FORCEINLINE btHingeConstraint *vkBulletHingeJoint::GetHingeConstraint()
+CS_FORCEINLINE btHingeConstraint *csBulletHingeJoint::GetHingeConstraint()
 {
   return m_hingeConstraints;
 }
 
-VK_FORCEINLINE const btHingeConstraint *vkBulletHingeJoint::GetHingeConstraint() const
+CS_FORCEINLINE const btHingeConstraint *csBulletHingeJoint::GetHingeConstraint() const
 {
   return m_hingeConstraints;
 }
 
 
-VK_FORCEINLINE const vkMatrix4f &vkBulletHingeJoint::GetFrameA() const
+CS_FORCEINLINE const csMatrix4f &csBulletHingeJoint::GetFrameA() const
 {
   return m_frameA;
 }
 
-VK_FORCEINLINE const vkMatrix4f &vkBulletHingeJoint::GetFrameB() const
+CS_FORCEINLINE const csMatrix4f &csBulletHingeJoint::GetFrameB() const
 {
   return m_frameB;
 }

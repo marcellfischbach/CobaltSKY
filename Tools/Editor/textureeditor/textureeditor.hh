@@ -5,14 +5,14 @@
 #include <assetdescriptor.hh>
 
 #include <textureeditor/textureeditor.refl.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/csenums.hh>
 
 class TextureEditorProperties;
 class TextureEditorWidget;
-VK_CLASS()
+CS_CLASS()
 class TextureEditor : public AbstractAssetEditor
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
   TextureEditor();

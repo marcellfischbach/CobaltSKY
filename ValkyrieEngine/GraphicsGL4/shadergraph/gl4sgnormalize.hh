@@ -4,14 +4,14 @@
 #include <graphicsgl4/shadergraph/gl4sgnormalize.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGNormalizeGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGNormalizeGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGNormalizeGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGNormalizeGL4() { }
+  csSGNormalizeGL4() : csSGNodeGL4() { }
+  virtual ~csSGNormalizeGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

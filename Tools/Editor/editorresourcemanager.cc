@@ -1,10 +1,10 @@
 
 #include <editorresourcemanager.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/core/csvfs.hh>
 
 
 EditorResourceManager::EditorResourceManager()
-  : vkResourceManager()
+  : csResourceManager()
 {
 
 }
@@ -14,27 +14,27 @@ EditorResourceManager::~EditorResourceManager()
 
 }
 
-iObject *EditorResourceManager::Load(const vkResourceLocator &locator, iObject *userData)
+iObject *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
 {
-  vkResourceLocator fixedLocator = FixResourceLocator(locator);
+  csResourceLocator fixedLocator = FixResourceLocator(locator);
   printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return vkResourceManager::Load(fixedLocator, userData);
+  return csResourceManager::Load(fixedLocator, userData);
 }
 
 
-const vkClass *EditorResourceManager::EvalClass(const vkResourceLocator &locator, iObject *userData) const
+const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator, iObject *userData) const
 {
-  vkResourceLocator fixedLocator = FixResourceLocator(locator);
+  csResourceLocator fixedLocator = FixResourceLocator(locator);
   printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return vkResourceManager::EvalClass(fixedLocator, userData);
+  return csResourceManager::EvalClass(fixedLocator, userData);
 }
 
 
-vkResourceLocator EditorResourceManager::FixResourceLocator(const vkResourceLocator &locator) const
+csResourceLocator EditorResourceManager::FixResourceLocator(const csResourceLocator &locator) const
 {
   if (!locator.GetResourceEntry().empty() && IsAnonymousLocator(locator))
   {
-    return vkResourceLocator(
+    return csResourceLocator(
       locator.GetResourceFile(),
       locator.GetResourceName()
     );
@@ -42,9 +42,9 @@ vkResourceLocator EditorResourceManager::FixResourceLocator(const vkResourceLoca
   return locator;
 }
 
-bool EditorResourceManager::IsAnonymousLocator(const vkResourceLocator &locator) const
+bool EditorResourceManager::IsAnonymousLocator(const csResourceLocator &locator) const
 {
-  const vkVFS::Entry *entry = vkVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
+  const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
   if (!entry)
   {
     return false;
@@ -52,25 +52,25 @@ bool EditorResourceManager::IsAnonymousLocator(const vkResourceLocator &locator)
   return entry->GetName() == locator.GetResourceEntry();
 }
 
-bool EditorResourceManager::RegisterObject(const vkResourceLocator &locator, iObject *object)
+bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, iObject *object)
 {
-  bool res = vkResourceManager::RegisterObject(locator, object);
+  bool res = csResourceManager::RegisterObject(locator, object);
   if (locator.GetResourceEntry().empty())
   {
 
-    const vkVFS::Entry *entry = vkVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
+    const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
     if (entry)
     {
-      vkResourceManager::RegisterObject(
-        vkResourceLocator(locator.GetResourceFile(), locator.GetResourceName(), entry->GetName()),
+      csResourceManager::RegisterObject(
+        csResourceLocator(locator.GetResourceFile(), locator.GetResourceName(), entry->GetName()),
         object
       );
     }
   }
   else if (IsAnonymousLocator(locator))
   {
-    vkResourceManager::RegisterObject(
-      vkResourceLocator(locator.GetResourceFile(), locator.GetResourceName()),
+    csResourceManager::RegisterObject(
+      csResourceLocator(locator.GetResourceFile(), locator.GetResourceName()),
       object
     );
   }

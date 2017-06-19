@@ -1,6 +1,6 @@
 #pragma once
 
-#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/csstring.hh>
 #include <project/projectreferencetree.hh>
 
 

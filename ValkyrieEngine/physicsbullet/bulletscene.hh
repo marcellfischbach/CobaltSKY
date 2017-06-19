@@ -1,23 +1,23 @@
 #pragma once
 
 #include <physicsbullet/bulletexport.hh>
-#include <valkyrie/vkdefs.hh>
-#include <valkyrie/core/vkcollection.hh>
+#include <valkyrie/csdefs.hh>
+#include <valkyrie/core/cscollection.hh>
 #include <valkyrie/physics/iphysicsscene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <physicsbullet/bulletscene.refl.hh>
 
-class vkBulletBody;
-class vkBulletDynamicCollider;
-class vkBulletCapsuleCharacterController;
+class csBulletBody;
+class csBulletDynamicCollider;
+class csBulletCapsuleCharacterController;
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletScene : public VK_SUPER(iPhysicsScene)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletScene : public CS_SUPER(iPhysicsScene)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  vkBulletScene();
-  virtual ~vkBulletScene();
+  csBulletScene();
+  virtual ~csBulletScene();
 
   bool Initialize(bool softBody);
 
@@ -38,8 +38,8 @@ public:
   virtual void UpdateColliders();
 
 
-  void BodyChanged(vkBulletBody *body);
-  void DynamicColliderChanged(vkBulletDynamicCollider *dynamicCollider);
+  void BodyChanged(csBulletBody *body);
+  void DynamicColliderChanged(csBulletDynamicCollider *dynamicCollider);
 
   btDiscreteDynamicsWorld *GetBulletScene();
 
@@ -50,12 +50,12 @@ private:
   btConstraintSolver *m_constraintSolver;
   btDiscreteDynamicsWorld *m_world;
 
-  vkCollection<vkBulletBody*> m_changedBodies;
-  vkCollection<vkBulletDynamicCollider*> m_changedDynamicColliders;
-  std::vector<vkBulletCapsuleCharacterController*> m_characterControllers;
+  csCollection<csBulletBody*> m_changedBodies;
+  csCollection<csBulletDynamicCollider*> m_changedDynamicColliders;
+  std::vector<csBulletCapsuleCharacterController*> m_characterControllers;
 };
 
-VK_FORCEINLINE btDiscreteDynamicsWorld *vkBulletScene::GetBulletScene()
+CS_FORCEINLINE btDiscreteDynamicsWorld *csBulletScene::GetBulletScene()
 {
   return m_world;
 }

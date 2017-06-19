@@ -1,51 +1,51 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
-#include <valkyrie/graphics/shadergraph/vksgnode.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/cssgnode.hh>
 #include <map>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.refl.hh>
 
-class vkSGNodeGL4;
-class vkGraphicsGL4;
+class csSGNodeGL4;
+class csGraphicsGL4;
 
-class VKGRAPHICSGL4_API vkShaderGraphGL4 : public VK_SUPER(ISGShaderGraphFactory)
+class CSGRAPHICSGL4_API csShaderGraphGL4 : public CS_SUPER(ISGShaderGraphFactory)
 {
 public:
-  vkShaderGraphGL4(vkGraphicsGL4 *graphics);
-  ~vkShaderGraphGL4();
+  csShaderGraphGL4(csGraphicsGL4 *graphics);
+  ~csShaderGraphGL4();
 
 
-  vkString CreateCode(vkSGNode *node, vkSize output);
-  vkString CreateCode(vkSGNode *node, const vkString &outputName);
+  csString CreateCode(csSGNode *node, csSize output);
+  csString CreateCode(csSGNode *node, const csString &outputName);
 
-  vkString CreateCode(vkSGOutput *output);
-
-
-  vkSGNodeGL4 *CreateNode(const vkClass *nodeClass);
+  csString CreateCode(csSGOutput *output);
 
 
-  virtual bool GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger);
+  csSGNodeGL4 *CreateNode(const csClass *nodeClass);
+
+
+  virtual bool GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
 
 private:
-  void GenerateGBuffer(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger);
-  void GenerateShadow(vkSGShaderGraph *graph, unsigned layers, vkRenderPass renderPass, iSGShaderGraphLogger *logger);
+  void GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
+  void GenerateShadow(csSGShaderGraph *graph, unsigned layers, csRenderPass renderPass, iSGShaderGraphLogger *logger);
 
-  void DebugCode(const vkString &title, const vkString &source);
+  void DebugCode(const csString &title, const csString &source);
 
 private:
   struct Map 
   {
-    const vkClass *nodeClass;
-    const vkClass *nodeClassGL4;
-    Map(const vkClass *nodeClass, const vkClass *nodeClassGL4)
+    const csClass *nodeClass;
+    const csClass *nodeClassGL4;
+    Map(const csClass *nodeClass, const csClass *nodeClassGL4)
       : nodeClass(nodeClass)
       , nodeClassGL4(nodeClassGL4)
     {
 
     }
   };
-  vkGraphicsGL4 *m_graphics;
+  csGraphicsGL4 *m_graphics;
   std::vector<Map> m_classMapping;
-  //std::map<const vkClass*, const vkClass*> m_classMapping;
+  //std::map<const csClass*, const csClass*> m_classMapping;
 };

@@ -2,8 +2,8 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/gl4shader.hh>
 #include <graphicsgl4/gl4program.hh>
-#include <valkyrie/graphics/shadergraph/vksginput.hh>
-#include <valkyrie/graphics/shadergraph/vksgoutput.hh>
+#include <valkyrie/graphics/shadergraph/cssginput.hh>
+#include <valkyrie/graphics/shadergraph/cssgoutput.hh>
 #include <iostream>
 #include <sstream>
 #include <set>
@@ -17,9 +17,9 @@ static const char *compareMode[] = {
   "!="
 };
 
-void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers, vkRenderPass renderPass, iSGShaderGraphLogger *logger)
+void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers, csRenderPass renderPass, iSGShaderGraphLogger *logger)
 {
-  vkString passName;
+  csString passName;
   switch (renderPass)
   {
   case eRP_ShadowPSSM:
@@ -31,11 +31,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   }
   graph->SetShader(renderPass, 0);
 
-  std::set<vkSGOutput*> outputs;
-  std::set<vkSGOutput*> preAlphaOutputs;
-  std::set<vkSGOutput*> postAlphaOutputs;
+  std::set<csSGOutput*> outputs;
+  std::set<csSGOutput*> preAlphaOutputs;
+  std::set<csSGOutput*> postAlphaOutputs;
 
-  vkSGOutput *alphaOutput = graph->GetAlpha();
+  csSGOutput *alphaOutput = graph->GetAlpha();
   if (alphaOutput)
   {
     if (alphaOutput->GetDataType() != eSGDT_Float)
@@ -49,15 +49,15 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     }
   }
 
-  vkShaderGraphCtx ctx(this);
+  csShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   ctx.EvaluateInlines(outputs);
 
   ctx.GenerateCode(preAlphaOutputs);
-  vkString preAlphaCode = ctx.GetCode();
+  csString preAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(outputs);
-  std::set<vkShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
+  std::set<csShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   bool vsm = true;
 
@@ -67,17 +67,17 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   ss << ""
     << "#version 330" << std::endl
     << std::endl
-    << "uniform mat4 vk_MatModel;" << std::endl
+    << "uniform mat4 cs_MatModel;" << std::endl
     << std::endl
-    << "in vec4 vk_Position;" << std::endl
-    << "in vec2 vk_TexCoord0;" << std::endl;
+    << "in vec4 cs_Position;" << std::endl
+    << "in vec2 cs_TexCoord0;" << std::endl;
   if (graph->IsSkinnedMaterial())
   {
     ss // add all the bindings that are needed to correctly perform multi bone skinning
-      << "uniform mat4 vk_MatsSkeleton[" << graph->GetMaxBones() << "];" << std::endl
-      << "uniform int vk_SkeletonMapping[" << graph->GetMaxBones() << "];" << std::endl
-      << "in ivec4 vk_BoneIndex;" << std::endl
-      << "in vec4 vk_BoneWeight;" << std::endl;
+      << "uniform mat4 cs_MatsSkeleton[" << graph->GetMaxBones() << "];" << std::endl
+      << "uniform int cs_SkeletonMapping[" << graph->GetMaxBones() << "];" << std::endl
+      << "in ivec4 cs_BoneIndex;" << std::endl
+      << "in vec4 cs_BoneWeight;" << std::endl;
   }
 
   ss
@@ -90,30 +90,30 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   if (graph->IsSkinnedMaterial())
   {
     ss
-      << "  int idx0 = vk_SkeletonMapping[vk_BoneIndex.x];" << std::endl
-      << "  int idx1 = vk_SkeletonMapping[vk_BoneIndex.y];" << std::endl
-      << "  int idx2 = vk_SkeletonMapping[vk_BoneIndex.z];" << std::endl
-      << "  int idx3 = vk_SkeletonMapping[vk_BoneIndex.w];" << std::endl
-      << "  mat4 boneMat40 = vk_MatsSkeleton[idx0];" << std::endl
-      << "  mat4 boneMat41 = vk_MatsSkeleton[idx1];" << std::endl
-      << "  mat4 boneMat42 = vk_MatsSkeleton[idx2];" << std::endl
-      << "  mat4 boneMat43 = vk_MatsSkeleton[idx3];" << std::endl
-      << "  vec4 position = boneMat40 * vk_Position * vk_BoneWeight.x + " << std::endl
-      << "                  boneMat41 * vk_Position * vk_BoneWeight.y + " << std::endl
-      << "                  boneMat42 * vk_Position * vk_BoneWeight.z + " << std::endl
-      << "                  boneMat43 * vk_Position * vk_BoneWeight.w;" << std::endl
-      << "  gl_Position = vk_MatModel * position;" << std::endl;
+      << "  int idx0 = cs_SkeletonMapping[cs_BoneIndex.x];" << std::endl
+      << "  int idx1 = cs_SkeletonMapping[cs_BoneIndex.y];" << std::endl
+      << "  int idx2 = cs_SkeletonMapping[cs_BoneIndex.z];" << std::endl
+      << "  int idx3 = cs_SkeletonMapping[cs_BoneIndex.w];" << std::endl
+      << "  mat4 boneMat40 = cs_MatsSkeleton[idx0];" << std::endl
+      << "  mat4 boneMat41 = cs_MatsSkeleton[idx1];" << std::endl
+      << "  mat4 boneMat42 = cs_MatsSkeleton[idx2];" << std::endl
+      << "  mat4 boneMat43 = cs_MatsSkeleton[idx3];" << std::endl
+      << "  vec4 position = boneMat40 * cs_Position * cs_BoneWeight.x + " << std::endl
+      << "                  boneMat41 * cs_Position * cs_BoneWeight.y + " << std::endl
+      << "                  boneMat42 * cs_Position * cs_BoneWeight.z + " << std::endl
+      << "                  boneMat43 * cs_Position * cs_BoneWeight.w;" << std::endl
+      << "  gl_Position = cs_MatModel * position;" << std::endl;
   }
   else
   {
     ss
-      << "  gl_Position = vk_MatModel * vk_Position;" << std::endl;
+      << "  gl_Position = cs_MatModel * cs_Position;" << std::endl;
   }
   ss
-    << "  inGeomTexCoord = vk_TexCoord0;" << std::endl
+    << "  inGeomTexCoord = cs_TexCoord0;" << std::endl
     << "}" << std::endl
     << std::endl;
-  vkString vertexShaderSources = ss.str();
+  csString vertexShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "VertexShader", vertexShaderSources);
@@ -125,7 +125,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << std::endl
     << "layout(triangles) in;" << std::endl
     << "layout(triangle_strip, max_vertices = " << (numLayers * 3) << ") out;" << std::endl
-    << "uniform mat4 vk_ShadowMapMatProjView[" << numLayers << "];" << std::endl
+    << "uniform mat4 cs_ShadowMapMatProjView[" << numLayers << "];" << std::endl
     << "in vec2 inGeomTexCoord[];" << std::endl
     << std::endl
     << "out vec2 inFragTexCoord;" << std::endl;
@@ -144,7 +144,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     for (unsigned j = 0; j < 3; ++j)
     {
       ss << ""
-        << "  gl_Position = vk_ShadowMapMatProjView[" << i << "] * gl_in[" << j << "].gl_Position;" << std::endl
+        << "  gl_Position = cs_ShadowMapMatProjView[" << i << "] * gl_in[" << j << "].gl_Position;" << std::endl
         << "  inFragTexCoord = inGeomTexCoord[" << j << "];" << std::endl;
       if (vsm)
       {
@@ -155,7 +155,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     ss << "  EndPrimitive();" << std::endl << std::endl << std::endl;
   }
   ss << "}" << std::endl;
-  vkString geometryShaderSources = ss.str();
+  csString geometryShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "GeometryShader", geometryShaderSources);
@@ -168,11 +168,11 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     << "#version 330" << std::endl
     << std::endl
     << (vsm
-        ? "layout(location = 0) out vec2 vk_FragColor;"
-        : "layout(location = 0) out vec4 vk_FragColor;"
+        ? "layout(location = 0) out vec2 cs_FragColor;"
+        : "layout(location = 0) out vec4 cs_FragColor;"
         ) << std::endl
     << std::endl;
-  for (const vkShaderGraphCtx::ExternalBinding &binding : bindings)
+  for (const csShaderGraphCtx::ExternalBinding &binding : bindings)
   {
     ss << "uniform " << binding.variableType << " " << binding.variableName << ";" << std::endl;
   }
@@ -198,19 +198,19 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   {
     ss << "  float dx = dFdx(inFragDepth);" << std::endl
       << "  float dy = dFdy(inFragDepth);" << std::endl
-      // << "  vk_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
-      << "  vk_FragColor = vec2(abs(dx) + abs(dy), 1.0);" << std::endl
+      // << "  cs_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
+      << "  cs_FragColor = vec2(abs(dx) + abs(dy), 1.0);" << std::endl
       ;
     ;
   }
   else
   {
-    ss << "  vk_FragColor = vec4(1, 1, 1, 1);" << std::endl;
+    ss << "  cs_FragColor = vec4(1, 1, 1, 1);" << std::endl;
   }
   // if VSM this can be 
   ss << "}" << std::endl
     << std::endl;
-  vkString fragmentShaderSources = ss.str();
+  csString fragmentShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "FragmentShader", fragmentShaderSources);
@@ -223,7 +223,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
   //DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
 
 
-  vkShaderGL4 *vertexShader = new vkShaderGL4();
+  csShaderGL4 *vertexShader = new csShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
@@ -237,7 +237,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     return;
   }
 
-  vkShaderGL4 *geometryShader = new vkShaderGL4();
+  csShaderGL4 *geometryShader = new csShaderGL4();
   geometryShader->SetShaderType(eST_Geometry);
   geometryShader->SetSource(geometryShaderSources);
   if (!geometryShader->Compile())
@@ -251,7 +251,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     return;
   }
 
-  vkShaderGL4 *fragmentShader = new vkShaderGL4();
+  csShaderGL4 *fragmentShader = new csShaderGL4();
   fragmentShader->SetShaderType(eST_Fragment);
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
@@ -267,7 +267,7 @@ void vkShaderGraphGL4::GenerateShadow(vkSGShaderGraph *graph, unsigned numLayers
     return;
   }
 
-  vkProgramGL4 *shadowShader = new vkProgramGL4();
+  csProgramGL4 *shadowShader = new csProgramGL4();
   shadowShader->AttachShader(vertexShader);
   shadowShader->AttachShader(geometryShader);
   shadowShader->AttachShader(fragmentShader);

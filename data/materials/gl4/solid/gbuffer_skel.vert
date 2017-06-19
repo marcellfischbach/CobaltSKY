@@ -1,26 +1,26 @@
 
 #version 330
 
-in vec4 vk_Position;
-in vec3 vk_Normal;
-in vec2 vk_TexCoord0;
-in vec4 vk_BoneIndex;
+in vec4 cs_Position;
+in vec3 cs_Normal;
+in vec2 cs_TexCoord0;
+in vec4 cs_BoneIndex;
 
-uniform mat4 vk_MatProj;
-uniform mat4 vk_MatView;
-uniform mat4 vk_MatModel;
+uniform mat4 cs_MatProj;
+uniform mat4 cs_MatView;
+uniform mat4 cs_MatModel;
 
 
 out vec2 texCoord;
 out vec3 normal;
 
-vec4 vk_bone_to_model4f(vec4 position);
+vec4 cs_bone_to_model4f(vec4 position);
 
 
 void main ()
 {
-	vec4 position = vk_bone_to_model4f(vk_Position);
-	gl_Position = vk_MatProj * vk_MatView * vk_MatModel * position;
-	texCoord = vk_TexCoord0;
-	normal = mat3(vk_MatModel) * vk_Normal;
+	vec4 position = cs_bone_to_model4f(cs_Position);
+	gl_Position = cs_MatProj * cs_MatView * cs_MatModel * position;
+	texCoord = cs_TexCoord0;
+	normal = mat3(cs_MatModel) * cs_Normal;
 }

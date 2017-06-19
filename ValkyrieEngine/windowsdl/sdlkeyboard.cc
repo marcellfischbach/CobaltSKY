@@ -2,11 +2,11 @@
 #include <windowsdl/sdlkeyboard.hh>
 #include <SDL.h>
 
-static vkKey keyMap[SDL_NUM_SCANCODES];
+static csKey keyMap[SDL_NUM_SCANCODES];
 
 SDLKeyboard::SDLKeyboard()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 
   memset(m_current, 0, sizeof(m_current));
   memset(m_prev, 0, sizeof(m_prev));
@@ -23,41 +23,41 @@ void SDLKeyboard::UpdateKeys()
   memcpy(m_prev, m_current, sizeof(m_current));
 }
 
-void SDLKeyboard::SetKeyDown(vkUInt32 key)
+void SDLKeyboard::SetKeyDown(csUInt32 key)
 {
   if (key < 300)
   {
-    vkKey k = keyMap[key];
+    csKey k = keyMap[key];
     m_current[k] = true;
   }
 
 }
 
-void SDLKeyboard::SetKeyUp(vkUInt32 key)
+void SDLKeyboard::SetKeyUp(csUInt32 key)
 {
   if (key < 300)
   {
-    vkKey k = keyMap[key];
+    csKey k = keyMap[key];
     m_current[k] = false;
   }
 }
 
-bool SDLKeyboard::IsKeyDown(vkKey key) const
+bool SDLKeyboard::IsKeyDown(csKey key) const
 {
   return m_current[key];
 }
 
-bool SDLKeyboard::IsKeyUp(vkKey key) const
+bool SDLKeyboard::IsKeyUp(csKey key) const
 {
   return !m_current[key];
 }
 
-bool SDLKeyboard::IsKeyPressed(vkKey key) const
+bool SDLKeyboard::IsKeyPressed(csKey key) const
 {
   return m_current[key] && !m_prev[key];
 }
 
-bool SDLKeyboard::IsKeyReleased(vkKey key) const
+bool SDLKeyboard::IsKeyReleased(csKey key) const
 {
   return !m_current[key] && m_prev[key];
 }

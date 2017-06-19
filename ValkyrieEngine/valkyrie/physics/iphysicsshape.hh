@@ -1,52 +1,52 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/vkenums.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/math/vkmatrix.hh>
-#include <valkyrie/math/vkvector.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/csenums.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/math/csmatrix.hh>
+#include <valkyrie/math/csvector.hh>
 #include <valkyrie/physics/iphysicsshape.refl.hh>
 
 
-struct vkPhysGeometryHeightFieldData
+struct csPhysGeometryHeightFieldData
 {
-  vkVector3f Min;
-  vkVector3f Max;
-  vkUInt16 SideLength;
-  vkUInt16 *Heights;
+  csVector3f Min;
+  csVector3f Max;
+  csUInt16 SideLength;
+  csUInt16 *Heights;
 };
 
-struct vkPhysGeometryTriMeshData
+struct csPhysGeometryTriMeshData
 {
-  vkUInt16 NumVertices;
-  vkVector3f *Vertices;
-  vkUInt16 NumIndices;
-  vkUInt16 *Indices;
+  csUInt16 NumVertices;
+  csVector3f *Vertices;
+  csUInt16 NumIndices;
+  csUInt16 *Indices;
 };
 
-struct vkPhysGeometry
+struct csPhysGeometry
 {
-  vkPhysGeometryType Type;
+  csPhysGeometryType Type;
 
   float Radius;
   float Height;
-  vkVector3f Dimensions;
+  csVector3f Dimensions;
 
-  vkPhysGeometryHeightFieldData *HeightFieldData;
-  vkPhysGeometryTriMeshData *TriMeshData;
+  csPhysGeometryHeightFieldData *HeightFieldData;
+  csPhysGeometryTriMeshData *TriMeshData;
 };
 
 
-VK_INTERFACE()
-struct VKE_API iPhysicsShape : public iObject
+CS_INTERFACE()
+struct CSE_API iPhysicsShape : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   virtual ~iPhysicsShape () { }
 
-  virtual const vkPhysGeometry &GetGeometry() const = 0;
+  virtual const csPhysGeometry &GetGeometry() const = 0;
 
-  virtual void SetLocalTransform(const vkMatrix4f &localTransform) = 0;
-  virtual const vkMatrix4f &GetLocalTransform() const = 0;
+  virtual void SetLocalTransform(const csMatrix4f &localTransform) = 0;
+  virtual const csMatrix4f &GetLocalTransform() const = 0;
 };
 
 

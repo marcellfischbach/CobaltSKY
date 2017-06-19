@@ -8,14 +8,14 @@
 
 
 
-vkProgramGL4::vkProgramGL4()
+csProgramGL4::csProgramGL4()
   : iShader()
   , m_name(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkProgramGL4::~vkProgramGL4()
+csProgramGL4::~csProgramGL4()
 {
   for (auto shader : m_shaders)
   {
@@ -46,65 +46,65 @@ vkProgramGL4::~vkProgramGL4()
 }
 
 
-void vkProgramGL4::Bind()
+void csProgramGL4::Bind()
 {
   glUseProgram(m_name);
 }
 
-void vkProgramGL4::InitializeSystemAttributes()
+void csProgramGL4::InitializeSystemAttributes()
 {
-  for (vkUInt32 i = 0; i < eVAT_COUNT; ++i)
+  for (csUInt32 i = 0; i < eVAT_COUNT; ++i)
   {
-    RegisterAttribute(vkShaderAttributeID(i));
+    RegisterAttribute(csShaderAttributeID(i));
   }
 }
 
-void vkProgramGL4::InitializeSystemStreams()
+void csProgramGL4::InitializeSystemStreams()
 {
-  for (vkUInt32 i = 0; i < eVST_COUNT; ++i)
+  for (csUInt32 i = 0; i < eVST_COUNT; ++i)
   {
-    RegisterStream(vkShaderStreamID(i));
+    RegisterStream(csShaderStreamID(i));
   }
 
 }
 
-void vkProgramGL4::RegisterAttribute(const vkShaderAttributeID &id)
+void csProgramGL4::RegisterAttribute(const csShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
 
-  vkString uniformName = vkString("vk_") + id.GetName();
+  csString uniformName = csString("cs_") + id.GetName();
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
-  vkShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
+  csShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
   attribute->SetLocation(loc);
   attribute->SetName(id.GetName());
   attribute->SetValid(true);
 }
 
-void vkProgramGL4::RegisterStream(const vkShaderStreamID &id)
+void csProgramGL4::RegisterStream(const csShaderStreamID &id)
 {
   ResizeStreams(id.GetID());
 
-  vkString attribName = vkString("vk_") + id.GetName();
+  csString attribName = csString("cs_") + id.GetName();
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
-  vkShaderStreamGL4 *stream = m_streams[id.GetID()];
+  csShaderStreamGL4 *stream = m_streams[id.GetID()];
   stream->SetLocation(loc);
   stream->SetName(id.GetName());
   stream->SetValid(true);
 }
 
 
-vkUInt32 vkProgramGL4::GetNumberOfAttributes() const
+csUInt32 csProgramGL4::GetNumberOfAttributes() const
 {
-  return (vkUInt32)m_attributes.size();
+  return (csUInt32)m_attributes.size();
 }
 
-iShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
+iShaderAttribute *csProgramGL4::GetAttribute(csUInt32 idx)
 {
   if (idx >= m_attributes.size())
   {
     return 0;
   }
-  vkShaderAttributeGL4 *attr = m_attributes[idx];
+  csShaderAttributeGL4 *attr = m_attributes[idx];
   if (attr->GetLocation() == -1)
   {
     return 0;
@@ -113,14 +113,14 @@ iShaderAttribute *vkProgramGL4::GetAttribute(vkUInt32 idx)
   return attr;
 }
 
-iShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
+iShaderAttribute *csProgramGL4::GetAttribute(const csShaderAttributeID &id)
 {
   if (id.GetID() >= m_attributes.size())
   {
     ResizeAttributes(id.GetID());
   }
 
-  vkShaderAttributeGL4 *attr = m_attributes[id.GetID()];
+  csShaderAttributeGL4 *attr = m_attributes[id.GetID()];
   if (!attr->IsValid())
   {
     RegisterAttribute(id);
@@ -133,7 +133,7 @@ iShaderAttribute *vkProgramGL4::GetAttribute(const vkShaderAttributeID &id)
   return attr;
 }
 
-iShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
+iShaderAttribute *csProgramGL4::GetAttribute(const csString &name)
 {
   for (size_t i = 0, in = m_namedAttributes.size(); i < in; ++i)
   {
@@ -144,14 +144,14 @@ iShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
   }
 
   Bind();
-  vkString uniformName = vkString("vk_") + name;
+  csString uniformName = csString("cs_") + name;
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   if (loc == -1)
   {
     return 0;
   }
 
-  vkShaderAttributeGL4 *attribute = new vkShaderAttributeGL4();
+  csShaderAttributeGL4 *attribute = new csShaderAttributeGL4();
   attribute->SetLocation(loc);
   attribute->SetName(name);
   attribute->SetValid(true);
@@ -162,19 +162,19 @@ iShaderAttribute *vkProgramGL4::GetAttribute(const vkString &name)
 
 
 
-vkUInt16 vkProgramGL4::GetNumberOfStreams() const
+csUInt16 csProgramGL4::GetNumberOfStreams() const
 {
-  return (vkUInt16)m_streams.size();
+  return (csUInt16)m_streams.size();
 }
 
-iShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
+iShaderStream *csProgramGL4::GetStream(const csShaderStreamID &id)
 {
   if (id.GetID() >= m_streams.size())
   {
     ResizeStreams(id.GetID());
   }
 
-  vkShaderStreamGL4 *stream = m_streams[id.GetID()];
+  csShaderStreamGL4 *stream = m_streams[id.GetID()];
   if (!stream->IsValid())
   {
     RegisterStream(id);
@@ -188,7 +188,7 @@ iShaderStream *vkProgramGL4::GetStream(const vkShaderStreamID &id)
 }
 
 
-iShaderStream *vkProgramGL4::GetStream(const vkString &name)
+iShaderStream *csProgramGL4::GetStream(const csString &name)
 {
   for (size_t i = 0, in = m_namedStreams.size(); i < in; ++i)
   {
@@ -199,13 +199,13 @@ iShaderStream *vkProgramGL4::GetStream(const vkString &name)
   }
 
   Bind();
-  vkString attribName = vkString("vk_") + name;
+  csString attribName = csString("cs_") + name;
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
   if (loc == -1)
   {
     return 0;
   }
-  vkShaderStreamGL4 *stream = new vkShaderStreamGL4();
+  csShaderStreamGL4 *stream = new csShaderStreamGL4();
   stream->SetLocation(loc);
   stream->SetName(name);
   stream->SetValid(true);
@@ -216,7 +216,7 @@ iShaderStream *vkProgramGL4::GetStream(const vkString &name)
 
 
 
-void vkProgramGL4::AttachShader(vkShaderGL4 *shader)
+void csProgramGL4::AttachShader(csShaderGL4 *shader)
 {
   if (m_name != 0)
   {
@@ -231,7 +231,7 @@ void vkProgramGL4::AttachShader(vkShaderGL4 *shader)
 }
 
 
-void vkProgramGL4::DetachShader(vkShaderGL4 *shader)
+void csProgramGL4::DetachShader(csShaderGL4 *shader)
 {
   if (m_name != 0)
   {
@@ -240,7 +240,7 @@ void vkProgramGL4::DetachShader(vkShaderGL4 *shader)
   }
   if (shader)
   {
-    for (std::vector<vkShaderGL4*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+    for (std::vector<csShaderGL4*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
     {
       if (*it == shader)
       {
@@ -252,7 +252,7 @@ void vkProgramGL4::DetachShader(vkShaderGL4 *shader)
   }
 }
 
-bool vkProgramGL4::Link()
+bool csProgramGL4::Link()
 {
   if (m_name != 0)
   {
@@ -283,7 +283,7 @@ bool vkProgramGL4::Link()
 
 }
 
-vkString vkProgramGL4::GetLinkErrorLog() const
+csString csProgramGL4::GetLinkErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
@@ -293,26 +293,26 @@ vkString vkProgramGL4::GetLinkErrorLog() const
     buffer[length] = '\0';
   }
 
-  return vkString(buffer);
+  return csString(buffer);
 }
 
 
 
-void vkProgramGL4::ResizeAttributes(vkUInt32 id)
+void csProgramGL4::ResizeAttributes(csUInt32 id)
 {
-  vkInt32 missing = (vkInt32)(id - m_attributes.size() + 1);
-  for (vkInt16 i = 0; i < missing; ++i)
+  csInt32 missing = (csInt32)(id - m_attributes.size() + 1);
+  for (csInt16 i = 0; i < missing; ++i)
   {
-    m_attributes.push_back(new vkShaderAttributeGL4());
+    m_attributes.push_back(new csShaderAttributeGL4());
   }
 }
 
 
-void vkProgramGL4::ResizeStreams(vkUInt32 id)
+void csProgramGL4::ResizeStreams(csUInt32 id)
 {
-  vkInt32 missing = (vkInt32)(id - m_streams.size() + 1);
-  for (vkInt16 i = 0; i < missing; ++i)
+  csInt32 missing = (csInt32)(id - m_streams.size() + 1);
+  for (csInt16 i = 0; i < missing; ++i)
   {
-    m_streams.push_back(new vkShaderStreamGL4());
+    m_streams.push_back(new csShaderStreamGL4());
   }
 }

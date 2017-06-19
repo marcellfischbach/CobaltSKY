@@ -1,19 +1,19 @@
 
 #version 330
 
-uniform mat4 vk_ShadowMats[6];
-uniform float vk_MapBias;
-uniform vec2 vk_ShadowIntensity;
-uniform vec3 vk_LightPosition;
+uniform mat4 cs_ShadowMats[6];
+uniform float cs_MapBias;
+uniform vec2 cs_ShadowIntensity;
+uniform vec3 cs_LightPosition;
 
-uniform sampler2DArrayShadow vk_ShadowMap;
+uniform sampler2DArrayShadow cs_ShadowMap;
 
 
 float calculate_shadow(vec3 world)
 {
 	int layer = 0;
 	
-	vec3 dir = world - vk_LightPosition;
+	vec3 dir = world - cs_LightPosition;
 	vec3 d = abs(dir);
 	if (d.x > d.y && d.x > d.z)
 	{
@@ -54,7 +54,7 @@ float calculate_shadow(vec3 world)
 	
 
 	// transform into final depth buffer space and performce perspective division
-	vec4 depthBufferSpace = vk_ShadowMats[layer] * vec4(world, 1.0);
+	vec4 depthBufferSpace = cs_ShadowMats[layer] * vec4(world, 1.0);
 	depthBufferSpace.xyz /= depthBufferSpace.w;
 
 	// shift from [-1, 1] -> [0, 1]
@@ -68,5 +68,5 @@ float calculate_shadow(vec3 world)
 		return 1.0;
 	}
 	
-	return texture(vk_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * vk_MapBias)) * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
+	return texture(cs_ShadowMap, vec4 (depthBufferSpace.xy, layer, depthBufferSpace.z * cs_MapBias)) * cs_ShadowIntensity.x + cs_ShadowIntensity.y;
 }

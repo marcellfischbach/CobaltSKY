@@ -4,14 +4,14 @@
 
 
 
-void vkSGMulGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGMulGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGNode *mul = GetNode();
+  csSGNode *mul = GetNode();
   ss << "(" << ctx.GetFullInputValue(mul->GetInput(0)).c_str() << " * " <<
     ctx.GetFullInputValue(mul->GetInput(1)).c_str() <<
     ")";
 
-  vkSGDataType dt = mul->GetOutput(0)->GetDataType();// GetHigher(mul->GetInput(0)->GetDataType(), mul->GetInput(1)->GetDataType());
+  csSGDataType dt = mul->GetOutput(0)->GetDataType();// GetHigher(mul->GetInput(0)->GetDataType(), mul->GetInput(1)->GetDataType());
   AssignOutput(ctx, mul->GetOutput(0), ss.str(), GetDataTypeVar(dt));
 }

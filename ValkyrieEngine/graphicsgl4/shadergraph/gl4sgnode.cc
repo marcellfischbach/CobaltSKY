@@ -2,8 +2,8 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 
-vkSGNodeGL4::vkSGNodeGL4()
-  : vkObject()
+csSGNodeGL4::csSGNodeGL4()
+  : csObject()
   , m_inline(true)
   , m_forceInline(false)
   , m_inlineEvaluated(false)
@@ -13,7 +13,7 @@ vkSGNodeGL4::vkSGNodeGL4()
 
 }
 
-vkSGNodeGL4::~vkSGNodeGL4()
+csSGNodeGL4::~csSGNodeGL4()
 {
 
 }
@@ -21,7 +21,7 @@ vkSGNodeGL4::~vkSGNodeGL4()
 
 
 
-vkString vkSGNodeGL4::AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, const vkString &exp, const vkString &type)
+csString csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const csString &exp, const csString &type)
 {
   if (IsInline())
   {
@@ -30,18 +30,18 @@ vkString vkSGNodeGL4::AssignOutput(vkShaderGraphCtx &ctx, vkSGOutput *output, co
   }
   else
   {
-    vkString var = ctx.AddAssignment(type, exp);
+    csString var = ctx.AddAssignment(type, exp);
     ctx.SetOutputValue(output, var);
     return var;
   }
 }
 
-vkSGDataType vkSGNodeGL4::GetHigher(vkSGDataType dtA, vkSGDataType dtB)
+csSGDataType csSGNodeGL4::GetHigher(csSGDataType dtA, csSGDataType dtB)
 {
   return dtA > dtB ? dtA : dtB;
 }
 
-vkString vkSGNodeGL4::GetDataTypeVar(vkSGDataType dt)
+csString csSGNodeGL4::GetDataTypeVar(csSGDataType dt)
 {
   switch (dt)
   {
@@ -82,20 +82,20 @@ vkString vkSGNodeGL4::GetDataTypeVar(vkSGDataType dt)
   return "inval";
 }
 
-void vkSGNodeGL4::SetDoubleInlineEvaluateInput()
+void csSGNodeGL4::SetDoubleInlineEvaluateInput()
 {
   m_doubleInlineEvaluateInput = true;
 }
 
-bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
+bool csSGNodeGL4::EvaluateInline(csShaderGraphCtx &ctx)
 {
   if (!m_inlineEvaluated)
   {
     m_inlineEvaluated = true;
-    for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
+    for (csSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
     {
-      vkSGInput *input = m_node->GetInput(i);
-      vkSGNode *node = input->GetNode();
+      csSGInput *input = m_node->GetInput(i);
+      csSGNode *node = input->GetNode();
 
       ctx.EvaluateInline(input);
       if (m_doubleInlineEvaluateInput)
@@ -112,16 +112,16 @@ bool vkSGNodeGL4::EvaluateInline(vkShaderGraphCtx &ctx)
   }
 }
 
-bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
+bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
 {
   if (m_evaluated)
   {
     return false;
   }
   m_evaluated = true;
-  for (vkSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
+  for (csSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
   {
-    vkSGInput *input = m_node->GetInput(i);
+    csSGInput *input = m_node->GetInput(i);
     ctx.Evaluate(input);
   }
 
@@ -133,9 +133,9 @@ bool vkSGNodeGL4::Evaluate(vkShaderGraphCtx &ctx)
 
 
 
-vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
+csString csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 {
-  vkSGInput *input = m_node->GetInput(x);
+  csSGInput *input = m_node->GetInput(x);
   if (!input)
   {
     return std::to_string(0.0f);
@@ -143,7 +143,7 @@ vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
 
   if (input->CanInputNode())
   {
-    vkSGOutput *output = input->GetInput();
+    csSGOutput *output = input->GetInput();
     if (output)
     {
       return ctx.GetFullOutputValue(output);
@@ -157,9 +157,9 @@ vkString vkSGNodeGL4::GetFloat(vkShaderGraphCtx &ctx, int x)
 }
 
 
-vkString vkSGNodeGL4::GetInt(vkShaderGraphCtx &ctx, int x)
+csString csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
 {
-  vkSGInput *input = m_node->GetInput(x);
+  csSGInput *input = m_node->GetInput(x);
   if (!input)
   {
     return std::to_string(0);
@@ -167,7 +167,7 @@ vkString vkSGNodeGL4::GetInt(vkShaderGraphCtx &ctx, int x)
 
   if (input->CanInputNode())
   {
-    vkSGOutput *output = input->GetInput();
+    csSGOutput *output = input->GetInput();
     if (output)
     {
       return ctx.GetFullOutputValue(output);

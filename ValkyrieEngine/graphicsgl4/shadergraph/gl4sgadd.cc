@@ -4,14 +4,14 @@
 
 
 
-void vkSGAddGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGAddGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGNode *add = GetNode();
+  csSGNode *add = GetNode();
   ss << "(" << ctx.GetFullInputValue(add->GetInput(0)).c_str() << " + " <<
     ctx.GetFullInputValue(add->GetInput(1)).c_str() <<
     ")";
 
-  vkSGDataType dt = add->GetOutput(0)->GetDataType();// GetHigher(add->GetInput(0)->GetDataType(), add->GetInput(1)->GetDataType());
+  csSGDataType dt = add->GetOutput(0)->GetDataType();// GetHigher(add->GetInput(0)->GetDataType(), add->GetInput(1)->GetDataType());
   AssignOutput(ctx, add->GetOutput(0), ss.str(), GetDataTypeVar(dt));
 }

@@ -1,8 +1,8 @@
-<entity name="MyEntityName" class="vkEntity">
+<entity name="MyEntityName" class="csEntity">
 	
 	<entityStates>
 	
-		<entityState id="0" class="vkStaticMeshState">
+		<entityState id="0" class="csStaticMeshState">
 			<mesh resourceMode="shared">${models}/sign_pole.staticmesh:Mesh</mesh>
 			<materials>
 				<material slot="0" slotName="White">${materials}/materials.xml:White</material>
@@ -15,7 +15,7 @@
 			<clippingRange max="50.0"/>
 		</entityState>
 		
-		<entityState id="1" class="vkDynamicColliderState" parentID="0">
+		<entityState id="1" class="csDynamicColliderState" parentID="0">
 			<transformation>
 				<translation>-0.65;0.0;1.7</translation>
 			</transformation>
@@ -27,14 +27,14 @@
 			<restitution>0.5</restitution>
 		</entityState>
 		
-		<entityState id="2" class="vkStaticMeshState" parentID="1">
+		<entityState id="2" class="csStaticMeshState" parentID="1">
 			<mesh resourceMode="shared">${models}/sign_sign.staticmesh:Mesh</mesh>
 			<materials>
 				<material slot="0" slotName="White">${materials}/materials.xml:White</material>
 			</materials>
 		</entityState>
 		
-		<entityState id="3" class="vkHingeJointState" parentID="0">
+		<entityState id="3" class="csHingeJointState" parentID="0">
 			<transformation>
 				<translation>-0.65;0.0;2.0</translation>
 				<axisAngle>0.0;1.0;0.0;1.5707963267948966192313216916398</axisAngle>

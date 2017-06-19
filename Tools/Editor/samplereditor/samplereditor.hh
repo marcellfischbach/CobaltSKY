@@ -5,17 +5,17 @@
 #include <assetdescriptor.hh>
 
 #include <samplereditor/samplereditor.refl.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/csenums.hh>
 
 #include <QDomDocument>
 #include <QDomElement>
 
 class SamplerEditorWidget;
 
-VK_CLASS()
+CS_CLASS()
 class SamplerEditor : public AbstractAssetEditor
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
   SamplerEditor();
@@ -40,7 +40,7 @@ private:
   void SetAddressU(QDomDocument doc, QDomElement element);
   void SetAddressV(QDomDocument doc, QDomElement element);
   void SetAddressW(QDomDocument doc, QDomElement element);
-  void SetAddress(QDomDocument doc, vkTextureAddressMode mode, QDomElement element);
+  void SetAddress(QDomDocument doc, csTextureAddressMode mode, QDomElement element);
   void SetBorderColor(QDomDocument doc, QDomElement element);
   void SetTextureCompareMode(QDomDocument doc, QDomElement element);
   void SetTextureCompareFunc(QDomDocument doc, QDomElement element);

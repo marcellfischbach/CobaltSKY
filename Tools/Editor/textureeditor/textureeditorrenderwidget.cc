@@ -2,7 +2,7 @@
 
 #include <valkyrie/graphics/igraphics.hh>
 #include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/vkengine.hh>
+#include <valkyrie/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 #include <graphicsgl4/gl4indexbuffer.hh>
@@ -19,29 +19,29 @@
 
 const char* VertexShaderProgram =
 "#version 330\n"
-"in vec2 vk_Position;\n"
-"in vec2 vk_TexCoord0;\n"
-"uniform vec2 vk_Scale;\n"
-"uniform vec2 vk_Offset;\n"
+"in vec2 cs_Position;\n"
+"in vec2 cs_TexCoord0;\n"
+"uniform vec2 cs_Scale;\n"
+"uniform vec2 cs_Offset;\n"
 "out vec2 fragTexCoord;\n"
 "void main ()\n"
 "{\n"
-"  gl_Position = vec4(vk_Offset + vk_Position * vk_Scale, 0.0, 1.0);"
-"  fragTexCoord = vk_TexCoord0;\n"
+"  gl_Position = vec4(cs_Offset + cs_Position * cs_Scale, 0.0, 1.0);"
+"  fragTexCoord = cs_TexCoord0;\n"
 "}\n"
 ;
 
 const char *FragmentShaderProgram =
 "#version 330\n"
-"layout(location = 0) out vec4 vk_FragColor;\n"
-"uniform sampler2D vk_Diffuse;\n"
-"uniform mat4 vk_ColorTrans;"
-"uniform float vk_LOD;\n"
+"layout(location = 0) out vec4 cs_FragColor;\n"
+"uniform sampler2D cs_Diffuse;\n"
+"uniform mat4 cs_ColorTrans;"
+"uniform float cs_LOD;\n"
 "in vec2 fragTexCoord;\n"
 "void main ()\n"
 "{\n"
-"  vk_FragColor = vk_ColorTrans * texture(vk_Diffuse, fragTexCoord, vk_LOD);\n"
-//"  vk_FragColor.a = 1.0;\n"
+"  cs_FragColor = cs_ColorTrans * texture(cs_Diffuse, fragTexCoord, cs_LOD);\n"
+//"  cs_FragColor.a = 1.0;\n"
 "}\n";
 
 
@@ -52,11 +52,11 @@ TextureEditorRenderWidget::TextureEditorRenderWidget(QWidget *parent)
   , m_vertexDeclaration(0)
   , m_vertexBuffer(0)
   , m_indexBuffer(0)
-  , m_idOffset(vkShaderAttributeID("Offset"))
-  , m_idScale(vkShaderAttributeID("Scale"))
-  , m_idDiffuse(vkShaderAttributeID("Diffuse"))
-  , m_idLOD(vkShaderAttributeID("LOD"))
-  , m_idColorTrans(vkShaderAttributeID("ColorTrans"))
+  , m_idOffset(csShaderAttributeID("Offset"))
+  , m_idScale(csShaderAttributeID("Scale"))
+  , m_idDiffuse(csShaderAttributeID("Diffuse"))
+  , m_idLOD(csShaderAttributeID("LOD"))
+  , m_idColorTrans(csShaderAttributeID("ColorTrans"))
   , m_lod(0.0f)
   , m_red(true)
   , m_green(true)
@@ -100,7 +100,7 @@ void TextureEditorRenderWidget::SetLOD(int lod)
 
 void TextureEditorRenderWidget::SetTexture(iTexture2D *texture)
 {
-  VK_SET(m_texture, texture);
+  CS_SET(m_texture, texture);
 }
 
 void TextureEditorRenderWidget::initializeGL()
@@ -108,7 +108,7 @@ void TextureEditorRenderWidget::initializeGL()
   RenderWidget::initializeGL();
 
 
-  iGraphics *gr = vkEng->GetRenderer();
+  iGraphics *gr = csEng->GetRenderer();
   m_shader = gr->CreateShader(VertexShaderProgram, "", "", "", FragmentShaderProgram);
 
   m_shader->RegisterAttribute(m_idOffset);
@@ -127,10 +127,10 @@ void TextureEditorRenderWidget::initializeGL()
     0, 3, 2,
   };
 
-  vkVertexElement elements[] = {
-    vkVertexElement(eVST_Position, eDT_Float, 2, 0, 4.0f * sizeof(float), 0),
-    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 2.0f * sizeof(float), 4.0f * sizeof(float), 0),
-    vkVertexElement()
+  csVertexElement elements[] = {
+    csVertexElement(eVST_Position, eDT_Float, 2, 0, 4.0f * sizeof(float), 0),
+    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 2.0f * sizeof(float), 4.0f * sizeof(float), 0),
+    csVertexElement()
   };
 
   m_vertexDeclaration = gr->CreateVertexDeclaration(elements);
@@ -148,10 +148,10 @@ void TextureEditorRenderWidget::paintGL()
   float sx = (float)m_texture->GetWidth() / (float)width();
   float sy = (float)m_texture->GetHeight() / (float)height();
 
-  vkVector2f o(-(1.0f - sx), (1.0f - sy));
-  vkVector2f s(sx, sy);
+  csVector2f o(-(1.0f - sx), (1.0f - sy));
+  csVector2f s(sx, sy);
 
-  iGraphics *gr = vkEng->GetRenderer();
+  iGraphics *gr = csEng->GetRenderer();
   gr->ResetDefaults();
   gr->SetShader(m_shader);
 
@@ -165,7 +165,7 @@ void TextureEditorRenderWidget::paintGL()
   float b = m_blue ? 1.0f : 0.0f;
   float a = m_alpha ? 1.0f : 0.0f;
   float atoc = !m_red && !m_green && !m_blue && m_alpha;
-  vkMatrix4f colorTrans(
+  csMatrix4f colorTrans(
     r, 0, 0, 0,
     0, g, 0, 0,
     0, 0, b, 0,
@@ -191,7 +191,7 @@ void TextureEditorRenderWidget::paintGL()
   iShaderAttribute *attrDiffuse = m_shader->GetAttribute(m_idDiffuse);
   if (attrDiffuse)
   {
-    vkTextureUnit unit = gr->BindTexture(m_texture);
+    csTextureUnit unit = gr->BindTexture(m_texture);
     attrDiffuse->Set(unit);
   }
   iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);
@@ -203,7 +203,7 @@ void TextureEditorRenderWidget::paintGL()
   gr->SetBlendEnabled(true);
   gr->SetBlendMode(eBM_SrcAlpha, eBM_InvSrcAlpha);
   gr->SetColorMask(true, true, true, true);
-  gr->Clear(true, vkVector4f(0.0f, 0.0f, 0.0f, 1.0f));
+  gr->Clear(true, csVector4f(0.0f, 0.0f, 0.0f, 1.0f));
 
   gr->RenderIndexed(ePT_Triangles, 6, eDT_UnsignedShort);
 

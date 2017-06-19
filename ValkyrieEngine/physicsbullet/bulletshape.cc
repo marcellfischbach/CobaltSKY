@@ -2,41 +2,41 @@
 
 #include <physicsbullet/bulletshape.hh>
 
-vkBulletShape::vkBulletShape()
+csBulletShape::csBulletShape()
   : iPhysicsShape()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkBulletShape::~vkBulletShape()
+csBulletShape::~csBulletShape()
 {
 
 }
 
 
-const vkPhysGeometry &vkBulletShape::GetGeometry() const
+const csPhysGeometry &csBulletShape::GetGeometry() const
 {
   return m_geometry;
 }
 
-void vkBulletShape::SetLocalTransform(const vkMatrix4f &localTransform)
+void csBulletShape::SetLocalTransform(const csMatrix4f &localTransform)
 {
   m_localTransform = localTransform;
 }
 
-const vkMatrix4f &vkBulletShape::GetLocalTransform() const
+const csMatrix4f &csBulletShape::GetLocalTransform() const
 {
   return m_localTransform;
 }
 
-bool vkBulletShape::IsTransformed() const
+bool csBulletShape::IsTransformed() const
 {
   return !m_localTransform.IsIdentity();
 }
 
-bool vkBulletShape::Initialize(const vkPhysGeometry &geometry)
+bool csBulletShape::Initialize(const csPhysGeometry &geometry)
 {
-  memcpy(&m_geometry, &geometry, sizeof(vkPhysGeometry));
+  memcpy(&m_geometry, &geometry, sizeof(csPhysGeometry));
 
   /*
   printf("Initialize: \n");

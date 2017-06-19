@@ -13,10 +13,10 @@ namespace
 {
 
 
-const vkVertexElement* find_element(const vkVertexElement* elems, vkUInt32 stream, vkUInt32 idx)
+const csVertexElement* find_element(const csVertexElement* elems, csUInt32 stream, csUInt32 idx)
 {
   unsigned v = 0;
-  for (const vkVertexElement* ve = elems; ve->Valid; ve++)
+  for (const csVertexElement* ve = elems; ve->Valid; ve++)
   {
     if (ve->Stream != stream)
     {
@@ -32,7 +32,7 @@ const vkVertexElement* find_element(const vkVertexElement* elems, vkUInt32 strea
 }
 
 
-void copy_element(vkVertexElement* dst, const vkVertexElement* src)
+void copy_element(csVertexElement* dst, const csVertexElement* src)
 {
   assert(dst);
   if (src)
@@ -48,21 +48,21 @@ void copy_element(vkVertexElement* dst, const vkVertexElement* src)
 }
 }
 
-vkVertexDeclarationGL4::vkVertexDeclarationGL4()
+csVertexDeclarationGL4::csVertexDeclarationGL4()
   : m_streams(0)
   , m_elements(0)
   , m_totalSize(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-bool vkVertexDeclarationGL4::Create(const vkVertexElement* elements)
+bool csVertexDeclarationGL4::Create(const csVertexElement* elements)
 {
 
   // evaluate the number of streams and the number of elements per stream
   std::map<unsigned, unsigned> str;
-  std::map<unsigned, vkSize> strSize;
-  for (const vkVertexElement* vptr = elements; vptr->Valid; vptr++)
+  std::map<unsigned, csSize> strSize;
+  for (const csVertexElement* vptr = elements; vptr->Valid; vptr++)
   {
     (str[vptr->Stream])++;
     m_streams = m_streams < vptr->Stream ? vptr->Stream : m_streams;
@@ -73,12 +73,12 @@ bool vkVertexDeclarationGL4::Create(const vkVertexElement* elements)
 
 
   // now create elements grouped by the streams.
-  m_elements = new vkVertexElement*[m_streams];
+  m_elements = new csVertexElement*[m_streams];
   for (unsigned i = 0; i<m_streams; i++)
   {
     unsigned numElems = str[i] + 1;
     // create the elements for this stream
-    m_elements[i] = new vkVertexElement[numElems];
+    m_elements[i] = new csVertexElement[numElems];
 
     for (unsigned j = 0; j<numElems; j++)
     {
@@ -90,7 +90,7 @@ bool vkVertexDeclarationGL4::Create(const vkVertexElement* elements)
   return true;
 }
 
-vkVertexDeclarationGL4::~vkVertexDeclarationGL4()
+csVertexDeclarationGL4::~csVertexDeclarationGL4()
 {
   for (unsigned i = 0; i<m_streams; i++)
   {
@@ -100,21 +100,21 @@ vkVertexDeclarationGL4::~vkVertexDeclarationGL4()
 }
 
 
-unsigned vkVertexDeclarationGL4::GetNumberOfStreams() const
+unsigned csVertexDeclarationGL4::GetNumberOfStreams() const
 {
   return m_streams;
 }
 
-const vkVertexElement* vkVertexDeclarationGL4::GetElements(vkUInt8 stream) const
+const csVertexElement* csVertexDeclarationGL4::GetElements(csUInt8 stream) const
 {
   assert(stream < m_streams);
 
   return m_elements[stream];
 }
 
-const vkVertexElement* vkVertexDeclarationGL4::GetElement(vkVertexStreamType streamDefinition, vkUInt8 stream) const
+const csVertexElement* csVertexDeclarationGL4::GetElement(csVertexStreamType streamDefinition, csUInt8 stream) const
 {
-  const vkVertexElement* elements = GetElements(stream);
+  const csVertexElement* elements = GetElements(stream);
   if (!elements)
   {
     return 0;
@@ -130,11 +130,11 @@ const vkVertexElement* vkVertexDeclarationGL4::GetElement(vkVertexStreamType str
   return 0;
 }
 
-void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, void* ptr)
+void csVertexDeclarationGL4::BindStream(csProgramGL4* shader, csUInt8 stream, void* ptr)
 {
   assert(stream < m_streams);
 
-  vkVertexElement* elements = m_elements[stream];
+  csVertexElement* elements = m_elements[stream];
 
   if (shader)
   {
@@ -157,20 +157,20 @@ void vkVertexDeclarationGL4::BindStream(vkProgramGL4* shader, vkUInt8 stream, vo
                  elements->Offset,
                  elements->Type);
         }
-        VK_CHECK_GL_ERROR;
+        CS_CHECK_GL_ERROR;
         s->Enable();
-        VK_CHECK_GL_ERROR;
+        CS_CHECK_GL_ERROR;
       }
       elements++;
     }
   }
 }
 
-void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
+void csVertexDeclarationGL4::UnbindStream(csProgramGL4* shader, csUInt8 stream)
 {
   assert(stream < m_streams);
 
-  vkVertexElement* elements = m_elements[stream];
+  csVertexElement* elements = m_elements[stream];
 
   if (shader)
   {
@@ -186,21 +186,21 @@ void vkVertexDeclarationGL4::UnbindStream(vkProgramGL4* shader, vkUInt8 stream)
   }
 }
 
-vkSize vkVertexDeclarationGL4::GetTotalSize() const
+csSize csVertexDeclarationGL4::GetTotalSize() const
 {
   return m_totalSize;
 }
 
 
-vkSize vkVertexDeclarationGL4::GetStride(vkUInt8 stream) const
+csSize csVertexDeclarationGL4::GetStride(csUInt8 stream) const
 {
-  const vkVertexElement* elements = GetElements(stream);
+  const csVertexElement* elements = GetElements(stream);
   if (!elements)
   {
     return 0;
   }
 
-  vkSize size = 0;
+  csSize size = 0;
   while (elements && elements->Valid)
   {
     size = size > elements->Stride ? size : elements->Stride;

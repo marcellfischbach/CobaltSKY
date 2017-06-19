@@ -3,10 +3,10 @@
 #include <sstream>
 
 
-void vkSGDotGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGDotGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGNode *dot = GetNode();
+  csSGNode *dot = GetNode();
   ss << "dot(" << ctx.GetFullInputValue(dot->GetInput(0)).c_str() << ", " <<
     ctx.GetFullInputValue(dot->GetInput(1)).c_str() <<
     ")";

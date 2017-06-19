@@ -1,11 +1,11 @@
 #version 330
 
-in vec4 vk_Position;
+in vec4 cs_Position;
 
-uniform mat4 vk_MatProjViewModel;
+uniform mat4 cs_MatProjViewModel;
 
 
 void main ()
 {
-	gl_Position = vk_MatProjViewModel * vk_Position;
+	gl_Position = cs_MatProjViewModel * cs_Position;
 }

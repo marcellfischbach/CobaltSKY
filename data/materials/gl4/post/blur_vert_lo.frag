@@ -1,9 +1,9 @@
 #version 330
 
-layout(location = 0) out vec4 vk_FragColor;
+layout(location = 0) out vec4 cs_FragColor;
 
-uniform sampler2D vk_Color0;
-uniform vec2 vk_Color0SizeInv;
+uniform sampler2D cs_Color0;
+uniform vec2 cs_Color0SizeInv;
 
 in vec2 inFragTexCoord0;
 
@@ -15,10 +15,10 @@ void main ()
 	float num = 0.0;
 	for (float i=-1.0; i<=1.0; i+=stepSize)
 	{
-		vec2 disp = vk_Color0SizeInv * vec2 (0.0, i) * kernelSize;
-		r += texture(vk_Color0, inFragTexCoord0 + disp);
+		vec2 disp = cs_Color0SizeInv * vec2 (0.0, i) * kernelSize;
+		r += texture(cs_Color0, inFragTexCoord0 + disp);
 		num += 1.0;
 	}
 	
-	vk_FragColor = r / num;
+	cs_FragColor = r / num;
 }

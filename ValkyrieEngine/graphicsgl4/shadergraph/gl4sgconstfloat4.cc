@@ -3,9 +3,9 @@
 #include <sstream>
 
 
-void vkSGConstFloat4GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGConstFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *n = GetNode();
+  csSGNode *n = GetNode();
 
   std::ostringstream ss;
   ss << "vec4("

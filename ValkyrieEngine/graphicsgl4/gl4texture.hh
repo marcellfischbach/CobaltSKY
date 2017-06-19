@@ -6,16 +6,16 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texture.refl.hh>
 
-VK_INTERFACE()
-class VKGRAPHICSGL4_API vkTextureGL4 : public virtual VK_SUPER(iTexture)
+CS_INTERFACE()
+class CSGRAPHICSGL4_API csTextureGL4 : public virtual CS_SUPER(iTexture)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  virtual ~vkTextureGL4();
+  virtual ~csTextureGL4();
 
   virtual bool Initialize();
 
-  virtual vkTextureType GetType() const ;
+  virtual csTextureType GetType() const ;
 
   virtual void SetSampler(iSampler *sampler);
   virtual iSampler *GetSampler();
@@ -27,13 +27,13 @@ public:
   GLuint GetName() const;
 
 protected:
-  vkTextureGL4(vkTextureType type);
+  csTextureGL4(csTextureType type);
 
   GLuint m_name;
   GLenum m_target;
 
 private:
-  vkTextureType m_type;
+  csTextureType m_type;
 
   iSampler *m_sampler;
 
@@ -41,7 +41,7 @@ private:
 
 
 
-VK_FORCEINLINE GLuint vkTextureGL4::GetName() const
+CS_FORCEINLINE GLuint csTextureGL4::GetName() const
 {
   return m_name;
 }

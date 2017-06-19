@@ -4,10 +4,10 @@
 
 
 
-void vkSGCrossGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGCrossGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
-  vkSGNode *dot = GetNode();
+  csSGNode *dot = GetNode();
   ss << "cross(" << ctx.GetFullInputValue(dot->GetInput(0)).c_str() << ", " <<
     ctx.GetFullInputValue(dot->GetInput(1)).c_str() <<
     ")";

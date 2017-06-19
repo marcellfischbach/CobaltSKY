@@ -1,47 +1,47 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/vkenums.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/math/vkvector.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/csenums.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/math/csvector.hh>
 
 #include <valkyrie/graphics/isampler.refl.hh>
 
-VK_INTERFACE();
-struct VKE_API iSampler : public iObject
+CS_INTERFACE();
+struct CSE_API iSampler : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
 
-  virtual void SetFilter(vkFilterMode filter) = 0;
-  virtual vkFilterMode GetFilter() const = 0;
+  virtual void SetFilter(csFilterMode filter) = 0;
+  virtual csFilterMode GetFilter() const = 0;
 
-  virtual void SetAnisotropy(vkUInt8 anisotropy) = 0;
-  virtual vkUInt8 GetAnisotropy() const = 0;
+  virtual void SetAnisotropy(csUInt8 anisotropy) = 0;
+  virtual csUInt8 GetAnisotropy() const = 0;
 
-  virtual void SetMinLOD(vkInt16 minLOD) = 0;
-  virtual vkInt16 GetMinLOD() const = 0;
+  virtual void SetMinLOD(csInt16 minLOD) = 0;
+  virtual csInt16 GetMinLOD() const = 0;
 
-  virtual void SetMaxLOD(vkInt16 minLOD) = 0;
-  virtual vkInt16 GetMaxLOD() const = 0;
+  virtual void SetMaxLOD(csInt16 minLOD) = 0;
+  virtual csInt16 GetMaxLOD() const = 0;
 
-  virtual void SetAddressU(vkTextureAddressMode addressMode) = 0;
-  virtual vkTextureAddressMode GetAddressU() const = 0;
+  virtual void SetAddressU(csTextureAddressMode addressMode) = 0;
+  virtual csTextureAddressMode GetAddressU() const = 0;
 
-  virtual void SetAddressV(vkTextureAddressMode addressMode) = 0;
-  virtual vkTextureAddressMode GetAddressV() const = 0;
+  virtual void SetAddressV(csTextureAddressMode addressMode) = 0;
+  virtual csTextureAddressMode GetAddressV() const = 0;
 
-  virtual void SetAddressW(vkTextureAddressMode addressMode) = 0;
-  virtual vkTextureAddressMode GetAddressW() const = 0;
+  virtual void SetAddressW(csTextureAddressMode addressMode) = 0;
+  virtual csTextureAddressMode GetAddressW() const = 0;
 
-  virtual void SetBorderColor(const vkVector4f &color) = 0;
-  virtual const vkVector4f &GetBorderColor() const = 0;
+  virtual void SetBorderColor(const csVector4f &color) = 0;
+  virtual const csVector4f &GetBorderColor() const = 0;
 
-  virtual void SetTextureCompareMode(vkTextureCompareMode mode) = 0;
-  virtual vkTextureCompareMode GetTextureCompareMode() const = 0;
+  virtual void SetTextureCompareMode(csTextureCompareMode mode) = 0;
+  virtual csTextureCompareMode GetTextureCompareMode() const = 0;
 
-  virtual void SetTextureCompareFunc(vkTextureCompareFunc func) = 0;
-  virtual vkTextureCompareFunc GetTextureCompareFunc() const = 0;
+  virtual void SetTextureCompareFunc(csTextureCompareFunc func) = 0;
+  virtual csTextureCompareFunc GetTextureCompareFunc() const = 0;
 
   virtual bool NeedsMipMaps() const = 0;
 

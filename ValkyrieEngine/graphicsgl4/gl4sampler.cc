@@ -4,18 +4,18 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-vkSamplerGL4::vkSamplerGL4()
+csSamplerGL4::csSamplerGL4()
   : iSampler()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkSamplerGL4::~vkSamplerGL4()
+csSamplerGL4::~csSamplerGL4()
 {
 
 }
 
-bool vkSamplerGL4::Initialize()
+bool csSamplerGL4::Initialize()
 {
   glGenSamplers(1, &m_name);
   glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -39,20 +39,20 @@ bool vkSamplerGL4::Initialize()
   m_minLOD = -1000;
   m_maxLOD = 1000;
   m_anisotropy = 1.0f;
-  m_borderColor = vkVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  m_borderColor = csVector4f(0.0f, 0.0f, 0.0f, 0.0f);
   m_textureCompareMode = eTCM_CompareToR;
   m_textureCompareFunc = eTCF_Always;
 
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   return m_name != 0;
 }
 
-void vkSamplerGL4::Bind(GLuint unit)
+void csSamplerGL4::Bind(GLuint unit)
 {
   glBindSampler(unit, m_name);
 }
 
-void vkSamplerGL4::SetFilter(vkFilterMode filterMode)
+void csSamplerGL4::SetFilter(csFilterMode filterMode)
 {
   if (m_filterMode != filterMode)
   {
@@ -116,152 +116,152 @@ void vkSamplerGL4::SetFilter(vkFilterMode filterMode)
       break;
 
     }
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkFilterMode vkSamplerGL4::GetFilter() const
+csFilterMode csSamplerGL4::GetFilter() const
 {
   return m_filterMode;
 }
 
-void vkSamplerGL4::SetAnisotropy(vkUInt8 anisotropy)
+void csSamplerGL4::SetAnisotropy(csUInt8 anisotropy)
 {
   if (m_anisotropy != anisotropy)
   {
     m_anisotropy = anisotropy;
     glSamplerParameterf(m_name, GL_TEXTURE_MAX_ANISOTROPY_EXT, m_anisotropy);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkUInt8 vkSamplerGL4::GetAnisotropy() const
+csUInt8 csSamplerGL4::GetAnisotropy() const
 {
   return m_anisotropy;
 }
 
-void vkSamplerGL4::SetMinLOD(vkInt16 minLOD)
+void csSamplerGL4::SetMinLOD(csInt16 minLOD)
 {
   if (m_minLOD != minLOD)
   {
     m_minLOD = minLOD;
     glSamplerParameteri(m_name, GL_TEXTURE_MIN_LOD, m_minLOD);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkInt16 vkSamplerGL4::GetMinLOD() const
+csInt16 csSamplerGL4::GetMinLOD() const
 {
   return m_minLOD;
 }
 
-void vkSamplerGL4::SetMaxLOD(vkInt16 maxLOD)
+void csSamplerGL4::SetMaxLOD(csInt16 maxLOD)
 {
   if (m_maxLOD != maxLOD)
   {
     m_maxLOD = maxLOD;
     glSamplerParameteri(m_name, GL_TEXTURE_MAX_LOD, m_maxLOD);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkInt16 vkSamplerGL4::GetMaxLOD() const
+csInt16 csSamplerGL4::GetMaxLOD() const
 {
   return m_maxLOD;
 }
 
-void vkSamplerGL4::SetAddressU(vkTextureAddressMode addressMode)
+void csSamplerGL4::SetAddressU(csTextureAddressMode addressMode)
 {
   if (m_addressU != addressMode)
   {
     m_addressU = addressMode;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_S, textureAddressModeMap[m_addressU]);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkTextureAddressMode vkSamplerGL4::GetAddressU() const
+csTextureAddressMode csSamplerGL4::GetAddressU() const
 {
   return m_addressU;
 }
 
-void vkSamplerGL4::SetAddressV(vkTextureAddressMode addressMode)
+void csSamplerGL4::SetAddressV(csTextureAddressMode addressMode)
 {
   if (m_addressV != addressMode)
   {
     m_addressV = addressMode;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_T, textureAddressModeMap[m_addressV]);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkTextureAddressMode vkSamplerGL4::GetAddressV() const
+csTextureAddressMode csSamplerGL4::GetAddressV() const
 {
   return m_addressV;
 }
 
-void vkSamplerGL4::SetAddressW(vkTextureAddressMode addressMode)
+void csSamplerGL4::SetAddressW(csTextureAddressMode addressMode)
 {
   if (m_addressW != addressMode)
   {
     m_addressW = addressMode;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_R, textureAddressModeMap[m_addressW]);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkTextureAddressMode vkSamplerGL4::GetAddressW() const
+csTextureAddressMode csSamplerGL4::GetAddressW() const
 {
   return m_addressW;
 }
 
 
-void vkSamplerGL4::SetBorderColor(const vkVector4f &color)
+void csSamplerGL4::SetBorderColor(const csVector4f &color)
 {
   if (m_borderColor != color)
   {
     m_borderColor = color;
     glSamplerParameterfv(m_name, GL_TEXTURE_BORDER_COLOR, static_cast<GLfloat*>(&m_borderColor.x));
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-const vkVector4f &vkSamplerGL4::GetBorderColor() const
+const csVector4f &csSamplerGL4::GetBorderColor() const
 {
   return m_borderColor;
 }
 
-void vkSamplerGL4::SetTextureCompareMode(vkTextureCompareMode compareMode)
+void csSamplerGL4::SetTextureCompareMode(csTextureCompareMode compareMode)
 {
   if (m_textureCompareMode != compareMode)
   {
     m_textureCompareMode = compareMode;
     glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_MODE, textureCompareModeMap[compareMode]);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkTextureCompareMode vkSamplerGL4::GetTextureCompareMode() const
+csTextureCompareMode csSamplerGL4::GetTextureCompareMode() const
 {
   return m_textureCompareMode;
 }
 
-void vkSamplerGL4::SetTextureCompareFunc(vkTextureCompareFunc compareFunc)
+void csSamplerGL4::SetTextureCompareFunc(csTextureCompareFunc compareFunc)
 {
   if (m_textureCompareFunc != compareFunc)
   {
     m_textureCompareFunc = compareFunc;
     glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_FUNC, textureCompareFuncMap[compareFunc]);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 }
 
-vkTextureCompareFunc vkSamplerGL4::GetTextureCompareFunc() const
+csTextureCompareFunc csSamplerGL4::GetTextureCompareFunc() const
 {
   return m_textureCompareFunc;
 }
 
-bool vkSamplerGL4::NeedsMipMaps() const
+bool csSamplerGL4::NeedsMipMaps() const
 {
   return m_filterMode >= eFM_MinMagMipNearest;
 }

@@ -1,15 +1,15 @@
 #pragma once
 
 
-class vkGeometryNode;
-class vkLightNode;
+class csGeometryNode;
+class csLightNode;
 
 struct iScanCallback
 {
 
-  virtual bool ScanGeometryNode(vkGeometryNode *geometryNode) = 0;
+  virtual bool ScanGeometryNode(csGeometryNode *geometryNode) = 0;
 
-  virtual bool ScanLightNode(vkLightNode *lightNode) = 0;
+  virtual bool ScanLightNode(csLightNode *lightNode) = 0;
 
 };
 

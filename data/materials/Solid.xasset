@@ -2,23 +2,23 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node class="vkSGTexture2D" id="0">
+        <node class="csSGTexture2D" id="0">
           <resource name="Diffuse">
             <locator>materials/textures/fieldstone_diffuse.xasset</locator>
           </resource>
         </node>
-        <node class="vkSGTexture2D" id="1">
+        <node class="csSGTexture2D" id="1">
           <resource name="Normal">
             <locator>materials/textures/fieldstone_normal.xasset</locator>
           </resource>
         </node>
-        <node class="vkSGVarFloat2" id="2">
+        <node class="csSGVarFloat2" id="2">
           <resource name="Multiplier">
             <float2>20.000000, 20.000000</float2>
           </resource>
         </node>
-        <node class="vkSGMul" id="3"/>
-        <node class="vkSGDefaultTextureCoordinate" id="4"/>
+        <node class="csSGMul" id="3"/>
+        <node class="csSGDefaultTextureCoordinate" id="4"/>
       </nodes>
       <inputs>
         <node input="0" id="0">

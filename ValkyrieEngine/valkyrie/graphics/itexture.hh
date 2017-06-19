@@ -3,22 +3,22 @@
 #pragma warning(disable: 4250)
 
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/vkenums.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/math/vkvector.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/csenums.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/math/csvector.hh>
 #include <valkyrie/graphics/itexture.refl.hh>
 
 struct iSampler;
 
-VK_INTERFACE();
-struct VKE_API iTexture : public iObject
+CS_INTERFACE();
+struct CSE_API iTexture : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   iTexture() : iObject() { }
   virtual ~iTexture() { }
 
-  virtual vkTextureType GetType() const = 0;
+  virtual csTextureType GetType() const = 0;
 
   virtual void SetSampler(iSampler *sampler) = 0;
   virtual iSampler* GetSampler() = 0;

@@ -4,11 +4,11 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define VK_GL_OFFSET(offset)  ((const GLvoid*)((unsigned long)offset))
+#define CS_GL_OFFSET(offset)  ((const GLvoid*)((unsigned long)offset))
 
 #if 1
 #ifdef _DEBUG 
-#	define VK_CHECK_GL_ERROR \
+#	define CS_CHECK_GL_ERROR \
 	{\
 	  GLenum error = glGetError ();\
 	  if (error != GL_NO_ERROR)\
@@ -21,18 +21,18 @@
 	  assert(error == GL_NO_ERROR);\
 	}
 #else
-#	define VK_CHECK_GL_ERROR
+#	define CS_CHECK_GL_ERROR
 #endif
 #else
-# define VK_CHECK_GL_ERROR
+# define CS_CHECK_GL_ERROR
 #endif
 
 #if 0
 #ifdef PROFILE_GL_FLUSH
-#	define VK_GL_FLUSH glFlush()
+#	define CS_GL_FLUSH glFlush()
 #else
-#	define VK_GL_FLUSH
+#	define CS_GL_FLUSH
 #endif
 #else
-# define VK_GL_FLUSH
+# define CS_GL_FLUSH
 #endif

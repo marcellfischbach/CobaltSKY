@@ -6,10 +6,10 @@
 #include <abstractasseteditor.refl.hh>
 #include <QFile>
 
-VK_INTERFACE()
+CS_INTERFACE()
 class AbstractAssetEditor : public iAssetEditor
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
   AbstractAssetEditor();
   virtual ~AbstractAssetEditor();
@@ -21,15 +21,15 @@ public:
   void SetWidget(QWidget *widget);
   virtual QWidget *GetWidget();
 
-  virtual const vkString &GetName() const;
-  virtual const std::set<vkString> &GetVisibleDockItems() const;
+  virtual const csString &GetName() const;
+  virtual const std::set<csString> &GetVisibleDockItems() const;
   virtual void PopulateDockItems();
 
   virtual void CloseRequest() override;
 
 protected:
   virtual void OpenAsset() = 0;
-  void AddDockItemName(const vkString &dockItemName);
+  void AddDockItemName(const csString &dockItemName);
 
 
 private:
@@ -38,6 +38,6 @@ private:
   QWidget *m_widget;
 
   bool m_dirty;
-  vkString m_name;
-  std::set<vkString> m_visibleDockItems;
+  csString m_name;
+  std::set<csString> m_visibleDockItems;
 };

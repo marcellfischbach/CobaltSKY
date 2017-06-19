@@ -4,24 +4,24 @@
 #include <valkyrie/window/ikeyboard.hh>
 #include <windowsdl/sdlkeyboard.refl.hh>
 
-VK_CLASS()
-class VKWINDOWSDL_API SDLKeyboard : public VK_SUPER(iKeyboard)
+CS_CLASS()
+class CSWINDOWSDL_API SDLKeyboard : public CS_SUPER(iKeyboard)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
 
   SDLKeyboard();
   virtual ~SDLKeyboard();
 
   void UpdateKeys();
-  void SetKeyDown(vkUInt32 key);
-  void SetKeyUp(vkUInt32 key);
+  void SetKeyDown(csUInt32 key);
+  void SetKeyUp(csUInt32 key);
 
-  bool IsKeyDown(vkKey key) const;
-  bool IsKeyUp(vkKey key) const;
+  bool IsKeyDown(csKey key) const;
+  bool IsKeyUp(csKey key) const;
 
-  bool IsKeyPressed(vkKey key) const;
-  bool IsKeyReleased(vkKey key) const;
+  bool IsKeyPressed(csKey key) const;
+  bool IsKeyReleased(csKey key) const;
 
 private:
   bool m_current[eK_COUNT];

@@ -1,7 +1,7 @@
 #pragma once
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/ishader.hh>
 #include <valkyrie/graphics/ishaderattribute.hh>
 #include <valkyrie/graphics/ishaderstream.hh>
@@ -9,45 +9,45 @@
 #include <vector>
 #include <graphicsgl4/gl4shaderattribute.refl.hh>
 
-VK_CLASS()
-class vkShaderAttributeGL4 : public VK_SUPER(iShaderAttribute)
+CS_CLASS()
+class csShaderAttributeGL4 : public CS_SUPER(iShaderAttribute)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
-  vkShaderAttributeGL4();
-  virtual ~vkShaderAttributeGL4();
+  csShaderAttributeGL4();
+  virtual ~csShaderAttributeGL4();
 
-  void SetName(const vkString &name);
-  virtual const vkString &GetName() const;
+  void SetName(const csString &name);
+  virtual const csString &GetName() const;
 
-  virtual void SetArrayIndex(vkUInt32 idx);
+  virtual void SetArrayIndex(csUInt32 idx);
 
   virtual void Set(float x);
   virtual void Set(float x, float y);
   virtual void Set(float x, float y, float z);
   virtual void Set(float x, float y, float z, float w);
 
-  virtual void Set(vkInt32 x);
-  virtual void Set(vkInt32 x, vkInt32 y);
-  virtual void Set(vkInt32 x, vkInt32 y, vkInt32 z);
-  virtual void Set(vkInt32 x, vkInt32 y, vkInt32 z, vkInt32 w);
+  virtual void Set(csInt32 x);
+  virtual void Set(csInt32 x, csInt32 y);
+  virtual void Set(csInt32 x, csInt32 y, csInt32 z);
+  virtual void Set(csInt32 x, csInt32 y, csInt32 z, csInt32 w);
 
-  virtual void Set(const vkVector2f &v);
-  virtual void Set(const vkVector3f &v);
-  virtual void Set(const vkVector4f &v);
-  virtual void Set(const vkColor4f &v);
-  virtual void Set(const vkVector2f *vs, vkSize num);
-  virtual void Set(const vkVector3f *vs, vkSize num);
-  virtual void Set(const vkVector4f *vs, vkSize num);
-  virtual void Set(const vkInt32 *vs, vkSize num);
-  virtual void Set(const vkUInt32 *vs, vkSize num);
-  virtual void Set(const float *vs, vkSize num);
+  virtual void Set(const csVector2f &v);
+  virtual void Set(const csVector3f &v);
+  virtual void Set(const csVector4f &v);
+  virtual void Set(const csColor4f &v);
+  virtual void Set(const csVector2f *vs, csSize num);
+  virtual void Set(const csVector3f *vs, csSize num);
+  virtual void Set(const csVector4f *vs, csSize num);
+  virtual void Set(const csInt32 *vs, csSize num);
+  virtual void Set(const csUInt32 *vs, csSize num);
+  virtual void Set(const float *vs, csSize num);
 
-  virtual void Set(const vkMatrix3f &m);
-  virtual void Set(const vkMatrix3f *ms, vkSize num);
-  virtual void Set(const vkMatrix4f &m);
-  virtual void Set(const vkMatrix4f *ms, vkSize num);
+  virtual void Set(const csMatrix3f &m);
+  virtual void Set(const csMatrix3f *ms, csSize num);
+  virtual void Set(const csMatrix4f &m);
+  virtual void Set(const csMatrix4f *ms, csSize num);
 
 
   void SetLocation(GLint location);
@@ -56,9 +56,9 @@ public:
   void SetValid(bool valid);
   bool IsValid()const;
 private:
-  vkString m_name;
+  csString m_name;
   GLint m_location;
-  vkUInt32 m_arrayIndex;
+  csUInt32 m_arrayIndex;
   GLint m_absLocation;
   bool m_valid;
 };

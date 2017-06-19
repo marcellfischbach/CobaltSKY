@@ -5,7 +5,7 @@
 
 bool SamplerEditorFactory::CanEdit(const AssetDescriptor &descriptor) const
 {
-  return descriptor.GetAssetType() == vkString("sampler");
+  return descriptor.GetAssetType() == csString("sampler");
 }
 
 iAssetEditor *SamplerEditorFactory::CreateEditor(const AssetDescriptor &descriptor) const

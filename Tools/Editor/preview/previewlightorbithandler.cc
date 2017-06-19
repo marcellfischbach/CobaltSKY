@@ -1,13 +1,13 @@
 
 #include <preview/previewlightorbithandler.hh>
-#include <valkyrie/graphics/vkdirectionallight.hh>
-#include <valkyrie/math/vkmatrix4f.hh>
+#include <valkyrie/graphics/csdirectionallight.hh>
+#include <valkyrie/math/csmatrix4f.hh>
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-PreviewLightOrbitHandler::PreviewLightOrbitHandler(vkDirectionalLight *light)
+PreviewLightOrbitHandler::PreviewLightOrbitHandler(csDirectionalLight *light)
 {
-  VK_SET(m_light, light);
+  CS_SET(m_light, light);
   UpdateLight();
 }
 
@@ -62,15 +62,15 @@ void PreviewLightOrbitHandler::wheelEvent(QWheelEvent *event)
 
 void PreviewLightOrbitHandler::UpdateLight()
 {
-  vkMatrix4f M, rH, rV;
+  csMatrix4f M, rH, rV;
 
 
   rH.SetRotationZ(m_rotH);
   rV.SetRotationX(m_rotV);
-  vkMatrix4f::Mult(rH, rV, M);
+  csMatrix4f::Mult(rH, rV, M);
 
-  vkVector3f d = M.GetYAxis(d);
-  vkVector3f::Mul(d, -1.0f, d);
+  csVector3f d = M.GetYAxis(d);
+  csVector3f::Mul(d, -1.0f, d);
   m_light->SetDirection(d);
 }
 

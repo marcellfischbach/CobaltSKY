@@ -1,7 +1,7 @@
 #pragma once
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/ishader.hh>
 #include <valkyrie/graphics/ishaderattribute.hh>
 #include <valkyrie/graphics/ishaderstream.hh>
@@ -10,56 +10,56 @@
 #include <graphicsgl4/gl4program.refl.hh>
 
 
-class vkShaderGL4;
-class vkShaderAttributeGL4;
-class vkShaderStreamGL4;
+class csShaderGL4;
+class csShaderAttributeGL4;
+class csShaderStreamGL4;
 
 
-VK_CLASS()
-class vkProgramGL4 : public VK_SUPER(iShader)
+CS_CLASS()
+class csProgramGL4 : public CS_SUPER(iShader)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
-  vkProgramGL4();
-  virtual ~vkProgramGL4();
+  csProgramGL4();
+  virtual ~csProgramGL4();
 
   void Bind();
 
-  virtual void RegisterAttribute(const vkShaderAttributeID &id);
-  virtual void RegisterStream(const vkShaderStreamID &id);
+  virtual void RegisterAttribute(const csShaderAttributeID &id);
+  virtual void RegisterStream(const csShaderStreamID &id);
 
-  virtual vkUInt32 GetNumberOfAttributes() const;
-  virtual iShaderAttribute *GetAttribute(vkUInt32 idx);
-  virtual iShaderAttribute *GetAttribute(const vkShaderAttributeID &id);
-  virtual iShaderAttribute *GetAttribute(const vkString &attributeName);
+  virtual csUInt32 GetNumberOfAttributes() const;
+  virtual iShaderAttribute *GetAttribute(csUInt32 idx);
+  virtual iShaderAttribute *GetAttribute(const csShaderAttributeID &id);
+  virtual iShaderAttribute *GetAttribute(const csString &attributeName);
 
-  virtual vkUInt16 GetNumberOfStreams() const;
-  virtual iShaderStream *GetStream(const vkShaderStreamID &id);
-  virtual iShaderStream *GetStream(const vkString &streamName);
+  virtual csUInt16 GetNumberOfStreams() const;
+  virtual iShaderStream *GetStream(const csShaderStreamID &id);
+  virtual iShaderStream *GetStream(const csString &streamName);
 
 
-  void AttachShader(vkShaderGL4 *shader);
-  void DetachShader(vkShaderGL4 *shader);
+  void AttachShader(csShaderGL4 *shader);
+  void DetachShader(csShaderGL4 *shader);
 
   bool Link();
-  vkString GetLinkErrorLog() const;
+  csString GetLinkErrorLog() const;
 
 private:
   GLuint m_name;
 
-  std::vector<vkShaderGL4*> m_shaders;
+  std::vector<csShaderGL4*> m_shaders;
 
   void InitializeSystemStreams();
   void InitializeSystemAttributes();
 
-  void ResizeAttributes(vkUInt32 id);
-  void ResizeStreams(vkUInt32 id);
-  std::vector<vkShaderAttributeGL4*> m_attributes;
-  std::vector<vkShaderStreamGL4*> m_streams;
+  void ResizeAttributes(csUInt32 id);
+  void ResizeStreams(csUInt32 id);
+  std::vector<csShaderAttributeGL4*> m_attributes;
+  std::vector<csShaderStreamGL4*> m_streams;
 
-  std::vector<vkShaderAttributeGL4*> m_namedAttributes;
-  std::vector<vkShaderStreamGL4*> m_namedStreams;
+  std::vector<csShaderAttributeGL4*> m_namedAttributes;
+  std::vector<csShaderStreamGL4*> m_namedStreams;
 
 };
 

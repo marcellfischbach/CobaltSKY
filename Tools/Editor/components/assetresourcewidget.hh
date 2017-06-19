@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <ui_assetresourcewidget.h>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 
 class AssetResourceWidget : public QWidget
@@ -12,15 +12,15 @@ public:
   AssetResourceWidget(QWidget *parent = 0);
   ~AssetResourceWidget();
 
-  void SetResourceLocator(const vkResourceLocator &locator);
-  void AddValidClass(const vkClass *cls);
+  void SetResourceLocator(const csResourceLocator &locator);
+  void AddValidClass(const csClass *cls);
 signals:
-  void ResourceChanged(const vkResourceLocator &locator);
+  void ResourceChanged(const csResourceLocator &locator);
 
   private slots:
-  void ResourceChangedSlot(const vkResourceLocator &locator);
+  void ResourceChangedSlot(const csResourceLocator &locator);
 private:
   Ui::AssetResourceUI m_gui;
 
-  vkResourceLocator m_locator;
+  csResourceLocator m_locator;
 };

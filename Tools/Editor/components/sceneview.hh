@@ -7,21 +7,21 @@
 struct iFrameProcessor;
 struct iGraphics;
 struct iSampler;
-class vkEntityScene;
-class vkCamera;
+class csEntityScene;
+class csCamera;
 struct SceneViewInputHandler;
-class QTVKOnscreenRenderTarget;
+class QTCSOnscreenRenderTarget;
 class SceneView : public QOpenGLWidget
 {
 public:
   SceneView(QWidget *parent = 0);
   virtual ~SceneView();
 
-  const vkEntityScene *GetScene() const;
-  vkEntityScene *GetScene();
+  const csEntityScene *GetScene() const;
+  csEntityScene *GetScene();
 
-  const vkCamera *GetCamera() const;
-  vkCamera *GetCamera();
+  const csCamera *GetCamera() const;
+  csCamera *GetCamera();
 
   void AddInputHandler(SceneViewInputHandler *handler);
 
@@ -30,7 +30,7 @@ protected:
   void paintGL();
   void resizeGL(int w, int h);
 
-  void SetScene(vkEntityScene *scene);
+  void SetScene(csEntityScene *scene);
 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
@@ -38,11 +38,11 @@ protected:
   void wheelEvent(QWheelEvent *event);
 
 private:
-  vkCamera *m_camera = 0;
-  vkEntityScene *m_scene = 0;
+  csCamera *m_camera = 0;
+  csEntityScene *m_scene = 0;
   iGraphics *m_graphics = 0;
   iFrameProcessor* m_frameProcessor = 0;
-  QTVKOnscreenRenderTarget *m_onscreenTarget = 0;
+  QTCSOnscreenRenderTarget *m_onscreenTarget = 0;
 
   std::vector<SceneViewInputHandler*> m_handlers;
 };

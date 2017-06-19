@@ -3,15 +3,15 @@
 #include <graphicsgl4/shadergraph/gl4sgfloateval.hh>
 #include <sstream>
 
-void vkSGFloat2GL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGFloat2GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *n = GetNode();
-  vkString src[] = {
+  csSGNode *n = GetNode();
+  csString src[] = {
     n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : ""
   };
 
-  vkSGDataType dt[] = {
+  csSGDataType dt[] = {
     n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
     n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
   };

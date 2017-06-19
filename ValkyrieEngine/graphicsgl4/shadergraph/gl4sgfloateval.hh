@@ -4,7 +4,7 @@
 
 namespace
 {
-vkString eval(vkString *src, vkSGDataType *dataTypes, vkSGNode *node, vkShaderGraphCtx &ctx, int start, int num)
+csString eval(csString *src, csSGDataType *dataTypes, csSGNode *node, csShaderGraphCtx &ctx, int start, int num)
 {
   if (start >= num)
   {
@@ -51,7 +51,7 @@ vkString eval(vkString *src, vkSGDataType *dataTypes, vkSGNode *node, vkShaderGr
     next++;
   }
 
-  vkString trail = ::eval(src, dataTypes, node, ctx, next, num);
+  csString trail = ::eval(src, dataTypes, node, ctx, next, num);
   if (trail.length() != 0)
   {
     ss << ", " << trail;

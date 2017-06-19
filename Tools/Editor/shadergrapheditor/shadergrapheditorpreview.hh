@@ -4,7 +4,7 @@
 
 #include <ui_shadergrapheditorpreview.h>
 
-class vkSGShaderGraph;
+class csSGShaderGraph;
 class ShaderGraphEditorPreview : public QWidget
 {
   Q_OBJECT
@@ -12,7 +12,7 @@ public:
   ShaderGraphEditorPreview(QWidget *parent = 0);
   virtual ~ShaderGraphEditorPreview();
 
-  void SetShaderGraph(vkSGShaderGraph *shaderGraph);
+  void SetShaderGraph(csSGShaderGraph *shaderGraph);
 
 public slots:
 void ShaderGraphChanged();

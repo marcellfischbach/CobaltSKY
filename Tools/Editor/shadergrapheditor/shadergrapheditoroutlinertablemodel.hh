@@ -2,15 +2,15 @@
 
 #include <QAbstractItemModel>
 
-class vkSGShaderGraph;
-class vkSGNode;
+class csSGShaderGraph;
+class csSGNode;
 class ShaderGraphEditorOutlinerTableModel : public QAbstractItemModel
 {
 public:
   ShaderGraphEditorOutlinerTableModel();
   virtual ~ShaderGraphEditorOutlinerTableModel();
 
-  void SetShaderGraph(vkSGShaderGraph *shaderGraph);
+  void SetShaderGraph(csSGShaderGraph *shaderGraph);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
@@ -20,10 +20,10 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-  QModelIndex GetIndex(vkSGShaderGraph *graph, int column);
-  QModelIndex GetIndex(vkSGNode *node, int column);
+  QModelIndex GetIndex(csSGShaderGraph *graph, int column);
+  QModelIndex GetIndex(csSGNode *node, int column);
 
 private:
-  vkSGShaderGraph *m_shaderGraph;
+  csSGShaderGraph *m_shaderGraph;
 };
 

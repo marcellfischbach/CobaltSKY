@@ -3,13 +3,13 @@
 
 #include <QString>
 #include <QPixmap>
-#include <valkyrie/core/vkresourcelocator.hh>
+#include <valkyrie/core/csresourcelocator.hh>
 
 
 class AssetManagerContentModelEntry
 {
 public:
-  AssetManagerContentModelEntry(const vkResourceLocator &locator);
+  AssetManagerContentModelEntry(const csResourceLocator &locator);
 
   const QPixmap &GetIcon() const
   {
@@ -21,7 +21,7 @@ public:
     return m_entryName;
   }
 
-  const vkResourceLocator &GetLocator() const
+  const csResourceLocator &GetLocator() const
   {
     return m_locator;
   }
@@ -29,5 +29,5 @@ public:
 private:
   QString m_entryName;
   QPixmap m_pixmap;
-  vkResourceLocator m_locator;
+  csResourceLocator m_locator;
 };

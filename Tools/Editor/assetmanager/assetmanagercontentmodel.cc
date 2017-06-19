@@ -8,9 +8,9 @@
 #include <QMimeData>
 #include <mimehelper.hh>
 #include <valkyrie/core/ifile.hh>
-#include <valkyrie/core/vkfileinfo.hh>
-#include <valkyrie/core/vkvfs.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csfileinfo.hh>
+#include <valkyrie/core/csvfs.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <QDomDocument>
 #include <QFile>
 
@@ -28,7 +28,7 @@ AssetManagerContentModel::~AssetManagerContentModel()
 }
 
 
-void AssetManagerContentModel::SetResourceLocator(const vkResourceLocator &locator)
+void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locator)
 {
   if (m_locator == locator)
   {
@@ -37,14 +37,14 @@ void AssetManagerContentModel::SetResourceLocator(const vkResourceLocator &locat
 
 
   m_locator = locator;
-  vkString absFileName = "";
+  csString absFileName = "";
   if (!locator.GetResourceEntry().empty())
   {
-    absFileName = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+    absFileName = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   }
   else
   {
-    absFileName = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile());
+    absFileName = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile());
   }
 
   beginResetModel();
@@ -55,8 +55,8 @@ void AssetManagerContentModel::SetResourceLocator(const vkResourceLocator &locat
   QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
   for (const QString &fileName : fileNames)
   {
-    vkString resourceFileName = locator.GetResourceFile() + "/" + vkString((const char*)fileName.toLatin1());
-    vkResourceLocator fileLocator(resourceFileName, "", locator.GetResourceEntry());
+    csString resourceFileName = locator.GetResourceFile() + "/" + csString((const char*)fileName.toLatin1());
+    csResourceLocator fileLocator(resourceFileName, "", locator.GetResourceEntry());
     m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
   }
 
@@ -138,8 +138,8 @@ QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) co
   const QModelIndex &index = indexes[0];
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
 
-  const vkResourceLocator &locator = entry->GetLocator();
-  const vkClass *cls = vkResourceManager::Get()->EvalClass(locator);
+  const csResourceLocator &locator = entry->GetLocator();
+  const csClass *cls = csResourceManager::Get()->EvalClass(locator);
 
   QMimeData *data = new QMimeData();
   MimeHelper::PutResourceLocatorMimeData(data, locator.GetResourceFile());
@@ -158,12 +158,12 @@ Qt::ItemFlags AssetManagerContentModel::flags(const QModelIndex &index) const
     return defaultFlags;
 }
 
-vkResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index) const
+csResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index) const
 {
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
   if (!entry)
   {
-    return vkResourceLocator();
+    return csResourceLocator();
   }
   return entry->GetLocator();
 }
@@ -173,9 +173,9 @@ const AssetManagerContentModelEntry *AssetManagerContentModel::GetEntry(const QM
   return CONST_FROM_INDEX(index);
 }
 
-vkString AssetManagerContentModel::ReadType(const vkResourceLocator &locator) const
+csString AssetManagerContentModel::ReadType(const csResourceLocator &locator) const
 {
-  vkString path = vkVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  csString path = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   QFile file(QString(path.c_str()));
   file.open(QIODevice::ReadOnly);
   QDomDocument doc;
@@ -205,5 +205,5 @@ vkString AssetManagerContentModel::ReadType(const vkResourceLocator &locator) co
     return "";
   }
 
-  return vkString((const char*)typeElement.tagName().toLatin1());
+  return csString((const char*)typeElement.tagName().toLatin1());
 }

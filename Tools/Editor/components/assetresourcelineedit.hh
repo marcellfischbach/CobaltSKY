@@ -3,8 +3,8 @@
 #include <QLineEdit>
 #include <QList>
 
-class vkClass;
-class vkResourceLocator;
+class csClass;
+class csResourceLocator;
 class AssetResourceLineEdit : public QLineEdit
 {
   Q_OBJECT
@@ -15,10 +15,10 @@ public:
   virtual void dragEnterEvent(QDragEnterEvent *event);
   virtual void dropEvent(QDropEvent *event);
 
-  void AddValidClass(const vkClass *cls);
+  void AddValidClass(const csClass *cls);
 
 signals:
-  void ResourceChanged(const vkResourceLocator &locator);
+  void ResourceChanged(const csResourceLocator &locator);
 private:
-  QList<const vkClass*> m_validClasses;
+  QList<const csClass*> m_validClasses;
 };

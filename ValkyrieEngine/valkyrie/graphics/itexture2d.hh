@@ -1,22 +1,22 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/itexture.hh>
 #include <valkyrie/graphics/itexture2d.refl.hh>
 
-VK_INTERFACE();
-struct VKE_API iTexture2D : public virtual VK_SUPER(iTexture)
+CS_INTERFACE();
+struct CSE_API iTexture2D : public virtual CS_SUPER(iTexture)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
   iTexture2D() : iTexture() { }
 
   virtual ~iTexture2D() { }
 
-  virtual vkUInt16 GetWidth() const = 0;
-  virtual vkUInt16 GetHeight() const = 0;
-  virtual vkUInt16 GetNumberOfLODs() const = 0;
+  virtual csUInt16 GetWidth() const = 0;
+  virtual csUInt16 GetHeight() const = 0;
+  virtual csUInt16 GetNumberOfLODs() const = 0;
 
-  virtual bool CopyData(vkUInt8 lod, vkPixelFormat format, const void *data) = 0;
+  virtual bool CopyData(csUInt8 lod, csPixelFormat format, const void *data) = 0;
 
 };

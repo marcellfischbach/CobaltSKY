@@ -1,6 +1,6 @@
 #pragma once
 
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <iasseteditorfactory.hh>
 #include <Editor.refl.hh>
 #include <QDir>
@@ -10,16 +10,16 @@
 
 class MainWindow;
 class AssetManagerWidget;
-class vkEngine;
-class vkGraphicsGL4;
+class csEngine;
+class csGraphicsGL4;
 struct iPhysicsSystem;
 struct iDockItem;
 class Project;
 
-VK_INTERFACE()
+CS_INTERFACE()
 class Editor : public iObject
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
   static Editor* Get();
 
@@ -33,7 +33,7 @@ public:
     return m_rootPath;
   }
 
-  vkString ConvertToResourcePath(const vkString &filePath) const;
+  csString ConvertToResourcePath(const csString &filePath) const;
 
   void AddEditorFactory(iAssetEditorFactory *factory);
   void OpenAsset(const AssetDescriptor &descriptor);
@@ -43,13 +43,13 @@ public:
   QRect GetScreenSize();
 
 
-  vkGraphicsGL4 *GetGraphics();
+  csGraphicsGL4 *GetGraphics();
  
   void AddDockItem(iDockItem *item);
-  iDockItem *GetDockItem(const vkString &dockItemName) const;
+  iDockItem *GetDockItem(const csString &dockItemName) const;
   void CurrentEditorChanged();
   void UpdateVisibleDockItemsFromEditor(iAssetEditor *editor);
-  void UpdateVisibleDockItems(const std::set<vkString> &visibleDocks);
+  void UpdateVisibleDockItems(const std::set<csString> &visibleDocks);
 
   void CloseProject();
   void OpenProject(const std::string &projectPath);
@@ -77,8 +77,8 @@ private:
   std::vector<iAssetEditorFactory*> m_editorFactories;
   std::map<AssetDescriptor, iAssetEditor*> m_openEditors;
 
-  vkEngine *m_engine;
-  vkGraphicsGL4 *m_graphics;
+  csEngine *m_engine;
+  csGraphicsGL4 *m_graphics;
   iPhysicsSystem *m_physicsSystem;
   std::vector<iDockItem*> m_dockItems;
 

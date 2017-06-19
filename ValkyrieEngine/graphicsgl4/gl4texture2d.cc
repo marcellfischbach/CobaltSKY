@@ -3,20 +3,20 @@
 #include <graphicsgl4/gl4mapping.hh>
 #include <graphicsgl4/gl4defines.hh>
 
-vkTexture2DGL4::vkTexture2DGL4()
-  : vkTextureGL4(eTT_Texture2D)
+csTexture2DGL4::csTexture2DGL4()
+  : csTextureGL4(eTT_Texture2D)
   , iTexture2D()
 {
 
 }
 
-vkTexture2DGL4::~vkTexture2DGL4()
+csTexture2DGL4::~csTexture2DGL4()
 {
 }
 
-bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
+bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
 {
-  if (!vkTextureGL4::Initialize())
+  if (!csTextureGL4::Initialize())
   {
     return false;
   }
@@ -44,15 +44,15 @@ bool vkTexture2DGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 h
     }
   }
   m_lods = lod;
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
-bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *data)
+bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *data)
 {
-  vkUInt16 layerWidth = m_width >> layer;
-  vkUInt16 layerHeight = m_height >> layer;
+  csUInt16 layerWidth = m_width >> layer;
+  csUInt16 layerHeight = m_height >> layer;
   if (layerWidth == 0 && layerHeight == 0)
   {
     return false;
@@ -68,23 +68,23 @@ bool vkTexture2DGL4::CopyData(vkUInt8 layer, vkPixelFormat format, const void *d
 
   Bind();
   glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
 
-vkUInt16 vkTexture2DGL4::GetWidth() const
+csUInt16 csTexture2DGL4::GetWidth() const
 {
   return m_width;
 }
 
-vkUInt16 vkTexture2DGL4::GetHeight() const
+csUInt16 csTexture2DGL4::GetHeight() const
 {
   return m_height;
 }
 
-vkUInt16 vkTexture2DGL4::GetNumberOfLODs() const
+csUInt16 csTexture2DGL4::GetNumberOfLODs() const
 {
   return m_lods;
 }

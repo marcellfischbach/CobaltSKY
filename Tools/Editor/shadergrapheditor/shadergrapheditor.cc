@@ -8,14 +8,14 @@
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <basicdockitem.hh>
 #include <editor.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/core/csresourcemanager.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 
 
 ShaderGraphEditor::ShaderGraphEditor()
   : AbstractAssetEditor()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
   m_widget = new ShaderGraphEditorWidget(this);
   SetWidget(m_widget);
 
@@ -51,19 +51,19 @@ void ShaderGraphEditor::OpenAsset()
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 
 
-  vkSGShaderGraph *shaderGraph = vkResourceManager::Get()->Aquire<vkSGShaderGraph>(descriptor.GetLocator());
+  csSGShaderGraph *shaderGraph = csResourceManager::Get()->Aquire<csSGShaderGraph>(descriptor.GetLocator());
 
-  vkResourceLocator metaLocator(descriptor.GetLocator(), "meta");
-  ShaderGraphEditorMeta *meta = vkResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
+  csResourceLocator metaLocator(descriptor.GetLocator(), "meta");
+  ShaderGraphEditorMeta *meta = csResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
   if (!meta)
   { 
     meta = new ShaderGraphEditorMeta();
   }
-  vkSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
+  csSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
   m_preview->SetShaderGraph(shaderGraph);
 
-  VK_RELEASE(meta);
+  CS_RELEASE(meta);
 
 }
 

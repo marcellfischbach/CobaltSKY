@@ -5,7 +5,7 @@
 #include <assetdescriptor.hh>
 
 #include <shadergrapheditor/shadergrapheditor.refl.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/csenums.hh>
 
 class ShaderGraphEditorOutliner;
 class ShaderGraphEditorPreview;
@@ -13,10 +13,10 @@ class ShaderGraphEditorProperties;
 class ShaderGraphEditorToolbox;
 class ShaderGraphEditorWidget;
 
-VK_CLASS()
+CS_CLASS()
 class ShaderGraphEditor : public AbstractAssetEditor
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 
 public:
   ShaderGraphEditor();

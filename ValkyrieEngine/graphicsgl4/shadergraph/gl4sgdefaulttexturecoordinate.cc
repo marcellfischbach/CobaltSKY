@@ -2,9 +2,9 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 
 
-void vkSGDefaultTextureCoordinateGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGDefaultTextureCoordinateGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *coord = GetNode();
+  csSGNode *coord = GetNode();
 
   ctx.SetOutputValue(coord->GetOutput(0), ctx.GetDefaultTextureCoordinate());
 

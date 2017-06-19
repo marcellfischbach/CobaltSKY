@@ -4,14 +4,14 @@
 #include <graphicsgl4/shadergraph/gl4sgdot.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGDotGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGDotGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGDotGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGDotGL4() { }
+  csSGDotGL4() : csSGNodeGL4() { }
+  virtual ~csSGDotGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

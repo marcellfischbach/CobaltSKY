@@ -29,78 +29,78 @@
 #include <graphicsgl4/shadergraph/gl4sgvarfloat3.hh>
 #include <graphicsgl4/shadergraph/gl4sgvarfloat4.hh>
 #include <graphicsgl4/gl4graphics.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <valkyrie/graphics/itexture.hh>
 
-#include <valkyrie/graphics/shadergraph/vksgadd.hh>
-#include <valkyrie/graphics/shadergraph/vksgconstfloat1.hh>
-#include <valkyrie/graphics/shadergraph/vksgconstfloat2.hh>
-#include <valkyrie/graphics/shadergraph/vksgconstfloat3.hh>
-#include <valkyrie/graphics/shadergraph/vksgconstfloat4.hh>
-#include <valkyrie/graphics/shadergraph/vksgcross.hh>
-#include <valkyrie/graphics/shadergraph/vksgdefaulttexturecoordinate.hh>
-#include <valkyrie/graphics/shadergraph/vksgdiv.hh>
-#include <valkyrie/graphics/shadergraph/vksgdot.hh>
-#include <valkyrie/graphics/shadergraph/vksgfloat2.hh>
-#include <valkyrie/graphics/shadergraph/vksgfloat3.hh>
-#include <valkyrie/graphics/shadergraph/vksgfloat4.hh>
-#include <valkyrie/graphics/shadergraph/vksglerp.hh>
-#include <valkyrie/graphics/shadergraph/vksgmul.hh>
-#include <valkyrie/graphics/shadergraph/vksgnormalize.hh>
-#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/vksgsplitfloat2.hh>
-#include <valkyrie/graphics/shadergraph/vksgsplitfloat3.hh>
-#include <valkyrie/graphics/shadergraph/vksgsplitfloat4.hh>
-#include <valkyrie/graphics/shadergraph/vksgsub.hh>
-#include <valkyrie/graphics/shadergraph/vksgtexture2d.hh>
-#include <valkyrie/graphics/shadergraph/vksgvarfloat1.hh>
-#include <valkyrie/graphics/shadergraph/vksgvarfloat2.hh>
-#include <valkyrie/graphics/shadergraph/vksgvarfloat3.hh>
-#include <valkyrie/graphics/shadergraph/vksgvarfloat4.hh>
+#include <valkyrie/graphics/shadergraph/cssgadd.hh>
+#include <valkyrie/graphics/shadergraph/cssgconstfloat1.hh>
+#include <valkyrie/graphics/shadergraph/cssgconstfloat2.hh>
+#include <valkyrie/graphics/shadergraph/cssgconstfloat3.hh>
+#include <valkyrie/graphics/shadergraph/cssgconstfloat4.hh>
+#include <valkyrie/graphics/shadergraph/cssgcross.hh>
+#include <valkyrie/graphics/shadergraph/cssgdefaulttexturecoordinate.hh>
+#include <valkyrie/graphics/shadergraph/cssgdiv.hh>
+#include <valkyrie/graphics/shadergraph/cssgdot.hh>
+#include <valkyrie/graphics/shadergraph/cssgfloat2.hh>
+#include <valkyrie/graphics/shadergraph/cssgfloat3.hh>
+#include <valkyrie/graphics/shadergraph/cssgfloat4.hh>
+#include <valkyrie/graphics/shadergraph/cssglerp.hh>
+#include <valkyrie/graphics/shadergraph/cssgmul.hh>
+#include <valkyrie/graphics/shadergraph/cssgnormalize.hh>
+#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
+#include <valkyrie/graphics/shadergraph/cssgsplitfloat2.hh>
+#include <valkyrie/graphics/shadergraph/cssgsplitfloat3.hh>
+#include <valkyrie/graphics/shadergraph/cssgsplitfloat4.hh>
+#include <valkyrie/graphics/shadergraph/cssgsub.hh>
+#include <valkyrie/graphics/shadergraph/cssgtexture2d.hh>
+#include <valkyrie/graphics/shadergraph/cssgvarfloat1.hh>
+#include <valkyrie/graphics/shadergraph/cssgvarfloat2.hh>
+#include <valkyrie/graphics/shadergraph/cssgvarfloat3.hh>
+#include <valkyrie/graphics/shadergraph/cssgvarfloat4.hh>
 
 #include <iostream>
 #include <sstream>
 
-vkShaderGraphGL4::vkShaderGraphGL4(vkGraphicsGL4 *graphics)
+csShaderGraphGL4::csShaderGraphGL4(csGraphicsGL4 *graphics)
   : m_graphics(graphics)
 {
 }
 
 
-vkShaderGraphGL4::~vkShaderGraphGL4()
+csShaderGraphGL4::~csShaderGraphGL4()
 {
 
 }
 
-vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
+csSGNodeGL4 *csShaderGraphGL4::CreateNode(const csClass *nodeClass)
 {
   static bool initialized = false;
   if (!initialized)
   {
-    m_classMapping.push_back(Map(vkSGVarFloat::GetStaticClass(), vkSGVarFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGVarFloat2::GetStaticClass(), vkSGVarFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGVarFloat3::GetStaticClass(), vkSGVarFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGVarFloat4::GetStaticClass(), vkSGVarFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGConstFloat::GetStaticClass(), vkSGConstFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGConstFloat2::GetStaticClass(), vkSGConstFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGConstFloat3::GetStaticClass(), vkSGConstFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGConstFloat4::GetStaticClass(), vkSGConstFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGFloat2::GetStaticClass(), vkSGFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGFloat3::GetStaticClass(), vkSGFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGFloat4::GetStaticClass(), vkSGFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGSplitFloat2::GetStaticClass(), vkSGSplitFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGSplitFloat3::GetStaticClass(), vkSGSplitFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGSplitFloat4::GetStaticClass(), vkSGSplitFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGAdd::GetStaticClass(), vkSGAddGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGSub::GetStaticClass(), vkSGSubGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGMul::GetStaticClass(), vkSGMulGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGDiv::GetStaticClass(), vkSGDivGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGDot::GetStaticClass(), vkSGDotGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGCross::GetStaticClass(), vkSGCrossGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGLerp::GetStaticClass(), vkSGLerpGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGNormalize::GetStaticClass(), vkSGNormalizeGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGDefaultTextureCoordinate::GetStaticClass(), vkSGDefaultTextureCoordinateGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(vkSGTexture2D::GetStaticClass(), vkSGTexture2DGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGVarFloat::GetStaticClass(), csSGVarFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGVarFloat2::GetStaticClass(), csSGVarFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGVarFloat3::GetStaticClass(), csSGVarFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGVarFloat4::GetStaticClass(), csSGVarFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGConstFloat::GetStaticClass(), csSGConstFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGConstFloat2::GetStaticClass(), csSGConstFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGConstFloat3::GetStaticClass(), csSGConstFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGConstFloat4::GetStaticClass(), csSGConstFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGFloat2::GetStaticClass(), csSGFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGFloat3::GetStaticClass(), csSGFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGFloat4::GetStaticClass(), csSGFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGSplitFloat2::GetStaticClass(), csSGSplitFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGSplitFloat3::GetStaticClass(), csSGSplitFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGSplitFloat4::GetStaticClass(), csSGSplitFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGAdd::GetStaticClass(), csSGAddGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGSub::GetStaticClass(), csSGSubGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGMul::GetStaticClass(), csSGMulGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGDiv::GetStaticClass(), csSGDivGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGDot::GetStaticClass(), csSGDotGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGCross::GetStaticClass(), csSGCrossGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGLerp::GetStaticClass(), csSGLerpGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGNormalize::GetStaticClass(), csSGNormalizeGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGDefaultTextureCoordinate::GetStaticClass(), csSGDefaultTextureCoordinateGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGTexture2D::GetStaticClass(), csSGTexture2DGL4::GetStaticClass()));
     initialized = true;
   }
   for (size_t i = 0, in = m_classMapping.size(); i < in; ++i)
@@ -108,7 +108,7 @@ vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
     Map &m = m_classMapping[i];
     if (m.nodeClass == nodeClass)
     {
-      return m.nodeClassGL4->CreateInstance<vkSGNodeGL4>();
+      return m.nodeClassGL4->CreateInstance<csSGNodeGL4>();
     }
   }
   return 0;
@@ -116,7 +116,7 @@ vkSGNodeGL4 *vkShaderGraphGL4::CreateNode(const vkClass *nodeClass)
 }
 
 
-vkString vkShaderGraphGL4::CreateCode(vkSGNode *node, vkSize output)
+csString csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
 {
   if (!node)
   {
@@ -126,7 +126,7 @@ vkString vkShaderGraphGL4::CreateCode(vkSGNode *node, vkSize output)
   return CreateCode(node->GetOutput(output));
 }
 
-vkString vkShaderGraphGL4::CreateCode(vkSGNode *node, const vkString &outputName)
+csString csShaderGraphGL4::CreateCode(csSGNode *node, const csString &outputName)
 {
   if (!node)
   {
@@ -137,16 +137,16 @@ vkString vkShaderGraphGL4::CreateCode(vkSGNode *node, const vkString &outputName
 }
 
 
-vkString vkShaderGraphGL4::CreateCode(vkSGOutput *output)
+csString csShaderGraphGL4::CreateCode(csSGOutput *output)
 {
-  vkShaderGraphCtx ctx(this);
+  csShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   return ctx.CreateCode(output);
 }
 
 
 
-bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGraphLogger *logger)
+bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGraphLogger *logger)
 {
   if (!graph->Validate())
   {
@@ -161,22 +161,22 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGrap
 
   for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    vkSGNode *node = graph->GetNode(i);
+    csSGNode *node = graph->GetNode(i);
     if (!node)
     {
       continue;
     }
 
-    vkSGResourceNode *resNode = vkQueryClass<vkSGResourceNode>(node);
+    csSGResourceNode *resNode = csQueryClass<csSGResourceNode>(node);
     if (!resNode)
     {
       continue;
     }
 
-    const vkString &resName = resNode->GetResourceName();
-    vkShaderParameterType resType = resNode->GetResourceType();
+    const csString &resName = resNode->GetResourceName();
+    csShaderParameterType resType = resNode->GetResourceType();
 
-    vkSize idx = graph->RegisterParam(resName, resType);
+    csSize idx = graph->RegisterParam(resName, resType);
 
     float *floats = resNode->GetDefaultFloats();
     int *ints = resNode->GetDefaultInts();
@@ -186,20 +186,20 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGrap
       graph->SetDefault(idx, floats[0]);
       break;
     case eSPT_Vector2:
-      graph->SetDefault(idx, vkVector2f(floats[0], floats[1]));
+      graph->SetDefault(idx, csVector2f(floats[0], floats[1]));
       break;
     case eSPT_Vector3:
-      graph->SetDefault(idx, vkVector3f(floats[0], floats[1], floats[2]));
+      graph->SetDefault(idx, csVector3f(floats[0], floats[1], floats[2]));
       break;
     case eSPT_Vector4:
-      graph->SetDefault(idx, vkVector4f(floats[0], floats[1], floats[2], floats[3]));
+      graph->SetDefault(idx, csVector4f(floats[0], floats[1], floats[2], floats[3]));
       break;
     case eSPT_Color4:
-      graph->SetDefault(idx, vkColor4f(floats[0], floats[1], floats[2], floats[3]));
+      graph->SetDefault(idx, csColor4f(floats[0], floats[1], floats[2], floats[3]));
       break;
     case eSPT_Texture:
     {
-      iTexture *texture = vkResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
+      iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
       graph->SetDefault(idx, texture);
     }
     break;
@@ -216,7 +216,7 @@ bool vkShaderGraphGL4::GenerateShaderGraph(vkSGShaderGraph *graph, iSGShaderGrap
 
 
 
-void vkShaderGraphGL4::DebugCode(const vkString &title, const vkString &code)
+void csShaderGraphGL4::DebugCode(const csString &title, const csString &code)
 {
   printf("%s\n", title.c_str());
 

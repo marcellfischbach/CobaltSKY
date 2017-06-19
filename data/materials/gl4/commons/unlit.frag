@@ -1,11 +1,11 @@
 #version 330
 
-layout(location = 0) out vec4 vk_FragColor;
+layout(location = 0) out vec4 cs_FragColor;
 
-uniform vec4 vk_Color;
+uniform vec4 cs_Color;
 
 void main ()
 {
-	vk_FragColor = vk_Color;
+	cs_FragColor = cs_Color;
 }
 

@@ -5,14 +5,14 @@
 
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGAddGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGAddGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGAddGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGAddGL4() { }
+  csSGAddGL4() : csSGNodeGL4() { }
+  virtual ~csSGAddGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

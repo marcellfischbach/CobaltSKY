@@ -1,6 +1,6 @@
 
 
-add_definitions(-DVKWINDOWSDL_EXPORT)
+add_definitions(-DCSWINDOWSDL_EXPORT)
 
 set(SOURCE
   sdlexport.hh
@@ -36,5 +36,5 @@ target_link_libraries(ValkyrieEngine-WindowSDL
 	${OPENGL_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-WindowSDL windowsdl VKWINDOWSDL_API ALL_SOURCES)
+CS_INSTALL_MOCCER(ValkyrieEngine-WindowSDL windowsdl CSWINDOWSDL_API ALL_SOURCES)
 

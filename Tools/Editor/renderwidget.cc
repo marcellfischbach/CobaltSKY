@@ -1,5 +1,5 @@
 
-#include <valkyrie/vkengine.hh>
+#include <valkyrie/csengine.hh>
 #include <valkyrie/graphics/igraphics.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
@@ -37,13 +37,13 @@ void RenderWidget::paintGL()
 
   if (!m_renderTarget)
   {
-    m_renderTarget = new vkRenderTargetGL4(defaultFramebufferObject(), width(), height());
+    m_renderTarget = new csRenderTargetGL4(defaultFramebufferObject(), width(), height());
   }
   else
   {
     m_renderTarget->Setup(defaultFramebufferObject(), width(), height());
   }
-  iGraphics *gr = vkEng->GetRenderer();
+  iGraphics *gr = csEng->GetRenderer();
   
   gr->SetRenderTarget(m_renderTarget);
   gr->SetViewport(m_renderTarget);
@@ -51,7 +51,7 @@ void RenderWidget::paintGL()
 
   if (m_clear)
   {
-    gr->Clear(true, vkVector4f (0.0f, 0.0f, 0.5f, 1.0f));
+    gr->Clear(true, csVector4f (0.0f, 0.0f, 0.5f, 1.0f));
   }
 }
 

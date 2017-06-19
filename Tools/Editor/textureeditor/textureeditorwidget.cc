@@ -1,6 +1,6 @@
 #include <textureeditor/textureeditorwidget.hh>
 #include <textureeditor/textureeditor.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <valkyrie/graphics/itexture2d.hh>
 #include <valkyrie/graphics/isampler.hh>
 #include <editor.hh>
@@ -27,15 +27,15 @@ TextureEditorWidget::~TextureEditorWidget()
 
 void TextureEditorWidget::SetTexture(iTexture2D *texture)
 {
-  VK_SET(m_texture, texture);
+  CS_SET(m_texture, texture);
 
   m_gui.openGLWidget->SetTexture(texture);
   m_gui.spLOD->setMaximum(texture->GetNumberOfLODs() - 1);
 }
 
-void TextureEditorWidget::SamplerChanged(const vkResourceLocator &locator)
+void TextureEditorWidget::SamplerChanged(const csResourceLocator &locator)
 {
-  iSampler *sampler = vkResourceManager::Get()->Aquire<iSampler>(locator);
+  iSampler *sampler = csResourceManager::Get()->Aquire<iSampler>(locator);
   if (sampler)
   {
     m_texture->SetSampler(sampler);
@@ -123,7 +123,7 @@ void TextureEditorWidget::on_pbSave_clicked()
     samplerElement.removeChild(child);
   }
 
-  vkResourceLocator samplerLocator = vkResourceManager::Get()->GetLocator(m_texture->GetSampler());
+  csResourceLocator samplerLocator = csResourceManager::Get()->GetLocator(m_texture->GetSampler());
   QDomText text = doc.createTextNode(QString(samplerLocator.GetResourceFile().c_str()));
   samplerElement.appendChild(text);
 

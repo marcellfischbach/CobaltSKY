@@ -2,7 +2,7 @@
 
 #include <QOpenGLWidget>
 
-class vkRenderTargetGL4;
+class csRenderTargetGL4;
 class RenderWidget : public QOpenGLWidget
 {
   Q_OBJECT
@@ -28,7 +28,7 @@ protected:
 private:
   QString m_name;
   GLuint m_vao;
-  vkRenderTargetGL4 *m_renderTarget;
+  csRenderTargetGL4 *m_renderTarget;
 
   bool m_clear;
 };

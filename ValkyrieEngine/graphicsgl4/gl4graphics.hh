@@ -6,83 +6,83 @@
 #include <graphicsgl4/gl4graphics.refl.hh>
 
 class IndexBufferGL4;
-class vkProgramGL4;
-class vkRenderTargetGL4;
-class vkSamplerGL4;
-class vkTextureGL4;
+class csProgramGL4;
+class csRenderTargetGL4;
+class csSamplerGL4;
+class csTextureGL4;
 class VertexBufferGL4;
-class vkVertexDeclarationGL4;
+class csVertexDeclarationGL4;
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkGraphicsGL4 : public VK_SUPER(iGraphics)
+CS_CLASS()
+class CSGRAPHICSGL4_API csGraphicsGL4 : public CS_SUPER(iGraphics)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  vkGraphicsGL4();
+  csGraphicsGL4();
   virtual void ResetDefaults();
 
-  virtual iIndexBuffer *CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual iVertexBuffer *CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode);
-  virtual iVertexDeclaration *CreateVertexDeclaration(const vkVertexElement *elements);
+  virtual iIndexBuffer *CreateIndexBuffer(csSize size, const void *data, csBufferDataMode mode);
+  virtual iVertexBuffer *CreateVertexBuffer(csSize size, const void *data, csBufferDataMode mode);
+  virtual iVertexDeclaration *CreateVertexDeclaration(const csVertexElement *elements);
   virtual iRenderTarget *CreateRenderTarget();
   virtual iSampler *CreateSampler();
-  virtual iTexture2D *CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps);
-  virtual iTexture2DArray *CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps);
-  virtual iTextureCube *CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth);
-  virtual iShader *CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode);
+  virtual iTexture2D *CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps);
+  virtual iTexture2DArray *CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps);
+  virtual iTextureCube *CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth);
+  virtual iShader *CreateShader(const csString &vertexCode, const csString &tessCtrlCode, const csString &tessEvalCode, const csString &geometryCode, const csString &fragmentCode);
 
   virtual ISGShaderGraphFactory* GetShaderGraphFactory();
 
-  virtual void SetProjectionMatrix(const vkMatrix4f &matrix);
-  virtual void SetProjectionMatrixInv(const vkMatrix4f &matrix);
-  virtual void SetViewMatrix(const vkMatrix4f &matrix);
-  virtual void SetViewMatrixInv(const vkMatrix4f &matrix);
-  virtual void SetModelMatrix(const vkMatrix4f &matrix);
-  virtual void SetModelMatrixInv(const vkMatrix4f &matrix);
-  virtual void GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
-  virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
-  virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
-  virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &out);
-  virtual void SetSkeleton(const vkSkeleton *skeleton);
-  virtual void SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices);
-  virtual void SetSkeletonBoneMapping(const vkUInt32 *mapping, vkSize numberOfBoneMappings);
+  virtual void SetProjectionMatrix(const csMatrix4f &matrix);
+  virtual void SetProjectionMatrixInv(const csMatrix4f &matrix);
+  virtual void SetViewMatrix(const csMatrix4f &matrix);
+  virtual void SetViewMatrixInv(const csMatrix4f &matrix);
+  virtual void SetModelMatrix(const csMatrix4f &matrix);
+  virtual void SetModelMatrixInv(const csMatrix4f &matrix);
+  virtual void GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, csMatrix4f &out);
+  virtual void GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, csMatrix4f &out);
+  virtual void GetOrthographicProjection(float l, float r, float b, float t, float n, float f, csMatrix4f &out);
+  virtual void GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, csMatrix4f &out);
+  virtual void SetSkeleton(const csSkeleton *skeleton);
+  virtual void SetSkeletonMatrices(const csMatrix4f *matrices, csSize numberOfMatrices);
+  virtual void SetSkeletonBoneMapping(const csUInt32 *mapping, csSize numberOfBoneMappings);
 
-  virtual void SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices);
+  virtual void SetShadowMatrices(const csMatrix4f *projView, const csMatrix4f *proj, const csMatrix4f *view, const csVector2f *nearFars, csSize numberOfMatrices);
 
   virtual void SetVertexDeclaration(iVertexDeclaration *vertexDeclaration);
-  virtual void SetVertexBuffer(vkUInt16 streamIdx, iVertexBuffer *vertexBuffer);
+  virtual void SetVertexBuffer(csUInt16 streamIdx, iVertexBuffer *vertexBuffer);
   virtual void SetIndexBuffer(iIndexBuffer *indexBuffer);
   virtual void SetShader(iShader *shader);
   virtual void FreeTextures();
   virtual void InvalidateTextures();
-  virtual vkTextureUnit BindTexture(iTexture *texture);
-  virtual void SetTexture(vkTextureUnit unit, iTexture *texture);
-  virtual void SetSampler(vkTextureUnit unit, iSampler *sampler);
+  virtual csTextureUnit BindTexture(iTexture *texture);
+  virtual void SetTexture(csTextureUnit unit, iTexture *texture);
+  virtual void SetSampler(csTextureUnit unit, iSampler *sampler);
   virtual void SetRenderTarget(iRenderTarget *renderTarget);
 
   virtual void SetBlendEnabled(bool enabled);
   virtual bool IsBlendEnabled() const;
-  virtual void SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst);
-  virtual void SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendDstColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstAlpha);
-  virtual void GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const;
+  virtual void SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst);
+  virtual void SetBlendMode(csBlendMode blendSrcColor, csBlendMode blendDstColor, csBlendMode blendSrcAlpha, csBlendMode blendDstAlpha);
+  virtual void GetBlendMode(csBlendMode &blendSrcColor, csBlendMode &blendDstColor, csBlendMode &blendSrcAlpha, csBlendMode &blendDstAlpha) const;
 
   virtual void SetDepthMask(bool depth);
   virtual void SetColorMask(bool red, bool green, bool blue, bool alpha);
   virtual void SetDepthTest(bool depthTest);
-  virtual void SetDepthFunc(vkCompareMode compareMode);
+  virtual void SetDepthFunc(csCompareMode compareMode);
 
   virtual void SetRenderFadeInOut(float near, float far);
-  virtual void SetRenderFadeInOutValue(vkUInt8 value);
+  virtual void SetRenderFadeInOutValue(csUInt8 value);
 
-  virtual void SetRenderDestination(vkRenderDestination renderDestination);
-  virtual void SetRenderDestinations(vkRenderDestination *renderDestination, vkSize numRenderDestinations);
+  virtual void SetRenderDestination(csRenderDestination renderDestination);
+  virtual void SetRenderDestinations(csRenderDestination *renderDestination, csSize numRenderDestinations);
 
-  virtual void Clear(bool clearColor = true, const vkVector4f &color = vkVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, vkUInt8 stencil = 0);
-  virtual void SetViewport(vkUInt16 width, vkUInt16 height);
-  virtual void SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height);
+  virtual void Clear(bool clearColor = true, const csVector4f &color = csVector4f (0.0f, 0.0f, 0.0f, 0.0f), bool clearDepth = true, float depth = 1.0, bool clearStencil = false, csUInt8 stencil = 0);
+  virtual void SetViewport(csUInt16 width, csUInt16 height);
+  virtual void SetViewport(csInt16 x, csInt16 y, csUInt16 width, csUInt16 height);
   virtual void SetViewport(iRenderTarget *viewport);
-  virtual void Render(vkPrimitiveType type, vkUInt32 count);
-  virtual void RenderIndexed(vkPrimitiveType type, vkUInt32 count, vkDataType indexDataType);
+  virtual void Render(csPrimitiveType type, csUInt32 count);
+  virtual void RenderIndexed(csPrimitiveType type, csUInt32 count, csDataType indexDataType);
   virtual void BindValues();
 
   virtual void RenderFullScreenFrame();
@@ -100,59 +100,59 @@ private:
   bool BindVertexDeclaration();
   void UnbindVertexDeclaration();
 
-  void SetClearColorValue(const vkVector4f &clearColorValue);
+  void SetClearColorValue(const csVector4f &clearColorValue);
   void SetClearDepthValue(float clearDepthValue);
-  void SetClearStencilValue(vkUInt8 clearStencilValue);
+  void SetClearStencilValue(csUInt8 clearStencilValue);
 
 private:
-  void RecalculateMatrix(vkMatrixType type);
+  void RecalculateMatrix(csMatrixType type);
 
-  vkUInt32 m_vao;
+  csUInt32 m_vao;
 
-  vkVertexDeclarationGL4 *m_vertexDeclaration;
+  csVertexDeclarationGL4 *m_vertexDeclaration;
   IndexBufferGL4 *m_indexBuffer;
   VertexBufferGL4 *m_vertexBuffer[16];
-  vkProgramGL4 *m_program;
-  vkRenderTargetGL4 *m_renderTarget;
+  csProgramGL4 *m_program;
+  csRenderTargetGL4 *m_renderTarget;
 
   bool m_blendEnabled;
-  vkBlendMode m_blendModeSrcColor;
-  vkBlendMode m_blendModeSrcAlpha;
-  vkBlendMode m_blendModeDstColor;
-  vkBlendMode m_blendModeDstAlpha;
+  csBlendMode m_blendModeSrcColor;
+  csBlendMode m_blendModeSrcAlpha;
+  csBlendMode m_blendModeDstColor;
+  csBlendMode m_blendModeDstAlpha;
 
   bool m_depthMask;
-  vkUInt8 m_colorMask;
+  csUInt8 m_colorMask;
   bool m_depthTest;
-  vkCompareMode m_depthFunc;
+  csCompareMode m_depthFunc;
 
 
-  vkVector4f m_clearColor;
+  csVector4f m_clearColor;
   float m_clearDepth;
-  vkUInt8 m_clearStencil;
+  csUInt8 m_clearStencil;
 
-  vkTextureUnit m_nextTextureUnit;
+  csTextureUnit m_nextTextureUnit;
 
-  vkSamplerGL4 *m_samplers[eTU_COUNT];
+  csSamplerGL4 *m_samplers[eTU_COUNT];
   bool m_samplerChanged[eTU_COUNT];
 
-  vkTextureGL4 *m_textures[eTU_COUNT];
+  csTextureGL4 *m_textures[eTU_COUNT];
   bool m_textureChanged[eTU_COUNT];
 
-  vkMatrix4f m_matrices[eMT_COUNT];
+  csMatrix4f m_matrices[eMT_COUNT];
   bool m_matrixNeedsRecalculation[eMT_COUNT];
 
-  const vkMatrix4f *m_skeletonMatrices;
-  vkSize m_numberOfSkeletonMatrices;
+  const csMatrix4f *m_skeletonMatrices;
+  csSize m_numberOfSkeletonMatrices;
 
-  const vkUInt32 *m_skeletonBoneMapping;
-  vkSize m_numberOfSkeletonBoneMappings;
+  const csUInt32 *m_skeletonBoneMapping;
+  csSize m_numberOfSkeletonBoneMappings;
 
-  vkSize m_numberOfShadowMatrices;
-  vkMatrix4f m_shadowMatricesProjView[6];
-  vkMatrix4f m_shadowMatricesProj[6];
-  vkMatrix4f m_shadowMatricesView[6];
-  vkVector2f m_shadowNearFars[6];
+  csSize m_numberOfShadowMatrices;
+  csMatrix4f m_shadowMatricesProjView[6];
+  csMatrix4f m_shadowMatricesProj[6];
+  csMatrix4f m_shadowMatricesView[6];
+  csVector2f m_shadowNearFars[6];
 
   void InvalidateSamplers();
 
@@ -163,13 +163,13 @@ private:
   void InitFullScreenData();
   VertexBufferGL4 *m_fullScreenVertexBuffer;
   VertexBufferGL4 *m_fullScreenParamVertexBuffer;
-  vkVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
-  vkProgramGL4 *m_fullScreenProgram;
-  vkProgramGL4 *m_fullScreenArrayProgram;
-  vkUInt16 m_viewportWidth;
-  vkUInt16 m_viewportHeight;
-  vkVector3f m_fadeInOutDistances;
-  vkUInt8 m_fadeInOutValue;
+  csVertexDeclarationGL4 *m_fullScreenVertexDeclaration;
+  csProgramGL4 *m_fullScreenProgram;
+  csProgramGL4 *m_fullScreenArrayProgram;
+  csUInt16 m_viewportWidth;
+  csUInt16 m_viewportHeight;
+  csVector3f m_fadeInOutDistances;
+  csUInt8 m_fadeInOutValue;
   /**
    * @}
    */

@@ -1,37 +1,37 @@
 #pragma once
 
 #include <physicsbullet/bulletexport.hh>
-#include <valkyrie/math/vkmatrix.hh>
+#include <valkyrie/math/csmatrix.hh>
 #include <valkyrie/physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
 #include <physicsbullet/bulletshape.refl.hh>
 
-VK_CLASS()
-class VKBULLETPHYSICS_API vkBulletShape : public VK_SUPER(iPhysicsShape)
+CS_CLASS()
+class CSBULLETPHYSICS_API csBulletShape : public CS_SUPER(iPhysicsShape)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  vkBulletShape();
-  virtual ~vkBulletShape();
+  csBulletShape();
+  virtual ~csBulletShape();
 
-  virtual const vkPhysGeometry &GetGeometry() const;
-  virtual void SetLocalTransform(const vkMatrix4f &localTransform);
-  virtual const vkMatrix4f &GetLocalTransform() const;
+  virtual const csPhysGeometry &GetGeometry() const;
+  virtual void SetLocalTransform(const csMatrix4f &localTransform);
+  virtual const csMatrix4f &GetLocalTransform() const;
 
   bool IsTransformed() const;
 
 public:
-  virtual bool Initialize(const vkPhysGeometry &geometry);
+  virtual bool Initialize(const csPhysGeometry &geometry);
 
   btCollisionShape *GetBulletShape();
 
 private:
-  vkMatrix4f m_localTransform;
-  vkPhysGeometry m_geometry;
+  csMatrix4f m_localTransform;
+  csPhysGeometry m_geometry;
   btCollisionShape *m_bulletShape;
 };
 
-VK_FORCEINLINE btCollisionShape *vkBulletShape::GetBulletShape()
+CS_FORCEINLINE btCollisionShape *csBulletShape::GetBulletShape()
 {
   return m_bulletShape;
 }

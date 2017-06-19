@@ -6,19 +6,19 @@
 #include <physicsbullet/bulletjoint.hh>
 #include <physicsbullet/bulletstaticcollider.hh>
 
-vkBulletScene::vkBulletScene()
+csBulletScene::csBulletScene()
   : iPhysicsScene()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkBulletScene::~vkBulletScene()
+csBulletScene::~csBulletScene()
 {
 
 }
 
 
-bool vkBulletScene::Initialize(bool softBody)
+bool csBulletScene::Initialize(bool softBody)
 {
   btDefaultCollisionConstructionInfo constructionInfo;
 
@@ -75,45 +75,45 @@ bool vkBulletScene::Initialize(bool softBody)
 }
 
 
-void vkBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
 {
-  vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
+  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
   {
     btCollider->AttachToScene(this);
   }
 }
 
-void vkBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
 {
-  vkBulletDynamicCollider *btCollider = static_cast<vkBulletDynamicCollider*>(dynamicCollider);
+  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
   {
     btCollider->DetachFromScene(this);
   }
 }
 
-void vkBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
+void csBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
-  vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
+  csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
     btCollider->AttachToScene(this);
   }
 }
 
-void vkBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
+void csBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
-  vkBulletStaticCollider *btCollider = static_cast<vkBulletStaticCollider*>(staticCollider);
+  csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
     btCollider->DetachFromScene(this);
   }
 }
 
-void vkBulletScene::AddCharacterController(iPhysicsCharacterController *controller)
+void csBulletScene::AddCharacterController(iPhysicsCharacterController *controller)
 {
-  vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
+  csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     m_characterControllers.push_back(capsController);
@@ -121,9 +121,9 @@ void vkBulletScene::AddCharacterController(iPhysicsCharacterController *controll
   }
 }
 
-void vkBulletScene::RemoveCharacterController(iPhysicsCharacterController *controller)
+void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *controller)
 {
-  vkBulletCapsuleCharacterController *capsController = vkQueryClass<vkBulletCapsuleCharacterController>(controller);
+  csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     for (size_t i = 0, in = m_characterControllers.size(); i < in; ++i)
@@ -139,9 +139,9 @@ void vkBulletScene::RemoveCharacterController(iPhysicsCharacterController *contr
 }
 
 
-void vkBulletScene::AddJoint(iPhysicsJoint *joint)
+void csBulletScene::AddJoint(iPhysicsJoint *joint)
 {
-  vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
+  csBulletJoint *j = csQueryClass<csBulletJoint>(joint);
   if (j)
   {
     j->AttachToScene(this);
@@ -149,9 +149,9 @@ void vkBulletScene::AddJoint(iPhysicsJoint *joint)
 }
 
 
-void vkBulletScene::RemoveJoint(iPhysicsJoint *joint)
+void csBulletScene::RemoveJoint(iPhysicsJoint *joint)
 {
-  vkBulletJoint *j = vkQueryClass<vkBulletJoint>(joint);
+  csBulletJoint *j = csQueryClass<csBulletJoint>(joint);
   if (j)
   {
     j->DetachFromScene(this);
@@ -159,24 +159,24 @@ void vkBulletScene::RemoveJoint(iPhysicsJoint *joint)
 
 }
 
-void vkBulletScene::BodyChanged(vkBulletBody *body)
+void csBulletScene::BodyChanged(csBulletBody *body)
 {
   m_changedBodies.Add(body);
 }
 
-void vkBulletScene::DynamicColliderChanged(vkBulletDynamicCollider *dynamicCollider)
+void csBulletScene::DynamicColliderChanged(csBulletDynamicCollider *dynamicCollider)
 {
   m_changedDynamicColliders.Add(dynamicCollider);
 }
 
-void vkBulletScene::StepSimulation(float tpf)
+void csBulletScene::StepSimulation(float tpf)
 {
   m_changedBodies.Clear();
   m_changedDynamicColliders.Clear();
   m_world->stepSimulation(tpf);
 }
 
-void vkBulletScene::UpdateColliders()
+void csBulletScene::UpdateColliders()
 {
   for (size_t i = 0; i < m_changedDynamicColliders.length; ++i)
   {

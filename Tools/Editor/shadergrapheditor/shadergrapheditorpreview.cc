@@ -1,6 +1,6 @@
 
 #include <shadergrapheditor/shadergrapheditorpreview.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 
 
 ShaderGraphEditorPreview::ShaderGraphEditorPreview(QWidget *parent)
@@ -15,7 +15,7 @@ ShaderGraphEditorPreview::~ShaderGraphEditorPreview()
 
 }
 
-void ShaderGraphEditorPreview::SetShaderGraph(vkSGShaderGraph *shaderGraph)
+void ShaderGraphEditorPreview::SetShaderGraph(csSGShaderGraph *shaderGraph)
 {
   m_gui.openGLWidget->SetMaterial(shaderGraph);
 }

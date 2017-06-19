@@ -1,37 +1,37 @@
 #pragma once
 
 #include <nodegraph/nodegraphnode.hh>
-#include <valkyrie/core/vkresourcelocator.hh>
-#include <valkyrie/graphics/shadergraph/vksgnode.hh>
-#include <valkyrie/graphics/shadergraph/vksgshadergraph.hh>
+#include <valkyrie/core/csresourcelocator.hh>
+#include <valkyrie/graphics/shadergraph/cssgnode.hh>
+#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
 #include <map>
 
-class vkSGNode;
-class vkSGShaderGraph;
+class csSGNode;
+class csSGShaderGraph;
 class NodeGraphNodeValueProperty;
 class ShaderGraphEditorNode : public NodeGraphNode
 {
 public:
-  ShaderGraphEditorNode(vkSGShaderGraph *shaderGraph);
-  ShaderGraphEditorNode(vkSGNode *node);
+  ShaderGraphEditorNode(csSGShaderGraph *shaderGraph);
+  ShaderGraphEditorNode(csSGNode *node);
   virtual ~ShaderGraphEditorNode();
 
-  NodeGraphNodeAnchor* GetInputAnchor(vkUInt32 idx) const;
-  NodeGraphNodeAnchor* GetOutputAnchor(vkUInt32 idx) const;
+  NodeGraphNodeAnchor* GetInputAnchor(csUInt32 idx) const;
+  NodeGraphNodeAnchor* GetOutputAnchor(csUInt32 idx) const;
 
-  vkSGShaderGraph *GetShaderGraph() const;
-  vkSGNode *GetSGNode() const;
+  csSGShaderGraph *GetShaderGraph() const;
+  csSGNode *GetSGNode() const;
 
   void UpdateValues();
 
 private:
-  vkSGShaderGraph *m_shaderGraph;
-  vkSGNode *m_sgNode;
+  csSGShaderGraph *m_shaderGraph;
+  csSGNode *m_sgNode;
 
-  vkResourceLocator m_texturePreviewResourceLocator;
+  csResourceLocator m_texturePreviewResourceLocator;
 
   std::map<unsigned, NodeGraphNodeValueProperty*> m_valueProperties;
-  std::map<vkUInt32, NodeGraphNodeAnchor *> m_inputAnchors;
-  std::map<vkUInt32, NodeGraphNodeAnchor *> m_outputAnchors;
+  std::map<csUInt32, NodeGraphNodeAnchor *> m_inputAnchors;
+  std::map<csUInt32, NodeGraphNodeAnchor *> m_outputAnchors;
 };
 

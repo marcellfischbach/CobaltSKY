@@ -8,28 +8,28 @@
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletshape.hh>
 
-vkBulletSystem::vkBulletSystem()
+csBulletSystem::csBulletSystem()
   : iPhysicsSystem ()
 {
 
 }
 
 
-vkBulletSystem::~vkBulletSystem()
+csBulletSystem::~csBulletSystem()
 {
 
 }
 
 
-void vkBulletSystem::Initialize()
+void csBulletSystem::Initialize()
 {
 
 }
 
 
-iPhysicsScene *vkBulletSystem::CreateScene()
+iPhysicsScene *csBulletSystem::CreateScene()
 {
-  vkBulletScene *scene = new vkBulletScene(); 
+  csBulletScene *scene = new csBulletScene(); 
   if (!scene->Initialize(false))
   {
     delete scene;
@@ -39,27 +39,27 @@ iPhysicsScene *vkBulletSystem::CreateScene()
 }
 
 
-iPhysicsDynamicCollider *vkBulletSystem::CreateDynamicCollider()
+iPhysicsDynamicCollider *csBulletSystem::CreateDynamicCollider()
 {
-  vkBulletDynamicCollider *dyn = new vkBulletDynamicCollider();
+  csBulletDynamicCollider *dyn = new csBulletDynamicCollider();
   return dyn;
 }
 
-iPhysicsStaticCollider *vkBulletSystem::CreateStaticCollider()
+iPhysicsStaticCollider *csBulletSystem::CreateStaticCollider()
 {
-  vkBulletStaticCollider *stat = new vkBulletStaticCollider();
+  csBulletStaticCollider *stat = new csBulletStaticCollider();
   return stat;
 }
 
-iPhysicsTriggerCollider *vkBulletSystem::CreateTriggerCollider()
+iPhysicsTriggerCollider *csBulletSystem::CreateTriggerCollider()
 {
   return 0;
 }
 
 
-iPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
+iPhysicsShape *csBulletSystem::CreateShape(const csPhysGeometry &geometry)
 {
-  vkBulletShape *shape = new vkBulletShape();
+  csBulletShape *shape = new csBulletShape();
   if (!shape->Initialize(geometry))
   {
     delete shape;
@@ -69,22 +69,22 @@ iPhysicsShape *vkBulletSystem::CreateShape(const vkPhysGeometry &geometry)
   return shape;
 }
 
-iPhysicsCapsuleCharacterController *vkBulletSystem::CreateCapsulseCharacterController()
+iPhysicsCapsuleCharacterController *csBulletSystem::CreateCapsulseCharacterController()
 {
-  vkBulletCapsuleCharacterController *controller = new vkBulletCapsuleCharacterController();
+  csBulletCapsuleCharacterController *controller = new csBulletCapsuleCharacterController();
   return controller;
 }
 
 
-iPhysicsJoint *vkBulletSystem::CreateJoint(vkPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
+iPhysicsJoint *csBulletSystem::CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
 {
-  vkBulletDynamicCollider *colA = vkQueryClass<vkBulletDynamicCollider>(colliderA);
-  vkBulletDynamicCollider *colB = vkQueryClass<vkBulletDynamicCollider>(colliderB);
+  csBulletDynamicCollider *colA = csQueryClass<csBulletDynamicCollider>(colliderA);
+  csBulletDynamicCollider *colB = csQueryClass<csBulletDynamicCollider>(colliderB);
   switch (type)
   {
   case ePJT_Hinge:
     {
-      vkBulletHingeJoint *hingeJoint = new vkBulletHingeJoint();
+      csBulletHingeJoint *hingeJoint = new csBulletHingeJoint();
       if (!hingeJoint->Initialize(colA, colB))
       {
         delete hingeJoint;

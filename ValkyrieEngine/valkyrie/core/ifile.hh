@@ -1,8 +1,8 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/core/csstring.hh>
 
 #include <valkyrie/core/ifile.refl.hh>
 
@@ -10,21 +10,21 @@
  * \addtogroup engine
  * @{
  */
-enum vkSeekPos
+enum csSeekPos
 {
 	eSP_Set,
 	eSP_Current,
 	eSP_End
 };
 
-enum vkOpenMode
+enum csOpenMode
 {
 	eOM_Read,
 	eOM_Write,
 	eOM_ReadWrite
 };
 
-enum vkTextMode
+enum csTextMode
 {
 	eTM_Text,
 	eTM_Binary
@@ -34,10 +34,10 @@ enum vkTextMode
  * @brief Generic interface for handling IO operations on file-like
  *        datasources.
  */
-VK_INTERFACE()
-struct VKE_API iFile : public iObject
+CS_INTERFACE()
+struct CSE_API iFile : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
   /**
    * @brief Returns whether or not the file is opened.
@@ -102,7 +102,7 @@ struct VKE_API iFile : public iObject
    *            bytes should be interpreted.
    * @param num The number of bytes the current location should be moved.
    */
-	virtual bool Seek (vkSeekPos pos, long num) = 0;
+	virtual bool Seek (csSeekPos pos, long num) = 0;
 
   /**
    * @brief Returns the current absolute position within the file.
@@ -111,7 +111,7 @@ struct VKE_API iFile : public iObject
    *
    * @return The current absolute position within the file.
    */
-	virtual vkSize Tell () = 0;
+	virtual csSize Tell () = 0;
 
 	/**
 	 * @brief Returns the length of the opened file.
@@ -121,11 +121,11 @@ struct VKE_API iFile : public iObject
 	 *
 	 * @return The length of the opened file or -1 if the file has no random access.
 	 */
-	virtual vkSize GetLength () = 0;
+	virtual csSize GetLength () = 0;
 
   /**
    */
-	virtual vkSize Read (void* buffer, vkSize size) = 0;
+	virtual csSize Read (void* buffer, csSize size) = 0;
 
   /**
    * @brief Read a single line from the buffer
@@ -135,9 +135,9 @@ struct VKE_API iFile : public iObject
    *
    * @return The number of characters in the output buffer
    */
-  virtual vkSize ReadLine (char *buffer, vkSize maxSize) = 0;
+  virtual csSize ReadLine (char *buffer, csSize maxSize) = 0;
 
-	virtual vkSize Write (const void* buffer, vkSize size) = 0;
+	virtual csSize Write (const void* buffer, csSize size) = 0;
 
   /**
    * @brief Returns the location where the file was located.
@@ -147,7 +147,7 @@ struct VKE_API iFile : public iObject
    *
    * @return The location of the file
    */
-  virtual const vkString& GetLocation () const = 0;
+  virtual const csString& GetLocation () const = 0;
 
   /**
    * @brief Returns the name of the file witout an optional extension
@@ -157,7 +157,7 @@ struct VKE_API iFile : public iObject
    *
    * @return The name of the file without an optional extension
    */
-  virtual const vkString& GetName () const = 0;
+  virtual const csString& GetName () const = 0;
 
   /**
    * @brief Returns the optional extension of the file
@@ -167,7 +167,7 @@ struct VKE_API iFile : public iObject
    *
    * @return The optional extension of the file
    */
-  virtual const vkString& GetExtension () const = 0;
+  virtual const csString& GetExtension () const = 0;
 };
 
 /** @} */

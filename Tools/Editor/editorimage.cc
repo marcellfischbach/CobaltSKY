@@ -1,10 +1,10 @@
 
 #include <editorimage.hh>
-#include <valkyrie/graphics/vkimage.hh>
+#include <valkyrie/graphics/csimage.hh>
 
-EditorImage::EditorImage(vkImage *image)
+EditorImage::EditorImage(csImage *image)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
   SetImage(image);
 }
 
@@ -12,7 +12,7 @@ EditorImage::~EditorImage()
 {
 }
 
-void EditorImage::SetImage(vkImage *image)
+void EditorImage::SetImage(csImage *image)
 {
   if (!image)
   {

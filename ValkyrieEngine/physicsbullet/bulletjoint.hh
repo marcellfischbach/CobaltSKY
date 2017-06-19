@@ -7,14 +7,14 @@
 #include <physicsbullet/bulletjoint.refl.hh>
 
 
-VK_INTERFACE()
-class VKBULLETPHYSICS_API vkBulletJoint : public virtual VK_SUPER(iPhysicsJoint)
+CS_INTERFACE()
+class CSBULLETPHYSICS_API csBulletJoint : public virtual CS_SUPER(iPhysicsJoint)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  virtual ~vkBulletJoint();
+  virtual ~csBulletJoint();
 
-  virtual vkPhysicsJointType GetType() const;
+  virtual csPhysicsJointType GetType() const;
 
   virtual iPhysicsDynamicCollider *GetColliderA() const;
   virtual iPhysicsDynamicCollider *GetColliderB() const;
@@ -22,22 +22,22 @@ public:
   btTypedConstraint *GetConstraint();
   const btTypedConstraint *GetConstraint() const;
 
-  virtual void AttachToScene(vkBulletScene *scene);
-  virtual void DetachFromScene(vkBulletScene *scene);
+  virtual void AttachToScene(csBulletScene *scene);
+  virtual void DetachFromScene(csBulletScene *scene);
 
 protected:
-  vkBulletJoint(vkPhysicsJointType type);
+  csBulletJoint(csPhysicsJointType type);
 
-  void SetCollider(vkBulletDynamicCollider *colliderA, vkBulletDynamicCollider *colliderB);
+  void SetCollider(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB);
 
 
   void SetConstraint(btTypedConstraint *constraint);
 
 private:
-  vkPhysicsJointType m_type;
+  csPhysicsJointType m_type;
 
-  vkBulletDynamicCollider *m_colliderA;
-  vkBulletDynamicCollider *m_colliderB;
+  csBulletDynamicCollider *m_colliderA;
+  csBulletDynamicCollider *m_colliderB;
 
   btTypedConstraint *m_constraint;
 };

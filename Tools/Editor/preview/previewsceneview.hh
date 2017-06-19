@@ -2,10 +2,10 @@
 
 #include <components/sceneview.hh>
 
-class vkDirectionalLight;
-class vkEntity;
-class vkLightState;
-class vkMaterial;
+class csDirectionalLight;
+class csEntity;
+class csLightState;
+class csMaterial;
 class PreviewLightOrbitHandler;
 class PreviewSceneView : public SceneView
 {
@@ -14,12 +14,12 @@ public:
   virtual ~PreviewSceneView();
 
 protected:
-  vkEntity *CreateSphere(float radius, unsigned numR, unsigned numH, vkMaterial *materialInstance);
+  csEntity *CreateSphere(float radius, unsigned numR, unsigned numH, csMaterial *materialInstance);
 
 private:
-  vkDirectionalLight *m_light = 0;
-  vkLightState *m_lightState = 0;
-  vkEntity *m_lightEntity = 0;
+  csDirectionalLight *m_light = 0;
+  csLightState *m_lightState = 0;
+  csEntity *m_lightEntity = 0;
 
   PreviewLightOrbitHandler *m_lightHandler = 0;
 };

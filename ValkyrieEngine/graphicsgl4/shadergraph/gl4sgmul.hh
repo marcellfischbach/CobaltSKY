@@ -4,14 +4,14 @@
 #include <graphicsgl4/shadergraph/gl4sgmul.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGMulGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGMulGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGMulGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGMulGL4() { }
+  csSGMulGL4() : csSGNodeGL4() { }
+  virtual ~csSGMulGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

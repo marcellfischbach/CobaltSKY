@@ -4,13 +4,13 @@
 
 
 
-vkShaderGL4::vkShaderGL4()
+csShaderGL4::csShaderGL4()
   : m_name(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkShaderGL4::~vkShaderGL4()
+csShaderGL4::~csShaderGL4()
 {
   if (m_name)
   {
@@ -18,35 +18,35 @@ vkShaderGL4::~vkShaderGL4()
   }
 }
 
-void vkShaderGL4::SetSource(const vkString &source)
+void csShaderGL4::SetSource(const csString &source)
 {
   m_shader = source;
 }
 
 
-const vkString &vkShaderGL4::GetSource() const
+const csString &csShaderGL4::GetSource() const
 {
   return m_shader;
 }
 
 
-GLuint vkShaderGL4::GetName() const
+GLuint csShaderGL4::GetName() const
 {
   return m_name;
 }
 
-void vkShaderGL4::SetShaderType(vkShaderType shaderType)
+void csShaderGL4::SetShaderType(csShaderType shaderType)
 {
   m_shaderType = shaderType;
 }
 
-vkShaderType vkShaderGL4::GetShaderType() const
+csShaderType csShaderGL4::GetShaderType() const
 {
   return m_shaderType;
 }
 
 
-bool vkShaderGL4::Compile()
+bool csShaderGL4::Compile()
 {
   m_name = glCreateShader(shaderTypeMap[m_shaderType]);
   if (!m_name)
@@ -71,7 +71,7 @@ bool vkShaderGL4::Compile()
   return true;
 }
 
-vkString vkShaderGL4::GetCompileErrorLog() const
+csString csShaderGL4::GetCompileErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
@@ -81,7 +81,7 @@ vkString vkShaderGL4::GetCompileErrorLog() const
     buffer[length] = '\0';
   }
 
-  return vkString(buffer);
+  return csString(buffer);
 }
 
 

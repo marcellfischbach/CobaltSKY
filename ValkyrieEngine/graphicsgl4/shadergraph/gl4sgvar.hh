@@ -4,16 +4,16 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgvar.refl.hh>
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGVarGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGVarGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGVarGL4() : vkSGNodeGL4() { }
-  vkSGVarGL4(const vkString &typeName);
-  virtual ~vkSGVarGL4() { }
+  csSGVarGL4() : csSGNodeGL4() { }
+  csSGVarGL4(const csString &typeName);
+  virtual ~csSGVarGL4() { }
 private:
-  vkString m_typeName;
+  csString m_typeName;
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

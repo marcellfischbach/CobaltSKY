@@ -5,58 +5,58 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-vkShaderGL4Loader::vkShaderGL4Loader()
+csShaderGL4Loader::csShaderGL4Loader()
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
 }
 
-vkShaderGL4Loader::~vkShaderGL4Loader()
+csShaderGL4Loader::~csShaderGL4Loader()
 {
 }
 
-bool vkShaderGL4Loader::CanLoad(iFile *file, const vkResourceLocator &locator, iObject *) const
+bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *) const
 {
-  vkString ext = file->GetExtension();
+  csString ext = file->GetExtension();
   return
-    ext == vkString("vert") ||
-    ext == vkString("ctrl") ||
-    ext == vkString("eval") ||
-    ext == vkString("geom") ||
-    ext == vkString("frag") ||
-    ext == vkString("comp");
+    ext == csString("vert") ||
+    ext == csString("ctrl") ||
+    ext == csString("eval") ||
+    ext == csString("geom") ||
+    ext == csString("frag") ||
+    ext == csString("comp");
 }
 
-const vkClass *vkShaderGL4Loader::EvalClass(iFile *file, const vkResourceLocator &locator, iObject *) const
+const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *) const
 {
-  return vkShaderGL4::GetStaticClass();
+  return csShaderGL4::GetStaticClass();
 }
 
-iObject *vkShaderGL4Loader::Load(iFile *file, const vkResourceLocator &locator, iObject *) const
+iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, iObject *) const
 {
-  vkString ext = file->GetExtension();
+  csString ext = file->GetExtension();
 
-  vkShaderType type;
-  if (ext == vkString("vert"))
+  csShaderType type;
+  if (ext == csString("vert"))
   {
     type = eST_Vertex;
   }
-  else if (ext == vkString("ctrl"))
+  else if (ext == csString("ctrl"))
   {
     type = eST_TessCtrl;
   }
-  else if (ext == vkString("eval"))
+  else if (ext == csString("eval"))
   {
     type = eST_TessEval;
   }
-  else if (ext == vkString("geom"))
+  else if (ext == csString("geom"))
   {
     type = eST_Geometry;
   }
-  else if (ext == vkString("frag"))
+  else if (ext == csString("frag"))
   {
     type = eST_Fragment;
   }
-  else if (ext == vkString("comp"))
+  else if (ext == csString("comp"))
   {
     type = eST_Compute;
   }
@@ -67,7 +67,7 @@ iObject *vkShaderGL4Loader::Load(iFile *file, const vkResourceLocator &locator, 
 
 
 
-  vkSize length = file->GetLength();
+  csSize length = file->GetLength();
 
   // create a buffer with an appropriet size and read all
   char *buffer = new char[length + 1];
@@ -75,16 +75,16 @@ iObject *vkShaderGL4Loader::Load(iFile *file, const vkResourceLocator &locator, 
   buffer[length] = '\0';
 
 
-  vkString source(buffer);
+  csString source(buffer);
   delete[] buffer;
 
-  vkShaderGL4 *shader = new vkShaderGL4();
+  csShaderGL4 *shader = new csShaderGL4();
   shader->SetSource(source);
   shader->SetShaderType(type);
 
   if (!shader->Compile())
   {
-    vkString log = shader->GetCompileErrorLog();
+    csString log = shader->GetCompileErrorLog();
     printf("Code:\n%s\n", source.c_str());
     printf("Log:\n%s\n", log.c_str());
     shader->Release();

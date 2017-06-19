@@ -4,21 +4,21 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-vkTexture2DArrayGL4::vkTexture2DArrayGL4()
-  : vkTextureGL4(eTT_Texture2DArray)
+csTexture2DArrayGL4::csTexture2DArrayGL4()
+  : csTextureGL4(eTT_Texture2DArray)
   , iTexture2DArray()
 {
 
 }
 
-vkTexture2DArrayGL4::~vkTexture2DArrayGL4()
+csTexture2DArrayGL4::~csTexture2DArrayGL4()
 {
 
 }
 
-bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
+bool csTexture2DArrayGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps)
 {
-  if (!vkTextureGL4::Initialize())
+  if (!csTextureGL4::Initialize())
   {
     return false;
   }
@@ -46,15 +46,15 @@ bool vkTexture2DArrayGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUIn
       break;
     }
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
-bool vkTexture2DArrayGL4::CopyData(vkUInt8 lod, vkPixelFormat format, const void *data)
+bool csTexture2DArrayGL4::CopyData(csUInt8 lod, csPixelFormat format, const void *data)
 {
-  vkUInt16 layerWidth = m_width >> lod;
-  vkUInt16 layerHeight = m_height >> lod;
+  csUInt16 layerWidth = m_width >> lod;
+  csUInt16 layerHeight = m_height >> lod;
   if (layerWidth == 0 && layerHeight == 0)
   {
     return false;
@@ -69,17 +69,17 @@ bool vkTexture2DArrayGL4::CopyData(vkUInt8 lod, vkPixelFormat format, const void
   }
 
   Bind();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   glTexImage3D(m_target, lod, internalFormatMap[m_format], layerWidth, layerHeight, m_layers, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
-bool vkTexture2DArrayGL4::CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat format, const void *data)
+bool csTexture2DArrayGL4::CopyData(csUInt16 layer, csUInt8 lod, csPixelFormat format, const void *data)
 {
-  vkUInt16 layerWidth = m_width >> lod;
-  vkUInt16 layerHeight = m_height >> lod;
+  csUInt16 layerWidth = m_width >> lod;
+  csUInt16 layerHeight = m_height >> lod;
   if (layerWidth == 0 && layerHeight == 0)
   {
     return false;
@@ -94,25 +94,25 @@ bool vkTexture2DArrayGL4::CopyData(vkUInt16 layer, vkUInt8 lod, vkPixelFormat fo
   }
 
   Bind();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   glTexSubImage3D(m_target, lod, 0, 0, layer, layerWidth, layerHeight, 1, externalFormatMap[format], externalFormatTypeMap[format], data);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
 
-vkUInt16 vkTexture2DArrayGL4::GetWidth() const
+csUInt16 csTexture2DArrayGL4::GetWidth() const
 {
   return m_width;
 }
 
-vkUInt16 vkTexture2DArrayGL4::GetHeight() const
+csUInt16 csTexture2DArrayGL4::GetHeight() const
 {
   return m_height;
 }
 
-vkUInt16 vkTexture2DArrayGL4::GetLayers() const
+csUInt16 csTexture2DArrayGL4::GetLayers() const
 {
   return m_layers;
 }

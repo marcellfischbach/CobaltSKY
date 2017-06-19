@@ -4,14 +4,14 @@
 #include <graphicsgl4/shadergraph/gl4sgsplitfloat2.refl.hh>
 
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGSplitFloat2GL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGSplitFloat2GL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGSplitFloat2GL4();
-  virtual ~vkSGSplitFloat2GL4() { }
+  csSGSplitFloat2GL4();
+  virtual ~csSGSplitFloat2GL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

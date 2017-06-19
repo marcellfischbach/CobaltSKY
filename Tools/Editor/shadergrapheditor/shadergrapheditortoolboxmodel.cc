@@ -1,7 +1,7 @@
 
 
 #include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
-#include <valkyrie/graphics/shadergraph/vksgnodes.hh>
+#include <valkyrie/graphics/shadergraph/cssgnodes.hh>
 #include <QMimeData>
 #include <QDataStream>
 
@@ -23,8 +23,8 @@ void ShaderGraphEditorToolboxModel::CreateModelData(const QString &filter)
   }
 
   m_root = new Data("root");
-  vkSGNodes *nodes = vkSGNodes::Get();
-  for (const vkSGNodes::Entry &entry : nodes->GetEntries())
+  csSGNodes *nodes = csSGNodes::Get();
+  for (const csSGNodes::Entry &entry : nodes->GetEntries())
   {
     QString v(entry.name.c_str());
     if (filter.isEmpty() || v.contains(filter, Qt::CaseInsensitive))
@@ -36,13 +36,13 @@ void ShaderGraphEditorToolboxModel::CreateModelData(const QString &filter)
   endResetModel();
 }
 
-ShaderGraphEditorToolboxModel::Data *ShaderGraphEditorToolboxModel::fromString(const vkString &string)
+ShaderGraphEditorToolboxModel::Data *ShaderGraphEditorToolboxModel::fromString(const csString &string)
 {
   Data *d = m_root;
-  vkString name = string;
+  csString name = string;
   while (true)
   {
-    vkString dataName = name;
+    csString dataName = name;
 
     size_t idx = name.find("/");
     if (idx != -1)

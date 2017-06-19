@@ -1,7 +1,7 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/physics/iphysicsscene.refl.hh>
 
 struct iPhysicsCharacterController;
@@ -9,10 +9,10 @@ struct iPhysicsDynamicCollider;
 struct iPhysicsJoint;
 struct iPhysicsStaticCollider;
 
-VK_INTERFACE()
-struct VKE_API iPhysicsScene : public iObject
+CS_INTERFACE()
+struct CSE_API iPhysicsScene : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
   virtual ~iPhysicsScene () { }
 

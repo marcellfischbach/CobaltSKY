@@ -2,11 +2,11 @@
 
 #include <QAbstractItemModel>
 #include <vector>
-#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/csstring.hh>
 
-#define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/vkClassName"
+#define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/csClassName"
 
-class vkClass;
+class csClass;
 
 
 
@@ -29,11 +29,11 @@ public:
 private:
   struct Data
   {
-    vkString name;
-    const vkClass *cls;
+    csString name;
+    const csClass *cls;
     QList<Data*> children;
     Data* parent;
-    Data(const vkString &name)
+    Data(const csString &name)
       : name(name)
       , cls(0)
       , parent(0)
@@ -52,5 +52,5 @@ private:
 
   Data *m_root;
 
-  Data *fromString(const vkString &name);
+  Data *fromString(const csString &name);
 };

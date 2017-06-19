@@ -2,11 +2,11 @@
 
 #include <QWidget>
 #include <ui_textureeditorwidget.h>
-#include <valkyrie/graphics/vkshaderattributeid.hh>
+#include <valkyrie/graphics/csshaderattributeid.hh>
 
 class TextureEditor;
 struct iTexture2D;
-class vkResourceLocator;
+class csResourceLocator;
 class TextureEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -16,7 +16,7 @@ public:
 
   void SetTexture(iTexture2D *texture);
 public slots:
-void SamplerChanged(const vkResourceLocator &locator);
+void SamplerChanged(const csResourceLocator &locator);
 private slots:
 void on_pbRed_toggled(bool checked);
 void on_pbGreen_toggled(bool checked);

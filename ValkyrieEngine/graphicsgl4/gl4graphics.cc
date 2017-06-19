@@ -18,13 +18,13 @@
 #include <graphicsgl4/gl4vertexbuffer.hh>
 #include <graphicsgl4/gl4vertexdeclaration.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
-#include <valkyrie/animation/vkskeleton.hh>
-#include <valkyrie/graphics/vkbinarygradient.hh>
+#include <valkyrie/animation/csskeleton.hh>
+#include <valkyrie/graphics/csbinarygradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
 
 
-vkGraphicsGL4::vkGraphicsGL4()
+csGraphicsGL4::csGraphicsGL4()
   : iGraphics()
   , m_vertexDeclaration(0)
   , m_indexBuffer(0)
@@ -36,7 +36,7 @@ vkGraphicsGL4::vkGraphicsGL4()
   , m_numberOfSkeletonBoneMappings(0)
   , m_shaderGraphFactory(0)
 {
-  VK_CLASS_GEN_CONSTR;
+  CS_CLASS_GEN_CONSTR;
   glewExperimental = true;
   if (glewInit() != GLEW_OK)
   {
@@ -66,23 +66,23 @@ vkGraphicsGL4::vkGraphicsGL4()
     m_matrixNeedsRecalculation[i] = false;
   }
 
-  vkResourceManager::Get()->RegisterLoader(new vkShaderGL4Loader());
-  vkResourceManager::Get()->RegisterLoader(new vkProgramGL4Loader());
+  csResourceManager::Get()->RegisterLoader(new csShaderGL4Loader());
+  csResourceManager::Get()->RegisterLoader(new csProgramGL4Loader());
 
   InitFullScreenData();
 
 
   ResetDefaults();
 
-  m_shaderGraphFactory = new vkShaderGraphGL4(this);
+  m_shaderGraphFactory = new csShaderGraphGL4(this);
 
 
 }
 
 
-void vkGraphicsGL4::ResetDefaults ()
+void csGraphicsGL4::ResetDefaults ()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   m_depthMask = true;
   glDepthMask(true);
 
@@ -95,12 +95,12 @@ void vkGraphicsGL4::ResetDefaults ()
   m_depthFunc = eCM_LessOrEqual;
   glDepthFunc(GL_LEQUAL);
 
-  SetClearColorValue(vkVector4f(0.0f, 0.0f, 0.0f, 0.0f));
+  SetClearColorValue(csVector4f(0.0f, 0.0f, 0.0f, 0.0f));
   SetClearDepthValue(1.0f);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   glGetError();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)
   {
@@ -137,7 +137,7 @@ void vkGraphicsGL4::ResetDefaults ()
 
 
 
-iIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+iIndexBuffer *csGraphicsGL4::CreateIndexBuffer(csSize size, const void *data, csBufferDataMode mode)
 {
   IndexBufferGL4 *indexBuffer = new IndexBufferGL4();
   if (!indexBuffer->CreateBuffer(size, data, mode))
@@ -151,7 +151,7 @@ iIndexBuffer *vkGraphicsGL4::CreateIndexBuffer(vkSize size, const void *data, vk
 
 
 
-iVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, vkBufferDataMode mode)
+iVertexBuffer *csGraphicsGL4::CreateVertexBuffer(csSize size, const void *data, csBufferDataMode mode)
 {
   VertexBufferGL4 *vertexBuffer = new VertexBufferGL4();
   if (!vertexBuffer->CreateBuffer(size, data, mode))
@@ -163,9 +163,9 @@ iVertexBuffer *vkGraphicsGL4::CreateVertexBuffer(vkSize size, const void *data, 
   return vertexBuffer;
 }
 
-iVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement *elements)
+iVertexDeclaration *csGraphicsGL4::CreateVertexDeclaration(const csVertexElement *elements)
 {
-  vkVertexDeclarationGL4 *decl = new vkVertexDeclarationGL4();
+  csVertexDeclarationGL4 *decl = new csVertexDeclarationGL4();
   if (!decl->Create(elements))
   {
     decl->Release();
@@ -175,14 +175,14 @@ iVertexDeclaration *vkGraphicsGL4::CreateVertexDeclaration(const vkVertexElement
   return decl;
 }
 
-iRenderTarget *vkGraphicsGL4::CreateRenderTarget()
+iRenderTarget *csGraphicsGL4::CreateRenderTarget()
 {
-  return new vkRenderTargetGL4();
+  return new csRenderTargetGL4();
 }
 
-iSampler *vkGraphicsGL4::CreateSampler()
+iSampler *csGraphicsGL4::CreateSampler()
 {
-  vkSamplerGL4 *sampler = new vkSamplerGL4();
+  csSamplerGL4 *sampler = new csSamplerGL4();
   if (!sampler->Initialize())
   {
     sampler->Release();
@@ -192,9 +192,9 @@ iSampler *vkGraphicsGL4::CreateSampler()
   return sampler;
 }
 
-iTexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width, vkUInt16 height, bool mipmaps)
+iTexture2D *csGraphicsGL4::CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
 {
-  vkTexture2DGL4 *texture = new vkTexture2DGL4();
+  csTexture2DGL4 *texture = new csTexture2DGL4();
   if (!texture->Initialize(format, width, height, mipmaps))
   {
     texture->Release();
@@ -204,9 +204,9 @@ iTexture2D *vkGraphicsGL4::CreateTexture2D(vkPixelFormat format, vkUInt16 width,
 }
 
 
-iTexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 layers, bool mipmaps)
+iTexture2DArray *csGraphicsGL4::CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps)
 {
-  vkTexture2DArrayGL4 *texture = new vkTexture2DArrayGL4();
+  csTexture2DArrayGL4 *texture = new csTexture2DArrayGL4();
   if (!texture->Initialize(format, width, height, layers, mipmaps))
   {
     texture->Release();
@@ -215,9 +215,9 @@ iTexture2DArray *vkGraphicsGL4::CreateTexture2DArray(vkPixelFormat format, vkUIn
   return texture;
 }
 
-iTextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
+iTextureCube *csGraphicsGL4::CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
 {
-  vkTextureCubeGL4 *texture = new vkTextureCubeGL4();
+  csTextureCubeGL4 *texture = new csTextureCubeGL4();
   if (!texture->Initialize(format, width, height, depth))
   {
     texture->Release();
@@ -228,97 +228,97 @@ iTextureCube *vkGraphicsGL4::CreateTextureCube(vkPixelFormat format, vkUInt16 wi
 
 
 
-iShader *vkGraphicsGL4::CreateShader(const vkString &vertexCode, const vkString &tessCtrlCode, const vkString &tessEvalCode, const vkString &geometryCode, const vkString &fragmentCode)
+iShader *csGraphicsGL4::CreateShader(const csString &vertexCode, const csString &tessCtrlCode, const csString &tessEvalCode, const csString &geometryCode, const csString &fragmentCode)
 {
-  vkProgramGL4 *program = new vkProgramGL4();
+  csProgramGL4 *program = new csProgramGL4();
 
-  vkShaderGL4 *vertexShader = new vkShaderGL4();
+  csShaderGL4 *vertexShader = new csShaderGL4();
   vertexShader->SetShaderType(eST_Vertex);
   vertexShader->SetSource(vertexCode);
   if (!vertexShader->Compile())
   {
     printf("Unable to compile vertex shader:\n%s\n", vertexShader->GetCompileErrorLog().c_str());
-    VK_RELEASE(vertexShader);
-    VK_RELEASE(program);
+    CS_RELEASE(vertexShader);
+    CS_RELEASE(program);
     return 0;
   }
   program->AttachShader(vertexShader);
-  VK_RELEASE(vertexShader);
+  CS_RELEASE(vertexShader);
 
   if (tessCtrlCode.length() != 0)
   {
-    vkShaderGL4 *tessCtrlShader = new vkShaderGL4();
+    csShaderGL4 *tessCtrlShader = new csShaderGL4();
     tessCtrlShader->SetShaderType(eST_TessCtrl);
     tessCtrlShader->SetSource(tessCtrlCode);
     if (!tessCtrlShader->Compile())
     {
       printf("Unable to compile tess ctrl shader:\n%s\n", tessCtrlShader->GetCompileErrorLog().c_str());
-      VK_RELEASE(tessCtrlShader);
-      VK_RELEASE(program);
+      CS_RELEASE(tessCtrlShader);
+      CS_RELEASE(program);
       return 0;
     }
     program->AttachShader(tessCtrlShader);
-    VK_RELEASE(tessCtrlShader);
+    CS_RELEASE(tessCtrlShader);
   }
   if (tessEvalCode.length() != 0)
   {
-    vkShaderGL4 *tessEvalShader = new vkShaderGL4();
+    csShaderGL4 *tessEvalShader = new csShaderGL4();
     tessEvalShader->SetShaderType(eST_TessEval);
     tessEvalShader->SetSource(tessEvalCode);
     if (!tessEvalShader->Compile())
     {
       printf("Unable to compile tess eval shader:\n%s\n", tessEvalShader->GetCompileErrorLog().c_str());
-      VK_RELEASE(tessEvalShader);
-      VK_RELEASE(program);
+      CS_RELEASE(tessEvalShader);
+      CS_RELEASE(program);
       return 0;
     }
     program->AttachShader(tessEvalShader);
-    VK_RELEASE(tessEvalShader);
+    CS_RELEASE(tessEvalShader);
   }
   if (geometryCode.length() != 0)
   {
-    vkShaderGL4 *geometryShader = new vkShaderGL4();
+    csShaderGL4 *geometryShader = new csShaderGL4();
     geometryShader->SetShaderType(eST_Geometry);
     geometryShader->SetSource(geometryCode);
     if (!geometryShader->Compile())
     {
       printf("Unable to compile geometry shader:\n%s\n", geometryShader->GetCompileErrorLog().c_str());
-      VK_RELEASE(geometryShader);
-      VK_RELEASE(program);
+      CS_RELEASE(geometryShader);
+      CS_RELEASE(program);
       return 0;
     }
     program->AttachShader(geometryShader);
-    VK_RELEASE(geometryShader);
+    CS_RELEASE(geometryShader);
   }
-  vkShaderGL4 *fragmentShader = new vkShaderGL4();
+  csShaderGL4 *fragmentShader = new csShaderGL4();
   fragmentShader->SetShaderType(eST_Fragment);
   fragmentShader->SetSource(fragmentCode);
   if (!fragmentShader->Compile())
   {
     printf("Unable to compile fragment shader:\n%s\n", fragmentShader->GetCompileErrorLog().c_str());
-    VK_RELEASE(fragmentShader);
-    VK_RELEASE(program);
+    CS_RELEASE(fragmentShader);
+    CS_RELEASE(program);
     return 0;
   }
   program->AttachShader(fragmentShader);
-  VK_RELEASE(fragmentShader);
+  CS_RELEASE(fragmentShader);
 
   if (!program->Link())
   {
     printf("Unable to link program:\n%s\n", program->GetLinkErrorLog().c_str());
-    VK_RELEASE(program);
+    CS_RELEASE(program);
     return 0;
   }
   return program;
 }
 
-ISGShaderGraphFactory *vkGraphicsGL4::GetShaderGraphFactory()
+ISGShaderGraphFactory *csGraphicsGL4::GetShaderGraphFactory()
 {
   return m_shaderGraphFactory;
 }
 
 
-void vkGraphicsGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetProjectionMatrix(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatProj] = matrix;
   m_matrixNeedsRecalculation[eMT_MatProjInv] = true;
@@ -328,13 +328,13 @@ void vkGraphicsGL4::SetProjectionMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
-void vkGraphicsGL4::SetProjectionMatrixInv(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetProjectionMatrixInv(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatProjInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatProjInv] = false;
 }
 
-void vkGraphicsGL4::SetViewMatrix(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetViewMatrix(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatView] = matrix;
   m_matrixNeedsRecalculation[eMT_MatViewInv] = true;
@@ -347,13 +347,13 @@ void vkGraphicsGL4::SetViewMatrix(const vkMatrix4f &matrix)
 
 }
 
-void vkGraphicsGL4::SetViewMatrixInv(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetViewMatrixInv(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatViewInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatViewInv] = false;
 }
 
-void vkGraphicsGL4::SetModelMatrix(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetModelMatrix(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatModel] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = true;
@@ -363,13 +363,13 @@ void vkGraphicsGL4::SetModelMatrix(const vkMatrix4f &matrix)
   m_matrixNeedsRecalculation[eMT_MatProjViewModelInv] = true;
 }
 
-void vkGraphicsGL4::SetModelMatrixInv(const vkMatrix4f &matrix)
+void csGraphicsGL4::SetModelMatrixInv(const csMatrix4f &matrix)
 {
   m_matrices[eMT_MatModelInv] = matrix;
   m_matrixNeedsRecalculation[eMT_MatModelInv] = false;
 }
 
-void vkGraphicsGL4::GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void csGraphicsGL4::GetPerspectiveProjection(float l, float r, float b, float t, float n, float f, csMatrix4f &m)
 {
   float z2 = 2.0f * n;
   float dx = r - l;
@@ -392,7 +392,7 @@ void vkGraphicsGL4::GetPerspectiveProjection(float l, float r, float b, float t,
 
 }
 
-void vkGraphicsGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void csGraphicsGL4::GetPerspectiveProjectionInv(float l, float r, float b, float t, float n, float f, csMatrix4f &m)
 {
   float z2 = 2.0f * n;
   float dx = r - l;
@@ -417,7 +417,7 @@ void vkGraphicsGL4::GetPerspectiveProjectionInv(float l, float r, float b, float
 
 }
 
-void vkGraphicsGL4::GetOrthographicProjection(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void csGraphicsGL4::GetOrthographicProjection(float l, float r, float b, float t, float n, float f, csMatrix4f &m)
 {
   float dx = r - l;
   float dy = t - b;
@@ -439,7 +439,7 @@ void vkGraphicsGL4::GetOrthographicProjection(float l, float r, float b, float t
   m.m03 = 0.0f;      m.m13 = 0.0f;      m.m23 = 0.0f;      m.m33 = 1.0;
 }
 
-void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, vkMatrix4f &m)
+void csGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, float t, float n, float f, csMatrix4f &m)
 {
   float dx = r - l;
   float dy = t - b;
@@ -462,34 +462,34 @@ void vkGraphicsGL4::GetOrthographicProjectionInv(float l, float r, float b, floa
 
 }
 
-void vkGraphicsGL4::SetSkeleton(const vkSkeleton *skeleton)
+void csGraphicsGL4::SetSkeleton(const csSkeleton *skeleton)
 {
   SetSkeletonMatrices(skeleton->GetMatrices(), skeleton->GetNumberOfBones());
 }
 
-void vkGraphicsGL4::SetSkeletonMatrices(const vkMatrix4f *matrices, vkSize numberOfMatrices)
+void csGraphicsGL4::SetSkeletonMatrices(const csMatrix4f *matrices, csSize numberOfMatrices)
 {
   m_skeletonMatrices = matrices;
   m_numberOfSkeletonMatrices = numberOfMatrices;
 }
 
-void vkGraphicsGL4::SetSkeletonBoneMapping(const vkUInt32 *boneMapping, vkSize numberOfBoneMappings)
+void csGraphicsGL4::SetSkeletonBoneMapping(const csUInt32 *boneMapping, csSize numberOfBoneMappings)
 {
   m_skeletonBoneMapping = boneMapping;
   m_numberOfSkeletonBoneMappings = numberOfBoneMappings;
 }
 
 
-void vkGraphicsGL4::SetShadowMatrices(const vkMatrix4f *projView, const vkMatrix4f *proj, const vkMatrix4f *view, const vkVector2f *nearFars, vkSize numberOfMatrices)
+void csGraphicsGL4::SetShadowMatrices(const csMatrix4f *projView, const csMatrix4f *proj, const csMatrix4f *view, const csVector2f *nearFars, csSize numberOfMatrices)
 {
   m_numberOfShadowMatrices = numberOfMatrices;
-  memcpy(m_shadowMatricesProjView, projView, sizeof(vkMatrix4f) * numberOfMatrices);
-  memcpy(m_shadowMatricesProj, proj, sizeof(vkMatrix4f) * numberOfMatrices);
-  memcpy(m_shadowMatricesView, view, sizeof(vkMatrix4f) * numberOfMatrices);
-  memcpy(m_shadowNearFars, nearFars, sizeof(vkVector2f) * numberOfMatrices);
+  memcpy(m_shadowMatricesProjView, projView, sizeof(csMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowMatricesProj, proj, sizeof(csMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowMatricesView, view, sizeof(csMatrix4f) * numberOfMatrices);
+  memcpy(m_shadowNearFars, nearFars, sizeof(csVector2f) * numberOfMatrices);
 }
 
-void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
+void csGraphicsGL4::RecalculateMatrix(csMatrixType type)
 {
   if (!m_matrixNeedsRecalculation[type])
   {
@@ -525,16 +525,16 @@ void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
     break;
 
   case eMT_MatProjView:
-    vkMatrix4f::Mult(m_matrices[eMT_MatProj], m_matrices[eMT_MatView], m_matrices[eMT_MatProjView]);
+    csMatrix4f::Mult(m_matrices[eMT_MatProj], m_matrices[eMT_MatView], m_matrices[eMT_MatProjView]);
     break;
 
   case eMT_MatViewModel:
-    vkMatrix4f::Mult(m_matrices[eMT_MatView], m_matrices[eMT_MatModel], m_matrices[eMT_MatViewModel]);
+    csMatrix4f::Mult(m_matrices[eMT_MatView], m_matrices[eMT_MatModel], m_matrices[eMT_MatViewModel]);
     break;
 
   case eMT_MatProjViewModel:
     RecalculateMatrix(eMT_MatProjView);
-    vkMatrix4f::Mult(m_matrices[eMT_MatProjView], m_matrices[eMT_MatModel], m_matrices[eMT_MatProjViewModel]);
+    csMatrix4f::Mult(m_matrices[eMT_MatProjView], m_matrices[eMT_MatModel], m_matrices[eMT_MatProjViewModel]);
     break;
 
   case eMT_MatProj:
@@ -545,7 +545,7 @@ void vkGraphicsGL4::RecalculateMatrix(vkMatrixType type)
   }
 }
 
-void vkGraphicsGL4::BindSkeleton()
+void csGraphicsGL4::BindSkeleton()
 {
   if (m_skeletonMatrices && m_numberOfSkeletonMatrices)
   {
@@ -566,45 +566,45 @@ void vkGraphicsGL4::BindSkeleton()
   }
 }
 
-void vkGraphicsGL4::BindMatrices()
+void csGraphicsGL4::BindMatrices()
 {
   if (!m_program)
   {
     return;
   }
-  for (vkUInt32 i = 0; i < eMT_COUNT; ++i)
+  for (csUInt32 i = 0; i < eMT_COUNT; ++i)
   {
     iShaderAttribute *attrib = m_program->GetAttribute(eVAT_MatProj + i);
     if (attrib)
     {
-      RecalculateMatrix((vkMatrixType)i);
+      RecalculateMatrix((csMatrixType)i);
       attrib->Set(m_matrices[i]);
     }
   }
 
   
-  static vkShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
+  static csShaderAttributeID ShadowMatricesProjViewAttribID("ShadowMapMatProjView");
   iShaderAttribute *attrib = m_program->GetAttribute(ShadowMatricesProjViewAttribID);
   if (attrib)
   {
     attrib->Set(m_shadowMatricesProjView, m_numberOfShadowMatrices);
   }
 
-  static vkShaderAttributeID ShadowMatricesProjAttribID("ShadowMapMatProj");
+  static csShaderAttributeID ShadowMatricesProjAttribID("ShadowMapMatProj");
   attrib = m_program->GetAttribute(ShadowMatricesProjAttribID);
   if (attrib)
   {
     attrib->Set(m_shadowMatricesProj, m_numberOfShadowMatrices);
   }
 
-  static vkShaderAttributeID ShadowMatricesViewAttribID("ShadowMapMatView");
+  static csShaderAttributeID ShadowMatricesViewAttribID("ShadowMapMatView");
   attrib = m_program->GetAttribute(ShadowMatricesViewAttribID);
   if (attrib)
   {
     attrib->Set(m_shadowMatricesView, m_numberOfShadowMatrices);
   }
 
-  static vkShaderAttributeID ShadowNearFarsAttribID("ShadowMapNearFar");
+  static csShaderAttributeID ShadowNearFarsAttribID("ShadowMapNearFar");
   attrib = m_program->GetAttribute(ShadowNearFarsAttribID);
   if (attrib)
   {
@@ -615,34 +615,34 @@ void vkGraphicsGL4::BindMatrices()
 }
 
 
-void vkGraphicsGL4::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
+void csGraphicsGL4::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
 {
-  vkVertexDeclarationGL4 *decl = static_cast<vkVertexDeclarationGL4*>(vertexDeclaration);
-  VK_SET(m_vertexDeclaration, decl);
+  csVertexDeclarationGL4 *decl = static_cast<csVertexDeclarationGL4*>(vertexDeclaration);
+  CS_SET(m_vertexDeclaration, decl);
 }
 
-void vkGraphicsGL4::SetVertexBuffer(vkUInt16 streamIdx, iVertexBuffer *vertexBuffer)
+void csGraphicsGL4::SetVertexBuffer(csUInt16 streamIdx, iVertexBuffer *vertexBuffer)
 {
   assert(streamIdx < 16);
 
   VertexBufferGL4 *vb = static_cast<VertexBufferGL4*>(vertexBuffer);
-  VK_SET(m_vertexBuffer[streamIdx], vb);
+  CS_SET(m_vertexBuffer[streamIdx], vb);
 }
 
-void vkGraphicsGL4::SetIndexBuffer(iIndexBuffer *indexBuffer)
+void csGraphicsGL4::SetIndexBuffer(iIndexBuffer *indexBuffer)
 {
   IndexBufferGL4 *ib = static_cast<IndexBufferGL4*>(indexBuffer);
-  VK_SET(m_indexBuffer, ib);
+  CS_SET(m_indexBuffer, ib);
 }
 
 
-void vkGraphicsGL4::SetShader(iShader *shader)
+void csGraphicsGL4::SetShader(iShader *shader)
 {
-  VK_CHECK_GL_ERROR;
-  vkProgramGL4 *prog = static_cast<vkProgramGL4*>(shader);
+  CS_CHECK_GL_ERROR;
+  csProgramGL4 *prog = static_cast<csProgramGL4*>(shader);
   if (prog != m_program)
   {
-    VK_SET(m_program, prog);
+    CS_SET(m_program, prog);
 
     if (prog)
     {
@@ -655,12 +655,12 @@ void vkGraphicsGL4::SetShader(iShader *shader)
     }
   }
   InvalidateTextures();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-vkTextureUnit vkGraphicsGL4::BindTexture(iTexture *texture)
+csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
   {
     if (m_nextTextureUnit != eTU_Invalid)
@@ -670,25 +670,25 @@ vkTextureUnit vkGraphicsGL4::BindTexture(iTexture *texture)
     return eTU_Invalid;
   }
 
-  vkTextureUnit unit = m_nextTextureUnit;
-  m_nextTextureUnit = static_cast<vkTextureUnit>(m_nextTextureUnit + 1);
+  csTextureUnit unit = m_nextTextureUnit;
+  m_nextTextureUnit = static_cast<csTextureUnit>(m_nextTextureUnit + 1);
   glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   SetSampler(unit, texture->GetSampler());
   SetTexture(unit, texture);
 
 
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   return unit;
 }
 
-void vkGraphicsGL4::SetTexture(vkTextureUnit unit, iTexture *texture)
+void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 {
-  VK_CHECK_GL_ERROR;
-  vkTextureGL4 *textureGL = texture ? vkQueryClass<vkTextureGL4>(texture) : 0;
+  CS_CHECK_GL_ERROR;
+  csTextureGL4 *textureGL = texture ? csQueryClass<csTextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL)
   {
-    VK_SET(m_textures[unit], textureGL);
+    CS_SET(m_textures[unit], textureGL);
     m_textureChanged[unit] = true;
     if (texture)
     {
@@ -696,46 +696,46 @@ void vkGraphicsGL4::SetTexture(vkTextureUnit unit, iTexture *texture)
       textureGL->Bind();
     }
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::SetSampler(vkTextureUnit unit, iSampler *sampler)
+void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 {
-  vkSamplerGL4 *samplerGL = sampler ? vkQueryClass<vkSamplerGL4>(sampler) : 0;
+  csSamplerGL4 *samplerGL = sampler ? csQueryClass<csSamplerGL4>(sampler) : 0;
   if (m_samplers[unit] != samplerGL)
   {
-    VK_SET(m_samplers[unit], samplerGL);
+    CS_SET(m_samplers[unit], samplerGL);
     m_samplerChanged[unit] = true;
     samplerGL->Bind(unit);
   }
 }
 
-void vkGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
+void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 {
-  VK_CHECK_GL_ERROR;
-  vkRenderTargetGL4 *rtGL4 = vkQueryClass<vkRenderTargetGL4>(renderTarget);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
+  csRenderTargetGL4 *rtGL4 = csQueryClass<csRenderTargetGL4>(renderTarget);
+  CS_CHECK_GL_ERROR;
   if (m_renderTarget != rtGL4 )
   {
-    VK_SET(m_renderTarget, rtGL4);
+    CS_SET(m_renderTarget, rtGL4);
     if (m_renderTarget)
     {
-      VK_CHECK_GL_ERROR;
+      CS_CHECK_GL_ERROR;
       m_renderTarget->Bind();
-      VK_CHECK_GL_ERROR;
+      CS_CHECK_GL_ERROR;
     }
     else
     {
-      VK_CHECK_GL_ERROR;
+      CS_CHECK_GL_ERROR;
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
-      VK_CHECK_GL_ERROR;
+      CS_CHECK_GL_ERROR;
     }
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
 
-void vkGraphicsGL4::SetBlendEnabled(bool enable)
+void csGraphicsGL4::SetBlendEnabled(bool enable)
 {
   if (m_blendEnabled != enable)
   {
@@ -751,12 +751,12 @@ void vkGraphicsGL4::SetBlendEnabled(bool enable)
   }
 }
 
-bool vkGraphicsGL4::IsBlendEnabled() const
+bool csGraphicsGL4::IsBlendEnabled() const
 {
   return m_blendEnabled;
 }
 
-void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
+void csGraphicsGL4::SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst)
 {
   if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
   {
@@ -766,7 +766,7 @@ void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrc, vkBlendMode blendDst)
   }
 }
 
-void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrcAlpha, vkBlendMode blendDstColor, vkBlendMode blendDstAlpha)
+void csGraphicsGL4::SetBlendMode(csBlendMode blendSrcColor, csBlendMode blendSrcAlpha, csBlendMode blendDstColor, csBlendMode blendDstAlpha)
 {
   if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
   {
@@ -778,7 +778,7 @@ void vkGraphicsGL4::SetBlendMode(vkBlendMode blendSrcColor, vkBlendMode blendSrc
   }
 }
 
-void vkGraphicsGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendDstColor, vkBlendMode &blendSrcAlpha, vkBlendMode &blendDstAlpha) const
+void csGraphicsGL4::GetBlendMode(csBlendMode &blendSrcColor, csBlendMode &blendDstColor, csBlendMode &blendSrcAlpha, csBlendMode &blendDstAlpha) const
 {
   blendSrcColor = m_blendModeSrcColor;
   blendSrcAlpha = m_blendModeSrcAlpha;
@@ -787,7 +787,7 @@ void vkGraphicsGL4::GetBlendMode(vkBlendMode &blendSrcColor, vkBlendMode &blendD
 }
 
 
-void vkGraphicsGL4::SetDepthMask(bool depth)
+void csGraphicsGL4::SetDepthMask(bool depth)
 {
   //if (m_depthMask != depth)
   {
@@ -796,9 +796,9 @@ void vkGraphicsGL4::SetDepthMask(bool depth)
   }
 }
 
-void vkGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
+void csGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
 {
-  vkUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
+  csUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
 //  if (colorMask != m_colorMask)
   {
     m_colorMask = colorMask;
@@ -806,7 +806,7 @@ void vkGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
   }
 }
 
-void vkGraphicsGL4::SetDepthTest(bool depthTest)
+void csGraphicsGL4::SetDepthTest(bool depthTest)
 {
   //if (m_depthTest != depthTest)
   {
@@ -822,7 +822,7 @@ void vkGraphicsGL4::SetDepthTest(bool depthTest)
   }
 }
 
-void vkGraphicsGL4::SetDepthFunc(vkCompareMode compareMode)
+void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
 {
   //if (m_depthFunc != compareMode)
   {
@@ -831,22 +831,22 @@ void vkGraphicsGL4::SetDepthFunc(vkCompareMode compareMode)
   }
 }
 
-void vkGraphicsGL4::SetRenderFadeInOut(float near, float far)
+void csGraphicsGL4::SetRenderFadeInOut(float near, float far)
 {
   m_fadeInOutDistances.Set(near, far, far - near);
 }
 
-void vkGraphicsGL4::SetRenderFadeInOutValue(vkUInt8 value)
+void csGraphicsGL4::SetRenderFadeInOutValue(csUInt8 value)
 {
   m_fadeInOutValue = value;
 }
 
-void vkGraphicsGL4::SetRenderDestination(vkRenderDestination renderDestination)
+void csGraphicsGL4::SetRenderDestination(csRenderDestination renderDestination)
 {
   glDrawBuffer(renderDestinationMap[renderDestination]);
 }
 
-void vkGraphicsGL4::SetRenderDestinations(vkRenderDestination *renderDestination, vkSize numRenderDestinations)
+void csGraphicsGL4::SetRenderDestinations(csRenderDestination *renderDestination, csSize numRenderDestinations)
 {
   static GLenum destinations[16];
   if (numRenderDestinations > 16)
@@ -854,14 +854,14 @@ void vkGraphicsGL4::SetRenderDestinations(vkRenderDestination *renderDestination
     numRenderDestinations = 16;
   }
   \
-  for (vkSize i = 0; i < numRenderDestinations; ++i)
+  for (csSize i = 0; i < numRenderDestinations; ++i)
   {
     destinations[i] = renderDestinationMap[renderDestination[i]];
   }
   glDrawBuffers(numRenderDestinations, destinations);
 }
 
-void vkGraphicsGL4::SetClearColorValue(const vkVector4f &colorValue)
+void csGraphicsGL4::SetClearColorValue(const csVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
   {
@@ -870,7 +870,7 @@ void vkGraphicsGL4::SetClearColorValue(const vkVector4f &colorValue)
   }
 }
 
-void vkGraphicsGL4::SetClearDepthValue(float depthValue)
+void csGraphicsGL4::SetClearDepthValue(float depthValue)
 {
   if (depthValue != m_clearDepth)
   {
@@ -879,7 +879,7 @@ void vkGraphicsGL4::SetClearDepthValue(float depthValue)
   }
 }
 
-void vkGraphicsGL4::SetClearStencilValue(vkUInt8 stencilValue)
+void csGraphicsGL4::SetClearStencilValue(csUInt8 stencilValue)
 {
   if (stencilValue != m_clearStencil)
   {
@@ -889,9 +889,9 @@ void vkGraphicsGL4::SetClearStencilValue(vkUInt8 stencilValue)
 }
 
 
-void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDepth, float depth, bool clearStencil, vkUInt8 stencil)
+void csGraphicsGL4::Clear(bool clearColor, const csVector4f &color, bool clearDepth, float depth, bool clearStencil, csUInt8 stencil)
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   GLbitfield clear = 0;
   if (clearColor)
   {
@@ -917,31 +917,31 @@ void vkGraphicsGL4::Clear(bool clearColor, const vkVector4f &color, bool clearDe
   }
 
   glClear(clear);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
 }
 
-void vkGraphicsGL4::SetViewport(vkUInt16 width, vkUInt16 height)
+void csGraphicsGL4::SetViewport(csUInt16 width, csUInt16 height)
 {
   SetViewport(0, 0, width, height);
 }
 
-void vkGraphicsGL4::SetViewport(vkInt16 x, vkInt16 y, vkUInt16 width, vkUInt16 height)
+void csGraphicsGL4::SetViewport(csInt16 x, csInt16 y, csUInt16 width, csUInt16 height)
 {
   glViewport(x, y, width, height);
   m_viewportWidth = width;
   m_viewportHeight = height;
 }
 
-void vkGraphicsGL4::SetViewport(iRenderTarget *renderTarget)
+void csGraphicsGL4::SetViewport(iRenderTarget *renderTarget)
 {
   SetViewport(0, 0, renderTarget->GetWidth(), renderTarget->GetHeight());
 }
 
 
-void vkGraphicsGL4::BindValues()
+void csGraphicsGL4::BindValues()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   BindMatrices();
 
 
@@ -952,7 +952,7 @@ void vkGraphicsGL4::BindValues()
   iShaderAttribute *attribBinaryGradient = m_program->GetAttribute(eVAT_BinaryGradient);
   if (attribBinaryGradient)
   {
-    vkTextureUnit tu = BindTexture(vkBinaryGradient::GetBinaryGradient());
+    csTextureUnit tu = BindTexture(csBinaryGradient::GetBinaryGradient());
     if (tu != eTU_Invalid)
     {
       attribBinaryGradient->Set(tu);
@@ -990,28 +990,28 @@ void vkGraphicsGL4::BindValues()
   {
     attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
 }
 
 
-void vkGraphicsGL4::Render(vkPrimitiveType primType, vkUInt32 count)
+void csGraphicsGL4::Render(csPrimitiveType primType, csUInt32 count)
 {
   BindValues();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
     glDrawArrays(primitiveTypeMap[primType], 0, count);
 
     UnbindVertexDeclaration();
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDataType indexType)
+void csGraphicsGL4::RenderIndexed(csPrimitiveType primType, csUInt32 count, csDataType indexType)
 {
   BindValues();
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
     m_indexBuffer->Bind();
@@ -1019,20 +1019,20 @@ void vkGraphicsGL4::RenderIndexed(vkPrimitiveType primType, vkUInt32 count, vkDa
 
     UnbindVertexDeclaration();
   }
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(iTexture2D *texture)
+void csGraphicsGL4::RenderFullScreenFrame(iTexture2D *texture)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture);
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2D *texture)
+void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2D *texture)
 {
-  VK_CHECK_GL_ERROR;
-  static vkShaderAttributeID attrDiffuseID("Diffuse");
-  static vkShaderAttributeID attrLeftBottomID("LeftBottom");
-  static vkShaderAttributeID attrDeltaID("Delta");
+  CS_CHECK_GL_ERROR;
+  static csShaderAttributeID attrDiffuseID("Diffuse");
+  static csShaderAttributeID attrLeftBottomID("LeftBottom");
+  static csShaderAttributeID attrDeltaID("Delta");
 
   float x0 = -1.0f + left * 2.0f;
   float y0 = -1.0f + bottom * 2.0f;
@@ -1048,30 +1048,30 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   SetShader(m_fullScreenProgram);
   SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
-  vkTextureUnit tu = BindTexture(texture);
+  csTextureUnit tu = BindTexture(texture);
   if (m_fullScreenProgram->GetAttribute(attrDiffuseID))
   {
     m_fullScreenProgram->GetAttribute(attrDiffuseID)->Set(tu);
   }
-  m_fullScreenProgram->GetAttribute(attrLeftBottomID)->Set(vkVector2f(x0, y0));
-  m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
+  m_fullScreenProgram->GetAttribute(attrLeftBottomID)->Set(csVector2f(x0, y0));
+  m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(csVector2f(x1 - x0, y1 - y0));
 
   Render(ePT_Triangles, 6);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(iTexture2DArray *texture, int layer)
+void csGraphicsGL4::RenderFullScreenFrame(iTexture2DArray *texture, int layer)
 {
   RenderFullScreenFrame(0.0f, 1.0f, 0.0f, 1.0f, texture, layer);
 }
 
-void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2DArray *texture, int layer)
+void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2DArray *texture, int layer)
 {
-  VK_CHECK_GL_ERROR;
-  static vkShaderAttributeID attrDiffuseID("Diffuse");
-  static vkShaderAttributeID attrLayerID("Layer");
-  static vkShaderAttributeID attrLeftBottomID("LeftBottom");
-  static vkShaderAttributeID attrDeltaID("Delta");
+  CS_CHECK_GL_ERROR;
+  static csShaderAttributeID attrDiffuseID("Diffuse");
+  static csShaderAttributeID attrLayerID("Layer");
+  static csShaderAttributeID attrLeftBottomID("LeftBottom");
+  static csShaderAttributeID attrDeltaID("Delta");
 
   float x0 = -1.0f + left * 2.0f;
   float y0 = -1.0f + bottom * 2.0f;
@@ -1087,19 +1087,19 @@ void vkGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   SetShader(m_fullScreenArrayProgram);
   SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
-  vkTextureUnit tu = BindTexture(texture);
+  csTextureUnit tu = BindTexture(texture);
   m_fullScreenArrayProgram->GetAttribute(attrDiffuseID)->Set(tu);
-  m_fullScreenArrayProgram->GetAttribute(attrLeftBottomID)->Set(vkVector2f(x0, y0));
-  m_fullScreenArrayProgram->GetAttribute(attrDeltaID)->Set(vkVector2f(x1 - x0, y1 - y0));
+  m_fullScreenArrayProgram->GetAttribute(attrLeftBottomID)->Set(csVector2f(x0, y0));
+  m_fullScreenArrayProgram->GetAttribute(attrDeltaID)->Set(csVector2f(x1 - x0, y1 - y0));
   m_fullScreenArrayProgram->GetAttribute(attrLayerID)->Set(layer);
   Render(ePT_Triangles, 6);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
 
-void vkGraphicsGL4::RenderFullScreenFrame()
+void csGraphicsGL4::RenderFullScreenFrame()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   SetDepthMask(true);
   SetDepthTest(false);
   SetDepthFunc(eCM_Always);
@@ -1109,13 +1109,13 @@ void vkGraphicsGL4::RenderFullScreenFrame()
   SetVertexBuffer(0, m_fullScreenVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   Render(ePT_Triangles, 6);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
 
-bool vkGraphicsGL4::BindVertexDeclaration()
+bool csGraphicsGL4::BindVertexDeclaration()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   if (!(m_vertexDeclaration && m_program))
   {
     return false;
@@ -1127,39 +1127,39 @@ bool vkGraphicsGL4::BindVertexDeclaration()
       return false;
     }
 
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
     m_vertexBuffer[i]->Bind();
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
     m_vertexDeclaration->BindStream(m_program, i, 0);
-    VK_CHECK_GL_ERROR;
+    CS_CHECK_GL_ERROR;
   }
 
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   return true;
 }
 
-void vkGraphicsGL4::UnbindVertexDeclaration()
+void csGraphicsGL4::UnbindVertexDeclaration()
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
   VertexBufferGL4::Unbind();
   for (unsigned i = 0, in = m_vertexDeclaration->GetNumberOfStreams(); i < in; ++i)
   {
     m_vertexDeclaration->UnbindStream(m_program, i);
   }
 
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }
 
 
-void vkGraphicsGL4::FreeTextures()
+void csGraphicsGL4::FreeTextures()
 {
   for (int i = 0; i < eTU_COUNT; ++i)
   {
-    SetTexture((vkTextureUnit)i, 0);
+    SetTexture((csTextureUnit)i, 0);
   }
 }
 
-void vkGraphicsGL4::InvalidateSamplers()
+void csGraphicsGL4::InvalidateSamplers()
 {
   for (int i = 0; i < eTU_COUNT; ++i)
   {
@@ -1168,7 +1168,7 @@ void vkGraphicsGL4::InvalidateSamplers()
 }
 
 
-void vkGraphicsGL4::InvalidateTextures()
+void csGraphicsGL4::InvalidateTextures()
 {
   m_nextTextureUnit = eTU_TextureUnit0;
   for (int i = 0; i < eTU_COUNT; ++i)
@@ -1178,7 +1178,7 @@ void vkGraphicsGL4::InvalidateTextures()
 }
 
 
-void vkGraphicsGL4::InitFullScreenData()
+void csGraphicsGL4::InitFullScreenData()
 {
   float vertexDataParam[] = {
     0, 0, 0, 1,     0, 0,
@@ -1202,20 +1202,20 @@ void vkGraphicsGL4::InitFullScreenData()
   };
   m_fullScreenVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexData), vertexData, eBDM_Static));
 
-  vkVertexElement elements[] = {
-    vkVertexElement(eVST_Position, eDT_Float, 4, 0, 6 * sizeof(float), 0),
-    vkVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(float), 6 * sizeof(float), 0),
-    vkVertexElement(),
+  csVertexElement elements[] = {
+    csVertexElement(eVST_Position, eDT_Float, 4, 0, 6 * sizeof(float), 0),
+    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(float), 6 * sizeof(float), 0),
+    csVertexElement(),
   };
 
-  m_fullScreenVertexDeclaration = static_cast<vkVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
+  m_fullScreenVertexDeclaration = static_cast<csVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
 
-  m_fullScreenProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/SimplePresent.xasset"));
-  m_fullScreenArrayProgram = vkResourceManager::Get()->GetOrLoad<vkProgramGL4>(vkResourceLocator("${shaders}/renderer/ArrayPresent.xasset "));
+  m_fullScreenProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/SimplePresent.xasset"));
+  m_fullScreenArrayProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/ArrayPresent.xasset "));
 }
 
 
-void vkGraphicsGL4::AssetGraphicsErrors() const
+void csGraphicsGL4::AssetGraphicsErrors() const
 {
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 }

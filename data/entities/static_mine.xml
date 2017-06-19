@@ -1,12 +1,12 @@
-<entity name="MyEntityName" class="vkEntity">
+<entity name="MyEntityName" class="csEntity">
 	
 	<entityStates>
 	
-		<entityState id="0" class="vkStaticColliderState" >
+		<entityState id="0" class="csStaticColliderState" >
 			<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
 		</entityState>
 	
-		<entityState id="1" class="vkStaticMeshState" parentID="0">
+		<entityState id="1" class="csStaticMeshState" parentID="0">
 			<mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh>
 			<materials>
 				<material slot="0" slotName="MineBody">${materials}/materials.xml:FieldStone</material>

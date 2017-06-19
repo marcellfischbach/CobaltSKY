@@ -1,22 +1,22 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
 
 #include <valkyrie/entity/iparticleemitter.refl.hh>
 
-class vkParticle;
+class csParticle;
 /**
 * \ingroup entity
 */
 
-VK_INTERFACE()
-struct VKE_API iParticleEmitter : public iObject
+CS_INTERFACE()
+struct CSE_API iParticleEmitter : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
   virtual ~iParticleEmitter() { }
 
-  virtual void Update(float tpf, vkParticle *particle) = 0;
+  virtual void Update(float tpf, csParticle *particle) = 0;
 
 };

@@ -1,20 +1,20 @@
 #pragma once
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkclass.hh>
-#include <valkyrie/vkenums.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csclass.hh>
+#include <valkyrie/csenums.hh>
 #include <valkyrie/graphics/ivertexbuffer.refl.hh>
 
-VK_INTERFACE();
-struct VKE_API iVertexBuffer : public iObject
+CS_INTERFACE();
+struct CSE_API iVertexBuffer : public iObject
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 
-  virtual vkSize GetSize() const = 0;
+  virtual csSize GetSize() const = 0;
 
-  virtual bool Copy(unsigned offset, vkSize size, const void* data) = 0;
+  virtual bool Copy(unsigned offset, csSize size, const void* data) = 0;
 
-  virtual bool Lock(unsigned offset, void** data, vkBufferAccessMode mode) = 0;
+  virtual bool Lock(unsigned offset, void** data, csBufferAccessMode mode) = 0;
 
   virtual bool Unlock() = 0;
 

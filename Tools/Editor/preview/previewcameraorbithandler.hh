@@ -3,11 +3,11 @@
 #include <components/sceneviewinputhandler.hh>
 #include <QPoint>
 
-class vkCamera;
+class csCamera;
 class PreviewCameraOrbitHandler : public SceneViewInputHandler
 {
 public:
-  PreviewCameraOrbitHandler(vkCamera *camera);
+  PreviewCameraOrbitHandler(csCamera *camera);
   virtual ~PreviewCameraOrbitHandler();
 
   virtual void mousePressEvent(QMouseEvent *event);
@@ -26,6 +26,6 @@ private:
 
   float m_cameraDistance = 25.0f;
 
-  vkCamera *m_camera = 0;
+  csCamera *m_camera = 0;
   QPoint m_mousePos;
 };

@@ -4,7 +4,7 @@
 #include <ui_shadergrapheditoroutliner.h>
 
 class ShaderGraphEditorNode;
-class vkSGShaderGraph;
+class csSGShaderGraph;
 class ShaderGraphEditorOutlinerTableModel;
 class ShaderGraphEditorOutliner : public QWidget
 {
@@ -13,7 +13,7 @@ public:
   ShaderGraphEditorOutliner(QWidget *parent = 0);
   virtual ~ShaderGraphEditorOutliner();
 
-  void SetShaderGraph(vkSGShaderGraph *shaderGraph);
+  void SetShaderGraph(csSGShaderGraph *shaderGraph);
 
   public slots:
   void SetSelectedNodes(const QList<ShaderGraphEditorNode*>& nodes);

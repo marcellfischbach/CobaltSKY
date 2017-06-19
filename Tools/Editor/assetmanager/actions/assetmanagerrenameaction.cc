@@ -4,7 +4,7 @@
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerrenamer.hh>
-#include <valkyrie/core/vkfileinfo.hh>
+#include <valkyrie/core/csfileinfo.hh>
 #include <QString>
 #include <QList>
 
@@ -54,10 +54,10 @@ bool AssetManagerRenameAction::PerformAction(AssetManagerWidget *assetManager) c
   dlg.SetName(entry->GetEntryName());
   if (dlg.exec())
   {
-    vkResourceLocator from = entry->GetLocator();
-    vkFileInfo info(from.GetResourceFile());
+    csResourceLocator from = entry->GetLocator();
+    csFileInfo info(from.GetResourceFile());
     std::string newName = info.GetLocation() + std::string("/") + std::string((const char*)dlg.GetName().toLatin1()) + "." + info.GetExtension();
-    vkResourceLocator to(newName, from.GetResourceName(), from.GetResourceEntry());
+    csResourceLocator to(newName, from.GetResourceName(), from.GetResourceEntry());
 
     if (from == to)
     {

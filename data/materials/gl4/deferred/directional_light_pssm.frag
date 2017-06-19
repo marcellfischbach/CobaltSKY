@@ -1,13 +1,13 @@
 
 #version 330
 
-uniform vec3 vk_Distances;
-uniform mat4 vk_ShadowMatsProjView[3];
-uniform vec2 vk_ShadowIntensity;
-uniform float vk_ShadowMapSizeInv;
+uniform vec3 cs_Distances;
+uniform mat4 cs_ShadowMatsProjView[3];
+uniform vec2 cs_ShadowIntensity;
+uniform float cs_ShadowMapSizeInv;
 
-uniform sampler2DArray vk_ShadowColorMap;
-uniform sampler2DArrayShadow vk_ShadowMap;
+uniform sampler2DArray cs_ShadowColorMap;
+uniform sampler2DArrayShadow cs_ShadowMap;
 
 
 float calculate_shadow(vec4 world, vec3 cam)
@@ -15,15 +15,15 @@ float calculate_shadow(vec4 world, vec3 cam)
 	int layer = 0;
 
 	float d = cam.y;
-	if (d < vk_Distances.x)
+	if (d < cs_Distances.x)
 	{
 		layer = 0;
 	}
-	else if (d < vk_Distances.y)
+	else if (d < cs_Distances.y)
 	{
 		layer = 1;
 	}
-	else if (d < vk_Distances.z)
+	else if (d < cs_Distances.z)
 	{
 		layer = 2;
 	}
@@ -33,7 +33,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 	}
 	
 	// transform into final depth buffer space and performce perspective division
-	vec4 depthBufferSpace = vk_ShadowMatsProjView[layer] * world;
+	vec4 depthBufferSpace = cs_ShadowMatsProjView[layer] * world;
 	// shift from [-1, 1] -> [0, 1]
 	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;
 
@@ -49,7 +49,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 	float val = 0.0;
 	float kernStep = 1.0;
 	float kernSize = 1.0;
-	float moment = texture(vk_ShadowColorMap, 
+	float moment = texture(cs_ShadowColorMap, 
 												 vec3(depthBufferSpace.xy, 
 															layer)).r;
 	if (moment > 1.0)
@@ -62,10 +62,10 @@ float calculate_shadow(vec4 world, vec3 cam)
 	{
 		for (float j=-kernSize; j<=kernSize; j+=kernStep)
 		{
-			vec2 kern = vec2 (i, j) * vk_ShadowMapSizeInv;
+			vec2 kern = vec2 (i, j) * cs_ShadowMapSizeInv;
 			
 			
-			val += texture(vk_ShadowMap, 
+			val += texture(cs_ShadowMap, 
 										 vec4(depthBufferSpace.xy + kern, 
 													layer, 
 			                    depthBufferSpace.z - moment));
@@ -74,5 +74,5 @@ float calculate_shadow(vec4 world, vec3 cam)
 	}
 	
 	val /= float(kerns);
-	return val * vk_ShadowIntensity.x + vk_ShadowIntensity.y;
+	return val * cs_ShadowIntensity.x + cs_ShadowIntensity.y;
 }

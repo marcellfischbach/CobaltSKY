@@ -16,7 +16,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
 
 
-#function(VK_MOC prefix api inlist outlist)
+#function(CS_MOC prefix api inlist outlist)
 #	set(out)
 #	foreach(file ${${inlist}})
 #		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${file} 
@@ -31,11 +31,11 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${ValkyrieEngine_BINARY_DIR}/bin)
 #	endforeach(file)
 	
 #	set(${outlist} ${out} PARENT_SCOPE)
-#endfunction(VK_MOC)
+#endfunction(CS_MOC)
 
 
-function(VK_INSTALL_MOCCER target prefix api inlist)
-	set(FILENAME "${CMAKE_CURRENT_BINARY_DIR}/.vkmoc")
+function(CS_INSTALL_MOCCER target prefix api inlist)
+	set(FILENAME "${CMAKE_CURRENT_BINARY_DIR}/.csmoc")
 	message("MocFileName: ${FILENAME}")
 	file(REMOVE "${FILENAME}")
 	foreach(file ${${inlist}})
@@ -55,12 +55,12 @@ function(VK_INSTALL_MOCCER target prefix api inlist)
 										)
 		add_dependencies(${target} ${TARGET_NAME})
 	endif()
-endfunction(VK_INSTALL_MOCCER)
+endfunction(CS_INSTALL_MOCCER)
 
 if (WIN32)
-add_definitions(-DVK_WIN32)
+add_definitions(-DCS_WIN32)
 else()
-add_definitions(-DVK_LINUX)
+add_definitions(-DCS_LINUX)
 endif()
 
 find_package(OpenGL)

@@ -1,10 +1,10 @@
 <asset>
 	<data>
-		<entity name="MyEntityName" class="vkEntity">
+		<entity name="MyEntityName" class="csEntity">
 			
 			<entityStates>
 			
-				<entityState id="0" class="vkDynamicColliderState" >
+				<entityState id="0" class="csDynamicColliderState" >
 					<shape resourceMode="shared">${models}/mine.staticmesh:Collision</shape>
 					<kinematic>false</kinematic>
 					<mass>0.001</mass>
@@ -12,7 +12,7 @@
 					<restitution>0.5</restitution>
 				</entityState>
 			
-				<entityState id="1" class="vkStaticMeshState" parentID="0">
+				<entityState id="1" class="csStaticMeshState" parentID="0">
 					<!--mesh resourceMode="shared">${models}/mine.staticmesh:Mesh</mesh-->
 					<mesh resourceMode="shared">${models}/mine.asset</mesh>
 					<materials>

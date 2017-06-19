@@ -3,10 +3,10 @@
 #include <QDir>
 #include <QWidget>
 #include <ui_assetmanagerwidget.h>
-#include <valkyrie/core/vkresourcelocator.hh>
-#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/csresourcelocator.hh>
+#include <valkyrie/core/csstring.hh>
 #include <map>
-#include <valkyrie/core/vklogger.hh>
+#include <valkyrie/core/cslogger.hh>
 
 class QAction;
 struct AssetManagerNewHandler;
@@ -20,7 +20,7 @@ public:
   AssetManagerWidget();
   ~AssetManagerWidget();
 
-  void OpenAsset(const vkResourceLocator &locator);
+  void OpenAsset(const csResourceLocator &locator);
 
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;
 
@@ -42,6 +42,6 @@ private:
   AssetManagerFolderModel *m_folderModel;
   AssetManagerContentModel *m_contentModel;
   QDir m_currentDir;
-  vkLogger m_logger;
+  csLogger m_logger;
 };
 

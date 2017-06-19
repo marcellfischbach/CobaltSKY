@@ -4,21 +4,21 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-vkTextureCubeGL4::vkTextureCubeGL4()
-  : vkTextureGL4(eTT_TextureCube)
+csTextureCubeGL4::csTextureCubeGL4()
+  : csTextureGL4(eTT_TextureCube)
   , iTextureCube()
 {
 
 }
 
-vkTextureCubeGL4::~vkTextureCubeGL4()
+csTextureCubeGL4::~csTextureCubeGL4()
 {
 
 }
 
-bool vkTextureCubeGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16 height, vkUInt16 depth)
+bool csTextureCubeGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
 {
-  if (!vkTextureGL4::Initialize())
+  if (!csTextureGL4::Initialize())
   {
     return false;
   }
@@ -40,15 +40,15 @@ bool vkTextureCubeGL4::Initialize(vkPixelFormat format, vkUInt16 width, vkUInt16
   glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internalFormatMap[format], height, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
   glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internalFormatMap[format], width, depth, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
   glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internalFormatMap[format], height, depth, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
-bool vkTextureCubeGL4::CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelFormat format, const void *data)
+bool csTextureCubeGL4::CopyData(csTextureCubeFace face, csUInt8 lod, csPixelFormat format, const void *data)
 {
-  vkUInt16 width;
-  vkUInt16 height;
+  csUInt16 width;
+  csUInt16 height;
   switch (face)
   {
   case eTCF_PositiveX:
@@ -67,8 +67,8 @@ bool vkTextureCubeGL4::CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelForm
     height = m_depth;
     break;
   }
-  vkUInt16 layerWidth = width >> lod;
-  vkUInt16 layerHeight = height >> lod;
+  csUInt16 layerWidth = width >> lod;
+  csUInt16 layerHeight = height >> lod;
   if (layerWidth == 0 && layerHeight == 0)
   {
     return false;
@@ -84,23 +84,23 @@ bool vkTextureCubeGL4::CopyData(vkTextureCubeFace face, vkUInt8 lod, vkPixelForm
 
   Bind();
   glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, lod, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
-  VK_CHECK_GL_ERROR;
+  CS_CHECK_GL_ERROR;
 
   return true;
 }
 
 
-vkUInt16 vkTextureCubeGL4::GetWidth() const
+csUInt16 csTextureCubeGL4::GetWidth() const
 {
   return m_width;
 }
 
-vkUInt16 vkTextureCubeGL4::GetHeight() const
+csUInt16 csTextureCubeGL4::GetHeight() const
 {
   return m_height;
 }
 
-vkUInt16 vkTextureCubeGL4::GetDepth() const
+csUInt16 csTextureCubeGL4::GetDepth() const
 {
   return m_depth;
 }

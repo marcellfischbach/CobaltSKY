@@ -3,18 +3,18 @@
 #include <editor.hh>
 
 
-AssetDescriptor::AssetDescriptor(const vkResourceLocator &locator, const vkString &assetType)
+AssetDescriptor::AssetDescriptor(const csResourceLocator &locator, const csString &assetType)
   : m_locator(locator)
   , m_assetType(assetType)
 {
 }
 
-const vkResourceLocator &AssetDescriptor::GetLocator() const
+const csResourceLocator &AssetDescriptor::GetLocator() const
 {
   return m_locator;
 }
 
-const vkString &AssetDescriptor::GetAssetType() const
+const csString &AssetDescriptor::GetAssetType() const
 {
   return m_assetType;
 }

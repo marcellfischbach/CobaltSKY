@@ -26,5 +26,5 @@ target_link_libraries(ValkyrieRunner
   )
 
 
-VK_INSTALL_MOCCER(ValkyrieRunner runner " " ALL_SOURCES)
+CS_INSTALL_MOCCER(ValkyrieRunner runner " " ALL_SOURCES)
 

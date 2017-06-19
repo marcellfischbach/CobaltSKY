@@ -5,14 +5,14 @@
 
 #include <graphicsgl4/shadergraph/gl4sgconstfloat1.refl.hh>
 
-VK_CLASS()
-class VKGRAPHICSGL4_API vkSGConstFloatGL4 : public VK_SUPER(vkSGNodeGL4)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGConstFloatGL4 : public CS_SUPER(csSGNodeGL4)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
-  vkSGConstFloatGL4() : vkSGNodeGL4() { }
-  virtual ~vkSGConstFloatGL4() { }
+  csSGConstFloatGL4() : csSGNodeGL4() { }
+  virtual ~csSGConstFloatGL4() { }
 
 protected:
-  void PrivEvaluate(vkShaderGraphCtx &ctx);
+  void PrivEvaluate(csShaderGraphCtx &ctx);
 };

@@ -1,14 +1,14 @@
 #version 330
 
-layout(location = 0) out vec4 vk_FragColor;
+layout(location = 0) out vec4 cs_FragColor;
 
-uniform sampler2D vk_Depth;
-uniform sampler2D vk_Normal;
-uniform vec2 vk_DepthSizeInv;
+uniform sampler2D cs_Depth;
+uniform sampler2D cs_Normal;
+uniform vec2 cs_DepthSizeInv;
 
-uniform mat4 vk_MatProjInv;
-uniform mat4 vk_MatViewInv;
-uniform mat4 vk_MatProjViewInv;
+uniform mat4 cs_MatProjInv;
+uniform mat4 cs_MatViewInv;
+uniform mat4 cs_MatProjViewInv;
 
 
 in vec2 inFragTexCoord0;
@@ -16,23 +16,23 @@ in vec2 inFragXYPlane;
 
 void main ()
 {
-	float d = texture(vk_Depth, inFragTexCoord0).r;
+	float d = texture(cs_Depth, inFragTexCoord0).r;
 	if (d == 1.0)
 	{
-		vk_FragColor = vec4(0, 0, 0, 1);
+		cs_FragColor = vec4(0, 0, 0, 1);
 		return;
 	}
 	
-	vec3 normal = texture(vk_Normal,  inFragTexCoord0).xyz * 2.0 - 1.0;
+	vec3 normal = texture(cs_Normal,  inFragTexCoord0).xyz * 2.0 - 1.0;
 	
 	d = d * 2.0f - 1.0;
 	
 	// projected paces
 	vec4 proj = vec4 (inFragXYPlane.xy, d, 1.0);
-	proj = vk_MatProjInv * proj;
+	proj = cs_MatProjInv * proj;
 	proj /= proj.w;
 	float depth = proj.y;
-	vec3 worldRef = (vk_MatViewInv * proj).xyz;
+	vec3 worldRef = (cs_MatViewInv * proj).xyz;
 	
 	float stepSize = 1.0;
 	float kernelSize = 20.0;
@@ -58,10 +58,10 @@ void main ()
 			{
 				continue;
 			}
-			vec2 disp = vk_DepthSizeInv * vec2 (i, j) * kernelSize;
+			vec2 disp = cs_DepthSizeInv * vec2 (i, j) * kernelSize;
 			vec2 dispProj = 2.0 * disp;
 			
-			float dRef = texture(vk_Depth,  inFragTexCoord0 + disp).r;
+			float dRef = texture(cs_Depth,  inFragTexCoord0 + disp).r;
 			if (dRef != 1.0)
 			{
 			
@@ -69,7 +69,7 @@ void main ()
 				
 				// projected paces
 				proj = vec4 (inFragXYPlane.xy + dispProj, dRef, 1.0);
-				vec4 worldProj = vk_MatProjViewInv * proj;
+				vec4 worldProj = cs_MatProjViewInv * proj;
 				vec3 world = worldProj.xyz / worldProj.w;
 				
 				vec3 diff = world - worldRef;
@@ -86,5 +86,5 @@ void main ()
 
 	f /= num;
 	f = 1.0 - f;
-	vk_FragColor = vec4(f, f, f, 1);
+	cs_FragColor = vec4(f, f, f, 1);
 }

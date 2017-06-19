@@ -5,21 +5,21 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4vertexbuffer.refl.hh>
 
-VK_CLASS();
-class VertexBufferGL4 : public VK_SUPER(iVertexBuffer)
+CS_CLASS();
+class VertexBufferGL4 : public CS_SUPER(iVertexBuffer)
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
   VertexBufferGL4();
   virtual ~VertexBufferGL4();
 
-  bool CreateBuffer(vkSize size, const void *data, vkBufferDataMode dataMode);
+  bool CreateBuffer(csSize size, const void *data, csBufferDataMode dataMode);
 
-  virtual vkSize GetSize() const;
+  virtual csSize GetSize() const;
 
-  virtual bool Copy(unsigned offset, vkSize size, const void* data);
+  virtual bool Copy(unsigned offset, csSize size, const void* data);
 
-  virtual bool Lock(unsigned offset, void** data, vkBufferAccessMode mode);
+  virtual bool Lock(unsigned offset, void** data, csBufferAccessMode mode);
 
   virtual bool Unlock();
 
@@ -30,6 +30,6 @@ public:
 
 private:
   GLuint m_name;
-  vkSize m_size;
+  csSize m_size;
 };
 

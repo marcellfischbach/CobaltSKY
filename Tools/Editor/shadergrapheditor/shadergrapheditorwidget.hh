@@ -2,12 +2,12 @@
 
 #include <QWidget>
 #include <QList>
-#include <valkyrie/core/vkstring.hh>
+#include <valkyrie/core/csstring.hh>
 #include <ui_shadergrapheditorwidget.h>
 
-class vkResourceLocator;
-class vkSGNode;
-class vkSGShaderGraph;
+class csResourceLocator;
+class csSGNode;
+class csSGShaderGraph;
 class ShaderGraphEditor;
 class ShaderGraphEditorMeta;
 class ShaderGraphEditorNode;
@@ -18,7 +18,7 @@ public:
   ShaderGraphEditorWidget(ShaderGraphEditor *parent);
   virtual ~ShaderGraphEditorWidget();
 
-  vkSGShaderGraph *SetShaderGraph(vkSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
+  csSGShaderGraph *SetShaderGraph(csSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
 
 public slots:
 void RepaintGraph();
@@ -40,14 +40,14 @@ private slots:
   void on_pbSave_clicked();
 
 private:
-  vkString ExtractName(const vkResourceLocator &locator);
+  csString ExtractName(const csResourceLocator &locator);
   bool Apply();
-  ShaderGraphEditorNode *GetEditorNode(vkSGNode *node);
+  ShaderGraphEditorNode *GetEditorNode(csSGNode *node);
   ShaderGraphEditorNode *GetShaderGraphNode();
   Ui::ShaderGraphEditorWidget m_gui;
   ShaderGraphEditor *m_editor;
-  vkSGShaderGraph *m_shaderGraph;
-  vkSGShaderGraph *m_shaderGraphCopy;
+  csSGShaderGraph *m_shaderGraph;
+  csSGShaderGraph *m_shaderGraphCopy;
 
   bool m_updateGuard;
 

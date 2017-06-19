@@ -4,10 +4,10 @@
 #include <editor.hh>
 #include <qsurfaceformat.h>
 
-#include <valkyrie/vkengine.hh>
-#include <valkyrie/core/vklogger.hh>
-#include <valkyrie/core/vksettings.hh>
-#include <valkyrie/core/vkvfs.hh>
+#include <valkyrie/csengine.hh>
+#include <valkyrie/core/cslogger.hh>
+#include <valkyrie/core/cssettings.hh>
+#include <valkyrie/core/csvfs.hh>
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 

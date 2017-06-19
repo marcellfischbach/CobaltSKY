@@ -1,24 +1,24 @@
 #pragma once
 
 
-#include <valkyrie/vkexport.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/csexport.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.refl.hh>
 
-class vkSGNode;
-class vkSGShaderGraph;
+class csSGNode;
+class csSGShaderGraph;
 
 
-VK_CLASS()
-class ShaderGraphEditorMetaAssetXMLLoader : public VK_SUPER(vkBaseXMLLoader)
+CS_CLASS()
+class ShaderGraphEditorMetaAssetXMLLoader : public CS_SUPER(csBaseXMLLoader)
 {
-  VK_CLASS_GEN;
+  CS_CLASS_GEN;
 public:
   ShaderGraphEditorMetaAssetXMLLoader();
   virtual ~ShaderGraphEditorMetaAssetXMLLoader();
 
-  virtual bool CanLoad(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual const vkClass *EvalClass(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(TiXmlElement *element, const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
 
 };

@@ -1,7 +1,7 @@
 
 #include <textureeditor/textureeditorproperties.hh>
 #include <components/assetresourcewidget.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <valkyrie/graphics/isampler.hh>
 #include <valkyrie/graphics/itexture.hh>
 
@@ -18,15 +18,15 @@ TextureEditorProperties::TextureEditorProperties()
 
 TextureEditorProperties::~TextureEditorProperties()
 {
-  VK_RELEASE(m_texture);
+  CS_RELEASE(m_texture);
 }
 
 void TextureEditorProperties::SetTexture(iTexture *texture)
 {
-  VK_SET(m_texture, texture);
+  CS_SET(m_texture, texture);
   if (m_texture)
   {
-    vkResourceLocator locator = vkResourceManager::Get()->GetLocator(texture->GetSampler());
+    csResourceLocator locator = csResourceManager::Get()->GetLocator(texture->GetSampler());
     m_samplerWidget->SetResourceLocator(locator);
   }
 }
@@ -43,7 +43,7 @@ void TextureEditorProperties::InitGUI()
   m_samplerWidget = new AssetResourceWidget(frame);
   m_samplerWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
   m_samplerWidget->AddValidClass(iSampler::GetStaticClass());
-  connect(m_samplerWidget, SIGNAL(ResourceChanged(const vkResourceLocator &)), this, SIGNAL(SamplerChanged(const vkResourceLocator &)));
+  connect(m_samplerWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SIGNAL(SamplerChanged(const csResourceLocator &)));
 
   frameLayout->addWidget(label, 0, 0, 1, 1);
   frameLayout->addWidget(m_samplerWidget, 0, 1, 1, 1);

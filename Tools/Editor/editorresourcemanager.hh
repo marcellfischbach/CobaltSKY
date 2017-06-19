@@ -1,22 +1,22 @@
 #pragma once
 
 
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 
-class EditorResourceManager : public vkResourceManager
+class EditorResourceManager : public csResourceManager
 {
 public:
   EditorResourceManager();
   virtual ~EditorResourceManager();
 
-  virtual iObject *Load(const vkResourceLocator &locator, iObject *userData = 0);
-  virtual const vkClass *EvalClass(const vkResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(const csResourceLocator &locator, iObject *userData = 0);
+  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = 0) const;
 
 
-  virtual bool RegisterObject(const vkResourceLocator &locator, iObject *object);
+  virtual bool RegisterObject(const csResourceLocator &locator, iObject *object);
 
 private:
-  vkResourceLocator FixResourceLocator(const vkResourceLocator &locator) const;
-  bool IsAnonymousLocator(const vkResourceLocator &locator) const;
+  csResourceLocator FixResourceLocator(const csResourceLocator &locator) const;
+  bool IsAnonymousLocator(const csResourceLocator &locator) const;
 
 };

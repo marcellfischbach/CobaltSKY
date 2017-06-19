@@ -1,6 +1,6 @@
 
 
-add_definitions(-DVKBULLETPHYSICS_EXPORT)
+add_definitions(-DCSBULLETPHYSICS_EXPORT)
 
 set(SOURCE
   bulletexport.hh
@@ -53,5 +53,5 @@ target_link_libraries(ValkyrieEngine-PhysicsBullet
 	${BULLET_LIBRARIES}
   )
 
-VK_INSTALL_MOCCER(ValkyrieEngine-PhysicsBullet physicsbullet VKBULLETPHYSICS_API ALL_SOURCES)
+CS_INSTALL_MOCCER(ValkyrieEngine-PhysicsBullet physicsbullet CSBULLETPHYSICS_API ALL_SOURCES)
 

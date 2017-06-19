@@ -1,32 +1,32 @@
 #include <graphicsgl4/shadergraph/gl4sgtexture2d.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
-#include <valkyrie/graphics/shadergraph/vksgresourcenode.hh>
+#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
 #include <sstream>
 
-void vkSGTexture2DGL4::PrivEvaluate(vkShaderGraphCtx &ctx)
+void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  vkSGNode *txt = GetNode();
-  vkSGResourceNode *res = vkQueryClass<vkSGResourceNode>(txt);
+  csSGNode *txt = GetNode();
+  csSGResourceNode *res = csQueryClass<csSGResourceNode>(txt);
   if (!res)
   {
     return;
   }
-  vkString bindingName = res->GetResourceName();
+  csString bindingName = res->GetResourceName();
   if (bindingName.length() == 0)
   {
     return;
   }
 
-  vkString txtCoordinate = ctx.GetDefaultTextureCoordinate();
+  csString txtCoordinate = ctx.GetDefaultTextureCoordinate();
   if (ctx.HasInputValue(txt->GetInput("uv")))
   {
     txtCoordinate = ctx.GetFullInputValue(txt->GetInput("uv"));
   }
 
-  bindingName = "vk_" + bindingName;
+  bindingName = "cs_" + bindingName;
   std::ostringstream ss;
   ss << "texture(" << bindingName << ", " << txtCoordinate << ")";
-  vkString code = ss.str();
+  csString code = ss.str();
 
   if (!IsInline())
   {

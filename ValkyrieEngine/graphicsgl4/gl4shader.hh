@@ -3,7 +3,7 @@
 
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
-#include <valkyrie/core/vkclass.hh>
+#include <valkyrie/core/csclass.hh>
 #include <valkyrie/graphics/ishader.hh>
 #include <valkyrie/graphics/ishaderattribute.hh>
 #include <valkyrie/graphics/ishaderstream.hh>
@@ -11,28 +11,28 @@
 #include <vector>
 #include <graphicsgl4/gl4shader.refl.hh>
 
-VK_CLASS()
-class vkShaderGL4 : public iObject
+CS_CLASS()
+class csShaderGL4 : public iObject
 {
-  VK_CLASS_GEN_OBJECT;
+  CS_CLASS_GEN_OBJECT;
 public:
-  vkShaderGL4();
-  virtual ~vkShaderGL4();
+  csShaderGL4();
+  virtual ~csShaderGL4();
 
-  void SetSource(const vkString &source);
-  const vkString &GetSource() const;
+  void SetSource(const csString &source);
+  const csString &GetSource() const;
 
   GLuint GetName() const;
 
-  void SetShaderType(vkShaderType shaderType);
-  vkShaderType GetShaderType() const;
+  void SetShaderType(csShaderType shaderType);
+  csShaderType GetShaderType() const;
 
   bool Compile();
-  vkString GetCompileErrorLog() const;
+  csString GetCompileErrorLog() const;
 private:
-  vkShaderType m_shaderType;
+  csShaderType m_shaderType;
 
-  vkString m_shader;
+  csString m_shader;
   GLuint m_name;
 
 };

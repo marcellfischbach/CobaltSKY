@@ -3,22 +3,22 @@
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <editorimage.hh>
 
-#include <valkyrie/core/vkfileinfo.hh>
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csfileinfo.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 
 #include <iostream>
 
 
-AssetManagerContentModelEntry::AssetManagerContentModelEntry(const vkResourceLocator &locator)
+AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLocator &locator)
   : m_locator(locator)
 {
-  vkFileInfo info(locator.GetResourceFile());
+  csFileInfo info(locator.GetResourceFile());
 
   m_entryName = QString(info.GetName().c_str());
   std::cout << "EntryName: " << info.GetName() << std::endl;
 
-  vkResourceLocator previewLocator(locator, "preview");
-  EditorImage *editorImage = vkResourceManager::Get()->Aquire<EditorImage>(previewLocator);
+  csResourceLocator previewLocator(locator, "preview");
+  EditorImage *editorImage = csResourceManager::Get()->Aquire<EditorImage>(previewLocator);
   if (editorImage)
   {
     QImage img = editorImage->GetImage();

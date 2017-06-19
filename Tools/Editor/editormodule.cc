@@ -3,7 +3,7 @@
 #include <editormodule.hh>
 #include <master.refl.cc>
 
-#include <valkyrie/core/vkresourcemanager.hh>
+#include <valkyrie/core/csresourcemanager.hh>
 #include <editor.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>
@@ -29,7 +29,7 @@ void EditorModule::Initialize()
   actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
   actionManager->RegisterAction(new AssetManagerRenameAction());
 
-  vkResourceManager *mgr = vkResourceManager::Get();
+  csResourceManager *mgr = csResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
 }
