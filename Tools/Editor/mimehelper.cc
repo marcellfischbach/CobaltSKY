@@ -1,8 +1,8 @@
 
 #include <mimehelper.hh>
-#include <valkyrie/core/csresourcelocator.hh>
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/core/csclassregistry.hh>
+#include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/core/csclassregistry.hh>
 #include <QMimeData>
 
 #define CS_RESOURCE_LOCATOR_MIME_TYPE "cs-application/resource_locator"

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/iindexbuffer.hh>
+#include <cobalt/graphics/iindexbuffer.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4indexbuffer.refl.hh>
 

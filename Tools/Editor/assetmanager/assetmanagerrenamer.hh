@@ -1,6 +1,6 @@
 #pragma once
 
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csresourcelocator.hh>
 
 class QDomDocument;
 class QDomElement;

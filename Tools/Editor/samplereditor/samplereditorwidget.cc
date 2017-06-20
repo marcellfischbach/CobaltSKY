@@ -2,7 +2,7 @@
 
 #include <samplereditor/samplereditorwidget.hh>
 #include <samplereditor/samplereditor.hh>
-#include <valkyrie/graphics/isampler.hh>
+#include <cobalt/graphics/isampler.hh>
 
 #include <QColor>
 

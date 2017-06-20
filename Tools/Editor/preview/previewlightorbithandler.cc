@@ -1,7 +1,7 @@
 
 #include <preview/previewlightorbithandler.hh>
-#include <valkyrie/graphics/csdirectionallight.hh>
-#include <valkyrie/math/csmatrix4f.hh>
+#include <cobalt/graphics/csdirectionallight.hh>
+#include <cobalt/math/csmatrix4f.hh>
 #include <QMouseEvent>
 #include <QWheelEvent>
 

@@ -2,7 +2,7 @@
 
 #include <QAbstractItemModel>
 #include <vector>
-#include <valkyrie/core/csstring.hh>
+#include <cobalt/core/csstring.hh>
 
 #define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/csClassName"
 

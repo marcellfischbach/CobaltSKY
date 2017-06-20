@@ -1,7 +1,7 @@
 #pragma once
 
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/math/csvector2f.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/math/csvector2f.hh>
 #include <shadergrapheditor/shadergrapheditormeta.refl.hh>
 
 #include <map>

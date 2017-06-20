@@ -2,8 +2,8 @@
 #include <physicsbullet/bulletstaticcollider.hh>
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletshape.hh>
-#include <valkyrie/physics/iphysicsshape.hh>
-#include <valkyrie/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/iphysicsshape.hh>
+#include <cobalt/physics/csphysicsshapecontainer.hh>
 
 
 csBulletStaticCollider::csBulletStaticCollider()

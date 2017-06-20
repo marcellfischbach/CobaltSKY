@@ -1,8 +1,8 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <map>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.refl.hh>
 

@@ -1,8 +1,8 @@
 
 #include <assetmanager/assetmanagerfoldermodel.hh>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <editor.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csvfs.hh>
 #include <QDir>
 #include <QList>
 

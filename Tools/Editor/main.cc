@@ -4,10 +4,10 @@
 #include <editor.hh>
 #include <qsurfaceformat.h>
 
-#include <valkyrie/csengine.hh>
-#include <valkyrie/core/cslogger.hh>
-#include <valkyrie/core/cssettings.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/csengine.hh>
+#include <cobalt/core/cslogger.hh>
+#include <cobalt/core/cssettings.hh>
+#include <cobalt/core/csvfs.hh>
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 

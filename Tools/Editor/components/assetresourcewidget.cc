@@ -1,6 +1,6 @@
 
 #include <components/assetresourcewidget.hh>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QPushButton>

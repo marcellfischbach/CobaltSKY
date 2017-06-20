@@ -1,6 +1,6 @@
 #pragma once
 
-#include <valkyrie/core/csclass.hh>
+#include <cobalt/core/csclass.hh>
 #include <iasseteditorfactory.hh>
 #include <Editor.refl.hh>
 #include <QDir>

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <valkyrie/core/csstring.hh>
-#include <valkyrie/core/csresourcelocator.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csstring.hh>
+#include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csvfs.hh>
 #include <string>
 #include <vector>
 #include <map>

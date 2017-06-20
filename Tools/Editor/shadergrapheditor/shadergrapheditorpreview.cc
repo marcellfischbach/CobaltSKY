@@ -1,6 +1,6 @@
 
 #include <shadergrapheditor/shadergrapheditorpreview.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 
 ShaderGraphEditorPreview::ShaderGraphEditorPreview(QWidget *parent)

@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <ui_assetresourcewidget.h>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csresourcelocator.hh>
 
 
 class AssetResourceWidget : public QWidget

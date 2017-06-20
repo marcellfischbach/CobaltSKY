@@ -2,9 +2,9 @@
 
 #include <shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
 #include <preview/previewcameraorbithandler.hh>
-#include <valkyrie/graphics/csmaterial.hh>
-#include <valkyrie/graphics/cscamera.hh>
-#include <valkyrie/entity/csentityscene.hh>
+#include <cobalt/graphics/csmaterial.hh>
+#include <cobalt/graphics/cscamera.hh>
+#include <cobalt/entity/csentityscene.hh>
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)

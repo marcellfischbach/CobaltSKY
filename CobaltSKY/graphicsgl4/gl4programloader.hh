@@ -2,7 +2,7 @@
 
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <graphicsgl4/gl4programloader.refl.hh>
 
 

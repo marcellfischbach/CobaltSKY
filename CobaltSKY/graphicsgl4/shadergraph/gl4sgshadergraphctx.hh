@@ -1,7 +1,7 @@
 #pragma once
 
-#include <valkyrie/core/csstring.hh>
-#include <valkyrie/cstypes.hh>
+#include <cobalt/core/csstring.hh>
+#include <cobalt/cstypes.hh>
 #include <set>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.refl.hh>
 #include <map>

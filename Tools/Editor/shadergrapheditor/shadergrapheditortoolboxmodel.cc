@@ -1,7 +1,7 @@
 
 
 #include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
-#include <valkyrie/graphics/shadergraph/cssgnodes.hh>
+#include <cobalt/graphics/shadergraph/cssgnodes.hh>
 #include <QMimeData>
 #include <QDataStream>
 

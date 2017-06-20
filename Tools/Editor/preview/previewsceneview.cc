@@ -2,16 +2,16 @@
 
 #include <preview/previewsceneview.hh>
 #include <preview/previewlightorbithandler.hh>
-#include <valkyrie/entity/csentity.hh>
-#include <valkyrie/entity/csentityscene.hh>
-#include <valkyrie/entity/cslightstate.hh>
-#include <valkyrie/entity/csstaticmeshstate.hh>
-#include <valkyrie/graphics/ivertexdeclaration.hh>
-#include <valkyrie/graphics/csdirectionallight.hh>
-#include <valkyrie/graphics/csmaterial.hh>
-#include <valkyrie/graphics/csmesh.hh>
-#include <valkyrie/graphics/cssubmesh.hh>
-#include <valkyrie/csengine.hh>
+#include <cobalt/entity/csentity.hh>
+#include <cobalt/entity/csentityscene.hh>
+#include <cobalt/entity/cslightstate.hh>
+#include <cobalt/entity/csstaticmeshstate.hh>
+#include <cobalt/graphics/ivertexdeclaration.hh>
+#include <cobalt/graphics/csdirectionallight.hh>
+#include <cobalt/graphics/csmaterial.hh>
+#include <cobalt/graphics/csmesh.hh>
+#include <cobalt/graphics/cssubmesh.hh>
+#include <cobalt/csengine.hh>
 
 PreviewSceneView::PreviewSceneView(QWidget *parent)
   : SceneView(parent)

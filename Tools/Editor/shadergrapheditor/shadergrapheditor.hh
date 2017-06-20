@@ -5,7 +5,7 @@
 #include <assetdescriptor.hh>
 
 #include <shadergrapheditor/shadergrapheditor.refl.hh>
-#include <valkyrie/csenums.hh>
+#include <cobalt/csenums.hh>
 
 class ShaderGraphEditorOutliner;
 class ShaderGraphEditorPreview;

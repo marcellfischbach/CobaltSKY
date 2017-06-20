@@ -1,6 +1,6 @@
 
 #include <editorimage.hh>
-#include <valkyrie/graphics/csimage.hh>
+#include <cobalt/graphics/csimage.hh>
 
 EditorImage::EditorImage(csImage *image)
 {

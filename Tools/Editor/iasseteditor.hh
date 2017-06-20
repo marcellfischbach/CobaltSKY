@@ -1,6 +1,6 @@
 #pragma once
 
-#include <valkyrie/core/csclass.hh>
+#include <cobalt/core/csclass.hh>
 #include <assetdescriptor.hh>
 #include <iasseteditor.refl.hh>
 #include <QWidget>

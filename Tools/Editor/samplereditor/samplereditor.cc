@@ -2,9 +2,9 @@
 #include <samplereditor/samplereditor.hh>
 #include <samplereditor/samplereditorwidget.hh>
 
-#include <valkyrie/core/csresourcemanager.hh>
-#include <valkyrie/core/csvfs.hh>
-#include <valkyrie/graphics/isampler.hh>
+#include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/core/csvfs.hh>
+#include <cobalt/graphics/isampler.hh>
 
 #include <QDomDocument>
 #include <QDomElement>

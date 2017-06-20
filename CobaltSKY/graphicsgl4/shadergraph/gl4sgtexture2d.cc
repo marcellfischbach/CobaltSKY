@@ -1,6 +1,6 @@
 #include <graphicsgl4/shadergraph/gl4sgtexture2d.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <sstream>
 
 void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)

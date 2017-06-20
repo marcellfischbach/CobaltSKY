@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/ivertexbuffer.hh>
+#include <cobalt/graphics/ivertexbuffer.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4vertexbuffer.refl.hh>
 

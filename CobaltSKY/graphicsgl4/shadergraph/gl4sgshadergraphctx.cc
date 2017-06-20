@@ -2,9 +2,9 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssginput.hh>
-#include <valkyrie/graphics/shadergraph/cssgoutput.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssginput.hh>
+#include <cobalt/graphics/shadergraph/cssgoutput.hh>
 
 
 csShaderGraphCtx::csShaderGraphCtx(csShaderGraphGL4 *graph)

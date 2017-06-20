@@ -3,8 +3,8 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/gl4program.hh>
 #include <graphicsgl4/gl4shader.hh>
-#include <valkyrie/graphics/shadergraph/cssgfloat3.hh>
-#include <valkyrie/graphics/shadergraph/cssgsplitfloat4.hh>
+#include <cobalt/graphics/shadergraph/cssgfloat3.hh>
+#include <cobalt/graphics/shadergraph/cssgsplitfloat4.hh>
 #include <iostream>
 #include <sstream>
 

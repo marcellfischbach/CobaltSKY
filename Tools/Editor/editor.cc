@@ -8,11 +8,11 @@
 #include <mainwindow.hh>
 #include <renderwidget.hh>
 #include <project/project.hh>
-#include <valkyrie/core/cssettings.hh>
+#include <cobalt/core/cssettings.hh>
 #include <assetmanager/assetmanagerdock.hh>
 #include <assetmanager/assetmanagerwidget.hh>
-#include <valkyrie/core/csvfs.hh>
-#include <valkyrie/csengine.hh>
+#include <cobalt/core/csvfs.hh>
+#include <cobalt/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <physicsbullet/bulletsystem.hh>
 
@@ -52,7 +52,7 @@ bool Editor::Initialize(int argc, char **argv)
     return false;
   }
 
-  std::string settingsPath = projectPath + "/valkyrie.xml";
+  std::string settingsPath = projectPath + "/cobalt.xml";
 
   csSettings::Get()->Initialize(settingsPath.c_str());
   csVFS::Get()->Initialize(csSettings::Get());
@@ -97,7 +97,7 @@ bool Editor::Initialize(int argc, char **argv)
   return true;
 }
 
-#include <valkyrie/graphics/itexture2d.hh>
+#include <cobalt/graphics/itexture2d.hh>
 csGraphicsGL4 *Editor::GetGraphics()
 {
   if (!m_graphics)

@@ -8,8 +8,8 @@
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
 #include <basicdockitem.hh>
 #include <editor.hh>
-#include <valkyrie/core/csresourcemanager.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 
 ShaderGraphEditor::ShaderGraphEditor()

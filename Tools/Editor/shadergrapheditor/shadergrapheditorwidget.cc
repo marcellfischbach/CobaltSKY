@@ -15,15 +15,15 @@
 #include <editor.hh>
 #include <project/project.hh>
 
-#include <valkyrie/csengine.hh>
-#include <valkyrie/core/csclassregistry.hh>
-#include <valkyrie/graphics/igraphics.hh>
-#include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/graphics/shadergraph/cssgdefaultconsolelogger.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
-#include <valkyrie/graphics/shadergraph/cssgtexture2d.hh>
+#include <cobalt/csengine.hh>
+#include <cobalt/core/csclassregistry.hh>
+#include <cobalt/graphics/igraphics.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/shadergraph/cssgdefaultconsolelogger.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/shadergraph/cssgtexture2d.hh>
 
 #include <QDomDocument>
 #include <QDomElement>

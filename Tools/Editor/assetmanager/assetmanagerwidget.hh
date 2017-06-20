@@ -3,10 +3,10 @@
 #include <QDir>
 #include <QWidget>
 #include <ui_assetmanagerwidget.h>
-#include <valkyrie/core/csresourcelocator.hh>
-#include <valkyrie/core/csstring.hh>
+#include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csstring.hh>
 #include <map>
-#include <valkyrie/core/cslogger.hh>
+#include <cobalt/core/cslogger.hh>
 
 class QAction;
 struct AssetManagerNewHandler;

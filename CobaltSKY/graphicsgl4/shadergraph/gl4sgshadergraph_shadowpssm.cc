@@ -2,8 +2,8 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/gl4shader.hh>
 #include <graphicsgl4/gl4program.hh>
-#include <valkyrie/graphics/shadergraph/cssginput.hh>
-#include <valkyrie/graphics/shadergraph/cssgoutput.hh>
+#include <cobalt/graphics/shadergraph/cssginput.hh>
+#include <cobalt/graphics/shadergraph/cssgoutput.hh>
 #include <iostream>
 #include <sstream>
 #include <set>

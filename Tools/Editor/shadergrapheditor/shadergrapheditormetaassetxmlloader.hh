@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include <valkyrie/csexport.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/csexport.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.refl.hh>
 
 class csSGNode;

@@ -1,10 +1,10 @@
 #pragma once
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/graphics/ishader.hh>
-#include <valkyrie/graphics/ishaderattribute.hh>
-#include <valkyrie/graphics/ishaderstream.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/graphics/ishader.hh>
+#include <cobalt/graphics/ishaderattribute.hh>
+#include <cobalt/graphics/ishaderstream.hh>
 #include <GL/glew.h>
 #include <vector>
 #include <graphicsgl4/gl4shaderattribute.refl.hh>

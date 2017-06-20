@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/irendertarget.hh>
+#include <cobalt/graphics/irendertarget.hh>
 #include <vector>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4rendertarget.refl.hh>

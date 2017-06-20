@@ -7,7 +7,7 @@
 #include <assetmanager/actions/assetmanagernewaction.hh>
 #include <assetdescriptor.hh>
 #include <editor.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csvfs.hh>
 #include <QDomDocument>
 #include <QFile>
 #include <QMenu>

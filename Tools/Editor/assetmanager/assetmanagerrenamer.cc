@@ -4,8 +4,8 @@
 #include <editor.hh>
 #include <project/project.hh>
 #include <project/projectreferencetree.hh>
-#include <valkyrie/core/csfileinfo.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csfileinfo.hh>
+#include <cobalt/core/csvfs.hh>
 #include <QDomDocument>
 #include <QDomElement>
 

@@ -3,7 +3,7 @@
 #include <physicsbullet/bulletexport.hh>
 #include <physicsbullet/bulletjoint.hh>
 
-#include <valkyrie/physics/iphysicshingejoint.hh>
+#include <cobalt/physics/iphysicshingejoint.hh>
 #include <physicsbullet/bullethingejoint.refl.hh>
 
 

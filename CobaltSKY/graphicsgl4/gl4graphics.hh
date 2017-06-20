@@ -2,7 +2,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/igraphics.hh>
+#include <cobalt/graphics/igraphics.hh>
 #include <graphicsgl4/gl4graphics.refl.hh>
 
 class IndexBufferGL4;

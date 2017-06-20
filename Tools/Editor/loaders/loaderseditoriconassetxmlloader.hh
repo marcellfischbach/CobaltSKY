@@ -1,7 +1,7 @@
 #pragma once
 
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <loaders/loaderseditoriconassetxmlloader.refl.hh>
 
 CS_CLASS()

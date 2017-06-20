@@ -5,7 +5,7 @@
 #include <assetdescriptor.hh>
 
 #include <textureeditor/textureeditor.refl.hh>
-#include <valkyrie/csenums.hh>
+#include <cobalt/csenums.hh>
 
 class TextureEditorProperties;
 class TextureEditorWidget;

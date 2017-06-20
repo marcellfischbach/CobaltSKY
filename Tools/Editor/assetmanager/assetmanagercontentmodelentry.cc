@@ -3,8 +3,8 @@
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <editorimage.hh>
 
-#include <valkyrie/core/csfileinfo.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/csfileinfo.hh>
+#include <cobalt/core/csresourcemanager.hh>
 
 #include <iostream>
 

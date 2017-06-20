@@ -1,8 +1,8 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.refl.hh>
 
 class csShaderGraphCtx;

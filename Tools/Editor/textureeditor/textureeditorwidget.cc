@@ -1,8 +1,8 @@
 #include <textureeditor/textureeditorwidget.hh>
 #include <textureeditor/textureeditor.hh>
-#include <valkyrie/core/csresourcemanager.hh>
-#include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/graphics/isampler.hh>
+#include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <editor.hh>
 #include <project/project.hh>
 #include <QDomDocument>

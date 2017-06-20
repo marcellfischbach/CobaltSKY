@@ -18,8 +18,8 @@
 #include <graphicsgl4/gl4vertexbuffer.hh>
 #include <graphicsgl4/gl4vertexdeclaration.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
-#include <valkyrie/animation/csskeleton.hh>
-#include <valkyrie/graphics/csbinarygradient.hh>
+#include <cobalt/animation/csskeleton.hh>
+#include <cobalt/graphics/csbinarygradient.hh>
 #include <GL/glew.h>
 #include <assert.h>
 

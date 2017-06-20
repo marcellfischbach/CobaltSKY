@@ -1,9 +1,9 @@
 #pragma once
 
 #include <QWidget>
-#include <valkyrie/csenums.hh>
-#include <valkyrie/cstypes.hh>
-#include <valkyrie/math/csvector4f.hh>
+#include <cobalt/csenums.hh>
+#include <cobalt/cstypes.hh>
+#include <cobalt/math/csvector4f.hh>
 #include <ui_samplereditorwidget.h>
 
 class SamplerEditor;

@@ -3,7 +3,7 @@
 #include <editormodule.hh>
 #include <master.refl.cc>
 
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <editor.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>

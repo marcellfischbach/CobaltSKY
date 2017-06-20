@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <ui_textureeditorwidget.h>
-#include <valkyrie/graphics/csshaderattributeid.hh>
+#include <cobalt/graphics/csshaderattributeid.hh>
 
 class TextureEditor;
 struct iTexture2D;

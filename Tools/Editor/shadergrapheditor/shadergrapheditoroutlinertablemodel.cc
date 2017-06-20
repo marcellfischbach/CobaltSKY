@@ -1,8 +1,8 @@
 
 #include <shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 ShaderGraphEditorOutlinerTableModel::ShaderGraphEditorOutlinerTableModel()
   : QAbstractItemModel()

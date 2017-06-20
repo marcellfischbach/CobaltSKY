@@ -6,8 +6,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <mimehelper.hh>
-#include <valkyrie/core/csclass.hh>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcelocator.hh>
 
 AssetResourceLineEdit::AssetResourceLineEdit(QWidget *parent)
   : QLineEdit(parent)

@@ -3,7 +3,7 @@
 
 #include <QDockWidget>
 #include <QWidget>
-#include <valkyrie/core/csstring.hh>
+#include <cobalt/core/csstring.hh>
 
 struct iDockItem
 {

@@ -3,9 +3,9 @@
 #include <physicsbullet/bulletshape.hh>
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletjoint.hh>
-#include <valkyrie/physics/csphysicsshapecontainer.hh>
-#include <valkyrie/entity/cstransformation.hh>
-#include <valkyrie/entity/cscolliderstate.hh>
+#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/entity/cstransformation.hh>
+#include <cobalt/entity/cscolliderstate.hh>
 
 csBulletDynamicCollider::csBulletDynamicCollider()
   : iPhysicsDynamicCollider()

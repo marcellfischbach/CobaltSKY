@@ -2,7 +2,7 @@
 
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/itexture.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texture.refl.hh>
 

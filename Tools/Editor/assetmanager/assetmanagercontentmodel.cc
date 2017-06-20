@@ -7,10 +7,10 @@
 #include <QPixmap>
 #include <QMimeData>
 #include <mimehelper.hh>
-#include <valkyrie/core/ifile.hh>
-#include <valkyrie/core/csfileinfo.hh>
-#include <valkyrie/core/csvfs.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/ifile.hh>
+#include <cobalt/core/csfileinfo.hh>
+#include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <QDomDocument>
 #include <QFile>
 

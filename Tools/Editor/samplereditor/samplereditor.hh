@@ -5,7 +5,7 @@
 #include <assetdescriptor.hh>
 
 #include <samplereditor/samplereditor.refl.hh>
-#include <valkyrie/csenums.hh>
+#include <cobalt/csenums.hh>
 
 #include <QDomDocument>
 #include <QDomElement>

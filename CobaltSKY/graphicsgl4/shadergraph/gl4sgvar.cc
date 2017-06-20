@@ -1,7 +1,7 @@
 
 #include <graphicsgl4/shadergraph/gl4sgvar.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 
 
 csSGVarGL4::csSGVarGL4(const csString &typeName)

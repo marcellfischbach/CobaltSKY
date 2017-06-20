@@ -1,7 +1,7 @@
 
 #include <loaders/loaderseditoriconassetxmlloader.hh>
 #include <editorimage.hh>
-#include <valkyrie/graphics/csimage.hh>
+#include <cobalt/graphics/csimage.hh>
 
 LoadersEditorIconAssetXMLLoader::LoadersEditorIconAssetXMLLoader()
   : csBaseXMLLoader()

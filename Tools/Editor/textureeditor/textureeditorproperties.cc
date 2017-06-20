@@ -1,9 +1,9 @@
 
 #include <textureeditor/textureeditorproperties.hh>
 #include <components/assetresourcewidget.hh>
-#include <valkyrie/core/csresourcemanager.hh>
-#include <valkyrie/graphics/isampler.hh>
-#include <valkyrie/graphics/itexture.hh>
+#include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <QFrame>
 #include <QGridLayout>

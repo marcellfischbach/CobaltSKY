@@ -1,10 +1,10 @@
 
 
 #include <shadergrapheditor/shadergrapheditornode.hh>
-#include <valkyrie/core/csresourcemanager.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <nodegraph/nodegraphnodeheader.hh>
 #include <nodegraph/nodegraphnodeimageproperty.hh>
 #include <nodegraph/nodegraphnodevalueproperty.hh>

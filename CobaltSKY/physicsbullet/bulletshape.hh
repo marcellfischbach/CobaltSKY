@@ -1,8 +1,8 @@
 #pragma once
 
 #include <physicsbullet/bulletexport.hh>
-#include <valkyrie/math/csmatrix.hh>
-#include <valkyrie/physics/iphysicsshape.hh>
+#include <cobalt/math/csmatrix.hh>
+#include <cobalt/physics/iphysicsshape.hh>
 #include <bullet/btBulletCollisionCommon.h>
 #include <physicsbullet/bulletshape.refl.hh>
 

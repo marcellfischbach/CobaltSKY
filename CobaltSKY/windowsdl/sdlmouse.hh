@@ -1,7 +1,7 @@
 #pragma once
 
 #include <windowsdl/sdlexport.hh>
-#include <valkyrie/window/imouse.hh>
+#include <cobalt/window/imouse.hh>
 #include <windowsdl/sdlmouse.refl.hh>
 
 CS_CLASS()

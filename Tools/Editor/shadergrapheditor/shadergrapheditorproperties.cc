@@ -4,10 +4,10 @@
 #include <shadergrapheditor/shadergrapheditornode.hh>
 #include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
 #include <components/assetresourcewidget.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgresourcenode.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
-#include <valkyrie/graphics/itexture.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <QGridLayout>
 #include <QLineEdit>

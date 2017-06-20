@@ -1,9 +1,9 @@
 #pragma once
 
 #include <nodegraph/nodegraphnode.hh>
-#include <valkyrie/core/csresourcelocator.hh>
-#include <valkyrie/graphics/shadergraph/cssgnode.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <map>
 
 class csSGNode;

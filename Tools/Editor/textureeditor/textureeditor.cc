@@ -5,8 +5,8 @@
 #include <basicdockitem.hh>
 #include <editor.hh>
 
-#include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/core/csresourcemanager.hh>
 
 
 TextureEditor::TextureEditor()

@@ -1,8 +1,8 @@
 
 
-#include <valkyrie/graphics/igraphics.hh>
-#include <valkyrie/graphics/itexture2d.hh>
-#include <valkyrie/csengine.hh>
+#include <cobalt/graphics/igraphics.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 #include <graphicsgl4/gl4indexbuffer.hh>

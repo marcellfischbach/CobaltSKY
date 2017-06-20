@@ -3,7 +3,7 @@
 
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4texture.hh>
-#include <valkyrie/graphics/itexturecube.hh>
+#include <cobalt/graphics/itexturecube.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texturecube.refl.hh>
 

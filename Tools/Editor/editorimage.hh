@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <valkyrie/core/csclass.hh>
+#include <cobalt/core/csclass.hh>
 #include <QImage>
 #include <editorimage.refl.hh>
 

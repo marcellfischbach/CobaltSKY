@@ -4,7 +4,7 @@
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerrenamer.hh>
-#include <valkyrie/core/csfileinfo.hh>
+#include <cobalt/core/csfileinfo.hh>
 #include <QString>
 #include <QList>
 

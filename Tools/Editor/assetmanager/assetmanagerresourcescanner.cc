@@ -1,9 +1,9 @@
 
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
-#include <valkyrie/core/ifile.hh>
-#include <valkyrie/core/csvfs.hh>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/ifile.hh>
+#include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <tixml/tinyxml.h>
 #include <QDir>
 #include <QFile>

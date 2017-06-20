@@ -4,8 +4,8 @@
 #include <QMessageBox>
 #include <editor.hh>
 #include <mainwindow.hh>
-#include <valkyrie/core/csfileinfo.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csfileinfo.hh>
+#include <cobalt/core/csvfs.hh>
 #include <QFile>
 
 AbstractAssetEditor::AbstractAssetEditor()
@@ -72,7 +72,7 @@ void AbstractAssetEditor::CloseRequest()
   if (m_dirty)
   {
     int res = QMessageBox::question(Editor::Get()->GetMainWindow(),
-                          QObject::tr("Valkyrie Editor"),
+                          QObject::tr("CobaltSKY Editor"),
                           QObject::tr("Close without saving?"),
                           QMessageBox::Yes,
                           QMessageBox::Cancel);

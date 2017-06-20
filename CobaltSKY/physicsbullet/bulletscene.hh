@@ -1,9 +1,9 @@
 #pragma once
 
 #include <physicsbullet/bulletexport.hh>
-#include <valkyrie/csdefs.hh>
-#include <valkyrie/core/cscollection.hh>
-#include <valkyrie/physics/iphysicsscene.hh>
+#include <cobalt/csdefs.hh>
+#include <cobalt/core/cscollection.hh>
+#include <cobalt/physics/iphysicsscene.hh>
 #include <bullet/btBulletDynamicsCommon.h>
 #include <physicsbullet/bulletscene.refl.hh>
 

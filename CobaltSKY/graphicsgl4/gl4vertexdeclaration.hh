@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <valkyrie/graphics/ivertexdeclaration.hh>
+#include <cobalt/graphics/ivertexdeclaration.hh>
 #include <graphicsgl4/gl4vertexdeclaration.refl.hh>
 
 

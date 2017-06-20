@@ -1,7 +1,7 @@
 #pragma once
 
 #include <renderwidget.hh>
-#include <valkyrie/graphics/csshaderattributeid.hh>
+#include <cobalt/graphics/csshaderattributeid.hh>
 
 
 struct iTexture2D;

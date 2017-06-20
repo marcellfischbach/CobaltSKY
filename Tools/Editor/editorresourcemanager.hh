@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <valkyrie/core/csresourcemanager.hh>
+#include <cobalt/core/csresourcemanager.hh>
 
 class EditorResourceManager : public csResourceManager
 {

@@ -1,6 +1,6 @@
 
 #include <preview/previewcameraorbithandler.hh>
-#include <valkyrie/graphics/cscamera.hh>
+#include <cobalt/graphics/cscamera.hh>
 #include <QMouseEvent>
 #include <QWheelEvent>
 

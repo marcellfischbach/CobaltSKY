@@ -1,6 +1,6 @@
 
-#include <valkyrie/csengine.hh>
-#include <valkyrie/graphics/igraphics.hh>
+#include <cobalt/csengine.hh>
+#include <cobalt/graphics/igraphics.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 

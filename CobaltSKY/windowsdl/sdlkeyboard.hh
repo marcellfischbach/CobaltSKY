@@ -1,7 +1,7 @@
 #pragma once
 
 #include <windowsdl/sdlexport.hh>
-#include <valkyrie/window/ikeyboard.hh>
+#include <cobalt/window/ikeyboard.hh>
 #include <windowsdl/sdlkeyboard.refl.hh>
 
 CS_CLASS()

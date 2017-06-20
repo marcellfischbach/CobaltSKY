@@ -1,6 +1,6 @@
 
 #include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
-#include <valkyrie/graphics/shadergraph/cssgshadergraph.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 ShaderGraphEditorShaderGraphProperties::ShaderGraphEditorShaderGraphProperties(QWidget *parent)
   : QWidget(parent)

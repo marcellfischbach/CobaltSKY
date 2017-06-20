@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <QList>
-#include <valkyrie/core/csstring.hh>
+#include <cobalt/core/csstring.hh>
 #include <ui_shadergrapheditorwidget.h>
 
 class csResourceLocator;

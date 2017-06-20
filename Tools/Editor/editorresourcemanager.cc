@@ -1,6 +1,6 @@
 
 #include <editorresourcemanager.hh>
-#include <valkyrie/core/csvfs.hh>
+#include <cobalt/core/csvfs.hh>
 
 
 EditorResourceManager::EditorResourceManager()

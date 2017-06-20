@@ -3,8 +3,8 @@
 #include <QAbstractItemModel>
 #include <QDir>
 #include <QList>
-#include <valkyrie/core/csstring.hh>
-#include <valkyrie/core/csresourcelocator.hh>
+#include <cobalt/core/csstring.hh>
+#include <cobalt/core/csresourcelocator.hh>
 
 class AssetManagerContentModelEntry;
 class csClass;
