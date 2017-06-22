@@ -15,6 +15,7 @@ public:
   ~MainWindow();
 
   bool ShowEditor(iAssetEditor *editor);
+  void UpdateEditor(iAssetEditor *editor);
   void CloseEditor(iAssetEditor *editor, bool force);
 
   void ShowWidget(QWidget *widget);

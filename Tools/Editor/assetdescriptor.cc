@@ -9,6 +9,16 @@ AssetDescriptor::AssetDescriptor(const csResourceLocator &locator, const csStrin
 {
 }
 
+bool AssetDescriptor::Renamed(const csResourceLocator &from, const csResourceLocator &to)
+{
+  if (m_locator == from)
+  {
+    m_locator = to;
+    return true;
+  }
+  return false;
+}
+
 const csResourceLocator &AssetDescriptor::GetLocator() const
 {
   return m_locator;

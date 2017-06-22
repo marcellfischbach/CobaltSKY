@@ -17,7 +17,7 @@ EditorResourceManager::~EditorResourceManager()
 iObject *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
-  printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
+  // printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
   return csResourceManager::Load(fixedLocator, userData);
 }
 
@@ -25,7 +25,7 @@ iObject *EditorResourceManager::Load(const csResourceLocator &locator, iObject *
 const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator, iObject *userData) const
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
-  printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
+  // printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
   return csResourceManager::EvalClass(fixedLocator, userData);
 }
 

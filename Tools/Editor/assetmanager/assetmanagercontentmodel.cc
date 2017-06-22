@@ -37,15 +37,23 @@ void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locat
 
 
   m_locator = locator;
+
+  Refresh();
+}
+
+void AssetManagerContentModel::Refresh()
+{
   csString absFileName = "";
-  if (!locator.GetResourceEntry().empty())
+  if (!m_locator.GetResourceEntry().empty())
   {
-    absFileName = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+    absFileName = csVFS::Get()->GetAbsolutePath(m_locator.GetResourceFile(), m_locator.GetResourceEntry());
   }
   else
   {
-    absFileName = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile());
+    absFileName = csVFS::Get()->GetAbsolutePath(m_locator.GetResourceFile());
   }
+
+  printf("Reset: %s\n", m_locator.GetResourceFile().c_str());
 
   beginResetModel();
   CleanupEntries();
@@ -55,8 +63,9 @@ void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locat
   QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
   for (const QString &fileName : fileNames)
   {
-    csString resourceFileName = locator.GetResourceFile() + "/" + csString((const char*)fileName.toLatin1());
-    csResourceLocator fileLocator(resourceFileName, "", locator.GetResourceEntry());
+    csString resourceFileName = m_locator.GetResourceFile() + "/" + csString((const char*)fileName.toLatin1());
+    printf("  %s\n", resourceFileName.c_str());
+    csResourceLocator fileLocator(resourceFileName, "", m_locator.GetResourceEntry());
     m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
   }
 

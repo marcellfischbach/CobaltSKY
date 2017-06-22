@@ -8,33 +8,33 @@
 
 csMaterial::csMaterial()
   : csObject()
-  , m_material(0)
+  , m_materialDef(0)
 {
 
 }
 
 csMaterial::~csMaterial()
 {
-  if (m_material)
+  if (m_materialDef)
   {
-    m_material->Release();
+    m_materialDef->Release();
   }
 }
 
-void csMaterial::SetMaterial(csMaterialDef *material)
+void csMaterial::SetMaterialDef(csMaterialDef *material)
 {
-  CS_SET(m_material, material);
+  CS_SET(m_materialDef, material);
   RebuildMaterialParameters();
 }
 
 void csMaterial::RebuildMaterialParameters()
 {
-  if (m_material)
+  if (m_materialDef)
   {
     m_parameters.clear();
-    for (csSize i = 0, in = m_material->GetNumberOfParameters(); i < in; ++i)
+    for (csSize i = 0, in = m_materialDef->GetNumberOfParameters(); i < in; ++i)
     {
-      csShaderParameterType type = m_material->GetParamType(i);
+      csShaderParameterType type = m_materialDef->GetParamType(i);
       ShaderParameter param;
       param.m_inherit = true;
       param.m_paramType = type;
@@ -44,23 +44,23 @@ void csMaterial::RebuildMaterialParameters()
   }
 }
 
-csMaterialDef *csMaterial::GetMaterial()
+csMaterialDef *csMaterial::GetMaterialDef()
 {
-  return m_material;
+  return m_materialDef;
 }
 
-const csMaterialDef *csMaterial::GetMaterial() const
+const csMaterialDef *csMaterial::GetMaterialDef() const
 {
-  return m_material;
+  return m_materialDef;
 }
 
 csInt16 csMaterial::GetIndex(const csString &parameterName) const
 {
-  if (!m_material)
+  if (!m_materialDef)
   {
     return -1;
   }
-  return m_material->GetIndex(parameterName);
+  return m_materialDef->GetIndex(parameterName);
 }
 
 void csMaterial::SetInherited(csUInt16 idx, bool inherited)
@@ -253,11 +253,11 @@ iTexture *csMaterial::GetTexture(csUInt16 idx)
 
 bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
 {
-  if (!m_material)
+  if (!m_materialDef)
   {
     return false;
   }
-  iShader *shader = m_material->Bind(renderer, pass);
+  iShader *shader = m_materialDef->Bind(renderer, pass);
   if (!shader)
   {
     return false;
@@ -268,11 +268,11 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
     ShaderParameter &param = m_parameters[i];
     if (param.m_inherit)
     {
-      m_material->BindParameter(renderer, pass, (csSize)i);
+      m_materialDef->BindParameter(renderer, pass, (csSize)i);
     }
     else
     {
-      iShaderAttribute *attr = m_material->GetAttribute((csSize)i, pass);
+      iShaderAttribute *attr = m_materialDef->GetAttribute((csSize)i, pass);
       if (attr)
       {
         switch (param.m_paramType)

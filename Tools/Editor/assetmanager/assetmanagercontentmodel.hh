@@ -18,6 +18,8 @@ public:
 
   void SetResourceLocator(const csResourceLocator &locator);
 
+  void Refresh();
+
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;

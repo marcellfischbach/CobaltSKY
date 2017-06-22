@@ -15,7 +15,6 @@ AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLoc
   csFileInfo info(locator.GetResourceFile());
 
   m_entryName = QString(info.GetName().c_str());
-  std::cout << "EntryName: " << info.GetName() << std::endl;
 
   csResourceLocator previewLocator(locator, "preview");
   EditorImage *editorImage = csResourceManager::Get()->Aquire<EditorImage>(previewLocator);

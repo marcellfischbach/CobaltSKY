@@ -7,6 +7,8 @@
 #include <editor.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>
+#include <materialeditor/materialeditornewaction.hh>
+#include <materialeditor/materialeditorfactory.hh>
 #include <samplereditor/samplereditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
@@ -21,11 +23,13 @@ void EditorModule::Initialize()
 
 
   Editor *editor = Editor::Get();
+  editor->AddEditorFactory(new MaterialEditorFactory());
   editor->AddEditorFactory(new SamplerEditorFactory());
   editor->AddEditorFactory(new ShaderGraphEditorFactory());
   editor->AddEditorFactory(new TextureEditorFactory());
 
   AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
+  actionManager->RegisterNewAction(new MaterialEditorNewAction());
   actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
   actionManager->RegisterAction(new AssetManagerRenameAction());
 

@@ -107,6 +107,34 @@ const csEntityState *csEntity::GetState(const csString &name) const
   return 0;
 }
 
+std::vector<csEntityState*> csEntity::FindStates(const csClass* cls) const
+{
+  std::vector<csEntityState*> result;
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    csEntityState *state = m_states[i];
+    if (state->GetClass()->IsInstanceOf(cls))
+    {
+      result.push_back(state);
+    }
+  }
+
+  return result;
+}
+
+csEntityState* csEntity::FindState(const csClass* cls) const
+{
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    csEntityState *state = m_states[i];
+    if (state->GetClass()->IsInstanceOf(cls))
+    {
+      return state;
+    }
+  }
+}
+
 
 csTransformation csEntity::GetTransformation()
 {

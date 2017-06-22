@@ -44,6 +44,19 @@ public:
   csEntityState *GetState(const csString &name);
   const csEntityState *GetState(const csString &name) const;
 
+  std::vector<csEntityState*> FindStates(const csClass *cls) const;
+  csEntityState* FindState(const csClass *cls) const;
+
+  template<typename T>
+  T* FindState() const
+  {
+    csEntityState *state = FindState(T::GetStaticClass());
+    if (!state)
+    {
+      return 0;
+    }
+    return csQueryClass<T>(state);
+  }
 
 
   void SetRootState(csSpatialState *rootState);

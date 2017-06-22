@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <set>
 
+
 CS_INTERFACE()
 struct iAssetEditor : public iObject
 {
@@ -18,6 +19,7 @@ struct iAssetEditor : public iObject
   virtual QWidget *GetWidget() = 0;
 
   virtual const csString &GetName() const = 0;
+  virtual bool IsDirty() const = 0;
 
   virtual const std::set<csString> &GetVisibleDockItems() const = 0;
   virtual void PopulateDockItems() = 0;

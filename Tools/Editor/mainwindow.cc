@@ -29,12 +29,38 @@ bool MainWindow::ShowEditor(iAssetEditor *editor)
   int idx = m_gui.tabWidget->indexOf(widget);
   if (idx == -1)
   {
-    idx = m_gui.tabWidget->addTab(widget, QString(editor->GetName().c_str()));
+    QString name = QString(editor->GetName().c_str());
+    if (editor->IsDirty())
+    {
+      name += " *";
+    }
+    idx = m_gui.tabWidget->addTab(widget, name);
     m_editors.push_back(editor);
   }
 
   m_gui.tabWidget->setCurrentIndex(idx);
   return true;
+}
+
+void MainWindow::UpdateEditor(iAssetEditor *editor)
+{
+  if (!editor)
+  {
+    return;
+  }
+  QWidget *widget = editor->GetWidget();
+  int idx = m_gui.tabWidget->indexOf(widget);
+  if (idx == -1)
+  {
+    return;
+  }
+
+  QString name = QString(editor->GetName().c_str());
+  if (editor->IsDirty())
+  {
+    name += " *";
+  }
+  m_gui.tabWidget->setTabText(idx, name);
 }
 
 void MainWindow::ShowWidget(QWidget *widget)

@@ -94,13 +94,12 @@ void csGraphicsGL4::ResetDefaults ()
 
   m_depthFunc = eCM_LessOrEqual;
   glDepthFunc(GL_LEQUAL);
+  CS_CHECK_GL_ERROR;
 
   SetClearColorValue(csVector4f(0.0f, 0.0f, 0.0f, 0.0f));
   SetClearDepthValue(1.0f);
-  CS_CHECK_GL_ERROR;
 
   glGetError();
-  CS_CHECK_GL_ERROR;
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)
   {
@@ -124,14 +123,17 @@ void csGraphicsGL4::ResetDefaults ()
 
 
 
+  CS_CHECK_GL_ERROR;
   glFrontFace(GL_CW);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
+  CS_CHECK_GL_ERROR;
 
   if (!glIsVertexArray(m_vao))
   {
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -638,7 +640,6 @@ void csGraphicsGL4::SetIndexBuffer(iIndexBuffer *indexBuffer)
 
 void csGraphicsGL4::SetShader(iShader *shader)
 {
-  CS_CHECK_GL_ERROR;
   csProgramGL4 *prog = static_cast<csProgramGL4*>(shader);
   if (prog != m_program)
   {
@@ -651,16 +652,16 @@ void csGraphicsGL4::SetShader(iShader *shader)
     }
     else
     {
+      CS_CHECK_GL_ERROR;
       glUseProgram(0);
+      CS_CHECK_GL_ERROR;
     }
   }
   InvalidateTextures();
-  CS_CHECK_GL_ERROR;
 }
 
 csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 {
-  CS_CHECK_GL_ERROR;
   if (texture == 0 || m_nextTextureUnit == eTU_Invalid)
   {
     if (m_nextTextureUnit != eTU_Invalid)
@@ -672,19 +673,18 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 
   csTextureUnit unit = m_nextTextureUnit;
   m_nextTextureUnit = static_cast<csTextureUnit>(m_nextTextureUnit + 1);
+  CS_CHECK_GL_ERROR;
   glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
   CS_CHECK_GL_ERROR;
   SetSampler(unit, texture->GetSampler());
   SetTexture(unit, texture);
 
 
-  CS_CHECK_GL_ERROR;
   return unit;
 }
 
 void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 {
-  CS_CHECK_GL_ERROR;
   csTextureGL4 *textureGL = texture ? csQueryClass<csTextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL)
   {
@@ -692,11 +692,12 @@ void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
     m_textureChanged[unit] = true;
     if (texture)
     {
+      CS_CHECK_GL_ERROR;
       glActiveTexture(GL_TEXTURE0 + unit);
+      CS_CHECK_GL_ERROR;
       textureGL->Bind();
     }
   }
-  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
@@ -712,17 +713,13 @@ void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 
 void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 {
-  CS_CHECK_GL_ERROR;
   csRenderTargetGL4 *rtGL4 = csQueryClass<csRenderTargetGL4>(renderTarget);
-  CS_CHECK_GL_ERROR;
   if (m_renderTarget != rtGL4 )
   {
     CS_SET(m_renderTarget, rtGL4);
     if (m_renderTarget)
     {
-      CS_CHECK_GL_ERROR;
       m_renderTarget->Bind();
-      CS_CHECK_GL_ERROR;
     }
     else
     {
@@ -731,7 +728,6 @@ void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
       CS_CHECK_GL_ERROR;
     }
   }
-  CS_CHECK_GL_ERROR;
 }
 
 
@@ -739,6 +735,7 @@ void csGraphicsGL4::SetBlendEnabled(bool enable)
 {
   if (m_blendEnabled != enable)
   {
+    CS_CHECK_GL_ERROR;
     m_blendEnabled = enable;
     if (enable)
     {
@@ -748,6 +745,7 @@ void csGraphicsGL4::SetBlendEnabled(bool enable)
     {
       glDisable(GL_BLEND);
     }
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -760,9 +758,11 @@ void csGraphicsGL4::SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst)
 {
   if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
   {
+    CS_CHECK_GL_ERROR;
     m_blendModeSrcColor = m_blendModeSrcAlpha = blendSrc;
     m_blendModeDstColor = m_blendModeDstAlpha = blendDst;
     glBlendFunc(blendModeMap[blendSrc], blendModeMap[blendDst]);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -770,11 +770,13 @@ void csGraphicsGL4::SetBlendMode(csBlendMode blendSrcColor, csBlendMode blendSrc
 {
   if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
   {
+    CS_CHECK_GL_ERROR;
     m_blendModeSrcColor = blendSrcColor;
     m_blendModeSrcAlpha = blendSrcAlpha;
     m_blendModeDstColor = blendDstColor;
     m_blendModeDstAlpha = blendDstAlpha;
     glBlendFuncSeparate(blendModeMap[blendSrcColor], blendModeMap[blendSrcAlpha], blendModeMap[blendDstColor], blendModeMap[blendDstAlpha]);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -789,27 +791,32 @@ void csGraphicsGL4::GetBlendMode(csBlendMode &blendSrcColor, csBlendMode &blendD
 
 void csGraphicsGL4::SetDepthMask(bool depth)
 {
-  //if (m_depthMask != depth)
+  if (m_depthMask != depth)
   {
+    CS_CHECK_GL_ERROR;
     m_depthMask = depth;
     glDepthMask(m_depthMask);
+    CS_CHECK_GL_ERROR;
   }
 }
 
 void csGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
 {
   csUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
-//  if (colorMask != m_colorMask)
+  if (colorMask != m_colorMask)
   {
+    CS_CHECK_GL_ERROR;
     m_colorMask = colorMask;
     glColorMask(red, green, blue, alpha);
+    CS_CHECK_GL_ERROR;
   }
 }
 
 void csGraphicsGL4::SetDepthTest(bool depthTest)
 {
-  //if (m_depthTest != depthTest)
+  if (m_depthTest != depthTest)
   {
+    CS_CHECK_GL_ERROR;
     m_depthTest = depthTest;
     if (m_depthTest)
     {
@@ -819,15 +826,18 @@ void csGraphicsGL4::SetDepthTest(bool depthTest)
     {
       glDisable(GL_DEPTH_TEST);
     }
+    CS_CHECK_GL_ERROR;
   }
 }
 
 void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
 {
-  //if (m_depthFunc != compareMode)
+  if (m_depthFunc != compareMode)
   {
+    CS_CHECK_GL_ERROR;
     m_depthFunc = compareMode;
     glDepthFunc(compareFuncMap[compareMode]);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -843,7 +853,9 @@ void csGraphicsGL4::SetRenderFadeInOutValue(csUInt8 value)
 
 void csGraphicsGL4::SetRenderDestination(csRenderDestination renderDestination)
 {
+  CS_CHECK_GL_ERROR;
   glDrawBuffer(renderDestinationMap[renderDestination]);
+  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::SetRenderDestinations(csRenderDestination *renderDestination, csSize numRenderDestinations)
@@ -853,20 +865,24 @@ void csGraphicsGL4::SetRenderDestinations(csRenderDestination *renderDestination
   {
     numRenderDestinations = 16;
   }
-  \
+  
   for (csSize i = 0; i < numRenderDestinations; ++i)
   {
     destinations[i] = renderDestinationMap[renderDestination[i]];
   }
+  CS_CHECK_GL_ERROR;
   glDrawBuffers(numRenderDestinations, destinations);
+  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::SetClearColorValue(const csVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
   {
+    CS_CHECK_GL_ERROR;
     m_clearColor = colorValue;
     glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.w);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -874,8 +890,10 @@ void csGraphicsGL4::SetClearDepthValue(float depthValue)
 {
   if (depthValue != m_clearDepth)
   {
+    CS_CHECK_GL_ERROR;
     m_clearDepth = depthValue;
     glClearDepth(m_clearDepth);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -883,15 +901,16 @@ void csGraphicsGL4::SetClearStencilValue(csUInt8 stencilValue)
 {
   if (stencilValue != m_clearStencil)
   {
+    CS_CHECK_GL_ERROR;
     m_clearStencil = stencilValue;
     glClearStencil(m_clearStencil);
+    CS_CHECK_GL_ERROR;
   }
 }
 
 
 void csGraphicsGL4::Clear(bool clearColor, const csVector4f &color, bool clearDepth, float depth, bool clearStencil, csUInt8 stencil)
 {
-  CS_CHECK_GL_ERROR;
   GLbitfield clear = 0;
   if (clearColor)
   {
@@ -916,6 +935,7 @@ void csGraphicsGL4::Clear(bool clearColor, const csVector4f &color, bool clearDe
     return;
   }
 
+  CS_CHECK_GL_ERROR;
   glClear(clear);
   CS_CHECK_GL_ERROR;
 
@@ -928,9 +948,11 @@ void csGraphicsGL4::SetViewport(csUInt16 width, csUInt16 height)
 
 void csGraphicsGL4::SetViewport(csInt16 x, csInt16 y, csUInt16 width, csUInt16 height)
 {
+  CS_CHECK_GL_ERROR;
   glViewport(x, y, width, height);
   m_viewportWidth = width;
   m_viewportHeight = height;
+  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::SetViewport(iRenderTarget *renderTarget)
@@ -990,7 +1012,6 @@ void csGraphicsGL4::BindValues()
   {
     attributeViewportSizeInv->Set(1.0f / (float)m_viewportWidth, 1.0f / (float)m_viewportHeight);
   }
-  CS_CHECK_GL_ERROR;
 
 }
 
@@ -998,28 +1019,28 @@ void csGraphicsGL4::BindValues()
 void csGraphicsGL4::Render(csPrimitiveType primType, csUInt32 count)
 {
   BindValues();
-  CS_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
+    CS_CHECK_GL_ERROR;
     glDrawArrays(primitiveTypeMap[primType], 0, count);
+    CS_CHECK_GL_ERROR;
 
     UnbindVertexDeclaration();
   }
-  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::RenderIndexed(csPrimitiveType primType, csUInt32 count, csDataType indexType)
 {
   BindValues();
-  CS_CHECK_GL_ERROR;
   if (BindVertexDeclaration())
   {
     m_indexBuffer->Bind();
+    CS_CHECK_GL_ERROR;
     glDrawElements(primitiveTypeMap[primType], count, dataTypeMap[indexType], 0);
+    CS_CHECK_GL_ERROR;
 
     UnbindVertexDeclaration();
   }
-  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::RenderFullScreenFrame(iTexture2D *texture)
@@ -1029,7 +1050,6 @@ void csGraphicsGL4::RenderFullScreenFrame(iTexture2D *texture)
 
 void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2D *texture)
 {
-  CS_CHECK_GL_ERROR;
   static csShaderAttributeID attrDiffuseID("Diffuse");
   static csShaderAttributeID attrLeftBottomID("LeftBottom");
   static csShaderAttributeID attrDeltaID("Delta");
@@ -1039,11 +1059,13 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   float x1 = -1.0f + right * 2.0f;
   float y1 = -1.0f + top * 2.0f;
 
+  CS_CHECK_GL_ERROR;
   glDepthMask(true);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_ALWAYS);
   glClearDepth(1.0);
   glDisable(GL_BLEND);
+  CS_CHECK_GL_ERROR;
 
   SetShader(m_fullScreenProgram);
   SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
@@ -1057,7 +1079,6 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   m_fullScreenProgram->GetAttribute(attrDeltaID)->Set(csVector2f(x1 - x0, y1 - y0));
 
   Render(ePT_Triangles, 6);
-  CS_CHECK_GL_ERROR;
 }
 
 void csGraphicsGL4::RenderFullScreenFrame(iTexture2DArray *texture, int layer)
@@ -1067,7 +1088,6 @@ void csGraphicsGL4::RenderFullScreenFrame(iTexture2DArray *texture, int layer)
 
 void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom, float top, iTexture2DArray *texture, int layer)
 {
-  CS_CHECK_GL_ERROR;
   static csShaderAttributeID attrDiffuseID("Diffuse");
   static csShaderAttributeID attrLayerID("Layer");
   static csShaderAttributeID attrLeftBottomID("LeftBottom");
@@ -1082,7 +1102,9 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   SetDepthTest(true);
   SetDepthFunc(eCM_Always);
   SetDepthMask(false);
+  CS_CHECK_GL_ERROR;
   glClearDepth(1.0);
+  CS_CHECK_GL_ERROR;
 
   SetShader(m_fullScreenArrayProgram);
   SetVertexBuffer(0, m_fullScreenParamVertexBuffer);
@@ -1093,13 +1115,11 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   m_fullScreenArrayProgram->GetAttribute(attrDeltaID)->Set(csVector2f(x1 - x0, y1 - y0));
   m_fullScreenArrayProgram->GetAttribute(attrLayerID)->Set(layer);
   Render(ePT_Triangles, 6);
-  CS_CHECK_GL_ERROR;
 }
 
 
 void csGraphicsGL4::RenderFullScreenFrame()
 {
-  CS_CHECK_GL_ERROR;
   SetDepthMask(true);
   SetDepthTest(false);
   SetDepthFunc(eCM_Always);
@@ -1109,13 +1129,11 @@ void csGraphicsGL4::RenderFullScreenFrame()
   SetVertexBuffer(0, m_fullScreenVertexBuffer);
   SetVertexDeclaration(m_fullScreenVertexDeclaration);
   Render(ePT_Triangles, 6);
-  CS_CHECK_GL_ERROR;
 }
 
 
 bool csGraphicsGL4::BindVertexDeclaration()
 {
-  CS_CHECK_GL_ERROR;
   if (!(m_vertexDeclaration && m_program))
   {
     return false;
@@ -1127,27 +1145,21 @@ bool csGraphicsGL4::BindVertexDeclaration()
       return false;
     }
 
-    CS_CHECK_GL_ERROR;
     m_vertexBuffer[i]->Bind();
-    CS_CHECK_GL_ERROR;
     m_vertexDeclaration->BindStream(m_program, i, 0);
-    CS_CHECK_GL_ERROR;
   }
 
-  CS_CHECK_GL_ERROR;
   return true;
 }
 
 void csGraphicsGL4::UnbindVertexDeclaration()
 {
-  CS_CHECK_GL_ERROR;
   VertexBufferGL4::Unbind();
   for (unsigned i = 0, in = m_vertexDeclaration->GetNumberOfStreams(); i < in; ++i)
   {
     m_vertexDeclaration->UnbindStream(m_program, i);
   }
 
-  CS_CHECK_GL_ERROR;
 }
 
 

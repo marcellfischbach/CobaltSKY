@@ -4,7 +4,7 @@
 #include <cobalt/loaders/cspngimageassetloader.hh>
 #include <cobalt/loaders/cspngimagefileloader.hh>
 #include <cobalt/loaders/csmaterialassetxmlloader.hh>
-#include <cobalt/loaders/csmaterialinstanceassetxmlloader.hh>
+#include <cobalt/loaders/csmaterialdefassetxmlloader.hh>
 #include <cobalt/loaders/csmeshassetxmlloader.hh>
 #include <cobalt/loaders/cssamplerassetxmlloader.hh>
 #include <cobalt/loaders/csshadergraphassetxmlloader.hh>
@@ -47,7 +47,7 @@ void csLoaders::Register(csResourceManager *mgr)
 
   mgr->RegisterLoader(new csShaderGraphAssetXMLLoader());
   mgr->RegisterLoader(new csMaterialAssetXMLLoader());
-  mgr->RegisterLoader(new csMaterialInstanceAssetXMLLoader());
+  mgr->RegisterLoader(new csMaterialDefAssetXMLLoader());
   mgr->RegisterLoader(new csSamplerAssetXMLLoader());
   mgr->RegisterLoader(new csTextureAssetXMLLoader());
   mgr->RegisterLoader(new csMeshAssetXMLLoader());

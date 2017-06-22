@@ -147,6 +147,30 @@ source_group(
     )
 
 
+set(MATERIALEDITOR_SOURCES
+    materialeditor/materialeditor.cc
+    materialeditor/materialeditor.hh
+    materialeditor/materialeditorfactory.cc
+    materialeditor/materialeditorfactory.hh
+    materialeditor/materialeditornewaction.cc
+    materialeditor/materialeditornewaction.hh
+    materialeditor/materialeditorpreviewsceneview.cc
+    materialeditor/materialeditorpreviewsceneview.hh
+    materialeditor/materialeditorwidget.cc
+    materialeditor/materialeditorwidget.hh
+    )
+
+set(MATERIALEDITOR_UI
+    materialeditor/materialeditorwidget.ui
+    )
+
+source_group(
+    "editor\\materialeditor"
+    FILES
+    ${MATERIALEDITOR_SOURCES}
+    ${MATERIALEDITOR_UI}
+    )
+
 set(NODEGRAPH_SOURCES
     nodegraph/nodegraphacceptevent.cc
     nodegraph/nodegraphacceptevent.hh
@@ -314,6 +338,7 @@ set(ALL_UI
     ${ASSETMANAGER_UI}
     ${ASSETMANAGER_ACTIONS_UI}
     ${COMPONENTS_UI}
+    ${MATERIALEDITOR_UI}
     ${SAMPLEREDITOR_UI}
     ${SHADERGRAPHEDITOR_UI}
     ${TEXTUREEDITOR_UI}
@@ -329,6 +354,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${COMPONENTS_SOURCES}
     ${LOADERS_SOURCES}
+    ${MATERIALEDITOR_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${PREVIEW_SOURCES}
     ${PROJECT_SOURCES}

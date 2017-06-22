@@ -24,9 +24,9 @@
 
 
 Editor::Editor()
-  : m_mainWindow(0)
+  : QObject ()
+  , m_mainWindow(0)
 {
-  CS_CLASS_GEN_CONSTR;
 }
 
 
@@ -281,6 +281,8 @@ void Editor::CloseProject()
 {
   if (m_project)
   {
+    disconnect(m_project, SIGNAL(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)),
+      this, SLOT(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)));
     //m_project->Close();
     delete m_project;
   }
@@ -291,4 +293,20 @@ void Editor::OpenProject(const std::string &projectPath)
   CloseProject();
   m_project = new Project();
   m_project->Open(projectPath);
+
+  connect(m_project, SIGNAL(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)),
+    this, SLOT(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)));
+
+}
+
+
+void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
+{
+
+  for (std::map<AssetDescriptor, iAssetEditor*>::iterator it = m_openEditors.begin(); it != m_openEditors.end(); ++it)
+  {
+    // fucking map returns an std::pair with const key
+    AssetDescriptor &desc = const_cast<AssetDescriptor&>(it->first);
+    desc.Renamed(from, to);
+  }
 }

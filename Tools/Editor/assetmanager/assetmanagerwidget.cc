@@ -93,7 +93,10 @@ void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &po
   AssetManagerAction *handler = static_cast<AssetManagerAction*>(action->data().value<void*>());
   if (handler)
   {
-    handler->PerformAction(this);
+    if (handler->PerformAction(this))
+    {
+      RefreshContent();
+    }
   }
 }
 
@@ -132,6 +135,32 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
   Editor::Get()->OpenAsset(descriptor);
 }
 
+void AssetManagerWidget::RefreshContent() 
+{
+  if (m_contentModel)
+  {
+    m_contentModel->Refresh();
+  }
+}
+
+QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const
+{
+  for (unsigned i = 0; ; ++i)
+  {
+    QString fileName = QString("%1 %2.xasset").arg(baseName).arg(i, 2, 10, QChar('0'));
+    if (!m_currentDir.exists(fileName))
+    {
+      return fileName;
+    }
+  }
+  return QString::null;
+}
+
+QString AssetManagerWidget::GetFilePath(const QString &fileName) const
+{
+  return m_currentDir.filePath(fileName);
+}
+
 const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelectedAssets() const
 {
   QList<const AssetManagerContentModelEntry*> entries;
@@ -162,7 +191,10 @@ void AssetManagerWidget::on_pbNewAsset_clicked(bool)
   AssetManagerAction *handler = static_cast<AssetManagerAction*>(action->data().value<void*>());
   if (handler)
   {
-    handler->PerformAction(this);
+    if (handler->PerformAction(this))
+    {
+      RefreshContent();
+    }
   }
 }
 

@@ -5,6 +5,8 @@
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerrenamer.hh>
 #include <cobalt/core/csfileinfo.hh>
+#include <editor.hh>
+#include <project/project.hh>
 #include <QString>
 #include <QList>
 
@@ -64,9 +66,8 @@ bool AssetManagerRenameAction::PerformAction(AssetManagerWidget *assetManager) c
       return false;
     }
 
-    AssetManagerRenamer renamer(from, to);
-    return renamer.Execute();
+    return Editor::Get()->GetProject()->Rename(from, to);
   }
 
-  return true;
+  return false;
 }

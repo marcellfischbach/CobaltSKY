@@ -50,10 +50,12 @@ csFileInfo::csFileInfo (const std::string &filename)
     }
   }
 
+  /*
   for (int i = 0; i < length; ++i)
   {
     tmpname[i] = char_to_lower (tmpname[i]);
   }
+  */
 
   if (!nameptr)
   {

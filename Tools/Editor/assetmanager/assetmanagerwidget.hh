@@ -22,6 +22,10 @@ public:
 
   void OpenAsset(const csResourceLocator &locator);
 
+  void RefreshContent();
+
+  QString GetNewAssetName(const QString &baseName) const;
+  QString GetFilePath(const QString &fileName) const;
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;
 
 protected slots:

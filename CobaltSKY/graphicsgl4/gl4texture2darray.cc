@@ -29,11 +29,13 @@ bool csTexture2DArrayGL4::Initialize(csPixelFormat format, csUInt16 width, csUIn
   m_layers = layers;
 
   Bind();
+  CS_CHECK_GL_ERROR;
   glTexParameteri(m_target, GL_TEXTURE_WRAP_R, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  CS_CHECK_GL_ERROR;
   int lod = 0;
   while (width >= 1 || height >= 1)
   {

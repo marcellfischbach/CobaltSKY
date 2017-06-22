@@ -4,6 +4,8 @@
 #include <iasseteditorfactory.hh>
 #include <Editor.refl.hh>
 #include <QDir>
+#include <QObject>
+#include <QMap>
 #include <vector>
 #include <map>
 #include <set>
@@ -16,10 +18,9 @@ struct iPhysicsSystem;
 struct iDockItem;
 class Project;
 
-CS_INTERFACE()
-class Editor : public iObject
+class Editor : public QObject
 {
-  CS_CLASS_GEN_OBJECT;
+  Q_OBJECT;
 public:
   static Editor* Get();
 
@@ -62,7 +63,9 @@ public:
     return m_project;
   }
 
+private slots:
 
+void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
   
 private:
   Editor();

@@ -157,9 +157,7 @@ void csVertexDeclarationGL4::BindStream(csProgramGL4* shader, csUInt8 stream, vo
                  elements->Offset,
                  elements->Type);
         }
-        CS_CHECK_GL_ERROR;
         s->Enable();
-        CS_CHECK_GL_ERROR;
       }
       elements++;
     }

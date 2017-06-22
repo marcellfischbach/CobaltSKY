@@ -9,6 +9,8 @@ class AssetDescriptor
 public:
   AssetDescriptor(const csResourceLocator &locator = csResourceLocator(), const csString &assetType = csString(""));
 
+  bool Renamed(const csResourceLocator &from, const csResourceLocator &to);
+
   const csResourceLocator &GetLocator() const;
   const csString &GetAssetType() const;
 

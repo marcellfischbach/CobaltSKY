@@ -238,6 +238,12 @@ csVector4f csMaterialDef::GetDefaultVector4(csSize idx) const
   return csVector4f(m_params[idx].m_defaultFloat);
 }
 
+
+csColor4f csMaterialDef::GetDefaultColor4(csSize idx) const
+{
+  return csColor4f(m_params[idx].m_defaultFloat);
+}
+
 int csMaterialDef::GetDefaultInt(csSize idx) const
 {
   return m_params[idx].m_defaultInt[0];

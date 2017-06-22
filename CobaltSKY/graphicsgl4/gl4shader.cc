@@ -1,7 +1,7 @@
 
 #include <graphicsgl4/gl4shader.hh>
 #include <graphicsgl4/gl4mapping.hh>
-
+#include <graphicsgl4/gl4defines.hh>
 
 
 csShaderGL4::csShaderGL4()
@@ -14,7 +14,9 @@ csShaderGL4::~csShaderGL4()
 {
   if (m_name)
   {
+    CS_CHECK_GL_ERROR;
     glDeleteShader(m_name);
+    CS_CHECK_GL_ERROR;
   }
 }
 
@@ -48,7 +50,9 @@ csShaderType csShaderGL4::GetShaderType() const
 
 bool csShaderGL4::Compile()
 {
+  CS_CHECK_GL_ERROR;
   m_name = glCreateShader(shaderTypeMap[m_shaderType]);
+  CS_CHECK_GL_ERROR;
   if (!m_name)
   {
     return false;
@@ -62,6 +66,7 @@ bool csShaderGL4::Compile()
 
   GLint param;
   glGetShaderiv(m_name, GL_COMPILE_STATUS, &param);
+  CS_CHECK_GL_ERROR;
 
   if (param == GL_FALSE)
   {
@@ -75,7 +80,9 @@ csString csShaderGL4::GetCompileErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
+  CS_CHECK_GL_ERROR;
   glGetShaderInfoLog(m_name, 1024, &length, buffer);
+  CS_CHECK_GL_ERROR;
   if (length < 1024)
   {
     buffer[length] = '\0';

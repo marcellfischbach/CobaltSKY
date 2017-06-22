@@ -39,8 +39,7 @@ bool AssetManagerRenamer::Execute()
   MoveTheFile(m_from, m_to);
   MoveTheFile(dataFrom, dataTo);
 
-  ProjectReferenceTree &tree = Editor::Get()->GetProject()->GetDependencyTree();
-  tree.Rename(m_from.AsAnonymous(), m_to.AsAnonymous());
+ 
 
   return true;
 }

@@ -1,5 +1,6 @@
 
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
+#include <assetmanager/assetmanagerwidget.hh>
 #include <QString>
 #include <QFile>
 #include <QDomDocument>
@@ -27,16 +28,19 @@ bool ShaderGraphEditorNewAction::IsEnabled(AssetManagerWidget *assetManager) con
 
 QString ShaderGraphEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
 {
-  return QString("New material");
+  return QString("New MaterialDef");
 }
 
 bool ShaderGraphEditorNewAction::PerformAction(AssetManagerWidget *assetManager) const
 {
-  return true;
-  /*
-  printf("Create new shader graph: %s\n", (const char*)assetName.toLatin1());
-  QString filePath = dir.absoluteFilePath(assetName + ".xasset");
-  QFile file(filePath);
+  QString assetName = assetManager->GetNewAssetName("ShaderGraph");
+  if (assetName == QString::null)
+  {
+    return false;
+  }
+
+  QString assetFilePath = assetManager->GetFilePath(assetName);
+  QFile file(assetFilePath);
   if (!file.open(QIODevice::WriteOnly))
   {
     return false;
@@ -61,5 +65,4 @@ bool ShaderGraphEditorNewAction::PerformAction(AssetManagerWidget *assetManager)
   file.write(content.toLatin1());
   file.close();
   return true;
-  */
 }

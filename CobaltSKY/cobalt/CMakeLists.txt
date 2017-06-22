@@ -342,10 +342,10 @@ set(SOURCE_LOADERS
     loaders/cscollisionassetxmlloader.hh
     loaders/csloaders.cc
     loaders/csloaders.hh
-    loaders/csmaterialinstanceassetxmlloader.cc
-    loaders/csmaterialinstanceassetxmlloader.hh
     loaders/csmaterialassetxmlloader.cc
     loaders/csmaterialassetxmlloader.hh
+    loaders/csmaterialdefassetxmlloader.cc
+    loaders/csmaterialdefassetxmlloader.hh
     loaders/csmeshassetxmlloader.cc
     loaders/csmeshassetxmlloader.hh
     loaders/cspngimageassetloader.cc

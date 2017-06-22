@@ -20,9 +20,9 @@ public:
   csMaterial();
   virtual ~csMaterial();
 
-  void SetMaterial(csMaterialDef *material);
-  csMaterialDef *GetMaterial();
-  const csMaterialDef  *GetMaterial() const;
+  void SetMaterialDef(csMaterialDef *material);
+  csMaterialDef *GetMaterialDef();
+  const csMaterialDef  *GetMaterialDef() const;
 
   void RebuildMaterialParameters();
 
@@ -48,7 +48,7 @@ public:
   iTexture *GetTexture(csUInt16 idx);
 
 private:
-  csMaterialDef *m_material;
+  csMaterialDef *m_materialDef;
 
   struct ShaderParameter
   {
