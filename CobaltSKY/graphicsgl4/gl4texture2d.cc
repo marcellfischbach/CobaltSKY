@@ -26,7 +26,6 @@ bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 h
   m_height = height;
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -69,7 +68,6 @@ bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *d
   }
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;
 

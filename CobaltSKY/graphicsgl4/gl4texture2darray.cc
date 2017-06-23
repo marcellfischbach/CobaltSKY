@@ -29,7 +29,6 @@ bool csTexture2DArrayGL4::Initialize(csPixelFormat format, csUInt16 width, csUIn
   m_layers = layers;
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexParameteri(m_target, GL_TEXTURE_WRAP_R, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -71,7 +70,6 @@ bool csTexture2DArrayGL4::CopyData(csUInt8 lod, csPixelFormat format, const void
   }
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexImage3D(m_target, lod, internalFormatMap[m_format], layerWidth, layerHeight, m_layers, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;
 
@@ -96,7 +94,6 @@ bool csTexture2DArrayGL4::CopyData(csUInt16 layer, csUInt8 lod, csPixelFormat fo
   }
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexSubImage3D(m_target, lod, 0, 0, layer, layerWidth, layerHeight, 1, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;
 

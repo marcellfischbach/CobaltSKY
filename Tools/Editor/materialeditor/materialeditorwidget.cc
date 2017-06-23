@@ -26,4 +26,16 @@ void MaterialEditorWidget::SetMaterial(csMaterial *material)
   m_gui.openGLWidget->SetMaterial(material);
 }
 
+void MaterialEditorWidget::MaterialChanged()
+{
+  m_gui.openGLWidget->repaint();
+}
 
+
+void MaterialEditorWidget::on_pbSave_clicked()
+{
+  if (m_editor)
+  {
+    m_editor->Save();
+  }
+}

@@ -13,6 +13,7 @@ public:
   ~AssetResourceWidget();
 
   void SetResourceLocator(const csResourceLocator &locator);
+  const csResourceLocator &GetResourceLocator() const;
   void AddValidClass(const csClass *cls);
 signals:
   void ResourceChanged(const csResourceLocator &locator);

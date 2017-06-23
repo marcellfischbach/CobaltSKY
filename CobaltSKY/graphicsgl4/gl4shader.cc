@@ -14,7 +14,6 @@ csShaderGL4::~csShaderGL4()
 {
   if (m_name)
   {
-    CS_CHECK_GL_ERROR;
     glDeleteShader(m_name);
     CS_CHECK_GL_ERROR;
   }
@@ -50,7 +49,6 @@ csShaderType csShaderGL4::GetShaderType() const
 
 bool csShaderGL4::Compile()
 {
-  CS_CHECK_GL_ERROR;
   m_name = glCreateShader(shaderTypeMap[m_shaderType]);
   CS_CHECK_GL_ERROR;
   if (!m_name)
@@ -80,7 +78,6 @@ csString csShaderGL4::GetCompileErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
-  CS_CHECK_GL_ERROR;
   glGetShaderInfoLog(m_name, 1024, &length, buffer);
   CS_CHECK_GL_ERROR;
   if (length < 1024)

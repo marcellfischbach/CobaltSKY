@@ -310,3 +310,9 @@ void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLoca
     desc.Renamed(from, to);
   }
 }
+
+void Editor::EmitObjectChanged(const iObject *object)
+{
+  emit ObjectChanged(object);
+}
+

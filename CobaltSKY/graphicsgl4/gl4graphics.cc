@@ -82,7 +82,6 @@ csGraphicsGL4::csGraphicsGL4()
 
 void csGraphicsGL4::ResetDefaults ()
 {
-  CS_CHECK_GL_ERROR;
   m_depthMask = true;
   glDepthMask(true);
 
@@ -121,9 +120,8 @@ void csGraphicsGL4::ResetDefaults ()
   InvalidateSamplers();
   InvalidateTextures();
 
+  SetShader(0);
 
-
-  CS_CHECK_GL_ERROR;
   glFrontFace(GL_CW);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
@@ -652,7 +650,6 @@ void csGraphicsGL4::SetShader(iShader *shader)
     }
     else
     {
-      CS_CHECK_GL_ERROR;
       glUseProgram(0);
       CS_CHECK_GL_ERROR;
     }
@@ -673,7 +670,6 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 
   csTextureUnit unit = m_nextTextureUnit;
   m_nextTextureUnit = static_cast<csTextureUnit>(m_nextTextureUnit + 1);
-  CS_CHECK_GL_ERROR;
   glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
   CS_CHECK_GL_ERROR;
   SetSampler(unit, texture->GetSampler());
@@ -692,7 +688,6 @@ void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
     m_textureChanged[unit] = true;
     if (texture)
     {
-      CS_CHECK_GL_ERROR;
       glActiveTexture(GL_TEXTURE0 + unit);
       CS_CHECK_GL_ERROR;
       textureGL->Bind();
@@ -723,7 +718,6 @@ void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
     }
     else
     {
-      CS_CHECK_GL_ERROR;
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
       CS_CHECK_GL_ERROR;
     }
@@ -735,7 +729,6 @@ void csGraphicsGL4::SetBlendEnabled(bool enable)
 {
   if (m_blendEnabled != enable)
   {
-    CS_CHECK_GL_ERROR;
     m_blendEnabled = enable;
     if (enable)
     {
@@ -758,7 +751,6 @@ void csGraphicsGL4::SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst)
 {
   if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
   {
-    CS_CHECK_GL_ERROR;
     m_blendModeSrcColor = m_blendModeSrcAlpha = blendSrc;
     m_blendModeDstColor = m_blendModeDstAlpha = blendDst;
     glBlendFunc(blendModeMap[blendSrc], blendModeMap[blendDst]);
@@ -770,7 +762,6 @@ void csGraphicsGL4::SetBlendMode(csBlendMode blendSrcColor, csBlendMode blendSrc
 {
   if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
   {
-    CS_CHECK_GL_ERROR;
     m_blendModeSrcColor = blendSrcColor;
     m_blendModeSrcAlpha = blendSrcAlpha;
     m_blendModeDstColor = blendDstColor;
@@ -793,7 +784,6 @@ void csGraphicsGL4::SetDepthMask(bool depth)
 {
   if (m_depthMask != depth)
   {
-    CS_CHECK_GL_ERROR;
     m_depthMask = depth;
     glDepthMask(m_depthMask);
     CS_CHECK_GL_ERROR;
@@ -805,7 +795,6 @@ void csGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
   csUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
   if (colorMask != m_colorMask)
   {
-    CS_CHECK_GL_ERROR;
     m_colorMask = colorMask;
     glColorMask(red, green, blue, alpha);
     CS_CHECK_GL_ERROR;
@@ -816,7 +805,6 @@ void csGraphicsGL4::SetDepthTest(bool depthTest)
 {
   if (m_depthTest != depthTest)
   {
-    CS_CHECK_GL_ERROR;
     m_depthTest = depthTest;
     if (m_depthTest)
     {
@@ -834,7 +822,6 @@ void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
 {
   if (m_depthFunc != compareMode)
   {
-    CS_CHECK_GL_ERROR;
     m_depthFunc = compareMode;
     glDepthFunc(compareFuncMap[compareMode]);
     CS_CHECK_GL_ERROR;
@@ -853,7 +840,6 @@ void csGraphicsGL4::SetRenderFadeInOutValue(csUInt8 value)
 
 void csGraphicsGL4::SetRenderDestination(csRenderDestination renderDestination)
 {
-  CS_CHECK_GL_ERROR;
   glDrawBuffer(renderDestinationMap[renderDestination]);
   CS_CHECK_GL_ERROR;
 }
@@ -870,7 +856,6 @@ void csGraphicsGL4::SetRenderDestinations(csRenderDestination *renderDestination
   {
     destinations[i] = renderDestinationMap[renderDestination[i]];
   }
-  CS_CHECK_GL_ERROR;
   glDrawBuffers(numRenderDestinations, destinations);
   CS_CHECK_GL_ERROR;
 }
@@ -879,7 +864,6 @@ void csGraphicsGL4::SetClearColorValue(const csVector4f &colorValue)
 {
   if (colorValue != m_clearColor)
   {
-    CS_CHECK_GL_ERROR;
     m_clearColor = colorValue;
     glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.w);
     CS_CHECK_GL_ERROR;
@@ -890,7 +874,6 @@ void csGraphicsGL4::SetClearDepthValue(float depthValue)
 {
   if (depthValue != m_clearDepth)
   {
-    CS_CHECK_GL_ERROR;
     m_clearDepth = depthValue;
     glClearDepth(m_clearDepth);
     CS_CHECK_GL_ERROR;
@@ -901,7 +884,6 @@ void csGraphicsGL4::SetClearStencilValue(csUInt8 stencilValue)
 {
   if (stencilValue != m_clearStencil)
   {
-    CS_CHECK_GL_ERROR;
     m_clearStencil = stencilValue;
     glClearStencil(m_clearStencil);
     CS_CHECK_GL_ERROR;
@@ -935,7 +917,6 @@ void csGraphicsGL4::Clear(bool clearColor, const csVector4f &color, bool clearDe
     return;
   }
 
-  CS_CHECK_GL_ERROR;
   glClear(clear);
   CS_CHECK_GL_ERROR;
 
@@ -948,7 +929,6 @@ void csGraphicsGL4::SetViewport(csUInt16 width, csUInt16 height)
 
 void csGraphicsGL4::SetViewport(csInt16 x, csInt16 y, csUInt16 width, csUInt16 height)
 {
-  CS_CHECK_GL_ERROR;
   glViewport(x, y, width, height);
   m_viewportWidth = width;
   m_viewportHeight = height;
@@ -963,7 +943,6 @@ void csGraphicsGL4::SetViewport(iRenderTarget *renderTarget)
 
 void csGraphicsGL4::BindValues()
 {
-  CS_CHECK_GL_ERROR;
   BindMatrices();
 
 
@@ -1021,7 +1000,6 @@ void csGraphicsGL4::Render(csPrimitiveType primType, csUInt32 count)
   BindValues();
   if (BindVertexDeclaration())
   {
-    CS_CHECK_GL_ERROR;
     glDrawArrays(primitiveTypeMap[primType], 0, count);
     CS_CHECK_GL_ERROR;
 
@@ -1035,7 +1013,6 @@ void csGraphicsGL4::RenderIndexed(csPrimitiveType primType, csUInt32 count, csDa
   if (BindVertexDeclaration())
   {
     m_indexBuffer->Bind();
-    CS_CHECK_GL_ERROR;
     glDrawElements(primitiveTypeMap[primType], count, dataTypeMap[indexType], 0);
     CS_CHECK_GL_ERROR;
 
@@ -1059,7 +1036,6 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   float x1 = -1.0f + right * 2.0f;
   float y1 = -1.0f + top * 2.0f;
 
-  CS_CHECK_GL_ERROR;
   glDepthMask(true);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_ALWAYS);
@@ -1102,7 +1078,6 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   SetDepthTest(true);
   SetDepthFunc(eCM_Always);
   SetDepthMask(false);
-  CS_CHECK_GL_ERROR;
   glClearDepth(1.0);
   CS_CHECK_GL_ERROR;
 

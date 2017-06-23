@@ -25,7 +25,6 @@ csRenderTargetGL4::csRenderTargetGL4(GLuint name, csUInt16 width, csUInt16 heigh
 
 csRenderTargetGL4::~csRenderTargetGL4()
 {
-  CS_CHECK_GL_ERROR;
   if (!m_provided)
   {
     if (m_name != 0)
@@ -53,7 +52,6 @@ csRenderTargetGL4::~csRenderTargetGL4()
 
 void csRenderTargetGL4::Bind()
 {
-  CS_CHECK_GL_ERROR;
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
   CS_CHECK_GL_ERROR;
 }
@@ -80,7 +78,6 @@ void csRenderTargetGL4::Initialize(csUInt16 width, csUInt16 height)
 {
   m_width = width;
   m_height = height;
-  CS_CHECK_GL_ERROR;
   glGenFramebuffers(1, &m_name);
   glBindFramebuffer(GL_FRAMEBUFFER, m_name);
   CS_CHECK_GL_ERROR;
@@ -91,7 +88,6 @@ void csRenderTargetGL4::AddColorTexture(iTexture *color)
   csTextureGL4 *coloGL4 = csQueryClass<csTextureGL4>(color);
   if (coloGL4)
   {
-    CS_CHECK_GL_ERROR;
     color->AddRef();
     glFramebufferTexture(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + m_colorTextures.size()), coloGL4->GetName(), 0);
     m_colorTextures.push_back(coloGL4);
@@ -108,7 +104,6 @@ void csRenderTargetGL4::SetDepthTexture(iTexture *depth)
     CS_SET(m_depthTexture, depthGL4);
     if (depthGL4)
     {
-      CS_CHECK_GL_ERROR;
       glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
       CS_CHECK_GL_ERROR;
     }
@@ -122,12 +117,12 @@ void csRenderTargetGL4::SetDepthBuffer(csUInt16 width, csUInt16 height)
   glBindRenderbuffer(GL_RENDERBUFFER, m_depthBuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, width, height);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthBuffer);
+  CS_CHECK_GL_ERROR;
 }
 
 
 bool csRenderTargetGL4::Finilize()
 {
-  CS_CHECK_GL_ERROR;
   GLenum r = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

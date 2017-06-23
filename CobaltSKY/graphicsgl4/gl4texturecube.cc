@@ -29,7 +29,6 @@ bool csTextureCubeGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16
   m_depth = depth;
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_R, GL_REPEAT);
@@ -84,7 +83,6 @@ bool csTextureCubeGL4::CopyData(csTextureCubeFace face, csUInt8 lod, csPixelForm
   }
 
   Bind();
-  CS_CHECK_GL_ERROR;
   glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, lod, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;
 

@@ -156,6 +156,8 @@ set(MATERIALEDITOR_SOURCES
     materialeditor/materialeditornewaction.hh
     materialeditor/materialeditorpreviewsceneview.cc
     materialeditor/materialeditorpreviewsceneview.hh
+    materialeditor/materialeditorproperties.cc
+    materialeditor/materialeditorproperties.hh
     materialeditor/materialeditorwidget.cc
     materialeditor/materialeditorwidget.hh
     )

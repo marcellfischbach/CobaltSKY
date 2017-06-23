@@ -36,3 +36,8 @@ void AssetResourceWidget::SetResourceLocator(const csResourceLocator &locator)
   m_locator = locator;
   m_gui.lineEdit->setText(QString(locator.GetResourceFile().c_str())); 
 }
+
+const csResourceLocator &AssetResourceWidget::GetResourceLocator() const
+{
+  return m_locator;
+}

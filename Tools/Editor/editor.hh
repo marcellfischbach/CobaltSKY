@@ -63,10 +63,14 @@ public:
     return m_project;
   }
 
+  void EmitObjectChanged(const iObject *object);
+
 private slots:
 
 void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
-  
+
+signals:
+void ObjectChanged(const iObject *object);
 private:
   Editor();
 

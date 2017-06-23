@@ -21,9 +21,7 @@ csTextureGL4::~csTextureGL4()
 {
   if (m_name)
   {
-    CS_CHECK_GL_ERROR;
     glDeleteTextures(1, &m_name);
-    CS_CHECK_GL_ERROR;
     CS_CHECK_GL_ERROR;
     m_name = 0;
   }
@@ -33,7 +31,6 @@ csTextureGL4::~csTextureGL4()
 
 bool csTextureGL4::Initialize()
 {
-  CS_CHECK_GL_ERROR;
   glGenTextures(1, &m_name);
   CS_CHECK_GL_ERROR;
   return m_name != 0;
@@ -56,7 +53,6 @@ const iSampler *csTextureGL4::GetSampler() const
 
 void csTextureGL4::Bind()
 {
-  CS_CHECK_GL_ERROR;
   glBindTexture(m_target, m_name);
   CS_CHECK_GL_ERROR;
 }
@@ -69,7 +65,6 @@ csTextureType csTextureGL4::GetType() const
 void csTextureGL4::GenerateMipMaps()
 {
   Bind();
-  CS_CHECK_GL_ERROR;
   glGenerateMipmap(m_target);
   CS_CHECK_GL_ERROR;
 }

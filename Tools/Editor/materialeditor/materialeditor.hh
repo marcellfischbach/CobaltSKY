@@ -10,6 +10,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+class csMaterial;
+class MaterialEditorProperties;
 class MaterialEditorWidget;
 CS_CLASS()
 class MaterialEditor : public AbstractAssetEditor
@@ -19,10 +21,17 @@ public:
   MaterialEditor();
   virtual ~MaterialEditor();
 
+  void Save();
+
 protected:
   void OpenAsset();
+  void PopulateDockItems();
+  void ReplaceFileContent();
 
 private:
+  csMaterial *m_material;
   MaterialEditorWidget *m_widget;
+
+  MaterialEditorProperties *m_properties;
 };
 

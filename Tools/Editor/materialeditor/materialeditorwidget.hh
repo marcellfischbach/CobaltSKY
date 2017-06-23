@@ -18,6 +18,10 @@ public:
 
   void SetMaterial(csMaterial *material);
 
+  public slots:
+  void MaterialChanged();
+protected slots:
+  void on_pbSave_clicked();
 private:
 
   MaterialEditor *m_editor;

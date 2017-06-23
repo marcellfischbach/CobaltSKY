@@ -19,15 +19,13 @@ VertexBufferGL4::~VertexBufferGL4()
 
 bool VertexBufferGL4::CreateBuffer(csSize size, const void *data, csBufferDataMode dataMode)
 {
-  CS_CHECK_GL_ERROR;
   glGenBuffers(1, &m_name);
   if (m_name == 0)
   {
+    CS_CHECK_GL_ERROR;
     return false;
   }
-  CS_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
-  CS_CHECK_GL_ERROR;
   glBufferData(GL_ARRAY_BUFFER, size, data, bufferDataModeMap[dataMode]);
 
   CS_GL_FLUSH;
@@ -45,14 +43,12 @@ csSize VertexBufferGL4::GetSize() const
 
 void VertexBufferGL4::Bind()
 {
-  CS_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
   CS_CHECK_GL_ERROR;
 }
 
 void VertexBufferGL4::Unbind()
 {
-  CS_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   CS_CHECK_GL_ERROR;
 }
@@ -64,7 +60,6 @@ bool VertexBufferGL4::Copy (unsigned offset, csSize size, const void* data)
 		return false;
 	}
 
-  CS_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
   glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
 	CS_GL_FLUSH;
@@ -80,7 +75,6 @@ bool VertexBufferGL4::Lock(unsigned offset, void **data, csBufferAccessMode mode
   }
 
   void *res = 0;
-  CS_CHECK_GL_ERROR;
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
   res = glMapBuffer(GL_ARRAY_BUFFER, bufferAccessModeMap[mode]);
   CS_CHECK_GL_ERROR;
@@ -106,7 +100,6 @@ bool VertexBufferGL4::Unlock()
     return false;
   }
 
-  CS_CHECK_GL_ERROR;
   glUnmapBuffer(GL_ARRAY_BUFFER);
 
   current_mapped_buffer = 0;

@@ -7,7 +7,10 @@
 #define CS_GL_OFFSET(offset)  ((const GLvoid*)((unsigned long)offset))
 
 #if 1
-#ifdef _DEBUG 
+
+// #define CS_DEFINE_GL_ERROR_CHECK 
+
+#if defined(_DEBUG) && defined(CS_DEFINE_GL_ERROR_CHECK)
 #	define CS_CHECK_GL_ERROR \
 	{\
 	  GLenum error = glGetError ();\

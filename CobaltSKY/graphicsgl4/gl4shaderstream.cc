@@ -58,14 +58,12 @@ void csShaderStreamGL4::SetArrayIndex(csUInt32 arrayIndex)
 
 void csShaderStreamGL4::Set(csSize size, csSize stride, csSize offset, csDataType type)
 {
-  CS_CHECK_GL_ERROR;
   glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, CS_GL_OFFSET(offset));
   CS_CHECK_GL_ERROR;
 }
 
 void csShaderStreamGL4::Set(csSize size, csSize stride, const void *data, csDataType type)
 {
-  CS_CHECK_GL_ERROR;
   glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, (const GLvoid*)data);
   CS_CHECK_GL_ERROR;
 }
@@ -73,14 +71,12 @@ void csShaderStreamGL4::Set(csSize size, csSize stride, const void *data, csData
 
 void csShaderStreamGL4::SetFrequency(csUInt8 frequency)
 {
-  CS_CHECK_GL_ERROR;
   glVertexAttribDivisor(m_absLocation, frequency);
   CS_CHECK_GL_ERROR;
 }
 
 void csShaderStreamGL4::Enable()
 {
-  CS_CHECK_GL_ERROR;
   glEnableVertexAttribArray(m_absLocation);
   CS_CHECK_GL_ERROR;
 
@@ -88,7 +84,6 @@ void csShaderStreamGL4::Enable()
 
 void csShaderStreamGL4::Disable()
 {
-  CS_CHECK_GL_ERROR;
   glDisableVertexAttribArray(m_absLocation);
   CS_CHECK_GL_ERROR;
 

@@ -17,7 +17,6 @@ csSamplerGL4::~csSamplerGL4()
 
 bool csSamplerGL4::Initialize()
 {
-  CS_CHECK_GL_ERROR;
   glGenSamplers(1, &m_name);
   glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -50,14 +49,12 @@ bool csSamplerGL4::Initialize()
 
 void csSamplerGL4::Bind(GLuint unit)
 {
-  CS_CHECK_GL_ERROR;
   glBindSampler(unit, m_name);
   CS_CHECK_GL_ERROR;
 }
 
 void csSamplerGL4::SetFilter(csFilterMode filterMode)
 {
-  CS_CHECK_GL_ERROR;
   if (m_filterMode != filterMode)
   {
     m_filterMode = filterMode;
@@ -134,7 +131,6 @@ void csSamplerGL4::SetAnisotropy(csUInt8 anisotropy)
   if (m_anisotropy != anisotropy)
   {
     m_anisotropy = anisotropy;
-    CS_CHECK_GL_ERROR;
     glSamplerParameterf(m_name, GL_TEXTURE_MAX_ANISOTROPY_EXT, m_anisotropy);
     CS_CHECK_GL_ERROR;
   }
@@ -150,7 +146,6 @@ void csSamplerGL4::SetMinLOD(csInt16 minLOD)
   if (m_minLOD != minLOD)
   {
     m_minLOD = minLOD;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_MIN_LOD, m_minLOD);
     CS_CHECK_GL_ERROR;
   }
@@ -166,7 +161,6 @@ void csSamplerGL4::SetMaxLOD(csInt16 maxLOD)
   if (m_maxLOD != maxLOD)
   {
     m_maxLOD = maxLOD;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_MAX_LOD, m_maxLOD);
     CS_CHECK_GL_ERROR;
   }
@@ -182,7 +176,6 @@ void csSamplerGL4::SetAddressU(csTextureAddressMode addressMode)
   if (m_addressU != addressMode)
   {
     m_addressU = addressMode;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_S, textureAddressModeMap[m_addressU]);
     CS_CHECK_GL_ERROR;
   }
@@ -198,7 +191,6 @@ void csSamplerGL4::SetAddressV(csTextureAddressMode addressMode)
   if (m_addressV != addressMode)
   {
     m_addressV = addressMode;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_T, textureAddressModeMap[m_addressV]);
     CS_CHECK_GL_ERROR;
   }
@@ -214,7 +206,6 @@ void csSamplerGL4::SetAddressW(csTextureAddressMode addressMode)
   if (m_addressW != addressMode)
   {
     m_addressW = addressMode;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_WRAP_R, textureAddressModeMap[m_addressW]);
     CS_CHECK_GL_ERROR;
   }
@@ -231,7 +222,6 @@ void csSamplerGL4::SetBorderColor(const csVector4f &color)
   if (m_borderColor != color)
   {
     m_borderColor = color;
-    CS_CHECK_GL_ERROR;
     glSamplerParameterfv(m_name, GL_TEXTURE_BORDER_COLOR, static_cast<GLfloat*>(&m_borderColor.x));
     CS_CHECK_GL_ERROR;
   }
@@ -247,7 +237,6 @@ void csSamplerGL4::SetTextureCompareMode(csTextureCompareMode compareMode)
   if (m_textureCompareMode != compareMode)
   {
     m_textureCompareMode = compareMode;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_MODE, textureCompareModeMap[compareMode]);
     CS_CHECK_GL_ERROR;
   }
@@ -263,7 +252,6 @@ void csSamplerGL4::SetTextureCompareFunc(csTextureCompareFunc compareFunc)
   if (m_textureCompareFunc != compareFunc)
   {
     m_textureCompareFunc = compareFunc;
-    CS_CHECK_GL_ERROR;
     glSamplerParameteri(m_name, GL_TEXTURE_COMPARE_FUNC, textureCompareFuncMap[compareFunc]);
     CS_CHECK_GL_ERROR;
   }

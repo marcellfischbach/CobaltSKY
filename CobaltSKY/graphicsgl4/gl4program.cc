@@ -20,7 +20,6 @@ csProgramGL4::~csProgramGL4()
 {
   for (auto shader : m_shaders)
   {
-    CS_CHECK_GL_ERROR;
     glDetachShader(m_name, shader->GetName());
     CS_CHECK_GL_ERROR;
     shader->Release();
@@ -45,7 +44,6 @@ csProgramGL4::~csProgramGL4()
     attribute->Release();
   }
 
-  CS_CHECK_GL_ERROR;
   glDeleteProgram(m_name);
   CS_CHECK_GL_ERROR;
 }
@@ -53,7 +51,6 @@ csProgramGL4::~csProgramGL4()
 
 void csProgramGL4::Bind()
 {
-  CS_CHECK_GL_ERROR;
   glUseProgram(m_name);
   CS_CHECK_GL_ERROR;
 }
@@ -85,6 +82,8 @@ void csProgramGL4::RegisterAttribute(const csShaderAttributeID &id)
   attribute->SetLocation(loc);
   attribute->SetName(id.GetName());
   attribute->SetValid(true);
+  CS_CHECK_GL_ERROR;
+
 }
 
 void csProgramGL4::RegisterStream(const csShaderStreamID &id)
@@ -97,6 +96,7 @@ void csProgramGL4::RegisterStream(const csShaderStreamID &id)
   stream->SetLocation(loc);
   stream->SetName(id.GetName());
   stream->SetValid(true);
+  CS_CHECK_GL_ERROR;
 }
 
 
@@ -152,7 +152,6 @@ iShaderAttribute *csProgramGL4::GetAttribute(const csString &name)
 
   Bind();
   csString uniformName = csString("cs_") + name;
-  CS_CHECK_GL_ERROR;
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   CS_CHECK_GL_ERROR;
   if (loc == -1)
@@ -209,7 +208,6 @@ iShaderStream *csProgramGL4::GetStream(const csString &name)
 
   Bind();
   csString attribName = csString("cs_") + name;
-  CS_CHECK_GL_ERROR;
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
   CS_CHECK_GL_ERROR;
   if (loc == -1)
@@ -267,7 +265,6 @@ bool csProgramGL4::Link()
 {
   if (m_name != 0)
   {
-    CS_CHECK_GL_ERROR;
     glDeleteProgram(m_name);
     CS_CHECK_GL_ERROR;
   }
@@ -302,7 +299,6 @@ csString csProgramGL4::GetLinkErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
-  CS_CHECK_GL_ERROR;
   glGetProgramInfoLog(m_name, 1024, &length, buffer);
   CS_CHECK_GL_ERROR;
   if (length < 1024)

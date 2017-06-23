@@ -89,7 +89,7 @@ void SceneView::initializeGL()
     printf("Unable to initialize frame processor\n");
     return;
   }
-
+  m_graphics->ResetDefaults();
 }
 
 void SceneView::paintGL()
@@ -119,6 +119,7 @@ void SceneView::paintGL()
 
 void SceneView::resizeGL(int width, int height)
 {
+
   m_graphics->ResetDefaults();
 
   if (m_frameProcessor)
