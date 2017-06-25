@@ -189,6 +189,7 @@ void MaterialEditorProperties::UpdateGUI()
       param.doubleSpinBoxes.push_back(sbF0);
       param.doubleSpinBoxes.push_back(sbF1);
       param.doubleSpinBoxes.push_back(sbF2);
+      param.doubleSpinBoxes.push_back(sbF3);
     }break;
     case eSPT_Color4:
     {
@@ -215,10 +216,14 @@ void MaterialEditorProperties::UpdateGUI()
       param.doubleSpinBoxes.push_back(sbF0);
       param.doubleSpinBoxes.push_back(sbF1);
       param.doubleSpinBoxes.push_back(sbF2);
+      param.doubleSpinBoxes.push_back(sbF3);
     }break;
     case eSPT_Texture:
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
+      iTexture *texture = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
+      param.textureWidget->setEnabled(!inherit);
+      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture));
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       param.textureWidget->AddValidClass(iTexture::GetStaticClass());
       m_frameLayout->addWidget(param.textureWidget, row, 1, 1, 1);
@@ -279,6 +284,10 @@ void MaterialEditorProperties::CheckBoxChanged(int)
   {
     bool enable = param.checkBox->isChecked();
     m_material->SetInherited(param.idx, !enable);
+    if (param.textureWidget)
+    {
+      param.textureWidget->setEnabled(enable);
+    }
     for (auto sb : param.doubleSpinBoxes)
     {
       sb->setEnabled(enable);

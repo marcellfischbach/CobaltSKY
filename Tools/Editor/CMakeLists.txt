@@ -14,7 +14,8 @@ message("QtOpenGL : ${Qt5OpenGL_INCLUDE_DIRS}")
 message("QtXml    : ${Qt5Xml_INCLUDE_DIRS}")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+include_directories(${CobaltSKY_SOURCE_DIR}/Tools/Editor)
+include_directories(${CobaltSKY_BINARY_DIR}/Tools/Editor)
 set(CMAKE_AUTOMOC ON)
 
 set(EDITOR_SOURCES

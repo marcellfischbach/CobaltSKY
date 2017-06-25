@@ -26,9 +26,12 @@ public:
 protected:
   void OpenAsset();
   void PopulateDockItems();
-  void ReplaceFileContent();
 
 private:
+  void FillElement(QDomElement materialElement, QDomDocument doc);
+  void ReplaceFileContent();
+  void SaveDocument(QDomDocument doc);
+
   csMaterial *m_material;
   MaterialEditorWidget *m_widget;
 

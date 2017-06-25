@@ -7,6 +7,7 @@
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -81,43 +82,44 @@ void MaterialEditor::Save()
   QDomElement materialElement = dataElement.firstChildElement("material");
   if (materialElement.isNull())
   {
-    ReplaceFileContent();
-    return;
+    materialElement = doc.createElement("material");
+    dataElement.appendChild(materialElement);
+  }
+  else
+  {
+    QDomElement newMaterialElement = doc.createElement("material");
+    dataElement.replaceChild(newMaterialElement, materialElement);
+    materialElement = newMaterialElement;
   }
 
-  QDomElement materialDefElement = materialElement.firstChildElement("materialDef");
-  if (materialDefElement.isNull())
-  {
-    ReplaceFileContent();
-    return;
-  }
+  FillElement(materialElement, doc);
 
-  QDomElement parametersElement = materialElement.firstChildElement("parameters");
-  if (parametersElement.isNull())
-  {
-    ReplaceFileContent();
-    return;
-  }
+  SaveDocument(doc);
+}
 
-  // remove all
-  QDomNodeList children = materialDefElement.childNodes();
-  for (int i = 0, in = children.length(); i < in; ++i)
-  {
-    materialDefElement.removeChild(children.at(i));
-  }
-  children = parametersElement.childNodes();
-  for (int i = 0, in = children.length(); i < in; ++i)
-  {
-    parametersElement.removeChild(children.at(i));
-  }
 
-  csMaterialDef *materialDef = m_material->GetMaterialDef();
-  if (materialDef)
-  {
+void MaterialEditor::ReplaceFileContent()
+{
+  QDomDocument doc;
 
-    csResourceLocator materialDefLocator = csResourceManager::Get()->GetLocator(materialDef);
-    materialDefElement.appendChild(doc.createTextNode(QString(materialDefLocator.GetText().c_str())));
-  }
+  QDomElement assetElement = doc.createElement("asset");
+  QDomElement dataElement = doc.createElement("data");
+  QDomElement materialElement = doc.createElement("material");
+
+  doc.appendChild(assetElement);
+  assetElement.appendChild(dataElement);
+  dataElement.appendChild(materialElement);
+
+  FillElement(materialElement, doc);
+  SaveDocument(doc);
+}
+
+
+void MaterialEditor::SaveDocument(QDomDocument doc)
+{
+  QString absFileName = GetResourceFileName();
+  QFile file(absFileName);
+
   QString xml = doc.toString(2);
   printf("xml\n%s\n",
     (const char*)xml.toLatin1());
@@ -133,11 +135,86 @@ void MaterialEditor::Save()
 
   Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 
+
 }
 
 
-
-void MaterialEditor::ReplaceFileContent()
+void MaterialEditor::FillElement(QDomElement materialElement, QDomDocument doc)
 {
-  printf("replace file\n");
+  QDomElement materialDefElement = doc.createElement("materialDef");
+  QDomElement parametersElement = doc.createElement("parameters");
+  materialElement.appendChild(materialDefElement);
+  materialElement.appendChild(parametersElement);
+
+  csMaterialDef *materialDef = m_material->GetMaterialDef();
+  if (materialDef)
+  {
+    csResourceLocator materialDefLocator = csResourceManager::Get()->GetLocator(materialDef);
+    materialDefElement.appendChild(doc.createTextNode(QString(materialDefLocator.GetText().c_str())));
+  }
+
+  for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
+  {
+    if (m_material->IsInherited(i))
+    {
+      continue;
+    }
+    csString parameterName = materialDef->GetParamName(i);
+    QDomElement parameterElement = doc.createElement("parameter");
+    parametersElement.appendChild(parameterElement);
+    parameterElement.setAttribute("name", QString(parameterName.c_str()));
+
+    switch (materialDef->GetParamType(i))
+    {
+    case eSPT_Float:
+      parameterElement.appendChild(doc.createElement("float"))
+        .appendChild(doc.createTextNode(QString("%1")
+          .arg((double)m_material->GetFloat(i), 0, 'f')));
+      break;
+    case eSPT_Vector2:
+      parameterElement.appendChild(doc.createElement("float2"))
+        .appendChild(doc.createTextNode(QString("%1, %2")
+          .arg((double)m_material->GetFloat2(i).x, 0, 'f')
+          .arg((double)m_material->GetFloat2(i).y, 0, 'f')
+        ));
+      break;
+    case eSPT_Vector3:
+      parameterElement.appendChild(doc.createElement("float3"))
+        .appendChild(doc.createTextNode(QString("%1, %2, %3")
+          .arg((double)m_material->GetFloat3(i).x, 0, 'f')
+          .arg((double)m_material->GetFloat3(i).y, 0, 'f')
+          .arg((double)m_material->GetFloat3(i).z, 0, 'f')
+        ));
+      break;
+    case eSPT_Vector4:
+      parameterElement.appendChild(doc.createElement("float4"))
+        .appendChild(doc.createTextNode(QString("%1, %2, %3, %4")
+          .arg((double)m_material->GetFloat4(i).x, 0, 'f')
+          .arg((double)m_material->GetFloat4(i).y, 0, 'f')
+          .arg((double)m_material->GetFloat4(i).z, 0, 'f')
+          .arg((double)m_material->GetFloat4(i).w, 0, 'f')
+        ));
+      break;
+    case eSPT_Color4:
+      parameterElement.appendChild(doc.createElement("color4"))
+        .appendChild(doc.createTextNode(QString("%1, %2, %3, %4")
+          .arg((double)m_material->GetColor4(i).r, 0, 'f')
+          .arg((double)m_material->GetColor4(i).g, 0, 'f')
+          .arg((double)m_material->GetColor4(i).b, 0, 'f')
+          .arg((double)m_material->GetColor4(i).a, 0, 'f')
+        ));
+      break;
+    case eSPT_Texture:
+      if (m_material->GetTexture(i))
+      {
+        csResourceLocator loc = csResourceManager::Get()->GetLocator(m_material->GetTexture(i));
+        csString name = loc.GetText();
+        parameterElement.appendChild(doc.createElement("locator"))
+          .appendChild(doc.createTextNode(QString(name.c_str())));
+      }
+      break;
+    }
+  }
 }
+
+
