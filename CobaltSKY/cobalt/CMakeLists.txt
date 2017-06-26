@@ -49,6 +49,10 @@ set(SOURCE_CORE
     core/csclassregistry.cc
     core/csclassregistry.hh
     core/cscollection.hh
+    core/csevent.cc
+    core/csevent.hh
+    core/cseventbus.cc
+    core/cseventbus.hh
     core/csfileinfo.cc
     core/csfileinfo.hh
     core/csfilestd.cc

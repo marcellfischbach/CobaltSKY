@@ -1,7 +1,11 @@
 
 
 set(SOURCE
+  event.cc
+  event.hh
   main.cc
+  runnermodule.cc
+  runnermodule.hh
   )
 
 source_group(
@@ -26,5 +30,6 @@ target_link_libraries(CobaltSKY-Runner
   )
 
 
-CS_INSTALL_MOCCER(CobaltSKY-Runner runner " " ALL_SOURCES)
 
+
+CS_INSTALL_MOCCER(CobaltSKY-Runner runner NO_API ALL_SOURCES)

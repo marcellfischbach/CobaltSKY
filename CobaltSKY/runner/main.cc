@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include <cobalt/csengine.hh>
+#include <cobalt/core/csevent.hh>
+#include <cobalt/core/cseventbus.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/cssettings.hh>
@@ -64,6 +66,7 @@
 #include <cobalt/window/imouse.hh>
 #include <math.h>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
+#include <runner/event.hh>
 
 
 int initialize();
@@ -89,6 +92,7 @@ iRenderTarget *rt = 0;
 csDirectionalLight *directionalLight;
 csParticle *particle;
 csSize numParticles;
+csEventBus masterBus;
 
 int main(int argc, char **argv)
 {
@@ -149,12 +153,32 @@ int main(int argc, char **argv)
   return main_loop();
 }
 
+void handle_master_event(csEvent &event, void *ptr)
+{
+  printf("HandleMasterEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+}
+
+void handle_an_event(csEvent &event, void *ptr)
+{
+  printf("HandleAnEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+}
+
+void handle_an_other_event(csEvent &event, void *ptr)
+{
+  printf("HandleAnOtherEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+}
+
+
 int initialize()
 {
   if (!window)
   {
     return -1;
   }
+
+  masterBus.Register(handle_master_event);
+  masterBus.Register(MyEvent0::GetStaticClass(), handle_an_event);
+  masterBus.Register(MyEvent1::GetStaticClass(), handle_an_other_event);
 
   iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768, false);
   rt = graphicsGL4->CreateRenderTarget();
@@ -245,7 +269,15 @@ int main_loop()
     if (keyboard->IsKeyPressed(eK_P))
       anim = !anim;
 
+    if (keyboard->IsKeyPressed(eK_U))
+    {
+      masterBus << MyEvent0();
+    }
 
+    if (keyboard->IsKeyPressed(eK_I))
+    {
+      masterBus << MyEvent1();
+    }
 
     UpdateCamera(camera, character, mouse, keyboard);
     UpdateCharacter(character, mouse, keyboard, tpf);
