@@ -37,6 +37,8 @@ set(EDITOR_SOURCES
     editormodule.hh
     editorresourcemanager.cc
     editorresourcemanager.hh
+    eventbus.cc
+    eventbus.hh
     glcontext.cc
     glcontext.hh
     iasseteditor.hh
@@ -134,6 +136,19 @@ source_group(
     ${COMPONENTS_SOURCES}
     ${COMPONENTS_UI}
     )
+
+ set(EVENTS_SOURCES
+    events/assetrenamedevent.cc
+    events/assetrenamedevent.hh
+    )
+
+
+source_group(
+    "editor\\events"
+    FILES
+    ${EVENTS_SOURCES}
+    )
+
 
 set(LOADERS_SOURCES
     loaders/loaderseditoriconassetxmlloader.cc
@@ -356,6 +371,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${COMPONENTS_SOURCES}
+    ${EVENTS_SOURCES}
     ${LOADERS_SOURCES}
     ${MATERIALEDITOR_SOURCES}
     ${NODEGRAPH_SOURCES}
