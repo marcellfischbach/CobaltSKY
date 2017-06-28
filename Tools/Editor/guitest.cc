@@ -6,7 +6,7 @@ GUITest::GUITest()
 {
   m_gui.setupUi(this);
 
-  QFile qssFile("D://Programming//CobaltSKY//Tools//Editor//cobalt.qss");
+  QFile qssFile("D://Programming//CobaltSKY//Tools//Editor//cobalt.css");
   if (qssFile.open(QIODevice::ReadOnly))
   {
     QString qss = qssFile.readAll();

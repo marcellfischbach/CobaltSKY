@@ -12,7 +12,7 @@
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 
-// #define GUI_TEST
+#define GUI_TEST
 
 int main (int argc, char **argv)
 {
