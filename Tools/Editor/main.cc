@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <qapplication.h>
 #include <editor.hh>
+#include <guitest.hh>
 #include <qsurfaceformat.h>
 
 #include <cobalt/csengine.hh>
@@ -11,6 +12,7 @@
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 
+// #define GUI_TEST
 
 int main (int argc, char **argv)
 {
@@ -36,7 +38,10 @@ int main (int argc, char **argv)
 
   QApplication app(argc, argv);
 
-
+#ifdef GUI_TEST
+  GUITest test;
+  test.setVisible(true);
+#else
   Editor *editor = Editor::Get();
 
 
@@ -44,6 +49,6 @@ int main (int argc, char **argv)
   {
     return -1;
   }
-
+#endif
   return app.exec();
 }

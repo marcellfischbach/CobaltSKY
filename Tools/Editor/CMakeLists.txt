@@ -41,6 +41,8 @@ set(EDITOR_SOURCES
     eventbus.hh
     glcontext.cc
     glcontext.hh
+    guitest.cc
+    guitest.hh
     iasseteditor.hh
     iasseteditorfactory.hh
     idockitem.hh
@@ -53,6 +55,7 @@ set(EDITOR_SOURCES
     )
 
 set(EDITOR_UI
+    guitest.ui
     mainwindow.ui
     )
 
