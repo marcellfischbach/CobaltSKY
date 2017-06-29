@@ -12,7 +12,7 @@
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 
-#define GUI_TEST
+// #define GUI_TEST
 
 int main (int argc, char **argv)
 {
@@ -37,6 +37,15 @@ int main (int argc, char **argv)
   QSurfaceFormat::setDefaultFormat(format);
 
   QApplication app(argc, argv);
+
+  QFile qssFile("G:/IDE/devs/CobaltSKY/Tools/Editor/cobalt.css");
+  if (qssFile.open(QIODevice::ReadOnly))
+  {
+    QString qss = qssFile.readAll();
+    qssFile.close();
+    //app.setStyleSheet(qss);
+  }
+
 
 #ifdef GUI_TEST
   GUITest test;
