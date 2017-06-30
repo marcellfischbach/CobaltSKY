@@ -3,6 +3,7 @@
 #include <assetmanager/assetmanagerrenamer.hh>
 #include <editor.hh>
 #include <project/project.hh>
+#include <project/projectassetreference.hh>
 #include <project/projectreferencetree.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
@@ -48,13 +49,14 @@ void AssetManagerRenamer::Rename(const csResourceLocator &from, const csResource
 {
   csResourceLocator nFrom = from.AsAnonymous();
   csResourceLocator nTo = to.AsAnonymous();
-  ProjectReferenceTree &tree = Editor::Get()->GetProject()->GetDependencyTree();
+  ProjectReferenceTree &tree = Editor::Get()->GetProject()->GetReferenceTree();
 
-  std::set<csResourceLocator> resources = tree.GetReferencedBy(from.AsAnonymous());
-  printf("Rename: [%d] %s => %s\n", resources.size(), from.GetDebugName().c_str(), to.GetDebugName().c_str());
-  for (const csResourceLocator &resource : resources)
+  const ProjectAssetReference *assetReference = tree.GetReference(from.AsAnonymous());
+  const std::vector<ProjectAssetReference*> referencedBys = assetReference->GetReferencedBy();
+  printf("Rename: [%d] %s => %s\n", referencedBys.size(), from.GetDebugName().c_str(), to.GetDebugName().c_str());
+  for (ProjectAssetReference *referencedBy : referencedBys)
   {
-    Rename(resource, from, to);
+    Rename(referencedBy->GetResourceLocator(), from, to);
   }
 }
 

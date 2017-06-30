@@ -133,7 +133,7 @@ void MaterialEditor::SaveDocument(QDomDocument doc)
     file.close();
   }
 
-  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 
 
 }

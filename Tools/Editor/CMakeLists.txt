@@ -244,6 +244,8 @@ source_group(
 set(PROJECT_SOURCES
     project/project.cc
     project/project.hh
+    project/projectassetreference.cc
+    project/projectassetreference.hh
     project/projectreferencetree.cc
     project/projectreferencetree.hh
     )

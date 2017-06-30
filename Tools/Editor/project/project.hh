@@ -14,8 +14,8 @@ public:
   void Open(const std::string &projectPath);
   void Close();
 
-  ProjectReferenceTree &GetDependencyTree();
-  const ProjectReferenceTree &GetDependencyTree() const;
+  ProjectReferenceTree &GetReferenceTree();
+  const ProjectReferenceTree &GetReferenceTree() const;
 
   bool Rename(const csResourceLocator &from, const csResourceLocator &to);
 
@@ -23,5 +23,5 @@ signals:
   void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
 
 private:
-  ProjectReferenceTree m_dependencyTree;
+  ProjectReferenceTree m_referenceTree;
 };

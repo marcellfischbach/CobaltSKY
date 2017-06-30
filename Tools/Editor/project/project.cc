@@ -12,25 +12,25 @@ Project::Project()
 
 void Project::Open(const std::string &projectPath)
 {
-  m_dependencyTree.Open(projectPath);
+  m_referenceTree.Open(projectPath);
   printf("Project opened\n");
 }
 
 void Project::Close()
 {
-  m_dependencyTree.Close();
+  m_referenceTree.Close();
   printf("Project closed\n");
 }
 
 
-ProjectReferenceTree &Project::GetDependencyTree()
+ProjectReferenceTree &Project::GetReferenceTree()
 {
-  return m_dependencyTree;
+  return m_referenceTree;
 }
 
-const ProjectReferenceTree &Project::GetDependencyTree() const
+const ProjectReferenceTree &Project::GetReferenceTree() const
 {
-  return m_dependencyTree;
+  return m_referenceTree;
 }
 
 bool Project::Rename(const csResourceLocator &from, const csResourceLocator &to)
@@ -41,7 +41,7 @@ bool Project::Rename(const csResourceLocator &from, const csResourceLocator &to)
     return false;
   }
 
-  m_dependencyTree.Rename(from.AsAnonymous(), to.AsAnonymous());
+  m_referenceTree.Rename(from.AsAnonymous(), to.AsAnonymous());
 
   emit ResourceRenamed(from, to);
   return true;

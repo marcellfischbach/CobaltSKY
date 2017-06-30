@@ -713,7 +713,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     file.close();
   }
 
-  Editor::Get()->GetProject()->GetDependencyTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
 
 }
 

@@ -1,5 +1,6 @@
 
 #include <project/projectreferencetree.hh>
+#include <project/projectassetreference.hh>
 #include <assetmanager/assetmanagerresourcescanner.hh>
 #include <QDomDocument>
 #include <QFile>
@@ -13,20 +14,33 @@ void ProjectReferenceTree::Open(const std::string &projectPath)
 {
   m_projectPath = projectPath;
 
-  LoadDependencyTree();
-  printf("Project opened\n");
+  LoadReferenceTree();
 }
 
 void ProjectReferenceTree::Close()
 {
-  StoreDependencyTree();
+  StoreReferenceTree();
 }
 
-void ProjectReferenceTree::LoadDependencyTree()
+void ProjectReferenceTree::Clear()
+{
+  for (auto entry : m_references)
+  {
+    if (entry.second)
+    {
+      delete entry.second;
+    }
+  }
+  m_references.clear();
+
+}
+
+void ProjectReferenceTree::LoadReferenceTree()
 {
   std::string referenceTreePath = m_projectPath + "/.project/referenceTree.xml";
-
   QFile file(QString(referenceTreePath.c_str()));
+
+
   if (!file.open(QIODevice::ReadOnly))
   {
     return;
@@ -39,188 +53,224 @@ void ProjectReferenceTree::LoadDependencyTree()
   }
   file.close();
 
-  m_references.clear();
-  m_referencedBy.clear();
+  Clear();
+
 
   QDomElement element = doc.documentElement();
-  if (element.tagName() == QString("referenceTree"))
+  if (element.tagName() != QString("referenceTree"))
   {
-    QDomElement resourcesElement = element.firstChildElement("resources");
-    if (!resourcesElement.isNull())
+    Rebuild();
+    return;
+  }
+
+
+  QDomElement assetsElement = element.firstChildElement("assets");
+  if (!assetsElement.isNull())
+  {
+    for (QDomElement assetElement = assetsElement.firstChildElement("asset");
+      !assetElement.isNull();
+      assetElement = assetElement.nextSiblingElement("asset"))
     {
-      for (QDomElement resourceElement = resourcesElement.firstChildElement("resource");
-        !resourceElement.isNull();
-        resourceElement = resourceElement.nextSiblingElement("resource"))
+
+      if (!assetElement.hasAttribute("locator") ||
+        !assetElement.hasAttribute("name") ||
+        !assetElement.hasAttribute("type"))
       {
-        if (resourceElement.hasAttribute("locator"))
-        {
-          std::string resourceLocator = std::string((const char*)resourceElement.attribute("locator").toLatin1());
-          m_allResources.insert(csResourceLocator(resourceLocator));
-        }
+        continue;
       }
+
+      std::string resourceLocator = std::string((const char*)assetElement.attribute("locator").toLatin1());
+      std::string name = std::string((const char*)assetElement.attribute("name").toLatin1());
+      std::string type = std::string((const char*)assetElement.attribute("type").toLatin1());
+
+
+      ProjectAssetReference *assetReference = new ProjectAssetReference();
+      assetReference->SetName(name);
+      assetReference->SetResourceLocator(csResourceLocator(resourceLocator));
+      assetReference->SetTypeName(type);
+      m_references[resourceLocator] = assetReference;
     }
+  }
 
-
-    QDomElement referencesElement = element.firstChildElement("references");
-    if (!referencesElement.isNull())
+  QDomElement referencesElement = element.firstChildElement("references");
+  if (!referencesElement.isNull())
+  {
+    for (QDomElement referenceElement = referencesElement.firstChildElement("reference");
+      !referenceElement.isNull();
+      referenceElement = referenceElement.nextSiblingElement("reference"))
     {
-      for (QDomElement referenceElement = referencesElement.firstChildElement("reference");
-        !referenceElement.isNull();
-        referenceElement = referenceElement.nextSiblingElement("reference"))
+      if (!referenceElement.hasAttribute("asset") ||
+        !referenceElement.hasAttribute("references"))
       {
-        if (referenceElement.hasAttribute("resource") && referenceElement.hasAttribute("references"))
-        {
-          std::string resource = std::string((const char*)referenceElement.attribute("resource").toLatin1());
-          std::string references= std::string((const char*)referenceElement.attribute("references").toLatin1());
+        continue;
+      }
 
-          csResourceLocator resourceLocator(resource);
-          csResourceLocator referencesLocator(references);
+      std::string assetResourceLocator = std::string((const char*)referenceElement.attribute("asset").toLatin1());
+      std::string referencesResourceLocator = std::string((const char*)referenceElement.attribute("references").toLatin1());
 
-          m_referencedBy[referencesLocator].insert(resourceLocator);
-          m_references[resourceLocator].insert(referencesLocator);
-        }
+      ProjectAssetReference *asset = m_references[csResourceLocator(assetResourceLocator)];
+      ProjectAssetReference *reference = m_references[csResourceLocator(assetResourceLocator)];
+
+      if (asset && reference)
+      {
+        asset->AddReference(reference);
+        reference->AddReferencedBy(asset);
       }
     }
   }
 }
 
-void ProjectReferenceTree::StoreDependencyTree()
+void ProjectReferenceTree::StoreReferenceTree()
 {
   QDomDocument doc;
 
   QDomElement referenceTreeElement = doc.createElement("referenceTree");
-  QDomElement resourcesElement = doc.createElement("resources");
-referenceTreeElement.appendChild(resourcesElement);
-for (auto resource : m_allResources)
-{
-  QDomElement resourceElement = doc.createElement("resource");
-  resourceElement.setAttribute("locator", QString(resource.GetText().c_str()));
-  resourcesElement.appendChild(resourceElement);
-
-}
-
-QDomElement referencesElement = doc.createElement("references");
-referenceTreeElement.appendChild(referencesElement);
-for (auto resource : m_references)
-{
-  for (auto reference : resource.second)
+  QDomElement assetsElement = doc.createElement("assets");
+  referenceTreeElement.appendChild(assetsElement);
+  for (auto entry : m_references)
   {
-    QDomElement dependencyElement = doc.createElement("reference");
-    dependencyElement.setAttribute("resource", QString(resource.first.GetText().c_str()));
-    dependencyElement.setAttribute("references", QString(reference.GetText().c_str()));
-    referencesElement.appendChild(dependencyElement);
+    ProjectAssetReference *asset = entry.second;
+
+    QDomElement assetElement = doc.createElement("asset");
+    assetElement.setAttribute("locator", QString(asset->GetResourceLocator().GetText().c_str()));
+    assetElement.setAttribute("name", QString(asset->GetName().c_str()));
+    assetElement.setAttribute("type", QString(asset->GetTypeName().c_str()));
+    assetsElement.appendChild(assetElement);
   }
-}
-doc.appendChild(referenceTreeElement);
 
-std::string referenceTreePath = m_projectPath + "/.project/referenceTree.xml";
-QFile file(QString(referenceTreePath.c_str()));
-if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+
+
+  QDomElement referencesElement = doc.createElement("references");
+  referenceTreeElement.appendChild(referencesElement);
+  for (auto entry : m_references)
+  {
+    ProjectAssetReference *asset = entry.second;
+    const std::vector<ProjectAssetReference*> references = asset->GetReferences();
+
+    for (auto reference : references)
+    {
+      QDomElement referenceElement = doc.createElement("reference");
+      referenceElement.setAttribute("asset", QString(asset->GetResourceLocator().GetText().c_str()));
+      referenceElement.setAttribute("references", QString(reference->GetResourceLocator().GetText().c_str()));
+      referencesElement.appendChild(referenceElement);
+    }
+  }
+  doc.appendChild(referenceTreeElement);
+
+  std::string referenceTreePath = m_projectPath + "/.project/referenceTree.xml";
+  QFile file(QString(referenceTreePath.c_str()));
+  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    file.write(doc.toString(2).toLatin1());
+    file.close();
+  }
+
+
+}
+
+void ProjectReferenceTree::Rebuild()
 {
-  file.write(doc.toString(2).toLatin1());
-  file.close();
-}
-
-
-}
-
-void ProjectReferenceTree::RebuildDependencyTree()
-{
-  printf("Rebuild dependency tree\n");
+  printf("Rebuild reference tree\n");
   AssetManagerResourceScanner scanner;
-  scanner.Scan();
-  const std::set<csResourceLocator> &allResources = scanner.GetAllResources();
-  const std::set<std::pair<csResourceLocator, csResourceLocator>> &references = scanner.GetReferences();
-  m_allResources.clear();
-  m_references.clear();
-  m_referencedBy.clear();
-  for (auto resource : allResources)
+  scanner.ScanPath();
+
+  const std::vector<AssetManagerResourceScanner::Entry> allEntries = scanner.GetAllEntries();
+  Clear();
+
+  for (auto entry : allEntries)
   {
-    m_allResources.insert(resource);
-  }
-  for (auto references : references)
-  {
-    m_referencedBy[references.second].insert(references.first);
-    m_references[references.first].insert(references.second);
+    ProjectAssetReference *assetReference = new ProjectAssetReference();
+    assetReference->SetName(entry.name);
+    assetReference->SetResourceLocator(entry.locator);
+    assetReference->SetTypeName(entry.typeName);
+    m_references[entry.locator] = assetReference;
   }
 
+  for (auto entry : allEntries)
+  {
+    ProjectAssetReference *asset = m_references[entry.locator];
+    for (auto referenceLocator : entry.references)
+    {
+      ProjectAssetReference *reference = m_references[referenceLocator];
+      if (asset && reference)
+      {
+        asset->AddReference(reference);
+        reference->AddReferencedBy(asset);
+      }
+    }
+  }
   printf("Rebuild dependency tree - done\n");
-  StoreDependencyTree();
+  StoreReferenceTree();
 }
 
 void ProjectReferenceTree::UpdateDependencyTree(const csResourceLocator &resourceLocator)
 {
-  m_references.erase(resourceLocator);
 
-  for (auto it : m_referencedBy)
+  ProjectAssetReference *assetReference = m_references[resourceLocator];
+  if (!assetReference)
   {
-    it.second.erase(resourceLocator);
+    Rebuild();
+    return;
   }
 
-  AssetManagerResourceScanner scanner;
-  for (auto it : m_allResources)
+  for (auto reference : assetReference->GetReferences())
   {
-    scanner.AddResource(it);
+    reference->RemoveReferencedBy(reference);
+  }
+  assetReference->ClearReference();
+
+
+
+  AssetManagerResourceScanner scanner;
+  for (auto it : m_references)
+  {
+    ProjectAssetReference *ref = it.second;
+    scanner.AddEntry(ref->GetResourceLocator(), ref->GetName(), ref->GetTypeName());
   }
 
   scanner.ScanReference(resourceLocator);
-  const std::set<std::pair<csResourceLocator, csResourceLocator>> &references = scanner.GetReferences();
-  for (auto reference : references)
+  const std::vector<AssetManagerResourceScanner::Entry> &entries = scanner.GetAllEntries();
+  for (auto entry : entries)
   {
-    m_referencedBy[reference.second].insert(reference.first);
-    m_references[reference.first].insert(reference.second);
+    if (entry.locator == resourceLocator)
+    {
+      for (auto ref : entry.references)
+      {
+        ProjectAssetReference *reference = m_references[ref];
+        if (assetReference && reference)
+        {
+          assetReference->AddReference(reference);
+          reference->AddReferencedBy(assetReference);
+        }
+      }
+      break;
+    }
   }
-  StoreDependencyTree();
+  StoreReferenceTree();
 }
 
 void ProjectReferenceTree::Rename(const csResourceLocator &from, const csResourceLocator &to)
 {
-  if (m_allResources.find(from) != m_allResources.end())
-  {
-    m_allResources.erase(from);
-    m_allResources.insert(to);
-  }
-  Rename(m_references, from, to);
-  Rename(m_referencedBy, from, to);
-  StoreDependencyTree();
-}
-
-void ProjectReferenceTree::Rename(std::map<csResourceLocator, std::set<csResourceLocator>> &references, const csResourceLocator &from, const csResourceLocator &to)
-{
-  std::map<csResourceLocator, std::set<csResourceLocator>>::iterator it = references.find(from);
-  if (it != references.end())
-  {
-    std::set<csResourceLocator> res = it->second;
-    references.erase(it);
-    references[to] = res;
-  }
-
-  for (it = references.begin(); it != references.end(); ++it)
-  {
-    if (it->second.find(from) != it->second.end())
-    {
-      it->second.erase(from);
-      it->second.insert(to);
-    }
-  }
-}
-
-std::set<csResourceLocator> ProjectReferenceTree::GetReference(const csResourceLocator &resource) const
-{
-  std::map<csResourceLocator, std::set<csResourceLocator>>::const_iterator it = m_references.find(resource);
+  auto it = m_references.find(from);
   if (it == m_references.end())
   {
-    return std::set<csResourceLocator>();
+    return;
   }
-  return it->second;
+  ProjectAssetReference *assetReference = it->second;
+  assetReference->SetResourceLocator(to);
+  m_references.erase(it);
+  m_references[to] = assetReference;
+
+  StoreReferenceTree();
 }
 
-std::set<csResourceLocator> ProjectReferenceTree::GetReferencedBy(const csResourceLocator &resource) const
+
+const ProjectAssetReference *ProjectReferenceTree::GetReference(const csResourceLocator &resource) const
 {
-  std::map<csResourceLocator, std::set<csResourceLocator>>::const_iterator it = m_referencedBy.find(resource);
-  if (it == m_referencedBy.end())
+  auto it = m_references.find(resource);
+  if (it == m_references.end())
   {
-    return std::set<csResourceLocator>();
+    return 0;
   }
   return it->second;
 }

@@ -142,5 +142,5 @@ void MainWindow::on_tabWidget_tabCloseRequested(int idx)
 
 void MainWindow::on_actionRebuild_dependency_tree_triggered(bool)
 {
-  Editor::Get()->GetProject()->GetDependencyTree().RebuildDependencyTree();
+  Editor::Get()->GetProject()->GetReferenceTree().Rebuild();
 }

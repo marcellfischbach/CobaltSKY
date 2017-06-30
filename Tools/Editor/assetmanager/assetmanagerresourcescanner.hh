@@ -12,28 +12,30 @@ class TiXmlElement;
 class AssetManagerResourceScanner
 {
 public:
+  struct Entry
+  {
+    csResourceLocator locator;
+    std::string name;
+    std::string typeName;
+    std::vector<csResourceLocator> references;
+  };
+
   AssetManagerResourceScanner();
 
-  void Scan();
+  void ScanPath();
   void ScanReference(const csResourceLocator &locator);
-  void AddResource(const csResourceLocator &locator);
+  void ScanReference(Entry &entry);
+  void AddEntry(const csResourceLocator &locator, const std::string &name, const std::string &typeName);
 
-  const std::set <csResourceLocator> &GetAllResources() const
-  {
-    return m_allResourceLocators;
-  }
+  const std::vector<Entry> GetAllEntries() const;
 
-  const std::set<std::pair<csResourceLocator, csResourceLocator>> &GetReferences() const
-  {
-    return m_references;
-  }
 
 private:
 
-  void Scan(const csVFS::Entry &entry, const csString &relPath);
-  void ScanReference(const csResourceLocator &assetName, const TiXmlElement *element);
+  void ScanPath(const csVFS::Entry &entry, const csString &relPath);
+  void ScanReference(Entry &entry, const TiXmlElement *element);
+  void EvalTypeName(Entry &entry, const TiXmlElement *rootElement);
 
   
-  std::set<csResourceLocator> m_allResourceLocators;
-  std::set<std::pair<csResourceLocator, csResourceLocator>> m_references;
+  std::map<csResourceLocator, Entry> m_entries;
 };

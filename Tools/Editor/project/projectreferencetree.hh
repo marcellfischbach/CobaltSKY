@@ -7,6 +7,7 @@
 #include <cobalt/core/csstring.hh>
 #include <cobalt/core/csresourcelocator.hh>
 
+class ProjectAssetReference;
 class ProjectReferenceTree
 {
 public:
@@ -15,21 +16,19 @@ public:
   void Open(const std::string &projectPath);
   void Close();
 
-  void RebuildDependencyTree();
-  void UpdateDependencyTree(const csResourceLocator &resourceName);
+  void Rebuild();
 
+  const ProjectAssetReference *GetResource(const csResourceLocator &locator);
+  void UpdateDependencyTree(const csResourceLocator &resourceLocator);
   void Rename(const csResourceLocator &from, const csResourceLocator &to);
-  std::set<csResourceLocator> GetReference(const csResourceLocator &resource) const;
-  std::set<csResourceLocator> GetReferencedBy(const csResourceLocator &resource) const;
 
+  const ProjectAssetReference *GetReference(const csResourceLocator &locator) const;
+private:
+  void Clear();
+  void LoadReferenceTree();
+  void StoreReferenceTree();
 
 private:
-  void LoadDependencyTree();
-  void StoreDependencyTree();
-  void Rename(std::map<csResourceLocator, std::set<csResourceLocator>> &references, const csResourceLocator &from, const csResourceLocator &to);
   std::string m_projectPath;
-
-  std::set<csResourceLocator> m_allResources;
-  std::map<csResourceLocator, std::set<csResourceLocator>> m_references;
-  std::map<csResourceLocator, std::set<csResourceLocator>> m_referencedBy;
+  std::map<csResourceLocator, ProjectAssetReference*> m_references;
 };
