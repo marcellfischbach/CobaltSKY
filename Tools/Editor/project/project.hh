@@ -19,8 +19,6 @@ public:
 
   bool Rename(const csResourceLocator &from, const csResourceLocator &to);
 
-signals:
-  void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
 
 private:
   ProjectReferenceTree m_referenceTree;

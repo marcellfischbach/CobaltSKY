@@ -107,6 +107,7 @@ bool csVFS::Initialize(csSettings *settings)
     TiXmlElement *vfsElement = settings->GetGroup("vfs");
     return LoadConfig(vfsElement, settings->GetRootPath());
   }
+  return false;
 }
 
 bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath)

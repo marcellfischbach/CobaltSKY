@@ -1,17 +1,27 @@
 
 #include <editorresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
+#include <eventbus.hh>
+#include <events/assetrenamedevent.hh>
 
+void editor_resource_manager_asset_renamed(csEvent &event, void *userData)
+{
+  AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
+
+  EditorResourceManager *resourceManager = reinterpret_cast<EditorResourceManager*>(userData);
+  resourceManager->RenameResource(evt.GetFrom(), evt.GetTo());
+
+}
 
 EditorResourceManager::EditorResourceManager()
   : csResourceManager()
 {
-
+  EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), editor_resource_manager_asset_renamed, this);
 }
 
 EditorResourceManager::~EditorResourceManager()
 {
-
+  EventBus::Get().Deregister(editor_resource_manager_asset_renamed, this);
 }
 
 iObject *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
@@ -29,6 +39,26 @@ const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator
   return csResourceManager::EvalClass(fixedLocator, userData);
 }
 
+void EditorResourceManager::RenameResource(const csResourceLocator &from, const csResourceLocator &to)
+{
+  // the resource is already changed on drive ... so we must check the to value
+  if (!to.GetResourceEntry().empty() && IsAnonymousLocator(to))
+  {
+    csResourceLocator &fixedFrom = csResourceLocator(
+      from.GetResourceFile(),
+      from.GetResourceName()
+    );
+    csResourceLocator &fixedTo = csResourceLocator(
+      to.GetResourceFile(),
+      to.GetResourceName()
+    );
+    csResourceManager::RenameResource(fixedFrom, fixedTo);
+  }
+  else
+  {
+    csResourceManager::RenameResource(from, to);
+  }
+}
 
 csResourceLocator EditorResourceManager::FixResourceLocator(const csResourceLocator &locator) const
 {

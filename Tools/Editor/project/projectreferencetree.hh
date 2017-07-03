@@ -12,6 +12,7 @@ class ProjectReferenceTree
 {
 public:
   ProjectReferenceTree();
+  ~ProjectReferenceTree();
 
   void Open(const std::string &projectPath);
   void Close();

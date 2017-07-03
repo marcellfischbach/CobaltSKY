@@ -6,6 +6,7 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <editor.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
+#include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>
 #include <materialeditor/materialeditornewaction.hh>
 #include <materialeditor/materialeditorfactory.hh>
@@ -36,4 +37,7 @@ void EditorModule::Initialize()
   csResourceManager *mgr = csResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
+
+
+  AssetManagerRenameHandler::Register();
 }

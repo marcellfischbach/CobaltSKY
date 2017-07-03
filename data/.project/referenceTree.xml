@@ -1,42 +1,42 @@
 <referenceTree>
   <assets>
-    <asset locator="Test.xasset" type="shaderGraph" name="Test"/>
-    <asset locator="default_sampler.xasset" type="sampler" name="default_sampler"/>
-    <asset locator="materials/DefaultMaterial.xasset" type="shaderGraph" name="DefaultMaterial"/>
-    <asset locator="materials/GroundFieldStone.xasset" type="material" name="GroundFieldStone"/>
-    <asset locator="materials/Material 00.xasset" type="material" name="Material 00"/>
-    <asset locator="materials/Material 01.xasset" type="material" name="Material 01"/>
-    <asset locator="materials/Material 02.xasset" type="material" name="Material 02"/>
-    <asset locator="materials/Solid.xasset" type="shaderGraph" name="Solid"/>
-    <asset locator="materials/TempleDirt.xasset" type="material" name="TempleDirt"/>
-    <asset locator="materials/default_sampler.xasset" type="sampler" name="default_sampler"/>
-    <asset locator="materials/gl4/commons/ForwardUnlit.xasset" type="program" name="ForwardUnlit"/>
-    <asset locator="materials/gl4/commons/unlit.xasset" type="material" name="unlit"/>
-    <asset locator="materials/gl4/deferred/DirectionalLight.xasset" type="program" name="DirectionalLight"/>
-    <asset locator="materials/gl4/deferred/DirectionalLightPSSM.xasset" type="program" name="DirectionalLightPSSM"/>
-    <asset locator="materials/gl4/deferred/PointLight.xasset" type="program" name="PointLight"/>
-    <asset locator="materials/gl4/deferred/PointLightCubeShadow.xasset" type="program" name="PointLightCubeShadow"/>
-    <asset locator="materials/gl4/deferred/SimplePresent.xasset" type="program" name="SimplePresent"/>
-    <asset locator="materials/gl4/renderer/ArrayPresent.xasset" type="program" name="ArrayPresent"/>
-    <asset locator="materials/gl4/renderer/SimplePresent.xasset" type="program" name="SimplePresent"/>
-    <asset locator="materials/grass_blades.xasset" type="texture2d" name="grass_blades"/>
-    <asset locator="materials/narf2.xasset" type="shaderGraph" name="narf2"/>
-    <asset locator="materials/textures/dirt_diffuse.xasset" type="texture2d" name="dirt_diffuse"/>
-    <asset locator="materials/textures/fieldstone_diffuse.xasset" type="texture2d" name="fieldstone_diffuse"/>
-    <asset locator="materials/textures/fieldstone_normal.xasset" type="texture2d" name="fieldstone_normal"/>
-    <asset locator="models/ground_plane.xasset" type="entityState" name="ground_plane"/>
-    <asset locator="models/temple.xasset" type="entityState" name="temple"/>
+    <asset name="Test" locator="Test.xasset" type="shaderGraph"/>
+    <asset name="default_sampler" locator="default_sampler.xasset" type="sampler"/>
+    <asset name="DefaultMaterial" locator="materials/DefaultMaterial.xasset" type="shaderGraph"/>
+    <asset name="GroundFieldStone" locator="materials/GroundFieldStone.xasset" type="material"/>
+    <asset name="Material 00" locator="materials/Material 00.xasset" type="material"/>
+    <asset name="Material 01" locator="materials/Material 01.xasset" type="material"/>
+    <asset name="Material 02" locator="materials/Material 02.xasset" type="material"/>
+    <asset name="Solid" locator="materials/Solid.xasset" type="shaderGraph"/>
+    <asset name="TempleDirt" locator="materials/TempleDirt.xasset" type="material"/>
+    <asset name="default_sampler" locator="materials/default_sampler.xasset" type="sampler"/>
+    <asset name="ForwardUnlit" locator="materials/gl4/commons/ForwardUnlit.xasset" type="program"/>
+    <asset name="unlit" locator="materials/gl4/commons/unlit.xasset" type="material"/>
+    <asset name="DirectionalLight" locator="materials/gl4/deferred/DirectionalLight.xasset" type="program"/>
+    <asset name="DirectionalLightPSSM" locator="materials/gl4/deferred/DirectionalLightPSSM.xasset" type="program"/>
+    <asset name="PointLight" locator="materials/gl4/deferred/PointLight.xasset" type="program"/>
+    <asset name="PointLightCubeShadow" locator="materials/gl4/deferred/PointLightCubeShadow.xasset" type="program"/>
+    <asset name="SimplePresent" locator="materials/gl4/deferred/SimplePresent.xasset" type="program"/>
+    <asset name="ArrayPresent" locator="materials/gl4/renderer/ArrayPresent.xasset" type="program"/>
+    <asset name="SimplePresent" locator="materials/gl4/renderer/SimplePresent.xasset" type="program"/>
+    <asset name="grass_blades" locator="materials/grass_blades.xasset" type="texture2d"/>
+    <asset name="narf2" locator="materials/narf2.xasset" type="shaderGraph"/>
+    <asset name="dirt_diffuse" locator="materials/textures/dirt_diffuse.xasset" type="texture2d"/>
+    <asset name="fieldstone_diffuse" locator="materials/textures/fieldstone_diffuse.xasset" type="texture2d"/>
+    <asset name="fieldstone_normal2" locator="materials/textures/fieldstone_normal.xasset" type="texture2d"/>
+    <asset name="ground_plane" locator="models/ground_plane.xasset" type="entityState"/>
+    <asset name="temple" locator="models/temple.xasset" type="entityState"/>
   </assets>
   <references>
-    <reference asset="materials/GroundFieldStone.xasset" references="materials/GroundFieldStone.xasset"/>
+    <reference asset="materials/GroundFieldStone.xasset" references="materials/Solid.xasset"/>
     <reference asset="materials/Solid.xasset" references="materials/textures/fieldstone_diffuse.xasset"/>
     <reference asset="materials/Solid.xasset" references="materials/textures/fieldstone_normal.xasset"/>
-    <reference asset="materials/TempleDirt.xasset" references="materials/TempleDirt.xasset"/>
-    <reference asset="materials/grass_blades.xasset" references="materials/grass_blades.xasset"/>
-    <reference asset="materials/textures/dirt_diffuse.xasset" references="materials/textures/dirt_diffuse.xasset"/>
-    <reference asset="materials/textures/fieldstone_diffuse.xasset" references="materials/textures/fieldstone_diffuse.xasset"/>
-    <reference asset="materials/textures/fieldstone_normal.xasset" references="materials/textures/fieldstone_normal.xasset"/>
-    <reference asset="models/ground_plane.xasset" references="models/ground_plane.xasset"/>
-    <reference asset="models/temple.xasset" references="models/temple.xasset"/>
+    <reference asset="materials/TempleDirt.xasset" references="materials/Solid.xasset"/>
+    <reference asset="materials/grass_blades.xasset" references="default_sampler.xasset"/>
+    <reference asset="materials/textures/dirt_diffuse.xasset" references="default_sampler.xasset"/>
+    <reference asset="materials/textures/fieldstone_diffuse.xasset" references="default_sampler.xasset"/>
+    <reference asset="materials/textures/fieldstone_normal.xasset" references="default_sampler.xasset"/>
+    <reference asset="models/ground_plane.xasset" references="materials/GroundFieldStone.xasset"/>
+    <reference asset="models/temple.xasset" references="materials/TempleDirt.xasset"/>
   </references>
 </referenceTree>

@@ -34,6 +34,16 @@ void csEventBus::Fire(csEvent &event, const csClass *cls)
       del.delegate(event, del.ptr);
     }
   }
+
+  std::map<const csClass *, std::vector<iEventHandler*>>::iterator it1 = m_handlers.find(cls);
+  if (it1 != m_handlers.end())
+  {
+    for (auto handler : it1->second)
+    {
+      handler->HandleEvent(event);
+    }
+  }
+
   for (csSize i = 0, in = cls->GetNumberOfSuperClasses(); i < in; ++i)
   {
     Fire(event, cls->GetSuperClass(i));
@@ -102,4 +112,35 @@ void csEventBus::Deregister(csEventDelegate delegate)
 }
 
 
+
+
+void csEventBus::Register(iEventHandler *handler)
+{
+  Register(csEvent::GetStaticClass(), handler);
+}
+
+void csEventBus::Register(const csClass *eventClass, iEventHandler *handler)
+{
+  m_handlers[eventClass].push_back(handler);
+}
+
+void csEventBus::Deregister(iEventHandler *handler)
+{
+
+  for (auto hndl : m_handlers)
+  {
+    for (std::vector<iEventHandler *>::iterator it = hndl.second.begin();
+      it != hndl.second.end(); )
+    {
+      if (*it == handler)
+      {
+        it = hndl.second.erase(it);
+      }
+      else
+      {
+        it++;
+      }
+    }
+  }
+}
 

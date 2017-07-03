@@ -1,10 +1,19 @@
 
 #include <components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcelocator.hh>
+#include <eventbus.hh>
+#include <events/assetrenamedevent.hh>
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QPushButton>
 
+
+void asset_resource_widget_asset_renamed(csEvent &event, void *userData)
+{
+  AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
+  AssetResourceWidget *widget = reinterpret_cast<AssetResourceWidget*>(userData);
+
+}
 
 AssetResourceWidget::AssetResourceWidget(QWidget *parent)
   : QWidget(parent)
@@ -13,6 +22,8 @@ AssetResourceWidget::AssetResourceWidget(QWidget *parent)
   connect(
     m_gui.lineEdit, SIGNAL(ResourceChanged(const csResourceLocator&)), 
     this, SLOT(ResourceChangedSlot(const csResourceLocator &)));
+
+
 }
 
 AssetResourceWidget::~AssetResourceWidget()

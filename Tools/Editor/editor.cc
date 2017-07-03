@@ -2,11 +2,13 @@
 #include <basicdockitem.hh>
 #include <editormodule.hh>
 #include <editorresourcemanager.hh>
+#include <eventbus.hh>
 #include <glcontext.hh>
 #include <iasseteditor.hh>
 #include <idockitem.hh>
 #include <mainwindow.hh>
 #include <renderwidget.hh>
+#include <events/assetrenamedevent.hh>
 #include <project/project.hh>
 #include <cobalt/core/cssettings.hh>
 #include <assetmanager/assetmanagerdock.hh>
@@ -21,14 +23,14 @@
 #include <QOffscreenSurface>
 #include <abstractdockitem.hh>
 
-
+void editor_resource_renamed(csEvent &event, void *userData);
 
 Editor::Editor()
-  : QObject ()
+  : QObject()
   , m_mainWindow(0)
 {
-}
 
+}
 
 bool Editor::Initialize(int argc, char **argv)
 {
@@ -88,6 +90,8 @@ bool Editor::Initialize(int argc, char **argv)
   // right docks
   AddDockItem(new BasicDockItem(OUTLINER_DOCK_NAME, QObject::tr("Outliner"), Qt::RightDockWidgetArea));
   AddDockItem(new BasicDockItem(PROPERTIES_DOCK_NAME, QObject::tr("Properties"), Qt::RightDockWidgetArea));
+
+  EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), editor_resource_renamed, this);
 
   GetGraphics();
 
@@ -281,8 +285,6 @@ void Editor::CloseProject()
 {
   if (m_project)
   {
-    disconnect(m_project, SIGNAL(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)),
-      this, SLOT(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)));
     //m_project->Close();
     delete m_project;
   }
@@ -294,11 +296,16 @@ void Editor::OpenProject(const std::string &projectPath)
   m_project = new Project();
   m_project->Open(projectPath);
 
-  connect(m_project, SIGNAL(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)),
-    this, SLOT(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)));
 
 }
 
+
+void editor_resource_renamed(csEvent &event, void *userData)
+{
+  AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
+  Editor *editor = reinterpret_cast<Editor*>(userData);
+  editor->ResourceRenamed(evt.GetFrom(), evt.GetTo());
+}
 
 void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 {
@@ -311,8 +318,4 @@ void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLoca
   }
 }
 
-void Editor::EmitObjectChanged(const iObject *object)
-{
-  emit ObjectChanged(object);
-}
 

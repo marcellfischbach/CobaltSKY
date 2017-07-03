@@ -11,6 +11,12 @@ class csEvent;
 
 typedef  void(*csEventDelegate)(csEvent &, void*);
 
+struct iEventHandler 
+{
+  virtual ~iEventHandler() {}
+  virtual void HandleEvent(csEvent &event) = 0;
+};
+
 class CSE_API csEventBus 
 {
 public:
@@ -27,6 +33,10 @@ public:
   void Deregister(csEventDelegate delegate);
   void Deregister(csEventDelegate delegate, void *userObject);
 
+  void Register(iEventHandler *handler);
+  void Register(const csClass *cls, iEventHandler *handler);
+  void Deregister(iEventHandler *handler);
+
 private:
   void Fire(csEvent &event, const csClass *cls);
 
@@ -36,7 +46,7 @@ private:
     void *ptr;
   };
   
-
+  std::map<const csClass *, std::vector<iEventHandler *>> m_handlers;
   std::map<const csClass *, std::vector<Delegate>> m_delegates;
 };
 

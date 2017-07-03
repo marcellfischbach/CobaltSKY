@@ -14,6 +14,7 @@ public:
 
 
   virtual bool RegisterObject(const csResourceLocator &locator, iObject *object);
+  virtual void RenameResource(const csResourceLocator &from, const csResourceLocator &to);
 
 private:
   csResourceLocator FixResourceLocator(const csResourceLocator &locator) const;

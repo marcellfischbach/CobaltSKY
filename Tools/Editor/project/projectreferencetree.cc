@@ -2,12 +2,30 @@
 #include <project/projectreferencetree.hh>
 #include <project/projectassetreference.hh>
 #include <assetmanager/assetmanagerresourcescanner.hh>
+#include <events/assetrenamedevent.hh>
+#include <cobalt/core/csevent.hh>
+#include <cobalt/core/cseventbus.hh>
+#include <eventbus.hh>
 #include <QDomDocument>
 #include <QFile>
 
+void project_reference_tree_renamed(csEvent &event, void *userData)
+{
+  AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
+  ProjectReferenceTree *tree = reinterpret_cast<ProjectReferenceTree*>(userData);
+
+  tree->Rename(evt.GetFrom().AsAnonymous(), evt.GetTo().AsAnonymous());
+}
+
 ProjectReferenceTree::ProjectReferenceTree()
 {
+  EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), project_reference_tree_renamed, this);
+}
 
+
+ProjectReferenceTree::~ProjectReferenceTree()
+{
+  EventBus::Get().Deregister(project_reference_tree_renamed, this);
 }
 
 void ProjectReferenceTree::Open(const std::string &projectPath)
@@ -109,7 +127,7 @@ void ProjectReferenceTree::LoadReferenceTree()
       std::string referencesResourceLocator = std::string((const char*)referenceElement.attribute("references").toLatin1());
 
       ProjectAssetReference *asset = m_references[csResourceLocator(assetResourceLocator)];
-      ProjectAssetReference *reference = m_references[csResourceLocator(assetResourceLocator)];
+      ProjectAssetReference *reference = m_references[csResourceLocator(referencesResourceLocator)];
 
       if (asset && reference)
       {

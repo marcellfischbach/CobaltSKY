@@ -133,6 +133,7 @@ csEntityState* csEntity::FindState(const csClass* cls) const
       return state;
     }
   }
+  return 0;
 }
 
 

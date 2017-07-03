@@ -80,6 +80,8 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagerfoldermodel.hh
     assetmanager/assetmanagerrenamer.cc
     assetmanager/assetmanagerrenamer.hh
+    assetmanager/assetmanagerrenamehandler.cc
+    assetmanager/assetmanagerrenamehandler.hh
     assetmanager/assetmanagerresourcescanner.cc
     assetmanager/assetmanagerresourcescanner.hh
     assetmanager/assetmanagerwidget.cc

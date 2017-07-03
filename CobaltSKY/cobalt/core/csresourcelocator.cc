@@ -1,5 +1,6 @@
 
 #include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csfileinfo.hh>
 
 csResourceLocator::csResourceLocator(const csResourceLocator &other)
   : m_resourceEntry(other.m_resourceEntry)
@@ -76,6 +77,20 @@ csResourceLocator csResourceLocator::AsFileName() const
   return csResourceLocator(m_resourceFile, "", "");
 }
 
+csResourceLocator csResourceLocator::AsXAsset() const
+{
+  csFileInfo fi(m_resourceFile);
+  csString fileName = fi.GetLocation() + "/" + fi.GetName() + ".xasset";
+  return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
+}
+
+csResourceLocator csResourceLocator::AsData() const
+{
+  csFileInfo fi(m_resourceFile);
+  csString fileName = fi.GetLocation() + "/" + fi.GetName() + ".data";
+  return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
+}
+
 const csString &csResourceLocator::GetResourceFile() const
 {
   return m_resourceFile;
@@ -149,3 +164,5 @@ void csResourceLocator::FixResourceFile()
     m_resourceFile = m_resourceFile.substr(s, m_resourceFile.length() - s);
   }
 }
+
+

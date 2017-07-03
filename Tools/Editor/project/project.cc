@@ -36,13 +36,5 @@ const ProjectReferenceTree &Project::GetReferenceTree() const
 bool Project::Rename(const csResourceLocator &from, const csResourceLocator &to)
 {
   AssetManagerRenamer renamer(from, to);
-  if (!renamer.Execute())
-  {
-    return false;
-  }
-
-  m_referenceTree.Rename(from.AsAnonymous(), to.AsAnonymous());
-
-  emit ResourceRenamed(from, to);
-  return true;
+  return renamer.Execute();
 }

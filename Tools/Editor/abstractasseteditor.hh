@@ -6,19 +6,6 @@
 #include <abstractasseteditor.refl.hh>
 #include <QFile>
 
-class AbstractAssetEditor;
-class AbstractAssetEditorObject : public QObject
-{
-  Q_OBJECT;
-public:
-  AbstractAssetEditorObject(AbstractAssetEditor *editor);
-
-private slots:
-void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
-
-private:
-  AbstractAssetEditor *m_editor;
-};
 
 CS_INTERFACE()
 class AbstractAssetEditor : public iAssetEditor
@@ -54,7 +41,6 @@ private:
   void UpdateName();
 
 private:
-  AbstractAssetEditorObject *m_object;
   AssetDescriptor m_assetDescriptor;
 
   QWidget *m_widget;

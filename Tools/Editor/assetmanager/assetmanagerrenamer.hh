@@ -12,9 +12,6 @@ public:
   bool Execute();
 
 private:
-  void Rename(const csResourceLocator &from, const csResourceLocator &to);
-  void Rename(const csResourceLocator &resource, const csResourceLocator &from, const csResourceLocator &to);
-  void Rename(QDomDocument doc, QDomElement element, const csResourceLocator &from, const csResourceLocator &to);
   void MoveTheFile(const csResourceLocator &from, const csResourceLocator &to);
 
 private:

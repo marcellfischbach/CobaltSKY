@@ -1,10 +1,11 @@
 
 #include <events/assetrenamedevent.hh>
 
-AssetRenamedEvent::AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, iObject *object)
+AssetRenamedEvent::AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, ResourceFetchMode mode, iObject *object)
   :csEvent()
   , m_from(from)
   , m_to(to)
+  , m_mode(mode)
   , m_object(object)
 {
 
@@ -18,6 +19,11 @@ const csResourceLocator &AssetRenamedEvent::GetFrom() const
 const csResourceLocator &AssetRenamedEvent::GetTo() const
 {
   return m_to;
+}
+
+AssetRenamedEvent::ResourceFetchMode AssetRenamedEvent::GetFetchMode() const
+{
+  return m_mode;
 }
 
 const iObject *AssetRenamedEvent::GetObject() const

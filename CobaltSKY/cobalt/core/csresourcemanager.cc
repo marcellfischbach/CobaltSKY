@@ -344,3 +344,17 @@ void csResourceManager::UnregisterResource(iObject *object)
 
 
 
+void csResourceManager::RenameResource(const csResourceLocator &from, const csResourceLocator &to)
+{
+  auto it = m_objects.find(from);
+  if (it == m_objects.end())
+  {
+    return;
+  }
+  iObject *object = it->second;
+
+  m_objects.erase(it);
+  m_objects[to] = object;
+  m_resources[object] = to;
+}
+

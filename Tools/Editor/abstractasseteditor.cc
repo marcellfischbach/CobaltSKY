@@ -5,36 +5,30 @@
 #include <editor.hh>
 #include <project/project.hh>
 #include <mainwindow.hh>
+#include <eventbus.hh>
+#include <events/assetrenamedevent.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
 #include <QFile>
 
-
-AbstractAssetEditorObject::AbstractAssetEditorObject(AbstractAssetEditor *editor)
-  : QObject()
-  , m_editor(editor)
+void abstract_asset_editor_asset_renamed(csEvent &event, void *userData)
 {
-  Project *proj = Editor::Get()->GetProject();
-
-  connect(proj, SIGNAL(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)),
-    this, SLOT(ResourceRenamed(const csResourceLocator &, const csResourceLocator &)));
+  AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
+  AbstractAssetEditor *editor = reinterpret_cast<AbstractAssetEditor*>(userData);
+  editor->ResourceRenamed(evt.GetFrom(), evt.GetTo());
 }
 
-void AbstractAssetEditorObject::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
-{
-  m_editor->ResourceRenamed(from, to);
-}
 
 AbstractAssetEditor::AbstractAssetEditor()
   : iAssetEditor()
   , m_dirty(true)
-  , m_object(new AbstractAssetEditorObject(this))
 {
+  EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), abstract_asset_editor_asset_renamed, this);
 }
 
 AbstractAssetEditor::~AbstractAssetEditor()
 {
-  m_object->deleteLater();
+  EventBus::Get().Deregister(abstract_asset_editor_asset_renamed, this);
 }
 
 void AbstractAssetEditor::SetAssetDescriptor(const AssetDescriptor &descriptor)

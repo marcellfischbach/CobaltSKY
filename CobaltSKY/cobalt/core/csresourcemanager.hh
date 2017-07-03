@@ -254,6 +254,8 @@ public:
   virtual void RegisterResource(iObject *object, const csResourceLocator &locator);
   virtual void UnregisterResource(iObject *object);
 
+  virtual void RenameResource(const csResourceLocator &from, const csResourceLocator &to);
+
 
 protected:
   csResourceManager();

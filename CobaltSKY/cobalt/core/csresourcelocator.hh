@@ -13,6 +13,8 @@ public:
 
   csResourceLocator AsAnonymous() const;
   csResourceLocator AsFileName() const;
+  csResourceLocator AsXAsset() const;
+  csResourceLocator AsData() const;
 
   const csString &GetResourceFile() const;
   const csString &GetResourceName() const;
@@ -29,6 +31,7 @@ public:
   }
 
   bool IsValid() const;
+
 
 private:
   void FixResourceFile();
