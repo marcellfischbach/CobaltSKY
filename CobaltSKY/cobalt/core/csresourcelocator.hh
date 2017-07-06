@@ -16,12 +16,20 @@ public:
   csResourceLocator AsXAsset() const;
   csResourceLocator AsData() const;
 
+  bool IsAnonymous() const;
+
   const csString &GetResourceFile() const;
   const csString &GetResourceName() const;
   const csString &GetResourceEntry() const;
 
   csString GetText() const;
   csString GetDebugName() const;
+
+  bool Equals(const csResourceLocator &other) const;
+  /**
+   * \brief Is any locator is anonymous test the base locator
+   */
+  bool EqualsAnonymous(const csResourceLocator &other) const;
 
   bool operator< (const csResourceLocator &o) const;
   bool operator== (const csResourceLocator &o) const;

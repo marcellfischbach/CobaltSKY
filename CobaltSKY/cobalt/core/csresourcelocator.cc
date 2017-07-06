@@ -91,6 +91,11 @@ csResourceLocator csResourceLocator::AsData() const
   return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
 }
 
+bool csResourceLocator::IsAnonymous() const
+{
+  return m_resourceEntry.empty();
+}
+
 const csString &csResourceLocator::GetResourceFile() const
 {
   return m_resourceFile;
@@ -135,6 +140,20 @@ bool csResourceLocator::operator<(const csResourceLocator &o) const
   return false;
 }
 
+bool csResourceLocator::Equals(const csResourceLocator &o) const
+{
+  return *this == o;
+}
+
+bool csResourceLocator::EqualsAnonymous(const csResourceLocator &o) const
+{
+  if (IsAnonymous() || o.IsAnonymous())
+  {
+    return m_resourceFile == o.m_resourceFile && m_resourceName == o.m_resourceName;
+  }
+
+  return *this == o;
+}
 
 bool csResourceLocator::operator==(const csResourceLocator &o) const
 {

@@ -69,6 +69,7 @@
      <string>Project</string>
     </property>
     <addaction name="actionRebuild_dependency_tree"/>
+    <addaction name="actionDebug_dependency_tree"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProject"/>
@@ -91,6 +92,11 @@
   <action name="actionRebuild_dependency_tree">
    <property name="text">
     <string>Rebuild dependency tree</string>
+   </property>
+  </action>
+  <action name="actionDebug_dependency_tree">
+   <property name="text">
+    <string>Debug dependency tree</string>
    </property>
   </action>
  </widget>

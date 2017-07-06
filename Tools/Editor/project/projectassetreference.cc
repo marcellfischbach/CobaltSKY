@@ -4,6 +4,8 @@
 
 
 ProjectAssetReference::ProjectAssetReference()
+  : m_parent(0)
+  , m_child(0)
 {
 
 }
@@ -28,6 +30,16 @@ const csString &ProjectAssetReference::GetTypeName() const
   return m_typeName;
 }
 
+void ProjectAssetReference::SetPriority(unsigned priority)
+{
+  m_priority = priority;
+}
+
+unsigned ProjectAssetReference::GetPriority() const
+{
+  return m_priority;
+}
+
 
 void ProjectAssetReference::SetResourceLocator(const csResourceLocator &resourceLocator)
 {
@@ -39,6 +51,56 @@ const csResourceLocator &ProjectAssetReference::GetResourceLocator() const
   return m_resourceLocator;
 }
 
+
+void ProjectAssetReference::SetParent(ProjectAssetReference *parent)
+{
+  m_parent = parent;
+}
+
+ProjectAssetReference *ProjectAssetReference::GetParent() const
+{
+  return m_parent;
+}
+
+void ProjectAssetReference::SetChild(ProjectAssetReference *child)
+{
+  m_child = child;
+}
+
+ProjectAssetReference* ProjectAssetReference::GetChild() const
+{
+  return m_child;
+}
+
+ProjectAssetReference* ProjectAssetReference::InsertChild(ProjectAssetReference *child)
+{
+  if (!child)
+  {
+    return this;
+  }
+
+  if (child->GetPriority() < GetPriority())
+  {
+    child->SetChild(this);
+    child->SetParent(0);
+    SetParent(child);
+    return child;
+  }
+  else
+  {
+    if (m_child)
+    {
+      SetChild(m_child->InsertChild(child));
+      m_child->SetParent(this);
+    }
+    else
+    {
+      SetChild(child);
+      child->SetParent(this);
+    }
+    return this;
+  }
+}
 
 
 void ProjectAssetReference::AddReference(ProjectAssetReference *reference)

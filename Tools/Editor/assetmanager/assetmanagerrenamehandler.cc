@@ -26,28 +26,41 @@ void AssetManagerRenameHandler::HandleEvent(csEvent &event)
 
 
   const ProjectReferenceTree &refTree = Editor::Get()->GetProject()->GetReferenceTree();
-  const ProjectAssetReference *ref = refTree.GetReference(evt.GetFrom().AsAnonymous());
-  if (!ref)
+
+  std::set<csResourceLocator> toBeChanged;
+  // get the reference from the TO locator because the reference tree is already updated before
+  const ProjectAssetReference *ref = refTree.GetReference(evt.GetTo());
+  while (ref)
   {
-    ref = refTree.GetReference(evt.GetTo().AsAnonymous());
-    if (!ref)
+    for (auto refBy : ref->GetReferencedBy())
     {
-      return;
+      toBeChanged.insert(refBy->GetResourceLocator());
     }
+    ref = ref->GetChild();
   }
 
-  const std::vector<ProjectAssetReference*> referencedBys = ref->GetReferencedBy();
-  for (ProjectAssetReference *referencedBy : referencedBys)
+
+  for (auto referencedBy : toBeChanged)
   {
-    Rename(referencedBy->GetResourceLocator(), evt.GetFrom(), evt.GetTo());
+    Rename(referencedBy, evt.GetFrom(), evt.GetTo());
   }
 
+  //
   // rename the data section
   // data is only referenced by the asset itself 
   // the asset itself is already renamed to we must check the TO-reference
-  csResourceLocator fromData = evt.GetFrom().AsData();
-  csResourceLocator toData = evt.GetTo().AsData();
-  Rename(evt.GetTo(), fromData, toData);
+  ref = refTree.GetReference(evt.GetTo());
+  while (ref)
+  {
+    csResourceLocator fromData = ref->GetResourceLocator().AsData();
+    fromData = csResourceLocator(evt.GetFrom().AsData().GetResourceFile(), fromData.GetResourceName(), fromData.GetResourceEntry());
+    csResourceLocator toData = evt.GetTo().AsData();
+    toData = csResourceLocator(toData.GetResourceFile(), toData.GetResourceName(), fromData.GetResourceEntry());
+
+    Rename(ref->GetResourceLocator(), fromData, toData);
+    ref = ref->GetChild();
+  }
+
 }
 
 void AssetManagerRenameHandler::Rename(const csResourceLocator &resource, const csResourceLocator &from, const csResourceLocator &to)

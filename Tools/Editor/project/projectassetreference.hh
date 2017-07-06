@@ -17,8 +17,19 @@ public:
   void SetTypeName(const csString &typeName);
   const csString &GetTypeName() const;
 
+  void SetPriority(unsigned priority);
+  unsigned GetPriority() const;
+
   void SetResourceLocator(const csResourceLocator &locator);
   const csResourceLocator &GetResourceLocator() const;
+
+  void SetParent(ProjectAssetReference *parent);
+  ProjectAssetReference *GetParent() const;
+
+  void SetChild(ProjectAssetReference *child);
+  ProjectAssetReference* GetChild() const;
+
+  ProjectAssetReference *InsertChild(ProjectAssetReference *child);
 
   void AddReference(ProjectAssetReference *reference);
   void RemoveReference(ProjectAssetReference *reference);
@@ -37,10 +48,11 @@ private:
 
   csString m_name;
   csString m_typeName;
+  unsigned m_priority;
 
   csResourceLocator m_resourceLocator;
-
-
+  ProjectAssetReference *m_parent;
+  ProjectAssetReference *m_child;
   std::vector<ProjectAssetReference*> m_references;
   std::vector<ProjectAssetReference*> m_referencedBy;
 };

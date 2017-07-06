@@ -144,3 +144,8 @@ void MainWindow::on_actionRebuild_dependency_tree_triggered(bool)
 {
   Editor::Get()->GetProject()->GetReferenceTree().Rebuild();
 }
+
+void MainWindow::on_actionDebug_dependency_tree_triggered(bool)
+{
+  Editor::Get()->GetProject()->GetReferenceTree().Debug();
+}

@@ -24,7 +24,7 @@ void AssetManagerResourceScanner::ScanPath()
 
   for (auto it = m_entries.begin(); it != m_entries.end (); ++it)
   {
-    ScanReference(it->second);
+    ScanReference(*it);
   }
   printf("Done\n");
 }
@@ -36,12 +36,12 @@ void AssetManagerResourceScanner::AddEntry(const csResourceLocator &resource, co
   entry.locator = resource;
   entry.name = name;
   entry.typeName = typeName;
-  m_entries[entry.locator] = entry;
+  m_entries.push_back(entry);
 }
 
-void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &entry, const csString &relPath)
+void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const csString &relPath)
 {
-  csString absPath = entry.GetAbsPath() + "/" + relPath;
+  csString absPath = vfsEntry.GetAbsPath() + "/" + relPath;
   QDir dir(QString(absPath.c_str()));
 
   QStringList filter;
@@ -54,9 +54,10 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &entry, const csSt
     csFileInfo info(assetFileName);
     //m_allResourceLocators.insert(csResourceLocator(assetFileName, "", entry.GetName()));
     Entry entry;
-    entry.locator = csResourceLocator(assetFileName);
+    entry.locator = csResourceLocator(assetFileName, "", vfsEntry.GetName());
     entry.name = info.GetName();
-    m_entries[entry.locator] = entry;
+    entry.priority = vfsEntry.GetPriority();
+    m_entries.push_back(entry);
   }
 
 
@@ -64,20 +65,21 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &entry, const csSt
   for (const QString &path : paths)
   {
     csString resourcePath = relPath + "/" + csString((const char*)path.toLatin1());
-    ScanPath(entry, resourcePath);
+    ScanPath(vfsEntry, resourcePath);
   }
 
 }
 
 void AssetManagerResourceScanner::ScanReference(const csResourceLocator &locator)
 {
-  auto it = m_entries.find(locator);
-  if (it == m_entries.end())
+  for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
   {
-    return;
+    if (it->locator == locator)
+    {
+      ScanReference(*it);
+      return;
+    }
   }
-
-  ScanReference(it->second);
 }
 
 void AssetManagerResourceScanner::ScanReference(Entry &entry)
@@ -119,10 +121,14 @@ void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const TiXmlEl
   {
     std::string text(textStr);
     csResourceLocator refLocator(text);
-    std::map<csResourceLocator, Entry>::iterator it = m_entries.find(refLocator);
-    if (it != m_entries.end())
+
+    for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
     {
-      assetEntry.references.push_back(refLocator);
+      if (it->locator.EqualsAnonymous(refLocator))
+      {
+        assetEntry.references.push_back(refLocator);
+        break;
+      }
     }
   }
 
@@ -153,13 +159,8 @@ void AssetManagerResourceScanner::EvalTypeName(Entry &assetEntry, const TiXmlEle
   assetEntry.typeName = std::string(resourceElement->Value());
 }
 
-const std::vector<AssetManagerResourceScanner::Entry> AssetManagerResourceScanner::GetAllEntries() const
+const std::vector<AssetManagerResourceScanner::Entry> &AssetManagerResourceScanner::GetAllEntries() const
 {
-  std::vector<Entry> entries;
-  for (auto entry : m_entries)
-  {
-    entries.push_back(entry.second);
-  }
-  return entries;
+  return m_entries;
 }
 

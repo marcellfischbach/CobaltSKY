@@ -17,6 +17,7 @@ public:
     csResourceLocator locator;
     std::string name;
     std::string typeName;
+    unsigned priority;
     std::vector<csResourceLocator> references;
   };
 
@@ -27,7 +28,7 @@ public:
   void ScanReference(Entry &entry);
   void AddEntry(const csResourceLocator &locator, const std::string &name, const std::string &typeName);
 
-  const std::vector<Entry> GetAllEntries() const;
+  const std::vector<Entry> &GetAllEntries() const;
 
 
 private:
@@ -37,5 +38,5 @@ private:
   void EvalTypeName(Entry &entry, const TiXmlElement *rootElement);
 
   
-  std::map<csResourceLocator, Entry> m_entries;
+  std::vector<Entry> m_entries;
 };

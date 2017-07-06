@@ -25,15 +25,27 @@ AssetManagerRenamer::AssetManagerRenamer(const csResourceLocator &from, const cs
 
 bool AssetManagerRenamer::Execute()
 {
-  csFileInfo fiFrom(m_from.GetResourceFile());
-  csFileInfo fiTo(m_to.GetResourceFile());
+  ProjectReferenceTree &tree = Editor::Get()->GetProject()->GetReferenceTree();
+  const ProjectAssetReference *reference = tree.GetReference(m_from);
+  while (reference)
+  {
+    csResourceLocator tmpFrom(m_from.GetResourceFile(), m_from.GetResourceName(), reference->GetResourceLocator().GetResourceEntry());
+    csResourceLocator tmpTo(m_to.GetResourceFile(), m_to.GetResourceName(), reference->GetResourceLocator().GetResourceEntry());
 
-  csResourceLocator dataFrom = m_from.AsData();
-  csResourceLocator dataTo = m_to.AsData();
+    csFileInfo fiFrom(tmpFrom.GetResourceFile());
+    csFileInfo fiTo(tmpTo.GetResourceFile());
 
-  
-  MoveTheFile(m_from, m_to);
-  MoveTheFile(dataFrom, dataTo);
+    csResourceLocator dataFrom = tmpFrom.AsData();
+    csResourceLocator dataTo = tmpTo.AsData();
+
+
+    MoveTheFile(tmpFrom, tmpTo);
+    MoveTheFile(dataFrom, dataTo);
+
+    reference = reference->GetChild();
+  }
+
+  tree.Rename(m_from, m_to);
 
   AssetRenamedEvent evnt(m_from, m_to);
 

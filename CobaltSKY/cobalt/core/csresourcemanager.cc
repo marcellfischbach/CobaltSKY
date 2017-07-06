@@ -76,7 +76,7 @@ iFile *csResourceManager::Open(const csResourceLocator &locator) const
 
 iObject *csResourceManager::Load(const csResourceLocator &locator, iObject *userData)
 {
-  iFile *file = Open(locator.GetResourceFile());
+  iFile *file = Open(locator);
   if (!file)
   {
     return 0;
@@ -90,7 +90,7 @@ iObject *csResourceManager::Load(const csResourceLocator &locator, iObject *user
 
 const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iObject *userData) const
 {
-  iFile *file = Open(locator.GetResourceFile());
+  iFile *file = Open(locator);
   if (!file)
   {
     return 0;
