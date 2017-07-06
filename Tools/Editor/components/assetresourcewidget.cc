@@ -12,7 +12,7 @@ void asset_resource_widget_asset_renamed(csEvent &event, void *userData)
 {
   AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
   AssetResourceWidget *widget = reinterpret_cast<AssetResourceWidget*>(userData);
-
+  widget->Renamed(evt.GetFrom(), evt.GetTo());
 }
 
 AssetResourceWidget::AssetResourceWidget(QWidget *parent)
@@ -23,12 +23,12 @@ AssetResourceWidget::AssetResourceWidget(QWidget *parent)
     m_gui.lineEdit, SIGNAL(ResourceChanged(const csResourceLocator&)), 
     this, SLOT(ResourceChangedSlot(const csResourceLocator &)));
 
-
+  EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), asset_resource_widget_asset_renamed, this);
 }
 
 AssetResourceWidget::~AssetResourceWidget()
 {
-
+  EventBus::Get().Deregister(asset_resource_widget_asset_renamed, this);
 }
 
 void AssetResourceWidget::AddValidClass(const csClass *cls)
@@ -51,4 +51,12 @@ void AssetResourceWidget::SetResourceLocator(const csResourceLocator &locator)
 const csResourceLocator &AssetResourceWidget::GetResourceLocator() const
 {
   return m_locator;
+}
+
+void AssetResourceWidget::Renamed(const csResourceLocator &from, const csResourceLocator &to)
+{
+  if (m_locator.EqualsAnonymous(from))
+  {
+    SetResourceLocator(to.AsAnonymous());
+  }
 }

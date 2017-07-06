@@ -1,7 +1,7 @@
 <asset>
   <data>
     <texture2d>
-      <sampler resourceMode="shared">default_sampler.xasset</sampler>
+      <sampler resourceMode="shared">default_sampler2.xasset</sampler>
       <image mipmap="true">materials/grass_blades.data</image>
     </texture2d>
   </data>
