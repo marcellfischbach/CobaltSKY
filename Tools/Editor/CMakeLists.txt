@@ -264,6 +264,8 @@ set(SAMPLEREDITOR_SOURCES
     samplereditor/samplereditor.hh
     samplereditor/samplereditorfactory.cc
     samplereditor/samplereditorfactory.hh
+    samplereditor/samplereditornewaction.cc
+    samplereditor/samplereditornewaction.hh
     samplereditor/samplereditorwidget.cc
     samplereditor/samplereditorwidget.hh
     )

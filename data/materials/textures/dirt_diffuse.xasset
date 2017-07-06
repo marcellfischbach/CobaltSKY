@@ -1,7 +1,7 @@
 <asset>
   <data>
     <texture2d>
-      <sampler resourceMode="shared">default_sampler2.xasset</sampler>
+      <sampler resourceMode="shared">DefaultSampler.xasset</sampler>
       <image mipmap="true">materials/textures/dirt_diffuse.data</image>
     </texture2d>
   </data>

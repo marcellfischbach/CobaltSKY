@@ -11,6 +11,7 @@
 #include <materialeditor/materialeditornewaction.hh>
 #include <materialeditor/materialeditorfactory.hh>
 #include <samplereditor/samplereditorfactory.hh>
+#include <samplereditor/samplereditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
@@ -32,6 +33,7 @@ void EditorModule::Initialize()
   AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
   actionManager->RegisterNewAction(new MaterialEditorNewAction());
   actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
+  actionManager->RegisterNewAction(new SamplerEditorNewAction());
   actionManager->RegisterAction(new AssetManagerRenameAction());
 
   csResourceManager *mgr = csResourceManager::Get();
