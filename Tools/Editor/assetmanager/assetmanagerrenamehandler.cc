@@ -27,9 +27,33 @@ void AssetManagerRenameHandler::HandleEvent(csEvent &event)
 
   const ProjectReferenceTree &refTree = Editor::Get()->GetProject()->GetReferenceTree();
 
+  //
+  // rename the data section
+  // data is only referenced by the asset itself 
+  // the asset itself is already renamed to we must check the TO-reference
+  const ProjectAssetReference *ref = refTree.GetReference(evt.GetTo());
+  while (ref)
+  {
+    csResourceLocator fromData = ref->GetResourceLocator().AsData();
+    fromData = csResourceLocator(evt.GetFrom().AsData().GetResourceFile(), fromData.GetResourceName(), fromData.GetResourceEntry());
+    csResourceLocator toData = evt.GetTo().AsData();
+    toData = csResourceLocator(toData.GetResourceFile(), toData.GetResourceName(), fromData.GetResourceEntry());
+
+    Rename(ref->GetResourceLocator(), fromData, toData);
+    ref = ref->GetChild();
+  }
+
+  const ProjectAssetReference *oldReference = refTree.GetReference(evt.GetFrom().AsAnonymous());
+  if (oldReference)
+  {
+    // the old name is still valid... so we have not changed the root asset
+    // all references on this asset are still valid... so we don't need to rename anything
+    return;
+  }
+
   std::set<csResourceLocator> toBeChanged;
   // get the reference from the TO locator because the reference tree is already updated before
-  const ProjectAssetReference *ref = refTree.GetReference(evt.GetTo());
+  ref = refTree.GetReference(evt.GetTo());
   while (ref)
   {
     for (auto refBy : ref->GetReferencedBy())
@@ -45,21 +69,7 @@ void AssetManagerRenameHandler::HandleEvent(csEvent &event)
     Rename(referencedBy, evt.GetFrom(), evt.GetTo());
   }
 
-  //
-  // rename the data section
-  // data is only referenced by the asset itself 
-  // the asset itself is already renamed to we must check the TO-reference
-  ref = refTree.GetReference(evt.GetTo());
-  while (ref)
-  {
-    csResourceLocator fromData = ref->GetResourceLocator().AsData();
-    fromData = csResourceLocator(evt.GetFrom().AsData().GetResourceFile(), fromData.GetResourceName(), fromData.GetResourceEntry());
-    csResourceLocator toData = evt.GetTo().AsData();
-    toData = csResourceLocator(toData.GetResourceFile(), toData.GetResourceName(), fromData.GetResourceEntry());
-
-    Rename(ref->GetResourceLocator(), fromData, toData);
-    ref = ref->GetChild();
-  }
+  
 
 }
 
