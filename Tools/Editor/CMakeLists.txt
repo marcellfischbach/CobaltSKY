@@ -66,10 +66,13 @@ source_group(
     ${EDITOR_UI}
     )
 
+
 set(ASSETMANAGER_SOURCES
     assetmanager/assetmanageraction.hh
     assetmanager/assetmanageractionmanager.cc
     assetmanager/assetmanageractionmanager.hh
+    assetmanager/assetmanagercontentitemdelegate.cc
+    assetmanager/assetmanagercontentitemdelegate.hh
     assetmanager/assetmanagercontentmodel.cc
     assetmanager/assetmanagercontentmodel.hh
     assetmanager/assetmanagercontentmodelentry.cc
@@ -89,6 +92,7 @@ set(ASSETMANAGER_SOURCES
     )
 
 set(ASSETMANAGER_UI
+    assetmanager/assetmanagercontentitemdelegatewidget.ui
     assetmanager/assetmanagerwidget.ui
     )
 

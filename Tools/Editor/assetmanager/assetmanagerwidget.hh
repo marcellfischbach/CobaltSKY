@@ -10,6 +10,7 @@
 
 class QAction;
 struct AssetManagerNewHandler;
+class AssetManagerContentItemDelegate;
 class AssetManagerContentModel;
 class AssetManagerContentModelEntry;
 class AssetManagerFolderModel;
@@ -47,5 +48,6 @@ private:
   AssetManagerContentModel *m_contentModel;
   QDir m_currentDir;
   csLogger m_logger;
+  AssetManagerContentItemDelegate *m_itemDelegate;
 };
 

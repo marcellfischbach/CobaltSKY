@@ -1,5 +1,6 @@
 
 #include <assetmanager/assetmanagerwidget.hh>
+#include <assetmanager/assetmanagercontentitemdelegate.hh>
 #include <assetmanager/assetmanagercontentmodel.hh>
 #include <assetmanager/assetmanagerfoldermodel.hh>
 #include <assetmanager/assetmanageraction.hh>
@@ -21,10 +22,12 @@ AssetManagerWidget::AssetManagerWidget()
 
   m_folderModel = new AssetManagerFolderModel();
   m_contentModel = new AssetManagerContentModel();
+  m_itemDelegate = new AssetManagerContentItemDelegate(m_contentModel);
   m_currentDir = Editor::Get()->GetRootPath();
 
   m_gui.treeView->setModel(m_folderModel);
   m_gui.listView->setModel(m_contentModel);
+  m_gui.listView->setItemDelegate(m_itemDelegate);
 
 
 
