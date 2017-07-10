@@ -71,6 +71,8 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanageraction.hh
     assetmanager/assetmanageractionmanager.cc
     assetmanager/assetmanageractionmanager.hh
+    assetmanager/assetmanagerassetwriter.cc
+    assetmanager/assetmanagerassetwriter.hh
     assetmanager/assetmanagercontentitemdelegate.cc
     assetmanager/assetmanagercontentitemdelegate.hh
     assetmanager/assetmanagercontentmodel.cc
@@ -104,6 +106,7 @@ source_group(
     )
 
 set(ASSETMANAGER_ACTIONS_SOURCES
+    assetmanager/actions/assetmanagernewaction.hh
     assetmanager/actions/assetmanagerrenameaction.cc
     assetmanager/actions/assetmanagerrenameaction.hh
     assetmanager/actions/assetmanagerrenamedialog.cc
@@ -113,14 +116,40 @@ set(ASSETMANAGER_ACTIONS_SOURCES
 set(ASSETMANAGER_ACTIONS_UI
     assetmanager/actions/assetmanagerrenamedialog.ui
     )
-
-
+    
 source_group(
     "editor\\assetmanager\\actions"
     FILES
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_UI}
     )
+
+
+
+
+
+set(ASSETMANAGER_IMPORT_SOURCES
+    assetmanager/import/assetmanagerimporter.hh
+    assetmanager/import/assetmanagerimporterdialog.cc
+    assetmanager/import/assetmanagerimporterdialog.hh
+    assetmanager/import/assetmanagerimporterlistmodel.cc
+    assetmanager/import/assetmanagerimporterlistmodel.hh
+    assetmanager/import/assetmanagerimportmanager.cc
+    assetmanager/import/assetmanagerimportmanager.hh
+    )
+
+set(ASSETMANAGER_IMPORT_UI
+    assetmanager/import/assetmanagerimporterdialog.ui
+    )
+
+
+source_group(
+    "editor\\assetmanager\\import"
+    FILES
+    ${ASSETMANAGER_IMPORT_SOURCES}
+    ${ASSETMANAGER_IMPORT_UI}
+    )
+
 
 set(COMPONENTS_SOURCES
     components/assetresourcelineedit.cc
@@ -344,6 +373,8 @@ set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.hh
     textureeditor/textureeditorfactory.cc
     textureeditor/textureeditorfactory.hh
+    textureeditor/textureeditorimporter.cc
+    textureeditor/textureeditorimporter.hh
     textureeditor/textureeditorproperties.cc
     textureeditor/textureeditorproperties.hh
     textureeditor/textureeditorrenderwidget.cc
@@ -368,6 +399,7 @@ set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
     ${ASSETMANAGER_ACTIONS_UI}
+    ${ASSETMANAGER_IMPORT_UI}
     ${COMPONENTS_UI}
     ${MATERIALEDITOR_UI}
     ${SAMPLEREDITOR_UI}
@@ -383,6 +415,7 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
+    ${ASSETMANAGER_IMPORT_SOURCES}
     ${COMPONENTS_SOURCES}
     ${EVENTS_SOURCES}
     ${LOADERS_SOURCES}

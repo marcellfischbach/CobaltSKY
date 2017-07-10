@@ -8,6 +8,7 @@
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>
+#include <assetmanager/import/assetmanagerimportmanager.hh>
 #include <materialeditor/materialeditornewaction.hh>
 #include <materialeditor/materialeditorfactory.hh>
 #include <samplereditor/samplereditorfactory.hh>
@@ -16,6 +17,7 @@
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <textureeditor/textureeditorfactory.hh>
+#include <textureeditor/textureeditorimporter.hh>
 
 #include <loaders/loaderseditoriconassetxmlloader.hh>
 
@@ -36,10 +38,13 @@ void EditorModule::Initialize()
   actionManager->RegisterNewAction(new SamplerEditorNewAction());
   actionManager->RegisterAction(new AssetManagerRenameAction());
 
+  AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
+  importManager->RegisterImporter(new TextureEditorImporter());
+
   csResourceManager *mgr = csResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
 
-
+  
   AssetManagerRenameHandler::Register();
 }

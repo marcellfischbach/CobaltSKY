@@ -17,7 +17,7 @@ public:
   virtual ~AssetManagerContentModel();
 
   void SetResourceLocator(const csResourceLocator &locator);
-
+  const csResourceLocator &GetResourceLocator() const;
   void Refresh();
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;

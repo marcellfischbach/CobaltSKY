@@ -25,6 +25,7 @@ public:
 
   void RefreshContent();
 
+  const csResourceLocator &GetContentResource() const;
   QString GetNewAssetName(const QString &baseName) const;
   QString GetFilePath(const QString &fileName) const;
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;
@@ -37,6 +38,7 @@ void on_treeView_clicked(const QModelIndex &index);
 void on_listView_doubleClicked(const QModelIndex &index);
 void on_listView_customContextMenuRequested(const QPoint &pos);
 void on_pbNewAsset_clicked(bool);
+void on_pbImport_clicked(bool);
 
 private:
   void FillStdMenu(QMenu *menu);

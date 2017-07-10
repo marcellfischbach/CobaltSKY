@@ -391,10 +391,10 @@ iFile *csVFS::Open(const csResourceLocator &locator, csOpenMode mode, csTextMode
 {
   if (locator.GetResourceEntry().empty())
   {
-    return Open(locator.GetResourceFile());
+    return Open(locator.GetResourceFile(), mode, textMode);
   }
   
-  return Open(locator.GetResourceFile(), locator.GetResourceEntry());
+  return Open(locator.GetResourceFile(), locator.GetResourceEntry(), mode, textMode);
 }
 
 

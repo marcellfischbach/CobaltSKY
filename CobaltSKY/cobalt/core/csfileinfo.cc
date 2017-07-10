@@ -17,6 +17,14 @@ namespace
     }
     return ch;
   }
+  char char_to_upper(char ch)
+  {
+    if (ch >= 'a' && ch <= 'z')
+    {
+      return 'A' + (ch - 'a');
+    }
+    return ch;
+  }
 }
 
 csFileInfo::csFileInfo (const std::string &filename)
@@ -76,6 +84,49 @@ csFileInfo::csFileInfo (const std::string &filename)
 
   //free (tmpname);
 
+}
+
+void csFileInfo::Lower()
+{
+  
+  for (int i = 0; i < m_name.length(); ++i)
+  {
+    m_name[i] = char_to_lower(m_name[i]);
+  }
+  for (int i = 0; i < m_extension.length(); ++i)
+  {
+    m_extension[i] = char_to_lower(m_extension[i]);
+  }
+  for (int i = 0; i < m_location.length(); ++i)
+  {
+    m_location[i] = char_to_lower(m_location[i]);
+  }
+  for (int i = 0; i < m_filname.length(); ++i)
+  {
+    m_filname[i] = char_to_lower(m_filname[i]);
+  }
+}
+
+
+void csFileInfo::Upper()
+{
+
+  for (int i = 0; i < m_name.length(); ++i)
+  {
+    m_name[i] = char_to_upper(m_name[i]);
+  }
+  for (int i = 0; i < m_extension.length(); ++i)
+  {
+    m_extension[i] = char_to_upper(m_extension[i]);
+  }
+  for (int i = 0; i < m_location.length(); ++i)
+  {
+    m_location[i] = char_to_upper(m_location[i]);
+  }
+  for (int i = 0; i < m_filname.length(); ++i)
+  {
+    m_filname[i] = char_to_upper(m_filname[i]);
+  }
 }
 
 const std::string &csFileInfo::GetName () const

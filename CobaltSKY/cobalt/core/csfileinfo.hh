@@ -14,6 +14,9 @@ public:
 	const std::string &GetExtension () const;
 	const std::string &GetLocation () const;
 
+  void Lower();
+  void Upper();
+
   bool Exists() const;
   static bool Exists(const std::string &filename);
 private:

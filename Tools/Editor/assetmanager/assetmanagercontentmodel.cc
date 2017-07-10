@@ -41,6 +41,11 @@ void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locat
   Refresh();
 }
 
+const csResourceLocator &AssetManagerContentModel::GetResourceLocator() const
+{
+  return m_locator;
+}
+
 void AssetManagerContentModel::Refresh()
 {
   csString absFileName = "";
