@@ -176,6 +176,8 @@ source_group(
     )
 
  set(EVENTS_SOURCES
+    events/assetaddedevent.cc
+    events/assetaddedevent.hh
     events/assetrenamedevent.cc
     events/assetrenamedevent.hh
     )

@@ -24,7 +24,7 @@ void EditorImage::SetImage(csImage *image)
     switch (image->GetPixelFormat())
     {
     case ePF_R8G8B8A8U:
-      format = QImage::Format_ARGB32;
+      format = QImage::Format_RGBA8888;
       break;
     case ePF_R8G8B8U:
       format = QImage::Format_RGB888;

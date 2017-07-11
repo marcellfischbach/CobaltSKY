@@ -3,6 +3,10 @@
 #include <assetmanager/import/assetmanagerimporter.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <editor.hh>
+#include <events/assetaddedevent.hh>
+#include <eventbus.hh>
+#include <project/project.hh>
+#include <project/projectreferencetree.hh>
 
 AssetManagerImporterDialog::AssetManagerImporterDialog(AssetManagerWidget *assetManager)
   : QDialog(assetManager)
@@ -57,9 +61,11 @@ void AssetManagerImporterDialog::AddImportData(AssetManagerImportData *data)
 
 void AssetManagerImporterDialog::on_pbOK_clicked(bool)
 {
+  EventBus &bus = EventBus::Get();
   for (AssetManagerImportData *data : m_datas)
   {
-    data->Import(m_assetManager);
+    csResourceLocator loc = data->Import(m_assetManager);
+    bus << AssetAddedEvent(loc, 0);
   }
   accept();
 }

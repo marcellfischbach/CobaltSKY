@@ -15,7 +15,7 @@ public:
   virtual const QString &GetName() const;
   virtual QWidget *GetWidget() const;
 
-  virtual void Import(AssetManagerWidget *assetManager);
+  virtual csResourceLocator Import(AssetManagerWidget *assetManager);
 
 private:
   QString GetType() const;

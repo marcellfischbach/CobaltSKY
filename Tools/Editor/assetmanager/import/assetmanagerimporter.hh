@@ -14,7 +14,7 @@ struct AssetManagerImportData
   virtual const QString &GetName() const = 0;
   virtual QWidget *GetWidget() const = 0;
 
-  virtual void Import(AssetManagerWidget *assetManager) = 0;
+  virtual csResourceLocator Import(AssetManagerWidget *assetManager) = 0;
 
 };
 

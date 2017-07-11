@@ -292,5 +292,7 @@ void AssetManagerWidget::on_pbImport_clicked(bool)
     }
   }
   importerDialog.exec();
+  RefreshContent();
+
 }
 

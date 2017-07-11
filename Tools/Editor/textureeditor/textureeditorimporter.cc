@@ -49,13 +49,13 @@ QWidget *TextureEditorImportData::GetWidget() const
   return m_view;
 }
 
-void TextureEditorImportData::Import(AssetManagerWidget *assetManager)
+csResourceLocator TextureEditorImportData::Import(AssetManagerWidget *assetManager)
 {
   csResourceLocator locator = assetManager->GetContentResource();
   QString typeID = GetType();
   if (typeID.isNull())
   {
-    return;
+    return csResourceLocator();
   }
 
   QString xAssetName = assetManager->GetNewAssetName(m_name);
@@ -163,6 +163,7 @@ void TextureEditorImportData::Import(AssetManagerWidget *assetManager)
     dataFile->Close();
   }
   
+  return xassetLocator;
 }
 
 QString TextureEditorImportData::GetType() const
