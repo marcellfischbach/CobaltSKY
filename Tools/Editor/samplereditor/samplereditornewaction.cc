@@ -31,19 +31,21 @@ QString SamplerEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManage
   return QString("New Sampler");
 }
 
-bool SamplerEditorNewAction::PerformAction(AssetManagerWidget *assetManager) const
+csResourceLocator SamplerEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
   QString assetName = assetManager->GetNewAssetName("Sampler");
   if (assetName == QString::null)
   {
-    return false;
+    return csResourceLocator();
   }
+
+  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
 
   QString assetFilePath = assetManager->GetFilePath(assetName);
   QFile file(assetFilePath);
   if (!file.open(QIODevice::WriteOnly))
   {
-    return false;
+    return csResourceLocator();
   }
 
   QDomDocument doc;
@@ -91,5 +93,5 @@ bool SamplerEditorNewAction::PerformAction(AssetManagerWidget *assetManager) con
   QString content = doc.toString(2);
   file.write(content.toLatin1());
   file.close();
-  return true;
+  return contentLocator;
 }

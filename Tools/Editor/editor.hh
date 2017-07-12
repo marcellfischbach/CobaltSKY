@@ -71,7 +71,7 @@ void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 private:
   Editor();
 
-  iAssetEditorFactory *FindFactory(const AssetDescriptor &descriptor);
+  iAssetEditorFactory *FindFactory(iObject *object, const AssetDescriptor &desc);
 
 
   MainWindow *m_mainWindow;

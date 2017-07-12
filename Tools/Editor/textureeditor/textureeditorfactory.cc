@@ -2,13 +2,14 @@
 
 #include <textureeditor/textureeditorfactory.hh>
 #include <textureeditor/textureeditor.hh>
+#include <cobalt/graphics/itexture2d.hh>
 
-bool TextureEditorFactory::CanEdit(const AssetDescriptor &descriptor) const
+bool TextureEditorFactory::CanEdit(iObject *object, const AssetDescriptor &descriptor) const
 {
-  return descriptor.GetAssetType() == csString("texture2d");
+  return object->GetClass()->IsInstanceOf<iTexture2D>();
 }
 
-iAssetEditor *TextureEditorFactory::CreateEditor(const AssetDescriptor &descriptor) const
+iAssetEditor *TextureEditorFactory::CreateEditor(iObject *object, const AssetDescriptor &descriptor) const
 {
   TextureEditor *editor = new TextureEditor();
   return editor;

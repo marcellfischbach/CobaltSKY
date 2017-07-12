@@ -25,7 +25,7 @@ public:
   virtual void PopulateDockItems();
 
 protected:
-  void OpenAsset();
+  void UpdateAsset();
 
 private:
   ShaderGraphEditorOutliner *m_outliner;

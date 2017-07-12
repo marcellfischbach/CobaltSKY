@@ -31,19 +31,21 @@ QString MaterialEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManag
   return QString("New Material");
 }
 
-bool MaterialEditorNewAction::PerformAction(AssetManagerWidget *assetManager) const
+csResourceLocator MaterialEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
   QString assetName = assetManager->GetNewAssetName("Material");
   if (assetName == QString::null)
   {
-    return false;
+    return csResourceLocator();
   }
+
+  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
 
   QString assetFilePath = assetManager->GetFilePath(assetName);
   QFile file(assetFilePath);
   if (!file.open(QIODevice::WriteOnly))
   {
-    return false;
+    return csResourceLocator();
   }
 
   QDomDocument doc;
@@ -62,5 +64,5 @@ bool MaterialEditorNewAction::PerformAction(AssetManagerWidget *assetManager) co
   QString content = doc.toString(2);
   file.write(content.toLatin1());
   file.close();
-  return true;
+  return contentLocator;
 }

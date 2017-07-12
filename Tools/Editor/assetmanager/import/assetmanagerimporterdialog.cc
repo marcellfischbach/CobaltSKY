@@ -65,6 +65,7 @@ void AssetManagerImporterDialog::on_pbOK_clicked(bool)
   for (AssetManagerImportData *data : m_datas)
   {
     csResourceLocator loc = data->Import(m_assetManager);
+    Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(loc);
     bus << AssetAddedEvent(loc, 0);
   }
   accept();

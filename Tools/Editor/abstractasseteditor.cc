@@ -22,6 +22,7 @@ void abstract_asset_editor_asset_renamed(csEvent &event, void *userData)
 AbstractAssetEditor::AbstractAssetEditor()
   : iAssetEditor()
   , m_dirty(true)
+  , m_editObject(0)
 {
   EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), abstract_asset_editor_asset_renamed, this);
 }
@@ -31,11 +32,12 @@ AbstractAssetEditor::~AbstractAssetEditor()
   EventBus::Get().Deregister(abstract_asset_editor_asset_renamed, this);
 }
 
-void AbstractAssetEditor::SetAssetDescriptor(const AssetDescriptor &descriptor)
+void AbstractAssetEditor::SetObject(iObject *object, const AssetDescriptor &descriptor)
 {
+  CS_SET(m_editObject, object);
   m_assetDescriptor = descriptor;
   UpdateName();
-  OpenAsset();
+  UpdateAsset();
 }
 
 void AbstractAssetEditor::UpdateName()
@@ -44,6 +46,16 @@ void AbstractAssetEditor::UpdateName()
   csFileInfo info(m_assetDescriptor.GetLocator().GetResourceFile());
   m_name = info.GetName();
 
+}
+
+iObject *AbstractAssetEditor::GetEditObject()
+{
+  return m_editObject;
+}
+
+const iObject *AbstractAssetEditor::GetEditObject() const
+{
+  return m_editObject;
 }
 
 const AssetDescriptor &AbstractAssetEditor::GetAssetDescriptor() const

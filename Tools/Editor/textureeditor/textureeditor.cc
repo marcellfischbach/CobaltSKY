@@ -28,14 +28,15 @@ TextureEditor::~TextureEditor()
 }
 
 
-void TextureEditor::OpenAsset()
+void TextureEditor::UpdateAsset()
 {
-  const AssetDescriptor &descriptor = GetAssetDescriptor();
+  iTexture2D *texture = csQueryClass<iTexture2D>(GetEditObject());
+  if (texture)
+  {
 
-
-  iTexture2D *texture = csResourceManager::Get()->Aquire<iTexture2D>(descriptor.GetLocator());
-  m_widget->SetTexture(texture);
-  m_properties->SetTexture(texture);
+    m_widget->SetTexture(texture);
+    m_properties->SetTexture(texture);
+  }
 }
 
 void TextureEditor::PopulateDockItems()

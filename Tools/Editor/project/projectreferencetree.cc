@@ -12,22 +12,13 @@
 #include <QFile>
 
 
-static void project_reference_tree_asset_added(csEvent &event, void *userData)
-{
-  AssetAddedEvent &addedEvent = static_cast<AssetAddedEvent&>(event);
-  ProjectReferenceTree *tree = reinterpret_cast<ProjectReferenceTree*>(userData);
-  tree->UpdateDependencyTree(addedEvent.GetLocator());
-}
-
 ProjectReferenceTree::ProjectReferenceTree()
 {
-  EventBus::Get().Register(AssetAddedEvent::GetStaticClass(), project_reference_tree_asset_added, this);
 }
 
 
 ProjectReferenceTree::~ProjectReferenceTree()
 {
-  EventBus::Get().Deregister(project_reference_tree_asset_added, this);
 }
 
 void ProjectReferenceTree::Open(const std::string &projectPath)

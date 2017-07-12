@@ -14,7 +14,7 @@ struct iAssetEditor : public iObject
   iAssetEditor() : iObject() { }
   virtual ~iAssetEditor() { }
 
-  virtual void SetAssetDescriptor(const AssetDescriptor &descriptor) = 0;
+  virtual void SetObject(iObject *object, const AssetDescriptor &descriptor) = 0;
 
   virtual QWidget *GetWidget() = 0;
 

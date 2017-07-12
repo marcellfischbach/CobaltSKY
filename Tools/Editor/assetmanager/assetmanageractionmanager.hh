@@ -3,7 +3,7 @@
 #include <vector>
 
 struct AssetManagerAction;
-struct AssetManagerNewAction;
+class AssetManagerNewAction;
 class AssetManagerActionManager
 {
 public:

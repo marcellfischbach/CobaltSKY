@@ -46,7 +46,7 @@ ShaderGraphEditor::~ShaderGraphEditor()
 }
 
 
-void ShaderGraphEditor::OpenAsset()
+void ShaderGraphEditor::UpdateAsset()
 {
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 

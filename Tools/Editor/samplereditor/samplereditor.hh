@@ -27,9 +27,10 @@ public:
   void CheckDirty();
 
 protected:
-  void OpenAsset();
+  void UpdateAsset();
 
 private:
+  void MergeSampler();
   void MergeFile();
   void ReplaceFile();
 

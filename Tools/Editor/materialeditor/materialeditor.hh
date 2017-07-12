@@ -24,7 +24,7 @@ public:
   void Save();
 
 protected:
-  void OpenAsset();
+  void UpdateAsset();
   void PopulateDockItems();
 
 private:

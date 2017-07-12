@@ -10,8 +10,8 @@ public:
   SamplerEditorFactory() { }
   virtual ~SamplerEditorFactory() { }
 
-  virtual bool CanEdit(const AssetDescriptor &descriptor) const;
+  virtual bool CanEdit(iObject *object, const AssetDescriptor &descriptor) const;
 
-  virtual iAssetEditor *CreateEditor(const AssetDescriptor &descriptor) const;
+  virtual iAssetEditor *CreateEditor(iObject *object, const AssetDescriptor &descriptor) const;
 
 };

@@ -21,7 +21,7 @@ public:
   virtual void PopulateDockItems();
 
 protected:
-  void OpenAsset();
+  void UpdateAsset();
 
 private:
   TextureEditorWidget *m_widget;

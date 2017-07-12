@@ -106,6 +106,7 @@ source_group(
     )
 
 set(ASSETMANAGER_ACTIONS_SOURCES
+    assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
     assetmanager/actions/assetmanagerrenameaction.cc
     assetmanager/actions/assetmanagerrenameaction.hh

@@ -2,13 +2,14 @@
 
 #include <samplereditor/samplereditorfactory.hh>
 #include <samplereditor/samplereditor.hh>
+#include <cobalt/graphics/isampler.hh>
 
-bool SamplerEditorFactory::CanEdit(const AssetDescriptor &descriptor) const
+bool SamplerEditorFactory::CanEdit(iObject *object, const AssetDescriptor &descriptor) const
 {
-  return descriptor.GetAssetType() == csString("sampler");
+  return object->GetClass()->IsInstanceOf<iSampler>();
 }
 
-iAssetEditor *SamplerEditorFactory::CreateEditor(const AssetDescriptor &descriptor) const
+iAssetEditor *SamplerEditorFactory::CreateEditor(iObject *object, const AssetDescriptor &descriptor) const
 {
   SamplerEditor *editor = new SamplerEditor();
   return editor;

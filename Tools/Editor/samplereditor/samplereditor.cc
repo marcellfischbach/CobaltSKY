@@ -28,13 +28,13 @@ SamplerEditor::~SamplerEditor()
 }
 
 
-void SamplerEditor::OpenAsset()
+void SamplerEditor::UpdateAsset()
 {
-  const AssetDescriptor &descriptor = GetAssetDescriptor();
-
-
-  iSampler *sampler = csResourceManager::Get()->Aquire<iSampler>(descriptor.GetLocator());
-  m_widget->SetSampler(sampler);
+  iSampler *sampler = csQueryClass<iSampler>(GetEditObject());
+  if (sampler)
+  {
+    m_widget->SetSampler(sampler);
+  }
 }
 
 void SamplerEditor::Apply()
@@ -46,10 +46,28 @@ void SamplerEditor::Save()
 {
   m_widget->Apply();
   m_widget->Store();
-
+  MergeSampler();
   MergeFile();
 }
 
+void SamplerEditor::MergeSampler()
+{
+  iSampler *editorSampler = csQueryClass<iSampler>(GetEditObject());
+  iSampler *engineSampler = csResourceManager::Get()->Get<iSampler>(GetAssetDescriptor().GetLocator());
+  if (editorSampler && engineSampler)
+  {
+    engineSampler->SetFilter(editorSampler->GetFilter());
+    engineSampler->SetAnisotropy(editorSampler->GetAnisotropy());
+    engineSampler->SetMinLOD(editorSampler->GetMinLOD());
+    engineSampler->SetMaxLOD(editorSampler->GetMaxLOD());
+    engineSampler->SetAddressU(editorSampler->GetAddressU());
+    engineSampler->SetAddressV(editorSampler->GetAddressV());
+    engineSampler->SetAddressW(editorSampler->GetAddressW());
+    engineSampler->SetBorderColor(editorSampler->GetBorderColor());
+    engineSampler->SetTextureCompareMode(editorSampler->GetTextureCompareMode());
+    engineSampler->SetTextureCompareFunc(editorSampler->GetTextureCompareFunc());
+  }
+}
 
 void SamplerEditor::MergeFile()
 {

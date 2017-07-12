@@ -26,6 +26,7 @@ public:
   void RefreshContent();
 
   const csResourceLocator &GetContentResource() const;
+  csResourceLocator GetContentResource(const csString &resourceFile, const csString &resourceName = "") const;
   QString GetNewAssetName(const QString &baseName) const;
   QString GetFilePath(const QString &fileName) const;
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;

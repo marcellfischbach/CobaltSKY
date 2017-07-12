@@ -31,19 +31,21 @@ QString ShaderGraphEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetMa
   return QString("New MaterialDef");
 }
 
-bool ShaderGraphEditorNewAction::PerformAction(AssetManagerWidget *assetManager) const
+csResourceLocator ShaderGraphEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
   QString assetName = assetManager->GetNewAssetName("ShaderGraph");
   if (assetName == QString::null)
   {
-    return false;
+    return csResourceLocator();
   }
+
+  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
 
   QString assetFilePath = assetManager->GetFilePath(assetName);
   QFile file(assetFilePath);
   if (!file.open(QIODevice::WriteOnly))
   {
-    return false;
+    return csResourceLocator();
   }
 
   QDomDocument doc;
@@ -64,5 +66,5 @@ bool ShaderGraphEditorNewAction::PerformAction(AssetManagerWidget *assetManager)
   QString content = doc.toString(2);
   file.write(content.toLatin1());
   file.close();
-  return true;
+  return contentLocator;
 }

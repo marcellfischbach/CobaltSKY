@@ -72,6 +72,14 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
 
 void TextureEditorWidget::on_pbSave_clicked()
 {
+
+  iTexture2D *managerTexture = csResourceManager::Get()->Get<iTexture2D>(m_editor->GetAssetDescriptor().GetLocator());
+  if (managerTexture)
+  {
+    managerTexture->SetSampler(m_texture->GetSampler());
+  }
+
+
   QFile file(m_editor->GetResourceFileName());
   QDomDocument doc;
   if (!doc.setContent(&file))

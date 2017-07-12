@@ -35,7 +35,7 @@ MaterialEditor::~MaterialEditor()
 }
 
 
-void MaterialEditor::OpenAsset()
+void MaterialEditor::UpdateAsset()
 {
   const AssetDescriptor &descriptor = GetAssetDescriptor();
 

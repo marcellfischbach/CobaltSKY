@@ -109,6 +109,7 @@ void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &po
 
 void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
 {
+  /*
   QDomDocument doc("mydocument");
   csString absFilePath = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   QFile file(QString(absFilePath.c_str()));
@@ -137,8 +138,8 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
 
   QDomElement typeElement = dataElement.firstChildElement();
   csString type = (const char*)typeElement.tagName().toLatin1();
-
-  AssetDescriptor descriptor(locator, type);
+  */
+  AssetDescriptor descriptor(locator);
   Editor::Get()->OpenAsset(descriptor);
 }
 
@@ -153,6 +154,16 @@ void AssetManagerWidget::RefreshContent()
 const csResourceLocator &AssetManagerWidget::GetContentResource() const
 {
   return m_contentModel->GetResourceLocator();
+}
+
+csResourceLocator AssetManagerWidget::GetContentResource(const csString &resourceFile, const csString &resourceName) const
+{
+  const csResourceLocator &loc = GetContentResource();
+  return csResourceLocator(
+    loc.GetResourceFile() + "/" + resourceFile,
+    resourceName,
+    loc.GetResourceEntry()
+  );
 }
 
 QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const

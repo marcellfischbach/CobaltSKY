@@ -2,13 +2,14 @@
 
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditor.hh>
+#include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
-bool ShaderGraphEditorFactory::CanEdit(const AssetDescriptor &descriptor) const
+bool ShaderGraphEditorFactory::CanEdit(iObject *object, const AssetDescriptor &descriptor) const
 {
-  return descriptor.GetAssetType() == csString("shaderGraph");
+  return object->GetClass()->IsInstanceOf<csSGShaderGraph>();
 }
 
-iAssetEditor *ShaderGraphEditorFactory::CreateEditor(const AssetDescriptor &descriptor) const
+iAssetEditor *ShaderGraphEditorFactory::CreateEditor(iObject *object, const AssetDescriptor &descriptor) const
 {
   ShaderGraphEditor *editor = new ShaderGraphEditor();
   return editor;

@@ -16,7 +16,10 @@ public:
   AbstractAssetEditor();
   virtual ~AbstractAssetEditor();
 
-  virtual void SetAssetDescriptor(const AssetDescriptor &assetDescriptor);
+
+  virtual void SetObject(iObject *object, const AssetDescriptor &assetDescriptor);
+  iObject *GetEditObject();
+  const iObject *GetEditObject() const;
   const AssetDescriptor &GetAssetDescriptor() const;
   QString GetResourceFileName() const;
 
@@ -33,7 +36,7 @@ public:
   void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
 
 protected:
-  virtual void OpenAsset() = 0;
+  virtual void UpdateAsset() = 0;
   void AddDockItemName(const csString &dockItemName);
   void UpdateMainWindow();
 
@@ -42,6 +45,7 @@ private:
 
 private:
   AssetDescriptor m_assetDescriptor;
+  iObject *m_editObject;
 
   QWidget *m_widget;
 

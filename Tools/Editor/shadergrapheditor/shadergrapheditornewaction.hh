@@ -13,6 +13,6 @@ public:
 
   virtual QString GetMenuEntryName(AssetManagerWidget *assetManager) const;
 
-  virtual bool PerformAction(AssetManagerWidget *assetManager) const;
+  virtual csResourceLocator CreateNewAsset(AssetManagerWidget *assetManager) const;
 
 };

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <assetdescriptor.hh>
-
+#include <cobalt/core/csclass.hh>
 
 struct iAssetEditor;
 struct iAssetEditorFactory
 {
 
-  virtual bool CanEdit(const AssetDescriptor &descriptor) const = 0;
+  virtual bool CanEdit(iObject *object, const AssetDescriptor &descriptor) const = 0;
 
-  virtual iAssetEditor *CreateEditor(const AssetDescriptor &descriptor) const = 0;
+  virtual iAssetEditor *CreateEditor(iObject *object, const AssetDescriptor &descriptor) const = 0;
 
 };

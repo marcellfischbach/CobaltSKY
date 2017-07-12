@@ -23,7 +23,9 @@
 #include <QOffscreenSurface>
 #include <abstractdockitem.hh>
 
+
 void editor_resource_renamed(csEvent &event, void *userData);
+
 
 Editor::Editor()
   : QObject()
@@ -137,18 +139,28 @@ void Editor::OpenAsset(const AssetDescriptor &desc)
   }
   else
   {
-    iAssetEditorFactory *factory = FindFactory(desc);
-    if (!factory)
+    iObject *data = csResourceManager::Get()->Load(desc.GetLocator());
+    if (!data)
     {
+      // TODO: Show error message
       return;
     }
 
-    editor = factory->CreateEditor(desc);
+
+    iAssetEditorFactory *factory = FindFactory(data, desc);
+    if (!factory)
+    {
+      data->Release();
+      return;
+    }
+
+    editor = factory->CreateEditor(data, desc);
     if (!editor)
     {
       return;
     }
-    editor->SetAssetDescriptor(desc);
+    editor->SetObject(data, desc);
+    data->Release();
   }
 
 
@@ -202,11 +214,11 @@ csString Editor::ConvertToResourcePath(const csString &filePath) const
   return filePath;
 }
 
-iAssetEditorFactory *Editor::FindFactory(const AssetDescriptor &desc)
+iAssetEditorFactory *Editor::FindFactory(iObject *object, const AssetDescriptor &desc)
 {
   for (iAssetEditorFactory *factory : m_editorFactories)
   {
-    if (factory->CanEdit(desc))
+    if (factory->CanEdit(object, desc))
     {
       return factory;
     }
