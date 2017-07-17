@@ -370,6 +370,27 @@ source_group(
     )
 
     
+set(STATICMESHEDITOR_SOURCES
+    staticmesheditor/staticmesheditor.cc
+    staticmesheditor/staticmesheditor.hh
+    staticmesheditor/staticmesheditorfactory.cc
+    staticmesheditor/staticmesheditorfactory.hh
+    staticmesheditor/staticmesheditorwidget.cc
+    staticmesheditor/staticmesheditorwidget.hh
+    )
+
+set(STATICMESHEDITOR_UI
+    staticmesheditor/staticmesheditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\staticmesheditor"
+    FILES
+    ${STATICMESHEDITOR_SOURCES}
+    ${STATICMESHEDITOR_UI}
+    )
+
     
 set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.cc
@@ -407,6 +428,7 @@ set(ALL_UI
     ${MATERIALEDITOR_UI}
     ${SAMPLEREDITOR_UI}
     ${SHADERGRAPHEDITOR_UI}
+    ${STATICMESHEDITOR_UI}
     ${TEXTUREEDITOR_UI}
     )
 
@@ -428,6 +450,7 @@ set(ALL_SOURCES
     ${PROJECT_SOURCES}
     ${SAMPLEREDITOR_SOURCES}
     ${SHADERGRAPHEDITOR_SOURCES}
+    ${STATICMESHEDITOR_SOURCES}
     ${TEXTUREEDITOR_SOURCES}
     )
 

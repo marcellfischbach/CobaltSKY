@@ -146,6 +146,7 @@ void Editor::OpenAsset(const AssetDescriptor &desc)
       return;
     }
 
+    printf("Data: %s\n", data->GetClass()->GetName().c_str());
 
     iAssetEditorFactory *factory = FindFactory(data, desc);
     if (!factory)

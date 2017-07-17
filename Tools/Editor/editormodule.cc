@@ -16,6 +16,7 @@
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
+#include <staticmesheditor/staticmesheditorfactory.hh>
 #include <textureeditor/textureeditorfactory.hh>
 #include <textureeditor/textureeditorimporter.hh>
 
@@ -30,6 +31,7 @@ void EditorModule::Initialize()
   editor->AddEditorFactory(new MaterialEditorFactory());
   editor->AddEditorFactory(new SamplerEditorFactory());
   editor->AddEditorFactory(new ShaderGraphEditorFactory());
+  editor->AddEditorFactory(new StaticMeshEditorFactory());
   editor->AddEditorFactory(new TextureEditorFactory());
 
   AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
