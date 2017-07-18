@@ -1,5 +1,5 @@
 
-#include <textureeditor/textureeditorimporter.hh>
+#include <importers/imageimporter.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <cobalt/core/csfileinfo.hh>
@@ -11,7 +11,7 @@
 #include <QDomElement>
 
 
-TextureEditorImportData::TextureEditorImportData()
+ImageImporterData::ImageImporterData()
   : AssetManagerImportData()
   , m_name("")
 {
@@ -20,12 +20,12 @@ TextureEditorImportData::TextureEditorImportData()
   m_view->setScene(scene);
 }
 
-TextureEditorImportData::~TextureEditorImportData()
+ImageImporterData::~ImageImporterData()
 {
   delete m_view;
 }
 
-void TextureEditorImportData::Import(const QString &fileName)
+void ImageImporterData::Import(const QString &fileName)
 {
   csFileInfo fi((const char*)fileName.toLatin1());
   m_name = QString(fi.GetName().c_str());
@@ -39,17 +39,17 @@ void TextureEditorImportData::Import(const QString &fileName)
 
 }
 
-const QString &TextureEditorImportData::GetName() const
+const QString &ImageImporterData::GetName() const
 {
   return m_name;// QObject::tr("Texture: %1").arg(m_name);
 }
 
-QWidget *TextureEditorImportData::GetWidget() const
+QWidget *ImageImporterData::GetWidget() const
 {
   return m_view;
 }
 
-csResourceLocator TextureEditorImportData::Import(AssetManagerWidget *assetManager)
+csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
 {
   csResourceLocator locator = assetManager->GetContentResource();
   QString typeID = GetType();
@@ -166,7 +166,7 @@ csResourceLocator TextureEditorImportData::Import(AssetManagerWidget *assetManag
   return xassetLocator;
 }
 
-QString TextureEditorImportData::GetType() const
+QString ImageImporterData::GetType() const
 {
   csFileInfo fi((const char*)m_fileName.toLatin1());
   fi.Upper();
@@ -174,34 +174,34 @@ QString TextureEditorImportData::GetType() const
 }
 
 
-TextureEditorImporter::TextureEditorImporter()
+ImageImporter::ImageImporter()
   : AssetManagerImporter()
 {
 
 }
 
 
-TextureEditorImporter::~TextureEditorImporter()
+ImageImporter::~ImageImporter()
 {
 
 }
 
-const QStringList TextureEditorImporter::GetFilters() const
+const QStringList ImageImporter::GetFilters() const
 {
   QStringList res;
   res << QString("Texture (*.png)");
   return res;
 }
 
-bool TextureEditorImporter::CanImport(const QString &fileName) const
+bool ImageImporter::CanImport(const QString &fileName) const
 {
   csFileInfo fi((const char*)fileName.toLatin1());
   return fi.GetExtension() == std::string("png");
 }
 
-AssetManagerImportData *TextureEditorImporter::Import(const QString &fileName) const
+AssetManagerImportData *ImageImporter::Import(const QString &fileName) const
 {
-  TextureEditorImportData *data = new TextureEditorImportData();
+  ImageImporterData *data = new ImageImporterData();
   data->Import(fileName);
   return data;
 }

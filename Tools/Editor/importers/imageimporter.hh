@@ -4,11 +4,11 @@
 #include <QGraphicsView>
 
 class AssetManagerWidget;
-class TextureEditorImportData : public AssetManagerImportData
+class ImageImporterData : public AssetManagerImportData
 {
 public:
-  TextureEditorImportData();
-  virtual ~TextureEditorImportData();
+  ImageImporterData();
+  virtual ~ImageImporterData();
 
   void Import(const QString &fileName);
 
@@ -25,11 +25,11 @@ private:
 };
 
 
-class TextureEditorImporter : public AssetManagerImporter
+class ImageImporter : public AssetManagerImporter
 {
 public:
-  TextureEditorImporter();
-  virtual ~TextureEditorImporter();
+  ImageImporter();
+  virtual ~ImageImporter();
 
   virtual const QStringList GetFilters() const;
 

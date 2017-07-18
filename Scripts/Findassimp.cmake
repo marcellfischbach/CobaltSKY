@@ -1,13 +1,16 @@
 FIND_PATH(
 	assimp_INCLUDE_DIRS
-	NAMES postprocess.h scene.h version.h config.h cimport.h
-	PATHS assimp
+	NAMES assimp/postprocess.h assimp/scene.h assimp/version.h assimp/config.h assimp/cimport.h
+	
 )
+
+MESSAGE("Assimp include dir: ${assimp_INCLUDE_DIRS}")
 
 FIND_LIBRARY(
 	assimp_LIBRARIES
-	NAMES assimp
+	NAMES assimp-vc140-mt
 )
+MESSAGE("Assimp libraries: ${assimp_LIBRARIES}")
 
 IF (assimp_INCLUDE_DIRS AND assimp_LIBRARIES)
     SET(assimp_FOUND TRUE)

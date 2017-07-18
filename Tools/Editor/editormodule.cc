@@ -18,7 +18,9 @@
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <staticmesheditor/staticmesheditorfactory.hh>
 #include <textureeditor/textureeditorfactory.hh>
-#include <textureeditor/textureeditorimporter.hh>
+
+#include <importers/imageimporter.hh>
+#include <importers/modelimporter.hh>
 
 #include <loaders/loaderseditoriconassetxmlloader.hh>
 
@@ -41,7 +43,8 @@ void EditorModule::Initialize()
   actionManager->RegisterAction(new AssetManagerRenameAction());
 
   AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
-  importManager->RegisterImporter(new TextureEditorImporter());
+  importManager->RegisterImporter(new ImageImporter());
+  importManager->RegisterImporter(new ModelImporter());
 
   csResourceManager *mgr = csResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());

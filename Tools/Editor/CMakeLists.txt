@@ -190,6 +190,21 @@ source_group(
     ${EVENTS_SOURCES}
     )
 
+                    
+set(IMPORTERS_SOURCES
+    importers/imageimporter.cc
+    importers/imageimporter.hh
+    importers/modelimporter.cc
+    importers/modelimporter.hh
+    )
+
+
+source_group(
+    "editor\\importers"
+    FILES
+    ${IMPORTERS_SOURCES}
+    )
+
 
 set(LOADERS_SOURCES
     loaders/loaderseditoriconassetxmlloader.cc
@@ -399,8 +414,6 @@ set(TEXTUREEDITOR_SOURCES
     textureeditor/textureeditor.hh
     textureeditor/textureeditorfactory.cc
     textureeditor/textureeditorfactory.hh
-    textureeditor/textureeditorimporter.cc
-    textureeditor/textureeditorimporter.hh
     textureeditor/textureeditorproperties.cc
     textureeditor/textureeditorproperties.hh
     textureeditor/textureeditorrenderwidget.cc
@@ -445,6 +458,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${COMPONENTS_SOURCES}
     ${EVENTS_SOURCES}
+    ${IMPORTERS_SOURCES}
     ${LOADERS_SOURCES}
     ${MATERIALEDITOR_SOURCES}
     ${NODEGRAPH_SOURCES}
@@ -472,7 +486,7 @@ target_link_libraries(Editor
     CobaltSKY
     CobaltSKY-GraphicsGL4
     CobaltSKY-PhysicsBullet
-    ${ASSIMP_LIBRARY}
+    ${assimp_LIBRARIES}
     )
 
 CS_INSTALL_MOCCER(Editor NO_PREFIX NO_API ALL_SOURCES)
