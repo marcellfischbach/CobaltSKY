@@ -65,6 +65,8 @@ public:
   csSpatialState *GetRootState();
   const csSpatialState *GetRootState() const;
 
+  void RemoveState(csEntityState *state);
+
   csEntity *GetParentEntity() ;
   const csEntity *GetParentEntity() const;
 

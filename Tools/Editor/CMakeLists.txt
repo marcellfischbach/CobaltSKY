@@ -375,6 +375,8 @@ set(STATICMESHEDITOR_SOURCES
     staticmesheditor/staticmesheditor.hh
     staticmesheditor/staticmesheditorfactory.cc
     staticmesheditor/staticmesheditorfactory.hh
+    staticmesheditor/staticmesheditorpreviewsceneview.cc
+    staticmesheditor/staticmesheditorpreviewsceneview.hh
     staticmesheditor/staticmesheditorwidget.cc
     staticmesheditor/staticmesheditorwidget.hh
     )

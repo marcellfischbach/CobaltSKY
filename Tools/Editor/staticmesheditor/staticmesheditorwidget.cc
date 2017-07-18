@@ -12,3 +12,8 @@ StaticMeshEditorWidget::~StaticMeshEditorWidget()
 {
 
 }
+
+void StaticMeshEditorWidget::SetStaticMeshState(csStaticMeshState *staticMeshState)
+{
+  m_gui.openGLWidget->SetStaticMeshState(staticMeshState);
+}

@@ -5,7 +5,7 @@
 #include <basicdockitem.hh>
 #include <editor.hh>
 
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/entity/csstaticmeshstate.hh>
 #include <cobalt/core/csresourcemanager.hh>
 
 
@@ -30,6 +30,11 @@ StaticMeshEditor::~StaticMeshEditor()
 
 void StaticMeshEditor::UpdateAsset()
 {
+  csStaticMeshState *staticMeshState = csQueryClass<csStaticMeshState>(GetEditObject());
+  if (staticMeshState)
+  {
+    m_widget->SetStaticMeshState(staticMeshState);
+  }
   /*
   iTexture2D *texture = csQueryClass<iTexture2D>(GetEditObject());
   if (texture)

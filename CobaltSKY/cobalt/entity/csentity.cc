@@ -177,6 +177,33 @@ void csEntity::SetRootState(csSpatialState *rootState)
 
 }
 
+void csEntity::RemoveState(csEntityState *state)
+{
+  if (state->GetEntity() != this)
+  {
+    // this state is not attached to this entity
+    return;
+  }
+
+  for (size_t i = 0, in = m_states.size(); i < in; ++i)
+  {
+    if (m_states[i] == state)
+    {
+      m_states.erase(m_states.begin() + i);
+      break;
+    }
+  }
+  if (m_rootState == state)
+  {
+    CS_RELEASE(m_rootState);
+  }
+  state->DetachFromEntity(this);
+  state->DetachFromScene(m_scene);
+  m_assemabled = false;
+
+  state->Release();
+}
+
 void csEntity::AddState(csEntityState *state)
 {
   if (state)
