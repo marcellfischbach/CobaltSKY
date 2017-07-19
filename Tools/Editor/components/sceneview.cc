@@ -14,9 +14,11 @@
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/deferred/csdeferredframeprocessor.hh>
 #include <editor.hh>
+#include <glcontext.hh>
 #include <QPaintEvent>
 #include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
+#include <QImage>
 
 SceneView::SceneView(QWidget *parent)
   : QOpenGLWidget(parent)
@@ -131,6 +133,63 @@ void SceneView::resizeGL(int width, int height)
   //
   // the camera projection will change aswell
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
+}
+
+void scene_view_cleanup_screenshot_data(void *data)
+{
+  delete[] data;
+}
+
+QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
+{
+  QImage result;
+  if (!GLContext::Get()->MakeCurrent())
+  {
+    printf("Unable to make glcontext current\n");
+    return result;
+  }
+  csDeferredFrameProcessor *frameProcessor = new csDeferredFrameProcessor(m_graphics);
+  if (!frameProcessor->Initialize())
+  {
+    printf("Unable to initialize frame processor\n");
+    return result;
+  }
+  frameProcessor->Resize(width, height);
+
+  iTexture2D *colorTexture = m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false);
+  iRenderTarget *renderTarget = m_graphics->CreateRenderTarget();
+  renderTarget->Initialize(width, height);
+  renderTarget->SetDepthBuffer(width, height);
+  renderTarget->AddColorTexture(colorTexture);
+  if (renderTarget->Finilize())
+  {
+
+    m_graphics->ResetDefaults();
+
+    csEntity *root = 0;
+    if (m_scene)
+    {
+      root = m_scene->GetRoot();
+      root->UpdateBoundingBox();
+    }
+
+    iTexture2D *colorTarget = 0;
+
+    iRenderTarget *target = frameProcessor->Render(root, m_camera, renderTarget);
+    colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
+
+    unsigned dataSize = 0;
+    colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, 0, dataSize);
+    unsigned char *buffer = new unsigned char[dataSize];
+    colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, buffer, dataSize);
+
+    result = QImage(buffer, width, height, QImage::Format_RGBA8888, scene_view_cleanup_screenshot_data, buffer);
+  }
+
+  colorTexture->Release();
+  renderTarget->Release();
+  frameProcessor->Release();
+  return result;
 }
 
 void SceneView::mousePressEvent(QMouseEvent *event)

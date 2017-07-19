@@ -38,6 +38,7 @@ private slots:
 
   void on_pbApply_clicked();
   void on_pbSave_clicked();
+  void on_pbScreenshot_clicked();
 
 private:
   csString ExtractName(const csResourceLocator &locator);

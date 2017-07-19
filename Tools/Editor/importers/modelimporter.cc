@@ -22,7 +22,7 @@ ModelImporterData::~ModelImporterData()
 
 void debug_node(const aiNode *node, int indent)
 {
-  if (node->mNumMeshes > 0)
+  if (node->mNumMeshes > 0 || true)
   {
     for (int i = 0; i < indent; ++i)
     {
@@ -42,30 +42,6 @@ void debug_node(const aiNode *node, int indent)
     debug_node(node->mChildren[i], indent + 1);
   }
 }
-
-void ModelImporterData::Import(const QString &fileName)
-{
-  csFileInfo fi((const char*)fileName.toLatin1());
-  m_name = QString(fi.GetName().c_str());
-  m_fileName = fileName;
-
-  // Create an instance of the Importer class
-  Assimp::Importer importer;
-  // And have it read the given file with some example postprocessing
-  // Usually - if speed is not the most important aspect for you - you'll 
-  // propably to request more postprocessing than we do in this example.
-  const aiScene* scene = importer.ReadFile(
-    std::string((const char*)fileName.toLatin1()),
-    aiProcess_CalcTangentSpace |
-    aiProcess_Triangulate |
-    aiProcess_JoinIdenticalVertices |
-    aiProcess_SortByPType);
-
-  printf("Import Scene\n");
-  debug_node(scene->mRootNode, 1);
-
-}
-
 
 const QString &ModelImporterData::GetName() const
 {
@@ -116,6 +92,96 @@ bool ModelImporter::CanImport(const QString &fileName) const
 AssetManagerImportData *ModelImporter::Import(const QString &fileName) const
 {
   ModelImporterData *data = new ModelImporterData();
-  data->Import(fileName);
+
+  // Create an instance of the Importer class
+  Assimp::Importer importer;
+  // And have it read the given file with some example postprocessing
+  // Usually - if speed is not the most important aspect for you - you'll 
+  // propably to request more postprocessing than we do in this example.
+  const aiScene* scene = importer.ReadFile(
+    std::string((const char*)fileName.toLatin1()),
+    aiProcess_CalcTangentSpace |
+    aiProcess_Triangulate |
+    aiProcess_JoinIdenticalVertices |
+    aiProcess_SortByPType);
+
+
+  csFileInfo fi((const char*)fileName.toLatin1());
+  data->m_name = QString(fi.GetName().c_str());
+  data->m_fileName = fileName;
+
+  Scan(data, scene);
+
+
   return data;
 }
+
+
+void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene) const
+{
+  aiNode *root = scene->mRootNode;
+  Scan(data, scene, root, 0);
+
+}
+
+
+static void ind(int indent)
+{
+  for (int i = 0; i < indent; ++i)
+  {
+    printf("  ");
+  }
+}
+
+void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene, aiNode *node, int indent) const
+{
+  std::string nodeName(node->mName.C_Str());
+  ind(indent); printf("%s", nodeName.c_str());
+
+  if (IsSkeleton(nodeName))
+  {
+    printf(" => Skeleton\n");
+    data->m_skeletons.push_back(node);
+    return;
+  }
+  else if (node->mNumMeshes > 0)
+  {
+    printf(" => Mesh %d\n", node->mNumMeshes);
+    data->m_meshNodes.push_back(node);
+  }
+  else {
+    printf("\n");
+  }
+
+  for (unsigned i = 0; i < node->mNumChildren; ++i)
+  {
+    aiNode *childNode = node->mChildren[i];
+    Scan(data, scene, childNode, indent+1);
+  }
+}
+
+
+bool ModelImporter::IsSkeleton(const std::string &name) const
+{
+  const unsigned ArmatureLength = 8;
+  if (name.length() >= ArmatureLength)
+  {
+    std::string sub = name.substr(0, ArmatureLength);
+    if (sub == std::string("Armature"))
+    {
+      return true;
+    }
+  }
+
+  const unsigned SkeletonLength = 8;
+  if (name.length() >= SkeletonLength)
+  {
+    std::string sub = name.substr(0, SkeletonLength);
+    if (sub == std::string("Skeleton"))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+

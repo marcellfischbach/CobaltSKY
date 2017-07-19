@@ -74,6 +74,35 @@ bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *d
   return true;
 }
 
+bool csTexture2DGL4::ReadData(csUInt8 layer, csPixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize)
+{
+  csUInt16 layerWidth = m_width >> layer;
+  csUInt16 layerHeight = m_height >> layer;
+  if (layerWidth == 0 && layerHeight == 0)
+  {
+    return false;
+  }
+  if (layerWidth == 0)
+  {
+    layerWidth = 1;
+  }
+  if (layerHeight == 0)
+  {
+    layerHeight = 1;
+  }
+
+  dataSize = pixelFormatSizeMap[format] * layerWidth * layerHeight;
+  if (dataSize > bufferSize || !data)
+  {
+    return false;
+  }
+
+  Bind();
+  glGetTexImage(m_target, layer, externalFormatMap[format], externalFormatTypeMap[format], data);
+  
+  return true;
+}
+
 
 csUInt16 csTexture2DGL4::GetWidth() const
 {

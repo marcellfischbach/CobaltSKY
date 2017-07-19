@@ -18,5 +18,5 @@ struct CSE_API iTexture2D : public virtual CS_SUPER(iTexture)
   virtual csUInt16 GetNumberOfLODs() const = 0;
 
   virtual bool CopyData(csUInt8 lod, csPixelFormat format, const void *data) = 0;
-
+  virtual bool ReadData(csUInt8 lod, csPixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize) = 0;
 };

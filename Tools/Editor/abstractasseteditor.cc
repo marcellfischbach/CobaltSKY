@@ -136,6 +136,14 @@ QString AbstractAssetEditor::GetResourceFileName() const
   return fileName;
 }
 
+QString AbstractAssetEditor::GetResourceDataFileName() const
+{
+  const csResourceLocator &loc = GetAssetDescriptor().GetLocator().AsData();
+  csString absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+  QString fileName(absFileName.c_str());
+  return fileName;
+}
+
 void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 {
   if (m_assetDescriptor.Renamed(from, to))

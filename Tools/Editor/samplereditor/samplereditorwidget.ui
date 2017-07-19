@@ -14,8 +14,26 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
+    <number>3</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
    <item row="0" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <widget class="QPushButton" name="pbApply">
        <property name="enabled">
@@ -35,14 +53,7 @@
         </size>
        </property>
        <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -62,14 +73,7 @@
         </size>
        </property>
        <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -89,7 +93,7 @@
         </size>
        </property>
        <property name="flat">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
       </widget>
      </item>

@@ -22,6 +22,7 @@ public:
   const iObject *GetEditObject() const;
   const AssetDescriptor &GetAssetDescriptor() const;
   QString GetResourceFileName() const;
+  QString GetResourceDataFileName() const;
 
   void SetWidget(QWidget *widget);
   virtual QWidget *GetWidget();

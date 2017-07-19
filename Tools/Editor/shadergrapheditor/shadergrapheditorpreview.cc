@@ -25,3 +25,9 @@ void ShaderGraphEditorPreview::ShaderGraphChanged()
   m_gui.openGLWidget->UpdateMaterial();
   m_gui.openGLWidget->repaint();
 }
+
+QImage ShaderGraphEditorPreview::TakeScreenshot(unsigned width, unsigned height)
+{
+  return m_gui.openGLWidget->TakeScreenshot(width, height);
+}
+

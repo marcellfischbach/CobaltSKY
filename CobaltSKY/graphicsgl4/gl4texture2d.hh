@@ -25,6 +25,7 @@ public:
   virtual csUInt16 GetNumberOfLODs() const;
 
   virtual bool CopyData(csUInt8 layer, csPixelFormat format, const void *data);
+  virtual bool ReadData(csUInt8 lod, csPixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize);
 
 private:
   csPixelFormat m_format;

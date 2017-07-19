@@ -11,6 +11,8 @@
 #include <nodegraph/nodegraphnodeimageproperty.hh>
 #include <nodegraph/nodegraphnodevalueproperty.hh>
 
+#include <assetmanager/assetmanagerassetwriter.hh>
+
 #include <mimehelper.hh>
 #include <editor.hh>
 #include <project/project.hh>
@@ -24,12 +26,16 @@
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <cobalt/graphics/shadergraph/cssgtexture2d.hh>
+#include <cobalt/core/csvfs.hh>
 
+#include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomText>
 #include <QDropEvent>
 #include <QFile>
+#include <QImage>
+#include <QImageWriter>
 
 ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
   : QWidget()
@@ -714,6 +720,42 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   }
 
   Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
+
+}
+
+
+void ShaderGraphEditorWidget::on_pbScreenshot_clicked()
+{
+  QImage image = m_editor->TakeScreenshot(64, 64);
+  csResourceLocator dataLocator = m_editor->GetAssetDescriptor().GetLocator().AsData();
+
+  printf("image: %s\n", dataLocator.GetDebugName().c_str());
+  iFile *file = csVFS::Get()->Open(dataLocator, eOM_ReadWrite);
+
+  AssetManagerAssetWriter writer;
+  writer.Import(file);
+  file->Close();
+  writer.RemoveEntry("EDITOR_ICON");
+
+  QBuffer buffer;
+  QImageWriter qimagewriter(&buffer, QString("PNG").toLatin1());
+  qimagewriter.write(image);
+
+  writer.AddEntry(
+    "EDITOR_ICON",
+    csString("PNG"),
+    buffer.data().length(),
+    reinterpret_cast<const csUInt8*>(buffer.data().constData())
+  );
+
+
+  iFile *dataFile = csVFS::Get()->Open(dataLocator, eOM_Write);
+  if (dataFile)
+  {
+    writer.Output(dataFile);
+    dataFile->Close();
+  }
+
 
 }
 

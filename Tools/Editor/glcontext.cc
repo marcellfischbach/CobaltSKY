@@ -25,3 +25,13 @@ void GLContext::Initialize(QObject *parent)
   m_openglContext->setShareContext(QOpenGLContext::globalShareContext());
   m_openglContext->create();
 }
+
+
+bool GLContext::MakeCurrent()
+{
+  if (m_openglContext && m_offscreenSurface)
+  {
+    return m_openglContext->makeCurrent(m_offscreenSurface);
+  }
+  return false;
+}

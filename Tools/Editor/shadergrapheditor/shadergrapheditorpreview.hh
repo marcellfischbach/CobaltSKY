@@ -13,6 +13,7 @@ public:
   virtual ~ShaderGraphEditorPreview();
 
   void SetShaderGraph(csSGShaderGraph *shaderGraph);
+  QImage TakeScreenshot(unsigned width, unsigned height);
 
 public slots:
 void ShaderGraphChanged();

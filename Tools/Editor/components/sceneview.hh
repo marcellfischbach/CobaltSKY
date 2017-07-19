@@ -11,6 +11,7 @@ class csEntityScene;
 class csCamera;
 struct SceneViewInputHandler;
 class QTCSOnscreenRenderTarget;
+class QImage;
 class SceneView : public QOpenGLWidget
 {
 public:
@@ -22,6 +23,8 @@ public:
 
   const csCamera *GetCamera() const;
   csCamera *GetCamera();
+
+  QImage TakeScreenshot(unsigned width, unsigned height);
 
   void AddInputHandler(SceneViewInputHandler *handler);
 

@@ -53,6 +53,9 @@
    </item>
    <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

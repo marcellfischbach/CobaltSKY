@@ -83,3 +83,7 @@ void ShaderGraphEditor::PopulateDockItems()
 
 }
 
+QImage ShaderGraphEditor::TakeScreenshot(unsigned width, unsigned height)
+{
+  return m_preview->TakeScreenshot(width, height);
+}

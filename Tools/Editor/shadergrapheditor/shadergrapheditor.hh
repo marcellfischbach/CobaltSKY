@@ -23,6 +23,7 @@ public:
   ~ShaderGraphEditor();
 
   virtual void PopulateDockItems();
+  QImage TakeScreenshot(unsigned width, unsigned height);
 
 protected:
   void UpdateAsset();

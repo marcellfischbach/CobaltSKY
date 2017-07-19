@@ -1,15 +1,17 @@
 #pragma once
 
 #include <assetmanager/import/assetmanagerimporter.hh>
+#include <vector>
 
+struct aiNode;
+struct aiScene;
 class QWidget;
 class ModelImporterData : public AssetManagerImportData
 {
+  friend class ModelImporter;
 public:
   ModelImporterData();
   virtual ~ModelImporterData();
-
-  void Import(const QString &fileName);
 
 
   virtual const QString &GetName() const;
@@ -21,6 +23,9 @@ private:
   QString m_name;
   QString m_fileName;
   QWidget *m_view;
+
+  std::vector<aiNode*> m_meshNodes;
+  std::vector<aiNode*> m_skeletons;
 };
 
 class ModelImporter : public AssetManagerImporter
@@ -34,4 +39,9 @@ public:
   virtual bool CanImport(const QString &fileName) const;
   virtual AssetManagerImportData *Import(const QString &fileName) const;
 
+private:
+  void Scan(ModelImporterData *data, const aiScene *scene) const;
+  void Scan(ModelImporterData *data, const aiScene *scene, aiNode *node, int indent = 0) const;
+
+  bool IsSkeleton(const std::string &name) const;
 };
