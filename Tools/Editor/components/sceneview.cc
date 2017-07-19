@@ -155,6 +155,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     return result;
   }
   frameProcessor->Resize(width, height);
+  m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
 
   iTexture2D *colorTexture = m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false);
   iRenderTarget *renderTarget = m_graphics->CreateRenderTarget();
@@ -189,6 +190,8 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
   colorTexture->Release();
   renderTarget->Release();
   frameProcessor->Release();
+  m_camera->SetPerspective(3.14159f / 4.0f, (float)this->height() / (float)this->width());
+
   return result;
 }
 

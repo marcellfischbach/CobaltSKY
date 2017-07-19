@@ -16,6 +16,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CobaltSKY_BINARY_DIR}/bin)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CobaltSKY_BINARY_DIR}/bin)
 
 
+
 #function(CS_MOC prefix api inlist outlist)
 #	set(out)
 #	foreach(file ${${inlist}})

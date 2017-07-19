@@ -108,6 +108,7 @@ bool AssetManagerAssetWriter::Import(iFile *file)
     file->Read(entry.buffer, entry.length);
   }
 
+  return true;
 }
 
 void AssetManagerAssetWriter::Output(iFile *file)

@@ -23,6 +23,7 @@
 #include <cobalt/graphics/deferred/csgbuffer.hh>
 #include <cobalt/graphics/deferred/csparticlerenderer.hh>
 #include <cobalt/graphics/deferred/cspointlightrenderer.hh>
+#include <cobalt/math/cscolor4f.hh>
 #include <algorithm>
 
 csDeferredFrameProcessor::csDeferredFrameProcessor(iGraphics *renderer)
@@ -30,6 +31,7 @@ csDeferredFrameProcessor::csDeferredFrameProcessor(iGraphics *renderer)
   , m_renderer(renderer)
   , m_gbuffer(0)
   , m_postProcessor(0)
+  , m_clearColor(0.0f, 0.0f, 0.0f, 1.0f)
 {
   CS_CLASS_GEN_CONSTR;
 
@@ -101,6 +103,10 @@ void csDeferredFrameProcessor::SetPostProcessor(csPostProcessor *postProcessor)
   CS_SET(m_postProcessor, postProcessor);
 }
 
+void csDeferredFrameProcessor::SetClearColor(const csColor4f &color)
+{
+  m_clearColor = color;
+}
 
 struct Data
 {
@@ -196,7 +202,7 @@ iRenderTarget *csDeferredFrameProcessor::Render(csEntity *root, csCamera *camera
   //glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
-  m_renderer->Clear(true, csVector4f(0.0f, 0.0f, 0.0f, 1.0f), false, 1.0f, false, 0);
+  m_renderer->Clear(true, csVector4f(m_clearColor.r, m_clearColor.g, m_clearColor.g, m_clearColor.a), false, 1.0f, false, 0);
 
 
   m_renderer->SetBlendEnabled(true);

@@ -30,7 +30,9 @@ void AssetManagerContentItemDelegate::paint(QPainter *painter, const QStyleOptio
     path.addRoundedRect(option.rect, 16.0, 16.0);
 
     QLinearGradient grad(option.rect.topLeft(), option.rect.bottomLeft());
-    grad.setColorAt(0.0, option.palette.background().color());
+    grad.setColorAt(0.0, option.palette.highlight().color().lighter(120));
+    grad.setColorAt(0.3, option.palette.highlight().color().lighter(120));
+    grad.setColorAt(0.4, option.palette.highlight().color());
     grad.setColorAt(1.0, option.palette.highlight().color());
     painter->fillPath(path, QBrush(grad));
   }

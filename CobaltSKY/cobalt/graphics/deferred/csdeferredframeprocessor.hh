@@ -8,6 +8,8 @@
 #include <cobalt/graphics/deferred/csdefaultcollector.hh>
 #include <cobalt/graphics/deferred/csdeferredframeprocessor.refl.hh>
 
+
+struct csColor4f;
 struct iShader;
 class csGBuffer;
 struct iGraphics;
@@ -28,6 +30,7 @@ public:
   bool Initialize();
 
   void SetPostProcessor(csPostProcessor *processor);
+  void SetClearColor(const csColor4f &clearColor);
 
   iRenderTarget *Render(csEntity *root, csCamera *camera, iRenderTarget *target);
 
@@ -43,6 +46,8 @@ private:
   csPostProcessor *m_postProcessor;
 
   csGBuffer *m_gbuffer;
+
+  csColor4f m_clearColor;
 
   iShader *m_simplePresentShader;
   iShader *m_directionLightShader;

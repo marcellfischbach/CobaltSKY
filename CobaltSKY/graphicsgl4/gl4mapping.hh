@@ -253,8 +253,8 @@ static GLenum compareFuncMap[] = {
   GL_GREATER,
   GL_EQUAL,
   GL_NOTEQUAL,
-  GL_ALWAYS,
   GL_NEVER,
+  GL_ALWAYS,
 };
 
 

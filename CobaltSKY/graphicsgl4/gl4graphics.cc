@@ -727,7 +727,7 @@ void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 
 void csGraphicsGL4::SetBlendEnabled(bool enable)
 {
-  if (m_blendEnabled != enable)
+  if (m_blendEnabled != enable || true)
   {
     m_blendEnabled = enable;
     if (enable)
@@ -1036,11 +1036,16 @@ void csGraphicsGL4::RenderFullScreenFrame(float left, float right, float bottom,
   float x1 = -1.0f + right * 2.0f;
   float y1 = -1.0f + top * 2.0f;
 
-  glDepthMask(true);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_ALWAYS);
-  glClearDepth(1.0);
-  glDisable(GL_BLEND);
+  SetDepthTest(true);
+  //SetDepthMask(true);
+  SetDepthFunc(eCM_Always);
+  SetClearDepthValue(1.0f);
+  SetBlendEnabled(false);
+  
+  //glEnable(GL_DEPTH_TEST);
+  //glDepthFunc(GL_ALWAYS);
+  //glClearDepth(1.0);
+  //glDisable(GL_BLEND);
   CS_CHECK_GL_ERROR;
 
   SetShader(m_fullScreenProgram);
