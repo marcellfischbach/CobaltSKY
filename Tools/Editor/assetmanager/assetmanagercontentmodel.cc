@@ -4,10 +4,13 @@
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <editor.hh>
 #include <editorimage.hh>
+#include <eventbus.hh>
+#include <events/assetpreviewiconchangedevent.hh>
 #include <QPixmap>
 #include <QMimeData>
 #include <mimehelper.hh>
 #include <cobalt/core/ifile.hh>
+#include <cobalt/core/csevent.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/core/csresourcemanager.hh>
@@ -17,13 +20,26 @@
 #define FROM_INDEX(e) reinterpret_cast<AssetManagerContentModelEntry*>(e.internalPointer());
 #define CONST_FROM_INDEX(e) reinterpret_cast<const AssetManagerContentModelEntry*>(e.internalPointer());
 
+
+void asset_manager_content_mode_preview_icon_changed(csEvent &event, void *user)
+{
+  AssetPreviewIconChangedEvent &evt = static_cast<AssetPreviewIconChangedEvent&>(event);
+  AssetManagerContentModel *model = reinterpret_cast<AssetManagerContentModel*>(user);
+  if (model)
+  {
+    model->PreviewIconChanged(evt.GetLocator());
+  }
+}
+
 AssetManagerContentModel::AssetManagerContentModel()
   : QAbstractItemModel()
 {
+  EventBus::Get().Register(AssetPreviewIconChangedEvent::GetStaticClass(), asset_manager_content_mode_preview_icon_changed, this);
 }
 
 AssetManagerContentModel::~AssetManagerContentModel()
 {
+  EventBus::Get().Deregister(asset_manager_content_mode_preview_icon_changed, this);
   CleanupEntries();
 }
 
@@ -220,4 +236,19 @@ csString AssetManagerContentModel::ReadType(const csResourceLocator &locator) co
   }
 
   return csString((const char*)typeElement.tagName().toLatin1());
+}
+
+
+void AssetManagerContentModel::PreviewIconChanged(const csResourceLocator &locator)
+{
+  for (AssetManagerContentModelEntry *entry : m_entries)
+  {
+    if (entry->GetLocator() == locator)
+    {
+      entry->ReloadIcon();
+      int idx = m_entries.indexOf(entry);
+      QModelIndex index = createIndex(idx, 0, entry);
+      emit dataChanged(index, index);
+    }
+  }
 }

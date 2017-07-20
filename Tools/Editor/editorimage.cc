@@ -12,6 +12,12 @@ EditorImage::~EditorImage()
 {
 }
 
+void editor_image_clean_up(void *data)
+{
+  unsigned char *imageBuffer = reinterpret_cast<unsigned char*>(data);
+  delete[] imageBuffer;
+}
+
 void EditorImage::SetImage(csImage *image)
 {
   if (!image)
@@ -20,6 +26,10 @@ void EditorImage::SetImage(csImage *image)
   }
   else
   {
+    size_t size = image->GetSize();
+    unsigned char *buffer = new unsigned char [size];
+    memcpy(buffer, image->GetData(), size);
+
     QImage::Format format;
     switch (image->GetPixelFormat())
     {
@@ -30,6 +40,6 @@ void EditorImage::SetImage(csImage *image)
       format = QImage::Format_RGB888;
       break;
     }
-    m_image = QImage((const uchar *)image->GetData(), image->GetWidth(), image->GetHeight(), format);
+    m_image = QImage((const uchar *)buffer, image->GetWidth(), image->GetHeight(), format, editor_image_clean_up, buffer);
   }
 }

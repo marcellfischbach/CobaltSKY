@@ -108,6 +108,11 @@ void csDeferredFrameProcessor::SetClearColor(const csColor4f &color)
   m_clearColor = color;
 }
 
+const csColor4f &csDeferredFrameProcessor::GetClearColor() const
+{
+  return m_clearColor;
+}
+
 struct Data
 {
   const csMatrix4f *matrix;

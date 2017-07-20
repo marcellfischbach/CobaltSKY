@@ -31,6 +31,7 @@ public:
   csResourceLocator GetLocator(const QModelIndex &index) const;
 
   const AssetManagerContentModelEntry *GetEntry(const QModelIndex &index) const;
+  void PreviewIconChanged(const csResourceLocator &locator);
 private:
   void CleanupEntries();
   csString ReadType(const csResourceLocator &fileName) const;

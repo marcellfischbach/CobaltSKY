@@ -155,6 +155,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     return result;
   }
   frameProcessor->Resize(width, height);
+  frameProcessor->SetClearColor(csColor4f(0.0f, 0.0f, 0.0f, 0.0f));
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
 
   iTexture2D *colorTexture = m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false);

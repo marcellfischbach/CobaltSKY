@@ -5,7 +5,7 @@
 
 #include <abstractasseteditor.refl.hh>
 #include <QFile>
-
+#include <QImage>
 
 CS_INTERFACE()
 class AbstractAssetEditor : public iAssetEditor
@@ -35,6 +35,8 @@ public:
 
   virtual void CloseRequest() override;
   void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
+
+  void ReplacePreviewIcon(QImage image);
 
 protected:
   virtual void UpdateAsset() = 0;

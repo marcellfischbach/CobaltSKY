@@ -1,15 +1,20 @@
 
 
 #include <abstractasseteditor.hh>
-#include <QMessageBox>
+#include <assetmanager/assetmanagerassetwriter.hh>
 #include <editor.hh>
 #include <project/project.hh>
 #include <mainwindow.hh>
 #include <eventbus.hh>
+#include <events/assetpreviewiconchangedevent.hh>
 #include <events/assetrenamedevent.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
+#include <QBuffer>
 #include <QFile>
+#include <QImage>
+#include <QImageWriter>
+#include <QMessageBox>
 
 void abstract_asset_editor_asset_renamed(csEvent &event, void *userData)
 {
@@ -151,6 +156,41 @@ void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const c
     UpdateName();
     UpdateMainWindow();
   }
+}
+
+void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
+{
+  csResourceLocator dataLocator = m_assetDescriptor.GetLocator().AsData();
+
+  printf("image: %s\n", dataLocator.GetDebugName().c_str());
+  iFile *file = csVFS::Get()->Open(dataLocator, eOM_ReadWrite);
+
+  AssetManagerAssetWriter writer;
+  writer.Import(file);
+  file->Close();
+  writer.RemoveEntry("EDITOR_ICON");
+
+  QBuffer buffer;
+  QImageWriter qimagewriter(&buffer, QString("PNG").toLatin1());
+  qimagewriter.write(image);
+
+  writer.AddEntry(
+    "EDITOR_ICON",
+    csString("PNG"),
+    buffer.data().length(),
+    reinterpret_cast<const csUInt8*>(buffer.data().constData())
+  );
+
+
+  iFile *dataFile = csVFS::Get()->Open(dataLocator, eOM_Write);
+  if (dataFile)
+  {
+    writer.Output(dataFile);
+    dataFile->Close();
+  }
+
+
+  EventBus::Get() << AssetPreviewIconChangedEvent(m_assetDescriptor.GetLocator());
 }
 
 void AbstractAssetEditor::UpdateMainWindow()

@@ -7,9 +7,9 @@
 #include <cobalt/graphics/iframeprocessor.hh>
 #include <cobalt/graphics/deferred/csdefaultcollector.hh>
 #include <cobalt/graphics/deferred/csdeferredframeprocessor.refl.hh>
+#include <cobalt/math/cscolor4f.hh>
 
 
-struct csColor4f;
 struct iShader;
 class csGBuffer;
 struct iGraphics;
@@ -31,6 +31,7 @@ public:
 
   void SetPostProcessor(csPostProcessor *processor);
   void SetClearColor(const csColor4f &clearColor);
+  const csColor4f &GetClearColor() const;
 
   iRenderTarget *Render(csEntity *root, csCamera *camera, iRenderTarget *target);
 

@@ -41,10 +41,18 @@ void AssetManagerContentItemDelegate::paint(QPainter *painter, const QStyleOptio
   painter->drawPixmap(option.rect.topLeft() + QPoint(4, 4), entry->GetIcon());
   painter->drawText(QRect (
     option.rect.topLeft() + QPoint(64 + 8, 4), 
-    QPoint(option.rect.right () - 4, option.rect.center().y() - 4)), 
+    QPoint(option.rect.right () - 4, option.rect.center().y() - 2)), 
     Qt::AlignLeft | Qt::AlignBottom,
     entry->GetEntryName());
 
+  if (!entry->GetTypeName().isEmpty())
+  {
+    painter->drawText(QRect(
+      QPoint(option.rect.left() +64 + 8, option.rect.center().y() + 2),
+      option.rect.bottomRight() - QPoint(4, 4)),
+      Qt::AlignLeft | Qt::AlignTop,
+      entry->GetTypeName());
+  }
   painter->restore();
 }
 

@@ -2,7 +2,10 @@
 
 #include <assetmanager/assetmanagercontentmodelentry.hh>
 #include <editorimage.hh>
-
+#include <editor.hh>
+#include <project/project.hh>
+#include <project/projectassetreference.hh>
+#include <project/projectreferencetree.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csresourcemanager.hh>
 
@@ -16,15 +19,27 @@ AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLoc
 
   m_entryName = QString(info.GetName().c_str());
 
-  csResourceLocator previewLocator(locator, "preview");
-  EditorImage *editorImage = csResourceManager::Get()->Aquire<EditorImage>(previewLocator);
+  const ProjectAssetReference *reference = Editor::Get()->GetProject()->GetReferenceTree().GetReference(locator);
+  if (reference)
+  {
+    m_typeName = QString(reference->GetTypeName().c_str());
+  }
+  ReloadIcon();
+}
+
+void AssetManagerContentModelEntry::ReloadIcon()
+{
+  csResourceLocator previewLocator(m_locator, "preview");
+  EditorImage *editorImage = csResourceManager::Get()->Load<EditorImage>(previewLocator);
   if (editorImage)
   {
+    printf("EditorImage: %s => %p\n", m_locator.GetDebugName().c_str(), editorImage);
     QImage img = editorImage->GetImage();
     if (!img.isNull())
     {
       m_pixmap = QPixmap::fromImage(img);
     }
+    editorImage->Release();
   }
   if (m_pixmap.isNull())
   {
