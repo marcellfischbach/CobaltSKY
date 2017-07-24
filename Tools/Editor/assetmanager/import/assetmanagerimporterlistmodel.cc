@@ -1,6 +1,7 @@
 
 #include <assetmanager/import/assetmanagerimporterlistmodel.hh>
 #include <assetmanager/import/assetmanagerimporter.hh>
+#include <assetmanager/import/assetmanagerimporterpage.hh>
 
 AssetManagerImporterListModel::AssetManagerImporterListModel()
   : QAbstractItemModel()
@@ -13,21 +14,27 @@ AssetManagerImporterListModel::~AssetManagerImporterListModel()
 
 }
 
-void AssetManagerImporterListModel::AddData(AssetManagerImportData* data)
+void AssetManagerImporterListModel::AddPage(AssetManagerImporterPage* page)
 {
   beginResetModel();
-  m_datas.push_back(data);
+  m_pages.push_back(page);
   endResetModel();
+}
+
+void AssetManagerImporterListModel::PageChanged(AssetManagerImporterPage *page)
+{
+  QModelIndex index = GetIndex(page, 0);
+  emit dataChanged(index, index);
 }
 
 QModelIndex AssetManagerImporterListModel::index(int row, int column, const QModelIndex &parent) const
 {
-  if (parent.isValid() || row >= m_datas.size() || column != 0)
+  if (parent.isValid() || row >= m_pages.size() || column != 0)
   {
     return QModelIndex();
   }
 
-  return createIndex(row, column, m_datas[row]);
+  return createIndex(row, column, m_pages[row]);
 }
 
 QModelIndex AssetManagerImporterListModel::parent(const QModelIndex &child) const
@@ -41,7 +48,7 @@ int AssetManagerImporterListModel::rowCount(const QModelIndex &parent) const
   {
     return 0;
   }
-  return (int)m_datas.size();
+  return (int)m_pages.size();
 }
 
 int AssetManagerImporterListModel::columnCount(const QModelIndex &parent) const
@@ -51,33 +58,39 @@ int AssetManagerImporterListModel::columnCount(const QModelIndex &parent) const
 
 QVariant AssetManagerImporterListModel::data(const QModelIndex &index, int role) const
 {
-  if (!index.isValid() || index.row() >= m_datas.size())
+  if (!index.isValid() || index.row() >= m_pages.size())
   {
     return QVariant();
   }
 
-  if (role == Qt::DisplayRole)
+  AssetManagerImporterPage *page = reinterpret_cast<AssetManagerImporterPage*>(index.internalPointer());
+  switch (role)
   {
-    AssetManagerImportData *data = reinterpret_cast<AssetManagerImportData*>(index.internalPointer());
-    return QVariant(data->GetName());
+  case Qt::DisplayRole:
+    return QVariant(page->GetName());
+  case Qt::FontRole:
+    QFont fnt;
+    fnt.setItalic(!page->IsImporting());
+    return QVariant(fnt);
   }
+
   return QVariant();
 }
 
 
-QModelIndex AssetManagerImporterListModel::GetIndex(AssetManagerImportData *data, int column)
+QModelIndex AssetManagerImporterListModel::GetIndex(AssetManagerImporterPage *page, int column)
 {
-  for (int i = 0, in= m_datas.size(); i<in; ++i)
+  for (int i = 0, in= m_pages.size(); i<in; ++i)
   {
-    if (m_datas[i] == data)
+    if (m_pages[i] == page)
     {
-      return createIndex(i, column, data);
+      return createIndex(i, column, page);
     }
   }
   return QModelIndex();
 }
 
-AssetManagerImportData *AssetManagerImporterListModel::GetData(const QModelIndex &index) const
+AssetManagerImporterPage *AssetManagerImporterListModel::GetPage(const QModelIndex &index) const
 {
-  return reinterpret_cast<AssetManagerImportData*>(index.internalPointer());
+  return reinterpret_cast<AssetManagerImporterPage*>(index.internalPointer());
 }

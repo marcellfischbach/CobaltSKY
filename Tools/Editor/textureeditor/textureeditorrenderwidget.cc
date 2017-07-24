@@ -201,7 +201,7 @@ void TextureEditorRenderWidget::paintGL()
   }
 
   gr->SetBlendEnabled(true);
-  gr->SetBlendMode(eBM_SrcAlpha, eBM_InvSrcAlpha);
+  gr->SetBlendMode(eBM_SrcAlpha, eBM_One);
   gr->SetColorMask(true, true, true, true);
   gr->Clear(true, csVector4f(0.0f, 0.0f, 0.0f, 1.0f));
 

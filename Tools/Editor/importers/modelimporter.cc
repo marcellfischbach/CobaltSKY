@@ -43,6 +43,12 @@ void debug_node(const aiNode *node, int indent)
   }
 }
 
+void ModelImporterData::SetName(const QString &name)
+{
+  m_name = name;
+}
+
+
 const QString &ModelImporterData::GetName() const
 {
   return m_name;
@@ -89,7 +95,7 @@ bool ModelImporter::CanImport(const QString &fileName) const
     || ext == std::string("obj");
 }
 
-AssetManagerImportData *ModelImporter::Import(const QString &fileName) const
+const std::vector<AssetManagerImportData*> ModelImporter::Import(const QString &fileName) const
 {
   ModelImporterData *data = new ModelImporterData();
 
@@ -112,8 +118,10 @@ AssetManagerImportData *ModelImporter::Import(const QString &fileName) const
 
   Scan(data, scene);
 
+  std::vector<AssetManagerImportData*> result;
 
-  return data;
+  result.push_back(data);
+  return result ;
 }
 
 

@@ -1,65 +1,55 @@
 <referenceTree>
   <assets>
-    <asset type="shaderGraph" priority="100" locator="materials/Solid.xasset@Debug" name="Solid"/>
-    <asset type="texture2d" priority="100" locator="materials/textures/dirt_diffuse.xasset@Debug" name="dirt_diffuse"/>
-    <asset type="texture2d" priority="100" locator="materials/textures/fieldstone_diffuse.xasset@Debug" name="fieldstone_diffuse"/>
-    <asset type="texture2d" priority="100" locator="materials/textures/fieldstone_normal.xasset@Debug" name="fieldstone_normal"/>
-    <asset type="sampler" priority="10" locator="AnotherSampler.xasset@ValkyrieDemo" name="AnotherSampler"/>
-    <asset type="sampler" priority="10" locator="DefaultSampler.xasset@ValkyrieDemo" name="DefaultSampler"/>
-    <asset type="sampler" priority="10" locator="NearestSampler.xasset@ValkyrieDemo" name="NearestSampler"/>
-    <asset type="sampler" priority="10" locator="Sampler.xasset@ValkyrieDemo" name="Sampler"/>
-    <asset type="shaderGraph" priority="10" locator="Test23.xasset@ValkyrieDemo" name="Test23"/>
-    <asset type="shaderGraph" priority="10" locator="debug/materials/Solid.xasset@ValkyrieDemo" name="Solid"/>
-    <asset type="texture2d" priority="10" locator="debug/materials/textures/dirt_diffuse.xasset@ValkyrieDemo" name="dirt_diffuse"/>
-    <asset type="texture2d" priority="10" locator="debug/materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" name="fieldstone_diffuse"/>
-    <asset type="texture2d" priority="10" locator="debug/materials/textures/fieldstone_normal.xasset@ValkyrieDemo" name="fieldstone_normal"/>
-    <asset type="shaderGraph" priority="10" locator="materials/DefaultMaterial.xasset@ValkyrieDemo" name="DefaultMaterial"/>
-    <asset type="material" priority="10" locator="materials/GroundFieldStone.xasset@ValkyrieDemo" name="GroundFieldStone"/>
-    <asset type="material" priority="10" locator="materials/Material 00b.xasset@ValkyrieDemo" name="Material 00b"/>
-    <asset type="material" priority="10" locator="materials/Material 01.xasset@ValkyrieDemo" name="Material 01"/>
-    <asset type="material" priority="10" locator="materials/Material 02.xasset@ValkyrieDemo" name="Material 02"/>
-    <asset type="shaderGraph" priority="10" locator="materials/Solid.xasset@ValkyrieDemo" name="Solid"/>
-    <asset type="material" priority="10" locator="materials/TempleDirt.xasset@ValkyrieDemo" name="TempleDirt"/>
-    <asset type="sampler" priority="10" locator="materials/default_sampler.xasset@ValkyrieDemo" name="default_sampler"/>
-    <asset type="program" priority="10" locator="materials/gl4/commons/ForwardUnlit.xasset@ValkyrieDemo" name="ForwardUnlit"/>
-    <asset type="material" priority="10" locator="materials/gl4/commons/unlit.xasset@ValkyrieDemo" name="unlit"/>
-    <asset type="program" priority="10" locator="materials/gl4/deferred/DirectionalLight.xasset@ValkyrieDemo" name="DirectionalLight"/>
-    <asset type="program" priority="10" locator="materials/gl4/deferred/DirectionalLightPSSM.xasset@ValkyrieDemo" name="DirectionalLightPSSM"/>
-    <asset type="program" priority="10" locator="materials/gl4/deferred/PointLight.xasset@ValkyrieDemo" name="PointLight"/>
-    <asset type="program" priority="10" locator="materials/gl4/deferred/PointLightCubeShadow.xasset@ValkyrieDemo" name="PointLightCubeShadow"/>
-    <asset type="program" priority="10" locator="materials/gl4/deferred/SimplePresent.xasset@ValkyrieDemo" name="SimplePresent"/>
-    <asset type="program" priority="10" locator="materials/gl4/renderer/ArrayPresent.xasset@ValkyrieDemo" name="ArrayPresent"/>
-    <asset type="program" priority="10" locator="materials/gl4/renderer/SimplePresent.xasset@ValkyrieDemo" name="SimplePresent"/>
-    <asset type="texture2d" priority="10" locator="materials/grass_blades.xasset@ValkyrieDemo" name="grass_blades"/>
-    <asset type="shaderGraph" priority="10" locator="materials/narf2.xasset@ValkyrieDemo" name="narf2"/>
-    <asset type="texture2d" priority="10" locator="materials/textures/dirt_diffuse.xasset@ValkyrieDemo" name="dirt_diffuse"/>
-    <asset type="texture2d" priority="10" locator="materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" name="fieldstone_diffuse"/>
-    <asset type="texture2d" priority="10" locator="materials/textures/fieldstone_normal.xasset@ValkyrieDemo" name="fieldstone_normal"/>
-    <asset type="entityState" priority="10" locator="models/ground_plane.xasset@ValkyrieDemo" name="ground_plane"/>
-    <asset type="entityState" priority="10" locator="models/temple.xasset@ValkyrieDemo" name="temple"/>
-    <asset type="texture2d" priority="10" locator="test/hero_skinned_txt.xasset@ValkyrieDemo" name="hero_skinned_txt"/>
+    <asset type="sampler" locator="DefaultSampler.xasset@ValkyrieDemo" priority="10" name="DefaultSampler"/>
+    <asset type="texture2d" locator="debug/blue_new.xasset@ValkyrieDemo" priority="10" name="blue_new"/>
+    <asset type="shaderGraph" locator="debug/materials/Solid.xasset@ValkyrieDemo" priority="10" name="Solid"/>
+    <asset type="texture2d" locator="debug/materials/textures/dirt_diffuse.xasset@ValkyrieDemo" priority="10" name="dirt_diffuse"/>
+    <asset type="texture2d" locator="debug/materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" priority="10" name="fieldstone_diffuse"/>
+    <asset type="texture2d" locator="debug/materials/textures/fieldstone_normal.xasset@ValkyrieDemo" priority="10" name="fieldstone_normal"/>
+    <asset type="texture2d" locator="debug/red_old.xasset@ValkyrieDemo" priority="10" name="red_old"/>
+    <asset type="shaderGraph" locator="materials/DefaultMaterial.xasset@ValkyrieDemo" priority="10" name="DefaultMaterial"/>
+    <asset type="material" locator="materials/GroundFieldStone.xasset@ValkyrieDemo" priority="10" name="GroundFieldStone"/>
+    <asset type="material" locator="materials/Material 00b.xasset@ValkyrieDemo" priority="10" name="Material 00b"/>
+    <asset type="material" locator="materials/Material 01.xasset@ValkyrieDemo" priority="10" name="Material 01"/>
+    <asset type="material" locator="materials/Material 02.xasset@ValkyrieDemo" priority="10" name="Material 02"/>
+    <asset type="shaderGraph" locator="materials/Solid.xasset@ValkyrieDemo" priority="10" name="Solid"/>
+    <asset type="material" locator="materials/TempleDirt.xasset@ValkyrieDemo" priority="10" name="TempleDirt"/>
+    <asset type="program" locator="materials/gl4/commons/ForwardUnlit.xasset@ValkyrieDemo" priority="10" name="ForwardUnlit"/>
+    <asset type="material" locator="materials/gl4/commons/unlit.xasset@ValkyrieDemo" priority="10" name="unlit"/>
+    <asset type="program" locator="materials/gl4/deferred/DirectionalLight.xasset@ValkyrieDemo" priority="10" name="DirectionalLight"/>
+    <asset type="program" locator="materials/gl4/deferred/DirectionalLightPSSM.xasset@ValkyrieDemo" priority="10" name="DirectionalLightPSSM"/>
+    <asset type="program" locator="materials/gl4/deferred/PointLight.xasset@ValkyrieDemo" priority="10" name="PointLight"/>
+    <asset type="program" locator="materials/gl4/deferred/PointLightCubeShadow.xasset@ValkyrieDemo" priority="10" name="PointLightCubeShadow"/>
+    <asset type="program" locator="materials/gl4/deferred/SimplePresent.xasset@ValkyrieDemo" priority="10" name="SimplePresent"/>
+    <asset type="program" locator="materials/gl4/renderer/ArrayPresent.xasset@ValkyrieDemo" priority="10" name="ArrayPresent"/>
+    <asset type="program" locator="materials/gl4/renderer/SimplePresent.xasset@ValkyrieDemo" priority="10" name="SimplePresent"/>
+    <asset type="texture2d" locator="materials/grass_blades.xasset@ValkyrieDemo" priority="10" name="grass_blades"/>
+    <asset type="shaderGraph" locator="materials/narf2.xasset@ValkyrieDemo" priority="10" name="narf2"/>
+    <asset type="texture2d" locator="materials/textures/dirt_diffuse.xasset@ValkyrieDemo" priority="10" name="dirt_diffuse"/>
+    <asset type="texture2d" locator="materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" priority="10" name="fieldstone_diffuse"/>
+    <asset type="texture2d" locator="materials/textures/fieldstone_normal.xasset@ValkyrieDemo" priority="10" name="fieldstone_normal"/>
+    <asset type="texture2d" locator="materials/textures/fieldstone_normal_with_alpha.xasset@ValkyrieDemo" priority="10" name="fieldstone_normal_with_alpha"/>
+    <asset type="entityState" locator="models/ground_plane.xasset@ValkyrieDemo" priority="10" name="ground_plane"/>
+    <asset type="entityState" locator="models/temple.xasset@ValkyrieDemo" priority="10" name="temple"/>
+    <asset type="texture2d" locator="test/hero_skinned_txt.xasset@ValkyrieDemo" priority="10" name="hero_skinned_txt"/>
   </assets>
   <references>
-    <reference asset="materials/Solid.xasset@Debug" references="materials/textures/fieldstone_diffuse.xasset"/>
-    <reference asset="materials/Solid.xasset@Debug" references="materials/textures/fieldstone_normal.xasset"/>
-    <reference asset="materials/textures/dirt_diffuse.xasset@Debug" references="DefaultSampler.xasset"/>
-    <reference asset="materials/textures/fieldstone_diffuse.xasset@Debug" references="DefaultSampler.xasset"/>
-    <reference asset="materials/textures/fieldstone_normal.xasset@Debug" references="DefaultSampler.xasset"/>
-    <reference asset="debug/materials/Solid.xasset@ValkyrieDemo" references="materials/textures/fieldstone_diffuse.xasset"/>
-    <reference asset="debug/materials/Solid.xasset@ValkyrieDemo" references="materials/textures/fieldstone_normal.xasset"/>
-    <reference asset="debug/materials/textures/dirt_diffuse.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="debug/materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="debug/materials/textures/fieldstone_normal.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="materials/GroundFieldStone.xasset@ValkyrieDemo" references="materials/Solid.xasset"/>
-    <reference asset="materials/Solid.xasset@ValkyrieDemo" references="materials/textures/fieldstone_diffuse.xasset"/>
-    <reference asset="materials/Solid.xasset@ValkyrieDemo" references="materials/textures/fieldstone_normal.xasset"/>
-    <reference asset="materials/TempleDirt.xasset@ValkyrieDemo" references="materials/Solid.xasset"/>
-    <reference asset="materials/grass_blades.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="materials/textures/dirt_diffuse.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo" references="NearestSampler.xasset"/>
-    <reference asset="materials/textures/fieldstone_normal.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
-    <reference asset="models/ground_plane.xasset@ValkyrieDemo" references="materials/GroundFieldStone.xasset"/>
-    <reference asset="models/temple.xasset@ValkyrieDemo" references="materials/TempleDirt.xasset"/>
-    <reference asset="test/hero_skinned_txt.xasset@ValkyrieDemo" references="DefaultSampler.xasset"/>
+    <reference references="DefaultSampler.xasset" asset="debug/blue_new.xasset@ValkyrieDemo"/>
+    <reference references="materials/textures/fieldstone_diffuse.xasset" asset="debug/materials/Solid.xasset@ValkyrieDemo"/>
+    <reference references="materials/textures/fieldstone_normal.xasset" asset="debug/materials/Solid.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="debug/materials/textures/dirt_diffuse.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="debug/materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="debug/materials/textures/fieldstone_normal.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="debug/red_old.xasset@ValkyrieDemo"/>
+    <reference references="materials/Solid.xasset" asset="materials/GroundFieldStone.xasset@ValkyrieDemo"/>
+    <reference references="materials/Solid.xasset" asset="materials/TempleDirt.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="materials/grass_blades.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="materials/textures/dirt_diffuse.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="materials/textures/fieldstone_diffuse.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="materials/textures/fieldstone_normal.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="materials/textures/fieldstone_normal_with_alpha.xasset@ValkyrieDemo"/>
+    <reference references="materials/GroundFieldStone.xasset" asset="models/ground_plane.xasset@ValkyrieDemo"/>
+    <reference references="materials/TempleDirt.xasset" asset="models/temple.xasset@ValkyrieDemo"/>
+    <reference references="DefaultSampler.xasset" asset="test/hero_skinned_txt.xasset@ValkyrieDemo"/>
   </references>
 </referenceTree>

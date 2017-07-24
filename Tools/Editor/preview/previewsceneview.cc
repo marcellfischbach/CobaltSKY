@@ -22,6 +22,7 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
   //
   // create the light within the scene
   m_light = new csDirectionalLight();
+  m_light->SetCastShadow(true);
   m_light->SetArbDirection(csVector3f(-1, -1, -1));
   m_lightState = new csLightState();
   m_lightState->SetLight(m_light);

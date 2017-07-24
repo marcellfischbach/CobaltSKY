@@ -8,7 +8,7 @@
 
 #if 1
 
-// #define CS_DEFINE_GL_ERROR_CHECK 
+ #define CS_DEFINE_GL_ERROR_CHECK 
 
 #if defined(_DEBUG) && defined(CS_DEFINE_GL_ERROR_CHECK)
 #	define CS_CHECK_GL_ERROR \

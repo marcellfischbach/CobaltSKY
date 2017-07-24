@@ -294,10 +294,10 @@ void AssetManagerWidget::on_pbImport_clicked(bool)
     {
       if (importer->CanImport(file))
       {
-        AssetManagerImportData *data = importer->Import(file);
-        if (data)
+        const std::vector<AssetManagerImportData*> datas = importer->Import(file);
+        if (!datas.empty())
         {
-          importerDialog.AddImportData(data);
+          importerDialog.AddImportDatas(datas);
         }
       }
     }

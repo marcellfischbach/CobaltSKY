@@ -133,6 +133,8 @@ set(ASSETMANAGER_IMPORT_SOURCES
     assetmanager/import/assetmanagerimporter.hh
     assetmanager/import/assetmanagerimporterdialog.cc
     assetmanager/import/assetmanagerimporterdialog.hh
+    assetmanager/import/assetmanagerimporterpage.cc
+    assetmanager/import/assetmanagerimporterpage.hh
     assetmanager/import/assetmanagerimporterlistmodel.cc
     assetmanager/import/assetmanagerimporterlistmodel.hh
     assetmanager/import/assetmanagerimportmanager.cc
@@ -141,6 +143,7 @@ set(ASSETMANAGER_IMPORT_SOURCES
 
 set(ASSETMANAGER_IMPORT_UI
     assetmanager/import/assetmanagerimporterdialog.ui
+    assetmanager/import/assetmanagerimporterpage.ui
     )
 
 

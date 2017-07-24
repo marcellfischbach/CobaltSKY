@@ -14,6 +14,7 @@ public:
   virtual ~ModelImporterData();
 
 
+  virtual void SetName(const QString &name);
   virtual const QString &GetName() const;
   virtual QWidget *GetWidget() const;
 
@@ -37,7 +38,7 @@ public:
   virtual const QStringList GetFilters() const;
 
   virtual bool CanImport(const QString &fileName) const;
-  virtual AssetManagerImportData *Import(const QString &fileName) const;
+  virtual const std::vector<AssetManagerImportData*> Import(const QString &fileName) const;
 
 private:
   void Scan(ModelImporterData *data, const aiScene *scene) const;

@@ -4,15 +4,16 @@
 #include <QAbstractItemModel>
 #include <vector>
 
-struct AssetManagerImportData;
+class AssetManagerImporterPage;
 
 class AssetManagerImporterListModel : public QAbstractItemModel
-{
+{ 
 public:
   AssetManagerImporterListModel();
   virtual ~AssetManagerImporterListModel();
 
-  void AddData(AssetManagerImportData* data);
+  void AddPage(AssetManagerImporterPage* page);
+  void PageChanged(AssetManagerImporterPage* page);
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
@@ -21,9 +22,9 @@ public:
 
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-  QModelIndex GetIndex(AssetManagerImportData *graph, int column);
-  AssetManagerImportData *GetData(const QModelIndex &index) const;
+  QModelIndex GetIndex(AssetManagerImporterPage *page, int column);
+  AssetManagerImporterPage *GetPage(const QModelIndex &index) const;
 
 private:
-  std::vector<AssetManagerImportData*> m_datas;
+  std::vector<AssetManagerImporterPage*> m_pages;
 };

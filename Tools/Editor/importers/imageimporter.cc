@@ -39,9 +39,15 @@ void ImageImporterData::Import(const QString &fileName)
 
 }
 
+void ImageImporterData::SetName(const QString &name)
+{
+  m_name = name;
+}
+
+
 const QString &ImageImporterData::GetName() const
 {
-  return m_name;// QObject::tr("Texture: %1").arg(m_name);
+  return m_name;
 }
 
 QWidget *ImageImporterData::GetWidget() const
@@ -199,9 +205,12 @@ bool ImageImporter::CanImport(const QString &fileName) const
   return fi.GetExtension() == std::string("png");
 }
 
-AssetManagerImportData *ImageImporter::Import(const QString &fileName) const
+const std::vector<AssetManagerImportData*> ImageImporter::Import(const QString &fileName) const
 {
   ImageImporterData *data = new ImageImporterData();
   data->Import(fileName);
-  return data;
+
+  std::vector<AssetManagerImportData*> result;
+  result.push_back(data);
+  return result;
 }

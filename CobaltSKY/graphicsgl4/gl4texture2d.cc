@@ -28,14 +28,13 @@ bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 h
   Bind();
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
   glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   CS_CHECK_GL_ERROR;
 
   int lod = 0;
   while (width >= 1 || height >= 1)
   {
-    glTexImage2D(m_target, lod, internalFormatMap[format], width, height, 0, externalFormatMap[format], externalFormatTypeMap[format], 0);
     lod++;
     width >>= 1;
     height >>= 1;
@@ -45,6 +44,7 @@ bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 h
     }
   }
   m_lods = lod;
+  glTexStorage2D(m_target, m_lods, sizedInternalFormatMap[format], m_width, m_height);
   CS_CHECK_GL_ERROR;
 
   return true;
@@ -67,8 +67,9 @@ bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *d
     layerHeight = 1;
   }
 
+
   Bind();
-  glTexImage2D(m_target, layer, internalFormatMap[m_format], layerWidth, layerHeight, 0, externalFormatMap[format], externalFormatTypeMap[format], data);
+  glTexSubImage2D(m_target, layer, 0, 0, layerWidth, layerHeight, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;
 
   return true;

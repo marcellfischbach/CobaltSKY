@@ -28,8 +28,8 @@ void main ()
 	float d = texture(cs_Depth, texCoord).r;
 	if (d == 1.0)
 	{
-		discard;
-	}
+cs_FragColor = vec4(0.7, 0.8, 1.0, 1.0);//discard;
+		return;	}
 	d = d * 2.0f - 1.0;
 	
 	// projected paces
