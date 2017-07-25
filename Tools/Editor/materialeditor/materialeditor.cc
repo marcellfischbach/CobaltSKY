@@ -218,3 +218,18 @@ void MaterialEditor::FillElement(QDomElement materialElement, QDomDocument doc)
 }
 
 
+
+
+void MaterialEditor::UpdatePreview()
+{
+  QImage preview = TakeScreenshot(64, 64);
+  if (!preview.isNull())
+  {
+    ReplacePreviewIcon(preview);
+  }
+}
+
+QImage MaterialEditor::TakeScreenshot(unsigned width, unsigned height)
+{
+  return m_widget->GetSceneView()->TakeScreenshot(width, height);
+}

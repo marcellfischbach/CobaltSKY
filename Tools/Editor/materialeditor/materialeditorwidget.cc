@@ -19,6 +19,10 @@ MaterialEditorWidget::~MaterialEditorWidget()
 
 }
 
+MaterialEditorPreviewSceneView *MaterialEditorWidget::GetSceneView()
+{
+  return m_gui.openGLWidget;
+}
 
 void MaterialEditorWidget::SetMaterial(csMaterial *material)
 {
@@ -38,4 +42,11 @@ void MaterialEditorWidget::on_pbSave_clicked()
   {
     m_editor->Save();
   }
+}
+
+void MaterialEditorWidget::on_pbScreenshot_clicked()
+{
+  QImage image = m_editor->TakeScreenshot(64, 64);
+  m_editor->ReplacePreviewIcon(image);
+
 }

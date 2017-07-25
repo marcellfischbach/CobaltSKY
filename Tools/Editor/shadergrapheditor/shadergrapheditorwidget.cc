@@ -722,10 +722,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
 void ShaderGraphEditorWidget::on_pbScreenshot_clicked()
 {
-  QImage image = m_editor->TakeScreenshot(64, 64);
-  m_editor->ReplacePreviewIcon(image);
-
-
+  m_editor->UpdatePreview();
 }
 
 

@@ -83,7 +83,17 @@ void ShaderGraphEditor::PopulateDockItems()
 
 }
 
+void ShaderGraphEditor::UpdatePreview()
+{
+  QImage preview = TakeScreenshot(64, 64);
+  if (!preview.isNull())
+  {
+    ReplacePreviewIcon(preview);
+  }
+}
+
 QImage ShaderGraphEditor::TakeScreenshot(unsigned width, unsigned height)
 {
   return m_preview->TakeScreenshot(width, height);
 }
+

@@ -10,6 +10,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+
+class QImage;
 class csMaterial;
 class MaterialEditorProperties;
 class MaterialEditorWidget;
@@ -22,6 +24,8 @@ public:
   virtual ~MaterialEditor();
 
   void Save();
+  void UpdatePreview();
+  QImage TakeScreenshot(unsigned width, unsigned height);
 
 protected:
   void UpdateAsset();

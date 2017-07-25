@@ -186,6 +186,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, buffer, dataSize);
 
     result = QImage(buffer, width, height, QImage::Format_RGBA8888, scene_view_cleanup_screenshot_data, buffer);
+    result = result.mirrored();
   }
 
   colorTexture->Release();

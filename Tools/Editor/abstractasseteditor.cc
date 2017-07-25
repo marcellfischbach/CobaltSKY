@@ -15,6 +15,8 @@
 #include <QImage>
 #include <QImageWriter>
 #include <QMessageBox>
+#include <QDomDocument>
+#include <QDomElement>
 
 void abstract_asset_editor_asset_renamed(csEvent &event, void *userData)
 {
@@ -158,6 +160,7 @@ void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const c
   }
 }
 
+
 void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
 {
   csResourceLocator dataLocator = m_assetDescriptor.GetLocator().AsData();
@@ -189,6 +192,47 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
     dataFile->Close();
   }
 
+  csString fileName = csVFS::Get()->GetAbsolutePath(m_assetDescriptor.GetLocator(), csVFS::CheckExistence);
+  QFile assetFile(QString(fileName.c_str()));
+  QDomDocument doc;
+  if (doc.setContent(&assetFile))
+  {
+    if (assetFile.isOpen())
+    {
+      assetFile.close();
+    }
+    QDomElement assetElement = doc.firstChildElement("asset");
+    if (!assetElement.isNull())
+    {
+      QDomElement previewElement = doc.createElement("preview");
+      QDomElement editorIconElement = doc.createElement("editorIcon");
+      QDomElement imageElement = doc.createElement("image");
+      previewElement.appendChild(editorIconElement);
+      editorIconElement.appendChild(imageElement);
+      imageElement.appendChild(doc.createTextNode(QString("%1:EDITOR_ICON").arg(QString(dataLocator.GetResourceFile().c_str()))));
+
+
+      QDomElement currentPreviewElement = assetElement.firstChildElement("preview");
+      if (currentPreviewElement.isNull())
+      {
+        assetElement.appendChild(previewElement);
+      }
+      else
+      {
+        assetElement.replaceChild(previewElement, currentPreviewElement);
+      }
+    }
+
+    QString xmlText = doc.toString(2);
+    if (assetFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    {
+      assetFile.write(xmlText.toLatin1());
+    }
+  }
+  if (assetFile.isOpen())
+  {
+    assetFile.close();
+  }
 
   EventBus::Get() << AssetPreviewIconChangedEvent(m_assetDescriptor.GetLocator());
 }

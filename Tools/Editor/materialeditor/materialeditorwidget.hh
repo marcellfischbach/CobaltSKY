@@ -18,10 +18,13 @@ public:
 
   void SetMaterial(csMaterial *material);
 
+  MaterialEditorPreviewSceneView *GetSceneView();
+
   public slots:
   void MaterialChanged();
 protected slots:
   void on_pbSave_clicked();
+  void on_pbScreenshot_clicked();
 private:
 
   MaterialEditor *m_editor;
