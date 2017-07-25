@@ -201,6 +201,8 @@ set(IMPORTERS_SOURCES
     importers/imageimporter.hh
     importers/modelimporter.cc
     importers/modelimporter.hh
+    importers/staticmeshmodelimporterdata.cc
+    importers/staticmeshmodelimporterdata.hh
     )
 
 

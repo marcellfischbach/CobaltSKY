@@ -4,7 +4,7 @@
       <materialDef>materials/Solid.xasset</materialDef>
       <parameters>
         <parameter name="Multiplier">
-          <float2>10.000000, 10.000000</float2>
+          <float2>1.000000, 1.000000</float2>
         </parameter>
       </parameters>
     </material>

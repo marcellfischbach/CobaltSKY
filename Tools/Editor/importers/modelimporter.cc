@@ -1,5 +1,7 @@
 
 #include <importers/modelimporter.hh>
+#include <importers/staticmeshmodelimporterdata.hh>
+#include <staticmesheditor/staticmesheditorwidget.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -8,16 +10,27 @@
 
 
 
-ModelImporterData::ModelImporterData()
+ModelImporterData::ModelImporterData(Type type)
   : AssetManagerImportData()
+  , m_type(type)
+  , m_view(0)
 {
-  m_view = new QLabel("Model importer...");
 }
 
 
 ModelImporterData::~ModelImporterData()
 {
 
+}
+
+ModelImporterData::Type ModelImporterData::GetType() const
+{
+  return m_type;
+}
+
+void ModelImporterData::SetView(QWidget *view)
+{
+  m_view = view;
 }
 
 void debug_node(const aiNode *node, int indent)
@@ -43,11 +56,6 @@ void debug_node(const aiNode *node, int indent)
   }
 }
 
-void ModelImporterData::SetName(const QString &name)
-{
-  m_name = name;
-}
-
 
 const QString &ModelImporterData::GetName() const
 {
@@ -58,12 +66,6 @@ QWidget *ModelImporterData::GetWidget() const
 {
   return m_view;
 }
-
-csResourceLocator ModelImporterData::Import(AssetManagerWidget *assetManager)
-{
-  return csResourceLocator();
-}
-
 
 
 
@@ -97,7 +99,6 @@ bool ModelImporter::CanImport(const QString &fileName) const
 
 const std::vector<AssetManagerImportData*> ModelImporter::Import(const QString &fileName) const
 {
-  ModelImporterData *data = new ModelImporterData();
 
   // Create an instance of the Importer class
   Assimp::Importer importer;
@@ -107,25 +108,33 @@ const std::vector<AssetManagerImportData*> ModelImporter::Import(const QString &
   const aiScene* scene = importer.ReadFile(
     std::string((const char*)fileName.toLatin1()),
     aiProcess_CalcTangentSpace |
+    aiProcess_PreTransformVertices |
+    aiProcess_FlipWindingOrder |
     aiProcess_Triangulate |
     aiProcess_JoinIdenticalVertices |
     aiProcess_SortByPType);
 
 
   csFileInfo fi((const char*)fileName.toLatin1());
-  data->m_name = QString(fi.GetName().c_str());
-  data->m_fileName = fileName;
 
-  Scan(data, scene);
+  Data data;
+  Scan(&data, scene);
 
-  std::vector<AssetManagerImportData*> result;
+  std::vector<AssetManagerImportData *> result;
+  QString name(fi.GetName().c_str());
+  for (auto d : data.datas)
+  {
+    d->SetName(name);
+    d->m_fileName = fileName;
+    d->GenerateData(scene);
+    result.push_back(d);
+  }
 
-  result.push_back(data);
-  return result ;
+  return result;
 }
 
 
-void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene) const
+void ModelImporter::Scan(Data *data, const aiScene *scene) const
 {
   aiNode *root = scene->mRootNode;
   Scan(data, scene, root, 0);
@@ -141,7 +150,7 @@ static void ind(int indent)
   }
 }
 
-void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene, aiNode *node, int indent) const
+void ModelImporter::Scan(Data *data, const aiScene *scene, aiNode *node, int indent) const
 {
   std::string nodeName(node->mName.C_Str());
   ind(indent); printf("%s", nodeName.c_str());
@@ -149,13 +158,18 @@ void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene, aiNode *
   if (IsSkeleton(nodeName))
   {
     printf(" => Skeleton\n");
-    data->m_skeletons.push_back(node);
+    // ModelImporterData *data = GetData(ModelImporterData::Skeleton);
+    // data->m_skeletons.push_back(node);
     return;
   }
   else if (node->mNumMeshes > 0)
   {
     printf(" => Mesh %d\n", node->mNumMeshes);
-    data->m_meshNodes.push_back(node);
+    StaticMeshModelImporterData *d = static_cast<StaticMeshModelImporterData *>(data->GetData(ModelImporterData::Mesh));
+    if (d)
+    {
+      d->m_meshNodes.push_back(node);
+    }
   }
   else {
     printf("\n");
@@ -164,7 +178,7 @@ void ModelImporter::Scan(ModelImporterData *data, const aiScene *scene, aiNode *
   for (unsigned i = 0; i < node->mNumChildren; ++i)
   {
     aiNode *childNode = node->mChildren[i];
-    Scan(data, scene, childNode, indent+1);
+    Scan(data, scene, childNode, indent + 1);
   }
 }
 
@@ -191,5 +205,31 @@ bool ModelImporter::IsSkeleton(const std::string &name) const
     }
   }
   return false;
+}
+
+
+ModelImporterData *ModelImporter::Data::GetData(ModelImporterData::Type type)
+{
+  for (auto data : datas)
+  {
+    if (data->GetType() == type)
+    {
+      return data;
+    }
+  }
+
+  ModelImporterData *data = 0;
+  switch (type)
+  {
+  case ModelImporterData::Mesh:
+    data = new StaticMeshModelImporterData();
+    break;
+  }
+  
+  if (data)
+  {
+    datas.push_back(data);
+  }
+  return data;
 }
 

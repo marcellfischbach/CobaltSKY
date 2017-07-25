@@ -6,27 +6,35 @@
 struct aiNode;
 struct aiScene;
 class QWidget;
+class StaticMeshEditorWidget;
 class ModelImporterData : public AssetManagerImportData
 {
   friend class ModelImporter;
 public:
-  ModelImporterData();
+  enum Type {
+    Mesh,
+    Skeleton,
+    Animation
+  };
+  
   virtual ~ModelImporterData();
 
+  Type GetType() const;
 
-  virtual void SetName(const QString &name);
   virtual const QString &GetName() const;
   virtual QWidget *GetWidget() const;
 
-  virtual csResourceLocator Import(AssetManagerWidget *assetManager);
+  virtual void GenerateData(const aiScene *scene) = 0;
 
-private:
+protected:
+  ModelImporterData(Type type);
+  void SetView(QWidget *view);
+
+protected:
+  Type m_type;
   QString m_name;
   QString m_fileName;
   QWidget *m_view;
-
-  std::vector<aiNode*> m_meshNodes;
-  std::vector<aiNode*> m_skeletons;
 };
 
 class ModelImporter : public AssetManagerImporter
@@ -41,8 +49,16 @@ public:
   virtual const std::vector<AssetManagerImportData*> Import(const QString &fileName) const;
 
 private:
-  void Scan(ModelImporterData *data, const aiScene *scene) const;
-  void Scan(ModelImporterData *data, const aiScene *scene, aiNode *node, int indent = 0) const;
+  struct Data
+  {
+    ModelImporterData *GetData(ModelImporterData::Type type);
+
+    std::vector<ModelImporterData*> datas;
+  };
+
+  void Scan(Data *data, const aiScene *scene) const;
+  void Scan(Data *data, const aiScene *scene, aiNode *node, int indent = 0) const;
 
   bool IsSkeleton(const std::string &name) const;
+
 };
