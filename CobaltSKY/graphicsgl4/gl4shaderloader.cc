@@ -85,7 +85,27 @@ iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, 
   if (!shader->Compile())
   {
     csString log = shader->GetCompileErrorLog();
-    printf("Code:\n%s\n", source.c_str());
+    printf("Code:\n");
+    bool newLine = true;
+    int line = 1;
+    for (auto c : source)
+    {
+      if (c == '\r')
+      {
+        continue;
+      }
+
+      if (newLine)
+      {
+        printf("[%02d] ", line++);
+        newLine = false;
+      }
+      printf("%c", c);
+      if (c == '\n')
+      {
+        newLine = true;
+      }
+    }
     printf("Log:\n%s\n", log.c_str());
     shader->Release();
     return 0;

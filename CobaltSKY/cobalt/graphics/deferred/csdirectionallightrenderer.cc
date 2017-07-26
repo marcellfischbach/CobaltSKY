@@ -12,6 +12,7 @@
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
 #include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/core/cssettings.hh>
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csgeometrydata.hh>
 #include <cobalt/entity/csrenderstate.hh>
@@ -43,10 +44,12 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
 
 
 
-  m_distances = csVector3f(15.0f, 45.0f, 135.0f);
+  m_distances.x = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance1", 5.0f);
+  m_distances.y = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance2", 25.0f);
+  m_distances.z = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance3", 120.0f);
+  m_shadowBufferSize = csSettings::Get()->GetIntValue("graphicsGL4", "pssm.bufferSize", 1024);
 
   csPixelFormat shadowBufferFormat = ePF_R16G16F;
-  m_shadowBufferSize = 1024;
   m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, (csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize, 3, false);
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, (csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize, 3, false);
 

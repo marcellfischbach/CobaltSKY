@@ -108,7 +108,6 @@ const std::vector<AssetManagerImportData*> ModelImporter::Import(const QString &
   const aiScene* scene = importer.ReadFile(
     std::string((const char*)fileName.toLatin1()),
     aiProcess_CalcTangentSpace |
-    aiProcess_PreTransformVertices |
     aiProcess_FlipWindingOrder |
     aiProcess_Triangulate |
     aiProcess_JoinIdenticalVertices |
@@ -124,7 +123,7 @@ const std::vector<AssetManagerImportData*> ModelImporter::Import(const QString &
   QString name(fi.GetName().c_str());
   for (auto d : data.datas)
   {
-    d->SetName(name);
+    d->SetImportName(name);
     d->m_fileName = fileName;
     d->GenerateData(scene);
     result.push_back(d);
@@ -168,7 +167,7 @@ void ModelImporter::Scan(Data *data, const aiScene *scene, aiNode *node, int ind
     StaticMeshModelImporterData *d = static_cast<StaticMeshModelImporterData *>(data->GetData(ModelImporterData::Mesh));
     if (d)
     {
-      d->m_meshNodes.push_back(node);
+      d->AddNode(node);
     }
   }
   else {

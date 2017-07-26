@@ -18,4 +18,11 @@
 		<broadphase>dbvt</broadphase>
 	</bullet>
 	
+	<graphicsGL4>
+		<pssm.distance1>5</pssm.distance1>
+		<pssm.distance2>25</pssm.distance2>
+		<pssm.distance3>120</pssm.distance3>
+		<pssm.bufferSize>2048</pssm.bufferSize>
+	</graphicsGL4>
+	
 </settings>

@@ -9,17 +9,20 @@
 #include <map>
 
 
+class csAssetOutputStream;
 class QString;
 class StaticMeshModelImporterData : public ModelImporterData
 {
-  friend class ModelImporter;
 public:
   StaticMeshModelImporterData();
   virtual ~StaticMeshModelImporterData();
 
+  virtual void SetImportName(const QString &importName);
   virtual void SetName(const QString &name);
 
   virtual void GenerateData(const aiScene *scene);
+
+  void AddNode(aiNode *node);
 
   virtual csResourceLocator Import(AssetManagerWidget *assetManager);
 
@@ -29,6 +32,7 @@ private:
   StaticMeshEditorWidget *m_staticMeshEditorWidget;
 
   std::vector<aiNode*> m_meshNodes;
+  std::vector<aiNode*> m_collisionNodes;
 
 
   struct Vertex
@@ -49,6 +53,7 @@ private:
 
   struct Data
   {
+    csString name;
     SubMesh *subMesh;
     unsigned materialIndex;
   };
@@ -62,10 +67,13 @@ private:
   std::vector<LOD*> m_lods;
   std::map<unsigned, unsigned> m_modelToLocalMap;
 
+  std::map<unsigned, csString> m_materialNames;
+
 
   LOD *GetLOD(unsigned lod);
   Data *GetData(unsigned lod, unsigned materialIndex);
   Data *GetData(LOD *lod, unsigned materialIndex);
+  void Output(SubMesh *subMesh, csAssetOutputStream &os);
 
-  unsigned GetLocalMaterialIndex(unsigned modelIndex);
+  unsigned GetLocalMaterialIndex(unsigned modelIndex, const csString &materialName);
 };

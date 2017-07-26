@@ -20,7 +20,7 @@ public:
   virtual ~ModelImporterData();
 
   Type GetType() const;
-
+  virtual void SetImportName(const QString &importName) = 0;
   virtual const QString &GetName() const;
   virtual QWidget *GetWidget() const;
 
