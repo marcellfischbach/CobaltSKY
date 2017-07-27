@@ -18,7 +18,7 @@ PreviewLightOrbitHandler::~PreviewLightOrbitHandler()
 
 void PreviewLightOrbitHandler::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::RightButton)
+  if (event->button() == Qt::LeftButton && IsShiftDown() && !IsCtrlDown())
   {
     m_rotationArmed = true;
     m_mousePos = event->globalPos();
@@ -35,7 +35,7 @@ void PreviewLightOrbitHandler::mouseReleaseEvent(QMouseEvent *event)
 
 void PreviewLightOrbitHandler::mouseMoveEvent(QMouseEvent *event)
 {
-  if (m_rotationArmed)
+  if (m_rotationArmed && IsShiftDown() && !IsCtrlDown())
   {
     QPoint d = event->globalPos() - m_mousePos;
     m_rotH += (float)d.x() / 100.0f;
@@ -50,6 +50,10 @@ void PreviewLightOrbitHandler::mouseMoveEvent(QMouseEvent *event)
     }
 
     m_mousePos = event->globalPos();
+  }
+  else
+  {
+    m_rotationArmed = false;
   }
   UpdateLight();
 }

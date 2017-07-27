@@ -12,9 +12,11 @@
 #include <cobalt/graphics/csmesh.hh>
 #include <cobalt/graphics/cssubmesh.hh>
 #include <cobalt/csengine.hh>
+#include <QTimer>
 
 PreviewSceneView::PreviewSceneView(QWidget *parent)
   : SceneView(parent)
+  , m_lightHandler(0)
 {
   csEntityScene *scene = new csEntityScene();
   SetScene(scene);
@@ -34,6 +36,7 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
 
   m_lightHandler = new PreviewLightOrbitHandler(m_light);
   AddInputHandler(m_lightHandler);
+
 }
 
 PreviewSceneView::~PreviewSceneView()

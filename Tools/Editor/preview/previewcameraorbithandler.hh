@@ -1,10 +1,10 @@
 #pragma once
 
-#include <components/sceneviewinputhandler.hh>
+#include <components/sceneviewbaseinputhandler.hh>
 #include <QPoint>
 
 class csCamera;
-class PreviewCameraOrbitHandler : public SceneViewInputHandler
+class PreviewCameraOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
   PreviewCameraOrbitHandler(csCamera *camera);
@@ -15,6 +15,7 @@ public:
   virtual void mouseMoveEvent(QMouseEvent *event);
 
   virtual void wheelEvent(QWheelEvent *event);
+
 
 private:
   void UpdateCamera();

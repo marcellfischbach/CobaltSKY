@@ -46,6 +46,13 @@ iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const csRe
 
 
   csImage *image = csResourceManager::Get()->Load<csImage>(imageLocator);
+  if (!image)
+  {
+    return 0;
+  }
+
+
+
   EditorImage *res = new EditorImage(image);
   image->Release();
   return res;

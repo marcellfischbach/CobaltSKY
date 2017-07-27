@@ -1,5 +1,6 @@
 #pragma once
 
+class QKeyEvent;
 class QMouseEvent;
 class QWheelEvent;
 struct SceneViewInputHandler
@@ -11,5 +12,10 @@ struct SceneViewInputHandler
   virtual void mouseMoveEvent(QMouseEvent *event) = 0;
 
   virtual void wheelEvent(QWheelEvent *event) = 0;
+
+  virtual void keyPressEvent(QKeyEvent *event) = 0;
+  virtual void keyReleaseEvent(QKeyEvent *event) = 0;
+
+  virtual void timedUpdate(float deltaT) = 0;
 
 };

@@ -813,6 +813,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 {
   csStaticMeshState *templeMeshState = csEng->Get<csStaticMeshState>("models/temple.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
+  csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
 
   csEntityScene *entityScene = new csEntityScene();
 
@@ -839,6 +840,18 @@ csEntityScene *create_scene(iGraphics *graphics)
   //templeEntity->GetTransformation().SetRotationZ(0.25f);
   templeEntity->FinishTransformation();
   entityScene->AddEntity(templeEntity);
+
+
+  //
+  // Add the temple to the scene
+  csEntity *gardenFenceEntity = new csEntity();
+  gardenFenceEntity->SetRootState(gardenFenceMeshState);
+  gardenFenceEntity->AddState(gardenFenceMeshState);
+  gardenFenceEntity->UpdateBoundingBox();
+  gardenFenceEntity->GetTransformation().SetTranslation(csVector3f(5.0f, 5.0f, 2.0f));
+  //templeEntity->GetTransformation().SetRotationZ(0.25f);
+  gardenFenceEntity->FinishTransformation();
+  entityScene->AddEntity(gardenFenceEntity);
 
   //
   // Add the player character

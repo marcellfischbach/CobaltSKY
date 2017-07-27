@@ -164,6 +164,8 @@ set(COMPONENTS_SOURCES
     components/qtcsonscreenrendertarget.hh
     components/sceneview.cc
     components/sceneview.hh
+    components/sceneviewbaseinputhandler.cc
+    components/sceneviewbaseinputhandler.hh
     components/sceneviewinputhandler.hh
     )
 
@@ -285,6 +287,8 @@ source_group(
 
                     
 set(PREVIEW_SOURCES
+    preview/previewcameraflowhandler.cc
+    preview/previewcameraflowhandler.hh
     preview/previewcameraorbithandler.cc
     preview/previewcameraorbithandler.hh
     preview/previewlightorbithandler.cc

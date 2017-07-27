@@ -17,7 +17,7 @@ PreviewCameraOrbitHandler::~PreviewCameraOrbitHandler()
 
 void PreviewCameraOrbitHandler::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::LeftButton)
+  if (event->button() == Qt::LeftButton && !IsShiftDown() && !IsCtrlDown())
   {
     m_rotationArmed = true;
     m_mousePos = event->globalPos();
@@ -34,7 +34,7 @@ void PreviewCameraOrbitHandler::mouseReleaseEvent(QMouseEvent *event)
 
 void PreviewCameraOrbitHandler::mouseMoveEvent(QMouseEvent *event)
 {
-  if (m_rotationArmed)
+  if (m_rotationArmed && !IsShiftDown() && !IsCtrlDown())
   {
     QPoint d = event->globalPos() - m_mousePos;
     m_rotH -= (float)d.x() / 100.0f;
@@ -49,6 +49,10 @@ void PreviewCameraOrbitHandler::mouseMoveEvent(QMouseEvent *event)
     }
 
     m_mousePos = event->globalPos();
+  }
+  else
+  {
+    m_rotationArmed = false;
   }
   UpdateCamera();
 }

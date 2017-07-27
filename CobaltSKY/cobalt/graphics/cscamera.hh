@@ -45,6 +45,9 @@ public:
 
   void UpdateCameraMatrices();
 
+  const csMatrix4f &GetCameraMatrix() const;
+  const csMatrix4f &GetCameraMatrixInv() const;
+
 private:
   void UpdateProjectionValues();
   void UpdateProjectionMatrices(iGraphics *renderer);
@@ -137,5 +140,15 @@ CS_FORCEINLINE void csCamera::SetFar(float f)
 CS_FORCEINLINE float csCamera::GetFar() const
 {
   return m_far;
+}
+
+CS_FORCEINLINE const csMatrix4f &csCamera::GetCameraMatrix() const
+{
+  return m_cameraMatrix;
+}
+
+CS_FORCEINLINE const csMatrix4f &csCamera::GetCameraMatrixInv() const
+{
+  return m_cameraMatrixInv;
 }
 

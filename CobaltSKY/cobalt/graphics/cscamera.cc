@@ -35,6 +35,7 @@ void csCamera::Apply(iGraphics *renderer)
 
 }
 
+
 void csCamera::UpdateCameraMatrices()
 {
   m_cameraMatrix.SetLookAt(m_eye, m_spot, m_up);

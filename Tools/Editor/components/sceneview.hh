@@ -12,8 +12,10 @@ class csCamera;
 struct SceneViewInputHandler;
 class QTCSOnscreenRenderTarget;
 class QImage;
+class QTimer;
 class SceneView : public QOpenGLWidget
 {
+  Q_OBJECT
 public:
   SceneView(QWidget *parent = 0);
   virtual ~SceneView();
@@ -40,12 +42,18 @@ protected:
   void mouseMoveEvent(QMouseEvent *event);
   void wheelEvent(QWheelEvent *event);
 
+  void keyPressEvent(QKeyEvent *event);
+  void keyReleaseEvent(QKeyEvent *event);
+
+private slots:
+void Timeout();
 private:
   csCamera *m_camera = 0;
   csEntityScene *m_scene = 0;
   iGraphics *m_graphics = 0;
   iFrameProcessor* m_frameProcessor = 0;
   QTCSOnscreenRenderTarget *m_onscreenTarget = 0;
+  QTimer *m_timer;
 
   std::vector<SceneViewInputHandler*> m_handlers;
 };

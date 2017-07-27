@@ -1,10 +1,10 @@
 #pragma once
 
-#include <components/sceneviewinputhandler.hh>
+#include <components/sceneviewbaseinputhandler.hh>
 #include <QPoint>
 
 class csDirectionalLight;
-class PreviewLightOrbitHandler : public SceneViewInputHandler
+class PreviewLightOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
   PreviewLightOrbitHandler(csDirectionalLight *light);
@@ -16,6 +16,7 @@ public:
 
   virtual void wheelEvent(QWheelEvent *event);
 
+
 private:
   void UpdateLight();
 
@@ -25,6 +26,6 @@ private:
   float m_rotV = 0.0f;
 
 
-  csDirectionalLight *m_light= 0;
+  csDirectionalLight *m_light = 0;
   QPoint m_mousePos;
 };

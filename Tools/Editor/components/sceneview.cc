@@ -19,17 +19,24 @@
 #include <QOpenGLContext>
 #include <QOpenGLFramebufferObject>
 #include <QImage>
+#include <QTimer>
 
 SceneView::SceneView(QWidget *parent)
   : QOpenGLWidget(parent)
   , m_onscreenTarget(new QTCSOnscreenRenderTarget())
 {
-
+  setFocusPolicy(Qt::StrongFocus);
+  m_timer = new QTimer();
+  m_timer->setInterval(16);
+  m_timer->setSingleShot(false);
+  connect(m_timer, SIGNAL(timeout()), this, SLOT(Timeout()));
+  m_timer->start();
 }
 
 SceneView::~SceneView()
 {
-
+  m_timer->stop();
+  m_timer->deleteLater();
 }
 
 void SceneView::AddInputHandler(SceneViewInputHandler *handler)
@@ -57,7 +64,7 @@ const csCamera *SceneView::GetCamera() const
   return m_camera;
 }
 
-csCamera *SceneView::GetCamera() 
+csCamera *SceneView::GetCamera()
 {
   return m_camera;
 }
@@ -197,6 +204,15 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
   return result;
 }
 
+void SceneView::Timeout()
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->timedUpdate(15.0 / 1000.0);
+  }
+  repaint();
+}
+
 void SceneView::mousePressEvent(QMouseEvent *event)
 {
   for (SceneViewInputHandler *handler : m_handlers)
@@ -229,6 +245,25 @@ void SceneView::wheelEvent(QWheelEvent *event)
   for (SceneViewInputHandler *handler : m_handlers)
   {
     handler->wheelEvent(event);
+  }
+  repaint();
+}
+
+
+void SceneView::keyPressEvent(QKeyEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->keyPressEvent(event);
+  }
+  repaint();
+}
+
+void SceneView::keyReleaseEvent(QKeyEvent *event)
+{
+  for (SceneViewInputHandler *handler : m_handlers)
+  {
+    handler->keyReleaseEvent(event);
   }
   repaint();
 }

@@ -1,6 +1,7 @@
 
 
 #include <staticmesheditor/staticmesheditorpreviewsceneview.hh>
+#include <preview/previewcameraflowhandler.hh>
 #include <preview/previewcameraorbithandler.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
@@ -34,7 +35,8 @@ void StaticMeshEditorPreviewSceneView::initializeGL()
   camera->SetUp(csVector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
 
-  AddInputHandler(new PreviewCameraOrbitHandler(camera));
+  //AddInputHandler(new PreviewCameraOrbitHandler(camera));
+  AddInputHandler(new PreviewCameraFlowHandler(camera));
 }
 
 
