@@ -43,6 +43,7 @@
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/itexture.hh>
 #include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/csgenericshaderpostprocess.hh>
 #include <cobalt/graphics/cslight.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/graphics/csmesh.hh>
@@ -50,6 +51,8 @@
 #include <cobalt/graphics/csparticle.hh>
 #include <cobalt/graphics/cspointlight.hh>
 #include <cobalt/graphics/cspostprocess.hh>
+#include <cobalt/graphics/cspostprocessoutput.hh>
+#include <cobalt/graphics/cspostprocessor.hh>
 #include <cobalt/graphics/deferred/csdeferredframeprocessor.hh>
 #include <cobalt/graphics/scene/cscameranode.hh>
 #include <cobalt/graphics/scene/csgeometrynode.hh>
@@ -903,6 +906,9 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
   {
     colorSampler = graphics->CreateSampler();
     colorSampler->SetFilter(eFM_MinMagNearest);
+    colorSampler->SetAddressU(eTAM_Clamp);
+    colorSampler->SetAddressV(eTAM_Clamp);
+    colorSampler->SetAddressW(eTAM_Clamp);
   }
 
   iRenderTarget *target = graphics->CreateRenderTarget();
@@ -922,6 +928,9 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
       depthSampler->SetFilter(eFM_MinMagNearest);
       depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
       depthSampler->SetTextureCompareMode(eTCM_CompareToR);
+      depthSampler->SetAddressU(eTAM_Clamp);
+      depthSampler->SetAddressV(eTAM_Clamp);
+      depthSampler->SetAddressW(eTAM_Clamp);
     }
     iTexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
     depthTexture->SetSampler(depthSampler);
@@ -945,36 +954,43 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 0
+#if 1
   pp = new csPostProcessor();
-  iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post.xml", "FSAO"));
-  iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post.xml", "CombineMult"));
-  iShader *blurVertShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post.xml", "BlurVertLo"));
-  iShader *blurHoriShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post.xml", "BlurHoriLo"));
+  iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
+  iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAdd.xasset"));
+  iShader *blurVertShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurVertLo.xasset"));
+  iShader *blurHoriShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurHoriLo.xasset"));
+  iShader *downScaleBrightPassShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/DownScaleBrightPass.xasset"));
 
   csGenericShaderPostProcess *fsaoPP = new csGenericShaderPostProcess();
-  fsaoPP->BindInput(csPostProcessor::eOO_FinalTarget_Color, "Color");
-  fsaoPP->BindInput(csPostProcessor::eOO_GBuffer_NormalLightMode, "Normal");
-  fsaoPP->BindInput(csPostProcessor::eOO_GBuffer_Depth, "Depth");
+  fsaoPP->BindInput(ePPO_FinalTarget_Color, "Color");
+  fsaoPP->BindInput(ePPO_GBuffer_NormalLightMode, "Normal");
+  fsaoPP->BindInput(ePPO_GBuffer_Depth, "Depth");
   fsaoPP->SetShader(fsaoShader);
   fsaoPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
+  csGenericShaderPostProcess *downScaleBrighPass = new csGenericShaderPostProcess();
+  downScaleBrighPass->BindInput(ePPO_FinalTarget_Color, "Color0");
+  downScaleBrighPass->SetShader(downScaleBrightPassShader);
+  downScaleBrighPass->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
+
 
   csGenericShaderPostProcess *blurVertPP = new csGenericShaderPostProcess();
-  blurVertPP->BindInput(fsaoPP, 0, "Color0");
+  blurVertPP->BindInput(downScaleBrighPass, 0, "Color0");
   blurVertPP->SetShader(blurVertShader);
-  blurVertPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+  blurVertPP->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
 
 
   csGenericShaderPostProcess *blurHoriPP = new csGenericShaderPostProcess();
   blurHoriPP->BindInput(blurVertPP, 0, "Color0");
   blurHoriPP->SetShader(blurHoriShader);
-  blurHoriPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+  blurHoriPP->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
 
 
   csGenericShaderPostProcess *combinePP = new csGenericShaderPostProcess();
-  combinePP->BindInput(csPostProcessor::eOO_FinalTarget_Color, "Color0");
+  combinePP->BindInput(ePPO_FinalTarget_Color, "Color0");
   combinePP->BindInput(blurHoriPP, 0, "Color1");
+  //combinePP->BindInput(fsaoPP, 0, "Color2");
   combinePP->SetShader(combineShader);
   combinePP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 

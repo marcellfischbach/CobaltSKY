@@ -1,0 +1,13 @@
+<asset>
+  <data>
+    <material>
+      <materialDef>materials/DefaultMaterialDef.xasset</materialDef>
+      <parameters/>
+    </material>
+  </data>
+  <preview>
+    <editorIcon>
+      <image>materials/DefaultMaterial.data:EDITOR_ICON</image>
+    </editorIcon>
+  </preview>
+</asset>

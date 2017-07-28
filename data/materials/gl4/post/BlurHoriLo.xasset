@@ -1,0 +1,12 @@
+<asset>
+	<data>
+		<program name="BlurVertLo">
+			<techniques>
+				<technique name="Default">
+					<shader>${shaders}/post/post.vert</shader>
+					<shader>${shaders}/post/blur_hori_lo.frag</shader>
+				</technique>
+			</techniques>
+		</program>
+	</data>
+</asset>
