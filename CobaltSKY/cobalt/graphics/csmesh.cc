@@ -179,3 +179,25 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numberOfMater
   }
 
 }
+
+
+unsigned csMesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
+{
+  const LOD &lod = m_lods[lodIdx];
+  return lod.m_meshes.size();
+
+}
+
+unsigned csMesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
+{
+  unsigned count = 0;
+  const LOD &lod = m_lods[lodIdx];
+  for (auto data : lod.m_meshes)
+  {
+    const csSubMesh *subMesh = data.m_mesh;
+    count += subMesh->GetNumberOfTrigons();
+  }
+  return count;
+
+}
+

@@ -46,7 +46,11 @@ public:
   virtual void UpdateTransformation();
 
 
+
   virtual void Render(iGraphics *graphics, csRenderPass pass) const;
+
+  virtual unsigned GetNumberOfRenderCalls() const;
+  virtual unsigned GetNumberOfTotalTrigons() const;
 
 protected:
   virtual void OnAttachedToScene(csEntityScene *scene);

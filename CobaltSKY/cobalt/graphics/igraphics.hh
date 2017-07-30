@@ -102,6 +102,12 @@ struct CSE_API iGraphics : public iObject
   virtual void SetDepthTest(bool depthTest) = 0;
   virtual void SetDepthFunc(csCompareMode compareMode) = 0;
 
+  virtual void SetFrontFace(csFaceWinding faceWinding) = 0;
+  virtual csFaceWinding GetFrontFace() const = 0;
+  virtual void SetCullFaceEnabled(bool enable) = 0;
+  virtual bool IsCullFaceEnabled() const = 0;
+  virtual void SetCullFace(csFaceSide side) = 0;
+  virtual csFaceSide GetCullFace() const = 0;
 
 
   virtual void SetRenderFadeInOut(float near, float far) = 0;

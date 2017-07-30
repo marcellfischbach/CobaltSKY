@@ -27,6 +27,9 @@ public:
   void SetShadingMode (csShadingMode shadingMode);
   csShadingMode GetShadingMode() const;
 
+  virtual unsigned GetNumberOfRenderCalls() const { return 0;  }
+  virtual unsigned GetNumberOfTotalTrigons() const { return 0; }
+
   virtual void Render(iGraphics *graphics, csRenderPass pass) const;
 
 private:

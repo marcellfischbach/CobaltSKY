@@ -123,8 +123,13 @@ void csGraphicsGL4::ResetDefaults ()
 
   SetShader(0);
 
+  m_frontFace = eFW_CW;
   glFrontFace(GL_CW);
+
+  m_cullFaceEnabled = true;
   glEnable(GL_CULL_FACE);
+
+  m_cullFace = eFS_Back;
   glCullFace(GL_BACK);
   CS_CHECK_GL_ERROR;
 
@@ -828,6 +833,57 @@ void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
     CS_CHECK_GL_ERROR;
   }
 }
+
+
+void csGraphicsGL4::SetFrontFace(csFaceWinding frontFace)
+{
+  if (m_frontFace != frontFace)
+  {
+    m_frontFace = frontFace;
+    glFrontFace(faceWindingMap[frontFace]);
+  }
+}
+
+csFaceWinding csGraphicsGL4::GetFrontFace() const
+{
+  return m_frontFace;
+}
+
+void csGraphicsGL4::SetCullFaceEnabled(bool enabled)
+{
+  if (m_cullFaceEnabled != enabled)
+  {
+    m_cullFaceEnabled = enabled;
+    if (enabled)
+    {
+      glEnable(GL_CULL_FACE);
+    }
+    else
+    {
+      glDisable(GL_CULL_FACE);
+    }
+  }
+}
+
+bool csGraphicsGL4::IsCullFaceEnabled() const
+{
+  return m_cullFaceEnabled;
+}
+
+void csGraphicsGL4::SetCullFace(csFaceSide cullFace)
+{
+  if (m_cullFace != cullFace)
+  {
+    m_cullFace = cullFace;
+    glCullFace(faceSideMap[cullFace]);
+  }
+}
+
+csFaceSide csGraphicsGL4::GetCullFace() const
+{
+  return m_cullFace;
+}
+
 
 void csGraphicsGL4::SetRenderFadeInOut(float near, float far)
 {

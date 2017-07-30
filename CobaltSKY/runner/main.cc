@@ -99,10 +99,13 @@ csEventBus masterBus;
 
 int main(int argc, char **argv)
 {
+  for (unsigned i = 0; i < argc; ++i)
+  {
+    printf("%s ", argv[i]);
+  }
+  printf("\n");
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());
-  csEngine engine;
-
   const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename("materials/solid.xasset");
   if (entry)
   {
@@ -115,6 +118,10 @@ int main(int argc, char **argv)
   {
     printf("no entry\n");
   }
+  csEngine engine;
+
+
+
 
   // initialize the window
   window = new SDLWindow();
@@ -124,13 +131,16 @@ int main(int argc, char **argv)
 #if 0
   posX = -1500;
 #else
-  //posX = 2000;
+  posX = 200;
 #endif
   if (!window->InitializeOpenGL("CobaltSKY Runner", 1366, 768, posX, posY, false, 4, 4))
   {
     delete window;
     return -1;
   }
+
+
+
   csImage *icon = csResourceManager::Get()->Load<csImage>(csResourceLocator("val.png"));
   if (icon)
   {
@@ -306,7 +316,7 @@ int main_loop()
 
     if (anim)
     {
-      angle += 0.01f;
+      angle += 0.001f;
     }
     directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
   }
@@ -814,7 +824,6 @@ void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iK
 
 csEntityScene *create_scene(iGraphics *graphics)
 {
-  csStaticMeshState *templeMeshState = csEng->Get<csStaticMeshState>("models/temple.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
 
@@ -833,20 +842,34 @@ csEntityScene *create_scene(iGraphics *graphics)
 
 
 
+  for (unsigned i = 0; i < 1; ++i)
+  {
+    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple2_Mesh.xasset"));
+    //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
+        //
+        // Add the temple to the scene
+    csEntity *templeEntity = new csEntity();
+    templeEntity->SetRootState(templeMeshState);
+    templeEntity->AddState(templeMeshState);
+    templeEntity->UpdateBoundingBox();
+    if (i != 0)
+    {
+      float x = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
+      float y = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
+      templeEntity->GetTransformation().SetTranslation(csVector3f(x, y, 2.0f));
+    }
+    else
+    {
+      templeEntity->GetTransformation().SetTranslation(csVector3f(20.0f, 20.0f, 2.0f));
+    }
+    //templeEntity->GetTransformation().SetRotationZ(0.25f);
+    templeEntity->FinishTransformation();
+    entityScene->AddEntity(templeEntity);
+  }
+
   //
   // Add the temple to the scene
-  csEntity *templeEntity = new csEntity();
-  templeEntity->SetRootState(templeMeshState);
-  templeEntity->AddState(templeMeshState);
-  templeEntity->UpdateBoundingBox();
-  templeEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, 2.0f));
-  //templeEntity->GetTransformation().SetRotationZ(0.25f);
-  templeEntity->FinishTransformation();
-  entityScene->AddEntity(templeEntity);
-
-
-  //
-  // Add the temple to the scene
+  /*
   csEntity *gardenFenceEntity = new csEntity();
   gardenFenceEntity->SetRootState(gardenFenceMeshState);
   gardenFenceEntity->AddState(gardenFenceMeshState);
@@ -855,6 +878,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   //templeEntity->GetTransformation().SetRotationZ(0.25f);
   gardenFenceEntity->FinishTransformation();
   entityScene->AddEntity(gardenFenceEntity);
+  */
 
   //
   // Add the player character
@@ -881,7 +905,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   directionalLight = new csDirectionalLight();
   directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(true);
+  directionalLight->SetCastShadow(false);
   directionalLight->SetShadowIntensity(0.0f);
 
   csLightState *directionalLightState = new csLightState();
@@ -954,10 +978,10 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 1
+#if 0
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
-  iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAdd.xasset"));
+  iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));
   iShader *blurVertShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurVertLo.xasset"));
   iShader *blurHoriShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurHoriLo.xasset"));
   iShader *downScaleBrightPassShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/DownScaleBrightPass.xasset"));
@@ -990,7 +1014,7 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
   csGenericShaderPostProcess *combinePP = new csGenericShaderPostProcess();
   combinePP->BindInput(ePPO_FinalTarget_Color, "Color0");
   combinePP->BindInput(blurHoriPP, 0, "Color1");
-  //combinePP->BindInput(fsaoPP, 0, "Color2");
+  combinePP->BindInput(fsaoPP, 0, "Color2");
   combinePP->SetShader(combineShader);
   combinePP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 

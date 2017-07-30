@@ -189,6 +189,24 @@ void csStaticMeshState::Render(iGraphics *graphics, csRenderPass pass) const
   }
 }
 
+unsigned csStaticMeshState::GetNumberOfRenderCalls() const
+{
+  if (m_mesh)
+  {
+    return m_mesh->GetNumberOfRenderCalls();
+  }
+  return 0;
+}
+
+
+unsigned csStaticMeshState::GetNumberOfTotalTrigons() const
+{
+  if (m_mesh)
+  {
+    return m_mesh->GetNumberOfTotalTrigons();
+  }
+  return 0;
+}
 
 void csStaticMeshState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
 {

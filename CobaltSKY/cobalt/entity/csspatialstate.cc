@@ -231,7 +231,7 @@ const csSpatialState *csSpatialState::FindState(const csString &stateName) const
 
 void csSpatialState::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
 {
-  if (clipper && false)
+  if (clipper)
   {
     csClipper::ClipResult cr = clipper->Test(m_boundingBox);
     switch (cr)

@@ -133,6 +133,7 @@ bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePa
             entry.SetPriority(atoi(rootPathElement->Attribute("priority")));
           }
 
+          printf("AddRootPath: %s[%d] => %s => %s\n", entry.GetName().c_str(), entry.GetPriority(), entry.GetPath().c_str(), entry.GetAbsPath().c_str());
           m_entries.push_back(entry);
         }
       }
@@ -334,7 +335,7 @@ iFile *csVFS::Open(const csString &filename, csOpenMode mode, csTextMode textMod
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
   {
-    printf ("Unable to solve filename: %s\n", filename.c_str());
+    printf ("%s@%d Unable to solve filename: %s\n", __FILE__, __LINE__, filename.c_str());
     return 0;
   }
 
@@ -351,7 +352,7 @@ iFile *csVFS::Open(const csString &filename, csOpenMode mode, csTextMode textMod
   }
 
   delete file;
-  printf ("Unable to open: %s\n", finalFilename.c_str());
+  printf("%s@%d Unable to open: %s %s\n", __FILE__, __LINE__, filename.c_str(), finalFilename.c_str());
   return 0;
 }
 
@@ -361,7 +362,7 @@ iFile *csVFS::Open(const csString &filename, const csString &entryName, csOpenMo
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
   {
-    printf("Unable to solve filename: %s\n", filename.c_str());
+    printf("%s@%d Unable to solve filename: %s\n", __FILE__, __LINE__, filename.c_str());
     return 0;
   }
 
@@ -382,7 +383,7 @@ iFile *csVFS::Open(const csString &filename, const csString &entryName, csOpenMo
   }
 
   delete file;
-  printf("Unable to open: %s\n", finalFilename.c_str());
+  printf("%s@%d Unable to open: %s\n", __FILE__, __LINE__, finalFilename.c_str());
   return 0;
 }
 

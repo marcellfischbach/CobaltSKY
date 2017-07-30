@@ -326,3 +326,15 @@ static GLenum renderDestinationMap[] = {
   GL_DEPTH_ATTACHMENT,
   GL_STENCIL_ATTACHMENT
 };
+
+
+static GLenum faceWindingMap[] = {
+  GL_CW,
+  GL_CCW
+};
+
+static GLenum faceSideMap[] = {
+  GL_FRONT,
+  GL_BACK,
+  GL_FRONT_AND_BACK
+};

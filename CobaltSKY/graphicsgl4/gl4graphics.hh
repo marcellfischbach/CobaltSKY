@@ -71,6 +71,14 @@ public:
   virtual void SetDepthTest(bool depthTest);
   virtual void SetDepthFunc(csCompareMode compareMode);
 
+  virtual void SetFrontFace(csFaceWinding faceWinding);
+  virtual csFaceWinding GetFrontFace() const;
+  virtual void SetCullFaceEnabled(bool enable);
+  virtual bool IsCullFaceEnabled() const;
+  virtual void SetCullFace(csFaceSide side);
+  virtual csFaceSide GetCullFace() const;
+
+
   virtual void SetRenderFadeInOut(float near, float far);
   virtual void SetRenderFadeInOutValue(csUInt8 value);
 
@@ -126,10 +134,13 @@ private:
   bool m_depthTest;
   csCompareMode m_depthFunc;
 
-
   csVector4f m_clearColor;
   float m_clearDepth;
   csUInt8 m_clearStencil;
+
+  csFaceWinding m_frontFace;
+  csFaceSide m_cullFace;
+  bool m_cullFaceEnabled;
 
   csTextureUnit m_nextTextureUnit;
 

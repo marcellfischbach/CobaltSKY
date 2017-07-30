@@ -55,9 +55,9 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
 
   iSampler *colorSampler = renderer->CreateSampler();
   colorSampler->SetFilter(eFM_MinMagLinear);
-  colorSampler->SetAddressU(eTAM_ClampBorder);
-  colorSampler->SetAddressV(eTAM_ClampBorder);
-  colorSampler->SetAddressW(eTAM_ClampBorder);
+  colorSampler->SetAddressU(eTAM_Clamp);
+  colorSampler->SetAddressV(eTAM_Clamp);
+  colorSampler->SetAddressW(eTAM_Clamp);
 
   m_colorBuffer->SetSampler(colorSampler);
   m_depthBuffer->SetSampler(m_depthSampler);
@@ -301,6 +301,7 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
   m_renderer->SetDepthFunc(eCM_LessOrEqual);
   m_renderer->SetColorMask(true, true, true, true);
 
+  csFaceSide current = m_renderer->GetCullFace();
 
   m_renderer->Clear(true, csVector4f(m_max[2].y, m_max[2].y * m_max[2].y, 1, 1));
   m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);
@@ -318,6 +319,7 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
       }
     }
   }
+  m_renderer->SetCullFace(eFS_Back);
   m_renderer->SetColorMask(true, true, true, true);
 
 }

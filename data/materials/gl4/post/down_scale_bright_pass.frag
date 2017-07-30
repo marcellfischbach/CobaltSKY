@@ -9,10 +9,14 @@ in vec2 inFragTexCoord0;
 void main ()
 {
 	vec4 col = texture(cs_Color0, inFragTexCoord0);
-	col.rgb = max(col.rgb - vec3(0.4, 0.4, 0.4), vec3(0.0, 0.0, 0.0));
-	col.rgb = col.rgb * 4.0;
-	col.rgb = col.rgb * col.rgb;
-	col.rgb = col.rgb / 4.0;
-	col.a = 0.0;
+	if ((col.r + col.g + col.b) < (3.0 * 0.8))
+	{
+		col = vec4(0.0, 0.0, 0.0, 0.0);
+	}
+	else
+	{
+		col.rgb *= 1.0;
+		col.a = 0.0;
+	}
 	cs_FragColor = col;
 }

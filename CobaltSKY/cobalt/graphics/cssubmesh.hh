@@ -35,6 +35,8 @@ public:
   void SetBoundingBox(const csBoundingBox &bbox);
   const csBoundingBox& GetBoundingBox() const;
 
+  unsigned GetNumberOfTrigons() const;
+
 private:
 
   iIndexBuffer *m_indexBuffer;

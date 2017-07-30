@@ -49,6 +49,9 @@ public:
 
   virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
 
+  unsigned GetNumberOfRenderCalls(csUInt8 lod = 0) const;
+  unsigned GetNumberOfTotalTrigons(csUInt8 lod = 0) const;
+
 
 protected:
   struct Data

@@ -123,6 +123,7 @@ void MaterialEditorProperties::UpdateGUI()
     case eSPT_Float:
     {
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
+      sbF0->setSingleStep(0.1);
       sbF0->setEnabled(!inherit);
       sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultFloat(i) : m_material->GetFloat(i));
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
@@ -132,6 +133,8 @@ void MaterialEditorProperties::UpdateGUI()
     {
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
+      sbF0->setSingleStep(0.1);
+      sbF1->setSingleStep(0.1);
       sbF0->setEnabled(!inherit);
       sbF1->setEnabled(!inherit);
       sbF0->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -148,6 +151,9 @@ void MaterialEditorProperties::UpdateGUI()
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF2 = new QDoubleSpinBox(m_frame);
+      sbF0->setSingleStep(0.1);
+      sbF1->setSingleStep(0.1);
+      sbF2->setSingleStep(0.1);
       sbF0->setEnabled(!inherit);
       sbF1->setEnabled(!inherit);
       sbF2->setEnabled(!inherit);
@@ -170,6 +176,10 @@ void MaterialEditorProperties::UpdateGUI()
       QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF2 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF3 = new QDoubleSpinBox(m_frame);
+      sbF0->setSingleStep(0.1);
+      sbF1->setSingleStep(0.1);
+      sbF2->setSingleStep(0.1);
+      sbF3->setSingleStep(0.1);
       sbF0->setEnabled(!inherit);
       sbF1->setEnabled(!inherit);
       sbF2->setEnabled(!inherit);

@@ -196,10 +196,12 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   }
   if (vsm)
   {
-    ss << "  float dx = dFdx(inFragDepth);" << std::endl
+    ss 
+      //<< " inFragDepth = -inFragDepth;" << std::endl
+      << "  float dx = dFdx(inFragDepth);" << std::endl
       << "  float dy = dFdy(inFragDepth);" << std::endl
-      //<< "  cs_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
-      << "  cs_FragColor = vec2(abs(dx) + abs(dy), 1.0);" << std::endl
+      << "  cs_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
+      //<< "  cs_FragColor = vec2(abs(dx) + abs(dy), 1.0);" << std::endl
       ;
     ;
   }

@@ -361,6 +361,18 @@ enum csParticleShadingMode
   ePSM_Emitting,
 };
 
+enum csFaceWinding
+{
+  eFW_CW,
+  eFW_CCW
+};
+
+enum csFaceSide
+{
+  eFS_Front,
+  eFS_Back,
+  eFS_FrontAndBack,
+};
 
 
 enum csResourceLoadingMode

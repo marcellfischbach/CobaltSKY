@@ -88,3 +88,11 @@ void csSubMesh::Render(iGraphics *renderer)
   renderer->RenderIndexed(m_primitiveType, (csUInt32)m_count, m_indexType);
 }
 
+unsigned csSubMesh::GetNumberOfTrigons() const
+{
+  if (m_primitiveType == ePT_Triangles)
+  {
+    return m_count / 3;
+  }
+  return m_count / 3;
+}

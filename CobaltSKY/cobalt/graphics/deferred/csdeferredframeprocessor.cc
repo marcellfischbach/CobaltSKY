@@ -163,14 +163,21 @@ void csDeferredFrameProcessor::RenderGBuffer(csEntity *root)
   m_renderer->Clear();
   m_renderer->SetBlendEnabled(false);
 
+  unsigned cnt = 0;
+  unsigned calls = 0;
+  unsigned trigons = 0;
   for (csSize i = 0; i < m_renderStates[eRQ_Deferred].length; ++i)
   {
     csRenderState *renderState = m_renderStates[eRQ_Deferred][i];
     if (renderState)
     {
       renderState->Render(m_renderer, eRP_GBuffer);
+      ++cnt;
+      //calls += renderState->GetNumberOfRenderCalls();
+      //trigons += renderState->GetNumberOfTotalTrigons();
     }
   }
+  //Sprintf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
 }
 
 iRenderTarget *csDeferredFrameProcessor::Render(csEntity *root, csCamera *camera, iRenderTarget *target)
