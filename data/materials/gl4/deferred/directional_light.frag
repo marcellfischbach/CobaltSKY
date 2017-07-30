@@ -48,24 +48,26 @@ float oren_nayar(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float Ndo
 
 float cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float NdotV, float roughness)
 {
-	float F0 = 0.6; // fresnel reflectance at normal incidence
+	float F0 = 0.8; // fresnel reflectance at normal incidence
 
-	float specular = 0.0;
-	if(NdotL > 0.0)
+	float specular = 1.0;
+	if(NdotL > 0.0 || true)
 	{
 
 		// calculate intermediary values
 		vec3 halfVector = normalize(lightDir + eyeDir);
 		float NdotH = max(dot(normal, halfVector), 0.0); 
-		float NdotV = max(dot(normal, eyeDir), 0.0); // note: this could also be NdotL, which is the same value
+		//float NdotV = max(dot(normal, eyeDir), 0.0); // note: this could also be NdotL, which is the same value
 		float VdotH = max(dot(eyeDir, halfVector), 0.0);
+		float LdotH = max(dot(lightDir, halfVector), 0.0);
 		float mSquared = roughness * roughness;
 
 		// geometric attenuation
 		float NH2 = 2.0 * NdotH;
 		float g1 = (NH2 * NdotV) / VdotH;
-		float g2 = (NH2 * NdotL) / VdotH;
+		float g2 = (NH2 * NdotL) / LdotH;
 		float geoAtt = min(1.0, min(g1, g2));
+		
 
 		// roughness (or: microfacet distribution function)
 		// beckmann distribution function
@@ -75,9 +77,13 @@ float cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float 
 
 		// fresnel
 		// Schlick approximation
-		float fresnel = pow(1.0 - NdotV, 5.0);
+		float fresnel = pow(1.0 - VdotH, 5.0);
 		fresnel *= (1.0 - F0);
 		fresnel += F0;
+		
+		roughnessExp = 1.0;
+		fresnel = 1.0;
+		
 
 		specular = (fresnel * geoAtt * roughnessExp) / (NdotV * NdotL * 3.14);
 	}
@@ -105,7 +111,7 @@ void main ()
 	vec3 eye = (cs_MatViewInv * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
 	vec3 eyeDir = normalize (eye - world);
 	
-	vec3 lightDir = -cs_LightDirection;
+	vec3 lightDir = normalize(-cs_LightDirection);
 	
 	vec3 normal = texture(cs_NormalLightMode, texCoord).xyz * 2.0 - 1.0;
 	normal = normalize(normal);
@@ -118,7 +124,7 @@ void main ()
 
 	float diffuse_reflection = oren_nayar(normal, lightDir, eyeDir, NdotL, NdotV, roughness);
 	float specular_reflection = cook_torrance(normal, lightDir, eyeDir, NdotL, NdotV, roughness);
-	
+	diffuse_reflection = 0.0;
 	
 
 	float directToIndirect = 1.0;
@@ -135,5 +141,5 @@ void main ()
 	
 	cs_FragColor = vec4 (diffuse * cs_LightColor.rgb * cs_LightEnergy * (directDiffuse_reflection * shadow + indirectDiffuse_reflection + specular_reflection) , 1.0);
 	//cs_FragColor = vec4(specular_reflection, specular_reflection, specular_reflection, 1.0);
-
+	//cs_FragColor = vec4(lightDir * 0.5 + 0.5, 1.0);
 }
