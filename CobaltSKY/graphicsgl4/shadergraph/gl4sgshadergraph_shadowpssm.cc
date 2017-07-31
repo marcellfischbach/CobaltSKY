@@ -66,7 +66,7 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   // generate the vertex shader
   ss << ""
     << "#version 330" << std::endl
-    << std::endl
+    << std::endl 
     << "uniform mat4 cs_MatModel;" << std::endl
     << std::endl
     << "in vec4 cs_Position;" << std::endl
@@ -201,8 +201,8 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
     ss
       << "  float dx = dFdx(inFragDepth);" << std::endl
       << "  float dy = dFdy(inFragDepth);" << std::endl
-      << "  cs_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
-      //<< "  cs_FragColor = vec2(inFragDepth, abs(dx) + abs(dy));" << std::endl
+      //<< "  cs_FragColor = vec2(inFragDepth, inFragDepth*inFragDepth + 0.25*(dx*dx + dy*dy));" << std::endl
+      << "  cs_FragColor = vec2(abs(dx) + abs(dy), 0.0);" << std::endl
       ;
     ;
   }

@@ -299,12 +299,14 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
   m_renderer->SetDepthMask(true);
   m_renderer->SetDepthTest(true);
   m_renderer->SetDepthFunc(eCM_LessOrEqual);
-  m_renderer->SetColorMask(true, true, true, true);
+  m_renderer->SetColorMask(true, true, false, false);
+  //m_renderer->SetColorMask(false, false, false, false);
+
 
   csFaceSide current = m_renderer->GetCullFace();
   m_renderer->SetCullFace(eFS_Back);
 
-  m_renderer->Clear(true, csVector4f(m_max[2].y, m_max[2].y * m_max[2].y, 1, 1));
+  m_renderer->Clear(true);
   m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);
   m_renderer->SetBlendEnabled(false);
 

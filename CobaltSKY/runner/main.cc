@@ -860,8 +860,8 @@ csEntityScene *create_scene(iGraphics *graphics)
 
 
 
-#if 0
-  for (unsigned i = 0; i < 1000; ++i)
+#if 1
+  for (unsigned i = 0; i < 10; ++i)
   {
     csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
     //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));

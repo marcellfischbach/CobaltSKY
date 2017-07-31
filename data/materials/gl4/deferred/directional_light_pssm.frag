@@ -9,56 +9,27 @@ uniform float cs_ShadowMapSizeInv;
 uniform sampler2DArray cs_ShadowColorMap;
 uniform sampler2DArrayShadow cs_ShadowMap;
 
-float linstep(float min, float max, float v)
-{
-  return clamp((v - min) / (max - min), 0, 1);
-}
-
-float ReduceLightBleeding(float p_max, float Amount)
-{
-  // Remove the [0, Amount] tail and linearly rescale (Amount, 1].
-   return linstep(Amount, 1, p_max);
-}
-
-float ChebyshevUpperBound(vec2 Moments, float t, float minVariance)
-{
-	// TODO: Make that variable global later.
-	
-  // One-tailed inequality valid if t > Moments.x
-   float p = (t <= Moments.x) ? 1.0 : 0.0;
-  // Compute variance.
-   float Variance = Moments.y - (Moments.x*Moments.x);
-  Variance = max(Variance, minVariance);
-  // Compute probabilistic upper bound.
-   float d = t - Moments.x;
-  float p_max = Variance / (Variance + d*d);
-	p_max = linstep(0.97, 0.99, p_max);
-  return max(p, p_max);
-	
-	}
-	
-	
 
 float calculate_shadow(vec4 world, vec3 cam)
 {
 	int layer = 0;
 
 	float d = cam.y;
-	float minVariance = 0.001;
+	float varianceMult = 1.0;
 	if (d < cs_Distances.x)
 	{
 		layer = 0;
-		minVariance = 0.001;
+		varianceMult = 1.0;
 	}
 	else if (d < cs_Distances.y)
 	{
 		layer = 1;
-		minVariance = 0.0008;
+		varianceMult = 2.0;
 	}
 	else if (d < cs_Distances.z)
 	{
 		layer = 2;
-		minVariance = 0.0004;
+		varianceMult = 4.0;
 	}
 	else
 	{
@@ -80,15 +51,37 @@ float calculate_shadow(vec4 world, vec3 cam)
 		return 1.0;
 	}
 	
+	float stepRange = 1.0;
+	float stepSize = 1.0;
+	float kernelSize = 0.001;
+	
 
-	// VSM Shadow mapping algorithm
-	vec2 Moments = texture(cs_ShadowColorMap, 
+	float variance = texture(cs_ShadowColorMap, 
 												 vec3(depthBufferSpace.xy, 
-															layer)).rg;
-															
-	float depth = depthBufferSpace.z;
-  // Compute the Chebyshev upper bound.
-	float val = ChebyshevUpperBound(Moments, depth, minVariance);
-	return val * cs_ShadowIntensity.x + cs_ShadowIntensity.y;
+															layer)).r * 2.0;
+
+	
+	float shadow = 0.0;
+	float amount = 0.0;
+	for (float y=-stepRange; y<=stepRange; y+=stepSize)
+	{
+		float devY = y * kernelSize;
+		for (float x=-stepRange; x<=stepRange; x+=stepSize)
+		{
+			float devX = x * kernelSize;
+			
+			float dev = x*x + y*y;
+			
+		
+			
+			float impact = 1.0 - dev / 4.0;
+			shadow += texture(cs_ShadowMap, vec4(depthBufferSpace.xy + vec2(devX, devY), layer, depthBufferSpace.z - variance * varianceMult)) * impact;
+			amount += impact;
+		}
+	}
+	
+	shadow /= amount;
+
+	return shadow * cs_ShadowIntensity.x + cs_ShadowIntensity.y;
 	
 }

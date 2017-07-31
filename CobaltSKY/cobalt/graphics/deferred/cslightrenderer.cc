@@ -26,7 +26,7 @@ csLightRenderer::csLightRenderer(iGraphics *renderer)
   m_depthSampler->SetAddressV(eTAM_ClampBorder);
   m_depthSampler->SetAddressW(eTAM_ClampBorder);
   m_depthSampler->SetTextureCompareMode(eTCM_CompareToR);
-  m_depthSampler->SetTextureCompareFunc(eTCF_Less);
+  m_depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
 }
 
 
