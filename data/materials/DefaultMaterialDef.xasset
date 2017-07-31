@@ -2,7 +2,16 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node class="csSGConstFloat3" id="0"/>
+        <node id="0" class="csSGVarFloat">
+          <resource name="Roughness">
+            <float>0.800000</float>
+          </resource>
+        </node>
+        <node id="1" class="csSGVarFloat3">
+          <resource name="Diffuse">
+            <float3>1.000000, 1.000000, 1.000000</float3>
+          </resource>
+        </node>
       </nodes>
       <inputs>
         <node input="0" id="0">
@@ -15,7 +24,10 @@
           <float>1.000000</float>
         </node>
         <shaderGraph input="Diffuse">
-          <node id="0" output="0"/>
+          <node output="0" id="1"/>
+        </shaderGraph>
+        <shaderGraph input="Roughness">
+          <node output="0" id="0"/>
         </shaderGraph>
       </inputs>
       <attributes>
@@ -31,7 +43,10 @@
     <shaderGraphMeta>
       <nodes>
         <node id="0">
-          <pos>-200.000000, -60.000000</pos>
+          <pos>-200.000000, 40.000000</pos>
+        </node>
+        <node id="1">
+          <pos>-220.000000, -60.000000</pos>
         </node>
       </nodes>
       <shaderGraph>
@@ -39,9 +54,4 @@
       </shaderGraph>
     </shaderGraphMeta>
   </meta>
-  <preview>
-    <editorIcon>
-      <image>materials/DefaultMaterialDef.data:EDITOR_ICON</image>
-    </editorIcon>
-  </preview>
 </asset>

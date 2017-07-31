@@ -45,6 +45,7 @@
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/csgenericshaderpostprocess.hh>
 #include <cobalt/graphics/cslight.hh>
+#include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/graphics/csmesh.hh>
 #include <cobalt/graphics/cssubmesh.hh>
@@ -72,6 +73,8 @@
 #include <runner/event.hh>
 
 
+static bool g_CreateCharacter = false;
+
 int initialize();
 int main_loop();
 csEntityScene *create_scene(iGraphics *graphics);
@@ -81,6 +84,7 @@ csSubMesh *create_skeleton_mesh(iGraphics *renderer, float size);
 csPostProcessor *createPostProcessor(iGraphics *graphics);
 void UpdateCamera(csCamera *cameraNode, csCharacterEntity *character, const iMouse *mouser, const iKeyboard *keyboard);
 void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf);
+void handle_material(const iKeyboard *keyboard);
 
 SDLWindow *window = 0;
 csGraphicsGL4 *graphicsGL4 = 0;
@@ -96,6 +100,7 @@ csDirectionalLight *directionalLight;
 csParticle *particle;
 csSize numParticles;
 csEventBus masterBus;
+csMaterial *material;
 
 int main(int argc, char **argv)
 {
@@ -128,7 +133,7 @@ int main(int argc, char **argv)
   csInt16 posX = 100;
   csInt16 posY = 100;
 
-#if 0
+#if 1
   posX = -1500;
 #else
   posX = 200;
@@ -255,7 +260,7 @@ int main_loop()
 
   csUInt32 fps = 0;
   csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli();
-  bool anim = true;
+  bool anim = false;
   float angle = 0.0f;
   csUInt64 lastTime = csTime::Get().GetCurrentTimeMilli();
   while (true)
@@ -265,7 +270,9 @@ int main_loop()
     csUInt64 time = csTime::Get().GetCurrentTimeMilli();
     if (time >= nextFPS)
     {
-      printf("FPS: %d\n", fps);
+      csUInt16 idx = material->GetIndex("Roughness");
+      float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->GetDefaultFloat(idx) : material->GetFloat(idx);
+      printf("FPS: %d Roughness: %f\n", fps, currentRoughness);
       fps = 0;
       nextFPS += 1000;
     }
@@ -291,6 +298,8 @@ int main_loop()
     {
       masterBus << MyEvent1();
     }
+
+    handle_material(keyboard);
 
     UpdateCamera(camera, character, mouse, keyboard);
     UpdateCharacter(character, mouse, keyboard, tpf);
@@ -824,6 +833,7 @@ void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iK
 
 csEntityScene *create_scene(iGraphics *graphics)
 {
+  material = csEng->Get<csMaterial>("materials/DefaultMaterial.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
 
@@ -867,6 +877,17 @@ csEntityScene *create_scene(iGraphics *graphics)
     entityScene->AddEntity(templeEntity);
   }
 
+  csStaticMeshState *sphereMeshState = csEng->Get<csStaticMeshState>("models/sphere_Mesh.xasset");
+  csEntity *sphereEntity = new csEntity();
+  sphereEntity->SetRootState(sphereMeshState);
+  sphereEntity->AddState(sphereMeshState);
+  sphereEntity->UpdateBoundingBox();
+  sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, 5.0f));
+  //templeEntity->GetTransformation().SetRotationZ(0.25f);
+  sphereEntity->FinishTransformation();
+  entityScene->AddEntity(sphereEntity);
+
+
   //
   // Add the temple to the scene
   /*
@@ -883,21 +904,23 @@ csEntityScene *create_scene(iGraphics *graphics)
   //
   // Add the player character
   // Setup the character 
-  character = new csCharacterEntity();
+  if (g_CreateCharacter)
+  {
+    character = new csCharacterEntity();
 
-  csStaticMeshState *characterMesh = new csStaticMeshState();
-  csSpatialState *spatialState = new csSpatialState();
-//  characterMesh->SetMesh(csResourceManager::Get()->GetOrLoad<csMesh>(csResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
-//  characterMesh->SetMaterial(csResourceManager::Get()->GetOrLoad<csMaterialInstance>(csResourceLocator("${materials}/materials.xml", "White")));
+    csStaticMeshState *characterMesh = new csStaticMeshState();
+    csSpatialState *spatialState = new csSpatialState();
+    //  characterMesh->SetMesh(csResourceManager::Get()->GetOrLoad<csMesh>(csResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
+    //  characterMesh->SetMaterial(csResourceManager::Get()->GetOrLoad<csMaterialInstance>(csResourceLocator("${materials}/materials.xml", "White")));
 
-  character->SetRootState(spatialState);
-  character->AddState(spatialState);
+    character->SetRootState(spatialState);
+    character->AddState(spatialState);
 
-  character->GetTransformation().SetTranslation(csVector3f(10.0f, 10.0f, 20.0f));
-  character->FinishTransformation();
+    character->GetTransformation().SetTranslation(csVector3f(10.0f, 10.0f, 20.0f));
+    character->FinishTransformation();
 
-  entityScene ->AddEntity(character);
-
+    entityScene->AddEntity(character);
+  }
   //
   // Add Lighting
 
@@ -905,7 +928,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   directionalLight = new csDirectionalLight();
   directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(false);
+  directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
   csLightState *directionalLightState = new csLightState();
@@ -1031,3 +1054,37 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
   return pp;
 }
 
+
+void handle_material(const iKeyboard *keyboard)
+{
+  static csInt16 idx = material->GetIndex("Roughness");
+  if (idx == -1)
+  {
+    return;
+  }
+
+  float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->GetDefaultFloat(idx) : material->GetFloat(idx);
+  if (keyboard->IsKeyDown(eK_O))
+  {
+    currentRoughness += 0.01f;
+    if (currentRoughness > 1.0)
+    {
+      currentRoughness = 1.0;
+    }
+  }
+  else if (keyboard->IsKeyDown(eK_L))
+  {
+    currentRoughness -= 0.01f;
+    if (currentRoughness < 0.01)
+    {
+      currentRoughness = 0.01;
+    }
+  }
+  else
+  {
+    return;
+  }
+
+  printf("Roughness: %f\n", currentRoughness);
+  material->Set(idx, currentRoughness);
+}

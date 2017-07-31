@@ -1,0 +1,13 @@
+<asset>
+  <data>
+    <texture2d>
+      <sampler resourceMode="shared">DefaultSampler.xasset</sampler>
+      <image mipmap="true">materials/textures/fieldstone_glossmap.data</image>
+    </texture2d>
+  </data>
+  <preview>
+    <editorIcon>
+      <image>materials/textures/fieldstone_glossmap.data:EDITOR_ICON</image>
+    </editorIcon>
+  </preview>
+</asset>

@@ -1,0 +1,100 @@
+<asset>
+  <data>
+    <shaderGraph>
+      <nodes>
+        <node id="0" class="csSGMul"/>
+        <node id="1" class="csSGMul"/>
+        <node id="2" class="csSGTexture2D">
+          <resource name="Diffuse">
+            <locator>materials/textures/fieldstone_diffuse.xasset</locator>
+          </resource>
+        </node>
+        <node id="3" class="csSGDefaultTextureCoordinate"/>
+        <node id="4" class="csSGTexture2D">
+          <resource name="Normal">
+            <locator>materials/textures/fieldstone_normal.xasset</locator>
+          </resource>
+        </node>
+        <node id="5" class="csSGTexture2D">
+          <resource name="fieldstone_glossmap">
+            <locator>materials/textures/fieldstone_glossmap.xasset</locator>
+          </resource>
+        </node>
+        <node id="6" class="csSGVarFloat2">
+          <resource name="Multiplier">
+            <float2>20.000000, 20.000000</float2>
+          </resource>
+        </node>
+      </nodes>
+      <inputs>
+        <node id="2" input="0">
+          <node id="1" output="0"/>
+        </node>
+        <node id="4" input="0">
+          <node id="1" output="0"/>
+        </node>
+        <node id="1" input="0">
+          <node id="6" output="0"/>
+        </node>
+        <node id="1" input="1">
+          <node id="3" output="0"/>
+        </node>
+        <node id="5" input="0">
+          <node id="1" output="0"/>
+        </node>
+        <node id="0" input="0">
+          <node id="5" output="1"/>
+        </node>
+        <node id="0" input="1">
+          <node id="5" output="1"/>
+        </node>
+        <shaderGraph input="Diffuse">
+          <node id="2" output="0"/>
+        </shaderGraph>
+        <shaderGraph input="Roughness">
+          <node id="5" output="1"/>
+        </shaderGraph>
+        <shaderGraph input="Normal">
+          <node id="4" output="0"/>
+        </shaderGraph>
+      </inputs>
+      <attributes>
+        <blendOutWithBinaryGradient/>
+        <discardAlpha enabled="true">
+          <threshold>0.000000</threshold>
+          <mode>Less</mode>
+        </discardAlpha>
+      </attributes>
+    </shaderGraph>
+  </data>
+  <meta>
+    <shaderGraphMeta>
+      <nodes>
+        <node id="0">
+          <pos>-140.000000, -40.000000</pos>
+        </node>
+        <node id="1">
+          <pos>-580.000000, -80.000000</pos>
+        </node>
+        <node id="2">
+          <pos>-340.000000, -260.000000</pos>
+        </node>
+        <node id="3">
+          <pos>-920.000000, 0.000000</pos>
+        </node>
+        <node id="4">
+          <pos>-340.000000, 100.000000</pos>
+        </node>
+        <node id="5">
+          <pos>-360.000000, -80.000000</pos>
+        </node>
+        <node id="6">
+          <pos>-680.000000, -120.000000</pos>
+        </node>
+      </nodes>
+      <shaderGraph>
+        <pos>200.000000, -120.000000</pos>
+      </shaderGraph>
+    </shaderGraphMeta>
+  </meta>
+</asset>

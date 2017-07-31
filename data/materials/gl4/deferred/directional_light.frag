@@ -46,16 +46,67 @@ float oren_nayar(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float Ndo
 	return L1;
 }
 
-float cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float NdotV, float roughness)
-{
-	float F0 = 0.8; // fresnel reflectance at normal incidence
+const float PI = 3.141569;
 
-	float specular = 1.0;
+float chiGGX(float v)
+{
+    return v > 0 ? 1 : 0;
+}
+
+float GGX_Distribution(vec3 normal, vec3 half, float roughness)
+{
+    float NdotH = dot(normal,half);
+    float roughness2 = roughness * roughness;
+    float NdotH2 = NdotH * NdotH;
+    float den = NdotH2 * roughness2 + (1 - NdotH2);
+    return (chiGGX(NdotH) * roughness2) / ( PI * den * den );
+}
+
+float GGX_PartialGeometryTerm(vec3 eyeDir, vec3 normal, vec3 half, float alpha)
+{
+    float VdotH2 = clamp(dot(eyeDir,half), 0.0, 1.0);
+    float chi = chiGGX( VdotH2 / clamp(dot(eyeDir,normal), 0.0, 1.0));
+    VdotH2 = VdotH2 * VdotH2;
+    float tan2 = ( 1 - VdotH2 ) / VdotH2;
+    return (chi * 2) / ( 1 + sqrt( 1 + alpha * alpha * tan2 ) );
+}
+
+vec3 Fresnel_Schlick(vec3 eyeDir, vec3 half, vec3 F0)
+{
+	float VdotH = dot(eyeDir, half);
+  return F0 + (1-F0) * pow( 1 - VdotH, 5);
+}
+
+vec3 cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float NdotV, float roughness)
+{
+
+	// Calculate colour at normal incidence
+	
+	float ior = 1.0 + roughness;
+	vec3 F0 = vec3(abs ((1.0 - ior) / (1.0 + ior)));
+	F0 = F0 * F0;
+	//F0 = lerp(F0, materialColour.rgb, metallic);
+	
+	
+	vec3 specular = vec3(0.0);
 	if(NdotL > 0.0 || true)
 	{
 
 		// calculate intermediary values
 		vec3 halfVector = normalize(lightDir + eyeDir);
+		float NdotV = dot(normal, eyeDir);
+		float NdotL = dot(normal, lightDir);
+		float NdotH = dot(normal, halfVector);
+		
+		float denominator = clamp( 4 * (NdotV * clamp(dot(halfVector, normal), 0.0, 1.0) + 0.05), 0.0, 1.0 );
+		
+		denominator = clamp(4 * (NdotV * clamp(NdotH, 0.0, 1.0) + 0.5), 0.0, 1.0);
+		float D = GGX_Distribution(normal, halfVector, roughness);
+		float G = GGX_PartialGeometryTerm(eyeDir, normal, halfVector, roughness);
+		vec3 F = Fresnel_Schlick(eyeDir, halfVector, F0);
+		
+		specular = D*G*F/denominator;
+		/*
 		float NdotH = max(dot(normal, halfVector), 0.0); 
 		//float NdotV = max(dot(normal, eyeDir), 0.0); // note: this could also be NdotL, which is the same value
 		float VdotH = max(dot(eyeDir, halfVector), 0.0);
@@ -86,6 +137,7 @@ float cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float 
 		
 
 		specular = (fresnel * geoAtt * roughnessExp) / (NdotV * NdotL * 3.14);
+		*/
 	}
 	return specular;
 }
@@ -123,8 +175,8 @@ void main ()
 	float NdotV = max(dot(normal, eyeDir), 0.0);
 
 	float diffuse_reflection = oren_nayar(normal, lightDir, eyeDir, NdotL, NdotV, roughness);
-	float specular_reflection = cook_torrance(normal, lightDir, eyeDir, NdotL, NdotV, roughness);
-	diffuse_reflection = 0.0;
+	vec3 specular_reflection = cook_torrance(normal, lightDir, eyeDir, NdotL, NdotV, roughness);
+	//diffuse_reflection = 0.0;
 	
 
 	float directToIndirect = 1.0;
@@ -135,7 +187,7 @@ void main ()
 	float shadow = calculate_shadow (world4, cam.xyz);
 	if (shadow < 1.0)
 	{
-		specular_reflection = 0.0;
+		specular_reflection = vec3(0.0);
 	}
 	
 	
