@@ -302,6 +302,7 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
   m_renderer->SetColorMask(true, true, true, true);
 
   csFaceSide current = m_renderer->GetCullFace();
+  m_renderer->SetCullFace(eFS_Back);
 
   m_renderer->Clear(true, csVector4f(m_max[2].y, m_max[2].y * m_max[2].y, 1, 1));
   m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);

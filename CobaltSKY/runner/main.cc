@@ -101,6 +101,7 @@ csParticle *particle;
 csSize numParticles;
 csEventBus masterBus;
 csMaterial *material;
+csEntity *sphereEntity;
 
 int main(int argc, char **argv)
 {
@@ -262,6 +263,7 @@ int main_loop()
   csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli();
   bool anim = false;
   float angle = 0.0f;
+  float height = 2.5f;
   csUInt64 lastTime = csTime::Get().GetCurrentTimeMilli();
   while (true)
   {
@@ -326,6 +328,13 @@ int main_loop()
     if (anim)
     {
       angle += 0.001f;
+      if (sphereEntity)
+      {
+        height = 2.5f + sin(angle* 4.0f) * 2.5f;
+        sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, height));
+        sphereEntity->FinishTransformation();
+      }
+
     }
     directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
   }
@@ -851,10 +860,10 @@ csEntityScene *create_scene(iGraphics *graphics)
 
 
 
-
-  for (unsigned i = 0; i < 1; ++i)
+#if 0
+  for (unsigned i = 0; i < 1000; ++i)
   {
-    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple2_Mesh.xasset"));
+    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
     //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
         //
         // Add the temple to the scene
@@ -876,17 +885,17 @@ csEntityScene *create_scene(iGraphics *graphics)
     templeEntity->FinishTransformation();
     entityScene->AddEntity(templeEntity);
   }
-
+#else
   csStaticMeshState *sphereMeshState = csEng->Get<csStaticMeshState>("models/sphere_Mesh.xasset");
-  csEntity *sphereEntity = new csEntity();
+  sphereEntity = new csEntity();
   sphereEntity->SetRootState(sphereMeshState);
   sphereEntity->AddState(sphereMeshState);
   sphereEntity->UpdateBoundingBox();
-  sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, 5.0f));
+  sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, 2.5f));
   //templeEntity->GetTransformation().SetRotationZ(0.25f);
   sphereEntity->FinishTransformation();
   entityScene->AddEntity(sphereEntity);
-
+#endif
 
   //
   // Add the temple to the scene
@@ -1001,7 +1010,7 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 0
+#if 1
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
   iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));

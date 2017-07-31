@@ -9,51 +9,68 @@ uniform float cs_ShadowMapSizeInv;
 uniform sampler2DArray cs_ShadowColorMap;
 uniform sampler2DArrayShadow cs_ShadowMap;
 
+float linstep(float min, float max, float v)
+{
+  return clamp((v - min) / (max - min), 0, 1);
+}
 
-float ChebyshevUpperBound(vec2 Moments, float t)
+float ReduceLightBleeding(float p_max, float Amount)
+{
+  // Remove the [0, Amount] tail and linearly rescale (Amount, 1].
+   return linstep(Amount, 1, p_max);
+}
+
+float ChebyshevUpperBound(vec2 Moments, float t, float minVariance)
 {
 	// TODO: Make that variable global later.
-	float g_MinVariance = 0.01;
 	
-	// One-tailed inequality valid if t > Moments.x
-	float p = (t <= Moments.x) ? 1.0 : 0.0;
-	// Compute variance.
-	float Variance = Moments.y - (Moments.x*Moments.x);
-	Variance = max(Variance, g_MinVariance);
-	// Compute probabilistic upper bound.
-	float d = t - Moments.x ;
-	float p_max = Variance / (Variance + d*d);
+  // One-tailed inequality valid if t > Moments.x
+   float p = (t <= Moments.x) ? 1.0 : 0.0;
+  // Compute variance.
+   float Variance = Moments.y - (Moments.x*Moments.x);
+  Variance = max(Variance, minVariance);
+  // Compute probabilistic upper bound.
+   float d = t - Moments.x;
+  float p_max = Variance / (Variance + d*d);
+	p_max = linstep(0.97, 0.99, p_max);
+  return max(p, p_max);
 	
-	return max(p, p_max);
-}
+	}
+	
+	
 
 float calculate_shadow(vec4 world, vec3 cam)
 {
 	int layer = 0;
 
 	float d = cam.y;
+	float minVariance = 0.001;
 	if (d < cs_Distances.x)
 	{
 		layer = 0;
+		minVariance = 0.001;
 	}
 	else if (d < cs_Distances.y)
 	{
 		layer = 1;
+		minVariance = 0.0008;
 	}
 	else if (d < cs_Distances.z)
 	{
 		layer = 2;
+		minVariance = 0.0004;
 	}
 	else
 	{
 		return 1.0;
 	}
 	
+	
 	// transform into final depth buffer space and performce perspective division
 	vec4 depthBufferSpace = cs_ShadowMatsProjView[layer] * world;
 	// shift from [-1, 1] -> [0, 1]
-	depthBufferSpace.xyz /= depthBufferSpace.w;
-	depthBufferSpace.xy = depthBufferSpace.xy * 0.5 + 0.5;
+	depthBufferSpace /= depthBufferSpace.w;
+	depthBufferSpace = depthBufferSpace * 0.5 + 0.5;
 
 	
 	if (depthBufferSpace.x < 0.0 || depthBufferSpace.x >= 1.0 ||
@@ -64,37 +81,6 @@ float calculate_shadow(vec4 world, vec3 cam)
 	}
 	
 
-	/*
-	// CobaltSKY own shadow mapping algorithm
-	float val = 0.0;
-	float kernStep = 1.0;
-	float kernSize = 0.0;
-	float moment = texture(cs_ShadowColorMap, 
-												 vec3(depthBufferSpace.xy, 
-															layer)).r;
-	if (moment > 1.0)
-	{
-		moment = 0.0;
-	}
-	
-	int kerns = 0;
-	for (float i=-kernSize; i<=kernSize; i+=kernStep)
-	{
-		for (float j=-kernSize; j<=kernSize; j+=kernStep)
-		{
-			vec2 kern = vec2 (i, j) * cs_ShadowMapSizeInv;
-			
-			
-			val += texture(cs_ShadowMap, 
-										 vec4(depthBufferSpace.xy + kern, 
-													layer, 
-			                    depthBufferSpace.z - moment));
-			kerns+=1;
-		}
-	}
-	
-	val /= float(kerns);
-	*/
 	// VSM Shadow mapping algorithm
 	vec2 Moments = texture(cs_ShadowColorMap, 
 												 vec3(depthBufferSpace.xy, 
@@ -102,8 +88,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 															
 	float depth = depthBufferSpace.z;
   // Compute the Chebyshev upper bound.
-	float val = ChebyshevUpperBound(Moments, depth);
-	
-	
+	float val = ChebyshevUpperBound(Moments, depth, minVariance);
 	return val * cs_ShadowIntensity.x + cs_ShadowIntensity.y;
+	
 }

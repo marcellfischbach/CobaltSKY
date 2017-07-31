@@ -193,5 +193,5 @@ void main ()
 	
 	cs_FragColor = vec4 (diffuse * cs_LightColor.rgb * cs_LightEnergy * (directDiffuse_reflection * shadow + indirectDiffuse_reflection + specular_reflection) , 1.0);
 	//cs_FragColor = vec4(specular_reflection, specular_reflection, specular_reflection, 1.0);
-	//cs_FragColor = vec4(lightDir * 0.5 + 0.5, 1.0);
+	//cs_FragColor = vec4(shadow, shadow, shadow, 1.0);
 }
