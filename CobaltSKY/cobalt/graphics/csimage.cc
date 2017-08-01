@@ -120,7 +120,7 @@ namespace
     if (srcLineScan % 4)
     {
       printf("Correct srcLineScan %d % 4 => %d", srcLineScan, srcLineScan % 4);
-      srcLineScan += 4 - (srcLineScan % 4);
+      //srcLineScan += 4 - (srcLineScan % 4);
       printf(" => %d\n", srcLineScan);
     }
 
@@ -128,7 +128,7 @@ namespace
     if (dstLineScan % 4)
     {
       printf("Correct dstLineScan %d % 4 => %d", dstLineScan, dstLineScan % 4);
-      dstLineScan += 4 - (dstLineScan % 4);
+      //dstLineScan += 4 - (dstLineScan % 4);
       printf(" => %d\n", dstLineScan);
     }
 
