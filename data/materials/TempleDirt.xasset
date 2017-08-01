@@ -9,4 +9,9 @@
       </parameters>
     </material>
   </data>
+  <preview>
+    <editorIcon>
+      <image>materials/TempleDirt.data:EDITOR_ICON</image>
+    </editorIcon>
+  </preview>
 </asset>

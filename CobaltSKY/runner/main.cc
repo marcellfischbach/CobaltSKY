@@ -867,7 +867,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 #if 1
   for (unsigned i = 0; i < 10; ++i)
   {
-    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
+    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple2_Mesh.xasset"));
     //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
         //
         // Add the temple to the scene
@@ -941,7 +941,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   directionalLight = new csDirectionalLight();
   directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(false);
+  directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
   csLightState *directionalLightState = new csLightState();
@@ -1014,10 +1014,11 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 0
+#if 1
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
-  iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));
+  iShader *combineAddMultShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));
+  iShader *combineAddShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAdd.xasset"));
   iShader *blurVertShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurVertLo.xasset"));
   iShader *blurHoriShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurHoriLo.xasset"));
   iShader *downScaleBrightPassShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/DownScaleBrightPass.xasset"));
@@ -1050,8 +1051,8 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
   csGenericShaderPostProcess *combinePP = new csGenericShaderPostProcess();
   combinePP->BindInput(ePPO_FinalTarget_Color, "Color0");
   combinePP->BindInput(blurHoriPP, 0, "Color1");
-  combinePP->BindInput(fsaoPP, 0, "Color2");
-  combinePP->SetShader(combineShader);
+  //combinePP->BindInput(fsaoPP, 0, "Color2");
+  combinePP->SetShader(combineAddShader);
   combinePP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
 
 

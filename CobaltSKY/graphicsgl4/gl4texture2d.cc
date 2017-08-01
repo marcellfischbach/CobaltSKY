@@ -67,7 +67,6 @@ bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *d
     layerHeight = 1;
   }
 
-
   Bind();
   glTexSubImage2D(m_target, layer, 0, 0, layerWidth, layerHeight, externalFormatMap[format], externalFormatTypeMap[format], data);
   CS_CHECK_GL_ERROR;

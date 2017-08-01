@@ -53,8 +53,8 @@ csGraphicsGL4::csGraphicsGL4()
   printf("  Version : %s\n", (const char *)glGetString(GL_VERSION));
   printf("  GLSL    : %s\n", (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+  glPixelStorei(GL_PACK_ALIGNMENT, 4);
   // initialize all 16 vertex buffer streams
   for (unsigned i = 0; i < 16; ++i)
   {
