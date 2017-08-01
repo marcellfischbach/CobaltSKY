@@ -103,8 +103,10 @@ csEventBus masterBus;
 csMaterial *material;
 csEntity *sphereEntity;
 
+
 int main(int argc, char **argv)
 {
+
   for (unsigned i = 0; i < argc; ++i)
   {
     printf("%s ", argv[i]);
@@ -134,7 +136,7 @@ int main(int argc, char **argv)
   csInt16 posX = 100;
   csInt16 posY = 100;
 
-#if 1
+#if 0
   posX = -1500;
 #else
   posX = 200;
@@ -308,12 +310,14 @@ int main_loop()
 
 
     scene->GetRoot()->UpdateBoundingBox();
+
     iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
     iTexture2D *colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 
     // now render this image onscreen
+    graphicsGL4->ResetDefaults();
     graphicsGL4->SetRenderTarget(0);
     graphicsGL4->SetViewport(1366, 768);
     graphicsGL4->Clear();
@@ -937,7 +941,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   directionalLight = new csDirectionalLight();
   directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
   directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.5f));
-  directionalLight->SetCastShadow(true);
+  directionalLight->SetCastShadow(false);
   directionalLight->SetShadowIntensity(0.0f);
 
   csLightState *directionalLightState = new csLightState();
@@ -1010,7 +1014,7 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 1
+#if 0
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
   iShader *combineShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));

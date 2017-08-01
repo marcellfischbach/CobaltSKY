@@ -74,7 +74,7 @@ float calculate_shadow(vec4 world, vec3 cam)
 			
 		
 			
-			float impact = 1.0 - dev / 4.0;
+			float impact = 1.0 - dev / 2.0;
 			shadow += texture(cs_ShadowMap, vec4(depthBufferSpace.xy + vec2(devX, devY), layer, depthBufferSpace.z - variance * varianceMult)) * impact;
 			amount += impact;
 		}

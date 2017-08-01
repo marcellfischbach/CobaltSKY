@@ -33,8 +33,8 @@ public:
   csPixelFormat GetPixelFormat() const;
   csUInt32 GetSize(csUInt16 level = 0) const;
 
-  bool GenerateMipMaps();
-
+  bool GenerateMipMaps(bool normal);
+  
 private:
   void Delete();
   csUInt32 GetBytesPerPixel(csPixelFormat format) const;

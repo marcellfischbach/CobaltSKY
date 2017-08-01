@@ -204,10 +204,17 @@ csImage *csTextureAssetXMLLoader::LoadImage(TiXmlElement *element, const csResou
   {
     return 0;
   }
-
+  printf("LoadImage: %s\n", imageName.c_str());
   if (element->Attribute("mipmap"))
   {
-    image->GenerateMipMaps();
+    if (element->Attribute("normal"))
+    {
+      image->GenerateMipMaps(false);
+    }
+    else
+    {
+      image->GenerateMipMaps(false);
+    }
   }
   return image;
 }

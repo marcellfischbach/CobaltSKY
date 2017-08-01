@@ -20,8 +20,8 @@
 	
 	<graphicsGL4>
 		<pssm.distance1>5</pssm.distance1>
-		<pssm.distance2>25</pssm.distance2>
-		<pssm.distance3>120</pssm.distance3>
+		<pssm.distance2>15</pssm.distance2>
+		<pssm.distance3>80</pssm.distance3>
 		<pssm.bufferSize>1024</pssm.bufferSize>
 	</graphicsGL4>
 	

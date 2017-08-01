@@ -1,6 +1,7 @@
 
 
 #include <cobalt/graphics/csimage.hh>
+#include <cobalt/math/csvector3f.hh>
 
 
 csImage::csImage()
@@ -47,12 +48,49 @@ void csImage::Delete()
 namespace
 {
 
-  csUInt8 *generate_down_scale(const csUInt8 *data, csUInt16 srcWidth, csUInt16 srcHeight, csUInt16 width, csUInt16 height, csPixelFormat format)
+  csInt16 convert(csUInt8 value, bool normal)
   {
-    if (width == 0 || height == 0)
+    if (!normal)
+    {
+      return value;
+    }
+    csInt16 v = value;
+    v -= 128;
+    v *= 2;
+
+    return v;
+  }
+
+  csInt16 convertBack(csInt16 value, bool normal)
+  {
+    if (!normal)
+    {
+      return value;
+    }
+
+    return value / 2 + 128;
+  }
+
+  csUInt8 *generate_down_scale(const csUInt8 *data, csUInt16 width, csUInt16 height, csPixelFormat format, bool normal)
+  {
+    if (width == 1 && height == 1)
     {
       return 0;
     }
+
+    csUInt16 nWidth = width >> 1;
+    if (nWidth == 0)
+    {
+      nWidth = 1;
+    }
+
+    csUInt16 nHeight = height >> 1;
+    if (nHeight == 0)
+    {
+      nHeight = 1;
+    }
+
+
     int num = 0;
     switch (format)
     {
@@ -74,54 +112,89 @@ namespace
       return 0;
     }
 
-    unsigned sampleWidth = srcWidth / width;
-    unsigned sampleHeight = srcHeight / height;
+    printf("generate_down_scale: %d %d => %d %d => %d   LS:  src: %d  dst: %d\n", width, height, nWidth, nHeight, num, width * num, nWidth * num);
 
-    csSize lineScan = width * num;
-    if (lineScan % 4)
+    bool debug = nWidth == 2 && nHeight == 2;
+
+    csSize srcLineScan = width * num;
+    if (srcLineScan % 4)
     {
-      lineScan += 4 - (lineScan % 4);
+      printf("Correct srcLineScan %d % 4 => %d", srcLineScan, srcLineScan % 4);
+      srcLineScan += 4 - (srcLineScan % 4);
+      printf(" => %d\n", srcLineScan);
     }
-    csUInt8 *res = new csUInt8[height * lineScan];
-    const csUInt8 *srcPtr = data;
-    csUInt8 *dstPtr = res;
-    for (csUInt16 dy = 0; dy < height; ++dy)
+
+    csSize dstLineScan = nWidth * num;
+    if (dstLineScan % 4)
     {
-      dstPtr = res + dy * lineScan;
-      unsigned srcY0 = dy * sampleHeight;
-      unsigned srcY1 = srcY0 + sampleHeight;
-      for (csUInt16 dx = 0; dx < width; ++dx)
+      printf("Correct dstLineScan %d % 4 => %d", dstLineScan, dstLineScan % 4);
+      dstLineScan += 4 - (dstLineScan % 4);
+      printf(" => %d\n", dstLineScan);
+    }
+
+    csUInt8 *res = new csUInt8[nHeight * dstLineScan];
+
+    for (csUInt16 dy = 0, sy = 0; dy < nHeight; ++dy, sy += 2)
+    {
+      bool bottom = (sy + 1) < height;
+      csUInt16 dx = 0;
+
+      csUInt8 *dstPtrY = res + dy * dstLineScan;
+      const csUInt8 *srcPtrY = data + sy * srcLineScan;
+      for (csUInt16 sx = 0; dx < nWidth; ++dx, sx += 2)
       {
-        unsigned srcX0 = dx * sampleWidth;
-        unsigned srcX1 = srcX0 + sampleWidth;
-        for (csUInt8 c = 0; c < num; ++c)
+        csUInt8 *dstPtr = dstPtrY + dx * num;
+        const csUInt8 *srcPtr = srcPtrY + sx * num;
+        bool right = (sx + 1) < width;
+        csUInt8 *nptr = dstPtr;
+
+
+
+        for (int c = 0; c < num; ++c, ++srcPtr)
         {
-          unsigned value = 0;
-          unsigned count = 0;
-          const csUInt8* srcShift = srcPtr + c;
-          for (csUInt16 sy = srcY0; sy < srcY1 && sy < srcHeight; ++sy)
+          csInt16 col = convert((csUInt8)*srcPtr, normal);
+          int rc = 1;
+          if (right)
           {
-            const csUInt8 *srcPtrY = srcShift + sy * srcWidth * num;
-            for (csUInt16 sx = srcX0; sx < srcX1 && sy < srcWidth; ++sx)
+            col += convert((csUInt8)*(srcPtr + num), normal);
+            rc++;
+          }
+          if (bottom)
+          {
+            col += convert((csUInt8)*(srcPtr + srcLineScan), normal);
+            rc++;
+
+            if (right)
             {
-              const csUInt8 *srcPtrX = srcPtrY + sx * num;
-              value += *srcPtrX;
-              count++;
+              col += convert((csUInt8)*(srcPtr + srcLineScan + num), normal);
+              rc++;
             }
           }
-          if (count)
-          {
-            value /= count;
-          }
-          *dstPtr++ = (csUInt8)value;
+          
+          col /= rc;
+          col = convertBack(col, normal);
+          *dstPtr++ = (csUInt8)(col & 0xff);
+        }
+
+        if (normal)
+        {
+          csUInt8 r = nptr[0];
+          csUInt8 g = nptr[1];
+          csUInt8 b = nptr[2];
+          csVector3f n((float)r / 255.0f * 2.0f - 1.0f, (float)g / 255.0f * 2.0f - 1.0f, (float)b / 255.0f * 2.0f - 1.0f);
+          n.Normalize();
+
+          nptr[0] = (csUInt8)((n.x * 0.5f + 0.5f) * 255.0f);
+          nptr[1] = (csUInt8)((n.y * 0.5f + 0.5f) * 255.0f);
+          nptr[2] = (csUInt8)((n.z * 0.5f + 0.5f) * 255.0f);
         }
       }
     }
 
     return res;
   }
-
-  csUInt8 *generate_down_scale(const csUInt8 *data, csUInt16 width, csUInt16 height, csPixelFormat format)
+  
+  csUInt8 *generate_mipmap_down_scale(const csUInt8 *data, csUInt16 width, csUInt16 height, csPixelFormat format)
   {
     if (width == 1 && height == 1)
     {
@@ -208,7 +281,7 @@ namespace
 
 }
 
-bool csImage::GenerateMipMaps()
+bool csImage::GenerateMipMaps(bool normal)
 {
   if (m_data.size() != 1
     || m_depth != 1
@@ -220,32 +293,9 @@ bool csImage::GenerateMipMaps()
   csUInt16 width = m_width;
   csUInt16 height = m_height;
   csUInt16 idx = 0;
-#define DEEP_MIP_MAP
   while (true)
   {
-#ifdef DEEP_MIP_MAP
-    width >>= 1;
-    if (width == 0)
-    {
-      width = 1;
-    }
-    height >>= 1;
-    if (height == 0)
-    {
-      height = 1;
-    }
-    csUInt8 *data = generate_down_scale(m_data[0], m_width, m_height, width, height, m_pixelFormat);
-    if (!data)
-    {
-      return false;
-    }
-    m_data.push_back(data);
-    if (width == 1 && height == 1)
-    {
-      break;
-    }
-#else
-    csUInt8 *data = generate_down_scale(m_data[idx++], width, height, m_pixelFormat);
+    csUInt8 *data = generate_down_scale(m_data[idx++], width, height, m_pixelFormat, normal);
     if (!data)
     {
       return false;
@@ -270,7 +320,6 @@ bool csImage::GenerateMipMaps()
     {
       break;
     }
-#endif
 
   }
 

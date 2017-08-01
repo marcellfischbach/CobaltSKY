@@ -166,7 +166,7 @@ void main ()
 	vec3 lightDir = normalize(-cs_LightDirection);
 	
 	vec3 normal = texture(cs_NormalLightMode, texCoord).xyz * 2.0 - 1.0;
-	normal = normalize(normal);
+	//normal = normalize(normal);
 	vec4 txt = texture(cs_DiffuseRoughness, texCoord);
 	vec3 diffuse = txt.rgb;
 	float roughness = txt.a;
@@ -193,5 +193,6 @@ void main ()
 	
 	cs_FragColor = vec4 (diffuse * cs_LightColor.rgb * cs_LightEnergy * (directDiffuse_reflection * shadow + indirectDiffuse_reflection + specular_reflection) , 1.0);
 	//cs_FragColor = vec4(specular_reflection, specular_reflection, specular_reflection, 1.0);
-	//cs_FragColor = vec4(shadow, shadow, shadow, 1.0);
+	// cs_FragColor = vec4(normal * 0.5 + 0.5, 1.0);
+	cs_FragColor = vec4(diffuse, 1.0);
 }
