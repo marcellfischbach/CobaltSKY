@@ -209,7 +209,7 @@ csImage *csTextureAssetXMLLoader::LoadImage(TiXmlElement *element, const csResou
   {
     if (element->Attribute("normal"))
     {
-      image->GenerateMipMaps(false);
+      image->GenerateMipMaps(true);
     }
     else
     {
