@@ -144,7 +144,8 @@ void SceneView::resizeGL(int width, int height)
 
 void scene_view_cleanup_screenshot_data(void *data)
 {
-  delete[] data;
+  unsigned char *buffer = reinterpret_cast<unsigned char*>(data);
+  delete[] buffer;
 }
 
 QImage SceneView::TakeScreenshot(unsigned width, unsigned height)

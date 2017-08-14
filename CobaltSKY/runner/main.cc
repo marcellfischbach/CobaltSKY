@@ -295,12 +295,14 @@ int main_loop()
 
     if (keyboard->IsKeyPressed(eK_U))
     {
-      masterBus << MyEvent0();
+      MyEvent0 evt;
+      masterBus << evt;
     }
 
     if (keyboard->IsKeyPressed(eK_I))
     {
-      masterBus << MyEvent1();
+      MyEvent1 evt;
+      masterBus << evt;
     }
 
     handle_material(keyboard);

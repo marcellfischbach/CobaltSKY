@@ -44,11 +44,11 @@ void EditorResourceManager::RenameResource(const csResourceLocator &from, const 
   // the resource is already changed on drive ... so we must check the to value
   if (!to.GetResourceEntry().empty() && IsAnonymousLocator(to))
   {
-    csResourceLocator &fixedFrom = csResourceLocator(
+    csResourceLocator fixedFrom = csResourceLocator(
       from.GetResourceFile(),
       from.GetResourceName()
     );
-    csResourceLocator &fixedTo = csResourceLocator(
+    csResourceLocator fixedTo = csResourceLocator(
       to.GetResourceFile(),
       to.GetResourceName()
     );

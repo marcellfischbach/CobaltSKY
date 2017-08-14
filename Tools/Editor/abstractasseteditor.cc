@@ -233,8 +233,8 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
   {
     assetFile.close();
   }
-
-  EventBus::Get() << AssetPreviewIconChangedEvent(m_assetDescriptor.GetLocator());
+  AssetPreviewIconChangedEvent evt(m_assetDescriptor.GetLocator());
+  EventBus::Get() << evt;
 }
 
 void AbstractAssetEditor::UpdateMainWindow()

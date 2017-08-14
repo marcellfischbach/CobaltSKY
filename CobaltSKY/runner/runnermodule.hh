@@ -7,6 +7,5 @@ public:
   static void Initialize();
 
 private:
-  class RunnerModule
-  () {}
+  RunnerModule() {}
 };

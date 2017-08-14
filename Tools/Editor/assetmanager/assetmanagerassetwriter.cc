@@ -2,6 +2,7 @@
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <cobalt/core/ifile.hh>
 #include <cobalt/csdefs.hh>
+#include <cstring>
 
 AssetManagerAssetWriter::Entry::Entry()
   : buffer(0)
