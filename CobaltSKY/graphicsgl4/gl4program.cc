@@ -20,8 +20,11 @@ csProgramGL4::~csProgramGL4()
 {
   for (auto shader : m_shaders)
   {
-    glDetachShader(m_name, shader->GetName());
-    CS_CHECK_GL_ERROR;
+    if (m_name)
+    {
+      glDetachShader(m_name, shader->GetName());
+      CS_CHECK_GL_ERROR;
+    }
     shader->Release();
   }
   m_shaders.clear();

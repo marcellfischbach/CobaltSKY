@@ -2,7 +2,7 @@
 #version 330
 
 
-float calculate_shadow(vec4 world, vec3 cam)
+float calculate_shadow(vec2 texCoord)
 {
 	return 1.0;
 }

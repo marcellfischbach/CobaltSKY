@@ -869,7 +869,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 #if 1
   for (unsigned i = 0; i < 10; ++i)
   {
-    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple2_Mesh.xasset"));
+    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
     //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
         //
         // Add the temple to the scene
@@ -1016,7 +1016,7 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 1
+#if 0
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
   iShader *combineAddMultShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));

@@ -1,0 +1,12 @@
+<asset>
+	<data>
+		<program name="ShadowMapBlurVert">
+			<techniques>
+				<technique name="Default">
+					<shader>${shaders}/deferred/directional_light.vert</shader>
+					<shader>${shaders}/deferred/blur_vert_lo.frag</shader>
+				</technique>
+			</techniques>
+		</program>
+	</data>
+</asset>

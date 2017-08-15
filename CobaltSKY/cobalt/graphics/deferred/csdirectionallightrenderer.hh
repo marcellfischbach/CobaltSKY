@@ -2,6 +2,7 @@
 
 #include <cobalt/graphics/deferred/cslightrenderer.hh>
 
+struct iTexture2D;
 struct iTexture2DArray;
 class csDirectionalLight;
 
@@ -15,6 +16,8 @@ public:
 
 private:
   void RenderShadow(csEntity *root, csCamera *camera, const csDirectionalLight *light);
+  void RenderShadowMap(const csDirectionalLight *light, csGBuffer *gbuffer);
+  void BlurShadowMap();
   void CalcPSSMMatrices(const csDirectionalLight *light, const csCamera *camera);
   void CalcMatrix(const csVector3f &dir, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
   void UpdateProjectionMatrices();
@@ -41,19 +44,33 @@ private:
 
   LightProgram m_programPSSM;
   iShaderAttribute *m_attrLightDirectionPSSM;
-  iShaderAttribute *m_attrDisancesPSSM;
-  iShaderAttribute *m_attrShadowMatsProjView;
-  iShaderAttribute *m_attrShadowMatsProj;
-  iShaderAttribute *m_attrShadowMatsView;
   iShaderAttribute *m_attrShadowMap;
-  iShaderAttribute *m_attrShadowColorMap;
-  iShaderAttribute *m_attrShadowMapSizeInv;
-  iShaderAttribute *m_attrMapBias;
-  iShaderAttribute *m_attrShadowIntensity;
-  iShaderAttribute *m_attrShadowProjNearFar;
   iTexture2DArray *m_colorBuffer;
   iTexture2DArray *m_depthBuffer;
   iTexture2DArray *m_colorBufferBlur;
   void BindDirectionalLightPSSM(csDirectionalLight *directionalLight);
+
+  struct {
+	  iShader *shader;
+	  iShaderAttribute *attrDepth;
+	  iShaderAttribute *attrDistances;
+	  iShaderAttribute *attrShadowMatsProjView;
+	  iShaderAttribute *attrShadowColorMap;
+	  iShaderAttribute *attrShadowMap;
+    iTexture2D *shadowMap;
+    iRenderTarget *shadowRenderTarget;
+    iTexture2D *shadowMapPingPong;
+    iRenderTarget *shadowRenderTargetPingPong;
+  } m_shadowMapRenderer;
+
+  struct {
+    iShader *shader;
+    iShaderAttribute *attrColor0;
+  } m_shadowMapBlurHori;
+
+  struct {
+    iShader *shader;
+    iShaderAttribute *attrColor0;
+  } m_shadowMapBlurVert;
 
 };
