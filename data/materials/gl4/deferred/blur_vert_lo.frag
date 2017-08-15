@@ -10,7 +10,7 @@ void main ()
 {
 	vec4 r = vec4(0.0);
 	float stepSize = 0.5;
-	float kernelSize = 2.0;
+	float kernelSize = 1.0;
 	float num = 0.0;
 	vec2 textureSizeInv = 1.0 / textureSize(cs_Color0, 0);
 	for (float i=-1.0; i<=1.0; i+=stepSize)

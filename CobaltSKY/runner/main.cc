@@ -73,7 +73,7 @@
 #include <runner/event.hh>
 
 
-static bool g_CreateCharacter = false;
+static bool g_CreateCharacter = true;
 
 int initialize();
 int main_loop();

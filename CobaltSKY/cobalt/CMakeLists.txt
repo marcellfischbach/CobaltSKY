@@ -149,6 +149,8 @@ set(SOURCE_ENTITY
     entity/csstaticmeshstate.hh
     entity/csskinnedmeshstate.cc
     entity/csskinnedmeshstate.hh
+	entity/csterrainstate.cc
+	entity/csterrainstate.hh
     entity/cstransformation.cc
     entity/cstransformation.hh
     )
@@ -167,7 +169,7 @@ set(SOURCE_GRAPHICS
     graphics/ishader.hh
     graphics/ishaderattribute.hh
     graphics/ishaderstream.hh
-		graphics/isampler.hh
+	graphics/isampler.hh
     graphics/itexture.hh
     graphics/itexture2d.hh
     graphics/itexture2darray.hh
@@ -211,6 +213,8 @@ set(SOURCE_GRAPHICS
     graphics/csshaderattributeid.hh
     graphics/csshaderstreamid.cc
     graphics/csshaderstreamid.hh
+	graphics/csterrainmesh.cc
+	graphics/csterrainmesh.hh
     )
 
 source_group(
