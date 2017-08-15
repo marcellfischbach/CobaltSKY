@@ -19,7 +19,7 @@ uniform vec3 cs_LightDirection;
 in vec2 texCoord;
 in vec2 xyPlane;
 
-float calculate_shadow(vec4 world, vec3 cam);
+float calculate_shadow(vec2 texCoord);
 
 float oren_nayar(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float NdotV, float roughness)
 {
@@ -89,7 +89,7 @@ vec3 cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float N
 	
 	
 	vec3 specular = vec3(0.0);
-	if(NdotL > 0.0 || true)
+	if(NdotL > 0.0)
 	{
 
 		// calculate intermediary values
@@ -106,38 +106,6 @@ vec3 cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float N
 		vec3 F = Fresnel_Schlick(eyeDir, halfVector, F0);
 		
 		specular = D*G*F/denominator;
-		/*
-		float NdotH = max(dot(normal, halfVector), 0.0); 
-		//float NdotV = max(dot(normal, eyeDir), 0.0); // note: this could also be NdotL, which is the same value
-		float VdotH = max(dot(eyeDir, halfVector), 0.0);
-		float LdotH = max(dot(lightDir, halfVector), 0.0);
-		float mSquared = roughness * roughness;
-
-		// geometric attenuation
-		float NH2 = 2.0 * NdotH;
-		float g1 = (NH2 * NdotV) / VdotH;
-		float g2 = (NH2 * NdotL) / LdotH;
-		float geoAtt = min(1.0, min(g1, g2));
-		
-
-		// roughness (or: microfacet distribution function)
-		// beckmann distribution function
-		float r1 = 1.0 / ( 3.14 * mSquared * pow(NdotH, 4.0));
-		float r2 = (NdotH * NdotH - 1.0) / (mSquared * NdotH * NdotH);
-		float roughnessExp = r1 * exp(r2);
-
-		// fresnel
-		// Schlick approximation
-		float fresnel = pow(1.0 - VdotH, 5.0);
-		fresnel *= (1.0 - F0);
-		fresnel += F0;
-		
-		roughnessExp = 1.0;
-		fresnel = 1.0;
-		
-
-		specular = (fresnel * geoAtt * roughnessExp) / (NdotV * NdotL * 3.14);
-		*/
 	}
 	return specular;
 }
@@ -179,12 +147,12 @@ void main ()
 	//diffuse_reflection = 0.0;
 	
 
-	float directToIndirect = 1.0;
+	float directToIndirect = 0.8;
 	float directDiffuse_reflection = clamp(diffuse_reflection, 0.0, 1.0) * directToIndirect;
-	float indirectDiffuse_reflection= ((diffuse_reflection + 1.0) / 2.0) * (1.0 - directToIndirect);
+	float indirectDiffuse_reflection= clamp(diffuse_reflection, 0.0, 1.0) * (1.0 - directToIndirect);
 	
 	
-	float shadow = calculate_shadow (world4, cam.xyz);
+	float shadow = calculate_shadow (texCoord);
 	if (shadow < 1.0)
 	{
 		specular_reflection = vec3(0.0);
@@ -195,4 +163,5 @@ void main ()
 	//cs_FragColor = vec4(specular_reflection, specular_reflection, specular_reflection, 1.0);
 	//cs_FragColor = vec4(normal * 0.5 + 0.5, 1.0);
 	//cs_FragColor = vec4(diffuse, 1.0);
+	//cs_FragColor = vec4(shadow, shadow, shadow, 1.0);
 }

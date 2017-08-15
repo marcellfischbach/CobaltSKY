@@ -617,7 +617,7 @@ void csGraphicsGL4::BindMatrices()
     attrib->Set(m_shadowNearFars, m_numberOfShadowMatrices);
   }
 
-
+  CS_CHECK_GL_ERROR;
 }
 
 
