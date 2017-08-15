@@ -54,10 +54,11 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
   m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, (csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize, 3, false);
 
   iSampler *colorSampler = renderer->CreateSampler();
+  colorSampler->SetBorderColor(csVector4f(1, 1, 1, 1));
   colorSampler->SetFilter(eFM_MinMagLinear);
-  colorSampler->SetAddressU(eTAM_Clamp);
-  colorSampler->SetAddressV(eTAM_Clamp);
-  colorSampler->SetAddressW(eTAM_Clamp);
+  colorSampler->SetAddressU(eTAM_ClampBorder);
+  colorSampler->SetAddressV(eTAM_ClampBorder);
+  colorSampler->SetAddressW(eTAM_ClampBorder);
 
   m_colorBuffer->SetSampler(colorSampler);
   m_depthBuffer->SetSampler(m_depthSampler);
@@ -68,7 +69,10 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
   m_shadowBuffer->Initialize((csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize);
   m_shadowBuffer->AddColorTexture(m_colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
-  m_shadowBuffer->Finilize();
+  if (!m_shadowBuffer->Finilize())
+  {
+	  printf("Unable to finalize shadow buffer object.\n");
+  }
 
 }
 
