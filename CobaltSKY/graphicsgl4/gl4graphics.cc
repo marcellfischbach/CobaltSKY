@@ -131,6 +131,9 @@ void csGraphicsGL4::ResetDefaults ()
 
   m_cullFace = eFS_Back;
   glCullFace(GL_BACK);
+
+  m_fillMode = eFM_Fill;
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   CS_CHECK_GL_ERROR;
 
   if (!glIsVertexArray(m_vao))
@@ -621,6 +624,7 @@ void csGraphicsGL4::BindMatrices()
 }
 
 
+
 void csGraphicsGL4::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
 {
   csVertexDeclarationGL4 *decl = static_cast<csVertexDeclarationGL4*>(vertexDeclaration);
@@ -728,6 +732,63 @@ void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
       CS_CHECK_GL_ERROR;
     }
   }
+}
+
+
+void csGraphicsGL4::PushRenderStates()
+{
+  RenderStates rs;
+  rs.BlendEnabled = m_blendEnabled;
+  rs.BlendModeDstAlpha = m_blendModeDstAlpha;
+  rs.BlendModeDstColor = m_blendModeDstColor;
+  rs.BlendModeSrcAlpha = m_blendModeSrcAlpha;
+  rs.BlendModeSrcColor = m_blendModeSrcColor;
+  rs.DepthMask = m_depthMask;
+  rs.DepthTest = m_depthTest;
+  rs.DepthFunc = m_depthFunc;
+  rs.ColorMask = m_colorMask;
+
+  rs.ClearColor = m_clearColor;
+  rs.ClearDepth = m_clearDepth;
+  rs.ClearStencil = m_clearStencil;
+
+  rs.FrontFace = m_frontFace;
+  rs.CullFace = m_cullFace;
+  rs.CullFaceEnabled = m_cullFaceEnabled;
+
+  rs.FillMode = m_fillMode;
+
+  m_renderStateStack.push_back(rs);
+}
+
+void csGraphicsGL4::PopRenderStates()
+{
+  if (m_renderStateStack.empty())
+  {
+    printf("Missmatch of push and pop render states.\n");
+    return;
+  }
+
+  RenderStates rs = m_renderStateStack[m_renderStateStack.size() - 1];
+  m_renderStateStack.pop_back();
+
+  SetBlendEnabled(rs.BlendEnabled);
+  SetBlendMode(rs.BlendModeSrcColor, rs.BlendModeSrcAlpha, rs.BlendModeDstColor, rs.BlendModeDstAlpha);
+  SetDepthMask(rs.DepthMask);
+
+  SetColorMask(rs.ColorMask & 0x08, rs.ColorMask & 0x04, rs.ColorMask & 0x02, rs.ColorMask & 0x01);
+  SetDepthTest(rs.DepthTest);
+  SetDepthFunc(rs.DepthFunc);
+
+  SetClearColorValue(rs.ClearColor);
+  SetClearDepthValue(rs.ClearDepth);
+  SetClearStencilValue(rs.ClearStencil);
+
+  SetFrontFace(rs.FrontFace);
+  SetCullFace(rs.CullFace);
+  SetCullFaceEnabled(rs.CullFaceEnabled);
+
+  SetFillMode(rs.FillMode);
 }
 
 
@@ -884,6 +945,19 @@ csFaceSide csGraphicsGL4::GetCullFace() const
   return m_cullFace;
 }
 
+void csGraphicsGL4::SetFillMode(csFillMode fillMode)
+{
+  if (m_fillMode != fillMode)
+  {
+    glPolygonMode(GL_FRONT_AND_BACK, fillModeMap[fillMode]);
+    m_fillMode = fillMode;
+  }
+}
+
+csFillMode csGraphicsGL4::GetFillMode() const
+{
+  return m_fillMode;
+}
 
 void csGraphicsGL4::SetRenderFadeInOut(float near, float far)
 {

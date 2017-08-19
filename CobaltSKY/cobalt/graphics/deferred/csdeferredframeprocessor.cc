@@ -166,6 +166,7 @@ void csDeferredFrameProcessor::RenderGBuffer(csEntity *root)
   unsigned cnt = 0;
   unsigned calls = 0;
   unsigned trigons = 0;
+  m_renderer->PushRenderStates();
   for (csSize i = 0; i < m_renderStates[eRQ_Deferred].length; ++i)
   {
     csRenderState *renderState = m_renderStates[eRQ_Deferred][i];
@@ -177,6 +178,7 @@ void csDeferredFrameProcessor::RenderGBuffer(csEntity *root)
       //trigons += renderState->GetNumberOfTotalTrigons();
     }
   }
+  m_renderer->PopRenderStates();
   //Sprintf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
 }
 

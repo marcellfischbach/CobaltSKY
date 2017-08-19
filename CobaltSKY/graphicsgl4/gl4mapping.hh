@@ -338,3 +338,10 @@ static GLenum faceSideMap[] = {
   GL_BACK,
   GL_FRONT_AND_BACK
 };
+
+static GLenum fillModeMap[] = {
+  GL_FILL,
+  GL_LINE,
+  GL_POINT
+};
+

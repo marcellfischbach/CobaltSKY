@@ -152,6 +152,8 @@ void csPointLightRenderer::BindPointLightCubeShadow(csPointLight *pointLight)
 }
 void csPointLightRenderer::RenderShadow(csEntity *root, const csPointLight *light)
 {
+  m_renderer->PushRenderStates();
+
   CalcCubeMatrices(light);
 
   CalcShadowIntensity(light);
@@ -198,6 +200,7 @@ void csPointLightRenderer::RenderShadow(csEntity *root, const csPointLight *ligh
   }
   m_renderer->SetColorMask(true, true, true, true);
 
+  m_renderer->PopRenderStates();
 }
 
 void csPointLightRenderer::CalcCubeMatrices(const csPointLight *light)

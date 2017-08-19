@@ -60,6 +60,8 @@ public:
   virtual void SetSampler(csTextureUnit unit, iSampler *sampler);
   virtual void SetRenderTarget(iRenderTarget *renderTarget);
 
+  virtual void PushRenderStates();
+  virtual void PopRenderStates();
   virtual void SetBlendEnabled(bool enabled);
   virtual bool IsBlendEnabled() const;
   virtual void SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst);
@@ -78,6 +80,8 @@ public:
   virtual void SetCullFace(csFaceSide side);
   virtual csFaceSide GetCullFace() const;
 
+  virtual void SetFillMode(csFillMode fillMode);
+  virtual csFillMode GetFillMode() const;
 
   virtual void SetRenderFadeInOut(float near, float far);
   virtual void SetRenderFadeInOutValue(csUInt8 value);
@@ -142,6 +146,8 @@ private:
   csFaceSide m_cullFace;
   bool m_cullFaceEnabled;
 
+  csFillMode m_fillMode;
+
   csTextureUnit m_nextTextureUnit;
 
   csSamplerGL4 *m_samplers[eTU_COUNT];
@@ -186,5 +192,31 @@ private:
    */
 
   ISGShaderGraphFactory* m_shaderGraphFactory;
+
+  struct RenderStates
+  {
+    bool BlendEnabled;
+    csBlendMode BlendModeSrcColor;
+    csBlendMode BlendModeSrcAlpha;
+    csBlendMode BlendModeDstColor;
+    csBlendMode BlendModeDstAlpha;
+
+    bool DepthMask;
+    csUInt8 ColorMask;
+    bool DepthTest;
+    csCompareMode DepthFunc;
+
+    csVector4f ClearColor;
+    float ClearDepth;
+    csUInt8 ClearStencil;
+
+    csFaceWinding FrontFace;
+    csFaceSide CullFace;
+    bool CullFaceEnabled;
+
+    csFillMode FillMode;
+  };
+
+  std::vector<RenderStates> m_renderStateStack;
 };
 

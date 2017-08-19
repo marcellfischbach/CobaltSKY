@@ -851,6 +851,13 @@ csEntityScene *create_scene(iGraphics *graphics)
   material = csEng->Get<csMaterial>("materials/DefaultMaterial.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
+  csMaterial *materialTempleDirt = csEng->Get<csMaterial>("materials/GroundFieldstone.xasset");
+
+  if (materialTempleDirt)
+  {
+    printf("Set fill mode\n");
+    materialTempleDirt->SetFillMode(eFM_Wireframe);
+  }
 
   csEntityScene *entityScene = new csEntityScene();
 

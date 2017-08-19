@@ -91,6 +91,8 @@ struct CSE_API iGraphics : public iObject
   virtual void SetSampler(csTextureUnit unit, iSampler *sampler) = 0;
   virtual void SetRenderTarget(iRenderTarget *renderTarget) = 0;
 
+  virtual void PushRenderStates() = 0;
+  virtual void PopRenderStates() = 0;
   virtual void SetBlendEnabled(bool enabled) = 0;
   virtual bool IsBlendEnabled() const = 0;
   virtual void SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst) = 0;
@@ -109,6 +111,8 @@ struct CSE_API iGraphics : public iObject
   virtual void SetCullFace(csFaceSide side) = 0;
   virtual csFaceSide GetCullFace() const = 0;
 
+  virtual void SetFillMode(csFillMode fillMode) = 0;
+  virtual csFillMode GetFillMode() const = 0;
 
   virtual void SetRenderFadeInOut(float near, float far) = 0;
   virtual void SetRenderFadeInOutValue(csUInt8 value) = 0;

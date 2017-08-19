@@ -59,12 +59,16 @@ public:
   csMatrix4f GetDefaultMatrix4(csSize idx) const;
   iTexture* GetDefaultTexture(csSize idx) const;
 
+  void SetFillMode(csFillMode fillMode);
+  csFillMode GetFillMode() const;
+
   void ClearParameters();
   csSize RegisterParam(const csString &parameterName, csShaderParameterType type);
 
   iShader *Bind(iGraphics *renderer, csRenderPass pass);
 protected:
   void BindParameter(iGraphics *renderer, csRenderPass pass, csSize idx);
+  void BindFillMode(iGraphics *renderer);
 
 private:
   struct Param
@@ -84,6 +88,8 @@ private:
   std::vector<Param> m_params;
 
   iShader *m_shaders[eRP_COUNT];
+
+  csFillMode m_fillMode;
 
 };
 

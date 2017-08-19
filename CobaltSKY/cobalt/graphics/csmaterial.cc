@@ -9,6 +9,8 @@
 csMaterial::csMaterial()
   : csObject()
   , m_materialDef(0)
+  , m_fillMode(eFM_Fill)
+  , m_fillModeInherited(true)
 {
 
 }
@@ -251,6 +253,22 @@ iTexture *csMaterial::GetTexture(csUInt16 idx)
   return m_parameters[idx].m_texture;
 }
 
+void csMaterial::SetFillMode(csFillMode mode)
+{
+  m_fillMode = mode;
+  m_fillModeInherited = false;
+}
+
+csFillMode csMaterial::GetFillMode() const
+{
+  return m_fillMode;
+}
+
+bool csMaterial::IsFillModeInherited() const
+{
+  return m_fillModeInherited;
+}
+
 bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
 {
   if (!m_materialDef)
@@ -320,6 +338,15 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
         }
       }
     }
+  }
+
+  if (m_fillModeInherited)
+  {
+    m_materialDef->BindFillMode(renderer);
+  }
+  else
+  {
+    renderer->SetFillMode(m_fillMode);
   }
 
   return true;

@@ -276,6 +276,8 @@ csClipper *csDirectionalLightRenderer::CreateClipper()
 
 void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, const csDirectionalLight *light)
 {
+  m_renderer->PushRenderStates();
+
 	CalcPSSMMatrices(light, camera);
 
 	CalcShadowIntensity(light);
@@ -331,6 +333,7 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
 	m_renderer->SetCullFace(eFS_Back);
 	m_renderer->SetColorMask(true, true, true, true);
 
+  m_renderer->PopRenderStates();
 }
 
 void csDirectionalLightRenderer::RenderShadowMap(const csDirectionalLight *light, csGBuffer *gBuffer)

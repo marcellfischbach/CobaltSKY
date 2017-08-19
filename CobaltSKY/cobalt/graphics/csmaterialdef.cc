@@ -9,6 +9,7 @@
 
 csMaterialDef::csMaterialDef()
   : csObject ()
+  , m_fillMode(eFM_Fill)
 {
   memset(m_shaders, 0, sizeof(m_shaders));
 }
@@ -127,6 +128,11 @@ void csMaterialDef::BindParameter(iGraphics *renderer, csRenderPass pass, csSize
       break;
     }
   }
+}
+
+void csMaterialDef::BindFillMode(iGraphics *graphics)
+{
+  graphics->SetFillMode(m_fillMode);
 }
 
 csSize csMaterialDef::GetNumberOfParameters() const
@@ -262,6 +268,16 @@ csMatrix4f csMaterialDef::GetDefaultMatrix4(csSize idx) const
 iTexture *csMaterialDef::GetDefaultTexture(csSize idx) const
 {
   return m_params[idx].m_defaultTexture;
+}
+
+void csMaterialDef::SetFillMode(csFillMode fillMode)
+{
+  m_fillMode = fillMode;
+}
+
+csFillMode csMaterialDef::GetFillMode() const
+{
+  return m_fillMode;
 }
 
 csMaterialDef::Param::Param(const csString &name, csShaderParameterType type)

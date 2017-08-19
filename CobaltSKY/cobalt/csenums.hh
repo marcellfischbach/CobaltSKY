@@ -361,6 +361,13 @@ enum csParticleShadingMode
   ePSM_Emitting,
 };
 
+enum csFillMode
+{
+  eFM_Fill,
+  eFM_Wireframe,
+  eFM_Points
+};
+
 enum csFaceWinding
 {
   eFW_CW,

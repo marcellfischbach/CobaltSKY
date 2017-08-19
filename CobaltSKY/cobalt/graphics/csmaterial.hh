@@ -47,6 +47,11 @@ public:
   csColor4f GetColor4(csUInt16 idx);
   iTexture *GetTexture(csUInt16 idx);
 
+
+  void SetFillMode(csFillMode mode);
+  csFillMode GetFillMode() const;
+  bool IsFillModeInherited() const;
+
 private:
   csMaterialDef *m_materialDef;
 
@@ -63,6 +68,9 @@ private:
     };
     ShaderParameter();
   };
+
+  csFillMode m_fillMode;
+  bool m_fillModeInherited;
 
   std::vector<ShaderParameter> m_parameters;
 
