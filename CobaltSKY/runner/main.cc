@@ -852,21 +852,28 @@ csEntityScene *create_scene(iGraphics *graphics)
   material = csEng->Get<csMaterial>("materials/DefaultMaterial.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
-  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/GroundFieldstone.xasset");
+  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/GroundFieldStone.xasset");
   printf("GroundMaterial: %p\n", groundMaterial);
+  if (groundMaterial)
+  {
+    //groundMaterial->SetFillMode(eFM_Wireframe);
+  }
 
   csEntityScene *entityScene = new csEntityScene();
 
 
-  csTerrainMesh *terrainMesh = new csTerrainMesh();
-  float heights[9];
-  memset(heights, 0, sizeof(heights));
-  terrainMesh->Initialize(graphics, 9, 2, 200.0f, 200.0f, heights);
 
+  unsigned numVerticesPerSide = 257;
+  unsigned numVertices = numVerticesPerSide*numVerticesPerSide;
+  csTerrainMesh *terrainMesh = new csTerrainMesh();
+  float *heights = new float[numVertices];
+  memset(heights, 0, sizeof(float) * numVertices);
+  terrainMesh->Initialize(graphics, numVerticesPerSide, 8, 200.0f, 200.0f, heights);
 
   csStaticMeshState *terrainState = new csStaticMeshState();
-  terrainState->SetMaterial(groundMaterial);
   terrainState->SetMesh(terrainMesh);
+  terrainState->SetMaterial(groundMaterial);
+
   csEntity *terrainEntity = new csEntity();
   terrainEntity->SetRootState(terrainState);
   terrainEntity->AddState(terrainState);

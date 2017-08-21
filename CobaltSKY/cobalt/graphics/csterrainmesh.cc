@@ -1,6 +1,7 @@
 
 
 #include <cobalt/graphics/csterrainmesh.hh>
+#include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/iindexbuffer.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ivertexbuffer.hh>
@@ -22,21 +23,23 @@ csTerrainMesh::~csTerrainMesh()
 }
 
 
-void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod)
+void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **materials, csUInt8 lod)
 {
   if (numMaterials != 1)
   {
     return;
   }
-
+  if (!materials[0]->Bind(gfx, pass))
+  {
+    return;
+  }
   gfx->SetVertexDeclaration(m_vertexDeclaration);
   gfx->SetVertexBuffer(0, m_vertices);
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
   {
     RenderObject &obj = m_renderObjects[i];
-
     gfx->SetIndexBuffer(obj.indexBuffer);
-    gfx->Render(ePT_Triangles, obj.numberOfIndices);
+    gfx->RenderIndexed(ePT_Triangles, obj.numberOfIndices, eDT_UnsignedInt);
   }
 }
 
@@ -137,6 +140,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   float y0 = -length / 2.0f;
   const float *hptr = heights;
   Vertex *vptr = vertices;
+  unsigned idx = 0;
   for (unsigned iy = 0; iy < numVertices; ++iy)
   {
     float fy = (float)iy / (float)(numVertices - 1);
@@ -149,10 +153,10 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       vptr->tangent = csVector3f(1.0f, 0.0f, 0.0f);
       vptr->binormal = csVector3f(0.0f, 1.0f, 0.0f);
       vptr->texCoord = csVector2f(fx, fy);
-
       m_boundingBox.Add(vptr->pos);
     }
   }
+
   m_boundingBox.Finish();
 
   m_vertices = gfx->CreateVertexBuffer(sizeof(Vertex) * numV, vertices, eBDM_Static);
@@ -169,7 +173,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   Quad *qptr = m_quads;
   for (unsigned i = 0, p = 0; i < numQuads; ++i)
   {
-    for (unsigned j = 0; j < numQuads; ++j, ++p)
+    for (unsigned j = 0; j < numQuads; ++j, ++p, ++qptr)
     {
       qptr->indices = new unsigned[m_quadSize * m_quadSize * 6];
       qptr->numberOfIndices = 0;
@@ -178,8 +182,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       qptr->renderObject = &m_renderObjects[0];
       m_renderObjects[0].quads[p] = qptr;
     }
-
   }
+
 
   m_numberOfLines = 2 * numQuads * (numQuads + 1);
   m_lines = new Line[m_numberOfLines];
@@ -301,6 +305,7 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
       }
     }
   }
+
 
   return quad->numberOfIndices;
 
