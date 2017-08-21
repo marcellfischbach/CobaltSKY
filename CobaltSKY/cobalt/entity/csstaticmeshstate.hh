@@ -8,7 +8,7 @@
 #include <cobalt/physics/csphysicsshapecontainer.hh>
 #include <cobalt/entity/csstaticmeshstate.refl.hh>
 
-class csMesh;
+struct iMesh;
 class csMaterial;
 /**
 * \ingroup entity
@@ -22,9 +22,9 @@ public:
   csStaticMeshState();
   virtual ~csStaticMeshState();
 
-  void SetMesh(csMesh *mesh);
-  csMesh *GetMesh();
-  const csMesh *GetMesh() const;
+  void SetMesh(iMesh *mesh);
+  iMesh *GetMesh();
+  const iMesh *GetMesh() const;
 
   csSize GetNumberOfMaterialsSlots() const;
   void SetMaterial(csMaterial *material, csSize slot = 0);
@@ -65,7 +65,7 @@ private:
 
   bool m_castShadow;
 
-  csMesh* m_mesh;
+  iMesh* m_mesh;
 
   csSize m_numberOfMaterialSlots;
   csMaterial **m_materials;
@@ -77,12 +77,12 @@ private:
 };
 
 
-CS_FORCEINLINE csMesh *csStaticMeshState::GetMesh()
+CS_FORCEINLINE iMesh *csStaticMeshState::GetMesh()
 {
   return m_mesh;
 }
 
-CS_FORCEINLINE const csMesh *csStaticMeshState::GetMesh() const
+CS_FORCEINLINE const iMesh *csStaticMeshState::GetMesh() const
 {
   return m_mesh;
 }

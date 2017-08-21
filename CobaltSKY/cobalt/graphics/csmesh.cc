@@ -8,10 +8,10 @@
 
 
 csMesh::csMesh()
-  : csObject()
+  : iMesh()
   , m_numberOfMaterials(0)
 {
-
+  CS_CLASS_GEN_CONSTR;
 }
 
 csMesh::~csMesh()
@@ -181,14 +181,14 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numberOfMater
 }
 
 
-unsigned csMesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
+csSize csMesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
 {
   const LOD &lod = m_lods[lodIdx];
   return lod.m_meshes.size();
 
 }
 
-unsigned csMesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
+csSize csMesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
 {
   unsigned count = 0;
   const LOD &lod = m_lods[lodIdx];

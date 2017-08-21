@@ -149,8 +149,6 @@ set(SOURCE_ENTITY
     entity/csstaticmeshstate.hh
     entity/csskinnedmeshstate.cc
     entity/csskinnedmeshstate.hh
-	entity/csterrainstate.cc
-	entity/csterrainstate.hh
     entity/cstransformation.cc
     entity/cstransformation.hh
     )
@@ -165,6 +163,7 @@ set(SOURCE_GRAPHICS
     graphics/iframeprocessor.hh
     graphics/igraphics.hh
     graphics/iindexbuffer.hh
+	graphics/imesh.hh
     graphics/irendertarget.hh
     graphics/ishader.hh
     graphics/ishaderattribute.hh

@@ -49,6 +49,7 @@
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/graphics/csmesh.hh>
 #include <cobalt/graphics/cssubmesh.hh>
+#include <cobalt/graphics/csterrainmesh.hh>
 #include <cobalt/graphics/csparticle.hh>
 #include <cobalt/graphics/cspointlight.hh>
 #include <cobalt/graphics/cspostprocess.hh>
@@ -73,7 +74,7 @@
 #include <runner/event.hh>
 
 
-static bool g_CreateCharacter = true;
+static bool g_CreateCharacter = false;
 
 int initialize();
 int main_loop();
@@ -851,17 +852,26 @@ csEntityScene *create_scene(iGraphics *graphics)
   material = csEng->Get<csMaterial>("materials/DefaultMaterial.xasset");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
-  csMaterial *materialTempleDirt = csEng->Get<csMaterial>("materials/GroundFieldstone.xasset");
-
-  if (materialTempleDirt)
-  {
-    printf("Set fill mode\n");
-    materialTempleDirt->SetFillMode(eFM_Wireframe);
-  }
+  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/GroundFieldstone.xasset");
+  printf("GroundMaterial: %p\n", groundMaterial);
 
   csEntityScene *entityScene = new csEntityScene();
 
 
+  csTerrainMesh *terrainMesh = new csTerrainMesh();
+  float heights[9];
+  memset(heights, 0, sizeof(heights));
+  terrainMesh->Initialize(graphics, 9, 2, 200.0f, 200.0f, heights);
+
+
+  csStaticMeshState *terrainState = new csStaticMeshState();
+  terrainState->SetMaterial(groundMaterial);
+  terrainState->SetMesh(terrainMesh);
+  csEntity *terrainEntity = new csEntity();
+  terrainEntity->SetRootState(terrainState);
+  terrainEntity->AddState(terrainState);
+  terrainEntity->FinishTransformation();
+  entityScene->AddEntity(terrainEntity);
 
   // 
   // Add the ground plane with physics
@@ -869,7 +879,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   planeEntity->SetRootState(groundMeshState);
   planeEntity->AddState(groundMeshState);
   planeEntity->FinishTransformation();
-  entityScene->AddEntity(planeEntity);
+  //entityScene->AddEntity(planeEntity);
 
 
 

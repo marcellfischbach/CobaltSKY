@@ -5,8 +5,8 @@
 #include <cobalt/entity/csentityscene.hh>
 #include <cobalt/animation/csskeleton.hh>
 #include <cobalt/graphics/igraphics.hh>
+#include <cobalt/graphics/imesh.hh>
 #include <cobalt/graphics/csmaterial.hh>
-#include <cobalt/graphics/csmesh.hh>
 #include <cobalt/physics/iphysicsscene.hh>
 #include <cobalt/csengine.hh>
 
@@ -42,7 +42,7 @@ csStaticMeshState::~csStaticMeshState()
 }
 
 
-void csStaticMeshState::SetMesh(csMesh *mesh)
+void csStaticMeshState::SetMesh(iMesh *mesh)
 {
   CS_SET(m_mesh, mesh);
 

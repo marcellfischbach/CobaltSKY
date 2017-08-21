@@ -3,6 +3,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/graphics/imesh.hh>
 #include <cobalt/math/csboundingbox.hh>
 #include <map>
 #include <vector>
@@ -22,9 +23,9 @@ class csSubMesh;
 const csUInt32 csInvalidMaterialIndex = ~0x00;
 
 CS_CLASS()
-class CSE_API csMesh : public CS_SUPER(csObject)
+class CSE_API csMesh : public CS_SUPER(iMesh)
 {
-  CS_CLASS_GEN;
+  CS_CLASS_GEN_OBJECT;
 public:
   csMesh();
   virtual ~csMesh();
@@ -49,8 +50,8 @@ public:
 
   virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
 
-  unsigned GetNumberOfRenderCalls(csUInt8 lod = 0) const;
-  unsigned GetNumberOfTotalTrigons(csUInt8 lod = 0) const;
+  csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const;
+  csSize GetNumberOfTotalTrigons(csUInt8 lod = 0) const;
 
 
 protected:
