@@ -109,6 +109,12 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   }
 
   m_quadSize = (numVertices - 1) / numQuads;
+  if (m_quadSize <= 2)
+  {
+    printf("csTerrain: NumQuads is to high. Quadsize[%d] <= 2", m_quadSize);
+    return false;
+  }
+  m_halfQuadSize = m_quadSize / 2;
 
 
   m_scanline = numVertices;
@@ -179,6 +185,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       qptr->numberOfIndices = 0;
       qptr->dirty = true;
       qptr->i0 = i * m_quadSize * m_scanline + j * m_quadSize;
+      qptr->ic = qptr->i0 + m_halfQuadSize * m_scanline + m_halfQuadSize;
       qptr->renderObject = &m_renderObjects[0];
       m_renderObjects[0].quads[p] = qptr;
     }
@@ -240,6 +247,11 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
 void csTerrainMesh::Update()
 {
   // update the lines
+  for (unsigned i = 0; i < m_numberOfLines; ++i)
+  {
+    m_lines[i].scale = 1 + (rand() % 3);
+    m_lines[i].scale = m_halfQuadSize;
+  }
 
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
   {
@@ -274,8 +286,34 @@ void csTerrainMesh::UpdateDirtyRenderObject(csTerrainMesh::RenderObject *renderO
 
 }
 
+namespace 
+{
+  inline int imax(int a, int b)
+  {
+    return a > b ? a : b;
+  }
+
+  inline int imin(int a, int b)
+  {
+    return a < b ? a : b;
+  }
+}
+
 unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
 {
+  // get the min scale
+  int min = quad->lineT->scale;
+  min = ::imin(min, quad->lineL->scale);
+  min = ::imin(min, quad->lineB->scale);
+  min = ::imin(min, quad->lineR->scale);
+
+  quad->numberOfIndices = 0;
+  quad->numberOfIndices += MakeIndicesT(min, quad->lineT->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned), quad->ic);
+  //quad->numberOfIndices += MakeIndicesL(min, quad->lineL->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
+  //quad->numberOfIndices += MakeIndicesB(min, quad->lineB->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
+  //quad->numberOfIndices += MakeIndicesR(min, quad->lineR->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
+  /*
+
   if (quad->dirty || true)
   {
 
@@ -305,10 +343,53 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
       }
     }
   }
-
+  */
 
   return quad->numberOfIndices;
 
 }
 
 
+unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  unsigned numIndices = 0;
+  if (innerScale == m_quadSize)
+  {
+    unsigned i0 = ic + m_halfQuadSize * m_scanline;
+    unsigned i00 = i0 - m_halfQuadSize;
+    unsigned i01 = i0 + m_halfQuadSize;
+    *iptr++ = ic;
+    *iptr++ = i00;
+    *iptr++ = i01;
+    numIndices = 3;
+  }
+  else if (innerScale == m_halfQuadSize)
+  {
+    if (outerScale == m_quadSize)
+    {
+      unsigned i0 = ic + m_halfQuadSize * m_scanline;
+      unsigned i00 = i0 - m_halfQuadSize;
+      unsigned i01 = i0 + m_halfQuadSize;
+      *iptr++ = ic;
+      *iptr++ = i00;
+      *iptr++ = i01;
+      numIndices = 3;
+    }
+    else 
+    {
+      unsigned i0 = ic + m_halfQuadSize * m_scanline;
+      unsigned i00 = i0 - m_halfQuadSize;
+      unsigned i01 = i0 + m_halfQuadSize;
+      *iptr++ = ic;
+      *iptr++ = i00;
+      *iptr++ = i0;
+      *iptr++ = ic;
+      *iptr++ = i0;
+      *iptr++ = i01;
+      numIndices = 6;
+
+    }
+  }
+  
+  return numIndices;
+}

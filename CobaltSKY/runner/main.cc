@@ -856,7 +856,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   printf("GroundMaterial: %p\n", groundMaterial);
   if (groundMaterial)
   {
-    //groundMaterial->SetFillMode(eFM_Wireframe);
+    groundMaterial->SetFillMode(eFM_Wireframe);
   }
 
   csEntityScene *entityScene = new csEntityScene();

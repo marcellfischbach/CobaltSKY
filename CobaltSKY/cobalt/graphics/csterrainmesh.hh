@@ -49,12 +49,15 @@ private:
   void UpdateDirtyRenderObject(RenderObject *renderObject);
   unsigned UpdateDirtyQuad(Quad *quad);
 
+  unsigned MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
+
 
   iVertexDeclaration *m_vertexDeclaration;
   iVertexBuffer *m_vertices;
 
   unsigned m_scanline;
   unsigned m_quadSize;
+  unsigned m_halfQuadSize;
 
 
 
@@ -63,7 +66,7 @@ private:
   {
     csVector3f pos0;
     csVector3f pos1;
-    int scale;
+    unsigned scale;
     Quad *quad0;
     Quad *quad1;
   };
@@ -71,6 +74,7 @@ private:
   struct Quad
   {
     unsigned i0;
+    unsigned ic;
     Line *lineT;
     Line *lineL;
     Line *lineR;
