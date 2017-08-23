@@ -20,7 +20,7 @@ csPNGImageFileLoader::~csPNGImageFileLoader()
 
 bool csPNGImageFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  return file->GetExtension() == csString("png");
+  return file->GetExtension() == std::string("png");
 }
 
 

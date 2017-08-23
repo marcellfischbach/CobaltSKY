@@ -280,7 +280,7 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
     csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
-      resourceNode->SetResourceName(csString((const char*)name.toLatin1()));
+      resourceNode->SetResourceName(std::string((const char*)name.toLatin1()));
 
       m_node->UpdateValues();
       m_node->Layout();

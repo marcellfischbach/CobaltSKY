@@ -2,7 +2,7 @@
 
 #include <QAbstractItemModel>
 #include <vector>
-#include <cobalt/core/csstring.hh>
+#include <string>
 
 #define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/csClassName"
 
@@ -29,11 +29,11 @@ public:
 private:
   struct Data
   {
-    csString name;
+    std::string name;
     const csClass *cls;
     QList<Data*> children;
     Data* parent;
-    Data(const csString &name)
+    Data(const std::string &name)
       : name(name)
       , cls(0)
       , parent(0)
@@ -52,5 +52,5 @@ private:
 
   Data *m_root;
 
-  Data *fromString(const csString &name);
+  Data *fromString(const std::string &name);
 };

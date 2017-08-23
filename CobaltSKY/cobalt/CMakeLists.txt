@@ -57,6 +57,8 @@ set(SOURCE_CORE
     core/csfileinfo.hh
     core/csfilestd.cc
     core/csfilestd.hh
+		core/csini.cc
+		core/csini.hh
     core/cslibrary.cc
     core/cslibrary.hh
     core/cslogger.cc

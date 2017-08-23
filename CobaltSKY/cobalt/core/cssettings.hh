@@ -3,8 +3,8 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csstring.hh>
-#include <tixml/tinyxml.h>
+#include <csini/csini.hh>
+#include <string>
 
 
 class CSE_API csSettings
@@ -15,26 +15,34 @@ public:
   static csSettings* Get ();
 
   bool Initialize(int argc, char** argv);
-  bool Initialize(const char* configFileName);
-  const char* GetRootPath () const;
+  bool Initialize(const std::string &configFileName);
+  const std::string &GetRootPath () const;
 
-  bool HasGroup (const char* group);
-  bool HasValue (const char* group, const char* entry = 0);
-  TiXmlElement *GetGroup (const char* group);
-  const char* GetStringValue (const char* group, const char* entry = 0);
-  int GetIntValue (const char* group, const char* entry = 0, int defaultValue = 0);
-  float GetFloatValue (const char* group, const char* entry = 0, float defaultValue = 0.0f);
-  bool GetBoolValue (const char* group, const char* entry = 0, bool defaultValue = false);
+  std::vector<std::string> FindSubGroupNames(const std::string &subGroup) const;
+
+  bool HasGroup (const std::string &group);
+
+  bool HasValue(const std::string &entry = 0);
+  std::string GetStringValue(const std::string &entry = 0);
+  int GetIntValue(const std::string &entry = 0, int defaultValue = 0);
+  float GetFloatValue(const std::string &entry = 0, float defaultValue = 0.0f);
+  bool GetBoolValue(const std::string &entry = 0, bool defaultValue = false);
+
+  bool HasValue (const std::string &group, const std::string &entry = 0);
+  std::string GetStringValue (const std::string &group, const std::string &entry = 0);
+  int GetIntValue (const std::string &group, const std::string &entry = 0, int defaultValue = 0);
+  float GetFloatValue (const std::string &group, const std::string &entry = 0, float defaultValue = 0.0f);
+  bool GetBoolValue (const std::string &group, const std::string &entry = 0, bool defaultValue = false);
 
 protected:
   csSettings();
 
 private:
-  TiXmlDocument     *m_document;
+  csINI m_ini;
+
   static csSettings*  static_instances;
   std::string         _rootPath;
 
-  TiXmlElement *GetElement(const char* group, const char* entry);
 
 };
 

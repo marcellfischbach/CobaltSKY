@@ -52,7 +52,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
       {
         const char *txt = meshElement->GetText();
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(meshElement, eRLM_Shared, eRLM_Instance);
-        mesh = csResourceManager::Get()->Aquire<csMesh>(csResourceLocator(csString(txt)), 0, loadingMode);
+        mesh = csResourceManager::Get()->Aquire<csMesh>(csResourceLocator(std::string(txt)), 0, loadingMode);
       }
       else
       {
@@ -70,7 +70,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
       {
         const char *txt = materialElement->GetText();
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
-        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(csString(txt)), 0, loadingMode);
+        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(std::string(txt)), 0, loadingMode);
         int slot = 0;
         if (materialElement->Attribute("slot"))
         {
@@ -78,7 +78,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
         }
         if (materialElement->Attribute("slotName"))
         {
-          csString slotName(materialElement->Attribute("slotName"));
+          std::string slotName(materialElement->Attribute("slotName"));
           csUInt32 meshSlot = staticMeshState->GetMesh()->GetMaterialIndex(slotName);
           if (meshSlot != csInvalidMaterialIndex)
           {
@@ -95,7 +95,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
       {
         const char *txt = materialElement->GetText();
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
-        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(csString(txt)), 0, loadingMode);
+        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(std::string(txt)), 0, loadingMode);
         staticMeshState->SetMaterial(material, 0);
       }
     }
@@ -111,7 +111,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
         {
           const char *txt = shapesElement->GetText();
           csResourceLoadingMode loadingMode = GetResourceLoadingMode(shapesElement, eRLM_Shared, eRLM_Instance);
-          shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(csString(txt)), 0, loadingMode);
+          shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(std::string(txt)), 0, loadingMode);
         }
         else
         {

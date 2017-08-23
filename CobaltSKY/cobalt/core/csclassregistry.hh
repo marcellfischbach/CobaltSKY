@@ -15,11 +15,11 @@ public:
 
   const std::vector<const csClass*> &GetAllClasses() const;
 
-  const csClass *GetClass(const csString &className) const;
-  void *CreateClass(const csString &className) const;
+  const csClass *GetClass(const std::string &className) const;
+  void *CreateClass(const std::string &className) const;
 
   template<typename T>
-  T* CreateClass(const csString &className) const
+  T* CreateClass(const std::string &className) const
   {
     return reinterpret_cast<T*>(CreateClass(className));
   }
@@ -28,7 +28,7 @@ private:
   csClassRegistry();
 
   std::vector<const csClass*> m_allClasses;
-  std::map<csString, const csClass *> m_classes;
+  std::map<std::string, const csClass *> m_classes;
 };
 
 

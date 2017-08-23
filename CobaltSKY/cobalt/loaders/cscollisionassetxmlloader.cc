@@ -19,8 +19,8 @@ csCollisionAssetXMLLoader::~csCollisionAssetXMLLoader()
 
 bool csCollisionAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return csString(element->Value()) == csString("collider") ||
-    csString(element->Value()) == csString("shapes");
+  return std::string(element->Value()) == std::string("collider") ||
+    std::string(element->Value()) == std::string("shapes");
 }
 
 const csClass *csCollisionAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -33,7 +33,7 @@ iObject *csCollisionAssetXMLLoader::Load(TiXmlElement *element, const csResource
   csPhysicsShapeContainer *container = new csPhysicsShapeContainer();
 
   TiXmlElement *shapesElement = 0;
-  if (csString(element->Value()) == csString("shapes"))
+  if (std::string(element->Value()) == std::string("shapes"))
   {
     shapesElement = element;
   }
@@ -63,8 +63,8 @@ iObject *csCollisionAssetXMLLoader::Load(TiXmlElement *element, const csResource
          child;
          child = child->NextSiblingElement())
     {
-      csString tag(child->Value());
-      if (tag == csString("transform"))
+      std::string tag(child->Value());
+      if (tag == std::string("transform"))
       {
         LoadTransform(child, localTransform);
       }

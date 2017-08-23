@@ -36,13 +36,13 @@ public:
   csEntityScene *GetScene();
   const csEntityScene *GetScene() const;
 
-  void SetName(const csString &name);
-  const csString &GetName() const;
+  void SetName(const std::string &name);
+  const std::string &GetName() const;
 
   csEntityState *GetState(csID id);
   const csEntityState *GetState(csID id) const;
-  csEntityState *GetState(const csString &name);
-  const csEntityState *GetState(const csString &name) const;
+  csEntityState *GetState(const std::string &name);
+  const csEntityState *GetState(const std::string &name) const;
 
   std::vector<csEntityState*> FindStates(const csClass *cls) const;
   csEntityState* FindState(const csClass *cls) const;
@@ -80,7 +80,7 @@ public:
   virtual void Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
 
   void AttachEntity(csEntity *entity, csSpatialState *parentState = 0);
-  void AttachEntity(csEntity *entity, const csString &parentStateName);
+  void AttachEntity(csEntity *entity, const std::string &parentStateName);
   void DetachEntity(csEntity *entity);
 
 
@@ -126,7 +126,7 @@ protected:
 
 private:
   csID m_id;
-  csString m_name;
+  std::string m_name;
 
   csSpatialState *m_rootState;
   std::vector<csEntityState*> m_states;
@@ -154,12 +154,12 @@ CS_FORCEINLINE const csEntityScene *csEntity::GetScene() const
 }
 
 
-CS_FORCEINLINE void csEntity::SetName(const csString &name)
+CS_FORCEINLINE void csEntity::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE const csString &csEntity::GetName() const
+CS_FORCEINLINE const std::string &csEntity::GetName() const
 {
   return m_name;
 }

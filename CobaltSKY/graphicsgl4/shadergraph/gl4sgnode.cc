@@ -21,7 +21,7 @@ csSGNodeGL4::~csSGNodeGL4()
 
 
 
-csString csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const csString &exp, const csString &type)
+std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const std::string &exp, const std::string &type)
 {
   if (IsInline())
   {
@@ -30,7 +30,7 @@ csString csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, co
   }
   else
   {
-    csString var = ctx.AddAssignment(type, exp);
+    std::string var = ctx.AddAssignment(type, exp);
     ctx.SetOutputValue(output, var);
     return var;
   }
@@ -41,7 +41,7 @@ csSGDataType csSGNodeGL4::GetHigher(csSGDataType dtA, csSGDataType dtB)
   return dtA > dtB ? dtA : dtB;
 }
 
-csString csSGNodeGL4::GetDataTypeVar(csSGDataType dt)
+std::string csSGNodeGL4::GetDataTypeVar(csSGDataType dt)
 {
   switch (dt)
   {
@@ -133,7 +133,7 @@ bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
 
 
 
-csString csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
+std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 {
   csSGInput *input = m_node->GetInput(x);
   if (!input)
@@ -157,7 +157,7 @@ csString csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 }
 
 
-csString csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
+std::string csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
 {
   csSGInput *input = m_node->GetInput(x);
   if (!input)

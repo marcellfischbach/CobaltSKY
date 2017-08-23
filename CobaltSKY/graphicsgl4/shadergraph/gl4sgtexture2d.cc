@@ -11,13 +11,13 @@ void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)
   {
     return;
   }
-  csString bindingName = res->GetResourceName();
+  std::string bindingName = res->GetResourceName();
   if (bindingName.length() == 0)
   {
     return;
   }
 
-  csString txtCoordinate = ctx.GetDefaultTextureCoordinate();
+  std::string txtCoordinate = ctx.GetDefaultTextureCoordinate();
   if (ctx.HasInputValue(txt->GetInput("uv")))
   {
     txtCoordinate = ctx.GetFullInputValue(txt->GetInput("uv"));
@@ -26,7 +26,7 @@ void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)
   bindingName = "cs_" + bindingName;
   std::ostringstream ss;
   ss << "texture(" << bindingName << ", " << txtCoordinate << ")";
-  csString code = ss.str();
+  std::string code = ss.str();
 
   if (!IsInline())
   {

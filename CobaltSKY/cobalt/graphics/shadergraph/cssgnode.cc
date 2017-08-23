@@ -55,7 +55,7 @@ csSGInput *csSGNode::GetInput(csSize idx) const
   return m_inputs[idx];
 }
 
-csSGInput *csSGNode::GetInput(const csString &name) const
+csSGInput *csSGNode::GetInput(const std::string &name) const
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -78,7 +78,7 @@ csSGDataType csSGNode::GetInputDataType(csSize idx) const
   return input->GetDataType();
 }
 
-csSGDataType csSGNode::GetInputDataType(const csString &name) const
+csSGDataType csSGNode::GetInputDataType(const std::string &name) const
 {
   csSGInput *input = GetInput(name);
   if (!input)
@@ -98,7 +98,7 @@ void csSGNode::SetOutputDataType(csSize idx, csSGDataType dataType)
 }
 
 
-void csSGNode::SetOutputDataType(const csString &name, csSGDataType dataType)
+void csSGNode::SetOutputDataType(const std::string &name, csSGDataType dataType)
 {
   csSGOutput *output = GetOutput(name);
   if (output)
@@ -124,7 +124,7 @@ void csSGNode::SetInput(int inputIdx, csSGNode *node, int outputIdx)
   input->SetInput(output);
 }
 
-void csSGNode::SetInput(const csString &inputName, csSGNode *node, int outputIdx)
+void csSGNode::SetInput(const std::string &inputName, csSGNode *node, int outputIdx)
 {
   csSGInput *input = GetInput(inputName);
   if (!input)
@@ -141,7 +141,7 @@ void csSGNode::SetInput(const csString &inputName, csSGNode *node, int outputIdx
 }
 
 
-void csSGNode::SetInput(int inputIdx, csSGNode *node, const csString &outputName)
+void csSGNode::SetInput(int inputIdx, csSGNode *node, const std::string &outputName)
 {
   csSGInput *input = GetInput(inputIdx);
   if (!input)
@@ -157,7 +157,7 @@ void csSGNode::SetInput(int inputIdx, csSGNode *node, const csString &outputName
   input->SetInput(output);
 }
 
-void csSGNode::SetInput(const csString &inputName, csSGNode *node, const csString &outputName)
+void csSGNode::SetInput(const std::string &inputName, csSGNode *node, const std::string &outputName)
 {
   csSGInput *input = GetInput(inputName);
   if (!input)
@@ -184,7 +184,7 @@ void csSGNode::SetInput(int idx, float constFloat)
   input->SetConst(constFloat);
 }
 
-void csSGNode::SetInput(const csString &inputName, float constFloat)
+void csSGNode::SetInput(const std::string &inputName, float constFloat)
 {
   csSGInput *input = GetInput(inputName);
   if (!input)
@@ -201,7 +201,7 @@ csSGNode *csSGNode::GetInputNode(csSize idx)
   return (input ? input->GetInputNode() : 0);
 }
 
-csSGNode *csSGNode::GetInputNode(const csString &name)
+csSGNode *csSGNode::GetInputNode(const std::string &name)
 {
   csSGInput *input = GetInput(name);
   return input ? input->GetInputNode() : 0;
@@ -231,7 +231,7 @@ csSGOutput *csSGNode::GetOutput(csSize idx)
   return m_outputs[idx];
 }
 
-csSGOutput *csSGNode::GetOutput(const csString &name)
+csSGOutput *csSGNode::GetOutput(const std::string &name)
 {
   for (size_t i = 0, in = m_outputs.size(); i < in; ++i)
   {

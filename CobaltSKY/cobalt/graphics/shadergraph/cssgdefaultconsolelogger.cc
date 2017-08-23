@@ -12,17 +12,17 @@ csSGDefaultConsoleLogger::~csSGDefaultConsoleLogger()
 
 }
 
-void csSGDefaultConsoleLogger::LogSourceCode(const csString &renderPass, const csString &shaderType, const csString &sourceCode)
+void csSGDefaultConsoleLogger::LogSourceCode(const std::string &renderPass, const std::string &shaderType, const std::string &sourceCode)
 {
   //printf("RenderPass: %s  ShaderType: %s\n%s\n", renderPass.c_str(), shaderType.c_str(), sourceCode.c_str());
 }
 
-void csSGDefaultConsoleLogger::LogInfo(const csString &renderPass, const csString &msg)
+void csSGDefaultConsoleLogger::LogInfo(const std::string &renderPass, const std::string &msg)
 {
   //printf("RenderPass: %s '%s'\n", renderPass.c_str(), msg.c_str());
 }
 
-void csSGDefaultConsoleLogger::LogError(const csString &renderPass, const csString &msg)
+void csSGDefaultConsoleLogger::LogError(const std::string &renderPass, const std::string &msg)
 {
   //fprintf(stderr, "RenderPass: %s\n%s\n", renderPass.c_str(), msg.c_str());
 }

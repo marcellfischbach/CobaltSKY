@@ -26,7 +26,7 @@ public:
 
   void RebuildMaterialParameters();
 
-  csInt16 GetIndex(const csString &parametername) const;
+  csInt16 GetIndex(const std::string &parametername) const;
 
   bool Bind(iGraphics *renderer, csRenderPass pass);
 

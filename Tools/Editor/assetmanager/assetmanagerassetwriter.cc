@@ -39,7 +39,7 @@ AssetManagerAssetWriter::~AssetManagerAssetWriter()
 }
 
 
-void AssetManagerAssetWriter::RemoveEntry(const csString &name)
+void AssetManagerAssetWriter::RemoveEntry(const std::string &name)
 {
   for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
   {
@@ -53,7 +53,7 @@ void AssetManagerAssetWriter::RemoveEntry(const csString &name)
     
 }
 
-void AssetManagerAssetWriter::AddEntry(const csString &name, const csString &typeID, csUInt32 length, const csUInt8* buffer)
+void AssetManagerAssetWriter::AddEntry(const std::string &name, const std::string &typeID, csUInt32 length, const csUInt8* buffer)
 {
   Entry entry;
   memset(&entry, 0, sizeof(Entry));

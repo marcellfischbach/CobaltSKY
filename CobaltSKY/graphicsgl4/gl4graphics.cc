@@ -237,7 +237,7 @@ iTextureCube *csGraphicsGL4::CreateTextureCube(csPixelFormat format, csUInt16 wi
 
 
 
-iShader *csGraphicsGL4::CreateShader(const csString &vertexCode, const csString &tessCtrlCode, const csString &tessEvalCode, const csString &geometryCode, const csString &fragmentCode)
+iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::string &tessCtrlCode, const std::string &tessEvalCode, const std::string &geometryCode, const std::string &fragmentCode)
 {
   csProgramGL4 *program = new csProgramGL4();
 

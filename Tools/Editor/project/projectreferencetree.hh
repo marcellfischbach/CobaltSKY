@@ -1,12 +1,13 @@
 
 #pragma once
 
+#include <cobalt/core/csresourcelocator.hh>
+
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
-#include <cobalt/core/csstring.hh>
-#include <cobalt/core/csresourcelocator.hh>
+#include <string>
 
 class ProjectAssetReference;
 class ProjectReferenceTree

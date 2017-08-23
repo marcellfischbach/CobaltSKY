@@ -1,11 +1,11 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/graphics/shadergraph/cssgenums.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/csdefs.hh>
 
+#include <string>
 
 class csSGNode;
 class csSGOutput;
@@ -15,7 +15,7 @@ class CSE_API csSGInput
 {
   friend class csSGNode;
 public:
-  csSGInput(const csString &name, bool canConst, bool canInputNode);
+  csSGInput(const std::string &name, bool canConst, bool canInputNode);
   virtual ~csSGInput();
 
   void SetIdx(csUInt32 idx);
@@ -24,7 +24,7 @@ public:
   const csSGNode *GetNode() const;
   csSGNode *GetNode();
 
-  const csString &GetName() const;
+  const std::string &GetName() const;
 
   void SetInput(csSGOutput* output);
   csSGOutput* GetInput();
@@ -40,7 +40,7 @@ public:
   csSGDataType GetDataType()const;
 
 private:
-  csString m_name;
+  std::string m_name;
 
   csSGNode *m_node;
 
@@ -64,7 +64,7 @@ CS_FORCEINLINE csUInt32 csSGInput::GetIdx() const
 }
 
 
-CS_FORCEINLINE const csString &csSGInput::GetName() const
+CS_FORCEINLINE const std::string &csSGInput::GetName() const
 {
   return m_name;
 }

@@ -161,7 +161,7 @@ const csClass *csResourceManager::EvalClass(TiXmlElement *element, const csResou
 }
 
 
-iObject *csResourceManager::Load(const csString &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
+iObject *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
 {
   for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {
@@ -176,7 +176,7 @@ iObject *csResourceManager::Load(const csString &typeID, csAssetInputStream &inp
   return 0;
 }
 
-const csClass *csResourceManager::EvalClass(const csString &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+const csClass *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
 {
   for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
   {

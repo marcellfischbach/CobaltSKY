@@ -21,9 +21,9 @@ csPNGImageAssetLoader::~csPNGImageAssetLoader()
 
 
 
-bool csPNGImageAssetLoader::CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData) const
+bool csPNGImageAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData) const
 {
-  return typeID == csString("PNG");
+  return typeID == std::string("PNG");
 }
 
 const csClass *csPNGImageAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const

@@ -19,13 +19,13 @@ csShaderGL4::~csShaderGL4()
   }
 }
 
-void csShaderGL4::SetSource(const csString &source)
+void csShaderGL4::SetSource(const std::string &source)
 {
   m_shader = source;
 }
 
 
-const csString &csShaderGL4::GetSource() const
+const std::string &csShaderGL4::GetSource() const
 {
   return m_shader;
 }
@@ -74,7 +74,7 @@ bool csShaderGL4::Compile()
   return true;
 }
 
-csString csShaderGL4::GetCompileErrorLog() const
+std::string csShaderGL4::GetCompileErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
@@ -85,7 +85,7 @@ csString csShaderGL4::GetCompileErrorLog() const
     buffer[length] = '\0';
   }
 
-  return csString(buffer);
+  return std::string(buffer);
 }
 
 

@@ -79,7 +79,7 @@ void csProgramGL4::RegisterAttribute(const csShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
 
-  csString uniformName = csString("cs_") + id.GetName();
+  std::string uniformName = std::string("cs_") + id.GetName();
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   csShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
   attribute->SetLocation(loc);
@@ -93,7 +93,7 @@ void csProgramGL4::RegisterStream(const csShaderStreamID &id)
 {
   ResizeStreams(id.GetID());
 
-  csString attribName = csString("cs_") + id.GetName();
+  std::string attribName = std::string("cs_") + id.GetName();
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
   csShaderStreamGL4 *stream = m_streams[id.GetID()];
   stream->SetLocation(loc);
@@ -143,7 +143,7 @@ iShaderAttribute *csProgramGL4::GetAttribute(const csShaderAttributeID &id)
   return attr;
 }
 
-iShaderAttribute *csProgramGL4::GetAttribute(const csString &name)
+iShaderAttribute *csProgramGL4::GetAttribute(const std::string &name)
 {
   for (size_t i = 0, in = m_namedAttributes.size(); i < in; ++i)
   {
@@ -154,7 +154,7 @@ iShaderAttribute *csProgramGL4::GetAttribute(const csString &name)
   }
 
   Bind();
-  csString uniformName = csString("cs_") + name;
+  std::string uniformName = std::string("cs_") + name;
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
   CS_CHECK_GL_ERROR;
   if (loc == -1)
@@ -199,7 +199,7 @@ iShaderStream *csProgramGL4::GetStream(const csShaderStreamID &id)
 }
 
 
-iShaderStream *csProgramGL4::GetStream(const csString &name)
+iShaderStream *csProgramGL4::GetStream(const std::string &name)
 {
   for (size_t i = 0, in = m_namedStreams.size(); i < in; ++i)
   {
@@ -210,7 +210,7 @@ iShaderStream *csProgramGL4::GetStream(const csString &name)
   }
 
   Bind();
-  csString attribName = csString("cs_") + name;
+  std::string attribName = std::string("cs_") + name;
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
   CS_CHECK_GL_ERROR;
   if (loc == -1)
@@ -298,7 +298,7 @@ bool csProgramGL4::Link()
 
 }
 
-csString csProgramGL4::GetLinkErrorLog() const
+std::string csProgramGL4::GetLinkErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
@@ -309,7 +309,7 @@ csString csProgramGL4::GetLinkErrorLog() const
     buffer[length] = '\0';
   }
 
-  return csString(buffer);
+  return std::string(buffer);
 }
 
 

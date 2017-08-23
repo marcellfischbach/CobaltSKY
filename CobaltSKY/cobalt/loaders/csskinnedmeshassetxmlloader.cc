@@ -14,7 +14,7 @@
 
 struct MaterialSlot
 {
-  csString name;
+  std::string name;
   csSize idx;
 };
 
@@ -41,7 +41,7 @@ csSkinnedMeshAssetXMLLoader::~csSkinnedMeshAssetXMLLoader()
 
 bool csSkinnedMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return csString(element->Value()) == csString("skinnedMesh");
+  return std::string(element->Value()) == std::string("skinnedMesh");
 }
 
 const csClass *csSkinnedMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -76,7 +76,7 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
       continue;
     }
     MaterialSlot slot;
-    slot.name = csString(materialSlotElement->Attribute("name"));
+    slot.name = std::string(materialSlotElement->Attribute("name"));
     slot.idx = atoi(materialSlotElement->Attribute("id"));
     slots.push_back(slot);
   }
@@ -93,7 +93,7 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
   {
     if (boneElement->Attribute("id") && boneElement->Attribute("name"))
     {
-      csString name(boneElement->Attribute("name"));
+      std::string name(boneElement->Attribute("name"));
       csUInt8 id = atoi(boneElement->Attribute("id"));
       mesh->AddBoneName(name, id);
     }
@@ -109,12 +109,12 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
        subMeshElement;
        subMeshElement = subMeshElement->NextSiblingElement("subMesh"))
   {
-    csString name;
+    std::string name;
     csSize materialSlot = 0;
     csSize lod = 0;
     if (subMeshElement->Attribute("name"))
     {
-      name = csString(subMeshElement->Attribute("name"));
+      name = std::string(subMeshElement->Attribute("name"));
     }
     if (subMeshElement->Attribute("materialSlot"))
     {
@@ -125,7 +125,7 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
       lod = atoi(subMeshElement->Attribute("lod"));
     }
 
-    csResourceLocator subMeshLocator(csString(subMeshElement->GetText()));
+    csResourceLocator subMeshLocator(std::string(subMeshElement->GetText()));
     csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(subMeshLocator);
     if (subMesh)
     {

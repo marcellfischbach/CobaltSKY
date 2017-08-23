@@ -111,7 +111,7 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
 {
   /*
   QDomDocument doc("mydocument");
-  csString absFilePath = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  std::string absFilePath = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   QFile file(QString(absFilePath.c_str()));
   if (!file.open(QIODevice::ReadOnly))
   {
@@ -137,7 +137,7 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
   }
 
   QDomElement typeElement = dataElement.firstChildElement();
-  csString type = (const char*)typeElement.tagName().toLatin1();
+  std::string type = (const char*)typeElement.tagName().toLatin1();
   */
   AssetDescriptor descriptor(locator);
   Editor::Get()->OpenAsset(descriptor);
@@ -156,7 +156,7 @@ const csResourceLocator &AssetManagerWidget::GetContentResource() const
   return m_contentModel->GetResourceLocator();
 }
 
-csResourceLocator AssetManagerWidget::GetContentResource(const csString &resourceFile, const csString &resourceName) const
+csResourceLocator AssetManagerWidget::GetContentResource(const std::string &resourceFile, const std::string &resourceName) const
 {
   const csResourceLocator &loc = GetContentResource();
   return csResourceLocator(

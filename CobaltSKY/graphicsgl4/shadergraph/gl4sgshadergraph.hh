@@ -16,10 +16,10 @@ public:
   ~csShaderGraphGL4();
 
 
-  csString CreateCode(csSGNode *node, csSize output);
-  csString CreateCode(csSGNode *node, const csString &outputName);
+  std::string CreateCode(csSGNode *node, csSize output);
+  std::string CreateCode(csSGNode *node, const std::string &outputName);
 
-  csString CreateCode(csSGOutput *output);
+  std::string CreateCode(csSGOutput *output);
 
 
   csSGNodeGL4 *CreateNode(const csClass *nodeClass);
@@ -31,7 +31,7 @@ private:
   void GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
   void GenerateShadow(csSGShaderGraph *graph, unsigned layers, csRenderPass renderPass, iSGShaderGraphLogger *logger);
 
-  void DebugCode(const csString &title, const csString &source);
+  void DebugCode(const std::string &title, const std::string &source);
 
 private:
   struct Map 

@@ -3,10 +3,11 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/graphics/csshaderattributeid.hh>
 #include <cobalt/graphics/csshaderstreamid.hh>
 #include <cobalt/csenums.hh>
+#include <string>
+
 #include <cobalt/graphics/ishader.refl.hh>
 
 struct iShaderAttribute;
@@ -25,11 +26,11 @@ struct CSE_API iShader : public iObject
 
   virtual csUInt32 GetNumberOfAttributes() const = 0;
   virtual iShaderAttribute *GetAttribute(const csShaderAttributeID &id) = 0;
-  virtual iShaderAttribute *GetAttribute(const csString &attributeName) = 0;
+  virtual iShaderAttribute *GetAttribute(const std::string &attributeName) = 0;
 
   virtual csUInt16 GetNumberOfStreams() const = 0;
   virtual iShaderStream *GetStream(const csShaderStreamID &id) = 0;
-  virtual iShaderStream *GetStream(const csString &streamName) = 0;
+  virtual iShaderStream *GetStream(const std::string &streamName) = 0;
 
 };
 

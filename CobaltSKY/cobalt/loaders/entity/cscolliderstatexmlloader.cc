@@ -40,7 +40,7 @@ iObject *csColliderStateXMLLoader::Load(TiXmlElement *element, const csResourceL
   {
     const char *txt = shapeElement->GetText();
     csResourceLoadingMode loadingMode = GetResourceLoadingMode(shapeElement, eRLM_Shared, eRLM_Instance);
-    csPhysicsShapeContainer *shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(csString(txt)), 0, loadingMode);
+    csPhysicsShapeContainer *shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(std::string(txt)), 0, loadingMode);
     collider->AttachShape(shapes);
   }
 

@@ -77,7 +77,7 @@ void AssetManagerRenameHandler::Rename(const csResourceLocator &resource, const 
 {
   csResourceLocator nFrom = from.AsAnonymous();
   csResourceLocator nTo = to.AsAnonymous();
-  csString absFileName = csVFS::Get()->GetAbsolutePath(resource);
+  std::string absFileName = csVFS::Get()->GetAbsolutePath(resource);
   QString fileName(absFileName.c_str());
   QFile file(fileName);
   QDomDocument doc;

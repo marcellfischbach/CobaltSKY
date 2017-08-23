@@ -18,10 +18,10 @@ struct iAssetEditor : public iObject
 
   virtual QWidget *GetWidget() = 0;
 
-  virtual const csString &GetName() const = 0;
+  virtual const std::string &GetName() const = 0;
   virtual bool IsDirty() const = 0;
 
-  virtual const std::set<csString> &GetVisibleDockItems() const = 0;
+  virtual const std::set<std::string> &GetVisibleDockItems() const = 0;
   virtual void PopulateDockItems() = 0;
 
   virtual void CloseRequest () = 0;

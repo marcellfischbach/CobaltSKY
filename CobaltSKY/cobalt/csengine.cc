@@ -109,7 +109,7 @@ iTextureCube *csEngine::CreateTextureCube(csPixelFormat format, csUInt16 width, 
   return 0;
 }
 
-iShader *csEngine::CreateShader(const csString &vertexCode, const csString &tessCtrl, const csString &tessEval, const csString &geometry, const csString &fragmentCode) 
+iShader *csEngine::CreateShader(const std::string &vertexCode, const std::string &tessCtrl, const std::string &tessEval, const std::string &geometry, const std::string &fragmentCode) 
 {
   if (m_renderer)
   {

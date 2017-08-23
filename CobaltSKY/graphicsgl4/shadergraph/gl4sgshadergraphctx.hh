@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cobalt/core/csstring.hh>
 #include <cobalt/cstypes.hh>
-#include <set>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.refl.hh>
+#include <string>
+#include <set>
 #include <map>
 
 class csShaderGraphGL4;
@@ -17,8 +17,8 @@ class csShaderGraphCtx
 public:
   struct ExternalBinding
   {
-    csString variableName;
-    csString variableType;
+    std::string variableName;
+    std::string variableType;
     csSGNode *node;
     friend bool operator<(const ExternalBinding &b0, const ExternalBinding &b1)
     {
@@ -33,7 +33,7 @@ public:
   csSGNodeGL4 *GetNode(csSGOutput *output);
   csSGNodeGL4 *GetNode(csSGInput *input);
 
-  csString CreateCode(csSGOutput* outputs);
+  std::string CreateCode(csSGOutput* outputs);
 
   void EvaluateInlines(std::set<csSGOutput*> outputs);
   void GenerateCode(std::set<csSGOutput*> outputs);
@@ -48,30 +48,30 @@ public:
   void EvaluateInline(csSGOutput *node);
   void EvaluateInline(csSGInput *node);
 
-  void AddExpression(const csString &expression);
-  csString AddAssignment(const csString &type, const csString &statement);
-  void SetOutputValue(csSGOutput *output, const csString &value);
+  void AddExpression(const std::string &expression);
+  std::string AddAssignment(const std::string &type, const std::string &statement);
+  void SetOutputValue(csSGOutput *output, const std::string &value);
 
   bool HasOutputValue(csSGOutput *output) const;
   bool HasInputValue(csSGInput *input) const;
-  csString GetOutputValue(csSGOutput *output);
-  csString GetInputValue(csSGInput *input);
+  std::string GetOutputValue(csSGOutput *output);
+  std::string GetInputValue(csSGInput *input);
 
-  csString GetFullOutputValue(csSGOutput *output);
-  csString GetFullInputValue(csSGInput *input);
+  std::string GetFullOutputValue(csSGOutput *output);
+  std::string GetFullInputValue(csSGInput *input);
 
-  csString GetNextVariable();
+  std::string GetNextVariable();
 
-  void AddBinding(csSGNode *node, const csString &variableType, const csString &variableName);
-  bool IsBindingApplyingFor(const csString &bindingName, csSGNode *node) const;
-  bool IsBindingApplyingFor(const csString &bindingName, csSGOutput *output) const;
-  bool IsBindingApplyingFor(const csString &bindingName, csSGInput *input) const;
+  void AddBinding(csSGNode *node, const std::string &variableType, const std::string &variableName);
+  bool IsBindingApplyingFor(const std::string &bindingName, csSGNode *node) const;
+  bool IsBindingApplyingFor(const std::string &bindingName, csSGOutput *output) const;
+  bool IsBindingApplyingFor(const std::string &bindingName, csSGInput *input) const;
   std::set<ExternalBinding> GetBindingsFor(std::set<csSGOutput*> outputs) const;
 
-  void SetDefaultTextureCoordinate(const csString &defaultTextureCoordinat);
-  const csString &GetDefaultTextureCoordinate() const;
+  void SetDefaultTextureCoordinate(const std::string &defaultTextureCoordinat);
+  const std::string &GetDefaultTextureCoordinate() const;
 
-  const csString &GetCode() const
+  const std::string &GetCode() const
   {
     return m_code;
   }
@@ -79,13 +79,13 @@ public:
 private:
   csShaderGraphGL4 *m_graph;
 
-  csString m_code;
+  std::string m_code;
   csUInt32 m_variableCounter;
-  csString m_defaultTextureCoordinate;
-  std::map<csSGOutput *, csString> m_outputValue;
+  std::string m_defaultTextureCoordinate;
+  std::map<csSGOutput *, std::string> m_outputValue;
   std::map<csSGNode *, csSGNodeGL4*> m_nodes;
-  std::map<csSGOutput *, csString> m_outputToVar;
+  std::map<csSGOutput *, std::string> m_outputToVar;
 
 
-  std::map<csString, ExternalBinding> m_unisformBindingNames;
+  std::map<std::string, ExternalBinding> m_unisformBindingNames;
 };

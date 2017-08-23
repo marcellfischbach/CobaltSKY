@@ -4,9 +4,9 @@
 #include <QWidget>
 #include <ui_assetmanagerwidget.h>
 #include <cobalt/core/csresourcelocator.hh>
-#include <cobalt/core/csstring.hh>
-#include <map>
 #include <cobalt/core/cslogger.hh>
+#include <map>
+#include <string>
 
 class QAction;
 struct AssetManagerNewHandler;
@@ -26,7 +26,7 @@ public:
   void RefreshContent();
 
   const csResourceLocator &GetContentResource() const;
-  csResourceLocator GetContentResource(const csString &resourceFile, const csString &resourceName = "") const;
+  csResourceLocator GetContentResource(const std::string &resourceFile, const std::string &resourceName = "") const;
   QString GetNewAssetName(const QString &baseName) const;
   QString GetFilePath(const QString &fileName) const;
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;

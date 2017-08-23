@@ -21,7 +21,6 @@ typedef signed __int64 csInt64;
 typedef unsigned long csID;
 #define csID_Undefined ~0x00
 
-typedef std::string csString;
 
 typedef size_t csSize;
 

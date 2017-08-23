@@ -53,7 +53,7 @@ private:
 
   struct Data
   {
-    csString name;
+    std::string name;
     SubMesh *subMesh;
     unsigned materialIndex;
   };
@@ -67,7 +67,7 @@ private:
   std::vector<LOD*> m_lods;
   std::map<unsigned, unsigned> m_modelToLocalMap;
 
-  std::map<unsigned, csString> m_materialNames;
+  std::map<unsigned, std::string> m_materialNames;
 
 
   LOD *GetLOD(unsigned lod);
@@ -75,5 +75,5 @@ private:
   Data *GetData(LOD *lod, unsigned materialIndex);
   void Output(SubMesh *subMesh, csAssetOutputStream &os);
 
-  unsigned GetLocalMaterialIndex(unsigned modelIndex, const csString &materialName);
+  unsigned GetLocalMaterialIndex(unsigned modelIndex, const std::string &materialName);
 };

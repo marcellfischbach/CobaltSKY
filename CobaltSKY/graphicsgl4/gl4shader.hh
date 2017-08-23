@@ -19,8 +19,8 @@ public:
   csShaderGL4();
   virtual ~csShaderGL4();
 
-  void SetSource(const csString &source);
-  const csString &GetSource() const;
+  void SetSource(const std::string &source);
+  const std::string &GetSource() const;
 
   GLuint GetName() const;
 
@@ -28,11 +28,11 @@ public:
   csShaderType GetShaderType() const;
 
   bool Compile();
-  csString GetCompileErrorLog() const;
+  std::string GetCompileErrorLog() const;
 private:
   csShaderType m_shaderType;
 
-  csString m_shader;
+  std::string m_shader;
   GLuint m_name;
 
 };

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csstring.hh>
+#include <string>
 
 class CSE_API csResourceLocator
 {
 public:
-  csResourceLocator(const csString &encodedResourceName = "");
-  csResourceLocator(const csString &resourceFile, const csString &resourceName, const csString &resourceEntry = "");
-  explicit csResourceLocator(const csResourceLocator &resource, const csString &resourceName);
+  csResourceLocator(const std::string &encodedResourceName = "");
+  csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
+  explicit csResourceLocator(const csResourceLocator &resource, const std::string &resourceName);
   csResourceLocator(const csResourceLocator &other);
 
   csResourceLocator AsAnonymous() const;
@@ -18,12 +18,12 @@ public:
 
   bool IsAnonymous() const;
 
-  const csString &GetResourceFile() const;
-  const csString &GetResourceName() const;
-  const csString &GetResourceEntry() const;
+  const std::string &GetResourceFile() const;
+  const std::string &GetResourceName() const;
+  const std::string &GetResourceEntry() const;
 
-  csString GetText() const;
-  csString GetDebugName() const;
+  std::string GetText() const;
+  std::string GetDebugName() const;
 
   bool Equals(const csResourceLocator &other) const;
   /**
@@ -43,8 +43,8 @@ public:
 
 private:
   void FixResourceFile();
-  csString m_resourceEntry;
-  csString m_resourceFile;
-  csString m_resourceName;
+  std::string m_resourceEntry;
+  std::string m_resourceFile;
+  std::string m_resourceName;
 
 };

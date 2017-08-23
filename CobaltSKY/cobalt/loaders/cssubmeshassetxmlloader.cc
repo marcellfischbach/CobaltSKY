@@ -21,9 +21,9 @@ csSubMeshAssetLoader::~csSubMeshAssetLoader()
 
 }
 
-bool csSubMeshAssetLoader::CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData)const
+bool csSubMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData)const
 {
-  return typeID == csString("SUBMESH");
+  return typeID == std::string("SUBMESH");
 }
 
 const csClass *csSubMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const

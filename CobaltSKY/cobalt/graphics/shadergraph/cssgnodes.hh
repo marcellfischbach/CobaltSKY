@@ -2,7 +2,6 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
 
 #include <cobalt/graphics/shadergraph/cssgadd.hh>
 #include <cobalt/graphics/shadergraph/cssgconstfloat1.hh>
@@ -28,15 +27,16 @@
 #include <cobalt/graphics/shadergraph/cssgvarfloat2.hh>
 #include <cobalt/graphics/shadergraph/cssgvarfloat3.hh>
 #include <cobalt/graphics/shadergraph/cssgvarfloat4.hh>
+#include <string>
 
 class CSE_API csSGNodes
 {
 public:
   struct Entry
   {
-    csString name;
+    std::string name;
     const csClass *clazz;
-    Entry(const csString &name, const csClass *clazz);
+    Entry(const std::string &name, const csClass *clazz);
   };
 
 public:

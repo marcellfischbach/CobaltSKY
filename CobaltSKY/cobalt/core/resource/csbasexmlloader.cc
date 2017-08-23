@@ -13,14 +13,14 @@ csBaseXMLLoader::~csBaseXMLLoader()
 
 }
 
-TiXmlElement *csBaseXMLLoader::FindElement(TiXmlElement *root, const csString &elementName, const csString &name) const
+TiXmlElement *csBaseXMLLoader::FindElement(TiXmlElement *root, const std::string &elementName, const std::string &name) const
 {
   if (!root)
   {
     return 0;
   }
 
-  csString tagName(root->Value());
+  std::string tagName(root->Value());
   if (tagName == elementName)
   {
     return root;
@@ -40,7 +40,7 @@ TiXmlElement *csBaseXMLLoader::FindElement(TiXmlElement *root, const csString &e
     {
       continue;
     }
-    csString thisName(c_attr);
+    std::string thisName(c_attr);
     if (thisName == name)
     {
       return element;
@@ -50,14 +50,14 @@ TiXmlElement *csBaseXMLLoader::FindElement(TiXmlElement *root, const csString &e
   return 0;
 }
 
-TiXmlElement *csBaseXMLLoader::FindElementByTagName(TiXmlElement *root, const csString &elementName) const
+TiXmlElement *csBaseXMLLoader::FindElementByTagName(TiXmlElement *root, const std::string &elementName) const
 {
   if (!root)
   {
     return 0;
   }
 
-  csString tagName(root->Value());
+  std::string tagName(root->Value());
   if (tagName == elementName)
   {
     return root;
@@ -67,7 +67,7 @@ TiXmlElement *csBaseXMLLoader::FindElementByTagName(TiXmlElement *root, const cs
        element;
        element = element->NextSiblingElement())
   {
-    if (elementName.length() == 0 || csString(element->Value()) == elementName)
+    if (elementName.length() == 0 || std::string(element->Value()) == elementName)
     {
       return element;
     }
@@ -82,16 +82,16 @@ csResourceLoadingMode csBaseXMLLoader::GetResourceLoadingMode(TiXmlElement *elem
   csResourceLoadingMode mode = defaultMode;
   if (element->Attribute("resourceMode"))
   {
-    csString modeString(element->Attribute("resourceMode"));
-    if (modeString == csString("shared"))
+    std::string modeString(element->Attribute("resourceMode"));
+    if (modeString == std::string("shared"))
     {
       mode = eRLM_Shared;
     }
-    else if (modeString == csString("instance"))
+    else if (modeString == std::string("instance"))
     {
       mode = eRLM_Instance;
     }
-    else if (modeString == csString("inline"))
+    else if (modeString == std::string("inline"))
     {
       mode = alterInline;
     }

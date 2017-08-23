@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cobalt/core/csstring.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csvfs.hh>
 #include <string>
 #include <vector>
 #include <map>
 #include <set>
+#include <string>
 
 class TiXmlElement;
 class AssetManagerResourceScanner
@@ -33,7 +33,7 @@ public:
 
 private:
 
-  void ScanPath(const csVFS::Entry &entry, const csString &relPath);
+  void ScanPath(const csVFS::Entry &entry, const std::string &relPath);
   void ScanReference(Entry &entry, const TiXmlElement *element);
   void EvalTypeName(Entry &entry, const TiXmlElement *rootElement);
 

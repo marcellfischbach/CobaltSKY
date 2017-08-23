@@ -19,8 +19,8 @@ ShaderGraphEditorMetaAssetXMLLoader::~ShaderGraphEditorMetaAssetXMLLoader()
 
 bool ShaderGraphEditorMetaAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
-  return tagName == csString("shaderGraphMeta");
+  std::string tagName(element->Value());
+  return tagName == std::string("shaderGraphMeta");
 }
 
 const csClass *ShaderGraphEditorMetaAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const

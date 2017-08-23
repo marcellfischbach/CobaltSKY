@@ -3,7 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
+#include <string>
 #include <vector>
 #include <map>
 

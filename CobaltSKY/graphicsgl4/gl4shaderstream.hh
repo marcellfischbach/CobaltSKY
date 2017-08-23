@@ -17,8 +17,8 @@ public:
   csShaderStreamGL4();
   virtual ~csShaderStreamGL4();
 
-  void SetName(const csString &name);
-  virtual const csString &GetName() const;
+  void SetName(const std::string &name);
+  virtual const std::string &GetName() const;
 
   void SetLocation(GLint location);
   GLint GetLocation() const;
@@ -36,7 +36,7 @@ public:
   void SetValid(bool valid);
   bool IsValid()const;
 private:
-  csString m_name;
+  std::string m_name;
   GLint m_location;
   csUInt32 m_arrayIndex;
   GLint m_absLocation;

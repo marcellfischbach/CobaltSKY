@@ -31,9 +31,9 @@ csStaticMeshAssetLoader::~csStaticMeshAssetLoader()
 
 }
 
-bool csStaticMeshAssetLoader::CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData) const
+bool csStaticMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData) const
 {
-  return typeID == csString("MESH");// && name == csString("DATA");
+  return typeID == std::string("MESH");// && name == std::string("DATA");
 }
 
 const csClass *csStaticMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
@@ -59,7 +59,7 @@ iObject *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const cs
   inputStream >> numMaterials;
   for (csUInt32 i = 0; i < numMaterials; ++i)
   {
-    csString name;
+    std::string name;
     inputStream >> name;
     mesh->AddMaterialName(name);
   }
@@ -85,7 +85,7 @@ iObject *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const cs
   {
     csSize materialIndex;
     csUInt8 lod;
-    csString name;
+    std::string name;
 
     inputStream
       >> materialIndex

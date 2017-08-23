@@ -46,10 +46,10 @@ iObject *csEntityXMLLoader::Load(TiXmlElement *element, const csResourceLocator 
 
   if (element->Attribute("name"))
   {
-    entity->SetName(csString(element->Attribute("name")));
+    entity->SetName(std::string(element->Attribute("name")));
   }
 
-  std::map<csString, csSpatialState*> spatialStates;
+  std::map<std::string, csSpatialState*> spatialStates;
   TiXmlElement *statesElement = element->FirstChildElement("entityStates");
   if (statesElement)
   {
@@ -67,12 +67,12 @@ iObject *csEntityXMLLoader::Load(TiXmlElement *element, const csResourceLocator 
         {
           if (stateElement->Attribute("id"))
           {
-            spatialStates[csString(stateElement->Attribute("id"))] = spatialState;
+            spatialStates[std::string(stateElement->Attribute("id"))] = spatialState;
           }
 
           if (stateElement->Attribute("parentID"))
           {
-            csSpatialState *parentState = spatialStates[csString(stateElement->Attribute("parentID"))];
+            csSpatialState *parentState = spatialStates[std::string(stateElement->Attribute("parentID"))];
             if (parentState)
             {
               entity->AddState(spatialState, parentState);
@@ -92,7 +92,7 @@ iObject *csEntityXMLLoader::Load(TiXmlElement *element, const csResourceLocator 
   TiXmlElement *rootElement = element->FirstChildElement("rootState");
   if (rootElement && rootElement->Attribute("id"))
   {
-    csSpatialState *rootState = spatialStates[csString(rootElement->Attribute("id"))];
+    csSpatialState *rootState = spatialStates[std::string(rootElement->Attribute("id"))];
     if (rootState)
     {
       entity->SetRootState(rootState);

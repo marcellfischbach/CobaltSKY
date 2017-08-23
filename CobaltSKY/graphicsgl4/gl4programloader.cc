@@ -21,9 +21,9 @@ csProgramGL4Loader::~csProgramGL4Loader()
 
 bool csProgramGL4Loader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
+  std::string tagName(element->Value());
 
-  return tagName == csString("program");
+  return tagName == std::string("program");
 }
 
 
@@ -35,7 +35,7 @@ const csClass *csProgramGL4Loader::EvalClass(TiXmlElement *element, const csReso
 
 iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  if (csString(element->Value()) != csString("program"))
+  if (std::string(element->Value()) != std::string("program"))
   {
     return 0;
   }
@@ -54,7 +54,7 @@ iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator
        shaderElement;
        shaderElement = shaderElement->NextSiblingElement("shader"))
   {
-    csResourceLocator locator(csString(shaderElement->GetText()));
+    csResourceLocator locator(std::string(shaderElement->GetText()));
     csShaderGL4 *shader = resourceManager->GetOrLoad<csShaderGL4>(locator);
     if (!shader)
     {
@@ -82,12 +82,12 @@ TiXmlElement *csProgramGL4Loader::FindTechnique(TiXmlElement *element) const
   {
     return 0;
   }
-  csString elementName(element->Value());
-  if (elementName == csString("program"))
+  std::string elementName(element->Value());
+  if (elementName == std::string("program"))
   {
     return FindTechnique(element->FirstChildElement("techniques"));
   }
-  else if (elementName == csString("techniques"))
+  else if (elementName == std::string("techniques"))
   {
     for (TiXmlElement *techniqueElement = element->FirstChildElement("technique");
          techniqueElement;
@@ -100,7 +100,7 @@ TiXmlElement *csProgramGL4Loader::FindTechnique(TiXmlElement *element) const
       }
     }
   }
-  else if (elementName == csString("technique"))
+  else if (elementName == std::string("technique"))
   {
     // do technique validation later.. for now just return the first technique 
     return element;

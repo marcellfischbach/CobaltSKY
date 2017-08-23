@@ -64,7 +64,7 @@ const csResourceLocator &AssetManagerContentModel::GetResourceLocator() const
 
 void AssetManagerContentModel::Refresh()
 {
-  csString absFileName = "";
+  std::string absFileName = "";
   if (!m_locator.GetResourceEntry().empty())
   {
     absFileName = csVFS::Get()->GetAbsolutePath(m_locator.GetResourceFile(), m_locator.GetResourceEntry());
@@ -84,7 +84,7 @@ void AssetManagerContentModel::Refresh()
   QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
   for (const QString &fileName : fileNames)
   {
-    csString resourceFileName = m_locator.GetResourceFile() + "/" + csString((const char*)fileName.toLatin1());
+    std::string resourceFileName = m_locator.GetResourceFile() + "/" + std::string((const char*)fileName.toLatin1());
     printf("  %s\n", resourceFileName.c_str());
     csResourceLocator fileLocator(resourceFileName, "", m_locator.GetResourceEntry());
     m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
@@ -203,9 +203,9 @@ const AssetManagerContentModelEntry *AssetManagerContentModel::GetEntry(const QM
   return CONST_FROM_INDEX(index);
 }
 
-csString AssetManagerContentModel::ReadType(const csResourceLocator &locator) const
+std::string AssetManagerContentModel::ReadType(const csResourceLocator &locator) const
 {
-  csString path = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  std::string path = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
   QFile file(QString(path.c_str()));
   file.open(QIODevice::ReadOnly);
   QDomDocument doc;
@@ -235,7 +235,7 @@ csString AssetManagerContentModel::ReadType(const csResourceLocator &locator) co
     return "";
   }
 
-  return csString((const char*)typeElement.tagName().toLatin1());
+  return std::string((const char*)typeElement.tagName().toLatin1());
 }
 
 

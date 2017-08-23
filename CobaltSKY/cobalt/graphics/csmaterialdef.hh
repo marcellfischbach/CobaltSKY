@@ -34,10 +34,10 @@ public:
 
   csSize GetNumberOfParameters() const;
   csShaderParameterType GetParamType(csSize idx) const;
-  csString GetParamName (csSize idx) const;
+  std::string GetParamName (csSize idx) const;
   iShaderAttribute *GetAttribute(csSize idx, csRenderPass pass) const;
 
-  csInt16 GetIndex(const csString &parametername) const;
+  csInt16 GetIndex(const std::string &parametername) const;
 
   void SetDefault(csSize idx, float def);
   void SetDefault(csSize idx, const csVector2f &def);
@@ -63,7 +63,7 @@ public:
   csFillMode GetFillMode() const;
 
   void ClearParameters();
-  csSize RegisterParam(const csString &parameterName, csShaderParameterType type);
+  csSize RegisterParam(const std::string &parameterName, csShaderParameterType type);
 
   iShader *Bind(iGraphics *renderer, csRenderPass pass);
 protected:
@@ -73,7 +73,7 @@ protected:
 private:
   struct Param
   {
-    csString m_name;
+    std::string m_name;
     iShaderAttribute *m_attribute[eRP_COUNT];
     csShaderParameterType m_type;
     union
@@ -82,7 +82,7 @@ private:
       int m_defaultInt[16];
       iTexture *m_defaultTexture;
     };
-    Param(const csString &name, csShaderParameterType type);
+    Param(const std::string &name, csShaderParameterType type);
   };
 
   std::vector<Param> m_params;

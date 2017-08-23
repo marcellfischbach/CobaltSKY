@@ -44,10 +44,10 @@ public:
   }
 
 
-  csString AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const csString &exp, const csString &type);
+  std::string AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const std::string &exp, const std::string &type);
 
   static csSGDataType GetHigher(csSGDataType dtA, csSGDataType dtB);
-  static csString GetDataTypeVar(csSGDataType dt);
+  static std::string GetDataTypeVar(csSGDataType dt);
 
 protected:
   virtual void PrivEvaluate(csShaderGraphCtx &ctx) = 0;
@@ -61,7 +61,7 @@ private:
   bool m_evaluated;
   bool m_doubleInlineEvaluateInput;
 
-  csString GetFloat(csShaderGraphCtx &ctx, int x);
-  csString GetInt(csShaderGraphCtx &ctx, int x);
+  std::string GetFloat(csShaderGraphCtx &ctx, int x);
+  std::string GetInt(csShaderGraphCtx &ctx, int x);
 
 };

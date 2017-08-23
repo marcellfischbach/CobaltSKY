@@ -3,8 +3,8 @@
 #include <QAbstractItemModel>
 #include <QDir>
 #include <QList>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/core/csresourcelocator.hh>
+#include <string>
 
 class AssetManagerContentModelEntry;
 class csClass;
@@ -34,7 +34,7 @@ public:
   void PreviewIconChanged(const csResourceLocator &locator);
 private:
   void CleanupEntries();
-  csString ReadType(const csResourceLocator &fileName) const;
+  std::string ReadType(const csResourceLocator &fileName) const;
 
   csResourceLocator m_locator;
   QList<AssetManagerContentModelEntry*> m_entries;

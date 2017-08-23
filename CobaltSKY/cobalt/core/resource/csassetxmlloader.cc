@@ -17,8 +17,8 @@ csAssetXMLLoader::~csAssetXMLLoader()
 
 bool csAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
-  return tagName == csString("asset");
+  std::string tagName(element->Value());
+  return tagName == std::string("asset");
 }
 
 

@@ -2,9 +2,9 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/csenums.hh>
+#include <string>
 #include <cobalt/graphics/igraphics.refl.hh>
 
 struct iFrameProcessor;
@@ -48,7 +48,7 @@ struct CSE_API iGraphics : public iObject
   virtual iTexture2D *CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps) = 0;
   virtual iTexture2DArray *CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps) = 0;
   virtual iTextureCube *CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth) = 0;
-  virtual iShader *CreateShader(const csString &vertexCode, const csString &tessCtrl, const csString &tessEval, const csString &geometry, const csString &fragmentCode) = 0;
+  virtual iShader *CreateShader(const std::string &vertexCode, const std::string &tessCtrl, const std::string &tessEval, const std::string &geometry, const std::string &fragmentCode) = 0;
   /**
    * @}
    */

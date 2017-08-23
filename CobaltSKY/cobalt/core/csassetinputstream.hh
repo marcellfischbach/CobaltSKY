@@ -29,7 +29,7 @@ public:
   csAssetInputStream & operator>> (csColor4f &o);
   csAssetInputStream & operator>> (csMatrix3f &o);
   csAssetInputStream & operator>> (csMatrix4f &o);
-  csAssetInputStream & operator>> (csString &o);
+  csAssetInputStream & operator>> (std::string &o);
   csAssetInputStream & Read(void *buffer, size_t size);
 
   const csUInt8 *GetData() const;

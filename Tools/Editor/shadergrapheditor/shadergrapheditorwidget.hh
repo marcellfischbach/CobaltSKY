@@ -2,7 +2,7 @@
 
 #include <QWidget>
 #include <QList>
-#include <cobalt/core/csstring.hh>
+#include <string>
 #include <ui_shadergrapheditorwidget.h>
 
 class csResourceLocator;
@@ -41,7 +41,7 @@ private slots:
   void on_pbScreenshot_clicked();
 
 private:
-  csString ExtractName(const csResourceLocator &locator);
+  std::string ExtractName(const csResourceLocator &locator);
   bool Apply();
   ShaderGraphEditorNode *GetEditorNode(csSGNode *node);
   ShaderGraphEditorNode *GetShaderGraphNode();

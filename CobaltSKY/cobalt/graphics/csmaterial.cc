@@ -56,7 +56,7 @@ const csMaterialDef *csMaterial::GetMaterialDef() const
   return m_materialDef;
 }
 
-csInt16 csMaterial::GetIndex(const csString &parameterName) const
+csInt16 csMaterial::GetIndex(const std::string &parameterName) const
 {
   if (!m_materialDef)
   {

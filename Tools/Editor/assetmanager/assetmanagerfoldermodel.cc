@@ -96,7 +96,7 @@ public:
     case Root:
       return csResourceLocator();
     case Entry:
-      return csResourceLocator("", "", csString((const char*)m_name.toLatin1()));
+      return csResourceLocator("", "", std::string((const char*)m_name.toLatin1()));
     case Dir:
       if (!m_parent)
       {
@@ -106,7 +106,7 @@ public:
       {
         csResourceLocator parentLocator = m_parent->GetResourceLocator();
         return csResourceLocator(
-          parentLocator.GetResourceFile() + "/" + csString((const char*)m_name.toLatin1()),
+          parentLocator.GetResourceFile() + "/" + std::string((const char*)m_name.toLatin1()),
           "",
           parentLocator.GetResourceEntry());
       }

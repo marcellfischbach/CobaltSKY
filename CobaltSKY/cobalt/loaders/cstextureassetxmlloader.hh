@@ -26,7 +26,7 @@ public:
   virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
 
 private:
-  csTextureType GetTextureType(const csString &typeName) const;
+  csTextureType GetTextureType(const std::string &typeName) const;
 
 
   iObject *LoadTexture2D(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;

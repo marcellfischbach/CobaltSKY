@@ -70,7 +70,7 @@ const csEntityState *csEntity::GetState(csID id) const
   return 0;
 }
 
-csEntityState *csEntity::GetState(const csString &name)
+csEntityState *csEntity::GetState(const std::string &name)
 {
   if (name == "")
   {
@@ -89,7 +89,7 @@ csEntityState *csEntity::GetState(const csString &name)
 }
 
 
-const csEntityState *csEntity::GetState(const csString &name) const
+const csEntityState *csEntity::GetState(const std::string &name) const
 {
   if (name == "")
   {
@@ -276,7 +276,7 @@ void csEntity::AttachEntity(csEntity *entity, csSpatialState *parentState)
   entity->AttachToScene(m_scene);
 }
 
-void csEntity::AttachEntity(csEntity *entity, const csString &parentStateName)
+void csEntity::AttachEntity(csEntity *entity, const std::string &parentStateName)
 {
   if (!m_rootState)
   {

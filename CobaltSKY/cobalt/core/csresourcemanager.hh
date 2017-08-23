@@ -8,7 +8,6 @@
 #include <cobalt/core/csassetinputstream.hh>
 #include <cobalt/core/csclass.hh>
 #include <cobalt/core/csresourcelocator.hh>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/core/resource/iassetloader.hh>
 #include <cobalt/core/resource/ifileloader.hh>
 #include <cobalt/core/resource/ixmlloader.hh>
@@ -22,6 +21,8 @@
 #include <tixml\tinyxml.h>
 #include <map>
 #include <vector>
+#include <string>
+
 #include <cobalt/core/csresourcemanager.refl.hh>
 
 
@@ -97,8 +98,8 @@ public:
   *
   * \return The object
   */
-  virtual iObject *Load(const csString &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0);
-  virtual const csClass *EvalClass(const csString &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0);
+  virtual const csClass *EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
 
   template<typename T>
   T *Load(const csResourceLocator &locator, iObject *userData = 0)
@@ -149,7 +150,7 @@ public:
   }
 
   template<typename T>
-  T *Load(const csString &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0)
+  T *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(typeID, inputStream, locator, userData);
     if (object)

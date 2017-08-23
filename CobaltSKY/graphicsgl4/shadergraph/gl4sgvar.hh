@@ -10,10 +10,10 @@ class CSGRAPHICSGL4_API csSGVarGL4 : public CS_SUPER(csSGNodeGL4)
   CS_CLASS_GEN;
 public:
   csSGVarGL4() : csSGNodeGL4() { }
-  csSGVarGL4(const csString &typeName);
+  csSGVarGL4(const std::string &typeName);
   virtual ~csSGVarGL4() { }
 private:
-  csString m_typeName;
+  std::string m_typeName;
 protected:
   void PrivEvaluate(csShaderGraphCtx &ctx);
 };

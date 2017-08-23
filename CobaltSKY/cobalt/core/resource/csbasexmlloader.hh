@@ -19,8 +19,8 @@ protected:
   csBaseXMLLoader();
   virtual ~csBaseXMLLoader();
 
-  TiXmlElement *FindElement(TiXmlElement *root, const csString &elementName, const csString &name = "") const;
-  TiXmlElement *FindElementByTagName(TiXmlElement *root, const csString &elementName) const;
+  TiXmlElement *FindElement(TiXmlElement *root, const std::string &elementName, const std::string &name = "") const;
+  TiXmlElement *FindElementByTagName(TiXmlElement *root, const std::string &elementName) const;
 
   csResourceLoadingMode GetResourceLoadingMode(TiXmlElement *element, csResourceLoadingMode defaultMode = eRLM_Shared, csResourceLoadingMode alterInline = eRLM_Inline) const;
 

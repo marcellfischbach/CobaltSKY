@@ -124,7 +124,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csMatrix4f &o)
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(csString &o)
+csAssetInputStream &csAssetInputStream::operator>>(std::string &o)
 {
   csUInt16 length;
   *this >> length;
@@ -132,7 +132,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csString &o)
   char *buffer = new char[length + 1];
   memcpy(buffer, m_readPointer, length);
   buffer[length] = '\0';
-  o = csString(buffer);
+  o = std::string(buffer);
 
   m_readPointer += length;
   return *this;

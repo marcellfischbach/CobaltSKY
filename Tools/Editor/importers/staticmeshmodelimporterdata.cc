@@ -54,8 +54,8 @@ void StaticMeshModelImporterData::AddNode(aiNode *node)
     return;
   }
 
-  csString name(node->mName.C_Str());
-  if (name.length() >= 7 && name.substr(0, 7) == csString("CS_COL_"))
+  std::string name(node->mName.C_Str());
+  if (name.length() >= 7 && name.substr(0, 7) == std::string("CS_COL_"))
   {
     m_collisionNodes.push_back(node);
   }
@@ -89,12 +89,12 @@ void StaticMeshModelImporterData::GenerateData(const aiScene *scene)
       material->Get(AI_MATKEY_NAME, materialName);
 
       unsigned lod = 0;
-      unsigned localMaterialIndex = GetLocalMaterialIndex(mesh->mMaterialIndex, csString(materialName.C_Str()));
+      unsigned localMaterialIndex = GetLocalMaterialIndex(mesh->mMaterialIndex, std::string(materialName.C_Str()));
 
       Data *data = GetData(lod, localMaterialIndex);
       if (data->name.length() == 0)
       {
-        data->name = csString(node->mName.C_Str());
+        data->name = std::string(node->mName.C_Str());
       }
       SubMesh *subMesh = data->subMesh;
 
@@ -191,9 +191,9 @@ void StaticMeshModelImporterData::GenerateData(const aiScene *scene)
 
 namespace
 {
-  csString as_data_name(const csString& dataName)
+  std::string as_data_name(const std::string& dataName)
   {
-    csString res;
+    std::string res;
     for (auto ch : dataName)
     {
       if (isalnum(ch))
@@ -277,7 +277,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
       SubMesh *subMesh = data->subMesh;
       csAssetOutputStream os;
       Output(subMesh, os);
-      csString dataName = ::as_data_name(data->name);
+      std::string dataName = ::as_data_name(data->name);
       writer.AddEntry(dataName, "SUBMESH", os.GetSize(), os.GetBuffer());
 
 
@@ -458,7 +458,7 @@ StaticMeshModelImporterData::Data *StaticMeshModelImporterData::GetData(LOD *lod
 }
 
 
-unsigned StaticMeshModelImporterData::GetLocalMaterialIndex(unsigned modelMaterialIndex, const csString &materialName)
+unsigned StaticMeshModelImporterData::GetLocalMaterialIndex(unsigned modelMaterialIndex, const std::string &materialName)
 {
   unsigned res = ~0x00;
   auto it = m_modelToLocalMap.find(modelMaterialIndex);

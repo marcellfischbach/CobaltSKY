@@ -28,13 +28,13 @@ void csSkeleton::PrepareBones(csSize numberOfBones)
     delete[] m_boneNames;
   }
   m_matrices = new csMatrix4f[numberOfBones];
-  m_boneNames = new csString[numberOfBones];
+  m_boneNames = new std::string[numberOfBones];
   m_numberOfBones = numberOfBones;
 }
 
 
 
-void csSkeleton::SetBoneName(csSize boneIdx, const csString &boneName)
+void csSkeleton::SetBoneName(csSize boneIdx, const std::string &boneName)
 {
   if (boneIdx >= m_numberOfBones)
   {
@@ -45,7 +45,7 @@ void csSkeleton::SetBoneName(csSize boneIdx, const csString &boneName)
 }
 
 
-csString csSkeleton::GetBoneName(csSize idx) const
+std::string csSkeleton::GetBoneName(csSize idx) const
 {
   if (idx >= m_numberOfBones)
   {
@@ -55,7 +55,7 @@ csString csSkeleton::GetBoneName(csSize idx) const
   return m_boneNames[idx];
 }
 
-csSize csSkeleton::GetBoneIndex(const csString &boneName) const
+csSize csSkeleton::GetBoneIndex(const std::string &boneName) const
 {
   for (csSize i = 0; i < m_numberOfBones; ++i)
   {

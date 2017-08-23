@@ -31,9 +31,9 @@ public:
 
   virtual csSize GetNumberOfMaterials() const;
 
-  virtual const csString &GetMaterialName(csSize idx) const;
+  virtual const std::string &GetMaterialName(csSize idx) const;
 
-  virtual csUInt32 GetMaterialIndex(const csString &materialName) const;
+  virtual csUInt32 GetMaterialIndex(const std::string &materialName) const;
 
   virtual csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const;
 
@@ -109,7 +109,7 @@ private:
 
   csBoundingBox m_boundingBox;
 
-  csString m_materialName;
+  std::string m_materialName;
 };
 
 CS_FORCEINLINE const csBoundingBox &csTerrainMesh::GetBoundingBox() const

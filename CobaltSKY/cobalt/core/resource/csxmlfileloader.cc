@@ -18,16 +18,16 @@ csXMLFileLoader::~csXMLFileLoader()
 
 bool csXMLFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  const csString extension = file->GetExtension();
-  return extension == csString("xml")
-    || extension == csString("xasset");
+  const std::string extension = file->GetExtension();
+  return extension == std::string("xml")
+    || extension == std::string("xasset");
 }
 
 
 const csClass *csXMLFileLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  const csString extension = file->GetExtension();
-  if (extension != csString("xml") && extension != csString("xasset"))
+  const std::string extension = file->GetExtension();
+  if (extension != std::string("xml") && extension != std::string("xasset"))
   {
     return 0;
   }
@@ -62,8 +62,8 @@ const csClass *csXMLFileLoader::EvalClass(iFile *file, const csResourceLocator &
 
 iObject *csXMLFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  const csString extension = file->GetExtension();
-  if (extension != csString("xml") && extension != csString("xasset"))
+  const std::string extension = file->GetExtension();
+  if (extension != std::string("xml") && extension != std::string("xasset"))
   {
     return 0;
   }

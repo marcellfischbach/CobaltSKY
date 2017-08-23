@@ -16,14 +16,14 @@ csShaderGL4Loader::~csShaderGL4Loader()
 
 bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *) const
 {
-  csString ext = file->GetExtension();
+  std::string ext = file->GetExtension();
   return
-    ext == csString("vert") ||
-    ext == csString("ctrl") ||
-    ext == csString("eval") ||
-    ext == csString("geom") ||
-    ext == csString("frag") ||
-    ext == csString("comp");
+    ext == std::string("vert") ||
+    ext == std::string("ctrl") ||
+    ext == std::string("eval") ||
+    ext == std::string("geom") ||
+    ext == std::string("frag") ||
+    ext == std::string("comp");
 }
 
 const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *) const
@@ -33,30 +33,30 @@ const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator
 
 iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, iObject *) const
 {
-  csString ext = file->GetExtension();
+  std::string ext = file->GetExtension();
 
   csShaderType type;
-  if (ext == csString("vert"))
+  if (ext == std::string("vert"))
   {
     type = eST_Vertex;
   }
-  else if (ext == csString("ctrl"))
+  else if (ext == std::string("ctrl"))
   {
     type = eST_TessCtrl;
   }
-  else if (ext == csString("eval"))
+  else if (ext == std::string("eval"))
   {
     type = eST_TessEval;
   }
-  else if (ext == csString("geom"))
+  else if (ext == std::string("geom"))
   {
     type = eST_Geometry;
   }
-  else if (ext == csString("frag"))
+  else if (ext == std::string("frag"))
   {
     type = eST_Fragment;
   }
-  else if (ext == csString("comp"))
+  else if (ext == std::string("comp"))
   {
     type = eST_Compute;
   }
@@ -75,7 +75,7 @@ iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, 
   buffer[length] = '\0';
 
 
-  csString source(buffer);
+  std::string source(buffer);
   delete[] buffer;
 
   csShaderGL4 *shader = new csShaderGL4();
@@ -84,7 +84,7 @@ iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, 
 
   if (!shader->Compile())
   {
-    csString log = shader->GetCompileErrorLog();
+    std::string log = shader->GetCompileErrorLog();
     printf("Code:\n");
     bool newLine = true;
     int line = 1;

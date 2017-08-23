@@ -14,7 +14,7 @@
 
 struct MaterialSlot
 {
-  csString name;
+  std::string name;
   csSize idx;
 };
 
@@ -41,7 +41,7 @@ csMeshAssetXMLLoader::~csMeshAssetXMLLoader()
 
 bool csMeshAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return csString(element->Value()) == csString("mesh");
+  return std::string(element->Value()) == std::string("mesh");
 }
 
 const csClass *csMeshAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -75,7 +75,7 @@ iObject *csMeshAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocat
       continue;
     }
     MaterialSlot slot;
-    slot.name = csString(materialSlotElement->Attribute("name"));
+    slot.name = std::string(materialSlotElement->Attribute("name"));
     slot.idx = atoi(materialSlotElement->Attribute("id"));
     slots.push_back(slot);
   }
@@ -96,12 +96,12 @@ iObject *csMeshAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocat
        subMeshElement;
        subMeshElement = subMeshElement->NextSiblingElement("subMesh"))
   {
-    csString name;
+    std::string name;
     csSize materialSlot = 0;
     csSize lod = 0;
     if (subMeshElement->Attribute("name"))
     {
-      name = csString(subMeshElement->Attribute("name"));
+      name = std::string(subMeshElement->Attribute("name"));
     }
     if (subMeshElement->Attribute("materialSlot"))
     {
@@ -112,7 +112,7 @@ iObject *csMeshAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocat
       lod = atoi(subMeshElement->Attribute("lod"));
     }
 
-    csResourceLocator subMeshLocator(csString(subMeshElement->GetText()));
+    csResourceLocator subMeshLocator(std::string(subMeshElement->GetText()));
     csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(subMeshLocator);
     if (subMesh)
     {

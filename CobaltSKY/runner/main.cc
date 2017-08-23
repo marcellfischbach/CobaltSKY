@@ -103,7 +103,8 @@ csSize numParticles;
 csEventBus masterBus;
 csMaterial *material;
 csEntity *sphereEntity;
-
+unsigned g_screenResolutionWidth;
+unsigned g_screenResolutionHeight;
 
 int main(int argc, char **argv)
 {
@@ -137,12 +138,15 @@ int main(int argc, char **argv)
   csInt16 posX = 100;
   csInt16 posY = 100;
 
+  g_screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
+  g_screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
+
 #if 0
   posX = -1500;
 #else
   posX = 200;
 #endif
-  if (!window->InitializeOpenGL("CobaltSKY Runner", 1366, 768, posX, posY, false, 4, 4))
+  if (!window->InitializeOpenGL("CobaltSKY Runner", g_screenResolutionWidth, g_screenResolutionHeight, posX, posY, false, 4, 4))
   {
     delete window;
     return -1;
@@ -202,11 +206,11 @@ int initialize()
   masterBus.Register(MyEvent0::GetStaticClass(), handle_an_event);
   masterBus.Register(MyEvent1::GetStaticClass(), handle_an_other_event);
 
-  iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, 1366, 768, false);
+  iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, g_screenResolutionWidth, g_screenResolutionHeight, false);
   rt = graphicsGL4->CreateRenderTarget();
-  rt->Initialize(1366, 768);
+  rt->Initialize(g_screenResolutionWidth, g_screenResolutionHeight);
   rt->AddColorTexture(color0);
-  rt->SetDepthBuffer(1366, 768);
+  rt->SetDepthBuffer(g_screenResolutionWidth, g_screenResolutionHeight);
   if (!rt->Finilize())
   {
     printf("Unable to create render target!!!\n");
@@ -220,7 +224,7 @@ int initialize()
 
 
   camera = new csCamera();
-  camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
+  camera->SetPerspective(3.14159f / 4.0f, (float)g_screenResolutionHeight / (float)g_screenResolutionWidth);
   camera->SetEye(csVector3f(7.814438f, 8.341354f, 7.872684f));
   camera->SetSpot(csVector3f(0, 0, 0));
   camera->SetUp(csVector3f(0, 0, 1));
@@ -236,7 +240,7 @@ int initialize()
   keyboard = window->GetKeyboard();
 
   fp = new csDeferredFrameProcessor(graphicsGL4);// ->CreateDeferredFrameProcessor();
-  if (!fp->Initialize() || !fp->Resize(1366, 768))
+  if (!fp->Initialize() || !fp->Resize(g_screenResolutionWidth, g_screenResolutionHeight))
   {
     printf("Unable to initialize frame processor\n");
     return -1;
@@ -322,7 +326,7 @@ int main_loop()
     // now render this image onscreen
     graphicsGL4->ResetDefaults();
     graphicsGL4->SetRenderTarget(0);
-    graphicsGL4->SetViewport(1366, 768);
+    graphicsGL4->SetViewport(g_screenResolutionWidth, g_screenResolutionHeight);
     graphicsGL4->Clear();
     graphicsGL4->RenderFullScreenFrame(colorTarget);
 
@@ -1040,7 +1044,7 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 csPostProcessor *createPostProcessor(iGraphics *graphics)
 {
   csPostProcessor *pp = 0;
-#if 0
+#if 1
   pp = new csPostProcessor();
   iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
   iShader *combineAddMultShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));
@@ -1054,24 +1058,24 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
   fsaoPP->BindInput(ePPO_GBuffer_NormalLightMode, "Normal");
   fsaoPP->BindInput(ePPO_GBuffer_Depth, "Depth");
   fsaoPP->SetShader(fsaoShader);
-  fsaoPP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+  fsaoPP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, ePF_RGBA, false));
 
   csGenericShaderPostProcess *downScaleBrighPass = new csGenericShaderPostProcess();
   downScaleBrighPass->BindInput(ePPO_FinalTarget_Color, "Color0");
   downScaleBrighPass->SetShader(downScaleBrightPassShader);
-  downScaleBrighPass->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
+  downScaleBrighPass->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
 
 
   csGenericShaderPostProcess *blurVertPP = new csGenericShaderPostProcess();
   blurVertPP->BindInput(downScaleBrighPass, 0, "Color0");
   blurVertPP->SetShader(blurVertShader);
-  blurVertPP->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
+  blurVertPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
 
 
   csGenericShaderPostProcess *blurHoriPP = new csGenericShaderPostProcess();
   blurHoriPP->BindInput(blurVertPP, 0, "Color0");
   blurHoriPP->SetShader(blurHoriShader);
-  blurHoriPP->SetOutput(createTarget(graphics, 683, 384, ePF_RGBA, false));
+  blurHoriPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
 
 
   csGenericShaderPostProcess *combinePP = new csGenericShaderPostProcess();
@@ -1079,7 +1083,7 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
   combinePP->BindInput(blurHoriPP, 0, "Color1");
   //combinePP->BindInput(fsaoPP, 0, "Color2");
   combinePP->SetShader(combineAddShader);
-  combinePP->SetOutput(createTarget(graphics, 1366, 768, ePF_RGBA, false));
+  combinePP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, ePF_RGBA, false));
 
 
   pp->SetFinalProcess(combinePP);

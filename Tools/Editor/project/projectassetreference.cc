@@ -10,22 +10,22 @@ ProjectAssetReference::ProjectAssetReference()
 
 }
 
-void ProjectAssetReference::SetName(const csString &name)
+void ProjectAssetReference::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-const csString &ProjectAssetReference::GetName() const
+const std::string &ProjectAssetReference::GetName() const
 {
   return m_name;
 }
 
-void ProjectAssetReference::SetTypeName(const csString &typeName)
+void ProjectAssetReference::SetTypeName(const std::string &typeName)
 {
   m_typeName = typeName;
 }
 
-const csString &ProjectAssetReference::GetTypeName() const
+const std::string &ProjectAssetReference::GetTypeName() const
 {
   return m_typeName;
 }

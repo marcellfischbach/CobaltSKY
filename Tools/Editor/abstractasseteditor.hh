@@ -27,10 +27,10 @@ public:
   void SetWidget(QWidget *widget);
   virtual QWidget *GetWidget();
 
-  virtual const csString &GetName() const;
+  virtual const std::string &GetName() const;
   virtual void SetDirty(bool dirty);
   virtual bool IsDirty() const;
-  virtual const std::set<csString> &GetVisibleDockItems() const;
+  virtual const std::set<std::string> &GetVisibleDockItems() const;
   virtual void PopulateDockItems();
 
   virtual void CloseRequest() override;
@@ -40,7 +40,7 @@ public:
 
 protected:
   virtual void UpdateAsset() = 0;
-  void AddDockItemName(const csString &dockItemName);
+  void AddDockItemName(const std::string &dockItemName);
   void UpdateMainWindow();
 
 private:
@@ -53,6 +53,6 @@ private:
   QWidget *m_widget;
 
   bool m_dirty;
-  csString m_name;
-  std::set<csString> m_visibleDockItems;
+  std::string m_name;
+  std::set<std::string> m_visibleDockItems;
 };

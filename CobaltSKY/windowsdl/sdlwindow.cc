@@ -71,8 +71,8 @@ bool SDLWindow::InitializeOpenGL(
   }
   m_posX = posX;
   m_posY = posY;
-  m_width = m_width;
-  m_height = m_height;
+  m_width = width;
+  m_height = height;
 
   m_context = SDL_GL_CreateContext(m_window);
 
@@ -82,7 +82,7 @@ bool SDLWindow::InitializeOpenGL(
   }
 
   SDL_SetRelativeMouseMode(SDL_TRUE);
-  glViewport(0, 0, 1366, 768);
+  glViewport(0, 0, width, height);
 
 
   return true;

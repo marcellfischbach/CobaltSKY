@@ -159,7 +159,7 @@ void MaterialEditor::FillElement(QDomElement materialElement, QDomDocument doc)
     {
       continue;
     }
-    csString parameterName = materialDef->GetParamName(i);
+    std::string parameterName = materialDef->GetParamName(i);
     QDomElement parameterElement = doc.createElement("parameter");
     parametersElement.appendChild(parameterElement);
     parameterElement.setAttribute("name", QString(parameterName.c_str()));
@@ -208,7 +208,7 @@ void MaterialEditor::FillElement(QDomElement materialElement, QDomDocument doc)
       if (m_material->GetTexture(i))
       {
         csResourceLocator loc = csResourceManager::Get()->GetLocator(m_material->GetTexture(i));
-        csString name = loc.GetText();
+        std::string name = loc.GetText();
         parameterElement.appendChild(doc.createElement("locator"))
           .appendChild(doc.createTextNode(QString(name.c_str())));
       }

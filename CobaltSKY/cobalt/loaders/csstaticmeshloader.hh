@@ -33,23 +33,23 @@ public:
 private:
   struct HeaderEntry
   {
-    csString name;
+    std::string name;
     csUInt32 type;
     csUInt32 position;
     csUInt32 size;
     iObject *obj;
   };
 
-  iObject *ReadEntry(std::map<csString, HeaderEntry> &entries, const csString &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
-  csGeometryData *ReadGeometry(std::map<csString, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
-  csGeometryMesh *ReadGeometryMesh(std::map<csString, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  iObject *ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  csGeometryData *ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  csGeometryMesh *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   csMultiMaterial *ReadMultiMaterial(iFile *file) const;
   csMesh *ReadMesh (csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   csPhysicsShapeContainer *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   bool ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   iVertexDeclaration *ReadVertexDeclaration(iFile *file) const;
 
-  csString ReadString(iFile *file) const;
+  std::string ReadString(iFile *file) const;
   
 };
 

@@ -6,7 +6,7 @@
 void csSGFloat2GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   csSGNode *n = GetNode();
-  csString src[] = {
+  std::string src[] = {
     n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : ""
   };

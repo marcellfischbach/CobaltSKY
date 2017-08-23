@@ -30,7 +30,7 @@ csMesh::~csMesh()
 
 
 
-void csMesh::AddMesh(csSubMesh *mesh, csSize materialIndex, csUInt8 lodIdx, const csString &name)
+void csMesh::AddMesh(csSubMesh *mesh, csSize materialIndex, csUInt8 lodIdx, const std::string &name)
 {
   if (mesh)
   {
@@ -52,23 +52,23 @@ void csMesh::AddMesh(csSubMesh *mesh, csSize materialIndex, csUInt8 lodIdx, cons
   }
 }
 
-void csMesh::AddMaterialName(const csString &materialName)
+void csMesh::AddMaterialName(const std::string &materialName)
 {
   m_materialNames.push_back(materialName);
 }
 
-const csString &csMesh::GetMaterialName(csSize idx) const
+const std::string &csMesh::GetMaterialName(csSize idx) const
 {
   if (idx >= m_materialNames.size())
   {
-    static csString undef("<undef>");
+    static std::string undef("<undef>");
     return undef;
   }
 
   return m_materialNames[idx];
 }
 
-csUInt32 csMesh::GetMaterialIndex(const csString &materialName) const
+csUInt32 csMesh::GetMaterialIndex(const std::string &materialName) const
 {
   for (csSize i = 0, in = m_materialNames.size(); i < in; ++i)
   {

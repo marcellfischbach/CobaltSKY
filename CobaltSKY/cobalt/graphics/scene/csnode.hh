@@ -25,12 +25,12 @@ public:
 public:
   virtual ~csNode();
 
-  CS_FORCEINLINE void SetName(const csString &name)
+  CS_FORCEINLINE void SetName(const std::string &name)
   {
     m_name = name;
   }
 
-  CS_FORCEINLINE const csString &GetName() const
+  CS_FORCEINLINE const std::string &GetName() const
   {
     return m_name;
   }
@@ -80,5 +80,5 @@ private:
 
   csGroupNode *m_parent;
 
-  csString m_name;
+  std::string m_name;
 };

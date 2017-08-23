@@ -129,7 +129,7 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
 
     writer.AddEntry(
       "DATA",
-      csString((const char*)typeID.toLatin1()),
+      std::string((const char*)typeID.toLatin1()),
       ba.length(),
       reinterpret_cast<const csUInt8*>(ba.constData())
     );
@@ -143,7 +143,7 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
 
   writer.AddEntry(
     "EDITOR_ICON",
-    csString("PNG"),
+    std::string("PNG"),
     buffer.data().length(),
     reinterpret_cast<const csUInt8*>(buffer.data().constData())
   );

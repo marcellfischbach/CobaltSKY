@@ -38,7 +38,7 @@ const csClass *csEntityMasterXMLLoader::EvalClass(TiXmlElement *element, const c
   {
     return 0;
   }
-  csString className(element->Attribute("class"));
+  std::string className(element->Attribute("class"));
   return csClassRegistry::Get()->GetClass(className);
 }
 
@@ -49,7 +49,7 @@ iObject *csEntityMasterXMLLoader::Load(TiXmlElement *element, const csResourceLo
   {
     return 0;
   }
-  csString className(element->Attribute("class"));
+  std::string className(element->Attribute("class"));
   const csClass *entityClass = csClassRegistry::Get()->GetClass(className);
   if (!entityClass)
   {

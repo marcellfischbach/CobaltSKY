@@ -107,7 +107,7 @@ void MaterialEditorProperties::UpdateGUI()
     Param param;
     param.idx = i;
     param.textureWidget = 0;
-    csString name = materialDef->GetParamName(i);
+    std::string name = materialDef->GetParamName(i);
 
     bool inherit = m_material->IsInherited(i);
 

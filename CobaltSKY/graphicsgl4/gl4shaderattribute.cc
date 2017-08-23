@@ -21,12 +21,12 @@ csShaderAttributeGL4::~csShaderAttributeGL4()
 {
 }
 
-void csShaderAttributeGL4::SetName(const csString &name)
+void csShaderAttributeGL4::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-const csString &csShaderAttributeGL4::GetName() const
+const std::string &csShaderAttributeGL4::GetName() const
 {
   return m_name;
 }

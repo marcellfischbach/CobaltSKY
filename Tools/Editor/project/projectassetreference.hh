@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cobalt/core/csresourcelocator.hh>
-#include <cobalt/core/csstring.hh>
 
+#include <string>
 #include <vector>
 
 class ProjectAssetReference;
@@ -11,11 +11,11 @@ class ProjectAssetReference
 public:
   ProjectAssetReference();
 
-  void SetName(const csString &name);
-  const csString &GetName() const;
+  void SetName(const std::string &name);
+  const std::string &GetName() const;
 
-  void SetTypeName(const csString &typeName);
-  const csString &GetTypeName() const;
+  void SetTypeName(const std::string &typeName);
+  const std::string &GetTypeName() const;
 
   void SetPriority(unsigned priority);
   unsigned GetPriority() const;
@@ -46,8 +46,8 @@ public:
   const std::vector<ProjectAssetReference*> &GetReferencedBy() const;
 private:
 
-  csString m_name;
-  csString m_typeName;
+  std::string m_name;
+  std::string m_typeName;
   unsigned m_priority;
 
   csResourceLocator m_resourceLocator;

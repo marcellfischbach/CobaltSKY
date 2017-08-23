@@ -98,9 +98,9 @@ private:
 
 struct CSE_API iSGShaderGraphLogger
 {
-  virtual void LogSourceCode(const csString &renderPass, const csString &shaderType, const csString &sourceCode) = 0;
-  virtual void LogInfo(const csString &renderPass, const csString &msg) = 0;
-  virtual void LogError(const csString &renderPass, const csString &msg) = 0;
+  virtual void LogSourceCode(const std::string &renderPass, const std::string &shaderType, const std::string &sourceCode) = 0;
+  virtual void LogInfo(const std::string &renderPass, const std::string &msg) = 0;
+  virtual void LogError(const std::string &renderPass, const std::string &msg) = 0;
 };
 
 struct CSE_API ISGShaderGraphFactory 

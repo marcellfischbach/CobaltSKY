@@ -8,7 +8,7 @@
 #include <cobalt/csenums.hh>
 #include <cobalt/math/csvector.hh>
 
-#include <cobalt/core/csstring.hh>
+#include <string>
 #include <vector>
 #include <cobalt/graphics/shadergraph/cssgnode.refl.hh>
 
@@ -24,34 +24,34 @@ public:
   virtual ~csSGNode();
 
   virtual csSGNode *Copy(csSGNode *node) const;
-  const csString &GetName() const;
+  const std::string &GetName() const;
 
-  //void SetBindingName(const csString &bindingName);
-  //const csString &GetBindingName() const;
+  //void SetBindingName(const std::string &bindingName);
+  //const std::string &GetBindingName() const;
 
   csSize GetNumberOfInputs() const;
   csSGInput *GetInput(csSize idx) const;
-  csSGInput *GetInput(const csString &name) const;
+  csSGInput *GetInput(const std::string &name) const;
   csSGDataType GetInputDataType(csSize idx) const;
-  csSGDataType GetInputDataType(const csString &name) const;
+  csSGDataType GetInputDataType(const std::string &name) const;
 
   void SetOutputDataType(csSize idx, csSGDataType dataType);
-  void SetOutputDataType(const csString &name, csSGDataType dataType);
+  void SetOutputDataType(const std::string &name, csSGDataType dataType);
 
   void SetInput(int inputIdx, csSGNode* node, int outputIdx = 0);
-  void SetInput(const csString &inputName, csSGNode *node, int outputIdx = 0);
-  void SetInput(int inputIdx, csSGNode* node, const csString &outputName);
-  void SetInput(const csString &inputName, csSGNode *node, const csString &outputName);
+  void SetInput(const std::string &inputName, csSGNode *node, int outputIdx = 0);
+  void SetInput(int inputIdx, csSGNode* node, const std::string &outputName);
+  void SetInput(const std::string &inputName, csSGNode *node, const std::string &outputName);
   void SetInput(int inputIdx, float constFloat);
-  void SetInput(const csString &inputName, float constFloat);
+  void SetInput(const std::string &inputName, float constFloat);
 
   csSGNode *GetInputNode(csSize idx);
-  csSGNode *GetInputNode(const csString &name);
+  csSGNode *GetInputNode(const std::string &name);
 
 
   csSize GetNumberOfOutputs() const;
   csSGOutput *GetOutput(csSize idx);
-  csSGOutput *GetOutput(const csString &name);
+  csSGOutput *GetOutput(const std::string &name);
 
 
   bool NotInvalid(csSGDataType dt) const;
@@ -72,13 +72,13 @@ public:
   virtual bool Validate();
 
 //protected:
-  void SetName(const csString &name);
+  void SetName(const std::string &name);
 
   void AddInput(csSGInput *input);
   void AddOutput(csSGOutput *output);
 
-  void SetValidationMessage(const csString &validationMessage);
-  const csString &GetValidationMessage() const;
+  void SetValidationMessage(const std::string &validationMessage);
+  const std::string &GetValidationMessage() const;
 
 #ifdef CS_BUILD_EDITOR
   const csVector2f &GetPosition() const
@@ -92,9 +92,9 @@ public:
 #endif
 
 private:
-  csString m_name;
-  //csString m_bindingName;
-  csString m_validationMessage;
+  std::string m_name;
+  //std::string m_bindingName;
+  std::string m_validationMessage;
 
   std::vector<csSGInput*> m_inputs;
   std::vector<csSGOutput*> m_outputs;
@@ -105,34 +105,34 @@ private:
 };
 
 
-CS_FORCEINLINE const csString &csSGNode::GetName() const
+CS_FORCEINLINE const std::string &csSGNode::GetName() const
 {
   return m_name;
 }
 
 /*
-CS_FORCEINLINE void csSGNode::SetBindingName(const csString &bindingName)
+CS_FORCEINLINE void csSGNode::SetBindingName(const std::string &bindingName)
 {
   m_bindingName = bindingName;
 }
 
-CS_FORCEINLINE const csString &csSGNode::GetBindingName() const
+CS_FORCEINLINE const std::string &csSGNode::GetBindingName() const
 {
   return m_bindingName;
 }
 */
 
-CS_FORCEINLINE void csSGNode::SetName(const csString &name)
+CS_FORCEINLINE void csSGNode::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE void csSGNode::SetValidationMessage(const csString &validationMessage)
+CS_FORCEINLINE void csSGNode::SetValidationMessage(const std::string &validationMessage)
 {
   m_validationMessage = validationMessage;
 }
 
-CS_FORCEINLINE const csString &csSGNode::GetValidationMessage() const
+CS_FORCEINLINE const std::string &csSGNode::GetValidationMessage() const
 {
   return m_validationMessage;
 }

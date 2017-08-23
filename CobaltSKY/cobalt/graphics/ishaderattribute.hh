@@ -16,7 +16,7 @@ struct CSE_API iShaderAttribute : public iObject
 
   virtual ~iShaderAttribute() {}
 
-  virtual const csString &GetName() const = 0;
+  virtual const std::string &GetName() const = 0;
 
   virtual void SetArrayIndex(csUInt32 idx) = 0;
 

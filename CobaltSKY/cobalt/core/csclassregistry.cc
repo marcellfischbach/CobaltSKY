@@ -57,9 +57,9 @@ const std::vector<const csClass*> &csClassRegistry::GetAllClasses() const
 }
 
 
-const csClass *csClassRegistry::GetClass(const csString &name) const
+const csClass *csClassRegistry::GetClass(const std::string &name) const
 {
-  std::map<csString, const csClass*>::const_iterator it = m_classes.find(name);
+  std::map<std::string, const csClass*>::const_iterator it = m_classes.find(name);
   if (it == m_classes.end())
   {
     return 0;
@@ -67,7 +67,7 @@ const csClass *csClassRegistry::GetClass(const csString &name) const
   return it->second;
 }
 
-void *csClassRegistry::CreateClass(const csString &name) const
+void *csClassRegistry::CreateClass(const std::string &name) const
 {
   const csClass *clazz = GetClass(name);
   if (!clazz)

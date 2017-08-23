@@ -282,7 +282,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
     QDataStream stream(&ba, QIODevice::ReadOnly);
     QString className;
     stream >> className;
-    const csClass *cls = csClassRegistry::Get()->GetClass(csString((const char*)className.toLatin1()));
+    const csClass *cls = csClassRegistry::Get()->GetClass(std::string((const char*)className.toLatin1()));
     if (!cls)
     {
       return;
@@ -780,7 +780,7 @@ ShaderGraphEditorNode *ShaderGraphEditorWidget::GetShaderGraphNode()
 }
 
 
-csString ShaderGraphEditorWidget::ExtractName(const csResourceLocator &locator)
+std::string ShaderGraphEditorWidget::ExtractName(const csResourceLocator &locator)
 {
   QString name(locator.GetResourceFile().c_str());
   name = name.replace("\\", "/");
@@ -790,5 +790,5 @@ csString ShaderGraphEditorWidget::ExtractName(const csResourceLocator &locator)
   {
     name = name.mid(idx_s + 1, idx_e - idx_s - 1);
   }
-  return csString((const char*)name.toLatin1());
+  return std::string((const char*)name.toLatin1());
 }

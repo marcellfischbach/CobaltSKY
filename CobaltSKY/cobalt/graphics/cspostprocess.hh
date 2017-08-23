@@ -2,10 +2,10 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/cspostprocessoutput.hh>
 #include <vector>
+#include <string>
 #include <map>
 #include <set>
 #include <cobalt/graphics/cspostprocess.refl.hh>
@@ -30,9 +30,9 @@ public:
   virtual bool Render(iGraphics *graphics);
   virtual bool Initialize(iGraphics *graphics);
 
-  int BindInput(iTexture *texture, const csString &inputName = "");
-  int BindInput(csPostProcess *postProcess, int outputIdx, const csString &inputName = "");
-  int BindInput(csPostProcessOutput originOutput, const csString &inputName = "");
+  int BindInput(iTexture *texture, const std::string &inputName = "");
+  int BindInput(csPostProcess *postProcess, int outputIdx, const std::string &inputName = "");
+  int BindInput(csPostProcessOutput originOutput, const std::string &inputName = "");
 
   void SetOutput(iRenderTarget *output);
   iRenderTarget *GetOutput();
@@ -43,7 +43,7 @@ public:
 protected:
   csPostProcess();
 
-  void SetInputBindingName(int idx, const csString &name);
+  void SetInputBindingName(int idx, const std::string &name);
   void SetShader(iShader *shader);
   
   bool BindShader(iGraphics *graphics);
@@ -61,7 +61,7 @@ private:
   struct Input
   {
     InputSource m_inputSource;
-    csString m_inputName;
+    std::string m_inputName;
     iTexture *m_texture;
     csPostProcess *m_postProcess;
     int m_postProcessOutput;

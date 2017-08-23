@@ -4,6 +4,8 @@
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/cssettings.hh>
 #include <algorithm>
+#include <tixml/tinyxml.h>
+
 // #include <cscore/cssettings.h>
 
 // #include <csini/csiini.h>
@@ -102,12 +104,54 @@ bool csVFS::LoadConfig(const std::string &configFileName)
 
 bool csVFS::Initialize(csSettings *settings)
 {
-  if (settings && settings->HasGroup("vfs"))
+  if (!settings)
   {
-    TiXmlElement *vfsElement = settings->GetGroup("vfs");
-    return LoadConfig(vfsElement, settings->GetRootPath());
+    return false;
   }
-  return false;
+
+  std::vector<std::string> groupNames = settings->FindSubGroupNames("vfs.root");
+  for (const std::string &groupName : groupNames)
+  {
+    ImportRootPath(settings, groupName);
+  }
+
+  groupNames = settings->FindSubGroupNames("vfs.resolution");
+  for (const std::string &groupName : groupNames)
+  {
+    ImportResolution(settings, groupName);
+  }
+  return true;
+}
+
+bool csVFS::ImportRootPath(csSettings *settings, const std::string &groupName)
+{
+  if (
+    !settings->HasValue(groupName, "name") ||
+    !settings->HasValue(groupName, "path")
+    ) {
+    return false;
+  }
+  Entry entry;
+
+  entry.SetPath(settings->GetStringValue(groupName, "path"));
+  entry.SetName(settings->GetStringValue(groupName, "name"));
+  entry.SetAbsPath(settings->GetRootPath() + std::string("/") + entry.GetPath());
+  entry.SetPriority(settings->GetIntValue(groupName, "prio", entry.GetPriority()));
+
+  m_entries.push_back(entry);
+  return true;
+}
+
+bool csVFS::ImportResolution(csSettings *settings, const std::string &groupName)
+{
+  if (
+    !settings->HasValue(groupName, "name") ||
+    !settings->HasValue(groupName, "path")
+    ) {
+    return false;
+  }
+  AddPath(settings->GetStringValue(groupName, "name"), settings->GetStringValue(groupName, "path"));
+
 }
 
 bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath)
@@ -151,8 +195,8 @@ bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePa
           continue;
         }
 
-        csString vfsName(resolutionElement->Attribute("name"));
-        csString pathName(resolutionElement->GetText());
+        std::string vfsName(resolutionElement->Attribute("name"));
+        std::string pathName(resolutionElement->GetText());
         AddPath(vfsName, pathName);
       }
     }
@@ -164,29 +208,29 @@ bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePa
 
 }
 
-bool csVFS::HasPath(const csString &vfsName) const
+bool csVFS::HasPath(const std::string &vfsName) const
 {
-  map<csString, csString>::const_iterator it = m_pathMapping.find(vfsName);
+  map<std::string, std::string>::const_iterator it = m_pathMapping.find(vfsName);
   return it != m_pathMapping.end();
 }
 
-void csVFS::AddPath(const csString &vfsName, const csString &path)
+void csVFS::AddPath(const std::string &vfsName, const std::string &path)
 {
   m_pathMapping[vfsName] = path;
 }
 
-void csVFS::RemovePath(const csString &vfsName)
+void csVFS::RemovePath(const std::string &vfsName)
 {
-  std::map<csString, csString>::iterator it = m_pathMapping.find(vfsName);
+  std::map<std::string, std::string>::iterator it = m_pathMapping.find(vfsName);
   if (it != m_pathMapping.end())
   {
     m_pathMapping.erase(it);
   }
 }
 
-const csString &csVFS::GetPath(const csString & vfsName) const
+const std::string &csVFS::GetPath(const std::string & vfsName) const
 {
-  map<csString, csString>::const_iterator it = m_pathMapping.find(vfsName);
+  map<std::string, std::string>::const_iterator it = m_pathMapping.find(vfsName);
   if (it == m_pathMapping.end())
   {
     return m_illegalPath;
@@ -195,17 +239,17 @@ const csString &csVFS::GetPath(const csString & vfsName) const
   return it->second;
 }
 
-csString csVFS::ExtractSymbol(const csString &path, unsigned idx, unsigned &length)
+std::string csVFS::ExtractSymbol(const std::string &path, unsigned idx, unsigned &length)
 {
   if (path.length() - idx < 3)
   {
-    return csString("");
+    return std::string("");
   }
 
   if (!(path[idx] == '$' && path[idx + 1] == '{'))
   {
     printf("Malformed symbol in \"%s\"\n", path.c_str());
-    return csString("");
+    return std::string("");
   }
 
   unsigned firstChar = idx + 2;
@@ -223,27 +267,27 @@ csString csVFS::ExtractSymbol(const csString &path, unsigned idx, unsigned &leng
   if (!validForm)
   {
     printf("Malformed symbol in \"%s\". Missing '}'\n", path.c_str());
-    return csString("");
+    return std::string("");
   }
 
   length = lastChar - idx + 1;
   return path.substr(firstChar, lastChar - firstChar);
 }
 
-csString csVFS::GetPathResolution(const csString &pathName) const
+std::string csVFS::GetPathResolution(const std::string &pathName) const
 {
-  csString res = pathName;
+  std::string res = pathName;
   for (unsigned i = 0; i < res.length(); )
   {
     if (res[i] == '$')
     {
       unsigned length;
-      csString symbol = ExtractSymbol(res, i, length);
+      std::string symbol = ExtractSymbol(res, i, length);
       if (symbol.length() == 0)
       {
         return pathName;
       }
-      csString replacement = GetPath(symbol);
+      std::string replacement = GetPath(symbol);
       if (replacement.length() == 0)
       {
         printf("Symbol not found: \"%s\"\n", symbol.c_str());
@@ -260,12 +304,12 @@ csString csVFS::GetPathResolution(const csString &pathName) const
   return res;
 }
 
-csString csVFS::GetAbsolutePath(const csString &path) const
+std::string csVFS::GetAbsolutePath(const std::string &path) const
 {
-  csString finalName = GetPathResolution(path);
+  std::string finalName = GetPathResolution(path);
   for (auto entry : m_entries)
   {
-    csString absPath = entry.GetAbsPath() + "/" + finalName;
+    std::string absPath = entry.GetAbsPath() + "/" + finalName;
     if (csFileInfo::Exists(absPath))
     {
       return absPath;
@@ -274,18 +318,18 @@ csString csVFS::GetAbsolutePath(const csString &path) const
   return "";
 }
 
-csString csVFS::GetAbsolutePath(const csString &path, const csString &entryName, ExistenceCheck checkExistence) const
+std::string csVFS::GetAbsolutePath(const std::string &path, const std::string &entryName, ExistenceCheck checkExistence) const
 {
   if (entryName.empty())
   {
     return GetAbsolutePath(path);
   }
-  csString finalName = GetPathResolution(path);
+  std::string finalName = GetPathResolution(path);
   for (auto entry : m_entries)
   {
     if (entry.GetName() == entryName)
     {
-      csString absPath = entry.GetAbsPath() + "/" + finalName;
+      std::string absPath = entry.GetAbsPath() + "/" + finalName;
       if (csFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
       {
         return absPath;
@@ -297,18 +341,18 @@ csString csVFS::GetAbsolutePath(const csString &path, const csString &entryName,
 }
 
 
-csString csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence) const
+std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence) const
 {
   if (locator.GetResourceEntry().empty())
   {
     return GetAbsolutePath(locator.GetResourceFile());
   }
-  csString finalName = GetPathResolution(locator.GetResourceFile());
+  std::string finalName = GetPathResolution(locator.GetResourceFile());
   for (auto entry : m_entries)
   {
     if (entry.GetName() == locator.GetResourceEntry())
     {
-      csString absPath = entry.GetAbsPath() + "/" + finalName;
+      std::string absPath = entry.GetAbsPath() + "/" + finalName;
       if (csFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
       {
         return absPath;
@@ -320,17 +364,17 @@ csString csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck
 }
 
 
-//void csVFS::SetRootPath(const csString &rootPath)
+//void csVFS::SetRootPath(const std::string &rootPath)
 //{
 //  m_rootPath = rootPath;
 //}
 
-//const csString &csVFS::GetRootPath() const
+//const std::string &csVFS::GetRootPath() const
 //{
 //  return m_rootPath;
 //}
 
-iFile *csVFS::Open(const csString &filename, csOpenMode mode, csTextMode textMode)
+iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode textMode)
 {
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
@@ -357,7 +401,7 @@ iFile *csVFS::Open(const csString &filename, csOpenMode mode, csTextMode textMod
 }
 
 
-iFile *csVFS::Open(const csString &filename, const csString &entryName, csOpenMode mode, csTextMode textMode)
+iFile *csVFS::Open(const std::string &filename, const std::string &entryName, csOpenMode mode, csTextMode textMode)
 {
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)

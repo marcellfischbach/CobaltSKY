@@ -17,7 +17,7 @@ public:
   csPNGImageAssetLoader();
   virtual ~csPNGImageAssetLoader();
 
-  bool CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData = 0)const ;
+  bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = 0)const ;
   virtual const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
   iObject *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
 };

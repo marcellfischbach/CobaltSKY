@@ -3,7 +3,7 @@
 #include <editor.hh>
 
 
-AssetDescriptor::AssetDescriptor(const csResourceLocator &locator, const csString &assetType)
+AssetDescriptor::AssetDescriptor(const csResourceLocator &locator, const std::string &assetType)
   : m_locator(locator)
   , m_assetType(assetType)
 {
@@ -24,7 +24,7 @@ const csResourceLocator &AssetDescriptor::GetLocator() const
   return m_locator;
 }
 
-const csString &AssetDescriptor::GetAssetType() const
+const std::string &AssetDescriptor::GetAssetType() const
 {
   return m_assetType;
 }

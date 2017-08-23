@@ -10,7 +10,7 @@ class QLabel;
 class BasicDockItem : public AbstractDockItem
 {
 public:
-  BasicDockItem(const csString &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea);
+  BasicDockItem(const std::string &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea);
   virtual ~BasicDockItem();
 
   void SetContent(QWidget *widget);

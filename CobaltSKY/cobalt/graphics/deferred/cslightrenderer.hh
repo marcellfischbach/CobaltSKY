@@ -62,7 +62,7 @@ protected:
   float m_mapBias;
 
   // shadow buffer
-  float m_shadowBufferSize;
+  csUInt16 m_shadowBufferSize;
   iRenderTarget *m_shadowBuffer;
   csVector2f m_shadowIntensity;
 

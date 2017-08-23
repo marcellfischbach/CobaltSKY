@@ -53,7 +53,7 @@ iObject *csEntityStateXMLLoader::Load(TiXmlElement *element, const csResourceLoc
   {
     if (element->Attribute("name"))
     {
-      entityState->SetName(csString(element->Attribute("name")));
+      entityState->SetName(std::string(element->Attribute("name")));
     }
     else
     {

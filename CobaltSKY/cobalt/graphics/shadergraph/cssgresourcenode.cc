@@ -27,12 +27,12 @@ csSGNode *csSGResourceNode::Copy(csSGNode *node) const
   return csSGNode::Copy(node);
 }
 
-void csSGResourceNode::SetResourceName(const csString &resourceName)
+void csSGResourceNode::SetResourceName(const std::string &resourceName)
 {
   m_resourceName = resourceName;
 }
 
-const csString &csSGResourceNode::GetResourceName() const
+const std::string &csSGResourceNode::GetResourceName() const
 {
   return m_resourceName;
 }

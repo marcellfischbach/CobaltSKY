@@ -70,8 +70,8 @@ public:
   virtual csSpatialState *ToSpatialState();
   virtual const csSpatialState *ToSpatialState() const;
 
-  csSpatialState *FindState(const csString &stateName);
-  const csSpatialState *FindState(const csString &stateName) const;
+  csSpatialState *FindState(const std::string &stateName);
+  const csSpatialState *FindState(const std::string &stateName) const;
 
   csSize GetNumberOfChildState() const;
   csSpatialState *GetChildState(csSize idx);

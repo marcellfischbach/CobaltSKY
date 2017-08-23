@@ -39,9 +39,9 @@ void AssetManagerResourceScanner::AddEntry(const csResourceLocator &resource, co
   m_entries.push_back(entry);
 }
 
-void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const csString &relPath)
+void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const std::string &relPath)
 {
-  csString absPath = vfsEntry.GetAbsPath() + "/" + relPath;
+  std::string absPath = vfsEntry.GetAbsPath() + "/" + relPath;
   QDir dir(QString(absPath.c_str()));
 
   QStringList filter;
@@ -50,7 +50,7 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const c
   QStringList entryFiles = dir.entryList(filter, QDir::Files);
   for (const QString &entryFile : entryFiles)
   {
-    csString assetFileName = relPath + "/" + csString((const char*)entryFile.toLatin1());
+    std::string assetFileName = relPath + "/" + std::string((const char*)entryFile.toLatin1());
     csFileInfo info(assetFileName);
     //m_allResourceLocators.insert(csResourceLocator(assetFileName, "", entry.GetName()));
     Entry entry;
@@ -64,7 +64,7 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const c
   QStringList paths = dir.entryList(QDir::AllDirs | QDir::NoSymLinks | QDir::NoDotAndDotDot);
   for (const QString &path : paths)
   {
-    csString resourcePath = relPath + "/" + csString((const char*)path.toLatin1());
+    std::string resourcePath = relPath + "/" + std::string((const char*)path.toLatin1());
     ScanPath(vfsEntry, resourcePath);
   }
 

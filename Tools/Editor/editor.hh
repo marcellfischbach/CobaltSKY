@@ -34,7 +34,7 @@ public:
     return m_rootPath;
   }
 
-  csString ConvertToResourcePath(const csString &filePath) const;
+  std::string ConvertToResourcePath(const std::string &filePath) const;
 
   void AddEditorFactory(iAssetEditorFactory *factory);
   void OpenAsset(const AssetDescriptor &descriptor);
@@ -47,10 +47,10 @@ public:
   csGraphicsGL4 *GetGraphics();
  
   void AddDockItem(iDockItem *item);
-  iDockItem *GetDockItem(const csString &dockItemName) const;
+  iDockItem *GetDockItem(const std::string &dockItemName) const;
   void CurrentEditorChanged();
   void UpdateVisibleDockItemsFromEditor(iAssetEditor *editor);
-  void UpdateVisibleDockItems(const std::set<csString> &visibleDocks);
+  void UpdateVisibleDockItems(const std::set<std::string> &visibleDocks);
 
   void CloseProject();
   void OpenProject(const std::string &projectPath);

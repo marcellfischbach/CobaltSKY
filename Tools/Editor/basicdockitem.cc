@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QScrollArea>
 
-BasicDockItem::BasicDockItem(const csString &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea)
+BasicDockItem::BasicDockItem(const std::string &dockName, const QString &dockTitle, Qt::DockWidgetArea dockArea)
   : AbstractDockItem(dockName, dockTitle, dockArea)
     , m_content(0)
     , m_emptyLabel(0)

@@ -18,7 +18,7 @@ void csSGSplitFloat3GL4::PrivEvaluate(csShaderGraphCtx &ctx)
     return;
   }
 
-  csString exp = ctx.GetInputValue(node->GetInput(0));
+  std::string exp = ctx.GetInputValue(node->GetInput(0));
   ctx.SetOutputValue(node->GetOutput(0), exp);
   ctx.SetOutputValue(node->GetOutput(1), exp);
   ctx.SetOutputValue(node->GetOutput(2), exp);

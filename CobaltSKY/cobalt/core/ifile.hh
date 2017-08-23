@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csstring.hh>
+#include <string>
 
 #include <cobalt/core/ifile.refl.hh>
 
@@ -147,7 +147,7 @@ struct CSE_API iFile : public iObject
    *
    * @return The location of the file
    */
-  virtual const csString& GetLocation () const = 0;
+  virtual const std::string& GetLocation () const = 0;
 
   /**
    * @brief Returns the name of the file witout an optional extension
@@ -157,7 +157,7 @@ struct CSE_API iFile : public iObject
    *
    * @return The name of the file without an optional extension
    */
-  virtual const csString& GetName () const = 0;
+  virtual const std::string& GetName () const = 0;
 
   /**
    * @brief Returns the optional extension of the file
@@ -167,7 +167,7 @@ struct CSE_API iFile : public iObject
    *
    * @return The optional extension of the file
    */
-  virtual const csString& GetExtension () const = 0;
+  virtual const std::string& GetExtension () const = 0;
 };
 
 /** @} */

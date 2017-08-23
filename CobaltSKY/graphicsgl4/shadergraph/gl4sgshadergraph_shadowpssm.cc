@@ -19,7 +19,7 @@ static const char *compareMode[] = {
 
 void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers, csRenderPass renderPass, iSGShaderGraphLogger *logger)
 {
-  csString passName;
+  std::string passName;
   switch (renderPass)
   {
   case eRP_ShadowPSSM:
@@ -54,7 +54,7 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   ctx.EvaluateInlines(outputs);
 
   ctx.GenerateCode(preAlphaOutputs);
-  csString preAlphaCode = ctx.GetCode();
+  std::string preAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(outputs);
   std::set<csShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
@@ -113,7 +113,7 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
     << "  inGeomTexCoord = cs_TexCoord0;" << std::endl
     << "}" << std::endl
     << std::endl;
-  csString vertexShaderSources = ss.str();
+  std::string vertexShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "VertexShader", vertexShaderSources);
@@ -157,7 +157,7 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
     ss << "  EndPrimitive();" << std::endl << std::endl << std::endl;
   }
   ss << "}" << std::endl;
-  csString geometryShaderSources = ss.str();
+  std::string geometryShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "GeometryShader", geometryShaderSources);
@@ -213,7 +213,7 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   // if VSM this can be 
   ss << "}" << std::endl
     << std::endl;
-  csString fragmentShaderSources = ss.str();
+  std::string fragmentShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode(passName, "FragmentShader", fragmentShaderSources);

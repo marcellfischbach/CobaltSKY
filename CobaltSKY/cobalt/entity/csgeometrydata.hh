@@ -28,8 +28,8 @@ public:
 
   csID GetID() const;
 
-  void SetName(const csString &name);
-  const csString &GetName() const;
+  void SetName(const std::string &name);
+  const std::string &GetName() const;
 
   virtual void Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config) = 0;
 
@@ -46,7 +46,7 @@ protected:
 
 private:
   csID m_id;
-  csString m_name;
+  std::string m_name;
 
   bool m_attached;
 };
@@ -70,12 +70,12 @@ CS_FORCEINLINE csID csGeometryData::GetID() const
 
 
 
-CS_FORCEINLINE void csGeometryData::SetName(const csString &name)
+CS_FORCEINLINE void csGeometryData::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE const csString &csGeometryData::GetName() const
+CS_FORCEINLINE const std::string &csGeometryData::GetName() const
 {
   return m_name;
 }

@@ -32,18 +32,18 @@ public:
   virtual csUInt32 GetNumberOfAttributes() const;
   virtual iShaderAttribute *GetAttribute(csUInt32 idx);
   virtual iShaderAttribute *GetAttribute(const csShaderAttributeID &id);
-  virtual iShaderAttribute *GetAttribute(const csString &attributeName);
+  virtual iShaderAttribute *GetAttribute(const std::string &attributeName);
 
   virtual csUInt16 GetNumberOfStreams() const;
   virtual iShaderStream *GetStream(const csShaderStreamID &id);
-  virtual iShaderStream *GetStream(const csString &streamName);
+  virtual iShaderStream *GetStream(const std::string &streamName);
 
 
   void AttachShader(csShaderGL4 *shader);
   void DetachShader(csShaderGL4 *shader);
 
   bool Link();
-  csString GetLinkErrorLog() const;
+  std::string GetLinkErrorLog() const;
 
 private:
   GLuint m_name;

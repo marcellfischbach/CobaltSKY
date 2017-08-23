@@ -18,9 +18,9 @@ csAssetFileLoader::~csAssetFileLoader()
 
 bool csAssetFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  csString extension = file->GetExtension();
-  return extension == csString("asset")
-    || extension == csString("data");
+  std::string extension = file->GetExtension();
+  return extension == std::string("asset")
+    || extension == std::string("data");
 }
 
 const csClass *csAssetFileLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
@@ -28,7 +28,7 @@ const csClass *csAssetFileLoader::EvalClass(iFile *file, const csResourceLocator
   char magicNumber[9];
   file->Read(magicNumber, 8);
   magicNumber[8] = '\0';
-  if (csString(magicNumber) != csString("VALASSET"))
+  if (std::string(magicNumber) != std::string("VALASSET"))
   {
     return 0;
   }
@@ -51,7 +51,7 @@ const csClass *csAssetFileLoader::EvalClass(iFile *file, const csResourceLocator
 
     file->Read(&entry, sizeof(Entry));
 
-    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == csString(entry.name))
+    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == std::string(entry.name))
     {
       // move pointer to the right position within the file
       file->Seek(eSP_Set, entry.offset);
@@ -80,7 +80,7 @@ iObject *csAssetFileLoader::Load(iFile *file, const csResourceLocator &locator, 
   char magicNumber[9];
   file->Read(magicNumber, 8);
   magicNumber[8] = '\0';
-  if (csString(magicNumber) != csString("VALASSET"))
+  if (std::string(magicNumber) != std::string("VALASSET"))
   {
     return 0;
   }
@@ -103,7 +103,7 @@ iObject *csAssetFileLoader::Load(iFile *file, const csResourceLocator &locator, 
 
     file->Read(&entry, sizeof(Entry));
 
-    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == csString(entry.name))
+    if (locator.GetResourceName().length() == 0 || locator.GetResourceName() == std::string(entry.name))
     {
       // move pointer to the right position within the file
       file->Seek(eSP_Set, entry.offset);

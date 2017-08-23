@@ -24,7 +24,7 @@ csMaterialAssetXMLLoader::~csMaterialAssetXMLLoader()
 
 bool csMaterialAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return csString(element->Value()) == csString("material");
+  return std::string(element->Value()) == std::string("material");
 }
 
 const csClass *csMaterialAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -46,7 +46,7 @@ iObject *csMaterialAssetXMLLoader::Load(TiXmlElement *element, const csResourceL
   {
     return material;
   }
-  csMaterialDef *materialDef = csResourceManager::Get()->GetOrLoad<csMaterialDef>(csResourceLocator(csString(materialDefElement->GetText())));
+  csMaterialDef *materialDef = csResourceManager::Get()->GetOrLoad<csMaterialDef>(csResourceLocator(std::string(materialDefElement->GetText())));
   if (!materialDef)
   {
     return material;
@@ -64,7 +64,7 @@ iObject *csMaterialAssetXMLLoader::Load(TiXmlElement *element, const csResourceL
       {
         continue;
       }
-      csString parameterName(parameterElement->Attribute("name"));
+      std::string parameterName(parameterElement->Attribute("name"));
       csInt16 index = material->GetIndex(parameterName);
       if (index == -1)
       {
@@ -78,30 +78,30 @@ iObject *csMaterialAssetXMLLoader::Load(TiXmlElement *element, const csResourceL
         continue;
       }
 
-      csString tagName(valueElement->Value());
-      if (tagName == csString("float"))
+      std::string tagName(valueElement->Value());
+      if (tagName == std::string("float"))
       {
         material->Set(index, LoadFloat(valueElement->GetText()));
       }
-      else if (tagName == csString("float2"))
+      else if (tagName == std::string("float2"))
       {
         material->Set(index, LoadVector2f(valueElement->GetText()));
       }
-      else if (tagName == csString("float3"))
+      else if (tagName == std::string("float3"))
       {
         material->Set(index, LoadVector3f(valueElement->GetText()));
       }
-      else if (tagName == csString("float4"))
+      else if (tagName == std::string("float4"))
       {
         material->Set(index, LoadVector4f(valueElement->GetText()));
       }
-      else if (tagName == csString("color4"))
+      else if (tagName == std::string("color4"))
       {
         material->Set(index, LoadColor4f(valueElement->GetText()));
       }
-      else if (tagName == csString("locator"))
+      else if (tagName == std::string("locator"))
       {
-        iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(csResourceLocator(csString(valueElement->GetText())));
+        iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(csResourceLocator(std::string(valueElement->GetText())));
         material->Set(index, texture);
       }
     }

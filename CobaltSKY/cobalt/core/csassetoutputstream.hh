@@ -30,7 +30,7 @@ public:
   csAssetOutputStream & operator<< (const csColor4f &i);
   csAssetOutputStream & operator<< (const csMatrix3f &i);
   csAssetOutputStream & operator<< (const csMatrix4f &i);
-  csAssetOutputStream & operator<< (const csString &i);
+  csAssetOutputStream & operator<< (const std::string &i);
   csAssetOutputStream & Write(const void *buffer, size_t size);
 
   CS_FORCEINLINE const csUInt8 *GetBuffer() const

@@ -17,20 +17,20 @@ public:
 
   void PrepareBones(csSize numberOfBones);
 
-  void SetBoneName(csSize boneIdx, const csString &boneName);
+  void SetBoneName(csSize boneIdx, const std::string &boneName);
 
   csSize GetNumberOfBones() const;
 
   csMatrix4f *GetMatrices();
   const csMatrix4f *GetMatrices() const;
 
-  csString GetBoneName(csSize boneIdx) const;
-  csSize GetBoneIndex(const csString &boneIndex) const;
+  std::string GetBoneName(csSize boneIdx) const;
+  csSize GetBoneIndex(const std::string &boneIndex) const;
 
 private:
   csSize m_numberOfBones;
   csMatrix4f *m_matrices;
-  csString *m_boneNames;
+  std::string *m_boneNames;
 
 };
 

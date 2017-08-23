@@ -17,15 +17,15 @@ csSamplerAssetXMLLoader::~csSamplerAssetXMLLoader()
 
 bool csSamplerAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  return csString(element->Value()) == csString("sampler");
+  return std::string(element->Value()) == std::string("sampler");
 }
 
 
 namespace
 {
-csFilterMode evalFilterMode(const csString &filterString)
+csFilterMode evalFilterMode(const std::string &filterString)
 {
-#define IF_FILTER(flt) if (filterString == csString (#flt)) return eFM_##flt
+#define IF_FILTER(flt) if (filterString == std::string (#flt)) return eFM_##flt
 #define ELSE_IF_FILTER(flt) else IF_FILTER(flt)
 
   IF_FILTER(MinMagNearest);
@@ -46,9 +46,9 @@ csFilterMode evalFilterMode(const csString &filterString)
   return eFM_MinMagMipLinear;
 }
 
-csTextureAddressMode evalAddressMode(const csString &addressModeString)
+csTextureAddressMode evalAddressMode(const std::string &addressModeString)
 {
-#define IF_ADDRESS(addr) if (addressModeString == csString (#addr)) return eTAM_##addr
+#define IF_ADDRESS(addr) if (addressModeString == std::string (#addr)) return eTAM_##addr
 #define ELSE_IF_ADDRESS(addr) else IF_ADDRESS(addr)
   IF_ADDRESS(Repeat);
   ELSE_IF_ADDRESS(RepeatMirror);
@@ -60,9 +60,9 @@ csTextureAddressMode evalAddressMode(const csString &addressModeString)
   return  eTAM_Repeat;
 }
 
-csTextureCompareMode evalCompareMode(const csString &compareString)
+csTextureCompareMode evalCompareMode(const std::string &compareString)
 {
-#define IF_COMPARE(cmp) if (compareString == csString (#cmp)) return eTCM_##cmp
+#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return eTCM_##cmp
 #define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
   IF_COMPARE(CompareToR);
   ELSE_IF_COMPARE(None);
@@ -71,9 +71,9 @@ csTextureCompareMode evalCompareMode(const csString &compareString)
   return eTCM_None;
 }
 
-csTextureCompareFunc evalCompareFunc(const csString &compareString)
+csTextureCompareFunc evalCompareFunc(const std::string &compareString)
 {
-#define IF_COMPARE(cmp) if (compareString == csString (#cmp)) return eTCF_##cmp
+#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return eTCF_##cmp
 #define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
   IF_COMPARE(LessOrEqual);
   ELSE_IF_COMPARE(GreaterOrEqual);
@@ -108,7 +108,7 @@ iObject *csSamplerAssetXMLLoader::Load(TiXmlElement *element, const csResourceLo
   TiXmlElement *filterElement = element->FirstChildElement("filter");
   if (filterElement)
   {
-    sampler->SetFilter(::evalFilterMode(csString(filterElement->GetText())));
+    sampler->SetFilter(::evalFilterMode(std::string(filterElement->GetText())));
   }
 
   TiXmlElement *anisotropyElement = element->FirstChildElement("anisotropy");
@@ -132,18 +132,18 @@ iObject *csSamplerAssetXMLLoader::Load(TiXmlElement *element, const csResourceLo
   TiXmlElement *addressUElement = element->FirstChildElement("addressU");
   if (addressUElement)
   {
-    sampler->SetAddressU(::evalAddressMode(csString(addressUElement->GetText())));
+    sampler->SetAddressU(::evalAddressMode(std::string(addressUElement->GetText())));
   }
   TiXmlElement *addressVElement = element->FirstChildElement("addressV");
   if (addressVElement)
   {
-    sampler->SetAddressV(::evalAddressMode(csString(addressVElement->GetText())));
+    sampler->SetAddressV(::evalAddressMode(std::string(addressVElement->GetText())));
   }
 
   TiXmlElement *addressWElement = element->FirstChildElement("addressW");
   if (addressWElement)
   {
-    sampler->SetAddressW(::evalAddressMode(csString(addressWElement->GetText())));
+    sampler->SetAddressW(::evalAddressMode(std::string(addressWElement->GetText())));
   }
 
   TiXmlElement *borderColorElement = element->FirstChildElement("borderColor");
@@ -154,12 +154,12 @@ iObject *csSamplerAssetXMLLoader::Load(TiXmlElement *element, const csResourceLo
   TiXmlElement *compareModeElement = element->FirstChildElement("compareMode");
   if (compareModeElement)
   {
-    sampler->SetTextureCompareMode(::evalCompareMode(csString(compareModeElement->GetText())));
+    sampler->SetTextureCompareMode(::evalCompareMode(std::string(compareModeElement->GetText())));
   }
   TiXmlElement *compareFuncElement = element->FirstChildElement("compareFunc");
   if (compareFuncElement)
   {
-    sampler->SetTextureCompareFunc(::evalCompareFunc(csString(compareFuncElement->GetText())));
+    sampler->SetTextureCompareFunc(::evalCompareFunc(std::string(compareFuncElement->GetText())));
   }
 
   return sampler;

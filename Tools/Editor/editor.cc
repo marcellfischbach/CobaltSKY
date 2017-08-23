@@ -189,7 +189,7 @@ iAssetEditor *Editor::FindCurrentEditor()
   return 0;
 }
 
-csString Editor::ConvertToResourcePath(const csString &filePath) const
+std::string Editor::ConvertToResourcePath(const std::string &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));
 
@@ -210,7 +210,7 @@ csString Editor::ConvertToResourcePath(const csString &filePath) const
     {
       vfsPath = vfsPath.mid(1);
     }
-    return csString((const char*)vfsPath.toLatin1());
+    return std::string((const char*)vfsPath.toLatin1());
   }
   return filePath;
 }
@@ -248,7 +248,7 @@ void Editor::AddDockItem(iDockItem *dockItem)
   m_mainWindow->addDockWidget(dockItem->GetDockArea(), dockItem->GetDockWidget());
 }
 
-iDockItem *Editor::GetDockItem(const csString &dockItemName) const
+iDockItem *Editor::GetDockItem(const std::string &dockItemName) const
 {
   for (iDockItem *dockItem : m_dockItems)
   {
@@ -274,7 +274,7 @@ void Editor::CurrentEditorChanged()
 
 void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
 {
-  std::set<csString> dockNames;
+  std::set<std::string> dockNames;
   if (currentEditor)
   {
     dockNames = currentEditor->GetVisibleDockItems();
@@ -282,7 +282,7 @@ void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
 
   UpdateVisibleDockItems(dockNames);
 }
-void Editor::UpdateVisibleDockItems(const std::set<csString> &dockNames)
+void Editor::UpdateVisibleDockItems(const std::set<std::string> &dockNames)
 {
   for (iDockItem *dockItem : m_dockItems)
   {

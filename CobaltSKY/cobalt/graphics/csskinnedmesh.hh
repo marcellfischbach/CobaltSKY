@@ -14,13 +14,13 @@ public:
   csSkinnedMesh();
   virtual ~csSkinnedMesh();
 
-  void AddBoneName(const csString &boneName, csUInt8 boneIndex);
+  void AddBoneName(const std::string &boneName, csUInt8 boneIndex);
   void GenerateMapping(const csSkeleton *skeleton);
 
   virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0) override;
 
 private:
-  std::map<csString, csUInt8> m_boneNameMapping;
+  std::map<std::string, csUInt8> m_boneNameMapping;
 
   csUInt32 *m_boneIdxMapping;
   csSize m_numberOfIndexMapping;

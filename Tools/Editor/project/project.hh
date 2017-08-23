@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cobalt/core/csstring.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <project/projectreferencetree.hh>
+#include <string>
 #include <QObject>
 
 class Project : public QObject

@@ -32,7 +32,7 @@ void csSkinnedMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numMat
 
 
 
-void csSkinnedMesh::AddBoneName(const csString &boneName, csUInt8 boneIdx)
+void csSkinnedMesh::AddBoneName(const std::string &boneName, csUInt8 boneIdx)
 {
   m_boneNameMapping[boneName] = boneIdx;
 }
@@ -47,7 +47,7 @@ void csSkinnedMesh::GenerateMapping(const csSkeleton *skeleton)
   m_numberOfIndexMapping = m_boneNameMapping.size();
   m_boneIdxMapping = new csUInt32[m_numberOfIndexMapping];
 
-  for (std::map<csString, csUInt8>::iterator it = m_boneNameMapping.begin(); it != m_boneNameMapping.end(); ++it)
+  for (std::map<std::string, csUInt8>::iterator it = m_boneNameMapping.begin(); it != m_boneNameMapping.end(); ++it)
   {
     csSize boneIdx = skeleton->GetBoneIndex(it->first);
     if (boneIdx == csInvalidBoneIdx)

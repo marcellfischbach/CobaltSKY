@@ -13,9 +13,9 @@ public:
     return &static_manager;
   }
 
-  csUInt32 Get(const csString &name)
+  csUInt32 Get(const std::string &name)
   {
-    std::map<csString, csUInt32>::iterator it = m_map.find(name);
+    std::map<std::string, csUInt32>::iterator it = m_map.find(name);
     if (it != m_map.end())
     {
       return it->second;
@@ -26,9 +26,9 @@ public:
     return id;
   }
 
-  const csString &Get(csUInt32 id)
+  const std::string &Get(csUInt32 id)
   {
-    std::map<csString, csUInt32>::iterator it;
+    std::map<std::string, csUInt32>::iterator it;
     for (it = m_map.begin(); it != m_map.end(); ++it)
     {
       if (it->second == id)
@@ -77,13 +77,13 @@ private:
   }
 
 
-  std::map<csString, csUInt32> m_map;
+  std::map<std::string, csUInt32> m_map;
   csUInt32 m_nextID;
-  csString m_nullString;
+  std::string m_nullString;
 };
 
 
-csShaderStreamID::csShaderStreamID(const csString &name)
+csShaderStreamID::csShaderStreamID(const std::string &name)
   : m_name(name)
   , m_id(csShaderStreamIDManager::Get()->Get(name))
 {
@@ -96,7 +96,7 @@ csShaderStreamID::csShaderStreamID(csUInt32 id)
 
 }
 
-const csString &csShaderStreamID::GetName() const
+const std::string &csShaderStreamID::GetName() const
 {
   return m_name;
 }

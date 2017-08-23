@@ -38,7 +38,7 @@ void csMaterialDef::ClearParameters()
   m_params.clear();
 }
 
-csSize csMaterialDef::RegisterParam(const csString &parameterName, csShaderParameterType type)
+csSize csMaterialDef::RegisterParam(const std::string &parameterName, csShaderParameterType type)
 {
   csSize idx = m_params.size();
   Param param(parameterName, type);
@@ -145,7 +145,7 @@ csShaderParameterType csMaterialDef::GetParamType(csSize idx) const
   return m_params[idx].m_type;
 }
 
-csString csMaterialDef::GetParamName(csSize idx) const
+std::string csMaterialDef::GetParamName(csSize idx) const
 {
   return m_params[idx].m_name;
 }
@@ -156,7 +156,7 @@ iShaderAttribute *csMaterialDef::GetAttribute(csSize idx, csRenderPass pass) con
   return m_params[idx].m_attribute[pass];
 }
 
-csInt16 csMaterialDef::GetIndex(const csString &parameterName) const
+csInt16 csMaterialDef::GetIndex(const std::string &parameterName) const
 {
   for (size_t i = 0, in = m_params.size(); i < in; ++i)
   {
@@ -280,7 +280,7 @@ csFillMode csMaterialDef::GetFillMode() const
   return m_fillMode;
 }
 
-csMaterialDef::Param::Param(const csString &name, csShaderParameterType type)
+csMaterialDef::Param::Param(const std::string &name, csShaderParameterType type)
   : m_name(name)
   , m_type(type)
 {

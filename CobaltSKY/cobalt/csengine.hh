@@ -32,12 +32,12 @@ public:
    * @{
    */
 
-  inline iObject *Get(const csString &resourceName, bool forceInstance = false) const
+  inline iObject *Get(const std::string &resourceName, bool forceInstance = false) const
   {
     return Get(csResourceLocator(resourceName), forceInstance);
   }
   template<typename T>
-  T *Get(const csString &resourceName, bool forceInstance = false) const
+  T *Get(const std::string &resourceName, bool forceInstance = false) const
   {
     return Get<T>(csResourceLocator(resourceName), forceInstance);
   }
@@ -62,7 +62,7 @@ public:
   virtual iTexture2D *CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps);
   virtual iTexture2DArray *CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps);
   virtual iTextureCube *CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth);
-  virtual iShader *CreateShader(const csString &vertexCode, const csString &tessCtrl, const csString &tessEval, const csString &geometry, const csString &fragmentCode);
+  virtual iShader *CreateShader(const std::string &vertexCode, const std::string &tessCtrl, const std::string &tessEval, const std::string &geometry, const std::string &fragmentCode);
 
 
   virtual iPhysicsScene *CreateScene();

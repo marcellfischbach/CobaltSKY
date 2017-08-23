@@ -49,18 +49,18 @@ csSize csTerrainMesh::GetNumberOfMaterials() const
   return 1;
 }
 
-const csString &csTerrainMesh::GetMaterialName(csSize idx) const
+const std::string &csTerrainMesh::GetMaterialName(csSize idx) const
 {
   if (idx != 0)
   {
-    static csString undef("<undef>");
+    static std::string undef("<undef>");
     return undef;
   }
   return m_materialName;
 }
 
 
-csUInt32 csTerrainMesh::GetMaterialIndex(const csString &name) const
+csUInt32 csTerrainMesh::GetMaterialIndex(const std::string &name) const
 {
   if (name == m_materialName)
   {

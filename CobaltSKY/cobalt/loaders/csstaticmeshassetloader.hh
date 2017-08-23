@@ -15,7 +15,7 @@ public:
   csStaticMeshAssetLoader();
   virtual ~csStaticMeshAssetLoader();
 
-  virtual bool CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = 0) const;
   const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
 
   iObject *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;

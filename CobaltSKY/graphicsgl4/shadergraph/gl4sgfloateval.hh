@@ -4,7 +4,7 @@
 
 namespace
 {
-csString eval(csString *src, csSGDataType *dataTypes, csSGNode *node, csShaderGraphCtx &ctx, int start, int num)
+std::string eval(std::string *src, csSGDataType *dataTypes, csSGNode *node, csShaderGraphCtx &ctx, int start, int num)
 {
   if (start >= num)
   {
@@ -51,7 +51,7 @@ csString eval(csString *src, csSGDataType *dataTypes, csSGNode *node, csShaderGr
     next++;
   }
 
-  csString trail = ::eval(src, dataTypes, node, ctx, next, num);
+  std::string trail = ::eval(src, dataTypes, node, ctx, next, num);
   if (trail.length() != 0)
   {
     ss << ", " << trail;

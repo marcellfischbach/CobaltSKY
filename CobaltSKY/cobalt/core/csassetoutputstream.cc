@@ -202,7 +202,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csMatrix4f &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csString &i)
+csAssetOutputStream &csAssetOutputStream::operator<<(const std::string &i)
 {
   AcquireCapacity(sizeof(csUInt16) + i.length());
   *this << (csUInt16)i.length();

@@ -4,9 +4,9 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/core/ifile.hh>
 #include <cobalt/core/csresourcelocator.hh>
-#include <cobalt/core/csstring.hh>
 #include <map>
 #include <vector>
+#include <string>
 
 
 using std::map;
@@ -63,21 +63,21 @@ public:
   bool Initialize(int argc, char** argv);
   bool Initialize(csSettings *settings);
 
-  bool HasPath (const csString &vfsName) const;
-  void AddPath (const csString &vfsName, const csString &path);
-  const csString &GetPath (const csString &vfsName) const;
-  void RemovePath (const csString &vfsName);
+  bool HasPath (const std::string &vfsName) const;
+  void AddPath (const std::string &vfsName, const std::string &path);
+  const std::string &GetPath (const std::string &vfsName) const;
+  void RemovePath (const std::string &vfsName);
 
-  csString GetPathResolution (const csString &path) const;
-  csString GetAbsolutePath(const csString &path) const;
-  csString GetAbsolutePath(const csString &path, const csString &entryName, ExistenceCheck checkExistence = CheckExistence) const;
-  csString GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence = CheckExistence) const;
+  std::string GetPathResolution (const std::string &path) const;
+  std::string GetAbsolutePath(const std::string &path) const;
+  std::string GetAbsolutePath(const std::string &path, const std::string &entryName, ExistenceCheck checkExistence = CheckExistence) const;
+  std::string GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence = CheckExistence) const;
   /**
   * \name Functions for opening files
   * @{
   */
-  iFile* Open(const csString& filename, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
-  iFile* Open(const csString& filename, const csString &entryName, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
+  iFile* Open(const std::string& filename, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
+  iFile* Open(const std::string& filename, const std::string &entryName, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
   iFile *Open(const csResourceLocator &locator, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
   /**
   * @}
@@ -91,13 +91,15 @@ public:
 private:
   csVFS ();
   bool LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath);
+  bool ImportRootPath(csSettings *settings, const std::string &groupName);
+  bool ImportResolution(csSettings *settings, const std::string &groupName);
 
-  static csString ExtractSymbol (const csString &path, unsigned idx, unsigned &length);
+  static std::string ExtractSymbol (const std::string &path, unsigned idx, unsigned &length);
 
   
-  map<csString, csString> m_pathMapping;
+  map<std::string, std::string> m_pathMapping;
 
-  csString m_illegalPath;
+  std::string m_illegalPath;
 
   vector<Entry> m_entries;
 };

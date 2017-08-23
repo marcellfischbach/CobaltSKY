@@ -192,7 +192,7 @@ void csSpatialState::RemoveSpatialState(csSpatialState *state)
   }
 }
 
-csSpatialState *csSpatialState::FindState(const csString &stateName)
+csSpatialState *csSpatialState::FindState(const std::string &stateName)
 {
   if (stateName == GetName())
   {
@@ -210,7 +210,7 @@ csSpatialState *csSpatialState::FindState(const csString &stateName)
   return 0;
 }
 
-const csSpatialState *csSpatialState::FindState(const csString &stateName) const
+const csSpatialState *csSpatialState::FindState(const std::string &stateName) const
 {
   if (stateName == GetName())
   {

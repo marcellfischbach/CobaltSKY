@@ -33,7 +33,7 @@ void csPostProcess::SetShader(iShader *shader)
 }
 
 
-void csPostProcess::SetInputBindingName(int idx, const csString &inputName)
+void csPostProcess::SetInputBindingName(int idx, const std::string &inputName)
 {
   if (idx >= m_inputs.size())
   {
@@ -44,7 +44,7 @@ void csPostProcess::SetInputBindingName(int idx, const csString &inputName)
 }
 
 
-int csPostProcess::BindInput(iTexture *texture, const csString &inputName)
+int csPostProcess::BindInput(iTexture *texture, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -59,7 +59,7 @@ int csPostProcess::BindInput(iTexture *texture, const csString &inputName)
   return res;
 }
 
-int csPostProcess::BindInput(csPostProcess *postProcess, int outputIdx, const csString &inputName)
+int csPostProcess::BindInput(csPostProcess *postProcess, int outputIdx, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -75,7 +75,7 @@ int csPostProcess::BindInput(csPostProcess *postProcess, int outputIdx, const cs
   return res;
 }
 
-int csPostProcess::BindInput(csPostProcessOutput originOutput, const csString &inputName)
+int csPostProcess::BindInput(csPostProcessOutput originOutput, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -171,9 +171,9 @@ bool csPostProcess::Initialize(iGraphics *graphics)
   {
     Input &input = m_inputs[i];
 
-    csString inputName = input.m_inputName;
-    csString inputSizeName = inputName + csString("Size");
-    csString inputSizeInvName = inputSizeName + csString("Inv");
+    std::string inputName = input.m_inputName;
+    std::string inputSizeName = inputName + std::string("Size");
+    std::string inputSizeInvName = inputSizeName + std::string("Inv");
     input.m_attrInput = m_shader->GetAttribute(csShaderAttributeID(inputName));
     input.m_attrInputSize = m_shader->GetAttribute(csShaderAttributeID(inputSizeName));
     input.m_attrInputSizeInv = m_shader->GetAttribute(csShaderAttributeID(inputSizeInvName));

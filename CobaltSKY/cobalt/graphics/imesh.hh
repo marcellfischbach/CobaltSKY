@@ -19,9 +19,9 @@ struct CSE_API iMesh : public CS_SUPER(iObject)
 
   virtual csSize GetNumberOfMaterials() const = 0;
 
-  virtual const csString &GetMaterialName(csSize idx) const = 0;
+  virtual const std::string &GetMaterialName(csSize idx) const = 0;
 
-  virtual csUInt32 GetMaterialIndex(const csString &materialName) const = 0;
+  virtual csUInt32 GetMaterialIndex(const std::string &materialName) const = 0;
 
   virtual const csBoundingBox &GetBoundingBox() const = 0;
 

@@ -25,8 +25,8 @@ csShaderGraphAssetXMLLoader::~csShaderGraphAssetXMLLoader()
 
 bool csShaderGraphAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
-  return tagName == csString("shaderGraph");
+  std::string tagName(element->Value());
+  return tagName == std::string("shaderGraph");
 }
 
 const csClass *csShaderGraphAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -53,7 +53,7 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
       }
 
       csUInt32 id = atoi(nodeElement->Attribute("id"));
-      csString className(nodeElement->Attribute("class"));
+      std::string className(nodeElement->Attribute("class"));
 
       const csClass *cls = csClassRegistry::Get()->GetClass(className);
       if (!cls)
@@ -81,7 +81,7 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
 
         if (resourceElement->Attribute("name"))
         {
-          csString resourceName = csString(resourceElement->Attribute("name"));
+          std::string resourceName = std::string(resourceElement->Attribute("name"));
           resource->SetResourceName(resourceName);
         }
 
@@ -89,30 +89,30 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
         TiXmlElement *valueElement = resourceElement->FirstChildElement();
         if (valueElement)
         {
-          csString tagName(valueElement->Value());
-          if (tagName == csString("float"))
+          std::string tagName(valueElement->Value());
+          if (tagName == std::string("float"))
           {
             resource->SetDefault(LoadFloat(valueElement->GetText()));
           }
-          else if (tagName == csString("float2"))
+          else if (tagName == std::string("float2"))
           {
             resource->SetDefault(LoadVector2f(valueElement->GetText()));
           }
-          else if (tagName == csString("float3"))
+          else if (tagName == std::string("float3"))
           {
             resource->SetDefault(LoadVector3f(valueElement->GetText()));
           }
-          else if (tagName == csString("float4"))
+          else if (tagName == std::string("float4"))
           {
             resource->SetDefault(LoadVector4f(valueElement->GetText()));
           }
-          else if (tagName == csString("color4"))
+          else if (tagName == std::string("color4"))
           {
             resource->SetDefault(LoadColor4f(valueElement->GetText()));
           }
-          else if (tagName == csString("locator"))
+          else if (tagName == std::string("locator"))
           {
-            resource->SetDefaultTextureResource(csResourceLocator(csString(valueElement->GetText())));
+            resource->SetDefaultTextureResource(csResourceLocator(std::string(valueElement->GetText())));
           }
         }
       }
@@ -165,28 +165,28 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
         continue;
       }
 
-      csString tagName(inputElement->Value());
-      if (tagName == csString("shaderGraph") && inputElement->Attribute("input"))
+      std::string tagName(inputElement->Value());
+      if (tagName == std::string("shaderGraph") && inputElement->Attribute("input"))
       {
         if (!output)
         {
           continue;
         }
-        csString input(inputElement->Attribute("input"));
+        std::string input(inputElement->Attribute("input"));
         csSGShaderGraph::InputType it;
-        if (input == csString("Diffuse"))
+        if (input == std::string("Diffuse"))
         {
           it = csSGShaderGraph::eIT_Diffuse;
         }
-        else if (input == csString("Alpha"))
+        else if (input == std::string("Alpha"))
         {
           it = csSGShaderGraph::eIT_Alpha;
         }
-        else if (input == csString("Roughness"))
+        else if (input == std::string("Roughness"))
         {
           it = csSGShaderGraph::eIT_Roughness;
         }
-        else if (input == csString("Normal"))
+        else if (input == std::string("Normal"))
         {
           it = csSGShaderGraph::eIT_Normal;
         }
@@ -196,7 +196,7 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
         }
         shaderGraph->SetInput(it, output);
       }
-      else if (tagName == csString("node") && inputElement->Attribute("id") && inputElement->Attribute("input"))
+      else if (tagName == std::string("node") && inputElement->Attribute("id") && inputElement->Attribute("input"))
       {
         csUInt32 nodeID = atoi(inputElement->Attribute("id"));
         csUInt32 inputID = atoi(inputElement->Attribute("input"));
@@ -267,7 +267,7 @@ iObject *csShaderGraphAssetXMLLoader::Load(TiXmlElement *element, const csResour
         }
         if (modeElement && modeElement->GetText())
         {
-          csString cmpStr(modeElement->GetText());
+          std::string cmpStr(modeElement->GetText());
 #define CMP(cmp)  (cmpStr == #cmp)  compareMode = eCM_##cmp
           if CMP(LessOrEqual);
           else if CMP(GreaterOrEqual);

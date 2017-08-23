@@ -21,8 +21,8 @@ public:
 
   virtual csSGNode *Copy(csSGNode *node) const;
 
-  void SetResourceName(const csString &resourceName);
-  const csString &GetResourceName() const;
+  void SetResourceName(const std::string &resourceName);
+  const std::string &GetResourceName() const;
 
   csShaderParameterType GetResourceType() const;
 
@@ -47,7 +47,7 @@ protected:
   void SetResourceType(csShaderParameterType type);
 
 private:
-  csString m_resourceName;
+  std::string m_resourceName;
   csShaderParameterType m_resourceType;
 
   float m_defaultFloats[16];

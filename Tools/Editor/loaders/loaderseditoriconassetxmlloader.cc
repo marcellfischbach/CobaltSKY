@@ -17,9 +17,9 @@ LoadersEditorIconAssetXMLLoader::~LoadersEditorIconAssetXMLLoader()
 
 bool LoadersEditorIconAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
+  std::string tagName(element->Value());
 
-  return tagName == csString("editorIcon");
+  return tagName == std::string("editorIcon");
 }
 
 const csClass *LoadersEditorIconAssetXMLLoader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
@@ -29,8 +29,8 @@ const csClass *LoadersEditorIconAssetXMLLoader::EvalClass(TiXmlElement *element,
 
 iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
-  if (tagName != csString("editorIcon"))
+  std::string tagName(element->Value());
+  if (tagName != std::string("editorIcon"))
   {
     return 0;
   }
@@ -41,7 +41,7 @@ iObject *LoadersEditorIconAssetXMLLoader::Load(TiXmlElement *element, const csRe
     return 0;
   }
 
-  csString resource(imageElement->GetText());
+  std::string resource(imageElement->GetText());
   csResourceLocator imageLocator(resource);
 
 

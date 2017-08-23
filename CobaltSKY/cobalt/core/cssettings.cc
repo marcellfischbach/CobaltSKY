@@ -10,18 +10,23 @@ csSettings::csSettings()
 
 bool csSettings::Initialize(int argc, char** argv)
 {
+  bool useDefault = true;
   for (int i=1; i<argc; i++)
   {
     if (strcmp (argv[i], "--config") == 0)
     {
       if (i >= argc) return false;
-      return Initialize(argv[i+1]);
+      if (!Initialize(argv[++i]))
+      {
+        return false;
+      }
+      useDefault = false;
     }
   }
   return Initialize(".");
 }
 
-static csString strip_path (const csString &path)
+static std::string strip_path (const std::string &path)
 {
   std::string p = path;
   for (int i=(int)p.length()-1; i>=0; --i)
@@ -35,12 +40,10 @@ static csString strip_path (const csString &path)
   return std::string(p.c_str());
 }
 
-bool csSettings::Initialize(const char *configFileName)
+bool csSettings::Initialize(const std::string &configFileName)
 {
-  m_document = new TiXmlDocument();
-  if (!m_document->LoadFile(configFileName))
+  if (!m_ini.Import(std::string(configFileName)))
   {
-    printf("Unable to open config file: %s\n", configFileName);
     return false;
   }
   _rootPath = strip_path(configFileName);
@@ -59,85 +62,67 @@ csSettings* csSettings::Get()
   return csSettings::static_instances;
 }
 
-const char* csSettings::GetRootPath () const
+const std::string &csSettings::GetRootPath () const
 {
-  return _rootPath.c_str();
+  return _rootPath;
 }
 
-TiXmlElement *csSettings::GetElement(const char *group, const char *entry)
+std::vector<std::string> csSettings::FindSubGroupNames(const std::string &groupSubName) const
 {
-  TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
-  if (!groupElement)
-  {
-    return 0;
-  }
-
-  return groupElement->FirstChildElement(entry);
+  return m_ini.FindSubGroupNames(groupSubName);
 }
 
-bool csSettings::HasGroup (const char* group)
+bool csSettings::HasGroup (const std::string &group)
 {
-  TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
-  return groupElement != 0;
+  return m_ini.HasGroup(group);
 }
 
-bool csSettings::HasValue(const char *group, const char *entry)
+bool csSettings::HasValue(const std::string &entry)
 {
-  TiXmlElement *groupElement = m_document->RootElement()->FirstChildElement(group);
-  if (!groupElement)
-  {
-    return false;
-  }
-
-  return groupElement->FirstChildElement(entry) != 0;
+  return m_ini.HasEntry(entry);
 }
 
-TiXmlElement *csSettings::GetGroup (const char* group)
+std::string csSettings::GetStringValue(const std::string &entry)
 {
-  return m_document->RootElement()->FirstChildElement(group);
+  return m_ini.GetValue(entry);
 }
 
-const char* csSettings::GetStringValue(const char *group, const char *entry)
+int csSettings::GetIntValue(const std::string &entry, int defaultValue)
 {
-  TiXmlElement *element = GetElement(group, entry);
-  if (element)
-  {
-    return element->GetText();
-  }
-  return 0;
+  return m_ini.GetIntValue(entry, defaultValue);
 }
 
-
-int csSettings::GetIntValue(const char *group, const char *entry, int defaultValue)
+float csSettings::GetFloatValue(const std::string &entry, float defaultValue)
 {
-  const char *text = GetStringValue(group, entry);
-  if (!text)
-  {
-    return defaultValue;
-  }
-
-  return atoi(text);
+  return m_ini.GetFloatValue(entry, defaultValue);
 }
 
-float csSettings::GetFloatValue(const char *group, const char *entry, float defaultValue)
+bool csSettings::GetBoolValue(const std::string &entry, bool defaultValue)
 {
-  const char *text = GetStringValue(group, entry);
-  if (!text)
-  {
-    return defaultValue;
-  }
-
-  return (float)atof(text);
+  return m_ini.GetBoolValue(entry, defaultValue);
 }
 
-
-bool csSettings::GetBoolValue(const char *group, const char *entry, bool defaultValue)
+bool csSettings::HasValue(const std::string &group, const std::string &entry)
 {
-  const char *text = GetStringValue(group, entry);
-  if (!text)
-  {
-    return defaultValue;
-  }
-  csString tStr(text);
-  return tStr == csString("true");
+  return m_ini.HasEntry(group, entry);
+}
+
+std::string csSettings::GetStringValue(const std::string &group, const std::string &entry)
+{
+  return m_ini.GetValue(group, entry);
+}
+
+int csSettings::GetIntValue(const std::string &group, const std::string &entry, int defaultValue)
+{
+  return m_ini.GetIntValue(group, entry, defaultValue);
+}
+
+float csSettings::GetFloatValue(const std::string &group, const std::string &entry, float defaultValue)
+{
+  return m_ini.GetFloatValue(group, entry, defaultValue);
+}
+
+bool csSettings::GetBoolValue(const std::string &group, const std::string &entry, bool defaultValue)
+{
+  return m_ini.GetBoolValue(group, entry, defaultValue);
 }

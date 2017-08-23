@@ -28,8 +28,8 @@ public:
   virtual void SetID(csID id);
   csID GetID() const;
 
-  void SetName(const csString &name);
-  const csString &GetName() const;
+  void SetName(const std::string &name);
+  const std::string &GetName() const;
 
   virtual csSpatialState *ToSpatialState();
   virtual const csSpatialState *ToSpatialState() const;
@@ -118,7 +118,7 @@ protected:
 
 private:
   csID m_id;
-  csString m_name;
+  std::string m_name;
 
   bool m_created;
   bool m_assembled;
@@ -138,12 +138,12 @@ CS_FORCEINLINE csID csEntityState::GetID() const
 
 
 
-CS_FORCEINLINE void csEntityState::SetName(const csString &name)
+CS_FORCEINLINE void csEntityState::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE const csString &csEntityState::GetName() const
+CS_FORCEINLINE const std::string &csEntityState::GetName() const
 {
   return m_name;
 }

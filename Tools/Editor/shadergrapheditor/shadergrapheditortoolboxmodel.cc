@@ -36,13 +36,13 @@ void ShaderGraphEditorToolboxModel::CreateModelData(const QString &filter)
   endResetModel();
 }
 
-ShaderGraphEditorToolboxModel::Data *ShaderGraphEditorToolboxModel::fromString(const csString &string)
+ShaderGraphEditorToolboxModel::Data *ShaderGraphEditorToolboxModel::fromString(const std::string &string)
 {
   Data *d = m_root;
-  csString name = string;
+  std::string name = string;
   while (true)
   {
-    csString dataName = name;
+    std::string dataName = name;
 
     size_t idx = name.find("/");
     if (idx != -1)

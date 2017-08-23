@@ -13,8 +13,8 @@ public:
   AssetManagerAssetWriter();
   ~AssetManagerAssetWriter();
 
-  void AddEntry(const csString &name, const csString &typeID, csUInt32 length, const csUInt8* buffer);
-  void RemoveEntry(const csString &name);
+  void AddEntry(const std::string &name, const std::string &typeID, csUInt32 length, const csUInt8* buffer);
+  void RemoveEntry(const std::string &name);
 
   bool Import(iFile *file);
   void Output(iFile *file);

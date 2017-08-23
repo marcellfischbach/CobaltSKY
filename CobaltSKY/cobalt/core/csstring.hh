@@ -2,5 +2,5 @@
 
 #include <string>
 
-typedef std::string csString;
+typedef std::string std::string;
 

@@ -82,7 +82,7 @@ QWidget *AbstractAssetEditor::GetWidget()
   return m_widget;
 }
 
-const csString &AbstractAssetEditor::GetName() const
+const std::string &AbstractAssetEditor::GetName() const
 {
   return m_name;
 }
@@ -101,12 +101,12 @@ bool AbstractAssetEditor::IsDirty() const
   return m_dirty;
 }
 
-void AbstractAssetEditor::AddDockItemName(const csString &dockItemName)
+void AbstractAssetEditor::AddDockItemName(const std::string &dockItemName)
 {
   m_visibleDockItems.insert(dockItemName);
 }
 
-const std::set<csString> &AbstractAssetEditor::GetVisibleDockItems() const
+const std::set<std::string> &AbstractAssetEditor::GetVisibleDockItems() const
 {
   return m_visibleDockItems;
 }
@@ -138,7 +138,7 @@ void AbstractAssetEditor::CloseRequest()
 QString AbstractAssetEditor::GetResourceFileName() const
 {
   const csResourceLocator &loc = GetAssetDescriptor().GetLocator();
-  csString absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+  std::string absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
   QString fileName(absFileName.c_str());
   return fileName;
 }
@@ -146,7 +146,7 @@ QString AbstractAssetEditor::GetResourceFileName() const
 QString AbstractAssetEditor::GetResourceDataFileName() const
 {
   const csResourceLocator &loc = GetAssetDescriptor().GetLocator().AsData();
-  csString absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+  std::string absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
   QString fileName(absFileName.c_str());
   return fileName;
 }
@@ -179,7 +179,7 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
 
   writer.AddEntry(
     "EDITOR_ICON",
-    csString("PNG"),
+    std::string("PNG"),
     buffer.data().length(),
     reinterpret_cast<const csUInt8*>(buffer.data().constData())
   );
@@ -192,7 +192,7 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
     dataFile->Close();
   }
 
-  csString fileName = csVFS::Get()->GetAbsolutePath(m_assetDescriptor.GetLocator(), csVFS::CheckExistence);
+  std::string fileName = csVFS::Get()->GetAbsolutePath(m_assetDescriptor.GetLocator(), csVFS::CheckExistence);
   QFile assetFile(QString(fileName.c_str()));
   QDomDocument doc;
   if (doc.setContent(&assetFile))

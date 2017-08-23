@@ -116,7 +116,7 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const csClass *nodeClass)
 }
 
 
-csString csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
+std::string csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
 {
   if (!node)
   {
@@ -126,7 +126,7 @@ csString csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
   return CreateCode(node->GetOutput(output));
 }
 
-csString csShaderGraphGL4::CreateCode(csSGNode *node, const csString &outputName)
+std::string csShaderGraphGL4::CreateCode(csSGNode *node, const std::string &outputName)
 {
   if (!node)
   {
@@ -137,7 +137,7 @@ csString csShaderGraphGL4::CreateCode(csSGNode *node, const csString &outputName
 }
 
 
-csString csShaderGraphGL4::CreateCode(csSGOutput *output)
+std::string csShaderGraphGL4::CreateCode(csSGOutput *output)
 {
   csShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
@@ -173,7 +173,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
       continue;
     }
 
-    const csString &resName = resNode->GetResourceName();
+    const std::string &resName = resNode->GetResourceName();
     csShaderParameterType resType = resNode->GetResourceType();
 
     csSize idx = graph->RegisterParam(resName, resType);
@@ -216,7 +216,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
 
 
 
-void csShaderGraphGL4::DebugCode(const csString &title, const csString &code)
+void csShaderGraphGL4::DebugCode(const std::string &title, const std::string &code)
 {
   printf("%s\n", title.c_str());
 

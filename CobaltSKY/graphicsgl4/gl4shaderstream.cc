@@ -18,12 +18,12 @@ csShaderStreamGL4::~csShaderStreamGL4()
 
 }
 
-void csShaderStreamGL4::SetName(const csString &name)
+void csShaderStreamGL4::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-const csString &csShaderStreamGL4::GetName() const
+const std::string &csShaderStreamGL4::GetName() const
 {
   return m_name;
 }

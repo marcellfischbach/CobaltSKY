@@ -30,7 +30,7 @@ public:
   csMesh();
   virtual ~csMesh();
 
-  void AddMesh(csSubMesh *instance, csSize materialIndex = 0, csUInt8 lod = 0, const csString &name = "");
+  void AddMesh(csSubMesh *instance, csSize materialIndex = 0, csUInt8 lod = 0, const std::string &name = "");
   csUInt8 GetNumberOfLODs() const;
   csSize GetNumberOfMeshes(csUInt8 lod = 0) const;
   csSubMesh *GetMesh(csUInt8 lod = 0, csSize idx = 0);
@@ -44,9 +44,9 @@ public:
 
 
   csSize GetNumberOfMaterials() const;
-  void AddMaterialName(const csString &materialName);
-  const csString &GetMaterialName(csSize idx) const;
-  csUInt32 GetMaterialIndex(const csString &materialName) const;
+  void AddMaterialName(const std::string &materialName);
+  const std::string &GetMaterialName(csSize idx) const;
+  csUInt32 GetMaterialIndex(const std::string &materialName) const;
 
   virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
 
@@ -59,7 +59,7 @@ protected:
   {
     csSubMesh *m_mesh;
     csSize m_materialIndex;
-    csString m_name;
+    std::string m_name;
   };
 
   struct LOD
@@ -69,7 +69,7 @@ protected:
 
   std::vector<LOD> m_lods;
   csSize m_numberOfMaterials;
-  std::vector<csString> m_materialNames;
+  std::vector<std::string> m_materialNames;
 
   LOD &GetLOD(csUInt8 lod);
 

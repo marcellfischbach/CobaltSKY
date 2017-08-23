@@ -13,7 +13,7 @@ struct CSE_API iAssetLoader : public iObject
   CS_CLASS_GEN;
   virtual ~iAssetLoader() { }
 
-  virtual bool CanLoad(const csString &typeID, const csResourceLocator &locator, iObject *userData = 0) const = 0;
+  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = 0) const = 0;
   virtual const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const = 0;
   virtual iObject *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const = 0;
 };

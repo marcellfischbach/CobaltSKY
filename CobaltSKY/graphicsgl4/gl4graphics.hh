@@ -29,7 +29,7 @@ public:
   virtual iTexture2D *CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps);
   virtual iTexture2DArray *CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps);
   virtual iTextureCube *CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth);
-  virtual iShader *CreateShader(const csString &vertexCode, const csString &tessCtrlCode, const csString &tessEvalCode, const csString &geometryCode, const csString &fragmentCode);
+  virtual iShader *CreateShader(const std::string &vertexCode, const std::string &tessCtrlCode, const std::string &tessEvalCode, const std::string &geometryCode, const std::string &fragmentCode);
 
   virtual ISGShaderGraphFactory* GetShaderGraphFactory();
 

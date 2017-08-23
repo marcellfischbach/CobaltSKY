@@ -4,7 +4,7 @@
 
 
 
-csSGInput::csSGInput(const csString &name, bool canConst, bool canInputNode)
+csSGInput::csSGInput(const std::string &name, bool canConst, bool canInputNode)
   : m_name(name)
   , m_node(0)
   , m_input(0)

@@ -46,17 +46,17 @@ public:
 
 	virtual csSize Write (const void* buffer, csSize size);
 
-  virtual const csString& GetLocation () const;
+  virtual const std::string& GetLocation () const;
 
-  virtual const csString& GetName () const;
+  virtual const std::string& GetName () const;
 
-  virtual const csString& GetExtension () const;
+  virtual const std::string& GetExtension () const;
 private:
   FILE*		m_file;
 
-  csString m_name;
-  csString m_extension;
-  csString m_location;
+  std::string m_name;
+  std::string m_extension;
+  std::string m_location;
 
   bool		m_read;
   bool		m_write;

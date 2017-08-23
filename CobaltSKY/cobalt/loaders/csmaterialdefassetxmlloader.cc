@@ -20,29 +20,29 @@ csMaterialDefAssetXMLLoader::~csMaterialDefAssetXMLLoader()
 
 bool csMaterialDefAssetXMLLoader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  csString tagName(element->Value());
+  std::string tagName(element->Value());
 
-  return tagName == csString("materialDef");
+  return tagName == std::string("materialDef");
 }
 
 
 
 namespace
 {
-csShaderParameterType get_shader_parameter_type(const csString &name)
+csShaderParameterType get_shader_parameter_type(const std::string &name)
 {
-  if (name == csString("float")) return eSPT_Float;
-  else if (name == csString("vec2")) return eSPT_Vector2;
-  else if (name == csString("vec3")) return eSPT_Vector3;
-  else if (name == csString("vec4")) return eSPT_Vector4;
-  else if (name == csString("int")) return eSPT_Int;
-  else if (name == csString("ivec2")) return eSPT_IVector2;
-  else if (name == csString("ivec3")) return eSPT_IVector3;
-  else if (name == csString("ivec4")) return eSPT_IVector4;
-  else if (name == csString("col")) return eSPT_Color4;
-  else if (name == csString("mat3")) return eSPT_Matrix3;
-  else if (name == csString("mat4")) return eSPT_Matrix4;
-  else if (name == csString("texture")) return eSPT_Texture;
+  if (name == std::string("float")) return eSPT_Float;
+  else if (name == std::string("vec2")) return eSPT_Vector2;
+  else if (name == std::string("vec3")) return eSPT_Vector3;
+  else if (name == std::string("vec4")) return eSPT_Vector4;
+  else if (name == std::string("int")) return eSPT_Int;
+  else if (name == std::string("ivec2")) return eSPT_IVector2;
+  else if (name == std::string("ivec3")) return eSPT_IVector3;
+  else if (name == std::string("ivec4")) return eSPT_IVector4;
+  else if (name == std::string("col")) return eSPT_Color4;
+  else if (name == std::string("mat3")) return eSPT_Matrix3;
+  else if (name == std::string("mat4")) return eSPT_Matrix4;
+  else if (name == std::string("texture")) return eSPT_Texture;
   return eSPT_Float;
 }
 }
@@ -55,7 +55,7 @@ const csClass *csMaterialDefAssetXMLLoader::EvalClass(TiXmlElement *element, con
 
 iObject *csMaterialDefAssetXMLLoader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  if (csString(element->Value()) != csString("materialDef"))
+  if (std::string(element->Value()) != std::string("materialDef"))
   {
     return 0;
   }
@@ -74,42 +74,42 @@ iObject *csMaterialDefAssetXMLLoader::Load(TiXmlElement *element, const csResour
        passElement;
        passElement = passElement->NextSiblingElement("pass"))
   {
-    csString passName;
+    std::string passName;
     if (passElement->Attribute("name"))
     {
-      passName = csString(passElement->Attribute("name"));
+      passName = std::string(passElement->Attribute("name"));
     }
 
     csRenderPass renderPass;
-    if (passName == csString("GBuffer"))
+    if (passName == std::string("GBuffer"))
     {
       renderPass = eRP_GBuffer;
     }
-    else if (passName == csString("ShadowPSSM"))
+    else if (passName == std::string("ShadowPSSM"))
     {
       renderPass = eRP_ShadowPSSM;
     }
-    else if (passName == csString("ShadowCube"))
+    else if (passName == std::string("ShadowCube"))
     {
       renderPass = eRP_ShadowCube;
     }
-    else if (passName == csString("ForwardUnlit"))
+    else if (passName == std::string("ForwardUnlit"))
     {
       renderPass = eRP_ForwardUnlit;
     }
-    else if (passName == csString("Forward1Light"))
+    else if (passName == std::string("Forward1Light"))
     {
       renderPass = eRP_Forward1Light;
     }
-    else if (passName == csString("Forward2Light"))
+    else if (passName == std::string("Forward2Light"))
     {
       renderPass = eRP_Forward2Light;
     }
-    else if (passName == csString("Forward3Light"))
+    else if (passName == std::string("Forward3Light"))
     {
       renderPass = eRP_Forward3Light;
     }
-    else if (passName == csString("Forward4Light"))
+    else if (passName == std::string("Forward4Light"))
     {
       renderPass = eRP_Forward4Light;
     }
@@ -141,61 +141,61 @@ iObject *csMaterialDefAssetXMLLoader::Load(TiXmlElement *element, const csResour
          parameterElement;
          parameterElement = parameterElement->NextSiblingElement("parameter"))
     {
-      csString type, name;
+      std::string type, name;
       if (!parameterElement->Attribute("type") || !parameterElement->Attribute("name"))
       {
         continue;
       }
-      type = csString(parameterElement->Attribute("type"));
-      name = csString(parameterElement->Attribute("name"));
-      csString defaultValue = csString(parameterElement->GetText());
+      type = std::string(parameterElement->Attribute("type"));
+      name = std::string(parameterElement->Attribute("name"));
+      std::string defaultValue = std::string(parameterElement->GetText());
 
       csShaderParameterType paramType;
-      if (type == csString("float"))
+      if (type == std::string("float"))
       {
         paramType = eSPT_Float;
       }
-      else if (type == csString("vec2"))
+      else if (type == std::string("vec2"))
       {
         paramType = eSPT_Vector2;
       }
-      else if (type == csString("vec3"))
+      else if (type == std::string("vec3"))
       {
         paramType = eSPT_Vector3;
       }
-      else if (type == csString("vec4"))
+      else if (type == std::string("vec4"))
       {
         paramType = eSPT_Vector4;
       }
-      else if (type == csString("int"))
+      else if (type == std::string("int"))
       {
         paramType = eSPT_Int;
       }
-      else if (type == csString("ivec2"))
+      else if (type == std::string("ivec2"))
       {
         paramType = eSPT_IVector2;
       }
-      else if (type == csString("ivec3"))
+      else if (type == std::string("ivec3"))
       {
         paramType = eSPT_IVector3;
       }
-      else if (type == csString("ivec4"))
+      else if (type == std::string("ivec4"))
       {
         paramType = eSPT_IVector4;
       }
-      else if (type == csString("col"))
+      else if (type == std::string("col"))
       {
         paramType = eSPT_Color4;
       }
-      else if (type == csString("mat3"))
+      else if (type == std::string("mat3"))
       {
         paramType = eSPT_Matrix3;
       }
-      else if (type == csString("mat4"))
+      else if (type == std::string("mat4"))
       {
         paramType = eSPT_Matrix4;
       }
-      else if (type == csString("texture"))
+      else if (type == std::string("texture"))
       {
         paramType = eSPT_Texture;
       }

@@ -131,10 +131,10 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
 
 
   ctx.GenerateCode(preAlphaOutputs);
-  csString preAlphaCode = ctx.GetCode();
+  std::string preAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(postAlphaOutputs);
-  csString postAlphaCode = ctx.GetCode();
+  std::string postAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(outputs);
   std::set<csShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
@@ -222,7 +222,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
     << "  inFragTexCoord = cs_TexCoord0;" << std::endl
     << "}" << std::endl
     << std::endl;
-  csString vertexShaderSources = ss.str();
+  std::string vertexShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode("GBuffer", "VertexShader", vertexShaderSources);
@@ -259,12 +259,12 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
       << "  }" << std::endl;
   }
   ss << postAlphaCode << std::endl;
-  csString roughness = "0.0";
+  std::string roughness = "0.0";
   if (roughnessOutput)
   {
     roughness = ctx.GetFullOutputValue(roughnessOutput);
   }
-  csString normal = "vec3(0, 0, 1)";
+  std::string normal = "vec3(0, 0, 1)";
   if (normalOutput)
   {
     normal = "((" + ctx.GetFullOutputValue(normalOutput) + ") * 2.0 - 1.0)";
@@ -280,7 +280,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
     << "  cs_SSSSpecular = vec4(0, 0, 0, 0);" << std::endl
     << "}" << std::endl
     << std::endl;
-  csString fragmentShaderSources = ss.str();
+  std::string fragmentShaderSources = ss.str();
   if (logger)
   {
     logger->LogSourceCode("GBuffer", "FragmentShader", fragmentShaderSources);

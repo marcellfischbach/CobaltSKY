@@ -58,14 +58,17 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
   }
 
 
-	m_distances.x = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance1", 5.0f);
-	m_distances.y = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance2", 25.0f);
-	m_distances.z = csSettings::Get()->GetFloatValue("graphicsGL4", "pssm.distance3", 120.0f);
-	m_shadowBufferSize = csSettings::Get()->GetIntValue("graphicsGL4", "pssm.bufferSize", 1024);
+	m_distances.x = csSettings::Get()->GetFloatValue("graphics", "pssm.distance1", 5.0f);
+	m_distances.y = csSettings::Get()->GetFloatValue("graphics", "pssm.distance2", 25.0f);
+	m_distances.z = csSettings::Get()->GetFloatValue("graphics", "pssm.distance3", 120.0f);
+	m_shadowBufferSize = csSettings::Get()->GetIntValue("graphics", "pssm.bufferSize", 1024);
+
+  printf("PSSM.Distances: %f %f %f\n", m_distances.x, m_distances.y, m_distances.z);
+  printf("PSSM.MapSize : %d\n", m_shadowBufferSize);
 
 	csPixelFormat shadowBufferFormat = ePF_R16G16F;
-	m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, (csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize, 3, false);
-	m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, (csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize, 3, false);
+	m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false);
+	m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false);
 
 	iSampler *colorSampler = renderer->CreateSampler();
 	colorSampler->SetBorderColor(csVector4f(1, 1, 1, 1));
@@ -77,9 +80,9 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
 	m_colorBuffer->SetSampler(colorSampler);
 	m_depthBuffer->SetSampler(m_depthSampler);
 
-	
+
 	m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
-	m_shadowBuffer->Initialize((csUInt16)m_shadowBufferSize, (csUInt16)m_shadowBufferSize);
+	m_shadowBuffer->Initialize(m_shadowBufferSize, m_shadowBufferSize);
 	m_shadowBuffer->AddColorTexture(m_colorBuffer);
 	m_shadowBuffer->SetDepthTexture(m_depthBuffer);
 	if (!m_shadowBuffer->Finilize())
@@ -87,8 +90,11 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
 		printf("Unable to finalize shadow buffer object.\n");
 	}
 
-  unsigned shadowMapWidth = 1366 / 2;
-  unsigned shadowMapHeight = 768 / 2;
+  unsigned screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
+  unsigned screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
+
+  unsigned shadowMapWidth = screenResolutionWidth / 2;
+  unsigned shadowMapHeight = screenResolutionHeight / 2;
 
   m_shadowMapRenderer.shadowMap = m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false);
   m_shadowMapRenderer.shadowMap->SetSampler(colorSampler);
