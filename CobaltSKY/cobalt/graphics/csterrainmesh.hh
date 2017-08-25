@@ -50,6 +50,9 @@ private:
   unsigned UpdateDirtyQuad(Quad *quad);
 
   unsigned MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
+  unsigned MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
+  unsigned MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
+  unsigned MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
 
 
   iVertexDeclaration *m_vertexDeclaration;

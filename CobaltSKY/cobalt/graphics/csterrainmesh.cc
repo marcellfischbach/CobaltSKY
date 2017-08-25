@@ -249,8 +249,10 @@ void csTerrainMesh::Update()
   // update the lines
   for (unsigned i = 0; i < m_numberOfLines; ++i)
   {
-    m_lines[i].scale = 1 + (rand() % 3);
-    m_lines[i].scale = m_halfQuadSize;
+    // 1, 2, 4, 8, 16, 32
+
+    m_lines[i].scale = 1 << (rand() % 5);
+    //m_lines[i].scale = 1;
   }
 
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
@@ -308,10 +310,10 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
   min = ::imin(min, quad->lineR->scale);
 
   quad->numberOfIndices = 0;
-  quad->numberOfIndices += MakeIndicesT(min, quad->lineT->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned), quad->ic);
-  //quad->numberOfIndices += MakeIndicesL(min, quad->lineL->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
-  //quad->numberOfIndices += MakeIndicesB(min, quad->lineB->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
-  //quad->numberOfIndices += MakeIndicesR(min, quad->lineR->scale, quad->indices + quad->numberOfIndices * sizeof(unsigned));
+  quad->numberOfIndices += MakeIndicesT(min, quad->lineT->scale, &quad->indices[quad->numberOfIndices], quad->ic);
+  quad->numberOfIndices += MakeIndicesL(min, quad->lineL->scale, &quad->indices[quad->numberOfIndices], quad->ic);
+  quad->numberOfIndices += MakeIndicesB(min, quad->lineB->scale, &quad->indices[quad->numberOfIndices], quad->ic);
+  quad->numberOfIndices += MakeIndicesR(min, quad->lineR->scale, &quad->indices[quad->numberOfIndices], quad->ic);
   /*
 
   if (quad->dirty || true)
@@ -352,6 +354,7 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
 
 unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
+  unsigned innerScanline = innerScale * m_scanline;
   unsigned numIndices = 0;
   if (innerScale == m_quadSize)
   {
@@ -390,6 +393,104 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
 
     }
   }
+  else
+  {
+    unsigned i0 = ic;
+    unsigned i1 = i0 + innerScanline;
+    for (unsigned i = 0, c=0; i < (m_halfQuadSize - innerScale); i+=innerScale,++c)
+    {
+      unsigned i00 = i0;
+      unsigned i01 = i0 + innerScale;
+      unsigned i10 = i1;
+      unsigned i11 = i1 + innerScale;
+
+      unsigned I00 = i0;
+      unsigned I01 = i0 - innerScale;
+      unsigned I10 = i1;
+      unsigned I11 = i1 - innerScale;
+      for (unsigned j = 0; j < i; j+=innerScale)
+      {
+        *iptr++ = i00;
+        *iptr++ = i10;
+        *iptr++ = i11;
+        *iptr++ = i00;
+        *iptr++ = i11;
+        *iptr++ = i01;
+
+        *iptr++ = I00;
+        *iptr++ = I11;
+        *iptr++ = I10;
+        *iptr++ = I00;
+        *iptr++ = I01;
+        *iptr++ = I11;
+
+        i00 += innerScale;
+        i01 += innerScale;
+        i10 += innerScale;
+        i11 += innerScale;
+        I00 -= innerScale;
+        I01 -= innerScale;
+        I10 -= innerScale;
+        I11 -= innerScale;
+      }
+
+      *iptr++ = i00;
+      *iptr++ = i10;
+      *iptr++ = i11;
+      *iptr++ = I00;
+      *iptr++ = I11;
+      *iptr++ = I10;
+      numIndices += c * 12 + 6;
+
+      i0 += innerScanline;
+      i1 += innerScanline;
+    }
+  }
   
+  return numIndices;
+}
+
+unsigned csTerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  unsigned innerScanline = innerScale * m_scanline;
+  unsigned numIndices = 0;
+  unsigned i0 = ic - m_halfQuadSize;
+  unsigned i00 = i0 - m_halfQuadSize * m_scanline;
+  unsigned i01 = i0 + m_halfQuadSize * m_scanline;
+  *iptr++ = ic;
+  *iptr++ = i00;
+  *iptr++ = i01;
+  numIndices = 3;
+
+  return numIndices;
+}
+
+unsigned csTerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  unsigned innerScanline = innerScale * m_scanline;
+  unsigned numIndices = 0;
+  unsigned i0 = ic - m_halfQuadSize * m_scanline;
+  unsigned i00 = i0 - m_halfQuadSize;
+  unsigned i01 = i0 + m_halfQuadSize;
+  *iptr++ = ic;
+  *iptr++ = i01;
+  *iptr++ = i00;
+  numIndices = 3;
+
+  return numIndices;
+}
+
+unsigned csTerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  unsigned innerScanline = innerScale * m_scanline;
+  unsigned numIndices = 0;
+  unsigned i0 = ic + m_halfQuadSize;
+  unsigned i00 = i0 - m_halfQuadSize * m_scanline;
+  unsigned i01 = i0 + m_halfQuadSize * m_scanline;
+  *iptr++ = ic;
+  *iptr++ = i01;
+  *iptr++ = i00;
+  numIndices = 3;
+
   return numIndices;
 }
