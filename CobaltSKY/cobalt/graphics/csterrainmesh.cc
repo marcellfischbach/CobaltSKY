@@ -397,7 +397,12 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
   {
     unsigned i0 = ic;
     unsigned i1 = i0 + innerScanline;
-    for (unsigned i = 0, c=0; i < (m_halfQuadSize - innerScale); i+=innerScale,++c)
+    unsigned range = m_halfQuadSize;
+    if (innerScale != outerScale)
+    {
+      range -= innerScale;
+    }
+    for (unsigned i = 0, c=0; i < range; i+=innerScale,++c)
     {
       unsigned i00 = i0;
       unsigned i01 = i0 + innerScale;
@@ -445,6 +450,84 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
       i0 += innerScanline;
       i1 += innerScanline;
     }
+    if (innerScale != outerScale)
+    {
+      if (outerScale != m_quadSize)
+      {
+        unsigned i10 = i1;
+        unsigned i11 = i1 + outerScale;
+        unsigned i0c = i0 + outerScale / 2;
+
+        unsigned I10 = i1;
+        unsigned I11 = i1 - outerScale;
+        unsigned I0c = i0 - outerScale / 2;
+
+        unsigned numSubSteps = outerScale / innerScale / 2;
+        for (unsigned i = 0; i < m_halfQuadSize; i += outerScale)
+        {
+
+          *iptr++ = i10;
+          *iptr++ = i11;
+          *iptr++ = i0c;
+
+          *iptr++ = I10;
+          *iptr++ = I0c;
+          *iptr++ = I11;
+          numIndices += 6;
+
+          unsigned i0c0 = i0c;
+          unsigned i0c1 = i0c - innerScale;
+          unsigned i0C0 = i0c;
+          unsigned i0C1 = i0c + innerScale;
+
+          unsigned I0c0 = I0c;
+          unsigned I0c1 = I0c + innerScale;
+          unsigned I0C0 = I0c;
+          unsigned I0C1 = I0c - innerScale;
+
+          for (unsigned j = 0; j < numSubSteps; ++j)
+          {
+            *iptr++ = i10;
+            *iptr++ = i0c0;
+            *iptr++ = i0c1;
+            *iptr++ = I10;
+            *iptr++ = I0c1;
+            *iptr++ = I0c0;
+            numIndices += 6;
+
+            if (i + outerScale != m_halfQuadSize)
+            {
+              *iptr++ = i11;
+              *iptr++ = i0C1;
+              *iptr++ = i0C0;
+              *iptr++ = I11;
+              *iptr++ = I0C0;
+              *iptr++ = I0C1;
+              numIndices += 6;
+            }
+
+
+
+            i0c0 -= innerScale;
+            i0c1 -= innerScale;
+            i0C0 += innerScale;
+            i0C1 += innerScale;
+            I0c0 += innerScale;
+            I0c1 += innerScale;
+            I0C0 -= innerScale;
+            I0C1 -= innerScale;
+          }
+
+          i10 += outerScale;
+          i11 += outerScale;
+          i0c += outerScale;
+          I10 -= outerScale;
+          I11 -= outerScale;
+          I0c -= outerScale;
+        }
+      }
+    }
+
   }
   
   return numIndices;
