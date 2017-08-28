@@ -139,6 +139,11 @@ csMesh::LOD &csMesh::GetLOD(csUInt8 lod)
   return m_lods[lod];
 }
 
+void csMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo)
+{
+  // no update here
+}
+
 void csMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numberOfMaterials, csMaterial **materials, csUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())

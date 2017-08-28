@@ -24,6 +24,12 @@ struct iEntityScan
 
 struct csScanConfig
 {
+  csScanConfig()
+    : FrameNo(0)
+  {
+  }
+
+  csUInt64 FrameNo;
 
   bool ScanShadowCasters;
   bool ScanNonShadowCasters;

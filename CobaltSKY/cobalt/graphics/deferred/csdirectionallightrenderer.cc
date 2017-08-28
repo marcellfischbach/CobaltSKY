@@ -289,6 +289,7 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
 	CalcShadowIntensity(light);
 
 	csScanConfig config;
+  
 	config.ScanShadowCasters = true;
 	config.ScanNonShadowCasters = false;
 	config.MainCameraPosition = camera->GetEye();

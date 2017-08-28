@@ -214,6 +214,7 @@ void csStaticMeshState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntit
   {
     if (m_castShadow && config.ScanShadowCasters || !m_castShadow && config.ScanNonShadowCasters)
     {
+      m_mesh->Update(graphics, config.MainCameraPosition, config.FrameNo);
       entityScan->ScanRenderState(this);
     }
   }

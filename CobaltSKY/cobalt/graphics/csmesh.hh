@@ -48,6 +48,7 @@ public:
   const std::string &GetMaterialName(csSize idx) const;
   csUInt32 GetMaterialIndex(const std::string &materialName) const;
 
+  virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
   virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
 
   csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const;

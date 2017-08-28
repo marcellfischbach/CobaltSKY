@@ -40,6 +40,7 @@ private:
   void RenderForward (csRenderState *renderState);
 
 private:
+  csUInt64 m_frameNo;
   csCollection<csRenderState*> m_renderStates[eRQ_COUNT];
   csCollection<csLightState*> m_lightStates;
   iGraphics *m_renderer;

@@ -141,7 +141,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
 
-#if 0
+#if 1
   posX = -1500;
 #else
   posX = 200;
@@ -860,7 +860,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   printf("GroundMaterial: %p\n", groundMaterial);
   if (groundMaterial)
   {
-    groundMaterial->SetFillMode(eFM_Wireframe);
+    //groundMaterial->SetFillMode(eFM_Wireframe);
   }
 
   csEntityScene *entityScene = new csEntityScene();
@@ -872,6 +872,19 @@ csEntityScene *create_scene(iGraphics *graphics)
   csTerrainMesh *terrainMesh = new csTerrainMesh();
   float *heights = new float[numVertices];
   memset(heights, 0, sizeof(float) * numVertices);
+
+  float *hptr = heights;
+  for (unsigned i = 0; i < numVerticesPerSide; ++i)
+  {
+    float angleX = (float)i / 12.0f;
+    for (unsigned j = 0; j < numVerticesPerSide; ++j)
+    {
+      float angleY = (float)j  / 12.0f;
+      *hptr++ = cos(angleX) * cos(angleY) * 4.0;
+      
+    }
+  }
+
   terrainMesh->Initialize(graphics, numVerticesPerSide, 8, 200.0f, 200.0f, heights);
 
   csStaticMeshState *terrainState = new csStaticMeshState();

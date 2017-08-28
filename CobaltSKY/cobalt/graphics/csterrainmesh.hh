@@ -25,6 +25,7 @@ public:
 
   bool Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights);
 
+  virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
   virtual void Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
 
   const csBoundingBox &GetBoundingBox() const;
@@ -45,7 +46,8 @@ private:
   struct Line;
   struct RenderObject;
 
-  void Update();
+  void Update(const csVector3f &referencePos);
+  bool UpdateLine(Line &line, const csVector3f &referencePos);
   void UpdateDirtyRenderObject(RenderObject *renderObject);
   unsigned UpdateDirtyQuad(Quad *quad);
 
@@ -53,7 +55,10 @@ private:
   unsigned MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
   unsigned MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
   unsigned MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *indices, unsigned ic) const;
+  unsigned MakeIndices(unsigned innerScale, unsigned outerScale, int majorStep, int minorStep, bool invert, unsigned *indices, unsigned ic) const;
 
+  csUInt64 m_lastUpdateFrame;
+  bool m_clean;
 
   iVertexDeclaration *m_vertexDeclaration;
   iVertexBuffer *m_vertices;
@@ -61,7 +66,7 @@ private:
   unsigned m_scanline;
   unsigned m_quadSize;
   unsigned m_halfQuadSize;
-
+  unsigned m_maxScale;
 
 
 
@@ -69,7 +74,9 @@ private:
   {
     csVector3f pos0;
     csVector3f pos1;
-    unsigned scale;
+    csVector3f min;
+    csVector3f max;
+    int scale;
     Quad *quad0;
     Quad *quad1;
   };

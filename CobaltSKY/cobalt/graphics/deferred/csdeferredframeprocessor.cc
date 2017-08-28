@@ -28,6 +28,7 @@
 
 csDeferredFrameProcessor::csDeferredFrameProcessor(iGraphics *renderer)
   : iFrameProcessor()
+  , m_frameNo(1)
   , m_renderer(renderer)
   , m_gbuffer(0)
   , m_postProcessor(0)
@@ -190,7 +191,9 @@ iRenderTarget *csDeferredFrameProcessor::Render(csEntity *root, csCamera *camera
   }
   m_lightStates.Clear();
 
+
   csScanConfig config;
+  config.FrameNo = m_frameNo++;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
   config.MainCameraPosition = camera->GetEye();

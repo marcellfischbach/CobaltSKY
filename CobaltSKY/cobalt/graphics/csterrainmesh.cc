@@ -7,10 +7,33 @@
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 
+namespace
+{
+  inline int imax(int a, int b)
+  {
+    return a > b ? a : b;
+  }
+
+  inline int imin(int a, int b)
+  {
+    return a < b ? a : b;
+  }
+
+  inline float fmax(float a, float b)
+  {
+    return a > b ? a : b;
+  }
+
+  inline float fmin(float a, float b)
+  {
+    return a < b ? a : b;
+  }
+}
 
 csTerrainMesh::csTerrainMesh()
   : iMesh()
   , m_materialName("Material")
+  , m_lastUpdateFrame(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
@@ -22,6 +45,15 @@ csTerrainMesh::~csTerrainMesh()
 
 }
 
+void csTerrainMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo)
+{
+  if (m_lastUpdateFrame < frameNo || m_clean)
+  {
+    Update(cameraPos);
+    m_lastUpdateFrame = frameNo;
+    m_clean = false;
+  }
+}
 
 void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **materials, csUInt8 lod)
 {
@@ -33,6 +65,7 @@ void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, csSize numMaterial
   {
     return;
   }
+
   gfx->SetVertexDeclaration(m_vertexDeclaration);
   gfx->SetVertexBuffer(0, m_vertices);
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
@@ -95,6 +128,17 @@ static bool IsPowerOfTwo(unsigned v)
 }
 
 
+static unsigned GetPowerOfTwo(unsigned i)
+{
+  unsigned r = 0;
+  while (i != 1)
+  {
+    r++;
+    i >>= 1;
+  }
+  return r;
+}
+
 bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights)
 {
   if (!IsPowerOfTwo(numVertices - 1))
@@ -114,10 +158,13 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
     printf("csTerrain: NumQuads is to high. Quadsize[%d] <= 2", m_quadSize);
     return false;
   }
+  m_clean = true;
   m_halfQuadSize = m_quadSize / 2;
-
+  m_maxScale = GetPowerOfTwo(m_quadSize);
 
   m_scanline = numVertices;
+
+
 
   struct Vertex
   {
@@ -204,6 +251,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       unsigned v1 = v0 + m_quadSize * m_scanline;
       lptr->pos0 = vertices[v0].pos;
       lptr->pos1 = vertices[v1].pos;
+      lptr->min = csVector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = csVector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
       lptr->quad0 = 0;
       lptr->quad1 = 0;
       if (j > 0)
@@ -224,6 +273,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       unsigned h1 = h0 + m_quadSize;
       lptr->pos0 = vertices[h0].pos;
       lptr->pos1 = vertices[h1].pos;
+      lptr->min = csVector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = csVector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
       if (j > 0)
       {
         lptr->quad0 = &m_quads[(j - 1) * numQuads + i];
@@ -239,26 +290,78 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
     }
   }
 
-  printf("Done\n");
-  Update();
   return true;
 };
 
-void csTerrainMesh::Update()
+void csTerrainMesh::Update(const csVector3f &referencePoint)
 {
   // update the lines
+  bool changed = false;
   for (unsigned i = 0; i < m_numberOfLines; ++i)
   {
-    // 1, 2, 4, 8, 16, 32
+    bool ch = UpdateLine(m_lines[i], referencePoint);
+    changed |= ch;
+  }
 
-    m_lines[i].scale = 1 << (rand() % 5);
-    //m_lines[i].scale = 1;
+  if (!changed)
+  {
+    return;
   }
 
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
   {
     UpdateDirtyRenderObject(&m_renderObjects[i]);
   }
+}
+
+bool csTerrainMesh::UpdateLine(Line &line, const csVector3f &referencePoint)
+{
+  csVector3f refOnLine = referencePoint;
+  if (refOnLine.x < line.min.x)
+  {
+    refOnLine.x = line.min.x;
+  }
+  else if (refOnLine.x > line.max.x)
+  {
+    refOnLine.x = line.max.x;
+  }
+  if (refOnLine.y < line.min.y)
+  {
+    refOnLine.y = line.min.y;
+  }
+  else if (refOnLine.y > line.max.y)
+  {
+    refOnLine.y = line.max.y;
+  }
+  if (refOnLine.z < line.min.z)
+  {
+    refOnLine.z = line.min.z;
+  }
+  else if (refOnLine.z > line.max.z)
+  {
+    refOnLine.z = line.max.z;
+  }
+
+
+  csVector3f r = csVector3f::Sub(referencePoint, refOnLine, r);
+  float distance = r.Length();
+
+  float f = distance / 25.0;
+
+  int scale = f;
+  if (scale > m_maxScale)
+  {
+    scale = m_maxScale;
+  }
+  scale = 1 << scale;
+  if (scale == line.scale)
+  {
+    return false;
+  }
+
+  line.scale = scale;
+
+  return true;
 }
 
 void csTerrainMesh::UpdateDirtyRenderObject(csTerrainMesh::RenderObject *renderObject)
@@ -288,18 +391,6 @@ void csTerrainMesh::UpdateDirtyRenderObject(csTerrainMesh::RenderObject *renderO
 
 }
 
-namespace 
-{
-  inline int imax(int a, int b)
-  {
-    return a > b ? a : b;
-  }
-
-  inline int imin(int a, int b)
-  {
-    return a < b ? a : b;
-  }
-}
 
 unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
 {
@@ -354,13 +445,38 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
 
 unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
-  unsigned innerScanline = innerScale * m_scanline;
+  return MakeIndices(innerScale, outerScale, m_scanline, 1, false, iptr, ic);
+}
+
+unsigned csTerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  return MakeIndices(innerScale, outerScale, -1, m_scanline, false, iptr, ic);
+}
+
+unsigned csTerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  return MakeIndices(innerScale, outerScale, -m_scanline, -1, false, iptr, ic);
+}
+
+unsigned csTerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+{
+  return MakeIndices(innerScale, outerScale, 1, -m_scanline, false, iptr, ic);
+}
+
+
+unsigned csTerrainMesh::MakeIndices(unsigned innerScale, unsigned outerScale, int majorStep, int minorStep, bool invert, unsigned *iptr, unsigned ic) const
+{
+  int innerMajorStep = innerScale * majorStep;
+  int innerMinorStep = innerScale * minorStep;
+
+  int outerMajorStep = outerScale * majorStep;
+  int outerMinorStep = outerScale * minorStep;
   unsigned numIndices = 0;
   if (innerScale == m_quadSize)
   {
-    unsigned i0 = ic + m_halfQuadSize * m_scanline;
-    unsigned i00 = i0 - m_halfQuadSize;
-    unsigned i01 = i0 + m_halfQuadSize;
+    unsigned i0 = ic + m_halfQuadSize * majorStep;
+    unsigned i00 = i0 - m_halfQuadSize * minorStep;
+    unsigned i01 = i0 + m_halfQuadSize * minorStep;
     *iptr++ = ic;
     *iptr++ = i00;
     *iptr++ = i01;
@@ -370,19 +486,19 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
   {
     if (outerScale == m_quadSize)
     {
-      unsigned i0 = ic + m_halfQuadSize * m_scanline;
-      unsigned i00 = i0 - m_halfQuadSize;
-      unsigned i01 = i0 + m_halfQuadSize;
+      unsigned i0 = ic + m_halfQuadSize * majorStep;
+      unsigned i00 = i0 - m_halfQuadSize * minorStep;
+      unsigned i01 = i0 + m_halfQuadSize * minorStep;
       *iptr++ = ic;
       *iptr++ = i00;
       *iptr++ = i01;
       numIndices = 3;
     }
-    else 
+    else
     {
-      unsigned i0 = ic + m_halfQuadSize * m_scanline;
-      unsigned i00 = i0 - m_halfQuadSize;
-      unsigned i01 = i0 + m_halfQuadSize;
+      unsigned i0 = ic + m_halfQuadSize * majorStep;
+      unsigned i00 = i0 - m_halfQuadSize * minorStep;
+      unsigned i01 = i0 + m_halfQuadSize * minorStep;
       *iptr++ = ic;
       *iptr++ = i00;
       *iptr++ = i0;
@@ -396,24 +512,24 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
   else
   {
     unsigned i0 = ic;
-    unsigned i1 = i0 + innerScanline;
+    unsigned i1 = i0 + innerMajorStep;
     unsigned range = m_halfQuadSize;
     if (innerScale != outerScale)
     {
       range -= innerScale;
     }
-    for (unsigned i = 0, c=0; i < range; i+=innerScale,++c)
+    for (unsigned i = 0, c = 0; i < range; i += innerScale, ++c)
     {
       unsigned i00 = i0;
-      unsigned i01 = i0 + innerScale;
+      unsigned i01 = i0 + innerMinorStep;
       unsigned i10 = i1;
-      unsigned i11 = i1 + innerScale;
+      unsigned i11 = i1 + innerMinorStep;
 
       unsigned I00 = i0;
-      unsigned I01 = i0 - innerScale;
+      unsigned I01 = i0 - innerMinorStep;
       unsigned I10 = i1;
-      unsigned I11 = i1 - innerScale;
-      for (unsigned j = 0; j < i; j+=innerScale)
+      unsigned I11 = i1 - innerMinorStep;
+      for (unsigned j = 0; j < i; j += innerScale)
       {
         *iptr++ = i00;
         *iptr++ = i10;
@@ -429,14 +545,14 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
         *iptr++ = I01;
         *iptr++ = I11;
 
-        i00 += innerScale;
-        i01 += innerScale;
-        i10 += innerScale;
-        i11 += innerScale;
-        I00 -= innerScale;
-        I01 -= innerScale;
-        I10 -= innerScale;
-        I11 -= innerScale;
+        i00 += innerMinorStep;
+        i01 += innerMinorStep;
+        i10 += innerMinorStep;
+        i11 += innerMinorStep;
+        I00 -= innerMinorStep;
+        I01 -= innerMinorStep;
+        I10 -= innerMinorStep;
+        I11 -= innerMinorStep;
       }
 
       *iptr++ = i00;
@@ -447,20 +563,20 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
       *iptr++ = I10;
       numIndices += c * 12 + 6;
 
-      i0 += innerScanline;
-      i1 += innerScanline;
+      i0 += innerMajorStep;
+      i1 += innerMajorStep;
     }
     if (innerScale != outerScale)
     {
       if (outerScale != m_quadSize)
       {
         unsigned i10 = i1;
-        unsigned i11 = i1 + outerScale;
-        unsigned i0c = i0 + outerScale / 2;
+        unsigned i11 = i1 + outerMinorStep;
+        unsigned i0c = i0 + outerMinorStep / 2;
 
         unsigned I10 = i1;
-        unsigned I11 = i1 - outerScale;
-        unsigned I0c = i0 - outerScale / 2;
+        unsigned I11 = i1 - outerMinorStep;
+        unsigned I0c = i0 - outerMinorStep / 2;
 
         unsigned numSubSteps = outerScale / innerScale / 2;
         for (unsigned i = 0; i < m_halfQuadSize; i += outerScale)
@@ -476,14 +592,14 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
           numIndices += 6;
 
           unsigned i0c0 = i0c;
-          unsigned i0c1 = i0c - innerScale;
+          unsigned i0c1 = i0c - innerMinorStep;
           unsigned i0C0 = i0c;
-          unsigned i0C1 = i0c + innerScale;
+          unsigned i0C1 = i0c + innerMinorStep;
 
           unsigned I0c0 = I0c;
-          unsigned I0c1 = I0c + innerScale;
+          unsigned I0c1 = I0c + innerMinorStep;
           unsigned I0C0 = I0c;
-          unsigned I0C1 = I0c - innerScale;
+          unsigned I0C1 = I0c - innerMinorStep;
 
           for (unsigned j = 0; j < numSubSteps; ++j)
           {
@@ -495,7 +611,7 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
             *iptr++ = I0c0;
             numIndices += 6;
 
-            if (i + outerScale != m_halfQuadSize)
+            if (((i + outerScale) != m_halfQuadSize) || ((j + 1) != numSubSteps))
             {
               *iptr++ = i11;
               *iptr++ = i0C1;
@@ -508,72 +624,27 @@ unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, u
 
 
 
-            i0c0 -= innerScale;
-            i0c1 -= innerScale;
-            i0C0 += innerScale;
-            i0C1 += innerScale;
-            I0c0 += innerScale;
-            I0c1 += innerScale;
-            I0C0 -= innerScale;
-            I0C1 -= innerScale;
+            i0c0 -= innerMinorStep;
+            i0c1 -= innerMinorStep;
+            i0C0 += innerMinorStep;
+            i0C1 += innerMinorStep;
+            I0c0 += innerMinorStep;
+            I0c1 += innerMinorStep;
+            I0C0 -= innerMinorStep;
+            I0C1 -= innerMinorStep;
           }
 
-          i10 += outerScale;
-          i11 += outerScale;
-          i0c += outerScale;
-          I10 -= outerScale;
-          I11 -= outerScale;
-          I0c -= outerScale;
+          i10 += outerMinorStep;
+          i11 += outerMinorStep;
+          i0c += outerMinorStep;
+          I10 -= outerMinorStep;
+          I11 -= outerMinorStep;
+          I0c -= outerMinorStep;
         }
       }
     }
 
   }
-  
-  return numIndices;
-}
-
-unsigned csTerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
-{
-  unsigned innerScanline = innerScale * m_scanline;
-  unsigned numIndices = 0;
-  unsigned i0 = ic - m_halfQuadSize;
-  unsigned i00 = i0 - m_halfQuadSize * m_scanline;
-  unsigned i01 = i0 + m_halfQuadSize * m_scanline;
-  *iptr++ = ic;
-  *iptr++ = i00;
-  *iptr++ = i01;
-  numIndices = 3;
-
-  return numIndices;
-}
-
-unsigned csTerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
-{
-  unsigned innerScanline = innerScale * m_scanline;
-  unsigned numIndices = 0;
-  unsigned i0 = ic - m_halfQuadSize * m_scanline;
-  unsigned i00 = i0 - m_halfQuadSize;
-  unsigned i01 = i0 + m_halfQuadSize;
-  *iptr++ = ic;
-  *iptr++ = i01;
-  *iptr++ = i00;
-  numIndices = 3;
-
-  return numIndices;
-}
-
-unsigned csTerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
-{
-  unsigned innerScanline = innerScale * m_scanline;
-  unsigned numIndices = 0;
-  unsigned i0 = ic + m_halfQuadSize;
-  unsigned i00 = i0 - m_halfQuadSize * m_scanline;
-  unsigned i01 = i0 + m_halfQuadSize * m_scanline;
-  *iptr++ = ic;
-  *iptr++ = i01;
-  *iptr++ = i00;
-  numIndices = 3;
 
   return numIndices;
 }
