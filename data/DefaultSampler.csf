@@ -1,0 +1,26 @@
+asset 
+{
+	data 
+	{
+		sampler 
+		{
+			filter(Anisotropic)
+			anisotropy(value:-6.0e-10)
+			minLOD(-1000)
+			maxLOD(1000)
+			addressU(Repeat)
+			addressV(Repeat)
+			addressW(Repeat)
+			borderColor(0 0 0 0)
+			compareMode(None)
+			comareFunc(Less)
+		}
+	}
+	preview 
+	{
+		editorIcon 
+		{
+			image(filename:narf)
+		}
+	}
+}

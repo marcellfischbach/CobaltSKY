@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <cobalt/csengine.hh>
+#include <cobalt/core/cobaltfile/cscobaltfile.hh>
 #include <cobalt/core/csevent.hh>
 #include <cobalt/core/cseventbus.hh>
 #include <cobalt/core/csfileinfo.hh>
@@ -108,6 +109,12 @@ unsigned g_screenResolutionHeight;
 
 int main(int argc, char **argv)
 {
+  csCobaltFile file;
+  file.Parse("g:/ide/devs/cobaltsky/data/DefaultSampler.csf");
+  if (true)
+  {
+    return 0;
+  }
 
   for (unsigned i = 0; i < argc; ++i)
   {
@@ -141,7 +148,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
 
-#if 1
+#if 0
   posX = -1500;
 #else
   posX = 200;

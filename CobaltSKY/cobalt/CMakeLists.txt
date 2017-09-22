@@ -57,8 +57,8 @@ set(SOURCE_CORE
     core/csfileinfo.hh
     core/csfilestd.cc
     core/csfilestd.hh
-		core/csini.cc
-		core/csini.hh
+    core/csini.cc
+    core/csini.hh
     core/cslibrary.cc
     core/cslibrary.hh
     core/cslogger.cc
@@ -85,6 +85,20 @@ source_group(
     ${SOURCE_CORE}
     )
 
+set(SOURCE_CORE_COBALTFILE
+	core/cobaltfile/cscobaltfile.cc
+	core/cobaltfile/cscobaltfile.hh
+	core/cobaltfile/cscobaltfileentry.cc
+	core/cobaltfile/cscobaltfileentry.hh
+	)
+
+source_group(
+    "cobalt\\core\\cobaltfile"
+    FILES
+    ${SOURCE_CORE_COBALTFILE}
+    )
+
+
 set(SOURCE_CORE_RESOURCE
     core/resource/iassetloader.hh
     core/resource/ifileloader.hh
@@ -104,6 +118,7 @@ source_group(
     FILES
     ${SOURCE_CORE_RESOURCE}
     )
+
 
 
 set(SOURCE_ENTITY
@@ -488,6 +503,7 @@ set(ALL_SOURCES
     ${SOURCE}
     ${SOURCE_ANIMATION}
     ${SOURCE_CORE}
+    ${SOURCE_CORE_COBALTFILE}
     ${SOURCE_CORE_RESOURCE}
     ${SOURCE_ENTITY}
     ${SOURCE_GRAPHICS}
