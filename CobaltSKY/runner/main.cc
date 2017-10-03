@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <cobalt/csengine.hh>
-#include <cobalt/core/cobaltfile/cscobaltfile.hh>
 #include <cobalt/core/csevent.hh>
 #include <cobalt/core/cseventbus.hh>
 #include <cobalt/core/csfileinfo.hh>
@@ -73,6 +72,7 @@
 #include <math.h>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <runner/event.hh>
+#include <csfile/csffile.hh>
 
 
 static bool g_CreateCharacter = false;
@@ -109,8 +109,29 @@ unsigned g_screenResolutionHeight;
 
 int main(int argc, char **argv)
 {
-  csCobaltFile file;
-  file.Parse("g:/ide/devs/cobaltsky/data/DefaultSampler.csf");
+  csfFile file;
+  file.Parse("d:/programming/cobaltsky/data/DefaultSampler.csf");
+
+  char buffer[256];
+  for (unsigned i = 0; i < 256; i++)
+  {
+    buffer[i] = 'a' + (i % 26);
+  }
+  csfBlob *blob0 = file.CreateBlob();
+  blob0->SetName("data");
+  blob0->SetBuffer(buffer, 256);
+  file.AddBlob(blob0);
+
+  csfBlob *blob1 = file.CreateBlob();
+  blob1->SetName("preview");
+  blob1->SetBuffer(buffer, 128);
+  file.AddBlob(blob1);
+
+  file.Output("d:/programming/cobaltsky/data/DefaultSampler_test.csf", false, 2);
+  csfFile newFile;
+  newFile.Parse("d:/programming/cobaltsky/data/DefaultSampler_test.csf");
+
+  newFile.Output("d:/programming/cobaltsky/data/DefaultSampler_test_2.csf");
   if (true)
   {
     return 0;

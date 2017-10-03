@@ -85,18 +85,6 @@ source_group(
     ${SOURCE_CORE}
     )
 
-set(SOURCE_CORE_COBALTFILE
-	core/cobaltfile/cscobaltfile.cc
-	core/cobaltfile/cscobaltfile.hh
-	core/cobaltfile/cscobaltfileentry.cc
-	core/cobaltfile/cscobaltfileentry.hh
-	)
-
-source_group(
-    "cobalt\\core\\cobaltfile"
-    FILES
-    ${SOURCE_CORE_COBALTFILE}
-    )
 
 
 set(SOURCE_CORE_RESOURCE
@@ -503,7 +491,6 @@ set(ALL_SOURCES
     ${SOURCE}
     ${SOURCE_ANIMATION}
     ${SOURCE_CORE}
-    ${SOURCE_CORE_COBALTFILE}
     ${SOURCE_CORE_RESOURCE}
     ${SOURCE_ENTITY}
     ${SOURCE_GRAPHICS}
@@ -524,6 +511,7 @@ add_library(CobaltSKY SHARED
 
 target_link_libraries(CobaltSKY
     TiXml
+	CobaltSKY-File
     ${PNG_LIBRARIES}
     )
 
