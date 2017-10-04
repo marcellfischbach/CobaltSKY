@@ -1,9 +1,10 @@
 #pragma once
 
+#include <csfile/csfexport.hh>
 #include <string>
 #include <vector>
 
-class csfEntry
+class CSF_API csfEntry
 {
   friend class csfFile;
 public:
@@ -20,17 +21,17 @@ public:
   void AddAttribute(const std::string &key, const std::string &value);
   bool HasAttribute(size_t idx) const;
   bool HasAttribute(const std::string &key) const;
-  std::string GetAttribute(size_t idx) const;
-  std::string GetAttribute(const std::string &key) const;
 
-  int GetAttributeInt(size_t idx) const;
-  int GetAttributeInt(const std::string &key) const;
-  long GetAttributeLong(size_t idx) const;
-  long GetAttributeLong(const std::string &key) const;
-  float GetAttributeFloat(size_t idx) const;
-  float GetAttributeFloat(const std::string &key) const;
-  double GetAttributeDouble(size_t idx) const;
-  double GetAttributeDouble(const std::string &key) const;
+  std::string GetAttribute(size_t idx, const std::string &defaultValue = "") const;
+  std::string GetAttribute(const std::string &key, const std::string &defaultValue = "") const;
+  int GetAttributeInt(size_t idx, int defaultValue = 0) const;
+  int GetAttributeInt(const std::string &key, int defaultValue = 0) const;
+  long GetAttributeLong(size_t idx, long defaultValue = 0) const;
+  long GetAttributeLong(const std::string &key, long defaultValue = 0) const;
+  float GetAttributeFloat(size_t idx, float defaultValue = 0.0f) const;
+  float GetAttributeFloat(const std::string &key, float defaultValue = 0.0f) const;
+  double GetAttributeDouble(size_t idx, double defaultValue = 0.0) const;
+  double GetAttributeDouble(const std::string &key, double defaultValue = 0.0) const;
 
 
   csfEntry *GetParent();
@@ -39,6 +40,8 @@ public:
   size_t GetNumberOfChildren() const;
   csfEntry *GetChild(size_t idx);
   const csfEntry *GetChild(size_t idx) const;
+
+  const csfEntry *GetEntry(const std::string &entry) const;
 
   void Debug() const;
 

@@ -94,18 +94,18 @@ bool csfEntry::HasAttribute(const std::string& key) const
   return false;
 }
 
-std::string csfEntry::GetAttribute(size_t idx) const
+std::string csfEntry::GetAttribute(size_t idx, const std::string &defaultValue) const
 {
   if (idx >= m_attributes.size())
   {
-    return "";
+    return defaultValue;
   }
   return m_attributes[idx].value;
 }
 
 
 
-std::string csfEntry::GetAttribute(const std::string& key) const
+std::string csfEntry::GetAttribute(const std::string& key, const std::string &defaultValue) const
 {
   for (const Attribute &attribute : m_attributes)
   {
@@ -114,48 +114,79 @@ std::string csfEntry::GetAttribute(const std::string& key) const
       return attribute.value;
     }
   }
-  return "";
+  return defaultValue;
 }
 
 
-int csfEntry::GetAttributeInt(size_t idx) const
+int csfEntry::GetAttributeInt(size_t idx, int defaultValue) const
 {
-  return atoi(GetAttribute(idx).c_str());
+  if (HasAttribute(idx))
+  {
+    return atoi(GetAttribute(idx).c_str());
+  }
+  return defaultValue;
 }
 
-int csfEntry::GetAttributeInt(const std::string &key) const
+int csfEntry::GetAttributeInt(const std::string &key, int defaultValue) const
 {
-  return atoi(GetAttribute(key).c_str());
+  if (HasAttribute(key))
+  {
+    return atoi(GetAttribute(key).c_str());
+  }
+  return defaultValue;
 }
 
-long csfEntry::GetAttributeLong(size_t idx) const
+long csfEntry::GetAttributeLong(size_t idx, long defaultValue) const
 {
-  return atol(GetAttribute(idx).c_str());
+  if (HasAttribute(idx))
+  {
+    return atol(GetAttribute(idx).c_str());
+  }
+  return defaultValue;
 }
 
-long csfEntry::GetAttributeLong(const std::string &key) const
+long csfEntry::GetAttributeLong(const std::string &key, long defaultValue) const
 {
-  return atol(GetAttribute(key).c_str());
+  if (HasAttribute(key))
+  {
+    return atol(GetAttribute(key).c_str());
+  }
+  return defaultValue;
 }
 
-float csfEntry::GetAttributeFloat(size_t idx) const
+float csfEntry::GetAttributeFloat(size_t idx, float defaultValue) const
 {
-  return (float)atof(GetAttribute(idx).c_str());
+  if (HasAttribute(idx))
+  {
+    return (float)atof(GetAttribute(idx).c_str());
+  }
 }
 
-float csfEntry::GetAttributeFloat(const std::string &key) const
+float csfEntry::GetAttributeFloat(const std::string &key, float defaultValue) const
 {
-  return (float)atof(GetAttribute(key).c_str());
+  if (HasAttribute(key))
+  {
+    return (float)atof(GetAttribute(key).c_str());
+  }
+  return defaultValue;
 }
 
-double csfEntry::GetAttributeDouble(size_t idx) const
+double csfEntry::GetAttributeDouble(size_t idx, double defaultValue) const
 {
-  return atof(GetAttribute(idx).c_str());
+  if (HasAttribute(idx))
+  {
+    return atof(GetAttribute(idx).c_str());
+  }
+  return defaultValue;
 }
 
-double csfEntry::GetAttributeDouble(const std::string &key) const
+double csfEntry::GetAttributeDouble(const std::string &key, double defaultValue) const
 {
-  return atof(GetAttribute(key).c_str());
+  if (HasAttribute(key))
+  {
+    return atof(GetAttribute(key).c_str());
+  }
+  return defaultValue;
 }
 
 csfEntry *csfEntry::GetParent()
@@ -190,6 +221,37 @@ const csfEntry *csfEntry::GetChild(size_t idx) const
     return 0;
   }
   return m_children[idx];
+}
+
+const csfEntry *csfEntry::GetEntry(const std::string &entry) const
+{
+  std::string entryName = entry;
+  while (true)
+  {
+    for (auto child : m_children)
+    {
+      if (child->GetTagName() == entryName)
+      {
+        if (entryName == entry)
+        {
+          return child;
+        }
+        else
+        {
+          std::string newEntry = entry.substr(entryName.length() + 1);
+          return child->GetEntry(newEntry);
+        }
+      }
+    }
+
+    size_t idx = entryName.find_last_of('.');
+    if (idx == std::string::npos)
+    {
+      break;
+    }
+    entryName = entryName.substr(0, idx);
+  }
+  return 0;
 }
 
 void csfEntry::Debug() const

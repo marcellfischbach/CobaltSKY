@@ -18,6 +18,8 @@ public:
   csfEntry *GetRoot();
   const csfEntry *GetRoot() const;
 
+  const csfEntry *GetEntry(const std::string &entry) const;
+
   const csfBlob *GetBlob(const std::string &blob) const;
 
   void AddBlob(csfBlob *blob);

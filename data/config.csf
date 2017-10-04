@@ -1,0 +1,34 @@
+config{
+
+	
+	video{
+		resolution(1366 768)
+	}
+	
+	graphics{
+		pssm{
+			distances(5.0 15.0 80.0)
+			bufferSize(2048)
+		}
+	}
+	
+	physics{
+		broadphase(dbvt)
+	}
+	
+	vfs{
+		rootPaths {
+			root(name:ValkyrieDemo prio:10 path:".")
+			root(name:Debug prio:100 path:"debug")
+		}
+		
+		resolutions{
+			resolution(name:shaders path:"materials/gl4")
+			resolution(name:materials path:"materials")
+			resolution(name:textures path:"materials/textures")
+			resolution(name:fonts path:"fonts")
+			resolution(name:models path:"models")
+			resolution(name:entities path:"entities")
+		}
+	}
+}

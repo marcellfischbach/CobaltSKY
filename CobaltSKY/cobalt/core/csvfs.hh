@@ -13,6 +13,7 @@ using std::map;
 using std::vector;
 
 
+class csfEntry;
 class csSettings;
 class TiXmlElement;
 
@@ -91,8 +92,8 @@ public:
 private:
   csVFS ();
   bool LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath);
-  bool ImportRootPath(csSettings *settings, const std::string &groupName);
-  bool ImportResolution(csSettings *settings, const std::string &groupName);
+  bool ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry);
+  bool ImportResolution(csSettings *settings, const csfEntry *resolutionEntry);
 
   static std::string ExtractSymbol (const std::string &path, unsigned idx, unsigned &length);
 

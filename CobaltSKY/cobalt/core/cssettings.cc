@@ -42,7 +42,7 @@ static std::string strip_path (const std::string &path)
 
 bool csSettings::Initialize(const std::string &configFileName)
 {
-  if (!m_ini.Import(std::string(configFileName)))
+  if (!m_file.Parse(std::string(configFileName)))
   {
     return false;
   }
@@ -67,62 +67,87 @@ const std::string &csSettings::GetRootPath () const
   return _rootPath;
 }
 
-std::vector<std::string> csSettings::FindSubGroupNames(const std::string &groupSubName) const
+bool csSettings::HasEntry(const std::string &entryName) const
 {
-  return m_ini.FindSubGroupNames(groupSubName);
+  return m_file.GetEntry(std::string("config.") + entryName);
 }
 
-bool csSettings::HasGroup (const std::string &group)
+const csfEntry *csSettings::GetEntry(const std::string &entryName) const
 {
-  return m_ini.HasGroup(group);
+  return m_file.GetEntry(std::string("config.") + entryName);
 }
 
-bool csSettings::HasValue(const std::string &entry)
+bool csSettings::HasValue(const std::string &entryName, size_t attribute) const
 {
-  return m_ini.HasEntry(entry);
+  const csfEntry *entry = GetEntry(entryName);
+
+  return entry && entry->GetNumberOfAttributes() > attribute;
 }
 
-std::string csSettings::GetStringValue(const std::string &entry)
+
+bool csSettings::HasValue(const std::string &entryName, const std::string &attributeName) const
 {
-  return m_ini.GetValue(entry);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->HasAttribute(attributeName);
 }
 
-int csSettings::GetIntValue(const std::string &entry, int defaultValue)
+std::string csSettings::GetStringValue(const std::string &entryName, size_t attribute, const std::string &defaultValue) const
 {
-  return m_ini.GetIntValue(entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttribute(attribute) : defaultValue;
 }
 
-float csSettings::GetFloatValue(const std::string &entry, float defaultValue)
+std::string csSettings::GetStringValue(const std::string &entryName, const std::string &attributeName, const std::string &defaultValue) const
 {
-  return m_ini.GetFloatValue(entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->HasAttribute(attributeName) ? entry->GetAttribute(attributeName) : defaultValue;
 }
 
-bool csSettings::GetBoolValue(const std::string &entry, bool defaultValue)
+int csSettings::GetIntValue(const std::string &entryName, size_t attribute, int defaultValue) const
 {
-  return m_ini.GetBoolValue(entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttributeInt(attribute) : defaultValue;
 }
 
-bool csSettings::HasValue(const std::string &group, const std::string &entry)
+int csSettings::GetIntValue(const std::string &entryName, const std::string &attributeName, int defaultValue) const
 {
-  return m_ini.HasEntry(group, entry);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->HasAttribute(attributeName) ? entry->GetAttributeInt(attributeName) : defaultValue;
 }
 
-std::string csSettings::GetStringValue(const std::string &group, const std::string &entry)
+
+float csSettings::GetFloatValue(const std::string &entryName, size_t attribute, float defaultValue) const
 {
-  return m_ini.GetValue(group, entry);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttributeFloat(attribute) : defaultValue;
 }
 
-int csSettings::GetIntValue(const std::string &group, const std::string &entry, int defaultValue)
+float csSettings::GetFloatValue(const std::string &entryName, const std::string &attributeName, float defaultValue) const
 {
-  return m_ini.GetIntValue(group, entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  return entry && entry->HasAttribute(attributeName) ? entry->GetAttributeFloat(attributeName) : defaultValue;
 }
 
-float csSettings::GetFloatValue(const std::string &group, const std::string &entry, float defaultValue)
+
+bool csSettings::GetBoolValue(const std::string &entryName, size_t attribute, bool defaultValue) const
 {
-  return m_ini.GetFloatValue(group, entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  if (entry && entry->GetNumberOfAttributes() > attribute)
+  {
+    std::string value = entry->GetAttribute(attribute);
+    return value == "true" || value == "on" || value == "yes";
+  }
+  return defaultValue;
 }
 
-bool csSettings::GetBoolValue(const std::string &group, const std::string &entry, bool defaultValue)
+bool csSettings::GetBoolValue(const std::string &entryName, const std::string &attributeName, bool defaultValue) const
 {
-  return m_ini.GetBoolValue(group, entry, defaultValue);
+  const csfEntry *entry = GetEntry(entryName);
+  if (entry && entry->HasAttribute(attributeName))
+  {
+    std::string value = entry->GetAttribute(attributeName);
+    return value == "true" || value == "on" || value == "yes";
+  }
+  return defaultValue;
 }
+

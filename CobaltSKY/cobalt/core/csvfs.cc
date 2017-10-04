@@ -109,48 +109,65 @@ bool csVFS::Initialize(csSettings *settings)
     return false;
   }
 
-  std::vector<std::string> groupNames = settings->FindSubGroupNames("vfs.root");
-  for (const std::string &groupName : groupNames)
+  const csfEntry *rootPathsEntry = settings->GetEntry("vfs.rootPaths");
+  if (!rootPathsEntry)
   {
-    ImportRootPath(settings, groupName);
+    return false;
+  }
+  for (size_t i = 0, in = rootPathsEntry->GetNumberOfChildren(); i < in; ++i)
+  {
+    const csfEntry *entry = rootPathsEntry->GetChild(i);
+    if (entry && entry->GetTagName() == "root")
+    {
+
+      ImportRootPath(settings, entry);
+    }
   }
 
-  groupNames = settings->FindSubGroupNames("vfs.resolution");
-  for (const std::string &groupName : groupNames)
+
+  const csfEntry *resolutionsEntry = settings->GetEntry("vfs.resolutions");
+  if (!rootPathsEntry)
   {
-    ImportResolution(settings, groupName);
+    return false;
   }
+  for (size_t i = 0, in = resolutionsEntry->GetNumberOfChildren(); i < in; ++i)
+  {
+    const csfEntry *entry = resolutionsEntry->GetChild(i);
+    if (entry && entry->GetTagName() == "resolution")
+    {
+      ImportResolution(settings, entry);
+    }
+  }
+
+
+
   return true;
 }
 
-bool csVFS::ImportRootPath(csSettings *settings, const std::string &groupName)
+bool csVFS::ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry)
 {
-  if (
-    !settings->HasValue(groupName, "name") ||
-    !settings->HasValue(groupName, "path")
-    ) {
+  if (!rootPathEntry || !rootPathEntry->HasAttribute("name") || !rootPathEntry->HasAttribute("path"))
+  {
     return false;
   }
-  Entry entry;
 
-  entry.SetPath(settings->GetStringValue(groupName, "path"));
-  entry.SetName(settings->GetStringValue(groupName, "name"));
+  Entry entry;
+  entry.SetPath(rootPathEntry->GetAttribute("path"));
+  entry.SetName(rootPathEntry->GetAttribute("name"));
   entry.SetAbsPath(settings->GetRootPath() + std::string("/") + entry.GetPath());
-  entry.SetPriority(settings->GetIntValue(groupName, "prio", entry.GetPriority()));
+  entry.SetPriority(rootPathEntry->GetAttributeInt("prio", entry.GetPriority()));
 
   m_entries.push_back(entry);
   return true;
 }
 
-bool csVFS::ImportResolution(csSettings *settings, const std::string &groupName)
+bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEntry)
 {
-  if (
-    !settings->HasValue(groupName, "name") ||
-    !settings->HasValue(groupName, "path")
-    ) {
+  if (!resolutionEntry->HasAttribute("name") || !resolutionEntry->HasAttribute("path"))
+  {
     return false;
   }
-  AddPath(settings->GetStringValue(groupName, "name"), settings->GetStringValue(groupName, "path"));
+  AddPath(resolutionEntry->GetAttribute("name"), resolutionEntry->GetAttribute("path"));
 
 }
 

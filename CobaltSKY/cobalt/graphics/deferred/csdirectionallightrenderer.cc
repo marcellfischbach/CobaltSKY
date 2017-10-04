@@ -58,10 +58,10 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
   }
 
 
-	m_distances.x = csSettings::Get()->GetFloatValue("graphics", "pssm.distance1", 5.0f);
-	m_distances.y = csSettings::Get()->GetFloatValue("graphics", "pssm.distance2", 25.0f);
-	m_distances.z = csSettings::Get()->GetFloatValue("graphics", "pssm.distance3", 120.0f);
-	m_shadowBufferSize = csSettings::Get()->GetIntValue("graphics", "pssm.bufferSize", 1024);
+	m_distances.x = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 0, 5.0f);
+	m_distances.y = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 1, 25.0f);
+	m_distances.z = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 2, 120.0f); 
+	m_shadowBufferSize = csSettings::Get()->GetIntValue("graphics.pssm.bufferSize", 0, 1024);
 
   printf("PSSM.Distances: %f %f %f\n", m_distances.x, m_distances.y, m_distances.z);
   printf("PSSM.MapSize : %d\n", m_shadowBufferSize);
@@ -90,8 +90,8 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
 		printf("Unable to finalize shadow buffer object.\n");
 	}
 
-  unsigned screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
-  unsigned screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
+  unsigned screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
+  unsigned screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
   unsigned shadowMapWidth = screenResolutionWidth / 2;
   unsigned shadowMapHeight = screenResolutionHeight / 2;

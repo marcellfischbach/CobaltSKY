@@ -3,7 +3,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csini.hh>
+#include <csfile/csffile.hh>
 #include <string>
 
 
@@ -18,27 +18,30 @@ public:
   bool Initialize(const std::string &configFileName);
   const std::string &GetRootPath () const;
 
-  std::vector<std::string> FindSubGroupNames(const std::string &subGroup) const;
 
-  bool HasGroup (const std::string &group);
+  bool HasEntry(const std::string &entry) const;
+  const csfEntry *GetEntry(const std::string &entry) const;
 
-  bool HasValue(const std::string &entry = 0);
-  std::string GetStringValue(const std::string &entry = 0);
-  int GetIntValue(const std::string &entry = 0, int defaultValue = 0);
-  float GetFloatValue(const std::string &entry = 0, float defaultValue = 0.0f);
-  bool GetBoolValue(const std::string &entry = 0, bool defaultValue = false);
+  bool HasValue(const std::string &entry, size_t attribute) const;
+  bool HasValue(const std::string &entry, const std::string &attributeName) const;
 
-  bool HasValue (const std::string &group, const std::string &entry = 0);
-  std::string GetStringValue (const std::string &group, const std::string &entry = 0);
-  int GetIntValue (const std::string &group, const std::string &entry = 0, int defaultValue = 0);
-  float GetFloatValue (const std::string &group, const std::string &entry = 0, float defaultValue = 0.0f);
-  bool GetBoolValue (const std::string &group, const std::string &entry = 0, bool defaultValue = false);
+  std::string GetStringValue(const std::string &entry, size_t attribute, const std::string &defaultValue = std::string("")) const;
+  std::string GetStringValue(const std::string &entry, const std::string &attributeName, const std::string &defaultValue = std::string ("")) const;
+
+  int GetIntValue(const std::string &entry, size_t attribute, int defaultValue = 0) const;
+  int GetIntValue(const std::string &entry, const std::string &attributeName, int defaultValue = 0) const;
+
+  float GetFloatValue(const std::string &entry, size_t attribute, float defaultValue = 0.0f) const;
+  float GetFloatValue(const std::string &entry, const std::string &attributeName, float defaultValue = 0.0f) const;
+
+  bool GetBoolValue(const std::string &entry, size_t attribute, bool defaultValue = false) const;
+  bool GetBoolValue(const std::string &entry, const std::string &attributeName, bool defaultValue = false) const;
 
 protected:
   csSettings();
 
 private:
-  csINI m_ini;
+  csfFile m_file;
 
   static csSettings*  static_instances;
   std::string         _rootPath;

@@ -514,7 +514,7 @@ bool csfFile::IsString(const std::string &token) const
       {
         return false;
       }
-      if (!isalpha(ch) && ch != '_')
+      if (!isalpha(ch) && ch != '_' && ch != '.')
       {
         return false;
       }
@@ -569,6 +569,11 @@ csfEntry *csfFile::GetRoot()
 const csfEntry *csfFile::GetRoot() const
 {
   return m_root;
+}
+
+const csfEntry *csfFile::GetEntry(const std::string &entry) const
+{
+  return m_root->GetEntry(entry);
 }
 
 const csfBlob *csfFile::GetBlob(const std::string &blob) const

@@ -109,39 +109,20 @@ unsigned g_screenResolutionHeight;
 
 int main(int argc, char **argv)
 {
-  csfFile file;
-  file.Parse("d:/programming/cobaltsky/data/DefaultSampler.csf");
-
-  char buffer[256];
-  for (unsigned i = 0; i < 256; i++)
-  {
-    buffer[i] = 'a' + (i % 26);
-  }
-  csfBlob *blob0 = file.CreateBlob();
-  blob0->SetName("data");
-  blob0->SetBuffer(buffer, 256);
-  file.AddBlob(blob0);
-
-  csfBlob *blob1 = file.CreateBlob();
-  blob1->SetName("preview");
-  blob1->SetBuffer(buffer, 128);
-  file.AddBlob(blob1);
-
-  file.Output("d:/programming/cobaltsky/data/DefaultSampler_test.csf", false, 2);
-  csfFile newFile;
-  newFile.Parse("d:/programming/cobaltsky/data/DefaultSampler_test.csf");
-
-  newFile.Output("d:/programming/cobaltsky/data/DefaultSampler_test_2.csf");
-  if (true)
-  {
-    return 0;
-  }
-
   for (unsigned i = 0; i < argc; ++i)
   {
     printf("%s ", argv[i]);
   }
   printf("\n");
+  csfFile file;
+  file.Parse(std::string(argv[2]));
+
+  const csfEntry *resEntry = file.GetEntry("config.video.resolution");
+  if (false)
+  {
+    return 0;
+  }
+
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());
   const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename("materials/solid.xasset");
@@ -166,8 +147,8 @@ int main(int argc, char **argv)
   csInt16 posX = 100;
   csInt16 posY = 100;
 
-  g_screenResolutionWidth = csSettings::Get()->GetIntValue("screenResolutionWidth", 1366);
-  g_screenResolutionHeight = csSettings::Get()->GetIntValue("screenResolutionHeight", 768);
+  g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
+  g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
 #if 0
   posX = -1500;
