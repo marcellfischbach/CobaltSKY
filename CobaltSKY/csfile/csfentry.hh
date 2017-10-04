@@ -12,13 +12,22 @@ public:
 
   void SetTagName(const std::string &tagName);
   const std::string &GetTagName() const;
-  
+
+  void RemoveAttributes();
   size_t GetNumberOfAttributes() const;
   std::string GetAttributeKey(size_t idx) const;
   std::string GetAttributeValue(size_t idx) const;
 
   void AddAttribute(const std::string &attribute);
   void AddAttribute(const std::string &key, const std::string &value);
+  void AddAttributeInt(int attribute);
+  void AddAttributeInt(const std::string &key, int attribute);
+  void AddAttributeLong(long attribute);
+  void AddAttributeLong(const std::string &key, long attribute);
+  void AddAttributeFloat(float attribute);
+  void AddAttributeFloat(const std::string &key, float attribute);
+  void AddAttributeDouble(double attribute);
+  void AddAttributeDouble(const std::string &key, double attribute);
   bool HasAttribute(size_t idx) const;
   bool HasAttribute(const std::string &key) const;
 

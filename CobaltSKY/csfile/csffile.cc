@@ -588,9 +588,9 @@ const csfBlob *csfFile::GetBlob(const std::string &blob) const
   return 0;
 }
 
-csfEntry *csfFile::CreateEntry()
+csfEntry *csfFile::CreateEntry(const std::string &tagName)
 {
-  return new csfEntry(this);
+  return new csfEntry(this, tagName);
 }
 
 csfBlob *csfFile::CreateBlob()

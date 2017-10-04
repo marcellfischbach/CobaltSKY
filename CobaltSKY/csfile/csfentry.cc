@@ -38,6 +38,11 @@ const std::string &csfEntry::GetTagName() const
   return m_tagName;
 }
 
+void csfEntry::RemoveAttributes()
+{
+  m_attributes.clear();
+}
+
 size_t csfEntry::GetNumberOfAttributes() const
 {
   return m_attributes.size();
@@ -75,6 +80,46 @@ void csfEntry::AddAttribute(const std::string &key, const std::string &value)
   attr.key = key;
   attr.value = value;
   m_attributes.push_back(attr);
+}
+
+void csfEntry::AddAttributeInt(int attribute)
+{
+  AddAttribute(std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeInt(const std::string &key, int attribute)
+{
+  AddAttribute(key, std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeLong(long attribute)
+{
+  AddAttribute(std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeLong(const std::string &key, long attribute)
+{
+  AddAttribute(key, std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeFloat(float attribute)
+{
+  AddAttribute(std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeFloat(const std::string &key, float attribute)
+{
+  AddAttribute(key, std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeDouble(double attribute)
+{
+  AddAttribute(std::to_string(attribute));
+}
+
+void csfEntry::AddAttributeDouble(const std::string &key, double attribute)
+{
+  AddAttribute(key, std::to_string(attribute));
 }
 
 bool csfEntry::HasAttribute(size_t idx) const

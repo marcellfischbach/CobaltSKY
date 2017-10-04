@@ -24,7 +24,7 @@ public:
 
   void AddBlob(csfBlob *blob);
 
-  csfEntry *CreateEntry();
+  csfEntry *CreateEntry(const std::string &tagName = std::string(""));
   csfBlob *CreateBlob();
 
 private:

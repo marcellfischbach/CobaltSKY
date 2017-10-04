@@ -5,6 +5,7 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/graphics/isampler.hh>
+#include <csfile/csffile.hh>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -48,6 +49,7 @@ void SamplerEditor::Save()
   m_widget->Store();
   MergeSampler();
   MergeFile();
+  MergeNewFile();
 }
 
 void SamplerEditor::MergeSampler()
@@ -217,6 +219,7 @@ void SamplerEditor::MergeFile()
 
 }
 
+
 void SamplerEditor::ReplaceFile()
 {
   QDomDocument doc;
@@ -268,6 +271,60 @@ void SamplerEditor::ReplaceFile()
   }
 }
 
+void SamplerEditor::MergeNewFile()
+{
+  ReplaceNewFile();
+}
+
+void SamplerEditor::ReplaceNewFile()
+{
+  csfFile file;
+  csfEntry *assetEntry = file.CreateEntry("asset");
+  csfEntry *dataEntry = file.CreateEntry("data");
+  csfEntry *samplerEntry = file.CreateEntry("sampler");
+  csfEntry *filterEntry = file.CreateEntry("filter");
+  csfEntry *anisotropyEntry = file.CreateEntry("anisotropy");
+  csfEntry *minLODEntry = file.CreateEntry("minLOD");
+  csfEntry *maxLODEntry = file.CreateEntry("maxLOD");
+  csfEntry *addressUEntry = file.CreateEntry("addressU");
+  csfEntry *addressVEntry = file.CreateEntry("addressV");
+  csfEntry *addressWEntry = file.CreateEntry("addressW");
+  csfEntry *borderColorEntry = file.CreateEntry("borderColor");
+  csfEntry *compareModeEntry = file.CreateEntry("compareMode");
+  csfEntry *compareFuncEntry = file.CreateEntry("compareFunc");
+
+  SetFilter(filterEntry);
+  SetAnisotropy(anisotropyEntry);
+  SetMinLOD(minLODEntry);
+  SetMaxLOD(maxLODEntry);
+  SetAddressU(addressUEntry);
+  SetAddressV(addressVEntry);
+  SetAddressW(addressWEntry);
+  SetBorderColor(borderColorEntry);
+  SetTextureCompareMode(compareModeEntry);
+  SetTextureCompareFunc(compareFuncEntry);
+
+  file.GetRoot()->AddChild(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(samplerEntry);
+  samplerEntry->AddChild(filterEntry);
+  samplerEntry->AddChild(anisotropyEntry);
+  samplerEntry->AddChild(minLODEntry);
+  samplerEntry->AddChild(maxLODEntry);
+  samplerEntry->AddChild(addressUEntry);
+  samplerEntry->AddChild(addressVEntry);
+  samplerEntry->AddChild(addressWEntry);
+  samplerEntry->AddChild(borderColorEntry);
+  samplerEntry->AddChild(compareModeEntry);
+  samplerEntry->AddChild(compareFuncEntry);
+
+  QString fileName(GetResourceFileName());
+  fileName = fileName.replace(".xasset", ".csf");
+
+  file.Output(std::string((const char*)fileName.toLatin1()), false, 2);
+
+}
+
 void SamplerEditor::Reset()
 {
   m_widget->Reset();
@@ -299,10 +356,38 @@ void SamplerEditor::SetFilter(QDomDocument doc, QDomElement element)
 }
 
 
+void SamplerEditor::SetFilter(csfEntry *entry)
+{
+  std::string text;
+  switch (m_widget->GetFilter())
+  {
+  case eFM_MinMagNearest: text = "MinMagNearest"; break;
+  case eFM_MinNearestMagLinear: text = "MinNearestMagLinear"; break;
+  case eFM_MinLinearMagNearest: text = "MinLinearMagNearest"; break;
+  case eFM_MinMagLinear: text = "MinMagLinear"; break;
+  case eFM_MinMagMipNearest: text = "MinMagMipNearest"; break;
+  case eFM_MinMagNearestMipLinear: text = "MinMagNearestMipLinear"; break;
+  case eFM_MinNearestMagLinearMipNearest: text = "MinNearestMagLinearMipNearest"; break;
+  case eFM_MinNearestMagMipLinear: text = "MinNearestMagMipLinear"; break;
+  case eFM_MinLinearMagMipNearest: text = "MinLinearMagMipNearest"; break;
+  case eFM_MinLinearMagNearestMipLinear: text = "MinLinearMagNearestMipLinear"; break;
+  case eFM_MinMagLinearMipNearest: text = "MinMagLinearMipNearest"; break;
+  case eFM_MinMagMipLinear: text = "MinMagMipLinear"; break;
+  case eFM_Anisotropic: text = "Anisotropic"; break;
+  }
+  entry->AddAttribute(text);
+}
+
 void SamplerEditor::SetAnisotropy(QDomDocument doc, QDomElement element)
 {
   RemoveChildren(element);
   element.appendChild(doc.createTextNode(QString::number(m_widget->GetAnisotropy())));
+}
+
+void SamplerEditor::SetAnisotropy(csfEntry *entry)
+{
+  entry->RemoveAttributes();
+  entry->AddAttributeInt(m_widget->GetAnisotropy());
 }
 
 
@@ -312,11 +397,23 @@ void SamplerEditor::SetMinLOD(QDomDocument doc, QDomElement element)
   element.appendChild(doc.createTextNode(QString::number(m_widget->GetMinLOD())));
 }
 
+void SamplerEditor::SetMinLOD(csfEntry *entry)
+{
+  entry->RemoveAttributes();
+  entry->AddAttributeInt(m_widget->GetMinLOD());
+}
+
 
 void SamplerEditor::SetMaxLOD(QDomDocument doc, QDomElement element)
 {
   RemoveChildren(element);
   element.appendChild(doc.createTextNode(QString::number(m_widget->GetMaxLOD())));
+}
+
+void SamplerEditor::SetMaxLOD(csfEntry *entry)
+{
+  entry->RemoveAttributes();
+  entry->AddAttributeInt(m_widget->GetMaxLOD());
 }
 
 
@@ -326,6 +423,11 @@ void SamplerEditor::SetAddressU(QDomDocument doc, QDomElement element)
   SetAddress(doc, m_widget->GetAddressU(), element);
 }
 
+void SamplerEditor::SetAddressU(csfEntry *entry)
+{
+  SetAddress(entry, m_widget->GetAddressU());
+}
+
 
 void SamplerEditor::SetAddressV(QDomDocument doc, QDomElement element)
 {
@@ -333,11 +435,20 @@ void SamplerEditor::SetAddressV(QDomDocument doc, QDomElement element)
   SetAddress(doc, m_widget->GetAddressV(), element);
 }
 
+void SamplerEditor::SetAddressV(csfEntry *entry)
+{
+  SetAddress(entry, m_widget->GetAddressV());
+}
 
 void SamplerEditor::SetAddressW(QDomDocument doc, QDomElement element)
 {
   RemoveChildren(element);
   SetAddress(doc, m_widget->GetAddressW(), element);
+}
+
+void SamplerEditor::SetAddressW(csfEntry *entry)
+{
+  SetAddress(entry, m_widget->GetAddressW());
 }
 
 
@@ -355,6 +466,22 @@ void SamplerEditor::SetAddress(QDomDocument doc, csTextureAddressMode address, Q
   element.appendChild(doc.createTextNode(text));
 }
 
+void SamplerEditor::SetAddress(csfEntry *entry, csTextureAddressMode address)
+{
+  std::string text;
+  switch (address)
+  {
+  case eTAM_Repeat: text = "Repeat"; break;
+  case eTAM_RepeatMirror: text = "RepeatMirror"; break;
+  case eTAM_Clamp: text = "Clamp"; break;
+  case eTAM_ClampBorder: text = "ClampBorder"; break;
+  case eTAM_MirrowOnce: text = "MirrowOnce"; break;
+  }
+
+  entry->RemoveAttributes();
+  entry->AddAttribute(text);
+}
+
 void SamplerEditor::SetBorderColor(QDomDocument doc, QDomElement element)
 {
   RemoveChildren(element);
@@ -362,6 +489,18 @@ void SamplerEditor::SetBorderColor(QDomDocument doc, QDomElement element)
   QString text = QString("%1 %2 %3 %4").arg(col.x).arg(col.y).arg(col.z).arg(col.w);
   element.appendChild(doc.createTextNode(text));
 }
+
+
+void SamplerEditor::SetBorderColor(csfEntry *entry)
+{
+  csVector4f col = m_widget->GetBorderColor();
+  entry->RemoveAttributes();
+  entry->AddAttributeFloat(col.x);
+  entry->AddAttributeFloat(col.y);
+  entry->AddAttributeFloat(col.z);
+  entry->AddAttributeFloat(col.w);
+}
+
 
 
 void SamplerEditor::SetTextureCompareMode(QDomDocument doc, QDomElement element)
@@ -374,6 +513,19 @@ void SamplerEditor::SetTextureCompareMode(QDomDocument doc, QDomElement element)
   case eTCM_None: text = "None"; break;
   }
   element.appendChild(doc.createTextNode(text));
+}
+
+
+void SamplerEditor::SetTextureCompareMode(csfEntry *entry)
+{
+  std::string text;
+  switch (m_widget->GetTextureCompareMode())
+  {
+  case eTCM_CompareToR: text = "CompareToR"; break;
+  case eTCM_None: text = "None"; break;
+  }
+  entry->RemoveAttributes();
+  entry->AddAttribute(text);
 }
 
 
@@ -394,6 +546,25 @@ void SamplerEditor::SetTextureCompareFunc(QDomDocument doc, QDomElement element)
   }
   element.appendChild(doc.createTextNode(text));
 
+}
+
+
+void SamplerEditor::SetTextureCompareFunc(csfEntry *entry)
+{
+  std::string text;
+  switch (m_widget->GetTextureCompareFunc())
+  {
+  case eTCF_LessOrEqual: text = "LessOrEqual"; break;
+  case eTCF_GreaterOrEqual: text = "GreaterOrEqual"; break;
+  case eTCF_Less: text = "Less"; break;
+  case eTCF_Greater: text = "Greater"; break;
+  case eTCF_Equal: text = "Equal"; break;
+  case eTCF_NotEqual: text = "NotEqual"; break;
+  case eTCF_Always: text = "Always"; break;
+  case eTCF_Never: text = "Never"; break;
+  }
+  entry->RemoveAttributes();
+  entry->AddAttribute(text);
 }
 
 

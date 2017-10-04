@@ -56,7 +56,7 @@ bool Editor::Initialize(int argc, char **argv)
     return false;
   }
 
-  std::string settingsPath = projectPath + "/cobalt.xml";
+  std::string settingsPath = projectPath + "/config.csf";
 
   csSettings::Get()->Initialize(settingsPath.c_str());
   csVFS::Get()->Initialize(csSettings::Get());
