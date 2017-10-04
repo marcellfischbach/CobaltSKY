@@ -53,6 +53,15 @@ void csResourceManager::RegisterLoader(iXMLLoader *loader)
   }
 }
 
+
+void csResourceManager::RegisterLoader(iCSFLoader *loader)
+{
+  if (loader)
+  {
+    loader->AddRef();
+    m_csfLoaders.push_back(loader);
+  }
+}
 void csResourceManager::RegisterLoader(iAssetLoader *loader)
 {
   if (loader)
@@ -155,6 +164,35 @@ const csClass *csResourceManager::EvalClass(TiXmlElement *element, const csResou
     if (loader->CanLoad(element, locator))
     {
       return loader->EvalClass(element, locator, userData);
+    }
+  }
+  return 0;
+}
+
+
+iObject *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData)
+{
+  for (int i = m_csfLoaders.size() - 1; i >= 0; --i)
+  {
+    const iCSFLoader *loader = m_csfLoaders[i];
+    if (loader->CanLoad(entry, locator))
+    {
+      iObject *obj = loader->Load(entry, locator, userData);
+      RegisterResource(obj, locator);
+      return obj;
+    }
+  }
+  return 0;
+}
+
+const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+{
+  for (int i = m_csfLoaders.size() - 1; i >= 0; --i)
+  {
+    const iCSFLoader *loader = m_csfLoaders[i];
+    if (loader->CanLoad(entry, locator))
+    {
+      return loader->EvalClass(entry, locator, userData);
     }
   }
   return 0;

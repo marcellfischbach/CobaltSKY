@@ -9,6 +9,7 @@
 #include <cobalt/core/csclass.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/resource/iassetloader.hh>
+#include <cobalt/core/resource/icsfloader.hh>
 #include <cobalt/core/resource/ifileloader.hh>
 #include <cobalt/core/resource/ixmlloader.hh>
 #include <cobalt/core/resource/csassetfileloader.hh>
@@ -18,7 +19,8 @@
 
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
-#include <tixml\tinyxml.h>
+#include <tixml/tinyxml.h>
+#include <csfile/csffile.hh>
 #include <map>
 #include <vector>
 #include <string>
@@ -87,6 +89,22 @@ public:
   virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
 
   /**
+  * \brief Load an object from the \a csffile.
+  *
+  * IMPORTANT: The caller is the owner of the returned object.
+  *
+  * \param element The XML-element where resource should be read from
+  * \param locator The origin location from where the resource should be loaded
+  * \param userData An optional user data that the loader can use.
+  *
+  * \return The object
+  */
+  virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0);
+
+
+  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+
+  /**
   * \brief Load an object from the \a asset \a file.
   *
   * IMPORTANT: The caller is the owner of the returned object.
@@ -137,6 +155,22 @@ public:
   T *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0)
   {
     iObject *object = Load(element, locator, userData);
+    if (object)
+    {
+      T* t_instance = csQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0)
+  {
+    iObject *object = Load(entry, locator, userData);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -245,6 +279,7 @@ public:
   }
 
   virtual void RegisterLoader(iXMLLoader *loader);
+  virtual void RegisterLoader(iCSFLoader *loader);
   virtual void RegisterLoader(iFileLoader *loader);
   virtual void RegisterLoader(iAssetLoader *loader);
 
@@ -267,6 +302,7 @@ protected:
 protected:
 
   std::vector<iFileLoader*> m_fileLoaders;
+  std::vector<iCSFLoader*> m_csfLoaders;
   std::vector<iXMLLoader*> m_xmlLoaders;
   std::vector<iAssetLoader*> m_assetLoaders;
 

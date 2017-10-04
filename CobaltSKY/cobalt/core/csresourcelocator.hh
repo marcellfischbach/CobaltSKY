@@ -15,6 +15,7 @@ public:
   csResourceLocator AsFileName() const;
   csResourceLocator AsXAsset() const;
   csResourceLocator AsData() const;
+  csResourceLocator AsCSF() const;
 
   bool IsAnonymous() const;
 

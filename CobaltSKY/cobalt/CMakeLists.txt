@@ -89,6 +89,7 @@ source_group(
 
 set(SOURCE_CORE_RESOURCE
     core/resource/iassetloader.hh
+    core/resource/icsfloader.hh
     core/resource/ifileloader.hh
     core/resource/ixmlloader.hh
     core/resource/csassetfileloader.hh
@@ -97,6 +98,8 @@ set(SOURCE_CORE_RESOURCE
     core/resource/csassetxmlloader.cc
     core/resource/csbasexmlloader.hh
     core/resource/csbasexmlloader.cc
+	core/resource/cscsffileloader.hh
+	core/resource/cscsffileloader.cc
     core/resource/csxmlfileloader.hh
     core/resource/csxmlfileloader.cc
     )

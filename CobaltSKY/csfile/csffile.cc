@@ -6,8 +6,9 @@
 #include <iostream>
 #include <fstream>
 
-csfFile::InputBuffer::InputBuffer(std::ifstream &stream, csUInt32 bufferSize)
-  : m_stream(stream)
+csfFile::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, csUInt32 bufferSize)
+  : IInputBuffer()
+  , m_stream(stream)
   , m_row(1)
   , m_column(1)
 {
@@ -17,12 +18,12 @@ csfFile::InputBuffer::InputBuffer(std::ifstream &stream, csUInt32 bufferSize)
   m_idx = 0;
 }
 
-csfFile::InputBuffer::~InputBuffer()
+csfFile::InputStreamBuffer::~InputStreamBuffer()
 {
   delete[] m_buffer;
 }
 
-bool csfFile::InputBuffer::HasMore()
+bool csfFile::InputStreamBuffer::HasMore()
 {
   if (m_idx >= m_bufferSize || m_idx >= m_bufferCapacity)
   {
@@ -31,7 +32,7 @@ bool csfFile::InputBuffer::HasMore()
   return m_idx < m_bufferCapacity;
 }
 
-csUInt8 csfFile::InputBuffer::GetByte()
+csUInt8 csfFile::InputStreamBuffer::GetByte()
 {
   csUInt8 ch = m_buffer[m_idx++];
   if (ch == '\n')
@@ -46,17 +47,17 @@ csUInt8 csfFile::InputBuffer::GetByte()
   return ch;
 }
 
-csUInt32 csfFile::InputBuffer::GetRow() const
+csUInt32 csfFile::InputStreamBuffer::GetRow() const
 {
   return m_row;
 }
 
-csUInt32 csfFile::InputBuffer::GetColumn() const
+csUInt32 csfFile::InputStreamBuffer::GetColumn() const
 {
   return m_column;
 }
 
-void csfFile::InputBuffer::fetchData()
+void csfFile::InputStreamBuffer::fetchData()
 {
   m_stream.read((char*)m_buffer, m_bufferSize);
   if (m_stream)
@@ -71,9 +72,61 @@ void csfFile::InputBuffer::fetchData()
 }
 
 
+
+
+
+csfFile::InputDataBuffer::InputDataBuffer(const csUInt8 *buffer, size_t size)
+  : IInputBuffer()
+  , m_buffer(buffer)
+  , m_bufferSize(size)
+  , m_row(1)
+  , m_column(1)
+  , m_idx(0)
+{
+}
+
+csfFile::InputDataBuffer::~InputDataBuffer()
+{
+}
+
+bool csfFile::InputDataBuffer::HasMore()
+{
+  return m_idx < m_bufferSize;
+}
+
+csUInt8 csfFile::InputDataBuffer::GetByte()
+{
+  csUInt8 ch = m_buffer[m_idx++];
+  if (ch == '\n')
+  {
+    m_row++;
+    m_column = 1;
+  }
+  else if (ch != '\r')
+  {
+    m_column++;
+  }
+  return ch;
+}
+
+csUInt32 csfFile::InputDataBuffer::GetRow() const
+{
+  return m_row;
+}
+
+csUInt32 csfFile::InputDataBuffer::GetColumn() const
+{
+  return m_column;
+}
+
+
+
+
 csfFile::csfFile()
   : m_danglingChar(0)
   , m_root(new csfEntry(this, "<root>"))
+  , m_error(false)
+  , m_errorMessage("")
 {
 
 }
@@ -95,17 +148,36 @@ static std::string tokenMap[] = {
 
 bool csfFile::Parse(const std::string &fileName)
 {
+  m_error = false;
+  m_errorMessage = "";
+
   std::ifstream file;
   file.open(fileName);
   if (!file.is_open())
   {
-    std::cout << "Unable to open file: " << fileName << std::endl;
-    return false;
+    return MapError("Unable to open file: " + fileName);
   }
 
-  std::cout << "Successfully opened: " << fileName << std::endl;
-  InputBuffer buffer (file, 32);
+  InputStreamBuffer buffer(file, 32);
 
+  bool res = Parse(&buffer);
+  return res;
+}
+
+
+bool csfFile::Parse(const csUInt8 *data, size_t size)
+{
+  m_error = false;
+  m_errorMessage = "";
+
+  InputDataBuffer buffer(data, size);
+
+  bool res = Parse(&buffer);
+  return res;
+}
+
+bool csfFile::Parse(csfFile::IInputBuffer *buffer)
+{
   csfEntry *parent = m_root;
   csfEntry *currentEntry = 0;
   enum State
@@ -123,6 +195,10 @@ bool csfFile::Parse(const std::string &fileName)
     if (token.type == eTT_Hash)
     {
       csfBlob *blob = GetBlob(buffer);
+      if (!blob)
+      {
+        return false;
+      }
       AddBlob(blob);
       continue;
     }
@@ -145,8 +221,7 @@ bool csfFile::Parse(const std::string &fileName)
     case eS_ExpectEntry:
       if (token.type != eTT_String)
       {
-        std::cout << "eS_ExpectEntry: Expected Token: " << tokenMap[eTT_String] << ", " << tokenMap[eTT_Hash] <<  " but got token: " << tokenMap[token.type] << " @ " << token.row << ":" << token.column << std::endl;
-        return false;
+        return MapError("eS_ExpectEntry: Expected Token: " + tokenMap[eTT_String] +  ", " + tokenMap[eTT_Hash] + " but got token: " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       }
       else 
       {
@@ -175,15 +250,13 @@ bool csfFile::Parse(const std::string &fileName)
         currentEntry = parent;
         if (!currentEntry)
         {
-          std::cout << "eS_ExpectAttribsOrChildrenOrClose: Invalid stack depth @ " << token.row << ":" << token.column << std::endl;
-          return false;
+          return MapError("eS_ExpectAttribsOrChildrenOrClose: Invalid stack depth @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
         }
         parent = currentEntry->GetParent();
       }
       else
       {
-        std::cout << "eS_ExpectAttribsOrChildrenOrClose: Expected Tokens: [" << tokenMap[eTT_CurlyBraceOpen] << ", " << tokenMap[eTT_CurlyBraceClose] << ", " << tokenMap[eTT_ParenOpen] << token.column << " but got token: " << tokenMap[token.type] << " @ " << token.row << ":" << std::endl;
-        return false;
+        return MapError("eS_ExpectAttribsOrChildrenOrClose: Expected Tokens: [" + tokenMap[eTT_CurlyBraceOpen] + ", " + tokenMap[eTT_CurlyBraceClose] + ", " + tokenMap[eTT_ParenOpen] + "] but got token: " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       }
       break;
 
@@ -193,8 +266,7 @@ bool csfFile::Parse(const std::string &fileName)
       {
         if (tokenCounter + 1 >= tokens.size())
         {
-          std::cout << "eS_ExpectAttrib: Invalid token size @ " << token.row << ":" << token.column << std::endl;
-          return false;
+          return MapError("eS_ExpectAttrib: Invalid token size @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
         }
 
         Token nextToken = tokens[tokenCounter + 1];
@@ -206,15 +278,13 @@ bool csfFile::Parse(const std::string &fileName)
         {
           if (tokenCounter + 2 >= tokens.size())
           {
-            std::cout << "eS_ExpectAttrib: Invalid token size @ " << token.row << ":" << token.column << std::endl;
-            return false;
+            return MapError("eS_ExpectAttrib: Invalid token size @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
           }
 
           nextToken = tokens[tokenCounter + 2];
           if (nextToken.type != eTT_String && nextToken.type != eTT_Number)
           {
-            std::cout << "eS_ExpectAttrib: Expected Tokens: " << tokenMap[eTT_String] << ", " << tokenMap[eTT_Number] << " but got " << tokenMap[token.type] << " @ " << token.row << ":" << token.column << std::endl;
-            return false;
+            return MapError("eS_ExpectAttrib: Expected Tokens: " + tokenMap[eTT_String] + ", " + tokenMap[eTT_Number] + " but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
           }
           currentEntry->AddAttribute(token.value, nextToken.value);
           tokenCounter += 2;
@@ -226,8 +296,8 @@ bool csfFile::Parse(const std::string &fileName)
       }
       else
       {
-        std::cout << "eS_ExpectAttrib: Expected Tokens: " << tokenMap[eTT_String] << ", " << tokenMap[eTT_Number] << ", " << tokenMap[eTT_ParenClose] << " but got " << tokenMap[token.type] << " @ " << token.row << ":" << token.column << std::endl;
-        return false;
+
+        return MapError("eS_ExpectAttrib: Expected Tokens: " + tokenMap[eTT_String] + ", " + tokenMap[eTT_Number] + ", " + tokenMap[eTT_ParenClose] + " but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       }
       break;
 
@@ -243,8 +313,7 @@ bool csfFile::Parse(const std::string &fileName)
         currentEntry = parent;
         if (!currentEntry)
         {
-          std::cout << "eS_ExpectEntryOrChildrenOrClose: Invalid stack depth " << " @ " << token.row << ":" << token.column << std::endl;
-          return false;
+          return MapError("eS_ExpectEntryOrChildrenOrClose: Invalid stack depth @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
         }
         parent = currentEntry->GetParent();
       }
@@ -255,8 +324,7 @@ bool csfFile::Parse(const std::string &fileName)
       }
       else
       {
-        std::cout << "eS_ExpectEntryOrChildrenOrClose: Expected Tokens: [" << tokenMap[eTT_CurlyBraceOpen] << ", " << tokenMap[eTT_CurlyBraceClose] << ", " << tokenMap[eTT_String] << " @ " << token.row << ":" << token.column << " but got token: " << tokenMap[token.type] << std::endl;
-        return false;
+        return MapError("eS_ExpectEntryOrChildrenOrClose: Expected Tokens: [" + tokenMap[eTT_CurlyBraceOpen] + ", " + tokenMap[eTT_CurlyBraceClose] + ", " + tokenMap[eTT_String] + " but got token: " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       }
       break;
 
@@ -265,12 +333,11 @@ bool csfFile::Parse(const std::string &fileName)
 
   }
 
-  m_root->Debug();
 
   return true;
 }
 
-csfFile::Token csfFile::GetToken(csfFile::InputBuffer& buffer)
+csfFile::Token csfFile::GetToken(csfFile::IInputBuffer* buffer)
 {
   std::string token = "";
   std::string fullToken = "";
@@ -280,11 +347,11 @@ csfFile::Token csfFile::GetToken(csfFile::InputBuffer& buffer)
     fullToken += m_danglingChar;
     m_danglingChar = 0;
   }
-  csUInt32 row = buffer.GetRow();
-  csUInt32 column = buffer.GetColumn();
-  while (buffer.HasMore())
+  csUInt32 row = buffer->GetRow();
+  csUInt32 column = buffer->GetColumn();
+  while (buffer->HasMore())
   {
-    char ch = (char)buffer.GetByte();
+    char ch = (char)buffer->GetByte();
     Token t = CheckToken(token + ch, fullToken + ch, row, column);
     if (t.type != eTT_Invalid)
     {
@@ -313,12 +380,12 @@ csfFile::Token csfFile::GetToken(csfFile::InputBuffer& buffer)
   return CheckToken(token, fullToken, row, column);
 }
 
-csfBlob *csfFile::GetBlob(csfFile::InputBuffer &buffer)
+csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
 {
   Token token = GetToken(buffer);
   if (token.type != eTT_String)
   {
-    std::cout << "Misformed blob: Expected '" << tokenMap[eTT_String] << "' but got " << tokenMap[token.type] << " @ " << token.row << ":" << token.column << std::endl;
+    MapError("Misformed blob: Expected '" + tokenMap[eTT_String] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
     return 0;
   }
   std::string blobName = token.value;
@@ -327,7 +394,7 @@ csfBlob *csfFile::GetBlob(csfFile::InputBuffer &buffer)
   token = GetToken(buffer);
   if (token.type != eTT_Colon)
   {
-    std::cout << "Misformed blob: Expected '" << tokenMap[eTT_Colon] << "' but got " << tokenMap[token.type] << " @ " << token.row << ":" << token.column << std::endl;
+    MapError("Misformed blob: Expected '" + tokenMap[eTT_Colon] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
     return 0;
   }
 
@@ -335,25 +402,25 @@ csfBlob *csfFile::GetBlob(csfFile::InputBuffer &buffer)
   b[0] = m_danglingChar; m_danglingChar = 0;
   for (unsigned i = 1; i < 4; ++i)
   {
-    if (!buffer.HasMore())
+    if (!buffer->HasMore())
     {
-      std::cout << "Misformed blob: Expected buffer size  @ " << token.row << ":" << token.column << std::endl;
+      MapError("Misformed blob: Expected buffer size  @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       return 0;
     }
-    b[i] = buffer.GetByte();
+    b[i] = buffer->GetByte();
   }
 
   csUInt32 size = *reinterpret_cast<csUInt32*>(b);
   csUInt8 *blobBuffer = new csUInt8[size];
   for (csUInt32 i = 0; i < size; ++i)
   {
-    if (!buffer.HasMore())
+    if (!buffer->HasMore())
     {
       delete[] blobBuffer;
-      std::cout << "Misformed blob: Expected buffer size  " << size << " @ " << token.row << ":" << token.column << std::endl;
+      MapError("Misformed blob: Expected buffer size  " + std::to_string(size) + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       return 0;
     }
-    blobBuffer[i] = buffer.GetByte();
+    blobBuffer[i] = buffer->GetByte();
   }
 
   csfBlob *blob = CreateBlob();
@@ -598,6 +665,16 @@ csfBlob *csfFile::CreateBlob()
   return new csfBlob(this);
 }
 
+bool csfFile::IsError()const
+{
+  return m_error;
+}
+
+const std::string &csfFile::GetErrorMessage() const
+{
+  return m_errorMessage;
+}
+
 void csfFile::AddBlob(csfBlob *blob)
 {
   if (!blob)
@@ -622,8 +699,7 @@ bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) c
   ofstream.open(fileName, std::ofstream::out | std::ofstream::trunc);
   if (!ofstream.is_open())
   {
-    std::cout << "Unable to open file '" << fileName << "' for writing" << std::endl;
-    return false;
+    return MapError("Unable to open file '" + fileName + "' for writing");
   }
 
 
@@ -753,5 +829,12 @@ bool csfFile::NeedQuotation(const std::string &value) const
     }
     return true;
   }
+  return false;
+}
+
+bool csfFile::MapError(const std::string &errorMessage) const
+{
+  m_error = true;
+  m_errorMessage = errorMessage;
   return false;
 }

@@ -91,6 +91,13 @@ csResourceLocator csResourceLocator::AsData() const
   return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
 }
 
+csResourceLocator csResourceLocator::AsCSF() const
+{
+  csFileInfo fi(m_resourceFile);
+  std::string fileName = fi.GetLocation() + "/" + fi.GetName() + ".csf";
+  return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
+}
+
 bool csResourceLocator::IsAnonymous() const
 {
   return m_resourceEntry.empty();
