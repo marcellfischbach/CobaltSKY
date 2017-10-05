@@ -44,6 +44,15 @@ const std::string &csfBlob::GetName() const
   return m_name;
 }
 
+void csfBlob::SetType(const std::string &type)
+{
+  m_type = type;
+}
+
+const std::string &csfBlob::GetType() const
+{
+  return m_type;
+}
 
 void csfBlob::SetBuffer(const void *buffer, size_t size)
 {

@@ -94,8 +94,12 @@ set(SOURCE_CORE_RESOURCE
     core/resource/ixmlloader.hh
     core/resource/csassetfileloader.hh
     core/resource/csassetfileloader.cc
+    core/resource/csassetcsfloader.hh
+    core/resource/csassetcsfloader.cc
     core/resource/csassetxmlloader.hh
     core/resource/csassetxmlloader.cc
+    core/resource/csbasecsfloader.hh
+    core/resource/csbasecsfloader.cc
     core/resource/csbasexmlloader.hh
     core/resource/csbasexmlloader.cc
 	core/resource/cscsffileloader.hh
@@ -367,6 +371,8 @@ set(SOURCE_LOADERS
     loaders/cspngimageassetloader.hh
     loaders/cspngimagefileloader.cc
     loaders/cspngimagefileloader.hh
+    loaders/cssamplerassetcsfloader.cc
+    loaders/cssamplerassetcsfloader.hh
     loaders/cssamplerassetxmlloader.cc
     loaders/cssamplerassetxmlloader.hh
     loaders/csshadergraphassetxmlloader.cc
@@ -375,6 +381,8 @@ set(SOURCE_LOADERS
     loaders/csstaticmeshloader.hh
     loaders/csstaticmeshassetloader.cc
     loaders/csstaticmeshassetloader.hh
+    loaders/cstextureassetcsfloader.cc
+    loaders/cstextureassetcsfloader.hh
     loaders/cstextureassetxmlloader.cc
     loaders/cstextureassetxmlloader.hh
     loaders/csskinnedmeshassetxmlloader.cc

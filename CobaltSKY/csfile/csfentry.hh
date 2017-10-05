@@ -10,6 +10,7 @@ class CSF_API csfEntry
 public:
   ~csfEntry();
 
+
   void SetTagName(const std::string &tagName);
   const std::string &GetTagName() const;
 
@@ -31,18 +32,18 @@ public:
   bool HasAttribute(size_t idx) const;
   bool HasAttribute(const std::string &key) const;
 
-  std::string GetAttribute(size_t idx, const std::string &defaultValue = "") const;
+  std::string GetAttribute(size_t idx = 0, const std::string &defaultValue = "") const;
   std::string GetAttribute(const std::string &key, const std::string &defaultValue = "") const;
-  int GetAttributeInt(size_t idx, int defaultValue = 0) const;
+  int GetAttributeInt(size_t idx = 0, int defaultValue = 0) const;
   int GetAttributeInt(const std::string &key, int defaultValue = 0) const;
-  long GetAttributeLong(size_t idx, long defaultValue = 0) const;
+  long GetAttributeLong(size_t idx = 0, long defaultValue = 0) const;
   long GetAttributeLong(const std::string &key, long defaultValue = 0) const;
-  float GetAttributeFloat(size_t idx, float defaultValue = 0.0f) const;
+  float GetAttributeFloat(size_t idx = 0, float defaultValue = 0.0f) const;
   float GetAttributeFloat(const std::string &key, float defaultValue = 0.0f) const;
-  double GetAttributeDouble(size_t idx, double defaultValue = 0.0) const;
+  double GetAttributeDouble(size_t idx = 0, double defaultValue = 0.0) const;
   double GetAttributeDouble(const std::string &key, double defaultValue = 0.0) const;
 
-
+  bool IsRoot() const;
   csfEntry *GetParent();
   void AddChild(csfEntry *child);
 

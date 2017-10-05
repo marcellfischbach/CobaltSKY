@@ -1,6 +1,8 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csclassregistry.hh>
+#include <cobalt/core/resource/csassetcsfloader.hh>
+#include <cobalt/core/resource/cscsffileloader.hh>
 #include <cobalt/core/csvfs.hh>
 
 
@@ -30,8 +32,10 @@ void csResourceManager::Register(csResourceManager *resourceManager)
 csResourceManager::csResourceManager()
 {
   RegisterLoader(new csXMLFileLoader());
+  RegisterLoader(new csCSFFileLoader());
   RegisterLoader(new csAssetFileLoader());
   RegisterLoader(new csAssetXMLLoader());
+  RegisterLoader(new csAssetCSFLoader());
 }
 
 
@@ -196,6 +200,16 @@ const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResou
     }
   }
   return 0;
+}
+
+
+iObject *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData)
+{
+  return Load(blob->GetType(), csAssetInputStream(static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize()), locator, userData);
+}
+const csClass *csResourceManager::EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData) const
+{
+  return EvalClass(blob->GetType(), csAssetInputStream(static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize()), locator, userData);
 }
 
 

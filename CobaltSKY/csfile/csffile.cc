@@ -392,14 +392,30 @@ csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
 
 
   token = GetToken(buffer);
-  if (token.type != eTT_Colon)
+  if (token.type != eTT_ParenOpen)
   {
-    MapError("Misformed blob: Expected '" + tokenMap[eTT_Colon] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
+    MapError("Misformed blob: Expected '" + tokenMap[eTT_ParenOpen] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
+    return 0;
+  }
+
+  token = GetToken(buffer);
+  if (token.type != eTT_String)
+  {
+    MapError("Misformed blob: Expected '" + tokenMap[eTT_String] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
+    return 0;
+  }
+  std::string blobType = token.value;
+
+  token = GetToken(buffer);
+  if (token.type != eTT_ParenClose)
+  {
+    MapError("Misformed blob: Expected '" + tokenMap[eTT_ParenClose] + "' but got " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
     return 0;
   }
 
   csUInt8 b[4];
-  b[0] = m_danglingChar; m_danglingChar = 0;
+  b[0] = m_danglingChar; 
+  m_danglingChar = 0;
   for (unsigned i = 1; i < 4; ++i)
   {
     if (!buffer->HasMore())
@@ -425,6 +441,7 @@ csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
 
   csfBlob *blob = CreateBlob();
   blob->SetName(blobName);
+  blob->SetType(blobType);
   blob->SetBuffer(blobBuffer, size);
   delete[] blobBuffer;
 
@@ -794,7 +811,7 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
 
 void csfFile::Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const
 {
-  ofstream << "#" << blob->GetName() << ":";
+  ofstream << "#" << blob->GetName() << "(" << blob->GetType() << ")";
   csUInt32 size = blob->GetSize();
   ofstream.write((const char*)&size, sizeof(size));
   ofstream.write((const char*)blob->GetBuffer(), blob->GetSize());

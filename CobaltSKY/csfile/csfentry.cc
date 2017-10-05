@@ -234,6 +234,11 @@ double csfEntry::GetAttributeDouble(const std::string &key, double defaultValue)
   return defaultValue;
 }
 
+bool csfEntry::IsRoot() const
+{
+  return !m_parent;
+}
+
 csfEntry *csfEntry::GetParent()
 {
   return m_parent;

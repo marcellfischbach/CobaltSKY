@@ -6,6 +6,7 @@
 #include <cobalt/loaders/csmaterialassetxmlloader.hh>
 #include <cobalt/loaders/csmaterialdefassetxmlloader.hh>
 #include <cobalt/loaders/csmeshassetxmlloader.hh>
+#include <cobalt/loaders/cssamplerassetcsfloader.hh>
 #include <cobalt/loaders/cssamplerassetxmlloader.hh>
 #include <cobalt/loaders/csshadergraphassetxmlloader.hh>
 #include <cobalt/loaders/csstaticmeshassetloader.hh>
@@ -49,6 +50,7 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csMaterialAssetXMLLoader());
   mgr->RegisterLoader(new csMaterialDefAssetXMLLoader());
   mgr->RegisterLoader(new csSamplerAssetXMLLoader());
+  mgr->RegisterLoader(new csSamplerAssetCSFLoader());
   mgr->RegisterLoader(new csTextureAssetXMLLoader());
   mgr->RegisterLoader(new csMeshAssetXMLLoader());
   mgr->RegisterLoader(new csSkinnedMeshAssetXMLLoader());

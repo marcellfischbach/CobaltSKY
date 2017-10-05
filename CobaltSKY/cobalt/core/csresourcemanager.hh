@@ -14,8 +14,11 @@
 #include <cobalt/core/resource/ixmlloader.hh>
 #include <cobalt/core/resource/csassetfileloader.hh>
 #include <cobalt/core/resource/csassetxmlloader.hh>
+#include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/resource/csbasexmlloader.hh>
+#include <cobalt/core/resource/csbasecsfloader.hh>
 #include <cobalt/core/resource/csxmlfileloader.hh>
+#include <cobalt/core/resource/cscsffileloader.hh>
 
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
@@ -104,6 +107,9 @@ public:
 
   virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
 
+  virtual iObject *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0);
+  virtual const csClass *EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0) const;
+
   /**
   * \brief Load an object from the \a asset \a file.
   *
@@ -182,6 +188,23 @@ public:
     }
     return 0;
   }
+
+  template<typename T>
+  T *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0)
+  {
+    iObject *object = Load(blob, locator, userData);
+    if (object)
+    {
+      T* t_instance = csQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
 
   template<typename T>
   T *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0)

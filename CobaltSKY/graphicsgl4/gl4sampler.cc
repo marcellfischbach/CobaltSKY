@@ -128,6 +128,10 @@ csFilterMode csSamplerGL4::GetFilter() const
 
 void csSamplerGL4::SetAnisotropy(csUInt8 anisotropy)
 {
+  if (anisotropy == 0)
+  {
+    anisotropy = 1;
+  }
   if (m_anisotropy != anisotropy)
   {
     m_anisotropy = anisotropy;
