@@ -100,46 +100,120 @@ csResourceLoadingMode csBaseCSFLoader::GetResourceLoadingMode(const csfEntry *en
   return mode;
 }
 
-bool csBaseCSFLoader::LoadBool(const csfEntry *entry) const
+bool csBaseCSFLoader::LoadBool(const csfEntry *entry, size_t idx) const
 {
-  return entry->GetAttribute() == std::string("true");
+  return entry->GetAttribute(idx) == std::string("true");
 }
 
-float csBaseCSFLoader::LoadFloat(const csfEntry *entry) const
+bool csBaseCSFLoader::LoadBool(const csfEntry *entry, const std::string &attributeName) const
 {
-  return entry->GetAttributeFloat();
+  size_t idx = entry->GetAttributeIndex(attributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return false;
+  }
+  return entry->GetAttribute(idx) == std::string("true");
 }
 
+float csBaseCSFLoader::LoadFloat(const csfEntry *entry, size_t idx) const
+{
+  return entry->GetAttributeFloat(idx);
+}
 
-csVector2f csBaseCSFLoader::LoadVector2f(const csfEntry *entry) const
+float csBaseCSFLoader::LoadFloat(const csfEntry *entry, const std::string &attributeName) const
+{
+  size_t idx = entry->GetAttributeIndex(attributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return 0.0f;
+  }
+  return entry->GetAttributeFloat(idx);
+}
+
+csVector2f csBaseCSFLoader::LoadVector2f(const csfEntry *entry, size_t idx) const
 {
   return csVector2f(
-    entry->GetAttributeFloat(0),
-    entry->GetAttributeFloat(1));
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx+1));
 }
 
-csVector3f csBaseCSFLoader::LoadVector3f(const csfEntry *entry) const
+csVector2f csBaseCSFLoader::LoadVector2f(const csfEntry *entry, const std::string &firstAttributeName) const
+{
+  size_t idx = entry->GetAttributeIndex(firstAttributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return csVector2f(0.0f, 0.0f);
+  }
+  return csVector2f(
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx + 1));
+}
+
+csVector3f csBaseCSFLoader::LoadVector3f(const csfEntry *entry, size_t idx) const
 {
   return csVector3f(
-    entry->GetAttributeFloat(0),
-    entry->GetAttributeFloat(1),
-    entry->GetAttributeFloat(2));
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx+1),
+    entry->GetAttributeFloat(idx+2));
 }
 
-csVector4f csBaseCSFLoader::LoadVector4f(const csfEntry *entry) const
+csVector3f csBaseCSFLoader::LoadVector3f(const csfEntry *entry, const std::string &firstAttributeName) const
+{
+  size_t idx = entry->GetAttributeIndex(firstAttributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return csVector3f(0.0f, 0.0f, 0.0f);
+  }
+  return csVector3f(
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx + 1),
+    entry->GetAttributeFloat(idx + 2));
+}
+
+csVector4f csBaseCSFLoader::LoadVector4f(const csfEntry *entry, size_t idx) const
 {
   return csVector4f(
-    entry->GetAttributeFloat(0),
-    entry->GetAttributeFloat(1),
-    entry->GetAttributeFloat(2),
-    entry->GetAttributeFloat(3));
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx+1),
+    entry->GetAttributeFloat(idx+2),
+    entry->GetAttributeFloat(idx+3));
 }
 
-csColor4f csBaseCSFLoader::LoadColor4f(const csfEntry *entry) const
+csVector4f csBaseCSFLoader::LoadVector4f(const csfEntry *entry, const std::string &firstAttributeName) const
+{
+  size_t idx = entry->GetAttributeIndex(firstAttributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return csVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+  return csVector4f(
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx + 1),
+    entry->GetAttributeFloat(idx + 2),
+    entry->GetAttributeFloat(idx + 3));
+}
+
+csColor4f csBaseCSFLoader::LoadColor4f(const csfEntry *entry, size_t idx) const
 {
   return csColor4f(
-    entry->GetAttributeFloat(0),
-    entry->GetAttributeFloat(1),
-    entry->GetAttributeFloat(2),
-    entry->GetAttributeFloat(3));
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx+1),
+    entry->GetAttributeFloat(idx+2),
+    entry->GetAttributeFloat(idx+3));
 }
+
+csColor4f csBaseCSFLoader::LoadColor4f(const csfEntry *entry, const std::string &firstAttributeName) const
+{
+  size_t idx = entry->GetAttributeIndex(firstAttributeName);
+  if (idx == csfEntry::InvalidIndex)
+  {
+    return csColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+  return csColor4f(
+    entry->GetAttributeFloat(idx),
+    entry->GetAttributeFloat(idx + 1),
+    entry->GetAttributeFloat(idx + 2),
+    entry->GetAttributeFloat(idx + 3));
+}
+
+

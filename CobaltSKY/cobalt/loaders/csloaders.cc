@@ -8,9 +8,11 @@
 #include <cobalt/loaders/csmeshassetxmlloader.hh>
 #include <cobalt/loaders/cssamplerassetcsfloader.hh>
 #include <cobalt/loaders/cssamplerassetxmlloader.hh>
+#include <cobalt/loaders/csshadergraphassetcsfloader.hh>
 #include <cobalt/loaders/csshadergraphassetxmlloader.hh>
 #include <cobalt/loaders/csstaticmeshassetloader.hh>
 #include <cobalt/loaders/csstaticmeshloader.hh>
+#include <cobalt/loaders/cstextureassetcsfloader.hh>
 #include <cobalt/loaders/cstextureassetxmlloader.hh>
 #include <cobalt/loaders/csskinnedmeshassetxmlloader.hh>
 #include <cobalt/loaders/cssubmeshassetxmlloader.hh>
@@ -46,11 +48,13 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csEntityMasterXMLLoader());
   mgr->RegisterLoader(new csEntityStateMasterXMLLoader());
 
+  mgr->RegisterLoader(new csShaderGraphAssetCSFLoader());
   mgr->RegisterLoader(new csShaderGraphAssetXMLLoader());
   mgr->RegisterLoader(new csMaterialAssetXMLLoader());
   mgr->RegisterLoader(new csMaterialDefAssetXMLLoader());
-  mgr->RegisterLoader(new csSamplerAssetXMLLoader());
   mgr->RegisterLoader(new csSamplerAssetCSFLoader());
+  mgr->RegisterLoader(new csSamplerAssetXMLLoader());
+  mgr->RegisterLoader(new csTextureAssetCSFLoader());
   mgr->RegisterLoader(new csTextureAssetXMLLoader());
   mgr->RegisterLoader(new csMeshAssetXMLLoader());
   mgr->RegisterLoader(new csSkinnedMeshAssetXMLLoader());

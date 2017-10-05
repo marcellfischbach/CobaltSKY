@@ -375,6 +375,8 @@ set(SOURCE_LOADERS
     loaders/cssamplerassetcsfloader.hh
     loaders/cssamplerassetxmlloader.cc
     loaders/cssamplerassetxmlloader.hh
+    loaders/csshadergraphassetcsfloader.cc
+    loaders/csshadergraphassetcsfloader.hh
     loaders/csshadergraphassetxmlloader.cc
     loaders/csshadergraphassetxmlloader.hh
     loaders/csstaticmeshloader.cc

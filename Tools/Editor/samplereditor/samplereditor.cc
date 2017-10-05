@@ -273,7 +273,138 @@ void SamplerEditor::ReplaceFile()
 
 void SamplerEditor::MergeNewFile()
 {
-  ReplaceNewFile();
+  QString fileName(GetResourceFileName());
+  fileName = fileName.replace(".xasset", ".csf");
+
+  csfFile file;
+  if (!file.Parse((const char*)fileName.toLatin1()))
+  {
+    ReplaceNewFile();
+    return;
+  }
+  csfEntry *assetEntry = file.GetRoot()->GetEntry("asset");
+  if (!assetEntry)
+  {
+    ReplaceNewFile();
+    return;
+  }
+
+  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  if (!dataEntry)
+  {
+    ReplaceNewFile();
+    return;
+  }
+
+  csfEntry *samplerEntry = dataEntry->GetEntry("sampler");
+  if (!samplerEntry)
+  {
+    ReplaceNewFile();
+    return;
+  }
+
+  //
+  // Filter
+  csfEntry *filterEntry = samplerEntry->GetEntry("filter");
+  if (!filterEntry)
+  {
+    filterEntry = file.CreateEntry("filter");
+    samplerEntry->AddChild(filterEntry);
+  }
+  SetFilter(filterEntry);
+
+  //
+  // Anisotropy
+  csfEntry *anisotropyEntry = samplerEntry->GetEntry("anisotropy");
+  if (!anisotropyEntry)
+  {
+    anisotropyEntry = file.CreateEntry("anisotropy");
+    samplerEntry->AddChild(anisotropyEntry);
+  }
+  SetAnisotropy(anisotropyEntry);
+
+  //
+  // MinLOD
+  csfEntry *minLODEntry = samplerEntry->GetEntry("minLOD");
+  if (!minLODEntry)
+  {
+    minLODEntry = file.CreateEntry("minLOD");
+    samplerEntry->AddChild(minLODEntry);
+  }
+  SetMinLOD(minLODEntry);
+
+  //
+  // MaxLOD
+  csfEntry *maxLODEntry = samplerEntry->GetEntry("maxLOD");
+  if (!maxLODEntry)
+  {
+    maxLODEntry = file.CreateEntry("maxLOD");
+    samplerEntry->AddChild(maxLODEntry);
+  }
+  SetMaxLOD(maxLODEntry);
+
+  //
+  // AddressU
+  csfEntry *addressUEntry = samplerEntry->GetEntry("addressU");
+  if (!addressUEntry)
+  {
+    addressUEntry = file.CreateEntry("addressU");
+    samplerEntry->AddChild(addressUEntry);
+  }
+  SetAddressU(addressUEntry);
+
+  //
+  // AddressV
+  csfEntry *addressVEntry = samplerEntry->GetEntry("addressV");
+  if (!addressVEntry)
+  {
+    addressVEntry = file.CreateEntry("addressV");
+    samplerEntry->AddChild(addressVEntry);
+  }
+  SetAddressV(addressVEntry);
+
+  //
+  // AddressU
+  csfEntry *addressWEntry = samplerEntry->GetEntry("addressW");
+  if (!addressWEntry)
+  {
+    addressWEntry = file.CreateEntry("addressW");
+    samplerEntry->AddChild(addressWEntry);
+  }
+  SetAddressW(addressWEntry);
+
+  //
+  // BorderColor
+  csfEntry *borderColorEntry = samplerEntry->GetEntry("borderColor");
+  if (!borderColorEntry)
+  {
+    borderColorEntry = file.CreateEntry("borderColor");
+    samplerEntry->AddChild(borderColorEntry);
+  }
+  SetBorderColor(borderColorEntry);
+
+  //
+  // CompareMode
+  csfEntry *compareModeEntry = samplerEntry->GetEntry("compareMode");
+  if (!compareModeEntry)
+  {
+    compareModeEntry = file.CreateEntry("compareMode");
+    samplerEntry->AddChild(compareModeEntry);
+  }
+  SetTextureCompareMode(compareModeEntry);
+
+  //
+  // CompareFunc
+  csfEntry *compareFuncEntry = samplerEntry->GetEntry("compareFunc");
+  if (!compareFuncEntry)
+  {
+    compareFuncEntry = file.CreateEntry("compareFunc");
+    samplerEntry->AddChild(compareFuncEntry);
+  }
+  SetTextureCompareFunc(compareFuncEntry);
+  file.Output(std::string((const char*)fileName.toLatin1()), false, 2);
+
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 }
 
 void SamplerEditor::ReplaceNewFile()

@@ -206,16 +206,21 @@ csImage *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResou
     return 0;
   }
 
-  std::string imageName(element->GetText());
-  csImage *image = csResourceManager::Get()->Load<csImage>(csResourceLocator(imageName));
+  std::string imageName(entry->GetAttribute());
+  const csfBlob *blob = entry->GetFile()->GetBlob(imageName);
+  if (!blob)
+  {
+    return 0;
+  }
+  csImage *image = csResourceManager::Get()->Load<csImage>(blob, locator, userData);
   if (!image)
   {
     return 0;
   }
   printf("LoadImage: %s\n", imageName.c_str());
-  if (element->Attribute("mipmap"))
+  if (LoadBool(entry, "mipmap"))
   {
-    if (element->Attribute("normal"))
+    if (LoadBool(entry, "normal"))
     {
       image->GenerateMipMaps(true);
     }

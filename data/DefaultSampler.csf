@@ -5,7 +5,7 @@ asset
     sampler
     {
       filter (Anisotropic)
-      anisotropy (6)
+      anisotropy (8)
       minLOD (-1000)
       maxLOD (1000)
       addressU (Repeat)

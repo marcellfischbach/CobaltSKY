@@ -1,7 +1,7 @@
 <asset>
   <data>
     <material>
-      <materialDef>materials/Solid.xasset</materialDef>
+      <materialDef>materials/Solid.csf</materialDef>
       <parameters>
         <parameter name="Multiplier">
           <float2>10.000000, 10.000000</float2>

@@ -24,10 +24,16 @@ protected:
 
   csResourceLoadingMode GetResourceLoadingMode(const csfEntry *entry, csResourceLoadingMode defaultMode = eRLM_Shared, csResourceLoadingMode alterInline = eRLM_Inline) const;
 
-  bool LoadBool(const csfEntry *entry) const;
-  float LoadFloat(const csfEntry *entry) const;
-  csVector2f LoadVector2f(const csfEntry *entry) const;
-  csVector3f LoadVector3f(const csfEntry *entry) const;
-  csVector4f LoadVector4f(const csfEntry *entry) const;
-  csColor4f LoadColor4f(const csfEntry *entry) const;
+  bool LoadBool(const csfEntry *entry, size_t idx = 0) const;
+  bool LoadBool(const csfEntry *entry, const std::string &attributeName) const;
+  float LoadFloat(const csfEntry *entry, size_t offset = 0) const;
+  float LoadFloat(const csfEntry *entry, const std::string &firstAttributeName) const;
+  csVector2f LoadVector2f(const csfEntry *entry, size_t offset = 0) const;
+  csVector2f LoadVector2f(const csfEntry *entry, const std::string &firstAttributeName) const;
+  csVector3f LoadVector3f(const csfEntry *entry, size_t offset = 0) const;
+  csVector3f LoadVector3f(const csfEntry *entry, const std::string &firstAttributeName) const;
+  csVector4f LoadVector4f(const csfEntry *entry, size_t offset = 0) const;
+  csVector4f LoadVector4f(const csfEntry *entry, const std::string &firstAttributeName) const;
+  csColor4f LoadColor4f(const csfEntry *entry, size_t offset = 0) const;
+  csColor4f LoadColor4f(const csfEntry *entry, const std::string &firstAttributeName5) const;
 };

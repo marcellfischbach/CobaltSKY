@@ -598,7 +598,7 @@ bool csfFile::IsString(const std::string &token) const
       {
         return false;
       }
-      if (!isalpha(ch) && ch != '_' && ch != '.')
+      if (!IsUnquotedChar(ch))
       {
         return false;
       }
@@ -728,7 +728,14 @@ bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) c
       Output(child, ofstream, tight, indent, 0);
     }
   }
+  ofstream.close();
 
+
+  ofstream.open(fileName, std::ofstream::out | std::ofstream::binary | std::ofstream::app);
+  if (!ofstream.is_open())
+  {
+    return MapError("Unable to open file '" + fileName + "' for writing binary blobs");
+  }
   for (csfBlob *blob : m_blobs)
   {
     Output(blob, ofstream, tight);
@@ -745,14 +752,14 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
   }
   ofstream << entry->GetTagName();
 
+  if (!tight)
+  {
+    ofstream << " ";
+  }
+
+  ofstream << "(";
   if (entry->GetNumberOfAttributes() > 0)
   {
-    if (!tight)
-    {
-      ofstream << " ";
-    }
-
-    ofstream << "(";
     for (size_t i = 0, in = entry->GetNumberOfAttributes(); i < in; ++i)
     {
       std::string key = entry->GetAttributeKey(i);
@@ -776,16 +783,15 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
         ofstream << " ";
       }
     }
-    ofstream << ")";
   }
+  ofstream << ")";
   if (entry->GetNumberOfChildren() > 0)
   {
     if (!tight)
     {
-      ofstream << std::endl << Indent(currentIndent) << "{" << std::endl;
+      ofstream << " {" << std::endl;
     }
-    else
-    {
+    else {
       ofstream << "{";
     }
     for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
@@ -840,13 +846,22 @@ bool csfFile::NeedQuotation(const std::string &value) const
   for (size_t i = 0, in = value.length(); i < in; ++i)
   {
     char ch = value[i];
-    if (isalpha(ch))
+    if (IsUnquotedChar(ch))
     {
       continue;
     }
     return true;
   }
   return false;
+}
+
+bool csfFile::IsUnquotedChar(char ch) const
+{
+  if (isalnum(ch))
+  {
+    return true;
+  }
+  return ch == '.' || ch == '_' || ch == '-';
 }
 
 bool csfFile::MapError(const std::string &errorMessage) const

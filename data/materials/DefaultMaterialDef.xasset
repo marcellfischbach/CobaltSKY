@@ -2,27 +2,18 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node id="0" class="csSGVarFloat">
+        <node class="csSGVarFloat" id="0">
           <resource name="Roughness">
             <float>0.800000</float>
           </resource>
         </node>
-        <node id="1" class="csSGVarFloat3">
+        <node class="csSGVarFloat3" id="1">
           <resource name="Diffuse">
             <float3>1.000000, 1.000000, 1.000000</float3>
           </resource>
         </node>
       </nodes>
       <inputs>
-        <node input="0" id="0">
-          <float>1.000000</float>
-        </node>
-        <node input="1" id="0">
-          <float>1.000000</float>
-        </node>
-        <node input="2" id="0">
-          <float>1.000000</float>
-        </node>
         <shaderGraph input="Diffuse">
           <node output="0" id="1"/>
         </shaderGraph>

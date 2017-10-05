@@ -21,30 +21,24 @@
         <node id="4" class="csSGMul"/>
         <node id="5" class="csSGTexture2D">
           <resource name="Diffuse">
-            <locator>materials/textures/fieldstone_diffuse.xasset</locator>
+            <locator>materials/textures/fieldstone_diffuse 01.csf</locator>
           </resource>
         </node>
       </nodes>
       <inputs>
-        <node id="0" input="0">
-          <float>0.000000</float>
+        <node input="0" id="1">
+          <node output="0" id="4"/>
         </node>
-        <node id="0" input="1">
-          <float>0.000000</float>
+        <node input="0" id="2">
+          <node output="0" id="4"/>
         </node>
-        <node id="4" input="0">
+        <node input="0" id="4">
           <node output="0" id="0"/>
         </node>
-        <node id="4" input="1">
+        <node input="1" id="4">
           <node output="0" id="3"/>
         </node>
-        <node id="5" input="0">
-          <node output="0" id="4"/>
-        </node>
-        <node id="1" input="0">
-          <node output="0" id="4"/>
-        </node>
-        <node id="2" input="0">
+        <node input="0" id="5">
           <node output="0" id="4"/>
         </node>
         <shaderGraph input="Diffuse">
@@ -93,9 +87,4 @@
       </shaderGraph>
     </shaderGraphMeta>
   </meta>
-  <preview>
-    <editorIcon>
-      <image>materials/Solid.data:EDITOR_ICON</image>
-    </editorIcon>
-  </preview>
 </asset>

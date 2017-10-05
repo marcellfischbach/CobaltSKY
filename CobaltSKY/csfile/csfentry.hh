@@ -1,13 +1,17 @@
 #pragma once
 
 #include <csfile/csfexport.hh>
+#include <cobalt/csdefs.hh>
 #include <string>
 #include <vector>
+
+
 
 class CSF_API csfEntry
 {
   friend class csfFile;
 public:
+  static const size_t InvalidIndex = ~0x00;
   ~csfEntry();
 
 
@@ -18,6 +22,7 @@ public:
   size_t GetNumberOfAttributes() const;
   std::string GetAttributeKey(size_t idx) const;
   std::string GetAttributeValue(size_t idx) const;
+  size_t GetAttributeIndex(const std::string &name) const;
 
   void AddAttribute(const std::string &attribute);
   void AddAttribute(const std::string &key, const std::string &value);
@@ -29,7 +34,7 @@ public:
   void AddAttributeFloat(const std::string &key, float attribute);
   void AddAttributeDouble(double attribute);
   void AddAttributeDouble(const std::string &key, double attribute);
-  bool HasAttribute(size_t idx) const;
+  bool HasAttribute(size_t idx = 0) const;
   bool HasAttribute(const std::string &key) const;
 
   std::string GetAttribute(size_t idx = 0, const std::string &defaultValue = "") const;
@@ -45,13 +50,22 @@ public:
 
   bool IsRoot() const;
   csfEntry *GetParent();
+  const csfEntry *GetParent() const;
   void AddChild(csfEntry *child);
 
   size_t GetNumberOfChildren() const;
   csfEntry *GetChild(size_t idx);
   const csfEntry *GetChild(size_t idx) const;
+  size_t GetChildIndex(const csfEntry *child) const;
 
-  const csfEntry *GetEntry(const std::string &entry) const;
+  CS_FORCEINLINE csfEntry *GetEntry(size_t idx = 0) { return GetChild(idx);  }
+  CS_FORCEINLINE const csfEntry *GetEntry(size_t idx = 0) const { return GetChild(idx); }
+
+  csfEntry *GetEntry(const std::string &entry, const csfEntry *offset = 0);
+  const csfEntry *GetEntry(const std::string &entry, const csfEntry *offset = 0) const;
+
+  const csfEntry *GetSiblingEntry(size_t offset = 0) const;
+  const csfEntry *GetSiblingEntry(const std::string &entry) const;
 
   void Debug() const;
 

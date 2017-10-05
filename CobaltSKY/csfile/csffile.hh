@@ -116,6 +116,7 @@ private:
   void Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const;
   std::string Indent(unsigned indent) const;
   bool NeedQuotation(const std::string &value) const;
+  bool IsUnquotedChar(char ch) const;
 
   bool MapError(const std::string &errorMessage) const;
 

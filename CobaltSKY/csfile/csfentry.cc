@@ -66,6 +66,19 @@ std::string csfEntry::GetAttributeValue(size_t idx) const
   return m_attributes[idx].value;
 }
 
+size_t csfEntry::GetAttributeIndex(const std::string &attributeName) const
+{
+  for (size_t i = 0, in = m_attributes.size(); i < in; ++i)
+  {
+    if (m_attributes[i].key == attributeName)
+    {
+      return i;
+    }
+  }
+
+  return InvalidIndex;
+}
+
 void csfEntry::AddAttribute(const std::string &attribute)
 {
   Attribute attr;
@@ -244,6 +257,11 @@ csfEntry *csfEntry::GetParent()
   return m_parent;
 }
 
+const csfEntry *csfEntry::GetParent() const
+{
+  return m_parent;
+}
+
 void csfEntry::AddChild(csfEntry *child)
 {
   child->m_parent = this;
@@ -273,13 +291,40 @@ const csfEntry *csfEntry::GetChild(size_t idx) const
   return m_children[idx];
 }
 
-const csfEntry *csfEntry::GetEntry(const std::string &entry) const
+size_t csfEntry::GetChildIndex(const csfEntry *entry) const
+{
+  for (size_t i = 0, in = m_children.size(); i < in; ++i)
+  {
+    if (m_children[i] == entry)
+    {
+      return i;
+    }
+  }
+  return InvalidIndex;
+}
+
+csfEntry *csfEntry::GetEntry(const std::string &entry, const csfEntry *offset)
+{
+  const csfEntry *thisEntry = this;
+  return const_cast<csfEntry*>(thisEntry->GetEntry(entry, offset));
+}
+
+const csfEntry *csfEntry::GetEntry(const std::string &entry, const csfEntry *offset) const
 {
   std::string entryName = entry;
   while (true)
   {
+    bool offsetFound = offset != 0 ? false : true;
     for (auto child : m_children)
     {
+      if (!offsetFound)
+      {
+        if (child == offset)
+        {
+          offsetFound = true;
+        }
+        continue;
+      }
       if (child->GetTagName() == entryName)
       {
         if (entryName == entry)
@@ -300,6 +345,29 @@ const csfEntry *csfEntry::GetEntry(const std::string &entry) const
       break;
     }
     entryName = entryName.substr(0, idx);
+  }
+  return 0;
+}
+
+const csfEntry *csfEntry::GetSiblingEntry(size_t offset) const
+{
+  if (!m_parent)
+  {
+    return 0;
+  }
+  size_t idx = m_parent->GetChildIndex(this);
+  if (idx == InvalidIndex)
+  {
+    return 0;
+  }
+  return m_parent->GetEntry(idx + offset + 1);
+}
+
+const csfEntry *csfEntry::GetSiblingEntry(const std::string &entry) const
+{
+  if (m_parent)
+  {
+    return m_parent->GetEntry(entry, this);
   }
   return 0;
 }

@@ -41,6 +41,7 @@ private slots:
   void on_pbScreenshot_clicked();
 
 private:
+  void SaveCSFFile();
   std::string ExtractName(const csResourceLocator &locator);
   bool Apply();
   ShaderGraphEditorNode *GetEditorNode(csSGNode *node);

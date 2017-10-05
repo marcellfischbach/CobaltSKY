@@ -176,6 +176,13 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
     blobData->SetType(std::string((const char*)typeID.toLatin1()));
     blobData->SetBuffer(reinterpret_cast<const csUInt8*>(ba.constData()), ba.length());
     outputFile.AddBlob(blobData);
+
+    const csUInt8 *data = reinterpret_cast<const csUInt8*>(ba.constData());
+    printf("Buffer data\n");
+    for (unsigned i = 0; i < 25; ++i)
+    {
+      printf("(%02d) 0x%2x\n", i, data[i]);
+    }
   }
 
   QImage image(m_fileName);

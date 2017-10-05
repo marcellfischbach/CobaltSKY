@@ -2,7 +2,7 @@
   <data>
     <sampler>
       <filter>Anisotropic</filter>
-      <anisotropy>6</anisotropy>
+      <anisotropy>8</anisotropy>
       <minLOD>-1000</minLOD>
       <maxLOD>1000</maxLOD>
       <addressU>Repeat</addressU>
