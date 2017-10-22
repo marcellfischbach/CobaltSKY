@@ -16,6 +16,7 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 #include <assimp/scene.h>
+#include <csfile/csffile.hh>
 #include <map>
 
 #include <QDomDocument>
@@ -319,6 +320,84 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     dataFile->Close();
   }
 
+
+
+  QString csfName = xAssetName;
+  csfName = csfName.left(csfName.length() - 6).append("csf");
+  csResourceLocator csfLocator(
+    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
+    locator.GetResourceName(),
+    locator.GetResourceEntry());
+  csfName = assetManager->GetFilePath(csfName);
+
+  csfFile outputFile;
+  csfEntry *assetEntry = outputFile.CreateEntry("asset");
+  csfEntry *dataEntry = outputFile.CreateEntry("data");
+  csfEntry *entityStateEntry = outputFile.CreateEntry("entityState");
+  csfEntry *meshEntry = outputFile.CreateEntry("mesh");
+  csfEntry *materialsEntry = outputFile.CreateEntry("materials");
+
+  outputFile.GetRoot()->AddChild(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(entityStateEntry);
+  entityStateEntry->AddChild(meshEntry);
+  entityStateEntry->AddChild(materialsEntry);
+
+  entityStateEntry->AddAttribute("csStaticMeshState");
+  entityStateEntry->AddAttribute("name", std::string((const char*)m_name.toLatin1()));
+
+  csfEntry *materialSlotsEntry = outputFile.CreateEntry("materialSlots");
+  meshEntry->AddChild(materialSlotsEntry);
+  for (auto materials : m_materialNames)
+  {
+    csfEntry *materialSlotEntry = outputFile.CreateEntry("materialSlot");
+    materialSlotEntry->AddAttributeInt("id", materials.first);
+    materialSlotEntry->AddAttribute("name", materials.second.c_str());
+    materialSlotsEntry->AddChild(materialSlotEntry);
+  }
+
+  csfEntry *globalIndicesEntry = outputFile.CreateEntry("globalIndices");
+  meshEntry->AddChild(globalIndicesEntry);
+
+  csfEntry *subMeshesEntry = outputFile.CreateEntry("subMeshes");
+  meshEntry->AddChild(subMeshesEntry);
+
+  for (auto lod : m_lods)
+  {
+    for (auto data : lod->datas)
+    {
+      SubMesh *subMesh = data->subMesh;
+      csAssetOutputStream os;
+      Output(subMesh, os);
+      std::string dataName = ::as_data_name(data->name);
+
+      csfBlob *blobData = outputFile.CreateBlob();
+      blobData->SetName(dataName);
+      blobData->SetType(std::string("SUBMESH"));
+      blobData->SetBuffer(reinterpret_cast<const csUInt8*>(os.GetBuffer()), os.GetSize());
+      outputFile.AddBlob(blobData);
+
+
+      csfEntry *subMeshEntry = outputFile.CreateEntry("subMesh");
+      subMeshesEntry->AddChild(subMeshEntry);
+
+      subMeshEntry->AddAttribute(dataName);
+      subMeshEntry->AddAttribute("name", data->name.c_str());
+      subMeshEntry->AddAttributeInt("lod", lod->lod);
+      subMeshEntry->AddAttributeInt("materialSlot", data->materialIndex);
+
+    }
+  }
+
+  for (auto m : m_materialNames)
+  {
+    csfEntry *materialEntry = outputFile.CreateEntry("material");
+    materialsEntry->AddChild(materialEntry);
+    materialEntry->AddAttribute("materials/DefaultMaterial.xasset");
+    materialEntry->AddAttributeInt("slot", m.first);
+  }
+
+  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
 
   return csResourceLocator();
 }
