@@ -414,17 +414,25 @@ set(SOURCE_LOADERS_ENTITY
     loaders/entity/csbasecolliderstatexmlloader.hh
     loaders/entity/cscolliderstatexmlloader.cc
     loaders/entity/cscolliderstatexmlloader.hh
-    loaders/entity/csentityloaderregistry.cc
-    loaders/entity/csentityloaderregistry.hh
     loaders/entity/csdynamiccolliderstatexmlloader.cc
     loaders/entity/csdynamiccolliderstatexmlloader.hh
+    loaders/entity/csentityloaderregistry.cc
+    loaders/entity/csentityloaderregistry.hh
     loaders/entity/csentitymasterxmlloader.cc
     loaders/entity/csentitymasterxmlloader.hh
+    loaders/entity/csentitymastercsfloader.cc
+    loaders/entity/csentitymastercsfloader.hh
     loaders/entity/csentitystateloaderdata.hh
+    loaders/entity/csentitystatemastercsfloader.cc
+    loaders/entity/csentitystatemastercsfloader.hh
     loaders/entity/csentitystatemasterxmlloader.cc
     loaders/entity/csentitystatemasterxmlloader.hh
+    loaders/entity/csentitystatecsfloader.cc
+    loaders/entity/csentitystatecsfloader.hh
     loaders/entity/csentitystatexmlloader.cc
     loaders/entity/csentitystatexmlloader.hh
+    loaders/entity/csentitycsfloader.cc
+    loaders/entity/csentitycsfloader.hh
     loaders/entity/csentityxmlloader.cc
     loaders/entity/csentityxmlloader.hh
     loaders/entity/cshingejointstatexmlloader.cc

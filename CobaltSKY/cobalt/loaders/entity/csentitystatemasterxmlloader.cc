@@ -62,7 +62,7 @@ iObject *csEntityStateMasterXMLLoader::Load(TiXmlElement *element, const csResou
     return 0;
   }
 
-  const csEntityStateXMLLoader *loader = csEntityLoaderRegistry::Get()->GetEntityStateLoader(entityStateClass);
+  const csEntityStateXMLLoader *loader = csEntityLoaderRegistry::Get()->GetEntityStateXMLLoader(entityStateClass);
   if (!loader)
   {
     return 0;

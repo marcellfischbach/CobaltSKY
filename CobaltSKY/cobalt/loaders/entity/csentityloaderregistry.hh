@@ -5,6 +5,8 @@
 
 class csEntityXMLLoader;
 class csEntityStateXMLLoader;
+class csEntityCSFLoader;
+class csEntityStateCSFLoader;
 /**
 * \ingroup loading
 */
@@ -15,13 +17,22 @@ public:
 
   void RegisterLoader(const csEntityXMLLoader *entityLoader);
   void RegisterLoader(const csEntityStateXMLLoader *entityLoader);
-  const csEntityXMLLoader *GetEntityLoader(const csClass *clazz) const;
-  const csEntityStateXMLLoader *GetEntityStateLoader(const csClass *clazz) const;
+  const csEntityXMLLoader *GetEntityXMLLoader(const csClass *clazz) const;
+  const csEntityStateXMLLoader *GetEntityStateXMLLoader(const csClass *clazz) const;
+
+  void RegisterLoader(const csEntityCSFLoader *entityLoader);
+  void RegisterLoader(const csEntityStateCSFLoader *entityLoader);
+  const csEntityCSFLoader *GetEntityCSFLoader(const csClass *clazz) const;
+  const csEntityStateCSFLoader *GetEntityStateCSFLoader(const csClass *clazz) const;
+
 
 private:
   csEntityLoaderRegistry();
 
-  std::map<const csClass*, const csEntityXMLLoader*> m_entityLoaders;
-  std::map<const csClass*, const csEntityStateXMLLoader*> m_entityStateLoaders;
+  std::map<const csClass*, const csEntityXMLLoader*> m_entityXMLLoaders;
+  std::map<const csClass*, const csEntityStateXMLLoader*> m_entityStateXMLLoaders;
+
+  std::map<const csClass*, const csEntityCSFLoader*> m_entityCSFLoaders;
+  std::map<const csClass*, const csEntityStateCSFLoader*> m_entityStateCSFLoaders;
 };
 

@@ -56,7 +56,7 @@ iObject *csEntityMasterXMLLoader::Load(TiXmlElement *element, const csResourceLo
     return 0;
   }
 
-  const csEntityXMLLoader *loader = csEntityLoaderRegistry::Get()->GetEntityLoader(entityClass);
+  const csEntityXMLLoader *loader = csEntityLoaderRegistry::Get()->GetEntityXMLLoader(entityClass);
   if (!loader)
   {
     return 0;
