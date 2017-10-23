@@ -114,14 +114,7 @@ int main(int argc, char **argv)
     printf("%s ", argv[i]);
   }
   printf("\n");
-  csfFile file;
-  file.Parse(std::string(argv[2]));
-
-  const csfEntry *resEntry = file.GetEntry("config.video.resolution");
-  if (false)
-  {
-    return 0;
-  }
+  
 
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());

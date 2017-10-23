@@ -2,24 +2,24 @@
   <data>
     <shaderGraph>
       <nodes>
-        <node id="0" class="csSGVarFloat2">
+        <node class="csSGVarFloat2" id="0">
           <resource name="Multiplier">
             <float2>20.000000, 20.000000</float2>
           </resource>
         </node>
-        <node id="1" class="csSGTexture2D">
+        <node class="csSGTexture2D" id="1">
           <resource name="Normal">
             <locator>materials/textures/fieldstone_normal.xasset</locator>
           </resource>
         </node>
-        <node id="2" class="csSGTexture2D">
+        <node class="csSGTexture2D" id="2">
           <resource name="fieldstone_glossmap">
             <locator>materials/textures/fieldstone_glossmap.xasset</locator>
           </resource>
         </node>
-        <node id="3" class="csSGDefaultTextureCoordinate"/>
-        <node id="4" class="csSGMul"/>
-        <node id="5" class="csSGTexture2D">
+        <node class="csSGDefaultTextureCoordinate" id="3"/>
+        <node class="csSGMul" id="4"/>
+        <node class="csSGTexture2D" id="5">
           <resource name="Diffuse">
             <locator>materials/textures/fieldstone_diffuse 01.csf</locator>
           </resource>
@@ -27,28 +27,28 @@
       </nodes>
       <inputs>
         <node input="0" id="1">
-          <node output="0" id="4"/>
+          <node id="4" output="0"/>
         </node>
         <node input="0" id="2">
-          <node output="0" id="4"/>
+          <node id="4" output="0"/>
         </node>
         <node input="0" id="4">
-          <node output="0" id="0"/>
+          <node id="0" output="0"/>
         </node>
         <node input="1" id="4">
-          <node output="0" id="3"/>
+          <node id="3" output="0"/>
         </node>
         <node input="0" id="5">
-          <node output="0" id="4"/>
+          <node id="4" output="0"/>
         </node>
         <shaderGraph input="Diffuse">
-          <node output="0" id="5"/>
+          <node id="5" output="0"/>
         </shaderGraph>
         <shaderGraph input="Roughness">
-          <node output="1" id="2"/>
+          <node id="2" output="1"/>
         </shaderGraph>
         <shaderGraph input="Normal">
-          <node output="0" id="1"/>
+          <node id="1" output="0"/>
         </shaderGraph>
       </inputs>
       <attributes>
