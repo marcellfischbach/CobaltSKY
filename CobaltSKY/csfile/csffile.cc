@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-csfFile::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, csUInt32 bufferSize)
+csfFile::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, size_t bufferSize)
   : IInputBuffer()
   , m_stream(stream)
   , m_row(1)
@@ -612,7 +612,7 @@ std::string csfFile::FixString(const std::string &str) const
 {
   std::string result = "";
   bool stripWhiteSpace = true;
-  for (unsigned i = 0, in = str.length(); i < in; ++i)
+  for (size_t i = 0, in = str.length(); i < in; ++i)
   {
     char ch = str[i];
     if (iswspace(ch))
@@ -818,7 +818,7 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
 void csfFile::Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const
 {
   ofstream << "#" << blob->GetName() << "(" << blob->GetType() << ")";
-  csUInt32 size = blob->GetSize();
+  csUInt32 size = (csUInt32)blob->GetSize();
   ofstream.write((const char*)&size, sizeof(size));
   ofstream.write((const char*)blob->GetBuffer(), blob->GetSize());
   if (!tight)

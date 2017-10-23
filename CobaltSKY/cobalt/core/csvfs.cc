@@ -168,7 +168,7 @@ bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEnt
     return false;
   }
   AddPath(resolutionEntry->GetAttribute("name"), resolutionEntry->GetAttribute("path"));
-
+  return true;
 }
 
 bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath)

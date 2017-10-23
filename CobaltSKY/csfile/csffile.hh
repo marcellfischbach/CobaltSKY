@@ -45,7 +45,7 @@ private:
   class InputStreamBuffer : public IInputBuffer
   {
   public:
-    InputStreamBuffer(std::ifstream &stream, csUInt32 bufferSize = 1024);
+    InputStreamBuffer(std::ifstream &stream, size_t bufferSize = 1024);
     virtual ~InputStreamBuffer();
     bool HasMore();
     csUInt8 GetByte();
@@ -57,8 +57,8 @@ private:
 
     csUInt8 *m_buffer;
     csUInt32 m_idx;
-    csUInt32 m_bufferSize;
-    csUInt32 m_bufferCapacity;
+    size_t m_bufferSize;
+    size_t m_bufferCapacity;
     csUInt32 m_row;
     csUInt32 m_column;
   };

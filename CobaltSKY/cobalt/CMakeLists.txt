@@ -102,8 +102,8 @@ set(SOURCE_CORE_RESOURCE
     core/resource/csbasecsfloader.cc
     core/resource/csbasexmlloader.hh
     core/resource/csbasexmlloader.cc
-	core/resource/cscsffileloader.hh
-	core/resource/cscsffileloader.cc
+    core/resource/cscsffileloader.hh
+    core/resource/cscsffileloader.cc
     core/resource/csxmlfileloader.hh
     core/resource/csxmlfileloader.cc
     )
@@ -175,12 +175,12 @@ set(SOURCE_GRAPHICS
     graphics/iframeprocessor.hh
     graphics/igraphics.hh
     graphics/iindexbuffer.hh
-	graphics/imesh.hh
+    graphics/imesh.hh
     graphics/irendertarget.hh
     graphics/ishader.hh
     graphics/ishaderattribute.hh
     graphics/ishaderstream.hh
-	graphics/isampler.hh
+    graphics/isampler.hh
     graphics/itexture.hh
     graphics/itexture2d.hh
     graphics/itexture2darray.hh
@@ -224,8 +224,8 @@ set(SOURCE_GRAPHICS
     graphics/csshaderattributeid.hh
     graphics/csshaderstreamid.cc
     graphics/csshaderstreamid.hh
-	graphics/csterrainmesh.cc
-	graphics/csterrainmesh.hh
+    graphics/csterrainmesh.cc
+    graphics/csterrainmesh.hh
     )
 
 source_group(
@@ -357,14 +357,22 @@ source_group(
 
 
 set(SOURCE_LOADERS
+    loaders/cscollisionassetcsfloader.cc
+    loaders/cscollisionassetcsfloader.hh
     loaders/cscollisionassetxmlloader.cc
     loaders/cscollisionassetxmlloader.hh
     loaders/csloaders.cc
     loaders/csloaders.hh
+    loaders/csmaterialassetcsfloader.cc
+    loaders/csmaterialassetcsfloader.hh
     loaders/csmaterialassetxmlloader.cc
     loaders/csmaterialassetxmlloader.hh
+    loaders/csmaterialdefassetcsfloader.cc
+    loaders/csmaterialdefassetcsfloader.hh
     loaders/csmaterialdefassetxmlloader.cc
     loaders/csmaterialdefassetxmlloader.hh
+    loaders/csmeshassetcsfloader.cc
+    loaders/csmeshassetcsfloader.hh
     loaders/csmeshassetxmlloader.cc
     loaders/csmeshassetxmlloader.hh
     loaders/cspngimageassetloader.cc
@@ -379,18 +387,20 @@ set(SOURCE_LOADERS
     loaders/csshadergraphassetcsfloader.hh
     loaders/csshadergraphassetxmlloader.cc
     loaders/csshadergraphassetxmlloader.hh
+    loaders/csskinnedmeshassetcsfloader.cc
+    loaders/csskinnedmeshassetcsfloader.hh
+    loaders/csskinnedmeshassetxmlloader.cc
+    loaders/csskinnedmeshassetxmlloader.hh
     loaders/csstaticmeshloader.cc
     loaders/csstaticmeshloader.hh
     loaders/csstaticmeshassetloader.cc
     loaders/csstaticmeshassetloader.hh
+    loaders/cssubmeshassetloader.cc
+    loaders/cssubmeshassetloader.hh
     loaders/cstextureassetcsfloader.cc
     loaders/cstextureassetcsfloader.hh
     loaders/cstextureassetxmlloader.cc
     loaders/cstextureassetxmlloader.hh
-    loaders/csskinnedmeshassetxmlloader.cc
-    loaders/csskinnedmeshassetxmlloader.hh
-    loaders/cssubmeshassetxmlloader.cc
-    loaders/cssubmeshassetxmlloader.hh
     )
 
 source_group(

@@ -13,7 +13,7 @@
 class CSE_API csAssetOutputStream
 {
 public:
-  csAssetOutputStream(csUInt32 initialCapacity = 64, csUInt32 allocationSize = 32);
+  csAssetOutputStream(size_t initialCapacity = 64, size_t allocationSize = 32);
   virtual ~csAssetOutputStream();
 
   csAssetOutputStream & operator<< (const csInt8 &i);
@@ -22,7 +22,7 @@ public:
   csAssetOutputStream & operator<< (const csUInt16 &i);
   csAssetOutputStream & operator<< (const csInt32 &i);
   csAssetOutputStream & operator<< (const csUInt32 &i);
-  csAssetOutputStream & operator<< (const csSize &i);
+  csAssetOutputStream & operator<< (const size_t &i);
   csAssetOutputStream & operator<< (const float &i);
   csAssetOutputStream & operator<< (const csVector2f &i);
   csAssetOutputStream & operator<< (const csVector3f &i);
@@ -38,16 +38,16 @@ public:
     return m_buffer;
   }
 
-  CS_FORCEINLINE csUInt32 GetSize() const
+  CS_FORCEINLINE size_t GetSize() const
   {
     return m_size;
   }
 
 private:
-  void AcquireCapacity(csUInt32 capacity);
+  void AcquireCapacity(size_t capacity);
   csUInt8 *m_writePointer;
   csUInt8 *m_buffer;
-  csUInt32 m_size;
-  csUInt32 m_capacity;
-  csUInt32 m_allocationSize;
+  size_t m_size;
+  size_t m_capacity;
+  size_t m_allocationSize;
 };

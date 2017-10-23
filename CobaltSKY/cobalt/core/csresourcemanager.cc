@@ -117,7 +117,7 @@ const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iO
 
 iObject *csResourceManager::Load(iFile *file, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = m_fileLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_fileLoaders.size() - 1; i >= 0; --i)
   {
     const iFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
@@ -133,7 +133,7 @@ iObject *csResourceManager::Load(iFile *file, const csResourceLocator &locator, 
 
 const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = m_fileLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_fileLoaders.size() - 1; i >= 0; --i)
   {
     const iFileLoader *loader = m_fileLoaders[i];
     if (loader->CanLoad(file, locator))
@@ -147,7 +147,7 @@ const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator
 
 iObject *csResourceManager::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_xmlLoaders.size() - 1; i >= 0; --i)
   {
     const iXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
@@ -162,7 +162,7 @@ iObject *csResourceManager::Load(TiXmlElement *element, const csResourceLocator 
 
 const csClass *csResourceManager::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = m_xmlLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_xmlLoaders.size() - 1; i >= 0; --i)
   {
     const iXMLLoader *loader = m_xmlLoaders[i];
     if (loader->CanLoad(element, locator))
@@ -176,7 +176,7 @@ const csClass *csResourceManager::EvalClass(TiXmlElement *element, const csResou
 
 iObject *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = m_csfLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_csfLoaders.size() - 1; i >= 0; --i)
   {
     const iCSFLoader *loader = m_csfLoaders[i];
     if (loader->CanLoad(entry, locator))
@@ -191,7 +191,7 @@ iObject *csResourceManager::Load(const csfEntry *entry, const csResourceLocator 
 
 const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = m_csfLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_csfLoaders.size() - 1; i >= 0; --i)
   {
     const iCSFLoader *loader = m_csfLoaders[i];
     if (loader->CanLoad(entry, locator))
@@ -215,7 +215,7 @@ const csClass *csResourceManager::EvalClass(const csfBlob *blob, const csResourc
 
 iObject *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_assetLoaders.size() - 1; i >= 0; --i)
   {
     const iAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))
@@ -230,7 +230,7 @@ iObject *csResourceManager::Load(const std::string &typeID, csAssetInputStream &
 
 const csClass *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = m_assetLoaders.size() - 1; i >= 0; --i)
+  for (int i = (int)m_assetLoaders.size() - 1; i >= 0; --i)
   {
     const iAssetLoader *loader = m_assetLoaders[i];
     if (loader->CanLoad(typeID, locator))

@@ -8,7 +8,7 @@
 
 
 
-csAssetOutputStream::csAssetOutputStream(csUInt32 initialCapacity, csUInt32 allocationSize)
+csAssetOutputStream::csAssetOutputStream(size_t initialCapacity, size_t allocationSize)
   : m_buffer(0)
   , m_writePointer(0)
   , m_size(0)
@@ -27,7 +27,7 @@ csAssetOutputStream::~csAssetOutputStream()
   m_writePointer = 0;
 }
 
-void csAssetOutputStream::AcquireCapacity(csUInt32 capacity)
+void csAssetOutputStream::AcquireCapacity(size_t capacity)
 {
   if ((m_size + capacity) > m_capacity)
   {
@@ -98,12 +98,12 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt32 &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csSize &i)
+csAssetOutputStream &csAssetOutputStream::operator<<(const size_t &i)
 {
-  AcquireCapacity(sizeof(csSize));
-  *reinterpret_cast<csSize*>(m_writePointer) = i;
-  m_writePointer += sizeof(csSize);
-  m_size += sizeof(csSize);
+  AcquireCapacity(sizeof(size_t));
+  *reinterpret_cast<size_t*>(m_writePointer) = i;
+  m_writePointer += sizeof(size_t);
+  m_size += sizeof(size_t);
   return *this;
 }
 

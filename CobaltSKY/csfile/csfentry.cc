@@ -218,6 +218,7 @@ float csfEntry::GetAttributeFloat(size_t idx, float defaultValue) const
   {
     return (float)atof(GetAttribute(idx).c_str());
   }
+  return defaultValue;
 }
 
 float csfEntry::GetAttributeFloat(const std::string &key, float defaultValue) const

@@ -66,7 +66,7 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
 
   // 
   // load the material slots
-  std::vector<MaterialSlot> slots;
+  std::vector<MaterialSlot> materialSlots;
   for (TiXmlElement *materialSlotElement = materialSlotsElement->FirstChildElement("materialSlot");
        materialSlotElement;
        materialSlotElement = materialSlotElement->NextSiblingElement("materialSlot"))
@@ -78,10 +78,10 @@ iObject *csSkinnedMeshAssetXMLLoader::Load(TiXmlElement *element, const csResour
     MaterialSlot slot;
     slot.name = std::string(materialSlotElement->Attribute("name"));
     slot.idx = atoi(materialSlotElement->Attribute("id"));
-    slots.push_back(slot);
+    materialSlots.push_back(slot);
   }
-  std::sort(slots.begin(), slots.end(), ::slot_sort);
-  for (MaterialSlot &slot : slots)
+  std::sort(materialSlots.begin(), materialSlots.end(), ::slot_sort);
+  for (MaterialSlot &slot : materialSlots)
   {
     mesh->AddMaterialName(slot.name);
   }

@@ -1,6 +1,6 @@
 
 
-#include <cobalt/loaders/cssubmeshassetxmlloader.hh>
+#include <cobalt/loaders/cssubmeshassetloader.hh>
 #include <cobalt/graphics/cssubmesh.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ivertexbuffer.hh>
