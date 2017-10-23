@@ -410,8 +410,12 @@ source_group(
     )
 
 set(SOURCE_LOADERS_ENTITY
+    loaders/entity/csbasecolliderstatecsfloader.cc
+    loaders/entity/csbasecolliderstatecsfloader.hh
     loaders/entity/csbasecolliderstatexmlloader.cc
     loaders/entity/csbasecolliderstatexmlloader.hh
+    loaders/entity/cscolliderstatecsfloader.cc
+    loaders/entity/cscolliderstatecsfloader.hh
     loaders/entity/cscolliderstatexmlloader.cc
     loaders/entity/cscolliderstatexmlloader.hh
     loaders/entity/csdynamiccolliderstatexmlloader.cc
@@ -441,6 +445,8 @@ set(SOURCE_LOADERS_ENTITY
     loaders/entity/csjointstatexmlloader.hh
     loaders/entity/csrenderstatexmlloader.cc
     loaders/entity/csrenderstatexmlloader.hh
+    loaders/entity/csspatialstatecsfloader.cc
+    loaders/entity/csspatialstatecsfloader.hh
     loaders/entity/csspatialstatexmlloader.cc
     loaders/entity/csspatialstatexmlloader.hh
     loaders/entity/csstaticcolliderstatexmlloader.cc
