@@ -38,20 +38,20 @@
 #include <cobalt/loaders/entity/csstaticcolliderstatexmlloader.hh>
 #include <cobalt/loaders/entity/csstaticmeshstatexmlloader.hh>
 
-//#include <cobalt/loaders/entity/csbasecolliderstatecsfloader.hh>
+#include <cobalt/loaders/entity/csbasecolliderstatecsfloader.hh>
 #include <cobalt/loaders/entity/cscolliderstatecsfloader.hh>
-//#include <cobalt/loaders/entity/csdynamiccolliderstatecsfloader.hh>
+#include <cobalt/loaders/entity/csdynamiccolliderstatecsfloader.hh>
 #include <cobalt/loaders/entity/csentityloaderregistry.hh>
 #include <cobalt/loaders/entity/csentitymastercsfloader.hh>
 #include <cobalt/loaders/entity/csentitystatemastercsfloader.hh>
 #include <cobalt/loaders/entity/csentitystatecsfloader.hh>
 #include <cobalt/loaders/entity/csentitycsfloader.hh>
-//#include <cobalt/loaders/entity/cshingejointstatecsfloader.hh>
-//#include <cobalt/loaders/entity/csjointstatecsfloader.hh>
-//#include <cobalt/loaders/entity/csrenderstatecsfloader.hh>
+#include <cobalt/loaders/entity/cshingejointstatecsfloader.hh>
+#include <cobalt/loaders/entity/csjointstatecsfloader.hh>
+#include <cobalt/loaders/entity/csrenderstatecsfloader.hh>
 #include <cobalt/loaders/entity/csspatialstatecsfloader.hh>
-//#include <cobalt/loaders/entity/csstaticcolliderstatecsfloader.hh>
-//#include <cobalt/loaders/entity/csstaticmeshstatecsfloader.hh>
+#include <cobalt/loaders/entity/csstaticcolliderstatecsfloader.hh>
+#include <cobalt/loaders/entity/csstaticmeshstatecsfloader.hh>
 
 csLoaders::csLoaders()
 {
@@ -108,10 +108,10 @@ void csLoaders::Register(csResourceManager *mgr)
   reg->RegisterLoader(new csEntityCSFLoader());
   reg->RegisterLoader(new csEntityStateCSFLoader());
   reg->RegisterLoader(new csSpatialStateCSFLoader());
-//  reg->RegisterLoader(new csRenderStateCSFLoader());
-//  reg->RegisterLoader(new csStaticMeshStateCSFLoader());
-//  reg->RegisterLoader(new csStaticColliderStateCSFLoader());
-//  reg->RegisterLoader(new csDynamicColliderStateCSFLoader());
-//  reg->RegisterLoader(new csJointStateCSFLoader());
-//  reg->RegisterLoader(new csHingeJointStateCSFLoader());
+  reg->RegisterLoader(new csRenderStateCSFLoader());
+  reg->RegisterLoader(new csStaticMeshStateCSFLoader());
+  reg->RegisterLoader(new csStaticColliderStateCSFLoader());
+  reg->RegisterLoader(new csDynamicColliderStateCSFLoader());
+  reg->RegisterLoader(new csJointStateCSFLoader());
+  reg->RegisterLoader(new csHingeJointStateCSFLoader());
 }

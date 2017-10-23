@@ -418,6 +418,8 @@ set(SOURCE_LOADERS_ENTITY
     loaders/entity/cscolliderstatecsfloader.hh
     loaders/entity/cscolliderstatexmlloader.cc
     loaders/entity/cscolliderstatexmlloader.hh
+    loaders/entity/csdynamiccolliderstatecsfloader.cc
+    loaders/entity/csdynamiccolliderstatecsfloader.hh
     loaders/entity/csdynamiccolliderstatexmlloader.cc
     loaders/entity/csdynamiccolliderstatexmlloader.hh
     loaders/entity/csentityloaderregistry.cc
@@ -439,22 +441,33 @@ set(SOURCE_LOADERS_ENTITY
     loaders/entity/csentitycsfloader.hh
     loaders/entity/csentityxmlloader.cc
     loaders/entity/csentityxmlloader.hh
+    loaders/entity/cshingejointstatecsfloader.cc
+    loaders/entity/cshingejointstatecsfloader.hh
     loaders/entity/cshingejointstatexmlloader.cc
     loaders/entity/cshingejointstatexmlloader.hh
+    loaders/entity/csjointstatecsfloader.cc
+    loaders/entity/csjointstatecsfloader.hh
     loaders/entity/csjointstatexmlloader.cc
     loaders/entity/csjointstatexmlloader.hh
+    loaders/entity/csrenderstatecsfloader.cc
+    loaders/entity/csrenderstatecsfloader.hh
     loaders/entity/csrenderstatexmlloader.cc
     loaders/entity/csrenderstatexmlloader.hh
     loaders/entity/csspatialstatecsfloader.cc
     loaders/entity/csspatialstatecsfloader.hh
     loaders/entity/csspatialstatexmlloader.cc
     loaders/entity/csspatialstatexmlloader.hh
+    loaders/entity/csstaticcolliderstatecsfloader.cc
+    loaders/entity/csstaticcolliderstatecsfloader.hh
     loaders/entity/csstaticcolliderstatexmlloader.cc
     loaders/entity/csstaticcolliderstatexmlloader.hh
+    loaders/entity/csstaticmeshstatecsfloader.cc
+    loaders/entity/csstaticmeshstatecsfloader.hh
     loaders/entity/csstaticmeshstatexmlloader.cc
     loaders/entity/csstaticmeshstatexmlloader.hh
     )
     
+
 source_group(
     "cobalt\\loaders\\entity"
     FILES

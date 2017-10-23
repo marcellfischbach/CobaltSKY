@@ -264,7 +264,7 @@ float csINI::GetFloatValue(const std::string &group, const std::string &entry, f
     return defaultValue;
   }
 
-  return atof(value.c_str());
+  return (float)atof(value.c_str());
 }
 
 
