@@ -48,6 +48,7 @@ void EditorModule::Initialize()
 
   csResourceManager *mgr = csResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
+  mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
 
   
