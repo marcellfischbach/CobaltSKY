@@ -12,7 +12,6 @@ class CSF_API csfEntry
   friend class csfFile;
 public:
   static const size_t InvalidIndex = ~0x00;
-  ~csfEntry();
 
 
   void SetTagName(const std::string &tagName);
@@ -24,16 +23,16 @@ public:
   std::string GetAttributeValue(size_t idx) const;
   size_t GetAttributeIndex(const std::string &name) const;
 
-  void AddAttribute(const std::string &attribute);
-  void AddAttribute(const std::string &key, const std::string &value);
-  void AddAttributeInt(int attribute);
-  void AddAttributeInt(const std::string &key, int attribute);
-  void AddAttributeLong(long attribute);
-  void AddAttributeLong(const std::string &key, long attribute);
-  void AddAttributeFloat(float attribute);
-  void AddAttributeFloat(const std::string &key, float attribute);
-  void AddAttributeDouble(double attribute);
-  void AddAttributeDouble(const std::string &key, double attribute);
+  csfEntry *AddAttribute(const std::string &attribute);
+  csfEntry *AddAttribute(const std::string &key, const std::string &value);
+  csfEntry *AddAttributeInt(int attribute);
+  csfEntry *AddAttributeInt(const std::string &key, int attribute);
+  csfEntry *AddAttributeLong(long attribute);
+  csfEntry *AddAttributeLong(const std::string &key, long attribute);
+  csfEntry *AddAttributeFloat(float attribute);
+  csfEntry *AddAttributeFloat(const std::string &key, float attribute);
+  csfEntry *AddAttributeDouble(double attribute);
+  csfEntry *AddAttributeDouble(const std::string &key, double attribute);
   bool HasAttribute(size_t idx = 0) const;
   bool HasAttribute(const std::string &key) const;
 
@@ -51,7 +50,9 @@ public:
   bool IsRoot() const;
   csfEntry *GetParent();
   const csfEntry *GetParent() const;
-  void AddChild(csfEntry *child);
+  csfEntry *AddChild(csfEntry *child);
+  csfEntry *RemoveChild(csfEntry *child);
+  void RemoveAllChildren ();
 
   size_t GetNumberOfChildren() const;
   csfEntry *GetChild(size_t idx);

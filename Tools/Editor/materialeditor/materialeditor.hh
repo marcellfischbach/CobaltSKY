@@ -11,6 +11,8 @@
 #include <QDomElement>
 
 
+class csfEntry;
+class csfFile;
 class QImage;
 class csMaterial;
 class MaterialEditorProperties;
@@ -35,6 +37,9 @@ private:
   void FillElement(QDomElement materialElement, QDomDocument doc);
   void ReplaceFileContent();
   void SaveDocument(QDomDocument doc);
+
+  void FillEntry(csfEntry *materialEntry, csfFile &file);
+  void SaveDocument(csfFile &file);
 
   csMaterial *m_material;
   MaterialEditorWidget *m_widget;

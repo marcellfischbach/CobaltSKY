@@ -9,6 +9,8 @@
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/graphics/itexture.hh>
 
+#include <csfile/csffile.hh>
+
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
@@ -95,6 +97,48 @@ void MaterialEditor::Save()
   FillElement(materialElement, doc);
 
   SaveDocument(doc);
+
+
+  csfFile outputFile;
+  if (!outputFile.Parse(std::string(absFileName)))
+  {
+    printf("Unable to open asset: %s\n", (const char*)absFileName.toLatin1());
+    ReplaceFileContent();
+    return;
+  }
+
+  csfEntry *assetEntry = outputFile.GetRoot()->GetEntry("asset");
+  if (!assetEntry)
+  {
+    ReplaceFileContent();
+    return;
+  }
+
+  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  if (!dataEntry)
+  {
+    ReplaceFileContent();
+    return;
+  }
+
+  csfEntry *materialEntry = dataEntry->GetEntry("material");
+  if (!materialElement)
+  {
+    materialEntry = outputFile.CreateEntry("material");
+    dataEntry->AddChild(materialEntry);
+  }
+  else
+  {
+    materialEntry->RemoveAttributes();
+    materialEntry->RemoveAllChildren();
+  }
+
+
+
+  FillEntry(materialEntry, outputFile);
+
+  SaveDocument(outputFile);
+
 }
 
 
@@ -112,6 +156,19 @@ void MaterialEditor::ReplaceFileContent()
 
   FillElement(materialElement, doc);
   SaveDocument(doc);
+
+
+  csfFile outputFile;
+  csfEntry *assetEntry = outputFile.CreateEntry("asset");
+  csfEntry *dataEntry = outputFile.CreateEntry("data");
+  csfEntry *materialEntry = outputFile.CreateEntry("material");
+
+  outputFile.GetRoot()->AddAttribute(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(materialEntry);
+
+  FillEntry(materialEntry, outputFile);
+  SaveDocument(outputFile);
 }
 
 
@@ -136,6 +193,14 @@ void MaterialEditor::SaveDocument(QDomDocument doc)
   Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 
 
+}
+
+void MaterialEditor::SaveDocument(csfFile &file)
+{
+  QString absFileName = GetResourceFileName();
+
+  file.Output(std::string(absFileName.toLatin1()));
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
 }
 
 
@@ -216,6 +281,75 @@ void MaterialEditor::FillElement(QDomElement materialElement, QDomDocument doc)
     }
   }
 }
+
+void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
+{
+  const csfEntry *materialDefEntry = file.CreateEntry("materialDef");
+  const csfEntry *parametersEntry = file.CreateEntry("parameters");
+  materialEntry->AddChild(materialDefEntry);
+  materialEntry->AddChild(parametersEntry);
+
+  csMaterialDef *materialDef = m_material->GetMaterialDef();
+  if (materialDef)
+  {
+    csResourceLocator materialDefLocator = csResourceManager::Get()->GetLocator(materialDef);
+    materialDefEntry->AddAttribute(materialDefLocator.GetText());
+  }
+
+  for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
+  {
+    if (m_material->IsInherited(i))
+    {
+      continue;
+    }
+    std::string parameterName = materialDef->GetParamName(i);
+    csfEntry *parameterEntry = file.CreateEntry("parameter");
+    parametersEntry->AddChild(parameterEntry);
+    parameterEntry->AddAttribute("name", parameterName);
+
+    switch (materialDef->GetParamType(i))
+    {
+    case eSPT_Float:
+      parameterEntry->AddChild(file.CreateEntry("float"))
+          ->AddAttributeFloat(m_material->GetFloat(i));
+      break;
+    case eSPT_Vector2:
+      parameterEntry->AddChild(file.CreateEntry("float2"))
+          ->AddAttributeFloat(m_material->GetFloat2(i).x)
+          ->AddAttributeFloat(m_material->GetFloat2(i).y);
+      break;
+    case eSPT_Vector3:
+      parameterEntry->AddChild(file.CreateEntry("float3"))
+          ->AddAttributeFloat(m_material->GetFloat3(i).x)
+          ->AddAttributeFloat(m_material->GetFloat3(i).y)
+          ->AddAttributeFloat(m_material->GetFloat3(i).z);
+      break;
+    case eSPT_Vector4:
+      parameterEntry->AddChild(file.CreateEntry("float4"))
+          ->AddAttributeFloat(m_material->GetFloat4(i).x)
+          ->AddAttributeFloat(m_material->GetFloat4(i).y)
+          ->AddAttributeFloat(m_material->GetFloat4(i).y)
+          ->AddAttributeFloat(m_material->GetFloat4(i).w);
+      break;
+    case eSPT_Color4:
+      parameterEntry->AddChild(file.CreateEntry("color4"))
+          ->AddAttributeFloat(m_material->GetColor4(i).r)
+          ->AddAttributeFloat(m_material->GetColor4(i).g)
+          ->AddAttributeFloat(m_material->GetColor4(i).b)
+          ->AddAttributeFloat(m_material->GetColor4(i).a);
+      break;
+    case eSPT_Texture:
+      if (m_material->GetTexture(i))
+      {
+        csResourceLocator loc = csResourceManager::Get()->GetLocator(m_material->GetTexture(i));
+        parameterEntry->AddChild(file.CreateEntry("locator"))
+            ->AddAttribute(loc.GetText());
+      }
+      break;
+    }
+  }
+}
+
 
 
 

@@ -11,6 +11,7 @@ class CSF_API csfFile
 {
 public:
   csfFile();
+  ~csfFile();
 
   bool Parse(const csUInt8* buffer, size_t size);
   bool Parse (const std::string &fileName);
@@ -124,6 +125,7 @@ private:
 
   csfEntry *m_root;
   std::vector<csfBlob*> m_blobs;
+  std::vector<csfEntry*> m_entries;
 
   mutable bool m_error;
   mutable std::string m_errorMessage;

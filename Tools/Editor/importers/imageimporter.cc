@@ -65,68 +65,18 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
     return csResourceLocator();
   }
 
-  QString xAssetName = assetManager->GetNewAssetName(m_name);
-  csResourceLocator xassetLocator(
-    locator.GetResourceFile() + "/" + (const char*)xAssetName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  QString dataName = xAssetName;
-  dataName = dataName.left(dataName.length() - 6).append("data");
-  csResourceLocator dataLocator(
-    locator.GetResourceFile() + "/" + (const char*)dataName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  QString csfName = xAssetName;
-  csfName = csfName.left(csfName.length() - 6).append("csf");
-  csResourceLocator csfLocator(
+  QString csfName = assetManager->GetNewAssetName(m_name);
+  csResourceLocator assetLocator(
     locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
     locator.GetResourceName(),
     locator.GetResourceEntry());
 
-  xAssetName = assetManager->GetFilePath(xAssetName);
-  dataName = assetManager->GetFilePath(dataName);
   csfName = assetManager->GetFilePath(csfName);
 
   printf("Import:\n");
-  printf("  XAsset: %s\n", (const char*)xAssetName.toLatin1());
-  printf("    Data: %s\n", (const char*)dataName.toLatin1());
-  printf("     CSF: %s\n", (const char*)csfName.toLatin1());
+  printf("  CSF: %s\n", (const char*)csfName.toLatin1());
 
 
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement texture2dElement = doc.createElement("texture2d");
-  QDomElement samplerElement = doc.createElement("sampler");
-  QDomElement imageElement = doc.createElement("image");
-
-  QDomElement previewElement = doc.createElement("preview");
-  QDomElement editorIconElement = doc.createElement("editorIcon");
-  QDomElement previewImageElement = doc.createElement("image");
-
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(texture2dElement);
-  texture2dElement.appendChild(samplerElement);
-  texture2dElement.appendChild(imageElement);
-
-  assetElement.appendChild(previewElement);
-  previewElement.appendChild(editorIconElement);
-  editorIconElement.appendChild(previewImageElement);
-
-  samplerElement.setAttribute("resourceMode", "shared");
-  samplerElement.appendChild(doc.createTextNode(QString("DefaultSampler.xasset")));
-
-  csResourceLocator anonDataLocator = dataLocator.AsAnonymous();
-  imageElement.appendChild(doc.createTextNode(QString(anonDataLocator.GetText().c_str())));
-  imageElement.setAttribute("mipmap", "true");
-
-  csResourceLocator previewLocator(anonDataLocator, "EDITOR_ICON");
-  previewImageElement.appendChild(doc.createTextNode(QString(previewLocator.GetText().c_str())));
-  QString xml = doc.toString(2);
-  printf("Xml:\n%s\n", (const char*)xml.toLatin1());
 
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -164,25 +114,11 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
     QByteArray ba = file.readAll();
     file.close();
 
-    writer.AddEntry(
-      "DATA",
-      std::string((const char*)typeID.toLatin1()),
-      ba.length(),
-      reinterpret_cast<const csUInt8*>(ba.constData())
-    );
-
     csfBlob *blobData = outputFile.CreateBlob();
     blobData->SetName("DATA");
     blobData->SetType(std::string((const char*)typeID.toLatin1()));
     blobData->SetBuffer(reinterpret_cast<const csUInt8*>(ba.constData()), ba.length());
     outputFile.AddBlob(blobData);
-
-    const csUInt8 *data = reinterpret_cast<const csUInt8*>(ba.constData());
-    printf("Buffer data\n");
-    for (unsigned i = 0; i < 25; ++i)
-    {
-      printf("(%02d) 0x%2x\n", i, data[i]);
-    }
   }
 
   QImage image(m_fileName);
@@ -191,13 +127,6 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
   QImageWriter qimagewriter(&buffer, QString("PNG").toLatin1());
   qimagewriter.write(image);
 
-  writer.AddEntry(
-    "EDITOR_ICON",
-    std::string("PNG"),
-    buffer.data().length(),
-    reinterpret_cast<const csUInt8*>(buffer.data().constData())
-  );
-
   csfBlob *blobEditorIcon = outputFile.CreateBlob();
   blobEditorIcon->SetName("EDITOR_ICON");
   blobEditorIcon->SetType(std::string("PNG"));
@@ -205,27 +134,8 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
   outputFile.AddBlob(blobEditorIcon);
 
   outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
-  //
-  // write the xml document
   
-  QFile xmlFile(xAssetName);
-  if (xmlFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
-  {
-    xmlFile.write(doc.toString(2).toLatin1());
-    xmlFile.close();
-  }
-  
-
-  //
-  // write the data document
-  iFile *dataFile = csVFS::Get()->Open(dataLocator, eOM_Write);
-  if (dataFile) 
-  {
-    writer.Output(dataFile);
-    dataFile->Close();
-  }
-  
-  return xassetLocator;
+  return assetLocator;
 }
 
 QString ImageImporterData::GetType() const

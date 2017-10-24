@@ -131,6 +131,15 @@ csfFile::csfFile()
 
 }
 
+csfFile::~csfFile()
+{
+  for (csfEntry *entry : m_entries)
+  {
+    delete entry;
+  }
+  m_entries.clear();
+
+}
 static std::string tokenMap[] = {
   "Invalid",
   "Number",
@@ -674,7 +683,9 @@ const csfBlob *csfFile::GetBlob(const std::string &blob) const
 
 csfEntry *csfFile::CreateEntry(const std::string &tagName)
 {
-  return new csfEntry(this, tagName);
+  csfEntry *entry = new csfEntry(this, tagName);
+  m_entries.push_back(entry);
+  return entry;
 }
 
 csfBlob *csfFile::CreateBlob()

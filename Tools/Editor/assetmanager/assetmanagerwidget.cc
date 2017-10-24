@@ -168,14 +168,14 @@ csResourceLocator AssetManagerWidget::GetContentResource(const std::string &reso
 
 QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const
 {
-  QString fileName = QString("%1.xasset").arg(baseName);
+  QString fileName = QString("%1.csf").arg(baseName);
   if (!m_currentDir.exists(fileName))
   {
     return fileName;
   }
   for (unsigned i = 1; ; ++i)
   {
-    QString fileName = QString("%1 %2.xasset").arg(baseName).arg(i, 2, 10, QChar('0'));
+    QString fileName = QString("%1 %2.csf").arg(baseName).arg(i, 2, 10, QChar('0'));
     if (!m_currentDir.exists(fileName))
     {
       return fileName;

@@ -212,7 +212,7 @@ namespace
 
 csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetManager)
 {
-  csResourceLocator locator = assetManager->GetContentResource();
+  /*
   QString xAssetName = assetManager->GetNewAssetName(m_name);
   printf("Name: %s\n", (const char*)m_name.toLatin1());
 
@@ -319,11 +319,11 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     writer.Output(dataFile);
     dataFile->Close();
   }
+  */
 
+  csResourceLocator locator = assetManager->GetContentResource();
 
-
-  QString csfName = xAssetName;
-  csfName = csfName.left(csfName.length() - 6).append("csf");
+  QString csfName = assetManager->GetNewAssetName(m_name);
   csResourceLocator csfLocator(
     locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
     locator.GetResourceName(),
@@ -393,7 +393,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
   {
     csfEntry *materialEntry = outputFile.CreateEntry("material");
     materialsEntry->AddChild(materialEntry);
-    materialEntry->AddAttribute("materials/DefaultMaterial.xasset");
+    materialEntry->AddAttribute("materials/DefaultMaterial.csf");
     materialEntry->AddAttributeInt("slot", m.first);
   }
 

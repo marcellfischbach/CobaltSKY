@@ -1,6 +1,7 @@
 
 #include <samplereditor/samplereditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <csfile/csffile.hh>
 #include <QString>
 #include <QFile>
 #include <QDomDocument>
@@ -40,58 +41,53 @@ csResourceLocator SamplerEditorNewAction::CreateNewAsset(AssetManagerWidget *ass
   }
 
   csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
-
   QString assetFilePath = assetManager->GetFilePath(assetName);
-  QFile file(assetFilePath);
-  if (!file.open(QIODevice::WriteOnly))
-  {
-    return csResourceLocator();
-  }
 
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement samplerElement = doc.createElement("sampler");
-  QDomElement filterElement = doc.createElement("filter");
-  QDomElement anisotropyElement = doc.createElement("anisotropy");
-  QDomElement minlodElement = doc.createElement("minlod");
-  QDomElement maxlodElement = doc.createElement("maxlod");
-  QDomElement addressuElement = doc.createElement("addressu");
-  QDomElement addressvElement = doc.createElement("addressv");
-  QDomElement addresswElement = doc.createElement("addressw");
-  QDomElement bordercolorElement = doc.createElement("bordercolor");
-  QDomElement comparemodeElement = doc.createElement("comparemode");
-  QDomElement comparefuncElement = doc.createElement("comparefunc");
+  csfFile outputFile;
+  csfEntry *assetEntry = outputFile.CreateEntry("asset");
+  csfEntry *dataEntry = outputFile.CreateEntry("data");
+  csfEntry *samplerEntry = outputFile.CreateEntry("sampler");
+  csfEntry *filterEntry = outputFile.CreateEntry("filter");
+  csfEntry *anisotropyEntry = outputFile.CreateEntry("anisotropy");
+  csfEntry *minLODEntry = outputFile.CreateEntry("minlod");
+  csfEntry *maxLODEntry = outputFile.CreateEntry("maxlod");
+  csfEntry *addressUEntry = outputFile.CreateEntry("addressu");
+  csfEntry *addressVEntry = outputFile.CreateEntry("addressv");
+  csfEntry *addressWEntry = outputFile.CreateEntry("addressw");
+  csfEntry *borderColorEntry = outputFile.CreateEntry("bordercolor");
+  csfEntry *compareModeEntry = outputFile.CreateEntry("comparemode");
+  csfEntry *compareFuncEntry = outputFile.CreateEntry("comparefunc");
 
 
+  outputFile.GetRoot()->AddChild(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(samplerEntry);
+  samplerEntry->AddChild(filterEntry);
+  samplerEntry->AddChild(anisotropyEntry);
+  samplerEntry->AddChild(minLODEntry);
+  samplerEntry->AddChild(maxLODEntry);
+  samplerEntry->AddChild(addressUEntry);
+  samplerEntry->AddChild(addressVEntry);
+  samplerEntry->AddChild(addressWEntry);
+  samplerEntry->AddChild(borderColorEntry);
+  samplerEntry->AddChild(compareModeEntry);
+  samplerEntry->AddChild(compareFuncEntry);
 
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(samplerElement);
-  samplerElement.appendChild(filterElement);
-  samplerElement.appendChild(anisotropyElement);
-  samplerElement.appendChild(minlodElement);
-  samplerElement.appendChild(maxlodElement);
-  samplerElement.appendChild(addressuElement);
-  samplerElement.appendChild(addressvElement);
-  samplerElement.appendChild(addresswElement);
-  samplerElement.appendChild(bordercolorElement);
-  samplerElement.appendChild(comparemodeElement);
-  samplerElement.appendChild(comparefuncElement);
+  filterEntry->AddAttribute("MinMagNearest");
+  anisotropyEntry->AddAttributeInt(1);
+  minLODEntry->AddAttributeInt(-1000);
+  maxLODEntry->AddAttributeInt(1000);
+  addressUEntry->AddAttribute("Repeat");
+  addressVEntry->AddAttribute("Repeat");
+  addressWEntry->AddAttribute("Repeat");
+  borderColorEntry->AddAttributeInt(0);
+  borderColorEntry->AddAttributeInt(0);
+  borderColorEntry->AddAttributeInt(0);
+  borderColorEntry->AddAttributeInt(0);
+  compareModeEntry->AddAttribute("CompareToR");
+  compareFuncEntry->AddAttribute("Always");
 
-  filterElement.appendChild(doc.createTextNode("MinMagNearest"));
-  anisotropyElement.appendChild(doc.createTextNode("1"));
-  minlodElement.appendChild(doc.createTextNode("-1000"));
-  maxlodElement.appendChild(doc.createTextNode("1000"));
-  addressuElement.appendChild(doc.createTextNode("Repeat"));
-  addressvElement.appendChild(doc.createTextNode("Repeat"));
-  addresswElement.appendChild(doc.createTextNode("Repeat"));
-  bordercolorElement.appendChild(doc.createTextNode("0 0 0 0"));
-  comparemodeElement.appendChild(doc.createTextNode("CompareToR"));
-  comparefuncElement.appendChild(doc.createTextNode("Always"));
+  outputFile.Output(std::string(assetFilePath.toLatin1()));
 
-  QString content = doc.toString(2);
-  file.write(content.toLatin1());
-  file.close();
   return contentLocator;
 }

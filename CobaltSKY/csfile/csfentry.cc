@@ -19,14 +19,6 @@ csfEntry::csfEntry(csfFile *file, const std::string &tagName)
 
 }
 
-csfEntry::~csfEntry()
-{
-  for (csfEntry *child : m_children)
-  {
-    delete child;
-  }
-  m_children.clear();
-}
 
 void csfEntry::SetTagName(const std::string &tagName)
 {
@@ -79,60 +71,62 @@ size_t csfEntry::GetAttributeIndex(const std::string &attributeName) const
   return InvalidIndex;
 }
 
-void csfEntry::AddAttribute(const std::string &attribute)
+csfEntry *csfEntry::AddAttribute(const std::string &attribute)
 {
   Attribute attr;
   attr.key = "";
   attr.value = attribute;
   m_attributes.push_back(attr);
+  return this;
 }
 
-void csfEntry::AddAttribute(const std::string &key, const std::string &value)
+csfEntry *csfEntry::AddAttribute(const std::string &key, const std::string &value)
 {
   Attribute attr;
   attr.key = key;
   attr.value = value;
   m_attributes.push_back(attr);
+  return this;
 }
 
-void csfEntry::AddAttributeInt(int attribute)
+csfEntry *csfEntry::AddAttributeInt(int attribute)
 {
-  AddAttribute(std::to_string(attribute));
+  return AddAttribute(std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeInt(const std::string &key, int attribute)
+csfEntry *csfEntry::AddAttributeInt(const std::string &key, int attribute)
 {
-  AddAttribute(key, std::to_string(attribute));
+  return AddAttribute(key, std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeLong(long attribute)
+csfEntry *csfEntry::AddAttributeLong(long attribute)
 {
-  AddAttribute(std::to_string(attribute));
+  return AddAttribute(std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeLong(const std::string &key, long attribute)
+csfEntry * csfEntry::AddAttributeLong(const std::string &key, long attribute)
 {
-  AddAttribute(key, std::to_string(attribute));
+  return AddAttribute(key, std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeFloat(float attribute)
+csfEntry * csfEntry::AddAttributeFloat(float attribute)
 {
-  AddAttribute(std::to_string(attribute));
+  return AddAttribute(std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeFloat(const std::string &key, float attribute)
+csfEntry * csfEntry::AddAttributeFloat(const std::string &key, float attribute)
 {
-  AddAttribute(key, std::to_string(attribute));
+  return AddAttribute(key, std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeDouble(double attribute)
+csfEntry *csfEntry::AddAttributeDouble(double attribute)
 {
-  AddAttribute(std::to_string(attribute));
+  return AddAttribute(std::to_string(attribute));
 }
 
-void csfEntry::AddAttributeDouble(const std::string &key, double attribute)
+csfEntry * csfEntry::AddAttributeDouble(const std::string &key, double attribute)
 {
-  AddAttribute(key, std::to_string(attribute));
+  return AddAttribute(key, std::to_string(attribute));
 }
 
 bool csfEntry::HasAttribute(size_t idx) const
@@ -263,10 +257,29 @@ const csfEntry *csfEntry::GetParent() const
   return m_parent;
 }
 
-void csfEntry::AddChild(csfEntry *child)
+csfEntry *csfEntry::AddChild(csfEntry *child)
 {
   child->m_parent = this;
   m_children.push_back(child);
+  return child;
+}
+
+csfEntry *csfEntry::RemoveChild(csfEntry *child)
+{
+  for (auto it = m_children.begin(); it != m_children.end(); ++it)
+  {
+    if (*it == child)
+    {
+      m_children.erase(it);
+      return this;
+    }
+  }
+  return this;
+}
+
+void csfEntry::RemoveAllChildren()
+{
+  m_children.clear();
 }
 
 size_t csfEntry::GetNumberOfChildren() const

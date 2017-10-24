@@ -1,6 +1,7 @@
 
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <csfile/csffile.hh>
 #include <QString>
 #include <QFile>
 #include <QDomDocument>
@@ -42,29 +43,22 @@ csResourceLocator ShaderGraphEditorNewAction::CreateNewAsset(AssetManagerWidget 
   csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
 
   QString assetFilePath = assetManager->GetFilePath(assetName);
-  QFile file(assetFilePath);
-  if (!file.open(QIODevice::WriteOnly))
-  {
-    return csResourceLocator();
-  }
+  csfFile outputFile;
 
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement shaderGraphElement = doc.createElement("shaderGraph");
-  QDomElement nodesElements = doc.createElement("nodes");
-  QDomElement inputsElements = doc.createElement("inputs");
-  QDomElement attributesElements = doc.createElement("attributes");
+  csfEntry *assetEntry = outputFile.CreateEntry("asset");
+  csfEntry *dataEntry = outputFile.CreateEntry("data");
+  csfEntry *shaderGraphEntry = outputFile.CreateEntry("shaderGraph");
+  csfEntry *nodesEntry = outputFile.CreateEntry("nodes");
+  csfEntry *inputsEntry = outputFile.CreateEntry("inputs");
+  csfEntry *attributesEntry = outputFile.CreateEntry("attributes");
 
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(shaderGraphElement);
-  shaderGraphElement.appendChild(nodesElements);
-  shaderGraphElement.appendChild(inputsElements);
-  shaderGraphElement.appendChild(attributesElements);
+  outputFile.GetRoot()->AddChild(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(shaderGraphEntry);
+  shaderGraphEntry->AddChild(nodesEntry);
+  shaderGraphEntry->AddChild(inputsEntry);
+  shaderGraphEntry->AddChild(attributesEntry);
 
-  QString content = doc.toString(2);
-  file.write(content.toLatin1());
-  file.close();
+  outputFile.Output(std::string(assetFilePath.toLatin1()));
   return contentLocator;
 }
