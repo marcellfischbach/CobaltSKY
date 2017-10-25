@@ -34,40 +34,6 @@ QString MaterialEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManag
 
 csResourceLocator MaterialEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
-  /*
-  QString assetName = assetManager->GetNewAssetName("Material");
-  if (assetName == QString::null)
-  {
-    return csResourceLocator();
-  }
-
-  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
-
-  QString assetFilePath = assetManager->GetFilePath(assetName);
-  QFile file(assetFilePath);
-  if (!file.open(QIODevice::WriteOnly))
-  {
-    return csResourceLocator();
-  }
-
-  QDomDocument doc;
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement materialElement = doc.createElement("material");
-  QDomElement materialDefElement = doc.createElement("materialDef");
-  QDomElement parametersElement = doc.createElement("parameters");
-
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(materialElement);
-  materialElement.appendChild(materialDefElement);
-  materialElement.appendChild(parametersElement);
-
-  QString content = doc.toString(2);
-  file.write(content.toLatin1());
-  file.close();
-  */
-
   QString assetName = assetManager->GetNewAssetName("Material");
   if (assetName == QString::null)
   {

@@ -15,6 +15,7 @@
 #include <samplereditor/samplereditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditornewaction.hh>
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
+#include <shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
 #include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <staticmesheditor/staticmesheditorfactory.hh>
 #include <textureeditor/textureeditorfactory.hh>
@@ -47,6 +48,7 @@ void EditorModule::Initialize()
   importManager->RegisterImporter(new ModelImporter());
 
   csResourceManager *mgr = csResourceManager::Get();
+  mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
   mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());

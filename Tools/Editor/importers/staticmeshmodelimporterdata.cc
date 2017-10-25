@@ -180,7 +180,7 @@ void StaticMeshModelImporterData::GenerateData(const aiScene *scene)
   state->SetCastShadow(true);
   state->SetMesh(mesh);
 
-  csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator("materials/DefaultMaterial.xasset"));
+  csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator("materials/DefaultMaterial.csf"));
   for (unsigned i = 0, in = mesh->GetNumberOfMaterials(); i < in; ++i)
   {
     state->SetMaterial(material, i);
@@ -212,115 +212,6 @@ namespace
 
 csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetManager)
 {
-  /*
-  QString xAssetName = assetManager->GetNewAssetName(m_name);
-  printf("Name: %s\n", (const char*)m_name.toLatin1());
-
-  csResourceLocator xassetLocator(
-    locator.GetResourceFile() + "/" + (const char*)xAssetName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  QString dataName = xAssetName;
-  dataName = dataName.left(dataName.length() - 6).append("data");
-  csResourceLocator dataLocator(
-    locator.GetResourceFile() + "/" + (const char*)dataName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  xAssetName = assetManager->GetFilePath(xAssetName);
-  dataName = assetManager->GetFilePath(dataName);
-
-  printf("Import:\n");
-  printf("  XAsset: %s\n", (const char*)xAssetName.toLatin1());
-  printf("    Data: %s\n", (const char*)dataName.toLatin1());
-
-
-  QDomDocument doc;
-
-  QDomElement assetElement = doc.createElement("asset");
-  QDomElement dataElement = doc.createElement("data");
-  QDomElement entityStateElement = doc.createElement("entityState");
-  QDomElement meshElement = doc.createElement("mesh");
-  QDomElement materialsElement = doc.createElement("materials");
-
-  doc.appendChild(assetElement);
-  assetElement.appendChild(dataElement);
-  dataElement.appendChild(entityStateElement);
-  entityStateElement.appendChild(meshElement);
-  entityStateElement.appendChild(materialsElement);
-
-  entityStateElement.setAttribute("class", "csStaticMeshState");
-  entityStateElement.setAttribute("name", m_name);
-
-  QDomElement materialSlotsElement = doc.createElement("materialSlots");
-  meshElement.appendChild(materialSlotsElement);
-  for (auto materials : m_materialNames)
-  {
-    QDomElement materialSlotElement = doc.createElement("materialSlot");
-    materialSlotElement.setAttribute("id", materials.first);
-    materialSlotElement.setAttribute("name", QString(materials.second.c_str()));
-    materialSlotsElement.appendChild(materialSlotElement);
-  }
-
-  QDomElement globalIndicesElement = doc.createElement("globalIndices");
-  meshElement.appendChild(globalIndicesElement);
-
-
-
-  QDomElement subMeshesElement = doc.createElement("subMeshes");
-  meshElement.appendChild(subMeshesElement);
-  AssetManagerAssetWriter writer;
-  for (auto lod : m_lods)
-  {
-    for (auto data : lod->datas)
-    {
-      SubMesh *subMesh = data->subMesh;
-      csAssetOutputStream os;
-      Output(subMesh, os);
-      std::string dataName = ::as_data_name(data->name);
-      writer.AddEntry(dataName, "SUBMESH", os.GetSize(), os.GetBuffer());
-
-
-      QDomElement subMeshElement = doc.createElement("subMesh");
-      subMeshesElement.appendChild(subMeshElement);
-
-      csResourceLocator subMeshLocator(dataLocator, dataName);
-      subMeshLocator = subMeshLocator.AsAnonymous();
-      subMeshElement.setAttribute("name", QString(data->name.c_str()));
-      subMeshElement.setAttribute("lod", lod->lod);
-      subMeshElement.setAttribute("materialSlot", data->materialIndex);
-      subMeshElement.appendChild(doc.createTextNode(QString(subMeshLocator.GetText().c_str())));
-
-    }
-  }
-
-
-  for (auto m : m_materialNames)
-  {
-    QDomElement materialElement = doc.createElement("material");
-    materialsElement.appendChild(materialElement);
-    materialElement.setAttribute("slot", m.first);
-    materialElement.appendChild(doc.createTextNode(QString("materials/DefaultMaterial.xasset")));
-  }
-
-  printf("ImportXML:\n%s\n", (const char*)doc.toString(2).toLatin1());
-
-  QFile xassetFile(xAssetName);
-  if (xassetFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
-  {
-    xassetFile.write(doc.toString(2).toLatin1());
-    xassetFile.close();
-  }
-
-  iFile *dataFile = csVFS::Get()->Open(dataLocator, eOM_Write);
-  if (dataFile)
-  {
-    writer.Output(dataFile);
-    dataFile->Close();
-  }
-  */
-
   csResourceLocator locator = assetManager->GetContentResource();
 
   QString csfName = assetManager->GetNewAssetName(m_name);

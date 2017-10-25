@@ -45,7 +45,7 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const s
   QDir dir(QString(absPath.c_str()));
 
   QStringList filter;
-  filter << "*.xasset";
+  filter << "*.csf";
 
   QStringList entryFiles = dir.entryList(filter, QDir::Files);
   for (const QString &entryFile : entryFiles)

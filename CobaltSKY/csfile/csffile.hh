@@ -13,15 +13,15 @@ public:
   csfFile();
   ~csfFile();
 
-  bool Parse(const csUInt8* buffer, size_t size);
-  bool Parse (const std::string &fileName);
+  bool Parse(const csUInt8* buffer, size_t size, bool parseBinarySection = true);
+  bool Parse (const std::string &fileName, bool parseBinarySection = true);
   bool Output (const std::string &fileName, bool tight = false, unsigned indent = 2) const;
 
   csfEntry *GetRoot();
   const csfEntry *GetRoot() const;
-
+  csfEntry *GetEntry(const std::string &entry);
   const csfEntry *GetEntry(const std::string &entry) const;
-
+  csfBlob *GetBlob(const std::string &blob);
   const csfBlob *GetBlob(const std::string &blob) const;
 
   void AddBlob(csfBlob *blob);
@@ -81,7 +81,7 @@ private:
     csUInt32 m_column;
   };
 
-  bool Parse(IInputBuffer *buffer);
+  bool Parse(IInputBuffer *buffer, bool parseBinarySection);
 
   enum TokenType
   {

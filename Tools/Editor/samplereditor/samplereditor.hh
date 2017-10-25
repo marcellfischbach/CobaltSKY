@@ -33,21 +33,7 @@ private:
   void MergeSampler();
   void MergeFile();
   void ReplaceFile();
-  void MergeNewFile();
-  void ReplaceNewFile();
 
-  void SetFilter(QDomDocument doc, QDomElement element);
-  void SetAnisotropy(QDomDocument doc, QDomElement element);
-  void SetMinLOD(QDomDocument doc, QDomElement element);
-  void SetMaxLOD(QDomDocument doc, QDomElement element);
-  void SetAddressU(QDomDocument doc, QDomElement element);
-  void SetAddressV(QDomDocument doc, QDomElement element);
-  void SetAddressW(QDomDocument doc, QDomElement element);
-  void SetAddress(QDomDocument doc, csTextureAddressMode mode, QDomElement element);
-  void SetBorderColor(QDomDocument doc, QDomElement element);
-  void SetTextureCompareMode(QDomDocument doc, QDomElement element);
-  void SetTextureCompareFunc(QDomDocument doc, QDomElement element);
-  void RemoveChildren(QDomElement element);
 
   void SetFilter(csfEntry *entry);
   void SetAnisotropy(csfEntry *entry);

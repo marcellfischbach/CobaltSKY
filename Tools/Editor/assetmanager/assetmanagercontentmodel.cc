@@ -14,7 +14,7 @@
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <QDomDocument>
+#include <csfile/csffile.hh>
 #include <QFile>
 
 #define FROM_INDEX(e) reinterpret_cast<AssetManagerContentModelEntry*>(e.internalPointer());
@@ -80,7 +80,7 @@ void AssetManagerContentModel::Refresh()
   CleanupEntries();
   QDir dir (QString(absFileName.c_str()));
   QStringList nameFilters;
-  nameFilters.append("*.xasset");
+  nameFilters.append("*.csf");
   QStringList fileNames = dir.entryList(nameFilters, QDir::Files, QDir::Name);
   for (const QString &fileName : fileNames)
   {
@@ -206,36 +206,34 @@ const AssetManagerContentModelEntry *AssetManagerContentModel::GetEntry(const QM
 std::string AssetManagerContentModel::ReadType(const csResourceLocator &locator) const
 {
   std::string path = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
-  QFile file(QString(path.c_str()));
-  file.open(QIODevice::ReadOnly);
-  QDomDocument doc;
-  QString errorMesage;
-  int line, column;
-  if (!doc.setContent(&file, &errorMesage, &line, &column))
+
+  csfFile oFile;
+  if (!oFile.Parse(path, false))
   {
-    printf("unable to parse %s '%s' %d:%d\n", path.c_str(), (const char*)errorMesage.toLatin1(), line, column);
+
+    printf("unable to parse %s '%s'\n", path.c_str(), oFile.GetErrorMessage().c_str());
     return "";
   }
 
-  QDomElement assetElement = doc.documentElement();
-  if (assetElement.isNull () || assetElement.tagName() != QString("asset"))
+  const csfEntry *assetEntry = oFile.GetEntry("asset");
+  if (!assetEntry)
   {
     return "";
   }
 
-  QDomElement dataElement = assetElement.firstChildElement("data");
-  if (dataElement.isNull())
+  const csfEntry *dataEntry = assetEntry->GetEntry("data");
+  if (!dataEntry)
   {
     return "";
   }
 
-  QDomElement typeElement = dataElement.firstChildElement();
-  if (typeElement.isNull())
+  const csfEntry *typeEntry = dataEntry->GetEntry();
+  if (!typeEntry)
   {
     return "";
   }
 
-  return std::string((const char*)typeElement.tagName().toLatin1());
+  return typeEntry->GetTagName();
 }
 
 

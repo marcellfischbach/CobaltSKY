@@ -5,8 +5,6 @@
 #include <cobalt/graphics/isampler.hh>
 #include <editor.hh>
 #include <project/project.hh>
-#include <QDomDocument>
-#include <QDomElement>
 #include <QFile>
 
 
@@ -80,27 +78,18 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  QFile file(m_editor->GetResourceFileName());
-  QDomDocument doc;
-  if (!doc.setContent(&file))
+  QString absFileName = m_editor->GetResourceFileName();
+
+
+  csfFile outputFile;
+  if (!outputFile.Parse(std::string(absFileName.toLatin1())))
   {
-    file.close();
     printf("Unable to save\n");
     //SaveNew();
     return;
   }
-  file.close();
-
-  QDomElement assetElement = doc.documentElement();
-  if (assetElement.isNull() || assetElement.tagName() != QString("asset"))
-  {
-    printf("Malformed asset\n");
-    // SaveNew ();
-    return;
-  }
-
-  QDomElement dataElement = assetElement.firstChildElement("data");
-  if (dataElement.isNull())
+  csfEntry *assetEntry = outputFile.GetEntry("asset");
+  if (!assetEntry)
   {
     printf("Malformed asset\n");
     // SaveNew ();
@@ -108,8 +97,8 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  QDomElement texture2dElement = dataElement.firstChildElement("texture2d");
-  if (texture2dElement.isNull())
+  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  if (!dataEntry)
   {
     printf("Malformed asset\n");
     // SaveNew ();
@@ -117,29 +106,29 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  QDomElement samplerElement = texture2dElement.firstChildElement("sampler");
-  if (samplerElement.isNull())
+  csfEntry *texture2dEntry = dataEntry->GetEntry("texture2d");
+  if (!texture2dEntry)
   {
     printf("Malformed asset\n");
     // SaveNew ();
     return;
   }
 
-  QDomNode child;
-  while (!(child = samplerElement.firstChild()).isNull())
+
+  csfEntry *samplerEntry = texture2dEntry->GetEntry("sampler");
+  if (!samplerEntry)
   {
-    samplerElement.removeChild(child);
+    printf("Malformed asset\n");
+    // SaveNew ();
+    return;
   }
+
+  samplerEntry->RemoveAttributes();
 
   csResourceLocator samplerLocator = csResourceManager::Get()->GetLocator(m_texture->GetSampler());
-  QDomText text = doc.createTextNode(QString(samplerLocator.GetResourceFile().c_str()));
-  samplerElement.appendChild(text);
+  samplerEntry->AddAttribute(samplerLocator.GetResourceFile());
 
-  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    file.write(doc.toString(2).toLatin1());
-    file.close();
-  }
+  outputFile.Output(std::string(absFileName.toLatin1()));
 
   Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
 }

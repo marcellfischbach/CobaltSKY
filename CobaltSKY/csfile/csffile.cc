@@ -155,7 +155,7 @@ static std::string tokenMap[] = {
 };
 
 
-bool csfFile::Parse(const std::string &fileName)
+bool csfFile::Parse(const std::string &fileName, bool parseBinarySection)
 {
   m_error = false;
   m_errorMessage = "";
@@ -169,23 +169,23 @@ bool csfFile::Parse(const std::string &fileName)
 
   InputStreamBuffer buffer(file, 32);
 
-  bool res = Parse(&buffer);
+  bool res = Parse(&buffer, parseBinarySection);
   return res;
 }
 
 
-bool csfFile::Parse(const csUInt8 *data, size_t size)
+bool csfFile::Parse(const csUInt8 *data, size_t size, bool parseBinarySection)
 {
   m_error = false;
   m_errorMessage = "";
 
   InputDataBuffer buffer(data, size);
 
-  bool res = Parse(&buffer);
+  bool res = Parse(&buffer, parseBinarySection);
   return res;
 }
 
-bool csfFile::Parse(csfFile::IInputBuffer *buffer)
+bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
 {
   csfEntry *parent = m_root;
   csfEntry *currentEntry = 0;
@@ -203,6 +203,10 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer)
     Token token = GetToken(buffer);
     if (token.type == eTT_Hash)
     {
+      if (!parseBinarySection)
+      {
+        break;
+      }
       csfBlob *blob = GetBlob(buffer);
       if (!blob)
       {
@@ -234,8 +238,7 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer)
       }
       else 
       {
-        csfEntry *newEntry = new csfEntry(this);
-        newEntry->SetTagName(token.value);
+        csfEntry *newEntry = CreateEntry(token.value);
         parent->AddChild(newEntry);
         currentEntry = newEntry;
         state = eS_ExpectAttribsOrChildrenOrClose;
@@ -664,14 +667,20 @@ const csfEntry *csfFile::GetRoot() const
   return m_root;
 }
 
+
+csfEntry *csfFile::GetEntry(const std::string &entry)
+{
+  return m_root->GetEntry(entry);
+}
+
 const csfEntry *csfFile::GetEntry(const std::string &entry) const
 {
   return m_root->GetEntry(entry);
 }
 
-const csfBlob *csfFile::GetBlob(const std::string &blob) const
+csfBlob *csfFile::GetBlob(const std::string &blob)
 {
-  for (const csfBlob *b : m_blobs)
+  for (csfBlob *b : m_blobs)
   {
     if (b->GetName() == blob)
     {
@@ -679,6 +688,11 @@ const csfBlob *csfFile::GetBlob(const std::string &blob) const
     }
   }
   return 0;
+}
+
+const csfBlob *csfFile::GetBlob(const std::string &blob) const
+{
+  return const_cast<csfFile*>(this)->GetBlob(blob);
 }
 
 csfEntry *csfFile::CreateEntry(const std::string &tagName)

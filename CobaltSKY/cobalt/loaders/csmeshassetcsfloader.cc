@@ -112,8 +112,13 @@ iObject *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocat
       lod = subMeshEntry->GetAttributeInt("lod");
     }
 
-    csResourceLocator subMeshLocator(subMeshEntry->GetAttribute());
-    csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(subMeshLocator);
+    csSubMesh *subMesh = 0;
+    std::string blobName = subMeshEntry->GetAttribute();
+    const csfBlob *blob = subMeshEntry->GetFile()->GetBlob(blobName);
+    if (blob)
+    {
+      subMesh = csResourceManager::Get()->Load<csSubMesh>(blob, locator, userData);
+    }
     if (subMesh)
     {
       mesh->AddMesh(subMesh, materialSlot, (csUInt8)lod, name);

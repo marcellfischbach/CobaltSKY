@@ -34,12 +34,10 @@ protected:
   void PopulateDockItems();
 
 private:
-  void FillElement(QDomElement materialElement, QDomDocument doc);
-  void ReplaceFileContent();
-  void SaveDocument(QDomDocument doc);
 
   void FillEntry(csfEntry *materialEntry, csfFile &file);
-  void SaveDocument(csfFile &file);
+  void ReplaceFileContent();
+  void Save(csfFile &file);
 
   csMaterial *m_material;
   MaterialEditorWidget *m_widget;
