@@ -2,6 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/resource/icsfloader.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector2f.hh>
@@ -22,6 +23,8 @@ protected:
   const csfEntry *FindEntry(const csfEntry *root, const std::string &entryName, const std::string &name = "") const;
   const csfEntry *FindEntryByTagName(const csfEntry *root, const std::string &entryName) const;
 
+  bool HasLocator (const csfEntry *entry) const;
+  csResourceLocator GetLocator(const csfEntry *entry) const;
   csResourceLoadingMode GetResourceLoadingMode(const csfEntry *entry, csResourceLoadingMode defaultMode = eRLM_Shared, csResourceLoadingMode alterInline = eRLM_Inline) const;
 
   bool LoadBool(const csfEntry *entry, size_t idx = 0) const;

@@ -119,13 +119,17 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
       printf("Exit 2\n");
       return 0;
     }
-
-    csResourceLocator shaderLocator(passEntry->GetAttribute());
-    iShader *shader = csResourceManager::Get()->GetOrLoad<iShader>(shaderLocator);
+    if (!HasLocator(passEntry))
+    {
+      material->Release();
+      printf ("Exit 3\n");
+      return 0;
+    }
+    iShader *shader = csResourceManager::Get()->GetOrLoad<iShader>(LoadLocator(passEntry));
     if (!shader)
     {
       material->Release();
-      printf("Exit 3\n");
+      printf("Exit 4\n");
       return 0;
     }
 
@@ -238,22 +242,25 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
         break;
       case eSPT_Texture:
         {
-          csResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
-          iTexture *texture = 0;
-          switch (rlm)
+          if (HasLocator(parameterEntry))
           {
-          case eRLM_Shared:
-            texture = csResourceManager::Get()->GetOrLoad<iTexture>(csResourceLocator(parameterEntry->GetAttribute()));
-            material->SetDefault(idx, texture);
-            break;
-          case eRLM_Instance:
-            texture = csResourceManager::Get()->Load<iTexture>(csResourceLocator(parameterEntry->GetAttribute()));
-            material->SetDefault(idx, texture);
-            if (texture) texture->Release();
-            break;
-          default:
-            printf("not implemented yet.");
+            csResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
+            iTexture *texture = 0;
+            switch (rlm)
+            {
+            case eRLM_Shared:
+              texture = csResourceManager::Get()->GetOrLoad<iTexture>(LoadLocator(parameterEntry));
+              material->SetDefault(idx, texture);
+              break;
+            case eRLM_Instance:
+              texture = csResourceManager::Get()->Load<iTexture>(LoadLocator(parameterEntry));
+              material->SetDefault(idx, texture);
+              if (texture) texture->Release();
+              break;
+            default:
+              printf("not implemented yet.");
 
+            }
           }
         }
       }

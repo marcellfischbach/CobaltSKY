@@ -77,6 +77,16 @@ const csfEntry *csBaseCSFLoader::FindEntryByTagName(const csfEntry *parent, cons
   return 0;
 }
 
+bool csBaseCSFLoader::HasLocator(const csfEntry *entry) const
+{
+  return entry->HasAttribute("locator");
+}
+
+csResourceLocator csBaseCSFLoader::HasLocator(const csfEntry *entry) const
+{
+  return csResourceLocator (entry->GetAttribute("locator"));
+}
+
 
 csResourceLoadingMode csBaseCSFLoader::GetResourceLoadingMode(const csfEntry *entry, csResourceLoadingMode defaultMode, csResourceLoadingMode alterInline) const
 {

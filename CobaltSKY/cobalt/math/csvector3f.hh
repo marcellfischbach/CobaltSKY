@@ -138,6 +138,16 @@ public:
     return csVector3f(x/v, y/v, z/v);
   }
 
+  CS_FORCEINLINE csVector3f operator+(const csVector3f &o) const
+  {
+    return csVector3f(x+o.x, y+o.y, z+o.z);
+  }
+
+  CS_FORCEINLINE csVector3f operator-(const csVector3f &o) const
+  {
+    return csVector3f(x-o.x, y-o.y, z-o.z);
+  }
+
   CS_FORCEINLINE static csVector3f &Add(const csVector3f &v0, const csVector3f &v1, csVector3f &r)
   {
     r.x = v0.x + v1.x;
@@ -247,6 +257,7 @@ public:
     r.z = z / l;
     return r;
   }
+
 
   CS_FORCEINLINE static csVector3f &Cross(const csVector3f &v0, const csVector3f &v1, csVector3f &r)
   {

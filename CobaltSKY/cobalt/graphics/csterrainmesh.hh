@@ -23,7 +23,7 @@ public:
   csTerrainMesh();
   virtual ~csTerrainMesh();
 
-  bool Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights);
+  bool Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const csVector3f *normals);
 
   virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
   virtual void Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);

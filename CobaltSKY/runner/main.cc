@@ -349,7 +349,7 @@ int main_loop()
       }
 
     }
-    directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.5f));
+    directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.25f));
   }
 
 
@@ -887,11 +887,12 @@ csEntityScene *create_scene(iGraphics *graphics)
     }
   }
 
-  terrainMesh->Initialize(graphics, numVerticesPerSide, 8, 200.0f, 200.0f, heights);
+  terrainMesh->Initialize(graphics, numVerticesPerSide, 8, 200.0f, 200.0f, heights, 0);
 
   csStaticMeshState *terrainState = new csStaticMeshState();
   terrainState->SetMesh(terrainMesh);
   terrainState->SetMaterial(groundMaterial);
+  terrainState->SetCastShadow(true);
 
   csEntity *terrainEntity = new csEntity();
   terrainEntity->SetRootState(terrainState);
@@ -985,7 +986,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   directionalLight = new csDirectionalLight();
   directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
-  directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.5f));
+  directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.0f));
   directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 

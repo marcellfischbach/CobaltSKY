@@ -125,12 +125,14 @@ iObject *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResour
       lod = subMeshEntry->GetAttributeInt("lod");
     }
 
-    csResourceLocator subMeshLocator(subMeshEntry->GetAttribute());
-    csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(subMeshLocator);
-    if (subMesh)
+    if (HasLocator(subMeshEntry))
     {
-      mesh->AddMesh(subMesh, materialSlot, (csUInt8)lod, name);
-      subMesh->Release();
+      csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(GetLocator(subMeshEntry));
+      if (subMesh)
+      {
+        mesh->AddMesh(subMesh, materialSlot, (csUInt8)lod, name);
+        subMesh->Release();
+      }
     }
   }
 

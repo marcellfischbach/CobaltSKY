@@ -36,10 +36,10 @@ iObject *csColliderStateCSFLoader::Load(const csfEntry *entry, const csResourceL
   csEntityStateLoaderData *data = csQueryClass<csEntityStateLoaderData>(userData);
   csColliderState *collider = csQueryClass<csColliderState>(data->state);
   const csfEntry *shapeEntry = entry->GetEntry("shape");
-  if (shapeEntry)
+  if (shapeEntry && HasLocator(shapeEntry))
   {
     csResourceLoadingMode loadingMode = GetResourceLoadingMode(shapeEntry, eRLM_Shared, eRLM_Instance);
-    csPhysicsShapeContainer *shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(shapeEntry->GetAttribute()), 0, loadingMode);
+    csPhysicsShapeContainer *shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(GetLocator(shapeEntry), 0, loadingMode);
     collider->AttachShape(shapes);
   }
 

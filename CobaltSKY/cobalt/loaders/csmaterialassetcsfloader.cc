@@ -42,11 +42,11 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
     return material;
   }
 
-  if (!materialDefEntry->HasAttribute())
+  if (!HasLocator(materialDefEntry))
   {
     return material;
   }
-  csMaterialDef *materialDef = csResourceManager::Get()->GetOrLoad<csMaterialDef>(csResourceLocator(materialDefEntry->GetAttribute()));
+  csMaterialDef *materialDef = csResourceManager::Get()->GetOrLoad<csMaterialDef>(LoadLocator(materialDefEntry));
   if (!materialDef)
   {
     return material;
@@ -101,9 +101,9 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
       {
         material->Set(index, LoadColor4f(valueEntry));
       }
-      else if (tagName == std::string("locator"))
+      else if (tagName == std::string("locator") && HasLocator(valueEntry))
       {
-        iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(csResourceLocator(valueEntry->GetAttribute()));
+        iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(LoadLocator(valueEntry));
         material->Set(index, texture);
       }
     }

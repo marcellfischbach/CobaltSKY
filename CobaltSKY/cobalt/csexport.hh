@@ -9,7 +9,6 @@
 
 
 
-
 #ifdef CSE_EXPORT
 #define CSE_API __declspec(dllexport)
 #else

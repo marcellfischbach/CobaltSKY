@@ -139,7 +139,92 @@ static unsigned GetPowerOfTwo(unsigned i)
   return r;
 }
 
-bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights)
+struct Vertex
+{
+  csVector3f pos;
+  csVector3f normal;
+  csVector3f tangent;
+  csVector3f binormal;
+  csVector2f texCoord;
+};
+
+namespace
+{
+
+csVector3f GetPos (Vertex *vertices, int numVertices, int ix, int iy)
+{
+  if (ix < 0)
+  {
+    ix = 0;
+  }
+  else if (ix >= numVertices)
+  {
+    ix = numVertices-1;
+  }
+  if (iy < 0)
+  {
+    iy = 0;
+  }
+  else if (iy >= numVertices)
+  {
+    iy = numVertices-1;
+  }
+
+
+  return vertices[iy * numVertices + ix].pos;
+}
+
+void GenerateNormals (Vertex *vertices, int numVertices)
+{
+  for (int iy=0; iy<numVertices; ++iy)
+  {
+    for (int ix=0; ix<numVertices; ++ix)
+    {
+      csVector3f c = GetPos(vertices, numVertices, ix, iy);
+      csVector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
+      csVector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
+      csVector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
+      csVector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
+
+
+      csVector3f n0 = csVector3f::Cross(py, nx, n0);
+      csVector3f n1 = csVector3f::Cross(px, py, n1);
+      csVector3f n2 = csVector3f::Cross(ny, px, n2);
+      csVector3f n3 = csVector3f::Cross(nx, ny, n3);
+
+      vertices[iy * numVertices + ix].normal = (n0 + n1 + n2 + n3).Normalize();
+    }
+  }
+}
+
+void GenerateTangentsAndBiNormal(Vertex *vertices, int numVertices)
+{
+  for (int iy=0; iy<numVertices; ++iy)
+  {
+    for (int ix=0; ix<numVertices; ++ix)
+    {
+      csVector3f c = GetPos(vertices, numVertices, ix, iy);
+      csVector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
+      csVector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
+      csVector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
+      csVector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
+
+
+      csVector3f dx0 = c - nx;
+      csVector3f dx1 = px - c;
+      csVector3f dy0 = c - ny;
+      csVector3f dy1 = py - c;
+
+
+      vertices[iy * numVertices + ix].tangent = (dx0 + dx1).Normalize();
+      vertices[iy * numVertices + ix].binormal = (dy0 + dy1).Normalize();
+    }
+  }
+
+}
+}
+
+bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const csVector3f *normals)
 {
   if (!IsPowerOfTwo(numVertices - 1))
   {
@@ -166,14 +251,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
 
 
 
-  struct Vertex
-  {
-    csVector3f pos;
-    csVector3f normal;
-    csVector3f tangent;
-    csVector3f binormal;
-    csVector2f texCoord;
-  };
+
 
   csVertexElement vertexElements[] = {
     csVertexElement(eVST_Position, eDT_Float, 3, offsetof(Vertex, pos), sizeof(Vertex), 0),
@@ -194,6 +272,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   const float *hptr = heights;
   Vertex *vptr = vertices;
   unsigned idx = 0;
+  const csVector3f *normal = normals;
   for (unsigned iy = 0; iy < numVertices; ++iy)
   {
     float fy = (float)iy / (float)(numVertices - 1);
@@ -202,13 +281,22 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       float fx = (float)ix / (float)(numVertices - 1);
 
       vptr->pos = csVector3f(x0 + fx *width, y0 + fy *length, *hptr);
-      vptr->normal = csVector3f(0.0f, 0.0f, 1.0f);
+      vptr->normal = normal ? *normal : csVector3f(0.0f, 0.0f, 1.0f);
       vptr->tangent = csVector3f(1.0f, 0.0f, 0.0f);
       vptr->binormal = csVector3f(0.0f, 1.0f, 0.0f);
       vptr->texCoord = csVector2f(fx, fy);
       m_boundingBox.Add(vptr->pos);
+      if (normal)
+      {
+        ++normal;
+      }
     }
   }
+  if (!normals)
+  {
+    GenerateNormals (vertices, numVertices);
+  }
+  GenerateTangentsAndBiNormal(vertices, numVertices);
 
   m_boundingBox.Finish();
 

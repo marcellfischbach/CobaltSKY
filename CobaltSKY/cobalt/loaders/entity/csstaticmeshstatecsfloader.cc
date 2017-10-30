@@ -48,10 +48,10 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
     if (meshEntry)
     {
       csMesh *mesh = 0;
-      if (meshEntry->HasAttribute())
+      if (HasLocator(meshEntry))
       {
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(meshEntry, eRLM_Shared, eRLM_Instance);
-        mesh = csResourceManager::Get()->Aquire<csMesh>(csResourceLocator(meshEntry->GetAttribute()), 0, loadingMode);
+        mesh = csResourceManager::Get()->Aquire<csMesh>(GetLocator(meshEntry), 0, loadingMode);
       }
       else
       {
@@ -67,32 +67,35 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
         materialEntry;
         materialEntry = materialEntry->GetSiblingEntry("material"))
       {
-        csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialEntry, eRLM_Shared, eRLM_Instance);
-        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(materialEntry->GetAttribute()), 0, loadingMode);
-        int slot = 0;
-        if (materialEntry->HasAttribute("slot"))
+        if (HasLocator(materialEntry))
         {
-          slot = materialEntry->GetAttributeInt("slot");
-        }
-        if (materialEntry->HasAttribute("slotName"))
-        {
-          std::string slotName = materialEntry->GetAttribute("slotName");
-          csUInt32 meshSlot = staticMeshState->GetMesh()->GetMaterialIndex(slotName);
-          if (meshSlot != csInvalidMaterialIndex)
+          csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialEntry, eRLM_Shared, eRLM_Instance);
+          csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(GetLocator(materialEntry), 0, loadingMode);
+          int slot = 0;
+          if (materialEntry->HasAttribute("slot"))
           {
-            slot = meshSlot;
+            slot = materialEntry->GetAttributeInt("slot");
           }
+          if (materialEntry->HasAttribute("slotName"))
+          {
+            std::string slotName = materialEntry->GetAttribute("slotName");
+            csUInt32 meshSlot = staticMeshState->GetMesh()->GetMaterialIndex(slotName);
+            if (meshSlot != csInvalidMaterialIndex)
+            {
+              slot = meshSlot;
+            }
+          }
+          staticMeshState->SetMaterial(material, slot);
         }
-        staticMeshState->SetMaterial(material, slot);
       }
     }
     else
     {
       const csfEntry *materialEntry = entry->GetEntry("material");
-      if (materialEntry)
+      if (materialEntry && HasLocator(materialEntry))
       {
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialEntry, eRLM_Shared, eRLM_Instance);
-        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(materialEntry->GetAttribute()), 0, loadingMode);
+        csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(GetLocator(materialEntry), 0, loadingMode);
         staticMeshState->SetMaterial(material, 0);
       }
     }
@@ -104,10 +107,10 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
       if (shapesEntry)
       {
         csPhysicsShapeContainer *shapes = 0;
-        if (shapesEntry->HasAttribute())
+        if (HasLocator(shapesEntry))
         {
           csResourceLoadingMode loadingMode = GetResourceLoadingMode(shapesEntry, eRLM_Shared, eRLM_Instance);
-          shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(csResourceLocator(shapesEntry->GetAttribute()), 0, loadingMode);
+          shapes = csResourceManager::Get()->Aquire<csPhysicsShapeContainer>(GetLocator(shapesEntry), 0, loadingMode);
         }
         else
         {

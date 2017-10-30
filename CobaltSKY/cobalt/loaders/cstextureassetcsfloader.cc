@@ -183,12 +183,18 @@ iSampler *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csRe
   switch (rlm)
   {
   case eRLM_Shared:
-    sampler = csResourceManager::Get()->GetOrLoad<iSampler>(csResourceLocator(entry->GetAttribute()));
-    CS_ADDREF(sampler);
+    if (HasLocator(entry))
+    {
+      sampler = csResourceManager::Get()->GetOrLoad<iSampler>(GetLocator(entry));
+      CS_ADDREF(sampler);
+    }
     break;
 
   case eRLM_Instance:
-    sampler = csResourceManager::Get()->Load<iSampler>(csResourceLocator(entry->GetAttribute()));
+    if (HasLocator(entry))
+    {
+      sampler = csResourceManager::Get()->Load<iSampler>(GetLocator(entry));
+    }
     break;
 
   case eRLM_Inline:

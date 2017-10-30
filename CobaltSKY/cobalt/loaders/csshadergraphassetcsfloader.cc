@@ -108,9 +108,9 @@ iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResour
           {
             resource->SetDefault(LoadColor4f(valueElement));
           }
-          else if (tagName == std::string("locator"))
+          else if (tagName == std::string("locator") && HasLocator(valueElement))
           {
-            resource->SetDefaultTextureResource(csResourceLocator(valueElement->GetAttribute()));
+            resource->SetDefaultTextureResource(GetLocator(valueElement));
           }
         }
       }
