@@ -6,6 +6,7 @@
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <tixml/tinyxml.h>
+#include <csfile/csffile.hh>
 #include <QDir>
 #include <QFile>
 
@@ -97,30 +98,31 @@ void AssetManagerResourceScanner::ScanReference(Entry &entry)
   buffer[length] = '\0';
   file->Close();
 
-
-  TiXmlDocument document;
-  document.Parse(buffer);
-  delete[] buffer;
-  if (document.Error())
+  csfFile csffile;
+  bool success = csffile.Parse((const csUInt8*)buffer, (size_t)length, false);
+  delete buffer;
+  if (!success)
   {
-    printf("Unable to parse xml file: %s\n%s\n",
-      entry.locator.GetDebugName(), document.ErrorDesc());
+    printf ("Unable to pase csf file: %s\n", entry.locator.GetDebugName().c_str());
     return;
   }
 
-  ScanReference(entry, document.RootElement());
-  EvalTypeName(entry, document.RootElement());
+
+  ScanReference(entry, csffile.GetRoot());
+  EvalTypeName(entry, csffile.GetRoot());
 
 }
 
-void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const TiXmlElement *element)
+void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const csfEntry *entry)
 {
-
-  const char *textStr = element->GetText();
-  if (textStr)
+  if (!entry)
   {
-    std::string text(textStr);
-    csResourceLocator refLocator(text);
+    return;
+  }
+
+  if (entry->HasAttribute("locator"))
+  {
+    csResourceLocator refLocator(entry->GetAttribute("locator"));
 
     for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
     {
@@ -130,33 +132,31 @@ void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const TiXmlEl
         break;
       }
     }
+
   }
 
-  for (const TiXmlElement *child = element->FirstChildElement(); child; child = child->NextSiblingElement())
+  for (const csfEntry *child = entry->GetEntry(); child; child = child->GetSiblingEntry())
   {
     ScanReference(assetEntry, child);
   }
+
 }
 
 
-void AssetManagerResourceScanner::EvalTypeName(Entry &assetEntry, const TiXmlElement *rootElement)
+void AssetManagerResourceScanner::EvalTypeName(Entry &assetEntry, const csfEntry *rootElement)
 {
-  if (std::string(rootElement->Value()) != std::string("asset"))
-  {
-    return;
-  }
-  const TiXmlElement *dataElement = rootElement->FirstChildElement("data");
-  if (!dataElement)
+  const csfEntry *dataEntry = rootElement->GetEntry("asset.data");
+  if (!dataEntry)
   {
     return;
   }
 
-  const TiXmlElement *resourceElement = dataElement->FirstChildElement();
-  if (!resourceElement)
+  const csfEntry *resourceEntry = dataEntry->GetEntry();
+  if (!resourceEntry)
   {
     return;
   }
-  assetEntry.typeName = std::string(resourceElement->Value());
+  assetEntry.typeName = std::string(resourceEntry->GetTagName());
 }
 
 const std::vector<AssetManagerResourceScanner::Entry> &AssetManagerResourceScanner::GetAllEntries() const

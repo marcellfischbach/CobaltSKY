@@ -8,7 +8,7 @@
 #include <set>
 #include <string>
 
-class TiXmlElement;
+class csfEntry;
 class AssetManagerResourceScanner
 {
 public:
@@ -34,8 +34,8 @@ public:
 private:
 
   void ScanPath(const csVFS::Entry &entry, const std::string &relPath);
-  void ScanReference(Entry &entry, const TiXmlElement *element);
-  void EvalTypeName(Entry &entry, const TiXmlElement *rootElement);
+  void ScanReference(Entry &assetEntry, const csfEntry *entry);
+  void EvalTypeName(Entry &assetEntry, const csfEntry *rootEntry);
 
   
   std::vector<Entry> m_entries;

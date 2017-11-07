@@ -7,7 +7,9 @@
 #include <cobalt/core/csevent.hh>
 #include <cobalt/core/cseventbus.hh>
 #include <cobalt/core/csfileinfo.hh>
+#include <csfile/csffile.hh>
 #include <eventbus.hh>
+#include <QDir>
 #include <QDomDocument>
 #include <QFile>
 
@@ -45,55 +47,44 @@ void ProjectReferenceTree::Clear()
 
 void ProjectReferenceTree::LoadReferenceTree()
 {
-  std::string referenceTreePath = m_projectPath + "/.project/referenceTree.xml";
-  QFile file(QString(referenceTreePath.c_str()));
+  std::string referenceTreePath = m_projectPath + "/.project/referenceTree.csf";
 
-
-  if (!file.open(QIODevice::ReadOnly))
-  {
-    return;
-  }
-  QDomDocument doc;
-  if (!doc.setContent(&file))
-  {
-    file.close();
-    return;
-  }
-  file.close();
-
-  Clear();
-
-
-  QDomElement element = doc.documentElement();
-  if (element.tagName() != QString("referenceTree"))
+  csfFile file;
+  if (!file.Parse(referenceTreePath))
   {
     Rebuild();
     return;
   }
 
 
-  QDomElement assetsElement = element.firstChildElement("assets");
-  if (!assetsElement.isNull())
+  const csfEntry *referenceTreeEntry = file.GetEntry("referenceTree");
+  if (!referenceTreeEntry)
   {
-    for (QDomElement assetElement = assetsElement.firstChildElement("asset");
-      !assetElement.isNull();
-      assetElement = assetElement.nextSiblingElement("asset"))
-    {
+    Rebuild();
+    return;
+  }
 
-      if (!assetElement.hasAttribute("locator") ||
-        !assetElement.hasAttribute("name") ||
-        !assetElement.hasAttribute("type"))
+  Clear();
+  const csfEntry *assetsEntry = referenceTreeEntry->GetEntry("assets");
+  if (assetsEntry)
+  {
+    for (const csfEntry *assetEntry = assetsEntry->GetEntry("asset");
+      assetEntry;
+      assetEntry = assetEntry->GetSiblingEntry("asset"))
+    {
+      if (!assetEntry->HasAttribute("locator")
+        || !assetEntry->HasAttribute("name")
+        || !assetEntry->HasAttribute("type"))
       {
         continue;
       }
-
-      std::string resourceLocator = std::string((const char*)assetElement.attribute("locator").toLatin1());
-      std::string name = std::string((const char*)assetElement.attribute("name").toLatin1());
-      std::string type = std::string((const char*)assetElement.attribute("type").toLatin1());
+      std::string resourceLocator = assetEntry->GetAttribute("locator");
+      std::string name = assetEntry->GetAttribute("name");
+      std::string type = assetEntry->GetAttribute("type");
       unsigned priority = 0;
-      if (assetElement.hasAttribute("priority"))
+      if (assetEntry->HasAttribute("priority"))
       {
-        priority = atoi((const char*)assetElement.attribute("priority").toLatin1());
+        priority = assetEntry->GetAttributeInt("priority");
       }
 
       ProjectAssetReference *assetReference = new ProjectAssetReference();
@@ -102,26 +93,27 @@ void ProjectReferenceTree::LoadReferenceTree()
       assetReference->SetTypeName(type);
       assetReference->SetPriority(priority);
       m_allReferences[assetReference->GetResourceLocator()] = assetReference;
+
     }
   }
 
   RebuildTree();
 
-  QDomElement referencesElement = element.firstChildElement("references");
-  if (!referencesElement.isNull())
+  const csfEntry *referencesEntry = referenceTreeEntry->GetEntry("references");
+  if (referencesEntry)
   {
-    for (QDomElement referenceElement = referencesElement.firstChildElement("reference");
-      !referenceElement.isNull();
-      referenceElement = referenceElement.nextSiblingElement("reference"))
+    for (const csfEntry *referenceEntry = referencesEntry->GetEntry("reference");
+      referenceEntry;
+      referenceEntry = referenceEntry->GetSiblingEntry("reference"))
     {
-      if (!referenceElement.hasAttribute("asset") ||
-        !referenceElement.hasAttribute("references"))
+      if (!referenceEntry->HasAttribute("asset") ||
+        !referenceEntry->HasAttribute("references"))
       {
         continue;
       }
 
-      std::string assetResourceLocator = std::string((const char*)referenceElement.attribute("asset").toLatin1());
-      std::string referencesResourceLocator = std::string((const char*)referenceElement.attribute("references").toLatin1());
+      std::string assetResourceLocator = referenceEntry->GetAttribute("asset");
+      std::string referencesResourceLocator = referenceEntry->GetAttribute("references");
 
       ProjectAssetReference *asset = m_allReferences[csResourceLocator(assetResourceLocator)];
       ProjectAssetReference *reference = m_references[csResourceLocator(referencesResourceLocator)];
@@ -137,31 +129,33 @@ void ProjectReferenceTree::LoadReferenceTree()
       }
     }
   }
+
 }
 
 void ProjectReferenceTree::StoreReferenceTree()
 {
-  QDomDocument doc;
 
-  QDomElement referenceTreeElement = doc.createElement("referenceTree");
-  QDomElement assetsElement = doc.createElement("assets");
-  referenceTreeElement.appendChild(assetsElement);
+  csfFile file;
+  csfEntry *referenceTreeEntry = file.CreateEntry("referenceTree");
+  csfEntry *assetsEntry = file.CreateEntry("assets");
+  file.GetRoot()->AddChild(referenceTreeEntry);
+  referenceTreeEntry->AddChild(assetsEntry);
+
   for (auto entry : m_allReferences)
   {
     ProjectAssetReference *asset = entry.second;
 
-    QDomElement assetElement = doc.createElement("asset");
-    assetElement.setAttribute("locator", QString(asset->GetResourceLocator().GetText().c_str()));
-    assetElement.setAttribute("name", QString(asset->GetName().c_str()));
-    assetElement.setAttribute("type", QString(asset->GetTypeName().c_str()));
-    assetElement.setAttribute("priority", asset->GetPriority());
-    assetsElement.appendChild(assetElement);
+    csfEntry *assetEntry = file.CreateEntry("asset");
+    assetEntry->AddAttribute("locator", asset->GetResourceLocator().GetText());
+    assetEntry->AddAttribute("name", asset->GetName());
+    assetEntry->AddAttribute("type", asset->GetTypeName());
+    assetEntry->AddAttributeInt("priority", asset->GetPriority());
+    assetsEntry->AddChild(assetEntry);
   }
 
 
-
-  QDomElement referencesElement = doc.createElement("references");
-  referenceTreeElement.appendChild(referencesElement);
+  csfEntry *referencesEntry = file.CreateEntry("references");
+  referenceTreeEntry->AddChild(referencesEntry);
   for (auto entry : m_allReferences)
   {
     ProjectAssetReference *asset = entry.second;
@@ -169,23 +163,15 @@ void ProjectReferenceTree::StoreReferenceTree()
 
     for (auto reference : references)
     {
-      QDomElement referenceElement = doc.createElement("reference");
-      referenceElement.setAttribute("asset", QString(asset->GetResourceLocator().GetText().c_str()));
-      referenceElement.setAttribute("references", QString(reference->GetResourceLocator().AsAnonymous().GetText().c_str()));
-      referencesElement.appendChild(referenceElement);
+      csfEntry *referenceEntry = file.CreateEntry("reference");
+      referenceEntry->AddAttribute("asset", asset->GetResourceLocator().GetText());
+      referenceEntry->AddAttribute("references", reference->GetResourceLocator().AsAnonymous().GetText());
+      referencesEntry->AddChild(referenceEntry);
     }
   }
-  doc.appendChild(referenceTreeElement);
 
-  std::string referenceTreePath = m_projectPath + "/.project/referenceTree.xml";
-  QFile file(QString(referenceTreePath.c_str()));
-  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    file.write(doc.toString(2).toLatin1());
-    file.close();
-  }
-
-
+  std::string referenceTreePath = m_projectPath + "/.project/referenceTree.csf";
+  file.Output(referenceTreePath, false, 2);
 }
 
 void ProjectReferenceTree::Rebuild()

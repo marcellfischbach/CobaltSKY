@@ -125,7 +125,7 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
       printf ("Exit 3\n");
       return 0;
     }
-    iShader *shader = csResourceManager::Get()->GetOrLoad<iShader>(LoadLocator(passEntry));
+    iShader *shader = csResourceManager::Get()->GetOrLoad<iShader>(GetLocator(passEntry));
     if (!shader)
     {
       material->Release();
@@ -249,11 +249,11 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
             switch (rlm)
             {
             case eRLM_Shared:
-              texture = csResourceManager::Get()->GetOrLoad<iTexture>(LoadLocator(parameterEntry));
+              texture = csResourceManager::Get()->GetOrLoad<iTexture>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               break;
             case eRLM_Instance:
-              texture = csResourceManager::Get()->Load<iTexture>(LoadLocator(parameterEntry));
+              texture = csResourceManager::Get()->Load<iTexture>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               if (texture) texture->Release();
               break;

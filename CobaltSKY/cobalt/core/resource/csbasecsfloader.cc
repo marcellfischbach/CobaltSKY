@@ -82,7 +82,7 @@ bool csBaseCSFLoader::HasLocator(const csfEntry *entry) const
   return entry->HasAttribute("locator");
 }
 
-csResourceLocator csBaseCSFLoader::HasLocator(const csfEntry *entry) const
+csResourceLocator csBaseCSFLoader::GetLocator(const csfEntry *entry) const
 {
   return csResourceLocator (entry->GetAttribute("locator"));
 }

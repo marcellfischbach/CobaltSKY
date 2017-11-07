@@ -864,6 +864,10 @@ std::string csfFile::Indent(unsigned indent) const
 
 bool csfFile::NeedQuotation(const std::string &value) const
 {
+  if (value.empty())
+  {
+    return true;
+  }
   if (IsNumber(value))
   {
     return false;
