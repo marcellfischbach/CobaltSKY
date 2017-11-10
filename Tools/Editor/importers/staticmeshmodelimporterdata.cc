@@ -284,7 +284,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
   {
     csfEntry *materialEntry = outputFile.CreateEntry("material");
     materialsEntry->AddChild(materialEntry);
-    materialEntry->AddAttribute("materials/DefaultMaterial.csf");
+    materialEntry->AddAttribute("locator", "materials/DefaultMaterial.csf");
     materialEntry->AddAttributeInt("slot", m.first);
   }
 

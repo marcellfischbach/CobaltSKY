@@ -39,10 +39,13 @@ iObject *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csRe
     return 0;
   }
 
-  csResourceLocator imageLocator(imageEntry->GetAttribute());
-
-
-  csImage *image = csResourceManager::Get()->Load<csImage>(imageLocator);
+  std::string imageName(imageEntry->GetAttribute());
+  const csfBlob *blob = imageEntry->GetFile()->GetBlob(imageName);
+  if (!blob)
+  {
+    return 0;
+  }
+  csImage *image = csResourceManager::Get()->Load<csImage>(blob, locator, userData);
   if (!image)
   {
     return 0;

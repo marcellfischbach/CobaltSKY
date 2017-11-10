@@ -97,7 +97,7 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
   previewEntry->AddChild(editorIconEntry);
   editorIconEntry->AddChild(previewImageEntry);
 
-  samplerEntry->AddAttribute("DefaultSampler.csf");
+  samplerEntry->AddAttribute("locator", "DefaultSampler.csf");
   samplerEntry->AddAttribute("resourceMode", "shared");
   imageEntry->AddAttribute("DATA");
   imageEntry->AddAttribute("mipmap", "true");

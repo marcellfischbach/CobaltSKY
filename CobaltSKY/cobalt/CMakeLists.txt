@@ -159,6 +159,8 @@ set(SOURCE_ENTITY
     entity/csstaticcolliderstate.hh
     entity/csstaticmeshstate.cc
     entity/csstaticmeshstate.hh
+    entity/csstaticmeshstatedata.cc
+    entity/csstaticmeshstatedata.hh
     entity/csskinnedmeshstate.cc
     entity/csskinnedmeshstate.hh
     entity/cstransformation.cc
@@ -558,6 +560,7 @@ set(ALL_SOURCES
 add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
+
 
 target_link_libraries(CobaltSKY
     TiXml

@@ -499,7 +499,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
           break;
         case eSPT_Texture:
           valueEntry = file.CreateEntry("locator");
-          valueEntry->AddAttribute(resourceNode->GetDefaultTextureResource().GetResourceFile());
+          valueEntry->AddAttribute("locator", resourceNode->GetDefaultTextureResource().GetResourceFile());
           break;
         }
         if (valueEntry)
