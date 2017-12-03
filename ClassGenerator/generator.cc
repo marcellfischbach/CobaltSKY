@@ -77,8 +77,46 @@ static std::string CreateHeaderFile(Class *clazz, const std::string &api)
   return result;
 }
 
+std::string Convert(TypeSpecifiction ts)
+{
+  switch (ts)
+  {
+  case eTS_Value:
+    return "eVMM_Value";
+  case eTS_Reference:
+    return "eVMM_Reference";
+  case eTS_Pointer:
+    return "eVMM_Pointer";
+  case eTS_PointerToPointer:
+    return "eVMM_PointerToPointer";
+  }
+  return "eVMM_Value";
+}
 
-static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownClassesCache *classesCache)
+std::string GetCodeForAttr(TypeSpecifiction ts)
+{
+  std::string res = "";
+  switch (ts)
+  {
+  case eTS_Value:
+  case eTS_Reference:
+    break;
+  case eTS_Pointer:
+    res = "*";
+    break;
+  case eTS_PointerToPointer:
+    res = "**";
+    break;
+  }
+  return res;
+}
+
+std::string Convert(bool v)
+{
+  return v ? std::string("true") : std::string("false");
+}
+
+static std::string CreateSourceFile(Class *clazz, const std::string &api)
 {
   std::string className = clazz->GetName() + std::string("Class");
   std::string result = "";
@@ -86,10 +124,14 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   result += "\n";
 
 
+  std::vector<std::string> propertyClasses;
   for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
   {
     Property prop = clazz->GetProperty(i);
-    std::string propClassName = className + "_" + prop.GetPropertyName();
+    std::string propClassName = className + prop.GetPropertyName();
+    propertyClasses.push_back(propClassName);
+    std::string propGetter = prop.GetGetter();
+    std::string propSetter = prop.GetSetter();
     result += "class " + api + " " + propClassName + " : public csProperty\n";
     result += "{\n";
     result += "public:\n";
@@ -100,21 +142,157 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
     result += "  \n";
     result += "  virtual void SetValue(iObject *object, void *data) const\n";
     result += "  {\n";
-    result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
-    result += "    if (d)\n";
-    result += "    {\n";
-    result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
-    result += "      d->" + prop.GetPropertyName() + " = v;\n";
-    result += "    }\n";
+    if (!propSetter.empty())
+    {
+      result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
+      result += "    if (d)\n";
+      result += "    {\n";
+      result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
+      result += "      d->Set" + prop.GetPropertyName() + "(v);\n";
+      result += "    }\n";
+    }
     result += "  }\n";
     result += "  \n";
     result += "  virtual const void *GetValue(const iObject *object) const\n";
     result += "  {\n";
-    result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
-    result += "    if (!d) return 0;\n";
-    result += "    return reinterpret_cast<const void*>(&d->" + prop.GetPropertyName() + ");\n";
+    if (!propGetter.empty())
+    {
+      result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
+      result += "    if (!d) return 0;\n";
+      result += "    const " + prop.GetTypeName() + " v = d->" + propGetter + "();\n";
+      result += "    return reinterpret_cast<const void*>(&v);\n";
+    }
+    else
+    {
+      result += "    return 0;\n";
+    }
     result += "  }\n";
     result += "  \n";
+    result += "};\n";
+    result += "\n";
+  }
+
+  std::vector<std::string> functionClasses;
+  for (size_t i = 0, in = clazz->GetNumberOfFunctions(); i < in; ++i)
+  {
+    Function func = clazz->GetFunction(i);
+    std::string funcClassName = className + func.GetName();
+    if (func.IsConst())
+    {
+      funcClassName += "Const";
+    }
+    functionClasses.push_back(funcClassName);
+    result += "class " + api + " " + funcClassName + " : public csFunction\n";
+    result += "{\n";
+    result += "public:\n";
+    result += "  " + funcClassName + "() \n";
+    result += "    : csFunction (" + Convert(func.IsVirtual()) + std::string(", ");
+    result += /*                  */ std::string("csValueDeclaration(") + Convert(func.IsReturnConst()) + std::string(", ");
+    result += /*                                                       */ std::string("\"") + func.GetReturnType() + std::string("\", "); 
+    result += /*                                                       */ Convert(func.GetReturnTypeSpecification()) + std::string("), ");
+    result += /*                  */ std::string("\"") + func.GetName() + std::string("\", ");
+    result += /*                  */ Convert(func.IsConst()) + ")\n";
+    result += "  {\n";
+    for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+    {
+      Function::Parameter param = func.GetParameter(i);
+      result += "    AddAttribute(csFunctionAttribute(csValueDeclaration(" + Convert(param.isConst) + std::string(", ");
+      result += /*                                                        */ std::string("\"") + param.type + std::string("\", ");
+      result += /*                                                        */ Convert(param.typeSpecifiction) + std::string("), ");
+      result += /*                                 */ "\"" + param.name + "\"));\n";
+    }
+    result += "  }\n";
+    result += "  \n";
+    result += "  virtual void Invoke(iObject* obj, ...) const\n";
+    result += "  {\n";
+    result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(obj);\n";
+    result += "    if (!d) return;\n";
+    result += "    va_list lst;\n";
+    result += "    va_start (lst, obj);\n";
+    for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+    {
+      Function::Parameter param = func.GetParameter(i);
+      std::string typeStr = (param.isConst ? "const " : "") + param.type + " *" + GetCodeForAttr(param.typeSpecifiction);
+      result += "    " + typeStr + param.name + " = va_arg(lst, " + typeStr + ");\n";
+    }
+    bool hasReturnValue = func.GetReturnType() != std::string("void");
+    if (hasReturnValue)
+    {
+      std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " *" + GetCodeForAttr(func.GetReturnTypeSpecification());
+      std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttr(func.GetReturnTypeSpecification());
+      result += "    " + typeStr + "___ptr___result___ = va_arg(lst, " + typeStr + ");\n";
+      result += "    " + resStr + " ___value___result___ = ";
+    }
+    else
+    {
+      result += "    ";
+    }
+    result += "d->" + func.GetName() + "(";
+    for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+    {
+      Function::Parameter param = func.GetParameter(i);
+      result += "*" + param.name;
+      if (i + 1 < in)
+      {
+        result += ", ";
+      }
+    }
+    result += ");\n";
+    if (hasReturnValue)
+    {
+      result += "    if (___ptr___result___)\n";
+      result += "    {\n";
+      result += "      *___ptr___result___ = ___value___result___;\n";
+      result += "    }\n";
+    }
+
+    result += "  }\n";
+    result += "  virtual void Invoke(const iObject* obj, ...) const\n";
+    result += "  {\n";
+    if (func.IsConst())
+    {
+      result += "    const " + clazz->GetName() + " *d = csQueryClass<const " + clazz->GetName() + ">(obj);\n";
+      result += "    if (!d) return;\n";
+      result += "    va_list lst;\n";
+      result += "    va_start (lst, obj);\n";
+      for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+      {
+        Function::Parameter param = func.GetParameter(i);
+        std::string typeStr = (param.isConst ? "const " : "") + param.type + " *" + GetCodeForAttr(param.typeSpecifiction);
+        result += "    " + typeStr + param.name + " = va_arg(lst, " + typeStr + ");\n";
+      }
+      bool hasReturnValue = func.GetReturnType() != std::string("void");
+      if (hasReturnValue)
+      {
+        std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " *" + GetCodeForAttr(func.GetReturnTypeSpecification());
+        std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttr(func.GetReturnTypeSpecification());
+        result += "    " + typeStr + "___ptr___result___ = va_arg(lst, " + typeStr + ");\n";
+        result += "    " + resStr + " ___value___result___ = ";
+      }
+      else
+      {
+        result += "    ";
+      }
+      result += "d->" + func.GetName() + "(";
+      for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+      {
+        Function::Parameter param = func.GetParameter(i);
+        result += "*" + param.name;
+        if (i + 1 < in)
+        {
+          result += ", ";
+        }
+      }
+      result += ");\n";
+      if (hasReturnValue)
+      {
+        result += "    if (___ptr___result___)\n";
+        result += "    {\n";
+        result += "      *___ptr___result___ = ___value___result___;\n";
+        result += "    }\n";
+      }
+    }
+    result += "  }\n";
     result += "};\n";
     result += "\n";
   }
@@ -134,11 +312,13 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
     result += "  AddSuperClass(" + super + "Class::Get());\n";
   }
 
-  for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
+  for (auto propName : propertyClasses)
   {
-    Property prop = clazz->GetProperty(i);
-    std::string propClassName = className + "_" + prop.GetPropertyName();
-    result += "  AddProperty(new " + propClassName + "());\n";
+    result += "  AddProperty(new " + propName + "());\n";
+  }
+  for (auto funcName : functionClasses)
+  {
+    result += "  AddFunction(new " + funcName + "());\n";
   }
   result += "}\n";
   result += "\n";
@@ -214,11 +394,146 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api, KnownC
   return result;
 }
 
-int main(int argc, char **argv)
+class Test
 {
+public:
+  Test() :m_v(0) { printf("Test::ctor\n"); }
+  Test(const Test &test) : m_v(test.m_v) { printf("Test::copy-ctor\n"); }
+  Test(Test &&test) : m_v(test.m_v) { printf("Test::move-ctor\n"); }
+
+  Test &operator= (const Test& other)
+  {
+    m_v = other.m_v;
+    return *this;
+  }
+
+  void setV(int v) { m_v = v; }
+  int getV() const { return m_v; }
+
+private:
+  int m_v;
+};
+
+Test g_test;
+
+
+const Test *performMyTest()
+{
+  return &g_test;
+}
+
+void performMyTestRefl(int n, ...)
+{
+  va_list lst;
+  va_start(lst, n);
+  const Test **pres = va_arg(lst, const Test **);
+  va_end(lst);
+
+
+  const Test *result = performMyTest();
+  if (pres)
+  {
+    *pres = result;
+  }
+}
+
+template<typename R>
+R performMyTestVaue()
+{
+  R r;
+  performMyTestRefl(0, &r);
+  return r;
+}
+
+template<typename R>
+R &performMyTestReference()
+{
+  R *r;
+  performMyTestRefl(0, &r);
+  return *r;
+}
+
+template<typename R>
+R *performMyTestPointer()
+{
+  R *r;
+  performMyTestRefl(0, &r);
+  return r;
+}
+
+int test(int argc, char **argv)
+{
+  const Test *test1 = performMyTest();
+  const Test *test2 = 0;
+  performMyTestRefl(0, &test2);
+  const Test *test3 = performMyTestPointer<const Test>();
+
+  printf("GlobalTest: 0x%p\n", &g_test);
+  printf("LocalTest1: 0x%p\n", test1);
+  printf("LocalTest2: 0x%p\n", test2);
+  printf("LocalTest3: 0x%p\n", test3);
+  if (true)
+  {
+    return 0;
+  }
   if (argc < 4)
   {
-    printf("Usage %s <prefix> <api> <bindir>", argv[0]);
+    printf("Usage %s --test <headerfile> <outputname>", argv[0]);
+    return -1;
+  }
+
+  std::string inputHeaderFilename = std::string(argv[2]);
+
+  SourceFile *sourceFile = new SourceFile(inputHeaderFilename);
+  Reader *reader = new Reader();
+  reader->Read(sourceFile);
+
+  std::string fileNameHeaderOutput = std::string(argv[3]) + std::string(".hh");
+  std::string fileNameSourceOutput = std::string(argv[3]) + std::string(".cc");
+  FILE *headerOutput = fopen(fileNameHeaderOutput.c_str(), "wt");
+  FILE *sourceOutput = fopen(fileNameSourceOutput.c_str(), "wt");
+
+  for (size_t i = 0, in = reader->GetNumberOfClasses(); i < in; ++i)
+  {
+    Class *clazz = reader->GetClass(i);
+    if (clazz)
+    {
+      printf("%s <= %s\n", inputHeaderFilename.c_str(), clazz->GetName().c_str());
+      //clazz->Debug();
+      std::string hdr = CreateHeaderFile(clazz, "TEST_API");
+      std::string src = CreateSourceFile(clazz, "TEST_API");
+      fwrite(hdr.c_str(), sizeof(char), hdr.length(), headerOutput);
+      fwrite(src.c_str(), sizeof(char), src.length(), sourceOutput);
+      printf("Header:\n%s\n", hdr.c_str());
+      printf("Source:\n%s\n", src.c_str());
+
+    }
+
+    clazz->Debug();
+  }
+
+  fclose(headerOutput);
+  fclose(sourceOutput);
+
+
+  delete reader;
+  delete sourceFile;
+
+  return 0;
+}
+
+int main(int argc, char **argv)
+{
+  if (argc >= 2)
+  {
+    if (std::string(argv[1]) == std::string("--test"))
+    {
+      return test(argc, argv);
+    }
+  }
+  if (argc < 4)
+  {
+    printf("Usage %s <prefix> <api> <bindir>\n", argv[0]);
     return -1;
   }
 
@@ -295,7 +610,7 @@ int main(int argc, char **argv)
   // now we know ALL classes
   for (Data &data : datas)
   {
-    
+
     std::string headerSource = "#pragma once\n\n\n";
     std::string sourceSource = "";
 
@@ -308,7 +623,7 @@ int main(int argc, char **argv)
         printf("%s <= %s\n", data.inputHeaderFilename.c_str(), clazz->GetName().c_str());
         //clazz->Debug();
         headerSource += CreateHeaderFile(clazz, api);
-        sourceSource += CreateSourceFile(clazz, api, &knownClassesCache);
+        sourceSource += CreateSourceFile(clazz, api);
 
       }
     }
@@ -361,7 +676,7 @@ int main(int argc, char **argv)
           continue;
         }
         std::string incPrefix = prefix;
-        if (incPrefix.length () != 0)
+        if (incPrefix.length() != 0)
         {
           incPrefix += "/";
         }
@@ -380,6 +695,7 @@ int main(int argc, char **argv)
     }
 
     masterSource += "\n";
+    masterSource += "#include <stdarg.h>\n";
     masterSource += includeOrigin + "\n";
     //masterSource += includeHeaders + "\n";
     masterSource += includeSources + "\n";

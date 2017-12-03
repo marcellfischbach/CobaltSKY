@@ -6,6 +6,7 @@
 
 #include <cobalt/entity/csdynamiccolliderstate.refl.hh>
 
+
 struct iPhysicsTriggerCollider;
 struct iPhysicsDynamicCollider;
 class csDynamicColliderStateTransformationCallback;
@@ -21,17 +22,26 @@ public:
   iPhysicsDynamicCollider *GetDynamicCollider();
   const iPhysicsDynamicCollider *GetDynamicCollider() const;
 
-  virtual void SetKinematic(bool kinematic);
-  virtual bool IsKinematic() const;
+  CS_FUNCTION()
+    virtual void SetKinematic(bool kinematic);
 
-  virtual void SetMass(float mass);
-  virtual float GetMass() const;
+  CS_FUNCTION()
+    virtual bool IsKinematic() const;
 
-  virtual void SetInertia(const csVector3f &inertia);
-  virtual const csVector3f &GetInertia() const;
+  CS_FUNCTION()
+    virtual void SetMass(float mass);
+  CS_FUNCTION()
+    virtual float GetMass() const;
 
-  virtual void SetAutoInertia(bool autoInertia);
-  virtual bool IsAutoInertia() const;
+  CS_FUNCTION()
+    virtual void SetInertia(const csVector3f &inertia);
+  CS_FUNCTION()
+    virtual const csVector3f &GetInertia() const;
+
+  CS_FUNCTION()
+    virtual void SetAutoInertia(bool autoInertia);
+  CS_FUNCTION()
+    virtual bool IsAutoInertia() const;
 
   virtual void DynamicTransformationChanged(const csMatrix4f &transformation);
 
@@ -40,6 +50,16 @@ protected:
   virtual void OnDetachedFromScene(csEntityScene *scene);
 
 private:
+  CS_PROPERTY(name = Mass)
+    float m_mass;
+
+  CS_PROPERTY(name = Inertia)
+    csVector3f m_inertia;
+
+  CS_PROPERTY(name = AutoInertia)
+    bool m_autoInertia;
+
+
   iPhysicsDynamicCollider *m_dynamicCollider;
   csDynamicColliderStateTransformationCallback *m_callback;
 };

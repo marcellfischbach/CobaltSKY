@@ -56,6 +56,7 @@ bool csDynamicColliderState::IsKinematic() const
 
 void csDynamicColliderState::SetMass(float mass)
 {
+  m_mass = mass;
   if (m_dynamicCollider)
   {
     m_dynamicCollider->SetMass(mass);
@@ -64,7 +65,8 @@ void csDynamicColliderState::SetMass(float mass)
 
 float csDynamicColliderState::GetMass() const
 {
-  return m_dynamicCollider ? m_dynamicCollider->GetMass() : 0.0f;
+  return m_mass;
+  //return m_dynamicCollider ? m_dynamicCollider->GetMass() : 0.0f;
 }
 
 void csDynamicColliderState::SetInertia(const csVector3f &inertia)

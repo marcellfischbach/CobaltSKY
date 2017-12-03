@@ -5,7 +5,8 @@
 #define CS_CLASS(...)
 #define CS_INTERFACE(...)
 #define CS_SUPER(Cls) Cls
-#define CS_PROPERTY(...) public: 
+#define CS_PROPERTY(...) 
+#define CS_FUNCTION(...) 
 #define CS_CLASS_GEN public: \
     virtual const csClass *GetClass () const;\
     static const csClass *GetStaticClass (); \
@@ -82,6 +83,14 @@ const T* csQueryClass(const iObject *object)
 }
 
 
+enum csValueMemoryMode
+{
+  eVMM_Value,
+  eVMM_Reference,
+  eVMM_Pointer,
+  eVMM_PointerToPointer,
+};
+
 class CSE_API csProperty
 {
 public:
@@ -91,12 +100,13 @@ public:
   template<typename T>
   void Set(iObject *object, T& t) const
   {
-    void *value = reinterpret_cast<void*>(&t);
-    SetValue(object, value);
+    const void *const_value = reinterpret_cast<const void*>(&t);
+    SetValue(object, const_cast<void*>(const_value));
   }
 
+
   template<typename T>
-  const T &Get(iObject *object) const
+  T Get(iObject *object) const
   {
     const void *data = GetValue(object);
     return *reinterpret_cast<const T*>(data);
@@ -113,6 +123,62 @@ private:
   std::string m_typeName;
   std::string m_name;
 
+};
+
+class csValueDeclaration
+{
+public:
+  csValueDeclaration(bool isConst = false, const std::string &type = "void", csValueMemoryMode mode = eVMM_Value);
+
+  bool IsConst() const;
+  const std::string &GetType() const;
+  csValueMemoryMode GetMode() const;
+private:
+  bool m_const;
+  std::string m_type;
+  csValueMemoryMode m_mode;
+};
+
+class CSE_API csFunctionAttribute
+{
+public:
+  csFunctionAttribute(const csValueDeclaration &type = csValueDeclaration(), const std::string &name = "");
+
+  const csValueDeclaration &GetType() const;
+  const std::string &GetName() const;
+
+private:
+  csValueDeclaration m_type;
+  std::string m_name;
+};
+
+class CSE_API csFunction
+{
+public:
+  const std::string &GetName() const;
+  const csValueDeclaration &GetReturnType() const;
+  const bool IsVirtual() const;
+  const bool IsConst() const;
+
+  size_t GetNumberOfAttributes() const;
+  const csFunctionAttribute &GetAttribute(size_t idx) const;
+
+  virtual void Invoke(iObject *obj, ...) const = 0;
+  virtual void Invoke(const iObject *obj, ...) const = 0;
+
+protected:
+  csFunction(bool isVirtual, const csValueDeclaration &returnType, const std::string &name, bool isConst);
+
+  void AddAttribute(const csFunctionAttribute &attribute);
+
+private:
+  bool m_virtual;
+  bool m_const;
+  std::string m_name;
+  csValueDeclaration m_returnType;
+
+  std::vector<csFunctionAttribute> m_attributes;
+  csFunctionAttribute m_invalid;
 };
 
 
@@ -142,6 +208,10 @@ public:
   const csProperty *GetProperty(size_t idx) const;
   const csProperty *GetProperty(const std::string &propName) const;
 
+  size_t GetNumberOfFunctions() const;
+  const csFunction *GetFunction(size_t idx) const;
+  std::vector<const csFunction*> GetFunction(const std::string &functionName) const;
+
   size_t GetNumberOfSuperClasses() const;
   const csClass *GetSuperClass(size_t idx) const;
 
@@ -159,11 +229,13 @@ protected:
 
   void AddSuperClass(csClass *parentClass);
   void AddProperty(csProperty *prop);
+  void AddFunction(csFunction *function);
 
 private:
   std::string m_name;
   std::vector<csClass*> m_superClasses;
   std::vector<csProperty*> m_properties;
+  std::vector<csFunction*> m_functions;
 
 };
 

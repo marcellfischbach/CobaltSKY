@@ -14,11 +14,13 @@ class csEntityScene;
 class csEntityState;
 class csSpatialState;
 class csTransformation;
+class csTransformState;
 
 struct csScanConfig;
 struct iEntityScan;
 struct iGraphics;
 struct iPhysicsBody;
+
 
 /**
  * \ingroup entity
@@ -126,8 +128,11 @@ protected:
 
 private:
   csID m_id;
+
+  CS_PROPERTY(Name)
   std::string m_name;
 
+  csTransformState *m_transform;
   csSpatialState *m_rootState;
   std::vector<csEntityState*> m_states;
 

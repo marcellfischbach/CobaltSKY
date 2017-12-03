@@ -42,7 +42,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
   for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
   {
     Property prop = clazz->GetProperty(i);
-    std::string propClassName = className + "_" + prop.GetPropertyName();
+    std::string propClassName = className + "_NARF_" + prop.GetPropertyName();
     result += "class " + api + " " + propClassName + " : public csProperty\n";
     result += "{\n";
     result += "public:\n";
@@ -57,7 +57,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "    if (d)\n";
     result += "    {\n";
     result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
-    result += "      d->" + prop.GetPropertyName() + " = v;\n";
+    result += "      d->Set" + prop.GetPropertyName() + "(v);\n";
     result += "    }\n";
     result += "  }\n";
     result += "  \n";
@@ -65,7 +65,7 @@ std::string CreateSourceFile(Class *clazz, const std::string &api)
     result += "  {\n";
     result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
     result += "    if (!d) return 0;\n";
-    result += "    return reinterpret_cast<const void*>(&d->" + prop.GetPropertyName() + ");\n";
+    result += "    return reinterpret_cast<const void*>(&d->Get" + prop.GetPropertyName() + "());\n";
     result += "  }\n";
     result += "  \n";
     result += "};\n";

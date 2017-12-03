@@ -18,6 +18,7 @@
 #include <cobalt/animation/csskeleton.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/entity/csblueprint.hh>
 #include <cobalt/entity/cscharacterentity.hh>
 #include <cobalt/entity/csdefaultparticleemitter.hh>
 #include <cobalt/entity/csdefaultparticlestepper.hh>
@@ -30,6 +31,7 @@
 #include <cobalt/entity/csparticlestate.hh>
 #include <cobalt/entity/csrenderstate.hh>
 #include <cobalt/entity/csentityscene.hh>
+#include <cobalt/entity/cstransformstate.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
@@ -107,6 +109,8 @@ csEntity *sphereEntity;
 unsigned g_screenResolutionWidth;
 unsigned g_screenResolutionHeight;
 
+
+
 int main(int argc, char **argv)
 {
   for (unsigned i = 0; i < argc; ++i)
@@ -114,6 +118,8 @@ int main(int argc, char **argv)
     printf("%s ", argv[i]);
   }
   printf("\n");
+
+
   
 
   csSettings::Get()->Initialize(argc, argv);
@@ -172,6 +178,17 @@ int main(int argc, char **argv)
   bulletSystem->Initialize();
   csEng->SetPhysicsSystem(bulletSystem);
 
+
+  csDynamicColliderState *state = new csDynamicColliderState();
+  state->SetMass(10.0f);
+
+  const csClass *stateClass = state->GetClass();
+  for (size_t i = 0; i < stateClass->GetNumberOf(); ++i)
+  {
+    const 
+  }
+
+  return 0;
 
   if (initialize() < 0)
   {

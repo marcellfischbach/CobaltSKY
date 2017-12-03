@@ -29,6 +29,48 @@ Tokenizer::Tokenizer(const std::string &line)
         token = "";
       }
     }
+    else if (ch == ':')
+    {
+      if (i + 1 < line.length() && line[i+1] == ':')
+      {
+        token += "::";
+        ++i;
+      }
+      else
+      {
+        if (token.length() != 0)
+        {
+          m_tokens.push_back(token);
+          token = "";
+        }
+        token += ch;
+        // for every other item we make a new token
+        m_tokens.push_back(token);
+        token = "";
+
+      }
+    }
+    else if (ch == '*')
+    {
+      if (token.length() != 0)
+      {
+        m_tokens.push_back(token);
+        token = "";
+      }
+
+      if (i + 1 < line.length() && line[i + 1] == '*')
+      {
+        token = "**";
+        ++i;
+      }
+      else
+      {
+        token = "*";
+      }
+
+      m_tokens.push_back(token);
+      token = "";
+    }
     else 
     {
       if (token.length() != 0)

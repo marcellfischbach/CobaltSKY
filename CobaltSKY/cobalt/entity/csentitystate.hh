@@ -17,6 +17,7 @@ struct iGraphics;
 * \ingroup entity
 */
 
+
 CS_INTERFACE()
 class CSE_API csEntityState : public CS_SUPER(csObject)
 {
@@ -118,6 +119,8 @@ protected:
 
 private:
   csID m_id;
+
+  CS_PROPERTY(Name)
   std::string m_name;
 
   bool m_created;
