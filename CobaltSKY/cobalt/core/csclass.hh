@@ -165,6 +165,22 @@ public:
 
   virtual void Invoke(iObject *obj, ...) const = 0;
   virtual void Invoke(const iObject *obj, ...) const = 0;
+  
+
+  void InvokeVoid(iObject *obj) const { Invoke(obj); }
+
+  template<typename A0>
+  void InvokeVoid(iObject *obj, A0 a0) const { Invoke(obj, &a0); }
+  template<typename A0, typename, A1>
+  void InvokeVoid(iObject *obj, A0 a0, A1 a1) const { Invoke(obj, &a0, &a1); }
+  template<typename A0, typename, A1, typename A2>
+  void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2) const { Invoke(obj, &a0, &a1, &a2); }
+  template<typename A0, typename, A1, typename A2, typename A3>
+  void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { Invoke(obj, &a0, &a1, &a2, &a3); }
+  template<typename A0, typename, A1, typename A2, typename A3, typename A4>
+  void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4); }
+  template<typename A0, typename, A1, typename A2, typename A3, typename A4, typename A5>
+  void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5); }
 
 protected:
   csFunction(bool isVirtual, const csValueDeclaration &returnType, const std::string &name, bool isConst);

@@ -93,13 +93,53 @@ std::string Convert(TypeSpecifiction ts)
   return "eVMM_Value";
 }
 
-std::string GetCodeForAttr(TypeSpecifiction ts)
+std::string GetCodeForAttrParam(TypeSpecifiction ts)
 {
   std::string res = "";
   switch (ts)
   {
   case eTS_Value:
   case eTS_Reference:
+    return "*";
+    break;
+  case eTS_Pointer:
+    res = "**";
+    break;
+  case eTS_PointerToPointer:
+    res = "***";
+    break;
+  }
+  return res;
+}
+
+std::string GetCodeForAttrPtr(TypeSpecifiction ts)
+{
+  std::string res = "";
+  switch (ts)
+  {
+  case eTS_Value:
+    return "*";
+    break;
+  case eTS_Reference:
+  case eTS_Pointer:
+    res = "**";
+    break;
+  case eTS_PointerToPointer:
+    res = "***";
+    break;
+  }
+  return res;
+}
+
+std::string GetCodeForAttrResult(TypeSpecifiction ts)
+{
+  std::string res = "";
+  switch (ts)
+  {
+  case eTS_Value:
+    break;
+  case eTS_Reference:
+    res = "&";
     break;
   case eTS_Pointer:
     res = "*";
@@ -116,115 +156,168 @@ std::string Convert(bool v)
   return v ? std::string("true") : std::string("false");
 }
 
-static std::string CreateSourceFile(Class *clazz, const std::string &api)
+static std::string CreateProperty(const std::string &className, Class *clazz, Property &prop, const std::string &api, std::vector<std::string> &propertyClasses)
 {
-  std::string className = clazz->GetName() + std::string("Class");
+  std::string propClassName = className + prop.GetPropertyName();
+  propertyClasses.push_back(propClassName);
+  std::string propGetter = prop.GetGetter();
+  std::string propSetter = prop.GetSetter();
   std::string result = "";
-  result += "\n";
-  result += "\n";
-
-
-  std::vector<std::string> propertyClasses;
-  for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
+  result += "class " + api + " " + propClassName + " : public csProperty\n";
+  result += "{\n";
+  result += "public:\n";
+  result += "  " + propClassName + "() \n";
+  result += "    : csProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
+  result += "  {\n";
+  result += "  }\n";
+  result += "  \n";
+  result += "  virtual void SetValue(iObject *object, void *data) const\n";
+  result += "  {\n";
+  if (!propSetter.empty())
   {
-    Property prop = clazz->GetProperty(i);
-    std::string propClassName = className + prop.GetPropertyName();
-    propertyClasses.push_back(propClassName);
-    std::string propGetter = prop.GetGetter();
-    std::string propSetter = prop.GetSetter();
-    result += "class " + api + " " + propClassName + " : public csProperty\n";
-    result += "{\n";
-    result += "public:\n";
-    result += "  " + propClassName + "() \n";
-    result += "    : csProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
-    result += "  {\n";
-    result += "  }\n";
-    result += "  \n";
-    result += "  virtual void SetValue(iObject *object, void *data) const\n";
-    result += "  {\n";
-    if (!propSetter.empty())
+    result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
+    result += "    if (d)\n";
+    result += "    {\n";
+    result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
+    result += "      d->Set" + prop.GetPropertyName() + "(v);\n";
+    result += "    }\n";
+  }
+  result += "  }\n";
+  result += "  \n";
+  result += "  virtual const void *GetValue(const iObject *object) const\n";
+  result += "  {\n";
+  if (!propGetter.empty())
+  {
+    result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
+    result += "    if (!d) return 0;\n";
+    result += "    const " + prop.GetTypeName() + " v = d->" + propGetter + "();\n";
+    result += "    return reinterpret_cast<const void*>(&v);\n";
+  }
+  else
+  {
+    result += "    return 0;\n";
+  }
+  result += "  }\n";
+  result += "  \n";
+  result += "};\n";
+  result += "\n";
+
+  return result;
+}
+
+static std::string CreateFunction(const std::string &className, Class *clazz, Function &func, const std::string &api, std::vector<std::string> &functionClasses)
+{
+  std::string funcClassName = className + func.GetName();
+  if (func.IsConst())
+  {
+    funcClassName += "Const";
+  }
+  functionClasses.push_back(funcClassName);
+  std::string result = "";
+  result += "class " + api + " " + funcClassName + " : public csFunction\n";
+  result += "{\n";
+  result += "public:\n";
+  result += "  " + funcClassName + "() \n";
+  result += "    : csFunction (" + Convert(func.IsVirtual()) + std::string(", ");
+  result += /*                  */ std::string("csValueDeclaration(") + Convert(func.IsReturnConst()) + std::string(", ");
+  result += /*                                                       */ std::string("\"") + func.GetReturnType() + std::string("\", ");
+  result += /*                                                       */ Convert(func.GetReturnTypeSpecification()) + std::string("), ");
+  result += /*                  */ std::string("\"") + func.GetName() + std::string("\", ");
+  result += /*                  */ Convert(func.IsConst()) + ")\n";
+  result += "  {\n";
+  for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+  {
+    Function::Parameter param = func.GetParameter(i);
+    result += "    AddAttribute(csFunctionAttribute(csValueDeclaration(" + Convert(param.isConst) + std::string(", ");
+    result += /*                                                        */ std::string("\"") + param.type + std::string("\", ");
+    result += /*                                                        */ Convert(param.typeSpecifiction) + std::string("), ");
+    result += /*                                 */ "\"" + param.name + "\"));\n";
+  }
+  result += "  }\n";
+  result += "  \n";
+  result += "  virtual void Invoke(iObject* obj, ...) const\n";
+  result += "  {\n";
+  result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(obj);\n";
+  result += "    if (!d) return;\n";
+  result += "    va_list lst;\n";
+  result += "    va_start (lst, obj);\n";
+  for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+  {
+    Function::Parameter param = func.GetParameter(i);
+    std::string typeStr = (param.isConst ? "const " : "") + param.type + " " + GetCodeForAttrParam(param.typeSpecifiction);
+    result += "    " + typeStr + param.name + " = va_arg(lst, " + typeStr + ");\n";
+  }
+  bool hasReturnValue = func.GetReturnType() != std::string("void");
+  if (hasReturnValue)
+  {
+    std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttrPtr(func.GetReturnTypeSpecification());
+    std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttrResult(func.GetReturnTypeSpecification());
+    result += "    " + typeStr + "___ptr___result___ = va_arg(lst, " + typeStr + ");\n";
+    result += "    va_end (lst);\n";
+    result += "    " + resStr + " ___value___result___ = ";
+  }
+  else
+  {
+    result += "    va_end (lst);\n";
+    result += "    ";
+  }
+  result += "d->" + func.GetName() + "(";
+  for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
+  {
+    Function::Parameter param = func.GetParameter(i);
+    result += "*" + param.name;
+    if (i + 1 < in)
     {
-      result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
-      result += "    if (d)\n";
-      result += "    {\n";
-      result += "      " + prop.GetTypeName() + " &v = *reinterpret_cast<" + prop.GetTypeName() + "*>(data);\n";
-      result += "      d->Set" + prop.GetPropertyName() + "(v);\n";
-      result += "    }\n";
+      result += ", ";
     }
-    result += "  }\n";
-    result += "  \n";
-    result += "  virtual const void *GetValue(const iObject *object) const\n";
-    result += "  {\n";
-    if (!propGetter.empty())
+  }
+  result += ");\n";
+  if (hasReturnValue)
+  {
+    result += "    if (___ptr___result___)\n";
+    result += "    {\n";
+    switch (func.GetReturnTypeSpecification())
     {
-      result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
-      result += "    if (!d) return 0;\n";
-      result += "    const " + prop.GetTypeName() + " v = d->" + propGetter + "();\n";
-      result += "    return reinterpret_cast<const void*>(&v);\n";
+    case eTS_Value:
+      result += "      *___ptr___result___ = ___value___result___; \n";
+      break;
+    case eTS_Reference:
+      result += "      *___ptr___result___ = &___value___result___; \n";
+      break;
+    case eTS_Pointer:
+      result += "      *___ptr___result___ = ___value___result___; \n";
+      break;
     }
-    else
-    {
-      result += "    return 0;\n";
-    }
-    result += "  }\n";
-    result += "  \n";
-    result += "};\n";
-    result += "\n";
+    result += "    }\n";
   }
 
-  std::vector<std::string> functionClasses;
-  for (size_t i = 0, in = clazz->GetNumberOfFunctions(); i < in; ++i)
+  result += "  }\n";
+  result += "  virtual void Invoke(const iObject* obj, ...) const\n";
+  result += "  {\n";
+  if (func.IsConst())
   {
-    Function func = clazz->GetFunction(i);
-    std::string funcClassName = className + func.GetName();
-    if (func.IsConst())
-    {
-      funcClassName += "Const";
-    }
-    functionClasses.push_back(funcClassName);
-    result += "class " + api + " " + funcClassName + " : public csFunction\n";
-    result += "{\n";
-    result += "public:\n";
-    result += "  " + funcClassName + "() \n";
-    result += "    : csFunction (" + Convert(func.IsVirtual()) + std::string(", ");
-    result += /*                  */ std::string("csValueDeclaration(") + Convert(func.IsReturnConst()) + std::string(", ");
-    result += /*                                                       */ std::string("\"") + func.GetReturnType() + std::string("\", "); 
-    result += /*                                                       */ Convert(func.GetReturnTypeSpecification()) + std::string("), ");
-    result += /*                  */ std::string("\"") + func.GetName() + std::string("\", ");
-    result += /*                  */ Convert(func.IsConst()) + ")\n";
-    result += "  {\n";
-    for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
-    {
-      Function::Parameter param = func.GetParameter(i);
-      result += "    AddAttribute(csFunctionAttribute(csValueDeclaration(" + Convert(param.isConst) + std::string(", ");
-      result += /*                                                        */ std::string("\"") + param.type + std::string("\", ");
-      result += /*                                                        */ Convert(param.typeSpecifiction) + std::string("), ");
-      result += /*                                 */ "\"" + param.name + "\"));\n";
-    }
-    result += "  }\n";
-    result += "  \n";
-    result += "  virtual void Invoke(iObject* obj, ...) const\n";
-    result += "  {\n";
-    result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(obj);\n";
+    result += "    const " + clazz->GetName() + " *d = csQueryClass<const " + clazz->GetName() + ">(obj);\n";
     result += "    if (!d) return;\n";
     result += "    va_list lst;\n";
     result += "    va_start (lst, obj);\n";
     for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
     {
       Function::Parameter param = func.GetParameter(i);
-      std::string typeStr = (param.isConst ? "const " : "") + param.type + " *" + GetCodeForAttr(param.typeSpecifiction);
+      std::string typeStr = (param.isConst ? "const " : "") + param.type + " " + GetCodeForAttrParam(param.typeSpecifiction);
       result += "    " + typeStr + param.name + " = va_arg(lst, " + typeStr + ");\n";
     }
     bool hasReturnValue = func.GetReturnType() != std::string("void");
     if (hasReturnValue)
     {
-      std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " *" + GetCodeForAttr(func.GetReturnTypeSpecification());
-      std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttr(func.GetReturnTypeSpecification());
+      std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttrPtr(func.GetReturnTypeSpecification());
+      std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttrResult(func.GetReturnTypeSpecification());
       result += "    " + typeStr + "___ptr___result___ = va_arg(lst, " + typeStr + ");\n";
+      result += "    va_end (lst);\n";
       result += "    " + resStr + " ___value___result___ = ";
     }
     else
     {
+      result += "    va_end (lst);\n";
       result += "    ";
     }
     result += "d->" + func.GetName() + "(";
@@ -242,59 +335,49 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api)
     {
       result += "    if (___ptr___result___)\n";
       result += "    {\n";
-      result += "      *___ptr___result___ = ___value___result___;\n";
+      switch (func.GetReturnTypeSpecification())
+      {
+      case eTS_Value:
+        result += "      *___ptr___result___ = ___value___result___; \n";
+        break;
+      case eTS_Reference:
+        result += "      *___ptr___result___ = &___value___result___; \n";
+        break;
+      case eTS_Pointer:
+        result += "      *___ptr___result___ = ___value___result___; \n";
+        break;
+      }
       result += "    }\n";
     }
+  }
+  result += "  }\n";
+  result += "};\n";
+  result += "\n";
 
-    result += "  }\n";
-    result += "  virtual void Invoke(const iObject* obj, ...) const\n";
-    result += "  {\n";
-    if (func.IsConst())
-    {
-      result += "    const " + clazz->GetName() + " *d = csQueryClass<const " + clazz->GetName() + ">(obj);\n";
-      result += "    if (!d) return;\n";
-      result += "    va_list lst;\n";
-      result += "    va_start (lst, obj);\n";
-      for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
-      {
-        Function::Parameter param = func.GetParameter(i);
-        std::string typeStr = (param.isConst ? "const " : "") + param.type + " *" + GetCodeForAttr(param.typeSpecifiction);
-        result += "    " + typeStr + param.name + " = va_arg(lst, " + typeStr + ");\n";
-      }
-      bool hasReturnValue = func.GetReturnType() != std::string("void");
-      if (hasReturnValue)
-      {
-        std::string typeStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " *" + GetCodeForAttr(func.GetReturnTypeSpecification());
-        std::string resStr = (func.IsReturnConst() ? "const " : "") + func.GetReturnType() + " " + GetCodeForAttr(func.GetReturnTypeSpecification());
-        result += "    " + typeStr + "___ptr___result___ = va_arg(lst, " + typeStr + ");\n";
-        result += "    " + resStr + " ___value___result___ = ";
-      }
-      else
-      {
-        result += "    ";
-      }
-      result += "d->" + func.GetName() + "(";
-      for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
-      {
-        Function::Parameter param = func.GetParameter(i);
-        result += "*" + param.name;
-        if (i + 1 < in)
-        {
-          result += ", ";
-        }
-      }
-      result += ");\n";
-      if (hasReturnValue)
-      {
-        result += "    if (___ptr___result___)\n";
-        result += "    {\n";
-        result += "      *___ptr___result___ = ___value___result___;\n";
-        result += "    }\n";
-      }
-    }
-    result += "  }\n";
-    result += "};\n";
-    result += "\n";
+  return result;
+}
+
+
+static std::string CreateSourceFile(Class *clazz, const std::string &api)
+{
+  std::string className = clazz->GetName() + std::string("Class");
+  std::string result = "";
+  result += "\n";
+  result += "\n";
+
+
+  std::vector<std::string> propertyClasses;
+  for (size_t i = 0, in = clazz->GetNumberOfProperties(); i < in; ++i)
+  {
+    Property prop = clazz->GetProperty(i);
+    result += CreateProperty(className, clazz, prop, api, propertyClasses);
+  }
+
+  std::vector<std::string> functionClasses;
+  for (size_t i = 0, in = clazz->GetNumberOfFunctions(); i < in; ++i)
+  {
+    Function func = clazz->GetFunction(i);
+    result += CreateFunction(className, clazz, func, api, functionClasses);
   }
 
   result += className + " *" + className + "::Get()\n";
@@ -416,13 +499,56 @@ private:
 
 Test g_test;
 
+void performMyTestVoid(Test &test)
+{
+  printf("Test: 0x%p\n", &test);
+}
 
-const Test *performMyTest()
+const Test performMyTestValue()
+{
+  return g_test;
+}
+
+const Test &performMyTestReference()
+{
+  return g_test;
+}
+
+const Test *performMyTestPointer()
 {
   return &g_test;
 }
 
-void performMyTestRefl(int n, ...)
+
+
+void performMyTestVoidRefl(int n, ...)
+{
+  va_list lst;
+  va_start(lst, n);
+  Test *parg = va_arg(lst, Test *);
+  va_end(lst);
+
+
+  performMyTestVoid(*parg);
+}
+
+void performMyTestValueRefl(int n, ...)
+{
+  va_list lst;
+  va_start(lst, n);
+  Test *pres = va_arg(lst, Test *);
+  va_end(lst);
+
+
+  const Test result = performMyTestReference();
+  if (pres)
+  {
+    *pres = result;
+  }
+}
+
+
+void performMyTestReferenceRefl(int n, ...)
 {
   va_list lst;
   va_start(lst, n);
@@ -430,18 +556,40 @@ void performMyTestRefl(int n, ...)
   va_end(lst);
 
 
-  const Test *result = performMyTest();
+  const Test &result = performMyTestReference();
+  if (pres)
+  {
+    *pres = &result;
+  }
+}
+
+void performMyTestPointerRefl(int n, ...)
+{
+  va_list lst;
+  va_start(lst, n);
+  const Test **pres = va_arg(lst, const Test **);
+  va_end(lst);
+
+
+  const Test *result = performMyTestPointer();
   if (pres)
   {
     *pres = result;
   }
 }
 
+template<typename A0>
+void _performMyTestVoid(A0 a0)
+{
+  performMyTestVoidRefl(0, &a0);
+}
+
+
 template<typename R>
-R performMyTestVaue()
+R performMyTestValue()
 {
   R r;
-  performMyTestRefl(0, &r);
+  performMyTestValueRefl(0, &r);
   return r;
 }
 
@@ -449,7 +597,7 @@ template<typename R>
 R &performMyTestReference()
 {
   R *r;
-  performMyTestRefl(0, &r);
+  performMyTestReferenceRefl(0, &r);
   return *r;
 }
 
@@ -457,25 +605,25 @@ template<typename R>
 R *performMyTestPointer()
 {
   R *r;
-  performMyTestRefl(0, &r);
+  performMyTestPointerRefl(0, &r);
   return r;
 }
 
 int test(int argc, char **argv)
 {
-  const Test *test1 = performMyTest();
-  const Test *test2 = 0;
-  performMyTestRefl(0, &test2);
-  const Test *test3 = performMyTestPointer<const Test>();
+  Test test;
+  printf("Bevoreprint\n");
+  printf("Test: 0x%p\n", &test);
+  printf("Call\n");
+  _performMyTestVoid<Test&>(test);
+  printf("Call-Done\n");
 
-  printf("GlobalTest: 0x%p\n", &g_test);
-  printf("LocalTest1: 0x%p\n", test1);
-  printf("LocalTest2: 0x%p\n", test2);
-  printf("LocalTest3: 0x%p\n", test3);
   if (true)
   {
     return 0;
   }
+
+
   if (argc < 4)
   {
     printf("Usage %s --test <headerfile> <outputname>", argv[0]);
