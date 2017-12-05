@@ -480,7 +480,8 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api)
 class Test
 {
 public:
-  Test() :m_v(0) { printf("Test::ctor\n"); }
+  Test() :m_v(0) { } // printf("Test::ctor\n");
+
   Test(const Test &test) : m_v(test.m_v) { printf("Test::copy-ctor\n"); }
   Test(Test &&test) : m_v(test.m_v) { printf("Test::move-ctor\n"); }
 

@@ -2,6 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
 #include <map>
@@ -35,6 +36,10 @@ public:
   void SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, csInt64 value);
   void SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, float value);
   void SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, double value);
+  void SetEntityStateVector2f(csUInt32 entityStateID, const std::string &propertyName, const csVector3f &value);
+  void SetEntityStateVector3f(csUInt32 entityStateID, const std::string &propertyName, const csVector3f &value);
+  void SetEntityStateVector4f(csUInt32 entityStateID, const std::string &propertyName, const csVector4f &value);
+  void SetEntityStateColor4f(csUInt32 entityStateID, const std::string &propertyName, const csColor4f &value);
   void SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, const csMatrix4f &value);
 
 private:
@@ -53,6 +58,10 @@ private:
     ePT_Int64,
     ePT_Float,
     ePT_Double,
+    ePT_Vector2f,
+    ePT_Vector3f,
+    ePT_Vector4f,
+    ePT_Color4f,
     ePT_Matrix4f,
   };
 
@@ -72,6 +81,10 @@ private:
     csInt64 m_int64;
     float m_float;
     double m_double;
+    csVector2f m_vector2f;
+    csVector3f m_vector3f;
+    csVector4f m_vector4f;
+    csColor4f m_color4f;
     csMatrix4f m_matrix4f;
   };
 

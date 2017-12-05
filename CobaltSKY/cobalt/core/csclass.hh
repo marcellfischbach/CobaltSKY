@@ -171,34 +171,127 @@ public:
   void InvokeVoid(iObject *obj) const { Invoke(obj); }
   template<typename A0>
   void InvokeVoid(iObject *obj, A0 a0) const { Invoke(obj, &a0); }
-  template<typename A0, typename, A1>
+  template<typename A0, typename A1>
   void InvokeVoid(iObject *obj, A0 a0, A1 a1) const { Invoke(obj, &a0, &a1); }
-  template<typename A0, typename, A1, typename A2>
+  template<typename A0, typename A1, typename A2>
   void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2) const { Invoke(obj, &a0, &a1, &a2); }
-  template<typename A0, typename, A1, typename A2, typename A3>
+  template<typename A0, typename A1, typename A2, typename A3>
   void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { Invoke(obj, &a0, &a1, &a2, &a3); }
-  template<typename A0, typename, A1, typename A2, typename A3, typename A4>
+  template<typename A0, typename A1, typename A2, typename A3, typename A4>
   void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4); }
-  template<typename A0, typename, A1, typename A2, typename A3, typename A4, typename A5>
+  template<typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
   void InvokeVoid(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5); }
-
+  //
+  // InvokeVoid Const
+  void InvokeVoid(const iObject *obj) const { Invoke(obj); }
+  template<typename A0>
+  void InvokeVoid(const iObject *obj, A0 a0) const { Invoke(obj, &a0); }
+  template<typename A0, typename A1>
+  void InvokeVoid(const iObject *obj, A0 a0, A1 a1) const { Invoke(obj, &a0, &a1); }
+  template<typename A0, typename A1, typename A2>
+  void InvokeVoid(const iObject *obj, A0 a0, A1 a1, A2 a2) const { Invoke(obj, &a0, &a1, &a2); }
+  template<typename A0, typename A1, typename A2, typename A3>
+  void InvokeVoid(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { Invoke(obj, &a0, &a1, &a2, &a3); }
+  template<typename A0, typename A1, typename A2, typename A3, typename A4>
+  void InvokeVoid(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4); }
+  template<typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  void InvokeVoid(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5); }
   //
   // InvokeValue
   template<typename R>
-  R InvokeValue(iObject *obj) const { R r;  Invoke(obj, &r); return r }
+  R InvokeValue(iObject *obj) const { R r;  Invoke(obj, &r); return r; }
   template<typename R, typename A0>
-  R InvokeValue(iObject *obj, A0 a0) const { R r;  Invoke(obj, &a0, &r); return r }
+  R InvokeValue(iObject *obj, A0 a0) const { R r;  Invoke(obj, &a0, &r); return r; }
   template<typename R, typename A0, typename A1>
-  R InvokeValue(iObject *obj, A0 a0, A1 a1) const { R r;  Invoke(obj, &a0, &a1, &r); return r }
+  R InvokeValue(iObject *obj, A0 a0, A1 a1) const { R r;  Invoke(obj, &a0, &a1, &r); return r; }
   template<typename R, typename A0, typename A1, typename A2>
-  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2) const { R r;  Invoke(obj, &a0, &a1, &a2, &r); return r }
+  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2) const { R r;  Invoke(obj, &a0, &a1, &a2, &r); return r; }
   template<typename R, typename A0, typename A1, typename A2, typename A3>
-  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return r }
+  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return r; }
   template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
-  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r }
+  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r; }
   template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
-  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r }
-
+  R InvokeValue(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return r; }
+  //
+  // InvokeValue const
+  template<typename R>
+  R InvokeValue(const iObject *obj) const { R r;  Invoke(obj, &r); return r; }
+  template<typename R, typename A0>
+  R InvokeValue(const iObject *obj, A0 a0) const { R r;  Invoke(obj, &a0, &r); return r; }
+  template<typename R, typename A0, typename A1>
+  R InvokeValue(const iObject *obj, A0 a0, A1 a1) const { R r;  Invoke(obj, &a0, &a1, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2>
+  R InvokeValue(const iObject *obj, A0 a0, A1 a1, A2 a2) const { R r;  Invoke(obj, &a0, &a1, &a2, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3>
+  R InvokeValue(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+  R InvokeValue(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  R InvokeValue(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return r; }
+  //
+  // InvokeReference
+  template<typename R>
+  R &InvokeReference(iObject *obj) const { R *r;  Invoke(obj, &r); return *r; }
+  template<typename R, typename A0>
+  R &InvokeReference(iObject *obj, A0 a0) const { R *r;  Invoke(obj, &a0, &r); return *r; }
+  template<typename R, typename A0, typename A1>
+  R &InvokeReference(iObject *obj, A0 a0, A1 a1) const { R *r;  Invoke(obj, &a0, &a1, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2>
+  R &InvokeReference(iObject *obj, A0 a0, A1 a1, A2 a2) const { R *r;  Invoke(obj, &a0, &a1, &a2, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3>
+  R &InvokeReference(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+  R &InvokeReference(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  R &InvokeReference(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return *r; }
+  //
+  // InvokeReference Const
+  template<typename R>
+  R &InvokeReference(const iObject *obj) const { R *r;  Invoke(obj, &r); return *r; }
+  template<typename R, typename A0>
+  R &InvokeReference(const iObject *obj, A0 a0) const { R *r;  Invoke(obj, &a0, &r); return *r; }
+  template<typename R, typename A0, typename A1>
+  R &InvokeReference(const iObject *obj, A0 a0, A1 a1) const { R *r;  Invoke(obj, &a0, &a1, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2>
+  R &InvokeReference(const iObject *obj, A0 a0, A1 a1, A2 a2) const { R *r;  Invoke(obj, &a0, &a1, &a2, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3>
+  R &InvokeReference(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+  R &InvokeReference(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return *r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  R &InvokeReference(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return *r; }
+  //
+  // InvokePointer
+  template<typename R>
+  R *InvokePointer(iObject *obj) const { R *r;  Invoke(obj, &r); return r; }
+  template<typename R, typename A0>
+  R *InvokePointer(iObject *obj, A0 a0) const { R *r;  Invoke(obj, &a0, &r); return r; }
+  template<typename R, typename A0, typename A1>
+  R *InvokePointer(iObject *obj, A0 a0, A1 a1) const { R *r;  Invoke(obj, &a0, &a1, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2>
+  R *InvokePointer(iObject *obj, A0 a0, A1 a1, A2 a2) const { R *r;  Invoke(obj, &a0, &a1, &a2, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3>
+  R *InvokePointer(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+  R *InvokePointer(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  R *InvokePointer(iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return r; }
+  //
+  // InvokePointer Const
+  template<typename R>
+  R *InvokePointer(const iObject *obj) const { R *r;  Invoke(obj, &r); return r; }
+  template<typename R, typename A0>
+  R *InvokePointer(const iObject *obj, A0 a0) const { R *r;  Invoke(obj, &a0, &r); return r; }
+  template<typename R, typename A0, typename A1>
+  R *InvokePointer(const iObject *obj, A0 a0, A1 a1) const { R *r;  Invoke(obj, &a0, &a1, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2>
+  R *InvokePointer(const iObject *obj, A0 a0, A1 a1, A2 a2) const { R *r;  Invoke(obj, &a0, &a1, &a2, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3>
+  R *InvokePointer(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4>
+  R *InvokePointer(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &r); return r; }
+  template<typename R, typename A0, typename A1, typename A2, typename A3, typename A4, typename A5>
+  R *InvokePointer(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return r; }
 
 protected:
   csFunction(bool isVirtual, const csValueDeclaration &returnType, const std::string &name, bool isConst);

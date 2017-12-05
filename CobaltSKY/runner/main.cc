@@ -181,12 +181,28 @@ int main(int argc, char **argv)
 
   csDynamicColliderState *state = new csDynamicColliderState();
   state->SetMass(10.0f);
+  state->SetInertia(csVector3f(1, 2, 3));
+  const csVector3f &inertia = state->GetInertia();
+  printf("StateInertia: %f %f %f\n", inertia.x, inertia.y, inertia.z);
 
+  const csDynamicColliderState *constState = static_cast<const csDynamicColliderState*>(state);
   const csClass *stateClass = state->GetClass();
-  for (size_t i = 0; i < stateClass->GetNumberOf(); ++i)
+  std::vector<const csFunction*> functions = stateClass->GetFunction("GetInertia");
+  if (!functions.empty())
   {
-    const 
+    const csFunction *func = functions[0];
+    const csVector3f &in = func->InvokeReference<const csVector3f>(constState);
+    printf("StateInertia: %f %f %f\n", in.x, in.y, in.z);
   }
+  functions = stateClass->GetFunction("SetInertia");
+  if (!functions.empty())
+  {
+    const csFunction *func = functions[0];
+    csVector3f in(2, 3, 4);
+    func->InvokeVoid<const csVector3f &>(state, in);
+  }
+  const csVector3f &inertia2 = state->GetInertia();
+  printf("StateInertia: %f %f %f\n", inertia2.x, inertia2.y, inertia2.z);
 
   return 0;
 

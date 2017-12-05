@@ -11,7 +11,6 @@ struct iPhysicsTriggerCollider;
 struct iPhysicsDynamicCollider;
 class csDynamicColliderStateTransformationCallback;
 
-
 CS_CLASS()
 class CSE_API csDynamicColliderState : public CS_SUPER(csBaseColliderState)
 {
