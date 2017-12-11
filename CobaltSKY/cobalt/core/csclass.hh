@@ -133,6 +133,8 @@ public:
   bool IsConst() const;
   const std::string &GetType() const;
   csValueMemoryMode GetMode() const;
+
+  bool operator==(const csValueDeclaration &other) const;
 private:
   bool m_const;
   std::string m_type;

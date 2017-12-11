@@ -183,6 +183,13 @@ csValueMemoryMode csValueDeclaration::GetMode() const
   return m_mode;
 }
 
+bool csValueDeclaration::operator==(const csValueDeclaration &other) const
+{
+  return m_const == other.m_const &&
+    m_type == other.m_type &&
+    m_mode == other.m_mode;
+
+}
 
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
