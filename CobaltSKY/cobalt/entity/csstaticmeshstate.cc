@@ -51,14 +51,33 @@ void csStaticMeshState::SetMesh(iMesh *mesh)
   UpdateBoundingBox();
 }
 
-void csStaticMeshState::SetMaterial(csMaterial *material, csSize slot)
+void csStaticMeshState::SetMaterial(csSize idx, csMaterial *material)
 {
-  if (slot >= m_numberOfMaterialSlots)
+  if (idx >= m_materials.size())
   {
     return;
   }
 
-  CS_SET(m_materials[slot], material);
+  CS_SET(m_materials[idx], material);
+}
+
+void csStaticMeshState::SetColliderShape(csSize idx, iPhysicsShape *shape)
+{
+  if (idx >= m_colliderShapes.size())
+  {
+    return;
+  }
+
+  CS_SET(m_colliderShapes[idx], shape);
+}
+
+void csStaticMeshState::AddColliderShape(iPhysicsShape *shape)
+{
+  if (shape)
+  {
+    shape->AddRef();
+    m_colliderShapes.push_back(shape);
+  }
 }
 
 

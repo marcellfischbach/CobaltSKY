@@ -1,0 +1,19 @@
+asset () {
+	data () {
+		blueprint {
+			entity (class: csEntity) {
+				state (class: csStaticMeshState id:123) {
+					mesh (locator: path_to_mesh.csf)
+					materials () {
+						item(locator: path_to_material_0.csf)
+						item(locator: path_to_material_1.csf)
+					}
+					colliderShapes() {
+						item(locator: path_to_collider_0.csf)
+						item(locator: path_to_collider_1.csf)
+					}
+				}
+			}
+		}
+	}
+}

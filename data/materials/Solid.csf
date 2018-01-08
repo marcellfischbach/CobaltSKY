@@ -1,0 +1,21 @@
+asset () {
+  data () {
+    material () {
+      materialDef (locator:"materials/SolidDef.csf")
+      parameters () {
+        parameter (name:fieldstone_glossmap) {
+          locator (locator:"materials/textures/fieldstone_glossmap.csf")
+        }
+        parameter (name:Diffuse) {
+          locator (locator:"materials/textures/fieldstone_diffuse.csf")
+        }
+        parameter (name:Normal) {
+          locator (locator:"materials/textures/fieldstone_normal.csf")
+        }
+        parameter (name:Multiplier) {
+          float2 (20.000000 20.000000)
+        }
+      }
+    }
+  }
+}

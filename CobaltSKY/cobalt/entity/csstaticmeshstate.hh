@@ -8,6 +8,8 @@
 #include <cobalt/physics/csphysicsshapecontainer.hh>
 #include <cobalt/entity/csstaticmeshstate.refl.hh>
 
+#include <vector>
+
 struct iMesh;
 class csMaterial;
 /**
@@ -26,14 +28,17 @@ public:
   iMesh *GetMesh();
   const iMesh *GetMesh() const;
 
-  csSize GetNumberOfMaterialsSlots() const;
-  void SetMaterial(csMaterial *material, csSize slot = 0);
-  csMaterial *GetMaterial(csSize slot = 0);
-  const csMaterial *GetMaterial(csSize slot = 0) const;
+  csSize GetNumberOfMaterials() const;
+  void SetMaterial(csSize idx, csMaterial *material);
+  csMaterial *GetMaterial(csSize idx = 0);
+  const csMaterial *GetMaterial(csSize idx = 0) const;
 
-  void SetColliderShape(csPhysicsShapeContainer *shapes);
-  csPhysicsShapeContainer *GetColliderShape();
-  const csPhysicsShapeContainer *GetColliderShape() const;
+  csSize GetNumberOfColliderShapes () const;
+  void AddColliderShape(iPhysicsShape *shape);
+  void SetColliderShape(csSize idx, iPhysicsShape *shape);
+  iPhysicsShape *GetPhysicsShape (csSize idx = 0);
+  const iPhysicsShape *GetPhysicsShape (csSize idx = 0) const;
+
   void SetFriction(float friction);
   float GetFriction() const;
   void SetRestitution(float restitution);
@@ -67,11 +72,9 @@ private:
 
   iMesh* m_mesh;
 
-  csSize m_numberOfMaterialSlots;
-  csMaterial **m_materials;
+  std::vector<csMaterial*> m_materials;
+  std::vector<iPhysicsShape*> m_colliderShapes;
 
-  iPhysicsStaticCollider *m_staticCollider;
-  csPhysicsShapeContainer *m_shapes;
   float m_friction;
   float m_restitution;
 };
@@ -87,28 +90,53 @@ CS_FORCEINLINE const iMesh *csStaticMeshState::GetMesh() const
   return m_mesh;
 }
 
-CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfMaterialsSlots() const
+CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfMaterials() const
 {
   return m_numberOfMaterialSlots;
 }
 
-CS_FORCEINLINE csMaterial *csStaticMeshState::GetMaterial(csSize slot)
+CS_FORCEINLINE csMaterial *csStaticMeshState::GetMaterial(csSize idx)
 {
-  if (slot >= m_numberOfMaterialSlots)
+  if (idx >= m_materials.size())
   {
     return 0;
   }
-  return m_materials[slot];
+  return m_materials[idx];
 }
 
-CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize slot) const
+CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize idx) const
 {
-  if (slot >= m_numberOfMaterialSlots)
+  if (idx >= m_materials.size())
   {
     return 0;
   }
-  return m_materials[slot];
+  return m_materials[idx];
 }
+
+
+CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfColliderShapes() const
+{
+  return m_numberOfMaterialSlots;
+}
+
+CS_FORCEINLINE iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx)
+{
+  if (slot >= m_colliderShapes.size())
+  {
+    return 0;
+  }
+  return m_colliderShapes[idx];
+}
+
+CS_FORCEINLINE const iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx) const
+{
+  if (slot >= m_colliderShapes.size())
+  {
+    return 0;
+  }
+  return m_colliderShapes[idx];
+}
+
 
 CS_FORCEINLINE void csStaticMeshState::SetCastShadow(bool castShadow)
 {

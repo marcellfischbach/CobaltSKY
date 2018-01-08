@@ -123,8 +123,8 @@ set(SOURCE_ENTITY
     entity/itransformationcallback.hh
     entity/csbasecolliderstate.cc
     entity/csbasecolliderstate.hh
-	entity/csblueprint.cc
-	entity/csblueprint.hh
+    entity/csblueprint.cc
+    entity/csblueprint.hh
     entity/cscharacterentity.cc
     entity/cscharacterentity.hh
     entity/cscolliderstate.cc
@@ -161,8 +161,6 @@ set(SOURCE_ENTITY
     entity/csstaticcolliderstate.hh
     entity/csstaticmeshstate.cc
     entity/csstaticmeshstate.hh
-    entity/csstaticmeshstatedata.cc
-    entity/csstaticmeshstatedata.hh
     entity/csskinnedmeshstate.cc
     entity/csskinnedmeshstate.hh
     entity/cstransformation.cc

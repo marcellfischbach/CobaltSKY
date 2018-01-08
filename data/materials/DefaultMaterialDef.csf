@@ -1,0 +1,48 @@
+asset () {
+  data () {
+    shaderGraph () {
+      nodes () {
+        node (id:0 class:csSGVarFloat) {
+          resource (name:Roughness) {
+            float (0.800000)
+          }
+        }
+        node (id:1 class:csSGVarFloat3) {
+          resource (name:Diffuse) {
+            float3 (1.000000 1.000000 1.000000)
+          }
+        }
+      }
+      inputs () {
+        shaderGraph (input:Diffuse) {
+          node (id:1 output:0)
+        }
+        shaderGraph (input:Roughness) {
+          node (id:0 output:0)
+        }
+      }
+      attributes () {
+        blendOutWithBinaryGradient ()
+        discardAlpha () {
+          threshold (0.000000)
+          mode (Less)
+        }
+      }
+    }
+  }
+  meta () {
+    shaderGraphMeta () {
+      nodes () {
+        node (id:0) {
+          pos (-60.000000 20.000000)
+        }
+        node (id:1) {
+          pos (-60.000000 -60.000000)
+        }
+      }
+      shaderGraph () {
+        pos (120.000000 -20.000000)
+      }
+    }
+  }
+}

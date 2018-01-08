@@ -1,0 +1,13 @@
+asset () {
+	data () {
+		scene () {
+			entityBluePrint(locator: entity_bp.csf) {
+				state(id:123) {
+					materials () {
+						item(id:1 locator: path_to_another_material.csf)
+					}
+				}
+			}
+		}
+	}
+}

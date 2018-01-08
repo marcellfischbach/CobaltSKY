@@ -204,7 +204,7 @@ int main(int argc, char **argv)
   const csVector3f &inertia2 = state->GetInertia();
   printf("StateInertia: %f %f %f\n", inertia2.x, inertia2.y, inertia2.z);
 
-  return 0;
+//  return 0;
 
   if (initialize() < 0)
   {
@@ -888,10 +888,10 @@ void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iK
 
 csEntityScene *create_scene(iGraphics *graphics)
 {
-  material = csEng->Get<csMaterial>("materials/DefaultMaterial.xasset");
+  material = csEng->Get<csMaterial>("materials/DefaultMaterial.csf");
   csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
-  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/GroundFieldStone.xasset");
+  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/Solid.csf");
   printf("GroundMaterial: %p\n", groundMaterial);
   if (groundMaterial)
   {

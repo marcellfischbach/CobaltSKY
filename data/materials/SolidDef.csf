@@ -1,0 +1,90 @@
+asset () {
+  data () {
+    shaderGraph () {
+      nodes () {
+        node (id:0 class:csSGTexture2D) {
+          resource (name:fieldstone_glossmap) {
+            locator (locator:"materials/textures/fieldstone_glossmap.csf")
+          }
+        }
+        node (id:1 class:csSGMul)
+        node (id:2 class:csSGTexture2D) {
+          resource (name:Diffuse) {
+            locator (locator:"materials/textures/fieldstone_diffuse.csf")
+          }
+        }
+        node (id:3 class:csSGDefaultTextureCoordinate)
+        node (id:4 class:csSGTexture2D) {
+          resource (name:Normal) {
+            locator (locator:"materials/textures/fieldstone_normal.csf")
+          }
+        }
+        node (id:5 class:csSGVarFloat2) {
+          resource (name:Multiplier) {
+            float2 (20.000000 20.000000)
+          }
+        }
+      }
+      inputs () {
+        node (id:2 input:0) {
+          node (id:1 output:0)
+        }
+        node (id:0 input:0) {
+          node (id:1 output:0)
+        }
+        node (id:1 input:0) {
+          node (id:5 output:0)
+        }
+        node (id:1 input:1) {
+          node (id:3 output:0)
+        }
+        node (id:4 input:0) {
+          node (id:1 output:0)
+        }
+        shaderGraph (input:Diffuse) {
+          node (id:2 output:0)
+        }
+        shaderGraph (input:Roughness) {
+          node (id:0 output:1)
+        }
+        shaderGraph (input:Normal) {
+          node (id:4 output:0)
+        }
+      }
+      attributes () {
+        blendOutWithBinaryGradient ()
+        discardAlpha (enabled:true) {
+          threshold (0.000000)
+          mode (Less)
+        }
+      }
+    }
+  }
+  meta () {
+    shaderGraphMeta () {
+      nodes () {
+        node (id:0) {
+          pos (-200.000000 100.000000)
+        }
+        node (id:1) {
+          pos (-420.000000 -20.000000)
+        }
+        node (id:2) {
+          pos (-200.000000 -240.000000)
+        }
+        node (id:3) {
+          pos (-700.000000 80.000000)
+        }
+        node (id:4) {
+          pos (-200.000000 -60.000000)
+        }
+        node (id:5) {
+          pos (-620.000000 -120.000000)
+        }
+      }
+      shaderGraph () {
+        pos (240.000000 0.000000)
+      }
+    }
+  }
+}
