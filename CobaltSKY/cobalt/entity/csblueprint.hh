@@ -2,6 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
@@ -22,25 +23,26 @@ public:
   iObject *NewInstance() const;
 
   csUInt32 CreateEntity(const csClass *cls, csUInt32 parentEntityID = 0);
-  csUInt32 CreateEntityState(const csClass *cls, csUInt32 parentEntityID);
+  csUInt32 CreateEntityState(const csClass *cls, csUInt32 parentEntityID, csUInt32 parentStateID = 0);
 
-  void SetEntityStateString(csUInt32 entityStateID, const std::string &propertyName, const std::string &value);
-  void SetEntityStateBool(csUInt32 entityStateID, const std::string &propertyName, bool value);
-  void SetEntityStateUInt8(csUInt32 entityStateID, const std::string &propertyName, csUInt8 value);
-  void SetEntityStateUInt16(csUInt32 entityStateID, const std::string &propertyName, csUInt16 value);
-  void SetEntityStateUInt32(csUInt32 entityStateID, const std::string &propertyName, csUInt32 value);
-  void SetEntityStateUInt64(csUInt32 entityStateID, const std::string &propertyName, csUInt64 value);
-  void SetEntityStateInt8(csUInt32 entityStateID, const std::string &propertyName, csInt8 value);
-  void SetEntityStateInt16(csUInt32 entityStateID, const std::string &propertyName, csInt16 value);
-  void SetEntityStateInt32(csUInt32 entityStateID, const std::string &propertyName, csInt32 value);
-  void SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, csInt64 value);
-  void SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, float value);
-  void SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, double value);
-  void SetEntityStateVector2f(csUInt32 entityStateID, const std::string &propertyName, const csVector3f &value);
-  void SetEntityStateVector3f(csUInt32 entityStateID, const std::string &propertyName, const csVector3f &value);
-  void SetEntityStateVector4f(csUInt32 entityStateID, const std::string &propertyName, const csVector4f &value);
-  void SetEntityStateColor4f(csUInt32 entityStateID, const std::string &propertyName, const csColor4f &value);
-  void SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, const csMatrix4f &value);
+  void SetEntityStateString(csUInt32 entityStateID, const std::string &propertyName, long idx, const std::string &value);
+  void SetEntityStateBool(csUInt32 entityStateID, const std::string &propertyName, long idx, bool value);
+  void SetEntityStateUInt8(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt8 value);
+  void SetEntityStateUInt16(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt16 value);
+  void SetEntityStateUInt32(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt32 value);
+  void SetEntityStateUInt64(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt64 value);
+  void SetEntityStateInt8(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt8 value);
+  void SetEntityStateInt16(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt16 value);
+  void SetEntityStateInt32(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt32 value);
+  void SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt64 value);
+  void SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, long idx, float value);
+  void SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, long idx, double value);
+  void SetEntityStateVector2f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector3f &value);
+  void SetEntityStateVector3f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector3f &value);
+  void SetEntityStateVector4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector4f &value);
+  void SetEntityStateColor4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csColor4f &value);
+  void SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csMatrix4f &value);
+  void SetEntityStateResourceLocator(csUInt32 entityStateID, const std::string &propertyName, long idx, const csResourceLocator &value);
 
 private:
 
@@ -63,11 +65,13 @@ private:
     ePT_Vector4f,
     ePT_Color4f,
     ePT_Matrix4f,
+    ePT_ResourceLocator,
   };
 
   struct Property
   {
     std::string m_propertyName;
+    long m_propertyIndex;
     PropertyType m_propertyType;
     std::string m_string;
     bool m_bool;
@@ -86,7 +90,10 @@ private:
     csVector4f m_vector4f;
     csColor4f m_color4f;
     csMatrix4f m_matrix4f;
+    csResourceLocator m_resourceLocator;
   };
+
+
 
   struct Decl
   {
@@ -99,6 +106,7 @@ private:
   void SetEntityStateProperty(csUInt32 entityStateID, Property prop);
   void SetEntityStatePropertyValue(csEntityState *entityState, const Property &prop) const;
   bool SetEntityStatePropertyValue(const csClass *cls, csEntityState *entityState, const Property &prop) const;
+  const csFunction *FindFunction(const csClass *cls, const std::string &name, const std::string &typeName) const;
 
   std::map<csUInt32, Decl> m_entities;
   std::map<csUInt32, Decl> m_entityStates;

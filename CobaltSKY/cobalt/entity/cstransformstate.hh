@@ -29,7 +29,7 @@ public:
 
 
 private:
-  CS_PROPERTY(LocalTransformation)
+  CS_PROPERTY(name=LocalTransformation)
   csMatrix4f m_localMatrix;
 
   void PerformTransformation();

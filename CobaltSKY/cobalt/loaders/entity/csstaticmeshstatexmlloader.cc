@@ -85,7 +85,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
             slot = meshSlot;
           }
         }
-        staticMeshState->SetMaterial(material, slot);
+        staticMeshState->SetMaterial(slot, material);
       }
     }
     else
@@ -96,7 +96,7 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
         const char *txt = materialElement->GetText();
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialElement, eRLM_Shared, eRLM_Instance);
         csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator(std::string(txt)), 0, loadingMode);
-        staticMeshState->SetMaterial(material, 0);
+        staticMeshState->SetMaterial(0, material);
       }
     }
 
@@ -117,7 +117,10 @@ iObject *csStaticMeshStateXMLLoader::Load(TiXmlElement *element, const csResourc
         {
           shapes = csResourceManager::Get()->Load<csPhysicsShapeContainer>(shapesElement, locator, userData);
         }
-        staticMeshState->SetColliderShape(shapes);
+        for (csSize i=0, in=shapes->GetNumberOfShapes(); i<in; ++i)
+        {
+          staticMeshState->AddColliderShape(shapes->GetShape(i));
+        }
         TiXmlElement *frictionElement = colliderElement->FirstChildElement("friction");
         if (frictionElement)
         {

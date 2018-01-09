@@ -49,7 +49,7 @@ public:
   csUInt32 GetMaterialIndex(const std::string &materialName) const;
 
   virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
-  virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0);
+  virtual void Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod = 0);
 
   csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const;
   csSize GetNumberOfTotalTrigons(csUInt8 lod = 0) const;

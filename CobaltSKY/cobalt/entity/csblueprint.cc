@@ -40,120 +40,143 @@ csUInt32 csBlueprint::CreateEntityState(const csClass *cls, csUInt32 parentEntit
   return decl.m_id;
 }
 
-void csBlueprint::SetEntityStateString(csUInt32 entityStateID, const std::string &propertyName, const std::string &value)
+void csBlueprint::SetEntityStateString(csUInt32 entityStateID, const std::string &propertyName, long idx, const std::string &value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_String;
   prop.m_string = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateBool(csUInt32 entityStateID, const std::string &propertyName, bool value)
+void csBlueprint::SetEntityStateBool(csUInt32 entityStateID, const std::string &propertyName, long idx, bool value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Bool;
   prop.m_bool = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateUInt8(csUInt32 entityStateID, const std::string &propertyName, csUInt8 value)
+void csBlueprint::SetEntityStateUInt8(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt8 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_UInt8;
   prop.m_uint8 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateUInt16(csUInt32 entityStateID, const std::string &propertyName, csUInt16 value)
+void csBlueprint::SetEntityStateUInt16(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt16 value)
 {
   Property prop;
+  prop.m_propertyIndex = idx;
   prop.m_propertyName = propertyName;
   prop.m_propertyType = ePT_UInt16;
   prop.m_uint16 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateUInt32(csUInt32 entityStateID, const std::string &propertyName, csUInt32 value)
+void csBlueprint::SetEntityStateUInt32(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt32 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_UInt32;
   prop.m_uint32 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateUInt64(csUInt32 entityStateID, const std::string &propertyName, csUInt64 value)
+void csBlueprint::SetEntityStateUInt64(csUInt32 entityStateID, const std::string &propertyName, long idx, csUInt64 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_UInt64;
   prop.m_uint64 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateInt8(csUInt32 entityStateID, const std::string &propertyName, csInt8 value)
+void csBlueprint::SetEntityStateInt8(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt8 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Int8;
   prop.m_int8 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateInt16(csUInt32 entityStateID, const std::string &propertyName, csInt16 value)
+void csBlueprint::SetEntityStateInt16(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt16 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Int16;
   prop.m_int16 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateInt32(csUInt32 entityStateID, const std::string &propertyName, csInt32 value)
+void csBlueprint::SetEntityStateInt32(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt32 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Int32;
   prop.m_int32 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, csInt64 value)
+void csBlueprint::SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt64 value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Int64;
   prop.m_int64 = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, float value)
+void csBlueprint::SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, long idx, float value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Float;
   prop.m_float = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, double value)
+void csBlueprint::SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, long idx, double value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Double;
   prop.m_double = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
-void csBlueprint::SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, const csMatrix4f &value)
+void csBlueprint::SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csMatrix4f &value)
 {
   Property prop;
   prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_Matrix4f;
   prop.m_matrix4f = value;
+  SetEntityStateProperty(entityStateID, prop);
+}
+
+void csBlueprint::SetEntityStateResourceLocator(csUInt32 entityStateID, const std::string &propertyName, long idx, const csResourceLocator &value)
+{
+  Property prop;
+  prop.m_propertyName = propertyName;
+  prop.m_propertyIndex = idx;
+  prop.m_propertyType = ePT_ResourceLocator;
+  prop.m_locator = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 

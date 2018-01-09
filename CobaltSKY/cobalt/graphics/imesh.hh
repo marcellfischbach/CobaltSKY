@@ -3,7 +3,7 @@
 
 #include <cobalt/core/csclass.hh>
 #include <cobalt/graphics/imesh.refl.hh>
-
+#include <vector>
 
 class csBoundingBox;
 enum csRenderPass;
@@ -19,7 +19,7 @@ struct CSE_API iMesh : public CS_SUPER(iObject)
 
   virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo) = 0;
 
-  virtual void Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod = 0) = 0;
+  virtual void Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod = 0) = 0;
 
   virtual csSize GetNumberOfMaterials() const = 0;
 

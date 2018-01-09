@@ -924,7 +924,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   csStaticMeshState *terrainState = new csStaticMeshState();
   terrainState->SetMesh(terrainMesh);
-  terrainState->SetMaterial(groundMaterial);
+  terrainState->SetMaterial(0, groundMaterial);
   terrainState->SetCastShadow(true);
 
   csEntity *terrainEntity = new csEntity();

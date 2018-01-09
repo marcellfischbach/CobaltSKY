@@ -157,6 +157,36 @@ const std::string &csProperty::GetName() const
   return m_name;
 }
 
+void csProperty::SetProperty(const std::string &key, const std::string &value)
+{
+  m_properties[key] = value;
+}
+
+std::set<std::string> csProperty::GetProperties() const
+{
+  std::set<std::string> res;
+  for(auto const &it : m_properties)
+  {
+    res.insert(it.first);
+  }
+  return res;
+}
+
+bool csProperty::HasProperty(const std::string &property) const
+{
+  return m_properties.find(property) != m_properties.end();
+}
+
+std::string csProperty::GetProperty(const std::string &property) const
+{
+  std::map<std::string, std::string>::const_iterator it = m_properties.find(property);
+  if (it != m_properties.end())
+  {
+    return it->first;
+  }
+  return "";
+}
+
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 

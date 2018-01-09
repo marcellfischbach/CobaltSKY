@@ -184,6 +184,11 @@ const std::string Property::GetSetter() const
 }
 
 
+const std::map<std::string, std::string> &Property::GetMeta() const
+{
+  return m_meta;
+}
+
 Function::Function()
   : m_functionName("")
   , m_const (false)

@@ -129,7 +129,7 @@ protected:
 private:
   csID m_id;
 
-  CS_PROPERTY(Name)
+  CS_PROPERTY(name=Name)
   std::string m_name;
 
   csTransformState *m_transform;

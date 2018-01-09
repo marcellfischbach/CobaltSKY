@@ -74,27 +74,51 @@ bool csBulletScene::Initialize(bool softBody)
   return true;
 }
 
-
-void csBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::AddCollider(iPhysicsCollider *collider)
 {
-  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
-  if (btCollider)
+  if (!collider)
   {
-    btCollider->AttachToScene(this);
+    return;
+  }
+
+  switch (collider->GetType())
+  {
+  case ePCT_Static:
+    AddStaticCollider(static_cast<iPhysicsStaticCollider*>(collider));
+    break;
+  case ePCT_Dynamic:
+  case ePCT_Kinematic:
+    AddDynamicCollider(static_cast<iPhysicsDynamicCollider*>(collider));
+    break;
   }
 }
 
-void csBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::RemoveCollider(iPhysicsCollider *collider)
 {
-  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
-  if (btCollider)
+  if (!collider)
   {
-    btCollider->DetachFromScene(this);
+    return;
+  }
+
+  switch (collider->GetType())
+  {
+  case ePCT_Static:
+    RemoveStaticCollider(static_cast<iPhysicsStaticCollider*>(collider));
+    break;
+  case ePCT_Dynamic:
+  case ePCT_Kinematic:
+    RemoveDynamicCollider(static_cast<iPhysicsDynamicCollider*>(collider));
+    break;
   }
 }
+
 
 void csBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
+  if (!staticCollider)
+  {
+    return;
+  }
   csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
@@ -104,6 +128,10 @@ void csBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
 
 void csBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
 {
+  if (!staticCollider)
+  {
+    return;
+  }
   csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
@@ -111,8 +139,39 @@ void csBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
   }
 }
 
+void csBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+{
+  if (!dynamicCollider)
+  {
+    return;
+  }
+  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
+  if (btCollider)
+  {
+    btCollider->AttachToScene(this);
+  }
+}
+
+void csBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+{
+  if (!dynamicCollider)
+  {
+    return;
+  }
+  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
+  if (btCollider)
+  {
+    btCollider->DetachFromScene(this);
+  }
+}
+
+
 void csBulletScene::AddCharacterController(iPhysicsCharacterController *controller)
 {
+  if (!controller)
+  {
+    return;
+  }
   csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {
@@ -123,6 +182,10 @@ void csBulletScene::AddCharacterController(iPhysicsCharacterController *controll
 
 void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *controller)
 {
+  if (!controller)
+  {
+    return;
+  }
   csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {

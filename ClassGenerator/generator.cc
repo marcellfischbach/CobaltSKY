@@ -169,6 +169,10 @@ static std::string CreateProperty(const std::string &className, Class *clazz, Pr
   result += "  " + propClassName + "() \n";
   result += "    : csProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
   result += "  {\n";
+  for (auto it : prop.GetMeta())
+  {
+    result += "    SetProperty (\"" + it.first + "\", \"" + it.second + "\");\n";
+  }
   result += "  }\n";
   result += "  \n";
   result += "  virtual void SetValue(iObject *object, void *data) const\n";
@@ -612,19 +616,6 @@ R *performMyTestPointer()
 
 int test(int argc, char **argv)
 {
-  Test test;
-  printf("Bevoreprint\n");
-  printf("Test: 0x%p\n", &test);
-  printf("Call\n");
-  _performMyTestVoid<Test&>(test);
-  printf("Call-Done\n");
-
-  if (true)
-  {
-    return 0;
-  }
-
-
   if (argc < 4)
   {
     printf("Usage %s --test <headerfile> <outputname>", argv[0]);

@@ -183,7 +183,7 @@ void StaticMeshModelImporterData::GenerateData(const aiScene *scene)
   csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(csResourceLocator("materials/DefaultMaterial.csf"));
   for (unsigned i = 0, in = mesh->GetNumberOfMaterials(); i < in; ++i)
   {
-    state->SetMaterial(material, i);
+    state->SetMaterial(i, material);
   }
 
   m_staticMeshEditorWidget->SetStaticMeshState(state);

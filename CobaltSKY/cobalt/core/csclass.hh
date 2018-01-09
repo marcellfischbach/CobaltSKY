@@ -41,6 +41,8 @@
 #define CS_ADDREF(o) if (o) o->AddRef()
 #define CS_RELEASE(o) if (o) o->Release()
 
+#include <map>
+#include <set>
 #include <string>
 #include <vector>
 #include <cobalt/csexport.hh>
@@ -112,9 +114,15 @@ public:
     return *reinterpret_cast<const T*>(data);
   }
 
+  std::set<std::string> GetProperties () const;
+  bool HasProperty (const std::string &property) const;
+  std::string GetProperty (const std::string &property) const;
+
+
 protected:
   csProperty(const std::string &typeName, const std::string &name);
 
+  void SetProperty (const std::string &key, const std::string &value = "");
   virtual void SetValue(iObject *object, void *data) const = 0;
   virtual const void *GetValue(const iObject *object) const = 0;
 
@@ -122,6 +130,7 @@ protected:
 private:
   std::string m_typeName;
   std::string m_name;
+  std::map<std::string, std::string> m_properties;
 
 };
 

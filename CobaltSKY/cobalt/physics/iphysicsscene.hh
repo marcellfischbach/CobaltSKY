@@ -5,6 +5,7 @@
 #include <cobalt/physics/iphysicsscene.refl.hh>
 
 struct iPhysicsCharacterController;
+struct iPhysicsCollider;
 struct iPhysicsDynamicCollider;
 struct iPhysicsJoint;
 struct iPhysicsStaticCollider;
@@ -16,6 +17,8 @@ struct CSE_API iPhysicsScene : public iObject
 public:
   virtual ~iPhysicsScene () { }
 
+  virtual void AddCollider(iPhysicsCollider *collider) = 0;
+  virtual void RemoveCollider(iPhysicsCollider *collider) = 0;
 
   virtual void AddStaticCollider(iPhysicsStaticCollider *collider) = 0;
   virtual void RemoveStaticCollider(iPhysicsStaticCollider *collider) = 0;

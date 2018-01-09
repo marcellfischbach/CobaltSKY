@@ -45,6 +45,6 @@ void MaterialEditorPreviewSceneView::SetMaterial(csMaterial*material)
   CS_SET(m_material, material);
   if (m_staticMeshState)
   {
-    m_staticMeshState->SetMaterial(material);
+    m_staticMeshState->SetMaterial(0, material);
   }
 }

@@ -498,3 +498,4 @@ enum csParticleRotationMode
   ePRM_Neg,
   ePRM_Both,
 };
+

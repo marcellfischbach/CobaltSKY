@@ -19,13 +19,13 @@ csSkinnedMesh::~csSkinnedMesh()
 
 
 
-void csSkinnedMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numMaterials, csMaterial **material, csUInt8 lod)
+void csSkinnedMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod)
 {
   if (m_boneIdxMapping && m_numberOfIndexMapping > 0)
   {
     renderer->SetSkeletonBoneMapping(m_boneIdxMapping, m_numberOfIndexMapping);
 
-    csMesh::Render(renderer, pass, numMaterials, material, lod);
+    csMesh::Render(renderer, pass, materials, lod);
   }
 }
 

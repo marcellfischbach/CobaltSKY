@@ -21,6 +21,8 @@ public:
 
   bool Initialize(bool softBody);
 
+  virtual void AddCollider(iPhysicsCollider *collider);
+  virtual void RemoveCollider(iPhysicsCollider *collider);
 
   virtual void AddStaticCollider(iPhysicsStaticCollider *collider);
   virtual void RemoveStaticCollider(iPhysicsStaticCollider *collider);

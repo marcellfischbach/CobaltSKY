@@ -8,18 +8,21 @@
 #include <cobalt/graphics/imesh.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/physics/iphysicsscene.hh>
+#include <cobalt/physics/iphysicsdynamiccollider.hh>
+#include <cobalt/physics/iphysicsstaticcollider.hh>
 #include <cobalt/csengine.hh>
 
 csStaticMeshState::csStaticMeshState()
   : csRenderState()
   , m_mesh(0)
-  , m_materials(0)
-  , m_numberOfMaterialSlots(0)
   , m_castShadow(true)
-  , m_staticCollider(0)
-  , m_shapes(0)
+  , m_collider(0)
   , m_friction(0.5)
   , m_restitution(0.5)
+  , m_enableCollision(false)
+  , m_colliderType(ePCT_Static)
+  , m_autoInertia(true)
+  , m_inertia(csVector3f(1.0f, 1.0f, 1.0f))
 {
 
 }
@@ -29,16 +32,17 @@ csStaticMeshState::~csStaticMeshState()
   CS_RELEASE(m_mesh);
   m_mesh = 0;
 
-  for (csUInt32 i = 0; i < m_numberOfMaterialSlots; ++i)
+  for (csMaterial *material : m_materials)
   {
-    CS_RELEASE(m_materials[i]);
-    m_materials[i] = 0;
+    CS_RELEASE(material);
   }
+  m_materials.clear();
 
-  delete[] m_materials;
-  m_materials = 0;
-
-  m_numberOfMaterialSlots = 0;
+  for (iPhysicsShape *shape : m_colliderShapes)
+  {
+    CS_RELEASE(shape);
+  }
+  m_colliderShapes.clear();
 }
 
 
@@ -83,33 +87,30 @@ void csStaticMeshState::AddColliderShape(iPhysicsShape *shape)
 
 void csStaticMeshState::UpdateMaterialSlots()
 {
-  csSize numberOfSlots = m_mesh->GetNumberOfMaterials();
-  if (numberOfSlots == m_numberOfMaterialSlots)
+  csSize numMaterials = m_mesh->GetNumberOfMaterials();
+  if (numMaterials == m_materials.size())
   {
     return;
   }
 
   // create new material slots
-  csMaterial **materials = new csMaterial*[numberOfSlots];
-  memset(materials, 0, sizeof(csMaterial*) * numberOfSlots);
+  csMaterial **materials = new csMaterial*[numMaterials];
+  memset(materials, 0, sizeof(csMaterial*) * numMaterials);
 
-  // copy all slots that remain from the old to the new
-  for (csUInt32 i = 0; i < numberOfSlots && i < m_numberOfMaterialSlots; ++i)
+  for (csUInt32 i= m_materials.size(); i<numMaterials; ++i)
   {
-    CS_SET(materials[i], m_materials[i]);
+    m_materials.push_back(0);
   }
 
-  for (csUInt32 i = 0; i < m_numberOfMaterialSlots; ++i)
+  while (m_materials.size() > numMaterials)
   {
-    CS_RELEASE(m_materials[i]);
-    m_materials[i] = 0;
+    csMaterial *material = m_materials.back();
+    CS_RELEASE(material);
+    m_materials.pop_back();
   }
-
-  delete[] m_materials;
-  m_materials = materials;
-  m_numberOfMaterialSlots = numberOfSlots;
 }
 
+/*
 void csStaticMeshState::SetColliderShape(csPhysicsShapeContainer *shapes)
 {
   if (shapes == m_shapes)
@@ -133,59 +134,88 @@ void csStaticMeshState::SetColliderShape(csPhysicsShapeContainer *shapes)
 
   CS_SET(m_shapes, shapes);
 }
+*/
 
 void csStaticMeshState::SetFriction(float friction)
 {
-  if (!m_staticCollider)
-  {
-    m_staticCollider = csEng->CreateStaticCollider();
-    m_staticCollider->AttachShape(m_shapes);
-    m_staticCollider->SetRestitution(m_restitution);
-  }
-
   m_friction = friction;
-  m_staticCollider->SetFriction(m_friction);
+  if (m_collider)
+  {
+    m_collider->SetFriction(m_friction);
+  }
 }
 
 
 void csStaticMeshState::SetRestitution(float restitution)
 {
-  if (!m_staticCollider)
-  {
-    m_staticCollider = csEng->CreateStaticCollider();
-    m_staticCollider->AttachShape(m_shapes);
-    m_staticCollider->SetFriction(m_friction);
-  }
-
   m_restitution = restitution;
-  m_staticCollider->SetRestitution(m_restitution);
+  if (m_collider)
+  {
+    m_collider->SetRestitution(m_restitution);
+  }
 }
 
 void csStaticMeshState::UpdateTransformation()
 {
   csSpatialState::UpdateTransformation();
 
-  if (m_staticCollider)
+  if (m_collider)
   {
-    m_staticCollider->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
-    m_staticCollider->FinishTransformation();
+    m_collider->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
+    m_collider->FinishTransformation();
+  }
+}
+
+iPhysicsBaseCollider *csStaticMeshState::GetCollider()
+{
+  if (!m_collider)
+  {
+    if (!m_enableCollision)
+    {
+      return 0;
+    }
+    switch (m_colliderType)
+    {
+    case ePCT_Static:
+      {
+        iPhysicsDynamicCollider *dynCol = csEng->CreateDynamicCollider();
+        dynCol->SetAutoInertia(m_autoInertia);
+        dynCol->SetInertia(m_inertia);
+        dynCol->SetMass(m_mass);
+        m_collider = dynCol;
+      }
+      break;
+    case ePCT_Dynamic:
+    case ePCT_Kinematic:
+      m_collider = csEng->CreateDynamicCollider();
+      break;
+    }
+
+
+    for (iPhysicsShape *shape : m_colliderShapes)
+    {
+      m_collider->AttachShape(shape);
+    }
+    m_collider->SetFriction(m_friction);
+    m_collider->SetRestitution(m_restitution);
   }
 
+  return m_collider;
 }
 
 void csStaticMeshState::OnAttachedToScene(csEntityScene *scene)
 {
-  if (m_staticCollider && scene)
+  if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->AddStaticCollider(m_staticCollider);
+    scene->GetPhysicsScene()->AddCollider(m_collider);
   }
 }
 
 void csStaticMeshState::OnDetachedFromScene(csEntityScene *scene)
 {
-  if (m_staticCollider && scene)
+  if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->RemoveStaticCollider(m_staticCollider);
+    scene->GetPhysicsScene()->RemoveCollider(m_collider);
   }
 }
 
@@ -204,7 +234,7 @@ void csStaticMeshState::Render(iGraphics *graphics, csRenderPass pass) const
   {
     csRenderState::Render(graphics, pass);
     graphics->SetModelMatrix(GetGlobalTransformation());
-    m_mesh->Render(graphics, pass, m_numberOfMaterialSlots, m_materials);
+    m_mesh->Render(graphics, pass, m_materials);
   }
 }
 
@@ -229,7 +259,7 @@ unsigned csStaticMeshState::GetNumberOfTotalTrigons() const
 
 void csStaticMeshState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
 {
-  if (m_materials && m_mesh)
+  if (!m_materials.empty() && m_mesh)
   {
     if (m_castShadow && config.ScanShadowCasters || !m_castShadow && config.ScanNonShadowCasters)
     {

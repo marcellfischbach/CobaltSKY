@@ -55,9 +55,9 @@ void csTerrainMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csU
   }
 }
 
-void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, csSize numMaterials, csMaterial **materials, csUInt8 lod)
+void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod)
 {
-  if (numMaterials != 1)
+  if (materials.size() != 1)
   {
     return;
   }

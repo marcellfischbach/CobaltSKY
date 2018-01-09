@@ -32,6 +32,8 @@ public:
   const std::string GetGetter() const;
   const std::string GetSetter() const;
 
+  const std::map<std::string, std::string> &GetMeta () const;
+
 private:
   bool m_const;
   std::string m_typeName;

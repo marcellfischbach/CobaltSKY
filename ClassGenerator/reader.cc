@@ -213,8 +213,13 @@ void ReadPropertyMetaData(SourceFile *sourceFile, size_t lineIdx, std::map<std::
       {
         metaKey = t.GetToken(i - 3);
       }
+      else
+      {
+        metaKey = metaValue;
+        metaValue = "";
+      }
 
-      if (!metaValue.empty() && !metaKey.empty())
+      if (!metaKey.empty())
       {
         data[metaKey] = metaValue;
       }

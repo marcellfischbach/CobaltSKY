@@ -4,13 +4,13 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/entity/csrenderstate.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/physics/iphysicsstaticcollider.hh>
 #include <cobalt/physics/csphysicsshapecontainer.hh>
 #include <cobalt/entity/csstaticmeshstate.refl.hh>
 
 #include <vector>
 
 struct iMesh;
+struct iPhysicsBaseCollider;
 class csMaterial;
 /**
 * \ingroup entity
@@ -36,8 +36,8 @@ public:
   csSize GetNumberOfColliderShapes () const;
   void AddColliderShape(iPhysicsShape *shape);
   void SetColliderShape(csSize idx, iPhysicsShape *shape);
-  iPhysicsShape *GetPhysicsShape (csSize idx = 0);
-  const iPhysicsShape *GetPhysicsShape (csSize idx = 0) const;
+  iPhysicsShape *GetColliderShape (csSize idx = 0);
+  const iPhysicsShape *GetColliderShape (csSize idx = 0) const;
 
   void SetFriction(float friction);
   float GetFriction() const;
@@ -66,6 +66,8 @@ protected:
 
 private:
 
+  iPhysicsBaseCollider *GetCollider();
+
   void UpdateMaterialSlots();
 
   bool m_castShadow;
@@ -75,8 +77,17 @@ private:
   std::vector<csMaterial*> m_materials;
   std::vector<iPhysicsShape*> m_colliderShapes;
 
+  bool m_enableCollision;
+  csPhysicsColliderType m_colliderType;
+  iPhysicsBaseCollider *m_collider;
+
+
   float m_friction;
   float m_restitution;
+
+  bool m_autoInertia;
+  csVector3f m_inertia;
+  float m_mass;
 };
 
 
@@ -92,7 +103,7 @@ CS_FORCEINLINE const iMesh *csStaticMeshState::GetMesh() const
 
 CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfMaterials() const
 {
-  return m_numberOfMaterialSlots;
+  return m_materials.size();
 }
 
 CS_FORCEINLINE csMaterial *csStaticMeshState::GetMaterial(csSize idx)
@@ -116,12 +127,12 @@ CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize idx) cons
 
 CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfColliderShapes() const
 {
-  return m_numberOfMaterialSlots;
+  return m_colliderShapes.size();
 }
 
 CS_FORCEINLINE iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx)
 {
-  if (slot >= m_colliderShapes.size())
+  if (idx >= m_colliderShapes.size())
   {
     return 0;
   }
@@ -130,7 +141,7 @@ CS_FORCEINLINE iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx)
 
 CS_FORCEINLINE const iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx) const
 {
-  if (slot >= m_colliderShapes.size())
+  if (idx >= m_colliderShapes.size())
   {
     return 0;
   }
@@ -147,18 +158,6 @@ CS_FORCEINLINE bool csStaticMeshState::IsCastShadow() const
 {
   return m_castShadow;
 }
-
-
-CS_FORCEINLINE csPhysicsShapeContainer *csStaticMeshState::GetColliderShape()
-{
-  return m_shapes;
-}
-
-CS_FORCEINLINE const csPhysicsShapeContainer *csStaticMeshState::GetColliderShape() const
-{
-  return m_shapes;
-}
-
 
 CS_FORCEINLINE float csStaticMeshState::GetFriction() const
 {

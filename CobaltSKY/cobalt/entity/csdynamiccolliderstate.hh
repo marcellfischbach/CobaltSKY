@@ -51,13 +51,13 @@ protected:
   virtual void OnDetachedFromScene(csEntityScene *scene);
 
 private:
-  CS_PROPERTY(name = Mass)
+  CS_PROPERTY(name=Mass)
     float m_mass;
 
-  CS_PROPERTY(name = Inertia)
+  CS_PROPERTY(name=Inertia)
     csVector3f m_inertia;
 
-  CS_PROPERTY(name = AutoInertia)
+  CS_PROPERTY(name=AutoInertia)
     bool m_autoInertia;
 
 

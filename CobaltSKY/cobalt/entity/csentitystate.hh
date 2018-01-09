@@ -120,7 +120,7 @@ protected:
 private:
   csID m_id;
 
-  CS_PROPERTY(Name)
+  CS_PROPERTY(name=Name)
   std::string m_name;
 
   bool m_created;

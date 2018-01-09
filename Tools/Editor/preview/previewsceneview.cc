@@ -144,7 +144,7 @@ csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
 
   csStaticMeshState *staticMeshState = new csStaticMeshState();
   staticMeshState->SetMesh(mesh);
-  staticMeshState->SetMaterial(materialInstance);
+  staticMeshState->SetMaterial(0, materialInstance);
 
   csEntity *entity = new csEntity();
   entity->AddState(staticMeshState);

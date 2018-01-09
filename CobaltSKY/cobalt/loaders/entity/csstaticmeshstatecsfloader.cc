@@ -85,7 +85,7 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
               slot = meshSlot;
             }
           }
-          staticMeshState->SetMaterial(material, slot);
+          staticMeshState->SetMaterial(slot, material);
         }
       }
     }
@@ -96,7 +96,7 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
       {
         csResourceLoadingMode loadingMode = GetResourceLoadingMode(materialEntry, eRLM_Shared, eRLM_Instance);
         csMaterial *material = csResourceManager::Get()->Aquire<csMaterial>(GetLocator(materialEntry), 0, loadingMode);
-        staticMeshState->SetMaterial(material, 0);
+        staticMeshState->SetMaterial(0, material);
       }
     }
 
@@ -116,7 +116,10 @@ iObject *csStaticMeshStateCSFLoader::Load(const csfEntry *entry, const csResourc
         {
           shapes = csResourceManager::Get()->Load<csPhysicsShapeContainer>(shapesEntry, locator, userData);
         }
-        staticMeshState->SetColliderShape(shapes);
+        for (csSize i=0, in=shapes->GetNumberOfShapes(); i<in; ++i)
+        {
+          staticMeshState->AddColliderShape(shapes->GetShape(i));
+        }
         const csfEntry *frictionEntry = colliderEntry->GetEntry("friction");
         if (frictionEntry)
         {

@@ -144,7 +144,7 @@ void csMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 f
   // no update here
 }
 
-void csMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numberOfMaterials, csMaterial **materials, csUInt8 lodIdx)
+void csMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {
@@ -161,7 +161,7 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, csSize numberOfMater
     {
       
       
-      if (data.m_materialIndex >= numberOfMaterials)
+      if (data.m_materialIndex >= materials.size())
       {
         continue;
       }
