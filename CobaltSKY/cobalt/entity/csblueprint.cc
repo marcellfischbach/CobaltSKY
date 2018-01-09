@@ -176,7 +176,7 @@ void csBlueprint::SetEntityStateResourceLocator(csUInt32 entityStateID, const st
   prop.m_propertyName = propertyName;
   prop.m_propertyIndex = idx;
   prop.m_propertyType = ePT_ResourceLocator;
-  prop.m_locator = value;
+  prop.m_resourceLocator = value;
   SetEntityStateProperty(entityStateID, prop);
 }
 
@@ -310,4 +310,9 @@ bool csBlueprint::SetEntityStatePropertyValue(const csClass *cls, csEntityState 
     break;
   }
   return true;
+}
+
+const csFunction *csBlueprint::FindFunction(const csClass *cls, const std::string &name, const std::string &typeName) const
+{
+  cls->
 }
