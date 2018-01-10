@@ -175,6 +175,23 @@ source_group(
     ${SOURCE_ENTITY}
     )
 
+set(SOURCE_ENTITY_BLUEPRINT
+    entity/blueprint/csblueprint.cc
+    entity/blueprint/csblueprint.hh
+    entity/blueprint/csbpentity.cc
+    entity/blueprint/csbpentity.hh
+    entity/blueprint/csbpentitystate.cc
+    entity/blueprint/csbpentitystate.hh
+    entity/blueprint/csbpproperty.cc
+    entity/blueprint/csbpproperty.hh
+    )
+
+source_group(
+    "cobalt\\entit\\blueprint"
+    FILES
+    ${SOURCE_ENTITY_BLUEPRINT}
+    )
+
 set(SOURCE_GRAPHICS
     graphics/iframeprocessor.hh
     graphics/igraphics.hh
@@ -547,6 +564,7 @@ set(ALL_SOURCES
     ${SOURCE_CORE}
     ${SOURCE_CORE_RESOURCE}
     ${SOURCE_ENTITY}
+    ${SOURCE_ENTITY_BLUEPRINT}
     ${SOURCE_GRAPHICS}
     ${SOURCE_GRAPHICS_DEFERRED}
     ${SOURCE_GRAPHICS_SCENE}
