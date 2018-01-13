@@ -32,6 +32,10 @@
 #include <cobalt/entity/csrenderstate.hh>
 #include <cobalt/entity/csentityscene.hh>
 #include <cobalt/entity/cstransformstate.hh>
+#include <cobalt/entity/blueprint/csblueprint.hh>
+#include <cobalt/entity/blueprint/csbpentity.hh>
+#include <cobalt/entity/blueprint/csbpentitystate.hh>
+#include <cobalt/entity/blueprint/csbppropertystring.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
@@ -256,6 +260,19 @@ int initialize()
   color0->SetSampler(sampler);
 
   scene = create_scene(graphicsGL4);
+
+  csBlueprint *bp = new csBlueprint();
+  
+  csBPEntity *bpEntity = new csBPEntity();
+  bpEntity->SetEntityClass(csEntity::GetStaticClass());
+  bp->SetEntity(bpEntity);
+
+  csBPPropertyString *stringProp = new csBPPropertyString();
+  stringProp->SetName("Name");
+  stringProp->SetString("This is a name");
+  bpEntity->AddProperty(stringProp);
+
+  csEntity *newEntity = bp->CreateEntity();
 
 
   camera = new csCamera();

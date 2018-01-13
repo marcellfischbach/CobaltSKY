@@ -184,10 +184,12 @@ set(SOURCE_ENTITY_BLUEPRINT
     entity/blueprint/csbpentitystate.hh
     entity/blueprint/csbpproperty.cc
     entity/blueprint/csbpproperty.hh
+    entity/blueprint/csbppropertystring.cc
+    entity/blueprint/csbppropertystring.hh
     )
 
 source_group(
-    "cobalt\\entit\\blueprint"
+    "cobalt\\entity\\blueprint"
     FILES
     ${SOURCE_ENTITY_BLUEPRINT}
     )

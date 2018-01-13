@@ -1,4 +1,5 @@
 
+#if 0
 #include <cobalt/entity/csblueprint.hh>
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csentitystate.hh>
@@ -316,3 +317,6 @@ const csFunction *csBlueprint::FindFunction(const csClass *cls, const std::strin
 {
   cls->
 }
+
+
+#endif

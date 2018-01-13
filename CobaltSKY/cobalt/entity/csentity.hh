@@ -38,7 +38,9 @@ public:
   csEntityScene *GetScene();
   const csEntityScene *GetScene() const;
 
+  CS_FUNCTION()
   void SetName(const std::string &name);
+  CS_FUNCTION()
   const std::string &GetName() const;
 
   csEntityState *GetState(csID id);

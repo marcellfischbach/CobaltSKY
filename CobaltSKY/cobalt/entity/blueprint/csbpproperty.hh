@@ -6,12 +6,29 @@
 
 #include <cobalt/entity/blueprint/csbpproperty.refl.hh>
 
-CS_CLASS()
-class CSE_API csBPProperty : public iObject
+class CSE_API csBPProperty 
 {
-  CS_CLASS_GEN;
 public:
-  csBPProperty();
-};
+  void SetName(const std::string &name);
+  const std::string &GetName() const;
 
-#endif // CSBPPROPERTY_HH
+  virtual void SetValue(iObject *obj) = 0;
+
+protected:
+  csBPProperty();
+
+  const csProperty *GetProperty(const csClass *ownerClass);
+  const csFunction *GetSetter(const csClass *ownerClass);
+
+
+
+private:
+  const csFunction *GetSetter(const csClass *ownerClass, const std::string &setterName);
+
+  std::string m_name;
+
+  const csProperty *m_property;
+
+  const csFunction *m_setter;
+
+};
