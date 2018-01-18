@@ -35,7 +35,7 @@
 #include <cobalt/entity/blueprint/csblueprint.hh>
 #include <cobalt/entity/blueprint/csbpentity.hh>
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
-#include <cobalt/entity/blueprint/csbppropertystring.hh>
+#include <cobalt/entity/blueprint/csbpproperty.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
@@ -267,10 +267,17 @@ int initialize()
   bpEntity->SetEntityClass(csEntity::GetStaticClass());
   bp->SetEntity(bpEntity);
 
-  csBPPropertyString *stringProp = new csBPPropertyString();
-  stringProp->SetName("Name");
-  stringProp->SetString("This is a name");
-  bpEntity->AddProperty(stringProp);
+  csBPEntityState *spatialState01 = new csBPEntityState();
+  spatialState01->SetEntityStateClass(csSpatialState::GetStaticClass());
+  spatialState01->SetRoot(true);
+  spatialState01->SetId(1);
+  bpEntity->AddEntityState(spatialState01);
+
+  csBPEntityState *spatialState02 = new csBPEntityState();
+  spatialState02->SetEntityStateClass(csStaticMeshState::GetStaticClass());
+  spatialState02->SetId(2);
+  spatialState02->SetParentId(1);
+  bpEntity->AddEntityState(spatialState02);
 
   csEntity *newEntity = bp->CreateEntity();
 

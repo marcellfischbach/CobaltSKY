@@ -182,7 +182,7 @@ std::string csProperty::GetProperty(const std::string &property) const
   std::map<std::string, std::string>::const_iterator it = m_properties.find(property);
   if (it != m_properties.end())
   {
-    return it->first;
+    return it->second;
   }
   return "";
 }

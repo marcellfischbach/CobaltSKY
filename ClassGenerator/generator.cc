@@ -177,6 +177,7 @@ static std::string CreateProperty(const std::string &className, Class *clazz, Pr
   result += "  \n";
   result += "  virtual void SetValue(iObject *object, void *data) const\n";
   result += "  {\n";
+  /*
   if (!propSetter.empty())
   {
     result += "    " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
@@ -186,10 +187,12 @@ static std::string CreateProperty(const std::string &className, Class *clazz, Pr
     result += "      d->Set" + prop.GetPropertyName() + "(v);\n";
     result += "    }\n";
   }
+  */
   result += "  }\n";
   result += "  \n";
   result += "  virtual const void *GetValue(const iObject *object) const\n";
   result += "  {\n";
+  /*
   if (!propGetter.empty())
   {
     result += "    const " + clazz->GetName() + " *d = csQueryClass<" + clazz->GetName() + ">(object);\n";
@@ -198,6 +201,7 @@ static std::string CreateProperty(const std::string &className, Class *clazz, Pr
     result += "    return reinterpret_cast<const void*>(&v);\n";
   }
   else
+  */
   {
     result += "    return 0;\n";
   }

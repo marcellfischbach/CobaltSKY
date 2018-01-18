@@ -19,7 +19,6 @@ csID csEntity::GetNextID()
 csEntity::csEntity()
   : csObject ()
   , m_rootState(0)
-  , m_transform(0)
   , m_created(false)
   , m_assemabled(false)
   , m_scene(0)
@@ -217,12 +216,6 @@ void csEntity::AddState(csEntityState *state)
   state->AttachToEntity(this);
   state->AttachToScene(m_scene);
   m_assemabled = false;
-
-  csTransformState *transformState = csQueryClass<csTransformState>(state);
-  if (transformState)
-  {
-    CS_SET(m_transform, transformState);
-  }
 }
 
 void csEntity::AddState(csSpatialState *state, csSpatialState *parentState)

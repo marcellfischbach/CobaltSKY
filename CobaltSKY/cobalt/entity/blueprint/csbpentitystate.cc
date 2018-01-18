@@ -1,17 +1,70 @@
 
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
+#include <cobalt/entity/blueprint/csbpproperty.hh>
 #include <cobalt/entity/csentitystate.hh>
 
 
 csBPEntityState::csBPEntityState()
   : m_entityStateClass(0)
+  , m_id(0)
+  , m_parentId(0)
+  , m_root(false)
 {
 }
 
+csBPEntityState::~csBPEntityState()
+{
+  for (auto prop : m_properties)
+  {
+    delete prop;
+  }
+  m_properties.clear();
 
+}
+
+
+void csBPEntityState::SetId(unsigned id)
+{
+  m_id = id;
+}
+
+unsigned csBPEntityState::GetId() const
+{
+  return m_id;
+}
+
+void csBPEntityState::SetParentId(unsigned parentId)
+{
+  m_parentId = parentId;
+}
+
+unsigned csBPEntityState::GetParentId() const
+{
+  return m_parentId;
+}
+
+void csBPEntityState::SetRoot(bool root)
+{
+  m_root = root;
+}
+
+bool csBPEntityState::IsRoot() const
+{
+  return m_root;
+}
 void csBPEntityState::SetEntityStateClass(const csClass *entityStateClass)
 {
   m_entityStateClass = entityStateClass;
+}
+
+const csClass *csBPEntityState::GetEntityStateClass() const
+{
+  return m_entityStateClass;
+}
+
+void csBPEntityState::AddProperty(csBPBaseProperty *property)
+{
+  m_properties.push_back(property);
 }
 
 csEntityState *csBPEntityState::CreateEntityState() const
@@ -21,6 +74,17 @@ csEntityState *csBPEntityState::CreateEntityState() const
     return 0;
   }
 
-  return m_entityStateClass->CreateInstance<csEntityState>();
+  csEntityState *state =  m_entityStateClass->CreateInstance<csEntityState>();
+  if (!state)
+  {
+    return 0;
+  }
+
+  for (csBPBaseProperty *prop : m_properties)
+  {
+    prop->Apply(state);
+  }
+
+  return state;
 }
 

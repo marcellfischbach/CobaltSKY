@@ -2,18 +2,27 @@ asset () {
 	data () {
 		blueprint {
 			entity (class: csEntity) {
-				state (class: csStaticMeshState id:123) {
-					mesh (locator: path_to_mesh.csf)
-					materials () {
-						item(locator: path_to_material_0.csf)
-						item(locator: path_to_material_1.csf)
-					}
-					colliderShapes() {
-						item(locator: path_to_collider_0.csf)
-						item(locator: path_to_collider_1.csf)
-					}
+				
+				entityState(class:csSpatialState id:1) {
+				}
+				
+				entityState (class:csStaticMeshState id:2 parentId:1) {
+				  resource(name:Mesh locator:path_to_mesh.csf)
+					
+					resource(name:Materials collection:true idx:0 locator:path_to_material_0.csf)
+					resource(name:Materials collection:true idx:1 locator:path_to_material_0.csf)
+
+					resource(name:ColliderShapes collection:true idx:0 locator:path_to_collider_0.csf)
+					resource(name:ColliderShapes collection:true idx:1 locator:path_to_collider_1.csf)
+					
+					bool(name:AutoInertia value:false)
+					vector3f(name:Inertia x:1 y:1 z:1)
+					float(name:Restitution value:1)
+					float(name:Friction value:0.25)
 				}
 			}
 		}
 	}
 }
+
+

@@ -14,7 +14,6 @@ class csEntityScene;
 class csEntityState;
 class csSpatialState;
 class csTransformation;
-class csTransformState;
 
 struct csScanConfig;
 struct iEntityScan;
@@ -42,6 +41,7 @@ public:
   void SetName(const std::string &name);
   CS_FUNCTION()
   const std::string &GetName() const;
+
 
   csEntityState *GetState(csID id);
   const csEntityState *GetState(csID id) const;
@@ -134,7 +134,6 @@ private:
   CS_PROPERTY(name=Name)
   std::string m_name;
 
-  csTransformState *m_transform;
   csSpatialState *m_rootState;
   std::vector<csEntityState*> m_states;
 
