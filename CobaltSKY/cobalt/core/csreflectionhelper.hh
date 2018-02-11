@@ -16,10 +16,12 @@ public:
 
 private:
   std::string GetMethodName(const std::string &prefix) const;
+  const csProperty *GetProperty(const csClass *cls) const;
 
   const csFunction *GetSetter(const csClass *cls, const std::string &name, const csValueDeclaration &decl) const;
-  const csFunction *GetGetter(const csClass *cls, const std::string &name, bool isConst = false) const;
+  const csFunction *GetGetter(const csClass *cls, const std::string &name, bool isConst) const;
 
   const csClass *m_cls;
+  const csProperty *m_property;
   std::string m_propertyName;
 };

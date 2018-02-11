@@ -6,8 +6,9 @@
 csReflectionPropertyHelper::csReflectionPropertyHelper(const csClass *cls, const std::string &propertyName)
   : m_cls(cls)
   , m_propertyName(propertyName)
+  , m_property(0)
 {
-
+  m_property = GetProperty(cls);
 }
 
 
@@ -20,6 +21,8 @@ std::string csReflectionPropertyHelper::GetMethodName(const std::string &prefix)
   }
   return prefix + propName;
 }
+
+
 const csFunction *csReflectionPropertyHelper::GetGetter(bool isConst) const
 {
   const csFunction *function = GetGetter(m_cls, GetMethodName("Get"), isConst);
@@ -44,6 +47,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(bool isConst) const
 
 const csFunction *csReflectionPropertyHelper::GetSetter(const csValueDeclaration &decl) const
 {
+
   const csFunction *function = GetSetter(m_cls, GetMethodName("Set"), decl);
   if (function)
   {
@@ -53,6 +57,24 @@ const csFunction *csReflectionPropertyHelper::GetSetter(const csValueDeclaration
   return function = GetSetter(m_cls, GetMethodName("set"), decl);
 }
 
+const csProperty *csReflectionPropertyHelper::GetProperty(const csClass *cls) const
+{
+  const csProperty *property = cls->GetProperty(m_propertyName);
+  if (property)
+  {
+    return property;
+  }
+
+  for (size_t i=0, in=cls->GetNumberOfSuperClasses(); i<in; ++i)
+  {
+    property = GetProperty(cls->GetSuperClass(i));
+    if (property)
+    {
+      return property;
+    }
+  }
+  return 0;
+}
 
 const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, const std::string &name, bool isConst) const
 {
@@ -60,6 +82,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
   {
     return 0;
   }
+
   std::vector<const csFunction*> functions = cls->GetFunction(name);
   for (const csFunction* fnc : functions)
   {
@@ -68,6 +91,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
       return fnc;
     }
   }
+
   for (size_t i = 0, in = cls->GetNumberOfSuperClasses(); i<in; ++i)
   {
     const csFunction *func = GetGetter(cls->GetSuperClass(i), name, isConst);

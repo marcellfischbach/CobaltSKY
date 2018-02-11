@@ -31,4 +31,10 @@ add_library(CobaltSKY-File SHARED
     )
 
 
+install(TARGETS CobaltSKY-File 
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib
+		PUBLIC_HEADER DESTINATION include/cobaltsky/csfile
+		)
 
+install(DIRECTORY . DESTINATION include/cobaltsky/csfile FILES_MATCHING PATTERN "*.hh")

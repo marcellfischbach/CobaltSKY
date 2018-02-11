@@ -30,6 +30,15 @@ add_library(CobaltSKY-WindowSDL SHARED
 	${ALL_SOURCES}
 	)
 
+
+install(TARGETS CobaltSKY-WindowSDL
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib
+		)
+
+install(DIRECTORY . DESTINATION include/cobaltsky/windowsdl FILES_MATCHING PATTERN "*.hh")
+
+
 target_link_libraries(CobaltSKY-WindowSDL
   CobaltSKY
 	${SDL_LIBRARY}

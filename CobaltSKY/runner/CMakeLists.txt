@@ -22,6 +22,11 @@ add_executable(CobaltSKY-Runner
 	${ALL_SOURCES}
 	)
 
+
+install(TARGETS CobaltSKY-Runner
+		RUNTIME DESTINATION bin
+		)
+
 target_link_libraries(CobaltSKY-Runner
   CobaltSKY
   CobaltSKY-WindowSDL

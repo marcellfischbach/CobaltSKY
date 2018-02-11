@@ -48,6 +48,14 @@ add_library(CobaltSKY-PhysicsBullet SHARED
 	${ALL_SOURCES}
 	)
 
+
+install(TARGETS CobaltSKY-PhysicsBullet 
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib
+		)
+
+install(DIRECTORY . DESTINATION include/cobaltsky/physicsbullet FILES_MATCHING PATTERN "*.hh")
+
 target_link_libraries(CobaltSKY-PhysicsBullet
 	CobaltSKY
 	${BULLET_LIBRARIES}

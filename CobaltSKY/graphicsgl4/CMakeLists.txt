@@ -129,6 +129,14 @@ add_library(CobaltSKY-GraphicsGL4 SHARED
 	${ALL_SOURCES}
 	)
 
+
+install(TARGETS CobaltSKY-GraphicsGL4 
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib
+		)
+
+install(DIRECTORY . DESTINATION include/cobaltsky/graphicsgl4 FILES_MATCHING PATTERN "*.hh")
+
 target_link_libraries(CobaltSKY-GraphicsGL4
   CobaltSKY
 	${OPENGL_LIBRARIES}

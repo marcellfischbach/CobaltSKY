@@ -63,6 +63,8 @@ set(SOURCE_CORE
     core/cslibrary.hh
     core/cslogger.cc
     core/cslogger.hh
+	core/csreflectionhelper.cc
+	core/csreflectionhelper.hh
     core/csresourcelocator.cc
     core/csresourcelocator.hh
     core/csresourcemanager.cc
@@ -581,6 +583,13 @@ add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
 
+
+install(TARGETS CobaltSKY 
+		RUNTIME DESTINATION bin
+		ARCHIVE DESTINATION lib
+		)
+
+install(DIRECTORY . DESTINATION include/cobaltsky/cobalt FILES_MATCHING PATTERN "*.hh")
 
 target_link_libraries(CobaltSKY
     TiXml
