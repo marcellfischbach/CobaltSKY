@@ -190,17 +190,17 @@ std::string csProperty::GetProperty(const std::string &property) const
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 
-csValueDeclaration::csValueDeclaration(bool isConst, const std::string &type, csValueMemoryMode mode)
-  : m_const(isConst)
+csValueDeclaration::csValueDeclaration(csConstness constness, const std::string &type, csValueMemoryMode mode)
+  : m_constness(constness)
   , m_type(type)
   , m_mode(mode)
 {
 
 }
 
-bool csValueDeclaration::IsConst() const
+csConstness  csValueDeclaration::GetConstness() const
 {
-  return m_const;
+  return m_constness;
 }
 
 const std::string &csValueDeclaration::GetType() const
@@ -215,7 +215,7 @@ csValueMemoryMode csValueDeclaration::GetMode() const
 
 bool csValueDeclaration::operator==(const csValueDeclaration &other) const
 {
-  return m_const == other.m_const &&
+  return m_constness == other.m_constness &&
     m_type == other.m_type &&
     m_mode == other.m_mode;
 
@@ -242,11 +242,11 @@ const std::string &csFunctionAttribute::GetName() const
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 
-csFunction::csFunction(bool isVirtual, const csValueDeclaration &returnType, const std::string &name, bool isConst)
-  : m_virtual(isVirtual)
+csFunction::csFunction(csFunctionVirtuality virtuality, const csValueDeclaration &returnType, const std::string &name, csConstness constness)
+  : m_virtuality(virtuality)
   , m_returnType(returnType)
   , m_name(name)
-  , m_const(isConst)
+  , m_constness(constness)
 {
 
 }
@@ -281,13 +281,13 @@ const csValueDeclaration &csFunction::GetReturnType() const
   return m_returnType;
 }
 
-const bool csFunction::IsVirtual() const
+const csFunctionVirtuality csFunction::GetVirtuality() const
 {
-  return m_virtual;
+  return m_virtuality;
 }
 
-const bool csFunction::IsConst() const
+const csConstness csFunction::GetConstness() const
 {
-  return m_const;
+  return m_constness;
 }
 

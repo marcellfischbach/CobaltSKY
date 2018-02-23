@@ -341,6 +341,7 @@ int main_loop()
       csUInt16 idx = material->GetIndex("Roughness");
       float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->GetDefaultFloat(idx) : material->GetFloat(idx);
       printf("FPS: %d Roughness: %f\n", fps, currentRoughness);
+      fflush(stdout);
       fps = 0;
       nextFPS += 1000;
     }
@@ -917,6 +918,8 @@ csEntityScene *create_scene(iGraphics *graphics)
   csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
   csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/Solid.csf");
   printf("GroundMaterial: %p\n", groundMaterial);
+
+  csBlueprint *blueprint = csEng->Get<csBlueprint>("models/entity_bp.csf");
   if (groundMaterial)
   {
     //groundMaterial->SetFillMode(eFM_Wireframe);

@@ -205,11 +205,13 @@ const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResou
 
 iObject *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData)
 {
-  return Load(blob->GetType(), csAssetInputStream(static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize()), locator, userData);
+  csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
+  return Load(blob->GetType(), stream, locator, userData);
 }
 const csClass *csResourceManager::EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData) const
 {
-  return EvalClass(blob->GetType(), csAssetInputStream(static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize()), locator, userData);
+  csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
+  return EvalClass(blob->GetType(), stream, locator, userData);
 }
 
 

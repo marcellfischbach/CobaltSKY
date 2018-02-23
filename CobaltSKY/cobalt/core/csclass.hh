@@ -84,6 +84,11 @@ const T* csQueryClass(const iObject *object)
   return reinterpret_cast<const T*>(object->QueryClass(T::GetStaticClass()));
 }
 
+enum csConstness
+{
+  eC_NonConst,
+  eC_Const,
+};
 
 enum csValueMemoryMode
 {
@@ -91,6 +96,12 @@ enum csValueMemoryMode
   eVMM_Reference,
   eVMM_Pointer,
   eVMM_PointerToPointer,
+};
+
+enum csFunctionVirtuality
+{
+  eFV_NonVirtual,
+  eFV_Virtual,
 };
 
 class CSE_API csProperty
@@ -137,15 +148,15 @@ private:
 class csValueDeclaration
 {
 public:
-  csValueDeclaration(bool isConst = false, const std::string &type = "void", csValueMemoryMode mode = eVMM_Value);
+  csValueDeclaration(csConstness constness = eC_NonConst, const std::string &type = "void", csValueMemoryMode mode = eVMM_Value);
 
-  bool IsConst() const;
+  csConstness GetConstness() const;
   const std::string &GetType() const;
   csValueMemoryMode GetMode() const;
 
   bool operator==(const csValueDeclaration &other) const;
 private:
-  bool m_const;
+  csConstness m_constness;
   std::string m_type;
   csValueMemoryMode m_mode;
 };
@@ -168,8 +179,8 @@ class CSE_API csFunction
 public:
   const std::string &GetName() const;
   const csValueDeclaration &GetReturnType() const;
-  const bool IsVirtual() const;
-  const bool IsConst() const;
+  const csFunctionVirtuality GetVirtuality() const;
+  const csConstness GetConstness() const;
 
   size_t GetNumberOfAttributes() const;
   const csFunctionAttribute &GetAttribute(size_t idx) const;
@@ -305,13 +316,13 @@ public:
   R *InvokePointer(const iObject *obj, A0 a0, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5) const { R *r;  Invoke(obj, &a0, &a1, &a2, &a3, &a4, &a5, &r); return r; }
 
 protected:
-  csFunction(bool isVirtual, const csValueDeclaration &returnType, const std::string &name, bool isConst);
+  csFunction(csFunctionVirtuality virtuality, const csValueDeclaration &returnType, const std::string &name, csConstness constness);
 
   void AddAttribute(const csFunctionAttribute &attribute);
 
 private:
-  bool m_virtual;
-  bool m_const;
+  csFunctionVirtuality m_virtuality;
+  csConstness m_constness;
   std::string m_name;
   csValueDeclaration m_returnType;
 

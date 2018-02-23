@@ -11,7 +11,7 @@
         </subMeshes>
       </mesh>
       <materials>
-        <material slot="0">materials/GroundFieldstone.xasset</material>
+        <material slot="0">materials/GroundFieldstone.csf</material>
       </materials>
       <collider>
         <shapes>

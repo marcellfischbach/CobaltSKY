@@ -3,6 +3,7 @@
 
 #include <cobalt/core/csclass.hh>
 #include <cobalt/graphics/imesh.refl.hh>
+#include <cobalt/csenums.hh>
 #include <vector>
 
 class csBoundingBox;

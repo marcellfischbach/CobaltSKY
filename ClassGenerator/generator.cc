@@ -151,10 +151,22 @@ std::string GetCodeForAttrResult(TypeSpecifiction ts)
   return res;
 }
 
+std::string ConvertVirtual(bool v)
+{
+  return v ? std::string("eFV_Virtual") : std::string("eFV_NonVirtual");
+}
+
+std::string ConvertConstness(bool v)
+{
+  return v ? std::string("eC_Const") : std::string("eC_NonConst");
+}
+
+/*
 std::string Convert(bool v)
 {
   return v ? std::string("true") : std::string("false");
 }
+*/
 
 static std::string CreateProperty(const std::string &className, Class *clazz, Property &prop, const std::string &api, std::vector<std::string> &propertyClasses)
 {
@@ -226,17 +238,17 @@ static std::string CreateFunction(const std::string &className, Class *clazz, Fu
   result += "{\n";
   result += "public:\n";
   result += "  " + funcClassName + "() \n";
-  result += "    : csFunction (" + Convert(func.IsVirtual()) + std::string(", ");
-  result += /*                  */ std::string("csValueDeclaration(") + Convert(func.IsReturnConst()) + std::string(", ");
+  result += "    : csFunction (" + ConvertVirtual(func.IsVirtual()) + std::string(", ");
+  result += /*                  */ std::string("csValueDeclaration(") + ConvertConstness(func.IsReturnConst()) + std::string(", ");
   result += /*                                                       */ std::string("\"") + func.GetReturnType() + std::string("\", ");
   result += /*                                                       */ Convert(func.GetReturnTypeSpecification()) + std::string("), ");
   result += /*                  */ std::string("\"") + func.GetName() + std::string("\", ");
-  result += /*                  */ Convert(func.IsConst()) + ")\n";
+  result += /*                  */ ConvertConstness(func.IsConst()) + ")\n";
   result += "  {\n";
   for (size_t i = 0, in = func.GetNumberOfParameters(); i < in; ++i)
   {
     Function::Parameter param = func.GetParameter(i);
-    result += "    AddAttribute(csFunctionAttribute(csValueDeclaration(" + Convert(param.isConst) + std::string(", ");
+    result += "    AddAttribute(csFunctionAttribute(csValueDeclaration(" + ConvertConstness(param.isConst) + std::string(", ");
     result += /*                                                        */ std::string("\"") + param.type + std::string("\", ");
     result += /*                                                        */ Convert(param.typeSpecifiction) + std::string("), ");
     result += /*                                 */ "\"" + param.name + "\"));\n";

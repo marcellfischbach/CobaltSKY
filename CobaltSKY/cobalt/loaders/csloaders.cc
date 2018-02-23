@@ -53,6 +53,8 @@
 #include <cobalt/loaders/entity/csstaticcolliderstatecsfloader.hh>
 #include <cobalt/loaders/entity/csstaticmeshstatecsfloader.hh>
 
+#include <cobalt/loaders/entity/blueprint/csblueprintcsfloader.hh>
+
 csLoaders::csLoaders()
 {
 
@@ -69,6 +71,7 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csEntityStateMasterXMLLoader());
   mgr->RegisterLoader(new csEntityMasterCSFLoader());
   mgr->RegisterLoader(new csEntityStateMasterCSFLoader());
+  mgr->RegisterLoader(new csBlueprintCSFLoader());
 
   mgr->RegisterLoader(new csCollisionAssetCSFLoader());
   mgr->RegisterLoader(new csCollisionAssetXMLLoader());

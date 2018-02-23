@@ -6,6 +6,7 @@
 #include <vector>
 
 
+class csfFile;
 
 class CSF_API csfEntry
 {

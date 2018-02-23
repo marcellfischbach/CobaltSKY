@@ -19,7 +19,6 @@ config{
 	vfs{
 		rootPaths {
 			root(name:ValkyrieDemo prio:10 path:".")
-			root(name:Debug prio:100 path:"debug")
 		}
 		
 		resolutions{

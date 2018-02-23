@@ -497,6 +497,19 @@ source_group(
     ${SOURCE_LOADERS_ENTITY}
     )
 
+set(SOURCE_LOADERS_ENTITY_BLUEPRINT
+	loaders/entity/blueprint/csblueprintcsfloader.cc
+	loaders/entity/blueprint/csblueprintcsfloader.hh
+	)
+
+
+source_group(
+    "cobalt\\loaders\\entity\\blueprint"
+    FILES
+    ${SOURCE_LOADERS_ENTITY_BLUEPRINT}
+    )
+
+
 set(SOURCE_MATH
     math/csboundingbox.cc
     math/csboundingbox.hh
@@ -573,6 +586,7 @@ set(ALL_SOURCES
     ${SOURCE_GRAPHICS_SHADERGRAPH}
     ${SOURCE_LOADERS}
     ${SOURCE_LOADERS_ENTITY}
+    ${SOURCE_LOADERS_ENTITY_BLUEPRINT}
     ${SOURCE_MATH}
     ${SOURCE_PHYSICS}
     ${SOURCE_WINDOW}

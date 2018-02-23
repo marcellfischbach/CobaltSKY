@@ -42,6 +42,7 @@ bool SDLWindow::InitializeOpenGL(
 
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
   SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   /*
   SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 16);
   SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 16);
@@ -102,7 +103,7 @@ void SDLWindow::SetIcon(const csImage *image)
                                                       0x0000ff00, 
                                                       0x00ff0000,
                                                       0xff000000);
-  SDL_SetWindowIcon(m_window, iconSurface);
+  //SDL_SetWindowIcon(m_window, iconSurface);
   SDL_FreeSurface(iconSurface);
   delete[] buffer;
 

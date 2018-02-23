@@ -23,26 +23,26 @@ std::string csReflectionPropertyHelper::GetMethodName(const std::string &prefix)
 }
 
 
-const csFunction *csReflectionPropertyHelper::GetGetter(bool isConst) const
+const csFunction *csReflectionPropertyHelper::GetGetter(csConstness constness) const
 {
-  const csFunction *function = GetGetter(m_cls, GetMethodName("Get"), isConst);
+  const csFunction *function = GetGetter(m_cls, GetMethodName("Get"), constness);
   if (function)
   {
     return function;
   }
 
-  function = GetGetter(m_cls, GetMethodName("get"), isConst);
+  function = GetGetter(m_cls, GetMethodName("get"), constness);
   if (function)
   {
     return function;
   }
-  function = GetGetter(m_cls, GetMethodName("Is"), isConst);
+  function = GetGetter(m_cls, GetMethodName("Is"), constness);
   if (function)
   {
     return function;
   }
 
-  return GetGetter(m_cls, GetMethodName("is"), isConst);
+  return GetGetter(m_cls, GetMethodName("is"), constness);
 }
 
 const csFunction *csReflectionPropertyHelper::GetSetter(const csValueDeclaration &decl) const
@@ -76,7 +76,7 @@ const csProperty *csReflectionPropertyHelper::GetProperty(const csClass *cls) co
   return 0;
 }
 
-const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, const std::string &name, bool isConst) const
+const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, const std::string &name, csConstness constness) const
 {
   if (!cls)
   {
@@ -86,7 +86,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
   std::vector<const csFunction*> functions = cls->GetFunction(name);
   for (const csFunction* fnc : functions)
   {
-    if (fnc->IsConst() == isConst && fnc->GetNumberOfAttributes() == 0)
+    if (fnc->GetConstness() == constness && fnc->GetNumberOfAttributes() == 0)
     {
       return fnc;
     }
@@ -94,7 +94,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
 
   for (size_t i = 0, in = cls->GetNumberOfSuperClasses(); i<in; ++i)
   {
-    const csFunction *func = GetGetter(cls->GetSuperClass(i), name, isConst);
+    const csFunction *func = GetGetter(cls->GetSuperClass(i), name, constness);
     if (func)
     {
       return func;

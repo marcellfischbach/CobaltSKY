@@ -65,6 +65,7 @@ private:
   csDynamicColliderStateTransformationCallback *m_callback;
 };
 
+
 CS_FORCEINLINE iPhysicsDynamicCollider *csDynamicColliderState::GetDynamicCollider()
 {
   return m_dynamicCollider;

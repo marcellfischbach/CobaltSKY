@@ -13,8 +13,8 @@
         </subMeshes>
       </mesh>
       <materials>
-        <material slot="0">materials/DefaultMaterial.xasset</material>
-        <material slot="1">materials/DefaultMaterial.xasset</material>
+        <material slot="0">materials/DefaultMaterial.csf</material>
+        <material slot="1">materials/DefaultMaterial.csf</material>
       </materials>
     </entityState>
   </data>

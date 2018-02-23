@@ -4,6 +4,8 @@
 #include <cobalt/cstypes.hh>
 #include <string>
 
+class csfFile;
+
 class CSF_API csfBlob
 {
   friend class csfFile;
