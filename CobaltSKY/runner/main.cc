@@ -920,6 +920,10 @@ csEntityScene *create_scene(iGraphics *graphics)
   printf("GroundMaterial: %p\n", groundMaterial);
 
   csBlueprint *blueprint = csEng->Get<csBlueprint>("models/entity_bp.csf");
+  if (blueprint)
+  {
+    blueprint->CreateEntity();
+  }
   if (groundMaterial)
   {
     //groundMaterial->SetFillMode(eFM_Wireframe);

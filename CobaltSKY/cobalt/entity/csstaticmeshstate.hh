@@ -24,28 +24,46 @@ public:
   csStaticMeshState();
   virtual ~csStaticMeshState();
 
+  CS_FUNCTION()
   void SetMesh(iMesh *mesh);
+  CS_FUNCTION()
   iMesh *GetMesh();
+  CS_FUNCTION()
   const iMesh *GetMesh() const;
 
+  CS_FUNCTION()
   csSize GetNumberOfMaterials() const;
+  CS_FUNCTION()
   void SetMaterial(csSize idx, csMaterial *material);
+  CS_FUNCTION()
   csMaterial *GetMaterial(csSize idx = 0);
+  CS_FUNCTION()
   const csMaterial *GetMaterial(csSize idx = 0) const;
 
+  CS_FUNCTION()
   csSize GetNumberOfColliderShapes () const;
+  CS_FUNCTION()
   void AddColliderShape(iPhysicsShape *shape);
+  CS_FUNCTION()
   void SetColliderShape(csSize idx, iPhysicsShape *shape);
+  CS_FUNCTION()
   iPhysicsShape *GetColliderShape (csSize idx = 0);
+  CS_FUNCTION()
   const iPhysicsShape *GetColliderShape (csSize idx = 0) const;
 
+  CS_FUNCTION()
   void SetFriction(float friction);
+  CS_FUNCTION()
   float GetFriction() const;
+  CS_FUNCTION()
   void SetRestitution(float restitution);
+  CS_FUNCTION()
   float GetRestitution() const;
 
 
+  CS_FUNCTION()
   void SetCastShadow(bool castShadow);
+  CS_FUNCTION()
   bool IsCastShadow() const;
 
   virtual void UpdateTransformation();
@@ -72,9 +90,12 @@ private:
 
   bool m_castShadow;
 
+  CS_PROPERTY(name = Mesh)
   iMesh* m_mesh;
 
+  CS_PROPERTY(name = Materials, type= csMaterial)
   std::vector<csMaterial*> m_materials;
+  CS_PROPERTY(name = ColliderShapes, type= iPhysicsShape)
   std::vector<iPhysicsShape*> m_colliderShapes;
 
   bool m_enableCollision;
@@ -82,11 +103,16 @@ private:
   iPhysicsBaseCollider *m_collider;
 
 
+  CS_PROPERTY(name=Friction)
   float m_friction;
+  CS_PROPERTY(name=Restitution)
   float m_restitution;
 
+  CS_PROPERTY(name=AutoInertia)
   bool m_autoInertia;
+  CS_PROPERTY(name=Inertia)
   csVector3f m_inertia;
+  CS_PROPERTY(name=Mass)
   float m_mass;
 };
 

@@ -232,9 +232,18 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
     switch (state)
     {
     case eS_ExpectEntry:
-      if (token.type != eTT_String)
+      if (token.type == eTT_CurlyBraceClose)
       {
-        return MapError("eS_ExpectEntry: Expected Token: " + tokenMap[eTT_String] +  ", " + tokenMap[eTT_Hash] + " but got token: " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
+        currentEntry = parent;
+        if (!currentEntry)
+        {
+          return MapError("eS_ExpectAttribsOrChildrenOrClose: Invalid stack depth @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
+        }
+        parent = currentEntry->GetParent();
+      }
+      else if (token.type != eTT_String)
+      {
+        return MapError("eS_ExpectEntry: Expected Token: " + tokenMap[eTT_String] +  " but got token: " + tokenMap[token.type] + " @ " + std::to_string(token.row) + ":" + std::to_string(token.column));
       }
       else 
       {

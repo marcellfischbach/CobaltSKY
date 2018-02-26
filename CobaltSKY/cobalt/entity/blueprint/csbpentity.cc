@@ -44,6 +44,18 @@ void csBPEntity::AddEntityState(csBPEntityState *entityState)
   m_entityStates.push_back(entityState);
 }
 
+csBPEntityState* csBPEntity::GetEntityStateByID(unsigned id) const
+{
+  for (auto state : m_entityStates)
+  {
+    if (state->GetId() == id)
+    {
+      return state;
+    }
+  }
+  return 0;
+}
+
 csEntity *csBPEntity::CreateEntity() const
 {
   if (!m_entityClass)

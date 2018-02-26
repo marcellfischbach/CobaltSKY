@@ -28,6 +28,8 @@ public:
 
   csEntity *CreateEntity() const;
 
+  csBPEntityState *GetEntityStateByID(unsigned id) const;
+
 private:
   const csClass *m_entityClass;
 

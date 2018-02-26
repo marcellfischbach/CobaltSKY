@@ -6,6 +6,10 @@
 #include <cobalt/loaders/entity/blueprint/csblueprintcsfloader.refl.hh>
 
 
+class csBlueprint;
+class csBPEntity;
+class csBPEntityState;
+class csBPBaseProperty;
 
 CS_CLASS()
 class CSE_API csBlueprintCSFLoader : public CS_SUPER(csBaseCSFLoader)
@@ -19,4 +23,10 @@ public:
   virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
   virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
 
+private:
+  void LoadEntity(csBlueprint *blueprint, const csfEntry *entry) const;
+  void LoadEntityState(csBPEntity *entity, const csfEntry *entry) const;
+  void LoadProperty(csBPEntityState *entityState, const csfEntry *entry) const;
+
+  csBPBaseProperty* CreateProperty(const csfEntry *entry) const;
 };
