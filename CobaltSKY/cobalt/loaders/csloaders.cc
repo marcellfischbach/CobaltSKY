@@ -4,6 +4,7 @@
 #include <cobalt/loaders/cscollisionassetxmlloader.hh>
 #include <cobalt/loaders/cspngimageassetloader.hh>
 #include <cobalt/loaders/cspngimagefileloader.hh>
+#include <cobalt/loaders/cspropertysettercsfloader.hh>
 #include <cobalt/loaders/csmaterialassetcsfloader.hh>
 #include <cobalt/loaders/csmaterialassetxmlloader.hh>
 #include <cobalt/loaders/csmaterialdefassetcsfloader.hh>
@@ -81,6 +82,7 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csMaterialDefAssetXMLLoader());
   mgr->RegisterLoader(new csMeshAssetCSFLoader());
   mgr->RegisterLoader(new csMeshAssetXMLLoader());
+  mgr->RegisterLoader(new csPropertySetterCSFLoader());
   mgr->RegisterLoader(new csSamplerAssetCSFLoader());
   mgr->RegisterLoader(new csSamplerAssetXMLLoader());
   mgr->RegisterLoader(new csShaderGraphAssetCSFLoader());
@@ -89,6 +91,7 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csSkinnedMeshAssetXMLLoader());
   mgr->RegisterLoader(new csTextureAssetCSFLoader());
   mgr->RegisterLoader(new csTextureAssetXMLLoader());
+
 
   // image loaders
   mgr->RegisterLoader(new csPNGImageAssetLoader());

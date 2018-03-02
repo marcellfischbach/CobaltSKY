@@ -4,7 +4,6 @@ add_definitions(-DCSE_EXPORT)
 add_definitions(-DCS_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
-
 set(SOURCE
     csdefs.hh
     csdiamond.hh
@@ -87,6 +86,21 @@ source_group(
     ${SOURCE_CORE}
     )
 
+	
+set(SOURCE_CORE_PROPERTY
+    core/property/csgenericpropertysetter.hh
+    core/property/cspropertysetter.hh
+    core/property/cspropertysetter.cc
+    core/property/csresourcepropertysetter.hh
+    core/property/csresourcepropertysetter.cc
+    )
+
+source_group(
+    "cobalt\\core\\property"
+    FILES
+    ${SOURCE_CORE_PROPERTY}
+    )
+
 
 
 set(SOURCE_CORE_RESOURCE
@@ -115,6 +129,7 @@ source_group(
     FILES
     ${SOURCE_CORE_RESOURCE}
     )
+
 
 
 
@@ -184,8 +199,6 @@ set(SOURCE_ENTITY_BLUEPRINT
     entity/blueprint/csbpentity.hh
     entity/blueprint/csbpentitystate.cc
     entity/blueprint/csbpentitystate.hh
-    entity/blueprint/csbpproperty.cc
-    entity/blueprint/csbpproperty.hh
     )
 
 source_group(
@@ -402,6 +415,8 @@ set(SOURCE_LOADERS
     loaders/cspngimageassetloader.hh
     loaders/cspngimagefileloader.cc
     loaders/cspngimagefileloader.hh
+	loaders/cspropertysettercsfloader.cc
+	loaders/cspropertysettercsfloader.hh
     loaders/cssamplerassetcsfloader.cc
     loaders/cssamplerassetcsfloader.hh
     loaders/cssamplerassetxmlloader.cc
@@ -577,6 +592,7 @@ set(ALL_SOURCES
     ${SOURCE}
     ${SOURCE_ANIMATION}
     ${SOURCE_CORE}
+    ${SOURCE_CORE_PROPERTY}
     ${SOURCE_CORE_RESOURCE}
     ${SOURCE_ENTITY}
     ${SOURCE_ENTITY_BLUEPRINT}

@@ -9,7 +9,7 @@
 #include <cobalt/entity/blueprint/csbpentity.refl.hh>
 
 class csBPEntityState;
-class csBPBaseProperty;
+class csPropertySetter;
 class csEntity;
 class csEntityState;
 
@@ -23,7 +23,7 @@ public:
   void SetEntityClass(const csClass *entityClass);
   const csClass *GetEntityClass() const;
 
-  void AddProperty(csBPBaseProperty *property);
+  void AddProperty(csPropertySetter *property);
   void AddEntityState(csBPEntityState *entityState);
 
   csEntity *CreateEntity() const;
@@ -33,7 +33,7 @@ public:
 private:
   const csClass *m_entityClass;
 
-  std::vector<csBPBaseProperty*> m_properties;
+  std::vector<csPropertySetter*> m_properties;
   std::vector<csBPEntityState*> m_entityStates;
 };
 

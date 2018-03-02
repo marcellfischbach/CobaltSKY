@@ -1,7 +1,8 @@
-#include <cobalt/entity/blueprint/csbpproperty.hh>
-#include <cobalt/core/csresourcemanager.hh>
 
-csBPBaseProperty::csBPBaseProperty()
+#include <cobalt/core/property/cspropertysetter.hh>
+
+
+csPropertySetter::csPropertySetter()
   : m_name("")
   , m_collection(false)
   , m_collectionIdx(~0x00)
@@ -12,37 +13,37 @@ csBPBaseProperty::csBPBaseProperty()
 {
 }
 
-void csBPBaseProperty::SetName(const std::string &name)
+void csPropertySetter::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-const std::string &csBPBaseProperty::GetName() const
+const std::string &csPropertySetter::GetName() const
 {
   return m_name;
 }
 
-void csBPBaseProperty::SetCollection(bool collection)
+void csPropertySetter::SetCollection(bool collection)
 {
   m_collection = collection;
 }
 
-bool csBPBaseProperty::IsCollection() const
+bool csPropertySetter::IsCollection() const
 {
   return m_collection;
 }
 
-void csBPBaseProperty::SetCollectionIdx(csUInt64 collectionIdx)
+void csPropertySetter::SetCollectionIdx(csUInt64 collectionIdx)
 {
   m_collectionIdx = collectionIdx;
 }
 
-csUInt64 csBPBaseProperty::GetCollectionIdx() const
+csUInt64 csPropertySetter::GetCollectionIdx() const
 {
   return m_collectionIdx;
 }
 
-void csBPBaseProperty::Apply(iObject *obj)
+void csPropertySetter::Apply(iObject *obj)
 {
   if (!m_collection)
   {
@@ -58,7 +59,7 @@ void csBPBaseProperty::Apply(iObject *obj)
   }
 }
 
-const csProperty *csBPBaseProperty::GetProperty(const csClass *ownerClass)
+const csProperty *csPropertySetter::GetProperty(const csClass *ownerClass)
 {
   if (!m_property)
   {
@@ -68,7 +69,7 @@ const csProperty *csBPBaseProperty::GetProperty(const csClass *ownerClass)
 }
 
 
-const csFunction *csBPBaseProperty::GetSetter(const csClass *ownerClass)
+const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass)
 {
   if (!m_setter)
   {
@@ -86,7 +87,7 @@ const csFunction *csBPBaseProperty::GetSetter(const csClass *ownerClass)
   return m_setter;
 }
 
-const csFunction *csBPBaseProperty::GetCollectionSetter(const csClass *ownerClass)
+const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass)
 {
   if (!m_collectionSetter)
   {
@@ -120,7 +121,7 @@ const csFunction *csBPBaseProperty::GetCollectionSetter(const csClass *ownerClas
   return m_collectionSetter;
 }
 
-const csFunction *csBPBaseProperty::GetCollectionAdder(const csClass *ownerClass)
+const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass)
 {
   if (!m_collectionAdder)
   {
@@ -155,7 +156,7 @@ const csFunction *csBPBaseProperty::GetCollectionAdder(const csClass *ownerClass
 }
 
 
-const csFunction *csBPBaseProperty::GetSetter(const csClass *ownerClass, const std::string &setterName)
+const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const std::string &setterName)
 {
   const csProperty *prop = GetProperty(ownerClass);
   if (!prop)
@@ -187,7 +188,7 @@ const csFunction *csBPBaseProperty::GetSetter(const csClass *ownerClass, const s
 }
 
 
-const csFunction *csBPBaseProperty::GetCollectionSetter(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
+const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
 {
   std::string propName = absName ? setterName : m_name;
   if (!absName)
@@ -226,7 +227,7 @@ const csFunction *csBPBaseProperty::GetCollectionSetter(const csClass *ownerClas
 
 
 
-const csFunction *csBPBaseProperty::GetCollectionAdder(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
+const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
 {
 
   std::string propName = absName ? setterName : m_name;
@@ -266,71 +267,3 @@ const csFunction *csBPBaseProperty::GetCollectionAdder(const csClass *ownerClass
 
 
 
-
-
-
-csBPResourceProperty::csBPResourceProperty()
-  : csBPBaseProperty()
-{
-
-}
-
-csBPResourceProperty::~csBPResourceProperty()
-{
-
-}
-
-
-void csBPResourceProperty::SetValue(iObject *obj)
-{
-  const csFunction *setter = GetSetter(obj->GetClass());
-  iObject *res = GetResource();
-  if (setter && res)
-  {
-    setter->InvokeVoid(obj, res);
-  }
-}
-
-void csBPResourceProperty::SetCollectionValue(iObject *obj, csUInt64 idx)
-{
-  const csFunction *setter = GetCollectionSetter(obj->GetClass());
-  iObject *res = GetResource();
-  if (setter && res)
-  {
-    setter->InvokeVoid(obj, idx, res);
-  }
-}
-
-
-void csBPResourceProperty::AddCollectionValue(iObject *obj)
-{
-  const csFunction *setter = GetCollectionAdder(obj->GetClass());
-  iObject *res = GetResource();
-  if (setter && res)
-  {
-    setter->InvokeVoid(obj, res);
-  }
-}
-
-void csBPResourceProperty::SetResourceLocator(const csResourceLocator &locator)
-{
-  m_locator = locator;
-}
-
-const csResourceLocator &csBPResourceProperty::GetResourceLocator() const
-{
-  return m_locator;
-}
-
-
-iObject *csBPResourceProperty::GetResource()
-{
-  iObject *object = csResourceManager::Get()->Aquire(m_locator);
-  return object;
-}
-
-const iObject *csBPResourceProperty::GetResource() const
-{
-  iObject *object = csResourceManager::Get()->Aquire(m_locator);
-  return object;
-}

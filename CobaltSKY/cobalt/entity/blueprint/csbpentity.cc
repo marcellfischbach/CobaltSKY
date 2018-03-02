@@ -1,8 +1,8 @@
 #include <cobalt/entity/blueprint/csbpentity.hh>
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
-#include <cobalt/entity/blueprint/csbpproperty.hh>
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csspatialstate.hh>
+#include <cobalt/core/property/cspropertysetter.hh>
 
 csBPEntity::csBPEntity()
   : m_entityClass(0)
@@ -13,7 +13,7 @@ csBPEntity::~csBPEntity()
 {
   for (auto prop : m_properties)
   {
-    delete prop;
+    CS_RELEASE(prop);
   }
   m_properties.clear();
 
@@ -34,8 +34,9 @@ const csClass *csBPEntity::GetEntityClass() const
   return m_entityClass;
 }
 
-void csBPEntity::AddProperty(csBPBaseProperty *property)
+void csBPEntity::AddProperty(csPropertySetter *property)
 {
+  CS_ADDREF(property);
   m_properties.push_back(property);
 }
 
@@ -68,7 +69,7 @@ csEntity *csBPEntity::CreateEntity() const
     return 0;
   }
 
-  for (csBPBaseProperty *prop : m_properties)
+  for (csPropertySetter *prop : m_properties)
   {
     prop->Apply(entity);
   }

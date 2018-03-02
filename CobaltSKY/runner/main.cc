@@ -35,7 +35,6 @@
 #include <cobalt/entity/blueprint/csblueprint.hh>
 #include <cobalt/entity/blueprint/csbpentity.hh>
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
-#include <cobalt/entity/blueprint/csbpproperty.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
