@@ -152,7 +152,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-#if 0
+#if 1
   posX = -1500;
 #else
   posX = 200;
@@ -918,11 +918,6 @@ csEntityScene *create_scene(iGraphics *graphics)
   csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/Solid.csf");
   printf("GroundMaterial: %p\n", groundMaterial);
 
-  csBlueprint *blueprint = csEng->Get<csBlueprint>("models/entity_bp.csf");
-  if (blueprint)
-  {
-    blueprint->CreateEntity();
-  }
   if (groundMaterial)
   {
     //groundMaterial->SetFillMode(eFM_Wireframe);
@@ -931,6 +926,16 @@ csEntityScene *create_scene(iGraphics *graphics)
   csEntityScene *entityScene = new csEntityScene();
 
 
+  csBlueprint *blueprint = csEng->Get<csBlueprint>("test/area.csf");
+  if (blueprint)
+  {
+    csEntity *entity = blueprint->CreateEntity();
+    if (entity)
+    {
+      entity->FinishTransformation();
+      entityScene->AddEntity(entity);
+    }
+  }
 
   unsigned numVerticesPerSide = 257;
   unsigned numVertices = numVerticesPerSide*numVerticesPerSide;

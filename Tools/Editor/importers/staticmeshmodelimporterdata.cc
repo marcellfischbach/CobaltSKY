@@ -40,7 +40,7 @@ StaticMeshModelImporterData::~StaticMeshModelImporterData()
 
 void StaticMeshModelImporterData::SetImportName(const QString &importName)
 {
-  SetName(importName + "_Mesh");
+  SetName(importName);
 }
 
 void StaticMeshModelImporterData::SetName(const QString &name)
@@ -210,11 +210,70 @@ namespace
   }
 }
 
+
 csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetManager)
+{
+  csResourceLocator meshLocator = ImportMesh(assetManager);
+  csResourceLocator colliderMeshLocator = ImportCollisionMesh(assetManager);
+
+
+  csResourceLocator locator = assetManager->GetContentResource();
+  QString csfName = assetManager->GetNewAssetName(m_name);
+  csResourceLocator csfLocator(
+    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
+    locator.GetResourceName(),
+    locator.GetResourceEntry());
+  csfName = assetManager->GetFilePath(csfName);
+  csfFile outputFile;
+  csfEntry *assetEntry = outputFile.CreateEntry("asset");
+  csfEntry *dataEntry = outputFile.CreateEntry("data");
+  csfEntry *blueprintEntry = outputFile.CreateEntry("blueprint");
+  csfEntry *entityEntry = outputFile.CreateEntry("entity");
+  csfEntry *entityStateEntry = outputFile.CreateEntry("entityState");
+
+  outputFile.GetRoot()->AddChild(assetEntry);
+  assetEntry->AddChild(dataEntry);
+  dataEntry->AddChild(blueprintEntry);
+  blueprintEntry->AddChild(entityEntry);
+  entityEntry->AddChild(entityStateEntry);
+
+  entityEntry->AddAttribute("class", "csEntity");
+  entityStateEntry->AddAttribute("class", "csStaticMeshState");
+  entityStateEntry->AddAttributeInt("id", 0);
+  entityStateEntry->AddAttribute("root", "true");
+
+  if (meshLocator.IsValid())
+  {
+    csfEntry *meshProperty = outputFile.CreateEntry("property");
+    meshProperty->AddAttribute("name", "Mesh");
+    meshProperty->AddAttribute("type", "resource");
+    meshProperty->AddAttribute("locator", meshLocator.AsAnonymous().GetText());
+    entityStateEntry->AddChild(meshProperty);
+
+    for (auto materials : m_materialNames)
+    {
+      csfEntry *materialProperty = outputFile.CreateEntry("property");
+      materialProperty->AddAttribute("name", "Materials");
+      materialProperty->AddAttribute("collection", "true");
+      materialProperty->AddAttribute("type", "resource");
+      materialProperty->AddAttributeInt("idx", materials.first);
+      materialProperty->AddAttribute("locator", "materials/DefaultMaterial.csf");
+      entityStateEntry->AddChild(materialProperty);
+    }
+  }
+
+  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
+
+  return csfLocator;
+
+
+}
+
+csResourceLocator StaticMeshModelImporterData::ImportMesh(AssetManagerWidget *assetManager)
 {
   csResourceLocator locator = assetManager->GetContentResource();
 
-  QString csfName = assetManager->GetNewAssetName(m_name);
+  QString csfName = assetManager->GetNewAssetName(m_name + "_Mesh");
   csResourceLocator csfLocator(
     locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
     locator.GetResourceName(),
@@ -224,18 +283,12 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
   csfEntry *dataEntry = outputFile.CreateEntry("data");
-  csfEntry *entityStateEntry = outputFile.CreateEntry("entityState");
   csfEntry *meshEntry = outputFile.CreateEntry("mesh");
-  csfEntry *materialsEntry = outputFile.CreateEntry("materials");
 
   outputFile.GetRoot()->AddChild(assetEntry);
   assetEntry->AddChild(dataEntry);
-  dataEntry->AddChild(entityStateEntry);
-  entityStateEntry->AddChild(meshEntry);
-  entityStateEntry->AddChild(materialsEntry);
+  dataEntry->AddChild(meshEntry);
 
-  entityStateEntry->AddAttribute("csStaticMeshState");
-  entityStateEntry->AddAttribute("name", std::string((const char*)m_name.toLatin1()));
 
   csfEntry *materialSlotsEntry = outputFile.CreateEntry("materialSlots");
   meshEntry->AddChild(materialSlotsEntry);
@@ -280,16 +333,15 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     }
   }
 
-  for (auto m : m_materialNames)
-  {
-    csfEntry *materialEntry = outputFile.CreateEntry("material");
-    materialsEntry->AddChild(materialEntry);
-    materialEntry->AddAttribute("locator", "materials/DefaultMaterial.csf");
-    materialEntry->AddAttributeInt("slot", m.first);
-  }
+
 
   outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
 
+  return csfLocator;
+}
+
+csResourceLocator StaticMeshModelImporterData::ImportCollisionMesh(AssetManagerWidget *assetManager)
+{
   return csResourceLocator();
 }
 

@@ -26,9 +26,11 @@ public:
 
   virtual csResourceLocator Import(AssetManagerWidget *assetManager);
 
-
-
 private:
+  csResourceLocator ImportMesh(AssetManagerWidget *assetManager);
+  csResourceLocator ImportCollisionMesh(AssetManagerWidget *assetManager);
+
+  
   StaticMeshEditorWidget *m_staticMeshEditorWidget;
 
   std::vector<aiNode*> m_meshNodes;
