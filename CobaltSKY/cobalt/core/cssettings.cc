@@ -46,6 +46,11 @@ bool csSettings::Initialize(const std::string &configFileName)
   {
     return false;
   }
+  m_configEntry = m_file.GetEntry("config");
+  if (!m_configEntry)
+  {
+    return false;
+  }
   _rootPath = strip_path(configFileName);
 
   return true;
@@ -69,12 +74,12 @@ const std::string &csSettings::GetRootPath () const
 
 bool csSettings::HasEntry(const std::string &entryName) const
 {
-  return m_file.GetEntry(std::string("config.") + entryName);
+  return m_configEntry && m_configEntry->GetEntry(entryName);
 }
 
 const csfEntry *csSettings::GetEntry(const std::string &entryName) const
 {
-  return m_file.GetEntry(std::string("config.") + entryName);
+  return m_configEntry ? m_configEntry->GetEntry(entryName) : 0;
 }
 
 bool csSettings::HasValue(const std::string &entryName, size_t attribute) const

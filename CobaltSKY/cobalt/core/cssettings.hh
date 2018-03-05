@@ -42,7 +42,7 @@ protected:
 
 private:
   csfFile m_file;
-
+  csfEntry *m_configEntry;
   static csSettings*  static_instances;
   std::string         _rootPath;
 

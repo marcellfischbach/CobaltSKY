@@ -83,4 +83,4 @@ include_directories(${CobaltSKY_BINARY_DIR}/CobaltSKY)
 
 add_subdirectory(3rdparty)
 add_subdirectory(CobaltSKY)
-#add_subdirectory(Tools)
+add_subdirectory(Tools)
