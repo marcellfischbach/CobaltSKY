@@ -1,0 +1,12 @@
+asset () {
+  data () {
+    material () {
+      materialDef ("materials/Solid.xasset")
+      parameters () {
+        parameter (name:Multiplier) {
+          float2 (99.989998 99.989998)
+        }
+      }
+    }
+  }
+}
