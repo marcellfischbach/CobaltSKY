@@ -397,22 +397,22 @@ set(SOURCE_LOADERS
 	loaders/csblueprintcsfloader.hh    
 	loaders/cscollisionassetcsfloader.cc
     loaders/cscollisionassetcsfloader.hh
-    loaders/cscollisionassetxmlloader.cc
-    loaders/cscollisionassetxmlloader.hh
+#    loaders/cscollisionassetxmlloader.cc
+    #loaders/cscollisionassetxmlloader.hh
     loaders/csloaders.cc
     loaders/csloaders.hh
     loaders/csmaterialassetcsfloader.cc
     loaders/csmaterialassetcsfloader.hh
-    loaders/csmaterialassetxmlloader.cc
-    loaders/csmaterialassetxmlloader.hh
+#    loaders/csmaterialassetxmlloader.cc
+#    loaders/csmaterialassetxmlloader.hh
     loaders/csmaterialdefassetcsfloader.cc
     loaders/csmaterialdefassetcsfloader.hh
-    loaders/csmaterialdefassetxmlloader.cc
-    loaders/csmaterialdefassetxmlloader.hh
+#    loaders/csmaterialdefassetxmlloader.cc
+#    loaders/csmaterialdefassetxmlloader.hh
     loaders/csmeshassetcsfloader.cc
     loaders/csmeshassetcsfloader.hh
-    loaders/csmeshassetxmlloader.cc
-    loaders/csmeshassetxmlloader.hh
+#    loaders/csmeshassetxmlloader.cc
+#    loaders/csmeshassetxmlloader.hh
     loaders/cspngimageassetloader.cc
     loaders/cspngimageassetloader.hh
     loaders/cspngimagefileloader.cc
@@ -421,16 +421,16 @@ set(SOURCE_LOADERS
 	loaders/cspropertysettercsfloader.hh
     loaders/cssamplerassetcsfloader.cc
     loaders/cssamplerassetcsfloader.hh
-    loaders/cssamplerassetxmlloader.cc
-    loaders/cssamplerassetxmlloader.hh
+#    loaders/cssamplerassetxmlloader.cc
+#    loaders/cssamplerassetxmlloader.hh
     loaders/csshadergraphassetcsfloader.cc
     loaders/csshadergraphassetcsfloader.hh
-    loaders/csshadergraphassetxmlloader.cc
-    loaders/csshadergraphassetxmlloader.hh
+#    loaders/csshadergraphassetxmlloader.cc
+#    loaders/csshadergraphassetxmlloader.hh
     loaders/csskinnedmeshassetcsfloader.cc
     loaders/csskinnedmeshassetcsfloader.hh
-    loaders/csskinnedmeshassetxmlloader.cc
-    loaders/csskinnedmeshassetxmlloader.hh
+#    loaders/csskinnedmeshassetxmlloader.cc
+#    loaders/csskinnedmeshassetxmlloader.hh
     loaders/csstaticmeshloader.cc
     loaders/csstaticmeshloader.hh
     loaders/csstaticmeshassetloader.cc
@@ -439,8 +439,8 @@ set(SOURCE_LOADERS
     loaders/cssubmeshassetloader.hh
     loaders/cstextureassetcsfloader.cc
     loaders/cstextureassetcsfloader.hh
-    loaders/cstextureassetxmlloader.cc
-    loaders/cstextureassetxmlloader.hh
+#    loaders/cstextureassetxmlloader.cc
+#    loaders/cstextureassetxmlloader.hh
     )
 
 source_group(
@@ -449,70 +449,6 @@ source_group(
     ${SOURCE_LOADERS}
     )
 
-set(SOURCE_LOADERS_ENTITY
-    loaders/entity/csbasecolliderstatecsfloader.cc
-    loaders/entity/csbasecolliderstatecsfloader.hh
-    loaders/entity/csbasecolliderstatexmlloader.cc
-    loaders/entity/csbasecolliderstatexmlloader.hh
-    loaders/entity/cscolliderstatecsfloader.cc
-    loaders/entity/cscolliderstatecsfloader.hh
-    loaders/entity/cscolliderstatexmlloader.cc
-    loaders/entity/cscolliderstatexmlloader.hh
-    loaders/entity/csdynamiccolliderstatecsfloader.cc
-    loaders/entity/csdynamiccolliderstatecsfloader.hh
-    loaders/entity/csdynamiccolliderstatexmlloader.cc
-    loaders/entity/csdynamiccolliderstatexmlloader.hh
-    loaders/entity/csentityloaderregistry.cc
-    loaders/entity/csentityloaderregistry.hh
-    loaders/entity/csentitymasterxmlloader.cc
-    loaders/entity/csentitymasterxmlloader.hh
-    loaders/entity/csentitymastercsfloader.cc
-    loaders/entity/csentitymastercsfloader.hh
-    loaders/entity/csentitystateloaderdata.hh
-    loaders/entity/csentitystatemastercsfloader.cc
-    loaders/entity/csentitystatemastercsfloader.hh
-    loaders/entity/csentitystatemasterxmlloader.cc
-    loaders/entity/csentitystatemasterxmlloader.hh
-    loaders/entity/csentitystatecsfloader.cc
-    loaders/entity/csentitystatecsfloader.hh
-    loaders/entity/csentitystatexmlloader.cc
-    loaders/entity/csentitystatexmlloader.hh
-    loaders/entity/csentitycsfloader.cc
-    loaders/entity/csentitycsfloader.hh
-    loaders/entity/csentityxmlloader.cc
-    loaders/entity/csentityxmlloader.hh
-    loaders/entity/cshingejointstatecsfloader.cc
-    loaders/entity/cshingejointstatecsfloader.hh
-    loaders/entity/cshingejointstatexmlloader.cc
-    loaders/entity/cshingejointstatexmlloader.hh
-    loaders/entity/csjointstatecsfloader.cc
-    loaders/entity/csjointstatecsfloader.hh
-    loaders/entity/csjointstatexmlloader.cc
-    loaders/entity/csjointstatexmlloader.hh
-    loaders/entity/csrenderstatecsfloader.cc
-    loaders/entity/csrenderstatecsfloader.hh
-    loaders/entity/csrenderstatexmlloader.cc
-    loaders/entity/csrenderstatexmlloader.hh
-    loaders/entity/csspatialstatecsfloader.cc
-    loaders/entity/csspatialstatecsfloader.hh
-    loaders/entity/csspatialstatexmlloader.cc
-    loaders/entity/csspatialstatexmlloader.hh
-    loaders/entity/csstaticcolliderstatecsfloader.cc
-    loaders/entity/csstaticcolliderstatecsfloader.hh
-    loaders/entity/csstaticcolliderstatexmlloader.cc
-    loaders/entity/csstaticcolliderstatexmlloader.hh
-    loaders/entity/csstaticmeshstatecsfloader.cc
-    loaders/entity/csstaticmeshstatecsfloader.hh
-    loaders/entity/csstaticmeshstatexmlloader.cc
-    loaders/entity/csstaticmeshstatexmlloader.hh
-    )
-    
-
-source_group(
-    "cobalt\\loaders\\entity"
-    FILES
-    ${SOURCE_LOADERS_ENTITY}
-    )
 
 
 
