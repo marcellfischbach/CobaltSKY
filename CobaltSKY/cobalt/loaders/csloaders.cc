@@ -1,6 +1,8 @@
 
 #include <cobalt/loaders/csloaders.hh>
 #include <cobalt/loaders/csblueprintcsfloader.hh>
+#include <cobalt/loaders/csentitycsfloader.hh>
+#include <cobalt/loaders/csentitystatecsfloader.hh>
 #include <cobalt/loaders/cscollisionassetcsfloader.hh>
 //#include <cobalt/loaders/cscollisionassetxmlloader.hh>
 #include <cobalt/loaders/cspngimageassetloader.hh>
@@ -41,6 +43,8 @@ void csLoaders::Register(csResourceManager *mgr)
   mgr->RegisterLoader(new csBlueprintCSFLoader());
 
   mgr->RegisterLoader(new csCollisionAssetCSFLoader());
+  mgr->RegisterLoader(new csEntityCSFLoader());
+  mgr->RegisterLoader(new csEntityStateCSFLoader());
 //  mgr->RegisterLoader(new csCollisionAssetXMLLoader());
   mgr->RegisterLoader(new csMaterialAssetCSFLoader());
 //  mgr->RegisterLoader(new csMaterialAssetXMLLoader());

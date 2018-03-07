@@ -12,7 +12,6 @@
 #include <cobalt/core/resource/icsfloader.hh>
 #include <cobalt/core/resource/ifileloader.hh>
 #include <cobalt/core/resource/ixmlloader.hh>
-#include <cobalt/core/resource/csassetfileloader.hh>
 #include <cobalt/core/resource/csassetxmlloader.hh>
 #include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/resource/csbasexmlloader.hh>

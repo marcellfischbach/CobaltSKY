@@ -108,8 +108,6 @@ set(SOURCE_CORE_RESOURCE
     core/resource/icsfloader.hh
     core/resource/ifileloader.hh
     core/resource/ixmlloader.hh
-    core/resource/csassetfileloader.hh
-    core/resource/csassetfileloader.cc
     core/resource/csassetcsfloader.hh
     core/resource/csassetcsfloader.cc
     core/resource/csassetxmlloader.hh
@@ -397,22 +395,18 @@ set(SOURCE_LOADERS
 	loaders/csblueprintcsfloader.hh    
 	loaders/cscollisionassetcsfloader.cc
     loaders/cscollisionassetcsfloader.hh
-#    loaders/cscollisionassetxmlloader.cc
-    #loaders/cscollisionassetxmlloader.hh
+	loaders/csentitycsfloader.cc
+	loaders/csentitycsfloader.hh
+	loaders/csentitystatecsfloader.cc
+	loaders/csentitystatecsfloader.hh
     loaders/csloaders.cc
     loaders/csloaders.hh
     loaders/csmaterialassetcsfloader.cc
     loaders/csmaterialassetcsfloader.hh
-#    loaders/csmaterialassetxmlloader.cc
-#    loaders/csmaterialassetxmlloader.hh
     loaders/csmaterialdefassetcsfloader.cc
     loaders/csmaterialdefassetcsfloader.hh
-#    loaders/csmaterialdefassetxmlloader.cc
-#    loaders/csmaterialdefassetxmlloader.hh
     loaders/csmeshassetcsfloader.cc
     loaders/csmeshassetcsfloader.hh
-#    loaders/csmeshassetxmlloader.cc
-#    loaders/csmeshassetxmlloader.hh
     loaders/cspngimageassetloader.cc
     loaders/cspngimageassetloader.hh
     loaders/cspngimagefileloader.cc
@@ -421,16 +415,10 @@ set(SOURCE_LOADERS
 	loaders/cspropertysettercsfloader.hh
     loaders/cssamplerassetcsfloader.cc
     loaders/cssamplerassetcsfloader.hh
-#    loaders/cssamplerassetxmlloader.cc
-#    loaders/cssamplerassetxmlloader.hh
     loaders/csshadergraphassetcsfloader.cc
     loaders/csshadergraphassetcsfloader.hh
-#    loaders/csshadergraphassetxmlloader.cc
-#    loaders/csshadergraphassetxmlloader.hh
     loaders/csskinnedmeshassetcsfloader.cc
     loaders/csskinnedmeshassetcsfloader.hh
-#    loaders/csskinnedmeshassetxmlloader.cc
-#    loaders/csskinnedmeshassetxmlloader.hh
     loaders/csstaticmeshloader.cc
     loaders/csstaticmeshloader.hh
     loaders/csstaticmeshassetloader.cc
@@ -439,8 +427,6 @@ set(SOURCE_LOADERS
     loaders/cssubmeshassetloader.hh
     loaders/cstextureassetcsfloader.cc
     loaders/cstextureassetcsfloader.hh
-#    loaders/cstextureassetxmlloader.cc
-#    loaders/cstextureassetxmlloader.hh
     )
 
 source_group(

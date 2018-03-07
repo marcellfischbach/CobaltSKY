@@ -33,7 +33,6 @@ csResourceManager::csResourceManager()
 {
   RegisterLoader(new csXMLFileLoader());
   RegisterLoader(new csCSFFileLoader());
-  RegisterLoader(new csAssetFileLoader());
   RegisterLoader(new csAssetXMLLoader());
   RegisterLoader(new csAssetCSFLoader());
 }

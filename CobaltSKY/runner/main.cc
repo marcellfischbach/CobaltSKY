@@ -926,7 +926,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   csEntityScene *entityScene = new csEntityScene();
 
 
-  csBlueprint *blueprint = csEng->Get<csBlueprint>("test/area.csf");
+  csBlueprint *blueprint = csEng->Get<csBlueprint>("models/area.csf");
   if (blueprint)
   {
     csEntity *entity = blueprint->CreateEntity();
