@@ -7,10 +7,61 @@
 #include <map>
 
 
+
+
 Reader::Reader()
 {
-
 }
+
+Containers::Containers()
+{
+  // all std c++ containers
+  m_collectionTypes.push_back(Container(std::string("std::array"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::vector"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::deque"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::forward_list"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::list"), 0));
+
+  m_collectionTypes.push_back(Container(std::string("std::set"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::map"), 1));
+  m_collectionTypes.push_back(Container(std::string("std::multiset"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::multimap"), 1));
+
+  m_collectionTypes.push_back(Container(std::string("std::unordered_set"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::unordered_map"), 1));
+  m_collectionTypes.push_back(Container(std::string("std::unordered_multiset"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::unordered_multimap"), 1));
+
+  m_collectionTypes.push_back(Container(std::string("std::stack"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::queue"), 0));
+  m_collectionTypes.push_back(Container(std::string("std::priority_queue"), 0));
+}
+
+bool Containers::IsCollection(const std::string &name) const
+{
+  for (auto &cont : m_collectionTypes)
+  {
+    if (cont.name == name)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+unsigned Containers::GetMasterTypeIdx(const std::string &name) const
+{
+  for (auto &cont : m_collectionTypes)
+  {
+    if (cont.name == name)
+    {
+      return cont.masterTypeIdx;
+    }
+  }
+  return 0;
+}
+
+Containers conts;
 
 static bool isClassLine(const std::string &line)
 {
@@ -227,6 +278,45 @@ void ReadPropertyMetaData(SourceFile *sourceFile, size_t lineIdx, std::map<std::
   }
 }
 
+namespace
+{
+  std::string FirstLetterUpperCase(const std::string name)
+  {
+    std::string result = name;
+    if (result.length() > 0)
+    {
+      char ch = result[0];
+      if (ch >= 'a' && ch <= 'z')
+      {
+        ch += 'A' - 'a';
+      }
+      result[0] = ch;
+    }
+    return result;
+  }
+  std::string ConvertPropertyName(const std::string propertyName)
+  {
+    size_t idx = 0;
+    std::string result = "";
+    if (propertyName.length() > 2)
+    {
+      if (propertyName[0] == 'm' && propertyName[1] == '_')
+      {
+        idx = 2;
+      }
+    }
+    if (propertyName.length() > 1)
+    {
+      if (propertyName[0] == '_')
+      {
+        idx = 1;
+      }
+    }
+    return FirstLetterUpperCase(propertyName.substr(idx));
+  }
+}
+
+
 
 Property ReadProperty(SourceFile *sourceFile, size_t lineIdx)
 {
@@ -236,16 +326,28 @@ Property ReadProperty(SourceFile *sourceFile, size_t lineIdx)
   enum States
   {
     ConstOrTypename,
+    ContainerStart,
+    ContainerConstOrTypename,
+    ContainerTypeSpecificationOrEnd,
     SpecificationOrName,
     Done,
   };
 
   States state = ConstOrTypename;
 
+  bool isContainerConst = false;
+  std::string containerTypeName = "";
+  TypeSpecifiction containerTypeSpecification = eTS_Value;
+
   bool isConst = false;
   std::string typeName = "";
-  std::string paramName;
   TypeSpecifiction typeSpecification = eTS_Value;
+  std::string paramName;
+
+  bool isCollection = false;
+  unsigned masterIdx = 0;
+
+  
 
   for (size_t n = sourceFile->GetNumberOfLines(); lineIdx < n; ++lineIdx)
   {
@@ -256,7 +358,7 @@ Property ReadProperty(SourceFile *sourceFile, size_t lineIdx)
       size_t semiIdx = token.find(';');
       if (semiIdx != std::string::npos)
       {
-        return Property(isConst, typeName, typeSpecification, paramName, meta);
+        return Property(isContainerConst, containerTypeName, containerTypeSpecification, isConst, typeName, typeSpecification, paramName, meta);
       }
 
       switch (state)
@@ -269,6 +371,64 @@ Property ReadProperty(SourceFile *sourceFile, size_t lineIdx)
         else
         {
           typeName = token;
+          if (conts.IsCollection(typeName))
+          {
+            isCollection = true;
+            masterIdx = conts.GetMasterTypeIdx(typeName);
+            state = ContainerStart;
+          }
+          else
+          {
+            state = SpecificationOrName;
+          }
+        }
+        break;
+      case ContainerStart:
+        if (token == std::string("<"))
+        {
+          state = ContainerConstOrTypename;
+        }
+        break;
+
+      case ContainerConstOrTypename:
+        if (token == std::string(","))
+        {
+          break;
+        }
+
+        if (masterIdx == 0)
+        {
+          if (token == std::string("const"))
+          {
+            isContainerConst = true;
+          }
+          else
+          {
+            containerTypeName = token;
+            state = ContainerTypeSpecificationOrEnd;
+          }
+        }
+        else
+        {
+          masterIdx--;
+        }
+        break;
+
+      case ContainerTypeSpecificationOrEnd:
+        if (token == std::string("&"))
+        {
+          containerTypeSpecification = eTS_Reference;
+        }
+        else if (token == std::string("*"))
+        {
+          containerTypeSpecification = eTS_Pointer;
+        }
+        else if (token == std::string("**"))
+        {
+          containerTypeSpecification = eTS_PointerToPointer;
+        }
+        else if (token == ">")
+        {
           state = SpecificationOrName;
         }
         break;
@@ -288,16 +448,18 @@ Property ReadProperty(SourceFile *sourceFile, size_t lineIdx)
         }
         else
         {
-          paramName = token;
+          paramName = ConvertPropertyName(token);
           state = Done;
         }
         break;
+
       case Done:
         break;
+
       }
     }
   }
-  return Property(false, "", eTS_Value, "", meta);
+  return Property(false, "", eTS_Value, false, "", eTS_Value, "", meta);
 }
 
 Function ReadFunction(SourceFile *sourceFile, size_t lineIdx)

@@ -83,6 +83,25 @@ iObject *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResource
       entry->GetAttributeFloat("w")));
     result = prop;
   }
+  else if (std::string("mat3f") == type)
+  {
+    csGenericPropertySetter<csMatrix3f> *prop = new csGenericPropertySetter<csMatrix3f>;
+    prop->Set(csMatrix3f(
+      entry->GetAttributeFloat("m00", 1.0f), entry->GetAttributeFloat("m01", 0.0f), entry->GetAttributeFloat("m02", 0.0f),
+      entry->GetAttributeFloat("m10", 0.0f), entry->GetAttributeFloat("m11", 1.0f), entry->GetAttributeFloat("m12", 0.0f),
+      entry->GetAttributeFloat("m20", 0.0f), entry->GetAttributeFloat("m21", 0.0f), entry->GetAttributeFloat("m22", 1.0f)));
+    result = prop;
+  }
+  else if (std::string("mat4f") == type)
+  {
+    csGenericPropertySetter<csMatrix4f> *prop = new csGenericPropertySetter<csMatrix4f>;
+    prop->Set(csMatrix4f(
+      entry->GetAttributeFloat("m00", 1.0f), entry->GetAttributeFloat("m01", 0.0f), entry->GetAttributeFloat("m02", 0.0f), entry->GetAttributeFloat("m03", 0.0f),
+      entry->GetAttributeFloat("m10", 0.0f), entry->GetAttributeFloat("m11", 1.0f), entry->GetAttributeFloat("m12", 0.0f), entry->GetAttributeFloat("m13", 0.0f),
+      entry->GetAttributeFloat("m20", 0.0f), entry->GetAttributeFloat("m21", 0.0f), entry->GetAttributeFloat("m22", 1.0f), entry->GetAttributeFloat("m23", 0.0f),
+      entry->GetAttributeFloat("m30", 0.0f), entry->GetAttributeFloat("m31", 0.0f), entry->GetAttributeFloat("m32", 0.0f), entry->GetAttributeFloat("m33", 1.0f)));
+    result = prop;
+  }
   return result;
 }
 

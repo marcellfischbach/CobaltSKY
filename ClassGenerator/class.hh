@@ -18,14 +18,21 @@ enum TypeSpecifiction
 class Property
 {
 public:
-  Property(bool isConst, const std::string &typeName, TypeSpecifiction typeSpecification, const std::string &propertyName, const std::map<std::string, std::string> &meta);
+  Property(bool isContainerConst, const std::string &containerTypeName, TypeSpecifiction containerTypeSpecification, 
+          bool isConst, const std::string &typeName, TypeSpecifiction typeSpecification, 
+    const std::string &propertyName, const std::map<std::string, std::string> &meta);
   bool IsValid() const;
 
   void Debug();
 
+  bool IsContainerConst() const;
+  const std::string &GetContainerTypeName() const;
+  TypeSpecifiction GetContainerTypeSpecification() const;
+
   bool IsConst() const;
   const std::string &GetTypeName() const;
   TypeSpecifiction GetTypeSpecification() const;
+
   const std::string &GetPropertyName() const;
   const std::string &GetPropertyVariableName() const;
 
@@ -35,9 +42,14 @@ public:
   const std::map<std::string, std::string> &GetMeta () const;
 
 private:
+  bool m_containerConst;
+  std::string m_containerTypeName;
+  TypeSpecifiction m_containerTypeSpecification;
+
   bool m_const;
   std::string m_typeName;
   TypeSpecifiction m_typeSpecification;
+
   std::string m_propertyName;
   std::map<std::string, std::string> m_meta;
 };

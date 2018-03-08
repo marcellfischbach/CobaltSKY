@@ -48,6 +48,15 @@ void csSpatialState::FinishTransformation()
   PerformTransformation();
 }
 
+void csSpatialState::SetLocalMatrix(const csMatrix4f &localMatrix)
+{
+  m_localMatrix.Set(localMatrix);
+}
+
+const csMatrix4f &csSpatialState::GetLocalMatrix() const
+{
+  return m_localMatrix;
+}
 
 void csSpatialState::PerformTransformation()
 {

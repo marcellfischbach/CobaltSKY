@@ -90,31 +90,31 @@ private:
 
   bool m_castShadow;
 
-  CS_PROPERTY(name = Mesh)
+  CS_PROPERTY()
   iMesh* m_mesh;
 
-  CS_PROPERTY(name = Materials, type= csMaterial)
+  CS_PROPERTY()
   std::vector<csMaterial*> m_materials;
-  CS_PROPERTY(name = ColliderShapes, type= iPhysicsShape)
+  CS_PROPERTY()
   std::vector<iPhysicsShape*> m_colliderShapes;
 
   bool m_enableCollision;
   csPhysicsColliderType m_colliderType;
   iPhysicsBaseCollider *m_collider;
 
-
-  CS_PROPERTY(name=Friction)
+  CS_PROPERTY()
   float m_friction;
-  CS_PROPERTY(name=Restitution)
+  CS_PROPERTY()
   float m_restitution;
 
-  CS_PROPERTY(name=AutoInertia)
+  CS_PROPERTY()
   bool m_autoInertia;
-  CS_PROPERTY(name=Inertia)
+  CS_PROPERTY()
   csVector3f m_inertia;
-  CS_PROPERTY(name=Mass)
+  CS_PROPERTY()
   float m_mass;
 };
+
 
 
 CS_FORCEINLINE iMesh *csStaticMeshState::GetMesh()

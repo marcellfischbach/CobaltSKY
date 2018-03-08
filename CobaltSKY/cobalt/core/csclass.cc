@@ -140,16 +140,28 @@ const csClass *csClass::GetSuperClass(size_t idx) const
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 
-csProperty::csProperty(const std::string &typeName, const std::string &propName)
-  : m_typeName(typeName)
-  , m_name(propName)
+csProperty::csProperty(const csValueDeclaration &containerDecl, const std::string &name, const csValueDeclaration &decl)
+  : m_containerDecl(containerDecl)
+  , m_name(name)
+  , m_decl(decl)
 {
 
 }
 
-const std::string &csProperty::GetTypeName() const
+
+bool csProperty::IsContainer() const
 {
-  return m_typeName;
+  return !m_containerDecl.GetType().empty();
+}
+
+const csValueDeclaration &csProperty::GetDecl() const
+{
+  return m_decl;
+}
+
+const csValueDeclaration &csProperty::GetContainerDecl() const
+{
+  return m_containerDecl;
 }
 
 const std::string &csProperty::GetName() const

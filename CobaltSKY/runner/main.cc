@@ -925,7 +925,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   csEntityScene *entityScene = new csEntityScene();
 
-
+  /*
   csBlueprint *blueprint = csEng->Get<csBlueprint>("models/area.csf");
   if (blueprint)
   {
@@ -935,6 +935,14 @@ csEntityScene *create_scene(iGraphics *graphics)
       entity->FinishTransformation();
       entityScene->AddEntity(entity);
     }
+  }
+  */
+
+  csEntity *testEntity = csEng->Get<csEntity>("models/test_ref_bp.csf");
+  if (testEntity)
+  {
+    testEntity->FinishTransformation();
+    entityScene->AddEntity(testEntity);
   }
 
   unsigned numVerticesPerSide = 257;

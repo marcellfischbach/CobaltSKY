@@ -71,6 +71,17 @@ Tokenizer::Tokenizer(const std::string &line)
       m_tokens.push_back(token);
       token = "";
     }
+    else if (ch == '<' || ch =='>' || ch == ',')
+    {
+      if (token.length() != 0)
+      {
+        m_tokens.push_back(token);
+        token = "";
+      }
+      token += ch;
+      m_tokens.push_back(token);
+      token = "";
+    }
     else 
     {
       if (token.length() != 0)

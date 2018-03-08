@@ -20,6 +20,24 @@ static void replaceSlash(std::string &path)
   }
 }
 
+
+std::string Convert(TypeSpecifiction ts)
+{
+  switch (ts)
+  {
+  case eTS_Value:
+    return "eVMM_Value";
+  case eTS_Reference:
+    return "eVMM_Reference";
+  case eTS_Pointer:
+    return "eVMM_Pointer";
+  case eTS_PointerToPointer:
+    return "eVMM_PointerToPointer";
+  }
+  return "eVMM_Value";
+}
+
+
 static bool getOutputFilenames(const std::string &in_filename, const std::string &in_outputDirectory, std::string &out_headerName, std::string &out_sourceName, bool simple)
 {
   size_t dotPos = in_filename.find_last_of('.');
@@ -75,22 +93,6 @@ static std::string CreateHeaderFile(Class *clazz, const std::string &api)
   result += "  \n";
   result += "  \n";
   return result;
-}
-
-std::string Convert(TypeSpecifiction ts)
-{
-  switch (ts)
-  {
-  case eTS_Value:
-    return "eVMM_Value";
-  case eTS_Reference:
-    return "eVMM_Reference";
-  case eTS_Pointer:
-    return "eVMM_Pointer";
-  case eTS_PointerToPointer:
-    return "eVMM_PointerToPointer";
-  }
-  return "eVMM_Value";
 }
 
 std::string GetCodeForAttrParam(TypeSpecifiction ts)
@@ -179,7 +181,7 @@ static std::string CreateProperty(const std::string &className, Class *clazz, Pr
   result += "{\n";
   result += "public:\n";
   result += "  " + propClassName + "() \n";
-  result += "    : csProperty (\"" + prop.GetTypeName() + "\", \"" + prop.GetPropertyName() + "\")\n";
+  result += "    : csProperty (csValueDeclaration(eC_NonConst, \"" + prop.GetContainerTypeName() + "\", eVMM_Value), \"" + prop.GetPropertyName() + "\", csValueDeclaration(eC_NonConst, \"" + prop.GetTypeName() + "\", " + Convert(prop.GetTypeSpecification())+ "))\n";
   result += "  {\n";
   for (auto it : prop.GetMeta())
   {

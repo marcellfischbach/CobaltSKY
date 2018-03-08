@@ -7,7 +7,6 @@
 /**
 * \ingroup entity
 */
-
 class CSE_API csTransformation
 {
 public:

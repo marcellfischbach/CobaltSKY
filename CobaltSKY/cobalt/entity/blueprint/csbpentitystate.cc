@@ -80,6 +80,7 @@ csEntityState *csBPEntityState::CreateEntityState() const
   {
     return 0;
   }
+  state->SetId(GetId());
 
   for (csPropertySetter *prop : m_properties)
   {

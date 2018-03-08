@@ -8,6 +8,7 @@
 
 #include <cobalt/entity/csentity.refl.hh>
 
+
 class csBoundingBox;
 class csClipper;
 class csEntityScene;

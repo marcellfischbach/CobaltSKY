@@ -1,4 +1,4 @@
-
+ 
 
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csentitystate.hh>
@@ -44,7 +44,7 @@ csEntityState *csEntity::GetState(csID id)
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
     csEntityState *state = m_states[i];
-    if (state && state->GetID() == id)
+    if (state && state->GetId() == id)
     {
       return state;
     }
@@ -63,7 +63,7 @@ const csEntityState *csEntity::GetState(csID id) const
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
     csEntityState *state = m_states[i];
-    if (state && state->GetID() == id)
+    if (state && state->GetId() == id)
     {
       return state;
     }

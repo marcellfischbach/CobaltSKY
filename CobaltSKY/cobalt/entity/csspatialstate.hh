@@ -62,6 +62,11 @@ public:
   csTransformation GetTransformation();
   virtual void FinishTransformation();
 
+  CS_FUNCTION()
+    void SetLocalMatrix(const csMatrix4f &matrix);
+  CS_FUNCTION()
+    const csMatrix4f &GetLocalMatrix() const;
+
   const csMatrix4f &GetLocalTransformation() const;
   const csMatrix4f &GetGlobalTransformation() const;
   const csMatrix4f &GetGlobalTransformationInv() const;
@@ -94,14 +99,16 @@ protected:
 
   void PerformTransformation();
 
-  csMatrix4f m_localMatrix;
-  csMatrix4f m_globalMatrix;
-  csMatrix4f m_globalMatrixInv;
+  CS_PROPERTY()
+    csMatrix4f m_localMatrix;
+  CS_PROPERTY()
+    csMatrix4f m_globalMatrix;
+  CS_PROPERTY()
+    csMatrix4f m_globalMatrixInv;
 
   bool m_boundingBoxDirty;
   csBoundingBox m_boundingBox;
   csDistanceState m_distanceState;
-
 
 private:
   void FlagBoundingBoxDirty();
@@ -115,7 +122,6 @@ private:
   std::vector<csSpatialState*> m_childStates;
 
 };
-
 
 
 CS_FORCEINLINE const csMatrix4f &csSpatialState::GetLocalTransformation() const

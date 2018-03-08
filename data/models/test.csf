@@ -1,0 +1,11 @@
+asset {
+	data {
+		entity (class:csEntity) {
+      entityState (class:csStaticMeshState id:0 root:true) {
+        property (name:Mesh type:resource locator:"models/area_Mesh.csf")
+        property (name:Materials collection:true type:resource idx:0 locator:"materials/DefaultMaterial.csf")
+        property (name:Materials collection:true type:resource idx:1 locator:"materials/DefaultMaterial.csf")
+      }
+    }
+	}
+}

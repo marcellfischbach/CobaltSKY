@@ -104,11 +104,30 @@ enum csFunctionVirtuality
   eFV_Virtual,
 };
 
+
+class csValueDeclaration
+{
+public:
+  csValueDeclaration(csConstness constness = eC_NonConst, const std::string &type = "void", csValueMemoryMode mode = eVMM_Value);
+
+  csConstness GetConstness() const;
+  const std::string &GetType() const;
+  csValueMemoryMode GetMode() const;
+
+  bool operator==(const csValueDeclaration &other) const;
+private:
+  csConstness m_constness;
+  std::string m_type;
+  csValueMemoryMode m_mode;
+};
+
 class CSE_API csProperty
 {
 public:
+  const csValueDeclaration &GetContainerDecl() const;
+  const csValueDeclaration &GetDecl() const;
+  bool IsContainer() const;
   const std::string &GetName() const;
-  const std::string &GetTypeName() const;
 
   template<typename T>
   void Set(iObject *object, T& t) const
@@ -131,7 +150,7 @@ public:
 
 
 protected:
-  csProperty(const std::string &typeName, const std::string &name);
+  csProperty(const csValueDeclaration &containerDecl, const std::string &name, const csValueDeclaration &decl);
 
   void SetProperty (const std::string &key, const std::string &value = "");
   virtual void SetValue(iObject *object, void *data) const = 0;
@@ -139,27 +158,13 @@ protected:
 
 
 private:
-  std::string m_typeName;
   std::string m_name;
+  csValueDeclaration m_containerDecl;
+  csValueDeclaration m_decl;
   std::map<std::string, std::string> m_properties;
 
 };
 
-class csValueDeclaration
-{
-public:
-  csValueDeclaration(csConstness constness = eC_NonConst, const std::string &type = "void", csValueMemoryMode mode = eVMM_Value);
-
-  csConstness GetConstness() const;
-  const std::string &GetType() const;
-  csValueMemoryMode GetMode() const;
-
-  bool operator==(const csValueDeclaration &other) const;
-private:
-  csConstness m_constness;
-  std::string m_type;
-  csValueMemoryMode m_mode;
-};
 
 class CSE_API csFunctionAttribute
 {

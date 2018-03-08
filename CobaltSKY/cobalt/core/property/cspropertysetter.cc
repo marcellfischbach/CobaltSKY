@@ -64,6 +64,18 @@ const csProperty *csPropertySetter::GetProperty(const csClass *ownerClass)
   if (!m_property)
   {
     m_property = ownerClass->GetProperty(m_name);
+    if (!m_property)
+    {
+      for (csSize i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
+      {
+        const csClass *superClass = ownerClass->GetSuperClass(i);
+        m_property = GetProperty(superClass);
+        if (m_property)
+        {
+          break;
+        }
+      }
+    }
   }
   return m_property;
 }
@@ -165,13 +177,18 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const s
   }
 
   std::string propName = m_name;
-  std::string propType = prop->GetTypeName();
+  std::string propType = prop->GetDecl().GetType();
   if (propName[0] >= 'a' && propName[0] <= 'z')
   {
     propName[0] = propName[0] + 'A' - 'a';
   }
   propName = setterName + propName;
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(propName);
+  return GetSetter(ownerClass, propName, prop->GetDecl().GetType());
+}
+
+const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+{
+  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
   for (const csFunction *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 1)
@@ -179,9 +196,18 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const s
       continue;
     }
 
-    if (func->GetAttribute(0).GetType().GetType() == prop->GetTypeName())
+    if (func->GetAttribute(0).GetType().GetType() == typeName)
     {
       return func;
+    }
+  }
+  for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
+  {
+    const csClass *superClass = ownerClass->GetSuperClass(i);
+    const csFunction *function = GetSetter(superClass, setterName, typeName);
+    if (function)
+    {
+      return function;
     }
   }
   return 0;
@@ -193,7 +219,7 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
   std::string propName = absName ? setterName : m_name;
   if (!absName)
   {
-    std::string propType = prop->GetTypeName();
+    std::string propType = prop->GetDecl().GetType();
     if (propName[0] >= 'a' && propName[0] <= 'z')
     {
       propName[0] = propName[0] + 'A' - 'a';
@@ -204,12 +230,18 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
     }
     propName = setterName + propName;
   }
-  std::string typeName = prop->GetTypeName();
+  std::string typeName = prop->GetDecl().GetType();
   if (prop->HasProperty("type"))
   {
     typeName = prop->GetProperty("type");
   }
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(propName);
+
+  return GetCollectionSetter(ownerClass, propName, typeName);
+}
+
+const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+{
+  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
   for (const csFunction *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 2)
@@ -220,6 +252,16 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
     if (func->GetAttribute(1).GetType().GetType() == typeName)
     {
       return func;
+    }
+  }
+
+  for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
+  {
+    const csClass *superClass = ownerClass->GetSuperClass(i);
+    const csFunction *function = GetCollectionSetter(superClass, setterName, typeName);
+    if (function)
+    {
+      return function;
     }
   }
   return 0;
@@ -233,7 +275,7 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
   std::string propName = absName ? setterName : m_name;
   if (!absName)
   {
-    std::string propType = prop->GetTypeName();
+    std::string propType = prop->GetDecl().GetType();
     if (propName[0] >= 'a' && propName[0] <= 'z')
     {
       propName[0] = propName[0] + 'A' - 'a';
@@ -244,12 +286,18 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
     }
     propName = setterName + propName;
   }
-  std::string typeName = prop->GetTypeName();
+  std::string typeName = prop->GetDecl().GetType();
   if (prop->HasProperty("type"))
   {
     typeName = prop->GetProperty("type");
   }
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(propName);
+
+  return GetCollectionAdder(ownerClass, propName, typeName);
+}
+
+const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+{
+  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
   for (const csFunction *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 1)
@@ -260,6 +308,16 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
     if (func->GetAttribute(0).GetType().GetType() == typeName)
     {
       return func;
+    }
+  }
+
+  for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
+  {
+    const csClass *superClass = ownerClass->GetSuperClass(i);
+    const csFunction *function = GetCollectionAdder(superClass, setterName, typeName);
+    if (function)
+    {
+      return function;
     }
   }
   return 0;

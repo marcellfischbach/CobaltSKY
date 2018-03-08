@@ -26,15 +26,14 @@ class CSE_API csEntityState : public CS_SUPER(csObject)
 public:
   virtual ~csEntityState();
 
-  virtual void SetID(csID id);
-  csID GetID() const;
+  virtual void SetId(csID id);
+  csID GetId() const;
 
   void SetName(const std::string &name);
   const std::string &GetName() const;
 
   virtual csSpatialState *ToSpatialState();
   virtual const csSpatialState *ToSpatialState() const;
-
 
   csEntity *GetEntity();
   const csEntity *GetEntity() const;
@@ -129,12 +128,12 @@ private:
   csEntityScene *m_scene;
 };
 
-CS_FORCEINLINE void csEntityState::SetID(csID id)
+CS_FORCEINLINE void csEntityState::SetId(csID id)
 {
   m_id = id;
 }
 
-CS_FORCEINLINE csID csEntityState::GetID() const
+CS_FORCEINLINE csID csEntityState::GetId() const
 {
   return m_id;
 }

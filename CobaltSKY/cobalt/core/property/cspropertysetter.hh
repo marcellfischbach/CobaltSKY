@@ -36,8 +36,11 @@ protected:
 
 private:
   const csFunction *GetSetter(const csClass *ownerClass, const std::string &setterName);
+  const csFunction *GetSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
   const csFunction *GetCollectionSetter(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName);
+  const csFunction *GetCollectionSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
   const csFunction *GetCollectionAdder(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName);
+  const csFunction *GetCollectionAdder(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
 
   std::string m_name;
 

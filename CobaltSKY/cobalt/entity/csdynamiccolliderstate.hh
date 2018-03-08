@@ -51,19 +51,20 @@ protected:
   virtual void OnDetachedFromScene(csEntityScene *scene);
 
 private:
-  CS_PROPERTY(name=Mass)
+  CS_PROPERTY()
     float m_mass;
 
-  CS_PROPERTY(name=Inertia)
+  CS_PROPERTY()
     csVector3f m_inertia;
 
-  CS_PROPERTY(name=AutoInertia)
+  CS_PROPERTY()
     bool m_autoInertia;
 
 
   iPhysicsDynamicCollider *m_dynamicCollider;
   csDynamicColliderStateTransformationCallback *m_callback;
 };
+
 
 
 CS_FORCEINLINE iPhysicsDynamicCollider *csDynamicColliderState::GetDynamicCollider()

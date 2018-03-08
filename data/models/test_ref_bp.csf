@@ -1,0 +1,10 @@
+asset {
+	data {
+		entity (locator:"models/area.csf") {
+			entityState(id:0) {
+				property(name:Materials collection:true type:resource idx:1 locator:"materials/Solid.csf")
+				property(name:LocalMatrix type:mat4f m32:5.0)
+			}
+		}
+	}
+}

@@ -104,15 +104,26 @@ void Class::Debug()
 
 
 
-
-Property::Property(bool isConst, const std::string &typeName, TypeSpecifiction typeSpecification, const std::string &propertyName, const std::map<std::string, std::string> &meta)
-  : m_const(isConst)
+Property::Property(bool isContainerConst, const std::string &containerTypeName, TypeSpecifiction containerTypeSpecification,
+  bool isConst, const std::string &typeName, TypeSpecifiction typeSpecification,
+  const std::string &propertyName, const std::map<std::string, std::string> &meta)
+  : m_containerConst(isContainerConst)
+  , m_containerTypeName(containerTypeName)
+  , m_containerTypeSpecification(containerTypeSpecification)
+  , m_const(isConst)
   , m_typeName(typeName)
-  , m_typeSpecification (typeSpecification)
+  , m_typeSpecification(typeSpecification)
   , m_propertyName(propertyName)
   , m_meta(meta)
 {
+  if (!m_containerTypeName.empty())
+  {
+    // we have a container situation so we swap the values
+    std::swap(m_containerConst, m_const);
+    std::swap(m_containerTypeName, m_typeName);
+    std::swap(m_containerTypeSpecification, m_typeSpecification);
 
+  }
 
 }
 
@@ -131,17 +142,42 @@ void Property::Debug()
     std::string("**")
   };
 
-  printf("   Prop: '%s' '%s' '%s''%s'\n", 
+  printf("   Prop: '%s' '%s' '%s' '%s''%s'\n",
     m_const ? "const" : "",
-    m_typeName.c_str(), 
+    m_containerTypeName.c_str(),
+    m_typeName.c_str(),
     specifierMap[m_typeSpecification].c_str(),
     GetPropertyName().c_str());
 }
 
+bool Property::IsContainerConst() const
+{
+  return m_containerConst;
+}
+
+const std::string &Property::GetContainerTypeName() const
+{
+  return m_containerTypeName;
+}
+
+TypeSpecifiction Property::GetContainerTypeSpecification() const
+{
+  return m_containerTypeSpecification;
+}
+
+bool Property::IsConst() const
+{
+  return m_const;
+}
 
 const std::string &Property::GetTypeName() const
 {
   return m_typeName;
+}
+
+TypeSpecifiction Property::GetTypeSpecification() const
+{
+  return m_typeSpecification;
 }
 
 const std::string &Property::GetPropertyName() const
@@ -191,8 +227,8 @@ const std::map<std::string, std::string> &Property::GetMeta() const
 
 Function::Function()
   : m_functionName("")
-  , m_const (false)
-  , m_virtual (false)
+  , m_const(false)
+  , m_virtual(false)
   , m_override(false)
   , m_returnType("void")
   , m_returnTypeSpecifiction(eTS_Value)
@@ -304,7 +340,7 @@ void Function::Debug()
     m_const ? "const" : "",
     m_override ? "overeride" : "");
 
-    
+
   for (auto param : m_parameters)
   {
     printf("      Arg: '%s' '%s' '%s''%s'\n",
