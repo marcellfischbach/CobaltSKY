@@ -38,12 +38,12 @@ int main (int argc, char **argv)
 
   QApplication app(argc, argv);
 
-  QFile qssFile("G:/IDE/devs/CobaltSKY/Tools/Editor/cobalt.css");
+  QFile qssFile("d:/programming/CobaltSKY/Tools/Editor/flat_menu.css");
   if (qssFile.open(QIODevice::ReadOnly))
   {
     QString qss = qssFile.readAll();
     qssFile.close();
-    //app.setStyleSheet(qss);
+    app.setStyleSheet(qss);
   }
 
 

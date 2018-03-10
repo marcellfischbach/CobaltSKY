@@ -13,6 +13,11 @@ csEntityState::csEntityState()
 
 }
 
+void csEntityState::SetId(csID id)
+{
+  m_id = id;
+}
+
 csEntityState::~csEntityState()
 {
 

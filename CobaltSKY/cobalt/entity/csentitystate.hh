@@ -128,11 +128,6 @@ private:
   csEntityScene *m_scene;
 };
 
-CS_FORCEINLINE void csEntityState::SetId(csID id)
-{
-  m_id = id;
-}
-
 CS_FORCEINLINE csID csEntityState::GetId() const
 {
   return m_id;

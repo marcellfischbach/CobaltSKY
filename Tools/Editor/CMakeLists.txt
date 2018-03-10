@@ -27,7 +27,9 @@ set(EDITOR_SOURCES
     assetdescriptor.hh
     basicdockitem.cc
     basicdockitem.hh
+    cobalt.css
     dockitems.hh
+	flat.css
     main.cc
     editor.cc
     editor.hh
