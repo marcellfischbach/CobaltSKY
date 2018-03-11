@@ -10,6 +10,7 @@ MainWindow::MainWindow()
   : QMainWindow()
 {
   m_gui.setupUi(this);
+  /*
   QFile qssFile("D://Programming//CobaltSKY//Tools//Editor//cobalt.qss");
   if (qssFile.open(QIODevice::ReadOnly))
   {
@@ -18,7 +19,7 @@ MainWindow::MainWindow()
     printf("StyleSheet:\n%s\n", (const char *)qss.toLatin1());
     setStyleSheet(qss);
   }
-
+  */
 }
 
 MainWindow::~MainWindow()

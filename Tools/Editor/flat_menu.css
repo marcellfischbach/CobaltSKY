@@ -1,4 +1,6 @@
 
+
+
 /* *********************** */
 /*  QMenuBar               */
 /* *********************** */
@@ -8,12 +10,13 @@ QMenuBar {
     background-color: #0747A6;
 }
 
-QMenuBar::item {
-    padding-top: .3em;
-    padding-bottom: .3em;
-    padding-left: 1em;
-    padding-right: 1em;
-}
+    QMenuBar::item {
+        padding-top: .3em;
+        padding-bottom: .3em;
+        padding-left: 1em;
+        padding-right: 1em;
+        border: 1px solid #0747A6;
+    }
 
 QMenuBar::item:selected {
     color: lightgray;
@@ -50,3 +53,51 @@ QMenu:disabled:selected {
     border: none;
 }
 
+
+
+/* *********************** */
+/*  QTabBar */
+/* *********************** */
+
+QTabBar::tab {
+    color: lightgray;
+    background-color: #0747A6;
+    padding-top: .3em;
+    padding-bottom: .3em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    margin: 0px;
+    border: 1px solid #0747A6;
+    border-left: 1px solid #2777e6;
+    border-top: 1px solid #2777e6;
+}
+
+
+QTabBar::tab:hover {
+    color: lightgray;
+    background-color: #1767c6;
+    border: 1px solid #2777e6;
+    border-right: 1px solid #1767c6;
+}
+
+QTabBar::tab:previous-selected {
+    border-left: 1px solid #0747A6;
+}
+
+QTabBar::tab:previous-selected:hover {
+    color: lightgray;
+    background-color: #1767c6;
+    border: 1px solid #2777e6;
+}
+
+
+QTabBar::tab:selected {
+    color: #111;
+    background-color: #fff;
+    border-color: lightgray;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-bottom-style: none;
+    border-width: 1px;
+}

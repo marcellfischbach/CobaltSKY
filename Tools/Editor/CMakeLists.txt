@@ -30,6 +30,7 @@ set(EDITOR_SOURCES
     cobalt.css
     dockitems.hh
 	flat.css
+	flat_menu.css
     main.cc
     editor.cc
     editor.hh
