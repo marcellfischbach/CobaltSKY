@@ -18,8 +18,6 @@ SamplerEditor::SamplerEditor()
   m_widget = new SamplerEditorWidget(this);
   SetWidget(m_widget);
 
-  AddDockItemName("TestDock01");
-  AddDockItemName("TestDock02");
 }
 
 SamplerEditor::~SamplerEditor()

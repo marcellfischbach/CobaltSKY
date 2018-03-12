@@ -38,7 +38,7 @@ int main (int argc, char **argv)
 
   QApplication app(argc, argv);
 
-  QFile qssFile("d:/programming/CobaltSKY/Tools/Editor/flat_menu.css");
+  QFile qssFile("g:/ide/devs/CobaltSKY/Tools/Editor/flat_menu.css");
   if (qssFile.open(QIODevice::ReadOnly))
   {
     QString qss = qssFile.readAll();

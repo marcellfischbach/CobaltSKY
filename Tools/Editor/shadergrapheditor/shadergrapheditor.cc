@@ -6,6 +6,7 @@
 #include <shadergrapheditor/shadergrapheditorproperties.hh>
 #include <shadergrapheditor/shadergrapheditortoolbox.hh>
 #include <shadergrapheditor/shadergrapheditorwidget.hh>
+#include <components/baseeditorwidget.hh>
 #include <basicdockitem.hh>
 #include <editor.hh>
 #include <cobalt/core/csresourcemanager.hh>
@@ -17,20 +18,20 @@ ShaderGraphEditor::ShaderGraphEditor()
 {
   CS_CLASS_GEN_CONSTR;
   m_widget = new ShaderGraphEditorWidget(this);
-  SetWidget(m_widget);
 
   m_toolbox = new ShaderGraphEditorToolbox();
-  AddDockItemName(TOOLBOX_DOCK_NAME);
-
   m_properties = new ShaderGraphEditorProperties();
-  AddDockItemName(PROPERTIES_DOCK_NAME);
-
   m_outliner = new ShaderGraphEditorOutliner();
-  AddDockItemName(OUTLINER_DOCK_NAME);
-
   m_preview = new ShaderGraphEditorPreview();
-  AddDockItemName(PREVIEW_DOCK_NAME);
 
+  
+  BaseEditorWidget *widget = new BaseEditorWidget(0,
+    BaseEditorWidget::Description(m_preview, m_toolbox),
+    m_widget,
+    BaseEditorWidget::Description(m_outliner, m_properties));
+    
+  SetWidget(widget);
+    
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
     m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
 
@@ -64,22 +65,6 @@ void ShaderGraphEditor::UpdateAsset()
   m_preview->SetShaderGraph(shaderGraph);
 
   CS_RELEASE(meta);
-
-}
-
-void ShaderGraphEditor::PopulateDockItems()
-{
-  BasicDockItem *toolbox = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(TOOLBOX_DOCK_NAME));
-  toolbox->SetContent(m_toolbox);
-
-  BasicDockItem *properties = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
-  properties->SetContent(m_properties);
-
-  BasicDockItem *preview = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PREVIEW_DOCK_NAME));
-  preview->SetContent(m_preview);
-
-  BasicDockItem *outliner = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(OUTLINER_DOCK_NAME));
-  outliner->SetContent(m_outliner);
 
 }
 

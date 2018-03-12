@@ -7,6 +7,7 @@
 #include <textureeditor/textureeditor.refl.hh>
 #include <cobalt/csenums.hh>
 
+class QSplitter;
 class TextureEditorProperties;
 class TextureEditorWidget;
 CS_CLASS()
@@ -18,12 +19,12 @@ public:
   TextureEditor();
   ~TextureEditor();
 
-  virtual void PopulateDockItems();
 
 protected:
   void UpdateAsset();
 
 private:
+  QSplitter *m_splitter;
   TextureEditorWidget *m_widget;
   TextureEditorProperties *m_properties;
 };
