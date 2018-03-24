@@ -127,18 +127,6 @@ int main(int argc, char **argv)
 
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());
-  const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename("materials/solid.xasset");
-  if (entry)
-  {
-    printf("Entry: %s @ %s\n",
-      entry->GetName().c_str(),
-      entry->GetAbsPath().c_str()
-    );
-  }
-  else
-  {
-    printf("no entry\n");
-  }
   csEngine engine;
 
 
@@ -152,7 +140,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-#if 1
+#if 0
   posX = -1500;
 #else
   posX = 200;
@@ -408,7 +396,6 @@ int main_loop()
     }
     directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.25f));
   }
-
 
   return 0;
 }

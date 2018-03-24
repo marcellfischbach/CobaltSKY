@@ -19,7 +19,10 @@ private:
   void RenderShadowMap(const csDirectionalLight *light, csGBuffer *gbuffer);
   void BlurShadowMap();
   void CalcPSSMMatrices(const csDirectionalLight *light, const csCamera *camera);
-  void CalcMatrix(const csVector3f &dir, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
+  void CalcMatrix(const csVector3f &dir, const csVector3f  &camPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
+
+  void CalcPSSMMatricesAlternative(const csDirectionalLight *light, const csCamera *camera);
+  void CalcMatrixAlternative(const csVector3f &dir, const csVector3f  &camPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
   void UpdateProjectionMatrices();
   csClipper *CreateClipper();
 

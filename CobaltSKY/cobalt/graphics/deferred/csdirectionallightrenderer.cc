@@ -93,8 +93,8 @@ csDirectionalLightRenderer::csDirectionalLightRenderer(iGraphics *renderer)
   unsigned screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   unsigned screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-  unsigned shadowMapWidth = screenResolutionWidth / 2;
-  unsigned shadowMapHeight = screenResolutionHeight / 2;
+  unsigned shadowMapWidth = screenResolutionWidth / 2.0f;
+  unsigned shadowMapHeight = screenResolutionHeight /2.0f;
 
   m_shadowMapRenderer.shadowMap = m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false);
   m_shadowMapRenderer.shadowMap->SetSampler(colorSampler);
@@ -284,7 +284,8 @@ void csDirectionalLightRenderer::RenderShadow(csEntity *root, csCamera *camera, 
 {
   m_renderer->PushRenderStates();
 
-	CalcPSSMMatrices(light, camera);
+	//CalcPSSMMatrices(light, camera);
+  CalcPSSMMatricesAlternative(light, camera);
 
 	CalcShadowIntensity(light);
 
@@ -436,16 +437,17 @@ void csDirectionalLightRenderer::CalcPSSMMatrices(const csDirectionalLight *ligh
 	{
 		camera->GetPlanePoints(0, &points[0]);
 		camera->GetPlanePoints(dists[i + 1], &points[4]);
-		CalcMatrix(light->GetDirection(), 8, points, m_shadowCam[i], m_shadowCamInv[i], m_min[i], m_max[i]);
+		CalcMatrix(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCam[i], m_shadowCamInv[i], m_min[i], m_max[i]);
 	}
 
 	camera->GetPlanePoints(0, &points[0]);
 	camera->GetPlanePoints(m_distances.z, &points[4]);
-	CalcMatrix(light->GetDirection(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
+	CalcMatrix(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
 }
 
-void csDirectionalLightRenderer::CalcMatrix(const csVector3f &dir, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const
+void csDirectionalLightRenderer::CalcMatrix(const csVector3f &dir, const csVector3f &cameraPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const
 {
+  /*
 	csVector3f spot;
 	for (csSize i = 0; i < numPoints; i++)
 	{
@@ -456,7 +458,7 @@ void csDirectionalLightRenderer::CalcMatrix(const csVector3f &dir, csSize numPoi
 	csVector3f eye;
 	csVector3f::Mul(dir, -100.0f, eye);
 	csVector3f::Add(eye, spot, eye);
-
+  */
 	csVector3f up(0.0f, 0.0f, 1.0f);
 	if (dir.z >= 0.9999999)
 	{
@@ -467,8 +469,10 @@ void csDirectionalLightRenderer::CalcMatrix(const csVector3f &dir, csSize numPoi
 		up.Set(-1.0f, 0.0f, 0.0f);
 	}
 
-	cam.SetLookAt(csVector3f(0, 0, 0), dir, up);
-	camInv.SetLookAtInv(csVector3f(0, 0, 0), dir, up);
+  csVector3f at = cameraPos + dir;
+
+	cam.SetLookAt(cameraPos, at, up);
+	camInv.SetLookAtInv(cameraPos, at, up);
 
 	min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
 	max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
@@ -502,5 +506,86 @@ void csDirectionalLightRenderer::CalcMatrix(const csVector3f &dir, csSize numPoi
 			max.z = t.z;
 		}
 	}
+}
+
+
+
+
+void csDirectionalLightRenderer::CalcPSSMMatricesAlternative(const csDirectionalLight *light, const csCamera *camera)
+{
+  float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
+  csVector3f points[8];
+
+  for (csSize i = 0; i < 3; ++i)
+  {
+    camera->GetPlanePoints(0, &points[0]);
+    camera->GetPlanePoints(dists[i + 1], &points[4]);
+    CalcMatrixAlternative(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCam[i], m_shadowCamInv[i], m_min[i], m_max[i]);
+  }
+
+  camera->GetPlanePoints(0, &points[0]);
+  camera->GetPlanePoints(m_distances.z, &points[4]);
+  CalcMatrixAlternative(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
+}
+
+void csDirectionalLightRenderer::CalcMatrixAlternative(const csVector3f &dir, const csVector3f &cameraPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const
+{
+  csVector3f up(0.0f, 0.0f, 1.0f);
+  if (dir.z >= 0.9999999)
+  {
+    up.Set(1.0f, 0.0f, 0.0f);
+  }
+  else if (dir.z <= -0.9999999)
+  {
+    up.Set(-1.0f, 0.0f, 0.0f);
+  }
+
+
+  csVector3f center(0.0f, 0.0f, 0.0f);
+  for (size_t i = 0; i < numPoints; ++i)
+  {
+    center += points[i];
+  }
+  center /= (float)numPoints;
+
+  float maxDistSqr = 0.0f;
+  for (size_t i = 0; i < numPoints; ++i)
+  {
+    float distSqr = (points[i] - center).Dot();
+    if (distSqr > maxDistSqr)
+    {
+      maxDistSqr = distSqr;
+    }
+  }
+
+  csVector3f at = center + dir;
+  cam.SetLookAt(center, at, up);
+  camInv.SetLookAtInv(center, at, up);
+
+  float radius = sqrt(maxDistSqr);
+  float sizePerPixel = 2.0f * radius / (float)m_shadowBufferSize;
+
+  csVector3f c = csMatrix4f::Mult(cam, center, c);
+
+  c.x -= fmodf(c.x, sizePerPixel);
+  c.y -= fmodf(c.y, sizePerPixel);
+  c.z -= fmodf(c.z, sizePerPixel);
+
+  csMatrix4f::Mult(camInv, c, center);
+
+  at = center + dir;
+  cam.SetLookAt(center, at, up);
+  camInv.SetLookAtInv(center, at, up);
+
+
+  min.x = -radius;
+  min.y = -radius;
+  min.z = -radius;
+
+  max.x = radius;
+  max.y = radius;
+  max.z = radius;
+
+
 }
 
