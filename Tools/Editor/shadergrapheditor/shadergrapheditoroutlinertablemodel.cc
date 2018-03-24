@@ -41,11 +41,10 @@ QModelIndex ShaderGraphEditorOutlinerTableModel::parent(const QModelIndex &child
 
 int ShaderGraphEditorOutlinerTableModel::rowCount(const QModelIndex &parent) const
 {
-  if (parent.isValid())
+  if (parent.isValid() || !m_shaderGraph)
   {
     return 0;
   }
-
   return m_shaderGraph->GetNumberOfTotalNodes() + 1;
 }
 

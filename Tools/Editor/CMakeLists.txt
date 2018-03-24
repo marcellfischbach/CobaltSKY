@@ -163,6 +163,8 @@ set(COMPONENTS_SOURCES
     components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
+	components/baseeditorwidget.cc
+	components/baseeditorwidget.hh
     components/qtcsonscreenrendertarget.cc
     components/qtcsonscreenrendertarget.hh
     components/sceneview.cc

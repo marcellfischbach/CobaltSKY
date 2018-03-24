@@ -101,21 +101,6 @@ bool AbstractAssetEditor::IsDirty() const
   return m_dirty;
 }
 
-void AbstractAssetEditor::AddDockItemName(const std::string &dockItemName)
-{
-  m_visibleDockItems.insert(dockItemName);
-}
-
-const std::set<std::string> &AbstractAssetEditor::GetVisibleDockItems() const
-{
-  return m_visibleDockItems;
-}
-
-void AbstractAssetEditor::PopulateDockItems()
-{
-  // don't do anything... override in subclasses
-}
-
 void AbstractAssetEditor::CloseRequest()
 {
   if (m_dirty)

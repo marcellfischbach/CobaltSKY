@@ -30,8 +30,6 @@ public:
   virtual const std::string &GetName() const;
   virtual void SetDirty(bool dirty);
   virtual bool IsDirty() const;
-  virtual const std::set<std::string> &GetVisibleDockItems() const;
-  virtual void PopulateDockItems();
 
   virtual void CloseRequest() override;
   void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
@@ -40,7 +38,6 @@ public:
 
 protected:
   virtual void UpdateAsset() = 0;
-  void AddDockItemName(const std::string &dockItemName);
   void UpdateMainWindow();
 
 private:

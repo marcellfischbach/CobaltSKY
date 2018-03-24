@@ -17,8 +17,6 @@ public:
   StaticMeshEditor();
   ~StaticMeshEditor();
 
-  virtual void PopulateDockItems();
-
 protected:
   void UpdateAsset();
 

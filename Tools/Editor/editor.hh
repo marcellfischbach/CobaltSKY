@@ -46,11 +46,7 @@ public:
 
   csGraphicsGL4 *GetGraphics();
  
-  void AddDockItem(iDockItem *item);
-  iDockItem *GetDockItem(const std::string &dockItemName) const;
   void CurrentEditorChanged();
-  void UpdateVisibleDockItemsFromEditor(iAssetEditor *editor);
-  void UpdateVisibleDockItems(const std::set<std::string> &visibleDocks);
 
   void CloseProject();
   void OpenProject(const std::string &projectPath);

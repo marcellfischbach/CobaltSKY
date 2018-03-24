@@ -2,56 +2,44 @@ asset () {
   data () {
     shaderGraph () {
       nodes () {
-        node (id:0 class:csSGTexture2D) {
-          resource (name:"") {
-            locator (locator:"")
-          }
-        }
-        node (id:1 class:csSGFloat3)
-        node (id:2 class:csSGConstFloat3)
-        node (id:3 class:csSGVarFloat) {
-          resource (name:Roughness) {
-            float (0.800000)
-          }
-        }
-        node (id:4 class:csSGVarFloat3) {
+        node (id:0 class:csSGVarFloat3) {
           resource (name:Diffuse) {
             float3 (1.000000 1.000000 1.000000)
           }
         }
-        node (id:5 class:csSGVarFloat3) {
-          resource (name:"") {
-            float3 (-431602080.000000 -431602080.000000 -431602080.000000)
+        node (id:1 class:csSGVarFloat) {
+          resource (name:Roughness) {
+            float (0.800000)
           }
         }
       }
       inputs () {
-        node (id:1 input:0) {
-          float (0.000000)
-        }
-        node (id:1 input:1) {
-          float (0.000000)
-        }
-        node (id:1 input:2) {
-          float (0.000000)
-        }
-        node (id:2 input:0) {
-          float (0.000000)
-        }
-        node (id:2 input:1) {
-          float (0.000000)
-        }
-        node (id:2 input:2) {
+        node (id:0 input:0) {
           float (0.000000)
         }
         node (id:0 input:0) {
           float (0.000000)
         }
+        node (id:0 input:1) {
+          float (0.000000)
+        }
+        node (id:0 input:2) {
+          float (0.000000)
+        }
+        node (id:0 input:0) {
+          float (0.000000)
+        }
+        node (id:0 input:1) {
+          float (0.000000)
+        }
+        node (id:0 input:2) {
+          float (0.000000)
+        }
         shaderGraph (input:Diffuse) {
-          node (id:4 output:0)
+          node (id:0 output:0)
         }
         shaderGraph (input:Roughness) {
-          node (id:3 output:0)
+          node (id:1 output:0)
         }
       }
       attributes () {
@@ -67,22 +55,10 @@ asset () {
     shaderGraphMeta () {
       nodes () {
         node (id:0) {
-          pos (140.000000 -180.000000)
-        }
-        node (id:1) {
-          pos (0.000000 140.000000)
-        }
-        node (id:2) {
-          pos (140.000000 140.000000)
-        }
-        node (id:3) {
-          pos (-60.000000 20.000000)
-        }
-        node (id:4) {
           pos (-60.000000 -60.000000)
         }
-        node (id:5) {
-          pos (240.000000 160.000000)
+        node (id:1) {
+          pos (-60.000000 20.000000)
         }
       }
       shaderGraph () {

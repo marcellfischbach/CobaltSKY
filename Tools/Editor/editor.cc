@@ -85,13 +85,6 @@ bool Editor::Initialize(int argc, char **argv)
   GLContext::Get()->Initialize(m_mainWindow);
 
 
-  // left docks
-  AddDockItem(new BasicDockItem(PREVIEW_DOCK_NAME, QObject::tr("Preview"), Qt::LeftDockWidgetArea));
-  AddDockItem(new BasicDockItem(TOOLBOX_DOCK_NAME, QObject::tr("Toolbox"), Qt::LeftDockWidgetArea));
-
-  // right docks
-  AddDockItem(new BasicDockItem(OUTLINER_DOCK_NAME, QObject::tr("Outliner"), Qt::RightDockWidgetArea));
-  AddDockItem(new BasicDockItem(PROPERTIES_DOCK_NAME, QObject::tr("Properties"), Qt::RightDockWidgetArea));
 
   EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), editor_resource_renamed, this);
 
@@ -242,57 +235,13 @@ QRect Editor::GetScreenSize()
 }
 
 
-void Editor::AddDockItem(iDockItem *dockItem)
-{
-  m_dockItems.push_back(dockItem);
-  m_mainWindow->addDockWidget(dockItem->GetDockArea(), dockItem->GetDockWidget());
-}
-
-iDockItem *Editor::GetDockItem(const std::string &dockItemName) const
-{
-  for (iDockItem *dockItem : m_dockItems)
-  {
-    if (dockItem->GetName() == dockItemName)
-    {
-      return dockItem;
-    }
-  }
-  return 0;
-}
 
 void Editor::CurrentEditorChanged()
 {
   iAssetEditor *currentEditor = FindCurrentEditor();
 
-  UpdateVisibleDockItemsFromEditor(currentEditor);
-
-  if (currentEditor)
-  {
-    currentEditor->PopulateDockItems();
-  }
 }
 
-void Editor::UpdateVisibleDockItemsFromEditor(iAssetEditor *currentEditor)
-{
-  std::set<std::string> dockNames;
-  if (currentEditor)
-  {
-    dockNames = currentEditor->GetVisibleDockItems();
-  }
-
-  UpdateVisibleDockItems(dockNames);
-}
-void Editor::UpdateVisibleDockItems(const std::set<std::string> &dockNames)
-{
-  for (iDockItem *dockItem : m_dockItems)
-  {
-    bool needed = dockNames.find(dockItem->GetName()) != dockNames.end();
-    if (!needed)
-    {
-      dockItem->SetEmptyContent();
-    }
-  }
-}
 
 void Editor::CloseProject()
 {

@@ -16,16 +16,19 @@
 #include <editor.hh>
 #include <dockitems.hh>
 #include <project/project.hh>
+#include <components/baseeditorwidget.hh>
 
 MaterialEditor::MaterialEditor()
   : AbstractAssetEditor()
 {
   CS_CLASS_GEN_CONSTR;
   m_widget = new MaterialEditorWidget(this);
-  SetWidget(m_widget);
-
-  AddDockItemName(PROPERTIES_DOCK_NAME);
   m_properties = new MaterialEditorProperties();
+
+  SetWidget(new BaseEditorWidget(0,
+    BaseEditorWidget::Description(),
+    m_widget,
+    BaseEditorWidget::Description(m_properties)));
 
   QObject::connect(m_properties, SIGNAL(MaterialChanged()), m_widget, SLOT(MaterialChanged()));
 }
@@ -46,12 +49,6 @@ void MaterialEditor::UpdateAsset()
   m_properties->SetMaterial(m_material);
 }
 
-
-void MaterialEditor::PopulateDockItems()
-{
-  BasicDockItem *properties = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
-  properties->SetContent(m_properties);
-}
 
 void MaterialEditor::Save()
 {

@@ -31,7 +31,6 @@ public:
 
 protected:
   void UpdateAsset();
-  void PopulateDockItems();
 
 private:
 

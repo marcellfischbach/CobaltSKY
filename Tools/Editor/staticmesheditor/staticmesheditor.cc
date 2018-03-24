@@ -4,6 +4,7 @@
 #include <staticmesheditor/staticmesheditorwidget.hh>
 #include <basicdockitem.hh>
 #include <editor.hh>
+#include <components/baseeditorwidget.hh>
 
 #include <cobalt/entity/csstaticmeshstate.hh>
 #include <cobalt/core/csresourcemanager.hh>
@@ -14,7 +15,10 @@ StaticMeshEditor::StaticMeshEditor()
 {
   CS_CLASS_GEN_CONSTR;
   m_widget = new StaticMeshEditorWidget(this);
-  SetWidget(m_widget);
+  SetWidget(new BaseEditorWidget(0,
+    BaseEditorWidget::Description(),
+    m_widget,
+    BaseEditorWidget::Description()));
 
   //m_properties = new TextureEditorProperties();
   //AddDockItemName(PROPERTIES_DOCK_NAME);
@@ -44,10 +48,4 @@ void StaticMeshEditor::UpdateAsset()
     m_properties->SetTexture(texture);
   }
   */
-}
-
-void StaticMeshEditor::PopulateDockItems()
-{
-  //BasicDockItem *properties = static_cast<BasicDockItem*>(Editor::Get()->GetDockItem(PROPERTIES_DOCK_NAME));
-  //properties->SetContent(m_properties);
 }
