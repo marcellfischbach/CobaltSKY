@@ -127,6 +127,8 @@ bool SDLWindow::UpdateEvents()
     printf("no window\n");
     return false;
   }
+  SDL_GL_MakeCurrent(m_window, m_context);
+
   m_keyboard->UpdateKeys();
   m_mouse->UpdateButtons();
   m_mouse->UpdateMotion();
@@ -163,6 +165,7 @@ bool SDLWindow::UpdateEvents()
 bool SDLWindow::Present()
 {
 
+  SDL_GL_MakeCurrent(m_window, m_context);
   SDL_GL_SwapWindow(m_window);
   return true;
 }

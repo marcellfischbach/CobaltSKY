@@ -1141,10 +1141,17 @@ void csGraphicsGL4::Render(csPrimitiveType primType, csUInt32 count)
 
 void csGraphicsGL4::RenderIndexed(csPrimitiveType primType, csUInt32 count, csDataType indexType)
 {
+  csInt32 c = count;
+  if (c < 0)
+  {
+    return;
+  }
   BindValues();
   if (BindVertexDeclaration())
   {
     m_indexBuffer->Bind();
+    CS_CHECK_GL_ERROR;
+    printf ("Count: %d\n", count); fflush(stdout);
     glDrawElements(primitiveTypeMap[primType], count, dataTypeMap[indexType], 0);
     CS_CHECK_GL_ERROR;
 

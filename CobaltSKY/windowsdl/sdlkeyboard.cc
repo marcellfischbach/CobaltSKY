@@ -1,6 +1,6 @@
 
 #include <windowsdl/sdlkeyboard.hh>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 static csKey keyMap[SDL_NUM_SCANCODES];
 

@@ -3,7 +3,7 @@
 
 #include <windowsdl/sdlexport.hh>
 #include <cobalt/window/iwindow.hh>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <string>
 #include <windowsdl/sdlwindow.refl.hh>
 

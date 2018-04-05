@@ -12,7 +12,7 @@
 #include <cobalt/graphics/isampler.hh>
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/cscamera.hh>
-#include <cobalt/graphics/deferred/csdeferredframeprocessor.hh>
+#include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <editor.hh>
 #include <glcontext.hh>
 #include <QPaintEvent>
@@ -92,7 +92,7 @@ void SceneView::initializeGL()
 
   //
   // create the frameprocessor that will render the scene
-  m_frameProcessor = new csDeferredFrameProcessor(m_graphics);
+  m_frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
   if (!m_frameProcessor->Initialize())
   {
     printf("Unable to initialize frame processor\n");
@@ -156,7 +156,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     printf("Unable to make glcontext current\n");
     return result;
   }
-  csDeferredFrameProcessor *frameProcessor = new csDeferredFrameProcessor(m_graphics);
+  csDeferredFrameProcessorGL4 *frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
   if (!frameProcessor->Initialize())
   {
     printf("Unable to initialize frame processor\n");

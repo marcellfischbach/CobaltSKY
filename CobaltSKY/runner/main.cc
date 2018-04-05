@@ -11,6 +11,7 @@
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <windowsdl/sdlwindow.hh>
 #include <graphicsgl4/gl4graphics.hh>
+#include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
 #include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>
@@ -60,7 +61,6 @@
 #include <cobalt/graphics/cspostprocess.hh>
 #include <cobalt/graphics/cspostprocessoutput.hh>
 #include <cobalt/graphics/cspostprocessor.hh>
-#include <cobalt/graphics/deferred/csdeferredframeprocessor.hh>
 #include <cobalt/graphics/scene/cscameranode.hh>
 #include <cobalt/graphics/scene/csgeometrynode.hh>
 #include <cobalt/graphics/scene/csgroupnode.hh>
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-#if 0
+#if 1
   posX = -1500;
 #else
   posX = 200;
@@ -285,7 +285,7 @@ int initialize()
 
   keyboard = window->GetKeyboard();
 
-  fp = new csDeferredFrameProcessor(graphicsGL4);// ->CreateDeferredFrameProcessor();
+  fp = new csDeferredFrameProcessorGL4(graphicsGL4);// ->CreateDeferredFrameProcessor();
   if (!fp->Initialize() || !fp->Resize(g_screenResolutionWidth, g_screenResolutionHeight))
   {
     printf("Unable to initialize frame processor\n");
@@ -313,13 +313,16 @@ int main_loop()
 {
 
   csUInt32 fps = 0;
-  csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli();
+  csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli() + 1000;
   bool anim = false;
   float angle = 0.0f;
   float height = 2.5f;
   csUInt64 lastTime = csTime::Get().GetCurrentTimeMilli();
+  unsigned run = 1;
   while (true)
   {
+    printf ("Run: %d\n", run++);
+    fflush(stdout);
     csTime::Get().Tick();
     fps++;
     csUInt64 time = csTime::Get().GetCurrentTimeMilli();
@@ -337,6 +340,7 @@ int main_loop()
 
     float tpf = (float)deltaT / 1000.0f;
 
+    printf ("Update window\n"); fflush(stdout);
     window->UpdateEvents();
     if (keyboard->IsKeyPressed(eK_Esc))
     {
@@ -356,28 +360,37 @@ int main_loop()
       MyEvent1 evt;
       masterBus << evt;
     }
+    printf ("Update window - done\n"); fflush(stdout);
 
     handle_material(keyboard);
 
+    printf ("Update camera and character\n"); fflush(stdout);
     UpdateCamera(camera, character, mouse, keyboard);
     UpdateCharacter(character, mouse, keyboard, tpf);
+    printf ("Update camera and character - done\n"); fflush(stdout);
 
 
     scene->GetRoot()->UpdateBoundingBox();
 
+    printf ("Render frame\n"); fflush(stdout);
     iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
+    printf ("Render frame - done\n"); fflush(stdout);
     iTexture2D *colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 
+    printf ("Present frame\n");
     // now render this image onscreen
     graphicsGL4->ResetDefaults();
     graphicsGL4->SetRenderTarget(0);
     graphicsGL4->SetViewport(g_screenResolutionWidth, g_screenResolutionHeight);
     graphicsGL4->Clear();
     graphicsGL4->RenderFullScreenFrame(colorTarget);
+    printf ("Present frame - done\n");
 
+    printf ("Present window\n");
     window->Present();
+    printf ("Present window - done\n");
     scene->Update(tpf);
 
     scene->GetPhysicsScene()->StepSimulation();

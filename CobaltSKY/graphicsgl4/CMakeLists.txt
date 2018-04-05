@@ -52,6 +52,30 @@ source_group(
 	)
 
 
+set(SOURCE_DEFERRED
+    deferred/gl4defaultcollector.cc
+    deferred/gl4defaultcollector.hh
+    deferred/gl4deferredframeprocessor.cc
+    deferred/gl4deferredframeprocessor.hh
+    deferred/gl4directionallightrenderer.cc
+    deferred/gl4directionallightrenderer.hh
+    deferred/gl4gbuffer.cc
+    deferred/gl4gbuffer.hh
+    deferred/gl4lightrenderer.cc
+    deferred/gl4lightrenderer.hh
+    deferred/gl4particlerenderer.cc
+    deferred/gl4particlerenderer.hh
+    deferred/gl4pointlightrenderer.cc
+    deferred/gl4pointlightrenderer.hh
+)
+
+source_group(
+    "graphicsgl4\\deferred"
+    FILES
+    ${SOURCE_DEFERRED}
+    )
+		
+
 
 
 set(SOURCE_SHADERGRAPH
@@ -121,6 +145,7 @@ source_group(
 
 set(ALL_SOURCES
 	${SOURCE}
+  ${SOURCE_DEFERRED}
 	${SOURCE_SHADERGRAPH}
 	)
 

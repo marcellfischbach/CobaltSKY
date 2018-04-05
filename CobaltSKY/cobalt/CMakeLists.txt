@@ -62,8 +62,8 @@ set(SOURCE_CORE
     core/cslibrary.hh
     core/cslogger.cc
     core/cslogger.hh
-	core/csreflectionhelper.cc
-	core/csreflectionhelper.hh
+		core/csreflectionhelper.cc
+		core/csreflectionhelper.hh
     core/csresourcelocator.cc
     core/csresourcelocator.hh
     core/csresourcemanager.cc
@@ -269,29 +269,6 @@ source_group(
     )
 		
 
-set(SOURCE_GRAPHICS_DEFERRED
-    graphics/deferred/csdefaultcollector.cc
-    graphics/deferred/csdefaultcollector.hh
-    graphics/deferred/csdeferredframeprocessor.cc
-    graphics/deferred/csdeferredframeprocessor.hh
-    graphics/deferred/csdirectionallightrenderer.cc
-    graphics/deferred/csdirectionallightrenderer.hh
-    graphics/deferred/csgbuffer.cc
-    graphics/deferred/csgbuffer.hh
-    graphics/deferred/cslightrenderer.cc
-    graphics/deferred/cslightrenderer.hh
-    graphics/deferred/csparticlerenderer.cc
-    graphics/deferred/csparticlerenderer.hh
-    graphics/deferred/cspointlightrenderer.cc
-    graphics/deferred/cspointlightrenderer.hh
-)
-
-source_group(
-    "cobalt\\graphics\\deferred"
-    FILES
-    ${SOURCE_GRAPHICS_DEFERRED}
-    )
-		
 
 set(SOURCE_GRAPHICS_SCENE
     graphics/scene/iscancallback.hh
