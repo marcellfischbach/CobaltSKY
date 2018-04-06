@@ -25,7 +25,7 @@ QWidget *BaseEditorWidget::Description::GetPart1() const
   return m_part1;
 }
 
-BaseEditorWidget::BaseEditorWidget(QWidget *parent, BaseEditorWidget::Description &leftDesc, QWidget *center, BaseEditorWidget::Description &rightDesc)
+BaseEditorWidget::BaseEditorWidget(QWidget *parent, const Description &leftDesc, QWidget *center, const Description &rightDesc)
   : QWidget(parent)
 {
   unsigned lCount = leftDesc.Count();
@@ -62,7 +62,7 @@ BaseEditorWidget::BaseEditorWidget(QWidget *parent, BaseEditorWidget::Descriptio
 }
 
 
-QWidget *BaseEditorWidget::Create(BaseEditorWidget::Description &desc)
+QWidget *BaseEditorWidget::Create(const Description &desc)
 {
   switch (desc.Count())
   {

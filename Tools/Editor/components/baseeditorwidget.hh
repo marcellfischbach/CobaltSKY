@@ -19,6 +19,6 @@ public:
   };
 
 public:
-  BaseEditorWidget(QWidget *parent, Description &descLeft, QWidget *center, Description &descRight);
-  QWidget *Create(Description &desc);
+  BaseEditorWidget(QWidget *parent, const Description &descLeft, QWidget *center, const Description &descRight);
+  QWidget *Create(const Description &desc);
 };

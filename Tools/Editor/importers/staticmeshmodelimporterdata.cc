@@ -75,7 +75,7 @@ void StaticMeshModelImporterData::GenerateData(const aiScene *scene)
 
   for (auto node : m_meshNodes)
   {
-    csMatrix4f trans(node->mTransformation.mData);
+    csMatrix4f trans(&node->mTransformation.a1);
     trans.Transpose();
     csMatrix4f normalTrans = trans;
     normalTrans.Invert();

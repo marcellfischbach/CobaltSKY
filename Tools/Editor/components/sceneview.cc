@@ -24,6 +24,7 @@
 SceneView::SceneView(QWidget *parent)
   : QOpenGLWidget(parent)
   , m_onscreenTarget(new QTCSOnscreenRenderTarget())
+  , m_graphics(0)
 {
   setFocusPolicy(Qt::StrongFocus);
   m_timer = new QTimer();
@@ -71,38 +72,44 @@ csCamera *SceneView::GetCamera()
 
 void SceneView::initializeGL()
 {
-  context()->setShareContext(QOpenGLContext::globalShareContext());
-
-  m_graphics = csEng->GetRenderer();
-  m_graphics->ResetDefaults();
-
-
-  //
-  // the sampler that is used for sampling the color buffer
-  //m_sampler = m_graphics->CreateSampler();
-  //m_sampler->SetFilter(eFM_MinMagNearest);
-
-
-  //
-  // the camera for viewing the scene
-  m_camera = new csCamera();
-  m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
-  m_camera->UpdateCameraMatrices();
-
-
-  //
-  // create the frameprocessor that will render the scene
-  m_frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
-  if (!m_frameProcessor->Initialize())
+  QOpenGLWidget::initializeGL();
+  if (!m_graphics)
   {
-    printf("Unable to initialize frame processor\n");
-    return;
+    context()->setShareContext(QOpenGLContext::globalShareContext());
+
+    m_graphics = csEng->GetRenderer();
+    m_graphics->ResetDefaults();
+
+
+    //
+    // the sampler that is used for sampling the color buffer
+    //m_sampler = m_graphics->CreateSampler();
+    //m_sampler->SetFilter(eFM_MinMagNearest);
+
+
+    //
+    // the camera for viewing the scene
+    m_camera = new csCamera();
+    m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
+    m_camera->UpdateCameraMatrices();
+
+
+    //
+    // create the frameprocessor that will render the scene
+    m_frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
+    if (!m_frameProcessor->Initialize())
+    {
+      printf("Unable to initialize frame processor\n");
+      return;
+    }
   }
+
   m_graphics->ResetDefaults();
 }
 
 void SceneView::paintGL()
 {
+  QOpenGLWidget::paintGL();
   m_onscreenTarget->Setup(width(), height());
 
   csEntity *root = 0;
@@ -128,7 +135,7 @@ void SceneView::paintGL()
 
 void SceneView::resizeGL(int width, int height)
 {
-
+  QOpenGLWidget::resizeGL(width, height);
   m_graphics->ResetDefaults();
 
   if (m_frameProcessor)

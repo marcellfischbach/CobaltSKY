@@ -139,9 +139,9 @@ void csGraphicsGL4::ResetDefaults ()
   if (!glIsVertexArray(m_vao))
   {
     glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
-    CS_CHECK_GL_ERROR;
   }
+  glBindVertexArray(m_vao);
+  CS_CHECK_GL_ERROR;
 }
 
 
@@ -1151,7 +1151,6 @@ void csGraphicsGL4::RenderIndexed(csPrimitiveType primType, csUInt32 count, csDa
   {
     m_indexBuffer->Bind();
     CS_CHECK_GL_ERROR;
-    printf ("Count: %d\n", count); fflush(stdout);
     glDrawElements(primitiveTypeMap[primType], count, dataTypeMap[indexType], 0);
     CS_CHECK_GL_ERROR;
 

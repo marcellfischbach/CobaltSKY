@@ -8,7 +8,7 @@ MESSAGE("Assimp include dir: ${assimp_INCLUDE_DIRS}")
 
 FIND_LIBRARY(
 	assimp_LIBRARIES
-	NAMES assimp-vc140-mt
+	NAMES assimp
 )
 MESSAGE("Assimp libraries: ${assimp_LIBRARIES}")
 

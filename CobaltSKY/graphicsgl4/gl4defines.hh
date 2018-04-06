@@ -9,12 +9,10 @@
 #if 1
 
  #define CS_DEFINE_GL_ERROR_CHECK 
-#define MYDEBUG
 
-#if defined(MYDEBUG) && defined(CS_DEFINE_GL_ERROR_CHECK)
+#if defined(_DEBUG) && defined(CS_DEFINE_GL_ERROR_CHECK)
 #	define CS_CHECK_GL_ERROR \
 	{\
-    glFlush();\
 	  GLenum error = glGetError ();\
 	  if (error != GL_NO_ERROR)\
 		{\
@@ -39,5 +37,5 @@
 #	define CS_GL_FLUSH
 #endif
 #else
-# define CS_GL_FLUSH glFlush()
+# define CS_GL_FLUSH
 #endif

@@ -308,6 +308,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   m_renderObjects[0].numberOfQuads = numQuads * numQuads;
   m_renderObjects[0].quads = new Quad*[m_renderObjects[0].numberOfQuads];
   m_renderObjects[0].indexBuffer = gfx->CreateIndexBuffer((numVertices - 1) * (numVertices - 1) * 6 * sizeof(unsigned), 0, eBDM_Static);
+  m_renderObjects[0].numberOfIndices = 0;
+  m_renderObjects[0].dirty = true;
 
   m_numberOfQuads = numQuads * numQuads;
   m_quads = new Quad[m_numberOfQuads];

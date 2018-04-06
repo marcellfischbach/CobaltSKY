@@ -185,7 +185,6 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
 
 iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *camera, iRenderTarget *target)
 {
-  printf ("csDeffered:\n"); fflush(stdout);
   for (unsigned i = 0; i < eRQ_COUNT; i++)
   {
     m_renderStates[i].Clear();
@@ -206,7 +205,6 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
     root->Scan(clipper, m_renderer, &collector, config);
   }
 
-  printf ("csDeffered:\n"); fflush(stdout);
   camera->Apply(m_renderer);
   
   //glBeginQuery(GL_TIME_ELAPSED, queries[0]);

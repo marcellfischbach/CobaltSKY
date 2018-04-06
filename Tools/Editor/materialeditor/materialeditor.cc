@@ -25,10 +25,12 @@ MaterialEditor::MaterialEditor()
   m_widget = new MaterialEditorWidget(this);
   m_properties = new MaterialEditorProperties();
 
+  BaseEditorWidget::Description descL;
+  BaseEditorWidget::Description descR(m_properties);
   SetWidget(new BaseEditorWidget(0,
-    BaseEditorWidget::Description(),
+    descL,
     m_widget,
-    BaseEditorWidget::Description(m_properties)));
+    descR));
 
   QObject::connect(m_properties, SIGNAL(MaterialChanged()), m_widget, SLOT(MaterialChanged()));
 }
