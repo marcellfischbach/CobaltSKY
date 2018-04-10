@@ -140,7 +140,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-#if 1
+#if 0
   posX = -1500;
 #else
   posX = 200;

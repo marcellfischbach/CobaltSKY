@@ -28,6 +28,7 @@
 
 StaticMeshModelImporterData::StaticMeshModelImporterData()
   : ModelImporterData(Mesh)
+  , m_importCollider(true)
 {
   m_staticMeshEditorWidget = new StaticMeshEditorWidget(0);
   SetView(m_staticMeshEditorWidget);
@@ -56,7 +57,7 @@ void StaticMeshModelImporterData::AddNode(aiNode *node)
   }
 
   std::string name(node->mName.C_Str());
-  if (name.length() >= 7 && name.substr(0, 7) == std::string("CS_COL_"))
+  if (name.length() >= 6 && name.substr(0, 6) == std::string("CSCOL_"))
   {
     m_collisionNodes.push_back(node);
   }
@@ -64,6 +65,11 @@ void StaticMeshModelImporterData::AddNode(aiNode *node)
   {
     m_meshNodes.push_back(node);
   }
+}
+
+void StaticMeshModelImporterData::AddColliderNode(aiNode *node)
+{
+
 }
 
 #define AI2CSVECTOR3(aiVector) csVector3f(aiVector.x, aiVector.y, aiVector.z)
