@@ -30,6 +30,11 @@ private:
   csResourceLocator ImportMesh(AssetManagerWidget *assetManager);
   csResourceLocator ImportCollider(AssetManagerWidget *assetManager);
 
+  void GenerateMeshData (const aiScene *scene);
+  void GenerateColliderData (const aiScene *scene);
+
+  bool m_importCollider;
+
   
   StaticMeshEditorWidget *m_staticMeshEditorWidget;
 
@@ -66,10 +71,29 @@ private:
     std::vector<Data*> datas;
   };
 
+  enum ColliderType
+  {
+    eCT_Box,
+    eCT_Cylinder,
+    eCT_TriMesh
+  };
+
+  struct Collider
+  {
+    ColliderType type;
+    csVector3f halfExtends;
+    csMatrix4f transform;
+    std::vector<csVector3f> vertices;
+    std::vector<unsigned> trigonIndices;
+
+  };
+
   std::vector<LOD*> m_lods;
   std::map<unsigned, unsigned> m_modelToLocalMap;
 
   std::map<unsigned, std::string> m_materialNames;
+
+  std::vector<Collider> m_colliders;
 
 
   LOD *GetLOD(unsigned lod);
