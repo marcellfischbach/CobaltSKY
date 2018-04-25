@@ -5,6 +5,7 @@
 #include "class.hh"
 #include "reader.hh"
 #include <ShlObj.h>
+#include <iostream>
 
 std::string prefix;
 
@@ -180,6 +181,7 @@ void replaceSlash(std::string &path)
 bool getFiletime(const std::string &fileName, LPFILETIME fileTime)
 {
   bool result = false;
+
   HANDLE handle = CreateFile(fileName.c_str(),
                              GENERIC_READ,
                              0,
@@ -281,7 +283,7 @@ int perform (const char *in_filename, const char *in_prefix, const char* api, co
   fopen_s(&file, in_filename, "rt");
   if (!file)
   {
-    printf("File not found. [%s]\n", in_filename);
+    std::cout << "File not found. [" << std::string(in_filename) << "]" << std::endl;
     return 0;
   }
 
@@ -299,7 +301,7 @@ int perform (const char *in_filename, const char *in_prefix, const char* api, co
   {
     return 0;
   }
-  printf("GenRefl for %s\n", in_filename);
+  std::cout << "GenRefl for " << std::string(in_filename) << std::endl;
 
   std::string headerSource = "";
   std::string sourceSource = "";
@@ -354,10 +356,10 @@ int main2(int argc, char **argv)
 {
   if (argc < 5)
   {
-    printf("Usage %s <mode> <prefix> <api> <outputpath> <input> [...<input>]\n", argv[0]);
+    std::cout << "Usage " << std::string(argv[0]) << " <mode> <prefix> <api> <outputpath> <input> [...<input>]" << std::endl;
     for (int i = 0; i < argc; ++i)
     {
-      printf("  arg: '%s'\n", argv[i]);
+      std::cout << "  arg: '" << std::string(argv[i]) << "'" << std::endl;
     }
     return -1;
   }

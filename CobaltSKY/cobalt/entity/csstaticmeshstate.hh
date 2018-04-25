@@ -91,14 +91,15 @@ private:
 
   CS_PROPERTY()
   std::vector<csMaterial*> m_materials;
+
   CS_PROPERTY()
-  csPhysicsShape *m_shape;
+  csPhysicsShape *m_colliderShape;
 
   bool m_enableCollision;
   csPhysicsColliderType m_colliderType;
 
   CS_PROPERTY()
-  iPhysicsBaseCollider *m_colliderShape;
+  iPhysicsBaseCollider *m_collider;
 
   CS_PROPERTY()
   float m_friction;

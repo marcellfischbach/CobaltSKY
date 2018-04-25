@@ -9,16 +9,16 @@
 #include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/assetmanagerrenameaction.hh>
 #include <assetmanager/import/assetmanagerimportmanager.hh>
-#include <materialeditor/materialeditornewaction.hh>
-#include <materialeditor/materialeditorfactory.hh>
-#include <samplereditor/samplereditorfactory.hh>
-#include <samplereditor/samplereditornewaction.hh>
-#include <shadergrapheditor/shadergrapheditornewaction.hh>
-#include <shadergrapheditor/shadergrapheditorfactory.hh>
-#include <shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
-#include <shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
-#include <staticmesheditor/staticmesheditorfactory.hh>
-#include <textureeditor/textureeditorfactory.hh>
+#include <editors/materialeditor/materialeditornewaction.hh>
+#include <editors/materialeditor/materialeditorfactory.hh>
+#include <editors/samplereditor/samplereditorfactory.hh>
+#include <editors/samplereditor/samplereditornewaction.hh>
+#include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
+#include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
+#include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
+#include <editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
+#include <editors/staticmesheditor/staticmesheditorfactory.hh>
+#include <editors/textureeditor/textureeditorfactory.hh>
 
 #include <importers/imageimporter.hh>
 #include <importers/modelimporter.hh>

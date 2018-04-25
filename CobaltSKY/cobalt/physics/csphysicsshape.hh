@@ -7,12 +7,12 @@
 #include <cobalt/physics/csphysicsshape.refl.hh>
 
 CS_CLASS()
-class CSE_API csPhysicsShapeContainer : public CS_SUPER(csObject)
+class CSE_API csPhysicsShape : public CS_SUPER(csObject)
 {
   CS_CLASS_GEN;
 public:
-  csPhysicsShapeContainer();
-  virtual ~csPhysicsShapeContainer();
+  csPhysicsShape();
+  virtual ~csPhysicsShape();
 
   void AddShape(iPhysicsShape *shape);
   void RemoveShape(csSize idx);

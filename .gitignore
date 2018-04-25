@@ -2,6 +2,7 @@
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
+build-ClassGenerator*
 *.user
 /docs/ValkyrieEngine.vpp~14
 /docs/ValkyrieEngine.vpp~15

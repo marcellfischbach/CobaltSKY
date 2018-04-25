@@ -8,7 +8,9 @@
 #include "class.hh"
 #include <ShlObj.h>
 #include <fstream>
-
+#include <iostream>
+#include <locale>
+#include <codecvt>
 static void replaceSlash(std::string &path)
 {
   for (size_t i = 0, in = path.length(); i < in; ++i)
@@ -499,13 +501,14 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api)
   return result;
 }
 
+/*
 class Test
 {
 public:
-  Test() :m_v(0) { } // printf("Test::ctor\n");
+  Test() :m_v(0) { } // std::cout << "Test::ctor" << std::endl;;
 
-  Test(const Test &test) : m_v(test.m_v) { printf("Test::copy-ctor\n"); }
-  Test(Test &&test) : m_v(test.m_v) { printf("Test::move-ctor\n"); }
+  Test(const Test &test) : m_v(test.m_v) { std::cout << "Test::copy-ctor" << std::endl; }
+  Test(Test &&test) : m_v(test.m_v) { std::cout << "Test::move-ctor" << std::endl; }
 
   Test &operator= (const Test& other)
   {
@@ -524,7 +527,7 @@ Test g_test;
 
 void performMyTestVoid(Test &test)
 {
-  printf("Test: 0x%p\n", &test);
+  std::cout << "Test: 0x" << &test << std::endl;;
 }
 
 const Test performMyTestValue()
@@ -636,7 +639,7 @@ int test(int argc, char **argv)
 {
   if (argc < 4)
   {
-    printf("Usage %s --test <headerfile> <outputname>", argv[0]);
+    std::cout << "Usage " << std::string(argv[0]) << " --test <headerfile> <outputname>" << std::endl;
     return -1;
   }
 
@@ -648,22 +651,24 @@ int test(int argc, char **argv)
 
   std::string fileNameHeaderOutput = std::string(argv[3]) + std::string(".hh");
   std::string fileNameSourceOutput = std::string(argv[3]) + std::string(".cc");
-  FILE *headerOutput = fopen(fileNameHeaderOutput.c_str(), "wt");
-  FILE *sourceOutput = fopen(fileNameSourceOutput.c_str(), "wt");
+  FILE *headerOutput;
+  fopen_s(&headerOutput, fileNameHeaderOutput.c_str(), "wt");
+  FILE *sourceOutput;
+  fopen_s(&sourceOutput, fileNameSourceOutput.c_str(), "wt");
 
   for (size_t i = 0, in = reader->GetNumberOfClasses(); i < in; ++i)
   {
     Class *clazz = reader->GetClass(i);
     if (clazz)
     {
-      printf("%s <= %s\n", inputHeaderFilename.c_str(), clazz->GetName().c_str());
+      std::cout << inputHeaderFilename<< " <= " << clazz->GetName() << std::endl;
       //clazz->Debug();
       std::string hdr = CreateHeaderFile(clazz, "TEST_API");
       std::string src = CreateSourceFile(clazz, "TEST_API");
       fwrite(hdr.c_str(), sizeof(char), hdr.length(), headerOutput);
       fwrite(src.c_str(), sizeof(char), src.length(), sourceOutput);
-      printf("Header:\n%s\n", hdr.c_str());
-      printf("Source:\n%s\n", src.c_str());
+      std::cout << "Header:" << std::endl << hdr << std::endl;
+      std::cout << "Source:" << std::endl << src << std::endl;
 
     }
 
@@ -679,9 +684,11 @@ int test(int argc, char **argv)
 
   return 0;
 }
+*/
 
 int main(int argc, char **argv)
 {
+  /*
   if (argc >= 2)
   {
     if (std::string(argv[1]) == std::string("--test"))
@@ -689,9 +696,10 @@ int main(int argc, char **argv)
       return test(argc, argv);
     }
   }
+  */
   if (argc < 4)
   {
-    printf("Usage %s <prefix> <api> <bindir>\n", argv[0]);
+    std::cout << "Usage " << std::string(argv[0]) << " <prefix> <api> <bindir>" << std::endl;
     return -1;
   }
 
@@ -732,11 +740,16 @@ int main(int argc, char **argv)
 
   std::vector<Data> datas;
 
-  std::ifstream masterStream(masterFileName);
+  std::wifstream masterStream(masterFileName);
 
-  std::string line;
-  while (std::getline(masterStream, line))
+  std::wstring wline;
+  using convert_type = std::codecvt_utf8<wchar_t>;
+  std::wstring_convert<convert_type, wchar_t> converter;
+  while (std::getline(masterStream, wline))
   {
+
+    //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
+    std::string line = converter.to_bytes( wline );
     Data d;
     d.sourceFile = 0;
     d.reader = 0;
@@ -778,7 +791,7 @@ int main(int argc, char **argv)
       Class *clazz = reader->GetClass(i);
       if (clazz)
       {
-        printf("%s <= %s\n", data.inputHeaderFilename.c_str(), clazz->GetName().c_str());
+        std::cout << data.inputHeaderFilename << " <= " << clazz->GetName() << std::endl;
         //clazz->Debug();
         headerSource += CreateHeaderFile(clazz, api);
         sourceSource += CreateSourceFile(clazz, api);

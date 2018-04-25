@@ -2,11 +2,13 @@
 
 #include "sourcefile.hh"
 #include <stdio.h>
+#include <iostream>
 
 
 SourceFile::SourceFile(const std::string &filename)
 {
-  FILE *file = fopen(filename.c_str(), "rt");
+  FILE *file;
+  fopen_s(&file, filename.c_str(), "rt");
   Init(file);
 }
 
@@ -196,12 +198,12 @@ void SourceFile::RemoveEmptyLines()
 
 void SourceFile::Debug()
 {
-  printf("SourceFile: %d\n", m_lines.size());
+  std::cout << "SourceFile: " <<  m_lines.size() << std::endl;
   for (size_t i = 0, in = m_lines.size(); i < in; ++i)
   {
-    printf("(%d) '%s'\n", i+1, m_lines[i].c_str());
+    std::cout << "(" << i+1 << ") '" << m_lines[i] << "'" << std::endl;
   }
 
-  printf("End of file\n");
+  std::cout << "End of file" << std::endl;
 }
 

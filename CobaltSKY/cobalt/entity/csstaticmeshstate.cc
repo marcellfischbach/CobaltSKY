@@ -38,11 +38,7 @@ csStaticMeshState::~csStaticMeshState()
   }
   m_materials.clear();
 
-  for (iPhysicsShape *shape : m_colliderShapes)
-  {
-    CS_RELEASE(shape);
-  }
-  m_colliderShapes.clear();
+  CS_RELEASE(m_colliderShape);
 }
 
 
@@ -65,23 +61,9 @@ void csStaticMeshState::SetMaterial(csSize idx, csMaterial *material)
   CS_SET(m_materials[idx], material);
 }
 
-void csStaticMeshState::SetColliderShape(csSize idx, iPhysicsShape *shape)
+void csStaticMeshState::SetColliderShape(csPhysicsShape *colliderShape)
 {
-  if (idx >= m_colliderShapes.size())
-  {
-    return;
-  }
-
-  CS_SET(m_colliderShapes[idx], shape);
-}
-
-void csStaticMeshState::AddColliderShape(iPhysicsShape *shape)
-{
-  if (shape)
-  {
-    shape->AddRef();
-    m_colliderShapes.push_back(shape);
-  }
+  CS_SET(m_colliderShape, colliderShape);
 }
 
 
@@ -182,20 +164,17 @@ iPhysicsBaseCollider *csStaticMeshState::GetCollider()
         dynCol->SetAutoInertia(m_autoInertia);
         dynCol->SetInertia(m_inertia);
         dynCol->SetMass(m_mass);
-        m_colliderShape = dynCol;
+        m_collider = dynCol;
       }
       break;
     case ePCT_Dynamic:
     case ePCT_Kinematic:
-      m_colliderShape = csEng->CreateDynamicCollider();
+      m_collider = csEng->CreateDynamicCollider();
       break;
     }
 
 
-    for (iPhysicsShape *shape : m_colliderShapes)
-    {
-      m_colliderShape->AttachShape(shape);
-    }
+    m_collider->AttachShape(m_colliderShape);
     m_colliderShape->SetFriction(m_friction);
     m_colliderShape->SetRestitution(m_restitution);
   }

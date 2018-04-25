@@ -2,6 +2,7 @@
 #include "class.hh"
 #include "tokenizer.hh"
 #include <stdio.h>
+#include <iostream>
 
 
 Class::Class()
@@ -82,14 +83,15 @@ const std::string &Class::GetSuperClass(size_t idx) const
 
 void Class::Debug()
 {
-  printf("Class: %s\n", m_name.c_str());
 
-  printf("  Supers: ");
+  std::cout << "Class: " << m_name << std::endl;
+
+  std::cout << "  Supers: ";
   for (std::string super : m_superClasses)
   {
-    printf(" %s", super.c_str());
+    std::cout << " " << super;
   }
-  printf("\n");
+  std::cout << std::endl;
 
   for (auto function : m_functions)
   {
@@ -122,7 +124,6 @@ Property::Property(bool isContainerConst, const std::string &containerTypeName, 
     std::swap(m_containerConst, m_const);
     std::swap(m_containerTypeName, m_typeName);
     std::swap(m_containerTypeSpecification, m_typeSpecification);
-
   }
 
 }
@@ -142,12 +143,14 @@ void Property::Debug()
     std::string("**")
   };
 
-  printf("   Prop: '%s' '%s' '%s' '%s''%s'\n",
-    m_const ? "const" : "",
-    m_containerTypeName.c_str(),
-    m_typeName.c_str(),
-    specifierMap[m_typeSpecification].c_str(),
-    GetPropertyName().c_str());
+  std::cout << "   Prop: "
+            << "'" << (m_const ? "const" : "") << "' "
+            << "'" << m_containerTypeName <<  "' "
+            << "'" << m_typeName <<  "' "
+            << "'" << specifierMap[m_typeSpecification] <<  "' "
+            << "'" << GetPropertyName() <<  "'"
+            << std::endl;
+
 }
 
 bool Property::IsContainerConst() const
@@ -331,22 +334,24 @@ void Function::Debug()
     std::string("**")
   };
 
-  printf("   Function: '%s' '%s' '%s' '%s''%s' () '%s' '%s''\n",
-    m_virtual ? "virtual" : "",
-    m_returnTypeIsConst ? "const" : "",
-    m_returnType.c_str(),
-    specifierMap[m_returnTypeSpecifiction].c_str(),
-    m_functionName.c_str(),
-    m_const ? "const" : "",
-    m_override ? "overeride" : "");
+  std::cout << "   Function: "
+            << "'" << (m_virtual ? "virtual" : "") << "' "
+            << "'" << (m_returnTypeIsConst ? "const" : "") << "' "
+            << "'" << m_returnType << "' "
+            << "'" << specifierMap[m_returnTypeSpecifiction] << "' "
+            << "'" << m_functionName << "'"
+            << "'" << (m_const ? "const" : "") << "' "
+            << "'" << (m_override ? "overide" : "") << "' "
+            << std::endl;
 
 
   for (auto param : m_parameters)
   {
-    printf("      Arg: '%s' '%s' '%s''%s'\n",
-      param.isConst ? "const" : "",
-      param.type.c_str(),
-      specifierMap[param.typeSpecifiction].c_str(),
-      param.name.c_str());
+    std::cout << "      Arg: "
+              << "'" << (param.isConst ? "const" : "") << "' "
+              << "'" << param.type << "' "
+              << "'" << specifierMap[param.typeSpecifiction] << "' "
+              << "'" << param.name << "' "
+              << std::endl;
   }
 }

@@ -2,6 +2,7 @@
 
 #include "cache.hh"
 #include <vector>
+#include <iostream>
 
 
 ProcessedFilesCache::ProcessedFilesCache()
@@ -25,7 +26,8 @@ void ProcessedFilesCache::Init(const std::string &cacheFilename)
   m_cacheFilename = cacheFilename;
   m_files.clear();
 
-  FILE *file = fopen(cacheFilename.c_str(), "rb");
+  FILE *file;
+  fopen_s(&file, cacheFilename.c_str(), "rb");
   if (!file)
   {
     // there is no cache file... but thats ok
@@ -73,7 +75,8 @@ void ProcessedFilesCache::Output()
     }
   }
 
-  FILE *file = fopen(m_cacheFilename.c_str(), "wb");
+  FILE *file;
+  fopen_s(&file, m_cacheFilename.c_str(), "wb");
   if (!file)
   {
     // there is no cache file... buts thats ok
@@ -85,6 +88,8 @@ void ProcessedFilesCache::Output()
   fwrite(entries.data(), sizeof(CacheFileEntry), num, file);
   fclose(file);
 }
+
+unsigned touchedFiles = 0;
 
 bool ProcessedFilesCache::TouchFile(const std::string &filename)
 {
@@ -110,6 +115,8 @@ bool ProcessedFilesCache::TouchFile(const std::string &filename)
     return false;
   }
 
+  touchedFiles++;
+  std::cout << "TouchFile: " << touchedFiles << std::endl;
 
   for (std::list<CacheFile>::iterator it = m_files.begin(); it != m_files.end(); ++it)
   {
@@ -138,7 +145,6 @@ bool ProcessedFilesCache::TouchFile(const std::string &filename)
   cf.touched = true;
 
   m_files.push_back(cf);
-
   return true;
 }
 
@@ -217,7 +223,8 @@ void KnownClassesCache::Init(const std::string &cacheFilename)
   m_cacheFilename = cacheFilename;
   m_classes.clear();
 
-  FILE *file = fopen(cacheFilename.c_str(), "rb");
+  FILE *file;
+  fopen_s(&file, cacheFilename.c_str(), "rb");
   if (!file)
   {
     // there is no cache yet... thats ok
@@ -253,14 +260,15 @@ void KnownClassesCache::Output()
     memcpy(entry.filename, it->filename.c_str(), it->filename.size());
   }
 
-  FILE *file = fopen(m_cacheFilename.c_str(), "wb");
+  FILE *file;
+  fopen_s(&file, m_cacheFilename.c_str(), "wb");
   if (!file)
   {
     // there is no cache file... buts thats ok
     return;
   }
 
-  printf("ClassCache has %d entries", entries.size());
+  std::cout << "ClassCache has " << entries.size() << " entries" << std::endl;
   unsigned num = (unsigned)entries.size();
   fwrite(&num, sizeof(unsigned), 1, file);
   fwrite(entries.data(), sizeof(CacheClassEntry), num, file);
