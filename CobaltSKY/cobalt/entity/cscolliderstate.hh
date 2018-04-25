@@ -10,7 +10,7 @@
 
 struct iPhysicsShape;
 struct iPhysicsCollider;
-class csPhysicsShapeContainer;
+class csPhysicsShape;
 
 
 CS_INTERFACE()
@@ -24,8 +24,8 @@ public:
   void AttachShape(iPhysicsShape *shape);
   void DetachShape(iPhysicsShape *shape);
 
-  void AttachShape(csPhysicsShapeContainer *shapes);
-  void DetachShape(csPhysicsShapeContainer *shapes);
+  void AttachShape(csPhysicsShape *shapes);
+  void DetachShape(csPhysicsShape *shapes);
 
   iPhysicsCollider *GetCollider();
   const iPhysicsCollider *GetCollider() const;

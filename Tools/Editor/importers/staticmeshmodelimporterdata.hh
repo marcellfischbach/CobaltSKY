@@ -28,7 +28,7 @@ public:
 
 private:
   csResourceLocator ImportMesh(AssetManagerWidget *assetManager);
-  csResourceLocator ImportCollisionMesh(AssetManagerWidget *assetManager);
+  csResourceLocator ImportCollider(AssetManagerWidget *assetManager);
 
   
   StaticMeshEditorWidget *m_staticMeshEditorWidget;

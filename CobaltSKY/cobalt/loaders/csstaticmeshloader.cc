@@ -12,7 +12,7 @@
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/csphysicsshape.hh>
 #include <cobalt/csengine.hh>
 #include <cobalt/csenums.hh>
 #include <map>
@@ -321,9 +321,9 @@ iVertexDeclaration *csStaticMeshLoader::ReadVertexDeclaration(iFile *file) const
 }
 
 
-csPhysicsShapeContainer *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csPhysicsShape *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  csPhysicsShapeContainer *container = new csPhysicsShapeContainer();
+  csPhysicsShape *container = new csPhysicsShape();
   csUInt32 numShapes;
   file->Read(&numShapes, sizeof(csUInt32));
   for (csUInt32 i = 0; i < numShapes; ++i)

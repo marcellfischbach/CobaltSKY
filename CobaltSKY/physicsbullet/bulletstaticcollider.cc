@@ -3,7 +3,7 @@
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletshape.hh>
 #include <cobalt/physics/iphysicsshape.hh>
-#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/csphysicsshape.hh>
 
 
 csBulletStaticCollider::csBulletStaticCollider()
@@ -66,7 +66,7 @@ void csBulletStaticCollider::DetachShape(iPhysicsShape *shape)
   // not implemented yet
 }
 
-void csBulletStaticCollider::AttachShape(csPhysicsShapeContainer *shapes)
+void csBulletStaticCollider::AttachShape(csPhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -78,7 +78,7 @@ void csBulletStaticCollider::AttachShape(csPhysicsShapeContainer *shapes)
   }
 }
 
-void csBulletStaticCollider::DetachShape(csPhysicsShapeContainer *shapes)
+void csBulletStaticCollider::DetachShape(csPhysicsShape *shapes)
 {
   if (!shapes)
   {

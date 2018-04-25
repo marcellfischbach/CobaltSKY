@@ -45,7 +45,7 @@ void csColliderState::DetachShape(iPhysicsShape *shape)
 }
 
 
-void csColliderState::AttachShape(csPhysicsShapeContainer *shapes)
+void csColliderState::AttachShape(csPhysicsShape *shapes)
 {
   if (m_collider)
   {
@@ -55,7 +55,7 @@ void csColliderState::AttachShape(csPhysicsShapeContainer *shapes)
 
 
 
-void csColliderState::DetachShape(csPhysicsShapeContainer *shapes)
+void csColliderState::DetachShape(csPhysicsShape *shapes)
 {
   if (m_collider)
   {

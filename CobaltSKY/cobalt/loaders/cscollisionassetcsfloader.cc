@@ -2,7 +2,7 @@
 
 #include <cobalt/loaders/cscollisionassetcsfloader.hh>
 #include <cobalt/physics/iphysicsshape.hh>
-#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/csphysicsshape.hh>
 #include <cobalt/csengine.hh>
 #include <cobalt/csenums.hh>
 
@@ -25,12 +25,12 @@ bool csCollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceL
 
 const csClass *csCollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csPhysicsShapeContainer::GetStaticClass();
+  return csPhysicsShape::GetStaticClass();
 }
 
 iObject *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  csPhysicsShapeContainer *container = new csPhysicsShapeContainer();
+  csPhysicsShape *container = new csPhysicsShape();
 
   const csfEntry *shapesEntry = 0;
   if (entry->GetTagName() == std::string("shapes"))

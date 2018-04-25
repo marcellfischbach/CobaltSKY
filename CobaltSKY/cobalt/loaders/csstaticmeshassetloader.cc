@@ -12,7 +12,7 @@
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/csphysicsshape.hh>
 #include <cobalt/csengine.hh>
 #include <cobalt/csenums.hh>
 #include <map>

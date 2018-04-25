@@ -34,8 +34,8 @@ public:
   virtual void AttachShape(iPhysicsShape *shape);
   virtual void DetachShape(iPhysicsShape *shape);
 
-  virtual void AttachShape(csPhysicsShapeContainer *shapes);
-  virtual void DetachShape(csPhysicsShapeContainer *shapes);
+  virtual void AttachShape(csPhysicsShape *shapes);
+  virtual void DetachShape(csPhysicsShape *shapes);
 
   /**
   * @}

@@ -214,7 +214,7 @@ namespace
 csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetManager)
 {
   csResourceLocator meshLocator = ImportMesh(assetManager);
-  csResourceLocator colliderMeshLocator = ImportCollisionMesh(assetManager);
+  csResourceLocator colliderLocator = ImportCollider(assetManager);
 
 
   csResourceLocator locator = assetManager->GetContentResource();
@@ -260,6 +260,15 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
       materialProperty->AddAttribute("locator", "materials/DefaultMaterial.csf");
       entityStateEntry->AddChild(materialProperty);
     }
+  }
+
+  if (colliderLocator.IsValid())
+  {
+    csfEntry *colliderProperty = outputFile.CreateEntry("property");
+    colliderProperty->AddAttribute("name", "Collider");
+    colliderProperty->AddAttribute("type", "resource");
+    colliderProperty->AddAttribute("locator", colliderLocator.AsAnonymous().GetText());
+    entityStateEntry->AddChild(colliderProperty);
   }
 
   outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
@@ -340,7 +349,7 @@ csResourceLocator StaticMeshModelImporterData::ImportMesh(AssetManagerWidget *as
   return csfLocator;
 }
 
-csResourceLocator StaticMeshModelImporterData::ImportCollisionMesh(AssetManagerWidget *assetManager)
+csResourceLocator StaticMeshModelImporterData::ImportCollider(AssetManagerWidget *assetManager)
 {
   return csResourceLocator();
 }

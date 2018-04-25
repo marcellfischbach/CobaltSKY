@@ -13,6 +13,7 @@ class ModelImporterData : public AssetManagerImportData
 public:
   enum Type {
     Mesh,
+    Collision,
     Skeleton,
     Animation
   };

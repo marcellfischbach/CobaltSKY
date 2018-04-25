@@ -10,7 +10,7 @@ class csGeometryData;
 class csGeometryMesh;
 class csMesh;
 class csMultiMaterial;
-class csPhysicsShapeContainer;
+class csPhysicsShape;
 class csSubMesh;
 struct iVertexDeclaration;
 struct iIndexBuffer;
@@ -45,7 +45,7 @@ private:
   csGeometryMesh *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   csMultiMaterial *ReadMultiMaterial(iFile *file) const;
   csMesh *ReadMesh (csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
-  csPhysicsShapeContainer *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  csPhysicsShape *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   bool ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
   iVertexDeclaration *ReadVertexDeclaration(iFile *file) const;
 

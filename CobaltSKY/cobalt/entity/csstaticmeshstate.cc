@@ -16,7 +16,7 @@ csStaticMeshState::csStaticMeshState()
   : csRenderState()
   , m_mesh(0)
   , m_castShadow(true)
-  , m_collider(0)
+  , m_colliderShape(0)
   , m_friction(0.5)
   , m_restitution(0.5)
   , m_enableCollision(false)
@@ -139,9 +139,9 @@ void csStaticMeshState::SetColliderShape(csPhysicsShapeContainer *shapes)
 void csStaticMeshState::SetFriction(float friction)
 {
   m_friction = friction;
-  if (m_collider)
+  if (m_colliderShape)
   {
-    m_collider->SetFriction(m_friction);
+    m_colliderShape->SetFriction(m_friction);
   }
 }
 
@@ -149,9 +149,9 @@ void csStaticMeshState::SetFriction(float friction)
 void csStaticMeshState::SetRestitution(float restitution)
 {
   m_restitution = restitution;
-  if (m_collider)
+  if (m_colliderShape)
   {
-    m_collider->SetRestitution(m_restitution);
+    m_colliderShape->SetRestitution(m_restitution);
   }
 }
 
@@ -159,16 +159,16 @@ void csStaticMeshState::UpdateTransformation()
 {
   csSpatialState::UpdateTransformation();
 
-  if (m_collider)
+  if (m_colliderShape)
   {
-    m_collider->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
-    m_collider->FinishTransformation();
+    m_colliderShape->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
+    m_colliderShape->FinishTransformation();
   }
 }
 
 iPhysicsBaseCollider *csStaticMeshState::GetCollider()
 {
-  if (!m_collider)
+  if (!m_colliderShape)
   {
     if (!m_enableCollision)
     {
@@ -182,32 +182,32 @@ iPhysicsBaseCollider *csStaticMeshState::GetCollider()
         dynCol->SetAutoInertia(m_autoInertia);
         dynCol->SetInertia(m_inertia);
         dynCol->SetMass(m_mass);
-        m_collider = dynCol;
+        m_colliderShape = dynCol;
       }
       break;
     case ePCT_Dynamic:
     case ePCT_Kinematic:
-      m_collider = csEng->CreateDynamicCollider();
+      m_colliderShape = csEng->CreateDynamicCollider();
       break;
     }
 
 
     for (iPhysicsShape *shape : m_colliderShapes)
     {
-      m_collider->AttachShape(shape);
+      m_colliderShape->AttachShape(shape);
     }
-    m_collider->SetFriction(m_friction);
-    m_collider->SetRestitution(m_restitution);
+    m_colliderShape->SetFriction(m_friction);
+    m_colliderShape->SetRestitution(m_restitution);
   }
 
-  return m_collider;
+  return m_colliderShape;
 }
 
 void csStaticMeshState::OnAttachedToScene(csEntityScene *scene)
 {
   if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->AddCollider(m_collider);
+    scene->GetPhysicsScene()->AddCollider(m_colliderShape);
   }
 }
 
@@ -215,7 +215,7 @@ void csStaticMeshState::OnDetachedFromScene(csEntityScene *scene)
 {
   if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->RemoveCollider(m_collider);
+    scene->GetPhysicsScene()->RemoveCollider(m_colliderShape);
   }
 }
 

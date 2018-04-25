@@ -11,7 +11,7 @@
 
 
 class csDynamicColliderState;
-class csPhysicsShapeContainer;
+class csPhysicsShape;
 struct iPhysicsShape;
 class csEntity;
 
@@ -33,7 +33,7 @@ struct CSE_API iPhysicsCollider : public iObject
   virtual void AttachShape(iPhysicsShape *shape) = 0;
   virtual void DetachShape(iPhysicsShape *shape) = 0;
 
-  virtual void AttachShape(csPhysicsShapeContainer *shapes) = 0;
-  virtual void DetachShape(csPhysicsShapeContainer *shapes) = 0;
+  virtual void AttachShape(csPhysicsShape *shapes) = 0;
+  virtual void DetachShape(csPhysicsShape *shapes) = 0;
 
 };

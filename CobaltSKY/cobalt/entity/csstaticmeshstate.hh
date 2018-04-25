@@ -4,7 +4,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/entity/csrenderstate.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/physics/csphysicsshapecontainer.hh>
+#include <cobalt/physics/csphysicsshape.hh>
 #include <cobalt/entity/csstaticmeshstate.refl.hh>
 
 #include <vector>
@@ -41,15 +41,11 @@ public:
   const csMaterial *GetMaterial(csSize idx = 0) const;
 
   CS_FUNCTION()
-  csSize GetNumberOfColliderShapes () const;
+  csPhysicsShape *GetColliderShape ();
   CS_FUNCTION()
-  void AddColliderShape(iPhysicsShape *shape);
+  const csPhysicsShape *GetColliderShape () const;
   CS_FUNCTION()
-  void SetColliderShape(csSize idx, iPhysicsShape *shape);
-  CS_FUNCTION()
-  iPhysicsShape *GetColliderShape (csSize idx = 0);
-  CS_FUNCTION()
-  const iPhysicsShape *GetColliderShape (csSize idx = 0) const;
+  void SetColliderShape(csPhysicsShape *colliderShape);
 
   CS_FUNCTION()
   void SetFriction(float friction);
@@ -96,11 +92,13 @@ private:
   CS_PROPERTY()
   std::vector<csMaterial*> m_materials;
   CS_PROPERTY()
-  std::vector<iPhysicsShape*> m_colliderShapes;
+  csPhysicsShape *m_shape;
 
   bool m_enableCollision;
   csPhysicsColliderType m_colliderType;
-  iPhysicsBaseCollider *m_collider;
+
+  CS_PROPERTY()
+  iPhysicsBaseCollider *m_colliderShape;
 
   CS_PROPERTY()
   float m_friction;
@@ -150,30 +148,15 @@ CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize idx) cons
   return m_materials[idx];
 }
 
-
-CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfColliderShapes() const
+CS_FORCEINLINE csPhysicsShape *csStaticMeshState::GetColliderShape()
 {
-  return m_colliderShapes.size();
+  return m_colliderShape;
 }
 
-CS_FORCEINLINE iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx)
+CS_FORCEINLINE const csPhysicsShape *csStaticMeshState::GetColliderShape() const
 {
-  if (idx >= m_colliderShapes.size())
-  {
-    return 0;
-  }
-  return m_colliderShapes[idx];
+  return m_colliderShape;
 }
-
-CS_FORCEINLINE const iPhysicsShape *csStaticMeshState::GetColliderShape(csSize idx) const
-{
-  if (idx >= m_colliderShapes.size())
-  {
-    return 0;
-  }
-  return m_colliderShapes[idx];
-}
-
 
 CS_FORCEINLINE void csStaticMeshState::SetCastShadow(bool castShadow)
 {

@@ -442,6 +442,8 @@ source_group(
     )
 
 set(SOURCE_PHYSICS
+    physics/csphysicsshape.cc
+    physics/csphysicsshape.hh
     physics/iphysicsbasecollider.hh
     physics/iphysicscharactercontroller.hh
     physics/iphysicscapsulecharactercontroller.hh
@@ -455,8 +457,6 @@ set(SOURCE_PHYSICS
     physics/iphysicssystem.hh
     physics/iphysicsstaticcollider.hh
     physics/iphysicstriggercollider.hh
-    physics/csphysicsshapecontainer.cc
-    physics/csphysicsshapecontainer.hh
     )
 
 source_group(
