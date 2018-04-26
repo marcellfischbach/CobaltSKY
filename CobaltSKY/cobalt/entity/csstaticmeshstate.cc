@@ -121,9 +121,9 @@ void csStaticMeshState::SetColliderShape(csPhysicsShapeContainer *shapes)
 void csStaticMeshState::SetFriction(float friction)
 {
   m_friction = friction;
-  if (m_colliderShape)
+  if (m_collider)
   {
-    m_colliderShape->SetFriction(m_friction);
+    m_collider->SetFriction(m_friction);
   }
 }
 
@@ -131,9 +131,9 @@ void csStaticMeshState::SetFriction(float friction)
 void csStaticMeshState::SetRestitution(float restitution)
 {
   m_restitution = restitution;
-  if (m_colliderShape)
+  if (m_collider)
   {
-    m_colliderShape->SetRestitution(m_restitution);
+    m_collider->SetRestitution(m_restitution);
   }
 }
 
@@ -141,16 +141,16 @@ void csStaticMeshState::UpdateTransformation()
 {
   csSpatialState::UpdateTransformation();
 
-  if (m_colliderShape)
+  if (m_collider)
   {
-    m_colliderShape->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
-    m_colliderShape->FinishTransformation();
+    m_collider->GetTransform().SetGlobalTransformation(GetGlobalTransformation());
+    m_collider->FinishTransformation();
   }
 }
 
 iPhysicsBaseCollider *csStaticMeshState::GetCollider()
 {
-  if (!m_colliderShape)
+  if (!m_collider)
   {
     if (!m_enableCollision)
     {
@@ -175,18 +175,18 @@ iPhysicsBaseCollider *csStaticMeshState::GetCollider()
 
 
     m_collider->AttachShape(m_colliderShape);
-    m_colliderShape->SetFriction(m_friction);
-    m_colliderShape->SetRestitution(m_restitution);
+    m_collider->SetFriction(m_friction);
+    m_collider->SetRestitution(m_restitution);
   }
 
-  return m_colliderShape;
+  return m_collider;
 }
 
 void csStaticMeshState::OnAttachedToScene(csEntityScene *scene)
 {
   if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->AddCollider(m_colliderShape);
+    scene->GetPhysicsScene()->AddCollider(m_collider);
   }
 }
 
@@ -194,7 +194,7 @@ void csStaticMeshState::OnDetachedFromScene(csEntityScene *scene)
 {
   if (scene && GetCollider())
   {
-    scene->GetPhysicsScene()->RemoveCollider(m_colliderShape);
+    scene->GetPhysicsScene()->RemoveCollider(m_collider);
   }
 }
 

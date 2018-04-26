@@ -45,17 +45,18 @@ function(CS_INSTALL_MOCCER target prefix api inlist)
 	endforeach(file)
   if (MSVC_IDE)
 		add_custom_command (TARGET ${target} PRE_BUILD
-												COMMAND ${CobaltSKY_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} 
+		                                                                                COMMAND ${CobaltSKY_BINARY_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
 												WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 												)
 
 	else()
 		set(TARGET_NAME "${target}-MOC")
 		add_custom_target(${TARGET_NAME}
-											COMMAND ${CobaltSKY_SOURCE_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
+		                                                                        COMMAND ${CobaltSKY_BINARY_DIR}/bin/ClassGenerator ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR}
 											WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 										)
 		add_dependencies(${target} ${TARGET_NAME})
+		add_dependencies(${TARGET_NAME} ClassGenerator)
 	endif()
 endfunction(CS_INSTALL_MOCCER)
 
@@ -92,5 +93,6 @@ include_directories(${CobaltSKY_BINARY_DIR}/CobaltSKY)
 
 
 add_subdirectory(3rdparty)
+add_subdirectory(ClassGenerator)
 add_subdirectory(CobaltSKY)
 add_subdirectory(Tools)

@@ -115,8 +115,6 @@ bool ProcessedFilesCache::TouchFile(const std::string &filename)
     return false;
   }
 
-  touchedFiles++;
-  std::cout << "TouchFile: " << touchedFiles << std::endl;
 
   for (std::list<CacheFile>::iterator it = m_files.begin(); it != m_files.end(); ++it)
   {

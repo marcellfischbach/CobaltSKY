@@ -2,7 +2,7 @@
 #include <importers/staticmeshmodelimporterdata.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerassetwriter.hh>
-#include <staticmesheditor/staticmesheditorwidget.hh>
+#include <editors/staticmesheditor/staticmesheditorwidget.hh>
 #include <cobalt/core/csassetoutputstream.hh>
 #include <cobalt/core/ifile.hh>
 #include <cobalt/core/csvfs.hh>
@@ -67,10 +67,6 @@ void StaticMeshModelImporterData::AddNode(aiNode *node)
   }
 }
 
-void StaticMeshModelImporterData::AddColliderNode(aiNode *node)
-{
-
-}
 
 #define AI2CSVECTOR3(aiVector) csVector3f(aiVector.x, aiVector.y, aiVector.z)
 #define AI2CSVECTOR2(aiVector) csVector2f(aiVector.x, aiVector.y)

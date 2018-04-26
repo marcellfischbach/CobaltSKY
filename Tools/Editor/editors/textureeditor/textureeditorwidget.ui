@@ -201,7 +201,7 @@
   <customwidget>
    <class>TextureEditorRenderWidget</class>
    <extends>QOpenGLWidget</extends>
-   <header location="global">textureeditor/textureeditorrenderwidget.hh</header>
+   <header location="global">editors/textureeditor/textureeditorrenderwidget.hh</header>
   </customwidget>
  </customwidgets>
  <resources>

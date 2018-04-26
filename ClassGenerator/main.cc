@@ -180,6 +180,7 @@ void replaceSlash(std::string &path)
 
 bool getFiletime(const std::string &fileName, LPFILETIME fileTime)
 {
+
   bool result = false;
 
   HANDLE handle = CreateFile(fileName.c_str(),

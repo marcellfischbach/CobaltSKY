@@ -686,6 +686,23 @@ int test(int argc, char **argv)
 }
 */
 
+void CreateDirectories (const std::string &path)
+{
+  size_t idx = 0;
+  while (true)
+  {
+    idx= path.find('/', idx);
+    if (idx == std::string::npos)
+    {
+      break;
+    }
+    std::string part = path.substr(0, idx);
+    SHCreateDirectoryEx(0, part.c_str(), 0);
+    idx++;
+  }
+  SHCreateDirectoryEx(0, path.c_str(), 0);
+}
+
 int main(int argc, char **argv)
 {
   /*
@@ -750,6 +767,7 @@ int main(int argc, char **argv)
 
     //use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
     std::string line = converter.to_bytes( wline );
+    //std::cout << "Line: " << line << std::endl;
     Data d;
     d.sourceFile = 0;
     d.reader = 0;
@@ -777,7 +795,6 @@ int main(int argc, char **argv)
     }
   }
 
-
   // now we know ALL classes
   for (Data &data : datas)
   {
@@ -798,10 +815,10 @@ int main(int argc, char **argv)
 
       }
     }
-
     size_t posSlash = data.outputHeaderFilename.find_last_of('/');
     std::string fullPath = data.outputHeaderFilename.substr(0, posSlash);
-    SHCreateDirectoryEx(0, fullPath.c_str(), 0);
+    CreateDirectories(fullPath);
+
 
 
     //replaceSlash(path);
@@ -815,7 +832,6 @@ int main(int argc, char **argv)
     fopen_s(&source, data.outputSourceFilename.c_str(), "wt");
     fwrite(sourceSource.c_str(), sizeof(char), sourceSource.length(), source);
     fclose(source);
-
   }
 
   if (datas.size() != 0)

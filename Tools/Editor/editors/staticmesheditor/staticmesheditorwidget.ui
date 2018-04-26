@@ -86,7 +86,7 @@
   <customwidget>
    <class>StaticMeshEditorPreviewSceneView</class>
    <extends>QOpenGLWidget</extends>
-   <header location="global">staticmesheditor/staticmesheditorpreviewsceneview.hh</header>
+   <header location="global">editors/staticmesheditor/staticmesheditorpreviewsceneview.hh</header>
   </customwidget>
  </customwidgets>
  <resources/>

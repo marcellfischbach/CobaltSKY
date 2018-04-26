@@ -501,6 +501,7 @@ add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
 
+add_dependencies(CobaltSKY ClassGenerator)
 
 install(TARGETS CobaltSKY 
 		RUNTIME DESTINATION bin

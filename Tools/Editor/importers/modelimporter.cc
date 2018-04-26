@@ -1,7 +1,7 @@
 
 #include <importers/modelimporter.hh>
 #include <importers/staticmeshmodelimporterdata.hh>
-#include <staticmesheditor/staticmesheditorwidget.hh>
+#include <editors/staticmesheditor/staticmesheditorwidget.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
