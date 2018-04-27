@@ -182,6 +182,29 @@ iAssetEditor *Editor::FindCurrentEditor()
   return 0;
 }
 
+
+void Editor::AddImporterFactory(iImporterFactory *factory)
+{
+  m_importerFactories.push_back(factory);
+}
+
+iImporterFactory *Editor::FindImporter(const std::string &fileName) const
+{
+  for (iImporterFactory *importer : m_importerFactories)
+  {
+    if (importer->CanImport(fileName))
+    {
+      return importer;
+    }
+  }
+  return 0;
+}
+
+const std::vector<iImporterFactory*> &Editor::GetAllImporters () const
+{
+  return m_importerFactories;
+}
+
 std::string Editor::ConvertToResourcePath(const std::string &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));

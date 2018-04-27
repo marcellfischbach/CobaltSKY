@@ -22,6 +22,7 @@
 
 #include <importers/imageimporter.hh>
 #include <importers/modelimporter.hh>
+#include <importers/image/imageimporter.hh>
 
 #include <loaders/loaderseditoriconassetxmlloader.hh>
 
@@ -36,6 +37,8 @@ void EditorModule::Initialize()
   editor->AddEditorFactory(new ShaderGraphEditorFactory());
   editor->AddEditorFactory(new StaticMeshEditorFactory());
   editor->AddEditorFactory(new TextureEditorFactory());
+
+  editor->AddImporterFactory(new ImageImporterFactory());
 
   AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
   actionManager->RegisterNewAction(new MaterialEditorNewAction());

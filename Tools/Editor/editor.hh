@@ -2,6 +2,7 @@
 
 #include <cobalt/core/csclass.hh>
 #include <iasseteditorfactory.hh>
+#include <importers/iimporter.hh>
 #include <Editor.refl.hh>
 #include <QDir>
 #include <QObject>
@@ -41,6 +42,10 @@ public:
 
   iAssetEditor *FindCurrentEditor();
 
+  void AddImporterFactory(iImporterFactory *factory);
+  iImporterFactory *FindImporter(const std::string &fileName) const;
+  const std::vector<iImporterFactory*> &GetAllImporters () const;
+
   QRect GetScreenSize();
 
 
@@ -76,6 +81,8 @@ private:
   QDir m_rootPath;
   std::vector<iAssetEditorFactory*> m_editorFactories;
   std::map<AssetDescriptor, iAssetEditor*> m_openEditors;
+
+  std::vector<iImporterFactory*> m_importerFactories;
 
   csEngine *m_engine;
   csGraphicsGL4 *m_graphics;

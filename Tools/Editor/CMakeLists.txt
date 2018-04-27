@@ -204,6 +204,9 @@ source_group(
 
                     
 set(IMPORTERS_SOURCES
+    importers/iimporter.hh
+    importers/importerdialog.cc
+    importers/importerdialog.hh
     importers/imageimporter.cc
     importers/imageimporter.hh
     importers/modelimporter.cc
@@ -217,6 +220,22 @@ source_group(
     "editor\\importers"
     FILES
     ${IMPORTERS_SOURCES}
+    )
+
+set(IMPORTERS_IMAGE_SOURCES
+    importers/image/imageimporter.cc
+    importers/image/imageimporter.hh
+    )
+
+set(IMPORTERS_IMAGE_UI
+    importers/image/imageimporter.ui
+    )
+
+source_group(
+    "editors\\importers\\image"
+    FILES
+    ${IMPORTERS_IMAGE_SOURCES}
+    ${IMPORTERS_IMAGE_UI}
     )
 
 
@@ -465,6 +484,7 @@ set(ALL_UI
     ${EDITORS_SHADERGRAPHEDITOR_UI}
     ${EDITORS_STATICMESHEDITOR_UI}
     ${EDITORS_TEXTUREEDITOR_UI}
+    ${IMPORTERS_IMAGE_UI}
     )
 
 
@@ -479,6 +499,7 @@ set(ALL_SOURCES
     ${COMPONENTS_SOURCES}
     ${EVENTS_SOURCES}
     ${IMPORTERS_SOURCES}
+    ${IMPORTERS_IMAGE_SOURCES}
     ${LOADERS_SOURCES}
     ${NODEGRAPH_SOURCES}
     ${PREVIEW_SOURCES}

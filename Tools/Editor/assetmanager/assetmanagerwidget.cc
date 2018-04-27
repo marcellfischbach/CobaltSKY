@@ -10,12 +10,15 @@
 #include <assetmanager/import/assetmanagerimporterdialog.hh>
 #include <assetmanager/import/assetmanagerimportmanager.hh>
 #include <assetdescriptor.hh>
+#include <importers/importerdialog.hh>
 #include <editor.hh>
 #include <cobalt/core/csvfs.hh>
 #include <QDomDocument>
 #include <QFile>
 #include <QFileDialog>
 #include <QMenu>
+#include <set>
+#include <iostream>
 
 
 AssetManagerWidget::AssetManagerWidget()
@@ -259,27 +262,37 @@ void AssetManagerWidget::FillNewMenu(QMenu *menu)
 
 void AssetManagerWidget::on_pbImport_clicked(bool)
 {
-  QString filters;
-  for (AssetManagerImporter *importer : AssetManagerImportManager::Get()->GetImporters())
-  {
-    QStringList fltrs = importer->GetFilters();
-    for (const QString &filter : fltrs)
-    {
-      filters += filter + QString(";;");
-    }
-  }
+  QString allFilters;
 
-  if (!filters.isEmpty())
+  QString allFormats = "All files (";
+  const std::vector<iImporterFactory*> &factories = Editor::Get()->GetAllImporters();
+  for (iImporterFactory *factory : factories)
   {
-    filters = filters.left(filters.length() - 2);
+    std::map<std::string, std::vector<std::string>> filters = factory->GetImportFormats();
+    QString formats = "";
+    for (auto it = filters.begin(); it != filters.end(); ++it)
+    {
+      std::string name = it->first;
+      std::vector<std::string> extensions = it->second;
+      formats += QString(name.c_str()) + " (";
+      for (auto extension : extensions)
+      {
+        allFormats += QString(extension.c_str()) + " ";
+        formats += QString(extension.c_str()) + " ";
+      }
+      formats += ");;";
+    }
+    allFilters += formats;
   }
+  allFormats += ");;" + allFilters;
+  allFormats = allFormats.left(allFormats.length() - 2);
 
 
   QStringList result =
     QFileDialog::getOpenFileNames(this,
       tr("CobaltSKY - Select assets to import..."),
       QString(),
-      filters
+      allFormats
     );
 
   if (result.isEmpty())
@@ -287,21 +300,16 @@ void AssetManagerWidget::on_pbImport_clicked(bool)
     return;
   }
 
-  AssetManagerImporterDialog importerDialog(this);
+
+  ImporterDialog importerDialog(this);
   for (QString file : result)
   {
-    for (AssetManagerImporter *importer : AssetManagerImportManager::Get()->GetImporters())
-    {
-      if (importer->CanImport(file))
-      {
-        const std::vector<AssetManagerImportData*> datas = importer->Import(file);
-        if (!datas.empty())
-        {
-          importerDialog.AddImportDatas(datas);
-        }
-      }
-    }
+    std::string fileName (file.toLatin1());
+    iImporterFactory *factory = Editor::Get()->FindImporter(fileName);
+    iImporter *importer = factory->CreateImporter(fileName);
+    importerDialog.AddImporter(importer);
   }
+
   importerDialog.exec();
   RefreshContent();
 
