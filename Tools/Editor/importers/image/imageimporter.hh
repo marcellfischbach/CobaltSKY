@@ -9,6 +9,8 @@ class ImageImporterGUI : public QWidget
 public:
   ImageImporterGUI ();
 
+  const csResourceLocator &GetSamplerLocator () const;
+
 private:
   Ui::ImageImporterGUI m_gui;
 };
@@ -23,10 +25,17 @@ public:
 
   virtual std::string GetAssetName () const;
 
+  virtual std::string GetFileName () const;
+
   virtual QWidget *GetWidget ();
+
+  virtual bool Import(AssetManagerWidget *assetManagerWidget);
 private:
+  std::string GetType() const;
+
   ImageImporterGUI *m_gui;
   std::string m_fileName;
+  std::string m_assetName;
 };
 
 class ImageImporterFactory : public iImporterFactory

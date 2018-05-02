@@ -5,6 +5,8 @@
 #include <vector>
 #include <QWidget>
 
+class AssetManagerWidget;
+
 struct iImporter
 {
 
@@ -12,7 +14,11 @@ struct iImporter
 
   virtual std::string GetAssetName () const = 0;
 
+  virtual std::string GetFileName () const = 0;
+
   virtual QWidget *GetWidget () = 0;
+
+  virtual bool Import(AssetManagerWidget *assetManagerWidget) = 0;
 };
 
 

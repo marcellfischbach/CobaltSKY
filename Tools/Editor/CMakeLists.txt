@@ -207,6 +207,8 @@ set(IMPORTERS_SOURCES
     importers/iimporter.hh
     importers/importerdialog.cc
     importers/importerdialog.hh
+    importers/importerfileslistmodel.cc
+    importers/importerfileslistmodel.hh
     importers/imageimporter.cc
     importers/imageimporter.hh
     importers/modelimporter.cc
@@ -215,11 +217,15 @@ set(IMPORTERS_SOURCES
     importers/staticmeshmodelimporterdata.hh
     )
 
+set(IMPORTERS_UI
+    importers/importerdialog.ui
+    )
 
 source_group(
     "editor\\importers"
     FILES
     ${IMPORTERS_SOURCES}
+    ${IMPORTERS_UI}
     )
 
 set(IMPORTERS_IMAGE_SOURCES
@@ -484,6 +490,7 @@ set(ALL_UI
     ${EDITORS_SHADERGRAPHEDITOR_UI}
     ${EDITORS_STATICMESHEDITOR_UI}
     ${EDITORS_TEXTUREEDITOR_UI}
+    ${IMPORTERS_UI}
     ${IMPORTERS_IMAGE_UI}
     )
 

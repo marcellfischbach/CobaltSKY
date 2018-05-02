@@ -301,17 +301,22 @@ void AssetManagerWidget::on_pbImport_clicked(bool)
   }
 
 
-  ImporterDialog importerDialog(this);
+  ImporterDialog *importerDialog = new ImporterDialog(this);
   for (QString file : result)
   {
     std::string fileName (file.toLatin1());
     iImporterFactory *factory = Editor::Get()->FindImporter(fileName);
     iImporter *importer = factory->CreateImporter(fileName);
-    importerDialog.AddImporter(importer);
+    importerDialog->AddImporter(importer);
   }
 
-  importerDialog.exec();
-  RefreshContent();
+  connect(importerDialog, SIGNAL(accepted()), this, SLOT(on_importDialogAccepted()));
+  importerDialog->show();
 
+}
+
+void AssetManagerWidget::on_importDialogAccepted()
+{
+  RefreshContent();
 }
 

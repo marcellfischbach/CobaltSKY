@@ -41,6 +41,9 @@ void on_listView_customContextMenuRequested(const QPoint &pos);
 void on_pbNewAsset_clicked(bool);
 void on_pbImport_clicked(bool);
 
+private slots:
+void on_importDialogAccepted ();
+
 private:
   void FillStdMenu(QMenu *menu);
   void FillNewMenu(QMenu *menu);
