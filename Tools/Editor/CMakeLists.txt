@@ -374,6 +374,8 @@ source_group(
 
 
 set(IMPORTERS_MODEL_SOURCES
+    importers/model/assimpscenescanner.cc
+    importers/model/assimpscenescanner.hh
     importers/model/modelimporter.cc
     importers/model/modelimporter.hh
     )

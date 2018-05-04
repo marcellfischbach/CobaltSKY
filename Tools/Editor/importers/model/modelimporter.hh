@@ -30,6 +30,7 @@ public:
 
   virtual bool Import(AssetManagerWidget *assetManagerWidget);
 private:
+  void ReadContent ();
   std::string GetType() const;
 
   ModelImporterGUI *m_gui;

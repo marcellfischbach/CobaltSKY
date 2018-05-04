@@ -1,5 +1,6 @@
 
 #include <importers/model/modelimporter.hh>
+#include <importers/model/assimpscenescanner.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <cobalt/core/csfileinfo.hh>
@@ -20,6 +21,7 @@ newModelImporter::newModelImporter(const std::string &fileName)
   csFileInfo fileInfo (m_fileName);
   m_assetName = fileInfo.GetName() + "." + fileInfo.GetExtension();
 
+  ReadContent ();
 }
 
 std::string newModelImporter::GetName () const
@@ -57,6 +59,15 @@ std::string newModelImporter::GetType() const
   return fi.GetExtension().c_str();
 }
 
+void newModelImporter::ReadContent()
+{
+  AssimpSceneScanner scanner;
+  if (!scanner.Scan(m_fileName))
+  {
+    return;
+  }
+
+}
 
 bool ModelImporterFactory::CanImport(const std::string &fileName) const
 {
