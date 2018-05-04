@@ -9,7 +9,7 @@ class QWidget;
 class StaticMeshEditorWidget;
 class ModelImporterData : public AssetManagerImportData
 {
-  friend class ModelImporter;
+  friend class newModelImporter;
 public:
   enum Type {
     Mesh,
@@ -31,7 +31,7 @@ protected:
   ModelImporterData(Type type);
   void SetView(QWidget *view);
 
-protected:
+public:
   Type m_type;
   QString m_name;
   QString m_fileName;

@@ -162,8 +162,11 @@ std::string newImageImporter::GetType() const
 
 bool ImageImporterFactory::CanImport(const std::string &fileName) const
 {
-//  QString name (fileName);
-  return true;
+  csFileInfo fi(fileName);
+  std::string ext = fi.GetExtension();
+  return ext == std::string("jpg")
+      || ext == std::string("jpeg")
+      || ext == std::string("png");
 }
 
 

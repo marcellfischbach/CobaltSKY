@@ -186,6 +186,134 @@ source_group(
     ${COMPONENTS_UI}
     )
 
+
+set(EDITORS_SAMPLEREDITOR_SOURCES
+    editors/samplereditor/samplereditor.cc
+    editors/samplereditor/samplereditor.hh
+    editors/samplereditor/samplereditorfactory.cc
+    editors/samplereditor/samplereditorfactory.hh
+    editors/samplereditor/samplereditornewaction.cc
+    editors/samplereditor/samplereditornewaction.hh
+    editors/samplereditor/samplereditorwidget.cc
+    editors/samplereditor/samplereditorwidget.hh
+    )
+
+set(EDITORS_SAMPLEREDITOR_UI
+    editors/samplereditor/samplereditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\editors\\samplereditor"
+    FILES
+    ${EDITORS_SAMPLEREDITOR_SOURCES}
+    ${EDITORS_SAMPLEREDITOR_UI}
+    )
+
+
+
+set(EDITORS_SHADERGRAPHEDITOR_SOURCES
+    editors/shadergrapheditor/shadergrapheditor.cc
+    editors/shadergrapheditor/shadergrapheditor.hh
+    editors/shadergrapheditor/shadergrapheditorfactory.cc
+    editors/shadergrapheditor/shadergrapheditorfactory.hh
+    editors/shadergrapheditor/shadergrapheditormeta.cc
+    editors/shadergrapheditor/shadergrapheditormeta.hh
+    editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.cc
+    editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh
+    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
+    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
+    editors/shadergrapheditor/shadergrapheditornewaction.cc
+    editors/shadergrapheditor/shadergrapheditornewaction.hh
+    editors/shadergrapheditor/shadergrapheditornode.cc
+    editors/shadergrapheditor/shadergrapheditornode.hh
+    editors/shadergrapheditor/shadergrapheditoroutliner.cc
+    editors/shadergrapheditor/shadergrapheditoroutliner.hh
+    editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.cc
+    editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.hh
+    editors/shadergrapheditor/shadergrapheditorpreview.cc
+    editors/shadergrapheditor/shadergrapheditorpreview.hh
+    editors/shadergrapheditor/shadergrapheditorpreviewsceneview.cc
+    editors/shadergrapheditor/shadergrapheditorpreviewsceneview.hh
+    editors/shadergrapheditor/shadergrapheditorproperties.cc
+    editors/shadergrapheditor/shadergrapheditorproperties.hh
+    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.cc
+    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.hh
+    editors/shadergrapheditor/shadergrapheditortoolbox.cc
+    editors/shadergrapheditor/shadergrapheditortoolbox.hh
+    editors/shadergrapheditor/shadergrapheditortoolboxmodel.cc
+    editors/shadergrapheditor/shadergrapheditortoolboxmodel.hh
+    editors/shadergrapheditor/shadergrapheditorwidget.cc
+    editors/shadergrapheditor/shadergrapheditorwidget.hh
+    )
+
+set(EDITORS_SHADERGRAPHEDITOR_UI
+    editors/shadergrapheditor/shadergrapheditoroutliner.ui
+    editors/shadergrapheditor/shadergrapheditorpreview.ui
+    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.ui
+    editors/shadergrapheditor/shadergrapheditortoolbox.ui
+    editors/shadergrapheditor/shadergrapheditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\editors\\shadergrapheditor"
+    FILES
+    ${EDITORS_SHADERGRAPHEDITOR_SOURCES}
+    ${EDITORS_SHADERGRAPHEDITOR_UI}
+    )
+
+
+set(EDITORS_STATICMESHEDITOR_SOURCES
+    editors/staticmesheditor/staticmesheditor.cc
+    editors/staticmesheditor/staticmesheditor.hh
+    editors/staticmesheditor/staticmesheditorfactory.cc
+    editors/staticmesheditor/staticmesheditorfactory.hh
+    editors/staticmesheditor/staticmesheditorpreviewsceneview.cc
+    editors/staticmesheditor/staticmesheditorpreviewsceneview.hh
+    editors/staticmesheditor/staticmesheditorwidget.cc
+    editors/staticmesheditor/staticmesheditorwidget.hh
+    )
+
+set(EDITORS_STATICMESHEDITOR_UI
+    editors/staticmesheditor/staticmesheditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\editors\\staticmesheditor"
+    FILES
+    ${EDITORS_STATICMESHEDITOR_SOURCES}
+    ${EDITORS_STATICMESHEDITOR_UI}
+    )
+
+
+set(EDITORS_TEXTUREEDITOR_SOURCES
+    editors/textureeditor/textureeditor.cc
+    editors/textureeditor/textureeditor.hh
+    editors/textureeditor/textureeditorfactory.cc
+    editors/textureeditor/textureeditorfactory.hh
+    editors/textureeditor/textureeditorproperties.cc
+    editors/textureeditor/textureeditorproperties.hh
+    editors/textureeditor/textureeditorrenderwidget.cc
+    editors/textureeditor/textureeditorrenderwidget.hh
+    editors/textureeditor/textureeditorwidget.cc
+    editors/textureeditor/textureeditorwidget.hh
+    )
+
+set(EDITORS_TEXTUREEDITOR_UI
+    editors/textureeditor/textureeditorwidget.ui
+    )
+
+
+source_group(
+    "editor\\editors\\textureeditor"
+    FILES
+    ${EDITORS_TEXTUREEDITOR_SOURCES}
+    ${EDITORS_TEXTUREEDITOR_UI}
+    )
+
+
  set(EVENTS_SOURCES
     events/assetaddedevent.cc
     events/assetaddedevent.hh
@@ -242,6 +370,23 @@ source_group(
     FILES
     ${IMPORTERS_IMAGE_SOURCES}
     ${IMPORTERS_IMAGE_UI}
+    )
+
+
+set(IMPORTERS_MODEL_SOURCES
+    importers/model/modelimporter.cc
+    importers/model/modelimporter.hh
+    )
+
+set(IMPORTERS_MODEL_UI
+    importers/model/modelimporter.ui
+    )
+
+source_group(
+    "editors\\importers\\model"
+    FILES
+    ${IMPORTERS_MODEL_SOURCES}
+    ${IMPORTERS_MODEL_UI}
     )
 
 
@@ -353,132 +498,6 @@ source_group(
     )
 
 
-set(EDITORS_SAMPLEREDITOR_SOURCES
-    editors/samplereditor/samplereditor.cc
-    editors/samplereditor/samplereditor.hh
-    editors/samplereditor/samplereditorfactory.cc
-    editors/samplereditor/samplereditorfactory.hh
-    editors/samplereditor/samplereditornewaction.cc
-    editors/samplereditor/samplereditornewaction.hh
-    editors/samplereditor/samplereditorwidget.cc
-    editors/samplereditor/samplereditorwidget.hh
-    )
-
-set(SAMPLEREDITOR_UI
-    editors/samplereditor/samplereditorwidget.ui
-    )
-
-
-source_group(
-    "editor\\editors\\samplereditor"
-    FILES
-    ${EDITORS_SAMPLEREDITOR_SOURCES}
-    ${EDITORS_SAMPLEREDITOR_UI}
-    )
-
-    
-
-set(EDITORS_SHADERGRAPHEDITOR_SOURCES
-    editors/shadergrapheditor/shadergrapheditor.cc
-    editors/shadergrapheditor/shadergrapheditor.hh
-    editors/shadergrapheditor/shadergrapheditorfactory.cc
-    editors/shadergrapheditor/shadergrapheditorfactory.hh
-    editors/shadergrapheditor/shadergrapheditormeta.cc
-    editors/shadergrapheditor/shadergrapheditormeta.hh
-    editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.cc
-    editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh
-    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
-    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
-    editors/shadergrapheditor/shadergrapheditornewaction.cc
-    editors/shadergrapheditor/shadergrapheditornewaction.hh
-    editors/shadergrapheditor/shadergrapheditornode.cc
-    editors/shadergrapheditor/shadergrapheditornode.hh
-    editors/shadergrapheditor/shadergrapheditoroutliner.cc
-    editors/shadergrapheditor/shadergrapheditoroutliner.hh
-    editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.cc
-    editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.hh
-    editors/shadergrapheditor/shadergrapheditorpreview.cc
-    editors/shadergrapheditor/shadergrapheditorpreview.hh
-    editors/shadergrapheditor/shadergrapheditorpreviewsceneview.cc
-    editors/shadergrapheditor/shadergrapheditorpreviewsceneview.hh
-    editors/shadergrapheditor/shadergrapheditorproperties.cc
-    editors/shadergrapheditor/shadergrapheditorproperties.hh
-    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.cc
-    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.hh
-    editors/shadergrapheditor/shadergrapheditortoolbox.cc
-    editors/shadergrapheditor/shadergrapheditortoolbox.hh
-    editors/shadergrapheditor/shadergrapheditortoolboxmodel.cc
-    editors/shadergrapheditor/shadergrapheditortoolboxmodel.hh
-    editors/shadergrapheditor/shadergrapheditorwidget.cc
-    editors/shadergrapheditor/shadergrapheditorwidget.hh
-    )
-
-set(EDITORS_SHADERGRAPHEDITOR_UI
-    editors/shadergrapheditor/shadergrapheditoroutliner.ui
-    editors/shadergrapheditor/shadergrapheditorpreview.ui
-    editors/shadergrapheditor/shadergrapheditorshadergraphproperties.ui
-    editors/shadergrapheditor/shadergrapheditortoolbox.ui
-    editors/shadergrapheditor/shadergrapheditorwidget.ui
-    )
-
-
-source_group(
-    "editor\\editors\\shadergrapheditor"
-    FILES
-    ${EDITORS_SHADERGRAPHEDITOR_SOURCES}
-    ${EDITORS_SHADERGRAPHEDITOR_UI}
-    )
-
-    
-set(EDITORS_STATICMESHEDITOR_SOURCES
-    editors/staticmesheditor/staticmesheditor.cc
-    editors/staticmesheditor/staticmesheditor.hh
-    editors/staticmesheditor/staticmesheditorfactory.cc
-    editors/staticmesheditor/staticmesheditorfactory.hh
-    editors/staticmesheditor/staticmesheditorpreviewsceneview.cc
-    editors/staticmesheditor/staticmesheditorpreviewsceneview.hh
-    editors/staticmesheditor/staticmesheditorwidget.cc
-    editors/staticmesheditor/staticmesheditorwidget.hh
-    )
-
-set(EDITORS_STATICMESHEDITOR_UI
-    editors/staticmesheditor/staticmesheditorwidget.ui
-    )
-
-
-source_group(
-    "editor\\editors\\staticmesheditor"
-    FILES
-    ${EDITORS_STATICMESHEDITOR_SOURCES}
-    ${EDITORS_STATICMESHEDITOR_UI}
-    )
-
-    
-set(EDITORS_TEXTUREEDITOR_SOURCES
-    editors/textureeditor/textureeditor.cc
-    editors/textureeditor/textureeditor.hh
-    editors/textureeditor/textureeditorfactory.cc
-    editors/textureeditor/textureeditorfactory.hh
-    editors/textureeditor/textureeditorproperties.cc
-    editors/textureeditor/textureeditorproperties.hh
-    editors/textureeditor/textureeditorrenderwidget.cc
-    editors/textureeditor/textureeditorrenderwidget.hh
-    editors/textureeditor/textureeditorwidget.cc
-    editors/textureeditor/textureeditorwidget.hh
-    )
-
-set(EDITORS_TEXTUREEDITOR_UI
-    editors/textureeditor/textureeditorwidget.ui
-    )
-
-
-source_group(
-    "editor\\editors\\textureeditor"
-    FILES
-    ${EDITORS_TEXTUREEDITOR_SOURCES}
-    ${EDITORS_TEXTUREEDITOR_UI}
-    )
-
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
@@ -492,6 +511,7 @@ set(ALL_UI
     ${EDITORS_TEXTUREEDITOR_UI}
     ${IMPORTERS_UI}
     ${IMPORTERS_IMAGE_UI}
+    ${IMPORTERS_MODEL_UI}
     )
 
 
@@ -504,18 +524,19 @@ set(ALL_SOURCES
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${COMPONENTS_SOURCES}
-    ${EVENTS_SOURCES}
-    ${IMPORTERS_SOURCES}
-    ${IMPORTERS_IMAGE_SOURCES}
-    ${LOADERS_SOURCES}
-    ${NODEGRAPH_SOURCES}
-    ${PREVIEW_SOURCES}
-    ${PROJECT_SOURCES}
     ${EDITORS_MATERIALEDITOR_SOURCES}
     ${EDITORS_SAMPLEREDITOR_SOURCES}
     ${EDITORS_SHADERGRAPHEDITOR_SOURCES}
     ${EDITORS_STATICMESHEDITOR_SOURCES}
     ${EDITORS_TEXTUREEDITOR_SOURCES}
+    ${EVENTS_SOURCES}
+    ${IMPORTERS_SOURCES}
+    ${IMPORTERS_IMAGE_SOURCES}
+    ${IMPORTERS_MODEL_SOURCES}
+    ${LOADERS_SOURCES}
+    ${NODEGRAPH_SOURCES}
+    ${PREVIEW_SOURCES}
+    ${PROJECT_SOURCES}
     )
 
 add_executable(
