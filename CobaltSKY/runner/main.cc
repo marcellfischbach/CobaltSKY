@@ -78,6 +78,7 @@
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <runner/event.hh>
 #include <csfile/csffile.hh>
+#include <iostream>
 
 
 static bool g_CreateCharacter = false;
@@ -140,7 +141,7 @@ int main(int argc, char **argv)
   g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
   g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
 
-#if 0
+#if 1
   posX = -1500;
 #else
   posX = 200;
@@ -152,13 +153,6 @@ int main(int argc, char **argv)
   }
 
 
-
-  csImage *icon = csResourceManager::Get()->Load<csImage>(csResourceLocator("val.png"));
-  if (icon)
-  {
-    window->SetIcon(icon);
-    icon->Release();
-  }
 
   csEng->SetWindow(window);
 

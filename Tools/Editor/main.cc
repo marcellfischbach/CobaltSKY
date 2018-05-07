@@ -11,6 +11,7 @@
 #include <cobalt/core/csvfs.hh>
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
+#include <QIcon>
 
 // #define GUI_TEST
 
@@ -37,6 +38,15 @@ int main (int argc, char **argv)
   QSurfaceFormat::setDefaultFormat(format);
 
   QApplication app(argc, argv);
+
+
+  QIcon icon;
+  icon.addFile(":/icons/resources/CobaltSKY-Editor16.png", QSize(), QIcon::Normal, QIcon::Off);
+  icon.addFile(":/icons/resources/CobaltSKY-Editor24.png", QSize(), QIcon::Normal, QIcon::Off);
+  icon.addFile(":/icons/resources/CobaltSKY-Editor32.png", QSize(), QIcon::Normal, QIcon::Off);
+  icon.addFile(":/icons/resources/CobaltSKY-Editor48.png", QSize(), QIcon::Normal, QIcon::Off);
+  icon.addFile(":/icons/resources/CobaltSKY-Editor64.png", QSize(), QIcon::Normal, QIcon::Off);
+  app.setWindowIcon(icon);
 
   QFile qssFile("g:/ide/devs/CobaltSKY/Tools/Editor/flat_menu.css");
   if (qssFile.open(QIODevice::ReadOnly))

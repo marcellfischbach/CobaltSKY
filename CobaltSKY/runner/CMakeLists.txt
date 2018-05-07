@@ -6,6 +6,7 @@ set(SOURCE
   main.cc
   runnermodule.cc
   runnermodule.hh
+  resource.rc
   )
 
 source_group(

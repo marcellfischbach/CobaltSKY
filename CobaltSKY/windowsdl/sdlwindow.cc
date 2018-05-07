@@ -103,7 +103,7 @@ void SDLWindow::SetIcon(const csImage *image)
                                                       0x0000ff00, 
                                                       0x00ff0000,
                                                       0xff000000);
-  //SDL_SetWindowIcon(m_window, iconSurface);
+  SDL_SetWindowIcon(m_window, iconSurface);
   SDL_FreeSurface(iconSurface);
   delete[] buffer;
 
