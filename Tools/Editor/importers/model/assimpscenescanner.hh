@@ -15,12 +15,17 @@ struct AssimpMeshData
   aiMesh *mesh;
 };
 
+
+
 class AssimpSceneScanner
 {
 public:
   AssimpSceneScanner();
 
   bool Scan(const std::string &fileName);
+
+  const std::vector<AssimpMeshData> &GetMeshes() const;
+  const std::vector<AssimpMeshData> &GetCollision() const;
 
 private:
 
@@ -29,4 +34,6 @@ private:
   std::vector<AssimpMeshData> m_meshData;
   std::vector<AssimpMeshData> m_collisionData;
 };
+
+
 

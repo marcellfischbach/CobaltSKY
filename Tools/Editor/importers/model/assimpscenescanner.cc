@@ -1,4 +1,5 @@
 #include <importers/model/assimpscenescanner.hh>
+#include <importers/model/modelmeshexporter.hh>
 #include <cobalt/math/csmatrix.hh>
 
 #include <assimp/Importer.hpp>
@@ -120,3 +121,14 @@ void AssimpSceneScanner::Scan(const aiScene *scene, aiNode *node, const csMatrix
 
 
 
+
+
+const std::vector<AssimpMeshData> &AssimpSceneScanner::GetMeshes() const
+{
+  return m_meshData;
+}
+
+const std::vector<AssimpMeshData> &AssimpSceneScanner::GetCollision() const
+{
+  return m_collisionData;
+}

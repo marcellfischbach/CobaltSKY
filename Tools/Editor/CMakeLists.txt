@@ -378,6 +378,8 @@ set(IMPORTERS_MODEL_SOURCES
     importers/model/assimpscenescanner.hh
     importers/model/modelimporter.cc
     importers/model/modelimporter.hh
+    importers/model/modelmeshexporter.cc
+    importers/model/modelmeshexporter.hh
     )
 
 set(IMPORTERS_MODEL_UI

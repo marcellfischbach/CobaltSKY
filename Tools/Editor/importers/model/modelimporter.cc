@@ -1,6 +1,7 @@
 
 #include <importers/model/modelimporter.hh>
 #include <importers/model/assimpscenescanner.hh>
+#include <importers/model/modelmeshexporter.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <cobalt/core/csfileinfo.hh>
@@ -66,6 +67,15 @@ void newModelImporter::ReadContent()
   {
     return;
   }
+
+  ModelMeshExporter exporter;
+  for (AssimpMeshData d : scanner.GetMeshes())
+  {
+    exporter.Add(d);
+  }
+  exporter.Finish();
+
+  return;
 
 }
 
