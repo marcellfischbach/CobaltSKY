@@ -34,6 +34,15 @@ bool SDLWindow::InitializeOpenGL(
 {
   SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE);
 
+  int numDrivers = SDL_GetNumVideoDrivers();
+  printf("Found %u Video drivers\n", numDrivers);
+  for (int i = 0; i < numDrivers; ++i)
+  {
+	  const char *videoDriver = SDL_GetVideoDriver(i);
+	  printf("   %s\n", videoDriver);
+  }
+  return false;
+
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);

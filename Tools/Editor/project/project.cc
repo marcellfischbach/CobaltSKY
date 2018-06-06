@@ -1,5 +1,7 @@
 
 #include <project/project.hh>
+#include <project/projectmodel.hh>
+#include <project/projectmodelscanner.hh>
 #include <assetmanager/assetmanagerresourcescanner.hh>
 #include <assetmanager/assetmanagerrenamer.hh>
 #include <QDomDocument>
@@ -14,6 +16,10 @@ void Project::Open(const std::string &projectPath)
 {
   m_referenceTree.Open(projectPath);
   printf("Project opened\n");
+
+  ProjectModel model;
+  ProjectModelScanner scanner(&model);
+  scanner.ScanAll();
 }
 
 void Project::Close()

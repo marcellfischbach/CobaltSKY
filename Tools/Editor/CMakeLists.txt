@@ -1,8 +1,9 @@
 
-find_package(Qt5Core)
-find_package(Qt5Widgets)
-find_package(Qt5OpenGL)
-find_package(Qt5Xml)
+find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml REQUIRED)
+#find_package(Qt5Core)
+#find_package(Qt5Widgets)
+#find_package(Qt5OpenGL)
+#find_package(Qt5Xml)
 #find_package(assimp)
 
 include_directories(${ASSIMP_INCLUDE_DIR})
@@ -491,6 +492,10 @@ set(PROJECT_SOURCES
     project/project.hh
     project/projectassetreference.cc
     project/projectassetreference.hh
+	project/projectmodel.cc
+	project/projectmodel.hh
+	project/projectmodelscanner.cc
+	project/projectmodelscanner.hh
     project/projectreferencetree.cc
     project/projectreferencetree.hh
     )

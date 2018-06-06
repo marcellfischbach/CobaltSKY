@@ -1,6 +1,6 @@
 
 #include <windowsdl/sdlmouse.hh>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 static csButton buttonMap[32];
 

@@ -53,27 +53,27 @@ float chiGGX(float v)
     return v > 0 ? 1 : 0;
 }
 
-float GGX_Distribution(vec3 normal, vec3 half, float roughness)
+float GGX_Distribution(vec3 normal, vec3 halfVec, float roughness)
 {
-    float NdotH = dot(normal,half);
+    float NdotH = dot(normal,halfVec);
     float roughness2 = roughness * roughness;
     float NdotH2 = NdotH * NdotH;
     float den = NdotH2 * roughness2 + (1 - NdotH2);
     return (chiGGX(NdotH) * roughness2) / ( PI * den * den );
 }
 
-float GGX_PartialGeometryTerm(vec3 eyeDir, vec3 normal, vec3 half, float alpha)
+float GGX_PartialGeometryTerm(vec3 eyeDir, vec3 normal, vec3 halfVec, float alpha)
 {
-    float VdotH2 = clamp(dot(eyeDir,half), 0.0, 1.0);
+    float VdotH2 = clamp(dot(eyeDir,halfVec), 0.0, 1.0);
     float chi = chiGGX( VdotH2 / clamp(dot(eyeDir,normal), 0.0, 1.0));
     VdotH2 = VdotH2 * VdotH2;
     float tan2 = ( 1 - VdotH2 ) / VdotH2;
     return (chi * 2) / ( 1 + sqrt( 1 + alpha * alpha * tan2 ) );
 }
 
-vec3 Fresnel_Schlick(vec3 eyeDir, vec3 half, vec3 F0)
+vec3 Fresnel_Schlick(vec3 eyeDir, vec3 halfVec, vec3 F0)
 {
-	float VdotH = dot(eyeDir, half);
+	float VdotH = dot(eyeDir, halfVec);
   return F0 + (1-F0) * pow( 1 - VdotH, 5);
 }
 
@@ -93,17 +93,17 @@ vec3 cook_torrance(vec3 normal, vec3 lightDir, vec3 eyeDir, float NdotL, float N
 	{
 
 		// calculate intermediary values
-		vec3 halfVector = normalize(lightDir + eyeDir);
+		vec3 halfVecVector = normalize(lightDir + eyeDir);
 		float NdotV = dot(normal, eyeDir);
 		float NdotL = dot(normal, lightDir);
-		float NdotH = dot(normal, halfVector);
+		float NdotH = dot(normal, halfVecVector);
 		
-		float denominator = clamp( 4 * (NdotV * clamp(dot(halfVector, normal), 0.0, 1.0) + 0.05), 0.0, 1.0 );
+		float denominator = clamp( 4 * (NdotV * clamp(dot(halfVecVector, normal), 0.0, 1.0) + 0.05), 0.0, 1.0 );
 		
 		denominator = clamp(4 * (NdotV * clamp(NdotH, 0.0, 1.0) + 0.5), 0.0, 1.0);
-		float D = GGX_Distribution(normal, halfVector, roughness);
-		float G = GGX_PartialGeometryTerm(eyeDir, normal, halfVector, roughness);
-		vec3 F = Fresnel_Schlick(eyeDir, halfVector, F0);
+		float D = GGX_Distribution(normal, halfVecVector, roughness);
+		float G = GGX_PartialGeometryTerm(eyeDir, normal, halfVecVector, roughness);
+		vec3 F = Fresnel_Schlick(eyeDir, halfVecVector, F0);
 		
 		specular = D*G*F/denominator;
 	}
