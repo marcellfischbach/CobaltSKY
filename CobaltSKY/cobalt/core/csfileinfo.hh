@@ -17,12 +17,16 @@ public:
   void Lower();
   void Upper();
 
+  bool IsFile() const;
+  bool IsFolder() const;
   bool Exists() const;
+  static bool IsFile(const std::string &filename);
+  static bool IsFolder(const std::string &filename);
   static bool Exists(const std::string &filename);
 private:
   std::string m_name;
   std::string m_extension;
   std::string m_location;
-  std::string m_filname;
+  std::string m_fileName;
 };
 

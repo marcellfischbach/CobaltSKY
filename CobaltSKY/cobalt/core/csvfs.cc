@@ -370,7 +370,7 @@ std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCh
     if (entry.GetName() == locator.GetResourceEntry())
     {
       std::string absPath = entry.GetAbsPath() + "/" + finalName;
-      if (csFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
+      if (checkExistence == DontCheckExistence || csFileInfo::Exists(absPath))
       {
         return absPath;
       }

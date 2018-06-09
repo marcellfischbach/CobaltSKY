@@ -109,6 +109,8 @@ source_group(
     ${ASSETMANAGER_UI}
     )
 
+
+
 set(ASSETMANAGER_ACTIONS_SOURCES
     assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
@@ -158,6 +160,29 @@ source_group(
     ${ASSETMANAGER_IMPORT_UI}
     )
 
+set(ASSETMODEL_SOURCES
+	assetmodel/asset.cc
+	assetmodel/asset.hh
+	assetmodel/entry.cc
+	assetmodel/entry.hh
+	assetmodel/folder.cc
+	assetmodel/folder.hh
+	assetmodel/model.cc
+	assetmodel/model.hh
+	assetmodel/modelscanner.cc
+	assetmodel/modelscanner.hh
+	assetmodel/root.cc
+	assetmodel/root.hh
+	assetmodel/vfsentry.cc
+	assetmodel/vfsentry.hh
+	)
+
+
+source_group(
+    "editor\\assetmodel"
+    FILES
+    ${ASSETMODEL_SOURCES}
+    )
 
 set(COMPONENTS_SOURCES
     components/assetresourcelineedit.cc
@@ -532,6 +557,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
+    ${ASSETMODEL_SOURCES}
     ${COMPONENTS_SOURCES}
     ${EDITORS_MATERIALEDITOR_SOURCES}
     ${EDITORS_SAMPLEREDITOR_SOURCES}

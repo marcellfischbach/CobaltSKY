@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
-
-
+#include <sys/types.h>
+#include <stdio.h>
+#include <filesystem>
 
 
 namespace
@@ -32,6 +33,7 @@ csFileInfo::csFileInfo (const std::string &filename)
   m_location = "";
   m_name = "";
   m_extension = "";
+  m_fileName = filename;
   std::string tmpname = filename;
 
   const char* locptr = tmpname.c_str ();
@@ -101,9 +103,9 @@ void csFileInfo::Lower()
   {
     m_location[i] = char_to_lower(m_location[i]);
   }
-  for (int i = 0; i < m_filname.length(); ++i)
+  for (int i = 0; i < m_fileName.length(); ++i)
   {
-    m_filname[i] = char_to_lower(m_filname[i]);
+    m_fileName[i] = char_to_lower(m_fileName[i]);
   }
 }
 
@@ -123,9 +125,9 @@ void csFileInfo::Upper()
   {
     m_location[i] = char_to_upper(m_location[i]);
   }
-  for (int i = 0; i < m_filname.length(); ++i)
+  for (int i = 0; i < m_fileName.length(); ++i)
   {
-    m_filname[i] = char_to_upper(m_filname[i]);
+    m_fileName[i] = char_to_upper(m_fileName[i]);
   }
 }
 
@@ -146,11 +148,37 @@ const std::string &csFileInfo::GetLocation () const
 
 bool csFileInfo::Exists() const
 {
-  return csFileInfo::Exists(m_filname);
+  return csFileInfo::Exists(m_fileName);
+}
+
+
+bool csFileInfo::IsFile() const
+{
+  return csFileInfo::IsFile(m_fileName);
+}
+
+
+bool csFileInfo::IsFolder() const
+{
+  return csFileInfo::IsFolder(m_fileName);
 }
 
 bool csFileInfo::Exists(const std::string &filename)
 {
   struct stat s;
   return stat(filename.c_str(), &s) == 0;
+}
+
+
+bool csFileInfo::IsFile(const std::string &filename)
+{
+  std::filesystem::path path(filename);
+  return std::filesystem::is_regular_file(path);
+}
+
+
+bool csFileInfo::IsFolder(const std::string &filename)
+{
+  std::filesystem::path path(filename);
+  return std::filesystem::is_directory(path);
 }

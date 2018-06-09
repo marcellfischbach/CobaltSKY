@@ -72,6 +72,11 @@ csResourceLocator csResourceLocator::AsAnonymous() const
   return csResourceLocator(m_resourceFile, m_resourceName, "");
 }
 
+csResourceLocator csResourceLocator::WithFileSuffix(const std::string &suffix) const
+{
+  return csResourceLocator(m_resourceFile + suffix, m_resourceName, m_resourceEntry);
+}
+
 csResourceLocator csResourceLocator::AsFileName() const
 {
   return csResourceLocator(m_resourceFile, "", "");

@@ -9,15 +9,16 @@
 #include <cobalt/core/cslogger.hh>
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csfileinfo.hh>
 
 #include <assetmanager/assetmanagerresourcescanner.hh>
 #include <QIcon>
 
 // #define GUI_TEST
 
+
 int main (int argc, char **argv)
 {
-
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 
 

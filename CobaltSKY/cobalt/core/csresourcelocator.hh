@@ -13,6 +13,7 @@ public:
 
   csResourceLocator AsAnonymous() const;
   csResourceLocator AsFileName() const;
+  csResourceLocator WithFileSuffix(const std::string &suffix) const;
   csResourceLocator AsXAsset() const;
   csResourceLocator AsData() const;
   csResourceLocator AsCSF() const;

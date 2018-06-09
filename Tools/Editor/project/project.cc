@@ -6,6 +6,8 @@
 #include <assetmanager/assetmanagerrenamer.hh>
 #include <QDomDocument>
 #include <QFile>
+#include <assetmodel/model.hh>
+#include <assetmodel/modelscanner.hh>
 
 Project::Project()
 {
@@ -20,6 +22,11 @@ void Project::Open(const std::string &projectPath)
   ProjectModel model;
   ProjectModelScanner scanner(&model);
   scanner.ScanAll();
+
+  asset::model::Model mModel;
+  asset::model::ModelScanner mScanner(&mModel);
+  mScanner.Scan();
+
 }
 
 void Project::Close()
