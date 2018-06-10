@@ -7,14 +7,27 @@ namespace asset::model
   Asset::Asset(Model *model, const std::string &fileName)
     : Entry(model, eT_Asset)
     , m_fileName(fileName)
+    , m_assetType("undef")
   {
-
+    SetName(fileName);
   }
 
   Asset::~Asset()
   {
 
   }
+
+  void Asset::ClearReferences()
+  {
+    m_references.clear();
+  }
+
+  void Asset::AddReference(const csResourceLocator &reference)
+  {
+    m_references.push_back(reference);
+  }
+
+
 
   csResourceLocator Asset::GetResourceLocator() const
   {

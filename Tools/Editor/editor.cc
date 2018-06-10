@@ -93,6 +93,8 @@ bool Editor::Initialize(int argc, char **argv)
 
   OpenProject(projectPath);
 
+  m_assetManager->SetProject(m_project);
+
   return true;
 }
 

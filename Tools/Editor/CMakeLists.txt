@@ -160,6 +160,33 @@ source_group(
     ${ASSETMANAGER_IMPORT_UI}
     )
 
+set(ASSETMANAGER_MODEL_SOURCES
+	assetmanager/model/assetlistmodel.cc
+	assetmanager/model/assetlistmodel.hh
+	assetmanager/model/foldertreemodel.cc
+	assetmanager/model/foldertreemodel.hh
+	assetmanager/model/viewasset.cc
+	assetmanager/model/viewasset.hh
+	assetmanager/model/viewdatamodel.cc
+	assetmanager/model/viewdatamodel.hh
+	assetmanager/model/viewentry.cc
+	assetmanager/model/viewentry.hh
+	assetmanager/model/viewfolder.cc
+	assetmanager/model/viewfolder.hh
+	assetmanager/model/viewroot.cc
+	assetmanager/model/viewroot.hh
+	assetmanager/model/viewvfsentry.cc
+	assetmanager/model/viewvfsentry.hh
+	)
+
+
+source_group(
+    "editor\\assetmanager\\model"
+    FILES
+    ${ASSETMANAGER_MODEL_SOURCES}
+    )
+
+
 set(ASSETMODEL_SOURCES
 	assetmodel/asset.cc
 	assetmodel/asset.hh
@@ -171,6 +198,8 @@ set(ASSETMODEL_SOURCES
 	assetmodel/model.hh
 	assetmodel/modelscanner.cc
 	assetmodel/modelscanner.hh
+	assetmodel/resourcescanner.cc
+	assetmodel/resourcescanner.hh
 	assetmodel/root.cc
 	assetmodel/root.hh
 	assetmodel/vfsentry.cc
@@ -557,6 +586,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
+    ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}
     ${COMPONENTS_SOURCES}
     ${EDITORS_MATERIALEDITOR_SOURCES}

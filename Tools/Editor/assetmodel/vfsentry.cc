@@ -7,7 +7,7 @@ namespace asset::model
     : Folder(model, Entry::eT_VFSEntry)
     , m_entry(entry)
   {
-
+    SetName(entry.GetName());
   }
 
   VFSEntry::~VFSEntry()

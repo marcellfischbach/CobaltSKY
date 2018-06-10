@@ -9,7 +9,10 @@
 #include <assetmanager/import/assetmanagerimporter.hh>
 #include <assetmanager/import/assetmanagerimporterdialog.hh>
 #include <assetmanager/import/assetmanagerimportmanager.hh>
+#include <assetmanager/model/viewdatamodel.hh>
+#include <assetmanager/model/foldertreemodel.hh>
 #include <assetdescriptor.hh>
+#include <project/project.hh>
 #include <importers/importerdialog.hh>
 #include <editor.hh>
 #include <cobalt/core/csvfs.hh>
@@ -27,12 +30,15 @@ AssetManagerWidget::AssetManagerWidget()
 {
   m_gui.setupUi(this);
 
+  m_dataModel = new asset::model::ViewDataModel();
+  m_folderTreeModel = new asset::model::FolderTreeModel();
+
   m_folderModel = new AssetManagerFolderModel();
   m_contentModel = new AssetManagerContentModel();
   m_itemDelegate = new AssetManagerContentItemDelegate(m_contentModel);
   m_currentDir = Editor::Get()->GetRootPath();
 
-  m_gui.treeView->setModel(m_folderModel);
+  m_gui.treeView->setModel(m_folderTreeModel);
   m_gui.listView->setModel(m_contentModel);
   m_gui.listView->setItemDelegate(m_itemDelegate);
 
@@ -50,6 +56,12 @@ AssetManagerWidget::AssetManagerWidget()
 AssetManagerWidget::~AssetManagerWidget()
 {
 
+}
+
+void AssetManagerWidget::SetProject(Project *project)
+{
+  m_dataModel->SetModel(project->GetModel());
+  m_folderTreeModel->SetViewDataModel(m_dataModel);
 }
 
 

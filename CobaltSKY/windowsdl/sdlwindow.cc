@@ -41,7 +41,6 @@ bool SDLWindow::InitializeOpenGL(
 	  const char *videoDriver = SDL_GetVideoDriver(i);
 	  printf("   %s\n", videoDriver);
   }
-  return false;
 
   SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
   SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);

@@ -8,6 +8,12 @@
 #include <map>
 #include <string>
 
+namespace asset::model
+{
+  class ViewDataModel;
+  class FolderTreeModel;
+}
+class Project;
 class QAction;
 struct AssetManagerNewHandler;
 class AssetManagerContentItemDelegate;
@@ -20,6 +26,8 @@ class AssetManagerWidget : public QWidget
 public:
   AssetManagerWidget();
   ~AssetManagerWidget();
+
+  void SetProject(Project *project);
 
   void OpenAsset(const csResourceLocator &locator);
 
@@ -55,5 +63,8 @@ private:
   QDir m_currentDir;
   csLogger m_logger;
   AssetManagerContentItemDelegate *m_itemDelegate;
+
+  asset::model::ViewDataModel *m_dataModel;
+  asset::model::FolderTreeModel *m_folderTreeModel;
 };
 

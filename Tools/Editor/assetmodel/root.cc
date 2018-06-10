@@ -8,7 +8,7 @@ namespace asset::model
   Root::Root(Model *model)
     : Entry(model, Entry::eT_Root)
   {
-
+    SetName("Content");
   }
 
   Root::~Root()

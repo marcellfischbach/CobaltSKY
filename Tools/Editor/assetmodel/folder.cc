@@ -8,7 +8,7 @@ namespace asset::model
     : Entry(model, Entry::eT_Folder)
     , m_folderName(folderName)
   {
-
+    SetName(folderName);
   }
 
   Folder::Folder(Model *model, Entry::Type type)

@@ -358,6 +358,7 @@ std::string csVFS::GetAbsolutePath(const std::string &path, const std::string &e
 }
 
 
+
 std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence) const
 {
   if (locator.GetResourceEntry().empty())

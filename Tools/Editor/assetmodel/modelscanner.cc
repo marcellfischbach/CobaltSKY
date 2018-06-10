@@ -4,11 +4,17 @@
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/resourcescanner.hh>
 #include <assetmodel/root.hh>
 #include <assetmodel/vfsentry.hh>
 #include <cobalt/core/csvfs.hh>
 #include <filesystem>
 #include <iostream>
+
+namespace std
+{
+  namespace fs = filesystem;
+}
 
 namespace asset::model
 {
@@ -44,16 +50,16 @@ namespace asset::model
     std::string path = csVFS::Get()->GetAbsolutePath(l);
     printf("MS_Scan: %s => %s\n", l.GetText().c_str(), path.c_str());
 
-    for (const std::filesystem::directory_entry &p : std::filesystem::directory_iterator(path))
+    for (const std::fs::directory_entry &p : std::fs::directory_iterator(path))
     {
-      const std::filesystem::path &childPath = (const std::filesystem::path&)p;
-      if (std::filesystem::is_directory(childPath))
+      const std::fs::path &childPath = (const std::fs::path&)p;
+      if (std::fs::is_directory(childPath))
       {
         Folder *childFolder = m_model->CreateFolder(childPath.filename().string());
         folder->Add(childFolder);
         Scan(childFolder);
       }
-      else if (std::filesystem::is_regular_file(childPath))
+      else if (std::fs::is_regular_file(childPath))
       {
         std::string ext = childPath.extension().string();
         if (ext == std::string(".csf") || ext == std::string(".asset"))
@@ -69,6 +75,21 @@ namespace asset::model
   void ModelScanner::Scan(Asset *asset)
   {
     csResourceLocator assetLocator = asset->GetResourceLocator();
+    std::fs::path path(csVFS::Get()->GetAbsolutePath(assetLocator));
+    std::string ext = path.extension().string();
+    if (ext == std::string(".csf") || ext == std::string(".asset"))
+    {
+      ResourceScanner(asset).Scan();
+    }
+    else
+    {
+      if (ext.length() != 0 && ext[0] == '.')
+      {
+        ext = ext.substr(1);
+      }
+      asset->SetAssetType(ext);
+    }
+
     printf("MS_Scan: %s\n", assetLocator.GetText().c_str());
   }
 
