@@ -14,6 +14,10 @@ namespace asset::model
 
     virtual void Add(Entry *entry);
 
+		virtual bool IsFolder() const;
+		virtual Folder *AsFolder();
+		virtual const Folder *AsFolder() const;
+
     const std::string &GetFolderName() const;
 
     virtual csResourceLocator GetResourceLocator() const;

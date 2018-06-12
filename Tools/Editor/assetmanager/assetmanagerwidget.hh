@@ -10,8 +10,9 @@
 
 namespace asset::model
 {
-  class ViewDataModel;
+	class AssetListModel;
   class FolderTreeModel;
+	class ViewDataModel;
 }
 class Project;
 class QAction;
@@ -58,13 +59,11 @@ private:
   void SelectIndex(const QModelIndex &index);
   Ui::AssetManager m_gui;
 
-  AssetManagerFolderModel *m_folderModel;
-  AssetManagerContentModel *m_contentModel;
-  QDir m_currentDir;
   csLogger m_logger;
-  AssetManagerContentItemDelegate *m_itemDelegate;
+//  AssetManagerContentItemDelegate *m_itemDelegate;
 
   asset::model::ViewDataModel *m_dataModel;
   asset::model::FolderTreeModel *m_folderTreeModel;
+	asset::model::AssetListModel *m_assetListModel;
 };
 

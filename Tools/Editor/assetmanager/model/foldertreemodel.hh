@@ -7,6 +7,7 @@
 
 namespace asset::model
 {
+	class Entry;
   class ViewEntry;
   class ViewFolder;
   class ViewRoot;
@@ -26,6 +27,10 @@ namespace asset::model
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+		ViewEntry *GetEntry(const QModelIndex &index);
+		const ViewEntry *GetEntry(const QModelIndex &index) const;
+		
 
   private:
 

@@ -9,8 +9,12 @@
 #include <assetmanager/import/assetmanagerimporter.hh>
 #include <assetmanager/import/assetmanagerimporterdialog.hh>
 #include <assetmanager/import/assetmanagerimportmanager.hh>
-#include <assetmanager/model/viewdatamodel.hh>
+#include <assetmanager/model/assetlistmodel.hh>
 #include <assetmanager/model/foldertreemodel.hh>
+#include <assetmanager/model/viewdatamodel.hh>
+#include <assetmanager/model/viewentry.hh>
+#include <assetmanager/model/viewfolder.hh>
+#include <assetmodel/folder.hh>
 #include <assetdescriptor.hh>
 #include <project/project.hh>
 #include <importers/importerdialog.hh>
@@ -32,15 +36,13 @@ AssetManagerWidget::AssetManagerWidget()
 
   m_dataModel = new asset::model::ViewDataModel();
   m_folderTreeModel = new asset::model::FolderTreeModel();
+	m_assetListModel = new asset::model::AssetListModel();
 
-  m_folderModel = new AssetManagerFolderModel();
-  m_contentModel = new AssetManagerContentModel();
-  m_itemDelegate = new AssetManagerContentItemDelegate(m_contentModel);
-  m_currentDir = Editor::Get()->GetRootPath();
+
 
   m_gui.treeView->setModel(m_folderTreeModel);
-  m_gui.listView->setModel(m_contentModel);
-  m_gui.listView->setItemDelegate(m_itemDelegate);
+  m_gui.listView->setModel(m_assetListModel);
+  //m_gui.listView->setItemDelegate(m_itemDelegate);
 
 
 
@@ -77,24 +79,34 @@ void AssetManagerWidget::on_treeView_clicked(const QModelIndex &index)
 
 void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
-  QDir dir = m_folderModel->GetDir(index);
-  csResourceLocator locator = m_folderModel->GetResourceLocator(index);
-  printf("Locator: %s\n", locator.GetDebugName().c_str());
-  //m_contentModel->SetDir(dir);
-  m_contentModel->SetResourceLocator(locator);
-  m_currentDir = dir;
+	asset::model::ViewEntry *entry = m_folderTreeModel->GetEntry(index);
+	if (!entry)
+	{
+		m_assetListModel->SetFolder(0);
+		return;
+	}
+
+	if (!entry || !entry->GetEntry() || !entry->GetEntry()->IsFolder())
+	{
+		m_assetListModel->SetFolder(0);
+		return;
+	}
+
+	asset::model::ViewFolder *folder = static_cast<asset::model::ViewFolder*>(entry);
+	m_assetListModel->SetFolder(folder);
 }
 
 
 void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
 {
+	/*
   csResourceLocator locator = m_contentModel->GetLocator(index);
   if (!locator.IsValid())
   {
     return;
   }
-
   OpenAsset(locator);
+	*/
 }
 
 void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &pos)
@@ -160,15 +172,19 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
 
 void AssetManagerWidget::RefreshContent() 
 {
+	/*
   if (m_contentModel)
   {
     m_contentModel->Refresh();
   }
+	*/
 }
 
+static csResourceLocator locator;
 const csResourceLocator &AssetManagerWidget::GetContentResource() const
 {
-  return m_contentModel->GetResourceLocator();
+	return locator;
+  //return m_contentModel->GetResourceLocator();
 }
 
 csResourceLocator AssetManagerWidget::GetContentResource(const std::string &resourceFile, const std::string &resourceName) const
@@ -183,6 +199,7 @@ csResourceLocator AssetManagerWidget::GetContentResource(const std::string &reso
 
 QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const
 {
+	/*
   QString fileName = QString("%1.csf").arg(baseName);
   if (!m_currentDir.exists(fileName))
   {
@@ -196,18 +213,21 @@ QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const
       return fileName;
     }
   }
+	*/
   return QString::null;
 }
 
 QString AssetManagerWidget::GetFilePath(const QString &fileName) const
 {
-  return m_currentDir.filePath(fileName);
+	return "";
+  //return m_currentDir.filePath(fileName);
 }
 
 const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelectedAssets() const
 {
   QList<const AssetManagerContentModelEntry*> entries;
-  for (auto index : m_gui.listView->selectionModel()->selection().indexes())
+	/*
+	for (auto index : m_gui.listView->selectionModel()->selection().indexes())
   {
     const AssetManagerContentModelEntry *entry = m_contentModel->GetEntry(index);
     if (entry)
@@ -215,6 +235,7 @@ const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelect
       entries.append(entry);
     }
   }
+	*/
   return entries;
 }
 
