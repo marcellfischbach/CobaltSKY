@@ -174,7 +174,7 @@ bool csResourceLocator::operator==(const csResourceLocator &o) const
 
 bool csResourceLocator::IsValid() const
 {
-  return m_resourceFile.size() > 0;
+  return !m_resourceFile.empty() || !m_resourceEntry.empty();
 }
 
 void csResourceLocator::FixResourceFile()

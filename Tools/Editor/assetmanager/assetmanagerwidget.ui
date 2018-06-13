@@ -106,37 +106,37 @@
        <bool>true</bool>
       </property>
       <property name="dragDropMode">
-       <enum>QAbstractItemView::InternalMove</enum>
+       <enum>QAbstractItemView::DropOnly</enum>
       </property>
       <property name="defaultDropAction">
-       <enum>Qt::IgnoreAction</enum>
+       <enum>Qt::CopyAction</enum>
       </property>
       <property name="alternatingRowColors">
-       <bool>false</bool>
+       <bool>true</bool>
+      </property>
+      <property name="movement">
+       <enum>QListView::Static</enum>
       </property>
       <property name="flow">
-       <enum>QListView::LeftToRight</enum>
+       <enum>QListView::TopToBottom</enum>
       </property>
       <property name="isWrapping" stdset="0">
        <bool>true</bool>
       </property>
       <property name="resizeMode">
-       <enum>QListView::Adjust</enum>
+       <enum>QListView::Fixed</enum>
       </property>
-      <property name="gridSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
+      <property name="spacing">
+       <number>3</number>
       </property>
       <property name="viewMode">
-       <enum>QListView::IconMode</enum>
+       <enum>QListView::ListMode</enum>
       </property>
       <property name="uniformItemSizes">
        <bool>false</bool>
       </property>
       <property name="wordWrap">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="selectionRectVisible">
        <bool>true</bool>

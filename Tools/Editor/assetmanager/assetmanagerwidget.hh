@@ -34,10 +34,10 @@ public:
 
   void RefreshContent();
 
-  const csResourceLocator &GetContentResource() const;
-  csResourceLocator GetContentResource(const std::string &resourceFile, const std::string &resourceName = "") const;
-  QString GetNewAssetName(const QString &baseName) const;
-  QString GetFilePath(const QString &fileName) const;
+  const csResourceLocator GetContentResource() const;
+  std::string GetNewAssetName(const std::string &baseName) const;
+  csResourceLocator GetNewResourceLocator(const std::string &baseName) const;
+  std::string GetFilePath(const std::string &fileName) const;
   const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;
 
 protected slots:

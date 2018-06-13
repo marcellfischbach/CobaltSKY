@@ -5,6 +5,7 @@
 #include <editors/staticmesheditor/staticmesheditorwidget.hh>
 #include <cobalt/core/csassetoutputstream.hh>
 #include <cobalt/core/ifile.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/entity/csstaticmeshstate.hh>
 #include <cobalt/math/csvector2f.hh>
@@ -219,13 +220,8 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
   csResourceLocator colliderLocator = ImportCollider(assetManager);
 
 
-  csResourceLocator locator = assetManager->GetContentResource();
-  QString csfName = assetManager->GetNewAssetName(m_name);
-  csResourceLocator csfLocator(
-    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-  csfName = assetManager->GetFilePath(csfName);
+  csResourceLocator csfLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
+
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
   csfEntry *dataEntry = outputFile.CreateEntry("data");
@@ -273,7 +269,10 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     entityStateEntry->AddChild(colliderProperty);
   }
 
-  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
+  if (!csfWriter::Write(outputFile, csfLocator, false, 2))
+  {
+    return csResourceLocator();
+  }
 
   return csfLocator;
 
@@ -282,14 +281,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
 
 csResourceLocator StaticMeshModelImporterData::ImportMesh(AssetManagerWidget *assetManager)
 {
-  csResourceLocator locator = assetManager->GetContentResource();
-
-  QString csfName = assetManager->GetNewAssetName(m_name + "_Mesh");
-  csResourceLocator csfLocator(
-    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-  csfName = assetManager->GetFilePath(csfName);
+  csResourceLocator csfLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()) + "_Mesh");
 
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -344,9 +336,10 @@ csResourceLocator StaticMeshModelImporterData::ImportMesh(AssetManagerWidget *as
     }
   }
 
-
-
-  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
+  if (!csfWriter::Write(outputFile, csfLocator, false, 2))
+  {
+    return csResourceLocator();
+  }
 
   return csfLocator;
 }

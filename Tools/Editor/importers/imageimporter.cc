@@ -4,6 +4,7 @@
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <csfile/csffile.hh>
 #include <QGraphicsPixmapItem>
 #include <QBuffer>
@@ -58,23 +59,20 @@ QWidget *ImageImporterData::GetWidget() const
 
 csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
 {
-  csResourceLocator locator = assetManager->GetContentResource();
   QString typeID = GetType();
   if (typeID.isNull())
   {
     return csResourceLocator();
   }
 
-  QString csfName = assetManager->GetNewAssetName(m_name);
-  csResourceLocator assetLocator(
-    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  csfName = assetManager->GetFilePath(csfName);
+  csResourceLocator assetLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
+  if (!assetLocator.IsValid())
+  {
+    return csResourceLocator();
+  }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", (const char*)csfName.toLatin1());
+  printf("  CSF: %s\n", assetLocator.GetText().c_str());
 
 
 
@@ -133,7 +131,10 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
   blobEditorIcon->SetBuffer(reinterpret_cast<const csUInt8*>(buffer.data().constData()), buffer.data().length());
   outputFile.AddBlob(blobEditorIcon);
 
-  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
+  if (!csfWriter::Write(outputFile, assetLocator, false, 2))
+  {
+    return csResourceLocator();
+  }
   
   return assetLocator;
 }

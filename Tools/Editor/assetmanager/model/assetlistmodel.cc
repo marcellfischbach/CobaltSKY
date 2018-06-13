@@ -3,6 +3,7 @@
 #include <assetmanager/model/viewasset.hh>
 #include <assetmanager/model/viewfolder.hh>
 #include <assetmodel/entry.hh>
+#include <assetmodel/folder.hh>
 
 
 
@@ -31,6 +32,15 @@ namespace asset::model
 		}
 	}
 
+  csResourceLocator  AssetListModel::GetResourceLocator() const
+  {
+    if (!m_folder)
+    {
+      return csResourceLocator();
+    }
+
+    return m_folder->GetFolder()->GetResourceLocator();
+  }
 
 
 	QModelIndex AssetListModel::index(int row, int column, const QModelIndex &parent) const

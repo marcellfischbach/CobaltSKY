@@ -2,6 +2,7 @@
 #include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
 #include <csfile/csffile.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <QString>
 #include <QFile>
 #include <QDomDocument>
@@ -34,15 +35,12 @@ QString ShaderGraphEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetMa
 
 csResourceLocator ShaderGraphEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
-  QString assetName = assetManager->GetNewAssetName("ShaderGraph");
-  if (assetName == QString::null)
+  csResourceLocator contentLocator = assetManager->GetNewResourceLocator("ShaderGraph");
+  if (!contentLocator.IsValid())
   {
     return csResourceLocator();
   }
 
-  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
-
-  QString assetFilePath = assetManager->GetFilePath(assetName);
   csfFile outputFile;
 
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -59,6 +57,9 @@ csResourceLocator ShaderGraphEditorNewAction::CreateNewAsset(AssetManagerWidget 
   shaderGraphEntry->AddChild(inputsEntry);
   shaderGraphEntry->AddChild(attributesEntry);
 
-  outputFile.Output(std::string(assetFilePath.toLatin1()));
+  if (!csfWriter::Write(outputFile, contentLocator))
+  {
+    return csResourceLocator();
+  }
   return contentLocator;
 }

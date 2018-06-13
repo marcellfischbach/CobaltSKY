@@ -2,6 +2,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <cobalt/core/csresourcelocator.hh>
 
 namespace asset::model
 {
@@ -13,6 +14,8 @@ namespace asset::model
 		virtual ~AssetListModel();
 
 		void SetFolder(ViewFolder *folder);
+
+    csResourceLocator GetResourceLocator() const;
 
 		virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 		virtual QModelIndex parent(const QModelIndex &child) const;

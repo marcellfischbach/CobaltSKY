@@ -1,6 +1,7 @@
 
 #include <editors/samplereditor/samplereditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <csfile/csffile.hh>
 #include <QString>
 #include <QFile>
@@ -34,14 +35,11 @@ QString SamplerEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManage
 
 csResourceLocator SamplerEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
-  QString assetName = assetManager->GetNewAssetName("Sampler");
-  if (assetName == QString::null)
+  csResourceLocator contentLocator = assetManager->GetNewResourceLocator("Sampler");
+  if (!contentLocator.IsValid())
   {
     return csResourceLocator();
   }
-
-  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
-  QString assetFilePath = assetManager->GetFilePath(assetName);
 
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -87,7 +85,9 @@ csResourceLocator SamplerEditorNewAction::CreateNewAsset(AssetManagerWidget *ass
   compareModeEntry->AddAttribute("CompareToR");
   compareFuncEntry->AddAttribute("Always");
 
-  outputFile.Output(std::string(assetFilePath.toLatin1()));
-
+  if (!csfWriter::Write(outputFile, contentLocator))
+  {
+    return csResourceLocator();
+  }
   return contentLocator;
 }

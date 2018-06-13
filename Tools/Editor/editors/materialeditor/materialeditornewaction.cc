@@ -1,6 +1,8 @@
 
 #include <editors/materialeditor/materialeditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <csfile/csffile.hh>
 #include <QString>
 #include <QFile>
@@ -34,15 +36,11 @@ QString MaterialEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManag
 
 csResourceLocator MaterialEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const
 {
-  QString assetName = assetManager->GetNewAssetName("Material");
-  if (assetName == QString::null)
+  csResourceLocator contentLocator = assetManager->GetNewResourceLocator("Material");
+  if (!contentLocator.IsValid())
   {
     return csResourceLocator();
   }
-
-  assetName = assetManager->GetFilePath(assetName);
-  csResourceLocator contentLocator = assetManager->GetContentResource((const char*)assetName.toLatin1());
-
 
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -57,6 +55,9 @@ csResourceLocator MaterialEditorNewAction::CreateNewAsset(AssetManagerWidget *as
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
-  outputFile.Output(std::string(assetName.toLatin1()));
+  if (!csfWriter::Write(outputFile, contentLocator))
+  {
+    return csResourceLocator();
+  }
   return contentLocator;
 }

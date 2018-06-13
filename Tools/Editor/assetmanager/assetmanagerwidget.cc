@@ -180,47 +180,63 @@ void AssetManagerWidget::RefreshContent()
 	*/
 }
 
-static csResourceLocator locator;
-const csResourceLocator &AssetManagerWidget::GetContentResource() const
+const csResourceLocator AssetManagerWidget::GetContentResource() const
 {
-	return locator;
-  //return m_contentModel->GetResourceLocator();
+  return m_assetListModel->GetResourceLocator();
 }
 
-csResourceLocator AssetManagerWidget::GetContentResource(const std::string &resourceFile, const std::string &resourceName) const
+std::string AssetManagerWidget::GetNewAssetName(const std::string& baseName) const
 {
-  const csResourceLocator &loc = GetContentResource();
-  return csResourceLocator(
-    loc.GetResourceFile() + "/" + resourceFile,
-    resourceName,
-    loc.GetResourceEntry()
-  );
-}
-
-QString AssetManagerWidget::GetNewAssetName(const QString &baseName) const
-{
-	/*
-  QString fileName = QString("%1.csf").arg(baseName);
-  if (!m_currentDir.exists(fileName))
+  csResourceLocator locator = m_assetListModel->GetResourceLocator();
+  if (!locator.IsValid())
   {
-    return fileName;
+    return std::string();
+  }
+  QString bName(baseName.c_str());
+  std::string fullPath = csVFS::Get()->GetAbsolutePath(locator);
+  QDir dir(QString(fullPath.c_str()));
+  QString fileName = QString("%1.asset").arg(bName);
+  if (!dir.exists(fileName))
+  {
+    return std::string((const char*)fileName.toLatin1());
   }
   for (unsigned i = 1; ; ++i)
   {
-    QString fileName = QString("%1 %2.csf").arg(baseName).arg(i, 2, 10, QChar('0'));
-    if (!m_currentDir.exists(fileName))
+    QString fileName = QString("%1 %2.asset").arg(bName).arg(i, 2, 10, QChar('0'));
+    if (!dir.exists(fileName))
     {
-      return fileName;
+      return std::string((const char*)fileName.toLatin1());
     }
   }
-	*/
-  return QString::null;
+  return std::string();
 }
 
-QString AssetManagerWidget::GetFilePath(const QString &fileName) const
+csResourceLocator AssetManagerWidget::GetNewResourceLocator(const std::string &baseName) const
 {
-	return "";
-  //return m_currentDir.filePath(fileName);
+  csResourceLocator loc = GetContentResource();
+  if (!loc.IsValid())
+  {
+    return csResourceLocator();
+  }
+
+  std::string bName = GetNewAssetName(baseName);
+  if (bName.empty())
+  {
+    return csResourceLocator();
+  }
+
+  return loc.WithFileSuffix(bName);
+}
+
+std::string AssetManagerWidget::GetFilePath(const std::string &fileName) const
+{
+  csResourceLocator loc = GetContentResource();
+  if (!loc.IsValid())
+  {
+    return "";
+  }
+  loc = loc.WithFileSuffix(fileName);
+  return csVFS::Get()->GetAbsolutePath(loc, csVFS::DontCheckExistence);
 }
 
 const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelectedAssets() const

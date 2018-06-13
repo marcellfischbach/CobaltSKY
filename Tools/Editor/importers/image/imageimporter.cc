@@ -4,6 +4,7 @@
 #include <assetmanager/assetmanagerassetwriter.hh>
 #include <csfile/csffile.hh>
 #include <cobalt/core/csfileinfo.hh>
+#include <cobalt/core/csfwriter.hh>
 #include <cobalt/graphics/isampler.hh>
 #include <QBuffer>
 #include <QByteArray>
@@ -59,7 +60,6 @@ QWidget *newImageImporter::GetWidget ()
 
 bool newImageImporter::Import(AssetManagerWidget *assetManager)
 {
-  csResourceLocator locator = assetManager->GetContentResource();
   std::string typeID = GetType();
   if (typeID.empty())
   {
@@ -69,16 +69,14 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
 
   csFileInfo fi (m_fileName);
 
-  QString csfName = assetManager->GetNewAssetName(QString(fi.GetName().c_str()));
-  csResourceLocator assetLocator(
-    locator.GetResourceFile() + "/" + (const char*)csfName.toLatin1(),
-    locator.GetResourceName(),
-    locator.GetResourceEntry());
-
-  csfName = assetManager->GetFilePath(csfName);
+  csResourceLocator assetLocator = assetManager->GetNewResourceLocator(fi.GetName());
+  if (!assetLocator.IsValid())
+  {
+    return false();
+  }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", (const char*)csfName.toLatin1());
+  printf("  CSF: %s\n", assetLocator.GetText().c_str());
 
 
 
@@ -146,9 +144,7 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
   blobEditorIcon->SetBuffer(reinterpret_cast<const csUInt8*>(buffer.data().constData()), buffer.data().length());
   outputFile.AddBlob(blobEditorIcon);
 
-  outputFile.Output(std::string((const char*)csfName.toLatin1()), false, 2);
-
-  return true;
+  return csfWriter::Write(outputFile, assetLocator, false, 2);
 }
 
 
