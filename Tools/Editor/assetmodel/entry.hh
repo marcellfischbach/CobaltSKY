@@ -7,6 +7,7 @@
 namespace asset::model
 {
   class Model;
+	class Folder;
   class Entry
   {
   public:
@@ -29,6 +30,9 @@ namespace asset::model
 
     virtual void Add(Entry *entry);
 
+		virtual bool IsFolder() const;
+		virtual Folder *AsFolder();
+		virtual const Folder *AsFolder() const;
     bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
 

@@ -44,4 +44,20 @@ namespace asset::model
       Entry::Add(entry);
     }
   }
+
+	bool Folder::IsFolder() const
+	{
+		return true;
+	}
+
+	Folder *Folder::AsFolder()
+	{
+		return this;
+	}
+
+	const	Folder *Folder::AsFolder() const
+	{
+		return this;
+	}
+
 }

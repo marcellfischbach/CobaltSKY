@@ -1,5 +1,6 @@
 
 #include <assetmodel/entry.hh>
+#include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
 
 namespace asset::model
@@ -26,4 +27,19 @@ namespace asset::model
     m_children.push_back(entry);
 
   }
+
+	bool Entry::IsFolder() const
+	{
+		return false;
+	}
+
+	Folder *Entry::AsFolder()
+	{
+		return 0;
+	}
+
+	const Folder *Entry::AsFolder() const
+	{
+		return 0;
+	}
 }

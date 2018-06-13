@@ -52,6 +52,8 @@ private:
 };
 
 
+
+
 CS_FORCEINLINE void csGeometryData::SetAttached(bool attached)
 {
   m_attached = true;

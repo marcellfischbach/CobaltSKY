@@ -10,175 +10,192 @@
 namespace asset::model
 {
 
-  FolderTreeModel::FolderTreeModel()
-    : QAbstractItemModel()
-    , m_dataModel(0)
-  {
+	FolderTreeModel::FolderTreeModel()
+		: QAbstractItemModel()
+		, m_dataModel(0)
+	{
 
-  }
+	}
 
-  FolderTreeModel::~FolderTreeModel()
-  {
+	FolderTreeModel::~FolderTreeModel()
+	{
 
-  }
+	}
 
-  void FolderTreeModel::SetViewDataModel(ViewDataModel *dataModel)
-  {
-    beginResetModel();
-    m_dataModel = dataModel;
-    endResetModel();
-  }
+	void FolderTreeModel::SetViewDataModel(ViewDataModel *dataModel)
+	{
+		beginResetModel();
+		m_dataModel = dataModel;
+		endResetModel();
+	}
 
-  QModelIndex FolderTreeModel::index(int row, int column, const QModelIndex &parent) const
-  {
-    if (!parent.isValid())
-    {
-      if (row == 0 && m_dataModel)
-      {
-        return createIndex(row, column, m_dataModel->GetRoot());
-      }
-      return QModelIndex();
-    }
+	QModelIndex FolderTreeModel::index(int row, int column, const QModelIndex &parent) const
+	{
+		if (!parent.isValid())
+		{
+			if (row == 0 && m_dataModel)
+			{
+				return createIndex(row, column, m_dataModel->GetRoot());
+			}
+			return QModelIndex();
+		}
 
-    ViewEntry *parentEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
-    if (!parentEntry)
-    {
-      return QModelIndex();
-    }
+		ViewEntry *parentEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
+		if (!parentEntry)
+		{
+			return QModelIndex();
+		}
 
-    switch (parentEntry->GetEntry()->GetType())
-    {
-    case Entry::eT_Asset:
-      return QModelIndex();
-    case Entry::eT_Root:
-      return createIndex(row, column, GetChild(static_cast<ViewRoot*>(parentEntry), row));
-    case Entry::eT_Folder:
-    case Entry::eT_VFSEntry:
-      return createIndex(row, column, GetChild(static_cast<ViewFolder*>(parentEntry), row));
-    }
+		switch (parentEntry->GetEntry()->GetType())
+		{
+		case Entry::eT_Asset:
+			return QModelIndex();
+		case Entry::eT_Root:
+			return createIndex(row, column, GetChild(static_cast<ViewRoot*>(parentEntry), row));
+		case Entry::eT_Folder:
+		case Entry::eT_VFSEntry:
+			return createIndex(row, column, GetChild(static_cast<ViewFolder*>(parentEntry), row));
+		}
 
-    return QModelIndex();
-  }
+		return QModelIndex();
+	}
 
-  QModelIndex FolderTreeModel::parent(const QModelIndex &child) const
-  {
-    if (!child.isValid())
-    {
-      return QModelIndex();
-    }
+	QModelIndex FolderTreeModel::parent(const QModelIndex &child) const
+	{
+		if (!child.isValid())
+		{
+			return QModelIndex();
+		}
 
-    ViewEntry *childEntry = reinterpret_cast<ViewEntry*>(child.internalPointer());
-    if (!childEntry)
-    {
-      return QModelIndex();
-    }
-  
-    ViewEntry *parentEntry = childEntry->GetParent();
-    ViewEntry *grandParentEntry = parentEntry ? parentEntry->GetParent() : 0;
-    
-    int indexOfParent = IndexOf(grandParentEntry, parentEntry);
-    return createIndex(indexOfParent, child.column(), parentEntry);
-  }
+		ViewEntry *childEntry = reinterpret_cast<ViewEntry*>(child.internalPointer());
+		if (!childEntry)
+		{
+			return QModelIndex();
+		}
 
-  int FolderTreeModel::rowCount(const QModelIndex &parent) const
-  {
-    if (!parent.isValid())
-    {
-      return 1;
-    }
+		ViewEntry *parentEntry = childEntry->GetParent();
+		if (!parentEntry)
+		{
+			return QModelIndex();
+		}
+		ViewEntry *grandParentEntry = parentEntry ? parentEntry->GetParent() : 0;
+		int indexOfParent = IndexOf(grandParentEntry, parentEntry);
+		return createIndex(indexOfParent, child.column(), parentEntry);
+	}
 
-    ViewEntry *parentEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
-    if (!parentEntry)
-    {
-      return 0;
-    }
+	int FolderTreeModel::rowCount(const QModelIndex &parent) const
+	{
+		if (!parent.isValid())
+		{
+			return 1;
+		}
 
-    switch (parentEntry->GetEntry()->GetType())
-    {
-    case Entry::eT_Asset:
-      return 0;
-    case Entry::eT_Root:
-      return static_cast<ViewRoot*>(parentEntry)->GetEntries().size();
-    case Entry::eT_Folder:
-    case Entry::eT_VFSEntry:
-      return static_cast<ViewFolder*>(parentEntry)->GetFolders().size();
-    }
+		ViewEntry *parentEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
+		if (!parentEntry)
+		{
+			return 0;
+		}
 
-    return 0;
-  }
+		switch (parentEntry->GetEntry()->GetType())
+		{
+		case Entry::eT_Asset:
+			return 0;
+		case Entry::eT_Root:
+			return static_cast<ViewRoot*>(parentEntry)->GetEntries().size();
+		case Entry::eT_Folder:
+		case Entry::eT_VFSEntry:
+			return static_cast<ViewFolder*>(parentEntry)->GetFolders().size();
+		}
 
-  int FolderTreeModel::columnCount(const QModelIndex &parent) const
-  {
-    return 1;
-  }
+		return 0;
+	}
 
-  QVariant FolderTreeModel::data(const QModelIndex &index, int role) const
-  {
-    if (!index.isValid())
-    {
-      return QVariant();
-    }
-    if (role != Qt::DisplayRole)
-    {
-      return QVariant();
-    }
+	int FolderTreeModel::columnCount(const QModelIndex &parent) const
+	{
+		return 1;
+	}
 
-    ViewEntry *entry = reinterpret_cast<ViewEntry*>(index.internalPointer());
-    return QString(entry->GetEntry()->GetName().c_str());
-  }
+	QVariant FolderTreeModel::data(const QModelIndex &index, int role) const
+	{
+		if (!index.isValid())
+		{
+			return QVariant();
+		}
+		if (role != Qt::DisplayRole)
+		{
+			return QVariant();
+		}
 
-
-
-
-  ViewEntry * FolderTreeModel::GetChild(ViewEntry *entry, size_t idx) const
-  {
-    if (!entry || !entry->GetEntry())
-    {
-      return 0;
-    }
-    switch (entry->GetEntry()->GetType())
-    {
-    case Entry::eT_Root:
-      return static_cast<ViewRoot*>(entry)->GetEntries()[idx];
-
-    case Entry::eT_VFSEntry:
-    case Entry::eT_Folder:
-      return static_cast<ViewFolder*>(entry)->GetFolders()[idx];
-
-    case Entry::eT_Asset:
-      return 0;
-    }
-    return 0;
-  }
+		ViewEntry *entry = reinterpret_cast<ViewEntry*>(index.internalPointer());
+		return QString(entry->GetEntry()->GetName().c_str());
+	}
 
 
-  int FolderTreeModel::IndexOf(ViewEntry *parent, ViewEntry *child) const
-  {
-    if (!parent || !parent->GetEntry())
-    {
-      return 0;
-    }
+	ViewEntry *FolderTreeModel::GetEntry(const QModelIndex &index)
+	{
+		return const_cast<ViewEntry*>(
+			static_cast<const FolderTreeModel*>(this)->GetEntry(index)
+			);
+	}
 
-    switch (parent->GetEntry()->GetType())
-    {
-    case Entry::eT_Root:
-    {
-      const std::vector<ViewEntry*> &rootChildren = static_cast<ViewRoot*>(parent)->GetEntries();
-      return std::distance(rootChildren.begin(), std::find(rootChildren.begin(), rootChildren.end(), child));
-    }
-    case Entry::eT_VFSEntry:
-    case Entry::eT_Folder:
-    {
-      const std::vector<ViewEntry*> &folderChildren = static_cast<ViewFolder*>(parent)->GetFolders();
-      return std::distance(folderChildren.begin(), std::find(folderChildren.begin(), folderChildren.end(), child));
-    }
+	const ViewEntry *FolderTreeModel::GetEntry(const QModelIndex &index) const
+	{
+		if (!index.isValid())
+		{
+			return 0;
+		}
+		return reinterpret_cast<const ViewEntry*>(index.internalPointer());
+	}
 
-    case Entry::eT_Asset:
-    {
-      return 0;
-    }
-    }
-    return 0;
-  }
+
+	ViewEntry * FolderTreeModel::GetChild(ViewEntry *entry, size_t idx) const
+	{
+		if (!entry || !entry->GetEntry())
+		{
+			return 0;
+		}
+		switch (entry->GetEntry()->GetType())
+		{
+		case Entry::eT_Root:
+			return static_cast<ViewRoot*>(entry)->GetEntries()[idx];
+
+		case Entry::eT_VFSEntry:
+		case Entry::eT_Folder:
+			return static_cast<ViewFolder*>(entry)->GetFolders()[idx];
+		case Entry::eT_Asset:
+			return 0;
+		}
+		return 0;
+	}
+
+
+	int FolderTreeModel::IndexOf(ViewEntry *parent, ViewEntry *child) const
+	{
+		if (!parent || !parent->GetEntry())
+		{
+			return 0;
+		}
+
+		switch (parent->GetEntry()->GetType())
+		{
+		case Entry::eT_Root:
+		{
+			const std::vector<ViewEntry*> &rootChildren = static_cast<ViewRoot*>(parent)->GetEntries();
+			return std::distance(rootChildren.begin(), std::find(rootChildren.begin(), rootChildren.end(), child));
+		}
+		case Entry::eT_VFSEntry:
+		case Entry::eT_Folder:
+		{
+			const std::vector<ViewEntry*> &folderChildren = static_cast<ViewFolder*>(parent)->GetFolders();
+			int idx = std::distance(folderChildren.begin(), std::find(folderChildren.begin(), folderChildren.end(), child));
+		}
+
+		case Entry::eT_Asset:
+		{
+			return 0;
+		}
+		}
+		return 0;
+	}
 
 }
