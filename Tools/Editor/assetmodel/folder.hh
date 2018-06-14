@@ -6,6 +6,7 @@
 namespace asset::model
 {
   class Model;
+	class Asset;
   class Folder : public Entry
   {
   public:
@@ -20,6 +21,10 @@ namespace asset::model
 
     const std::string &GetFolderName() const;
 
+		const std::string GetNewAssetName(const std::string &baseName) const;
+		csResourceLocator GetNewResourceLocator(const std::string &baseName) const;
+		Asset *CreateNewAsset(const std::string &baseName) const;
+
     virtual csResourceLocator GetResourceLocator() const;
 
   protected:
@@ -30,4 +35,15 @@ namespace asset::model
   private:
     std::string m_folderName;
   };
+}
+
+
+inline void asset::model::Folder::SetFolderName(const std::string &folderName)
+{
+	m_folderName = folderName;
+}
+
+inline const std::string& asset::model::Folder::GetFolderName() const
+{
+	return m_folderName;
 }

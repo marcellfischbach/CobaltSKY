@@ -45,6 +45,34 @@ namespace asset::model
     }
   }
 
+	const std::string Folder::GetNewAssetName(const std::string &baseName) const
+	{
+		std::string testName = baseName + ".asset";
+		if (!GetChildByName(testName))
+		{
+			return testName;
+		}
+		for (unsigned i = 1; i < 100; ++i)
+		{
+			testName = baseName + std::to_string(i) + ".asset";
+			if (!GetChildByName(testName))
+			{
+				return testName;
+			}
+		}
+		return std::string();
+	}
+
+	csResourceLocator Folder::GetNewResourceLocator(const std::string &baseName) const
+	{
+		std::string assetName = GetNewAssetName(baseName);
+		if (assetName.empty())
+		{
+			return csResourceLocator();
+		}
+		return GetResourceLocator().WithFileSuffix(assetName);
+	}
+
 	bool Folder::IsFolder() const
 	{
 		return true;

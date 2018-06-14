@@ -6,7 +6,8 @@
 
 namespace asset::model
 {
-  class Model;
+	class Asset;
+	class Model;
 	class Folder;
   class Entry
   {
@@ -33,10 +34,20 @@ namespace asset::model
 		virtual bool IsFolder() const;
 		virtual Folder *AsFolder();
 		virtual const Folder *AsFolder() const;
-    bool IsAttached() const;
+
+		virtual bool IsAsset() const;
+		virtual Asset *AsAsset();
+		virtual const Asset*AsAsset() const;
+
+		virtual bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
 
     const std::vector<Entry*> &GetChildren() const;
+    Entry* GetChildByName(const std::string &name);
+    const Entry* GetChildByName(const std::string &name) const;
+
+		Model *GetModel();
+		const Model *GetModel() const;
 
   protected:
     Entry(Model *model, Type type);
@@ -67,4 +78,14 @@ inline const std::string &asset::model::Entry::GetName() const
 inline const std::vector<asset::model::Entry*> &asset::model::Entry::GetChildren() const
 {
   return m_children;
+}
+
+inline asset::model::Model *asset::model::Entry::GetModel()
+{
+	return m_model;
+}
+
+inline const asset::model::Model *asset::model::Entry::GetModel() const
+{
+	return m_model;
 }

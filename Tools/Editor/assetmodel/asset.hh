@@ -18,6 +18,11 @@ namespace asset::model
     void SetAssetType(const std::string &assetType);
     const std::string &GetAssetType() const;
 
+		virtual bool IsAsset() const;
+		virtual Asset *AsAsset();
+		virtual const Asset*AsAsset() const;
+
+
     void ClearReferences();
     void AddReference(const csResourceLocator &locator);
 

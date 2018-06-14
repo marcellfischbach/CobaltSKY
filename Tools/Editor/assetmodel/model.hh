@@ -9,6 +9,7 @@
 namespace asset::model
 {
   class Asset;
+	class Entry;
   class Folder;
   class Root;
   class VFSEntry;
@@ -24,6 +25,10 @@ namespace asset::model
     VFSEntry* CreateVFSEntry(const csVFS::Entry &entry);
 
     Root *GetRoot() { return m_root;  }
+
+	signals:
+		void EntryAboutToAdd(asset::model::Entry* parent, asset::model::Entry *child);
+		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
 
   private:
     Root * m_root;

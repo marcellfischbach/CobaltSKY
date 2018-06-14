@@ -9,6 +9,7 @@
 bool csfWriter::Write(const csfFile &file, const csResourceLocator &locator, bool tight, unsigned indent)
 {
   std::string fullPath = csVFS::Get()->GetAbsolutePath(locator, csVFS::DontCheckExistence);
+	printf("csfWriter::Write: %s\n", fullPath.c_str());
   if (fullPath.empty())
   {
     return false;

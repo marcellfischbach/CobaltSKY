@@ -31,9 +31,29 @@ namespace asset::model
 
   void ViewDataModel::SetModel(Model *model)
   {
+		if (m_model)
+		{
+			Disconnect();
+		}
     m_model = model;
     Rebuild();
+		if (m_model)
+		{
+			Connect();
+		}
   }
+
+	void ViewDataModel::Connect()
+	{
+		connect(m_model, SIGNAL(EntryAdded(asset::model::Entry *, asset::model::Entry *)),
+			this, SLOT(EntryAdded(asset::model::Entry *, asset::model::Entry *)));
+	}
+
+	void ViewDataModel::Disconnect()
+	{
+		disconnect(m_model, SIGNAL(EntryAdded(asset::model::Entry *, asset::model::Entry *)),
+			this, SLOT(EntryAdded(asset::model::Entry *, asset::model::Entry *)));
+	}
 
   void ViewDataModel::Cleanup()
   {
@@ -87,20 +107,61 @@ namespace asset::model
       return 0;
     }
 
+		ViewEntry *viewEntry;
     switch (entry->GetType())
     {
     case Entry::eT_Asset:
-      return new ViewAsset(static_cast<Asset*>(entry));
+      viewEntry = new ViewAsset(static_cast<Asset*>(entry));
+			break;
     case Entry::eT_Folder:
-      return new ViewFolder(static_cast<Folder*>(entry));
+      viewEntry = new ViewFolder(static_cast<Folder*>(entry));
+			break;
     case Entry::eT_VFSEntry:
-      return new ViewVFSEntry(static_cast<VFSEntry*>(entry));
+      viewEntry = new ViewVFSEntry(static_cast<VFSEntry*>(entry));
+			break;
     case Entry::eT_Root:
-      return new ViewRoot(static_cast<Root*>(entry));
+      viewEntry = new ViewRoot(static_cast<Root*>(entry));
+			break;
     }
-    return 0;
+		if (viewEntry)
+		{
+			m_data[entry] = viewEntry;
+		}
+		return viewEntry;
   }
 
+
+
+	void ViewDataModel::EntryAdded(Entry *parent, Entry *child)
+	{
+		auto parentIt = m_data.find(parent);
+		if (parentIt == m_data.end())
+		{
+			return;
+		}
+
+		ViewEntry *viewParent = parentIt->second;
+
+		ViewEntry *viewChild = 0;
+		auto childIt = m_data.find(child);
+		if (childIt == m_data.end())
+		{
+			viewChild = Create(child);
+		}
+		else
+		{
+			viewChild = childIt->second;
+		}
+
+		
+		if (viewParent && viewChild)
+		{
+			emit EntryAboutToAdd(viewParent, viewChild);
+			viewParent->Add(viewChild);
+			emit EntryAdded(viewParent, viewChild);
+		}
+
+	}
 
 
 }

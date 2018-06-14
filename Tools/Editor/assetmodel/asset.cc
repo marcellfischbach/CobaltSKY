@@ -38,5 +38,20 @@ namespace asset::model
     }
     return csResourceLocator();
   }
+
+	bool Asset::IsAsset() const
+	{
+		return true;
+	}
+
+	Asset *Asset::AsAsset()
+	{
+		return this;
+	}
+
+	const	Asset *Asset::AsAsset() const
+	{
+		return this;
+	}
 }
 

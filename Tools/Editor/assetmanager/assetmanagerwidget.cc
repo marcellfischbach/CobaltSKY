@@ -36,7 +36,7 @@ AssetManagerWidget::AssetManagerWidget()
 
   m_dataModel = new asset::model::ViewDataModel();
   m_folderTreeModel = new asset::model::FolderTreeModel();
-	m_assetListModel = new asset::model::AssetListModel();
+	m_assetListModel = new asset::model::AssetListModel(m_dataModel);
 
 
 
@@ -178,6 +178,16 @@ void AssetManagerWidget::RefreshContent()
     m_contentModel->Refresh();
   }
 	*/
+}
+
+asset::model::Folder *AssetManagerWidget::GetCurrentFolder() const
+{
+	asset::model::ViewFolder *viewFolder = m_assetListModel->GetFolder();
+	if (!viewFolder)
+	{
+		return 0;
+	}
+	return viewFolder->GetFolder();
 }
 
 const csResourceLocator AssetManagerWidget::GetContentResource() const

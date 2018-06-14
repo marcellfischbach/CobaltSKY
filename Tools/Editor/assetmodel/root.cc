@@ -29,6 +29,10 @@ namespace asset::model
     }
   }
 
+	bool Root::IsAttached() const
+	{
+		return true;
+	}
 
   csResourceLocator Root::GetResourceLocator() const
   {

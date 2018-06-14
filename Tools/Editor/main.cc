@@ -49,7 +49,7 @@ int main (int argc, char **argv)
   icon.addFile(":/icons/resources/CobaltSKY-Editor64.png", QSize(), QIcon::Normal, QIcon::Off);
   app.setWindowIcon(icon);
 
-  QFile qssFile("d:/programming/CobaltSKY/Tools/Editor/flat_menu.css");
+  QFile qssFile("d:/DEV/CobaltSKY/Tools/Editor/flat_menu.css");
   if (qssFile.open(QIODevice::ReadOnly))
   {
     QString qss = qssFile.readAll();

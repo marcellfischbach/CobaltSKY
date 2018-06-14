@@ -2,6 +2,7 @@
 #include <assetmanager/model/assetlistmodel.hh>
 #include <assetmanager/model/viewasset.hh>
 #include <assetmanager/model/viewfolder.hh>
+#include <assetmanager/model/viewdatamodel.hh>
 #include <assetmodel/entry.hh>
 #include <assetmodel/folder.hh>
 
@@ -10,11 +11,13 @@
 namespace asset::model
 {
 
-	AssetListModel::AssetListModel()
+	AssetListModel::AssetListModel(ViewDataModel *dataModel)
 		: QAbstractItemModel()
 		, m_folder(0)
+		, m_dataModel(dataModel)
 	{
-
+		connect(m_dataModel, SIGNAL(EntryAdded(asset::model::ViewEntry*, asset::model::ViewEntry*)), 
+			this, SLOT(EntryAdded(asset::model::ViewEntry *, asset::model::ViewEntry*)));
 	}
 
 	AssetListModel::~AssetListModel()
@@ -102,6 +105,24 @@ namespace asset::model
 
 
 
+
+	void AssetListModel::EntryAdded(ViewEntry *parent, ViewEntry *child)
+	{
+		if (parent != m_folder)
+		{
+			return;
+		}
+
+		for (size_t i = 0, in = m_folder->GetAssets().size(); i < in; ++i)
+		{
+			if (m_folder->GetAssets()[i] == child)
+			{
+				beginInsertRows(QModelIndex(), i, i);
+				endInsertRows();
+				return;
+			}
+		}
+	}
 
 
 }

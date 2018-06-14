@@ -1,6 +1,7 @@
 
 #include <editors/samplereditor/samplereditornewaction.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <assetmodel/asset.hh>
 #include <cobalt/core/csfwriter.hh>
 #include <csfile/csffile.hh>
 #include <QString>
@@ -9,6 +10,7 @@
 #include <QDomElement>
 
 SamplerEditorNewAction::SamplerEditorNewAction()
+	: AssetManagerNewAction("Sampler")
 {
 
 }
@@ -31,6 +33,60 @@ bool SamplerEditorNewAction::IsEnabled(AssetManagerWidget *assetManager) const
 QString SamplerEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
 {
   return QString("New Sampler");
+}
+
+bool SamplerEditorNewAction::CreateNewAsset(asset::model::Folder *folder, const csResourceLocator &locator, const std::string &fileName) const
+{
+	csfFile outputFile;
+	csfEntry *assetEntry = outputFile.CreateEntry("asset");
+	csfEntry *dataEntry = outputFile.CreateEntry("data");
+	csfEntry *samplerEntry = outputFile.CreateEntry("sampler");
+	csfEntry *filterEntry = outputFile.CreateEntry("filter");
+	csfEntry *anisotropyEntry = outputFile.CreateEntry("anisotropy");
+	csfEntry *minLODEntry = outputFile.CreateEntry("minlod");
+	csfEntry *maxLODEntry = outputFile.CreateEntry("maxlod");
+	csfEntry *addressUEntry = outputFile.CreateEntry("addressu");
+	csfEntry *addressVEntry = outputFile.CreateEntry("addressv");
+	csfEntry *addressWEntry = outputFile.CreateEntry("addressw");
+	csfEntry *borderColorEntry = outputFile.CreateEntry("bordercolor");
+	csfEntry *compareModeEntry = outputFile.CreateEntry("comparemode");
+	csfEntry *compareFuncEntry = outputFile.CreateEntry("comparefunc");
+
+
+	outputFile.GetRoot()->AddChild(assetEntry);
+	assetEntry->AddChild(dataEntry);
+	dataEntry->AddChild(samplerEntry);
+	samplerEntry->AddChild(filterEntry);
+	samplerEntry->AddChild(anisotropyEntry);
+	samplerEntry->AddChild(minLODEntry);
+	samplerEntry->AddChild(maxLODEntry);
+	samplerEntry->AddChild(addressUEntry);
+	samplerEntry->AddChild(addressVEntry);
+	samplerEntry->AddChild(addressWEntry);
+	samplerEntry->AddChild(borderColorEntry);
+	samplerEntry->AddChild(compareModeEntry);
+	samplerEntry->AddChild(compareFuncEntry);
+
+	filterEntry->AddAttribute("MinMagNearest");
+	anisotropyEntry->AddAttributeInt(1);
+	minLODEntry->AddAttributeInt(-1000);
+	maxLODEntry->AddAttributeInt(1000);
+	addressUEntry->AddAttribute("Repeat");
+	addressVEntry->AddAttribute("Repeat");
+	addressWEntry->AddAttribute("Repeat");
+	borderColorEntry->AddAttributeInt(0);
+	borderColorEntry->AddAttributeInt(0);
+	borderColorEntry->AddAttributeInt(0);
+	borderColorEntry->AddAttributeInt(0);
+	compareModeEntry->AddAttribute("CompareToR");
+	compareFuncEntry->AddAttribute("Always");
+
+	if (!csfWriter::Write(outputFile, locator))
+	{
+		return false;
+	}
+
+	return true;
 }
 
 csResourceLocator SamplerEditorNewAction::CreateNewAsset(AssetManagerWidget *assetManager) const

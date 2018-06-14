@@ -6,14 +6,18 @@
 
 namespace asset::model
 {
+	class ViewEntry;
 	class ViewFolder;
+	class ViewDataModel;
 	class AssetListModel : public QAbstractItemModel
 	{
+		Q_OBJECT;
 	public:
-		AssetListModel();
+		AssetListModel(ViewDataModel *dataModel);
 		virtual ~AssetListModel();
 
 		void SetFolder(ViewFolder *folder);
+		ViewFolder *GetFolder();
 
     csResourceLocator GetResourceLocator() const;
 
@@ -23,10 +27,20 @@ namespace asset::model
 		virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+	private slots:
+		void EntryAdded(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
+
 	private:
 		ViewFolder * m_folder;
-
+		ViewDataModel *m_dataModel;
 	};
 
+
+	
+}
+
+inline asset::model::ViewFolder *asset::model::AssetListModel::GetFolder()
+{
+	return m_folder;
 }
 

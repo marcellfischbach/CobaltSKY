@@ -10,6 +10,7 @@
 
 namespace asset::model
 {
+	class Folder;
 	class AssetListModel;
   class FolderTreeModel;
 	class ViewDataModel;
@@ -33,6 +34,7 @@ public:
   void OpenAsset(const csResourceLocator &locator);
 
   void RefreshContent();
+	asset::model::Folder *GetCurrentFolder() const;
 
   const csResourceLocator GetContentResource() const;
   std::string GetNewAssetName(const std::string &baseName) const;

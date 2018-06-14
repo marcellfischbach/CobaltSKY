@@ -14,6 +14,8 @@ namespace asset::model
 
       virtual void Add(Entry *entry);
 
+			virtual bool IsAttached() const;
+
       virtual csResourceLocator GetResourceLocator() const;
     };
 
