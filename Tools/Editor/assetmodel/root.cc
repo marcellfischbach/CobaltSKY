@@ -29,10 +29,15 @@ namespace asset::model
     }
   }
 
-	bool Root::IsAttached() const
-	{
-		return true;
-	}
+  void Root::Delete()
+  {
+    // root may never be deleted.
+  }
+
+  bool Root::IsAttached() const
+  {
+    return true;
+  }
 
   csResourceLocator Root::GetResourceLocator() const
   {

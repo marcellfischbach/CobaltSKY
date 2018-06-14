@@ -305,4 +305,7 @@ void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLoca
   }
 }
 
-
+std::string Editor::GetApplicationTitle() const
+{
+  return "CobaltSKY - Editor";
+}

@@ -5,18 +5,19 @@
 
 namespace asset::model
 {
-    class Model;
-    class Root : public Entry
-    {
-    public:
-      Root(Model *model);
-      virtual ~Root();
+  class Model;
+  class Root : public Entry
+  {
+  public:
+    Root(Model *model);
+    virtual ~Root();
 
-      virtual void Add(Entry *entry);
+    virtual void Add(Entry *entry);
+    virtual void Delete();
 
-			virtual bool IsAttached() const;
+    virtual bool IsAttached() const;
 
-      virtual csResourceLocator GetResourceLocator() const;
-    };
+    virtual csResourceLocator GetResourceLocator() const;
+  };
 
 }

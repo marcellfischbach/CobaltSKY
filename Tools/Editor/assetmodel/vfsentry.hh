@@ -17,7 +17,17 @@ namespace asset::model
 
     virtual csResourceLocator GetResourceLocator() const;
 
+    virtual const VFSEntry *GetVFSEntry() const;
+
+    int GetPriority() const;
+
   private:
     const csVFS::Entry &m_entry;
   };
+}
+
+
+inline int asset::model::VFSEntry::GetPriority() const
+{
+  return m_entry.GetPriority();
 }

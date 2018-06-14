@@ -112,27 +112,56 @@ source_group(
 
 
 set(ASSETMANAGER_ACTIONS_SOURCES
-    assetmanager/actions/assetmanagerdeleteaction.cc
-    assetmanager/actions/assetmanagerdeleteaction.hh
     assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
-    assetmanager/actions/assetmanagerrenameaction.cc
-    assetmanager/actions/assetmanagerrenameaction.hh
-    assetmanager/actions/assetmanagerrenamedialog.cc
-    assetmanager/actions/assetmanagerrenamedialog.hh
     )
 
-set(ASSETMANAGER_ACTIONS_UI
-    assetmanager/actions/assetmanagerrenamedialog.ui
-    )
     
 source_group(
     "editor\\assetmanager\\actions"
     FILES
     ${ASSETMANAGER_ACTIONS_SOURCES}
-    ${ASSETMANAGER_ACTIONS_UI}
     )
 
+
+set(ASSETMANAGER_ACTIONS_DELETE_SOURCES
+    assetmanager/actions/delete/assetmanagerdeleteaction.cc
+    assetmanager/actions/delete/assetmanagerdeleteaction.hh
+    assetmanager/actions/delete/assetmanagerdeletedialog.cc
+    assetmanager/actions/delete/assetmanagerdeletedialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_DELETE_UI
+	assetmanager/actions/delete/assetmanagerdeletedialog.ui
+    )
+    
+
+source_group(
+    "editor\\assetmanager\\actions\\delete"
+    FILES
+    ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
+    ${ASSETMANAGER_ACTIONS_DELETE_UI}
+    )
+
+
+
+set(ASSETMANAGER_ACTIONS_RENAME_SOURCES
+    assetmanager/actions/rename/assetmanagerrenameaction.cc
+    assetmanager/actions/rename/assetmanagerrenameaction.hh
+    assetmanager/actions/rename/assetmanagerrenamedialog.cc
+    assetmanager/actions/rename/assetmanagerrenamedialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_RENAME_UI
+    assetmanager/actions/rename/assetmanagerrenamedialog.ui
+    )
+    
+source_group(
+    "editor\\assetmanager\\actions\\rename"
+    FILES
+    ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
+    ${ASSETMANAGER_ACTIONS_RENAME_UI}
+    )
 
 
 
@@ -579,7 +608,8 @@ source_group(
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
-    ${ASSETMANAGER_ACTIONS_UI}
+    ${ASSETMANAGER_ACTIONS_DELETE_UI}
+    ${ASSETMANAGER_ACTIONS_RENAME_UI}
     ${ASSETMANAGER_IMPORT_UI}
     ${COMPONENTS_UI}
     ${EDITORS_MATERIALEDITOR_UI}
@@ -600,6 +630,8 @@ set(ALL_SOURCES
     ${EDITOR_SOURCES}
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
+    ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
+    ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}

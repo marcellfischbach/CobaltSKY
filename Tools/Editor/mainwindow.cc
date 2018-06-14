@@ -10,6 +10,7 @@ MainWindow::MainWindow()
   : QMainWindow()
 {
   m_gui.setupUi(this);
+  setWindowTitle(QString(Editor::Get()->GetApplicationTitle().c_str()));
   /*
   QFile qssFile("D://Programming//CobaltSKY//Tools//Editor//cobalt.qss");
   if (qssFile.open(QIODevice::ReadOnly))

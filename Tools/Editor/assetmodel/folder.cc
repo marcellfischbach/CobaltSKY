@@ -45,17 +45,6 @@ namespace asset::model
     }
   }
 
-	void Folder::Delete()
-	{
-		for (auto child : GetChildren())
-		{
-			child->Delete();
-		}
-		emit GetModel()->EntryAboutToDelete(this);
-		RemoveFromParent();
-		emit GetModel()->EntryDeleted(this);
-	}
-
 	const std::string Folder::GetNewAssetName(const std::string &baseName) const
 	{
 		std::string testName = baseName + ".asset";

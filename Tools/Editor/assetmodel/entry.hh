@@ -9,6 +9,7 @@ namespace asset::model
 	class Asset;
 	class Model;
 	class Folder;
+  class VFSEntry;
   class Entry
   {
   public:
@@ -49,6 +50,8 @@ namespace asset::model
     const std::vector<Entry*> &GetChildren() const;
     Entry* GetChildByName(const std::string &name);
     const Entry* GetChildByName(const std::string &name) const;
+
+    virtual const VFSEntry *GetVFSEntry() const;
 
 		Model *GetModel();
 		const Model *GetModel() const;

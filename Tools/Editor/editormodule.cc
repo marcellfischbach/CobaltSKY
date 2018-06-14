@@ -7,7 +7,9 @@
 #include <editor.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/assetmanagerrenamehandler.hh>
-#include <assetmanager/actions/assetmanagerrenameaction.hh>
+#include <assetmanager/actions/rename/assetmanagerrenameaction.hh>
+#include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
+
 #include <assetmanager/import/assetmanagerimportmanager.hh>
 #include <editors/materialeditor/materialeditornewaction.hh>
 #include <editors/materialeditor/materialeditorfactory.hh>
@@ -47,6 +49,7 @@ void EditorModule::Initialize()
   actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
   actionManager->RegisterNewAction(new SamplerEditorNewAction());
   actionManager->RegisterAction(new AssetManagerRenameAction());
+  actionManager->RegisterAction(new AssetManagerDeleteAction());
 
   AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
   importManager->RegisterImporter(new ImageImporter());

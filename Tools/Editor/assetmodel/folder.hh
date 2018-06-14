@@ -1,4 +1,4 @@
-
+ 
 #pragma once
 
 #include <assetmodel/entry.hh>
@@ -14,7 +14,6 @@ namespace asset::model
     virtual ~Folder();
 
     virtual void Add(Entry *entry);
-		virtual void Delete();
 
 		virtual bool IsFolder() const;
 		virtual Folder *AsFolder();

@@ -64,6 +64,7 @@ public:
     return m_project;
   }
 
+  std::string GetApplicationTitle() const;
 
 public: // private don't call'em yourself
 

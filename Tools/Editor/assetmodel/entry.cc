@@ -49,7 +49,7 @@ namespace asset::model
 		emit m_model->EntryAboutToRemove(this, entry);
 		entry->m_parent = 0;
 		m_children.erase(it);
-		emit m_model->EntryRemove(this, entry);
+		emit m_model->EntryRemoved(this, entry);
 	}
 
 	void Entry::RemoveFromParent()
@@ -63,7 +63,13 @@ namespace asset::model
 
 	void Entry::Delete()
 	{
-
+    for (auto child : GetChildren())
+    {
+      child->Delete();
+    }
+    emit GetModel()->EntryAboutToDelete(this);
+    RemoveFromParent();
+    emit GetModel()->EntryDeleted(this);
 	}
 
 	bool Entry::IsAttached() const
@@ -93,6 +99,15 @@ namespace asset::model
 		}
 		return 0;
 	}
+
+  const VFSEntry *Entry::GetVFSEntry() const
+  {
+    if (m_parent)
+    {
+      return m_parent->GetVFSEntry();
+    }
+    return 0;
+  }
 
 	bool Entry::IsFolder() const
 	{
