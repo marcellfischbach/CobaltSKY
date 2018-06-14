@@ -18,6 +18,7 @@ namespace asset::model
     Asset *GetAsset();
 
     virtual void Add(ViewEntry *entry);
+    virtual void Remove(ViewEntry *entry);
     virtual void Sort();
 
   private:

@@ -52,6 +52,22 @@ namespace asset::model
 
   }
 
+	void ViewFolder::Remove(ViewEntry *entry)
+	{
+		auto it = std::find(m_assets.begin(), m_assets.end(), entry);
+		if (it != m_assets.end())
+		{
+			entry->SetParent(0);
+			m_assets.erase(it);
+		}
+		it = std::find(m_folders.begin(), m_folders.end(), entry);
+		if (it != m_folders.end())
+		{
+			entry->SetParent(0);
+			m_folders.erase(it);
+		}
+	}
+
   void ViewFolder::Sort()
   {
     SortAssets();

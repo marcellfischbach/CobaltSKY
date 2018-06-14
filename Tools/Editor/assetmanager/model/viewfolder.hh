@@ -19,6 +19,7 @@ namespace asset::model
     Folder *GetFolder();
 
     virtual void Add(ViewEntry *entry);
+    virtual void Remove(ViewEntry *entry);
     virtual void Sort();
 
     const std::vector<ViewEntry*> &GetFolders() const;

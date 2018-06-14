@@ -249,19 +249,21 @@ std::string AssetManagerWidget::GetFilePath(const std::string &fileName) const
   return csVFS::Get()->GetAbsolutePath(loc, csVFS::DontCheckExistence);
 }
 
-const QList<const AssetManagerContentModelEntry *> AssetManagerWidget::GetSelectedAssets() const
+const std::vector<asset::model::Asset*> AssetManagerWidget::GetSelectedAssets() const
 {
-  QList<const AssetManagerContentModelEntry*> entries;
-	/*
+  std::vector<asset::model::Asset*> entries;
 	for (auto index : m_gui.listView->selectionModel()->selection().indexes())
   {
-    const AssetManagerContentModelEntry *entry = m_contentModel->GetEntry(index);
-    if (entry)
+    asset::model::ViewEntry *entry = m_assetListModel->GetEntry(index);
+    if (entry && entry->GetEntry())
     {
-      entries.append(entry);
+			asset::model::Asset *asset = entry->GetEntry()->AsAsset();
+			if (asset)
+			{
+				entries.push_back(asset);
+			}
     }
   }
-	*/
   return entries;
 }
 

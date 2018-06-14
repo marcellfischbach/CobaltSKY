@@ -4,6 +4,7 @@
 #include <assetmodel/folder.hh>
 #include <assetmodel/root.hh>
 #include <assetmodel/vfsentry.hh>
+#include <assetmodel/sync/deletehandler.hh>
 
 namespace asset::model
 {
@@ -11,6 +12,7 @@ namespace asset::model
     : QObject()
   {
     m_root = new Root(this);
+		m_deleteHandler = new sync::DeleteHandler(this);
   }
 
   Model::~Model()

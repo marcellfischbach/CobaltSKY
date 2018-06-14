@@ -105,6 +105,18 @@ namespace asset::model
 
 
 
+	ViewEntry *AssetListModel::GetEntry(const QModelIndex &index) const
+	{
+		if (!index.isValid())
+		{
+			return 0;
+		}
+
+		return reinterpret_cast<ViewEntry*>(index.internalPointer());
+	}
+
+
+
 
 	void AssetListModel::EntryAdded(ViewEntry *parent, ViewEntry *child)
 	{

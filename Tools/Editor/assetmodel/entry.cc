@@ -33,6 +33,39 @@ namespace asset::model
 		emit m_model->EntryAdded(this, entry);
 	}
 
+	void Entry::Remove(Entry *entry)
+	{
+		if (!entry)
+		{
+			return;
+		}
+
+		auto it = std::find(m_children.begin(), m_children.end(), entry);
+		if (it == m_children.end())
+		{
+			return;
+		}
+
+		emit m_model->EntryAboutToRemove(this, entry);
+		entry->m_parent = 0;
+		m_children.erase(it);
+		emit m_model->EntryRemove(this, entry);
+	}
+
+	void Entry::RemoveFromParent()
+	{
+		if (!m_parent)
+		{
+			return;
+		}
+		m_parent->Remove(this);
+	}
+
+	void Entry::Delete()
+	{
+
+	}
+
 	bool Entry::IsAttached() const
 	{
 		if (!m_parent)

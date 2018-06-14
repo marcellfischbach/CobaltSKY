@@ -112,6 +112,8 @@ source_group(
 
 
 set(ASSETMANAGER_ACTIONS_SOURCES
+    assetmanager/actions/assetmanagerdeleteaction.cc
+    assetmanager/actions/assetmanagerdeleteaction.hh
     assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
     assetmanager/actions/assetmanagerrenameaction.cc
@@ -211,6 +213,19 @@ source_group(
     "editor\\assetmodel"
     FILES
     ${ASSETMODEL_SOURCES}
+    )
+
+	
+set(ASSETMODEL_SYNC_SOURCES
+	assetmodel/sync/deletehandler.cc
+	assetmodel/sync/deletehandler.hh
+	)
+
+
+source_group(
+    "editor\\assetmodel\\sync"
+    FILES
+    ${ASSETMODEL_SYNC_SOURCES}
     )
 
 set(COMPONENTS_SOURCES
@@ -588,6 +603,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}
+    ${ASSETMODEL_SYNC_SOURCES}
     ${COMPONENTS_SOURCES}
     ${EDITORS_MATERIALEDITOR_SOURCES}
     ${EDITORS_SAMPLEREDITOR_SOURCES}

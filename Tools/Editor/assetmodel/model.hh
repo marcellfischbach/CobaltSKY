@@ -8,6 +8,10 @@
 
 namespace asset::model
 {
+	namespace sync
+	{
+		class DeleteHandler;
+	}
   class Asset;
 	class Entry;
   class Folder;
@@ -30,8 +34,15 @@ namespace asset::model
 		void EntryAboutToAdd(asset::model::Entry* parent, asset::model::Entry *child);
 		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
 
+		void EntryAboutToRemove(asset::model::Entry* parent, asset::model::Entry *child);
+		void EntryRemove(asset::model::Entry *parent, asset::model::Entry *child);
+
+		void EntryAboutToDelete(asset::model::Entry* entry);
+		void EntryDeleted(asset::model::Entry* entry);
+
   private:
     Root * m_root;
 
+		sync::DeleteHandler *m_deleteHandler;
   };
 }

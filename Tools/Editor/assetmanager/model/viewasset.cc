@@ -24,6 +24,12 @@ namespace asset::model
     return;
   }
 
+	void ViewAsset::Remove(ViewEntry *entry)
+	{
+		// no children at asset level
+		return;
+	}
+
   void ViewAsset::Sort()
   {
     return;

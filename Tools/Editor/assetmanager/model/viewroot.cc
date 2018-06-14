@@ -37,6 +37,19 @@ namespace asset::model
     }
   }
 
+
+
+	void ViewRoot::Remove(ViewEntry *entry)
+	{
+		auto it = std::find(m_entries.begin(), m_entries.end(), entry);
+		if (it == m_entries.end())
+		{
+			return;
+		}
+		entry->SetParent(0);
+		m_entries.erase(it);
+	}
+
   bool lessVFSEntry(ViewEntry *e0, ViewEntry *e1)
   {
     int p0 = 0;

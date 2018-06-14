@@ -10,10 +10,12 @@
 
 namespace asset::model
 {
+	class Asset;
 	class Folder;
 	class AssetListModel;
   class FolderTreeModel;
 	class ViewDataModel;
+	class ViewEntry;
 }
 class Project;
 class QAction;
@@ -40,7 +42,7 @@ public:
   std::string GetNewAssetName(const std::string &baseName) const;
   csResourceLocator GetNewResourceLocator(const std::string &baseName) const;
   std::string GetFilePath(const std::string &fileName) const;
-  const QList<const AssetManagerContentModelEntry*> GetSelectedAssets() const;
+	const std::vector<asset::model::Asset*> GetSelectedAssets() const;
 
 protected slots:
 

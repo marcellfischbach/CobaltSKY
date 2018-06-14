@@ -25,11 +25,15 @@ namespace asset::model
     Entry *GetParent() { return m_parent;  }
     const Entry *GetParent() const { return m_parent; }
 
+		void RemoveFromParent();
+		virtual void Delete();
+
     Type GetType() const { return m_type; }
 
     const std::string &GetName() const;
 
     virtual void Add(Entry *entry);
+		virtual void Remove(Entry *entry);
 
 		virtual bool IsFolder() const;
 		virtual Folder *AsFolder();
@@ -58,6 +62,7 @@ namespace asset::model
     Model * m_model;
     Type m_type;
     std::string m_name;
+		csResourceLocator m_locator;
 
     Entry *m_parent;
     std::vector<Entry*> m_children;

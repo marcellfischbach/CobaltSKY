@@ -33,6 +33,7 @@ namespace asset::model
 
 	private slots:
 		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
+		void EntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
 
   private:
 		void Connect();

@@ -27,6 +27,8 @@ namespace asset::model
 		virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
 		virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
+		ViewEntry *GetEntry(const QModelIndex &index) const;
+
 	private slots:
 		void EntryAdded(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
 

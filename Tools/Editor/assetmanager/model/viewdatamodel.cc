@@ -47,12 +47,16 @@ namespace asset::model
 	{
 		connect(m_model, SIGNAL(EntryAdded(asset::model::Entry *, asset::model::Entry *)),
 			this, SLOT(EntryAdded(asset::model::Entry *, asset::model::Entry *)));
+		connect(m_model, SIGNAL(EntryRemoved(asset::model::Entry *, asset::model::Entry *)),
+			this, SLOT(EntryRemoved(asset::model::Entry *, asset::model::Entry *)));
 	}
 
 	void ViewDataModel::Disconnect()
 	{
 		disconnect(m_model, SIGNAL(EntryAdded(asset::model::Entry *, asset::model::Entry *)),
 			this, SLOT(EntryAdded(asset::model::Entry *, asset::model::Entry *)));
+		disconnect(m_model, SIGNAL(EntryRemoved(asset::model::Entry *, asset::model::Entry *)),
+			this, SLOT(EntryRemoved(asset::model::Entry *, asset::model::Entry *)));
 	}
 
   void ViewDataModel::Cleanup()
@@ -160,6 +164,30 @@ namespace asset::model
 			viewParent->Add(viewChild);
 			emit EntryAdded(viewParent, viewChild);
 		}
+
+	}
+
+	void ViewDataModel::EntryRemoved(Entry *parent, Entry *child)
+	{
+		auto childIt = m_data.find(child);
+		if (childIt == m_data.end())
+		{
+			return;
+		}
+
+		ViewEntry *viewChild = childIt->second;
+
+		auto parentIt = m_data.find(parent);
+		if (parentIt == m_data.end())
+		{
+			return;
+		}
+
+		ViewEntry *viewParent = parentIt->second;
+
+		viewParent->Remove(viewChild);
+		m_data.erase(childIt);
+		delete viewChild;
 
 	}
 

@@ -19,6 +19,7 @@ namespace asset::model
     ViewEntry *GetParent();
 
     virtual void Add(ViewEntry *entry) = 0;
+    virtual void Remove(ViewEntry *entry) = 0;
     virtual void Sort() = 0;
 
   protected:
