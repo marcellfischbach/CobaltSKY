@@ -17,6 +17,8 @@ namespace asset::model
     const VFSEntry *GetVFSEntry() const;
     VFSEntry *GetVFSEntry();
 
+		virtual const std::string GetText() const;
+
   private:
     VFSEntry * m_vfsEntry;
   };

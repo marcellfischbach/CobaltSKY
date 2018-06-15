@@ -1,0 +1,16 @@
+asset () {
+  data () {
+    sampler () {
+      filter (MinMagNearest)
+      anisotropy (1)
+      minlod (-1000)
+      maxlod (1000)
+      addressu (Repeat)
+      addressv (Repeat)
+      addressw (Repeat)
+      bordercolor (0 0 0 0)
+      comparemode (CompareToR)
+      comparefunc (Always)
+    }
+  }
+}

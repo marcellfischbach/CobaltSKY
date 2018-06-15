@@ -248,6 +248,8 @@ source_group(
 set(ASSETMODEL_SYNC_SOURCES
 	assetmodel/sync/deletehandler.cc
 	assetmodel/sync/deletehandler.hh
+	assetmodel/sync/renamehandler.cc
+	assetmodel/sync/renamehandler.hh
 	)
 
 

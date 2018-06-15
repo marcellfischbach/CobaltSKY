@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace asset::model
 {
 
@@ -17,6 +19,8 @@ namespace asset::model
     void SetParent(ViewEntry* parent);
     const ViewEntry *GetParent() const;
     ViewEntry *GetParent();
+
+		virtual const std::string GetText() const;
 
     virtual void Add(ViewEntry *entry) = 0;
     virtual void Remove(ViewEntry *entry) = 0;

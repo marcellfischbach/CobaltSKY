@@ -35,6 +35,17 @@ void csfEntry::RemoveAttributes()
   m_attributes.clear();
 }
 
+void csfEntry::RemoveAttribute(size_t idx)
+{
+	if (m_attributes.size() >= idx)
+	{
+		return;
+	}
+
+	auto it = m_attributes.begin() + idx;
+	m_attributes.erase(it);
+}
+
 size_t csfEntry::GetNumberOfAttributes() const
 {
   return m_attributes.size();

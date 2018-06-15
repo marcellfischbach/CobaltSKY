@@ -127,7 +127,7 @@ namespace asset::model
 		}
 
 		ViewEntry *entry = reinterpret_cast<ViewEntry*>(index.internalPointer());
-		return QString(entry->GetEntry()->GetName().c_str());
+		return QString(entry->GetText().c_str());
 	}
 
 

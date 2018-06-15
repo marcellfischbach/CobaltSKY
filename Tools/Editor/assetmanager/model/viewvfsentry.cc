@@ -15,4 +15,13 @@ namespace asset::model
   {
 
   }
+
+	const std::string ViewVFSEntry::GetText() const
+	{
+		if (m_vfsEntry)
+		{
+			return m_vfsEntry->GetName() + " (" + std::to_string(m_vfsEntry->GetEntry().GetPriority()) + ")";
+		}
+		return ViewEntry::GetText();
+	}
 }

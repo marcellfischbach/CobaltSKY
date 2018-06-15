@@ -17,6 +17,21 @@ namespace asset::model
 
   }
 
+	void Asset::SetName(const std::string &name)
+	{
+		if (name.find(".asset") != name.length() - 6)
+		{
+			m_fileName = name + ".asset";
+			Entry::SetName(name);
+		}
+		else
+		{ 
+			m_fileName = name;
+			Entry::SetName(name.substr(0, name.length() - 6));
+		}
+
+	}
+
   void Asset::ClearReferences()
   {
     m_references.clear();

@@ -27,18 +27,21 @@ bool AssetManagerDeleteAction::ShouldShow(AssetManagerWidget *assetManager) cons
 bool AssetManagerDeleteAction::IsEnabled(AssetManagerWidget *assetManager) const
 {
 	const std::vector<asset::model::Asset*> entries = assetManager->GetSelectedAssets();
-	return !entries.empty();
+	return entries.size() == 1;
 }
 
 QString AssetManagerDeleteAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
 {
 	const std::vector<asset::model::Asset*> entries = assetManager->GetSelectedAssets();
-	if (entries.empty())
+	if (entries.empty() || entries.size() > 1)
 	{
 		return QObject::tr("Delete");
 	}
-	asset::model::Asset* entry = entries[0];
-	return QObject::tr("Delete %1").arg(QString(entry->GetName().c_str()));
+	else
+	{
+		asset::model::Asset* entry = entries[0];
+		return QObject::tr("Delete %1").arg(QString(entry->GetName().c_str()));
+	}
 }
 
 bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) const

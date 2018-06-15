@@ -28,6 +28,7 @@ namespace asset::model
 
 		void RemoveFromParent();
 		virtual void Delete();
+		virtual void Rename(const std::string &newName);
 
     Type GetType() const { return m_type; }
 
@@ -56,12 +57,18 @@ namespace asset::model
 		Model *GetModel();
 		const Model *GetModel() const;
 
+		virtual void EmitEntryAboutToDelete();
+		virtual void EmitEntryDeleted();
+
+		virtual void EmitEntryAboutToRename();
+		virtual void EmitEntryRenamed();
+
   protected:
     Entry(Model *model, Type type);
-
-    void SetName(const std::string &name);
+    virtual void SetName(const std::string &name);
 
   private:
+
     Model * m_model;
     Type m_type;
     std::string m_name;

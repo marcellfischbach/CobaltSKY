@@ -14,18 +14,27 @@ AssetManagerRenameDialog::~AssetManagerRenameDialog()
 }
 
 
-void AssetManagerRenameDialog::SetName(const QString &name)
+void AssetManagerRenameDialog::SetAssetName(const std::string &name)
 {
-  m_gui.leName->setText(name);
+	QString msg = tr("Enter a new name for '%1'?").arg(QString(name.c_str()));
+	m_gui.message->setText(msg);
+	m_gui.leName->setText(QString(name.c_str()));
 }
 
-QString AssetManagerRenameDialog::GetName() const
+const std::string AssetManagerRenameDialog::GetAssetName() const
 {
-  return m_gui.leName->text();
+	QString name = m_gui.leName->text();
+	if (name.isNull())
+	{
+		return std::string();
+	}
+	return std::string((const char*)name.toLatin1());
 }
 
 void AssetManagerRenameDialog::on_pbOK_clicked()
 {
+	m_renameOverloaded = m_gui.cbRenameOverloaded->isChecked();
+	m_renameSuper = m_gui.cbRenameSuper->isChecked();
   accept();
 }
 

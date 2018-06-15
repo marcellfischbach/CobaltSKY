@@ -18,6 +18,8 @@ namespace asset::model
     void SetAssetType(const std::string &assetType);
     const std::string &GetAssetType() const;
 
+		virtual void SetName(const std::string &name);
+
 		virtual bool IsAsset() const;
 		virtual Asset *AsAsset();
 		virtual const Asset*AsAsset() const;

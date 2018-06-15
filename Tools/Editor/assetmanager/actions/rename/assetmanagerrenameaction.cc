@@ -1,14 +1,13 @@
 
 #include <assetmanager/actions/rename/assetmanagerrenameaction.hh>
 #include <assetmanager/actions/rename/assetmanagerrenamedialog.hh>
-#include <assetmanager/assetmanagercontentmodelentry.hh>
+#include <assetmodel/asset.hh>
+#include <assetmodel/model.hh>
+#include <assetmodel/vfsentry.hh>
+#include <cobalt/core/csvfs.hh>
+#include <vector>
+#include <QObject>
 #include <assetmanager/assetmanagerwidget.hh>
-#include <assetmanager/assetmanagerrenamer.hh>
-#include <cobalt/core/csfileinfo.hh>
-#include <editor.hh>
-#include <project/project.hh>
-#include <QString>
-#include <QList>
 
 AssetManagerRenameAction::AssetManagerRenameAction()
   : AssetManagerAction()
@@ -28,50 +27,75 @@ bool AssetManagerRenameAction::ShouldShow(AssetManagerWidget *assetManager) cons
 
 bool AssetManagerRenameAction::IsEnabled(AssetManagerWidget *assetManager) const
 {
-//  const QList<const AssetManagerContentModelEntry*> entries = assetManager->GetSelectedAssets();
-  return false;// entries.size();
+	const std::vector<asset::model::Asset*> entries = assetManager->GetSelectedAssets();
+	return entries.size() == 1;
+
 }
 
 QString AssetManagerRenameAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
 {
-  /*
-  const QList<const AssetManagerContentModelEntry*> entries = assetManager->GetSelectedAssets();
-  if (entries.isEmpty())
-  {
-    return QObject::tr("Rename");
-  }
-  const AssetManagerContentModelEntry *entry = entries.first();
-  return QObject::tr("Rename %1").arg(entry->GetEntryName());
-  */
-  return QObject::tr("Rename");
+	const std::vector<asset::model::Asset*> entries = assetManager->GetSelectedAssets();
+	if (entries.empty() || entries.size () > 1)
+	{
+		return QObject::tr("Rename");
+	}
+	else
+	{
+		asset::model::Asset* entry = entries[0];
+		return QObject::tr("Rename %1").arg(QString(entry->GetName().c_str()));
+	}
 }
 
 bool AssetManagerRenameAction::PerformAction(AssetManagerWidget *assetManager) const
 {
-  /*
-  const QList<const AssetManagerContentModelEntry*> entries = assetManager->GetSelectedAssets();
-  if (entries.isEmpty())
-  {
-    return false;
-  }
-  const AssetManagerContentModelEntry *entry = entries.first();
+	const std::vector<asset::model::Asset*> entries = assetManager->GetSelectedAssets();
+	if (entries.empty())
+	{
+		return false;
+	}
+	asset::model::Asset* entry = entries[0];
 
-  AssetManagerRenameDialog dlg(assetManager);
-  dlg.SetName(entry->GetEntryName());
-  if (dlg.exec())
-  {
-    csResourceLocator from = entry->GetLocator();
-    csFileInfo info(from.GetResourceFile());
-    std::string newName = info.GetLocation() + std::string("/") + std::string((const char*)dlg.GetName().toLatin1()) + "." + info.GetExtension();
-    csResourceLocator to(newName, from.GetResourceName(), from.GetResourceEntry());
 
-    if (from == to)
-    {
-      return false;
-    }
+	AssetManagerRenameDialog dlg(assetManager);
+	dlg.SetAssetName(entry->GetName());
+	int res = dlg.exec();
+	if (res != QDialog::Accepted)
+	{
+		return false;
+	}
+	std::string newName = dlg.GetAssetName();
+	if (newName == entry->GetName())
+	{
+		printf("Don't rename %s => %s\n", entry->GetName().c_str(), newName.c_str());
+		return false;
+	}
 
-    return Editor::Get()->GetProject()->Rename(from, to);
-  }
-  */
-  return false;
+	bool renameOverloaded = dlg.IsRenameOverloaded();
+	bool renameSuper = dlg.IsRenameSuper();
+	
+
+	const asset::model::VFSEntry *vfsEntry = entry->GetVFSEntry();
+	int entityPriority = vfsEntry->GetPriority();
+
+	const std::set<asset::model::Entry*> &otherEntriesCopy = std::set<asset::model::Entry*>(entry->GetModel()->GetEntries(entry->GetResourceLocator()));
+	for (auto renameEntry : otherEntriesCopy)
+	{
+		const asset::model::VFSEntry *renameVFSEntry = renameEntry->GetVFSEntry();
+		int deletePriority = renameVFSEntry->GetPriority();
+
+		if (deletePriority < entityPriority && !renameSuper)
+		{
+			continue;
+		}
+		else if (deletePriority > entityPriority && !renameOverloaded)
+		{
+			continue;
+		}
+
+		renameEntry->Rename(newName);
+
+	}
+
+
+	return true;
 }

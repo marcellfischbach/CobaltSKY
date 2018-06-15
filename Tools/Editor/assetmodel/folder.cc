@@ -6,7 +6,6 @@ namespace asset::model
 {
   Folder::Folder(Model *model, const std::string &folderName)
     : Entry(model, Entry::eT_Folder)
-    , m_folderName(folderName)
   {
     SetName(folderName);
   }
@@ -27,7 +26,7 @@ namespace asset::model
     const Entry *parent = GetParent();
     if (parent)
     {
-      return parent->GetResourceLocator().WithFileSuffix(m_folderName + "/");
+      return parent->GetResourceLocator().WithFileSuffix(GetName() + "/");
     }
     return csResourceLocator();
   }
@@ -86,6 +85,26 @@ namespace asset::model
 	const	Folder *Folder::AsFolder() const
 	{
 		return this;
+	}
+
+
+
+	void Folder::EmitEntryAboutToRename()
+	{
+		Entry::EmitEntryAboutToRename();
+		for (auto child : GetChildren())
+		{
+			child->EmitEntryAboutToRename();
+		}
+	}
+
+	void Folder::EmitEntryRenamed()
+	{
+		for (auto child : GetChildren())
+		{
+			child->EmitEntryRenamed();
+		}
+		Entry::EmitEntryRenamed();
 	}
 
 }

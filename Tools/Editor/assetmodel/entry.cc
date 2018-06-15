@@ -61,15 +61,43 @@ namespace asset::model
 		m_parent->Remove(this);
 	}
 
+	void Entry::EmitEntryAboutToDelete()
+	{
+		emit GetModel()->EntryAboutToDelete(this);
+	}
+
+	void Entry::EmitEntryDeleted()
+	{
+		emit GetModel()->EntryDeleted(this);
+	}
+
 	void Entry::Delete()
 	{
     for (auto child : GetChildren())
     {
       child->Delete();
     }
-    emit GetModel()->EntryAboutToDelete(this);
+		EmitEntryAboutToDelete();
     RemoveFromParent();
-    emit GetModel()->EntryDeleted(this);
+		EmitEntryDeleted();
+	}
+
+	void Entry::EmitEntryAboutToRename()
+	{
+		emit GetModel()->EntryAboutToRename(this);
+	}
+
+	void Entry::EmitEntryRenamed()
+	{
+		emit GetModel()->EntryRenamed(this);
+	}
+
+
+	void Entry::Rename(const std::string &name)
+	{
+		EmitEntryAboutToRename();
+		SetName(name);
+		EmitEntryRenamed();
 	}
 
 	bool Entry::IsAttached() const

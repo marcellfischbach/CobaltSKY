@@ -19,6 +19,7 @@ public:
   const std::string &GetTagName() const;
 
   void RemoveAttributes();
+	void RemoveAttribute(size_t idx);
   size_t GetNumberOfAttributes() const;
   std::string GetAttributeKey(size_t idx) const;
   std::string GetAttributeValue(size_t idx) const;

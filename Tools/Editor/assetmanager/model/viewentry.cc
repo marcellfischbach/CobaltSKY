@@ -1,5 +1,6 @@
 
 #include <assetmanager/model/viewentry.hh>
+#include <assetmodel/entry.hh>
 
 
 namespace asset::model
@@ -17,4 +18,9 @@ namespace asset::model
     m_entry = 0;
   }
 
+
+	const std::string asset::model::ViewEntry::GetText() const
+	{
+		return m_entry ? m_entry->GetName() : "<noname>";
+	}
 }
