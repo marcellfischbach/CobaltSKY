@@ -43,15 +43,13 @@ namespace asset::model
 		return new VFSEntry(this, entry);
 	}
 
-	static std::set<Entry*> EmptyEntrySet;
-
-	const std::set<Entry*> &Model::GetEntries(const csResourceLocator &locator) const
+	const std::set<Entry*> Model::GetEntries(const csResourceLocator &locator) const
 	{
 		csResourceLocator anonLocator = locator.AsAnonymous();
 		auto it = m_entries.find(anonLocator);
 		if (it == m_entries.end())
 		{
-			return EmptyEntrySet;
+			return std::set<Entry*>();
 		}
 		return it->second;
 	}
@@ -98,10 +96,23 @@ namespace asset::model
 		csResourceLocator locator = child->GetResourceLocator();
 		csResourceLocator anonLocator = locator.AsAnonymous();
 		m_entries[anonLocator].insert(child);
+
+    Asset *asset = child->AsAsset();
+    if (asset)
+    {
+      m_references[child] = asset->GetReferences();
+    }
 	}
 
 	void Model::onEntryRemoved(Entry *parent, Entry *child)
 	{
+
+    auto refIt = m_references.find(child);
+    if (refIt != m_references.end())
+    {
+      m_references.erase(refIt);
+    }
+
 		for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
 		{
 			auto mit = it->second.find(child);

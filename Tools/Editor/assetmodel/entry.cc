@@ -9,6 +9,7 @@ namespace asset::model
   Entry::Entry(Model *model, Type type)
     : m_model(model)
     , m_type(type)
+    , m_parent(0)
   {
 
   }
@@ -25,6 +26,11 @@ namespace asset::model
 		{
 			return;
 		}
+
+    if (entry->GetParent() && entry->GetParent() != this)
+    {
+      entry->RemoveFromParent();
+    }
 
 		emit m_model->EntryAboutToAdd(this, entry);
     entry->m_parent = this;

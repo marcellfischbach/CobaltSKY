@@ -34,7 +34,7 @@ namespace asset::model
 
     Root *GetRoot() { return m_root;  }
 
-    const std::set<Entry*> &GetEntries(const csResourceLocator &locator) const;
+    const std::set<Entry*> GetEntries(const csResourceLocator &locator) const;
 		const std::set<Entry*> GetReferencing(const csResourceLocator &locator) const;
 
     void RemoveReferences(Entry *entry);

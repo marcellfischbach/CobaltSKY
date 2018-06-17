@@ -35,14 +35,12 @@ namespace asset::model
   void Asset::ClearReferences()
   {
     m_references.clear();
-
     GetModel()->RemoveReferences(this);
   }
 
   void Asset::AddReference(const csResourceLocator &reference)
   {
-    m_references.push_back(reference);
-
+    m_references.insert(reference);
     GetModel()->AddReference(this, reference);
   }
 

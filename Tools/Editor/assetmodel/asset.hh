@@ -4,7 +4,7 @@
 #include <assetmodel/entry.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <string>
-#include <vector>
+#include <set>
 
 namespace asset::model
 {
@@ -28,7 +28,7 @@ namespace asset::model
     void ClearReferences();
     void AddReference(const csResourceLocator &locator);
 
-    const std::vector<csResourceLocator> &GetReferences() const;
+    const std::set<csResourceLocator> &GetReferences() const;
 
     virtual csResourceLocator GetResourceLocator() const;
 
@@ -37,7 +37,7 @@ namespace asset::model
 
     std::string m_assetType;
 
-    std::vector<csResourceLocator> m_references;
+    std::set<csResourceLocator> m_references;
   };
 
 
@@ -57,7 +57,7 @@ inline const std::string &asset::model::Asset::GetAssetType() const
   return m_assetType;
 }
 
-inline const std::vector<csResourceLocator> &asset::model::Asset::GetReferences() const
+inline const std::set<csResourceLocator> &asset::model::Asset::GetReferences() const
 {
   return m_references;
 }
