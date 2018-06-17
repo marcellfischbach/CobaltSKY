@@ -37,7 +37,7 @@ void csfEntry::RemoveAttributes()
 
 void csfEntry::RemoveAttribute(size_t idx)
 {
-	if (m_attributes.size() >= idx)
+	if (idx >= m_attributes.size())
 	{
 		return;
 	}

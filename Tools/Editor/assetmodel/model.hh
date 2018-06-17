@@ -37,6 +37,7 @@ namespace asset::model
     const std::set<Entry*> &GetEntries(const csResourceLocator &locator) const;
 		const std::set<Entry*> GetReferencing(const csResourceLocator &locator) const;
 
+    void RemoveReferences(Entry *entry);
 		void AddReference(Entry *entry, const csResourceLocator &locator);
 
 	signals:

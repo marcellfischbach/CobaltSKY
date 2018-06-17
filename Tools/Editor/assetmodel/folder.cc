@@ -46,17 +46,17 @@ namespace asset::model
 
 	const std::string Folder::GetNewAssetName(const std::string &baseName) const
 	{
-		std::string testName = baseName + ".asset";
+		std::string testName = baseName;
 		if (!GetChildByName(testName))
 		{
-			return testName;
+			return testName + ".asset";
 		}
 		for (unsigned i = 1; i < 100; ++i)
 		{
-			testName = baseName + std::to_string(i) + ".asset";
+			testName = baseName + std::to_string(i);
 			if (!GetChildByName(testName))
 			{
-				return testName;
+				return testName + ".asset";
 			}
 		}
 		return std::string();

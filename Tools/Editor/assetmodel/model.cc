@@ -72,6 +72,17 @@ namespace asset::model
 		return referencing;
 	}
 
+  void Model::RemoveReferences(Entry *entry)
+  {
+    auto it = m_references.find(entry);
+    if (it == m_references.end())
+    {
+      return;
+    }
+
+    m_references.erase(it);
+  }
+
 	void Model::AddReference(Entry *entry, const csResourceLocator &locator)
 	{
 		if (!entry || !locator.IsValid())

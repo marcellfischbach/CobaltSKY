@@ -1,21 +1,21 @@
 
-#include <assetmodel/resourcescanner.hh>
+#include <assetmodel/sync/assetscanner.hh>
 #include <assetmodel/asset.hh>
 #include <cobalt/core/csvfs.hh>
 #include <csfile/csffile.hh>
 #include <csfile/csfentry.hh>
 
 
-namespace asset::model
+namespace asset::model::sync
 {
   
-  ResourceScanner::ResourceScanner(Asset *asset)
+  AssetScanner::AssetScanner(asset::model::Asset *asset)
     : m_asset(asset)
   {
 
   }
 
-  void ResourceScanner::Scan()
+  void AssetScanner::Scan()
   {
     std::string path = csVFS::Get()->GetAbsolutePath(m_asset->GetResourceLocator());
     if (path.empty())
@@ -44,7 +44,7 @@ namespace asset::model
   }
 
 
-  void ResourceScanner::Scan(const csfEntry *entry)
+  void AssetScanner::Scan(const csfEntry *entry)
   {
     if (entry->HasAttribute("locator"))
     {

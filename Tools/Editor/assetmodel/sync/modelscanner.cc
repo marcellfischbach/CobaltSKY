@@ -1,10 +1,10 @@
 
 
-#include <assetmodel/modelscanner.hh>
+#include <assetmodel/sync/modelscanner.hh>
+#include <assetmodel/sync/assetscanner.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
-#include <assetmodel/resourcescanner.hh>
 #include <assetmodel/root.hh>
 #include <assetmodel/vfsentry.hh>
 #include <cobalt/core/csvfs.hh>
@@ -16,9 +16,9 @@ namespace std
   namespace fs = filesystem;
 }
 
-namespace asset::model
+namespace asset::model::sync
 {
-  ModelScanner::ModelScanner(Model *model)
+  ModelScanner::ModelScanner(asset::model::Model *model)
     : m_model(model)
   {
 
@@ -44,7 +44,7 @@ namespace asset::model
     }
   }
 
-  void ModelScanner::Scan(Folder *folder)
+  void ModelScanner::Scan(asset::model::Folder *folder)
   {
     csResourceLocator l = folder->GetResourceLocator();
     std::string path = csVFS::Get()->GetAbsolutePath(l);
@@ -55,7 +55,7 @@ namespace asset::model
       const std::fs::path &childPath = (const std::fs::path&)p;
       if (std::fs::is_directory(childPath))
       {
-        Folder *childFolder = m_model->CreateFolder(childPath.filename().string());
+        asset::model::Folder *childFolder = m_model->CreateFolder(childPath.filename().string());
         folder->Add(childFolder);
         Scan(childFolder);
       }
@@ -64,7 +64,7 @@ namespace asset::model
         std::string ext = childPath.extension().string();
         if (ext == std::string(".csf") || ext == std::string(".asset"))
         {
-          Asset *asset = m_model->CreateAsset(childPath.filename().string());
+          asset::model::Asset *asset = m_model->CreateAsset(childPath.filename().string());
           folder->Add(asset);
           Scan(asset);
         }
@@ -72,14 +72,14 @@ namespace asset::model
     }
   }
 
-  void ModelScanner::Scan(Asset *asset)
+  void ModelScanner::Scan(asset::model::Asset *asset)
   {
     csResourceLocator assetLocator = asset->GetResourceLocator();
     std::fs::path path(csVFS::Get()->GetAbsolutePath(assetLocator));
     std::string ext = path.extension().string();
     if (ext == std::string(".csf") || ext == std::string(".asset"))
     {
-      ResourceScanner(asset).Scan();
+      AssetScanner(asset).Scan();
     }
     else
     {

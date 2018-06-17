@@ -185,9 +185,11 @@ namespace asset::model
 
 		ViewEntry *viewParent = parentIt->second;
 
+    emit EntryAboutToRemove(viewParent, viewChild);
 		viewParent->Remove(viewChild);
 		m_data.erase(childIt);
-		delete viewChild;
+    emit EntryRemoved(viewParent, viewChild);
+    delete viewChild;
 
 	}
 

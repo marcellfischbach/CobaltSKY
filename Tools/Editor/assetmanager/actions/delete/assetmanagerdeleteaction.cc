@@ -73,6 +73,7 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
   for (auto deleteEntry : otherEntries)
   {
     const asset::model::VFSEntry *deleteVFSEntry = deleteEntry->GetVFSEntry();
+
     int deletePriority = deleteVFSEntry->GetPriority();
 
     if (deletePriority < entityPriority && !deleteSuper)

@@ -7,15 +7,19 @@ class csfEntry;
 namespace asset::model
 {
   class Asset;
-  class ResourceScanner
+}
+
+namespace asset::model::sync
+{
+  class AssetScanner
   {
   public:
-    ResourceScanner(Asset *asset);
+    AssetScanner(asset::model::Asset *asset);
     void Scan();
 
   private:
     void Scan(const csfEntry *entry);
-    Asset * m_asset;
+    asset::model::Asset * m_asset;
   };
 
 }

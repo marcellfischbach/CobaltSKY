@@ -31,6 +31,8 @@ namespace asset::model
 
 	private slots:
 		void EntryAdded(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
+		void EntryAboutToRemove(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
+		void EntryRemoved(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
 
 	private:
 		ViewFolder * m_folder;

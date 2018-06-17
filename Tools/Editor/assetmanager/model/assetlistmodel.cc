@@ -18,6 +18,12 @@ namespace asset::model
 	{
 		connect(m_dataModel, SIGNAL(EntryAdded(asset::model::ViewEntry*, asset::model::ViewEntry*)), 
 			this, SLOT(EntryAdded(asset::model::ViewEntry *, asset::model::ViewEntry*)));
+
+
+    connect(m_dataModel, SIGNAL(EntryAboutToRemove(asset::model::ViewEntry*, asset::model::ViewEntry*)),
+      this, SLOT(EntryAboutToRemove(asset::model::ViewEntry *, asset::model::ViewEntry*)));
+    connect(m_dataModel, SIGNAL(EntryRemoved(asset::model::ViewEntry*, asset::model::ViewEntry*)),
+      this, SLOT(EntryRemoved(asset::model::ViewEntry *, asset::model::ViewEntry*)));
 	}
 
 	AssetListModel::~AssetListModel()
@@ -79,6 +85,7 @@ namespace asset::model
 		{
 			return 0;
 		}
+    printf("RowCount: %d\n", m_folder->GetAssets().size());
 		return m_folder->GetAssets().size();
 	}
 
@@ -95,12 +102,14 @@ namespace asset::model
 		}
 
 		const ViewEntry *entry = reinterpret_cast<const ViewEntry*>(index.internalPointer());
+    printf("data: 0x%p ", entry);
 		if (!entry)
 		{
+      printf("\n");
 			return QVariant();
 		}
-
-		return QString(entry->GetEntry()->GetName().c_str());
+    printf("  %s\n", entry->GetText().c_str());
+		return QString(entry->GetEntry ()->GetName().c_str());
 	}
 
 
@@ -136,6 +145,35 @@ namespace asset::model
 		}
 	}
 
+  void AssetListModel::EntryAboutToRemove(ViewEntry *parent, ViewEntry *child)
+  {
+    if (parent != m_folder)
+    {
+      return;
+    }
+
+    const std::vector<asset::model::ViewEntry*> &assets = m_folder->GetAssets();
+    auto it = std::find(assets.begin(), assets.end(), child);
+    if (it == assets.end())
+    {
+      return;
+    }
+
+    std::ptrdiff_t pos = std::distance(assets.begin(), it);
+    beginRemoveRows(QModelIndex(), pos, pos);
+  }
+
+
+  void AssetListModel::EntryRemoved(ViewEntry *parent, ViewEntry *child)
+  {
+    if (parent != m_folder)
+    {
+      return;
+    }
+
+    endRemoveRows();
+
+  }
 
 }
 

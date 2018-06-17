@@ -26,6 +26,9 @@ namespace asset::model
 		void EntryAboutToAdd(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
 		void EntryAdded(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
 
+    void EntryAboutToRemove(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
+    void EntryRemoved(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
+
   private:
     void Cleanup();
     ViewEntry *Build(Entry *entry);

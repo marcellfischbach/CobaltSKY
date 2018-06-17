@@ -227,10 +227,6 @@ set(ASSETMODEL_SOURCES
 	assetmodel/folder.hh
 	assetmodel/model.cc
 	assetmodel/model.hh
-	assetmodel/modelscanner.cc
-	assetmodel/modelscanner.hh
-	assetmodel/resourcescanner.cc
-	assetmodel/resourcescanner.hh
 	assetmodel/root.cc
 	assetmodel/root.hh
 	assetmodel/vfsentry.cc
@@ -246,8 +242,14 @@ source_group(
 
 	
 set(ASSETMODEL_SYNC_SOURCES
+	assetmodel/sync/assetmodifier.cc
+	assetmodel/sync/assetmodifier.hh
+	assetmodel/sync/assetscanner.cc
+	assetmodel/sync/assetscanner.hh
 	assetmodel/sync/deletehandler.cc
 	assetmodel/sync/deletehandler.hh
+	assetmodel/sync/modelscanner.cc
+	assetmodel/sync/modelscanner.hh
 	assetmodel/sync/renamehandler.cc
 	assetmodel/sync/renamehandler.hh
 	)

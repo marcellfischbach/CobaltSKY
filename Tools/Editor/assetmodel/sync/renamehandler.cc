@@ -1,14 +1,12 @@
 
 #include <assetmodel/sync/renamehandler.hh>
+#include <assetmodel/sync/assetmodifier.hh>
+#include <assetmodel/sync/assetscanner.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
 #include <assetmodel/entry.hh>
 #include <filesystem>
-#include <cobalt/core/csvfs.hh>
-#include <csfile/csffile.hh>
-#include <csfile/csfentry.hh>
-#include <cobalt/core/csfwriter.hh>
 
 
 namespace asset::model::sync
@@ -133,33 +131,14 @@ namespace asset::model::sync
 
 		for (Entry *entry : it->second)
 		{
-			const csResourceLocator &locator = entry->GetResourceLocator();
-			std::string fullPath = csVFS::Get()->GetAbsolutePath(locator);
-			csfFile file;
-			if (file.Parse(fullPath, false))
-			{
-				Rename(file.GetRoot(), oldLocator, newLocator);
-				csfWriter::Write(file, locator);
-			}
+      Asset *asset = entry->AsAsset();
+      if (asset)
+      {
+        AssetModifier(asset).ReplaceLocator(oldLocator, newLocator);
+        AssetScanner(asset).Scan();
+      }
 		}
 	}
 
 
-	void RenameHandler::Rename(csfEntry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
-	{
-		if (entry->HasAttribute("locator"))
-		{
-			if (entry->GetAttribute("locator") == oldLocator.GetText())
-			{
-				size_t idx = entry->GetAttributeIndex("locator");
-				entry->RemoveAttribute(idx);
-				entry->AddAttribute("locator", newLocator.GetText());
-			}
-		}
-
-		for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
-		{
-			Rename(entry->GetChild(i), oldLocator, newLocator);
-		}
-	}
 }

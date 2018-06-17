@@ -36,7 +36,6 @@ namespace asset::model::sync
 
 
 	private:
-		void Rename(csfEntry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		asset::model::Model * m_model;
 		void RenameAsset(asset::model::Asset *asset, csResourceLocator locator);
 		void RenameFolder(asset::model::Folder *folder, csResourceLocator locator);
