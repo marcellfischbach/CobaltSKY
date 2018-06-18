@@ -4,6 +4,7 @@
 #include <QObject>
 #include <string>
 #include <cobalt/core/csvfs.hh>
+#include <assetmodel/modelsync.hh>
 #include <map>
 #include <set>
 
@@ -21,6 +22,7 @@ namespace asset::model
   class Folder;
   class Root;
   class VFSEntry;
+	class MoveHelper;
   class Model : public QObject
   {
     Q_OBJECT
@@ -40,6 +42,21 @@ namespace asset::model
     void RemoveReferences(Entry *entry);
 		void AddReference(Entry *entry, const csResourceLocator &locator);
 
+		int GetLowestPriority(const csResourceLocator &locator) const;
+
+		/**
+		 * Not part of the public API
+		 * @{
+		*/
+		void Add(Entry *parent, Entry *child);
+		void Remove(Entry *parent, Entry *child);
+		void Rename(Entry *entry, const std::string &name);
+		void Delete(Entry *entry);
+
+		/**
+		 * @}
+		 */
+
 	signals:
 		void EntryAboutToAdd(asset::model::Entry* parent, asset::model::Entry *child);
 		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
@@ -47,17 +64,11 @@ namespace asset::model
 		void EntryAboutToRemove(asset::model::Entry* parent, asset::model::Entry *child);
 		void EntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
 
-		void EntryAboutToRename(asset::model::Entry *entry);
-		void EntryRenamed(asset::model::Entry *entry);
+		void EntryAboutToChanged(asset::model::Entry* entry);
+		void EntryChanged(asset::model::Entry* entry);
 
-		void EntryAboutToMove(asset::model::Entry *entry);
-		void EntryMoved(asset::model::Entry *entry);
-
-		void EntryAboutToDelete(asset::model::Entry* entry);
-		void EntryDeleted(asset::model::Entry* entry);
-
-		void LocatorAboutToRename(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		void LocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		void LocatorRemoved(const csResourceLocator &locator);
 
   private slots:
     void onEntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
@@ -67,9 +78,9 @@ namespace asset::model
 
 
   private:
-		
+		void HandleLocatorRenamed(MoveHelper &helper);
+
 		csResourceLocator GetCurrentResourceLocator(Entry*entry) const;
-		int GetLowestPriority(const csResourceLocator &locator) const;
     Root * m_root;
 
 		sync::DeleteHandler *m_deleteHandler;
@@ -77,5 +88,7 @@ namespace asset::model
 
     std::map<csResourceLocator, std::set<Entry*>> m_entries;
 		std::map<Entry*, std::set<csResourceLocator>> m_references;
+
+		ModelSync m_sync;
   };
 }

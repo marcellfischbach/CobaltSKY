@@ -21,6 +21,16 @@ namespace asset::model
     return csResourceLocator("", "", m_entry.GetName());
   }
 
+	csResourceLocator VFSEntry::GetNamedResourceLocator(const std::string &name) const
+	{
+		return csResourceLocator("", "", name);
+	}
+
+	csResourceLocator VFSEntry::Construct(const csResourceLocator &parentLocator) const
+	{
+		return csResourceLocator("", "", m_entry.GetName());
+	}
+
   const VFSEntry *VFSEntry::GetVFSEntry() const
   {
     return this;

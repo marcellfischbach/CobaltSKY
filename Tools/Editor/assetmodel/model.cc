@@ -9,6 +9,9 @@
 
 namespace asset::model
 {
+
+
+
 	Model::Model()
 		: QObject()
 	{
@@ -91,42 +94,6 @@ namespace asset::model
 		m_references[entry].insert(anonLocator);
 	}
 
-	void Model::onEntryAdded(Entry *parent, Entry *child)
-	{
-		csResourceLocator locator = child->GetResourceLocator();
-		csResourceLocator anonLocator = locator.AsAnonymous();
-		m_entries[anonLocator].insert(child);
-
-    Asset *asset = child->AsAsset();
-    if (asset)
-    {
-      m_references[child] = asset->GetReferences();
-    }
-	}
-
-	void Model::onEntryRemoved(Entry *parent, Entry *child)
-	{
-
-    auto refIt = m_references.find(child);
-    if (refIt != m_references.end())
-    {
-      m_references.erase(refIt);
-    }
-
-		for (auto it = m_entries.begin(); it != m_entries.end(); ++it)
-		{
-			auto mit = it->second.find(child);
-			if (mit != it->second.end())
-			{
-				it->second.erase(mit);
-				if (it->second.empty())
-				{
-					m_entries.erase(it);
-				}
-				return;
-			}
-		}
-	}
 
 	csResourceLocator Model::GetCurrentResourceLocator(Entry *entry) const
 	{
@@ -156,54 +123,195 @@ namespace asset::model
 		}
 		return lowest;
 	}
+	 
 
-	void Model::onEntryRenamed(Entry *entry)
+
+
+
+
+
+
+
+
+	/* ****************************************************************************************/
+	/* ****************************************************************************************/
+	/*																																												*/
+	/*		Modification of the data witin the model																						*/
+	/*																																												*/
+	/* ****************************************************************************************/
+	/* ****************************************************************************************/
+
+
+	class MoveHelper
 	{
-		csResourceLocator currentLocator = GetCurrentResourceLocator(entry);
-		csResourceLocator newLocator = entry->GetResourceLocator().AsAnonymous();
-		int entryPriority = entry->GetVFSEntry()->GetPriority();
-		int lowestPriority = GetLowestPriority(currentLocator);
-
-		if (entryPriority <= lowestPriority)
+	public:
+		MoveHelper(Model *model)
+			: m_model(model)
 		{
-			// referencing resource locators must be renamed aswell.
-			emit LocatorAboutToRename(currentLocator, newLocator);
+
 		}
 
-		auto oldEntriesIt = m_entries.find(currentLocator);
-		if (oldEntriesIt != m_entries.end())
+		void Collect(Entry *entry)
 		{
-			auto oldIt = oldEntriesIt->second.find(entry);
-			if (oldIt != oldEntriesIt->second.end())
+			const VFSEntry *vfsEntry = entry->GetVFSEntry();
+
+			Node node;
+			node.currentLocator = entry->GetResourceLocator();
+			node.entry = entry;
+			node.priority = vfsEntry ? vfsEntry->GetPriority() : -1;
+			node.lowestPriority = m_model->GetLowestPriority(node.currentLocator.AsAnonymous());
+
+			m_nodes.push_back(node);
+			for (auto child : entry->GetChildren())
 			{
-				oldEntriesIt->second.erase(oldIt);
-				if (oldEntriesIt->second.empty())
+				Collect(child);
+			}
+		}
+
+		struct Node
+		{
+			csResourceLocator currentLocator;
+			Entry *entry;
+			int priority;
+			int lowestPriority;
+		};
+
+		std::vector<Node> m_nodes;
+		Model *m_model;
+	};
+
+
+
+	void Model::Add(Entry *parent, Entry *child)
+	{
+		if (!parent || !child)
+		{
+			return;
+		}
+		if (child->GetParent() == parent)
+		{
+			// don't add twice
+			return;
+		}
+
+		Entry *currentParent = child->GetParent();
+		bool move = currentParent && currentParent != parent;
+		MoveHelper moveHelper(this);
+		if (move)
+		{
+			moveHelper.Collect(child);
+		}
+
+
+		// now remove the child from the current parent... will do nothing if child is currently not attached to any other entry
+		Remove(child->GetParent(), child);
+
+		csResourceLocator currentLocator = child->GetResourceLocator();
+		if (move)
+		{
+			// when moving we must move the files within FS between the possible access... 
+			// so we get the future resource locator and move the paths
+			csResourceLocator newLocator = parent->GetFutureResourceLocator(child);
+			m_sync.Move(currentLocator, newLocator);
+		}
+
+		// 
+		// attach it back to the graph
+		emit EntryAboutToAdd(parent, child);
+		parent->AddChild(child);
+		emit EntryAdded(parent, child);
+
+		if (move)
+		{
+			HandleLocatorRenamed(moveHelper);
+		}
+
+
+	}
+
+
+	void Model::Remove(Entry *parent, Entry *child)
+	{
+		if (!parent || !child)
+		{
+			return;
+		}
+
+		if (child->GetParent() != parent)
+		{
+			return;
+		}
+
+		emit EntryAboutToRemove(parent, child);
+		parent->RemoveChild(child);
+		emit EntryRemoved(parent, child);
+	}
+
+	void Model::Rename(Entry *entry, const std::string &name)
+	{
+		MoveHelper moveHelper(this);
+		moveHelper.Collect(entry);
+
+		csResourceLocator oldLocator = entry->GetResourceLocator();
+		csResourceLocator newLocator = entry->GetNamedResourceLocator(name);
+		m_sync.Move(oldLocator, newLocator);
+		entry->SetName(name);
+
+		HandleLocatorRenamed(moveHelper);
+
+	}
+
+	void Model::Delete(Entry *entry)
+	{
+
+		for (auto child : entry->GetChildren())
+		{
+			Delete(child);
+		}
+
+		csResourceLocator locator = entry->GetResourceLocator();
+		entry->RemoveFromParent();
+		m_sync.Delete(locator);
+
+
+		// remove the entry from m_entries and emit signal if this was the last resource with the given name
+		csResourceLocator anonLocator = locator.AsAnonymous();
+		auto entriesId = m_entries.find(anonLocator);
+		if (entriesId != m_entries.end())
+		{
+			auto entryId = entriesId->second.find(entry);
+			if (entryId != entriesId->second.end())
+			{
+				entriesId->second.erase(entryId);
+				if (entriesId->second.empty())
 				{
-					m_entries.erase(oldEntriesIt);
+					m_entries.erase(entriesId);
+					emit LocatorRemoved(anonLocator);
 				}
 			}
 		}
 
-		m_entries[newLocator].insert(entry);
 
-		if (entryPriority <= lowestPriority)
+		// remove the references entry aswell
+		auto referenceIt = m_references.find(entry);
+		if (referenceIt != m_references.end())
 		{
-			emit LocatorRenamed(currentLocator, newLocator);
+			m_references.erase(referenceIt);
 		}
+
 
 	}
 
-
-	void Model::onLocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+	void Model::HandleLocatorRenamed(MoveHelper &helper)
 	{
-		for (auto entry : m_references)
+		for (auto node : helper.m_nodes)
 		{
-			auto it = entry.second.find(oldLocator);
-			if (it != entry.second.end())
+			if (node.priority <= node.lowestPriority)
 			{
-				entry.second.erase(it);
-				entry.second.insert(newLocator);
+				emit LocatorRenamed(node.currentLocator, node.entry->GetResourceLocator());
 			}
 		}
 	}
+
+
 }

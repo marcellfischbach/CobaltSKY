@@ -18,6 +18,12 @@ namespace asset::model
     virtual bool IsAttached() const;
 
     virtual csResourceLocator GetResourceLocator() const;
+    virtual csResourceLocator GetNamedResourceLocator(const std::string &name) const;
+
+
+	protected:
+		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const;
+
   };
 
 }

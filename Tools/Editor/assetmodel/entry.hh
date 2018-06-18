@@ -12,6 +12,7 @@ namespace asset::model
   class VFSEntry;
   class Entry
   {
+		friend class Model;
   public:
     enum Type
     {
@@ -47,6 +48,8 @@ namespace asset::model
 
 		virtual bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
+		virtual csResourceLocator GetFutureResourceLocator(Entry *child) const;
+		virtual csResourceLocator GetNamedResourceLocator(const std::string &newName) const = 0;
 
     const std::vector<Entry*> &GetChildren() const;
     Entry* GetChildByName(const std::string &name);
@@ -57,17 +60,15 @@ namespace asset::model
 		Model *GetModel();
 		const Model *GetModel() const;
 
-		virtual void EmitEntryAboutToDelete();
-		virtual void EmitEntryDeleted();
-
-		virtual void EmitEntryAboutToRename();
-		virtual void EmitEntryRenamed();
-
   protected:
     Entry(Model *model, Type type);
     virtual void SetName(const std::string &name);
 
+		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const = 0;
+
   private:
+		bool AddChild(Entry *entry);
+		bool RemoveChild(Entry *entry);
 
     Model * m_model;
     Type m_type;

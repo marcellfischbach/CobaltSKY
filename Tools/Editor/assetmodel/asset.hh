@@ -18,6 +18,8 @@ namespace asset::model
     void SetAssetType(const std::string &assetType);
     const std::string &GetAssetType() const;
 
+		virtual void Add(Entry *entry);
+
 		virtual void SetName(const std::string &name);
 
 		virtual bool IsAsset() const;
@@ -31,6 +33,11 @@ namespace asset::model
     const std::set<csResourceLocator> &GetReferences() const;
 
     virtual csResourceLocator GetResourceLocator() const;
+		virtual csResourceLocator GetNamedResourceLocator(const std::string &name) const;
+
+	protected:
+		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const;
+
 
   private:
     std::string m_fileName;

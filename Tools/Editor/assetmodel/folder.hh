@@ -24,12 +24,10 @@ namespace asset::model
 		Asset *CreateNewAsset(const std::string &baseName) const;
 
     virtual csResourceLocator GetResourceLocator() const;
-
-		virtual void EmitEntryAboutToRename();
-		virtual void EmitEntryRenamed();
-
+		virtual csResourceLocator GetNamedResourceLocator(const std::string &newName) const;
   protected:
     Folder(Model *mode, Entry::Type type);
+		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const;
 
 
   };

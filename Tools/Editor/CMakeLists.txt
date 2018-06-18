@@ -227,6 +227,8 @@ set(ASSETMODEL_SOURCES
 	assetmodel/folder.hh
 	assetmodel/model.cc
 	assetmodel/model.hh
+	assetmodel/modelsync.cc
+	assetmodel/modelsync.hh
 	assetmodel/root.cc
 	assetmodel/root.hh
 	assetmodel/vfsentry.cc

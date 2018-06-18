@@ -22,40 +22,53 @@ namespace asset::model
 
   void Entry::Add(Entry *entry)
   {
-		if (!entry)
+		m_model->Add(this, entry);
+	}
+
+	bool Entry::AddChild(Entry *child)
+	{
+		if (!child)
 		{
-			return;
+			return false;
+		}
+		if (child->m_parent)
+		{
+			return false;
+		}
+		auto it = std::find(m_children.begin(), m_children.end(), child);
+		if (it != m_children.end())
+		{
+			return false;
 		}
 
-    if (entry->GetParent() && entry->GetParent() != this)
-    {
-      entry->RemoveFromParent();
-    }
-
-		emit m_model->EntryAboutToAdd(this, entry);
-    entry->m_parent = this;
-    m_children.push_back(entry);
-
-		emit m_model->EntryAdded(this, entry);
+		child->m_parent = this;
+		m_children.push_back(child);
+		return true;
 	}
+
 
 	void Entry::Remove(Entry *entry)
 	{
-		if (!entry)
+		m_model->Remove(this, entry);
+	}
+
+
+	bool Entry::RemoveChild(Entry *child)
+	{
+		if (!child)
 		{
-			return;
+			return false;
 		}
 
-		auto it = std::find(m_children.begin(), m_children.end(), entry);
+		child->m_parent = 0;
+		auto it = std::find(m_children.begin(), m_children.end(), child);
 		if (it == m_children.end())
 		{
-			return;
+			return false;
 		}
-
-		emit m_model->EntryAboutToRemove(this, entry);
-		entry->m_parent = 0;
 		m_children.erase(it);
-		emit m_model->EntryRemoved(this, entry);
+		child->m_parent = 0;
+		return true;
 	}
 
 	void Entry::RemoveFromParent()
@@ -67,43 +80,17 @@ namespace asset::model
 		m_parent->Remove(this);
 	}
 
-	void Entry::EmitEntryAboutToDelete()
-	{
-		emit GetModel()->EntryAboutToDelete(this);
-	}
-
-	void Entry::EmitEntryDeleted()
-	{
-		emit GetModel()->EntryDeleted(this);
-	}
 
 	void Entry::Delete()
 	{
-    for (auto child : GetChildren())
-    {
-      child->Delete();
-    }
-		EmitEntryAboutToDelete();
-    RemoveFromParent();
-		EmitEntryDeleted();
+		m_model->Delete(this);
 	}
 
-	void Entry::EmitEntryAboutToRename()
-	{
-		emit GetModel()->EntryAboutToRename(this);
-	}
-
-	void Entry::EmitEntryRenamed()
-	{
-		emit GetModel()->EntryRenamed(this);
-	}
 
 
 	void Entry::Rename(const std::string &name)
 	{
-		EmitEntryAboutToRename();
-		SetName(name);
-		EmitEntryRenamed();
+		m_model->Rename(this, name);
 	}
 
 	bool Entry::IsAttached() const
@@ -113,6 +100,16 @@ namespace asset::model
 			return false;
 		}
 		return m_parent->IsAttached();
+	}
+
+	csResourceLocator Entry::GetFutureResourceLocator(Entry *child) const
+	{
+		if (!IsAttached() || !child)
+		{
+			return csResourceLocator();
+		}
+
+		return child->Construct(GetResourceLocator());
 	}
 
 	Entry *Entry::GetChildByName(const std::string &name)

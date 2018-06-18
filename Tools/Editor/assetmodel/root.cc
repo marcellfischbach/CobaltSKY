@@ -44,4 +44,13 @@ namespace asset::model
     return csResourceLocator();
   }
 
+	csResourceLocator Root::GetNamedResourceLocator(const std::string &name) const
+	{
+		return csResourceLocator();
+	}
+
+	csResourceLocator Root::Construct(const csResourceLocator &parent) const
+	{
+		return csResourceLocator();
+	}
 }

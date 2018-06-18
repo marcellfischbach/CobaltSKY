@@ -17,6 +17,11 @@ namespace asset::model
 
   }
 
+	void Asset::Add(Entry *entry)
+	{
+		// assets never have children
+	}
+
 	void Asset::SetName(const std::string &name)
 	{
 		if (name.find(".asset") != name.length() - 6)
@@ -48,13 +53,36 @@ namespace asset::model
 
   csResourceLocator Asset::GetResourceLocator() const
   {
-    const Entry *parent = GetParent();
-    if (parent)
-    {
-      return parent->GetResourceLocator().WithFileSuffix(m_fileName);
-    }
-    return csResourceLocator();
+		const Entry *parent = GetParent();
+		if (parent)
+		{
+			return parent->GetResourceLocator().WithFileSuffix(m_fileName);
+		}
+		return csResourceLocator();
   }
+
+	csResourceLocator Asset::GetNamedResourceLocator(const std::string &name) const
+	{
+		std::string fileName = name;
+		if (name.find(".asset") != name.length() - 6)
+		{
+			fileName = name + ".asset";
+		}
+
+
+		const Entry *parent = GetParent();
+		if (parent)
+		{
+			return parent->GetResourceLocator().WithFileSuffix(fileName);
+		}
+		return csResourceLocator();
+	}
+
+	csResourceLocator Asset::Construct(const csResourceLocator &parentLocator) const
+	{
+		return parentLocator.WithFileSuffix(m_fileName);
+	}
+
 
 	bool Asset::IsAsset() const
 	{
