@@ -49,6 +49,16 @@ namespace asset::model
     GetModel()->AddReference(this, reference);
   }
 
+  void Asset::RenameReference(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  {
+    auto it = m_references.find(oldLocator);
+    if (it != m_references.end())
+    {
+      m_references.erase(it);
+      m_references.insert(newLocator);
+    }
+
+  }
 
 
   csResourceLocator Asset::GetResourceLocator() const

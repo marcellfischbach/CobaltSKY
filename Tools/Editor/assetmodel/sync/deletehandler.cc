@@ -14,84 +14,27 @@ namespace asset::model::sync
     :QObject()
     , m_model(model)
   {
-    connect(model, SIGNAL(EntryAboutToDelete(asset::model::Entry*)), this, SLOT(EntryAboutToDelete(asset::model::Entry*)));
-    connect(model, SIGNAL(EntryDeleted(asset::model::Entry*)), this, SLOT(EntryDeleted(asset::model::Entry*)));
+    connect(model, SIGNAL(LocatorAboutToRemove(const csResourceLocator&)), this, SLOT(LocatorAboutToRemove(const csResourceLocator &)));
+    connect(model, SIGNAL(LocatorRemoved(const csResourceLocator&)), this, SLOT(LocatorRemoved(const csResourceLocator &)));
   }
 
 
-  void DeleteHandler::EntryAboutToDelete(asset::model::Entry *entry)
+  void DeleteHandler::LocatorAboutToRemove(const csResourceLocator &locator)
   {
-    if (!entry)
-    {
-      return;
-    }
-    m_entries[entry] = entry->GetResourceLocator();
+    csResourceLocator anonLocator = locator.AsAnonymous();
+    std::set<Entry*> entries = m_model->GetReferencing(anonLocator);
+    m_entries[anonLocator] = entries;
   }
 
-  void DeleteHandler::EntryDeleted(asset::model::Entry *entry)
+  void DeleteHandler::LocatorRemoved(const csResourceLocator &locator)
   {
-    if (!entry)
-    {
-      return;
-    }
-    auto it = m_entries.find(entry);
+    auto it = m_entries.find(locator.AsAnonymous());
     if (it == m_entries.end())
     {
       return;
     }
-
-    switch (entry->GetType())
-    {
-    case asset::model::Entry::eT_Asset:
-      DeleteAsset(entry->AsAsset(), it->second);
-      break;
-    case asset::model::Entry::eT_Folder:
-      DeleteFolder(entry->AsFolder(), it->second);
-      break;
-    case asset::model::Entry::eT_VFSEntry:
-    case asset::model::Entry::eT_Root:
-      break;
-    }
-
-    m_entries.erase(it);
-
-  }
-  void DeleteHandler::DeleteAsset(asset::model::Asset *asset, csResourceLocator locator)
-  {
-    std::string fullPath = csVFS::Get()->GetAbsolutePath(locator);
-    if (fullPath.empty())
-    {
-      return;
-    }
-    std::filesystem::path path(fullPath);
-    std::filesystem::remove(path);
-
-    ClearAssetReference(locator);
-  }
-
-  void DeleteHandler::DeleteFolder(asset::model::Folder *folder, csResourceLocator locator)
-  {
-    std::string fullPath = csVFS::Get()->GetAbsolutePath(locator);
-    if (fullPath.empty())
-    {
-      return;
-    }
-    std::filesystem::path path(fullPath);
-    std::filesystem::remove_all(path);
-  }
-
-
-  void DeleteHandler::ClearAssetReference(const csResourceLocator &locator)
-  {
     csResourceLocator anonLocator = locator.AsAnonymous();
-    std::set<Entry*> entries = m_model->GetEntries(anonLocator);
-    if (!entries.empty())
-    {
-      return;
-    }
-    std::set<Entry*> referencing = m_model->GetReferencing(locator);
-
-    for (Entry * entry : referencing)
+    for (Entry *entry : it->second)
     {
       Asset *asset = entry->AsAsset();
       if (asset)
@@ -100,7 +43,7 @@ namespace asset::model::sync
         AssetScanner(asset).Scan();
       }
     }
+    m_entries.erase(it);
+
   }
-
-
 }

@@ -67,18 +67,22 @@ namespace asset::model
 		void EntryAboutToChanged(asset::model::Entry* entry);
 		void EntryChanged(asset::model::Entry* entry);
 
+		void LocatorAboutToRename(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		void LocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		void LocatorAboutToRemove(const csResourceLocator &locator);
 		void LocatorRemoved(const csResourceLocator &locator);
 
   private slots:
-    void onEntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
-    void onEntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
-    void onEntryRenamed(asset::model::Entry *entry);
-		void onLocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 
 
   private:
+    void AddEntry(Entry *entry);
+    bool IsLastEntry(Entry *entry);
+    bool RemoveEntry(Entry *entry);
+
 		void HandleLocatorRenamed(MoveHelper &helper);
+    void HandleLocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+    void HandleLocatorRemoved(const csResourceLocator &locator);
 
 		csResourceLocator GetCurrentResourceLocator(Entry*entry) const;
     Root * m_root;

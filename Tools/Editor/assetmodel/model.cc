@@ -19,10 +19,6 @@ namespace asset::model
 		m_deleteHandler = new sync::DeleteHandler(this);
 		m_renameHandler = new sync::RenameHandler(this);
 
-		connect(this, SIGNAL(EntryAdded(asset::model::Entry*, asset::model::Entry*)), SLOT(onEntryAdded(asset::model::Entry*, asset::model::Entry*)));
-		connect(this, SIGNAL(EntryRemoved(asset::model::Entry*, asset::model::Entry*)), SLOT(onEntryRemoved(asset::model::Entry*, asset::model::Entry*)));
-		connect(this, SIGNAL(EntryRenamed(asset::model::Entry*)), SLOT(onEntryRenamed(asset::model::Entry*)));
-		connect(this, SIGNAL(LocatorRenamed(const csResourceLocator &, const csResourceLocator &)), SLOT(onLocatorRenamed(const csResourceLocator &, const csResourceLocator &)));
 	}
 
 	Model::~Model()
@@ -219,6 +215,10 @@ namespace asset::model
 		// attach it back to the graph
 		emit EntryAboutToAdd(parent, child);
 		parent->AddChild(child);
+
+    AddEntry(child);
+
+
 		emit EntryAdded(parent, child);
 
 		if (move)
@@ -243,6 +243,9 @@ namespace asset::model
 		}
 
 		emit EntryAboutToRemove(parent, child);
+
+    RemoveEntry(child);
+
 		parent->RemoveChild(child);
 		emit EntryRemoved(parent, child);
 	}
@@ -255,7 +258,9 @@ namespace asset::model
 		csResourceLocator oldLocator = entry->GetResourceLocator();
 		csResourceLocator newLocator = entry->GetNamedResourceLocator(name);
 		m_sync.Move(oldLocator, newLocator);
+    RemoveEntry(entry);
 		entry->SetName(name);
+    AddEntry(entry);
 
 		HandleLocatorRenamed(moveHelper);
 
@@ -270,37 +275,92 @@ namespace asset::model
 		}
 
 		csResourceLocator locator = entry->GetResourceLocator();
+    csResourceLocator anonLocator = locator.AsAnonymous();
+    if (IsLastEntry(entry))
+    {
+      emit LocatorAboutToRemove(anonLocator);
+    }
+    if (RemoveEntry(entry))
+    {
+      emit LocatorRemoved(anonLocator);
+    }
+
 		entry->RemoveFromParent();
 		m_sync.Delete(locator);
 
-
-		// remove the entry from m_entries and emit signal if this was the last resource with the given name
-		csResourceLocator anonLocator = locator.AsAnonymous();
-		auto entriesId = m_entries.find(anonLocator);
-		if (entriesId != m_entries.end())
-		{
-			auto entryId = entriesId->second.find(entry);
-			if (entryId != entriesId->second.end())
-			{
-				entriesId->second.erase(entryId);
-				if (entriesId->second.empty())
-				{
-					m_entries.erase(entriesId);
-					emit LocatorRemoved(anonLocator);
-				}
-			}
-		}
-
-
-		// remove the references entry aswell
-		auto referenceIt = m_references.find(entry);
-		if (referenceIt != m_references.end())
-		{
-			m_references.erase(referenceIt);
-		}
-
-
 	}
+
+  void Model::AddEntry(Entry *entry)
+  {
+    csResourceLocator locator = entry->GetResourceLocator();
+    m_entries[locator.AsAnonymous()].insert(entry);
+    Asset *asset = entry->AsAsset();
+    if (asset)
+    {
+      m_references[asset] = asset->GetReferences();
+    }
+
+  }
+
+  bool Model::IsLastEntry(Entry *entry)
+  {
+    csResourceLocator locator = entry->GetResourceLocator();
+
+
+    // remove the entry from m_entries and emit signal if this was the last resource with the given name
+    csResourceLocator anonLocator = locator.AsAnonymous();
+    auto entriesId = m_entries.find(anonLocator);
+    if (entriesId != m_entries.end())
+    {
+      auto entryId = entriesId->second.find(entry);
+      if (entryId != entriesId->second.end())
+      {
+        if (entriesId->second.size() == 1)
+        {
+          // there is only one entry with the name and that is our entry
+          // so we must be the last
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool Model::RemoveEntry(Entry *entry)
+  {
+    bool lastEntryRemoved = false;
+    csResourceLocator locator = entry->GetResourceLocator();
+
+
+    // remove the entry from m_entries and emit signal if this was the last resource with the given name
+    csResourceLocator anonLocator = locator.AsAnonymous();
+    auto entriesId = m_entries.find(anonLocator);
+    if (entriesId != m_entries.end())
+    {
+      auto entryId = entriesId->second.find(entry);
+      if (entryId != entriesId->second.end())
+      {
+        entriesId->second.erase(entryId);
+        if (entriesId->second.empty())
+        {
+          m_entries.erase(entriesId);
+          lastEntryRemoved = true;
+        }
+      }
+    }
+
+
+
+    // remove the references entry aswell
+    auto referenceIt = m_references.find(entry);
+    if (referenceIt != m_references.end())
+    {
+      m_references.erase(referenceIt);
+    }
+
+    return lastEntryRemoved;
+  }
+  
 
 	void Model::HandleLocatorRenamed(MoveHelper &helper)
 	{
@@ -308,10 +368,35 @@ namespace asset::model
 		{
 			if (node.priority <= node.lowestPriority)
 			{
-				emit LocatorRenamed(node.currentLocator, node.entry->GetResourceLocator());
+        HandleLocatorRenamed(node.currentLocator, node.entry->GetResourceLocator());
 			}
 		}
 	}
+
+  void Model::HandleLocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  {
+    emit LocatorAboutToRename(oldLocator, newLocator);
+
+    csResourceLocator anonOldLocator = oldLocator.AsAnonymous();
+    csResourceLocator anonNewLocator = newLocator.AsAnonymous();
+
+    for (auto it = m_references.begin(); it != m_references.end(); ++it)
+    {
+      auto refIt = it->second.find(anonOldLocator);
+      if (refIt != it->second.end())
+      {
+        it->second.erase(refIt);
+        it->second.insert(anonNewLocator);
+      }
+
+      Asset *asset = it->first->AsAsset();
+      if (asset)
+      {
+        asset->RenameReference(oldLocator, newLocator);
+      }
+    }
+    emit LocatorRenamed(oldLocator, newLocator);
+  }
 
 
 }

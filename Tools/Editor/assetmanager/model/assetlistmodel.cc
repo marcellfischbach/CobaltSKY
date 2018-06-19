@@ -85,7 +85,6 @@ namespace asset::model
 		{
 			return 0;
 		}
-    printf("RowCount: %d\n", m_folder->GetAssets().size());
 		return m_folder->GetAssets().size();
 	}
 
@@ -102,13 +101,10 @@ namespace asset::model
 		}
 
 		const ViewEntry *entry = reinterpret_cast<const ViewEntry*>(index.internalPointer());
-    printf("data: 0x%p ", entry);
 		if (!entry)
 		{
-      printf("\n");
 			return QVariant();
 		}
-    printf("  %s\n", entry->GetText().c_str());
 		return QString(entry->GetEntry ()->GetName().c_str());
 	}
 

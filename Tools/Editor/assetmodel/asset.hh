@@ -29,6 +29,7 @@ namespace asset::model
 
     void ClearReferences();
     void AddReference(const csResourceLocator &locator);
+    void RenameReference(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 
     const std::set<csResourceLocator> &GetReferences() const;
 
