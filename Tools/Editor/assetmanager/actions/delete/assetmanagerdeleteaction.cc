@@ -3,6 +3,7 @@
 #include <assetmanager/actions/delete/assetmanagerdeletedialog.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
 #include <assetmodel/vfsentry.hh>
 #include <cobalt/core/csvfs.hh>
 #include <vector>
@@ -68,26 +69,36 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
   const asset::model::VFSEntry *vfsEntry = entry->GetVFSEntry();
   int entityPriority = vfsEntry->GetPriority();
 
-  const std::set<asset::model::Entry*> &otherEntries = entry->GetModel()->GetEntries(entry->GetResourceLocator());
+  const std::set<asset::model::Entry*> &otherEntries = entry->GetModel()->GetAllEntriesFor(entry->GetResourceLocator());
 
-  for (auto deleteEntry : otherEntries)
-  {
-    const asset::model::VFSEntry *deleteVFSEntry = deleteEntry->GetVFSEntry();
+	asset::model::ModelTransaction tr;
+	bool commit = true;
+	try
+	{
+		for (auto deleteEntry : otherEntries)
+		{
+			const asset::model::VFSEntry *deleteVFSEntry = deleteEntry->GetVFSEntry();
 
-    int deletePriority = deleteVFSEntry->GetPriority();
+			int deletePriority = deleteVFSEntry->GetPriority();
 
-    if (deletePriority < entityPriority && !deleteSuper)
-    {
-      continue;
-    }
-    else if (deletePriority > entityPriority && !deleteOverloaded)
-    {
-      continue;
-    }
+			if (deletePriority < entityPriority && !deleteSuper)
+			{
+				continue;
+			}
+			else if (deletePriority > entityPriority && !deleteOverloaded)
+			{
+				continue;
+			}
 
-    deleteEntry->Delete();
+			deleteEntry->Delete(tr);
 
-  }
+		}
+		tr.Commit();
+	}
+	catch (const std::exception &e)
+	{
+		tr.Rollback();
+	}
 
 
 	return true;

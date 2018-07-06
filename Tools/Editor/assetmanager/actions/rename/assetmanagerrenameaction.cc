@@ -3,6 +3,7 @@
 #include <assetmanager/actions/rename/assetmanagerrenamedialog.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
 #include <assetmodel/vfsentry.hh>
 #include <cobalt/core/csvfs.hh>
 #include <vector>
@@ -77,23 +78,32 @@ bool AssetManagerRenameAction::PerformAction(AssetManagerWidget *assetManager) c
 	const asset::model::VFSEntry *vfsEntry = entry->GetVFSEntry();
 	int entityPriority = vfsEntry->GetPriority();
 
-	const std::set<asset::model::Entry*> &otherEntriesCopy = std::set<asset::model::Entry*>(entry->GetModel()->GetEntries(entry->GetResourceLocator()));
-	for (auto renameEntry : otherEntriesCopy)
+	const std::set<asset::model::Entry*> &otherEntriesCopy = std::set<asset::model::Entry*>(entry->GetModel()->GetAllEntriesFor(entry->GetResourceLocator()));
+	asset::model::ModelTransaction tr;
+	try
 	{
-		const asset::model::VFSEntry *renameVFSEntry = renameEntry->GetVFSEntry();
-		int deletePriority = renameVFSEntry->GetPriority();
-
-		if (deletePriority < entityPriority && !renameSuper)
+		for (auto renameEntry : otherEntriesCopy)
 		{
-			continue;
-		}
-		else if (deletePriority > entityPriority && !renameOverloaded)
-		{
-			continue;
-		}
+			const asset::model::VFSEntry *renameVFSEntry = renameEntry->GetVFSEntry();
+			int deletePriority = renameVFSEntry->GetPriority();
 
-		renameEntry->Rename(newName);
+			if (deletePriority < entityPriority && !renameSuper)
+			{
+				continue;
+			}
+			else if (deletePriority > entityPriority && !renameOverloaded)
+			{
+				continue;
+			}
 
+			renameEntry->Rename(newName, tr);
+
+		}
+		tr.Commit();
+	}
+	catch (const std::exception &e)
+	{
+		tr.Rollback();
 	}
 
 

@@ -16,7 +16,7 @@ namespace asset::model
 
   }
 
-  void Root::Add(Entry *entry)
+  void Root::Add(Entry *entry, ModelTransaction &tr)
   {
     if (!entry)
     {
@@ -25,11 +25,11 @@ namespace asset::model
 
     if (entry->GetType() == Entry::eT_VFSEntry)
     {
-      Entry::Add(entry);
+      Entry::Add(entry, tr);
     }
   }
 
-  void Root::Delete()
+  void Root::Delete(ModelTransaction &tr)
   {
     // root may never be deleted.
   }
@@ -44,13 +44,4 @@ namespace asset::model
     return csResourceLocator();
   }
 
-	csResourceLocator Root::GetNamedResourceLocator(const std::string &name) const
-	{
-		return csResourceLocator();
-	}
-
-	csResourceLocator Root::Construct(const csResourceLocator &parent) const
-	{
-		return csResourceLocator();
-	}
 }

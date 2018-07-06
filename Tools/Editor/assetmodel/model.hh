@@ -17,78 +17,74 @@ namespace asset::model
 		class DeleteHandler;
 		class RenameHandler;
 	}
-  class Asset;
+	class Asset;
 	class Entry;
-  class Folder;
-  class Root;
-  class VFSEntry;
+	class Folder;
+	class Root;
+	class VFSEntry;
 	class MoveHelper;
-  class Model : public QObject
-  {
-    Q_OBJECT
-  public:
-    Model();
-    virtual ~Model();
+	class ModelTransaction;
+	class TreeCollector;
+	class Model : public QObject
+	{
+		friend class AddCallback;
+		friend class RemoveCallback;
+		friend class RenameCallback;
+		Q_OBJECT
+	public:
+		Model();
+		virtual ~Model();
 
-    Asset* CreateAsset(const std::string &fileName);
-    Folder* CreateFolder(const std::string &folderName);
-    VFSEntry* CreateVFSEntry(const csVFS::Entry &entry);
+		Asset* CreateAsset(const std::string &fileName);
+		Folder* CreateFolder(const std::string &folderName);
+		VFSEntry* CreateVFSEntry(const csVFS::Entry &entry);
 
-    Root *GetRoot() { return m_root;  }
+		Root *GetRoot() { return m_root; }
+		Entry *GetEntry(const csResourceLocator &locator);
+		const Entry *GetEntry(const csResourceLocator &locator) const;
 
-    const std::set<Entry*> GetEntries(const csResourceLocator &locator) const;
-		const std::set<Entry*> GetReferencing(const csResourceLocator &locator) const;
-
-    void RemoveReferences(Entry *entry);
-		void AddReference(Entry *entry, const csResourceLocator &locator);
+		const std::set<Entry*> &GetAllEntriesFor(const csResourceLocator &locator) const;
+		std::set<Entry*> GetReferencing(const csResourceLocator &locator) const;
 
 		int GetLowestPriority(const csResourceLocator &locator) const;
 
-		/**
-		 * Not part of the public API
-		 * @{
-		*/
-		void Add(Entry *parent, Entry *child);
-		void Remove(Entry *parent, Entry *child);
-		void Rename(Entry *entry, const std::string &name);
-		void Delete(Entry *entry);
+		void Add(Entry *parent, Entry *child, ModelTransaction &tr);
+		void Remove(Entry *parent, Entry *child, ModelTransaction &tr);
+		void Delete(Entry *entry, ModelTransaction &tr);
+		void Rename(Entry *entry, const std::string &newname, ModelTransaction &tr);
 
-		/**
-		 * @}
-		 */
+		void ClearReferences(Entry *entry);
+		void AddReference(Entry *entry, const csResourceLocator &reference);
 
 	signals:
-		void EntryAboutToAdd(asset::model::Entry* parent, asset::model::Entry *child);
-		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
+		void EntryAdded(Entry *parent, Entry *child);
+		void EntryRemoved(Entry *parent, Entry *child);
+		void EntryRenamed(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		void ResourceRemoved(const csResourceLocator &locator);
+		void ResourceRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 
-		void EntryAboutToRemove(asset::model::Entry* parent, asset::model::Entry *child);
-		void EntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
+	private:
+		void AddCommit(Entry *parent, Entry *child);
+		void AddRollback(Entry *parent, Entry *child);
+		void RemoveCommit(Entry *parent, Entry *child);
+		void RemoveRollback(Entry *parent, Entry *child);
+		void RenameCommit(Entry *entry, const std::string &newName, TreeCollector &collector);
 
-		void EntryAboutToChanged(asset::model::Entry* entry);
-		void EntryChanged(asset::model::Entry* entry);
+		void UpdateCollector(TreeCollector &collector);
+		void UpdateCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		void InsertIntoEntryCache(Entry* entry);
+		bool RemoveFromEntryCache(Entry* entry);
+		void RemoveReference(const csResourceLocator &locator);
+		void RenameReference(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		csResourceLocator EvaluateEntryLocator(const Entry *entry) const;
 
-		void LocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
-		void LocatorRemoved(const csResourceLocator &locator);
+	private:
+		Root * m_root;
 
-  private slots:
-    void onEntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
-    void onEntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
-    void onEntryRenamed(asset::model::Entry *entry);
-		void onLocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		std::map<csResourceLocator, std::set<asset::model::Entry*>> m_entries;
 
+		std::map<csResourceLocator, asset::model::Entry*> m_namedEntries;
 
-  private:
-		void HandleLocatorRenamed(MoveHelper &helper);
-
-		csResourceLocator GetCurrentResourceLocator(Entry*entry) const;
-    Root * m_root;
-
-		sync::DeleteHandler *m_deleteHandler;
-		sync::RenameHandler *m_renameHandler;
-
-    std::map<csResourceLocator, std::set<Entry*>> m_entries;
-		std::map<Entry*, std::set<csResourceLocator>> m_references;
-
-		ModelSync m_sync;
-  };
+		std::map<asset::model::Entry *, std::set<csResourceLocator>> m_references;
+	};
 }

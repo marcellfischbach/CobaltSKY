@@ -1,6 +1,7 @@
 
 #include <assetmodel/sync/assetscanner.hh>
 #include <assetmodel/asset.hh>
+#include <assetmodel/model.hh>
 #include <cobalt/core/csvfs.hh>
 #include <csfile/csffile.hh>
 #include <csfile/csfentry.hh>

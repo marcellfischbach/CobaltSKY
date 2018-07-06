@@ -23,25 +23,22 @@ namespace asset::model
 
 	csResourceLocator Folder::GetResourceLocator() const
 	{
-		return GetNamedResourceLocator(GetName());
+		const Entry *parent = GetParent();
+		if (!parent)
+		{
+			return csResourceLocator();
+		}
+
+		csResourceLocator parentLocator = parent->GetResourceLocator();
+		if (!parentLocator.IsValid())
+		{
+			return csResourceLocator();
+		}
+		return parent->GetResourceLocator().WithFileSuffix(GetName() + "/");
 	}
 
-	csResourceLocator Folder::GetNamedResourceLocator(const std::string &newName) const
-	{
-    const Entry *parent = GetParent();
-    if (parent)
-    {
-      return parent->GetResourceLocator().WithFileSuffix(newName + "/");
-    }
-    return csResourceLocator();
-  }
-
-	csResourceLocator Folder::Construct(const csResourceLocator &parentLocator) const
-	{
-		return parentLocator.WithFileSuffix(GetName() + "/");
-	}
-
-  void Folder::Add(Entry *entry)
+	
+  void Folder::Add(Entry *entry, ModelTransaction &tr)
   {
     if (!entry)
     {
@@ -50,7 +47,7 @@ namespace asset::model
 
     if (entry->GetType() == Entry::eT_Folder || entry->GetType() == Entry::eT_Asset)
     {
-      Entry::Add(entry);
+      Entry::Add(entry, tr);
     }
   }
 

@@ -8,6 +8,7 @@ namespace asset::model
 {
 	class Asset;
 	class Model;
+	class ModelTransaction;
 	class Folder;
   class VFSEntry;
   class Entry
@@ -27,16 +28,18 @@ namespace asset::model
     Entry *GetParent() { return m_parent;  }
     const Entry *GetParent() const { return m_parent; }
 
-		void RemoveFromParent();
-		virtual void Delete();
-		virtual void Rename(const std::string &newName);
+		virtual void Add(Entry *entry, ModelTransaction &tr);
+		virtual void Remove(Entry *entry, ModelTransaction &tr);
+		void RemoveFromParent(ModelTransaction &tr);
+		virtual void Delete(ModelTransaction &tr);
+		virtual void Rename(const std::string &newName, ModelTransaction &tr);
 
     Type GetType() const { return m_type; }
 
-    const std::string &GetName() const;
+		virtual void SetName(const std::string &name);
+		const std::string &GetName() const;
+		virtual const std::string FakeName(const std::string &name) const;
 
-    virtual void Add(Entry *entry);
-		virtual void Remove(Entry *entry);
 
 		virtual bool IsFolder() const;
 		virtual Folder *AsFolder();
@@ -48,23 +51,19 @@ namespace asset::model
 
 		virtual bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
-		virtual csResourceLocator GetFutureResourceLocator(Entry *child) const;
-		virtual csResourceLocator GetNamedResourceLocator(const std::string &newName) const = 0;
 
     const std::vector<Entry*> &GetChildren() const;
     Entry* GetChildByName(const std::string &name);
     const Entry* GetChildByName(const std::string &name) const;
 
     virtual const VFSEntry *GetVFSEntry() const;
+    int GetVFSEntryPriority() const;
 
 		Model *GetModel();
 		const Model *GetModel() const;
 
   protected:
     Entry(Model *model, Type type);
-    virtual void SetName(const std::string &name);
-
-		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const = 0;
 
   private:
 		bool AddChild(Entry *entry);

@@ -84,7 +84,7 @@ namespace asset::model::sync
   void DeleteHandler::ClearAssetReference(const csResourceLocator &locator)
   {
     csResourceLocator anonLocator = locator.AsAnonymous();
-    std::set<Entry*> entries = m_model->GetEntries(anonLocator);
+    const std::set<Entry*> &entries = m_model->GetAllEntriesFor(locator);
     if (!entries.empty())
     {
       return;

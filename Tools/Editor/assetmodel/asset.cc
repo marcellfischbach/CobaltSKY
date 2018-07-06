@@ -6,7 +6,7 @@ namespace asset::model
 {
   Asset::Asset(Model *model, const std::string &fileName)
     : Entry(model, eT_Asset)
-    , m_fileName(fileName)
+    , m_assetName("")
     , m_assetType("undef")
   {
     SetName(fileName);
@@ -24,64 +24,48 @@ namespace asset::model
 
 	void Asset::SetName(const std::string &name)
 	{
-		if (name.find(".asset") != name.length() - 6)
+		std::string fileName = name;
+		if (name.find(".asset") == name.length() - 6)
 		{
-			m_fileName = name + ".asset";
-			Entry::SetName(name);
+			// this is the filename
+			m_assetName = name.substr(0, name.length() - 6);
+			fileName = name;
 		}
 		else
 		{ 
-			m_fileName = name;
-			Entry::SetName(name.substr(0, name.length() - 6));
+			m_assetName = name;
+			fileName = name + ".asset";
 		}
 
+		Entry::SetName(fileName);
 	}
 
-  void Asset::ClearReferences()
-  {
-    m_references.clear();
-    GetModel()->RemoveReferences(this);
-  }
-
-  void Asset::AddReference(const csResourceLocator &reference)
-  {
-    m_references.insert(reference);
-    GetModel()->AddReference(this, reference);
-  }
-
+	const std::string Asset::FakeName(const std::string &name) const
+	{
+		if (name.find(".asset") == name.length() - 6)
+		{
+			return name;
+		}
+		return name + ".asset";
+	}
 
 
   csResourceLocator Asset::GetResourceLocator() const
   {
 		const Entry *parent = GetParent();
-		if (parent)
+		if (!parent)
 		{
-			return parent->GetResourceLocator().WithFileSuffix(m_fileName);
-		}
-		return csResourceLocator();
-  }
-
-	csResourceLocator Asset::GetNamedResourceLocator(const std::string &name) const
-	{
-		std::string fileName = name;
-		if (name.find(".asset") != name.length() - 6)
-		{
-			fileName = name + ".asset";
+			return csResourceLocator();
 		}
 
-
-		const Entry *parent = GetParent();
-		if (parent)
+		csResourceLocator parentLocator = parent->GetResourceLocator();
+		if (!parentLocator.IsValid())
 		{
-			return parent->GetResourceLocator().WithFileSuffix(fileName);
+			return csResourceLocator();
 		}
-		return csResourceLocator();
+		return parent->GetResourceLocator().WithFileSuffix(GetName());
 	}
 
-	csResourceLocator Asset::Construct(const csResourceLocator &parentLocator) const
-	{
-		return parentLocator.WithFileSuffix(m_fileName);
-	}
 
 
 	bool Asset::IsAsset() const
@@ -97,6 +81,16 @@ namespace asset::model
 	const	Asset *Asset::AsAsset() const
 	{
 		return this;
+	}
+
+	void Asset::ClearReferences()
+	{
+		GetModel()->ClearReferences(this);
+	}
+
+	void Asset::AddReference(const csResourceLocator &locator)
+	{
+		GetModel()->AddReference(this, locator);
 	}
 }
 

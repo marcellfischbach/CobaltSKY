@@ -13,7 +13,7 @@ namespace asset::model
     Folder(Model *model, const std::string &folderName);
     virtual ~Folder();
 
-    virtual void Add(Entry *entry);
+    virtual void Add(Entry *entry, ModelTransaction &tr);
 
 		virtual bool IsFolder() const;
 		virtual Folder *AsFolder();
@@ -24,10 +24,8 @@ namespace asset::model
 		Asset *CreateNewAsset(const std::string &baseName) const;
 
     virtual csResourceLocator GetResourceLocator() const;
-		virtual csResourceLocator GetNamedResourceLocator(const std::string &newName) const;
   protected:
     Folder(Model *mode, Entry::Type type);
-		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const;
 
 
   };

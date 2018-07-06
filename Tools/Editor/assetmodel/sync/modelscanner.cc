@@ -5,6 +5,7 @@
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
 #include <assetmodel/root.hh>
 #include <assetmodel/vfsentry.hh>
 #include <cobalt/core/csvfs.hh>
@@ -38,7 +39,16 @@ namespace asset::model::sync
     {
       const csVFS::Entry &entry = vfs->GetEntry(i);
       VFSEntry *vfsEntry = m_model->CreateVFSEntry(entry);
-      root->Add(vfsEntry);
+			ModelTransaction tr;
+			try
+			{
+				root->Add(vfsEntry, tr);
+			}
+			catch (const std::exception &e)
+			{
+
+			}
+			tr.Commit();
       Scan(vfsEntry);
 
     }
@@ -56,7 +66,16 @@ namespace asset::model::sync
       if (std::fs::is_directory(childPath))
       {
         asset::model::Folder *childFolder = m_model->CreateFolder(childPath.filename().string());
-        folder->Add(childFolder);
+				ModelTransaction tr;
+				try
+				{
+					folder->Add(childFolder, tr);
+				}
+				catch (const std::exception &e)
+				{
+
+				}
+				tr.Commit();
         Scan(childFolder);
       }
       else if (std::fs::is_regular_file(childPath))
@@ -65,7 +84,16 @@ namespace asset::model::sync
         if (ext == std::string(".csf") || ext == std::string(".asset"))
         {
           asset::model::Asset *asset = m_model->CreateAsset(childPath.filename().string());
-          folder->Add(asset);
+					ModelTransaction tr;
+					try
+					{
+						folder->Add(asset, tr);
+					}
+					catch (const std::exception &e)
+					{
+
+					}
+					tr.Commit();
           Scan(asset);
         }
       }

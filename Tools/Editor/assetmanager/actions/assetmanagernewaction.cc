@@ -4,6 +4,7 @@
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
 #include <editor.hh>
 #include <project/project.hh>
 #include <project/projectreferencetree.hh>
@@ -53,7 +54,16 @@ bool AssetManagerNewAction::PerformAction(AssetManagerWidget *widget) const
 	{
 		return false;
 	}
-	folder->Add(asset);
+	asset::model::ModelTransaction tr;
+	try
+	{
+		folder->Add(asset, tr);
+		tr.Commit();
+	}
+	catch (const std::exception &e)
+	{
+		tr.Rollback();
+	}
 	return true;
 	/*
   csResourceLocator locator = CreateNewAsset(widget);

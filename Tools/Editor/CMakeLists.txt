@@ -223,12 +223,16 @@ set(ASSETMODEL_SOURCES
 	assetmodel/asset.hh
 	assetmodel/entry.cc
 	assetmodel/entry.hh
+	assetmodel/exceptions.cc
+	assetmodel/exceptions.hh
 	assetmodel/folder.cc
 	assetmodel/folder.hh
 	assetmodel/model.cc
 	assetmodel/model.hh
 	assetmodel/modelsync.cc
 	assetmodel/modelsync.hh
+	assetmodel/modeltransaction.cc
+	assetmodel/modeltransaction.hh
 	assetmodel/root.cc
 	assetmodel/root.hh
 	assetmodel/vfsentry.cc
@@ -254,6 +258,8 @@ set(ASSETMODEL_SYNC_SOURCES
 	assetmodel/sync/modelscanner.hh
 	assetmodel/sync/renamehandler.cc
 	assetmodel/sync/renamehandler.hh
+	assetmodel/sync/securefs.cc
+	assetmodel/sync/securefs.hh
 	)
 
 

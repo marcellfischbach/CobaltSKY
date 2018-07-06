@@ -12,17 +12,13 @@ namespace asset::model
     Root(Model *model);
     virtual ~Root();
 
-    virtual void Add(Entry *entry);
-    virtual void Delete();
+    virtual void Add(Entry *entry, ModelTransaction &tr);
+    virtual void Delete(ModelTransaction &tr);
 
     virtual bool IsAttached() const;
 
     virtual csResourceLocator GetResourceLocator() const;
-    virtual csResourceLocator GetNamedResourceLocator(const std::string &name) const;
 
-
-	protected:
-		virtual csResourceLocator Construct(const csResourceLocator &parentLocator) const;
 
   };
 

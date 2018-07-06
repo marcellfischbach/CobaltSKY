@@ -1,7 +1,10 @@
 
 #include <assetmodel/entry.hh>
+#include <assetmodel/exceptions.hh>
 #include <assetmodel/folder.hh>
 #include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
+#include <assetmodel/vfsentry.hh>
 
 namespace asset::model
 {
@@ -19,10 +22,15 @@ namespace asset::model
 
   }
 
+	const std::string Entry::FakeName(const std::string &name) const
+	{
+		return name;
+	}
 
-  void Entry::Add(Entry *entry)
+
+  void Entry::Add(Entry *entry, ModelTransaction &tr)
   {
-		m_model->Add(this, entry);
+		m_model->Add(this, entry, tr);
 	}
 
 	bool Entry::AddChild(Entry *child)
@@ -47,9 +55,9 @@ namespace asset::model
 	}
 
 
-	void Entry::Remove(Entry *entry)
+	void Entry::Remove(Entry *entry, ModelTransaction &tr)
 	{
-		m_model->Remove(this, entry);
+		m_model->Remove(this, entry, tr);
 	}
 
 
@@ -71,26 +79,26 @@ namespace asset::model
 		return true;
 	}
 
-	void Entry::RemoveFromParent()
+	void Entry::RemoveFromParent(ModelTransaction &tr)
 	{
 		if (!m_parent)
 		{
 			return;
 		}
-		m_parent->Remove(this);
+		m_parent->Remove(this, tr);
 	}
 
 
-	void Entry::Delete()
+	void Entry::Delete(ModelTransaction &tr)
 	{
-		m_model->Delete(this);
+		m_model->Delete(this, tr);
 	}
 
 
 
-	void Entry::Rename(const std::string &name)
+	void Entry::Rename(const std::string &name, ModelTransaction &tr)
 	{
-		m_model->Rename(this, name);
+		m_model->Rename(this, name, tr);
 	}
 
 	bool Entry::IsAttached() const
@@ -102,15 +110,6 @@ namespace asset::model
 		return m_parent->IsAttached();
 	}
 
-	csResourceLocator Entry::GetFutureResourceLocator(Entry *child) const
-	{
-		if (!IsAttached() || !child)
-		{
-			return csResourceLocator();
-		}
-
-		return child->Construct(GetResourceLocator());
-	}
 
 	Entry *Entry::GetChildByName(const std::string &name)
 	{
@@ -139,6 +138,17 @@ namespace asset::model
     }
     return 0;
   }
+
+	int Entry::GetVFSEntryPriority() const
+	{
+		const VFSEntry *vfsEntry = GetVFSEntry();
+		if (!vfsEntry)
+		{
+			throw NotAttachedException(this);
+		}
+		return vfsEntry->GetPriority();
+
+	}
 
 	bool Entry::IsFolder() const
 	{
