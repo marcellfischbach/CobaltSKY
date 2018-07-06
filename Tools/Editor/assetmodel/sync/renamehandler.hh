@@ -27,9 +27,6 @@ namespace asset::model::sync
 		RenameHandler(asset::model::Model *model);
 
 	private slots:
-		void EntryAboutToRename(asset::model::Entry *entry);
-		void EntryRenamed(asset::model::Entry *entry);
-
 		void LocatorAboutToRename(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		void LocatorRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 
@@ -37,9 +34,7 @@ namespace asset::model::sync
 
 	private:
 		asset::model::Model * m_model;
-		void RenameAsset(asset::model::Asset *asset, csResourceLocator locator);
-		void RenameFolder(asset::model::Folder *folder, csResourceLocator locator);
-		std::map<asset::model::Entry *, csResourceLocator> m_entries;
-		std::map<csResourceLocator, std::set<asset::model::Entry*>> m_references;
+
+    std::map<csResourceLocator, std::set<asset::model::Entry*>> m_entries;
 	};
 }

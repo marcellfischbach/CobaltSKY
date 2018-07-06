@@ -12,8 +12,8 @@ namespace asset::model
 	{
 		friend class Model;
 	public:
-		void Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
-		void Delete(const csResourceLocator &locator);
+		bool Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		bool Delete(const csResourceLocator &locator);
 	private:
 		ModelSync();
 	};
