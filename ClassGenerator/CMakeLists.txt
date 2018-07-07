@@ -16,4 +16,4 @@ add_executable(ClassGenerator
 	)
 
 
- install(TARGETS ClassGenerator DESTINATION  ${ClassGenerator_SOURCE_DIR}/../bin)
+ install(TARGETS ClassGenerator DESTINATION  ${CobaltSKY_SOURCE_DIR}/bin)

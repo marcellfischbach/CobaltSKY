@@ -32,7 +32,7 @@ bool SamplerEditorNewAction::IsEnabled(AssetManagerWidget *assetManager) const
 
 QString SamplerEditorNewAction::GetMenuEntryName(AssetManagerWidget *assetManager) const
 {
-  return QString("New Sampler");
+  return QString("New Sampler 1");
 }
 
 bool SamplerEditorNewAction::CreateNewAsset(asset::model::Folder *folder, const csResourceLocator &locator, const std::string &fileName) const

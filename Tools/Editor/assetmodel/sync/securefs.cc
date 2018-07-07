@@ -4,6 +4,8 @@
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csvfs.hh>
+#include <QDir>
+#include <QUuid>
 
 namespace asset::model
 {
@@ -171,4 +173,203 @@ namespace asset::model
 		}
 	}
 
+
+  void SecureFS::Delete(const csResourceLocator &locator)
+  {
+    std::filesystem::path path(csVFS::Get()->GetAbsolutePath(locator, csVFS::CheckExistence));
+
+    Delete(path);
+  }
+
+
+  void SecureFS::Delete(std::filesystem::path &path)
+  {
+    if (!std::filesystem::exists(path))
+    {
+      throw AlterFSException("Path " + path.generic_string() + " does not exsist");
+    }
+
+    if (std::filesystem::is_regular_file(path))
+    {
+      DeleteFile(path);
+    }
+    else if (std::filesystem::is_directory(path))
+    {
+      DeleteDirectory(path);
+    }
+  }
+
+  class SecureFSDeleteFile : public ModelTransaction::iCallback
+  {
+  public:
+    SecureFSDeleteFile(std::filesystem::path &file, std::filesystem::path &temp)
+      : m_file(file)
+      , m_temp(temp)
+    {
+    }
+    virtual ~SecureFSDeleteFile()
+    {
+
+    }
+
+    void OnCommit()
+    {
+      try
+      {
+        std::filesystem::remove(m_temp);
+      }
+      catch (const std::exception &e)
+      {
+
+      }
+    }
+
+    void OnRollback()
+    {
+      try
+      {
+        std::filesystem::copy(m_temp, m_file);
+      }
+      catch (const std::exception &e)
+      {
+
+      }
+      try
+      {
+        std::filesystem::remove(m_temp);
+      }
+      catch (const std::exception &e)
+      {
+
+      }
+    }
+
+  private:
+    std::filesystem::path m_file;
+    std::filesystem::path m_temp;
+  };
+
+  void SecureFS::DeleteFile(std::filesystem::path &path)
+  {
+    if (!std::filesystem::exists(path))
+    {
+      throw AlterFSException("Path " + path.generic_string() + " does not exsist");
+    }
+
+    if (!std::filesystem::is_regular_file(path))
+    {
+      throw AlterFSException("Path " + path.generic_string() + " is no file");
+    }
+
+    std::filesystem::path tmpFile = GetTempFile();
+    bool saveDelete = true;
+    try
+    {
+      std::filesystem::copy_file(path, tmpFile);
+    }
+    catch (const std::exception &e)
+    {
+      saveDelete = false;
+    }
+
+    try
+    {
+      if (!std::filesystem::remove(path))
+      {
+        throw AlterFSException("Unable to delete " + path.generic_string());
+      }
+    }
+    catch (const std::exception &e)
+    {
+      throw AlterFSException("Unable to delete " + path.generic_string());
+    }
+
+    if (saveDelete)
+    {
+      m_tr.Attach(new SecureFSDeleteFile(path, tmpFile));
+    }
+  }
+
+
+  class SecureFSDeleteDirectory : public ModelTransaction::iCallback
+  {
+  public:
+    SecureFSDeleteDirectory(std::filesystem::path &dir)
+      : m_dir(dir)
+    {
+    }
+    virtual ~SecureFSDeleteDirectory()
+    {
+
+    }
+
+    void OnCommit()
+    {
+    }
+
+    void OnRollback()
+    {
+      try
+      {
+        std::filesystem::create_directories(m_dir);
+      }
+      catch (const std::exception &e)
+      {
+
+      }
+    }
+
+  private:
+    std::filesystem::path m_dir;
+  };
+
+  void SecureFS::DeleteDirectory(std::filesystem::path &path)
+  {
+    if (!std::filesystem::exists(path))
+    {
+      throw AlterFSException("Path " + path.generic_string() + " does not exsist");
+    }
+
+    if (!std::filesystem::is_directory(path))
+    {
+      throw AlterFSException("Path " + path.generic_string() + " is no directory");
+    }
+
+
+    for (auto &e : std::filesystem::directory_iterator(path))
+    {
+      std::filesystem::path childPath = e.path();
+      Delete(childPath);
+    }
+
+    try
+    {
+      if (!std::filesystem::remove(path))
+      {
+        throw AlterFSException("Unable to delete " + path.generic_string());
+      }
+    }
+    catch (const std::exception &e)
+    {
+      throw AlterFSException("Unable to delete " + path.generic_string());
+    }
+    m_tr.Attach(new SecureFSDeleteDirectory(path));
+  }
+
+
+  std::filesystem::path SecureFS::GetTempFile()
+  {
+    std::string randomName = std::string(QUuid::createUuid().toString().toLatin1().data());
+    std::string homePath = QDir::homePath().toLatin1().data();
+    std::string editorPath = homePath + "/CobalSKY-Editor";
+
+    if (!std::filesystem::create_directories(std::filesystem::path (editorPath)))
+    {
+      throw AlterFSException("Unable to create editor path: " + editorPath);
+    }
+
+    std::string tempPath = editorPath + "/" + randomName;
+
+    return std::filesystem::path(tempPath);
+  }
 }

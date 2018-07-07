@@ -37,7 +37,7 @@
      <item>
       <widget class="QPushButton" name="pbNewAsset">
        <property name="text">
-        <string>New Asset</string>
+        <string>New</string>
        </property>
       </widget>
      </item>

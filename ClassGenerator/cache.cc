@@ -266,7 +266,7 @@ void KnownClassesCache::Output()
     return;
   }
 
-  std::cout << "ClassCache has " << entries.size() << " entries" << std::endl;
+  //std::cout << "ClassCache has " << entries.size() << " entries" << std::endl;
   unsigned num = (unsigned)entries.size();
   fwrite(&num, sizeof(unsigned), 1, file);
   fwrite(entries.data(), sizeof(CacheClassEntry), num, file);

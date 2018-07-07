@@ -66,8 +66,7 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
   bool deleteOverloaded = dlg.IsDeleteOverloaded();
   bool deleteSuper = dlg.IsDeleteSuper();
 
-  const asset::model::VFSEntry *vfsEntry = entry->GetVFSEntry();
-  int entityPriority = vfsEntry->GetPriority();
+  int entityPriority = entry->GetVFSEntryPriority();
 
   const std::set<asset::model::Entry*> &otherEntries = entry->GetModel()->GetAllEntriesFor(entry->GetResourceLocator());
 
@@ -77,9 +76,7 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
 	{
 		for (auto deleteEntry : otherEntries)
 		{
-			const asset::model::VFSEntry *deleteVFSEntry = deleteEntry->GetVFSEntry();
-
-			int deletePriority = deleteVFSEntry->GetPriority();
+			int deletePriority = deleteEntry->GetVFSEntryPriority();
 
 			if (deletePriority < entityPriority && !deleteSuper)
 			{

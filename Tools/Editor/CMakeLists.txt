@@ -252,12 +252,12 @@ set(ASSETMODEL_SYNC_SOURCES
 	assetmodel/sync/assetmodifier.hh
 	assetmodel/sync/assetscanner.cc
 	assetmodel/sync/assetscanner.hh
-	assetmodel/sync/deletehandler.cc
-	assetmodel/sync/deletehandler.hh
+	#assetmodel/sync/deletehandler.cc
+	#assetmodel/sync/deletehandler.hh
 	assetmodel/sync/modelscanner.cc
 	assetmodel/sync/modelscanner.hh
-	assetmodel/sync/renamehandler.cc
-	assetmodel/sync/renamehandler.hh
+	#assetmodel/sync/renamehandler.cc
+	#assetmodel/sync/renamehandler.hh
 	assetmodel/sync/securefs.cc
 	assetmodel/sync/securefs.hh
 	)

@@ -108,29 +108,6 @@ namespace asset::model
 		return lowestPriority;
 	}
 
-	class AddCallback : public ModelTransaction::iCallback
-	{
-	public:
-		AddCallback(Model* model, Entry *parent, Entry *child)
-			: m_model(model)
-			, m_parent(parent)
-			, m_child(child)
-		{ }
-		void OnCommit() 
-		{
-			m_model->AddCommit(m_parent, m_child);
-		}
-		void OnRollback()
-		{
-			m_model->AddRollback(m_parent, m_child);
-		}
-
-	private:
-		Model * m_model;
-		Entry *m_parent;
-		Entry *m_child;
-	};
-
 	void Model::Add(asset::model::Entry *parent, asset::model::Entry *child, ModelTransaction &tr)
 	{
 		if (!parent || !child)
@@ -141,7 +118,8 @@ namespace asset::model
 		parent->AddChild(child);
 		InsertIntoEntryCache(child);
 
-		tr.Attach(new AddCallback(this, parent, child));
+    tr.OnCommit([this, parent, child]() {AddCommit(parent, child); });
+    tr.OnRollback([this, parent, child]() {AddRollback(parent, child); });
 	}
 
 	void Model::AddCommit(Entry *parent, Entry *child)
@@ -160,31 +138,6 @@ namespace asset::model
 		parent->RemoveChild(child);
 	}
 
-
-	class RemoveCallback : public ModelTransaction::iCallback
-	{
-	public:
-		RemoveCallback(Model* model, Entry *parent, Entry *child)
-			: m_model(model)
-			, m_parent(parent)
-			, m_child(child)
-		{ }
-
-		void OnCommit()
-		{
-			m_model->RemoveCommit(m_parent, m_child);
-		}
-		void OnRollback()
-		{
-			m_model->RemoveRollback(m_parent, m_child);
-		}
-
-	private:
-		Model * m_model;
-		Entry *m_parent;
-		Entry *m_child;
-	};
-
 	void Model::Remove(asset::model::Entry *parent, asset::model::Entry *child, ModelTransaction &tr)
 	{
 		if (!parent || !child || child->GetParent() != parent)
@@ -195,7 +148,8 @@ namespace asset::model
 		csResourceLocator oldLocator = child->GetResourceLocator();
 		parent->RemoveChild(child);
 
-		tr.Attach(new RemoveCallback(this, parent, child));
+    tr.OnCommit([this, parent, child]() { RemoveCommit(parent, child); });
+    tr.OnRollback([this, parent, child]() { RemoveRollback(parent, child); });
 	}
 
 	void Model::RemoveCommit(asset::model::Entry *parent, asset::model::Entry *child)
@@ -247,37 +201,52 @@ namespace asset::model
 		std::vector<Data> m_entries;
 	};
 
+  
 
 	void Model::Delete(Entry *entry, ModelTransaction &tr)
 	{
+    for (Entry *child : entry->GetChildren())
+    {
+      child->Delete(tr);
+    }
+
+
+    csResourceLocator locator = entry->GetResourceLocator();
+    tr.OnCommit([this, entry, locator]() { DeleteCommit(entry, locator); });
+    entry->RemoveFromParent(tr);
+
+    try
+    {
+      SecureFS secureFS(tr);
+      secureFS.Delete(locator);
+    }
+    catch (const std::exception &e)
+    {
+      throw ModelStateException("Unable to delete " + locator.GetText());
+    }
 
 	}
 
+  void Model::DeleteCommit(Entry *entry, const csResourceLocator &locator)
+  {
+    printf("DeleteCommit: %s <- %s\n",
+      entry->GetName().c_str(),
+      locator.GetText().c_str());
+    if (!locator.IsValid())
+    {
+      return;
+    }
 
-	class RenameCallback : public ModelTransaction::iCallback
-	{
-	public:
-		RenameCallback(Model* model, Entry *entry, const std::string &newName, TreeCollector treeCollector)
-			: m_model(model)
-			, m_entry(entry)
-			, m_newName(newName)
-			, m_treeCollector(treeCollector)
-		{ }
+    csResourceLocator anonLocator = locator.AsAnonymous();
+    emit EntryDeleted(entry, locator);
+    if (RemoveFromEntryCache(entry))
+    {
+      emit ResourceRemoved(anonLocator);
+      RemoveReference(anonLocator);
+    }
 
-		void OnCommit()
-		{
-			m_model->RenameCommit(m_entry, m_newName, m_treeCollector);
-		}
-		void OnRollback()
-		{
-		}
+  }
 
-	private:
-		Model * m_model;
-		Entry *m_entry;
-		std::string m_newName;
-		TreeCollector m_treeCollector;
-	};
 
 	void Model::Rename(Entry *entry, const std::string &name, ModelTransaction &tr)
 	{
@@ -301,10 +270,10 @@ namespace asset::model
 			throw ModelStateException(std::string("Unable to move ") + oldLocator.GetText() + std::string(" to ") + newLocator.GetText());
 		}
 
-		tr.Attach(new RenameCallback(this, entry, name, treeCollector));
+    tr.OnCommit([this, entry, name, treeCollector]() { RenameCommit(entry, name, treeCollector); });
 	}
 
-	void Model::RenameCommit(Entry *entry, const std::string &name, TreeCollector &treeCollector)
+	void Model::RenameCommit(Entry *entry, const std::string &name, TreeCollector treeCollector)
 	{
 		entry->SetName(name);
 		UpdateCollector(treeCollector);

@@ -27,9 +27,6 @@ namespace asset::model
 	class TreeCollector;
 	class Model : public QObject
 	{
-		friend class AddCallback;
-		friend class RemoveCallback;
-		friend class RenameCallback;
 		Q_OBJECT
 	public:
 		Model();
@@ -57,9 +54,10 @@ namespace asset::model
 		void AddReference(Entry *entry, const csResourceLocator &reference);
 
 	signals:
-		void EntryAdded(Entry *parent, Entry *child);
-		void EntryRemoved(Entry *parent, Entry *child);
-		void EntryRenamed(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+		void EntryAdded(asset::model::Entry *parent, asset::model::Entry *child);
+		void EntryRemoved(asset::model::Entry *parent, asset::model::Entry *child);
+		void EntryRenamed(asset::model::Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+    void EntryDeleted(asset::model::Entry *entry, const csResourceLocator &oldLocator);
 		void ResourceRemoved(const csResourceLocator &locator);
 		void ResourceRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 
@@ -68,7 +66,8 @@ namespace asset::model
 		void AddRollback(Entry *parent, Entry *child);
 		void RemoveCommit(Entry *parent, Entry *child);
 		void RemoveRollback(Entry *parent, Entry *child);
-		void RenameCommit(Entry *entry, const std::string &newName, TreeCollector &collector);
+    void DeleteCommit(Entry *entry, const csResourceLocator &locator);
+		void RenameCommit(Entry *entry, const std::string &newName, TreeCollector collector);
 
 		void UpdateCollector(TreeCollector &collector);
 		void UpdateCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
