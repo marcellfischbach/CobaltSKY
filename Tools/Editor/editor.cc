@@ -76,7 +76,7 @@ bool Editor::Initialize(int argc, char **argv)
   m_mainWindow->ShowWidget(renderWidget);
 
   m_assetManager = new AssetManagerWidget();
-  m_mainWindow->addDockWidget(Qt::BottomDockWidgetArea, new AssetManagerDock(m_mainWindow));
+  m_mainWindow->addDockWidget(Qt::LeftDockWidgetArea, new AssetManagerDock(m_mainWindow));
   //m_mainWindow->showMaximized();
   m_mainWindow->resize(1024, 768);
   m_mainWindow->setVisible(true);

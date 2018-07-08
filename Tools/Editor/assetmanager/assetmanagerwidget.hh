@@ -14,6 +14,7 @@ namespace asset::model
 	class Folder;
 	class AssetListModel;
   class FolderTreeModel;
+  class TreeModel;
 	class ViewDataModel;
 	class ViewEntry;
 }
@@ -67,7 +68,6 @@ private:
 //  AssetManagerContentItemDelegate *m_itemDelegate;
 
   asset::model::ViewDataModel *m_dataModel;
-  asset::model::FolderTreeModel *m_folderTreeModel;
-	asset::model::AssetListModel *m_assetListModel;
+  asset::model::TreeModel *m_treeModel;
 };
 

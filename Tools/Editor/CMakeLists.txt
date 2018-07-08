@@ -196,6 +196,8 @@ set(ASSETMANAGER_MODEL_SOURCES
 	assetmanager/model/assetlistmodel.hh
 	assetmanager/model/foldertreemodel.cc
 	assetmanager/model/foldertreemodel.hh
+	assetmanager/model/treemodel.cc
+	assetmanager/model/treemodel.hh
 	assetmanager/model/viewasset.cc
 	assetmanager/model/viewasset.hh
 	assetmanager/model/viewdatamodel.cc

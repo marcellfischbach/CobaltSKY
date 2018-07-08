@@ -11,6 +11,7 @@
 #include <assetmanager/import/assetmanagerimportmanager.hh>
 #include <assetmanager/model/assetlistmodel.hh>
 #include <assetmanager/model/foldertreemodel.hh>
+#include <assetmanager/model/treemodel.hh>
 #include <assetmanager/model/viewdatamodel.hh>
 #include <assetmanager/model/viewentry.hh>
 #include <assetmanager/model/viewfolder.hh>
@@ -35,24 +36,18 @@ AssetManagerWidget::AssetManagerWidget()
   m_gui.setupUi(this);
 
   m_dataModel = new asset::model::ViewDataModel();
-  m_folderTreeModel = new asset::model::FolderTreeModel();
-	m_assetListModel = new asset::model::AssetListModel(m_dataModel);
+  m_treeModel = new asset::model::TreeModel();
+  m_treeModel->SetViewDataModel(m_dataModel);
 
 
 
-  m_gui.treeView->setModel(m_folderTreeModel);
-  m_gui.listView->setModel(m_assetListModel);
+  m_gui.treeView->setModel(m_treeModel);
+  m_gui.toolButtonClearSearch->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogResetButton));
+  //m_gui.listView->setModel(m_assetListModel);
   //m_gui.listView->setItemDelegate(m_itemDelegate);
 
 
 
-  QRect size = Editor::Get()->GetScreenSize();
-  int width = size.width();
-  int treeSize = 300;
-
-  m_gui.splitter->setSizes(QList<int>() << treeSize << width - treeSize);
-  m_gui.splitter->setStretchFactor(0, 0);
-  m_gui.splitter->setStretchFactor(1, 1);
 }
 
 AssetManagerWidget::~AssetManagerWidget()
@@ -63,7 +58,8 @@ AssetManagerWidget::~AssetManagerWidget()
 void AssetManagerWidget::SetProject(Project *project)
 {
   m_dataModel->SetModel(project->GetModel());
-  m_folderTreeModel->SetViewDataModel(m_dataModel);
+  m_treeModel->SetViewDataModel(m_dataModel);
+  m_gui.treeView->setExpanded(m_treeModel->GetRootModelIndex(), true);
 }
 
 
@@ -79,6 +75,7 @@ void AssetManagerWidget::on_treeView_clicked(const QModelIndex &index)
 
 void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
+  /*
 	asset::model::ViewEntry *entry = m_folderTreeModel->GetEntry(index);
 	if (!entry)
 	{
@@ -94,6 +91,7 @@ void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 
 	asset::model::ViewFolder *folder = static_cast<asset::model::ViewFolder*>(entry);
 	m_assetListModel->SetFolder(folder);
+  */
 }
 
 
@@ -182,21 +180,26 @@ void AssetManagerWidget::RefreshContent()
 
 asset::model::Folder *AssetManagerWidget::GetCurrentFolder() const
 {
+  /*
 	asset::model::ViewFolder *viewFolder = m_assetListModel->GetFolder();
 	if (!viewFolder)
 	{
 		return 0;
 	}
 	return viewFolder->GetFolder();
+  */
+  return 0;
 }
 
 const csResourceLocator AssetManagerWidget::GetContentResource() const
 {
-  return m_assetListModel->GetResourceLocator();
+  return csResourceLocator();
+  //return m_assetListModel->GetResourceLocator();
 }
 
 std::string AssetManagerWidget::GetNewAssetName(const std::string& baseName) const
 {
+  /*
   csResourceLocator locator = m_assetListModel->GetResourceLocator();
   if (!locator.IsValid())
   {
@@ -218,6 +221,7 @@ std::string AssetManagerWidget::GetNewAssetName(const std::string& baseName) con
       return std::string((const char*)fileName.toLatin1());
     }
   }
+  */
   return std::string();
 }
 
@@ -252,6 +256,7 @@ std::string AssetManagerWidget::GetFilePath(const std::string &fileName) const
 const std::vector<asset::model::Asset*> AssetManagerWidget::GetSelectedAssets() const
 {
   std::vector<asset::model::Asset*> entries;
+  /*
 	for (auto index : m_gui.listView->selectionModel()->selection().indexes())
   {
     asset::model::ViewEntry *entry = m_assetListModel->GetEntry(index);
@@ -264,12 +269,14 @@ const std::vector<asset::model::Asset*> AssetManagerWidget::GetSelectedAssets() 
 			}
     }
   }
+  */
   return entries;
 }
 
 
 void AssetManagerWidget::on_pbNewAsset_clicked(bool)
 {
+  /*
   QMenu menu(m_gui.pbNewAsset);
   FillNewMenu(&menu);
 
@@ -288,6 +295,7 @@ void AssetManagerWidget::on_pbNewAsset_clicked(bool)
       RefreshContent();
     }
   }
+  */
 }
 
 
@@ -323,6 +331,7 @@ void AssetManagerWidget::FillNewMenu(QMenu *menu)
 
 void AssetManagerWidget::on_pbImport_clicked(bool)
 {
+  /*
   QString allFilters;
 
   QString allFormats = "All files (";
@@ -373,7 +382,7 @@ void AssetManagerWidget::on_pbImport_clicked(bool)
 
   connect(importerDialog, SIGNAL(accepted()), this, SLOT(on_importDialogAccepted()));
   importerDialog->show();
-
+  */
 }
 
 void AssetManagerWidget::on_importDialogAccepted()

@@ -59,15 +59,17 @@ int main (int argc, char **argv)
   }
 
 
-	if (false)
+	if (true)
 	{
 		qApp->setStyle(QStyleFactory::create("Fusion"));
 
+    /*
 		QPalette darkPalette;
 		darkPalette.setColor(QPalette::Window, QColor(53, 53, 53));
 		darkPalette.setColor(QPalette::WindowText, Qt::white);
 		darkPalette.setColor(QPalette::Base, QColor(25, 25, 25));
 		darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+		darkPalette.setColor(QPalette::AlternateBase, QColor(40, 40, 40));
 		darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
 		darkPalette.setColor(QPalette::ToolTipText, Qt::white);
 		darkPalette.setColor(QPalette::Text, Qt::white);
@@ -81,6 +83,7 @@ int main (int argc, char **argv)
 
 		qApp->setPalette(darkPalette);
 		qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+    */
 	}
 
 

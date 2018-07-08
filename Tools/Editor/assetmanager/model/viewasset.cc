@@ -34,4 +34,13 @@ namespace asset::model
   {
     return;
   }
+
+  const std::string ViewAsset::GetText() const
+  {
+    if (m_asset)
+    {
+      return m_asset->GetAssetName () + "(" + m_asset->GetAssetType() + ")";
+    }
+    return ViewEntry::GetText();
+  }
 }
