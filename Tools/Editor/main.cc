@@ -59,7 +59,7 @@ int main (int argc, char **argv)
   }
 
 
-	if (true)
+	if (false)
 	{
 		qApp->setStyle(QStyleFactory::create("Fusion"));
 

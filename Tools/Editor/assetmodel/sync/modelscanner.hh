@@ -6,10 +6,6 @@ namespace asset::model
   class Asset;
   class Folder;
   class Model;
-}
-
-namespace asset::model::sync
-{
   class ModelScanner
   {
   public:

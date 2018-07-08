@@ -26,5 +26,20 @@ namespace asset::model
     return this;
   }
 
+
+  bool VFSEntry::IsVFSEntry() const
+  {
+    return true;
+  }
+
+  VFSEntry *VFSEntry::AsVFSEntry()
+  {
+    return this;
+  }
+
+  const VFSEntry *VFSEntry::AsVFSEntry() const
+  {
+    return this;
+  }
 }
 

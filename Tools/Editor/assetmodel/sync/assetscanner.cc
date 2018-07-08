@@ -7,7 +7,7 @@
 #include <csfile/csfentry.hh>
 
 
-namespace asset::model::sync
+namespace asset::model
 {
   
   AssetScanner::AssetScanner(asset::model::Asset *asset)

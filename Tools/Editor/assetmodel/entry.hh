@@ -49,6 +49,10 @@ namespace asset::model
 		virtual Asset *AsAsset();
 		virtual const Asset*AsAsset() const;
 
+    virtual bool IsVFSEntry() const;
+    virtual VFSEntry *AsVFSEntry();
+    virtual const VFSEntry *AsVFSEntry() const;
+
 		virtual bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
 

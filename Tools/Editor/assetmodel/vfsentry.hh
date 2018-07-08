@@ -22,6 +22,10 @@ namespace asset::model
     int GetPriority() const;
 
 
+    virtual bool IsVFSEntry() const;
+    virtual VFSEntry *AsVFSEntry();
+    virtual const VFSEntry *AsVFSEntry() const;
+
   private:
     const csVFS::Entry &m_entry;
   };

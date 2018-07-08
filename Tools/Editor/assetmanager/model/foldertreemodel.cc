@@ -6,6 +6,9 @@
 #include <assetmanager/model/viewfolder.hh>
 #include <assetmanager/model/viewvfsentry.hh>
 #include <assetmodel/entry.hh>
+#include <QApplication>
+#include <QStyle>
+#include <QIcon>
 
 namespace asset::model
 {
@@ -121,13 +124,24 @@ namespace asset::model
 		{
 			return QVariant();
 		}
-		if (role != Qt::DisplayRole)
-		{
-			return QVariant();
-		}
+    ViewEntry *entry = reinterpret_cast<ViewEntry*>(index.internalPointer());
+    switch (role)
+    {
+    case Qt::DisplayRole:
+      return QString(entry->GetText().c_str());
 
-		ViewEntry *entry = reinterpret_cast<ViewEntry*>(index.internalPointer());
-		return QString(entry->GetText().c_str());
+    case Qt::DecorationRole:
+      if (entry->GetEntry()->IsVFSEntry())
+      {
+        return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+      }
+      if (entry->GetEntry()->IsFolder())
+      {
+        return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+      }
+      break;
+    }
+		return QVariant();
 	}
 
 

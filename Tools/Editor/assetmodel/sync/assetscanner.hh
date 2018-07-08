@@ -7,10 +7,6 @@ class csfEntry;
 namespace asset::model
 {
   class Asset;
-}
-
-namespace asset::model::sync
-{
   class AssetScanner
   {
   public:

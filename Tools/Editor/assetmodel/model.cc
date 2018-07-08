@@ -6,9 +6,10 @@
 #include <assetmodel/modeltransaction.hh>
 #include <assetmodel/root.hh>
 #include <assetmodel/vfsentry.hh>
-#include <assetmodel/sync/deletehandler.hh>
-#include <assetmodel/sync/renamehandler.hh>
+#include <assetmodel/sync/assetmodifier.hh>
 #include <assetmodel/sync/securefs.hh>
+
+#include <iostream>
 
 namespace asset::model
 {
@@ -222,6 +223,7 @@ namespace asset::model
     }
     catch (const std::exception &e)
     {
+      std::cout << "asset::model::Model: Unable to delete " << locator.GetText() << ": " << e.what() << std::endl;
       throw ModelStateException("Unable to delete " + locator.GetText());
     }
 
@@ -404,6 +406,12 @@ namespace asset::model
 
 		for (Entry *entry : referencingEntries)
 		{
+      Asset *asset = entry->AsAsset();
+      if (asset)
+      {
+        AssetModifier modifier(asset);
+        modifier.ClearLocator(anonLocator);
+      }
 			// reset the reference in all asset-files
 		}
 
@@ -420,10 +428,17 @@ namespace asset::model
 	void Model::RenameReference(const csResourceLocator &olLocator, const csResourceLocator &newLocator)
 	{
 		csResourceLocator oldAnonLocator = olLocator.AsAnonymous();
+		csResourceLocator newAnonLocator = newLocator.AsAnonymous();
 		std::set<Entry*> &referencingEntries = GetReferencing(oldAnonLocator);
 
 		for (Entry *entry : referencingEntries)
 		{
+      Asset *asset = entry->AsAsset();
+      if (asset)
+      {
+        AssetModifier modifier(asset);
+        modifier.ReplaceLocator(oldAnonLocator, newAnonLocator);
+      }
 			// reset the reference in all asset-files
 		}
 

@@ -179,4 +179,20 @@ namespace asset::model
 	{
 		return 0;
 	}
+
+
+  bool Entry::IsVFSEntry() const
+  {
+    return false;
+  }
+
+  VFSEntry *Entry::AsVFSEntry()
+  {
+    return 0;
+  }
+
+  const VFSEntry *Entry::AsVFSEntry() const
+  {
+    return 0;
+  }
 }

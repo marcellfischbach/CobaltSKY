@@ -17,7 +17,7 @@ namespace std
   namespace fs = filesystem;
 }
 
-namespace asset::model::sync
+namespace asset::model
 {
   ModelScanner::ModelScanner(asset::model::Model *model)
     : m_model(model)

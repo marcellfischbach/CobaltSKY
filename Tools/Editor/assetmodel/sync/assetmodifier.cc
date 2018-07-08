@@ -6,7 +6,7 @@
 #include <csfile/csffile.hh>
 
 
-namespace asset::model::sync
+namespace asset::model
 {
   AssetModifier::AssetModifier(asset::model::Asset *asset)
     : m_asset(asset)

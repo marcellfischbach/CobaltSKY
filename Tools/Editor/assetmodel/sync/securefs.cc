@@ -10,168 +10,215 @@
 namespace asset::model
 {
 
-	SecureFS::SecureFS(ModelTransaction &tr)
-		: m_tr(tr)
-	{
+  SecureFS::SecureFS(ModelTransaction &tr)
+    : m_tr(tr)
+  {
 
-	}
+  }
 
 
-	void SecureFS::Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
-	{
-		std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::CheckExistence));
-		std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
-		Move(oldPath, newPath);
-	}
+  void SecureFS::Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  {
+    std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::CheckExistence));
+    std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
+    Move(oldPath, newPath);
+  }
 
-	void SecureFS::Move(std::filesystem::path &oldPath, std::filesystem::path &newPath)
-	{
-		if (!std::filesystem::exists(oldPath))
-		{
-			throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
-		}
-		if (std::filesystem::exists(newPath) && std::filesystem::is_regular_file(newPath))
-		{
-			throw AlterFSException("Destination " + newPath.generic_string() + " already exists.");
-		}
+  void SecureFS::Move(std::filesystem::path &oldPath, std::filesystem::path &newPath)
+  {
+    if (!std::filesystem::exists(oldPath))
+    {
+      throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
+    }
+    if (std::filesystem::exists(newPath) && std::filesystem::is_regular_file(newPath))
+    {
+      throw AlterFSException("Destination " + newPath.generic_string() + " already exists.");
+    }
 
-		if (std::filesystem::is_directory(oldPath))
-		{
-			MoveDirectory(oldPath, newPath);
-		}
-		else if (std::filesystem::is_regular_file(oldPath))
-		{
-			MoveFile(oldPath, newPath);
-		}
-	}
+    if (std::filesystem::is_directory(oldPath))
+    {
+      MoveDirectory(oldPath, newPath);
+    }
+    else if (std::filesystem::is_regular_file(oldPath))
+    {
+      MoveFile(oldPath, newPath);
+    }
+  }
 
-	void SecureFS::MoveFile(std::filesystem::path &oldPath, std::filesystem::path &newPath)
-	{
-		if (!std::filesystem::exists(oldPath))
-		{
-			throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
-		}
-		if (!std::filesystem::is_regular_file(oldPath))
-		{
-			throw AlterFSException("Source " + oldPath.generic_string() + " is not a regular file");
-		}
-		if (std::filesystem::exists(newPath))
-		{
-			throw AlterFSException("Destination " + newPath.generic_string() + " already exists");
-		}
+  class SecureFSMoveFile : public ModelTransaction::iCallback
+  {
+  public:
+    SecureFSMoveFile(std::filesystem::path &oldPath, std::filesystem::path &newPath)
+      : ModelTransaction::iCallback()
+      , m_oldPath(oldPath)
+      , m_newPath(newPath)
+    {
 
-		try
-		{
-			if (!std::filesystem::copy_file(oldPath, newPath))
-			{
-				throw AlterFSException("Unable to copy " + oldPath.generic_string() + " to " + newPath.generic_string());
-			}
-		}
-		catch (const std::exception &e)
-		{
-			throw AlterFSException("Unable to copy " + oldPath.generic_string() + " to " + newPath.generic_string());
-		}
-	}
+    }
 
-	class SecureFSCreateDirectory : public ModelTransaction::iCallback
-	{
-	public:
-		SecureFSCreateDirectory(std::filesystem::path &oldPath, std::filesystem::path &newPath)
-			: ModelTransaction::iCallback()
-			, m_oldPath(oldPath)
-			, m_validNewPath(true)
-			, m_newPath(newPath)
-		{
+    virtual ~SecureFSMoveFile()
+    {
 
-		}
-		SecureFSCreateDirectory(std::filesystem::path &oldPath)
-			: ModelTransaction::iCallback()
-			, m_oldPath(oldPath)
-			, m_validNewPath(false)
-		{
+    }
 
-		}
+    void OnCommit()
+    {
+      try
+      {
+        std::filesystem::remove(m_oldPath);
+      }
+      catch (const std::exception &e)
+      {
 
-		virtual ~SecureFSCreateDirectory()
-		{
+      }
+    }
+    void OnRollback()
+    {
+      try
+      {
+        std::filesystem::remove(m_newPath);
+      }
+      catch (const std::exception &e)
+      {
 
-		}
+      }
+    }
 
-		void OnCommit()
-		{
-			try
-			{
-				std::filesystem::remove_all(m_oldPath);
-			}
-			catch (const std::exception &e)
-			{
+  private:
+    std::filesystem::path m_oldPath;
+    std::filesystem::path m_newPath;
+  };
 
-			}
-		}
-		void OnRollback()
-		{
-			if (m_validNewPath)
-			{
-				try
-				{
-					std::filesystem::remove_all(m_newPath);
-				}
-				catch (const std::exception &e)
-				{
 
-				}
-			}
-		}
+  void SecureFS::MoveFile(std::filesystem::path &oldPath, std::filesystem::path &newPath)
+  {
+    if (!std::filesystem::exists(oldPath))
+    {
+      throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
+    }
+    if (!std::filesystem::is_regular_file(oldPath))
+    {
+      throw AlterFSException("Source " + oldPath.generic_string() + " is not a regular file");
+    }
+    if (std::filesystem::exists(newPath))
+    {
+      throw AlterFSException("Destination " + newPath.generic_string() + " already exists");
+    }
 
-	private:
-		std::filesystem::path m_oldPath;
-		bool m_validNewPath;
-		std::filesystem::path m_newPath;
-	};
+    try
+    {
+      if (!std::filesystem::copy_file(oldPath, newPath))
+      {
+        throw AlterFSException("Unable to copy " + oldPath.generic_string() + " to " + newPath.generic_string());
+      }
+    }
+    catch (const std::exception &e)
+    {
+      throw AlterFSException("Unable to copy " + oldPath.generic_string() + " to " + newPath.generic_string());
+    }
 
-	void SecureFS::MoveDirectory(std::filesystem::path &oldPath, std::filesystem::path &newPath)
-	{
-		if (!std::filesystem::exists(oldPath))
-		{
-			throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
-		}
-		if (!std::filesystem::is_directory(oldPath))
-		{
-			throw AlterFSException("Source " + oldPath.generic_string() + " is not a directory");
-		}
-		if (std::filesystem::exists(newPath) && std::filesystem::is_regular_file(newPath))
-		{
-			throw AlterFSException("Destination " + newPath.generic_string() + " already exists");
-		}
+    m_tr.Attach(new SecureFSMoveFile(oldPath, newPath));
+  }
 
-		if (!std::filesystem::exists(newPath))
-		{
-			try
-			{
-				if (!std::filesystem::create_directories(newPath))
-				{
-					throw AlterFSException("Unable to create " + newPath.generic_string() + "  directory");
-				}
-			}
-			catch (const std::exception &e)
-			{
-				throw AlterFSException("Unable to create " + newPath.generic_string() + "  directory");
-			}
+  class SecureFSCreateDirectory : public ModelTransaction::iCallback
+  {
+  public:
+    SecureFSCreateDirectory(std::filesystem::path &oldPath, std::filesystem::path &newPath)
+      : ModelTransaction::iCallback()
+      , m_oldPath(oldPath)
+      , m_validNewPath(true)
+      , m_newPath(newPath)
+    {
 
-			m_tr.Attach(new SecureFSCreateDirectory(oldPath, newPath));
-		}
-		else
-		{
-			m_tr.Attach(new SecureFSCreateDirectory(oldPath));
-		}
+    }
+    SecureFSCreateDirectory(std::filesystem::path &oldPath)
+      : ModelTransaction::iCallback()
+      , m_oldPath(oldPath)
+      , m_validNewPath(false)
+    {
 
-		for (auto &e : std::filesystem::directory_iterator(oldPath))
-		{
-			std::filesystem::path oldEntryPath = e.path();
-			std::filesystem::path newEntryPath(newPath.generic_string() + "/" + oldEntryPath.filename().generic_string());
-			Move(oldEntryPath, newEntryPath);
-		}
-	}
+    }
+
+    virtual ~SecureFSCreateDirectory()
+    {
+
+    }
+
+    void OnCommit()
+    {
+      try
+      {
+        std::filesystem::remove_all(m_oldPath);
+      }
+      catch (const std::exception &e)
+      {
+
+      }
+    }
+    void OnRollback()
+    {
+      if (m_validNewPath)
+      {
+        try
+        {
+          std::filesystem::remove_all(m_newPath);
+        }
+        catch (const std::exception &e)
+        {
+
+        }
+      }
+    }
+
+  private:
+    std::filesystem::path m_oldPath;
+    bool m_validNewPath;
+    std::filesystem::path m_newPath;
+  };
+
+  void SecureFS::MoveDirectory(std::filesystem::path &oldPath, std::filesystem::path &newPath)
+  {
+    if (!std::filesystem::exists(oldPath))
+    {
+      throw AlterFSException("Source " + oldPath.generic_string() + " does not exsist");
+    }
+    if (!std::filesystem::is_directory(oldPath))
+    {
+      throw AlterFSException("Source " + oldPath.generic_string() + " is not a directory");
+    }
+    if (std::filesystem::exists(newPath) && std::filesystem::is_regular_file(newPath))
+    {
+      throw AlterFSException("Destination " + newPath.generic_string() + " already exists");
+    }
+
+    if (!std::filesystem::exists(newPath))
+    {
+      try
+      {
+        if (!std::filesystem::create_directories(newPath))
+        {
+          throw AlterFSException("Unable to create " + newPath.generic_string() + "  directory");
+        }
+      }
+      catch (const std::exception &e)
+      {
+        throw AlterFSException("Unable to create " + newPath.generic_string() + "  directory");
+      }
+
+      m_tr.Attach(new SecureFSCreateDirectory(oldPath, newPath));
+    }
+    else
+    {
+      m_tr.Attach(new SecureFSCreateDirectory(oldPath));
+    }
+
+    for (auto &e : std::filesystem::directory_iterator(oldPath))
+    {
+      std::filesystem::path oldEntryPath = e.path();
+      std::filesystem::path newEntryPath(newPath.generic_string() + "/" + oldEntryPath.filename().generic_string());
+      Move(oldEntryPath, newEntryPath);
+    }
+  }
 
 
   void SecureFS::Delete(const csResourceLocator &locator)
@@ -363,9 +410,13 @@ namespace asset::model
     std::string homePath = QDir::homePath().toLatin1().data();
     std::string editorPath = homePath + "/CobalSKY-Editor";
 
-    if (!std::filesystem::create_directories(std::filesystem::path (editorPath)))
+    std::filesystem::path path(editorPath);
+    if (!std::filesystem::exists(path))
     {
-      throw AlterFSException("Unable to create editor path: " + editorPath);
+      if (!std::filesystem::create_directories(std::filesystem::path(editorPath)))
+      {
+        throw AlterFSException("Unable to create editor path: " + editorPath);
+      }
     }
 
     std::string tempPath = editorPath + "/" + randomName;

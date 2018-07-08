@@ -21,7 +21,7 @@ void Project::Open(const std::string &projectPath)
   printf("Project opened\n");
 
   m_model = new asset::model::Model();
-  asset::model::sync::ModelScanner(m_model).Scan();
+  asset::model::ModelScanner(m_model).Scan();
 
   ProjectModel model;
   ProjectModelScanner scanner(&model);

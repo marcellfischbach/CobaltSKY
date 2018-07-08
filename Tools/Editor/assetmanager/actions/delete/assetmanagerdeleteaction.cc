@@ -9,6 +9,7 @@
 #include <vector>
 #include <QObject>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <iostream>
 
 AssetManagerDeleteAction::AssetManagerDeleteAction()
 	: AssetManagerAction()
@@ -54,9 +55,9 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
   }
   asset::model::Asset* entry = entries[0];
 
-
+  std::string entryName = entry->GetName();
   AssetManagerDeleteDialog dlg(assetManager);
-  dlg.SetAssetName(entry->GetName());
+  dlg.SetAssetName(entryName);
   int res = dlg.exec(); 
   if (res != QDialog::Accepted)
   {
@@ -94,6 +95,7 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
 	}
 	catch (const std::exception &e)
 	{
+    std::cout << "Unable to delete " << entryName << ": " << e.what() << std::endl;
 		tr.Rollback();
 	}
 
