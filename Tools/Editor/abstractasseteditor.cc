@@ -128,13 +128,6 @@ QString AbstractAssetEditor::GetResourceFileName() const
   return fileName;
 }
 
-QString AbstractAssetEditor::GetResourceDataFileName() const
-{
-  const csResourceLocator &loc = GetAssetDescriptor().GetLocator().AsData();
-  std::string absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
-  QString fileName(absFileName.c_str());
-  return fileName;
-}
 
 void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 {
@@ -148,6 +141,7 @@ void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const c
 
 void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
 {
+	/*
   csResourceLocator dataLocator = m_assetDescriptor.GetLocator().AsData();
 
   printf("image: %s\n", dataLocator.GetDebugName().c_str());
@@ -220,6 +214,7 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
   }
   AssetPreviewIconChangedEvent evt(m_assetDescriptor.GetLocator());
   EventBus::Get() << evt;
+	*/
 }
 
 void AbstractAssetEditor::UpdateMainWindow()

@@ -42,7 +42,7 @@ bool AssetManagerNewAction::PerformAction(AssetManagerWidget *widget) const
     return false;
   }
   csResourceLocator locator = folder->GetResourceLocator().WithFileSuffix(fileName);
-  printf("CreateAsset: %s\n", locator.GetText().c_str());
+  printf("CreateAsset: %s\n", locator.Encode().c_str());
   if (!locator.IsValid())
   {
     return false;

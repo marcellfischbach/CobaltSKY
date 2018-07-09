@@ -76,7 +76,7 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
   }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", assetLocator.GetText().c_str());
+  printf("  CSF: %s\n", assetLocator.Encode().c_str());
 
 
 
@@ -103,7 +103,7 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
   if (samplerLocator.IsValid())
   {
     csResourceLocator anonymous = samplerLocator.AsAnonymous();
-    samplerEntry->AddAttribute("locator", anonymous.GetText());
+    samplerEntry->AddAttribute("locator", anonymous.Encode());
   }
   else
   {

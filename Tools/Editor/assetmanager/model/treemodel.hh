@@ -33,7 +33,12 @@ namespace asset::model
     ViewEntry *GetEntry(const QModelIndex &index);
     const ViewEntry *GetEntry(const QModelIndex &index) const;
 
-
+		Qt::DropActions supportedDropActions() const;
+		Qt::ItemFlags flags(const QModelIndex &index) const;
+		QStringList mimeTypes() const;
+		QMimeData *mimeData(const QModelIndexList &indices) const;
+		bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const;
+		bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
   private slots:
     void EntryAdded(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
     void EntryAboutToRemove(asset::model::ViewEntry *parent, asset::model::ViewEntry *child);
@@ -41,6 +46,8 @@ namespace asset::model
 
 
   private:
+		void put(QDataStream &stream, const std::vector<Entry*> &entries) const;
+		void get(QDataStream &stream, std::vector<Entry*> &entries) const;
     void ConnectDataModel();
     void DisconnectDataModel();
 

@@ -72,7 +72,7 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
   }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", assetLocator.GetText().c_str());
+  printf("  CSF: %s\n", assetLocator.Encode().c_str());
 
 
 

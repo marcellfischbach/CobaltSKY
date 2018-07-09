@@ -39,6 +39,9 @@ AssetManagerWidget::AssetManagerWidget()
   m_treeModel = new asset::model::TreeModel();
   m_treeModel->SetViewDataModel(m_dataModel);
 
+	m_gui.treeView->setAcceptDrops(true);
+	m_gui.treeView->setDragEnabled(true);
+	m_gui.treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
 
   m_gui.treeView->setModel(m_treeModel);

@@ -6,9 +6,12 @@
 #include <assetmanager/model/viewfolder.hh>
 #include <assetmanager/model/viewvfsentry.hh>
 #include <assetmodel/entry.hh>
+#include <assetmodel/modeltransaction.hh>
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
+#include <QMimeData>
+#include <iostream>
 
 namespace asset::model
 {
@@ -327,4 +330,203 @@ namespace asset::model
   {
     endRemoveRows();
   }
+
+	Qt::DropActions TreeModel::supportedDropActions() const
+	{
+		return Qt::CopyAction;
+	}
+
+	Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
+	{
+		Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+
+		if (!index.isValid())
+		{
+			return defaultFlags;
+		}
+		ViewEntry *viewEntry = reinterpret_cast<ViewEntry*>(index.internalPointer());
+		if (!viewEntry)
+		{
+			return defaultFlags;
+		}
+
+		Qt::ItemFlags flags = defaultFlags;
+		Entry *entry = viewEntry->GetEntry();
+		if (entry->IsAsset()) 
+		{
+			flags |= Qt::ItemIsDragEnabled;
+		}
+		else if (entry->IsVFSEntry())
+		{
+			flags |= Qt::ItemIsDropEnabled;
+		}
+		else if (entry->IsFolder())
+		{
+			flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+		}
+			
+		return flags;
+	}
+
+	QStringList TreeModel::mimeTypes() const
+	{
+		QStringList types;
+		// types << "text";
+		types << "application/resourceLocator";
+		types << "application/resourceType";
+		types << "application/assetModelEntryPtr";
+		return types;
+	}
+
+	QMimeData *TreeModel::mimeData(const QModelIndexList &indices) const
+	{
+		QMimeData *mimeData = new QMimeData();
+		QByteArray encodedLocator;
+		QByteArray encodedTypes;
+		QByteArray encodedEntries;
+
+		QString text;
+		QDataStream locatorStream(&encodedLocator, QIODevice::WriteOnly);
+		QDataStream entryPtrStream(&encodedEntries, QIODevice::WriteOnly);
+		std::vector<Entry*> entries;
+		for (auto idx : indices)
+		{
+			if (idx.isValid ())
+			{
+				ViewEntry *viewEntry = reinterpret_cast<ViewEntry*>(idx.internalPointer());
+				if (viewEntry)
+				{
+					Entry *entry = viewEntry->GetEntry();
+					entries.push_back(entry);
+
+					QString resourceLocator(viewEntry->GetEntry()->GetResourceLocator().Encode().c_str());
+					locatorStream << resourceLocator;
+					if (text.length() != 0)
+					{
+						text += "|";
+					}
+					text += resourceLocator;
+				}
+			}
+		}
+
+		put(entryPtrStream, entries);
+
+		
+		mimeData->setText(text);
+		mimeData->setData("application/resourceLocator", encodedLocator);
+		mimeData->setData("application/assetModelEntryPtr", encodedEntries);
+		return mimeData;
+	}
+
+	bool TreeModel::canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const
+	{
+		if (!parent.isValid())
+		{
+			return false;;
+		}
+		ViewEntry *viewEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
+		if (!viewEntry)
+		{
+			return false;
+		}
+		Entry *dropEntry = viewEntry->GetEntry();
+
+		if (!data->hasFormat("application/assetModelEntryPtr"))
+		{
+			return false;
+		}
+
+		QByteArray &rawData = data->data("application/assetModelEntryPtr");
+		QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+		std::vector<Entry*> entries;
+		get(entriesStream, entries);
+
+
+		// check if we are dropping onto ow
+		for (Entry *entry : entries)
+		{
+			if (dropEntry->IsDescendentOf(entry))
+			{
+				return false;
+			}
+		}
+
+
+		return true;
+	}
+
+	bool TreeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+	{
+		if (!parent.isValid())
+		{
+			return false;;
+		}
+		ViewEntry *viewEntry = reinterpret_cast<ViewEntry*>(parent.internalPointer());
+		if (!viewEntry)
+		{
+			return false;
+		}
+		Entry *dropEntry = viewEntry->GetEntry();
+
+		if (!data->hasFormat("application/assetModelEntryPtr"))
+		{
+			return false;
+		}
+
+		std::cout << "Drop onto " << dropEntry->GetResourceLocator().Encode() << std::endl;
+
+		QByteArray &rawData = data->data("application/assetModelEntryPtr");
+		QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+		std::vector<Entry*> entries;
+		get(entriesStream, entries);
+
+		ModelTransaction tr;
+		try
+		{
+			for (Entry *entry : entries)
+			{
+				std::cout << "   " + entry->GetResourceLocator().Encode() << std::endl;
+				if (dropEntry->IsDescendentOf(entry))
+				{
+					continue;
+				}
+				entry->MoveTo(dropEntry, tr);
+			}
+
+			tr.Commit();
+		}
+		catch (const std::exception &e)
+		{
+			tr.Rollback();
+			std::cerr << "  Unable to drop onto " << dropEntry->GetResourceLocator().Encode() << ": " << e.what () << std::endl;
+		}
+
+		return true;
+	}
+
+
+		void TreeModel::put(QDataStream &stream, const std::vector<Entry*> &entries) const
+	{
+			stream << (quint32)entries.size();
+			for (Entry* entry : entries)
+			{
+				quint64 ptr = reinterpret_cast<quint64>(entry);
+				stream << ptr;
+			}
+
+	}
+	void TreeModel::get(QDataStream &stream, std::vector<Entry*> &entries) const
+	{
+		quint32 numEntries;
+		stream >> numEntries;
+		for (quint32 i = 0; i < numEntries; ++i)
+		{
+			quint64 ptr;
+			stream >> ptr;
+			Entry *entry = reinterpret_cast<Entry*>(ptr);
+			entries.push_back(entry);
+		}
+	}
+
 }

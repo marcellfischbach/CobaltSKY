@@ -146,7 +146,7 @@ void ProjectReferenceTree::StoreReferenceTree()
     ProjectAssetReference *asset = entry.second;
 
     csfEntry *assetEntry = file.CreateEntry("asset");
-    assetEntry->AddAttribute("locator", asset->GetResourceLocator().GetText());
+    assetEntry->AddAttribute("locator", asset->GetResourceLocator().Encode());
     assetEntry->AddAttribute("name", asset->GetName());
     assetEntry->AddAttribute("type", asset->GetTypeName());
     assetEntry->AddAttributeInt("priority", asset->GetPriority());
@@ -164,8 +164,8 @@ void ProjectReferenceTree::StoreReferenceTree()
     for (auto reference : references)
     {
       csfEntry *referenceEntry = file.CreateEntry("reference");
-      referenceEntry->AddAttribute("asset", asset->GetResourceLocator().GetText());
-      referenceEntry->AddAttribute("references", reference->GetResourceLocator().AsAnonymous().GetText());
+      referenceEntry->AddAttribute("asset", asset->GetResourceLocator().Encode());
+      referenceEntry->AddAttribute("references", reference->GetResourceLocator().AsAnonymous().Encode());
       referencesEntry->AddChild(referenceEntry);
     }
   }

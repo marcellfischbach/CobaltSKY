@@ -22,6 +22,7 @@ void AssetManagerRenameHandler::Register()
 
 void AssetManagerRenameHandler::HandleEvent(csEvent &event)
 {
+	/*
   AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
 
 
@@ -70,7 +71,7 @@ void AssetManagerRenameHandler::HandleEvent(csEvent &event)
   }
 
   
-
+	*/
 }
 
 void AssetManagerRenameHandler::Rename(const csResourceLocator &resource, const csResourceLocator &from, const csResourceLocator &to)
@@ -118,7 +119,7 @@ void AssetManagerRenameHandler::Rename(QDomDocument doc, QDomElement element, co
         if (thisLocator.AsFileName() == from.AsFileName())
         {
           csResourceLocator toRes(to.GetResourceFile(), thisLocator.GetResourceName(), to.GetResourceEntry());
-          QDomText newText = doc.createTextNode(QString(toRes.GetText().c_str()));
+          QDomText newText = doc.createTextNode(QString(toRes.Encode().c_str()));
 
           element.replaceChild(newText, textNode);
         }

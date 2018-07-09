@@ -36,11 +36,11 @@ namespace asset::model
   {
     if (entry->HasAttribute("locator"))
     {
-      if (entry->GetAttribute("locator") == oldLocator.GetText())
+      if (entry->GetAttribute("locator") == oldLocator.Encode())
       {
         size_t idx = entry->GetAttributeIndex("locator");
         entry->RemoveAttribute(idx);
-        entry->AddAttribute("locator", newLocator.GetText());
+        entry->AddAttribute("locator", newLocator.Encode());
       }
     }
 

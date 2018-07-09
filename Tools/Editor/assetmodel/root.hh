@@ -19,7 +19,9 @@ namespace asset::model
 
     virtual csResourceLocator GetResourceLocator() const;
 
-
+		virtual bool IsRoot() const;
+		virtual Root *AsRoot();
+		virtual const Root *AsRoot() const;
   };
 
 }

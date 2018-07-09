@@ -245,7 +245,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     csfEntry *meshProperty = outputFile.CreateEntry("property");
     meshProperty->AddAttribute("name", "Mesh");
     meshProperty->AddAttribute("type", "resource");
-    meshProperty->AddAttribute("locator", meshLocator.AsAnonymous().GetText());
+    meshProperty->AddAttribute("locator", meshLocator.AsAnonymous().Encode());
     entityStateEntry->AddChild(meshProperty);
 
     for (auto materials : m_materialNames)
@@ -265,7 +265,7 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
     csfEntry *colliderProperty = outputFile.CreateEntry("property");
     colliderProperty->AddAttribute("name", "Collider");
     colliderProperty->AddAttribute("type", "resource");
-    colliderProperty->AddAttribute("locator", colliderLocator.AsAnonymous().GetText());
+    colliderProperty->AddAttribute("locator", colliderLocator.AsAnonymous().Encode());
     entityStateEntry->AddChild(colliderProperty);
   }
 

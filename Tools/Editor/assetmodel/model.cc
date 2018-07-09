@@ -93,7 +93,7 @@ namespace asset::model
 		auto it = m_entries.find(anonLocator);
 		if (it == m_entries.end())
 		{
-			throw NoSuchLocatorException(locator.GetText());
+			throw NoSuchLocatorException(locator.Encode());
 		}
 
 		int lowestPriority = INT_MAX;
@@ -202,6 +202,71 @@ namespace asset::model
 		std::vector<Data> m_entries;
 	};
 
+
+	void Model::Move(Entry *oldParent, Entry *newParent, Entry *child, ModelTransaction &tr)
+	{
+		if (!oldParent || !newParent || !child || oldParent == newParent)
+		{
+			return;
+		}
+		TreeCollector treeCollector(child);
+		csResourceLocator oldLocator = child->GetResourceLocator();
+		csResourceLocator newLocator = newParent->CreateResourceLocator(child->GetName());
+
+		SecureFS secureFS(tr);
+		try
+		{
+			secureFS.Move(oldLocator, newLocator);
+		}
+		catch (const std::exception &e)
+		{
+			throw ModelStateException("Unable to move " + oldLocator.Encode() + " to " + newLocator.Encode());
+		}
+
+		MergePath(oldParent, newParent, child, tr);
+		tr.OnCommit([this, treeCollector]() {MoveCommit(treeCollector); });
+	}
+
+	void Model::MoveCommit(TreeCollector treeCollector)
+	{
+		UpdateCollector(treeCollector);
+	}
+
+	void Model::MergePath(Entry *oldParent, Entry *newParent, Entry *child, ModelTransaction &tr)
+	{
+		if (!oldParent || !newParent || !child || oldParent == newParent)
+		{
+			return;
+		}
+		if (child->IsVFSEntry () || child->IsRoot())
+		{
+			return;
+		}
+
+		if (child->IsAsset())
+		{
+			Remove(oldParent, child, tr);
+			Add(newParent, child, tr);
+		}
+		else if (child->IsFolder())
+		{
+			Entry *existingEntry = newParent->GetChildByName(child->GetName());
+			if (!existingEntry)
+			{
+				Remove(oldParent, child, tr);
+				Add(newParent, child, tr);
+			}
+			else
+			{
+				std::vector<Entry*> children = child->GetChildren();
+				for (Entry *childEntry : children)
+				{
+					MergePath(child, existingEntry, childEntry, tr);
+				}
+				Remove(oldParent, child, tr);
+			}
+		}
+	}
   
 
 	void Model::Delete(Entry *entry, ModelTransaction &tr)
@@ -223,8 +288,8 @@ namespace asset::model
     }
     catch (const std::exception &e)
     {
-      std::cout << "asset::model::Model: Unable to delete " << locator.GetText() << ": " << e.what() << std::endl;
-      throw ModelStateException("Unable to delete " + locator.GetText());
+      std::cout << "asset::model::Model: Unable to delete " << locator.Encode() << ": " << e.what() << std::endl;
+      throw ModelStateException("Unable to delete " + locator.Encode());
     }
 
 	}
@@ -233,7 +298,7 @@ namespace asset::model
   {
     printf("DeleteCommit: %s <- %s\n",
       entry->GetName().c_str(),
-      locator.GetText().c_str());
+      locator.Encode().c_str());
     if (!locator.IsValid())
     {
       return;
@@ -269,7 +334,7 @@ namespace asset::model
 		}
 		catch (const std::exception &e)
 		{
-			throw ModelStateException(std::string("Unable to move ") + oldLocator.GetText() + std::string(" to ") + newLocator.GetText());
+			throw ModelStateException(std::string("Unable to move ") + oldLocator.Encode() + std::string(" to ") + newLocator.Encode());
 		}
 
     tr.OnCommit([this, entry, name, treeCollector]() { RenameCommit(entry, name, treeCollector); });

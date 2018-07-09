@@ -134,7 +134,7 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
   if (materialDef)
   {
     csResourceLocator materialDefLocator = csResourceManager::Get()->GetLocator(materialDef);
-    materialDefEntry->AddAttribute("locator", materialDefLocator.GetText());
+    materialDefEntry->AddAttribute("locator", materialDefLocator.Encode());
   }
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
@@ -184,7 +184,7 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
       {
         csResourceLocator loc = csResourceManager::Get()->GetLocator(m_material->GetTexture(i));
         parameterEntry->AddChild(file.CreateEntry("locator"))
-            ->AddAttribute("locator", loc.GetText());
+            ->AddAttribute("locator", loc.Encode());
       }
       break;
     }
