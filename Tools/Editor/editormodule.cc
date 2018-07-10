@@ -9,12 +9,16 @@
 #include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/rename/assetmanagerrenameaction.hh>
 #include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
+#include <assetmanager/contextmenu/contextmenuhandler.hh>
 
 #include <assetmanager/import/assetmanagerimportmanager.hh>
+#include <editors/materialeditor/materialeditorcontextmenufactory.hh>
 #include <editors/materialeditor/materialeditornewaction.hh>
 #include <editors/materialeditor/materialeditorfactory.hh>
+#include <editors/samplereditor/samplereditorcontextmenufactory.hh>
 #include <editors/samplereditor/samplereditorfactory.hh>
 #include <editors/samplereditor/samplereditornewaction.hh>
+#include <editors/shadergrapheditor/shadergrapheditorcontextmenufactory.hh>
 #include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
 #include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
 #include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
@@ -44,6 +48,11 @@ void EditorModule::Initialize()
   editor->AddImporterFactory(new ImageImporterFactory());
   editor->AddImporterFactory(new ModelImporterFactory());
 
+	asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();
+	contextMenu->AddFactory(new MaterialEditorContextMenuFactory());
+	contextMenu->AddFactory(new SamplerEditorContextMenuFactory());
+	contextMenu->AddFactory(new ShaderGraphEditorContextMenuFactory());
+	
   AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
   actionManager->RegisterNewAction(new MaterialEditorNewAction());
   actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());

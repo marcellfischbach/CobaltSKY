@@ -6,6 +6,7 @@
 #include <assetmanager/assetmanageraction.hh>
 #include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/actions/assetmanagernewaction.hh>
+#include <assetmanager/contextmenu/contextmenuhandler.hh>
 #include <assetmanager/import/assetmanagerimporter.hh>
 #include <assetmanager/import/assetmanagerimporterdialog.hh>
 #include <assetmanager/import/assetmanagerimportmanager.hh>
@@ -30,24 +31,25 @@
 
 
 AssetManagerWidget::AssetManagerWidget()
-  : QWidget()
-  , m_logger("AssetManagerWidget")
+	: QWidget()
+	, m_logger("AssetManagerWidget")
 {
-  m_gui.setupUi(this);
+	m_gui.setupUi(this);
 
-  m_dataModel = new asset::model::ViewDataModel();
-  m_treeModel = new asset::model::TreeModel();
-  m_treeModel->SetViewDataModel(m_dataModel);
+	m_dataModel = new asset::model::ViewDataModel();
+	m_treeModel = new asset::model::TreeModel();
+	m_treeModel->SetViewDataModel(m_dataModel);
 
 	m_gui.treeView->setAcceptDrops(true);
 	m_gui.treeView->setDragEnabled(true);
 	m_gui.treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+	m_gui.treeView->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
-  m_gui.treeView->setModel(m_treeModel);
-  m_gui.toolButtonClearSearch->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogResetButton));
-  //m_gui.listView->setModel(m_assetListModel);
-  //m_gui.listView->setItemDelegate(m_itemDelegate);
+	m_gui.treeView->setModel(m_treeModel);
+	m_gui.toolButtonClearSearch->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogResetButton));
+	//m_gui.listView->setModel(m_assetListModel);
+	//m_gui.listView->setItemDelegate(m_itemDelegate);
 
 
 
@@ -60,25 +62,25 @@ AssetManagerWidget::~AssetManagerWidget()
 
 void AssetManagerWidget::SetProject(Project *project)
 {
-  m_dataModel->SetModel(project->GetModel());
-  m_treeModel->SetViewDataModel(m_dataModel);
-  m_gui.treeView->setExpanded(m_treeModel->GetRootModelIndex(), true);
+	m_dataModel->SetModel(project->GetModel());
+	m_treeModel->SetViewDataModel(m_dataModel);
+	m_gui.treeView->setExpanded(m_treeModel->GetRootModelIndex(), true);
 }
 
 
 void AssetManagerWidget::on_treeView_activated(const QModelIndex &index)
 {
-  SelectIndex(index);
+	SelectIndex(index);
 }
 
 void AssetManagerWidget::on_treeView_clicked(const QModelIndex &index)
 {
-  SelectIndex(index);
+	SelectIndex(index);
 }
 
 void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 {
-  /*
+	/*
 	asset::model::ViewEntry *entry = m_folderTreeModel->GetEntry(index);
 	if (!entry)
 	{
@@ -94,20 +96,33 @@ void AssetManagerWidget::SelectIndex(const QModelIndex &index)
 
 	asset::model::ViewFolder *folder = static_cast<asset::model::ViewFolder*>(entry);
 	m_assetListModel->SetFolder(folder);
-  */
+	*/
 }
 
 
 void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
 {
 	/*
-  csResourceLocator locator = m_contentModel->GetLocator(index);
-  if (!locator.IsValid())
-  {
-    return;
-  }
-  OpenAsset(locator);
+	csResourceLocator locator = m_contentModel->GetLocator(index);
+	if (!locator.IsValid())
+	{
+		return;
+	}
+	OpenAsset(locator);
 	*/
+}
+
+void AssetManagerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
+{
+	QModelIndex index = m_gui.treeView->indexAt(pos);
+	asset::model::ViewEntry *viewEntry = m_treeModel->GetEntry(index);
+	asset::model::Entry *entry = viewEntry ? viewEntry->GetEntry() : 0;
+
+	QMenu *menu = asset::contextmenu::Handler::Get()->BuildContextMenu(entry);
+
+	menu->exec(m_gui.treeView->mapToGlobal(pos));
+	delete menu;
+
 }
 
 void AssetManagerWidget::on_listView_customContextMenuRequested(const QPoint &pos)

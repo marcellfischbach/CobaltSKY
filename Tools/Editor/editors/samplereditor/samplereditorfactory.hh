@@ -15,3 +15,5 @@ public:
   virtual iAssetEditor *CreateEditor(iObject *object, const AssetDescriptor &descriptor) const;
 
 };
+
+

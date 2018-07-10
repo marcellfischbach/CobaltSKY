@@ -165,6 +165,28 @@ source_group(
 
 
 
+set(ASSETMANAGER_CONTEXTMENU_SOURCES
+    assetmanager/contextmenu/contextmenubuilder.cc
+    assetmanager/contextmenu/contextmenubuilder.hh
+    assetmanager/contextmenu/contextmenucategory.cc
+    assetmanager/contextmenu/contextmenucategory.hh
+    assetmanager/contextmenu/contextmenuentry.cc
+    assetmanager/contextmenu/contextmenuentry.hh
+    assetmanager/contextmenu/contextmenuhandler.cc
+    assetmanager/contextmenu/contextmenuhandler.hh
+    )
+
+set(ASSETMANAGER_CONTEXTMENU_UI
+    )
+    
+source_group(
+    "editor\\assetmanager\\contextmenu"
+    FILES
+    ${ASSETMANAGER_CONTEXTMENU_SOURCES}
+    ${ASSETMANAGER_CONTEXTMENU_UI}
+    )
+
+
 
 set(ASSETMANAGER_IMPORT_SOURCES
     assetmanager/import/assetmanagerimporter.hh
@@ -299,6 +321,8 @@ source_group(
 set(EDITORS_SAMPLEREDITOR_SOURCES
     editors/samplereditor/samplereditor.cc
     editors/samplereditor/samplereditor.hh
+    editors/samplereditor/samplereditorcontextmenufactory.cc
+    editors/samplereditor/samplereditorcontextmenufactory.hh
     editors/samplereditor/samplereditorfactory.cc
     editors/samplereditor/samplereditorfactory.hh
     editors/samplereditor/samplereditornewaction.cc
@@ -324,6 +348,8 @@ source_group(
 set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditor.cc
     editors/shadergrapheditor/shadergrapheditor.hh
+    editors/shadergrapheditor/shadergrapheditorcontextmenufactory.cc
+    editors/shadergrapheditor/shadergrapheditorcontextmenufactory.hh
     editors/shadergrapheditor/shadergrapheditorfactory.cc
     editors/shadergrapheditor/shadergrapheditorfactory.hh
     editors/shadergrapheditor/shadergrapheditormeta.cc
@@ -521,6 +547,8 @@ source_group(
 set(EDITORS_MATERIALEDITOR_SOURCES
     editors/materialeditor/materialeditor.cc
     editors/materialeditor/materialeditor.hh
+    editors/materialeditor/materialeditorcontextmenufactory.cc
+    editors/materialeditor/materialeditorcontextmenufactory.hh
     editors/materialeditor/materialeditorfactory.cc
     editors/materialeditor/materialeditorfactory.hh
     editors/materialeditor/materialeditornewaction.cc
@@ -620,6 +648,7 @@ set(ALL_UI
     ${ASSETMANAGER_UI}
     ${ASSETMANAGER_ACTIONS_DELETE_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
+    ${ASSETMANAGER_CONTEXTMENU_UI}
     ${ASSETMANAGER_IMPORT_UI}
     ${COMPONENTS_UI}
     ${EDITORS_MATERIALEDITOR_UI}
@@ -642,6 +671,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
     ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
+    ${ASSETMANAGER_CONTEXTMENU_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}
