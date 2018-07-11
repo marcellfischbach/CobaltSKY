@@ -4,10 +4,51 @@
 #include <assetmanager/contextmenu/contextmenucategory.hh>
 #include <assetmanager/contextmenu/contextmenuentry.hh>
 #include <QMenu>
-
+#include <iostream>
 
 namespace asset::contextmenu
 {
+
+
+	ContextMenuResult::ContextMenuResult(QMenu *menu, Folder *folder)
+		: m_menu(menu)
+		, m_folder(folder)
+	{
+	}
+
+	ContextMenuResult::ContextMenuResult(ContextMenuResult && other)
+	{
+		m_menu = other.m_menu;
+		m_folder = other.m_folder;
+		other.m_folder = 0;
+		other.m_menu = 0;
+	}
+
+	ContextMenuResult::~ContextMenuResult()
+	{
+		if (m_menu)
+		{
+			delete m_menu;
+			m_menu = 0;
+		}
+		if (m_folder)
+		{
+			delete m_folder;
+			m_folder = 0;
+		}
+	}
+
+	QMenu *ContextMenuResult::GetMenu()
+	{
+		return m_menu;
+	}
+
+	QMenu *ContextMenuResult::operator->()
+	{
+		return m_menu;
+	}
+
+
 
 	Handler::Handler()
 	{
@@ -43,7 +84,12 @@ namespace asset::contextmenu
 		}
 	}
 
-	QMenu *Handler::BuildContextMenu(asset::model::Entry *entry) const
+	Folder *Handler::CreateRoot() const
+	{
+		return new Folder(Category::Root(), "");
+	}
+
+	ContextMenuResult Handler::BuildContextMenu(asset::model::Entry *entry) const
 	{
 		std::vector<asset::contextmenu::Entry*> contextEntries;
 		Folder *root = new Folder(Category::Root(), "");
@@ -56,9 +102,7 @@ namespace asset::contextmenu
 			}
 		}
 
-		QMenu *menu = builder.Create();
-		delete root;
-		return menu;
+		return ContextMenuResult(builder.Create(), root);
 	}
 
 

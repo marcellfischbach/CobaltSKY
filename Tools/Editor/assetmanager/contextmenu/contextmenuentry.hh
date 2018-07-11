@@ -5,6 +5,12 @@
 #include <vector>
 #include <string>
 #include <exception>
+#include <functional>
+
+namespace asset
+{
+	struct ActionCallback;
+}
 
 namespace asset::contextmenu
 {
@@ -79,13 +85,21 @@ namespace asset::contextmenu
 		virtual Action *AsAction();
 		virtual const Action *AsAction() const;
 		virtual Action *AsNewAction() const;
+		
+		void Callback();
+
+		Action *SetAction(asset::ActionCallback *action);
+		asset::ActionCallback *GetAction();
+		const asset::ActionCallback *GetAction() const;
 
 		virtual bool Matches(const Entry *other) const;
 
 
 	private:
 		std::string m_name;
+		asset::ActionCallback *m_action;
 	};
+
 
 	class EntryMergeException : public std::exception
 	{

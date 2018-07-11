@@ -118,10 +118,10 @@ void AssetManagerWidget::on_treeView_customContextMenuRequested(const QPoint &po
 	asset::model::ViewEntry *viewEntry = m_treeModel->GetEntry(index);
 	asset::model::Entry *entry = viewEntry ? viewEntry->GetEntry() : 0;
 
-	QMenu *menu = asset::contextmenu::Handler::Get()->BuildContextMenu(entry);
+	asset::contextmenu::ContextMenuResult menu = asset::contextmenu::Handler::Get()->BuildContextMenu(entry);
 
 	menu->exec(m_gui.treeView->mapToGlobal(pos));
-	delete menu;
+	std::cout << "Close menu\n";
 
 }
 

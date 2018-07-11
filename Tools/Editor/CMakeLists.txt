@@ -112,15 +112,24 @@ source_group(
 
 
 set(ASSETMANAGER_ACTIONS_SOURCES
+    assetmanager/actions/assetmanageractioncallback.hh
     assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
+    assetmanager/actions/assetmanagernewassetaction.cc
+    assetmanager/actions/assetmanagernewassetaction.hh
+    assetmanager/actions/assetmanagernewassetdialog.cc
+    assetmanager/actions/assetmanagernewassetdialog.hh
     )
 
+set(ASSETMANAGER_ACTIONS_UI
+	assetmanager/actions/assetmanagernewassetdialog.ui
+	)
     
 source_group(
     "editor\\assetmanager\\actions"
     FILES
     ${ASSETMANAGER_ACTIONS_SOURCES}
+    ${ASSETMANAGER_ACTIONS_UI}
     )
 
 
@@ -646,7 +655,8 @@ source_group(
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
-    ${ASSETMANAGER_ACTIONS_DELETE_UI}
+    ${ASSETMANAGER_ACTIONS_UI}
+	${ASSETMANAGER_ACTIONS_DELETE_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
     ${ASSETMANAGER_CONTEXTMENU_UI}
     ${ASSETMANAGER_IMPORT_UI}

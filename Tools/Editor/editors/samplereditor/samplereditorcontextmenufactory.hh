@@ -8,4 +8,5 @@ class SamplerEditorContextMenuFactory : public asset::contextmenu::Handler::Item
 
 public:
 	void Create(asset::model::Entry *entry, asset::contextmenu::Builder contextEntries);
+
 };

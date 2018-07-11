@@ -1,6 +1,7 @@
 	
 
 #include <assetmanager/contextmenu/contextmenuentry.hh>
+#include <assetmanager/actions/assetmanageractioncallback.hh>
 #include <algorithm>
 
 
@@ -231,6 +232,7 @@ namespace asset::contextmenu
 	Action::Action(const Category &category, const std::string &name)
 		: Entry(category)
 		, m_name(name)
+		, m_action(0)
 	{
 
 	}
@@ -238,6 +240,10 @@ namespace asset::contextmenu
 	// ///////////////////////////////////////////////////////////////////////
 	Action::~Action()
 	{
+		if (m_action)
+		{
+			delete m_action;
+		}
 	}
 
 
@@ -274,6 +280,24 @@ namespace asset::contextmenu
 		return new Action(GetCategory(), GetName());
 	}
 
+	// ///////////////////////////////////////////////////////////////////////
+	Action *Action::SetAction(asset::ActionCallback *action)
+	{
+		m_action = action;
+		return this;
+	}
+
+	// ///////////////////////////////////////////////////////////////////////
+	asset::ActionCallback *Action::GetAction()
+	{
+		return m_action;
+	}
+
+	// ///////////////////////////////////////////////////////////////////////
+	const asset::ActionCallback *Action::GetAction() const
+	{
+		return m_action;
+	}
 
 	// ///////////////////////////////////////////////////////////////////////
 	bool Action::Matches(const Entry *other) const
@@ -281,6 +305,14 @@ namespace asset::contextmenu
 		return false;
 	}
 
+	// ///////////////////////////////////////////////////////////////////////
+	void Action::Callback()
+	{
+		if (m_action)
+		{
+			m_action->Callback();
+		}
+	}
 
 
 	EntryMerger::EntryMerger()

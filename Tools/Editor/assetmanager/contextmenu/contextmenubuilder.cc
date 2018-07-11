@@ -69,6 +69,11 @@ namespace asset::contextmenu
 			{
 				Action *childAction = child->AsAction();
 				QAction *qAction = menu->addAction(QString(childAction->GetName().c_str()));
+
+				if (childAction->GetAction())
+				{
+					QObject::connect(qAction, &QAction::triggered, [childAction]() {childAction->Callback(); });
+				}
 				// connect the qAction somehow with the action
 			}
 			else if (child->IsFolder())

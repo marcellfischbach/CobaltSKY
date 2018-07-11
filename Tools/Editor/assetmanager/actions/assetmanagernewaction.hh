@@ -7,6 +7,7 @@
 namespace asset::model
 {
 	class Folder;
+
 }
 
 class AssetManagerNewAction : public AssetManagerAction
