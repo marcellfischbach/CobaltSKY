@@ -5,6 +5,9 @@
 #include <iasseteditor.hh>
 #include <editor.hh>
 #include <project/project.hh>
+#include <iostream>
+#include <QThread>
+#include <QTimer>
 
 MainWindow::MainWindow()
   : QMainWindow()
@@ -30,10 +33,11 @@ MainWindow::~MainWindow()
 
 bool MainWindow::ShowEditor(iAssetEditor *editor)
 {
-  if (!editor)
-  {
-    return false;
-  }
+	std::cout << "MainWindow::ShowEditor in " << QThread::currentThreadId() << std::endl;
+	if (!editor)
+	{
+		return false;
+	}
 
   QWidget *widget = editor->GetWidget();
   int idx = m_gui.tabWidget->indexOf(widget);

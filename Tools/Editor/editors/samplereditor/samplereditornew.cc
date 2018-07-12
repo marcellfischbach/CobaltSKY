@@ -1,8 +1,8 @@
 
 
-#include <editors/samplereditor/samplereditorcontextmenufactory.hh>
+#include <editors/samplereditor/samplereditornew.hh>
 #include <assetmanager/contextmenu/contextmenuentry.hh>
-#include <assetmanager/actions/assetmanagernewassetaction.hh>
+#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
 #include <iostream>
 #include <QMessageBox>
 #include <editor.hh>
@@ -16,14 +16,14 @@ void SamplerEditorContextMenuFactory::Create(asset::model::Entry *entry, asset::
 	asset::contextmenu::Action* action = builder
 		.GetFolder(asset::contextmenu::Category::New(), "New")
 		.AddAction(asset::contextmenu::Category::Default(), "Sampler")
-		->SetAction(new asset::NewAssetAction(new SamplerCreator("Sampler", "Sampler"), entry));
+		->SetAction(new asset::actions::NewAssetAction(new SamplerCreator("Sampler", "Sampler"), entry));
 }
 
 
 
 
 SamplerCreator::SamplerCreator(const std::string &name, const std::string &defaultName)
-	: asset::NewAssetCreator(name, defaultName, "sampler")
+	: asset::actions::NewAssetCreator(name, defaultName, "sampler")
 {
 
 }

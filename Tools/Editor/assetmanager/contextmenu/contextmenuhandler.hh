@@ -35,6 +35,7 @@ namespace asset::contextmenu
 	public:
 		struct ItemFactory
 		{
+			virtual ~ItemFactory () { }
 			virtual void Create(asset::model::Entry *entry, Builder builder) = 0;
 		};
 

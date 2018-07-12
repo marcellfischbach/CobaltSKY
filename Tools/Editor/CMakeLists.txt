@@ -115,21 +115,13 @@ set(ASSETMANAGER_ACTIONS_SOURCES
     assetmanager/actions/assetmanageractioncallback.hh
     assetmanager/actions/assetmanagernewaction.cc
     assetmanager/actions/assetmanagernewaction.hh
-    assetmanager/actions/assetmanagernewassetaction.cc
-    assetmanager/actions/assetmanagernewassetaction.hh
-    assetmanager/actions/assetmanagernewassetdialog.cc
-    assetmanager/actions/assetmanagernewassetdialog.hh
     )
 
-set(ASSETMANAGER_ACTIONS_UI
-	assetmanager/actions/assetmanagernewassetdialog.ui
-	)
     
 source_group(
     "editor\\assetmanager\\actions"
     FILES
     ${ASSETMANAGER_ACTIONS_SOURCES}
-    ${ASSETMANAGER_ACTIONS_UI}
     )
 
 
@@ -150,6 +142,25 @@ source_group(
     FILES
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_UI}
+    )
+
+
+set(ASSETMANAGER_ACTIONS_NEW_SOURCES
+    assetmanager/actions/new/assetmanagernewassetaction.cc
+    assetmanager/actions/new/assetmanagernewassetaction.hh
+    assetmanager/actions/new/assetmanagernewassetdialog.cc
+    assetmanager/actions/new/assetmanagernewassetdialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_NEW_UI
+	assetmanager/actions/new/assetmanagernewassetdialog.ui
+	)
+    
+source_group(
+    "editor\\assetmanager\\actions\\new"
+    FILES
+    ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEW_UI}
     )
 
 
@@ -330,12 +341,10 @@ source_group(
 set(EDITORS_SAMPLEREDITOR_SOURCES
     editors/samplereditor/samplereditor.cc
     editors/samplereditor/samplereditor.hh
-    editors/samplereditor/samplereditorcontextmenufactory.cc
-    editors/samplereditor/samplereditorcontextmenufactory.hh
     editors/samplereditor/samplereditorfactory.cc
     editors/samplereditor/samplereditorfactory.hh
-    editors/samplereditor/samplereditornewaction.cc
-    editors/samplereditor/samplereditornewaction.hh
+    editors/samplereditor/samplereditornew.cc
+    editors/samplereditor/samplereditornew.hh
     editors/samplereditor/samplereditorwidget.cc
     editors/samplereditor/samplereditorwidget.hh
     )
@@ -655,8 +664,8 @@ source_group(
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
-    ${ASSETMANAGER_ACTIONS_UI}
 	${ASSETMANAGER_ACTIONS_DELETE_UI}
+	${ASSETMANAGER_ACTIONS_NEW_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
     ${ASSETMANAGER_CONTEXTMENU_UI}
     ${ASSETMANAGER_IMPORT_UI}
@@ -680,6 +689,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
     ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
     ${ASSETMANAGER_CONTEXTMENU_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}

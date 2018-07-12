@@ -7,7 +7,7 @@
 #include <exception>
 #include <functional>
 
-namespace asset
+namespace asset::actions
 {
 	struct ActionCallback;
 }
@@ -88,16 +88,16 @@ namespace asset::contextmenu
 		
 		void Callback();
 
-		Action *SetAction(asset::ActionCallback *action);
-		asset::ActionCallback *GetAction();
-		const asset::ActionCallback *GetAction() const;
+		Action *SetAction(asset::actions::ActionCallback *action);
+		asset::actions::ActionCallback *GetAction();
+		const asset::actions::ActionCallback *GetAction() const;
 
 		virtual bool Matches(const Entry *other) const;
 
 
 	private:
 		std::string m_name;
-		asset::ActionCallback *m_action;
+		asset::actions::ActionCallback *m_action;
 	};
 
 

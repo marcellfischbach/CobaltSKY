@@ -13,6 +13,7 @@ SamplerEditorWidget::SamplerEditorWidget(SamplerEditor *parent)
 {
   m_gui.setupUi(this);
 
+
   //
   // Set the filter combo box model
   m_gui.cbFilter->clear();

@@ -42,6 +42,10 @@ namespace asset::model
 
 		virtual void SetName(const std::string &name);
 		const std::string &GetName() const;
+		
+		virtual void SetDisplayName(const std::string &displayName);
+		virtual const std::string &GetDisplayName() const;
+
 		virtual const std::string FakeName(const std::string &name) const;
 
 

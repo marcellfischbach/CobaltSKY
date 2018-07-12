@@ -4,13 +4,14 @@
 #include <QDialog>
 #include <ui_assetmanagernewassetdialog.h>
 
-namespace asset
+namespace asset::model
+{
+	class Folder;
+}
+
+namespace asset::actions
 {
 
-	namespace model
-	{
-		class Folder;
-	}
 
 	class NewAssetDialog : public QDialog
 	{

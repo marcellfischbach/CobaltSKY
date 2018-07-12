@@ -281,20 +281,20 @@ namespace asset::contextmenu
 	}
 
 	// ///////////////////////////////////////////////////////////////////////
-	Action *Action::SetAction(asset::ActionCallback *action)
+	Action *Action::SetAction(asset::actions::ActionCallback *action)
 	{
 		m_action = action;
 		return this;
 	}
 
 	// ///////////////////////////////////////////////////////////////////////
-	asset::ActionCallback *Action::GetAction()
+	asset::actions::ActionCallback *Action::GetAction()
 	{
 		return m_action;
 	}
 
 	// ///////////////////////////////////////////////////////////////////////
-	const asset::ActionCallback *Action::GetAction() const
+	const asset::actions::ActionCallback *Action::GetAction() const
 	{
 		return m_action;
 	}

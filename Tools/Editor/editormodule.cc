@@ -15,9 +15,8 @@
 #include <editors/materialeditor/materialeditorcontextmenufactory.hh>
 #include <editors/materialeditor/materialeditornewaction.hh>
 #include <editors/materialeditor/materialeditorfactory.hh>
-#include <editors/samplereditor/samplereditorcontextmenufactory.hh>
 #include <editors/samplereditor/samplereditorfactory.hh>
-#include <editors/samplereditor/samplereditornewaction.hh>
+#include <editors/samplereditor/samplereditornew.hh>
 #include <editors/shadergrapheditor/shadergrapheditorcontextmenufactory.hh>
 #include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
 #include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
@@ -35,41 +34,40 @@
 
 void EditorModule::Initialize()
 {
-  register_classes();
+	register_classes();
 
 
-  Editor *editor = Editor::Get();
-  editor->AddEditorFactory(new MaterialEditorFactory());
-  editor->AddEditorFactory(new SamplerEditorFactory());
-  editor->AddEditorFactory(new ShaderGraphEditorFactory());
-  editor->AddEditorFactory(new StaticMeshEditorFactory());
-  editor->AddEditorFactory(new TextureEditorFactory());
+	Editor *editor = Editor::Get();
+	editor->AddEditorFactory(new MaterialEditorFactory());
+	editor->AddEditorFactory(new SamplerEditorFactory());
+	editor->AddEditorFactory(new ShaderGraphEditorFactory());
+	editor->AddEditorFactory(new StaticMeshEditorFactory());
+	editor->AddEditorFactory(new TextureEditorFactory());
 
-  editor->AddImporterFactory(new ImageImporterFactory());
-  editor->AddImporterFactory(new ModelImporterFactory());
+	editor->AddImporterFactory(new ImageImporterFactory());
+	editor->AddImporterFactory(new ModelImporterFactory());
 
 	asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();
+	contextMenu->AddFactory(new asset::actions::AssetManagerRenameContextMenu());
 	contextMenu->AddFactory(new MaterialEditorContextMenuFactory());
 	contextMenu->AddFactory(new SamplerEditorContextMenuFactory());
 	contextMenu->AddFactory(new ShaderGraphEditorContextMenuFactory());
-	
-  AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
-  actionManager->RegisterNewAction(new MaterialEditorNewAction());
-  actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
-  actionManager->RegisterNewAction(new SamplerEditorNewAction());
-  actionManager->RegisterAction(new AssetManagerRenameAction());
-  actionManager->RegisterAction(new AssetManagerDeleteAction());
 
-  AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
-  importManager->RegisterImporter(new ImageImporter());
-  importManager->RegisterImporter(new ModelImporter());
+	AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
+	actionManager->RegisterNewAction(new MaterialEditorNewAction());
+	actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
+	actionManager->RegisterAction(new AssetManagerDeleteAction());
 
-  csResourceManager *mgr = csResourceManager::Get();
-  mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
-  mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
-  mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
-  mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
+	AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
+	importManager->RegisterImporter(new ImageImporter());
+	importManager->RegisterImporter(new ModelImporter());
 
-  
-  AssetManagerRenameHandler::Register();
+	csResourceManager *mgr = csResourceManager::Get();
+	mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
+	mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
+	mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
+	mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
+
+
+	AssetManagerRenameHandler::Register();
 }

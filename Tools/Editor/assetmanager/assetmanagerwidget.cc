@@ -123,7 +123,9 @@ void AssetManagerWidget::on_treeView_doubleClicked(const QModelIndex &index)
 		return;
 	}
 
+	std::cout << "AssetManagerWidget::openAsset\n";
 	Editor::Get()->OpenAsset(asset);
+	std::cout << "AssetManagerWidget::openAsset - done\n";
 }
 
 void AssetManagerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)

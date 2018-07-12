@@ -22,6 +22,7 @@ namespace asset::model
 
 		virtual void SetName(const std::string &name);
     const std::string &GetAssetName() const;
+		virtual const std::string &GetDisplayName() const;
 		virtual const std::string FakeName(const std::string &name) const;
 
 		virtual bool IsAsset() const;

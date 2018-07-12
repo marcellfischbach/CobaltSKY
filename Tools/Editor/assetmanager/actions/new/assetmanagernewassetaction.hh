@@ -6,14 +6,14 @@
 
 class csfFile;
 
-namespace asset
+namespace asset::model
+{
+	class Entry;
+	class Folder;
+}
+namespace asset::actions
 {
 
-	namespace model
-	{
-		class Entry;
-		class Folder;
-	}
 
 	class NewAssetCreator
 	{

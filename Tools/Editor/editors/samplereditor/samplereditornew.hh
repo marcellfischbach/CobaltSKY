@@ -2,7 +2,7 @@
 #pragma once
 
 #include <assetmanager/contextmenu/contextmenuhandler.hh>
-#include <assetmanager/actions/assetmanagernewassetaction.hh>
+#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
 
 class SamplerEditorContextMenuFactory : public asset::contextmenu::Handler::ItemFactory
 {
@@ -14,7 +14,7 @@ public:
 
 
 class csfFile;
-class SamplerCreator : public asset::NewAssetCreator
+class SamplerCreator : public asset::actions::NewAssetCreator
 {
 public:
 	SamplerCreator(const std::string &name, const std::string &defaultName);

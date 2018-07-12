@@ -1,11 +1,11 @@
 
-#include <assetmanager/actions/assetmanagernewassetdialog.hh>
+#include <assetmanager/actions/new/assetmanagernewassetdialog.hh>
 #include <editor.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/folder.hh>
 #include <QMessageBox>
 
-namespace asset
+namespace asset::actions
 {
 
 	NewAssetDialog::NewAssetDialog(QWidget *parent, asset::model::Folder *folder)

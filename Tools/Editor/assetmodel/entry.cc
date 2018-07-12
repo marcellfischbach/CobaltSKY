@@ -22,6 +22,18 @@ namespace asset::model
 
   }
 
+
+	void Entry::SetDisplayName(const std::string &name)
+	{
+		SetName(name);
+	}
+
+	const std::string &Entry::GetDisplayName() const
+	{
+		return GetName();
+	}
+
+
 	bool Entry::IsDescendentOf(const Entry *entry) const
 	{
 		const Entry *test = this;

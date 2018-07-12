@@ -1,6 +1,6 @@
 
-#include <assetmanager/actions/assetmanagernewassetaction.hh>
-#include <assetmanager/actions/assetmanagernewassetdialog.hh>
+#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
+#include <assetmanager/actions/new/assetmanagernewassetdialog.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/entry.hh>
 #include <assetmodel/folder.hh>
@@ -14,7 +14,7 @@
 #include <iostream>
 #include <QMessageBox>
 
-namespace asset
+namespace asset::actions
 {
 
 	NewAssetCreator::NewAssetCreator(const std::string &name, const std::string &defaultName, const std::string &assetType)
