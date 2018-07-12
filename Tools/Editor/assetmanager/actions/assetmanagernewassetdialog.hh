@@ -7,12 +7,16 @@
 namespace asset
 {
 
+	namespace model
+	{
+		class Folder;
+	}
 
 	class NewAssetDialog : public QDialog
 	{
 		Q_OBJECT
 	public:
-		NewAssetDialog(QWidget *parent);
+		NewAssetDialog(QWidget *parent, asset::model::Folder *folder);
 		virtual ~NewAssetDialog();
 
 		void SetName(const std::string &name);
@@ -20,6 +24,8 @@ namespace asset
 
 		const std::string &GetName() const;
 
+	private:
+		bool CheckNameIsAvailable(const std::string &name) const;
 	private slots:
 		void on_pbOK_clicked();
 		void on_pbCancel_clicked();
@@ -27,6 +33,7 @@ namespace asset
 		Ui::NewAssetDialog m_gui;
 
 		std::string m_name;
+		asset::model::Folder *m_folder;
 	};
 
 }

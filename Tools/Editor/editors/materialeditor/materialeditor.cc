@@ -42,10 +42,10 @@ MaterialEditor::~MaterialEditor()
 
 void MaterialEditor::UpdateAsset()
 {
-  const AssetDescriptor &descriptor = GetAssetDescriptor();
+  const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
 
-  m_material = csResourceManager::Get()->Aquire<csMaterial>(descriptor.GetLocator());
+  m_material = csResourceManager::Get()->Aquire<csMaterial>(locator);
   m_widget->SetMaterial(m_material);
 
   m_properties->SetMaterial(m_material);
@@ -120,7 +120,7 @@ void MaterialEditor::Save(csfFile &file)
   QString absFileName = GetResourceFileName();
 
   file.Output(std::string(absFileName.toLatin1()));
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAsset()->GetResourceLocator().GetResourceFile());
 }
 
 void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)

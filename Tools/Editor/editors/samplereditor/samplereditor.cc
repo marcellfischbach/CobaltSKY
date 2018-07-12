@@ -50,7 +50,7 @@ void SamplerEditor::Save()
 void SamplerEditor::MergeSampler()
 {
   iSampler *editorSampler = csQueryClass<iSampler>(GetEditObject());
-  iSampler *engineSampler = csResourceManager::Get()->Get<iSampler>(GetAssetDescriptor().GetLocator());
+  iSampler *engineSampler = csResourceManager::Get()->Get<iSampler>(GetAsset()->GetResourceLocator());
   if (editorSampler && engineSampler)
   {
     engineSampler->SetFilter(editorSampler->GetFilter());
@@ -200,7 +200,7 @@ void SamplerEditor::MergeFile()
   SetTextureCompareFunc(compareFuncEntry);
   file.Output(std::string((const char*)fileName.toLatin1()), false, 2);
 
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAsset()->GetResourceLocator().GetResourceFile());
 }
 
 void SamplerEditor::ReplaceFile()

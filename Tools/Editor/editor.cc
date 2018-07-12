@@ -13,6 +13,7 @@
 #include <cobalt/core/cssettings.hh>
 #include <assetmanager/assetmanagerdock.hh>
 #include <assetmanager/assetmanagerwidget.hh>
+#include <assetmodel/asset.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
@@ -21,6 +22,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QOffscreenSurface>
+#include <QMessageBox>
 #include <abstractdockitem.hh>
 
 
@@ -125,45 +127,57 @@ void Editor::AddEditorFactory(iAssetEditorFactory *factory)
   m_editorFactories.push_back(factory);
 }
 
-void Editor::OpenAsset(const AssetDescriptor &desc)
+void Editor::OpenAsset(asset::model::Asset *asset)
 {
   iAssetEditor* editor = 0;
-  if (m_openEditors.find(desc) != m_openEditors.end())
-  {
-    editor = m_openEditors[desc];
-  }
-  else
-  {
-    iObject *data = csResourceManager::Get()->Load(desc.GetLocator());
+	auto it = m_openEditors.find(asset);
+	if (it != m_openEditors.end())
+	{
+		editor = it->second;
+	}
+	else
+	{
+
+    iObject *data = csResourceManager::Get()->Load(asset->GetResourceLocator());
     if (!data)
     {
+			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),
+				tr("Unable to open asset %1").arg(asset->GetResourceLocator().Encode().c_str()),
+				QMessageBox::Close);
       // TODO: Show error message
       return;
     }
 
     printf("Data: %s\n", data->GetClass()->GetName().c_str());
 
-    iAssetEditorFactory *factory = FindFactory(data, desc);
+    iAssetEditorFactory *factory = FindFactory(data, asset);
     if (!factory)
     {
+			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),
+				tr("No factory registered for asset %1").arg(asset->GetResourceLocator().Encode().c_str()),
+				QMessageBox::Close);
+			// TODO: Show error message
       data->Release();
       return;
     }
 
-    editor = factory->CreateEditor(data, desc);
+    editor = factory->CreateEditor(data, asset);
     if (!editor)
     {
-      return;
+			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),
+				tr("Factor cannot create editor for asset %1").arg(asset->GetResourceLocator().Encode().c_str()),
+				QMessageBox::Close);
+			return;
     }
-    editor->SetObject(data, desc);
+    editor->SetObject(data, asset);
     data->Release();
   }
 
 
-  m_openEditors[desc] = editor;
+  m_openEditors[asset] = editor;
   if (!m_mainWindow->ShowEditor(editor))
   {
-    m_openEditors.erase(desc);
+    m_openEditors.erase(asset);
   }
 
 
@@ -172,7 +186,7 @@ void Editor::OpenAsset(const AssetDescriptor &desc)
 iAssetEditor *Editor::FindCurrentEditor()
 {
   QWidget *tabWidget = m_mainWindow->GetCurrentTab();
-  for (std::map<AssetDescriptor, iAssetEditor*>::iterator it = m_openEditors.begin();
+  for (std::map<asset::model::Asset *, iAssetEditor*>::iterator it = m_openEditors.begin();
     it != m_openEditors.end();
     ++it)
   {
@@ -233,11 +247,11 @@ std::string Editor::ConvertToResourcePath(const std::string &filePath) const
   return filePath;
 }
 
-iAssetEditorFactory *Editor::FindFactory(iObject *object, const AssetDescriptor &desc)
+iAssetEditorFactory *Editor::FindFactory(iObject *object, asset::model::Asset *asset)
 {
   for (iAssetEditorFactory *factory : m_editorFactories)
   {
-    if (factory->CanEdit(object, desc))
+    if (factory->CanEdit(object, asset))
     {
       return factory;
     }
@@ -297,11 +311,11 @@ void editor_resource_renamed(csEvent &event, void *userData)
 void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 {
 
-  for (std::map<AssetDescriptor, iAssetEditor*>::iterator it = m_openEditors.begin(); it != m_openEditors.end(); ++it)
+  for (std::map<asset::model::Asset *, iAssetEditor*>::iterator it = m_openEditors.begin(); it != m_openEditors.end(); ++it)
   {
     // fucking map returns an std::pair with const key
-    AssetDescriptor &desc = const_cast<AssetDescriptor&>(it->first);
-    desc.Renamed(from, to);
+    // AssetDescriptor &desc = const_cast<AssetDescriptor&>(it->first);
+    // desc.Renamed(from, to);
   }
 }
 

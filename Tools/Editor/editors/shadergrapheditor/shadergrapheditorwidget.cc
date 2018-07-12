@@ -645,7 +645,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   file.Output(std::string((const char*)fileName.toLatin1()));
 
 
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAsset()->GetResourceLocator().GetResourceFile());
 
 }
 

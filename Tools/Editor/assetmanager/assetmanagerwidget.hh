@@ -49,6 +49,7 @@ protected slots:
 
 void on_treeView_activated(const QModelIndex &index);
 void on_treeView_clicked(const QModelIndex &index);
+void on_treeView_doubleClicked(const QModelIndex &index);
 void on_treeView_customContextMenuRequested(const QPoint &pos);
 
 void on_listView_doubleClicked(const QModelIndex &index);

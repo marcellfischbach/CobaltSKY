@@ -112,6 +112,20 @@ void AssetManagerWidget::on_listView_doubleClicked(const QModelIndex &index)
 	*/
 }
 
+void AssetManagerWidget::on_treeView_doubleClicked(const QModelIndex &index)
+{
+	asset::model::ViewEntry *viewEntry = m_treeModel->GetEntry(index);
+	asset::model::Entry *entry = viewEntry ? viewEntry->GetEntry() : 0;
+	asset::model::Asset *asset = entry ? entry->AsAsset() : 0;
+
+	if (!asset)
+	{
+		return;
+	}
+
+	Editor::Get()->OpenAsset(asset);
+}
+
 void AssetManagerWidget::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
 	QModelIndex index = m_gui.treeView->indexAt(pos);
@@ -183,7 +197,7 @@ void AssetManagerWidget::OpenAsset(const csResourceLocator &locator)
   std::string type = (const char*)typeElement.tagName().toLatin1();
   */
   AssetDescriptor descriptor(locator);
-  Editor::Get()->OpenAsset(descriptor);
+  // SEditor::Get()->OpenAsset(descriptor);
 }
 
 void AssetManagerWidget::RefreshContent() 

@@ -65,10 +65,13 @@ namespace asset::model
     virtual csResourceLocator GetResourceLocator() const = 0;
 		virtual csResourceLocator CreateResourceLocator(const std::string &fileName) const;
 
+		bool ContainsChild(const std::string &name) const;
     const std::vector<Entry*> &GetChildren() const;
     Entry* GetChildByName(const std::string &name);
     const Entry* GetChildByName(const std::string &name) const;
 
+		Folder *FindFolder();
+		const Folder *FindFolder() const;
     virtual const VFSEntry *GetVFSEntry() const;
     int GetVFSEntryPriority() const;
 

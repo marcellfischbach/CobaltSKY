@@ -139,6 +139,17 @@ namespace asset::model
 		return GetResourceLocator().WithFileSuffix(fileName);
 	}
 
+	bool Entry::ContainsChild(const std::string &name) const
+	{
+		for (const Entry *entry : m_children)
+		{
+			if (name == entry->GetName())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	Entry *Entry::GetChildByName(const std::string &name)
 	{
@@ -156,6 +167,29 @@ namespace asset::model
 				return entry;
 			}
 		}
+		return 0;
+	}
+
+	Folder *Entry::FindFolder()
+	{
+		return const_cast<Folder*>(
+			static_cast<const Entry*>(this)->FindFolder()
+			);
+	}
+
+	const Folder *Entry::FindFolder() const
+	{
+		const Entry *entry = this;
+		while (entry)
+		{
+			const Folder *folder = entry->AsFolder();
+			if (folder)
+			{
+				return folder;
+			}
+			entry = entry->GetParent();
+		}
+
 		return 0;
 	}
 

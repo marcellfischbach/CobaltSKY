@@ -11,6 +11,12 @@
 #include <map>
 #include <set>
 
+
+namespace asset::model
+{
+	class Asset;
+}
+
 class MainWindow;
 class AssetManagerWidget;
 class csEngine;
@@ -38,7 +44,7 @@ public:
   std::string ConvertToResourcePath(const std::string &filePath) const;
 
   void AddEditorFactory(iAssetEditorFactory *factory);
-  void OpenAsset(const AssetDescriptor &descriptor);
+	void OpenAsset(asset::model::Asset *asset);
 
   iAssetEditor *FindCurrentEditor();
 
@@ -73,7 +79,7 @@ void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
 private:
   Editor();
 
-  iAssetEditorFactory *FindFactory(iObject *object, const AssetDescriptor &desc);
+  iAssetEditorFactory *FindFactory(iObject *object, asset::model::Asset *asset);
 
 
   MainWindow *m_mainWindow;
@@ -81,7 +87,7 @@ private:
 
   QDir m_rootPath;
   std::vector<iAssetEditorFactory*> m_editorFactories;
-  std::map<AssetDescriptor, iAssetEditor*> m_openEditors;
+  std::map<asset::model::Asset*, iAssetEditor*> m_openEditors;
 
   std::vector<iImporterFactory*> m_importerFactories;
 
