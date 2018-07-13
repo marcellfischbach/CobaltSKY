@@ -366,8 +366,6 @@ source_group(
 set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditor.cc
     editors/shadergrapheditor/shadergrapheditor.hh
-    editors/shadergrapheditor/shadergrapheditorcontextmenufactory.cc
-    editors/shadergrapheditor/shadergrapheditorcontextmenufactory.hh
     editors/shadergrapheditor/shadergrapheditorfactory.cc
     editors/shadergrapheditor/shadergrapheditorfactory.hh
     editors/shadergrapheditor/shadergrapheditormeta.cc
@@ -376,6 +374,8 @@ set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh
     editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
     editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
+    editors/shadergrapheditor/shadergrapheditornew.cc
+    editors/shadergrapheditor/shadergrapheditornew.hh
     editors/shadergrapheditor/shadergrapheditornewaction.cc
     editors/shadergrapheditor/shadergrapheditornewaction.hh
     editors/shadergrapheditor/shadergrapheditornode.cc

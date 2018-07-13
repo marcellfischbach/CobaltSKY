@@ -17,7 +17,7 @@
 #include <editors/materialeditor/materialeditorfactory.hh>
 #include <editors/samplereditor/samplereditorfactory.hh>
 #include <editors/samplereditor/samplereditornew.hh>
-#include <editors/shadergrapheditor/shadergrapheditorcontextmenufactory.hh>
+#include <editors/shadergrapheditor/shadergrapheditornew.hh>
 #include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
 #include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
 #include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
