@@ -43,10 +43,9 @@ int main (int argc, char **argv)
   }
 
 
-	if (false)
+	if (true)
 	{
 		qApp->setStyle(QStyleFactory::create("Fusion"));
-    /*
 		QPalette darkPalette;
 		darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));
 		darkPalette.setColor(QPalette::WindowText, Qt::white);
@@ -66,7 +65,7 @@ int main (int argc, char **argv)
 
 		qApp->setPalette(darkPalette);
 		qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-    */
+    
 	}
 
 
