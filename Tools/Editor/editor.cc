@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QOffscreenSurface>
+#include <QOpenGLContext>
 #include <QMessageBox>
 #include <abstractdockitem.hh>
 
@@ -73,9 +74,10 @@ bool Editor::Initialize(int argc, char **argv)
 
   m_mainWindow = new MainWindow();
 
-  RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
-  renderWidget->SetClear(true);
-  m_mainWindow->ShowWidget(renderWidget);
+
+  //
+  //
+  
 
   m_assetManager = new AssetManagerWidget();
   m_mainWindow->addDockWidget(Qt::LeftDockWidgetArea, new AssetManagerDock(m_mainWindow));
@@ -85,6 +87,10 @@ bool Editor::Initialize(int argc, char **argv)
   //renderWidget->setVisible(false);
 
   GLContext::Get()->Initialize(m_mainWindow);
+
+  RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
+  renderWidget->SetClear(true);
+  m_mainWindow->ShowWidget(renderWidget);
 
 
 

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <QThread>
 #include <QTimer>
+#include <QFrame>
 
 MainWindow::MainWindow()
   : QMainWindow()
