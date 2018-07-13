@@ -157,11 +157,13 @@ void scene_view_cleanup_screenshot_data(void *data)
 QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
 {
   QImage result;
+  /*
   if (!GLContext::Get()->MakeCurrent())
   {
     printf("Unable to make glcontext current\n");
     return result;
   }
+  */
   csDeferredFrameProcessorGL4 *frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
   if (!frameProcessor->Initialize())
   {

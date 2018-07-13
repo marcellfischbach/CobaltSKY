@@ -50,7 +50,7 @@ ShaderGraphEditor::~ShaderGraphEditor()
 
 void ShaderGraphEditor::UpdateAsset()
 {
-  GLContext::Get()->MakeCurrent();
+  // GLContext::Get()->MakeCurrent();
 
 	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 

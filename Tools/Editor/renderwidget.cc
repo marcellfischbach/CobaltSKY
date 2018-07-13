@@ -34,7 +34,7 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
 
   QPainter p(this);
   
-  GLContext::Get()->MakeCurrent();
+  // GLContext::Get()->MakeCurrent();
   if (!CheckRenderConditions())
   {
     return;
@@ -66,10 +66,12 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
 
 bool RenderWidget::CheckRenderConditions()
 {
+  /*
   if (!GLContext::Get()->MakeCurrent())
   {
     return false;
   }
+  */
 
   bool fireInitialized = false;
   bool fireResized = false;
