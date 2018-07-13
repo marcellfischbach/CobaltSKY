@@ -23,12 +23,32 @@ public:
     m_clear = clear;
   }
 
+  iRenderTarget *GetRenderTarget()
+  {
+    return m_renderTarget;
+  }
+  const iRenderTarget *GetRenderTarget() const
+  {
+    return m_renderTarget;
+  }
+
+
+  iTexture2D *GetColorTexture()
+  {
+    return m_colorTexture;
+  }
+  const iTexture2D *GetColorTexture() const
+  {
+    return m_colorTexture;
+  }
 protected:
   void paintEvent(QPaintEvent *event);
   
   virtual void initializeGL();
   virtual void paintGL();
   virtual void resizeGL(int width, int height);
+
+
 private:
   bool CheckRenderConditions();
   void ReleaseBuffers();

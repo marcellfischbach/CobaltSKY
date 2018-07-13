@@ -42,7 +42,7 @@ ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
 {
   m_gui.setupUi(this);
   on_nodeGraph_ScaleChanged(1.0f);
-
+  
   csSGShaderGraph *shaderGraph = new csSGShaderGraph();
   ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(shaderGraph);
   m_gui.nodeGraph->AddNode(shaderGraphNode);
@@ -198,7 +198,6 @@ void ShaderGraphEditorWidget::on_nodeGraph_Disconnected(NodeGraphNodeAnchor *anc
     return;
   }
 
-  printf("Disconnected: %p %p\n", anchorA, anchorB);
   NodeGraphNodeAnchor *inputAnchor = anchorA->GetType() == eNGNPT_Input ? anchorA : anchorB;
 
   ShaderGraphEditorNode *editorNodeInput = static_cast<ShaderGraphEditorNode*>(inputAnchor->GetNode());
@@ -359,7 +358,6 @@ void ShaderGraphEditorWidget::on_nodeGraph_NodeRemoved(NodeGraphNode* node)
   {
     return;
   }
-  printf("RemoveNode: %p\n", node);
   ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(node);
   csSGNode *sgNode = editorNode->GetSGNode();
   if (!sgNode)
@@ -661,6 +659,7 @@ bool ShaderGraphEditorWidget::Apply()
   printf("Apply\n");
   printf("Compile shader graph copy\n");
   csSGDefaultConsoleLogger logger;
+
   if (csEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy, &logger))
   {
     printf("Successfully compiled\n");

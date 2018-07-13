@@ -17,7 +17,6 @@ GLContext *GLContext::Get()
 
 void GLContext::Initialize(QObject *parent)
 {
-  /*
   QSurfaceFormat format;
   format.setRedBufferSize(8);
   format.setGreenBufferSize(8);
@@ -29,22 +28,16 @@ void GLContext::Initialize(QObject *parent)
   format.setVersion(4, 4);
   format.setRenderableType(QSurfaceFormat::OpenGL);
   format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-  */
 
   m_offscreenSurface = new QOffscreenSurface();
+  m_offscreenSurface->setFormat(format);
   m_offscreenSurface->create();
 
-  m_openglContext = new QOpenGLContext();
-  m_openglContext->setShareContext(QOpenGLContext::globalShareContext());
+  m_openglContext = QOpenGLContext::globalShareContext();
   m_openglContext->create();
   m_openglContext->makeCurrent(m_offscreenSurface);
   
-  /*
-  m_openglContext = new QOpenGLContext(parent);
-  m_openglContext->setFormat(QSurfaceFormat::defaultFormat());
-  m_openglContext->setShareContext(QOpenGLContext::globalShareContext());
-  m_openglContext->create();
-  */
+
 }
 
 
@@ -53,6 +46,15 @@ bool GLContext::MakeCurrent()
   if (m_openglContext && m_offscreenSurface)
   {
     return m_openglContext->makeCurrent(m_offscreenSurface);
+  }
+  return false;
+}
+
+bool GLContext::Unbind()
+{
+  if (m_openglContext)
+  {
+    //return m_openglContext->makeCurrent(0);
   }
   return false;
 }

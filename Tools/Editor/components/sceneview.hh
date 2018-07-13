@@ -1,6 +1,6 @@
 #pragma once
 
-#include <QOpenGLWidget>
+#include <renderwidget.hh>
 
 #include <vector>
 
@@ -13,7 +13,7 @@ struct SceneViewInputHandler;
 class QTCSOnscreenRenderTarget;
 class QImage;
 class QTimer;
-class SceneView : public QOpenGLWidget
+class SceneView : public RenderWidget
 {
   Q_OBJECT
 public:

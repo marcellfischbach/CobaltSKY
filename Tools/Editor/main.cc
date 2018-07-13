@@ -22,27 +22,9 @@
 int main (int argc, char **argv)
 {
 
-	csResourceLocator locator("narf@/path/to/the/file.asset?with_a_given_name");
-	printf("NewName: '%s'\n", locator.Encode().c_str());
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
 
-
-  QSurfaceFormat format;
-  format.setRedBufferSize(8);
-  format.setGreenBufferSize(8);
-  format.setBlueBufferSize(8);
-  format.setAlphaBufferSize(8);
-  format.setDepthBufferSize(24);
-  format.setStencilBufferSize(8);
-  format.setMajorVersion(4);
-  format.setMinorVersion(4);
-  format.setRenderableType(QSurfaceFormat::OpenGL);
-  format.setProfile(QSurfaceFormat::CoreProfile);
-  format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
-  //format.setOption(QSurfaceFormat::DeprecatedFunctions, true);
-
-  QSurfaceFormat::setDefaultFormat(format);
 
   QApplication app(argc, argv);
 
@@ -64,7 +46,7 @@ int main (int argc, char **argv)
   }
 
 
-	if (true)
+	if (false)
 	{
 		qApp->setStyle(QStyleFactory::create("Fusion"));
     /*

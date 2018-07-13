@@ -31,7 +31,9 @@ RenderWidget::~RenderWidget()
 
 void	RenderWidget::paintEvent(QPaintEvent *event)
 {
+
   QPainter p(this);
+  
   GLContext::Get()->MakeCurrent();
   if (!CheckRenderConditions())
   {
@@ -59,7 +61,7 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
   }
   memcpy(m_bufferImage->bits(), m_buffer, resSize);
   p.drawImage(0, 0, *m_bufferImage);
-
+  
 }
 
 bool RenderWidget::CheckRenderConditions()

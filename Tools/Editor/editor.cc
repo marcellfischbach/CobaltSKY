@@ -88,9 +88,6 @@ bool Editor::Initialize(int argc, char **argv)
 
   GLContext::Get()->Initialize(m_mainWindow);
 
-  RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
-  renderWidget->SetClear(true);
-  m_mainWindow->ShowWidget(renderWidget);
 
 
 
@@ -102,6 +99,11 @@ bool Editor::Initialize(int argc, char **argv)
   OpenProject(projectPath);
 
   m_assetManager->SetProject(m_project);
+
+
+  RenderWidget *renderWidget = new RenderWidget(m_mainWindow);
+  renderWidget->SetClear(true);
+  m_mainWindow->ShowWidget(renderWidget);
 
   return true;
 }

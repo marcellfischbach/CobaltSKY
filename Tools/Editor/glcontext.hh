@@ -15,6 +15,7 @@ public:
 
     void Initialize (QObject *parent);
     bool MakeCurrent();
+    bool Unbind();
 
     static GLContext *Get ();
 private:
