@@ -49,6 +49,7 @@ void EditorModule::Initialize()
 
 	asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();
 	contextMenu->AddFactory(new asset::actions::AssetManagerRenameContextMenu());
+	contextMenu->AddFactory(new asset::actions::AssetManagerDeleteContextMenu());
 	contextMenu->AddFactory(new MaterialEditorContextMenuFactory());
 	contextMenu->AddFactory(new SamplerEditorContextMenuFactory());
 	contextMenu->AddFactory(new ShaderGraphEditorContextMenuFactory());
@@ -56,7 +57,6 @@ void EditorModule::Initialize()
 	AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
 	actionManager->RegisterNewAction(new MaterialEditorNewAction());
 	actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
-	actionManager->RegisterAction(new AssetManagerDeleteAction());
 
 	AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
 	importManager->RegisterImporter(new ImageImporter());

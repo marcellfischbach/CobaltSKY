@@ -1,18 +1,33 @@
 
 #include <assetmanager/assetmanageraction.hh>
+#include <assetmanager/actions/assetmanageractioncallback.hh>
+#include <assetmanager/contextmenu/contextmenuhandler.hh>
 
-class AssetManagerDeleteAction : public AssetManagerAction
+namespace asset::model
 {
-public:
-	AssetManagerDeleteAction();
-	virtual ~AssetManagerDeleteAction();
+  class Entry;
+}
 
-	virtual bool ShouldShow(AssetManagerWidget *assetManager) const;
+namespace asset::actions
+{
 
-	virtual bool IsEnabled(AssetManagerWidget *assetManager) const;
+  class AssetManagerDeleteContextMenu : public  asset::contextmenu::Handler::ItemFactory
+  {
+  public:
+    virtual ~AssetManagerDeleteContextMenu() { }
+    virtual void Create(asset::model::Entry *entry, asset::contextmenu::Builder builder);
+  };
 
-	virtual QString GetMenuEntryName(AssetManagerWidget *assetManager) const;
+  class AssetManagerDeleteAction : public asset::actions::ActionCallback
+  {
+  public:
+    AssetManagerDeleteAction(asset::model::Entry *entry);
+    virtual ~AssetManagerDeleteAction();
 
-	virtual bool PerformAction(AssetManagerWidget *assetManager) const;
 
-};
+    virtual void Callback();
+
+  private:
+    asset::model::Entry *m_entry;
+  };
+}
