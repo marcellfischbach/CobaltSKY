@@ -158,6 +158,23 @@ source_group(
     ${ASSETMANAGER_ACTIONS_NEW_UI}
     )
 
+set(ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES
+    assetmanager/actions/newfolder/assetmanagernewfolderaction.cc
+    assetmanager/actions/newfolder/assetmanagernewfolderaction.hh
+    assetmanager/actions/newfolder/assetmanagernewfolderdialog.cc
+    assetmanager/actions/newfolder/assetmanagernewfolderdialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_NEWFOLDER_UI
+	assetmanager/actions/newfolder/assetmanagernewfolderdialog.ui
+	)
+    
+source_group(
+    "editor\\assetmanager\\actions\\newfolder"
+    FILES
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_UI}
+    )
 
 
 set(ASSETMANAGER_ACTIONS_RENAME_SOURCES
@@ -658,6 +675,7 @@ set(ALL_UI
     ${ASSETMANAGER_UI}
 	${ASSETMANAGER_ACTIONS_DELETE_UI}
 	${ASSETMANAGER_ACTIONS_NEW_UI}
+	${ASSETMANAGER_ACTIONS_NEWFOLDER_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
     ${ASSETMANAGER_CONTEXTMENU_UI}
     ${ASSETMANAGER_IMPORT_UI}
@@ -682,6 +700,7 @@ set(ALL_SOURCES
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
     ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES}
     ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
     ${ASSETMANAGER_CONTEXTMENU_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}

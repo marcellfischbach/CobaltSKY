@@ -7,6 +7,7 @@
 #include <editor.hh>
 #include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/rename/assetmanagerrenameaction.hh>
+#include <assetmanager/actions/newfolder/assetmanagernewfolderaction.hh>
 #include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
 #include <assetmanager/contextmenu/contextmenuhandler.hh>
 
@@ -46,6 +47,7 @@ void EditorModule::Initialize()
 
 	asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();
 	contextMenu->AddFactory(new asset::actions::AssetManagerRenameContextMenu());
+	contextMenu->AddFactory(new asset::actions::AssetManagerNewFolderContextMenu());
 	contextMenu->AddFactory(new asset::actions::AssetManagerDeleteContextMenu());
 	contextMenu->AddFactory(new MaterialEditorContextMenuFactory());
 	contextMenu->AddFactory(new SamplerEditorContextMenuFactory());
