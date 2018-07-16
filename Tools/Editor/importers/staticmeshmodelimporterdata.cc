@@ -220,7 +220,11 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
   csResourceLocator colliderLocator = ImportCollider(assetManager);
 
 
-  csResourceLocator csfLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
+  csResourceLocator csfLocator;// = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
+  if (!csfLocator.IsValid())
+  {
+    return csResourceLocator();
+  }
 
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
@@ -281,8 +285,11 @@ csResourceLocator StaticMeshModelImporterData::Import(AssetManagerWidget *assetM
 
 csResourceLocator StaticMeshModelImporterData::ImportMesh(AssetManagerWidget *assetManager)
 {
-  csResourceLocator csfLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()) + "_Mesh");
-
+  csResourceLocator csfLocator;// = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()) + "_Mesh");
+  if (!csfLocator.IsValid())
+  {
+    return csResourceLocator();
+  }
   csfFile outputFile;
   csfEntry *assetEntry = outputFile.CreateEntry("asset");
   csfEntry *dataEntry = outputFile.CreateEntry("data");

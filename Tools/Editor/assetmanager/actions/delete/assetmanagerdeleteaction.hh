@@ -1,5 +1,4 @@
 
-#include <assetmanager/assetmanageraction.hh>
 #include <assetmanager/actions/assetmanageractioncallback.hh>
 #include <assetmanager/contextmenu/contextmenuhandler.hh>
 

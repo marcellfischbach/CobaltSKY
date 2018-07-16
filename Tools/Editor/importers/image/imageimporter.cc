@@ -69,7 +69,7 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
 
   csFileInfo fi (m_fileName);
 
-  csResourceLocator assetLocator = assetManager->GetNewResourceLocator(fi.GetName());
+  csResourceLocator assetLocator;// = assetManager->GetNewResourceLocator(fi.GetName());
   if (!assetLocator.IsValid())
   {
     return false();

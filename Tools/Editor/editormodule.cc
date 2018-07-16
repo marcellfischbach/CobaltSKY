@@ -5,21 +5,18 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <editor.hh>
-#include <assetmanager/assetmanageractionmanager.hh>
 #include <assetmanager/assetmanagerrenamehandler.hh>
 #include <assetmanager/actions/rename/assetmanagerrenameaction.hh>
 #include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
 #include <assetmanager/contextmenu/contextmenuhandler.hh>
 
 #include <assetmanager/import/assetmanagerimportmanager.hh>
-#include <editors/materialeditor/materialeditorcontextmenufactory.hh>
-#include <editors/materialeditor/materialeditornewaction.hh>
 #include <editors/materialeditor/materialeditorfactory.hh>
+#include <editors/materialeditor/materialeditornew.hh>
 #include <editors/samplereditor/samplereditorfactory.hh>
 #include <editors/samplereditor/samplereditornew.hh>
-#include <editors/shadergrapheditor/shadergrapheditornew.hh>
-#include <editors/shadergrapheditor/shadergrapheditornewaction.hh>
 #include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
+#include <editors/shadergrapheditor/shadergrapheditornew.hh>
 #include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
 #include <editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <editors/staticmesheditor/staticmesheditorfactory.hh>
@@ -53,10 +50,6 @@ void EditorModule::Initialize()
 	contextMenu->AddFactory(new MaterialEditorContextMenuFactory());
 	contextMenu->AddFactory(new SamplerEditorContextMenuFactory());
 	contextMenu->AddFactory(new ShaderGraphEditorContextMenuFactory());
-
-	AssetManagerActionManager *actionManager = AssetManagerActionManager::Get();
-	actionManager->RegisterNewAction(new MaterialEditorNewAction());
-	actionManager->RegisterNewAction(new ShaderGraphEditorNewAction());
 
 	AssetManagerImportManager *importManager = AssetManagerImportManager::Get();
 	importManager->RegisterImporter(new ImageImporter());

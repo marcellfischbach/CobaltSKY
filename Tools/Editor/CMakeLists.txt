@@ -72,9 +72,6 @@ source_group(
 
 
 set(ASSETMANAGER_SOURCES
-    assetmanager/assetmanageraction.hh
-    assetmanager/assetmanageractionmanager.cc
-    assetmanager/assetmanageractionmanager.hh
     assetmanager/assetmanagerassetwriter.cc
     assetmanager/assetmanagerassetwriter.hh
     assetmanager/assetmanagercontentitemdelegate.cc
@@ -335,6 +332,32 @@ source_group(
     ${COMPONENTS_UI}
     )
 
+set(EDITORS_MATERIALEDITOR_SOURCES
+    editors/materialeditor/materialeditor.cc
+    editors/materialeditor/materialeditor.hh
+    editors/materialeditor/materialeditorfactory.cc
+    editors/materialeditor/materialeditorfactory.hh
+    editors/materialeditor/materialeditornew.cc
+    editors/materialeditor/materialeditornew.hh
+    editors/materialeditor/materialeditorpreviewsceneview.cc
+    editors/materialeditor/materialeditorpreviewsceneview.hh
+    editors/materialeditor/materialeditorproperties.cc
+    editors/materialeditor/materialeditorproperties.hh
+    editors/materialeditor/materialeditorwidget.cc
+    editors/materialeditor/materialeditorwidget.hh
+    )
+
+set(EDITORS_MATERIALEDITOR_UI
+    editors/materialeditor/materialeditorwidget.ui
+    )
+
+source_group(
+    "editor\\editors\\materialeditor"
+    FILES
+    ${EDITORS_MATERIALEDITOR_SOURCES}
+    ${EDITORS_MATERIALEDITOR_UI}
+    )
+
 
 set(EDITORS_SAMPLEREDITOR_SOURCES
     editors/samplereditor/samplereditor.cc
@@ -374,8 +397,6 @@ set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
     editors/shadergrapheditor/shadergrapheditornew.cc
     editors/shadergrapheditor/shadergrapheditornew.hh
-    editors/shadergrapheditor/shadergrapheditornewaction.cc
-    editors/shadergrapheditor/shadergrapheditornewaction.hh
     editors/shadergrapheditor/shadergrapheditornode.cc
     editors/shadergrapheditor/shadergrapheditornode.hh
     editors/shadergrapheditor/shadergrapheditoroutliner.cc
@@ -560,33 +581,6 @@ source_group(
     )
 
 
-set(EDITORS_MATERIALEDITOR_SOURCES
-    editors/materialeditor/materialeditor.cc
-    editors/materialeditor/materialeditor.hh
-    editors/materialeditor/materialeditorcontextmenufactory.cc
-    editors/materialeditor/materialeditorcontextmenufactory.hh
-    editors/materialeditor/materialeditorfactory.cc
-    editors/materialeditor/materialeditorfactory.hh
-    editors/materialeditor/materialeditornewaction.cc
-    editors/materialeditor/materialeditornewaction.hh
-    editors/materialeditor/materialeditorpreviewsceneview.cc
-    editors/materialeditor/materialeditorpreviewsceneview.hh
-    editors/materialeditor/materialeditorproperties.cc
-    editors/materialeditor/materialeditorproperties.hh
-    editors/materialeditor/materialeditorwidget.cc
-    editors/materialeditor/materialeditorwidget.hh
-    )
-
-set(EDITORS_MATERIALEDITOR_UI
-    editors/materialeditor/materialeditorwidget.ui
-    )
-
-source_group(
-    "editor\\editors\\materialeditor"
-    FILES
-    ${EDITORS_MATERIALEDITOR_SOURCES}
-    ${EDITORS_MATERIALEDITOR_UI}
-    )
 
 set(NODEGRAPH_SOURCES
     nodegraph/nodegraphacceptevent.cc
