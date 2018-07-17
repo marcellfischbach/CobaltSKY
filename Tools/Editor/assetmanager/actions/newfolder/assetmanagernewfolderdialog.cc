@@ -1,6 +1,7 @@
 
 
 #include <assetmanager/actions/newfolder/assetmanagernewfolderdialog.hh>
+#include <editor.hh>
 
 namespace asset::actions
 {
@@ -9,6 +10,8 @@ namespace asset::actions
 		: QDialog(parent)
 	{
 		m_gui.setupUi(this);
+    setWindowTitle(QString(Editor::Get()->GetApplicationTitle().c_str()));
+
 	}
 
   AssetManagerNewFolderDialog::~AssetManagerNewFolderDialog()

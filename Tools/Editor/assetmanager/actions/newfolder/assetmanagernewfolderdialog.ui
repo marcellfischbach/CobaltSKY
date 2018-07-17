@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ValkyieEditor - Rename</string>
+   <string>CobaltSKY - Rename</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -92,7 +92,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>Please enter the name for the new folder</string>
      </property>
     </widget>
    </item>

@@ -1,6 +1,7 @@
 
 
 #include <assetmanager/actions/rename/assetmanagerrenamedialog.hh>
+#include <editor.hh>
 
 namespace asset::actions
 {
@@ -9,7 +10,8 @@ namespace asset::actions
 		: QDialog(parent)
 	{
 		m_gui.setupUi(this);
-	}
+    setWindowTitle(QString(Editor::Get()->GetApplicationTitle().c_str()));
+  }
 
 	AssetManagerRenameDialog::~AssetManagerRenameDialog()
 	{
