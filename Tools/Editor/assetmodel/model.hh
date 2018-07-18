@@ -47,6 +47,7 @@ namespace asset::model
 
 		void Add(Entry *parent, Entry *child, ModelTransaction &tr);
 		void Remove(Entry *parent, Entry *child, ModelTransaction &tr);
+		void Move(Entry *oldParent, Entry *newparent, Entry *child, ModelTransaction &tr);
 		void Delete(Entry *entry, ModelTransaction &tr);
 		void Rename(Entry *entry, const std::string &newname, ModelTransaction &tr);
 
@@ -66,9 +67,11 @@ namespace asset::model
 		void AddRollback(Entry *parent, Entry *child);
 		void RemoveCommit(Entry *parent, Entry *child);
 		void RemoveRollback(Entry *parent, Entry *child);
+		void MoveCommit(TreeCollector collector);
     void DeleteCommit(Entry *entry, const csResourceLocator &locator);
 		void RenameCommit(Entry *entry, const std::string &newName, TreeCollector collector);
 
+		void MergePath(Entry *oldParent, Entry *newParent, Entry *child, ModelTransaction &tr);
 		void UpdateCollector(TreeCollector &collector);
 		void UpdateCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		void InsertIntoEntryCache(Entry* entry);

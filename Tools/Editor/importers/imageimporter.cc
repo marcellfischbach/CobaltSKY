@@ -65,14 +65,14 @@ csResourceLocator ImageImporterData::Import(AssetManagerWidget *assetManager)
     return csResourceLocator();
   }
 
-  csResourceLocator assetLocator = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
+  csResourceLocator assetLocator;// = assetManager->GetNewResourceLocator(std::string((const char*)m_name.toLatin1()));
   if (!assetLocator.IsValid())
   {
     return csResourceLocator();
   }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", assetLocator.GetText().c_str());
+  printf("  CSF: %s\n", assetLocator.Encode().c_str());
 
 
 

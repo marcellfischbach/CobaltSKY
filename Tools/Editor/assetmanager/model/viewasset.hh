@@ -20,7 +20,7 @@ namespace asset::model
     virtual void Add(ViewEntry *entry);
     virtual void Remove(ViewEntry *entry);
     virtual void Sort();
-
+    virtual const std::string ViewAsset::GetText() const;
   private:
     Asset * m_asset;
   };

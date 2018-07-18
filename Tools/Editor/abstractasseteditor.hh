@@ -2,7 +2,7 @@
 
 #include <iasseteditor.hh>
 #include <assetdescriptor.hh>
-
+#include <assetmodel/asset.hh>
 #include <abstractasseteditor.refl.hh>
 #include <QFile>
 #include <QImage>
@@ -17,12 +17,12 @@ public:
   virtual ~AbstractAssetEditor();
 
 
-  virtual void SetObject(iObject *object, const AssetDescriptor &assetDescriptor);
+  virtual void SetObject(iObject *object, asset::model::Asset *asset);
   iObject *GetEditObject();
   const iObject *GetEditObject() const;
-  const AssetDescriptor &GetAssetDescriptor() const;
+  asset::model::Asset *GetAsset();
+  const asset::model::Asset *GetAsset() const;
   QString GetResourceFileName() const;
-  QString GetResourceDataFileName() const;
 
   void SetWidget(QWidget *widget);
   virtual QWidget *GetWidget();
@@ -44,7 +44,7 @@ private:
   void UpdateName();
 
 private:
-  AssetDescriptor m_assetDescriptor;
+	asset::model::Asset *m_asset;
   iObject *m_editObject;
 
   QWidget *m_widget;

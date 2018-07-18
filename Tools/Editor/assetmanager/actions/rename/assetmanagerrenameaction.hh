@@ -1,18 +1,32 @@
 
-#include <assetmanager/assetmanageraction.hh>
+#include <assetmanager/actions/assetmanageractioncallback.hh>
+#include <assetmanager/contextmenu/contextmenuhandler.hh>
 
-class AssetManagerRenameAction : public AssetManagerAction 
+namespace asset::model
 {
-public:
-  AssetManagerRenameAction();
-  virtual ~AssetManagerRenameAction();
+	class Entry;
+}
 
-  virtual bool ShouldShow(AssetManagerWidget *assetManager) const;
+namespace asset::actions
+{
 
-  virtual bool IsEnabled(AssetManagerWidget *assetManager) const;
+	class AssetManagerRenameContextMenu : public  asset::contextmenu::Handler::ItemFactory
+	{
+	public:
+		virtual ~AssetManagerRenameContextMenu () { }
+		virtual void Create(asset::model::Entry *entry, asset::contextmenu::Builder builder);
+	};
 
-  virtual QString GetMenuEntryName(AssetManagerWidget *assetManager) const;
+	class AssetManagerRenameAction : public asset::actions::ActionCallback
+	{
+	public:
+		AssetManagerRenameAction(asset::model::Entry *entry);
+		virtual ~AssetManagerRenameAction();
 
-  virtual bool PerformAction(AssetManagerWidget *assetManager) const;
 
-};
+		virtual void Callback();
+
+	private:
+		asset::model::Entry *m_entry;
+	};
+}

@@ -64,7 +64,15 @@ namespace asset::model
       VFSEntry *entry = static_cast<ViewVFSEntry*>(e1)->GetVFSEntry();
       p1 = entry ? entry->GetEntry().GetPriority() : 0;
     }
-    return p0 < p1;
+
+    if (p0 != p1)
+    {
+      return p0 < p1;
+    }
+
+    std::string n0 = e0->GetText();
+    std::string n1 = e1->GetText();
+    return n0 < n1;
   }
 
   void ViewRoot::Sort()

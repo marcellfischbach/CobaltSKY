@@ -40,6 +40,11 @@ namespace asset::model
 		Entry::SetName(fileName);
 	}
 
+	const std::string &Asset::GetDisplayName() const
+	{
+		return m_assetName;
+	}
+
 	const std::string Asset::FakeName(const std::string &name) const
 	{
 		if (name.find(".asset") == name.length() - 6)

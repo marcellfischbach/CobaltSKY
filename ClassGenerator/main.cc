@@ -310,7 +310,7 @@ int perform (const char *in_filename, const char *in_prefix, const char* api, co
   headerSource += "\n";
   headerSource += "#pragma once\n";
   headerSource += "\n";
-  headerSource += "#include <valkyrie/core/csclass.hh>\n";
+  headerSource += "#include <cobalt/core/csclass.hh>\n";
   headerSource += "\n";
 
   sourceSource += "\n";

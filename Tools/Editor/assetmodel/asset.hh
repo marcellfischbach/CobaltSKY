@@ -21,6 +21,8 @@ namespace asset::model
 		virtual void Add(Entry *entry);
 
 		virtual void SetName(const std::string &name);
+    const std::string &GetAssetName() const;
+		virtual const std::string &GetDisplayName() const;
 		virtual const std::string FakeName(const std::string &name) const;
 
 		virtual bool IsAsset() const;
@@ -57,3 +59,9 @@ inline const std::string &asset::model::Asset::GetAssetType() const
 {
   return m_assetType;
 }
+
+inline const std::string &asset::model::Asset::GetAssetName() const
+{
+  return m_assetName;
+}
+

@@ -71,7 +71,7 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
 void TextureEditorWidget::on_pbSave_clicked()
 {
 
-  iTexture2D *managerTexture = csResourceManager::Get()->Get<iTexture2D>(m_editor->GetAssetDescriptor().GetLocator());
+  iTexture2D *managerTexture = csResourceManager::Get()->Get<iTexture2D>(m_editor->GetAsset()->GetResourceLocator());
   if (managerTexture)
   {
     managerTexture->SetSampler(m_texture->GetSampler());
@@ -130,5 +130,5 @@ void TextureEditorWidget::on_pbSave_clicked()
 
   outputFile.Output(std::string(absFileName.toLatin1()));
 
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAssetDescriptor().GetLocator().GetResourceFile());
+  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAsset()->GetResourceLocator().GetResourceFile());
 }

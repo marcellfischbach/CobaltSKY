@@ -19,9 +19,10 @@ public:
   void CloseEditor(iAssetEditor *editor, bool force);
 
   void ShowWidget(QWidget *widget);
-
+ 
   QWidget *GetCurrentTab () const;
 private slots:
+
   void on_tabWidget_currentChanged(int index);
   void on_tabWidget_tabCloseRequested(int index);
 
@@ -29,7 +30,7 @@ private slots:
   void on_actionDebug_dependency_tree_triggered(bool);
 
 private:
-  Ui::MainWindow m_gui;
+	Ui::MainWindow m_gui;
 
   std::list<iAssetEditor*> m_editors;
 };

@@ -14,9 +14,7 @@ public:
   csResourceLocator AsAnonymous() const;
   csResourceLocator AsFileName() const;
   csResourceLocator WithFileSuffix(const std::string &suffix) const;
-  csResourceLocator AsXAsset() const;
-  csResourceLocator AsData() const;
-  csResourceLocator AsCSF() const;
+	csResourceLocator WithResourceName(const std::string &resourceName) const;
 
   bool IsAnonymous() const;
 
@@ -24,7 +22,7 @@ public:
   const std::string &GetResourceName() const;
   const std::string &GetResourceEntry() const;
 
-  std::string GetText() const;
+  std::string Encode() const;
   std::string GetDebugName() const;
 
   bool Equals(const csResourceLocator &other) const;

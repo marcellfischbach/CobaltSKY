@@ -1,14 +1,17 @@
 #pragma once
 
-#include <QOpenGLWidget>
+#include <QWidget>
 
-class csRenderTargetGL4;
-class RenderWidget : public QOpenGLWidget
+#include <cobalt/cstypes.hh>
+
+struct iRenderTarget;
+struct iTexture2D;
+class RenderWidget : public QWidget
 {
   Q_OBJECT
 public:
   RenderWidget(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
-  ~RenderWidget();
+  virtual ~RenderWidget();
 
   void SetName(const QString &name)
   {
@@ -20,15 +23,44 @@ public:
     m_clear = clear;
   }
 
+  iRenderTarget *GetRenderTarget()
+  {
+    return m_renderTarget;
+  }
+  const iRenderTarget *GetRenderTarget() const
+  {
+    return m_renderTarget;
+  }
+
+
+  iTexture2D *GetColorTexture()
+  {
+    return m_colorTexture;
+  }
+  const iTexture2D *GetColorTexture() const
+  {
+    return m_colorTexture;
+  }
 protected:
-  void initializeGL();
-  void paintGL();
-  void resizeGL(int width, int height);
+  void paintEvent(QPaintEvent *event);
   
+  virtual void initializeGL();
+  virtual void paintGL();
+  virtual void resizeGL(int width, int height);
+
+
+private:
+  bool CheckRenderConditions();
+  void ReleaseBuffers();
+
 private:
   QString m_name;
-  GLuint m_vao;
-  csRenderTargetGL4 *m_renderTarget;
+  //GLuint m_vao;
+  iRenderTarget *m_renderTarget;
+  iTexture2D *m_colorTexture;
+
+  csUInt8 *m_buffer;
+  QImage *m_bufferImage;
 
   bool m_clear;
 };

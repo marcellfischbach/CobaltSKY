@@ -10,6 +10,7 @@ namespace asset::model
 	class Model;
 	class ModelTransaction;
 	class Folder;
+	class Root;
   class VFSEntry;
   class Entry
   {
@@ -28,8 +29,11 @@ namespace asset::model
     Entry *GetParent() { return m_parent;  }
     const Entry *GetParent() const { return m_parent; }
 
+		bool IsDescendentOf(const Entry *entry) const;
+
 		virtual void Add(Entry *entry, ModelTransaction &tr);
 		virtual void Remove(Entry *entry, ModelTransaction &tr);
+		virtual void MoveTo(Entry *newParent, ModelTransaction &tr);
 		void RemoveFromParent(ModelTransaction &tr);
 		virtual void Delete(ModelTransaction &tr);
 		virtual void Rename(const std::string &newName, ModelTransaction &tr);
@@ -38,6 +42,10 @@ namespace asset::model
 
 		virtual void SetName(const std::string &name);
 		const std::string &GetName() const;
+		
+		virtual void SetDisplayName(const std::string &displayName);
+		virtual const std::string &GetDisplayName() const;
+
 		virtual const std::string FakeName(const std::string &name) const;
 
 
@@ -53,13 +61,21 @@ namespace asset::model
     virtual VFSEntry *AsVFSEntry();
     virtual const VFSEntry *AsVFSEntry() const;
 
+		virtual bool IsRoot() const;
+		virtual Root *AsRoot();
+		virtual const Root *AsRoot() const;
+
 		virtual bool IsAttached() const;
     virtual csResourceLocator GetResourceLocator() const = 0;
+		virtual csResourceLocator CreateResourceLocator(const std::string &fileName) const;
 
+		bool ContainsChild(const std::string &name) const;
     const std::vector<Entry*> &GetChildren() const;
     Entry* GetChildByName(const std::string &name);
     const Entry* GetChildByName(const std::string &name) const;
 
+		Folder *FindFolder();
+		const Folder *FindFolder() const;
     virtual const VFSEntry *GetVFSEntry() const;
     int GetVFSEntryPriority() const;
 

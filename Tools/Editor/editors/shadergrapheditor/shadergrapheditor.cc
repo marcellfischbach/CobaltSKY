@@ -9,6 +9,7 @@
 #include <components/baseeditorwidget.hh>
 #include <basicdockitem.hh>
 #include <editor.hh>
+#include <glcontext.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
@@ -49,12 +50,13 @@ ShaderGraphEditor::~ShaderGraphEditor()
 
 void ShaderGraphEditor::UpdateAsset()
 {
-  const AssetDescriptor &descriptor = GetAssetDescriptor();
+  // GLContext::Get()->MakeCurrent();
 
+	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
-  csSGShaderGraph *shaderGraph = csResourceManager::Get()->Aquire<csSGShaderGraph>(descriptor.GetLocator());
+  csSGShaderGraph *shaderGraph = csResourceManager::Get()->Aquire<csSGShaderGraph>(locator);
 
-  csResourceLocator metaLocator(descriptor.GetLocator(), "meta");
+  csResourceLocator metaLocator(locator, "meta");
   ShaderGraphEditorMeta *meta = csResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
   if (!meta)
   { 

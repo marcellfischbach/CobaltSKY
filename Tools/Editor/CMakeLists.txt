@@ -72,9 +72,6 @@ source_group(
 
 
 set(ASSETMANAGER_SOURCES
-    assetmanager/assetmanageraction.hh
-    assetmanager/assetmanageractionmanager.cc
-    assetmanager/assetmanageractionmanager.hh
     assetmanager/assetmanagerassetwriter.cc
     assetmanager/assetmanagerassetwriter.hh
     assetmanager/assetmanagercontentitemdelegate.cc
@@ -112,8 +109,7 @@ source_group(
 
 
 set(ASSETMANAGER_ACTIONS_SOURCES
-    assetmanager/actions/assetmanagernewaction.cc
-    assetmanager/actions/assetmanagernewaction.hh
+    assetmanager/actions/assetmanageractioncallback.hh
     )
 
     
@@ -144,6 +140,42 @@ source_group(
     )
 
 
+set(ASSETMANAGER_ACTIONS_NEW_SOURCES
+    assetmanager/actions/new/assetmanagernewassetaction.cc
+    assetmanager/actions/new/assetmanagernewassetaction.hh
+    assetmanager/actions/new/assetmanagernewassetdialog.cc
+    assetmanager/actions/new/assetmanagernewassetdialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_NEW_UI
+	assetmanager/actions/new/assetmanagernewassetdialog.ui
+	)
+    
+source_group(
+    "editor\\assetmanager\\actions\\new"
+    FILES
+    ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEW_UI}
+    )
+
+set(ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES
+    assetmanager/actions/newfolder/assetmanagernewfolderaction.cc
+    assetmanager/actions/newfolder/assetmanagernewfolderaction.hh
+    assetmanager/actions/newfolder/assetmanagernewfolderdialog.cc
+    assetmanager/actions/newfolder/assetmanagernewfolderdialog.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_NEWFOLDER_UI
+	assetmanager/actions/newfolder/assetmanagernewfolderdialog.ui
+	)
+    
+source_group(
+    "editor\\assetmanager\\actions\\newfolder"
+    FILES
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_UI}
+    )
+
 
 set(ASSETMANAGER_ACTIONS_RENAME_SOURCES
     assetmanager/actions/rename/assetmanagerrenameaction.cc
@@ -163,6 +195,28 @@ source_group(
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
     )
 
+
+
+set(ASSETMANAGER_CONTEXTMENU_SOURCES
+    assetmanager/contextmenu/contextmenubuilder.cc
+    assetmanager/contextmenu/contextmenubuilder.hh
+    assetmanager/contextmenu/contextmenucategory.cc
+    assetmanager/contextmenu/contextmenucategory.hh
+    assetmanager/contextmenu/contextmenuentry.cc
+    assetmanager/contextmenu/contextmenuentry.hh
+    assetmanager/contextmenu/contextmenuhandler.cc
+    assetmanager/contextmenu/contextmenuhandler.hh
+    )
+
+set(ASSETMANAGER_CONTEXTMENU_UI
+    )
+    
+source_group(
+    "editor\\assetmanager\\contextmenu"
+    FILES
+    ${ASSETMANAGER_CONTEXTMENU_SOURCES}
+    ${ASSETMANAGER_CONTEXTMENU_UI}
+    )
 
 
 
@@ -196,6 +250,8 @@ set(ASSETMANAGER_MODEL_SOURCES
 	assetmanager/model/assetlistmodel.hh
 	assetmanager/model/foldertreemodel.cc
 	assetmanager/model/foldertreemodel.hh
+	assetmanager/model/treemodel.cc
+	assetmanager/model/treemodel.hh
 	assetmanager/model/viewasset.cc
 	assetmanager/model/viewasset.hh
 	assetmanager/model/viewdatamodel.cc
@@ -293,14 +349,40 @@ source_group(
     ${COMPONENTS_UI}
     )
 
+set(EDITORS_MATERIALEDITOR_SOURCES
+    editors/materialeditor/materialeditor.cc
+    editors/materialeditor/materialeditor.hh
+    editors/materialeditor/materialeditorfactory.cc
+    editors/materialeditor/materialeditorfactory.hh
+    editors/materialeditor/materialeditornew.cc
+    editors/materialeditor/materialeditornew.hh
+    editors/materialeditor/materialeditorpreviewsceneview.cc
+    editors/materialeditor/materialeditorpreviewsceneview.hh
+    editors/materialeditor/materialeditorproperties.cc
+    editors/materialeditor/materialeditorproperties.hh
+    editors/materialeditor/materialeditorwidget.cc
+    editors/materialeditor/materialeditorwidget.hh
+    )
+
+set(EDITORS_MATERIALEDITOR_UI
+    editors/materialeditor/materialeditorwidget.ui
+    )
+
+source_group(
+    "editor\\editors\\materialeditor"
+    FILES
+    ${EDITORS_MATERIALEDITOR_SOURCES}
+    ${EDITORS_MATERIALEDITOR_UI}
+    )
+
 
 set(EDITORS_SAMPLEREDITOR_SOURCES
     editors/samplereditor/samplereditor.cc
     editors/samplereditor/samplereditor.hh
     editors/samplereditor/samplereditorfactory.cc
     editors/samplereditor/samplereditorfactory.hh
-    editors/samplereditor/samplereditornewaction.cc
-    editors/samplereditor/samplereditornewaction.hh
+    editors/samplereditor/samplereditornew.cc
+    editors/samplereditor/samplereditornew.hh
     editors/samplereditor/samplereditorwidget.cc
     editors/samplereditor/samplereditorwidget.hh
     )
@@ -330,8 +412,8 @@ set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh
     editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
     editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
-    editors/shadergrapheditor/shadergrapheditornewaction.cc
-    editors/shadergrapheditor/shadergrapheditornewaction.hh
+    editors/shadergrapheditor/shadergrapheditornew.cc
+    editors/shadergrapheditor/shadergrapheditornew.hh
     editors/shadergrapheditor/shadergrapheditornode.cc
     editors/shadergrapheditor/shadergrapheditornode.hh
     editors/shadergrapheditor/shadergrapheditoroutliner.cc
@@ -516,31 +598,6 @@ source_group(
     )
 
 
-set(EDITORS_MATERIALEDITOR_SOURCES
-    editors/materialeditor/materialeditor.cc
-    editors/materialeditor/materialeditor.hh
-    editors/materialeditor/materialeditorfactory.cc
-    editors/materialeditor/materialeditorfactory.hh
-    editors/materialeditor/materialeditornewaction.cc
-    editors/materialeditor/materialeditornewaction.hh
-    editors/materialeditor/materialeditorpreviewsceneview.cc
-    editors/materialeditor/materialeditorpreviewsceneview.hh
-    editors/materialeditor/materialeditorproperties.cc
-    editors/materialeditor/materialeditorproperties.hh
-    editors/materialeditor/materialeditorwidget.cc
-    editors/materialeditor/materialeditorwidget.hh
-    )
-
-set(EDITORS_MATERIALEDITOR_UI
-    editors/materialeditor/materialeditorwidget.ui
-    )
-
-source_group(
-    "editor\\editors\\materialeditor"
-    FILES
-    ${EDITORS_MATERIALEDITOR_SOURCES}
-    ${EDITORS_MATERIALEDITOR_UI}
-    )
 
 set(NODEGRAPH_SOURCES
     nodegraph/nodegraphacceptevent.cc
@@ -616,8 +673,11 @@ source_group(
 set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
-    ${ASSETMANAGER_ACTIONS_DELETE_UI}
+	${ASSETMANAGER_ACTIONS_DELETE_UI}
+	${ASSETMANAGER_ACTIONS_NEW_UI}
+	${ASSETMANAGER_ACTIONS_NEWFOLDER_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
+    ${ASSETMANAGER_CONTEXTMENU_UI}
     ${ASSETMANAGER_IMPORT_UI}
     ${COMPONENTS_UI}
     ${EDITORS_MATERIALEDITOR_UI}
@@ -639,7 +699,10 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
+    ${ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES}
     ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
+    ${ASSETMANAGER_CONTEXTMENU_SOURCES}
     ${ASSETMANAGER_IMPORT_SOURCES}
     ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}

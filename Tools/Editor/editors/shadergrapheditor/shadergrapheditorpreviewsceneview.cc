@@ -5,6 +5,7 @@
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/entity/csentityscene.hh>
+#include <glcontext.hh>
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)

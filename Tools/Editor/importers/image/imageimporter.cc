@@ -69,14 +69,14 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
 
   csFileInfo fi (m_fileName);
 
-  csResourceLocator assetLocator = assetManager->GetNewResourceLocator(fi.GetName());
+  csResourceLocator assetLocator;// = assetManager->GetNewResourceLocator(fi.GetName());
   if (!assetLocator.IsValid())
   {
     return false();
   }
 
   printf("Import:\n");
-  printf("  CSF: %s\n", assetLocator.GetText().c_str());
+  printf("  CSF: %s\n", assetLocator.Encode().c_str());
 
 
 
@@ -103,7 +103,7 @@ bool newImageImporter::Import(AssetManagerWidget *assetManager)
   if (samplerLocator.IsValid())
   {
     csResourceLocator anonymous = samplerLocator.AsAnonymous();
-    samplerEntry->AddAttribute("locator", anonymous.GetText());
+    samplerEntry->AddAttribute("locator", anonymous.Encode());
   }
   else
   {

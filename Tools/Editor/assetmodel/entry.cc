@@ -22,6 +22,32 @@ namespace asset::model
 
   }
 
+
+	void Entry::SetDisplayName(const std::string &name)
+	{
+		SetName(name);
+	}
+
+	const std::string &Entry::GetDisplayName() const
+	{
+		return GetName();
+	}
+
+
+	bool Entry::IsDescendentOf(const Entry *entry) const
+	{
+		const Entry *test = this;
+		while (test)
+		{
+			if (test == entry)
+			{
+				return true;
+			}
+			test = test->GetParent();
+		}
+		return false;
+	}
+
 	const std::string Entry::FakeName(const std::string &name) const
 	{
 		return name;
@@ -60,7 +86,6 @@ namespace asset::model
 		m_model->Remove(this, entry, tr);
 	}
 
-
 	bool Entry::RemoveChild(Entry *child)
 	{
 		if (!child)
@@ -78,6 +103,13 @@ namespace asset::model
 		child->m_parent = 0;
 		return true;
 	}
+
+	void Entry::MoveTo(Entry *newParent, ModelTransaction &tr)
+	{
+		m_model->Move(GetParent(), newParent, this, tr);
+	}
+
+
 
 	void Entry::RemoveFromParent(ModelTransaction &tr)
 	{
@@ -110,6 +142,26 @@ namespace asset::model
 		return m_parent->IsAttached();
 	}
 
+	csResourceLocator Entry::CreateResourceLocator(const std::string &fileName) const
+	{
+		if (!IsAttached())
+		{
+			return csResourceLocator();
+		}
+		return GetResourceLocator().WithFileSuffix(fileName);
+	}
+
+	bool Entry::ContainsChild(const std::string &name) const
+	{
+		for (const Entry *entry : m_children)
+		{
+			if (name == entry->GetName())
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 	Entry *Entry::GetChildByName(const std::string &name)
 	{
@@ -127,6 +179,29 @@ namespace asset::model
 				return entry;
 			}
 		}
+		return 0;
+	}
+
+	Folder *Entry::FindFolder()
+	{
+		return const_cast<Folder*>(
+			static_cast<const Entry*>(this)->FindFolder()
+			);
+	}
+
+	const Folder *Entry::FindFolder() const
+	{
+		const Entry *entry = this;
+		while (entry)
+		{
+			const Folder *folder = entry->AsFolder();
+			if (folder)
+			{
+				return folder;
+			}
+			entry = entry->GetParent();
+		}
+
 		return 0;
 	}
 
@@ -195,4 +270,19 @@ namespace asset::model
   {
     return 0;
   }
+
+	bool Entry::IsRoot() const
+	{
+		return false;
+	}
+
+	Root *Entry::AsRoot()
+	{
+		return 0;
+	}
+
+	const Root *Entry::AsRoot() const
+	{
+		return 0;
+	}
 }

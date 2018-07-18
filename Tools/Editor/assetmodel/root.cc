@@ -44,4 +44,18 @@ namespace asset::model
     return csResourceLocator();
   }
 
+	bool Root::IsRoot() const
+	{
+		return true;
+	}
+
+	Root *Root::AsRoot()
+	{
+		return this;
+	}
+
+	const Root *Root::AsRoot() const
+	{
+		return this;
+	}
 }

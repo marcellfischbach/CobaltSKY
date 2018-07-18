@@ -64,8 +64,8 @@ set(SOURCE_CORE
     core/cslibrary.hh
     core/cslogger.cc
     core/cslogger.hh
-		core/csreflectionhelper.cc
-		core/csreflectionhelper.hh
+	core/csreflectionhelper.cc
+	core/csreflectionhelper.hh
     core/csresourcelocator.cc
     core/csresourcelocator.hh
     core/csresourcemanager.cc

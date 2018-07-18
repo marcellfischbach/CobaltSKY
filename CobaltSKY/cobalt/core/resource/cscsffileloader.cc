@@ -20,14 +20,14 @@ csCSFFileLoader::~csCSFFileLoader()
 bool csCSFFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
   const std::string extension = file->GetExtension();
-  return extension == std::string("csf");
+  return extension == std::string("csf") || extension == std::string("asset");
 }
 
 
 const csClass *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
   const std::string extension = file->GetExtension();
-  if (extension != std::string("csf"))
+  if (extension != std::string("csf") && extension != std::string("asset"))
   {
     return 0;
   }
@@ -63,7 +63,7 @@ const csClass *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &
 iObject *csCSFFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
   const std::string extension = file->GetExtension();
-  if (extension != std::string("csf"))
+  if (extension != std::string("csf") && extension != std::string("asset"))
   {
     return 0;
   }

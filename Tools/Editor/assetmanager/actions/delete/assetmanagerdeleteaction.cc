@@ -1,6 +1,120 @@
 
 #include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
 #include <assetmanager/actions/delete/assetmanagerdeletedialog.hh>
+#include <assetmanager/contextmenu/contextmenucategory.hh>
+#include <assetmanager/contextmenu/contextmenuentry.hh>
+#include <assetmodel/asset.hh>
+#include <assetmodel/model.hh>
+#include <assetmodel/modeltransaction.hh>
+#include <assetmodel/vfsentry.hh>
+#include <editor.hh>
+#include <mainwindow.hh>
+#include <cobalt/core/csvfs.hh>
+#include <vector>
+#include <QObject>
+#include <assetmanager/assetmanagerwidget.hh>
+
+namespace asset::actions
+{
+
+
+  void AssetManagerDeleteContextMenu::Create(asset::model::Entry *entry, asset::contextmenu::Builder builder)
+  {
+    if (entry->IsRoot() || entry->IsVFSEntry())
+    {
+      return;
+    }
+
+    std::string name = "Delete '" + entry->GetDisplayName() + "'";
+    builder.AddAction(asset::contextmenu::Category::Edit(), name)
+      ->SetAction(new AssetManagerDeleteAction(entry));
+  }
+
+
+
+  AssetManagerDeleteAction::AssetManagerDeleteAction(asset::model::Entry *entry)
+    : asset::actions::ActionCallback()
+    , m_entry(entry)
+  {
+
+  }
+
+  AssetManagerDeleteAction::~AssetManagerDeleteAction()
+  {
+
+  }
+
+  void AssetManagerDeleteAction::Callback()
+  {
+    AssetManagerDeleteDialog dlg(Editor::Get()->GetMainWindow());
+    dlg.SetAssetName(m_entry->GetDisplayName());
+    int res = dlg.exec();
+
+    if (res != QDialog::Accepted)
+    {
+      return;
+    }
+
+    bool deleteOverloaded = dlg.IsDeleteOverloaded();
+    bool deleteSuper = dlg.IsDeleteSuper();
+
+
+    int entityPriority = m_entry->GetVFSEntryPriority();
+
+    const std::set<asset::model::Entry*> &otherEntriesCopy = std::set<asset::model::Entry*>(m_entry->GetModel()->GetAllEntriesFor(m_entry->GetResourceLocator()));
+    asset::model::ModelTransaction tr;
+    try
+    {
+      for (auto deleteEntry : otherEntriesCopy)
+      {
+        const asset::model::VFSEntry *renameVFSEntry = deleteEntry->GetVFSEntry();
+        int deletePriority = renameVFSEntry->GetPriority();
+
+        if (deletePriority < entityPriority && !deleteSuper)
+        {
+          continue;
+        }
+        else if (deletePriority > entityPriority && !deleteOverloaded)
+        {
+          continue;
+        }
+
+        deleteEntry->Delete(tr);
+
+      }
+      tr.Commit();
+    }
+    catch (const std::exception &e)
+    {
+      tr.Rollback();
+    }
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#if 0
+#include <assetmanager/actions/delete/assetmanagerdeleteaction.hh>
+#include <assetmanager/actions/delete/assetmanagerdeletedialog.hh>
 #include <assetmodel/asset.hh>
 #include <assetmodel/model.hh>
 #include <assetmodel/modeltransaction.hh>
@@ -102,3 +216,5 @@ bool AssetManagerDeleteAction::PerformAction(AssetManagerWidget *assetManager) c
 
 	return true;
 }
+
+#endif

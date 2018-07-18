@@ -25,6 +25,7 @@ AssetManagerRenamer::AssetManagerRenamer(const csResourceLocator &from, const cs
 
 bool AssetManagerRenamer::Execute()
 {
+	/*
   ProjectReferenceTree &tree = Editor::Get()->GetProject()->GetReferenceTree();
   const ProjectAssetReference *reference = tree.GetReference(m_from);
   while (reference)
@@ -50,7 +51,7 @@ bool AssetManagerRenamer::Execute()
   AssetRenamedEvent evnt(m_from, m_to);
 
   EventBus::Get() << evnt;
-
+	*/
   return true;
 }
 

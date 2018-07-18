@@ -58,7 +58,7 @@ namespace asset::model
   {
     csResourceLocator l = folder->GetResourceLocator();
     std::string path = csVFS::Get()->GetAbsolutePath(l);
-    printf("MS_Scan: %s => %s\n", l.GetText().c_str(), path.c_str());
+    printf("MS_Scan: %s => %s\n", l.Encode().c_str(), path.c_str());
 
     for (const std::fs::directory_entry &p : std::fs::directory_iterator(path))
     {
@@ -118,7 +118,7 @@ namespace asset::model
       asset->SetAssetType(ext);
     }
 
-    printf("MS_Scan: %s\n", assetLocator.GetText().c_str());
+    printf("MS_Scan: %s\n", assetLocator.Encode().c_str());
   }
 
 }

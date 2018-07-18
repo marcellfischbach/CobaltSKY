@@ -6,6 +6,10 @@
 #include <QWidget>
 #include <set>
 
+namespace asset::model
+{
+	class Asset;
+}
 
 CS_INTERFACE()
 struct iAssetEditor : public iObject
@@ -14,7 +18,8 @@ struct iAssetEditor : public iObject
   iAssetEditor() : iObject() { }
   virtual ~iAssetEditor() { }
 
-  virtual void SetObject(iObject *object, const AssetDescriptor &descriptor) = 0;
+  virtual void SetObject(iObject *object, asset::model::Asset *asset) = 0;
+
 
   virtual QWidget *GetWidget() = 0;
 

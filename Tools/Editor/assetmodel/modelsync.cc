@@ -15,7 +15,7 @@ namespace asset::model
 
 	bool ModelSync::Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
 	{
-    std::cout << "Move: " << oldLocator.GetText() << " => " + newLocator.GetText() << std::endl;
+    std::cout << "Move: " << oldLocator.Encode() << " => " + newLocator.Encode() << std::endl;
     std::string oldPathStr = csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::CheckExistence);
     std::string newPathStr = csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence);
     if (oldPathStr.empty() || newPathStr.empty())
@@ -34,7 +34,7 @@ namespace asset::model
 
 	bool ModelSync::Delete(const csResourceLocator &locator)
 	{
-    std::cout << "Delete: " << locator.GetText() << std::endl;
+    std::cout << "Delete: " << locator.Encode() << std::endl;
     std::string pathStr = csVFS::Get()->GetAbsolutePath(locator, csVFS::CheckExistence);
     if (pathStr.empty())
     {

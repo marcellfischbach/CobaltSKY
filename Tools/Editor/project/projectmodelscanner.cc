@@ -18,7 +18,7 @@ namespace
 {
 	void Scan(const csResourceLocator &locator)
 	{
-		printf("Scan: %s\n", locator.GetText().c_str());
+		printf("Scan: %s\n", locator.Encode().c_str());
 	}
 
 	void Scan(QString filePath, const csVFS::Entry &entry)

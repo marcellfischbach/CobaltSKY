@@ -22,7 +22,7 @@
 #include <QTimer>
 
 SceneView::SceneView(QWidget *parent)
-  : QOpenGLWidget(parent)
+  : RenderWidget(parent)
   , m_onscreenTarget(new QTCSOnscreenRenderTarget())
   , m_graphics(0)
 {
@@ -72,10 +72,9 @@ csCamera *SceneView::GetCamera()
 
 void SceneView::initializeGL()
 {
-  QOpenGLWidget::initializeGL();
+  RenderWidget::initializeGL();
   if (!m_graphics)
   {
-    context()->setShareContext(QOpenGLContext::globalShareContext());
 
     m_graphics = csEng->GetRenderer();
     m_graphics->ResetDefaults();
@@ -109,7 +108,7 @@ void SceneView::initializeGL()
 
 void SceneView::paintGL()
 {
-  QOpenGLWidget::paintGL();
+  RenderWidget::paintGL();
   m_onscreenTarget->Setup(width(), height());
 
   csEntity *root = 0;
@@ -120,7 +119,7 @@ void SceneView::paintGL()
   }
   iTexture2D *colorTarget = 0;
 
-  iRenderTarget *target = m_frameProcessor->Render(root, m_camera, m_onscreenTarget->GetRenderTarget());
+  iRenderTarget *target = m_frameProcessor->Render(root, m_camera, GetRenderTarget());
   colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
   /*
   //
@@ -135,7 +134,7 @@ void SceneView::paintGL()
 
 void SceneView::resizeGL(int width, int height)
 {
-  QOpenGLWidget::resizeGL(width, height);
+  RenderWidget::resizeGL(width, height);
   m_graphics->ResetDefaults();
 
   if (m_frameProcessor)
@@ -158,11 +157,13 @@ void scene_view_cleanup_screenshot_data(void *data)
 QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
 {
   QImage result;
+  /*
   if (!GLContext::Get()->MakeCurrent())
   {
     printf("Unable to make glcontext current\n");
     return result;
   }
+  */
   csDeferredFrameProcessorGL4 *frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
   if (!frameProcessor->Initialize())
   {

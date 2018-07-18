@@ -15,38 +15,27 @@ csResourceLocator::csResourceLocator(const std::string &encodedResourceName)
 	, m_resourceFile("")
 	, m_resourceName("")
 {
-	size_t idxSC = encodedResourceName.find(':');
-	size_t idxAT = encodedResourceName.find('@');
 
 
-	// extract the filename
-	size_t idxEndFileName = encodedResourceName.length();
-	idxEndFileName = idxSC < idxEndFileName ? idxSC : idxEndFileName;
-	idxEndFileName = idxAT < idxEndFileName ? idxAT : idxEndFileName;
-	m_resourceFile = encodedResourceName.substr(0, idxEndFileName);
 
+	size_t idxAST = encodedResourceName.find('@');
+	size_t idxQUEST = encodedResourceName.find('?');
 
-	if (idxSC != std::string::npos)
+	size_t fileNameStart = 0;
+	size_t fileNameEnd = encodedResourceName.length();
+
+	if (idxAST != std::string::npos)
 	{
-		// extract the resource name
-		size_t length = encodedResourceName.length() - idxSC;
-		if (idxAT != std::string::npos && idxAT > idxSC)
-		{
-			length = idxAT - idxSC;
-		}
-		m_resourceName = encodedResourceName.substr(idxSC + 1, length - 1);
+		m_resourceEntry = encodedResourceName.substr(0, idxAST);
+		fileNameStart = idxAST + 1;
+	}
+	if (idxQUEST != std::string::npos)
+	{
+		m_resourceName = encodedResourceName.substr(idxQUEST + 1);
+		fileNameEnd = idxQUEST;
 	}
 
-	if (idxAT != std::string::npos)
-	{
-		// extract the resource name
-		size_t length = encodedResourceName.length() - idxAT;
-		if (idxSC != std::string::npos && idxSC > idxAT)
-		{
-			length = idxSC - idxAT;
-		}
-		m_resourceEntry = encodedResourceName.substr(idxAT + 1, length - 1);
-	}
+	m_resourceFile = encodedResourceName.substr(fileNameStart, fileNameEnd - fileNameStart);
 	FixResourceFile();
 
 }
@@ -77,31 +66,16 @@ csResourceLocator csResourceLocator::WithFileSuffix(const std::string &suffix) c
 	return csResourceLocator(m_resourceFile + suffix, m_resourceName, m_resourceEntry);
 }
 
+csResourceLocator csResourceLocator::WithResourceName(const std::string &resourceName) const
+{
+	return csResourceLocator(m_resourceFile, resourceName, m_resourceEntry);
+}
+
 csResourceLocator csResourceLocator::AsFileName() const
 {
 	return csResourceLocator(m_resourceFile, "", "");
 }
 
-csResourceLocator csResourceLocator::AsXAsset() const
-{
-	csFileInfo fi(m_resourceFile);
-	std::string fileName = fi.GetLocation() + "/" + fi.GetName() + ".xasset";
-	return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
-}
-
-csResourceLocator csResourceLocator::AsData() const
-{
-	csFileInfo fi(m_resourceFile);
-	std::string fileName = fi.GetLocation() + "/" + fi.GetName() + ".data";
-	return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
-}
-
-csResourceLocator csResourceLocator::AsCSF() const
-{
-	csFileInfo fi(m_resourceFile);
-	std::string fileName = fi.GetLocation() + "/" + fi.GetName() + ".csf";
-	return csResourceLocator(fileName, m_resourceName, m_resourceEntry);
-}
 
 bool csResourceLocator::IsAnonymous() const
 {
@@ -123,23 +97,24 @@ const std::string &csResourceLocator::GetResourceEntry() const
 	return m_resourceEntry;
 }
 
-std::string csResourceLocator::GetText() const
+std::string csResourceLocator::Encode() const
 {
-	std::string result = m_resourceFile;
-	if (!m_resourceName.empty())
-	{
-		result += std::string(":") + m_resourceName;
-	}
+	std::string result;
 	if (!m_resourceEntry.empty())
 	{
-		result += std::string("@") + m_resourceEntry;
+		result += m_resourceEntry + std::string("@");
+	}
+	result += m_resourceFile;
+	if (!m_resourceName.empty())
+	{
+		result += std::string("?") + m_resourceName;
 	}
 	return result;
 }
 
 std::string csResourceLocator::GetDebugName() const
 {
-	return m_resourceFile + ":" + m_resourceName + "@" + m_resourceEntry;
+	return m_resourceEntry + "@" + m_resourceFile + "?" + m_resourceName;
 }
 
 bool csResourceLocator::operator<(const csResourceLocator &o) const

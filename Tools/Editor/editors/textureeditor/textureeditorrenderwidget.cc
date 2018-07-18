@@ -105,7 +105,7 @@ void TextureEditorRenderWidget::SetTexture(iTexture2D *texture)
 
 void TextureEditorRenderWidget::initializeGL()
 {
-  RenderWidget::initializeGL();
+//  RenderWidget::initializeGL();
 
 
   iGraphics *gr = csEng->GetRenderer();
@@ -141,7 +141,7 @@ void TextureEditorRenderWidget::initializeGL()
 
 void TextureEditorRenderWidget::paintGL()
 {
-  RenderWidget::paintGL();
+ // RenderWidget::paintGL();
 
 
 
