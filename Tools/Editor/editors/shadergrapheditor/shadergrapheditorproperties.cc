@@ -264,7 +264,7 @@ void ShaderGraphEditorProperties::SpinBox_valueChanged(double value)
 
   m_node->UpdateValues();
   m_node->Layout();
-  emit NodeChanged();
+  emit NodeChanged(m_node);
 }
 
 void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
@@ -284,7 +284,7 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
 
       m_node->UpdateValues();
       m_node->Layout();
-      emit NodeChanged();
+      emit NodeChanged(m_node);
     }
   }
 }
@@ -312,7 +312,7 @@ void ShaderGraphEditorProperties::DefaultFloat_valueChanged(double value)
 
   m_node->UpdateValues();
   m_node->Layout();
-  emit NodeChanged();
+  emit NodeChanged(m_node);
 }
 
 void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
@@ -338,7 +338,7 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
 
   m_node->UpdateValues();
   m_node->Layout();
-  emit NodeChanged();
+  emit NodeChanged(m_node);
 }
 
 void ShaderGraphEditorProperties::ResourceChanged(const csResourceLocator &locator)
@@ -360,6 +360,6 @@ void ShaderGraphEditorProperties::ResourceChanged(const csResourceLocator &locat
 
   m_node->UpdateValues();
   m_node->Layout();
-  emit NodeChanged();
+  emit NodeChanged(m_node);
 }
 

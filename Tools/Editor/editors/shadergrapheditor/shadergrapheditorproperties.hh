@@ -29,7 +29,7 @@ private slots:
   void ResourceChanged(const csResourceLocator &locator);
 
 signals:
-  void NodeChanged();
+  void NodeChanged(ShaderGraphEditorNode *node);
 
 private:
   void Cleanup();

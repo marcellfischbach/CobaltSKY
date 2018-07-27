@@ -293,7 +293,9 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
+    emit ShaderGraphNodeAboutToAdd(node);
     m_shaderGraphCopy->AddNode(node);
+    emit ShaderGraphNodeAdded(node);
 
     editorNode = new ShaderGraphEditorNode(node);
   }
@@ -325,8 +327,9 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
     csSGTexture2D *txtNode = new csSGTexture2D();
     txtNode->SetDefaultTextureResource(locator);
     txtNode->SetResourceName(ExtractName(locator));
-
+    emit ShaderGraphNodeAboutToAdd(txtNode);
     m_shaderGraphCopy->AddNode(txtNode);
+    emit ShaderGraphNodeAdded(txtNode);
 
     editorNode = new ShaderGraphEditorNode(txtNode);
   }
@@ -359,10 +362,13 @@ void ShaderGraphEditorWidget::on_nodeGraph_NodeRemoved(NodeGraphNode* node)
     return;
   }
   ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(node);
+
   csSGNode *sgNode = editorNode->GetSGNode();
   if (!sgNode)
   {
+    emit ShaderGraphNodeAboutToRemove(sgNode);
     m_shaderGraphCopy->RemoveNode(sgNode);
+    emit ShaderGraphNodeRemoved(sgNode);
   }
 }
 

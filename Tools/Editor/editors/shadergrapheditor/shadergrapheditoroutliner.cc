@@ -42,6 +42,35 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
   }
 }
 
+void ShaderGraphEditorOutliner::NodeChanged(ShaderGraphEditorNode* node)
+{
+  if (node)
+  {
+    m_model->NodeChanged(node->GetSGNode());
+  }
+}
+
+void ShaderGraphEditorOutliner::NodeAboutToAdd(csSGNode *node)
+{
+  m_model->NodeAboutToAdd(node);
+}
+
+
+void ShaderGraphEditorOutliner::NodeAdded(csSGNode *node)
+{
+  m_model->NodeAdded(node);
+}
+
+void ShaderGraphEditorOutliner::NodeAboutToRemove(csSGNode *node)
+{
+  m_model->NodeAboutToRemove(node);
+}
+
+void ShaderGraphEditorOutliner::NodeRemoved(csSGNode *node)
+{
+  m_model->NodeRemoved(node);
+}
+
 
 void ShaderGraphEditorOutliner::SetShaderGraph(csSGShaderGraph *shaderGraph)
 {

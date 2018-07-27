@@ -5,6 +5,7 @@
 
 class ShaderGraphEditorNode;
 class csSGShaderGraph;
+class csSGNode;
 class ShaderGraphEditorOutlinerTableModel;
 class ShaderGraphEditorOutliner : public QWidget
 {
@@ -17,6 +18,11 @@ public:
 
   public slots:
   void SetSelectedNodes(const QList<ShaderGraphEditorNode*>& nodes);
+  void NodeChanged(ShaderGraphEditorNode* node);
+  void NodeAboutToAdd(csSGNode *node);
+  void NodeAdded(csSGNode *node);
+  void NodeAboutToRemove(csSGNode *node);
+  void NodeRemoved(csSGNode *node);
 
 private:
   Ui::ShaderGraphEditorOutliner m_gui;

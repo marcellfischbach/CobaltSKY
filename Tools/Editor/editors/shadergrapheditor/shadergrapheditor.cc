@@ -33,13 +33,16 @@ ShaderGraphEditor::ShaderGraphEditor()
     
   SetWidget(widget);
     
-  QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
-    m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
+  QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)), m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
 
-  QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)),
-    m_outliner, SLOT(SetSelectedNodes(const QList<ShaderGraphEditorNode*>&)));
+  QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)), m_outliner, SLOT(SetSelectedNodes(const QList<ShaderGraphEditorNode*>&)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToAdd(csSGNode*)), m_outliner, SLOT(NodeAboutToAdd(csSGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAdded(csSGNode*)), m_outliner, SLOT(NodeAdded(csSGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToRemove(csSGNode*)), m_outliner, SLOT(NodeAboutToRemove(csSGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeRemoved(csSGNode*)), m_outliner, SLOT(NodeRemoved(csSGNode*)));
+  QObject::connect(m_properties, SIGNAL(NodeChanged(ShaderGraphEditorNode*)), m_outliner, SLOT(NodeChanged(ShaderGraphEditorNode*)));
 
-  QObject::connect(m_properties, SIGNAL(NodeChanged()), m_widget, SLOT(RepaintGraph()));
+  QObject::connect(m_properties, SIGNAL(NodeChanged(ShaderGraphEditorNode*)), m_widget, SLOT(RepaintGraph()));
   QObject::connect(m_widget, SIGNAL(ShaderGraphChanged()), m_preview, SLOT(ShaderGraphChanged()));
 }
 

@@ -12,6 +12,13 @@ public:
 
   void SetShaderGraph(csSGShaderGraph *shaderGraph);
 
+  void NodeChanged(csSGNode *node);
+  void NodeAdded(csSGNode *node);
+  void NodeAboutToAdd(csSGNode *node);
+  void NodeRemoved(csSGNode *node);
+  void NodeAboutToRemove(csSGNode *node);
+
+
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   virtual QModelIndex parent(const QModelIndex &child) const;
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;

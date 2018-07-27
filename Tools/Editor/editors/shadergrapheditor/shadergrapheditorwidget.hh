@@ -55,5 +55,9 @@ private:
 
 signals:
   void SelectionChanged(const QList<ShaderGraphEditorNode*> &nodes);
+  void ShaderGraphNodeAboutToAdd(csSGNode *node);
+  void ShaderGraphNodeAdded(csSGNode *node);
+  void ShaderGraphNodeAboutToRemove(csSGNode *node);
+  void ShaderGraphNodeRemoved(csSGNode *node);
   void ShaderGraphChanged();
 };

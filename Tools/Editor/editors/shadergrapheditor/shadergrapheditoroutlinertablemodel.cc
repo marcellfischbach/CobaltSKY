@@ -25,6 +25,50 @@ void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(csSGShaderGraph *shader
 }
 
 
+void ShaderGraphEditorOutlinerTableModel::NodeChanged(csSGNode *node)
+{
+  int idx = m_shaderGraph->GetIndexOfNode(node);
+  if (idx == -1)
+  {
+    return;
+  }
+  
+  emit dataChanged(createIndex(idx, 0, node), createIndex(idx, 1, node));
+}
+
+void ShaderGraphEditorOutlinerTableModel::NodeAboutToAdd(csSGNode *node)
+{
+
+}
+
+void ShaderGraphEditorOutlinerTableModel::NodeAdded(csSGNode *node)
+{
+  int idx = m_shaderGraph->GetIndexOfNode(node);
+  if (idx == -1)
+  {
+    return;
+  }
+
+  beginInsertRows(QModelIndex(), idx, idx);
+  endInsertRows();
+}
+
+void ShaderGraphEditorOutlinerTableModel::NodeAboutToRemove(csSGNode *node)
+{
+  int idx = m_shaderGraph->GetIndexOfNode(node);
+  if (idx == -1)
+  {
+    return;
+  }
+  beginRemoveRows(QModelIndex(), idx, idx);
+}
+
+void ShaderGraphEditorOutlinerTableModel::NodeRemoved(csSGNode *node)
+{
+  endRemoveRows();
+}
+
+
 QModelIndex ShaderGraphEditorOutlinerTableModel::index(int row, int column, const QModelIndex &parent) const
 {
   if (parent.isValid() || !m_shaderGraph)
