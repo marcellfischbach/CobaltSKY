@@ -5,7 +5,7 @@
 #include <cobalt/core/csclassregistry.hh>
 #include <QMimeData>
 
-#define CS_RESOURCE_LOCATOR_MIME_TYPE "cs-application/resource_locator"
+#define CS_RESOURCE_LOCATOR_MIME_TYPE "application/resourceLocator"
 #define CS_RESOURCE_TYPE_MIME_TYPE "cs-application/resource_type"
 #define CS_CLASS_MIME_TYPE "cs-application/class"
 

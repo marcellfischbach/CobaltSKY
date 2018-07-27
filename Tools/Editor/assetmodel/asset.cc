@@ -1,6 +1,7 @@
 
 #include <assetmodel/asset.hh>
 #include <assetmodel/model.hh>
+#include <cobalt/core/csresourcemanager.hh>
 
 namespace asset::model
 {
@@ -8,6 +9,7 @@ namespace asset::model
     : Entry(model, eT_Asset)
     , m_assetName("")
     , m_assetType("undef")
+    , m_cls(0)
   {
     SetName(fileName);
   }
@@ -97,5 +99,14 @@ namespace asset::model
 	{
 		GetModel()->AddReference(this, locator);
 	}
+
+  const csClass *Asset::GetClass() const
+  {
+    if (!m_cls)
+    {
+      m_cls = csResourceManager::Get()->EvalClass(GetResourceLocator());
+    }
+    return m_cls;
+  }
 }
 

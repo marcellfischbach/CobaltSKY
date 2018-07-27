@@ -14,7 +14,10 @@ EditorImage::~EditorImage()
 
 void editor_image_clean_up(void *data)
 {
+
+
   unsigned char *imageBuffer = reinterpret_cast<unsigned char*>(data);
+  printf("Cleanupat: %p\n", imageBuffer);
   delete[] imageBuffer;
 }
 
@@ -40,6 +43,7 @@ void EditorImage::SetImage(csImage *image)
       format = QImage::Format_RGB888;
       break;
     }
+    printf("Buffer at: %p\n", buffer);
     m_image = QImage((const uchar *)buffer, image->GetWidth(), image->GetHeight(), format, editor_image_clean_up, buffer);
   }
 }

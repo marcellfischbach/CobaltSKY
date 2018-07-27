@@ -137,6 +137,8 @@ iObject *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, const csRe
     ptr += bytesPerRow;
   }
 
+
+
   csImage *image = new csImage();
   image->SetWidth(width);
   image->SetHeight(height);

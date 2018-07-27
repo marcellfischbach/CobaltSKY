@@ -3,6 +3,7 @@
 
 #include <assetmodel/entry.hh>
 #include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csclass.hh>
 #include <string>
 #include <set>
 
@@ -29,6 +30,8 @@ namespace asset::model
 		virtual Asset *AsAsset();
 		virtual const Asset*AsAsset() const;
 
+    const csClass *GetClass() const;
+
 
     virtual csResourceLocator GetResourceLocator() const;
 
@@ -41,6 +44,7 @@ namespace asset::model
 
     std::string m_assetType;
 
+    mutable const csClass *m_cls;
   };
 
 

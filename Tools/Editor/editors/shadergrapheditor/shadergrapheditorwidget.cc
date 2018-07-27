@@ -238,34 +238,48 @@ void ShaderGraphEditorWidget::on_nodeGraph_ScaleChanged(float scale)
 void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, NodeGraphAcceptEvent *accept)
 {
   // check the mime from the toolbox
+  bool validEntryFound = false;
   if (event->mimeData()->hasFormat(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME))
   {
-    accept->Accept();
-    return;
+    validEntryFound = true;
   }
   else
   {
-
     const QMimeData *data = event->mimeData();
-    if (!data)
+    if (!data->hasFormat("application/assetModelEntryPtr"))
     {
       return;
     }
 
-    const csClass *cls = MimeHelper::GetClass(data);
-    if (!cls)
-    {
-      return;
-    }
+    QByteArray &rawData = data->data("application/assetModelEntryPtr");
+    QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+    std::vector<asset::model::Entry*> entries;
+    get(entriesStream, entries);
 
-    if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+    for (asset::model::Entry *entry : entries)
     {
-      if (!MimeHelper::HasResourceLocator(data))
+      asset::model::Asset *asset = entry->AsAsset();
+      if (!asset)
       {
-        return;
+        continue;
+      }
+
+      const csClass *cls = asset->GetClass();
+      if (!cls)
+      {
+        continue;
+      }
+
+      if (cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+      {
+        validEntryFound = true;
+        break;
       }
     }
+  }
 
+  if (validEntryFound)
+  {
     accept->Accept();
   }
 }
@@ -273,7 +287,6 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, No
 
 void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
 {
-  ShaderGraphEditorNode *editorNode = 0;
 
   if (event->mimeData()->hasFormat(SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME))
   {
@@ -297,7 +310,10 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
     m_shaderGraphCopy->AddNode(node);
     emit ShaderGraphNodeAdded(node);
 
-    editorNode = new ShaderGraphEditorNode(node);
+    ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(node);
+    m_gui.nodeGraph->AddNode(editorNode);
+    editorNode->SetLocation(m_gui.nodeGraph->GetLocalCoordinate(event->pos()));
+
   }
   else
   {
@@ -309,36 +325,69 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
-    const csClass *cls = MimeHelper::GetClass(data);
-    if (!cls)
+
+
+    if (!data->hasFormat("application/assetModelEntryPtr"))
     {
       return;
     }
 
-    if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+    QByteArray &rawData = data->data("application/assetModelEntryPtr");
+    QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+    std::vector<asset::model::Entry*> entries;
+    get(entriesStream, entries);
+
+    for (asset::model::Entry *entry : entries)
     {
-      if (!MimeHelper::HasResourceLocator(data))
+      asset::model::Asset *asset = entry->AsAsset();
+      if (!asset)
       {
         return;
       }
+
+      const csClass *cls = asset->GetClass();
+      if (!cls)
+      {
+        continue;
+      }
+
+      if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+      {
+        continue;
+      }
+
+
+      csResourceLocator locator = asset->GetResourceLocator();
+
+      csSGTexture2D *txtNode = new csSGTexture2D();
+      txtNode->SetDefaultTextureResource(locator);
+      txtNode->SetResourceName(ExtractName(locator));
+      emit ShaderGraphNodeAboutToAdd(txtNode);
+      m_shaderGraphCopy->AddNode(txtNode);
+      emit ShaderGraphNodeAdded(txtNode);
+
+      ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(txtNode);
+
+      m_gui.nodeGraph->AddNode(editorNode);
+      editorNode->SetLocation(m_gui.nodeGraph->GetLocalCoordinate(event->pos()));
+
     }
-    csResourceLocator locator = MimeHelper::GetResourceLocator(data);
 
-    csSGTexture2D *txtNode = new csSGTexture2D();
-    txtNode->SetDefaultTextureResource(locator);
-    txtNode->SetResourceName(ExtractName(locator));
-    emit ShaderGraphNodeAboutToAdd(txtNode);
-    m_shaderGraphCopy->AddNode(txtNode);
-    emit ShaderGraphNodeAdded(txtNode);
-
-    editorNode = new ShaderGraphEditorNode(txtNode);
   }
 
-  if (editorNode)
+  m_gui.nodeGraph->repaint();
+}
+
+void ShaderGraphEditorWidget::get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const
+{
+  quint32 numEntries;
+  stream >> numEntries;
+  for (quint32 i = 0; i < numEntries; ++i)
   {
-    m_gui.nodeGraph->AddNode(editorNode);
-    editorNode->SetLocation(m_gui.nodeGraph->GetLocalCoordinate(event->pos()));
-    m_gui.nodeGraph->repaint();
+    quint64 ptr;
+    stream >> ptr;
+    asset::model::Entry *entry = reinterpret_cast<asset::model::Entry*>(ptr);
+    entries.push_back(entry);
   }
 }
 
@@ -364,7 +413,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_NodeRemoved(NodeGraphNode* node)
   ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(node);
 
   csSGNode *sgNode = editorNode->GetSGNode();
-  if (!sgNode)
+  if (sgNode)
   {
     emit ShaderGraphNodeAboutToRemove(sgNode);
     m_shaderGraphCopy->RemoveNode(sgNode);

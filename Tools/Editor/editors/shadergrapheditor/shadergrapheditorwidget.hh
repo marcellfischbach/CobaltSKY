@@ -5,6 +5,13 @@
 #include <string>
 #include <ui_shadergrapheditorwidget.h>
 
+
+namespace asset::model
+{
+  class Entry;
+}
+
+
 class csResourceLocator;
 class csSGNode;
 class csSGShaderGraph;
@@ -44,6 +51,7 @@ private:
   void SaveCSFFile();
   std::string ExtractName(const csResourceLocator &locator);
   bool Apply();
+  void get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const;
   ShaderGraphEditorNode *GetEditorNode(csSGNode *node);
   ShaderGraphEditorNode *GetShaderGraphNode();
   Ui::ShaderGraphEditorWidget m_gui;
