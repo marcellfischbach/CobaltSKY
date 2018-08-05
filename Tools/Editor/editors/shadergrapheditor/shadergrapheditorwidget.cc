@@ -360,6 +360,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       csResourceLocator locator = asset->GetResourceLocator();
 
       csSGTexture2D *txtNode = new csSGTexture2D();
+
       txtNode->SetDefaultTextureResource(locator);
       txtNode->SetResourceName(ExtractName(locator));
       emit ShaderGraphNodeAboutToAdd(txtNode);

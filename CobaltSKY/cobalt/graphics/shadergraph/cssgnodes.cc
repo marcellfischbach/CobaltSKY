@@ -32,6 +32,9 @@ csSGNodes::csSGNodes()
   m_entries.push_back(Entry(CS_SUB_NAME, csSGSub::GetStaticClass()));
   m_entries.push_back(Entry(CS_MUL_NAME, csSGMul::GetStaticClass()));
   m_entries.push_back(Entry(CS_DIV_NAME, csSGDiv::GetStaticClass()));
+  m_entries.push_back(Entry(CS_NEG_NAME, csSGNeg::GetStaticClass()));
+  m_entries.push_back(Entry(CS_ONE_BY_NAME, csSGOneBy::GetStaticClass()));
+  m_entries.push_back(Entry(CS_ONE_MINUS_NAME, csSGOneMinus::GetStaticClass()));
   m_entries.push_back(Entry(CS_DOT_NAME, csSGDot::GetStaticClass()));
   m_entries.push_back(Entry(CS_CROSS_NAME, csSGCross::GetStaticClass()));
   m_entries.push_back(Entry(CS_LERP_NAME, csSGLerp::GetStaticClass()));

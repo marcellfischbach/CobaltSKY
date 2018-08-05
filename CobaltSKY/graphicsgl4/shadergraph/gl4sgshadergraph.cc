@@ -14,8 +14,11 @@
 #include <graphicsgl4/shadergraph/gl4sgfloat4.hh>
 #include <graphicsgl4/shadergraph/gl4sglerp.hh>
 #include <graphicsgl4/shadergraph/gl4sgmul.hh>
+#include <graphicsgl4/shadergraph/gl4sgneg.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnormalize.hh>
+#include <graphicsgl4/shadergraph/gl4sgoneby.hh>
+#include <graphicsgl4/shadergraph/gl4sgoneminus.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <graphicsgl4/shadergraph/gl4sgsplitfloat2.hh>
@@ -46,7 +49,10 @@
 #include <cobalt/graphics/shadergraph/cssgfloat4.hh>
 #include <cobalt/graphics/shadergraph/cssglerp.hh>
 #include <cobalt/graphics/shadergraph/cssgmul.hh>
+#include <cobalt/graphics/shadergraph/cssgneg.hh>
 #include <cobalt/graphics/shadergraph/cssgnormalize.hh>
+#include <cobalt/graphics/shadergraph/cssgoneby.hh>
+#include <cobalt/graphics/shadergraph/cssgoneminus.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgsplitfloat2.hh>
 #include <cobalt/graphics/shadergraph/cssgsplitfloat3.hh>
@@ -95,6 +101,9 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const csClass *nodeClass)
     m_classMapping.push_back(Map(csSGSub::GetStaticClass(), csSGSubGL4::GetStaticClass()));
     m_classMapping.push_back(Map(csSGMul::GetStaticClass(), csSGMulGL4::GetStaticClass()));
     m_classMapping.push_back(Map(csSGDiv::GetStaticClass(), csSGDivGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGNeg::GetStaticClass(), csSGNegGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGOneBy::GetStaticClass(), csSGOneByGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(csSGOneMinus::GetStaticClass(), csSGOneMinusGL4::GetStaticClass()));
     m_classMapping.push_back(Map(csSGDot::GetStaticClass(), csSGDotGL4::GetStaticClass()));
     m_classMapping.push_back(Map(csSGCross::GetStaticClass(), csSGCrossGL4::GetStaticClass()));
     m_classMapping.push_back(Map(csSGLerp::GetStaticClass(), csSGLerpGL4::GetStaticClass()));

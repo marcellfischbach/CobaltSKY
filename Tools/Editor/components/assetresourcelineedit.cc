@@ -8,6 +8,7 @@
 #include <mimehelper.hh>
 #include <cobalt/core/csclass.hh>
 #include <cobalt/core/csresourcelocator.hh>
+#include <assetmodel/asset.hh>
 
 AssetResourceLineEdit::AssetResourceLineEdit(QWidget *parent)
   : QLineEdit(parent)
@@ -29,15 +30,31 @@ AssetResourceLineEdit::~AssetResourceLineEdit()
 void AssetResourceLineEdit::dragEnterEvent(QDragEnterEvent *event)
 {
   const QMimeData *mimeData = event->mimeData();
-  if (!MimeHelper::HasClass(mimeData))
+  if (!mimeData->hasFormat("application/assetModelEntryPtr"))
   {
     return;
   }
-  const csClass *cls = MimeHelper::GetClass(mimeData);
+  QByteArray &rawData = mimeData->data("application/assetModelEntryPtr");
+  QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+  std::vector<asset::model::Entry*> entries;
+  get(entriesStream, entries);
+  if (entries.size() != 1)
+  {
+    return;
+  }
+  asset::model::Asset *asset = entries[0]->AsAsset();
+  if (!asset)
+  {
+    return;
+  }
+
+  const csClass *cls = asset->GetClass();
   if (!cls)
   {
     return;
   }
+
+  
   for (const csClass *validClass : m_validClasses)
   {
     if (cls->IsInstanceOf(validClass))
@@ -48,16 +65,39 @@ void AssetResourceLineEdit::dragEnterEvent(QDragEnterEvent *event)
   }
 }
 
+
+void AssetResourceLineEdit::get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const
+{
+  quint32 numEntries;
+  stream >> numEntries;
+  for (quint32 i = 0; i < numEntries; ++i)
+  {
+    quint64 ptr;
+    stream >> ptr;
+    asset::model::Entry *entry = reinterpret_cast<asset::model::Entry*>(ptr);
+    entries.push_back(entry);
+  }
+}
+
+
 void AssetResourceLineEdit::dropEvent(QDropEvent *event)
 {
-  const QMimeData *data = event->mimeData();
-  if (!MimeHelper::HasResourceLocator(data))
+  const QMimeData *mimeData = event->mimeData();
+  if (!mimeData->hasFormat("application/assetModelEntryPtr"))
   {
     return;
   }
+  QByteArray &rawData = mimeData->data("application/assetModelEntryPtr");
+  QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
+  std::vector<asset::model::Entry*> entries;
+  get(entriesStream, entries);
+  if (entries.size() != 1)
+  {
+    return;
+  }
+  asset::model::Entry *entry = entries[0];
 
-  csResourceLocator locator = MimeHelper::GetResourceLocator(data);
-  emit ResourceChanged(locator);
+  emit ResourceChanged(entry->GetResourceLocator());
 }
 
 

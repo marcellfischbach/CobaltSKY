@@ -60,7 +60,10 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
     return;
   }
   memcpy(m_bufferImage->bits(), m_buffer, resSize);
-  p.drawImage(0, 0, *m_bufferImage);
+  QTransform currentTr = p.transform();
+  p.setTransform(QTransform::fromScale(1.0f, -1.0f), true);
+  p.drawImage(0, -height(), *m_bufferImage);
+  p.setTransform(currentTr, false);
   
 }
 

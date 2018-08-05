@@ -110,8 +110,14 @@ set(SOURCE_SHADERGRAPH
   shadergraph/gl4sgnormalize.hh
   shadergraph/gl4sgmul.cc
   shadergraph/gl4sgmul.hh
+  shadergraph/gl4sgneg.cc
+  shadergraph/gl4sgneg.hh
   shadergraph/gl4sgnode.cc
   shadergraph/gl4sgnode.hh
+  shadergraph/gl4sgoneby.cc
+  shadergraph/gl4sgoneby.hh
+  shadergraph/gl4sgoneminus.cc
+  shadergraph/gl4sgoneminus.hh
   shadergraph/gl4sgshadergraph.cc
   shadergraph/gl4sgshadergraph.hh
   shadergraph/gl4sgshadergraph_gbuffer.cc

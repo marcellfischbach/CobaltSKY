@@ -80,17 +80,6 @@ public:
   void SetValidationMessage(const std::string &validationMessage);
   const std::string &GetValidationMessage() const;
 
-#ifdef CS_BUILD_EDITOR
-  const csVector2f &GetPosition() const
-  {
-    return m_position;
-  }
-  void SetPosition(const csVector2f &position)
-  {
-    m_position = position;
-  }
-#endif
-
 private:
   std::string m_name;
   //std::string m_bindingName;
@@ -99,9 +88,6 @@ private:
   std::vector<csSGInput*> m_inputs;
   std::vector<csSGOutput*> m_outputs;
 
-#ifdef CS_BUILD_EDITOR
-  csVector2f m_position;
-#endif
 };
 
 

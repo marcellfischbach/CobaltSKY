@@ -14,4 +14,5 @@ csSGTexture2D::csSGTexture2D()
   AddOutput(new csSGOutput(eSGDT_Float, "g", "g"));
   AddOutput(new csSGOutput(eSGDT_Float, "b", "b"));
   AddOutput(new csSGOutput(eSGDT_Float, "a", "a"));
+
 }

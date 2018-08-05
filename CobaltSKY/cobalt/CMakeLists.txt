@@ -1,7 +1,6 @@
 
 
 add_definitions(-DCSE_EXPORT)
-add_definitions(-DCS_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
 set(SOURCE
@@ -329,12 +328,18 @@ set(SOURCE_GRAPHICS_SHADERGRAPH
     graphics/shadergraph/cssglerp.hh
     graphics/shadergraph/cssgmul.cc
     graphics/shadergraph/cssgmul.hh
+    graphics/shadergraph/cssgneg.cc
+    graphics/shadergraph/cssgneg.hh
     graphics/shadergraph/cssgnode.cc
     graphics/shadergraph/cssgnode.hh
     graphics/shadergraph/cssgnodes.cc
     graphics/shadergraph/cssgnodes.hh
     graphics/shadergraph/cssgnormalize.cc
     graphics/shadergraph/cssgnormalize.hh
+    graphics/shadergraph/cssgoneby.cc
+    graphics/shadergraph/cssgoneby.hh
+    graphics/shadergraph/cssgoneminus.cc
+    graphics/shadergraph/cssgoneminus.hh
     graphics/shadergraph/cssgoutput.cc
     graphics/shadergraph/cssgoutput.hh
     graphics/shadergraph/cssgresourcenode.cc

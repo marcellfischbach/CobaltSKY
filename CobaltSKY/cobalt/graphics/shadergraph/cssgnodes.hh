@@ -17,7 +17,10 @@
 #include <cobalt/graphics/shadergraph/cssgfloat4.hh>
 #include <cobalt/graphics/shadergraph/cssglerp.hh>
 #include <cobalt/graphics/shadergraph/cssgmul.hh>
+#include <cobalt/graphics/shadergraph/cssgneg.hh>
 #include <cobalt/graphics/shadergraph/cssgnormalize.hh>
+#include <cobalt/graphics/shadergraph/cssgoneby.hh>
+#include <cobalt/graphics/shadergraph/cssgoneminus.hh>
 #include <cobalt/graphics/shadergraph/cssgsplitfloat2.hh>
 #include <cobalt/graphics/shadergraph/cssgsplitfloat3.hh>
 #include <cobalt/graphics/shadergraph/cssgsplitfloat4.hh>

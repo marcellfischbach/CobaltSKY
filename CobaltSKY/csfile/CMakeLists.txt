@@ -1,7 +1,6 @@
 
 
 add_definitions(-DCSF_EXPORT)
-add_definitions(-DCS_BUILD_EDITOR)
 add_definitions(-D_USE_MATH_DEFINES)
 
 
