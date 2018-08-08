@@ -31,9 +31,7 @@ void csResourceManager::Register(csResourceManager *resourceManager)
 
 csResourceManager::csResourceManager()
 {
-  RegisterLoader(new csXMLFileLoader());
   RegisterLoader(new csCSFFileLoader());
-  RegisterLoader(new csAssetXMLLoader());
   RegisterLoader(new csAssetCSFLoader());
 }
 
@@ -46,16 +44,6 @@ void csResourceManager::RegisterLoader(iFileLoader *loader)
     m_fileLoaders.push_back(loader);
   }
 }
-
-void csResourceManager::RegisterLoader(iXMLLoader *loader)
-{
-  if (loader)
-  {
-    loader->AddRef();
-    m_xmlLoaders.push_back(loader);
-  }
-}
-
 
 void csResourceManager::RegisterLoader(iCSFLoader *loader)
 {
@@ -138,35 +126,6 @@ const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator
     if (loader->CanLoad(file, locator))
     {
       return loader->EvalClass(file, locator, userData);
-    }
-  }
-  return 0;
-}
-
-
-iObject *csResourceManager::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData)
-{
-  for (int i = (int)m_xmlLoaders.size() - 1; i >= 0; --i)
-  {
-    const iXMLLoader *loader = m_xmlLoaders[i];
-    if (loader->CanLoad(element, locator))
-    {
-      iObject *obj = loader->Load(element, locator, userData);
-      RegisterResource(obj, locator);
-      return obj;
-    }
-  }
-  return 0;
-}
-
-const csClass *csResourceManager::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
-{
-  for (int i = (int)m_xmlLoaders.size() - 1; i >= 0; --i)
-  {
-    const iXMLLoader *loader = m_xmlLoaders[i];
-    if (loader->CanLoad(element, locator))
-    {
-      return loader->EvalClass(element, locator, userData);
     }
   }
   return 0;

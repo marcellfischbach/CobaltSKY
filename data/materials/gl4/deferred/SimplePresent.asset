@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program(name:"SimplePresent") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/deferred/deferred_simple_present.vert")
+					shader(locator:"${shaders}/deferred/deferred_simple_present.frag")
+				}
+			}
+		}
+	}
+}

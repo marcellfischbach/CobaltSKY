@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program(name:"ShadowMapBlurVert") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/deferred/directional_light.vert")
+					shader(locator:"${shaders}/deferred/blur_vert_lo.frag")
+				}
+			}
+		}
+	}
+}

@@ -4,7 +4,6 @@
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/cssettings.hh>
 #include <algorithm>
-#include <tixml/tinyxml.h>
 
 // #include <cscore/cssettings.h>
 
@@ -87,19 +86,21 @@ bool csVFS::Initialize(int argc, char** argv)
 bool csVFS::LoadConfig(const std::string &configFileName)
 {
   csFileInfo fileInfo(configFileName.c_str());
-  TiXmlDocument doc;
-  if (!doc.LoadFile(configFileName.c_str()))
+
+  csfFile file;
+  if (!file.Parse(configFileName))
   {
     return false;
   }
 
-  const TiXmlElement *rootElement = doc.RootElement();
-  if (!rootElement)
+
+  const csfEntry *rootEntry = file.GetRoot();
+  if (!rootEntry)
   {
     return false;
   }
 
-  return LoadConfig(rootElement, fileInfo.GetLocation());
+  return LoadConfig(rootEntry, fileInfo.GetLocation());
 }
 
 bool csVFS::Initialize(csSettings *settings)
@@ -171,27 +172,27 @@ bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEnt
   return true;
 }
 
-bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath)
+bool csVFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
 {
-    const TiXmlElement *rootPathsElement = vfsElement->FirstChildElement("rootPaths");
-    if (rootPathsElement)
+    const csfEntry *rootPathsEntry = vfsEntry->GetEntry("rootPaths");
+    if (rootPathsEntry)
     {
-      for (const TiXmlElement *rootPathElement = rootPathsElement->FirstChildElement("rootPath");
-           rootPathElement;
-           rootPathElement = rootPathElement->NextSiblingElement("rootPath"))
+      for (const csfEntry *rootPathEntry = rootPathsEntry->GetEntry("rootPath");
+           rootPathEntry;
+           rootPathEntry = rootPathEntry->GetSiblingEntry("rootPath"))
       {
-        if (rootPathElement->GetText() != 0)
+        if (rootPathEntry->HasAttribute("path"))
         {
           Entry entry;
-          entry.SetPath(rootPathElement->GetText());
+          entry.SetPath(rootPathEntry->GetAttribute("path"));
           entry.SetAbsPath(basePath + std::string("/") + entry.GetPath());
-          if (rootPathElement->Attribute("name"))
+          if (rootPathEntry->HasAttribute("name"))
           {
-            entry.SetName(rootPathElement->Attribute("name"));
+            entry.SetName(rootPathEntry->GetAttribute("name"));
           }
-          if (rootPathElement->Attribute("priority"))
+          if (rootPathEntry->HasAttribute("priority"))
           {
-            entry.SetPriority(atoi(rootPathElement->Attribute("priority")));
+            entry.SetPriority(rootPathEntry->GetAttributeInt("priority"));
           }
 
           printf("AddRootPath: %s[%d] => %s => %s\n", entry.GetName().c_str(), entry.GetPriority(), entry.GetPath().c_str(), entry.GetAbsPath().c_str());
@@ -200,20 +201,20 @@ bool csVFS::LoadConfig(const TiXmlElement *vfsElement, const std::string &basePa
       }
     }
 
-    const TiXmlElement *resolutionsElement = vfsElement->FirstChildElement("resolutions");
-    if (resolutionsElement)
+    const csfEntry *resolutionsEntry = vfsEntry->GetEntry("resolutions");
+    if (resolutionsEntry)
     {
-      for (const TiXmlElement *resolutionElement = resolutionsElement->FirstChildElement();
-           resolutionElement;
-           resolutionElement = resolutionElement->NextSiblingElement())
+      for (const csfEntry *resolutionEntry = resolutionsEntry->GetEntry();
+           resolutionEntry;
+           resolutionEntry = resolutionEntry->GetEntry())
       {
-        if (!resolutionElement->Attribute("name") || !resolutionElement->GetText())
+        if (!resolutionEntry->HasAttribute("name") || !resolutionEntry->HasAttribute("path"))
         {
           continue;
         }
 
-        std::string vfsName(resolutionElement->Attribute("name"));
-        std::string pathName(resolutionElement->GetText());
+        std::string vfsName(resolutionEntry->GetAttribute("name"));
+        std::string pathName(resolutionEntry->GetAttribute("path"));
         AddPath(vfsName, pathName);
       }
     }

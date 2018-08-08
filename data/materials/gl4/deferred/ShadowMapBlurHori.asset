@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program(name:"ShadowMapBlurHori") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/deferred/directional_light.vert")
+					shader(locator:"${shaders}/deferred/blur_hori_lo.frag")
+				}
+			}
+		}
+	}
+}

@@ -15,7 +15,6 @@ using std::vector;
 
 class csfEntry;
 class csSettings;
-class TiXmlElement;
 
 /**
 * \addtogroup engine
@@ -91,7 +90,7 @@ public:
 
 private:
   csVFS ();
-  bool LoadConfig(const TiXmlElement *vfsElement, const std::string &basePath);
+  bool LoadConfig(const csfEntry *vfsEntry, const std::string &basePath);
   bool ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry);
   bool ImportResolution(csSettings *settings, const csfEntry *resolutionEntry);
 

@@ -11,12 +11,8 @@
 #include <cobalt/core/resource/iassetloader.hh>
 #include <cobalt/core/resource/icsfloader.hh>
 #include <cobalt/core/resource/ifileloader.hh>
-#include <cobalt/core/resource/ixmlloader.hh>
-#include <cobalt/core/resource/csassetxmlloader.hh>
 #include <cobalt/core/resource/csassetcsfloader.hh>
-#include <cobalt/core/resource/csbasexmlloader.hh>
 #include <cobalt/core/resource/csbasecsfloader.hh>
-#include <cobalt/core/resource/csxmlfileloader.hh>
 #include <cobalt/core/resource/cscsffileloader.hh>
 
 #include <cobalt/math/cscolor4f.hh>
@@ -74,22 +70,7 @@ public:
 
   virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
 
-  /**
-  * \brief Load an object from the \a file.
-  *
-  * IMPORTANT: The caller is the owner of the returned object.
-  *
-  * \param element The XML-element where resource should be read from
-  * \param locator The origin location from where the resource should be loaded
-  * \param userData An optional user data that the loader can use.
-  *
-  * \return The object
-  */
-  virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0);
-
-
-  virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
-
+ 
   /**
   * \brief Load an object from the \a csffile.
   *
@@ -156,21 +137,6 @@ public:
     return 0;
   }
 
-  template<typename T>
-  T *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0)
-  {
-    iObject *object = Load(element, locator, userData);
-    if (object)
-    {
-      T* t_instance = csQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
-      return t_instance;
-    }
-    return 0;
-  }
 
   template<typename T>
   T *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0)
@@ -300,7 +266,6 @@ public:
     return 0;
   }
 
-  virtual void RegisterLoader(iXMLLoader *loader);
   virtual void RegisterLoader(iCSFLoader *loader);
   virtual void RegisterLoader(iFileLoader *loader);
   virtual void RegisterLoader(iAssetLoader *loader);
@@ -325,7 +290,6 @@ protected:
 
   std::vector<iFileLoader*> m_fileLoaders;
   std::vector<iCSFLoader*> m_csfLoaders;
-  std::vector<iXMLLoader*> m_xmlLoaders;
   std::vector<iAssetLoader*> m_assetLoaders;
 
   std::map<csResourceLocator, iObject*> m_objects;

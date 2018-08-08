@@ -9,7 +9,7 @@
 
 
 csProgramGL4Loader::csProgramGL4Loader()
-  : csBaseXMLLoader()
+  : csBaseCSFLoader()
 {
 }
 
@@ -19,30 +19,30 @@ csProgramGL4Loader::~csProgramGL4Loader()
 }
 
 
-bool csProgramGL4Loader::CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
+bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  std::string tagName(element->Value());
+  std::string tagName(entry->GetTagName());
 
   return tagName == std::string("program");
 }
 
 
 
-const csClass *csProgramGL4Loader::EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
+const csClass *csProgramGL4Loader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   return csProgramGL4::GetStaticClass();
 }
 
-iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData) const
+iObject *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  if (std::string(element->Value()) != std::string("program"))
+  if (std::string(entry->GetTagName()) != std::string("program"))
   {
     return 0;
   }
   CS_CHECK_GL_ERROR;
 
-  TiXmlElement *techniqueElement = FindTechnique(element);
-  if (!techniqueElement)
+  const csfEntry *techniqueEntry = FindTechnique(entry);
+  if (!techniqueEntry)
   {
     return 0;
   }
@@ -50,11 +50,15 @@ iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator
   csResourceManager *resourceManager = csResourceManager::Get();
 
   csProgramGL4 *program = new csProgramGL4();
-  for (TiXmlElement *shaderElement = techniqueElement->FirstChildElement("shader");
-       shaderElement;
-       shaderElement = shaderElement->NextSiblingElement("shader"))
+  for (const csfEntry *shaderEntry = techniqueEntry->GetEntry("shader");
+       shaderEntry;
+       shaderEntry = shaderEntry->GetSiblingEntry("shader"))
   {
-    csResourceLocator locator(std::string(shaderElement->GetText()));
+    if (!shaderEntry->HasAttribute("locator"))
+    {
+      return 0;
+    }
+    csResourceLocator locator(shaderEntry->GetAttribute("locator"));
     csShaderGL4 *shader = resourceManager->GetOrLoad<csShaderGL4>(locator);
     if (!shader)
     {
@@ -76,34 +80,34 @@ iObject *csProgramGL4Loader::Load(TiXmlElement *element, const csResourceLocator
   return program;
 }
 
-TiXmlElement *csProgramGL4Loader::FindTechnique(TiXmlElement *element) const
+const csfEntry *csProgramGL4Loader::FindTechnique(const csfEntry *entry) const
 {
-  if (!element)
+  if (!entry)
   {
     return 0;
   }
-  std::string elementName(element->Value());
-  if (elementName == std::string("program"))
+  std::string entryName(entry->GetTagName());
+  if (entryName == std::string("program"))
   {
-    return FindTechnique(element->FirstChildElement("techniques"));
+    return FindTechnique(entry->GetEntry("techniques"));
   }
-  else if (elementName == std::string("techniques"))
+  else if (entryName == std::string("techniques"))
   {
-    for (TiXmlElement *techniqueElement = element->FirstChildElement("technique");
-         techniqueElement;
-         techniqueElement = techniqueElement->NextSiblingElement("technique"))
+    for (const csfEntry *techniqueEntry = entry->GetEntry("technique");
+         techniqueEntry;
+         techniqueEntry = techniqueEntry->GetSiblingEntry("technique"))
     {
-      TiXmlElement *technique = FindTechnique(techniqueElement);
+      const csfEntry *technique = FindTechnique(techniqueEntry);
       if (technique)
       {
         return technique;
       }
     }
   }
-  else if (elementName == std::string("technique"))
+  else if (entryName == std::string("technique"))
   {
     // do technique validation later.. for now just return the first technique 
-    return element;
+    return entry;
   }
   return 0;
 }

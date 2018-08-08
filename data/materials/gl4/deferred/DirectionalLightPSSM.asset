@@ -1,0 +1,13 @@
+asset() {
+	data() {
+		program(name:"DirectionalLightPSSM") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/deferred/directional_light.vert")
+					shader(locator:"${shaders}/deferred/directional_light.frag")
+					shader(locator:"${shaders}/deferred/directional_light_pssm.frag")
+				}
+			}
+		}
+	}
+}

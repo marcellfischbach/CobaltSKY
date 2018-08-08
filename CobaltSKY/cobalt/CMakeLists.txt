@@ -76,8 +76,6 @@ set(SOURCE_CORE
     core/csthread.hh
     core/csvfs.cc
     core/csvfs.hh
-    core/csxml.cc
-    core/csxml.hh
     )
 
 
@@ -108,19 +106,12 @@ set(SOURCE_CORE_RESOURCE
     core/resource/iassetloader.hh
     core/resource/icsfloader.hh
     core/resource/ifileloader.hh
-    core/resource/ixmlloader.hh
     core/resource/csassetcsfloader.hh
     core/resource/csassetcsfloader.cc
-    core/resource/csassetxmlloader.hh
-    core/resource/csassetxmlloader.cc
     core/resource/csbasecsfloader.hh
     core/resource/csbasecsfloader.cc
-    core/resource/csbasexmlloader.hh
-    core/resource/csbasexmlloader.cc
     core/resource/cscsffileloader.hh
     core/resource/cscsffileloader.cc
-    core/resource/csxmlfileloader.hh
-    core/resource/csxmlfileloader.cc
     )
 
 source_group(
@@ -520,7 +511,6 @@ install(TARGETS CobaltSKY
 install(DIRECTORY . DESTINATION include/cobaltsky/cobalt FILES_MATCHING PATTERN "*.hh")
 
 target_link_libraries(CobaltSKY
-    TiXml
 	CobaltSKY-File
     ${PNG_LIBRARIES}
     )

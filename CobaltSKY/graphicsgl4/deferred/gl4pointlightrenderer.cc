@@ -21,11 +21,11 @@
 csPointLightRendererGL4::csPointLightRendererGL4(iGraphics *renderer)
   : csLightRendererGL4(renderer)
 {
-  InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/PointLight.xasset"));
+  InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/PointLight.asset"));
   m_attrLightPositionNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightPosition"));
   m_attrLightRangeNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightRadius"));
 
-  InitializeLightProgram(&m_programCubeShadow, csResourceLocator("${shaders}/deferred/PointLightCubeShadow.xasset"));
+  InitializeLightProgram(&m_programCubeShadow, csResourceLocator("${shaders}/deferred/PointLightCubeShadow.asset"));
   m_attrLightPositionCubeShadow = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("LightPosition"));
   m_attrLightRangeCubeShadow = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("LightRadius"));
   m_attrShadowMats = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("ShadowMats"));

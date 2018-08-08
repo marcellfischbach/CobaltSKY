@@ -1,0 +1,13 @@
+asset() {
+	data() {
+		program(name:"PointLightCubeShadow") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/deferred/point_light.vert")
+					shader(locator:"${shaders}/deferred/point_light.frag")
+					shader(locator:"${shaders}/deferred/point_light_cube_shadow.frag")
+				}
+			}
+		}
+	}
+}

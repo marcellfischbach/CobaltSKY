@@ -19,7 +19,6 @@
 #include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
 #include <editors/shadergrapheditor/shadergrapheditornew.hh>
 #include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
-#include <editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh>
 #include <editors/staticmesheditor/staticmesheditorfactory.hh>
 #include <editors/textureeditor/textureeditorfactory.hh>
 
@@ -28,7 +27,6 @@
 #include <importers/image/imageimporter.hh>
 #include <importers/model/modelimporter.hh>
 
-#include <loaders/loaderseditoriconassetxmlloader.hh>
 
 void EditorModule::Initialize()
 {
@@ -59,9 +57,7 @@ void EditorModule::Initialize()
 
 	csResourceManager *mgr = csResourceManager::Get();
 	mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
-	mgr->RegisterLoader(new ShaderGraphEditorMetaAssetXMLLoader());
 	mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
-	mgr->RegisterLoader(new LoadersEditorIconAssetXMLLoader());
 
 
 	AssetManagerRenameHandler::Register();

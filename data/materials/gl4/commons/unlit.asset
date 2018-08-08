@@ -1,0 +1,14 @@
+asset() {
+	data() {
+		material(name:"Unlit") {
+			passes() {
+				pass(name:"ForwardUnlit" locator:"${shaders}/commons/ForwardUnlit.asset")
+			}
+			parameters() {
+				parameter(name:"Color") {
+					color4(1 1 1 1)
+				}
+			}
+		}
+	}
+}

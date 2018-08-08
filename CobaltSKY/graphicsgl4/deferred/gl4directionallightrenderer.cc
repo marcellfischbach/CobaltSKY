@@ -26,16 +26,16 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
 	, m_colorBufferBlur(0)
 	, m_depthBuffer(0)
 {
-	InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/DirectionalLight.xasset"));
+	InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
 	m_attrLightDirectionNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightDirection"));
 
-	InitializeLightProgram(&m_programPSSM, csResourceLocator("${shaders}/deferred/DirectionalLightPSSM.xasset"));
+	InitializeLightProgram(&m_programPSSM, csResourceLocator("${shaders}/deferred/DirectionalLightPSSM.asset"));
 	m_attrLightDirectionPSSM = m_programPSSM.program->GetAttribute(csShaderAttributeID("LightDirection"));
 	m_attrShadowMap = m_programPSSM.program->GetAttribute(csShaderAttributeID("ShadowMap"));
 
 	//
 	// load and init the shadow map renderer
-	m_shadowMapRenderer.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.xasset"));
+	m_shadowMapRenderer.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.asset"));
 	if (m_shadowMapRenderer.shader)
 	{
 		m_shadowMapRenderer.attrDepth = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("Depth"));
@@ -45,13 +45,13 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
 		m_shadowMapRenderer.attrShadowMatsProjView = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("ShadowMatsProjView"));
 	}
 
-  m_shadowMapBlurHori.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurHori.xasset"));
+  m_shadowMapBlurHori.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurHori.asset"));
   if (m_shadowMapBlurHori.shader)
   {
     m_shadowMapBlurHori.attrColor0 = m_shadowMapBlurHori.shader->GetAttribute(csShaderAttributeID("Color0"));
   }
 
-  m_shadowMapBlurVert.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurVert.xasset"));
+  m_shadowMapBlurVert.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurVert.asset"));
   if (m_shadowMapBlurVert.shader)
   {
     m_shadowMapBlurVert.attrColor0 = m_shadowMapBlurVert.shader->GetAttribute(csShaderAttributeID("Color0"));

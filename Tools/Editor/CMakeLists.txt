@@ -410,8 +410,6 @@ set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     editors/shadergrapheditor/shadergrapheditormeta.hh
     editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.cc
     editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh
-    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.cc
-    editors/shadergrapheditor/shadergrapheditormetaassetxmlloader.hh
     editors/shadergrapheditor/shadergrapheditornew.cc
     editors/shadergrapheditor/shadergrapheditornew.hh
     editors/shadergrapheditor/shadergrapheditornode.cc
@@ -586,8 +584,6 @@ source_group(
 set(LOADERS_SOURCES
     loaders/loaderseditoriconassetcsfloader.cc
     loaders/loaderseditoriconassetcsfloader.hh
-    loaders/loaderseditoriconassetxmlloader.cc
-    loaders/loaderseditoriconassetxmlloader.hh
     )
 
 

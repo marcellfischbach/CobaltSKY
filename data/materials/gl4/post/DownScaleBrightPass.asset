@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program(name:"BlurVertLo") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/post/post.vert")
+					shader(locator:"${shaders}/post/down_scale_bright_pass.frag")
+				}
+			}
+		}
+	}
+}

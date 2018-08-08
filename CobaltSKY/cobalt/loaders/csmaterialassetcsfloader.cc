@@ -78,7 +78,7 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
       {
         try
         {
-          index = material->GetIndexByName(parametersEntry->GetAttribute("id"));
+          index = material->GetIndexByName(parametersEntry->GetAttribute("name"));
         }
         catch (const std::exception &e)
         {

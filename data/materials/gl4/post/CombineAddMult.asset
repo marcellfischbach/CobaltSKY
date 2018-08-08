@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program(name:"BlurVertLo") {
+			techniques() {
+				technique(name:"Default") {
+					shader(locator:"${shaders}/post/post.vert")
+					shader(locator:"${shaders}/post/combine_add_mult.frag")
+				}
+			}
+		}
+	}
+}

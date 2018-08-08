@@ -7,17 +7,17 @@
 
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csProgramGL4Loader : public CS_SUPER(csBaseXMLLoader)
+class CSGRAPHICSGL4_API csProgramGL4Loader : public CS_SUPER(csBaseCSFLoader)
 {
   CS_CLASS_GEN;
 public:
   csProgramGL4Loader();
   virtual ~csProgramGL4Loader();
 
-  virtual bool CanLoad(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual const csClass *EvalClass(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(TiXmlElement *element, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
 
 private:
-  TiXmlElement *FindTechnique(TiXmlElement *element) const;
+  const csfEntry *FindTechnique(const csfEntry *entry) const;
 };

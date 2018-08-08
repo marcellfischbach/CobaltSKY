@@ -1,0 +1,12 @@
+asset() {
+	data() {
+		program (name:"Unlit") {
+			techniques() {
+				technique() {
+					shader(locator:"${shaders}/commons/unlit.vert")
+					shader(locator:"${shaders}/commons/unlit.frag")
+				}
+			}
+		}
+	}
+}
