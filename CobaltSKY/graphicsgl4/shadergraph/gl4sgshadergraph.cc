@@ -182,10 +182,11 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
       continue;
     }
 
+    const std::string &resId = resNode->GetResourceId();
     const std::string &resName = resNode->GetResourceName();
     csShaderParameterType resType = resNode->GetResourceType();
 
-    csSize idx = graph->RegisterParam(resName, resType);
+    csSize idx = graph->RegisterParam(resId, resName, resType);
 
     float *floats = resNode->GetDefaultFloats();
     int *ints = resNode->GetDefaultInts();

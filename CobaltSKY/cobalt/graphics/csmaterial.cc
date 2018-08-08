@@ -1,6 +1,7 @@
 
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/csnosuchparameterexception.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
 #include <cobalt/graphics/itexture.hh>
@@ -56,45 +57,78 @@ const csMaterialDef *csMaterial::GetMaterialDef() const
   return m_materialDef;
 }
 
-csInt16 csMaterial::GetIndex(const std::string &parameterName) const
+csSize csMaterial::GetIndex(const std::string &id) const
 {
   if (!m_materialDef)
   {
-    return -1;
+    throw csNoSuchParameterIdException(id);
   }
-  return m_materialDef->GetIndex(parameterName);
+  return m_materialDef->GetIndex(id);
 }
 
-void csMaterial::SetInherited(csUInt16 idx, bool inherited)
+csSize csMaterial::GetIndexByName(const std::string &name) const
 {
+  if (!m_materialDef)
+  {
+    throw csNoSuchParameterNameException(name);
+  }
+  return m_materialDef->GetIndex(name);
+}
+
+const std::string &csMaterial::GetParameterId(csSize idx) const
+{
+  if (!m_materialDef)
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+  return m_materialDef->GetParameterId(idx);
+}
+
+const std::string &csMaterial::GetParameterName(csSize idx) const
+{
+  if (!m_materialDef)
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+  return m_materialDef->GetParameterName(idx);
+}
+
+void csMaterial::SetInherited(csSize idx, bool inherited)
+{
+#ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    return;
+    throw csNoSuchParameterIndexException(idx);
   }
+#endif
 
 
   ShaderParameter &param = m_parameters[idx];
   param.m_inherit = inherited;
 }
 
-bool csMaterial::IsInherited(csUInt16 idx) const
+bool csMaterial::IsInherited(csSize idx) const
 {
+#ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    return false;
+    throw csNoSuchParameterIndexException(idx);
   }
+#endif
 
 
   const ShaderParameter &param = m_parameters[idx];
   return param.m_inherit;
 }
 
-void csMaterial::Set(csUInt16 idx, float v)
+void csMaterial::Set(csSize idx, float v)
 {
+#ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    return;
+    throw csNoSuchParameterIndexException(idx);
   }
+#endif
 
 
   ShaderParameter &param = m_parameters[idx];
@@ -102,12 +136,14 @@ void csMaterial::Set(csUInt16 idx, float v)
   param.m_float[0] = v;
 }
 
-void csMaterial::Set(csUInt16 idx, const csVector2f &v)
+void csMaterial::Set(csSize idx, const csVector2f &v)
 {
+#ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    return;
+    throw csNoSuchParameterIndexException(idx);
   }
+#endif
 
 
   ShaderParameter &param = m_parameters[idx];
@@ -117,12 +153,14 @@ void csMaterial::Set(csUInt16 idx, const csVector2f &v)
 }
 
 
-void csMaterial::Set(csUInt16 idx, const csVector3f &v)
+void csMaterial::Set(csSize idx, const csVector3f &v)
 {
+#ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    return;
+    throw csNoSuchParameterIndexException(idx);
   }
+#endif
 
 
   ShaderParameter &param = m_parameters[idx];
@@ -133,7 +171,7 @@ void csMaterial::Set(csUInt16 idx, const csVector3f &v)
 }
 
 
-void csMaterial::Set(csUInt16 idx, const csVector4f &v)
+void csMaterial::Set(csSize idx, const csVector4f &v)
 {
   if (idx >= m_parameters.size())
   {
@@ -150,7 +188,7 @@ void csMaterial::Set(csUInt16 idx, const csVector4f &v)
 }
 
 
-void csMaterial::Set(csUInt16 idx, const csColor4f &c)
+void csMaterial::Set(csSize idx, const csColor4f &c)
 {
   if (idx >= m_parameters.size())
   {
@@ -166,7 +204,7 @@ void csMaterial::Set(csUInt16 idx, const csColor4f &c)
   param.m_float[3] = c.a;
 }
 
-void csMaterial::Set(csUInt16 idx, iTexture *texture)
+void csMaterial::Set(csSize idx, iTexture *texture)
 {
   if (idx >= m_parameters.size())
   {
@@ -179,7 +217,7 @@ void csMaterial::Set(csUInt16 idx, iTexture *texture)
   param.m_inherit = false;
 }
 
-float csMaterial::GetFloat(csUInt16 idx)
+float csMaterial::GetFloat(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -190,7 +228,7 @@ float csMaterial::GetFloat(csUInt16 idx)
   return param.m_float[0];
 }
 
-csVector2f csMaterial::GetFloat2(csUInt16 idx)
+csVector2f csMaterial::GetFloat2(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -201,7 +239,7 @@ csVector2f csMaterial::GetFloat2(csUInt16 idx)
   return csVector2f(param.m_float[0],
                     param.m_float[1]);
 }
-csVector3f csMaterial::GetFloat3(csUInt16 idx)
+csVector3f csMaterial::GetFloat3(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -214,7 +252,7 @@ csVector3f csMaterial::GetFloat3(csUInt16 idx)
                     param.m_float[2]);
 }
 
-csVector4f csMaterial::GetFloat4(csUInt16 idx)
+csVector4f csMaterial::GetFloat4(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -229,7 +267,7 @@ csVector4f csMaterial::GetFloat4(csUInt16 idx)
 }
 
 
-csColor4f csMaterial::GetColor4(csUInt16 idx)
+csColor4f csMaterial::GetColor4(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -243,7 +281,7 @@ csColor4f csMaterial::GetColor4(csUInt16 idx)
                    param.m_float[3]);
 }
 
-iTexture *csMaterial::GetTexture(csUInt16 idx)
+iTexture *csMaterial::GetTexture(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -290,7 +328,7 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
     }
     else
     {
-      iShaderAttribute *attr = m_materialDef->GetAttribute((csSize)i, pass);
+      iShaderAttribute *attr = m_materialDef->GetAttributeUnsafe((csSize)i, pass);
       if (attr)
       {
         switch (param.m_paramType)

@@ -82,6 +82,10 @@ iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResour
         {
           resource->SetResourceName(resourceElement->GetAttribute("name"));
         }
+        if (resourceElement->HasAttribute("id"))
+        {
+          resource->SetResourceId(resourceElement->GetAttribute("id"));
+        }
 
 
         const csfEntry *valueElement = resourceElement->GetEntry();

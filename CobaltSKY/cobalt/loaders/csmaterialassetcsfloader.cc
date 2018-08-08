@@ -62,16 +62,31 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
          parameterEntry;
          parameterEntry = parameterEntry->GetSiblingEntry("parameter"))
     {
-      if (!parameterEntry->HasAttribute("name"))
+      csSize index;
+      if (parameterEntry->HasAttribute("id") )
       {
-        continue;
+        try
+        {
+          index = material->GetIndex(parameterEntry->GetAttribute("id"));
+        }
+        catch (const std::exception &e)
+        {
+          continue;
+        }
       }
-      std::string parameterName = parameterEntry->GetAttribute("name");
-      csInt16 index = material->GetIndex(parameterName);
-      if (index == -1)
+      else if (parametersEntry->HasAttribute("name"))
       {
-        continue;
+        try
+        {
+          index = material->GetIndexByName(parametersEntry->GetAttribute("id"));
+        }
+        catch (const std::exception &e)
+        {
+          continue;
+        }
       }
+
+
 
       csShaderParameterType type = materialDef->GetParamType(index);
       const csfEntry *valueEntry = parameterEntry->GetEntry();

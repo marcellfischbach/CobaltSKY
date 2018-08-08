@@ -105,12 +105,12 @@ void MaterialEditorProperties::UpdateGUI()
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
     Param param;
-    param.idx = i;
     param.textureWidget = 0;
-    std::string name = materialDef->GetParamName(i);
+    std::string id = materialDef->GetParameterId(i);
+    std::string name = materialDef->GetParameterName(i);
 
     bool inherit = m_material->IsInherited(i);
-
+    param.id = id;
     param.checkBox = new QCheckBox(m_frame);
     param.checkBox->setText(QString(name.c_str()));
     param.checkBox->setChecked(!inherit);
@@ -141,7 +141,7 @@ void MaterialEditorProperties::UpdateGUI()
       sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector2(i).x : m_material->GetFloat2(i).x);
       sbF1->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector2(i).y : m_material->GetFloat2(i).y);
-      m_frameLayout->addWidget(sbF0,   row, 1, 1, 1);
+      m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
       param.doubleSpinBoxes.push_back(sbF0);
       param.doubleSpinBoxes.push_back(sbF1);
@@ -293,14 +293,22 @@ void MaterialEditorProperties::CheckBoxChanged(int)
   for (auto param : m_params)
   {
     bool enable = param.checkBox->isChecked();
-    m_material->SetInherited(param.idx, !enable);
-    if (param.textureWidget)
+    try
     {
-      param.textureWidget->setEnabled(enable);
+      csSize idx = m_material->GetIndex(param.id);
+      m_material->SetInherited(idx, !enable);
+      if (param.textureWidget)
+      {
+        param.textureWidget->setEnabled(enable);
+      }
+      for (auto sb : param.doubleSpinBoxes)
+      {
+        sb->setEnabled(enable);
+      }
     }
-    for (auto sb : param.doubleSpinBoxes)
+    catch (const std::exception &e)
     {
-      sb->setEnabled(enable);
+
     }
   }
 
@@ -333,50 +341,59 @@ void MaterialEditorProperties::UpdateMaterialValues()
 
   for (auto param : m_params)
   {
-    m_material->SetInherited(param.idx, !param.checkBox->isChecked());
-    if (!param.checkBox->isChecked())
+    try
     {
-      continue;
+      csSize idx = m_material->GetIndex(param.id);
+      m_material->SetInherited(idx, !param.checkBox->isChecked());
+      if (!param.checkBox->isChecked())
+      {
+        continue;
+      }
+
+      switch (materialDef->GetParamType(idx))
+      {
+      case eSPT_Float:
+        m_material->Set(idx, (float)param.doubleSpinBoxes[0]->value());
+        break;
+      case eSPT_Vector2:
+        m_material->Set(idx, csVector2f(
+          (float)param.doubleSpinBoxes[0]->value(),
+          (float)param.doubleSpinBoxes[1]->value()
+        ));
+        break;
+      case eSPT_Vector3:
+        m_material->Set(idx, csVector3f(
+          (float)param.doubleSpinBoxes[0]->value(),
+          (float)param.doubleSpinBoxes[1]->value(),
+          (float)param.doubleSpinBoxes[2]->value()
+        ));
+        break;
+      case eSPT_Vector4:
+        m_material->Set(idx, csVector4f(
+          (float)param.doubleSpinBoxes[0]->value(),
+          (float)param.doubleSpinBoxes[1]->value(),
+          (float)param.doubleSpinBoxes[2]->value(),
+          (float)param.doubleSpinBoxes[3]->value()
+        ));
+        break;
+      case eSPT_Color4:
+        m_material->Set(idx, csColor4f(
+          (float)param.doubleSpinBoxes[0]->value(),
+          (float)param.doubleSpinBoxes[1]->value(),
+          (float)param.doubleSpinBoxes[2]->value(),
+          (float)param.doubleSpinBoxes[3]->value()
+        ));
+        break;
+      case eSPT_Texture:
+      {
+        iTexture *texture = csResourceManager::Get()->Aquire<iTexture>(param.textureWidget->GetResourceLocator());
+        m_material->Set(idx, texture);
+      }break;
+      }
     }
-    switch (materialDef->GetParamType(param.idx))
+    catch (const std::exception &e)
     {
-    case eSPT_Float:
-      m_material->Set(param.idx, (float)param.doubleSpinBoxes[0]->value());
-      break;
-    case eSPT_Vector2:
-      m_material->Set(param.idx, csVector2f(
-        (float)param.doubleSpinBoxes[0]->value(),
-        (float)param.doubleSpinBoxes[1]->value()
-      ));
-      break;
-    case eSPT_Vector3:
-      m_material->Set(param.idx, csVector3f(
-        (float)param.doubleSpinBoxes[0]->value(),
-        (float)param.doubleSpinBoxes[1]->value(),
-        (float)param.doubleSpinBoxes[2]->value()
-      ));
-      break;
-    case eSPT_Vector4:
-      m_material->Set(param.idx, csVector4f(
-        (float)param.doubleSpinBoxes[0]->value(),
-        (float)param.doubleSpinBoxes[1]->value(),
-        (float)param.doubleSpinBoxes[2]->value(),
-        (float)param.doubleSpinBoxes[3]->value()
-      ));
-      break;
-    case eSPT_Color4:
-      m_material->Set(param.idx, csColor4f(
-        (float)param.doubleSpinBoxes[0]->value(),
-        (float)param.doubleSpinBoxes[1]->value(),
-        (float)param.doubleSpinBoxes[2]->value(),
-        (float)param.doubleSpinBoxes[3]->value()
-      ));
-      break;
-    case eSPT_Texture:
-    {
-      iTexture *texture = csResourceManager::Get()->Aquire<iTexture>(param.textureWidget->GetResourceLocator());
-      m_material->Set(param.idx, texture);
-    }break;
+
     }
   }
 

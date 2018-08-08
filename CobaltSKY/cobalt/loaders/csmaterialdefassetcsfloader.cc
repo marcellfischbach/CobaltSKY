@@ -145,12 +145,13 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
          parameterEntry;
          parameterEntry = parameterEntry->GetSiblingEntry("parameter"))
     {
-      std::string type, name;
-      if (!parameterEntry->HasAttribute("type") || !parameterEntry->HasAttribute("name"))
+      std::string type, id, name;
+      if (!parameterEntry->HasAttribute("type") || !parameterEntry->HasAttribute("name") || !parameterEntry->HasAttribute("id"))
       {
         continue;
       }
       type = parameterEntry->GetAttribute("type");
+      id= parameterEntry->GetAttribute("id");
       name = parameterEntry->GetAttribute("name");
 
       csShaderParameterType paramType;
@@ -207,7 +208,7 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
         continue;
       }
 
-      csSize idx = material->RegisterParam(name, paramType);
+      csSize idx = material->RegisterParam(id, name, paramType);
       switch (paramType)
       {
       case eSPT_Float:

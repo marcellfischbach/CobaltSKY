@@ -242,6 +242,8 @@ set(SOURCE_GRAPHICS
     graphics/csmultimaterial.hh
     graphics/csmesh.cc
     graphics/csmesh.hh
+	graphics/csnosuchparameterexception.cc
+	graphics/csnosuchparameterexception.hh
     graphics/csparticle.cc
     graphics/csparticle.hh
     graphics/cspointlight.cc

@@ -26,26 +26,29 @@ public:
 
   void RebuildMaterialParameters();
 
-  csInt16 GetIndex(const std::string &parametername) const;
+  csSize GetIndex(const std::string &id) const;
+  csSize GetIndexByName(const std::string &name) const;
+  const std::string &GetParameterId(csSize idx) const;
+  const std::string &GetParameterName(csSize idx) const;
 
   bool Bind(iGraphics *renderer, csRenderPass pass);
 
-  void SetInherited(csUInt16 idx, bool inherited);
-  bool IsInherited(csUInt16 idx) const;
+  void SetInherited(csSize idx, bool inherited);
+  bool IsInherited(csSize idx) const;
 
-  void Set(csUInt16 idx, float v);
-  void Set(csUInt16 idx, const csVector2f &v);
-  void Set(csUInt16 idx, const csVector3f &v);
-  void Set(csUInt16 idx, const csVector4f &v);
-  void Set(csUInt16 idx, const csColor4f &c);
-  void Set(csUInt16 idx, iTexture *texture);
+  void Set(csSize idx, float v);
+  void Set(csSize idx, const csVector2f &v);
+  void Set(csSize idx, const csVector3f &v);
+  void Set(csSize idx, const csVector4f &v);
+  void Set(csSize idx, const csColor4f &c);
+  void Set(csSize idx, iTexture *texture);
 
-  float GetFloat(csUInt16 idx);
-  csVector2f GetFloat2(csUInt16 idx);
-  csVector3f GetFloat3(csUInt16 idx);
-  csVector4f GetFloat4(csUInt16 idx);
-  csColor4f GetColor4(csUInt16 idx);
-  iTexture *GetTexture(csUInt16 idx);
+  float GetFloat(csSize idx);
+  csVector2f GetFloat2(csSize idx);
+  csVector3f GetFloat3(csSize idx);
+  csVector4f GetFloat4(csSize idx);
+  csColor4f GetColor4(csSize idx);
+  iTexture *GetTexture(csSize idx);
 
 
   void SetFillMode(csFillMode mode);

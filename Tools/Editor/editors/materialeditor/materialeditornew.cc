@@ -41,5 +41,6 @@ bool MaterialCreator::Create(csfFile &file)
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
+  return true;
 }
 

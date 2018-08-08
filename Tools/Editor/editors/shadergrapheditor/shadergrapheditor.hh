@@ -7,6 +7,7 @@
 #include <editors/shadergrapheditor/shadergrapheditor.refl.hh>
 #include <cobalt/csenums.hh>
 
+class csSGShaderGraph;
 class ShaderGraphEditorOutliner;
 class ShaderGraphEditorPreview;
 class ShaderGraphEditorProperties;
@@ -27,6 +28,9 @@ public:
 
 protected:
   void UpdateAsset();
+
+private:
+  void UpdateResourceNodeIDs(csSGShaderGraph *shaderGraph);
 
 private:
   ShaderGraphEditorOutliner *m_outliner;

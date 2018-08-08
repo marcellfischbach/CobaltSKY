@@ -38,7 +38,7 @@ private:
 
   struct Param
   {
-    csSize idx;
+    std::string id;
     QCheckBox *checkBox;
     AssetResourceWidget *textureWidget;
     std::vector<QDoubleSpinBox*> doubleSpinBoxes;

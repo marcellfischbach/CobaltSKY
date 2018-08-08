@@ -73,4 +73,5 @@ bool SamplerCreator::Create(csfFile &file)
 	compareModeEntry->AddAttribute("CompareToR");
 	compareFuncEntry->AddAttribute("Always");
 
+  return true;
 }

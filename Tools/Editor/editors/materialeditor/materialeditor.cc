@@ -143,9 +143,11 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
     {
       continue;
     }
-    std::string parameterName = materialDef->GetParamName(i);
+    std::string parameterId = materialDef->GetParameterId(i);
+    std::string parameterName = materialDef->GetParameterName(i);
     csfEntry *parameterEntry = file.CreateEntry("parameter");
     parametersEntry->AddChild(parameterEntry);
+    parameterEntry->AddAttribute("id", parameterId);
     parameterEntry->AddAttribute("name", parameterName);
 
     switch (materialDef->GetParamType(i))

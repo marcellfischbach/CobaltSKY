@@ -12,7 +12,8 @@
 #include <glcontext.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
-
+#include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
+#include <QUuid>
 
 ShaderGraphEditor::ShaderGraphEditor()
   : AbstractAssetEditor()
@@ -58,6 +59,7 @@ void ShaderGraphEditor::UpdateAsset()
 	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
   csSGShaderGraph *shaderGraph = csResourceManager::Get()->Aquire<csSGShaderGraph>(locator);
+  UpdateResourceNodeIDs(shaderGraph);
 
   csResourceLocator metaLocator(locator, "meta");
   ShaderGraphEditorMeta *meta = csResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
@@ -71,6 +73,24 @@ void ShaderGraphEditor::UpdateAsset()
 
   CS_RELEASE(meta);
 
+}
+
+void ShaderGraphEditor::UpdateResourceNodeIDs(csSGShaderGraph *shaderGraph)
+{
+  for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    csSGNode *node = shaderGraph->GetNode(i);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    if (resourceNode)
+    {
+      std::string resourceId = resourceNode->GetResourceId();
+      if (resourceId.empty())
+      {
+        resourceId = QUuid::createUuid().toString().toLatin1().data();
+        resourceNode->SetResourceId(resourceId);
+      }
+    }
+  }
 }
 
 void ShaderGraphEditor::UpdatePreview()

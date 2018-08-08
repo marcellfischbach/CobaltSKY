@@ -31,6 +31,7 @@
 #include <QDropEvent>
 #include <QFile>
 #include <QImage>
+#include <QUuid>
 
 
 ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
@@ -306,6 +307,13 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    if (node)
+    {
+      QString uuid = QUuid::createUuid().toString();
+      resourceNode->SetResourceId(std::string(uuid.toLatin1().data()));
+    }
+
     emit ShaderGraphNodeAboutToAdd(node);
     m_shaderGraphCopy->AddNode(node);
     emit ShaderGraphNodeAdded(node);
@@ -363,6 +371,8 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
 
       txtNode->SetDefaultTextureResource(locator);
       txtNode->SetResourceName(ExtractName(locator));
+      QString uuid = QUuid::createUuid().toString();
+      txtNode->SetResourceId(std::string(uuid.toLatin1().data()));
       emit ShaderGraphNodeAboutToAdd(txtNode);
       m_shaderGraphCopy->AddNode(txtNode);
       emit ShaderGraphNodeAdded(txtNode);
@@ -490,6 +500,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       if (resourceNode)
       {
         csfEntry *resourceEntry = file.CreateEntry("resource");
+        resourceEntry->AddAttribute("id", resourceNode->GetResourceId());
         resourceEntry->AddAttribute("name", resourceNode->GetResourceName());
         nodeEntry->AddChild(resourceEntry);
 

@@ -24,6 +24,9 @@ public:
   void SetResourceName(const std::string &resourceName);
   const std::string &GetResourceName() const;
 
+  void SetResourceId(const std::string &resourceId);
+  const std::string &GetResourceId() const;
+
   csShaderParameterType GetResourceType() const;
 
   void SetDefault(float value);
@@ -47,6 +50,7 @@ protected:
   void SetResourceType(csShaderParameterType type);
 
 private:
+  std::string m_resourceId;
   std::string m_resourceName;
   csShaderParameterType m_resourceType;
 

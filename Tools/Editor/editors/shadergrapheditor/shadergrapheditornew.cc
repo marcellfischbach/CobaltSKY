@@ -44,4 +44,5 @@ bool ShaderGraphCreator::Create(csfFile &file)
   shaderGraphEntry->AddChild(inputsEntry);
   shaderGraphEntry->AddChild(attributesEntry);
 
+  return true;
 }

@@ -18,6 +18,7 @@ csSGNode *csSGResourceNode::Copy(csSGNode *node) const
   csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
   if (resourceNode)
   {
+    resourceNode->m_resourceId = m_resourceId;
     resourceNode->m_resourceName = m_resourceName;
     resourceNode->m_resourceType = m_resourceType;
     memcpy(resourceNode->m_defaultFloats, m_defaultFloats, sizeof(m_defaultFloats));
@@ -35,6 +36,16 @@ void csSGResourceNode::SetResourceName(const std::string &resourceName)
 const std::string &csSGResourceNode::GetResourceName() const
 {
   return m_resourceName;
+}
+
+void csSGResourceNode::SetResourceId(const std::string &resourceId)
+{
+  m_resourceId = resourceId;
+}
+
+const std::string &csSGResourceNode::GetResourceId() const
+{
+  return m_resourceId;
 }
 
 void csSGResourceNode::SetResourceType(csShaderParameterType resourceType)

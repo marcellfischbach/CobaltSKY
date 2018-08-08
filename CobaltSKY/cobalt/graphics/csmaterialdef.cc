@@ -1,6 +1,7 @@
 
 
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/csnosuchparameterexception.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
@@ -38,10 +39,10 @@ void csMaterialDef::ClearParameters()
   m_params.clear();
 }
 
-csSize csMaterialDef::RegisterParam(const std::string &parameterName, csShaderParameterType type)
+csSize csMaterialDef::RegisterParam(const std::string &id, const std::string &parameterName, csShaderParameterType type)
 {
   csSize idx = m_params.size();
-  Param param(parameterName, type);
+  Param param(id, parameterName, type);
   for (csSize i = 0; i < eRP_COUNT; ++i)
   {
     iShader *shader = m_shaders[i];
@@ -142,45 +143,116 @@ csSize csMaterialDef::GetNumberOfParameters() const
 
 csShaderParameterType csMaterialDef::GetParamType(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return m_params[idx].m_type;
-}
-
-std::string csMaterialDef::GetParamName(csSize idx) const
-{
-  return m_params[idx].m_name;
 }
 
 
 iShaderAttribute *csMaterialDef::GetAttribute(csSize idx, csRenderPass pass) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
+  return GetAttributeUnsafe(idx, pass);
+}
+
+iShaderAttribute *csMaterialDef::GetAttributeUnsafe(csSize idx, csRenderPass pass) const
+{
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return m_params[idx].m_attribute[pass];
 }
 
-csInt16 csMaterialDef::GetIndex(const std::string &parameterName) const
+csInt16 csMaterialDef::GetIndex(const std::string &id) const
 {
   for (size_t i = 0, in = m_params.size(); i < in; ++i)
   {
-    if (m_params[i].m_name == parameterName)
+    if (m_params[i].m_id == id)
     {
       return (csInt16)i;
     }
   }
-  return -1;
+
+  throw csNoSuchParameterIdException(id);
+}
+
+csInt16 csMaterialDef::GetIndexByName(const std::string &name) const
+{
+  for (size_t i = 0, in = m_params.size(); i < in; ++i)
+  {
+    if (m_params[i].m_name == name)
+    {
+      return (csInt16)i;
+    }
+  }
+  throw csNoSuchParameterNameException(name);
+}
+
+const std::string &csMaterialDef::GetParameterId(csSize idx) const
+{
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
+  return m_params[idx].m_id;
+}
+
+const std::string &csMaterialDef::GetParameterName(csSize idx) const
+{
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
+  return m_params[idx].m_name;
 }
 
 void csMaterialDef::SetDefault(csSize idx, float def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultFloat[0] = def;
 }
 
 void csMaterialDef::SetDefault(csSize idx, const csVector2f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultFloat[0] = def.x;
   m_params[idx].m_defaultFloat[1] = def.y;
 }
 
 void csMaterialDef::SetDefault(csSize idx, const csVector3f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultFloat[0] = def.x;
   m_params[idx].m_defaultFloat[1] = def.y;
   m_params[idx].m_defaultFloat[2] = def.z;
@@ -188,6 +260,12 @@ void csMaterialDef::SetDefault(csSize idx, const csVector3f &def)
 
 void csMaterialDef::SetDefault(csSize idx, const csVector4f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultFloat[0] = def.x;
   m_params[idx].m_defaultFloat[1] = def.y;
   m_params[idx].m_defaultFloat[2] = def.z;
@@ -197,6 +275,12 @@ void csMaterialDef::SetDefault(csSize idx, const csVector4f &def)
 
 void csMaterialDef::SetDefault(csSize idx, const csColor4f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultFloat[0] = def.r;
   m_params[idx].m_defaultFloat[1] = def.g;
   m_params[idx].m_defaultFloat[2] = def.b;
@@ -205,68 +289,146 @@ void csMaterialDef::SetDefault(csSize idx, const csColor4f &def)
 
 void csMaterialDef::SetDefault(csSize idx, int def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   m_params[idx].m_defaultInt[0] = def;
 }
 
 void csMaterialDef::SetDefault(csSize idx, const csMatrix3f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 9);
 }
 
 void csMaterialDef::SetDefault(csSize idx, const csMatrix4f &def)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 16);
 }
 
 void csMaterialDef::SetDefault(csSize idx, iTexture *texture)
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   CS_SET(m_params[idx].m_defaultTexture, texture);
 }
 
 
 float csMaterialDef::GetDefaultFloat(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return m_params[idx].m_defaultFloat[0];
 }
 
 csVector2f csMaterialDef::GetDefaultVector2(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csVector2f(m_params[idx].m_defaultFloat);
 }
 
 csVector3f csMaterialDef::GetDefaultVector3(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csVector3f(m_params[idx].m_defaultFloat);
 }
 
 csVector4f csMaterialDef::GetDefaultVector4(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csVector4f(m_params[idx].m_defaultFloat);
 }
 
 
 csColor4f csMaterialDef::GetDefaultColor4(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csColor4f(m_params[idx].m_defaultFloat);
 }
 
 int csMaterialDef::GetDefaultInt(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return m_params[idx].m_defaultInt[0];
 }
 
 csMatrix3f csMaterialDef::GetDefaultMatrix3(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csMatrix3f(m_params[idx].m_defaultFloat);
 }
 
 csMatrix4f csMaterialDef::GetDefaultMatrix4(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return csMatrix4f(m_params[idx].m_defaultFloat);
 }
 
 iTexture *csMaterialDef::GetDefaultTexture(csSize idx) const
 {
+#ifdef _DEBUG
+  if (idx >= m_params.size())
+  {
+    throw csNoSuchParameterIndexException(idx);
+  }
+#endif
   return m_params[idx].m_defaultTexture;
 }
 
@@ -280,8 +442,9 @@ csFillMode csMaterialDef::GetFillMode() const
   return m_fillMode;
 }
 
-csMaterialDef::Param::Param(const std::string &name, csShaderParameterType type)
-  : m_name(name)
+csMaterialDef::Param::Param(const std::string &id, const std::string &name, csShaderParameterType type)
+  : m_id(id)
+  , m_name(name)
   , m_type(type)
 {
   CS_ZERO(m_defaultFloat);
