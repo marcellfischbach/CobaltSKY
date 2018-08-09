@@ -93,8 +93,10 @@ include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PNG_INCLUDE_DIRS})
 include_directories(${BULLET_INCLUDE_DIRS})
 include_directories(${CobaltSKY_SOURCE_DIR}/3rdparty)
-include_directories(${CobaltSKY_SOURCE_DIR}/CobaltSKY)
-include_directories(${CobaltSKY_BINARY_DIR}/CobaltSKY)
+include_directories(${CobaltSKY_SOURCE_DIR}/Engine)
+include_directories(${CobaltSKY_BINARY_DIR}/Engine)
+include_directories(${CobaltSKY_SOURCE_DIR}/Editor)
+include_directories(${CobaltSKY_BINARY_DIR}/Editor)
 
 
 add_subdirectory(3rdparty)
