@@ -99,5 +99,5 @@ include_directories(${CobaltSKY_BINARY_DIR}/CobaltSKY)
 
 add_subdirectory(3rdparty)
 add_subdirectory(ClassGenerator)
-add_subdirectory(CobaltSKY)
-add_subdirectory(Tools)
+add_subdirectory(Engine)
+add_subdirectory(Editor)
