@@ -719,8 +719,7 @@ set(ALL_SOURCES
     ${PROJECT_SOURCES}
     )
 
-add_executable(
-    Editor
+add_library(Editor SHARED
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}

@@ -1,2 +1,7 @@
 
 add_subdirectory(Editor)
+add_subdirectory(EditorLauncher)
+add_subdirectory(EditorMaterial)
+add_subdirectory(EditorSampler)
+add_subdirectory(EditorShaderGraph)
+add_subdirectory(EditorTexture)
