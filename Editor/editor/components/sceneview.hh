@@ -14,7 +14,7 @@ struct SceneViewInputHandler;
 class QTCSOnscreenRenderTarget;
 class QImage;
 class QTimer;
-class SceneView : public RenderWidget
+class EDITOR_API SceneView : public RenderWidget
 {
   Q_OBJECT
 public:

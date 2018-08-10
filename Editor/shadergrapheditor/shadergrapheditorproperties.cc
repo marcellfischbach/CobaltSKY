@@ -1,9 +1,9 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditorproperties.hh>
-#include <editors/shadergrapheditor/shadergrapheditornode.hh>
-#include <editors/shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
-#include <components/assetresourcewidget.hh>
+#include <shadergrapheditor/shadergrapheditorproperties.hh>
+#include <shadergrapheditor/shadergrapheditornode.hh>
+#include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
+#include <editor/components/assetresourcewidget.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>

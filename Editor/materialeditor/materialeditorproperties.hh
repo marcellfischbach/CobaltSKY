@@ -1,5 +1,6 @@
 #pragma once
 
+#include <materialeditor/materialeditorexport.hh>
 #include <QWidget>
 #include <cobalt/cstypes.hh>
 
@@ -10,7 +11,7 @@ class QGridLayout;
 class AssetResourceWidget;
 class csMaterial;
 class csResourceLocator;
-class MaterialEditorProperties : public QWidget
+class MATERIALEDITOR_API MaterialEditorProperties : public QWidget
 {
   Q_OBJECT;
 public:

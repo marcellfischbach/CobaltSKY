@@ -1,8 +1,9 @@
 
 #pragma once
 
-#include <assetmanager/contextmenu/contextmenuhandler.hh>
-#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
+#include <shadergrapheditor/shadergrapheditorexport.hh>
+#include <editor/assetmanager/contextmenu/contextmenuhandler.hh>
+#include <editor/assetmanager/actions/new/assetmanagernewassetaction.hh>
 
 class ShaderGraphEditorContextMenuFactory : public asset::contextmenu::Handler::ItemFactory
 {

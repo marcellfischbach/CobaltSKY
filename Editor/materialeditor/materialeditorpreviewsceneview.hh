@@ -1,11 +1,12 @@
 #pragma once
 
 
-#include <preview/previewsceneview.hh>
+#include <materialeditor/materialeditorexport.hh>
+#include <editor/preview/previewsceneview.hh>
 
 class csMaterial;
 class csStaticMeshState;
-class MaterialEditorPreviewSceneView : public PreviewSceneView
+class MATERIALEDITOR_API MaterialEditorPreviewSceneView : public PreviewSceneView
 {
 public:
   MaterialEditorPreviewSceneView(QWidget *parent);

@@ -2,7 +2,7 @@
 
 #include <editor/editorexport.hh>
 
-class NodeGraphAcceptEvent
+class EDITOR_API NodeGraphAcceptEvent
 {
 public:
   NodeGraphAcceptEvent();

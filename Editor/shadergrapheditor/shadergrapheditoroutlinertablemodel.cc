@@ -1,5 +1,5 @@
 
-#include <editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
+#include <shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>

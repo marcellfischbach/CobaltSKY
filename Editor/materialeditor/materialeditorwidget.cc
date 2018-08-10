@@ -1,7 +1,7 @@
 
 
-#include <editors/materialeditor/materialeditorwidget.hh>
-#include <editors/materialeditor/materialeditor.hh>
+#include <materialeditor/materialeditorwidget.hh>
+#include <materialeditor/materialeditor.hh>
 
 #include <cobalt/graphics/csmaterial.hh>
 

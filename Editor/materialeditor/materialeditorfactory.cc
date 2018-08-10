@@ -1,7 +1,7 @@
 
 
-#include <editors/materialeditor/materialeditorfactory.hh>
-#include <editors/materialeditor/materialeditor.hh>
+#include <materialeditor/materialeditorfactory.hh>
+#include <materialeditor/materialeditor.hh>
 #include <cobalt/graphics/csmaterial.hh>
 
 bool MaterialEditorFactory::CanEdit(iObject *object, asset::model::Asset*asset) const

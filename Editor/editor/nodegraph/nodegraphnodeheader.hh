@@ -9,7 +9,7 @@
 class QPainter;
 
 class NodeGraphNodeAnchor;
-class NodeGraphNodeHeader
+class EDITOR_API NodeGraphNodeHeader
 {
 public:
   NodeGraphNodeHeader();

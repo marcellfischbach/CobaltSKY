@@ -4,7 +4,7 @@
 
 class QMouseEvent;
 class QWheelEvent;
-struct PreviewInputHandler
+struct EDITOR_API PreviewInputHandler
 {
   virtual ~PreviewInputHandler() { }
 

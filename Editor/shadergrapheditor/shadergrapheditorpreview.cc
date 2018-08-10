@@ -1,5 +1,5 @@
 
-#include <editors/shadergrapheditor/shadergrapheditorpreview.hh>
+#include <shadergrapheditor/shadergrapheditorpreview.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 

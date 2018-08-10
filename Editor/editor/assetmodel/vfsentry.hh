@@ -8,7 +8,7 @@
 namespace asset::model
 {
   class Model;
-  class VFSEntry : public Folder
+  class EDITOR_API VFSEntry : public Folder
   {
   public:
     VFSEntry(Model *model, const csVFS::Entry &entry);

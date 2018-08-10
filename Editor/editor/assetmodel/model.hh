@@ -26,7 +26,7 @@ namespace asset::model
 	class MoveHelper;
 	class ModelTransaction;
 	class TreeCollector;
-	class Model : public QObject
+	class EDITOR_API Model : public QObject
 	{
 		Q_OBJECT
 	public:

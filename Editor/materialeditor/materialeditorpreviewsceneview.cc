@@ -1,7 +1,7 @@
 
 
-#include <editors/materialeditor/materialeditorpreviewsceneview.hh>
-#include <preview/previewcameraorbithandler.hh>
+#include <materialeditor/materialeditorpreviewsceneview.hh>
+#include <editor/preview/previewcameraorbithandler.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/entity/csentityscene.hh>

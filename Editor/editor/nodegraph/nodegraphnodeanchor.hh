@@ -6,7 +6,7 @@
 
 class NodeGraphNode;
 class NodeGraphNodeProperty;
-class NodeGraphNodeAnchor
+class EDITOR_API NodeGraphNodeAnchor
 {
 public:
   NodeGraphNodeAnchor(NodeGraphNode *node, NodeGraphNodeProperty *prop);

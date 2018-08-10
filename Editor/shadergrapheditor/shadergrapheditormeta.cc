@@ -1,6 +1,6 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditormeta.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
 
 ShaderGraphEditorMeta::ShaderGraphEditorMeta()
   : iObject()

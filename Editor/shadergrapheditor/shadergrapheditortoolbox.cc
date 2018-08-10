@@ -1,6 +1,6 @@
 
-#include <editors/shadergrapheditor/shadergrapheditortoolbox.hh>
-#include <editors/shadergrapheditor/shadergrapheditortoolboxmodel.hh>
+#include <shadergrapheditor/shadergrapheditortoolbox.hh>
+#include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 
 ShaderGraphEditorToolbox::ShaderGraphEditorToolbox()
   : QWidget()

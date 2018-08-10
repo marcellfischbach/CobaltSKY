@@ -1,20 +1,20 @@
 
-#include <editors/shadergrapheditor/shadergrapheditorwidget.hh>
-#include <editors/shadergrapheditor/shadergrapheditor.hh>
-#include <editors/shadergrapheditor/shadergrapheditormeta.hh>
-#include <editors/shadergrapheditor/shadergrapheditornode.hh>
-#include <editors/shadergrapheditor/shadergrapheditortoolboxmodel.hh>
+#include <shadergrapheditor/shadergrapheditorwidget.hh>
+#include <shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
+#include <shadergrapheditor/shadergrapheditornode.hh>
+#include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 
-#include <nodegraph/nodegraphnode.hh>
-#include <nodegraph/nodegraphnodeanchor.hh>
-#include <nodegraph/nodegraphnodeheader.hh>
-#include <nodegraph/nodegraphnodeimageproperty.hh>
-#include <nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/nodegraph/nodegraphnode.hh>
+#include <editor/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/nodegraph/nodegraphnodeheader.hh>
+#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
 
 
-#include <mimehelper.hh>
-#include <editor.hh>
-#include <project/project.hh>
+#include <editor/mimehelper.hh>
+#include <editor/editor.hh>
+#include <editor/project/project.hh>
 
 #include <cobalt/csengine.hh>
 #include <cobalt/core/csclassregistry.hh>
@@ -709,8 +709,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
   file.Output(std::string((const char*)fileName.toLatin1()));
 
-
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAsset()->GetResourceLocator().GetResourceFile());
+  // Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(m_editor->GetAsset()->GetResourceLocator().GetResourceFile());
 
 }
 

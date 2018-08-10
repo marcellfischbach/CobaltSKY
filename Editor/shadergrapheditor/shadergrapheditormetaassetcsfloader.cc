@@ -1,6 +1,6 @@
 
-#include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
-#include <editors/shadergrapheditor/shadergrapheditormeta.hh>
+#include <shadergrapheditor/shadergrapheditormetaassetcsfloader.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
 
 
 

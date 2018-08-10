@@ -4,6 +4,10 @@ find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml REQUIRED)
 include_directories(${ASSIMP_INCLUDE_DIR})
 include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5Xml_INCLUDE_DIRS})
 
+add_definitions(-DSHADERGRAPHEDITOR_EXPORT)
+
+set(CMAKE_AUTOMOC ON)
+
 set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     shadergrapheditor.cc
     shadergrapheditor.hh
@@ -13,6 +17,8 @@ set(EDITORS_SHADERGRAPHEDITOR_SOURCES
     shadergrapheditormeta.hh
     shadergrapheditormetaassetcsfloader.cc
     shadergrapheditormetaassetcsfloader.hh
+    shadergrapheditormodule.cc
+    shadergrapheditormodule.hh
     shadergrapheditornew.cc
     shadergrapheditornew.hh
     shadergrapheditornode.cc
@@ -68,4 +74,4 @@ target_link_libraries(EditorShaderGraph
     Editor
     )
 
-CS_INSTALL_MOCCER(EditorShaderGraph shadergrapheditor NO_API ALL_SOURCES)
+CS_INSTALL_MOCCER(EditorShaderGraph shadergrapheditor SHADERGRAPHEDITOR_API ALL_SOURCES)

@@ -2,8 +2,6 @@
 #include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <editor/project/project.hh>
-#include <editor/project/projectassetreference.hh>
-#include <editor/project/projectreferencetree.hh>
 #include <editor/editor.hh>
 #include <editor/eventbus.hh>
 #include <editor/events/assetrenamedevent.hh>
@@ -61,10 +59,6 @@ void AssetResourceWidget::Renamed(const csResourceLocator &from, const csResourc
 {
   if (m_locator.EqualsAnonymous(from))
   {
-    const ProjectAssetReference *ref = Editor::Get()->GetProject()->GetReferenceTree().GetReference(from.AsAnonymous());
-    if (!ref)
-    {
-      SetResourceLocator(to.AsAnonymous());
-    }
+    SetResourceLocator(to.AsAnonymous());
   }
 }

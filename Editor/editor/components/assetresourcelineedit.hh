@@ -12,7 +12,7 @@ namespace asset::model
   class Entry;
 }
 
-class AssetResourceLineEdit : public QLineEdit
+class EDITOR_API AssetResourceLineEdit : public QLineEdit
 {
   Q_OBJECT
 public:

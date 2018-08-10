@@ -6,7 +6,7 @@
 #include <QPoint>
 
 class csCamera;
-class PreviewCameraFlowHandler : public SceneViewBaseInputHandler
+class EDITOR_API PreviewCameraFlowHandler : public SceneViewBaseInputHandler
 {
 public:
   PreviewCameraFlowHandler(csCamera *camera);

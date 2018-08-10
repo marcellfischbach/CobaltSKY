@@ -129,7 +129,7 @@
   <customwidget>
    <class>MaterialEditorPreviewSceneView</class>
    <extends>QOpenGLWidget</extends>
-   <header location="global">editors/materialeditor/materialeditorpreviewsceneview.hh</header>
+   <header location="global">materialeditor/materialeditorpreviewsceneview.hh</header>
   </customwidget>
  </customwidgets>
  <resources>

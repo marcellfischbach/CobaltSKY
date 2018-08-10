@@ -1,10 +1,10 @@
 #pragma once
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
+#include <editor/abstractasseteditor.hh>
+#include <editor/assetdescriptor.hh>
 
-#include <abstractasseteditor.hh>
-#include <assetdescriptor.hh>
-
-#include <editors/shadergrapheditor/shadergrapheditor.refl.hh>
+#include <shadergrapheditor/shadergrapheditor.refl.hh>
 #include <cobalt/csenums.hh>
 
 class csSGShaderGraph;

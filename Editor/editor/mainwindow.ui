@@ -64,13 +64,6 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuProject">
-    <property name="title">
-     <string>Project</string>
-    </property>
-    <addaction name="actionRebuild_dependency_tree"/>
-    <addaction name="actionDebug_dependency_tree"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuProject"/>
   </widget>

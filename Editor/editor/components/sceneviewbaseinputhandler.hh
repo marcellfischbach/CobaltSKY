@@ -4,7 +4,7 @@
 #include <editor/components/sceneviewinputhandler.hh>
 
 
-class SceneViewBaseInputHandler : public SceneViewInputHandler
+class EDITOR_API SceneViewBaseInputHandler : public SceneViewInputHandler
 {
 public:
   virtual ~SceneViewBaseInputHandler();

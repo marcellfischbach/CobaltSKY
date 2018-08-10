@@ -5,7 +5,7 @@
 
 struct iRenderTarget;
 class csRenderTargetGL4;
-class QTCSOnscreenRenderTarget
+class EDITOR_API QTCSOnscreenRenderTarget
 {
 public:
   QTCSOnscreenRenderTarget();

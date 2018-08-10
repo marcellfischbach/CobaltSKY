@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include <iasseteditorfactory.hh>
+#include <shadergrapheditor/shadergrapheditorexport.hh>
+#include <editor/iasseteditorfactory.hh>
 
 
 class ShaderGraphEditorFactory : public iAssetEditorFactory

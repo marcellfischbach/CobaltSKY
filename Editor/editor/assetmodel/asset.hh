@@ -11,7 +11,7 @@
 namespace asset::model
 {
   class Model;
-  class Asset : public Entry
+  class EDITOR_API Asset : public Entry
   {
   public:
     Asset(Model *model, const std::string &fileName);

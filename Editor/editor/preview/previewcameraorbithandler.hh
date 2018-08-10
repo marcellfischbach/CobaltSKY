@@ -5,7 +5,7 @@
 #include <QPoint>
 
 class csCamera;
-class PreviewCameraOrbitHandler : public SceneViewBaseInputHandler
+class EDITOR_API PreviewCameraOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
   PreviewCameraOrbitHandler(csCamera *camera);

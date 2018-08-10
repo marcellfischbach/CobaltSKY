@@ -1,12 +1,12 @@
 
 
-#include <editors/materialeditor/materialeditornew.hh>
-#include <assetmanager/contextmenu/contextmenuentry.hh>
-#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
+#include <materialeditor/materialeditornew.hh>
+#include <editor/assetmanager/contextmenu/contextmenuentry.hh>
+#include <editor/assetmanager/actions/new/assetmanagernewassetaction.hh>
 #include <iostream>
 #include <QMessageBox>
-#include <editor.hh>
-#include <mainwindow.hh>
+#include <editor/editor.hh>
+#include <editor/mainwindow.hh>
 #include <csfile/csffile.hh>
 
 void MaterialEditorContextMenuFactory::Create(asset::model::Entry *entry, asset::contextmenu::Builder builder)

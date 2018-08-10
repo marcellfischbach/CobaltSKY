@@ -1,7 +1,7 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditorfactory.hh>
-#include <editors/shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditorfactory.hh>
+#include <shadergrapheditor/shadergrapheditor.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 bool ShaderGraphEditorFactory::CanEdit(iObject *object, asset::model::Asset *asset) const

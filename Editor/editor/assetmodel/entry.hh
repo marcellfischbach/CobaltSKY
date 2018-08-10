@@ -13,7 +13,7 @@ namespace asset::model
 	class Folder;
 	class Root;
   class VFSEntry;
-  class Entry
+  class EDITOR_API Entry
   {
 		friend class Model;
   public:

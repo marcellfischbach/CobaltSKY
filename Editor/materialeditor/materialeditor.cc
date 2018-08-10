@@ -1,7 +1,7 @@
 
-#include <editors/materialeditor/materialeditor.hh>
-#include <editors/materialeditor/materialeditorwidget.hh>
-#include <editors/materialeditor/materialeditorproperties.hh>
+#include <materialeditor/materialeditor.hh>
+#include <materialeditor/materialeditorwidget.hh>
+#include <materialeditor/materialeditorproperties.hh>
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
@@ -12,11 +12,11 @@
 #include <csfile/csffile.hh>
 
 #include <QFile>
-#include <basicdockitem.hh>
-#include <editor.hh>
-#include <dockitems.hh>
-#include <project/project.hh>
-#include <components/baseeditorwidget.hh>
+#include <editor/basicdockitem.hh>
+#include <editor/editor.hh>
+#include <editor/dockitems.hh>
+#include <editor/project/project.hh>
+#include <editor/components/baseeditorwidget.hh>
 
 MaterialEditor::MaterialEditor()
   : AbstractAssetEditor()
@@ -120,7 +120,6 @@ void MaterialEditor::Save(csfFile &file)
   QString absFileName = GetResourceFileName();
 
   file.Output(std::string(absFileName.toLatin1()));
-  Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(GetAsset()->GetResourceLocator().GetResourceFile());
 }
 
 void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)

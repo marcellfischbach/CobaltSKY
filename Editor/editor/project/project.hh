@@ -2,7 +2,6 @@
 
 #include <editor/editorexport.hh>
 #include <cobalt/core/csresourcelocator.hh>
-#include <editor/project/projectreferencetree.hh>
 #include <string>
 #include <QObject>
 
@@ -20,17 +19,10 @@ public:
   void Open(const std::string &projectPath);
   void Close();
 
-  ProjectReferenceTree &GetReferenceTree();
-  const ProjectReferenceTree &GetReferenceTree() const;
-
   const asset::model::Model* GetModel() const;
   asset::model::Model* GetModel();
 
-  bool Rename(const csResourceLocator &from, const csResourceLocator &to);
-
-
 private:
-  ProjectReferenceTree m_referenceTree;
 
   asset::model::Model* m_model;
 

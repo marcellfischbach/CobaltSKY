@@ -1,6 +1,6 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditortoolboxmodel.hh>
+#include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 #include <cobalt/graphics/shadergraph/cssgnodes.hh>
 #include <QMimeData>
 #include <QDataStream>

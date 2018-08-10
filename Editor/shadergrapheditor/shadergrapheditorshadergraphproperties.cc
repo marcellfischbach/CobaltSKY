@@ -1,5 +1,5 @@
 
-#include <editors/shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
+#include <shadergrapheditor/shadergrapheditorshadergraphproperties.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 
 ShaderGraphEditorShaderGraphProperties::ShaderGraphEditorShaderGraphProperties(QWidget *parent)

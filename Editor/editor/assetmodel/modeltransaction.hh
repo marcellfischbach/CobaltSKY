@@ -9,7 +9,7 @@
 namespace asset::model
 {
 
-	class ModelTransaction
+	class EDITOR_API ModelTransaction
 	{
 	public:
 		struct iCallback

@@ -5,7 +5,7 @@
 class QKeyEvent;
 class QMouseEvent;
 class QWheelEvent;
-struct SceneViewInputHandler
+struct EDITOR_API SceneViewInputHandler
 {
   virtual ~SceneViewInputHandler () { }
 

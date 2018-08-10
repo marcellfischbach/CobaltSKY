@@ -1,15 +1,16 @@
 #pragma once
 
 
+#include <materialeditor/materialeditorexport.hh>
 #include <QWidget>
 #include <cobalt/csenums.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/math/csvector4f.hh>
-#include <ui_materialeditorwidget.h>
+#include <materialeditor/ui_materialeditorwidget.h>
 
 class csMaterial;
 class MaterialEditor;
-class MaterialEditorWidget : public QWidget
+class MATERIALEDITOR_API MaterialEditorWidget : public QWidget
 {
   Q_OBJECT;
 public:

@@ -8,7 +8,7 @@ class csEntity;
 class csLightState;
 class csMaterial;
 class PreviewLightOrbitHandler;
-class PreviewSceneView : public SceneView
+class EDITOR_API PreviewSceneView : public SceneView
 {
 public:
   PreviewSceneView(QWidget *parent = 0);

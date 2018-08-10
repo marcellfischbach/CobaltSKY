@@ -1,9 +1,10 @@
 #pragma once
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <QWidget>
 #include <QList>
 #include <string>
-#include <ui_shadergrapheditorwidget.h>
+#include <shadergrapheditor/ui_shadergrapheditorwidget.h>
 
 
 namespace asset::model

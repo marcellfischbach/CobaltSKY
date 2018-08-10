@@ -1,6 +1,7 @@
 #pragma once
 
-#include <nodegraph/nodegraphnode.hh>
+#include <shadergrapheditor/shadergrapheditorexport.hh>
+#include <editor/nodegraph/nodegraphnode.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>

@@ -7,7 +7,7 @@
 namespace asset::model
 {
   class Model;
-  class Root : public Entry
+  class EDITOR_API Root : public Entry
   {
   public:
     Root(Model *model);

@@ -1,7 +1,8 @@
 #pragma once
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <QWidget>
-#include <ui_shadergrapheditoroutliner.h>
+#include <shadergrapheditor/ui_shadergrapheditoroutliner.h>
 
 class ShaderGraphEditorNode;
 class csSGShaderGraph;

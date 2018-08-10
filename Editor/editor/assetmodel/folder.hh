@@ -8,7 +8,7 @@ namespace asset::model
 {
   class Model;
 	class Asset;
-  class Folder : public Entry
+  class EDITOR_API Folder : public Entry
   {
   public:
     Folder(Model *model, const std::string &folderName);

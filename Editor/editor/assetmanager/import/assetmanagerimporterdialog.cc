@@ -7,7 +7,6 @@
 #include <editor/events/assetaddedevent.hh>
 #include <editor/eventbus.hh>
 #include <editor/project/project.hh>
-#include <editor/project/projectreferencetree.hh>
 
 AssetManagerImporterDialog::AssetManagerImporterDialog(AssetManagerWidget *assetManager)
   : QDialog(assetManager)
@@ -93,7 +92,6 @@ void AssetManagerImporterDialog::on_pbOK_clicked(bool)
     {
       AssetManagerImportData *data = page->GetData();
       csResourceLocator loc = data->Import(m_assetManager);
-      Editor::Get()->GetProject()->GetReferenceTree().UpdateDependencyTree(loc);
       AssetAddedEvent evt(loc, 0);
       bus << evt;
     }

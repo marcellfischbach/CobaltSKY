@@ -1,7 +1,7 @@
 
-#include <editors/shadergrapheditor/shadergrapheditoroutliner.hh>
-#include <editors/shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
-#include <editors/shadergrapheditor/shadergrapheditornode.hh>
+#include <shadergrapheditor/shadergrapheditoroutliner.hh>
+#include <shadergrapheditor/shadergrapheditoroutlinertablemodel.hh>
+#include <shadergrapheditor/shadergrapheditornode.hh>
 
 ShaderGraphEditorOutliner::ShaderGraphEditorOutliner(QWidget *parent)
   : QWidget(parent)

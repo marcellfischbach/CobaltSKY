@@ -1,12 +1,12 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditornew.hh>
-#include <assetmanager/contextmenu/contextmenuentry.hh>
-#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
+#include <shadergrapheditor/shadergrapheditornew.hh>
+#include <editor/assetmanager/contextmenu/contextmenuentry.hh>
+#include <editor/assetmanager/actions/new/assetmanagernewassetaction.hh>
 #include <iostream>
 #include <QMessageBox>
-#include <editor.hh>
-#include <mainwindow.hh>
+#include <editor/editor.hh>
+#include <editor/mainwindow.hh>
 #include <csfile/csffile.hh>
 
 

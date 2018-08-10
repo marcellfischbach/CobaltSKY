@@ -21,7 +21,9 @@ target_link_libraries(EditorLauncher
     Qt5::OpenGL
     Qt5::Xml
     Editor
+	EditorMaterial
 	EditorSampler
+	EditorShaderGraph
 	EditorTexture
     )
 

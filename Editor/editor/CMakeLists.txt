@@ -84,10 +84,6 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagerdock.hh
     assetmanager/assetmanagerfoldermodel.cc
     assetmanager/assetmanagerfoldermodel.hh
-    assetmanager/assetmanagerrenamer.cc
-    assetmanager/assetmanagerrenamer.hh
-    assetmanager/assetmanagerrenamehandler.cc
-    assetmanager/assetmanagerrenamehandler.hh
     assetmanager/assetmanagerresourcescanner.cc
     assetmanager/assetmanagerresourcescanner.hh
     assetmanager/assetmanagerwidget.cc
@@ -524,14 +520,6 @@ source_group(
 set(PROJECT_SOURCES
     project/project.cc
     project/project.hh
-    project/projectassetreference.cc
-    project/projectassetreference.hh
-	project/projectmodel.cc
-	project/projectmodel.hh
-	project/projectmodelscanner.cc
-	project/projectmodelscanner.hh
-    project/projectreferencetree.cc
-    project/projectreferencetree.hh
     )
 
 source_group(

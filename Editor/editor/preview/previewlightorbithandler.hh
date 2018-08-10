@@ -5,7 +5,7 @@
 #include <QPoint>
 
 class csDirectionalLight;
-class PreviewLightOrbitHandler : public SceneViewBaseInputHandler
+class EDITOR_API PreviewLightOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
   PreviewLightOrbitHandler(csDirectionalLight *light);

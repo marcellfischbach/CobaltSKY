@@ -5,7 +5,6 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <editor/editor.hh>
-#include <editor/assetmanager/assetmanagerrenamehandler.hh>
 #include <editor/assetmanager/actions/rename/assetmanagerrenameaction.hh>
 #include <editor/assetmanager/actions/newfolder/assetmanagernewfolderaction.hh>
 #include <editor/assetmanager/actions/delete/assetmanagerdeleteaction.hh>
@@ -63,5 +62,4 @@ void EditorModule::Initialize()
 	mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
 
 
-	AssetManagerRenameHandler::Register();
 }

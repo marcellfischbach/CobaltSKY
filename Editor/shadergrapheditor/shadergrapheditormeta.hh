@@ -1,8 +1,9 @@
 #pragma once
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <cobalt/core/csclass.hh>
 #include <cobalt/math/csvector2f.hh>
-#include <editors/shadergrapheditor/shadergrapheditormeta.refl.hh>
+#include <shadergrapheditor/shadergrapheditormeta.refl.hh>
 
 #include <map>
 

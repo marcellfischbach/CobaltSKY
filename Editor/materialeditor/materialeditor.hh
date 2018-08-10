@@ -1,10 +1,10 @@
 #pragma once
 
+#include <materialeditor/materialeditorexport.hh>
+#include <editor/abstractasseteditor.hh>
+#include <editor/assetdescriptor.hh>
 
-#include <abstractasseteditor.hh>
-#include <assetdescriptor.hh>
-
-#include <editors/materialeditor/materialeditor.refl.hh>
+#include <materialeditor/materialeditor.refl.hh>
 #include <cobalt/csenums.hh>
 
 #include <QDomDocument>
@@ -18,7 +18,7 @@ class csMaterial;
 class MaterialEditorProperties;
 class MaterialEditorWidget;
 CS_CLASS()
-class MaterialEditor : public AbstractAssetEditor
+class MATERIALEDITOR_API MaterialEditor : public AbstractAssetEditor
 {
   CS_CLASS_GEN_OBJECT;
 public:

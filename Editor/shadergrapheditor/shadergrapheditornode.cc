@@ -1,14 +1,14 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditornode.hh>
+#include <shadergrapheditor/shadergrapheditornode.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
-#include <nodegraph/nodegraphnodeheader.hh>
-#include <nodegraph/nodegraphnodeimageproperty.hh>
-#include <nodegraph/nodegraphnodevalueproperty.hh>
-#include <editorimage.hh>
+#include <editor/nodegraph/nodegraphnodeheader.hh>
+#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/editorimage.hh>
 #include <QMap>
 #include <QColor>
 

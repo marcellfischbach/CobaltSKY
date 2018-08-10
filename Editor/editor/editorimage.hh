@@ -10,7 +10,7 @@ class csImage;
 
 
 CS_CLASS()
-class EditorImage : public CS_SUPER(iObject)
+class EDITOR_API EditorImage : public CS_SUPER(iObject)
 {
   CS_CLASS_GEN_OBJECT;
 public:

@@ -168,7 +168,7 @@
   <customwidget>
    <class>NodeGraphWidget</class>
    <extends>QWidget</extends>
-   <header location="global">nodegraph/nodegraphwidget.hh</header>
+   <header location="global">editor/nodegraph/nodegraphwidget.hh</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -2,7 +2,7 @@
 
 #include <editor/editorexport.hh>
 
-class NodeGraphVetoEvent
+class EDITOR_API NodeGraphVetoEvent
 {
 public:
   NodeGraphVetoEvent();

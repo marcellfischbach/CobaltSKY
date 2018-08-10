@@ -10,7 +10,7 @@
 class QPainter;
 class NodeGraphNode;
 class NodeGraphNodeAnchor;
-class NodeGraphNodeProperty
+class EDITOR_API NodeGraphNodeProperty
 {
 public:
   NodeGraphNodeProperty(NodeGraphNode *node);

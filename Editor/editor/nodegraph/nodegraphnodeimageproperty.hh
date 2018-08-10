@@ -4,7 +4,7 @@
 #include <editor/nodegraph/nodegraphnodeproperty.hh>
 #include <QImage>
 
-class NodeGraphNodeImageProperty : public NodeGraphNodeProperty
+class EDITOR_API NodeGraphNodeImageProperty : public NodeGraphNodeProperty
 {
 public:
   NodeGraphNodeImageProperty(NodeGraphNode *node);

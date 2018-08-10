@@ -13,7 +13,7 @@
 
 class NodeGraphNode;
 class NodeGraphNodeAnchor;
-class NodeGraphWidget : public QWidget
+class EDITOR_API NodeGraphWidget : public QWidget
 {
   Q_OBJECT
 

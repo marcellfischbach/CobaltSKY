@@ -1,10 +1,11 @@
 
 #pragma once
 
-#include <assetmanager/contextmenu/contextmenuhandler.hh>
-#include <assetmanager/actions/new/assetmanagernewassetaction.hh>
+#include <materialeditor/materialeditorexport.hh>
+#include <editor/assetmanager/contextmenu/contextmenuhandler.hh>
+#include <editor/assetmanager/actions/new/assetmanagernewassetaction.hh>
 
-class MaterialEditorContextMenuFactory : public asset::contextmenu::Handler::ItemFactory
+class MATERIALEDITOR_API MaterialEditorContextMenuFactory : public asset::contextmenu::Handler::ItemFactory
 {
 
 public:
@@ -14,7 +15,7 @@ public:
 
 
 class csfFile;
-class MaterialCreator : public asset::actions::NewAssetCreator
+class MATERIALEDITOR_API MaterialCreator : public asset::actions::NewAssetCreator
 {
 public:
   MaterialCreator(const std::string &name, const std::string &defaultName);

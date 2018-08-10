@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include <preview/previewsceneview.hh>
+#include <shadergrapheditor/shadergrapheditorexport.hh>
+#include <editor/preview/previewsceneview.hh>
 
 class csMaterialDef;
 class csMaterial;

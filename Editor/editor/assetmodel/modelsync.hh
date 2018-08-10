@@ -9,7 +9,7 @@ namespace asset::model
 {
 
 
-	class ModelSync
+	class EDITOR_API ModelSync
 	{
 		friend class Model;
 	public:

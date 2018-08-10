@@ -4,8 +4,6 @@
 #include <editor/editorimage.hh>
 #include <editor/editor.hh>
 #include <editor/project/project.hh>
-#include <editor/project/projectassetreference.hh>
-#include <editor/project/projectreferencetree.hh>
 #include <cobalt/core/csfileinfo.hh>
 #include <cobalt/core/csresourcemanager.hh>
 
@@ -19,11 +17,7 @@ AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLoc
 
   m_entryName = QString(info.GetName().c_str());
 
-  const ProjectAssetReference *reference = Editor::Get()->GetProject()->GetReferenceTree().GetReference(locator);
-  if (reference)
-  {
-    m_typeName = QString(reference->GetTypeName().c_str());
-  }
+
   ReloadIcon();
 }
 

@@ -5,7 +5,7 @@
 #include <QColor>
 
 
-class NodeGraphNodeValueProperty : public NodeGraphNodeProperty
+class EDITOR_API NodeGraphNodeValueProperty : public NodeGraphNodeProperty
 {
 public:
   NodeGraphNodeValueProperty(NodeGraphNode *node);

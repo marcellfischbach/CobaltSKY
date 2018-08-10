@@ -1,9 +1,10 @@
 #pragma once
 
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <editors/shadergrapheditor/shadergrapheditormetaassetcsfloader.refl.hh>
+#include <shadergrapheditor/shadergrapheditormetaassetcsfloader.refl.hh>
 
 class csSGNode;
 class csSGShaderGraph;

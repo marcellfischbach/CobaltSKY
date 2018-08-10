@@ -15,7 +15,9 @@
 
 #include <editor/assetmanager/assetmanagerresourcescanner.hh>
 
+#include <materialeditor/materialeditormodule.hh>
 #include <samplereditor/samplereditormodule.hh>
+#include <shadergrapheditor/shadergrapheditormodule.hh>
 #include <textureeditor/textureeditormodule.hh>
 #include <QIcon>
 
@@ -88,7 +90,9 @@ int main (int argc, char **argv)
     return -1;
   }
 
+  MaterialEditorModule::Initialize(argc, argv);
   SamplerEditorModule::Initialize(argc, argv);
+  ShaderGraphEditorModule::Initialize(argc, argv);
   TextureEditorModule::Initialize(argc, argv);
   
 #endif

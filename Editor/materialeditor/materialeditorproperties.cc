@@ -1,6 +1,6 @@
 
-#include <editors/materialeditor/materialeditorproperties.hh>
-#include <components/assetresourcewidget.hh>
+#include <materialeditor/materialeditorproperties.hh>
+#include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>

@@ -1,11 +1,11 @@
 
 
-#include <editors/shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
-#include <preview/previewcameraorbithandler.hh>
+#include <shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
+#include <editor/preview/previewcameraorbithandler.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/entity/csentityscene.hh>
-#include <glcontext.hh>
+#include <editor/glcontext.hh>
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)

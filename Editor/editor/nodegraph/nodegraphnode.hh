@@ -8,7 +8,7 @@
 class NodeGraphNodeAnchor;
 class NodeGraphNodeHeader;
 class NodeGraphNodeProperty;
-class NodeGraphNode
+class EDITOR_API NodeGraphNode
 {
 public:
   NodeGraphNode();

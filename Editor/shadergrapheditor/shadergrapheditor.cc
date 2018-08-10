@@ -1,15 +1,15 @@
 
-#include <shadergrapheditor.hh>
-#include <shadergrapheditormeta.hh>
-#include <shadergrapheditoroutliner.hh>
-#include <shadergrapheditorpreview.hh>
-#include <shadergrapheditorproperties.hh>
-#include <shadergrapheditortoolbox.hh>
-#include <shadergrapheditorwidget.hh>
-#include <components/baseeditorwidget.hh>
-#include <basicdockitem.hh>
-#include <editor.hh>
-#include <glcontext.hh>
+#include <shadergrapheditor/shadergrapheditor.hh>
+#include <shadergrapheditor/shadergrapheditormeta.hh>
+#include <shadergrapheditor/shadergrapheditoroutliner.hh>
+#include <shadergrapheditor/shadergrapheditorpreview.hh>
+#include <shadergrapheditor/shadergrapheditorproperties.hh>
+#include <shadergrapheditor/shadergrapheditortoolbox.hh>
+#include <shadergrapheditor/shadergrapheditorwidget.hh>
+#include <editor/components/baseeditorwidget.hh>
+#include <editor/basicdockitem.hh>
+#include <editor/editor.hh>
+#include <editor/glcontext.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>

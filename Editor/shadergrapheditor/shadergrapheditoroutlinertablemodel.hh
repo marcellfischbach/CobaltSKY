@@ -1,5 +1,6 @@
 #pragma once
 
+#include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <QAbstractItemModel>
 
 class csSGShaderGraph;

@@ -1,10 +1,11 @@
 #pragma once
 
 
-#include <iasseteditorfactory.hh>
+#include <materialeditor/materialeditorexport.hh>
+#include <editor/iasseteditorfactory.hh>
 
 
-class MaterialEditorFactory : public iAssetEditorFactory
+class MATERIALEDITOR_API MaterialEditorFactory : public iAssetEditorFactory
 {
 public:
   MaterialEditorFactory() { }
