@@ -49,6 +49,8 @@ set(EDITOR_SOURCES
     guitest.hh
     iasseteditor.hh
     iasseteditorfactory.hh
+	iassetimporter.hh
+	iassetimporterfactory.hh
     idockitem.hh
     mainwindow.cc
     mainwindow.hh
@@ -217,6 +219,8 @@ source_group(
 
 
 set(ASSETMANAGER_IMPORT_SOURCES
+	assetmanager/import/assetmanagerimportaction.cc
+	assetmanager/import/assetmanagerimportaction.hh
     assetmanager/import/assetmanagerimporter.hh
     assetmanager/import/assetmanagerimporterdialog.cc
     assetmanager/import/assetmanagerimporterdialog.hh
