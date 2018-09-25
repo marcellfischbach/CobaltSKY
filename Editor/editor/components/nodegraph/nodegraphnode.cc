@@ -1,8 +1,8 @@
 
 
-#include <editor/nodegraph/nodegraphnode.hh>
-#include <editor/nodegraph/nodegraphnodeheader.hh>
-#include <editor/nodegraph/nodegraphnodeproperty.hh>
+#include <editor/components/nodegraph/nodegraphnode.hh>
+#include <editor/components/nodegraph/nodegraphnodeheader.hh>
+#include <editor/components/nodegraph/nodegraphnodeproperty.hh>
 
 float NodeGraphNode::GridSize = 20.0f;
 

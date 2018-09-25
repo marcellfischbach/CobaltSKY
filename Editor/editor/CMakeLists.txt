@@ -349,6 +349,35 @@ source_group(
     ${COMPONENTS_UI}
     )
 
+set(COMPONENTS_NODEGRAPH_SOURCES
+    components/nodegraph/nodegraphacceptevent.cc
+    components/nodegraph/nodegraphacceptevent.hh
+    components/nodegraph/nodegraphnode.cc
+    components/nodegraph/nodegraphnode.hh
+    components/nodegraph/nodegraphnodeanchor.cc
+    components/nodegraph/nodegraphnodeanchor.hh
+    components/nodegraph/nodegraphnodeheader.cc
+    components/nodegraph/nodegraphnodeheader.hh
+    components/nodegraph/nodegraphnodeimageproperty.cc
+    components/nodegraph/nodegraphnodeimageproperty.hh
+    components/nodegraph/nodegraphnodeproperty.cc
+    components/nodegraph/nodegraphnodeproperty.hh
+    components/nodegraph/nodegraphnodepropertytype.hh
+    components/nodegraph/nodegraphnodevalueproperty.cc
+    components/nodegraph/nodegraphnodevalueproperty.hh
+    components/nodegraph/nodegraphvetoevent.cc
+    components/nodegraph/nodegraphvetoevent.hh
+    components/nodegraph/nodegraphwidget.cc
+    components/nodegraph/nodegraphwidget.hh
+    )
+
+    
+
+source_group(
+    "editor\\components\\nodegraph"
+    FILES
+    ${COMPONENTS_NODEGRAPH_SOURCES}
+    )
 
 
 
@@ -470,35 +499,6 @@ source_group(
 
 
 
-set(NODEGRAPH_SOURCES
-    nodegraph/nodegraphacceptevent.cc
-    nodegraph/nodegraphacceptevent.hh
-    nodegraph/nodegraphnode.cc
-    nodegraph/nodegraphnode.hh
-    nodegraph/nodegraphnodeanchor.cc
-    nodegraph/nodegraphnodeanchor.hh
-    nodegraph/nodegraphnodeheader.cc
-    nodegraph/nodegraphnodeheader.hh
-    nodegraph/nodegraphnodeimageproperty.cc
-    nodegraph/nodegraphnodeimageproperty.hh
-    nodegraph/nodegraphnodeproperty.cc
-    nodegraph/nodegraphnodeproperty.hh
-    nodegraph/nodegraphnodepropertytype.hh
-    nodegraph/nodegraphnodevalueproperty.cc
-    nodegraph/nodegraphnodevalueproperty.hh
-    nodegraph/nodegraphvetoevent.cc
-    nodegraph/nodegraphvetoevent.hh
-    nodegraph/nodegraphwidget.cc
-    nodegraph/nodegraphwidget.hh
-    )
-
-    
-
-source_group(
-    "editor\\nodegraph"
-    FILES
-    ${NODEGRAPH_SOURCES}
-    )
 
 
                     
@@ -567,13 +567,13 @@ set(ALL_SOURCES
     ${ASSETMODEL_SOURCES}
     ${ASSETMODEL_SYNC_SOURCES}
     ${COMPONENTS_SOURCES}
+    ${COMPONENTS_NODEGRAPH_SOURCES}
     ${EDITORS_STATICMESHEDITOR_SOURCES}
     ${EVENTS_SOURCES}
     ${IMPORTERS_SOURCES}
     ${IMPORTERS_IMAGE_SOURCES}
     ${IMPORTERS_MODEL_SOURCES}
     ${LOADERS_SOURCES}
-    ${NODEGRAPH_SOURCES}
     ${PREVIEW_SOURCES}
     ${PROJECT_SOURCES}
     )

@@ -1,6 +1,6 @@
 
 
-#include <editor/nodegraph/nodegraphnodeproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeproperty.hh>
 
 NodeGraphNodeProperty::NodeGraphNodeProperty(NodeGraphNode *node)
   : m_minSizeDirty(true)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <editor/nodegraph/nodegraphnodepropertytype.hh>
+#include <editor/components/nodegraph/nodegraphnodepropertytype.hh>
 
 #include <QFont>
 #include <QRectF>

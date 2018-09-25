@@ -1,7 +1,7 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <editor/nodegraph/nodegraphnodeproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeproperty.hh>
 #include <QImage>
 
 class EDITOR_API NodeGraphNodeImageProperty : public NodeGraphNodeProperty

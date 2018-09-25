@@ -1,5 +1,5 @@
 
-#include <editor/nodegraph/nodegraphvetoevent.hh>
+#include <editor/components/nodegraph/nodegraphvetoevent.hh>
 
 
 NodeGraphVetoEvent::NodeGraphVetoEvent()

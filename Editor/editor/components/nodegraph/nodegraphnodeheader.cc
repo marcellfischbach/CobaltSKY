@@ -1,7 +1,7 @@
 
 
-#include <editor/nodegraph/nodegraphnodeheader.hh>
-#include <editor/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/components/nodegraph/nodegraphnodeheader.hh>
+#include <editor/components/nodegraph/nodegraphnodeanchor.hh>
 #include <QFontMetrics>
 #include <QPainter>
 

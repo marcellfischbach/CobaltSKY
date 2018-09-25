@@ -1,5 +1,5 @@
 
-#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeimageproperty.hh>
 #include <QPainter>
 
 

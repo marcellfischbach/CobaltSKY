@@ -5,9 +5,9 @@
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
-#include <editor/nodegraph/nodegraphnodeheader.hh>
-#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
-#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeheader.hh>
+#include <editor/components/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodevalueproperty.hh>
 #include <editor/editorimage.hh>
 #include <QMap>
 #include <QColor>

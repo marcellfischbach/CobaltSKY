@@ -1,7 +1,7 @@
 
 
-#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
-#include <editor/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/components/nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeanchor.hh>
 #include <QPainter>
 
 #define ANCHOR_RADIUS 20

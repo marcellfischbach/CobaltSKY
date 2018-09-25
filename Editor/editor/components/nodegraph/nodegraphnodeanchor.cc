@@ -1,6 +1,6 @@
 
-#include <editor/nodegraph/nodegraphnodeanchor.hh>
-#include <editor/nodegraph/nodegraphnode.hh>
+#include <editor/components/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/components/nodegraph/nodegraphnode.hh>
 
 NodeGraphNodeAnchor::NodeGraphNodeAnchor(NodeGraphNode *node, NodeGraphNodeProperty *prop)
   : m_node(node)

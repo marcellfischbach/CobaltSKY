@@ -1,12 +1,12 @@
 
 
-#include <editor/nodegraph/nodegraphwidget.hh>
-#include <editor/nodegraph/nodegraphnode.hh>
-#include <editor/nodegraph/nodegraphnodeanchor.hh>
-#include <editor/nodegraph/nodegraphnodeheader.hh>
-#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
-#include <editor/nodegraph/nodegraphnodeproperty.hh>
-#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/components/nodegraph/nodegraphwidget.hh>
+#include <editor/components/nodegraph/nodegraphnode.hh>
+#include <editor/components/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/components/nodegraph/nodegraphnodeheader.hh>
+#include <editor/components/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodeproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodevalueproperty.hh>
 
 #include <QPaintEvent>
 #include <QPainter>

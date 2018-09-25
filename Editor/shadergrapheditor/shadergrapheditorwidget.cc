@@ -5,11 +5,11 @@
 #include <shadergrapheditor/shadergrapheditornode.hh>
 #include <shadergrapheditor/shadergrapheditortoolboxmodel.hh>
 
-#include <editor/nodegraph/nodegraphnode.hh>
-#include <editor/nodegraph/nodegraphnodeanchor.hh>
-#include <editor/nodegraph/nodegraphnodeheader.hh>
-#include <editor/nodegraph/nodegraphnodeimageproperty.hh>
-#include <editor/nodegraph/nodegraphnodevalueproperty.hh>
+#include <editor/components/nodegraph/nodegraphnode.hh>
+#include <editor/components/nodegraph/nodegraphnodeanchor.hh>
+#include <editor/components/nodegraph/nodegraphnodeheader.hh>
+#include <editor/components/nodegraph/nodegraphnodeimageproperty.hh>
+#include <editor/components/nodegraph/nodegraphnodevalueproperty.hh>
 
 
 #include <editor/mimehelper.hh>
@@ -308,7 +308,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
     }
 
     csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
-    if (node)
+    if (resourceNode)
     {
       QString uuid = QUuid::createUuid().toString();
       resourceNode->SetResourceId(std::string(uuid.toLatin1().data()));

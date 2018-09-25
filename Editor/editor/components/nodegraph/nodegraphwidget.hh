@@ -7,8 +7,8 @@
 #include <QMimeData>
 #include <QWidget>
 
-#include <editor/nodegraph/nodegraphacceptevent.hh>
-#include <editor/nodegraph/nodegraphvetoevent.hh>
+#include <editor/components/nodegraph/nodegraphacceptevent.hh>
+#include <editor/components/nodegraph/nodegraphvetoevent.hh>
 
 
 class NodeGraphNode;

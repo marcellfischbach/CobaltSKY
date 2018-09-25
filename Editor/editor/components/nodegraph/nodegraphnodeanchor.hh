@@ -2,7 +2,7 @@
 
 #include <editor/editorexport.hh>
 #include <QRectF>
-#include <editor/nodegraph/nodegraphnodepropertytype.hh>
+#include <editor/components/nodegraph/nodegraphnodepropertytype.hh>
 
 class NodeGraphNode;
 class NodeGraphNodeProperty;

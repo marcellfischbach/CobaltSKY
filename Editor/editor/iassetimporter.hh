@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <string>
 #include <filesystem>
+#include <editor/iassetimporter.refl.hh>
+
 
 CS_INTERFACE()
 struct EDITOR_API iAssetImporter : public iObject
