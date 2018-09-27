@@ -63,15 +63,15 @@ set(ALL_SOURCES
     ${EDITORS_SHADERGRAPHEDITOR_SOURCES}
     )
 
-add_library(EditorShaderGraph SHARED
+add_library(Editor-ShaderGraphEditor SHARED
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}
     )
 
 
-target_link_libraries(EditorShaderGraph
+target_link_libraries(Editor-ShaderGraphEditor
     Editor
     )
 
-CS_INSTALL_MOCCER(EditorShaderGraph shadergrapheditor SHADERGRAPHEDITOR_API ALL_SOURCES)
+CS_INSTALL_MOCCER(Editor-ShaderGraphEditor shadergrapheditor SHADERGRAPHEDITOR_API ALL_SOURCES)

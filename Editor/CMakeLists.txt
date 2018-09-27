@@ -1,6 +1,7 @@
 
 add_subdirectory(editor)
 add_subdirectory(editorlauncher)
+add_subdirectory(imageimporter)
 add_subdirectory(materialeditor)
 add_subdirectory(samplereditor)
 add_subdirectory(shadergrapheditor)

@@ -116,10 +116,10 @@ void TextureEditorRenderWidget::initializeGL()
   m_shader->RegisterAttribute(m_idDiffuse);
 
   float vertices[] = {
-    -1.0f, -1.0f,   0.0f, 0.0f,
-    -1.0f, 1.0f,    0.0f, 1.0f,
-    1.0f, -1.0f,   1.0f, 0.0f,
-    1.0f, 1.0f,    1.0f, 1.0f,
+    -1.0f, -1.0f,   0.0f, 1.0f,
+    -1.0f, 1.0f,    0.0f, 0.0f,
+    1.0f, -1.0f,   1.0f, 1.0f,
+    1.0f, 1.0f,    1.0f, 0.0f,
   };
 
   short indices[] = {

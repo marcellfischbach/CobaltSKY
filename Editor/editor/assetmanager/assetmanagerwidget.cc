@@ -4,9 +4,6 @@
 #include <editor/assetmanager/assetmanagercontentmodel.hh>
 #include <editor/assetmanager/assetmanagerfoldermodel.hh>
 #include <editor/assetmanager/contextmenu/contextmenuhandler.hh>
-#include <editor/assetmanager/import/assetmanagerimporter.hh>
-#include <editor/assetmanager/import/assetmanagerimporterdialog.hh>
-#include <editor/assetmanager/import/assetmanagerimportmanager.hh>
 #include <editor/assetmanager/model/assetlistmodel.hh>
 #include <editor/assetmanager/model/foldertreemodel.hh>
 #include <editor/assetmanager/model/treemodel.hh>
@@ -16,7 +13,6 @@
 #include <editor/assetmodel/folder.hh>
 #include <editor/assetdescriptor.hh>
 #include <editor/project/project.hh>
-#include <editor/importers/importerdialog.hh>
 #include <editor/editor.hh>
 #include <cobalt/core/csvfs.hh>
 #include <QDomDocument>

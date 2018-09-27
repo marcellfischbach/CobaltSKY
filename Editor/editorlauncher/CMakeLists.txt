@@ -21,10 +21,11 @@ target_link_libraries(EditorLauncher
     Qt5::OpenGL
     Qt5::Xml
     Editor
-	EditorMaterial
-	EditorSampler
-	EditorShaderGraph
-	EditorTexture
+	Editor-ImageImporter
+	Editor-MaterialEditor
+	Editor-SamplerEditor
+	Editor-ShaderGraphEditor
+	Editor-TextureEditor
     )
 
 CS_INSTALL_MOCCER(EditorLauncher editorlauncher NO_API ALL_SOURCES)

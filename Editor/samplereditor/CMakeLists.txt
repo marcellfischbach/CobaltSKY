@@ -38,15 +38,15 @@ set(ALL_SOURCES
     ${EDITORS_SAMPLEREDITOR_SOURCES}
     )
 
-add_library(EditorSampler SHARED
+add_library(Editor-SamplerEditor SHARED
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}
     )
 
 
-target_link_libraries(EditorSampler
+target_link_libraries(Editor-SamplerEditor
     Editor
     )
 
-CS_INSTALL_MOCCER(EditorSampler samplereditor SAMPLEREDITOR_API ALL_SOURCES)
+CS_INSTALL_MOCCER(Editor-SamplerEditor samplereditor SAMPLEREDITOR_API ALL_SOURCES)

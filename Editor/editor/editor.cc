@@ -1,5 +1,6 @@
 #include <editor/editor.hh>
 #include <editor/basicdockitem.hh>
+#include <editor/editorfactorymanager.hh>
 #include <editor/editormodule.hh>
 #include <editor/editorresourcemanager.hh>
 #include <editor/eventbus.hh>
@@ -130,11 +131,6 @@ AssetManagerWidget *Editor::GetAssetManager()
   return m_assetManager;
 }
 
-void Editor::AddEditorFactory(iAssetEditorFactory *factory)
-{
-  m_editorFactories.push_back(factory);
-}
-
 void Editor::OpenAsset(asset::model::Asset *asset)
 {
   iAssetEditor* editor = 0;
@@ -158,7 +154,7 @@ void Editor::OpenAsset(asset::model::Asset *asset)
 
     printf("Data: %s\n", data->GetClass()->GetName().c_str());
 
-    iAssetEditorFactory *factory = FindFactory(data, asset);
+    iAssetEditorFactory *factory = EditorFactoryManager::Get()->FindFactory(data, asset);
     if (!factory)
     {
 			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),
@@ -207,28 +203,6 @@ iAssetEditor *Editor::FindCurrentEditor()
 }
 
 
-void Editor::AddImporterFactory(iImporterFactory *factory)
-{
-  m_importerFactories.push_back(factory);
-}
-
-iImporterFactory *Editor::FindImporter(const std::string &fileName) const
-{
-  for (iImporterFactory *importer : m_importerFactories)
-  {
-    if (importer->CanImport(fileName))
-    {
-      return importer;
-    }
-  }
-  return 0;
-}
-
-const std::vector<iImporterFactory*> &Editor::GetAllImporters () const
-{
-  return m_importerFactories;
-}
-
 std::string Editor::ConvertToResourcePath(const std::string &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));
@@ -255,17 +229,7 @@ std::string Editor::ConvertToResourcePath(const std::string &filePath) const
   return filePath;
 }
 
-iAssetEditorFactory *Editor::FindFactory(iObject *object, asset::model::Asset *asset)
-{
-  for (iAssetEditorFactory *factory : m_editorFactories)
-  {
-    if (factory->CanEdit(object, asset))
-    {
-      return factory;
-    }
-  }
-  return 0;
-}
+
 
 Editor *Editor::Get()
 {

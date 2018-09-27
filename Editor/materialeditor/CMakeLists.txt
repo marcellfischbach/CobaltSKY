@@ -41,15 +41,15 @@ set(ALL_SOURCES
     ${EDITORS_MATERIALEDITOR_SOURCES}
     )
 
-add_library(EditorMaterial SHARED
+add_library(Editor-MaterialEditor SHARED
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}
     )
 
 
-target_link_libraries(EditorMaterial
+target_link_libraries(Editor-MaterialEditor
     Editor
     )
 
-CS_INSTALL_MOCCER(EditorMaterial materialeditor MATERIALEDITOR_API ALL_SOURCES)
+CS_INSTALL_MOCCER(Editor-MaterialEditor materialeditor MATERIALEDITOR_API ALL_SOURCES)

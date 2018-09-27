@@ -2,7 +2,7 @@
 
 
 #include <editor/editorexport.hh>
-#include <editor/preview/previewsceneview.hh>
+#include <editor/components/preview/previewsceneview.hh>
 
 class csEntity;
 class csStaticMeshState;

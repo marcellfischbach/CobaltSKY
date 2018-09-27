@@ -15,6 +15,8 @@
 
 #include <editor/assetmanager/assetmanagerresourcescanner.hh>
 
+#include <imageimporter/imageimportermodule.hh>
+
 #include <materialeditor/materialeditormodule.hh>
 #include <samplereditor/samplereditormodule.hh>
 #include <shadergrapheditor/shadergrapheditormodule.hh>
@@ -48,31 +50,33 @@ int main (int argc, char **argv)
   }
 
 
-	if (true)
-	{
-		qApp->setStyle(QStyleFactory::create("Fusion"));
-    /*
-		QPalette darkPalette;
-		darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));
-		darkPalette.setColor(QPalette::WindowText, Qt::white);
-		darkPalette.setColor(QPalette::Base, QColor(25, 35, 25));
-		darkPalette.setColor(QPalette::AlternateBase, QColor(53, 64, 53));
-		darkPalette.setColor(QPalette::AlternateBase, QColor(40, 50, 40));
-		darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-		darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-		darkPalette.setColor(QPalette::Text, Qt::white);
-		darkPalette.setColor(QPalette::Button, QColor(53, 64, 53));
-		darkPalette.setColor(QPalette::ButtonText, Qt::white);
-		darkPalette.setColor(QPalette::BrightText, Qt::red);
-		darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+  if (false)
+  {
+    qApp->setStyle(QStyleFactory::create("Fusion"));
+    if (true)
+    {
+      QPalette darkPalette;
+      darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));
+      darkPalette.setColor(QPalette::WindowText, Qt::white);
+      darkPalette.setColor(QPalette::Base, QColor(25, 35, 25));
+      darkPalette.setColor(QPalette::AlternateBase, QColor(53, 64, 53));
+      darkPalette.setColor(QPalette::AlternateBase, QColor(40, 50, 40));
+      darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+      darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+      darkPalette.setColor(QPalette::Text, Qt::white);
+      darkPalette.setColor(QPalette::Button, QColor(53, 64, 53));
+      darkPalette.setColor(QPalette::ButtonText, Qt::white);
+      darkPalette.setColor(QPalette::BrightText, Qt::red);
+      darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
 
-		darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-		darkPalette.setColor(QPalette::HighlightedText, Qt::black);
+      darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+      darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
-		qApp->setPalette(darkPalette);
-		qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-    */
-	}
+      qApp->setPalette(darkPalette);
+      qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+
+    }
+  }
 
 
 
@@ -91,6 +95,7 @@ int main (int argc, char **argv)
     return -1;
   }
 
+  ImageImporterModule::Initialize(argc, argv);
   MaterialEditorModule::Initialize(argc, argv);
   SamplerEditorModule::Initialize(argc, argv);
   ShaderGraphEditorModule::Initialize(argc, argv);

@@ -3,15 +3,15 @@
 #include <shadergrapheditor/shadergrapheditorfactory.hh>
 #include <shadergrapheditor/shadergrapheditornew.hh>
 #include <shadergrapheditor/master.refl.cc>
-#include <editor/editor.hh>
+#include <editor/editorfactorymanager.hh>
 #include <editor/assetmanager/contextmenu/contextmenuhandler.hh>
 
 void ShaderGraphEditorModule::Initialize(int argc, char **argv)
 {
   register_classes();
 
-  Editor *editor = Editor::Get();
-  editor->AddEditorFactory(new ShaderGraphEditorFactory());
+  EditorFactoryManager *editorFactoryManager = EditorFactoryManager::Get();
+  editorFactoryManager->AddEditorFactory(new ShaderGraphEditorFactory());
 
 
   asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();

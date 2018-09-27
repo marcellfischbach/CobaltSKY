@@ -42,15 +42,15 @@ set(ALL_SOURCES
     )
 
 
-add_library(EditorTexture SHARED
+add_library(Editor-TextureEditor SHARED
     ${ALL_SOURCES}
     ${ALL_UI_SOURCES}
     ${RESOURCES_SOURCES}
     )
 
 
-target_link_libraries(EditorTexture
+target_link_libraries(Editor-TextureEditor
     Editor
     )
 
-CS_INSTALL_MOCCER(EditorTexture textureeditor TEXTUREEDITOR_API ALL_SOURCES)
+CS_INSTALL_MOCCER(Editor-TextureEditor textureeditor TEXTUREEDITOR_API ALL_SOURCES)

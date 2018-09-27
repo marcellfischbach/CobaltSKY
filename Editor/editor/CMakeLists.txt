@@ -35,6 +35,8 @@ set(EDITOR_SOURCES
 	flat_menu.css
     editor.cc
     editor.hh
+	editorfactorymanager.cc
+	editorfactorymanager.hh
     editorimage.cc
     editorimage.hh
     editormodule.cc
@@ -52,6 +54,8 @@ set(EDITOR_SOURCES
 	iassetimporter.hh
 	iassetimporterfactory.hh
     idockitem.hh
+	importerfactorymanager.cc
+	importerfactorymanager.hh
     mainwindow.cc
     mainwindow.hh
     mimehelper.cc
@@ -138,6 +142,30 @@ source_group(
     )
 
 
+set(ASSETMANAGER_ACTIONS_IMPORT_SOURCES
+	assetmanager/actions/import/assetmanagerimportaction.cc
+	assetmanager/actions/import/assetmanagerimportaction.hh
+    assetmanager/actions/import/assetmanagerimporterdialog.cc
+    assetmanager/actions/import/assetmanagerimporterdialog.hh
+    assetmanager/actions/import/assetmanagerimporterpage.cc
+    assetmanager/actions/import/assetmanagerimporterpage.hh
+    assetmanager/actions/import/assetmanagerimporterlistmodel.cc
+    assetmanager/actions/import/assetmanagerimporterlistmodel.hh
+    )
+
+set(ASSETMANAGER_ACTIONS_IMPORT_UI
+    assetmanager/actions/import/assetmanagerimporterdialog.ui
+    assetmanager/actions/import/assetmanagerimporterpage.ui
+    )
+
+
+source_group(
+    "editor\\assetmanager\\actions\\import"
+    FILES
+    ${ASSETMANAGER_ACTIONS_IMPORT_SOURCES}
+    ${ASSETMANAGER_ACTIONS_IMPORT_UI}
+    )
+
 set(ASSETMANAGER_ACTIONS_NEW_SOURCES
     assetmanager/actions/new/assetmanagernewassetaction.cc
     assetmanager/actions/new/assetmanagernewassetaction.hh
@@ -218,32 +246,7 @@ source_group(
 
 
 
-set(ASSETMANAGER_IMPORT_SOURCES
-	assetmanager/import/assetmanagerimportaction.cc
-	assetmanager/import/assetmanagerimportaction.hh
-    assetmanager/import/assetmanagerimporter.hh
-    assetmanager/import/assetmanagerimporterdialog.cc
-    assetmanager/import/assetmanagerimporterdialog.hh
-    assetmanager/import/assetmanagerimporterpage.cc
-    assetmanager/import/assetmanagerimporterpage.hh
-    assetmanager/import/assetmanagerimporterlistmodel.cc
-    assetmanager/import/assetmanagerimporterlistmodel.hh
-    assetmanager/import/assetmanagerimportmanager.cc
-    assetmanager/import/assetmanagerimportmanager.hh
-    )
 
-set(ASSETMANAGER_IMPORT_UI
-    assetmanager/import/assetmanagerimporterdialog.ui
-    assetmanager/import/assetmanagerimporterpage.ui
-    )
-
-
-source_group(
-    "editor\\assetmanager\\import"
-    FILES
-    ${ASSETMANAGER_IMPORT_SOURCES}
-    ${ASSETMANAGER_IMPORT_UI}
-    )
 
 set(ASSETMANAGER_MODEL_SOURCES
 	assetmanager/model/assetlistmodel.cc
@@ -379,6 +382,24 @@ source_group(
     ${COMPONENTS_NODEGRAPH_SOURCES}
     )
 
+	                   
+set(COMPONENTS_PREVIEW_SOURCES
+    components/preview/previewcameraflowhandler.cc
+    components/preview/previewcameraflowhandler.hh
+    components/preview/previewcameraorbithandler.cc
+    components/preview/previewcameraorbithandler.hh
+    components/preview/previewlightorbithandler.cc
+    components/preview/previewlightorbithandler.hh
+    components/preview/previewsceneview.cc
+    components/preview/previewsceneview.hh
+    )
+
+
+source_group(
+    "editor\\components\\preview"
+    FILES
+    ${COMPONENTS_PREVIEW_SOURCES}
+    )
 
 
 set(EDITORS_STATICMESHEDITOR_SOURCES
@@ -421,68 +442,7 @@ source_group(
     ${EVENTS_SOURCES}
     )
 
-                    
-set(IMPORTERS_SOURCES
-    importers/iimporter.hh
-    importers/importerdialog.cc
-    importers/importerdialog.hh
-    importers/importerfileslistmodel.cc
-    importers/importerfileslistmodel.hh
-    importers/imageimporter.cc
-    importers/imageimporter.hh
-    importers/modelimporter.cc
-    importers/modelimporter.hh
-    importers/staticmeshmodelimporterdata.cc
-    importers/staticmeshmodelimporterdata.hh
-    )
-
-set(IMPORTERS_UI
-    importers/importerdialog.ui
-    )
-
-source_group(
-    "editor\\importers"
-    FILES
-    ${IMPORTERS_SOURCES}
-    ${IMPORTERS_UI}
-    )
-
-set(IMPORTERS_IMAGE_SOURCES
-    importers/image/imageimporter.cc
-    importers/image/imageimporter.hh
-    )
-
-set(IMPORTERS_IMAGE_UI
-    importers/image/imageimporter.ui
-    )
-
-source_group(
-    "editors\\importers\\image"
-    FILES
-    ${IMPORTERS_IMAGE_SOURCES}
-    ${IMPORTERS_IMAGE_UI}
-    )
-
-
-set(IMPORTERS_MODEL_SOURCES
-    importers/model/assimpscenescanner.cc
-    importers/model/assimpscenescanner.hh
-    importers/model/modelimporter.cc
-    importers/model/modelimporter.hh
-    importers/model/modelmeshexporter.cc
-    importers/model/modelmeshexporter.hh
-    )
-
-set(IMPORTERS_MODEL_UI
-    importers/model/modelimporter.ui
-    )
-
-source_group(
-    "editors\\importers\\model"
-    FILES
-    ${IMPORTERS_MODEL_SOURCES}
-    ${IMPORTERS_MODEL_UI}
-    )
+       
 
 
 set(LOADERS_SOURCES
@@ -501,25 +461,7 @@ source_group(
 
 
 
-                    
-set(PREVIEW_SOURCES
-    preview/previewcameraflowhandler.cc
-    preview/previewcameraflowhandler.hh
-    preview/previewcameraorbithandler.cc
-    preview/previewcameraorbithandler.hh
-    preview/previewlightorbithandler.cc
-    preview/previewlightorbithandler.hh
-    preview/previewsceneview.cc
-    preview/previewsceneview.hh
-    )
-
-
-source_group(
-    "editor\\preview"
-    FILES
-    ${PREVIEW_SOURCES}
-    )
-
+ 
 
 set(PROJECT_SOURCES
     project/project.cc
@@ -537,16 +479,13 @@ set(ALL_UI
     ${EDITOR_UI}
     ${ASSETMANAGER_UI}
 	${ASSETMANAGER_ACTIONS_DELETE_UI}
+    ${ASSETMANAGER_ACTIONS_IMPORT_UI}
 	${ASSETMANAGER_ACTIONS_NEW_UI}
 	${ASSETMANAGER_ACTIONS_NEWFOLDER_UI}
     ${ASSETMANAGER_ACTIONS_RENAME_UI}
     ${ASSETMANAGER_CONTEXTMENU_UI}
-    ${ASSETMANAGER_IMPORT_UI}
     ${COMPONENTS_UI}
     ${EDITORS_STATICMESHEDITOR_UI}
-    ${IMPORTERS_UI}
-    ${IMPORTERS_IMAGE_UI}
-    ${IMPORTERS_MODEL_UI}
     )
 
 
@@ -558,23 +497,20 @@ set(ALL_SOURCES
     ${ASSETMANAGER_SOURCES}
     ${ASSETMANAGER_ACTIONS_SOURCES}
     ${ASSETMANAGER_ACTIONS_DELETE_SOURCES}
+    ${ASSETMANAGER_ACTIONS_IMPORT_SOURCES}
     ${ASSETMANAGER_ACTIONS_NEW_SOURCES}
     ${ASSETMANAGER_ACTIONS_NEWFOLDER_SOURCES}
     ${ASSETMANAGER_ACTIONS_RENAME_SOURCES}
     ${ASSETMANAGER_CONTEXTMENU_SOURCES}
-    ${ASSETMANAGER_IMPORT_SOURCES}
     ${ASSETMANAGER_MODEL_SOURCES}
     ${ASSETMODEL_SOURCES}
     ${ASSETMODEL_SYNC_SOURCES}
     ${COMPONENTS_SOURCES}
     ${COMPONENTS_NODEGRAPH_SOURCES}
+    ${COMPONENTS_PREVIEW_SOURCES}
     ${EDITORS_STATICMESHEDITOR_SOURCES}
     ${EVENTS_SOURCES}
-    ${IMPORTERS_SOURCES}
-    ${IMPORTERS_IMAGE_SOURCES}
-    ${IMPORTERS_MODEL_SOURCES}
     ${LOADERS_SOURCES}
-    ${PREVIEW_SOURCES}
     ${PROJECT_SOURCES}
     )
 

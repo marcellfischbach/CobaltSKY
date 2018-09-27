@@ -1,8 +1,8 @@
 
 
 #include <editor/editors/staticmesheditor/staticmesheditorpreviewsceneview.hh>
-#include <editor/preview/previewcameraflowhandler.hh>
-#include <editor/preview/previewcameraorbithandler.hh>
+#include <editor/components/preview/previewcameraflowhandler.hh>
+#include <editor/components/preview/previewcameraorbithandler.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/entity/csentityscene.hh>

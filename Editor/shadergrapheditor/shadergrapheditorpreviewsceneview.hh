@@ -2,7 +2,7 @@
 
 
 #include <shadergrapheditor/shadergrapheditorexport.hh>
-#include <editor/preview/previewsceneview.hh>
+#include <editor/components/preview/previewsceneview.hh>
 
 class csMaterialDef;
 class csMaterial;

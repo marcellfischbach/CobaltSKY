@@ -1,7 +1,7 @@
 
 
 #include <shadergrapheditor/shadergrapheditorpreviewsceneview.hh>
-#include <editor/preview/previewcameraorbithandler.hh>
+#include <editor/components/preview/previewcameraorbithandler.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/entity/csentityscene.hh>

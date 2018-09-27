@@ -27,6 +27,7 @@ namespace asset::contextmenu
 		static Category Default() { return Category("default", 0); }
 		static Category New() { return Category("new", 0); }
 		static Category Edit() { return Category("edit", 1); }
+		static Category Import() { return Category("import", 2); }
 
 	private:
 

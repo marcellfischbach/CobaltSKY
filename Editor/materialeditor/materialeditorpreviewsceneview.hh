@@ -2,7 +2,7 @@
 
 
 #include <materialeditor/materialeditorexport.hh>
-#include <editor/preview/previewsceneview.hh>
+#include <editor/components/preview/previewsceneview.hh>
 
 class csMaterial;
 class csStaticMeshState;
