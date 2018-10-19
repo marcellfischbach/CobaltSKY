@@ -11,9 +11,11 @@
 #include <editor/components/nodegraph/nodegraphnodeimageproperty.hh>
 #include <editor/components/nodegraph/nodegraphnodevalueproperty.hh>
 
+#include <materialeditor/materialeditorevents.hh>
 
 #include <editor/mimehelper.hh>
 #include <editor/editor.hh>
+#include <editor/eventbus.hh>
 #include <editor/project/project.hh>
 
 #include <cobalt/csengine.hh>
@@ -43,7 +45,7 @@ ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
 {
   m_gui.setupUi(this);
   on_nodeGraph_ScaleChanged(1.0f);
-  
+
   csSGShaderGraph *shaderGraph = new csSGShaderGraph();
   ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(shaderGraph);
   m_gui.nodeGraph->AddNode(shaderGraphNode);
@@ -65,6 +67,7 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
 
   m_updateGuard = true;
   m_shaderGraphCopy = m_shaderGraph->Copy(m_shaderGraphCopy);
+  QueryResources(m_shaderGraph);
 
   m_gui.nodeGraph->Clear();
   ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(m_shaderGraphCopy);
@@ -127,6 +130,20 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
   return m_shaderGraphCopy;
 }
 
+
+void ShaderGraphEditorWidget::QueryResources(csSGShaderGraph *graph)
+{
+  m_resourceIDs.clear();
+  for (csSize i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
+  {
+    csSGNode *node = graph->GetNode(i);
+    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    if (resourceNode)
+    {
+      m_resourceIDs.insert(resourceNode->GetResourceId());
+    }
+  }
+}
 
 void ShaderGraphEditorWidget::RepaintGraph()
 {
@@ -458,7 +475,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   }
   csfFile file;
 
-  csfEntry *assetEntry= file.CreateEntry("asset");
+  csfEntry *assetEntry = file.CreateEntry("asset");
   csfEntry *dataEntry = file.CreateEntry("data");
   csfEntry *shaderGraphEntry = file.CreateEntry("shaderGraph");
   csfEntry *metaEntry = file.CreateEntry("meta");
@@ -636,7 +653,6 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
     }
 
-
   }
 
   for (size_t i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
@@ -703,7 +719,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     }
   }
 
-  
+
 
   QString fileName = m_editor->GetResourceFileName();
 
@@ -736,10 +752,47 @@ bool ShaderGraphEditorWidget::Apply()
     return false;
   }
 
+
+
+
   m_shaderGraph = m_shaderGraphCopy->Copy(m_shaderGraph);
   printf("Compile shader graph\n");
   bool result = csEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraph);
   printf("Compile done: %d\n", result);
+
+  std::set<std::string> thisResources;
+  csResourceLocator locator = m_editor->GetAsset()->GetResourceLocator();
+  if (locator.IsValid())
+  {
+    for (csSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
+    {
+      csSGNode *node = m_shaderGraph->GetNode(i);
+      csSGResourceNode *resNode = csQueryClass<csSGResourceNode>(node);
+      if (resNode)
+      {
+        thisResources.insert(resNode->GetResourceId());
+        if (m_resourceIDs.find(resNode->GetResourceId()) == m_resourceIDs.end())
+        {
+          EventBus::Get() << MaterialEditorAttributeAdded(locator, resNode->GetResourceId(), resNode->GetResourceName());
+        }
+        else
+        {
+          EventBus::Get() << MaterialEditorAttributeChanged(locator, resNode->GetResourceId(), resNode->GetResourceName());
+        }
+      }
+    }
+
+    for (const std::string &id : m_resourceIDs)
+    {
+      if (thisResources.find(id) == thisResources.end())
+      {
+        EventBus::Get() << MaterialEditorAttributeRemoved(locator, id);
+      }
+    }
+
+  }
+
+
 
   emit ShaderGraphChanged();
   return true;

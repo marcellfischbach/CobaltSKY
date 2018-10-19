@@ -3,7 +3,7 @@
 #include <editor/editorexport.hh>
 #include <cobalt/core/cseventbus.hh>
 
-class EventBus : public csEventBus
+class EDITOR_API EventBus : public csEventBus
 {
 public:
   static EventBus &Get();

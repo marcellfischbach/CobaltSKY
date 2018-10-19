@@ -14,9 +14,14 @@
 #include <QFile>
 #include <editor/basicdockitem.hh>
 #include <editor/editor.hh>
+#include <editor/eventbus.hh>
 #include <editor/dockitems.hh>
 #include <editor/project/project.hh>
+#include <editor/assetmodel/model.hh>
 #include <editor/components/baseeditorwidget.hh>
+#include <materialeditor/materialeditorevents.hh>
+
+void material_attribute_changed(csEvent &event, void *ptr);
 
 MaterialEditor::MaterialEditor()
   : AbstractAssetEditor()
@@ -33,6 +38,7 @@ MaterialEditor::MaterialEditor()
     descR));
 
   QObject::connect(m_properties, SIGNAL(MaterialChanged()), m_widget, SLOT(MaterialChanged()));
+  EventBus::Get().Register(MaterialEditorAttributeChanged::GetStaticClass(), material_attribute_changed, this);
 }
 
 MaterialEditor::~MaterialEditor()
@@ -96,6 +102,30 @@ void MaterialEditor::Save()
 
   Save(outputFile);
 
+}
+
+void MaterialEditor::MaterialAttributeChanged(const csResourceLocator &materialLocator, const std::string &attributeID, const std::string &attribureName)
+{
+  printf("MaterialEditor::AttributeChanged %s -> %s -> %s\n",
+    materialLocator.GetDebugName().c_str(),
+    attributeID.c_str(),
+    attribureName.c_str());
+  csResourceLocator locator = csResourceManager::Get()->GetLocator(m_material->GetMaterialDef());
+  if (Editor::Get()->GetProject()->GetModel()->IsMasterLocator(materialLocator))
+  {
+    m_properties->AttributeChanged(attributeID, attribureName);
+  }
+  else
+  {
+    printf("This is not the master locator\n");
+  }
+
+}
+
+void material_attribute_changed(csEvent &event, void *ptr)
+{
+  MaterialEditorAttributeChanged &meac = (MaterialEditorAttributeChanged&)event;
+  reinterpret_cast<MaterialEditor*>(ptr)->MaterialAttributeChanged(meac.GetMaterialLocator(), meac.GetAttributeID(), meac.GetAttributeName());
 }
 
 

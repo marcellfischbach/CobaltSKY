@@ -39,6 +39,17 @@ void MaterialEditorProperties::SetMaterial(csMaterial *material)
   }
 }
 
+void MaterialEditorProperties::AttributeChanged(const std::string &id, const std::string &name)
+{
+  for (Param &param : m_params)
+  {
+    if (param.id == id)
+    {
+      param.checkBox->setText(QString(name.c_str()));
+    }
+  }
+}
+
 void MaterialEditorProperties::InitGUI()
 {
   QFrame *frame = new QFrame(this);

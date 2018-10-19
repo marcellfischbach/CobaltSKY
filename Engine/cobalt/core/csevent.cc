@@ -8,7 +8,6 @@ csEvent::csEvent()
   , m_id(s_event_id++)
   , m_accepted(false)
 {
-
 }
 
 csEvent::~csEvent()

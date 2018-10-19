@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QList>
 #include <string>
+#include <set>
 #include <shadergrapheditor/ui_shadergrapheditorwidget.h>
 
 
@@ -49,6 +50,7 @@ private slots:
   void on_pbScreenshot_clicked();
 
 private:
+  void QueryResources(csSGShaderGraph *graph);
   void SaveCSFFile();
   std::string ExtractName(const csResourceLocator &locator);
   bool Apply();
@@ -60,7 +62,15 @@ private:
   csSGShaderGraph *m_shaderGraph;
   csSGShaderGraph *m_shaderGraphCopy;
 
+  struct Resource
+  {
+    std::string name;
+    std::string id;
+  };
+
   bool m_updateGuard;
+
+  std::set<std::string> m_resourceIDs;
 
 signals:
   void SelectionChanged(const QList<ShaderGraphEditorNode*> &nodes);

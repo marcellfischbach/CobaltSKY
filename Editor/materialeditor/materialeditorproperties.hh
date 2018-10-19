@@ -20,6 +20,8 @@ public:
 
   void SetMaterial(csMaterial *material);
 
+  void AttributeChanged(const std::string &id, const std::string &name);
+
 private slots:
 void MaterialDefChanged(const csResourceLocator &locator);
 void CheckBoxChanged(int);

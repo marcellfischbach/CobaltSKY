@@ -11,6 +11,8 @@ set(CMAKE_AUTOMOC ON)
 set(EDITORS_MATERIALEDITOR_SOURCES
     materialeditor.cc
     materialeditor.hh
+	materialeditorevents.cc
+	materialeditorevents.hh
     materialeditorfactory.cc
     materialeditorfactory.hh
 	materialeditormodule.cc

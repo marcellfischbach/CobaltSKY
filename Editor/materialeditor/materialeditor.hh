@@ -29,6 +29,8 @@ public:
   void UpdatePreview();
   QImage TakeScreenshot(unsigned width, unsigned height);
 
+  void MaterialAttributeChanged(const csResourceLocator &locator, const std::string &attributeID, const std::string &attributeName);
+
 protected:
   void UpdateAsset();
 

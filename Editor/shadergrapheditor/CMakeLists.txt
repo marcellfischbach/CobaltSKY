@@ -72,6 +72,7 @@ add_library(Editor-ShaderGraphEditor SHARED
 
 target_link_libraries(Editor-ShaderGraphEditor
     Editor
+	Editor-MaterialEditor
     )
 
 CS_INSTALL_MOCCER(Editor-ShaderGraphEditor shadergrapheditor SHADERGRAPHEDITOR_API ALL_SOURCES)
