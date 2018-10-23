@@ -30,7 +30,7 @@ bool csShaderGraphAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourc
 
 const csClass *csShaderGraphAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csSGShaderGraph::GetStaticClass();
+  return csSGShaderGraphWrapper::GetStaticClass();
 }
 
 iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const

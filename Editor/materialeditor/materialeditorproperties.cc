@@ -61,7 +61,7 @@ void MaterialEditorProperties::InitGUI()
   QLabel *label = new QLabel(tr("MaterialDef"), frame);
   m_materialDefWidget = new AssetResourceWidget(frame);
   m_materialDefWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-  m_materialDefWidget->AddValidClass(csMaterialDef::GetStaticClass());
+  m_materialDefWidget->AddValidClass(csMaterialDefWrapper::GetStaticClass());
   connect(m_materialDefWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SLOT(MaterialDefChanged(const csResourceLocator &)));
 
   frameLayout->addWidget(label, 0, 0, 1, 1);

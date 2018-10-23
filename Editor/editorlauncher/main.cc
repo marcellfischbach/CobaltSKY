@@ -50,10 +50,10 @@ int main (int argc, char **argv)
   }
 
 
-  if (false)
+  if (true)
   {
     qApp->setStyle(QStyleFactory::create("Fusion"));
-    if (true)
+    if (false)
     {
       QPalette darkPalette;
       darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));
