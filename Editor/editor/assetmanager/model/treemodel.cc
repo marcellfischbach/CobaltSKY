@@ -437,7 +437,7 @@ namespace asset::model
 			return false;
 		}
 
-		QByteArray &rawData = data->data("application/assetModelEntryPtr");
+        QByteArray rawData = data->data("application/assetModelEntryPtr");
 		QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
 		std::vector<Entry*> entries;
 		get(entriesStream, entries);
@@ -476,7 +476,7 @@ namespace asset::model
 
 		std::cout << "Drop onto " << dropEntry->GetResourceLocator().Encode() << std::endl;
 
-		QByteArray &rawData = data->data("application/assetModelEntryPtr");
+        QByteArray rawData = data->data("application/assetModelEntryPtr");
 		QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
 		std::vector<Entry*> entries;
 		get(entriesStream, entries);

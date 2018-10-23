@@ -1340,8 +1340,8 @@ void csGraphicsGL4::InitFullScreenData()
 
   m_fullScreenVertexDeclaration = static_cast<csVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
 
-  m_fullScreenProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/SimplePresent.xasset"));
-  m_fullScreenArrayProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/ArrayPresent.xasset "));
+  m_fullScreenProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/SimplePresent.asset"));
+  m_fullScreenArrayProgram = csResourceManager::Get()->GetOrLoad<csProgramGL4>(csResourceLocator("${shaders}/renderer/ArrayPresent.asset "));
 }
 
 

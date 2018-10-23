@@ -322,7 +322,7 @@ int main_loop()
     if (time >= nextFPS)
     {
       csUInt16 idx = material->GetIndex("Roughness");
-      float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->GetDefaultFloat(idx) : material->GetFloat(idx);
+      float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->Get()->GetDefaultFloat(idx) : material->GetFloat(idx);
       printf("FPS: %d Roughness: %f\n", fps, currentRoughness);
       fflush(stdout);
       fps = 0;
@@ -1182,7 +1182,7 @@ void handle_material(const iKeyboard *keyboard)
     return;
   }
 
-  float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->GetDefaultFloat(idx) : material->GetFloat(idx);
+  float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->Get()->GetDefaultFloat(idx) : material->GetFloat(idx);
   if (keyboard->IsKeyDown(eK_O))
   {
     currentRoughness += 0.01f;

@@ -10,6 +10,11 @@
 namespace asset::model
 {
 
+AlterFSException::AlterFSException(const std::string &message)
+    : csException (message)
+{
+}
+
   SecureFS::SecureFS(ModelTransaction &tr)
     : m_tr(tr)
   {

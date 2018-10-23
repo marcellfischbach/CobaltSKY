@@ -495,7 +495,7 @@ namespace asset::model
   void Model::RemoveReference(const csResourceLocator &locator)
   {
     csResourceLocator anonLocator = locator.AsAnonymous();
-    std::set<Entry*> &referencingEntries = GetReferencing(anonLocator);
+    std::set<Entry*> referencingEntries = GetReferencing(anonLocator);
 
     for (Entry *entry : referencingEntries)
     {
@@ -522,7 +522,7 @@ namespace asset::model
   {
     csResourceLocator oldAnonLocator = olLocator.AsAnonymous();
     csResourceLocator newAnonLocator = newLocator.AsAnonymous();
-    std::set<Entry*> &referencingEntries = GetReferencing(oldAnonLocator);
+    std::set<Entry*> referencingEntries = GetReferencing(oldAnonLocator);
 
     for (Entry *entry : referencingEntries)
     {

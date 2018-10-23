@@ -15,9 +15,9 @@ ShaderGraphEditorPreview::~ShaderGraphEditorPreview()
 
 }
 
-void ShaderGraphEditorPreview::SetShaderGraph(csSGShaderGraph *shaderGraph)
+void ShaderGraphEditorPreview::SetShaderGraph(csMaterialDefWrapper *materialDef)
 {
-  m_gui.openGLWidget->SetMaterial(shaderGraph);
+  m_gui.openGLWidget->SetMaterial(materialDef);
 }
 
 void ShaderGraphEditorPreview::ShaderGraphChanged()

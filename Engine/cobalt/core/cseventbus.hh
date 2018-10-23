@@ -28,6 +28,7 @@ public:
   csEventBus &operator <<(csEvent &event);
 
 
+
   void Register(csEventDelegate delegate, void *userObject = 0);
   void Register(const csClass *cls, csEventDelegate delegate, void *userObject = 0);
   void Deregister(csEventDelegate delegate);

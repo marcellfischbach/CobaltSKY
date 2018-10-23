@@ -3,9 +3,10 @@
 
 #include <editor/editorexport.hh>
 #include <editor/assetmanager/contextmenu/contextmenucategory.hh>
+#include <cobalt/core/csexception.hh>
 #include <vector>
 #include <string>
-#include <exception>
+
 #include <functional>
 
 namespace asset::actions
@@ -102,14 +103,11 @@ namespace asset::contextmenu
 	};
 
 
-	class EntryMergeException : public std::exception
+    class EntryMergeException : public csException
 	{
 	public:
-		EntryMergeException(const std::string &message)
-			: std::exception(message.c_str())
-		{
-
-		}
+        EntryMergeException(const std::string &message);
+        virtual ~EntryMergeException();
 	};
 
 	class EntryMerger

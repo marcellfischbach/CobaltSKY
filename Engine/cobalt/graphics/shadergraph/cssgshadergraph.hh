@@ -96,6 +96,13 @@ private:
 
 };
 
+class CSE_API csSGShaderGraphWrapper : public csMaterialDefWrapper
+{
+public:
+  csSGShaderGraphWrapper(csSGShaderGraph *shaderGraph);
+  virtual ~csSGShaderGraphWrapper();
+};
+
 struct CSE_API iSGShaderGraphLogger
 {
   virtual void LogSourceCode(const std::string &renderPass, const std::string &shaderType, const std::string &sourceCode) = 0;

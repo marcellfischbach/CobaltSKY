@@ -91,7 +91,7 @@ void MaterialEditorProperties::InitGUI()
 
 void MaterialEditorProperties::MaterialDefChanged(const csResourceLocator &locator)
 {
-  csMaterialDef *materialDef = csResourceManager::Get()->Aquire<csMaterialDef>(locator);
+  csMaterialDefWrapper *materialDef = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator);
   if (materialDef == m_material->GetMaterialDef())
   {
     return;
@@ -107,12 +107,14 @@ void MaterialEditorProperties::MaterialDefChanged(const csResourceLocator &locat
 void MaterialEditorProperties::UpdateGUI()
 {
   CleanUp();
-  if (!m_material || !m_material->GetMaterialDef())
+  if (!m_material || !m_material->GetMaterialDef() || !m_material->GetMaterialDef()->IsValid())
   {
     return;
   }
   unsigned row = 0;
-  csMaterialDef *materialDef = m_material->GetMaterialDef();
+  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
+  csMaterialDef *materialDef = materialDefWrapper->Get();
+
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
     Param param;
@@ -343,11 +345,13 @@ void MaterialEditorProperties::UpdateMaterialValues()
     return;
   }
 
-  csMaterialDef *materialDef = m_material->GetMaterialDef();
-  if (!materialDef)
+  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
+  if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return;
   }
+
+  csMaterialDef *materialDef = materialDefWrapper->Get();
 
 
   for (auto param : m_params)

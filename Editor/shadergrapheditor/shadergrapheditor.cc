@@ -58,7 +58,8 @@ void ShaderGraphEditor::UpdateAsset()
 
 	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
-  csSGShaderGraph *shaderGraph = csResourceManager::Get()->Aquire<csSGShaderGraph>(locator);
+  csMaterialDefWrapper *shaderGraphWrapper = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator);
+  csSGShaderGraph *shaderGraph = csQueryClass<csSGShaderGraph>(shaderGraphWrapper->Get());
   UpdateResourceNodeIDs(shaderGraph);
 
   csResourceLocator metaLocator(locator, "meta");
@@ -69,7 +70,7 @@ void ShaderGraphEditor::UpdateAsset()
   }
   csSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
-  m_preview->SetShaderGraph(shaderGraph);
+  m_preview->SetShaderGraph(shaderGraphWrapper);
 
   CS_RELEASE(meta);
 

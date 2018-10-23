@@ -3,15 +3,15 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <exception>
 #include <string>
 #include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csexception.hh>
 
 namespace asset::model
 {
 
 	class Entry;
-	class NoSuchLocatorException : public std::exception 
+    class NoSuchLocatorException : public csException
 	{
 
 	public:
@@ -27,7 +27,7 @@ namespace asset::model
 	};
 
 
-	class NoTransactionException : public std::exception
+    class NoTransactionException : public csException
 	{
 
 	public:
@@ -39,7 +39,7 @@ namespace asset::model
 
 
 
-	class NotAttachedException : public std::exception
+    class NotAttachedException : public csException
 	{
 
 	public:
@@ -54,7 +54,7 @@ namespace asset::model
 	};
 
 
-	class ModelStateException : public std::exception
+    class ModelStateException : public csException
 	{
 
 	public:

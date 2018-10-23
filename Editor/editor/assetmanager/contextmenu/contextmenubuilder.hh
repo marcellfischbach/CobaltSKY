@@ -3,6 +3,7 @@
 
 #include <editor/editorexport.hh>
 #include <vector>
+#include <string>
 
 class QMenu;
 

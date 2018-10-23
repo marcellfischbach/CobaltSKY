@@ -4,7 +4,7 @@
 #include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <editor/components/preview/previewsceneview.hh>
 
-class csMaterialDef;
+class csMaterialDefWrapper;
 class csMaterial;
 class ShaderGraphEditorPreviewSceneView : public PreviewSceneView
 {
@@ -12,7 +12,7 @@ public:
   ShaderGraphEditorPreviewSceneView(QWidget *parent);
   virtual ~ShaderGraphEditorPreviewSceneView();
 
-  void SetMaterial(csMaterialDef *material);
+  void SetMaterial(csMaterialDefWrapper *material);
   void UpdateMaterial();
 
 protected:

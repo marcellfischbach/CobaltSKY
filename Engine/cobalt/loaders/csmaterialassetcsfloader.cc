@@ -46,14 +46,15 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
   {
     return material;
   }
-  csMaterialDef *materialDef = csResourceManager::Get()->GetOrLoad<csMaterialDef>(GetLocator(materialDefEntry));
-  if (!materialDef)
+  csMaterialDefWrapper *materialDefWrapper = csResourceManager::Get()->GetOrLoad<csMaterialDefWrapper>(GetLocator(materialDefEntry));
+  if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return material;
   }
+  csMaterialDef *materialDef = materialDefWrapper->Get();
 
-  material->SetMaterialDef(materialDef);
-  materialDef->Release();
+  material->SetMaterialDef(materialDefWrapper);
+  materialDefWrapper->Release();
 
   const csfEntry *parametersEntry = entry->GetEntry("parameters");
   if (parametersEntry)
@@ -62,7 +63,7 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
          parameterEntry;
          parameterEntry = parameterEntry->GetSiblingEntry("parameter"))
     {
-      csSize index;
+      csSize index = ~0x00;
       if (parameterEntry->HasAttribute("id") )
       {
         try
@@ -84,6 +85,10 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
         {
           continue;
         }
+      }
+      if (index == ~0x00)
+      {
+        continue;
       }
 
 

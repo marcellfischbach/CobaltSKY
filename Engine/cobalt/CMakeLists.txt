@@ -51,6 +51,8 @@ set(SOURCE_CORE
     core/csevent.hh
     core/cseventbus.cc
     core/cseventbus.hh
+    core/csexception.cc
+    core/csexception.hh
     core/csfileinfo.cc
     core/csfileinfo.hh
     core/csfilestd.cc
@@ -69,6 +71,8 @@ set(SOURCE_CORE
     core/csresourcelocator.hh
     core/csresourcemanager.cc
     core/csresourcemanager.hh
+	core/csresourcewrapper.cc
+	core/csresourcewrapper.hh
     core/cssettings.cc
     core/cssettings.hh
     core/csstring.hh

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <exception>
+#include <cobalt/core/csexception.hh>
 #include <filesystem>
 #include <string>
 
@@ -12,14 +12,10 @@ namespace asset::model
 {
 	class ModelTransaction;
 
-	class AlterFSException : public std::exception
+    class AlterFSException : public csException
 	{
 	public:
-		AlterFSException(const std::string &message)
-			: std::exception(message.c_str())
-		{
-
-		}
+        AlterFSException(const std::string &message);
 	};
 
 

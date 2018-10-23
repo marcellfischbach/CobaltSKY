@@ -34,7 +34,7 @@ void AssetResourceLineEdit::dragEnterEvent(QDragEnterEvent *event)
   {
     return;
   }
-  QByteArray &rawData = mimeData->data("application/assetModelEntryPtr");
+  QByteArray rawData = mimeData->data("application/assetModelEntryPtr");
   QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
   std::vector<asset::model::Entry*> entries;
   get(entriesStream, entries);
@@ -87,7 +87,7 @@ void AssetResourceLineEdit::dropEvent(QDropEvent *event)
   {
     return;
   }
-  QByteArray &rawData = mimeData->data("application/assetModelEntryPtr");
+  QByteArray rawData = mimeData->data("application/assetModelEntryPtr");
   QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
   std::vector<asset::model::Entry*> entries;
   get(entriesStream, entries);

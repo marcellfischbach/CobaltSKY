@@ -3,11 +3,12 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/csmaterial.refl.hh>
 
-class csMaterialDef;
+class csMaterialDefWrapper;
 struct iGraphics;
 struct iTexture;
 
@@ -20,9 +21,9 @@ public:
   csMaterial();
   virtual ~csMaterial();
 
-  void SetMaterialDef(csMaterialDef *material);
-  csMaterialDef *GetMaterialDef();
-  const csMaterialDef  *GetMaterialDef() const;
+  void SetMaterialDef(csMaterialDefWrapper *material);
+  csMaterialDefWrapper *GetMaterialDef();
+  const csMaterialDefWrapper  *GetMaterialDef() const;
 
   void RebuildMaterialParameters();
 
@@ -56,7 +57,7 @@ public:
   bool IsFillModeInherited() const;
 
 private:
-  csMaterialDef *m_materialDef;
+  csMaterialDefWrapper *m_materialDef;
 
   struct ShaderParameter
   {
@@ -79,3 +80,17 @@ private:
 
 
 };
+
+
+
+CS_CLASS()
+class CSE_API csMaterialWrapper : public csTypedResourceWrapper<csMaterial>
+{
+  CS_CLASS_GEN;
+public:
+  csMaterialWrapper(csMaterial *material = 0) : csTypedResourceWrapper<csMaterial>(material)
+  {
+  }
+
+};
+

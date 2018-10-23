@@ -111,6 +111,7 @@ public:
           parentLocator.GetResourceEntry());
       }
     }
+    return csResourceLocator();
   }
 
 private:

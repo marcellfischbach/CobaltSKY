@@ -412,6 +412,7 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
     {
       return file;
     }
+    printf("AbsFile: %s\n", absFileName.c_str());
   }
 
   delete file;

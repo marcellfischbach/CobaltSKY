@@ -74,6 +74,7 @@ public:
   const std::string &GetAttributeID() const;
 
 private:
+  csUInt8 pad[7];
   csResourceLocator m_materialLocator;
   std::string m_attributeID;
 

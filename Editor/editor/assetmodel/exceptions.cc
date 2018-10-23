@@ -6,7 +6,7 @@ namespace asset::model
 {
 	
 	NoSuchLocatorException::NoSuchLocatorException (const csResourceLocator &locator)
-		: std::exception()
+        : csException()
 		, m_locator(locator)
 	{
 
@@ -18,19 +18,19 @@ namespace asset::model
 
 
 	NoTransactionException::NoTransactionException()
-		: std::exception()
+        : csException()
 	{
 
 	}
 
 	NoTransactionException::NoTransactionException(const char *message)
-		: std::exception(message)
+        : csException(message)
 	{
 
 	}
 
 	NoTransactionException::NoTransactionException(const std::string &message)
-		: std::exception(message.c_str())
+        : csException(message.c_str())
 	{
 
 	}
@@ -40,21 +40,21 @@ namespace asset::model
 
 
 	NotAttachedException::NotAttachedException(const Entry *entry)
-		: std::exception()
+        : csException()
 		, m_entry(entry)
 	{
 
 	}
 
 	NotAttachedException::NotAttachedException(const Entry *entry, const char *message)
-		: std::exception(message)
+        : csException(message)
 		, m_entry(entry)
 	{
 
 	}
 
 	NotAttachedException::NotAttachedException(const Entry *entry, const std::string &message)
-		: std::exception(message.c_str())
+        : csException(message.c_str())
 		, m_entry(entry)
 	{
 
@@ -63,19 +63,19 @@ namespace asset::model
 
 
 	ModelStateException::ModelStateException()
-		: std::exception()
+        : csException()
 	{
 
 	}
 
 	ModelStateException::ModelStateException(const char *message)
-		: std::exception(message)
+        : csException(message)
 	{
 
 	}
 
 	ModelStateException::ModelStateException(const std::string &message)
-		: std::exception(message.c_str())
+        : csException(message.c_str())
 	{
 
 	}

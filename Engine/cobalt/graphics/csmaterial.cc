@@ -24,7 +24,7 @@ csMaterial::~csMaterial()
   }
 }
 
-void csMaterial::SetMaterialDef(csMaterialDef *material)
+void csMaterial::SetMaterialDef(csMaterialDefWrapper *material)
 {
   CS_SET(m_materialDef, material);
   RebuildMaterialParameters();
@@ -32,12 +32,13 @@ void csMaterial::SetMaterialDef(csMaterialDef *material)
 
 void csMaterial::RebuildMaterialParameters()
 {
-  if (m_materialDef)
+  if (m_materialDef && m_materialDef->IsValid())
   {
     m_parameters.clear();
-    for (csSize i = 0, in = m_materialDef->GetNumberOfParameters(); i < in; ++i)
+    csMaterialDef *materialDef = m_materialDef->Get();
+    for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
     {
-      csShaderParameterType type = m_materialDef->GetParamType(i);
+      csShaderParameterType type = materialDef->GetParamType(i);
       ShaderParameter param;
       param.m_inherit = true;
       param.m_paramType = type;
@@ -47,50 +48,50 @@ void csMaterial::RebuildMaterialParameters()
   }
 }
 
-csMaterialDef *csMaterial::GetMaterialDef()
+csMaterialDefWrapper *csMaterial::GetMaterialDef()
 {
   return m_materialDef;
 }
 
-const csMaterialDef *csMaterial::GetMaterialDef() const
+const csMaterialDefWrapper *csMaterial::GetMaterialDef() const
 {
   return m_materialDef;
 }
 
 csSize csMaterial::GetIndex(const std::string &id) const
 {
-  if (!m_materialDef)
+  if (!m_materialDef || !m_materialDef->IsValid())
   {
     throw csNoSuchParameterIdException(id);
   }
-  return m_materialDef->GetIndex(id);
+  return m_materialDef->Get()->GetIndex(id);
 }
 
 csSize csMaterial::GetIndexByName(const std::string &name) const
 {
-  if (!m_materialDef)
+  if (!m_materialDef || !m_materialDef->IsValid())
   {
     throw csNoSuchParameterNameException(name);
   }
-  return m_materialDef->GetIndex(name);
+  return m_materialDef->Get()->GetIndex(name);
 }
 
 const std::string &csMaterial::GetParameterId(csSize idx) const
 {
-  if (!m_materialDef)
+  if (!m_materialDef || !m_materialDef->IsValid())
   {
     throw csNoSuchParameterIndexException(idx);
   }
-  return m_materialDef->GetParameterId(idx);
+  return m_materialDef->Get()->GetParameterId(idx);
 }
 
 const std::string &csMaterial::GetParameterName(csSize idx) const
 {
-  if (!m_materialDef)
+  if (!m_materialDef || !m_materialDef->IsValid())
   {
     throw csNoSuchParameterIndexException(idx);
   }
-  return m_materialDef->GetParameterName(idx);
+  return m_materialDef->Get()->GetParameterName(idx);
 }
 
 void csMaterial::SetInherited(csSize idx, bool inherited)
@@ -309,11 +310,12 @@ bool csMaterial::IsFillModeInherited() const
 
 bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
 {
-  if (!m_materialDef)
+  if (!m_materialDef || !m_materialDef->IsValid())
   {
     return false;
   }
-  iShader *shader = m_materialDef->Bind(renderer, pass);
+  csMaterialDef *materialDef = m_materialDef->Get();
+  iShader *shader = materialDef->Bind(renderer, pass);
   if (!shader)
   {
     return false;
@@ -324,11 +326,11 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
     ShaderParameter &param = m_parameters[i];
     if (param.m_inherit)
     {
-      m_materialDef->BindParameter(renderer, pass, (csSize)i);
+      materialDef->BindParameter(renderer, pass, (csSize)i);
     }
     else
     {
-      iShaderAttribute *attr = m_materialDef->GetAttributeUnsafe((csSize)i, pass);
+      iShaderAttribute *attr = materialDef->GetAttributeUnsafe((csSize)i, pass);
       if (attr)
       {
         switch (param.m_paramType)
@@ -380,7 +382,7 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
 
   if (m_fillModeInherited)
   {
-    m_materialDef->BindFillMode(renderer);
+    materialDef->BindFillMode(renderer);
   }
   else
   {

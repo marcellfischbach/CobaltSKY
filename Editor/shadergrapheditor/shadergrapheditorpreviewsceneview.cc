@@ -35,7 +35,7 @@ ShaderGraphEditorPreviewSceneView::~ShaderGraphEditorPreviewSceneView()
   CS_RELEASE(m_materialInstance);
 }
 
-void ShaderGraphEditorPreviewSceneView::SetMaterial(csMaterialDef *material)
+void ShaderGraphEditorPreviewSceneView::SetMaterial(csMaterialDefWrapper *material)
 {
   m_materialInstance->SetMaterialDef(material);
 }

@@ -159,12 +159,18 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
-  csMaterialDef *materialDef = m_material->GetMaterialDef();
-  if (materialDef)
+  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
+  if (!materialDefWrapper || materialDefWrapper->IsValid())
   {
-    csResourceLocator materialDefLocator = csResourceManager::Get()->GetLocator(materialDef);
-    materialDefEntry->AddAttribute("locator", materialDefLocator.Encode());
+    return;
   }
+
+  if (materialDefWrapper->GetLocator().IsValid())
+  {
+    materialDefEntry->AddAttribute("locator", materialDefWrapper->GetLocator().Encode());
+  }
+
+  csMaterialDef *materialDef = materialDefWrapper->Get();
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {

@@ -3,6 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
@@ -97,4 +98,15 @@ private:
 
 };
 
+
+CS_CLASS()
+class CSE_API csMaterialDefWrapper : public csTypedResourceWrapper<csMaterialDef>
+{
+  CS_CLASS_GEN;
+public:
+  csMaterialDefWrapper(csMaterialDef *materialDef = 0) : csTypedResourceWrapper<csMaterialDef>(materialDef)
+  {
+  }
+
+};
 

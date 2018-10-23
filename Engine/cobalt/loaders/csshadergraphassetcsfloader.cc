@@ -294,5 +294,5 @@ iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResour
   }
 
 
-  return shaderGraph;
+  return new csSGShaderGraphWrapper(shaderGraph);
 }

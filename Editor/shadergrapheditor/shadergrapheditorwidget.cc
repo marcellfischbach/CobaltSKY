@@ -269,7 +269,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, No
       return;
     }
 
-    QByteArray &rawData = data->data("application/assetModelEntryPtr");
+    QByteArray rawData = data->data("application/assetModelEntryPtr");
     QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
     std::vector<asset::model::Entry*> entries;
     get(entriesStream, entries);
@@ -357,7 +357,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
-    QByteArray &rawData = data->data("application/assetModelEntryPtr");
+    QByteArray rawData = data->data("application/assetModelEntryPtr");
     QDataStream entriesStream(&rawData, QIODevice::ReadOnly);
     std::vector<asset::model::Entry*> entries;
     get(entriesStream, entries);
@@ -773,11 +773,13 @@ bool ShaderGraphEditorWidget::Apply()
         thisResources.insert(resNode->GetResourceId());
         if (m_resourceIDs.find(resNode->GetResourceId()) == m_resourceIDs.end())
         {
-          EventBus::Get() << MaterialEditorAttributeAdded(locator, resNode->GetResourceId(), resNode->GetResourceName());
+            MaterialEditorAttributeAdded added(locator, resNode->GetResourceId(), resNode->GetResourceName());
+          EventBus::Get().Fire(added);
         }
         else
         {
-          EventBus::Get() << MaterialEditorAttributeChanged(locator, resNode->GetResourceId(), resNode->GetResourceName());
+            MaterialEditorAttributeChanged changed(locator, resNode->GetResourceId(), resNode->GetResourceName());
+          EventBus::Get().Fire(changed);
         }
       }
     }
@@ -786,7 +788,8 @@ bool ShaderGraphEditorWidget::Apply()
     {
       if (thisResources.find(id) == thisResources.end())
       {
-        EventBus::Get() << MaterialEditorAttributeRemoved(locator, id);
+          MaterialEditorAttributeRemoved removed(locator, id);
+        EventBus::Get().Fire(removed);
       }
     }
 

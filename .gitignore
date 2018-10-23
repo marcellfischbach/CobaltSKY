@@ -16,3 +16,6 @@ build-ClassGenerator*
 .vs/
 bin/*
 
+/docs/ValkyrieEngine.vpp.vbak
+/docs/ValkyrieEngine.vpp.bak_001d
+/docs/ValkyrieEngine.vpp.bak_000f
