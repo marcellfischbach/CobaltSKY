@@ -58,6 +58,12 @@ set(EDITOR_SOURCES
 	importerfactorymanager.hh
     mainwindow.cc
     mainwindow.hh
+	mainwindowmenubutton.cc
+	mainwindowmenubutton.hh
+	mainwindowmenupanel.cc
+	mainwindowmenupanel.hh
+	mainwindowsidepanel.cc
+	mainwindowsidepanel.hh
     mimehelper.cc
     mimehelper.hh
     renderwidget.cc
@@ -90,6 +96,8 @@ set(ASSETMANAGER_SOURCES
     assetmanager/assetmanagerdock.hh
     assetmanager/assetmanagerfoldermodel.cc
     assetmanager/assetmanagerfoldermodel.hh
+	assetmanager/assetmanagermenubutton.cc
+	assetmanager/assetmanagermenubutton.hh
     assetmanager/assetmanagerresourcescanner.cc
     assetmanager/assetmanagerresourcescanner.hh
     assetmanager/assetmanagerwidget.cc
@@ -466,6 +474,8 @@ source_group(
 set(PROJECT_SOURCES
     project/project.cc
     project/project.hh
+	project/projectmenubutton.cc
+	project/projectmenubutton.hh
     )
 
 source_group(

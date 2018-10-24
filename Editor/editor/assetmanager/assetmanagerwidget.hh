@@ -31,7 +31,7 @@ class AssetManagerWidget : public QWidget
   Q_OBJECT
 public:
   AssetManagerWidget();
-  ~AssetManagerWidget();
+  virtual ~AssetManagerWidget();
 
   void SetProject(Project *project);
 

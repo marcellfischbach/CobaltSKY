@@ -78,6 +78,16 @@ void MainWindow::UpdateEditor(iAssetEditor *editor)
   m_gui.tabWidget->setTabText(idx, name);
 }
 
+MainWindowMenuPanel *MainWindow::GetMenuPanel()
+{
+  return m_gui.menuPanel;
+}
+
+void MainWindow::ShowSidePanel(QWidget *widget)
+{
+  m_gui.sidePanel->ShowPanel(widget);
+}
+
 void MainWindow::ShowWidget(QWidget *widget)
 {
   if (!widget)

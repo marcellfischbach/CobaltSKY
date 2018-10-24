@@ -12,9 +12,11 @@
 #include <editor/events/assetrenamedevent.hh>
 #include <editor/project/project.hh>
 #include <cobalt/core/cssettings.hh>
+#include <editor/assetmanager/assetmanagermenubutton.hh>
 #include <editor/assetmanager/assetmanagerdock.hh>
 #include <editor/assetmanager/assetmanagerwidget.hh>
 #include <editor/assetmodel/asset.hh>
+#include <editor/project/projectmenubutton.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/csengine.hh>
 #include <GraphicsGL4/gl4graphics.hh>
@@ -73,15 +75,19 @@ bool Editor::Initialize(int argc, char **argv)
   m_physicsSystem->Initialize();
   m_engine->SetPhysicsSystem(m_physicsSystem);
 
-  m_mainWindow = new MainWindow();
+  m_assetManager = new AssetManagerWidget();
 
+  m_mainWindow = new MainWindow();
+  m_mainWindow->GetMenuPanel()->AddButton(AssetManagerMenuButton::Get());
+  m_mainWindow->GetMenuPanel()->AddButton(ProjectMenuButton::Get());
+  //AssetManagerMenuButton::Get()->ActionPerformed();
 
   //
   //
   
 
-  m_assetManager = new AssetManagerWidget();
-  m_mainWindow->addDockWidget(Qt::LeftDockWidgetArea, new AssetManagerDock(m_mainWindow));
+  //m_mainWindow->ShowSidePanel(GetAssetManager());
+  //m_mainWindow->addDockWidget(Qt::LeftDockWidgetArea, new AssetManagerDock(m_mainWindow));
   //m_mainWindow->showMaximized();
   m_mainWindow->resize(1024, 768);
   m_mainWindow->setVisible(true);

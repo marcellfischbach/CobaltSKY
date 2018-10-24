@@ -1,27 +1,28 @@
 <RCC>
-    <qresource prefix="/icons">
-        <file>resources/screenshot32.png</file>
-        <file>resources/screenshot24.png</file>
-        <file>resources/screenshot48.png</file>
-        <file>resources/Import16.png</file>
-        <file>resources/Import24.png</file>
-        <file>resources/UnknownAsset64.png</file>
-        <file>resources/apply16.png</file>
-        <file>resources/apply24.png</file>
-        <file>resources/apply32.png</file>
-        <file>resources/apply48.png</file>
-        <file>resources/revert16.png</file>
-        <file>resources/revert24.png</file>
-        <file>resources/revert32.png</file>
-        <file>resources/revert48.png</file>
-        <file>resources/save16.png</file>
-        <file>resources/save24.png</file>
-        <file>resources/save32.png</file>
-        <file>resources/save48.png</file>
-        <file>resources/CobaltSKY-Editor16.png</file>
-        <file>resources/CobaltSKY-Editor24.png</file>
-        <file>resources/CobaltSKY-Editor32.png</file>
-        <file>resources/CobaltSKY-Editor48.png</file>
-        <file>resources/CobaltSKY-Editor64.png</file>
-    </qresource>
+  <qresource prefix="/icons">
+    <file>resources/ResourceManager64.png</file>
+    <file>resources/screenshot32.png</file>
+    <file>resources/screenshot24.png</file>
+    <file>resources/screenshot48.png</file>
+    <file>resources/Import16.png</file>
+    <file>resources/Import24.png</file>
+    <file>resources/UnknownAsset64.png</file>
+    <file>resources/apply16.png</file>
+    <file>resources/apply24.png</file>
+    <file>resources/apply32.png</file>
+    <file>resources/apply48.png</file>
+    <file>resources/revert16.png</file>
+    <file>resources/revert24.png</file>
+    <file>resources/revert32.png</file>
+    <file>resources/revert48.png</file>
+    <file>resources/save16.png</file>
+    <file>resources/save24.png</file>
+    <file>resources/save32.png</file>
+    <file>resources/save48.png</file>
+    <file>resources/CobaltSKY-Editor16.png</file>
+    <file>resources/CobaltSKY-Editor24.png</file>
+    <file>resources/CobaltSKY-Editor32.png</file>
+    <file>resources/CobaltSKY-Editor48.png</file>
+    <file>resources/CobaltSKY-Editor64.png</file>
+  </qresource>
 </RCC>

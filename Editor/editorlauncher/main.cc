@@ -53,7 +53,7 @@ int main (int argc, char **argv)
   if (true)
   {
     qApp->setStyle(QStyleFactory::create("Fusion"));
-    if (false)
+    if (true)
     {
       QPalette darkPalette;
       darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));

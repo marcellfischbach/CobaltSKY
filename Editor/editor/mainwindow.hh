@@ -8,6 +8,7 @@
 class QTabWidget;
 
 struct iAssetEditor;
+class MainWindowMenuPanel;
 class MainWindow : public QMainWindow
 {
   Q_OBJECT;
@@ -15,11 +16,13 @@ public:
   MainWindow();
   ~MainWindow();
 
+  MainWindowMenuPanel *GetMenuPanel();
   bool ShowEditor(iAssetEditor *editor);
   void UpdateEditor(iAssetEditor *editor);
   void CloseEditor(iAssetEditor *editor, bool force);
 
   void ShowWidget(QWidget *widget);
+  void ShowSidePanel(QWidget *sidePanelWidget);
  
   QWidget *GetCurrentTab () const;
 private slots:
@@ -31,4 +34,5 @@ private:
 	Ui::MainWindow m_gui;
 
   std::list<iAssetEditor*> m_editors;
+  QWidget *m_sidePanelWidget;
 };

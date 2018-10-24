@@ -28,19 +28,28 @@
      <number>0</number>
     </property>
     <property name="spacing">
-     <number>3</number>
+     <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="tabsClosable">
-       <bool>true</bool>
+     <widget class="MainWindowMenuPanel" name="menuPanel" native="true"/>
+    </item>
+    <item row="0" column="1">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="movable">
-       <bool>true</bool>
-      </property>
-      <property name="tabBarAutoHide">
-       <bool>false</bool>
-      </property>
+      <widget class="MainWindowSidePanel" name="sidePanel" native="true"/>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+       <property name="movable">
+        <bool>true</bool>
+       </property>
+       <property name="tabBarAutoHide">
+        <bool>false</bool>
+       </property>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -52,7 +61,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -65,7 +74,6 @@
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuProject"/>
   </widget>
   <action name="actionOpen_Project">
    <property name="text">
@@ -93,6 +101,22 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>MainWindowSidePanel</class>
+   <extends>QWidget</extends>
+   <header location="global">editor/mainwindowsidepanel.hh</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MainWindowMenuPanel</class>
+   <extends>QWidget</extends>
+   <header location="global">editor/mainwindowmenupanel.hh</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
