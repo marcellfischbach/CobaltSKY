@@ -15,7 +15,7 @@ class csPostProcess;
 class csPostProcessor;
 struct iRenderTarget;
 struct iShaderAttribute;
-struct iTexture;
+class csTextureWrapper;
 
 
 
@@ -30,7 +30,7 @@ public:
   virtual bool Render(iGraphics *graphics);
   virtual bool Initialize(iGraphics *graphics);
 
-  int BindInput(iTexture *texture, const std::string &inputName = "");
+  int BindInput(csTextureWrapper *texture, const std::string &inputName = "");
   int BindInput(csPostProcess *postProcess, int outputIdx, const std::string &inputName = "");
   int BindInput(csPostProcessOutput originOutput, const std::string &inputName = "");
 
@@ -62,7 +62,7 @@ private:
   {
     InputSource m_inputSource;
     std::string m_inputName;
-    iTexture *m_texture;
+    csTextureWrapper *m_texture;
     csPostProcess *m_postProcess;
     int m_postProcessOutput;
     csPostProcessOutput m_originOutput;

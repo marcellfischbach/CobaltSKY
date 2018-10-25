@@ -6,8 +6,8 @@
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/isampler.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csgeometrydata.hh>
@@ -20,13 +20,14 @@
 csLightRendererGL4::csLightRendererGL4(iGraphics *renderer)
   : m_renderer(renderer)
 {
-  m_depthSampler = m_renderer->CreateSampler();
-  m_depthSampler->SetFilter(eFM_MinMagLinear);
-  m_depthSampler->SetAddressU(eTAM_ClampBorder);
-  m_depthSampler->SetAddressV(eTAM_ClampBorder);
-  m_depthSampler->SetAddressW(eTAM_ClampBorder);
-  m_depthSampler->SetTextureCompareMode(eTCM_CompareToR);
-  m_depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
+  iSampler *depthSampler = m_renderer->CreateSampler();
+  depthSampler->SetFilter(eFM_MinMagLinear);
+  depthSampler->SetAddressU(eTAM_ClampBorder);
+  depthSampler->SetAddressV(eTAM_ClampBorder);
+  depthSampler->SetAddressW(eTAM_ClampBorder);
+  depthSampler->SetTextureCompareMode(eTCM_CompareToR);
+  depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
+  m_depthSampler = new csSamplerWrapper(depthSampler);
 }
 
 
@@ -58,27 +59,27 @@ void csLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, csGBufferGL4 *gbuf
 {
   if (attribs.attrDiffuseRoughness)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDiffuseRoughness());
+    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDiffuseRoughness()->Get());
     attribs.attrDiffuseRoughness->Set(unit);
   }
   if (attribs.attrNormalLightMode)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetNormalLightMode());
+    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetNormalLightMode()->Get());
     attribs.attrNormalLightMode->Set(unit);
   }
   if (attribs.attrEmissiveMetallic)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetEmissiveMetallic());
+    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetEmissiveMetallic()->Get());
     attribs.attrEmissiveMetallic->Set(unit);
   }
   if (attribs.attrSSSSpecular)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetSSSSpec());
+    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetSSSSpec()->Get());
     attribs.attrSSSSpecular->Set(unit);
   }
   if (attribs.attrDepth)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDepth());
+    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDepth()->Get());
     attribs.attrDepth->Set(unit);
   }
 }

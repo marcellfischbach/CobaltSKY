@@ -4,7 +4,7 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <csfile/csffile.hh>
 
 #include <QFile>
@@ -27,7 +27,7 @@ SamplerEditor::~SamplerEditor()
 
 void SamplerEditor::UpdateAsset()
 {
-  iSampler *sampler = csQueryClass<iSampler>(GetEditObject());
+  csSamplerWrapper *sampler = csQueryClass<csSamplerWrapper>(GetEditObject());
   if (sampler)
   {
     m_widget->SetSampler(sampler);
@@ -49,8 +49,10 @@ void SamplerEditor::Save()
 
 void SamplerEditor::MergeSampler()
 {
-  iSampler *editorSampler = csQueryClass<iSampler>(GetEditObject());
-  iSampler *engineSampler = csResourceManager::Get()->Get<iSampler>(GetAsset()->GetResourceLocator());
+  csSamplerWrapper *editorSamplerWrapper = csQueryClass<csSamplerWrapper>(GetEditObject());
+  csSamplerWrapper *engineSamplerWrapper = csResourceManager::Get()->Get<csSamplerWrapper>(GetAsset()->GetResourceLocator());
+  iSampler *editorSampler = editorSamplerWrapper ? editorSamplerWrapper->Get() : 0;
+  iSampler *engineSampler = engineSamplerWrapper ? engineSamplerWrapper->Get() : 0;
   if (editorSampler && engineSampler)
   {
     engineSampler->SetFilter(editorSampler->GetFilter());

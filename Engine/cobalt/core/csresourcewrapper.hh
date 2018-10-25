@@ -9,7 +9,7 @@
 #include <cobalt/core/csresourcewrapper.refl.hh>
 
 CS_CLASS()
-class CSE_API csResourceWrapper : public csObject
+class CSE_API csResourceWrapper : public CS_SUPER(csObject)
 {
   CS_CLASS_GEN;
 public:
@@ -18,12 +18,17 @@ public:
 
   virtual void SetResource(iObject *resource);
 
-  CS_FORCEINLINE iObject *GetResource()
+  CS_FORCEINLINE iObject *Get()
   {
     return m_resource;
   }
 
-  CS_FORCEINLINE const iObject *GetResource() const
+  CS_FORCEINLINE const iObject *Get() const
+  {
+    return m_resource;
+  }
+
+  CS_FORCEINLINE bool IsValid() const
   {
     return m_resource;
   }
@@ -42,46 +47,4 @@ private:
   iObject * m_resource;
 
   csResourceLocator m_locator;
-};
-
-template<typename T>
-class csTypedResourceWrapper : public csResourceWrapper
-{
-public:
-  csTypedResourceWrapper(T *resource = 0)
-    : csResourceWrapper(resource)
-    , m_t(resource)
-  {
-
-  }
-
-  virtual ~csTypedResourceWrapper()
-  {
-    m_t = 0;
-  }
-
-  CS_FORCEINLINE bool IsValid() const
-  {
-    return m_t;
-  }
-
-  virtual void SetResource(iObject *resource)
-  {
-    csResourceWrapper::SetResource(resource);
-    T* t = csQueryClass<T>(resource);
-  }
-
-  CS_FORCEINLINE T* Get()
-  {
-    return m_t;
-  }
-
-  CS_FORCEINLINE const T* Get() const
-  {
-    return m_t;
-  }
-
-
-private:
-  T * m_t;
 };

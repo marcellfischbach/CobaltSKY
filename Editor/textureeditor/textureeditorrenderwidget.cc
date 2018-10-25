@@ -1,7 +1,7 @@
 
 
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
@@ -98,7 +98,7 @@ void TextureEditorRenderWidget::SetLOD(int lod)
   repaint();
 }
 
-void TextureEditorRenderWidget::SetTexture(iTexture2D *texture)
+void TextureEditorRenderWidget::SetTexture(csTexture2DWrapper *texture)
 {
   CS_SET(m_texture, texture);
 }
@@ -144,9 +144,10 @@ void TextureEditorRenderWidget::paintGL()
  // RenderWidget::paintGL();
 
 
+  iTexture2D *texture = m_texture->Get();
 
-  float sx = (float)m_texture->GetWidth() / (float)width();
-  float sy = (float)m_texture->GetHeight() / (float)height();
+  float sx = (float)texture->GetWidth() / (float)width();
+  float sy = (float)texture->GetHeight() / (float)height();
 
   csVector2f o(-(1.0f - sx), (1.0f - sy));
   csVector2f s(sx, sy);
@@ -191,7 +192,7 @@ void TextureEditorRenderWidget::paintGL()
   iShaderAttribute *attrDiffuse = m_shader->GetAttribute(m_idDiffuse);
   if (attrDiffuse)
   {
-    csTextureUnit unit = gr->BindTexture(m_texture);
+    csTextureUnit unit = gr->BindTexture(texture);
     attrDiffuse->Set(unit);
   }
   iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);

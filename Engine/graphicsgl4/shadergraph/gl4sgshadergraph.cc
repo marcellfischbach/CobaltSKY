@@ -33,7 +33,7 @@
 #include <graphicsgl4/shadergraph/gl4sgvarfloat4.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 
 #include <cobalt/graphics/shadergraph/cssgadd.hh>
 #include <cobalt/graphics/shadergraph/cssgconstfloat1.hh>
@@ -209,7 +209,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
       break;
     case eSPT_Texture:
     {
-      iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(resNode->GetDefaultTextureResource());
+      csTextureWrapper *texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(resNode->GetDefaultTextureResource());
       graph->SetDefault(idx, texture);
     }
     break;

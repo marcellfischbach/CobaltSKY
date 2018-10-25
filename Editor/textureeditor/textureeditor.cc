@@ -5,7 +5,7 @@
 #include <editor/basicdockitem.hh>
 #include <editor/editor.hh>
 
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <editor/components/baseeditorwidget.hh>
 #include <QSplitter>
@@ -35,7 +35,7 @@ TextureEditor::~TextureEditor()
 
 void TextureEditor::UpdateAsset()
 {
-  iTexture2D *texture = csQueryClass<iTexture2D>(GetEditObject());
+  csTexture2DWrapper *texture = csQueryClass<csTexture2DWrapper>(GetEditObject());
   if (texture)
   {
 

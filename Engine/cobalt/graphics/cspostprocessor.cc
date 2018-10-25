@@ -1,7 +1,7 @@
 
 #include <cobalt/graphics/cspostprocessor.hh>
 #include <cobalt/graphics/cspostprocess.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <string.h>
 
 csPostProcessor::csPostProcessor()
@@ -17,7 +17,7 @@ csPostProcessor::~csPostProcessor()
 }
 
 
-void csPostProcessor::SetInput(csPostProcessOutput originOutput, iTexture *texture)
+void csPostProcessor::SetInput(csPostProcessOutput originOutput, csTextureWrapper *texture)
 {
   if (!texture)
   {
@@ -27,12 +27,12 @@ void csPostProcessor::SetInput(csPostProcessOutput originOutput, iTexture *textu
   m_originInputs[originOutput] = texture;
 }
 
-const iTexture *csPostProcessor::GetInput(csPostProcessOutput originOutput) const
+const csTextureWrapper *csPostProcessor::GetInput(csPostProcessOutput originOutput) const
 {
   return m_originInputs[originOutput];
 }
 
-iTexture *csPostProcessor::GetInput(csPostProcessOutput originOutput)
+csTextureWrapper *csPostProcessor::GetInput(csPostProcessOutput originOutput)
 {
   return m_originInputs[originOutput];
 }

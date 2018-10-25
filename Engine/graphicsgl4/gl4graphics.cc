@@ -683,7 +683,7 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
   m_nextTextureUnit = static_cast<csTextureUnit>(m_nextTextureUnit + 1);
   glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
   CS_CHECK_GL_ERROR;
-  SetSampler(unit, texture->GetSampler());
+  SetSampler(unit, texture->GetSampler()->Get());
   SetTexture(unit, texture);
 
 
@@ -1085,7 +1085,7 @@ void csGraphicsGL4::BindValues()
   iShaderAttribute *attribBinaryGradient = m_program->GetAttribute(eVAT_BinaryGradient);
   if (attribBinaryGradient)
   {
-    csTextureUnit tu = BindTexture(csBinaryGradient::GetBinaryGradient());
+    csTextureUnit tu = BindTexture(csBinaryGradient::GetBinaryGradient()->Get());
     if (tu != eTU_Invalid)
     {
       attribBinaryGradient->Set(tu);

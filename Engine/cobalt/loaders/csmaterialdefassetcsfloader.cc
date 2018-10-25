@@ -1,7 +1,7 @@
 
 #include <cobalt/loaders/csmaterialdefassetcsfloader.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/csengine.hh>
 
@@ -246,15 +246,15 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
           if (HasLocator(parameterEntry))
           {
             csResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
-            iTexture *texture = 0;
+            csTextureWrapper *texture = 0;
             switch (rlm)
             {
             case eRLM_Shared:
-              texture = csResourceManager::Get()->GetOrLoad<iTexture>(GetLocator(parameterEntry));
+              texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               break;
             case eRLM_Instance:
-              texture = csResourceManager::Get()->Load<iTexture>(GetLocator(parameterEntry));
+              texture = csResourceManager::Get()->Load<csTextureWrapper>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               if (texture) texture->Release();
               break;

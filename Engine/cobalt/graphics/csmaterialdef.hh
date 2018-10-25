@@ -3,7 +3,6 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
@@ -17,7 +16,7 @@
 struct iGraphics;
 struct iShader;
 struct iShaderAttribute;
-struct iTexture;
+class csTextureWrapper;
 
 CS_CLASS();
 class CSE_API csMaterialDef : public CS_SUPER(csObject)
@@ -50,7 +49,7 @@ public:
   void SetDefault(csSize idx, int def);
   void SetDefault(csSize idx, const csMatrix3f &def);
   void SetDefault(csSize idx, const csMatrix4f &def);
-  void SetDefault(csSize idx, iTexture *def);
+  void SetDefault(csSize idx, csTextureWrapper *def);
 
   float GetDefaultFloat(csSize idx) const;
   csVector2f GetDefaultVector2(csSize idx) const;
@@ -60,7 +59,7 @@ public:
   int GetDefaultInt(csSize idx) const;
   csMatrix3f GetDefaultMatrix3(csSize idx) const;
   csMatrix4f GetDefaultMatrix4(csSize idx) const;
-  iTexture* GetDefaultTexture(csSize idx) const;
+  csTextureWrapper* GetDefaultTexture(csSize idx) const;
 
   void SetFillMode(csFillMode fillMode);
   csFillMode GetFillMode() const;
@@ -85,7 +84,7 @@ private:
     {
       float m_defaultFloat[16];
       int m_defaultInt[16];
-      iTexture *m_defaultTexture;
+      csTextureWrapper *m_defaultTexture;
     };
     Param(const std::string &id, const std::string &name, csShaderParameterType type);
   };
@@ -95,18 +94,6 @@ private:
   iShader *m_shaders[eRP_COUNT];
 
   csFillMode m_fillMode;
-
-};
-
-
-CS_CLASS()
-class CSE_API csMaterialDefWrapper : public csTypedResourceWrapper<csMaterialDef>
-{
-  CS_CLASS_GEN;
-public:
-  csMaterialDefWrapper(csMaterialDef *materialDef = 0) : csTypedResourceWrapper<csMaterialDef>(materialDef)
-  {
-  }
 
 };
 

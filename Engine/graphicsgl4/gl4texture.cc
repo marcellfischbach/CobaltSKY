@@ -4,8 +4,7 @@
 #include <graphicsgl4/gl4mapping.hh>
 #include <graphicsgl4/gl4sampler.hh>
 #include <graphicsgl4/gl4defines.hh>
-
-
+#include <cobalt/graphics/cssamplerwrapper.hh>
 
 csTextureGL4::csTextureGL4(csTextureType type)
   : iTexture()
@@ -36,17 +35,17 @@ bool csTextureGL4::Initialize()
   return m_name != 0;
 }
 
-void csTextureGL4::SetSampler(iSampler *sampler)
+void csTextureGL4::SetSampler(csSamplerWrapper *sampler)
 {
   CS_SET(m_sampler, sampler);
 }
 
-iSampler *csTextureGL4::GetSampler()
+csSamplerWrapper *csTextureGL4::GetSampler()
 {
   return m_sampler;
 }
 
-const iSampler *csTextureGL4::GetSampler() const
+const csSamplerWrapper *csTextureGL4::GetSampler() const
 {
   return m_sampler;
 }

@@ -41,7 +41,7 @@ csRenderTargetGL4::~csRenderTargetGL4()
     CS_RELEASE(m_depthTexture);
     m_depthTexture = 0;
 
-    for (csTextureGL4 *txt : m_colorTextures)
+    for (csTextureWrapper *txt : m_colorTextures)
     {
       CS_RELEASE(txt);
     }
@@ -83,25 +83,25 @@ void csRenderTargetGL4::Initialize(csUInt16 width, csUInt16 height)
   CS_CHECK_GL_ERROR;
 }
 
-void csRenderTargetGL4::AddColorTexture(iTexture *color)
+void csRenderTargetGL4::AddColorTexture(csTextureWrapper *color)
 {
-  csTextureGL4 *coloGL4 = csQueryClass<csTextureGL4>(color);
+  csTextureGL4 *coloGL4 = csQueryClass<csTextureGL4>(color->Get());
   if (coloGL4)
   {
     color->AddRef();
     glFramebufferTexture(GL_FRAMEBUFFER, (GLenum)(GL_COLOR_ATTACHMENT0 + m_colorTextures.size()), coloGL4->GetName(), 0);
-    m_colorTextures.push_back(coloGL4);
+    m_colorTextures.push_back(color);
     CS_CHECK_GL_ERROR;
 
   }
 }
 
-void csRenderTargetGL4::SetDepthTexture(iTexture *depth)
+void csRenderTargetGL4::SetDepthTexture(csTextureWrapper *depth)
 {
-  csTextureGL4 *depthGL4 = csQueryClass<csTextureGL4>(depth);
-  if (depthGL4 != m_depthTexture)
+  if (depth != m_depthTexture)
   {
-    CS_SET(m_depthTexture, depthGL4);
+    csTextureGL4 *depthGL4 = csQueryClass<csTextureGL4>(depth->Get());
+    CS_SET(m_depthTexture, depth);
     if (depthGL4)
     {
       glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, depthGL4->GetName(), 0);
@@ -130,7 +130,7 @@ bool csRenderTargetGL4::Finilize()
   return r == GL_FRAMEBUFFER_COMPLETE;
 }
 
-iTexture *csRenderTargetGL4::GetColorBuffer(csUInt8 idx) const
+csTextureWrapper *csRenderTargetGL4::GetColorBuffer(csUInt8 idx) const
 {
   if (idx >= m_colorTextures.size())
   {
@@ -140,7 +140,7 @@ iTexture *csRenderTargetGL4::GetColorBuffer(csUInt8 idx) const
   return m_colorTextures[idx];
 }
 
-iTexture *csRenderTargetGL4::GetDepthBuffer() const
+csTextureWrapper *csRenderTargetGL4::GetDepthBuffer() const
 {
   return m_depthTexture;
 }

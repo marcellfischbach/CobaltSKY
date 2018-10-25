@@ -79,20 +79,13 @@ bool Editor::Initialize(int argc, char **argv)
 
   m_mainWindow = new MainWindow();
   m_mainWindow->GetMenuPanel()->AddButton(AssetManagerMenuButton::Get());
-  //m_mainWindow->GetMenuPanel()->AddButton(ProjectMenuButton::Get());
   AssetManagerMenuButton::Get()->ActionPerformed();
 
-  //
-  //
   
 
-  //m_mainWindow->ShowSidePanel(GetAssetManager());
-  //m_mainWindow->addDockWidget(Qt::LeftDockWidgetArea, new AssetManagerDock(m_mainWindow));
-  //m_mainWindow->showMaximized();
   m_mainWindow->resize(1024, 768);
   m_mainWindow->setVisible(true);
-  //renderWidget->setVisible(false);
-
+  
   GLContext::Get()->Initialize(m_mainWindow);
 
 

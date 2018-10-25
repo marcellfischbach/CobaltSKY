@@ -6,9 +6,9 @@
 #include <graphicsgl4/deferred/gl4gbuffer.refl.hh>
 
 struct iGraphics;
-struct iTexture2D;
 struct iRenderTarget;
-struct iSampler;
+struct csTexture2DWrapper;
+struct csSamplerWrapper;
 
 CS_INTERFACE()
 class CSGRAPHICSGL4_API csGBufferGL4 : public CS_SUPER(csObject)
@@ -24,40 +24,40 @@ public:
 
   bool IsValid() const;
 
-  CS_FORCEINLINE iTexture2D *GetDiffuseRoughness()
+  CS_FORCEINLINE csTexture2DWrapper *GetDiffuseRoughness()
   {
     return m_diffuseRoughness;
   }
 
-  CS_FORCEINLINE iTexture2D *GetNormalLightMode()
+  CS_FORCEINLINE csTexture2DWrapper *GetNormalLightMode()
   {
     return m_normalLightMode;
   }
 
-  CS_FORCEINLINE iTexture2D *GetEmissiveMetallic()
+  CS_FORCEINLINE csTexture2DWrapper *GetEmissiveMetallic()
   {
     return m_emissiveMetallic;
   }
 
-  CS_FORCEINLINE iTexture2D *GetSSSSpec()
+  CS_FORCEINLINE csTexture2DWrapper *GetSSSSpec()
   {
     return m_sssSpec;
   }
 
-  CS_FORCEINLINE iTexture2D *GetDepth()
+  CS_FORCEINLINE csTexture2DWrapper *GetDepth()
   {
     return m_depth;
   }
 
-  static iSampler *GetColorSampler(iGraphics *renderer);
-  static iSampler *GetDepthSampler(iGraphics *renderer);
+  static csSamplerWrapper *GetColorSampler(iGraphics *renderer);
+  static csSamplerWrapper *GetDepthSampler(iGraphics *renderer);
 
 private:
-  iTexture2D *m_diffuseRoughness;
-  iTexture2D *m_normalLightMode;
-  iTexture2D *m_emissiveMetallic;
-  iTexture2D *m_sssSpec;
-  iTexture2D *m_depth;
+  csTexture2DWrapper *m_diffuseRoughness;
+  csTexture2DWrapper *m_normalLightMode;
+  csTexture2DWrapper *m_emissiveMetallic;
+  csTexture2DWrapper *m_sssSpec;
+  csTexture2DWrapper *m_depth;
   iRenderTarget *m_renderTarget;
   iGraphics *m_renderer;
 };

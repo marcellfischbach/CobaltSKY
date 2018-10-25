@@ -3,7 +3,7 @@
 
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4texture.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4sampler.refl.hh>
 

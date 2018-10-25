@@ -1,6 +1,6 @@
 #include <cobalt/csengine.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 
@@ -55,7 +55,7 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
 
   unsigned size = width() * height() * 4;
   unsigned resSize;
-  if (!m_colorTexture->ReadData(0, ePF_R8G8B8A8U, size, m_buffer, resSize))
+  if (!m_colorTexture->Get()->ReadData(0, ePF_R8G8B8A8U, size, m_buffer, resSize))
   {
     return;
   }
@@ -104,7 +104,7 @@ bool RenderWidget::CheckRenderConditions()
   if (!m_renderTarget)
   {
     // buffer is already initialized but has the wrong size
-    m_colorTexture = csEng->GetRenderer()->CreateTexture2D(ePF_R8G8B8A8U, width(), height(), false);
+    m_colorTexture = new csTexture2DWrapper(csEng->GetRenderer()->CreateTexture2D(ePF_R8G8B8A8U, width(), height(), false));
     m_renderTarget = csEng->GetRenderer()->CreateRenderTarget();
     m_renderTarget->Initialize(width(), height());
     m_renderTarget->AddColorTexture(m_colorTexture);

@@ -4,7 +4,7 @@
 #include <graphicsgl4/deferred/gl4lightrenderer.hh>
 
 
-struct iTexture2DArray;
+struct csTexture2DArrayWrapper;
 class csPointLight;
 
 
@@ -38,7 +38,7 @@ private:
   iShaderAttribute *m_attrShadowMap;
   iShaderAttribute *m_attrMapBias;
   iShaderAttribute *m_attrShadowIntensity;
-  iTexture2DArray *m_depthBuffer;
+  csTexture2DArrayWrapper *m_depthBuffer;
   void BindPointLightCubeShadow(csPointLight *pointLight);
 
 };

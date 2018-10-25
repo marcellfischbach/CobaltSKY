@@ -1,6 +1,6 @@
 
 #include <cobalt/loaders/cssamplerassetcsfloader.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/csengine.hh>
 
 
@@ -93,7 +93,7 @@ namespace
 
 const csClass *csSamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return iSampler::GetStaticClass();
+  return csSamplerWrapper::GetStaticClass();
 }
 
 iObject *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
@@ -162,6 +162,6 @@ iObject *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLo
     sampler->SetTextureCompareFunc(::evalCompareFunc(compareFuncElement->GetAttribute()));
   }
 
-  return sampler;
+  return new csSamplerWrapper(sampler);
 }
 

@@ -2,8 +2,8 @@
 #include <textureeditor/textureeditorproperties.hh>
 #include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/isampler.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 
 #include <QFrame>
 #include <QGridLayout>
@@ -21,12 +21,12 @@ TextureEditorProperties::~TextureEditorProperties()
   CS_RELEASE(m_texture);
 }
 
-void TextureEditorProperties::SetTexture(iTexture *texture)
+void TextureEditorProperties::SetTexture(csTextureWrapper *texture)
 {
   CS_SET(m_texture, texture);
   if (m_texture)
   {
-    csResourceLocator locator = csResourceManager::Get()->GetLocator(texture->GetSampler());
+    csResourceLocator locator = csResourceManager::Get()->GetLocator(texture->Get()->GetSampler());
     m_samplerWidget->SetResourceLocator(locator);
   }
 }
@@ -42,7 +42,7 @@ void TextureEditorProperties::InitGUI()
   QLabel *label = new QLabel(tr("Sampler"), frame);
   m_samplerWidget = new AssetResourceWidget(frame);
   m_samplerWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-  m_samplerWidget->AddValidClass(iSampler::GetStaticClass());
+  m_samplerWidget->AddValidClass(csSamplerWrapper::GetStaticClass());
   connect(m_samplerWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SIGNAL(SamplerChanged(const csResourceLocator &)));
 
   frameLayout->addWidget(label, 0, 0, 1, 1);

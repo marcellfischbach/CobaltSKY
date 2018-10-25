@@ -1,8 +1,8 @@
 #include <textureeditor/textureeditorwidget.hh>
 #include <textureeditor/textureeditor.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/itexture2d.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <editor/editor.hh>
 #include <editor/project/project.hh>
 #include <QFile>
@@ -23,20 +23,20 @@ TextureEditorWidget::~TextureEditorWidget()
 
 }
 
-void TextureEditorWidget::SetTexture(iTexture2D *texture)
+void TextureEditorWidget::SetTexture(csTexture2DWrapper *texture)
 {
   CS_SET(m_texture, texture);
 
   m_gui.openGLWidget->SetTexture(texture);
-  m_gui.spLOD->setMaximum(texture->GetNumberOfLODs() - 1);
+  m_gui.spLOD->setMaximum(texture->Get()->GetNumberOfLODs() - 1);
 }
 
 void TextureEditorWidget::SamplerChanged(const csResourceLocator &locator)
 {
-  iSampler *sampler = csResourceManager::Get()->Aquire<iSampler>(locator);
+  csSamplerWrapper *sampler = csResourceManager::Get()->Aquire<csSamplerWrapper>(locator);
   if (sampler)
   {
-    m_texture->SetSampler(sampler);
+    m_texture->Get()->SetSampler(sampler);
     m_gui.openGLWidget->repaint();
   }
 }
@@ -71,10 +71,10 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
 void TextureEditorWidget::on_pbSave_clicked()
 {
 
-  iTexture2D *managerTexture = csResourceManager::Get()->Get<iTexture2D>(m_editor->GetAsset()->GetResourceLocator());
+  csTexture2DWrapper *managerTexture = csResourceManager::Get()->Get<csTexture2DWrapper>(m_editor->GetAsset()->GetResourceLocator());
   if (managerTexture)
   {
-    managerTexture->SetSampler(m_texture->GetSampler());
+    managerTexture->Get()->SetSampler(m_texture->Get()->GetSampler());
   }
 
 
@@ -125,7 +125,7 @@ void TextureEditorWidget::on_pbSave_clicked()
 
   samplerEntry->RemoveAttributes();
 
-  csResourceLocator samplerLocator = csResourceManager::Get()->GetLocator(m_texture->GetSampler());
+  csResourceLocator samplerLocator = csResourceManager::Get()->GetLocator(m_texture->Get()->GetSampler()->Get());
   samplerEntry->AddAttribute(samplerLocator.GetResourceFile());
 
   outputFile.Output(std::string(absFileName.toLatin1()));

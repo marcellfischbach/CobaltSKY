@@ -5,8 +5,7 @@
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/itexture.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <set>
 #include <map>
 #include <string.h>
@@ -44,7 +43,7 @@ void csPostProcess::SetInputBindingName(int idx, const std::string &inputName)
 }
 
 
-int csPostProcess::BindInput(iTexture *texture, const std::string &inputName)
+int csPostProcess::BindInput(csTextureWrapper *texture, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -129,16 +128,17 @@ bool csPostProcess::BindInputs(iGraphics *graphics)
       continue;
     }
 
+    iTexture *inputTexture = input.m_texture->Get();
     if (input.m_attrInput)
     {
-      csTextureUnit tu = graphics->BindTexture(input.m_texture);
+      csTextureUnit tu = graphics->BindTexture(inputTexture);
       input.m_attrInput->Set(tu);
     }
-    switch (input.m_texture->GetType())
+    switch (input.m_texture->Get()->GetType())
     {
     case eTT_Texture2D:
       {
-        iTexture2D *txt2D = csQueryClass<iTexture2D>(input.m_texture);
+        iTexture2D *txt2D = csQueryClass<iTexture2D>(inputTexture);
         if (input.m_attrInputSize)
         {
           input.m_attrInputSize->Set((float)txt2D->GetWidth(), (float)txt2D->GetHeight());

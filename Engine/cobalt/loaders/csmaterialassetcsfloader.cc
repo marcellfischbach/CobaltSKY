@@ -2,10 +2,11 @@
 #include <cobalt/loaders/csmaterialassetcsfloader.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/csmaterialdefwrapper.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/csengine.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <map>
 
 
@@ -123,7 +124,7 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
       }
       else if (tagName == std::string("locator") && HasLocator(valueEntry))
       {
-        iTexture *texture = csResourceManager::Get()->GetOrLoad<iTexture>(GetLocator(valueEntry));
+        csTextureWrapper *texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(GetLocator(valueEntry));
         material->Set(index, texture);
       }
     }

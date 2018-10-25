@@ -37,11 +37,11 @@ csPointLightRendererGL4::csPointLightRendererGL4(iGraphics *renderer)
   m_mapBias = 0.99f;
 
   csUInt16 bufferSize = 1024;
-  iTexture2DArray *colorBuffer = renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false);
-  m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6, false);
+  csTexture2DArrayWrapper *colorBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false));
+  m_depthBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6, false));
 
-  colorBuffer->SetSampler(csGBufferGL4::GetColorSampler(renderer));
-  m_depthBuffer->SetSampler(m_depthSampler);
+  colorBuffer->Get()->SetSampler(csGBufferGL4::GetColorSampler(renderer));
+  m_depthBuffer->Get()->SetSampler(m_depthSampler);
 
   m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
@@ -137,7 +137,7 @@ void csPointLightRendererGL4::BindPointLightCubeShadow(csPointLight *pointLight)
   }
   if (m_attrShadowMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer);
+    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
     m_attrShadowMap->Set(tu);
   }
   if (m_attrMapBias)

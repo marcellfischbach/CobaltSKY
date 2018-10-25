@@ -9,7 +9,7 @@
 class csPostProcess;
 struct iGraphics;
 struct iRenderTarget;
-struct iTexture;
+struct csTextureWrapper;
 
 CS_CLASS()
 class CSE_API csPostProcessor : public CS_SUPER(csObject)
@@ -21,9 +21,9 @@ public:
   csPostProcessor();
   virtual ~csPostProcessor();
 
-  void SetInput(csPostProcessOutput originOutput, iTexture *texture);
-  const iTexture *GetInput(csPostProcessOutput originOutput) const;
-  iTexture *GetInput(csPostProcessOutput originOutput);
+  void SetInput(csPostProcessOutput originOutput, csTextureWrapper *texture);
+  const csTextureWrapper *GetInput(csPostProcessOutput originOutput) const;
+  csTextureWrapper *GetInput(csPostProcessOutput originOutput);
 
   void SetFinalProcess(csPostProcess *postProcess);
   bool BuildPostProcessing(iGraphics *graphics);
@@ -37,6 +37,6 @@ private:
   void BuildSet(csPostProcess *process, std::set<csPostProcess*> &processes);
   csPostProcess *m_finalProcess;
   std::vector<csPostProcess*> m_processes;
-  iTexture *m_originInputs[ePPO_COUNT];
+  csTextureWrapper *m_originInputs[ePPO_COUNT];
 };
 

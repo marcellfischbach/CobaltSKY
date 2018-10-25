@@ -10,8 +10,8 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/isampler.hh>
-#include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/cscamera.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <editor/editor.hh>
 #include <editor/glcontext.hh>
@@ -174,7 +174,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
   frameProcessor->SetClearColor(csColor4f(0.0f, 0.0f, 0.0f, 0.0f));
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
 
-  iTexture2D *colorTexture = m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false);
+  csTexture2DWrapper *colorTexture = new csTexture2DWrapper(m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false));
   iRenderTarget *renderTarget = m_graphics->CreateRenderTarget();
   renderTarget->Initialize(width, height);
   renderTarget->SetDepthBuffer(width, height);

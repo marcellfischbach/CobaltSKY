@@ -4,13 +4,13 @@
 #include <graphicsgl4/deferred/gl4gbuffer.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/irendertarget.hh>
-#include <cobalt/graphics/isampler.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/itexture2darray.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/entity/csentity.hh>
@@ -67,18 +67,19 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
   printf("PSSM.MapSize : %d\n", m_shadowBufferSize);
 
 	csPixelFormat shadowBufferFormat = ePF_R16G16F;
-	m_colorBuffer = renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false);
-	m_depthBuffer = renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false);
+  m_colorBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false));
+  m_depthBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false));
 
-	iSampler *colorSampler = renderer->CreateSampler();
-	colorSampler->SetBorderColor(csVector4f(1, 1, 1, 1));
-	colorSampler->SetFilter(eFM_MinMagLinear);
-	colorSampler->SetAddressU(eTAM_ClampBorder);
-	colorSampler->SetAddressV(eTAM_ClampBorder);
-	colorSampler->SetAddressW(eTAM_ClampBorder);
+	iSampler *colorSmplr = renderer->CreateSampler();
+  colorSmplr->SetBorderColor(csVector4f(1, 1, 1, 1));
+  colorSmplr->SetFilter(eFM_MinMagLinear);
+  colorSmplr->SetAddressU(eTAM_ClampBorder);
+  colorSmplr->SetAddressV(eTAM_ClampBorder);
+  colorSmplr->SetAddressW(eTAM_ClampBorder);
+  csSamplerWrapper* colorSampler = new csSamplerWrapper(colorSmplr);
 
-	m_colorBuffer->SetSampler(colorSampler);
-	m_depthBuffer->SetSampler(m_depthSampler);
+	m_colorBuffer->Get()->SetSampler(colorSampler);
+	m_depthBuffer->Get()->SetSampler(m_depthSampler);
 
 
 	m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
@@ -96,8 +97,8 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
   unsigned shadowMapWidth = screenResolutionWidth / 2.0f;
   unsigned shadowMapHeight = screenResolutionHeight /2.0f;
 
-  m_shadowMapRenderer.shadowMap = m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false);
-  m_shadowMapRenderer.shadowMap->SetSampler(colorSampler);
+  m_shadowMapRenderer.shadowMap = new csTexture2DWrapper(m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
+  m_shadowMapRenderer.shadowMap->Get()->SetSampler(colorSampler);
 
   m_shadowMapRenderer.shadowRenderTarget = m_renderer->CreateRenderTarget();
   m_shadowMapRenderer.shadowRenderTarget->Initialize(shadowMapWidth, shadowMapHeight);
@@ -108,8 +109,8 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
     printf("Unable to finalize shadow map render target.\n");
   }
 
-  m_shadowMapRenderer.shadowMapPingPong = m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false);
-  m_shadowMapRenderer.shadowMapPingPong->SetSampler(colorSampler);
+  m_shadowMapRenderer.shadowMapPingPong = new csTexture2DWrapper(m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
+  m_shadowMapRenderer.shadowMapPingPong->Get()->SetSampler(colorSampler);
 
   m_shadowMapRenderer.shadowRenderTargetPingPong = m_renderer->CreateRenderTarget();
   m_shadowMapRenderer.shadowRenderTargetPingPong->Initialize(shadowMapWidth, shadowMapHeight);
@@ -200,7 +201,7 @@ void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(csDirectionalLight 
 	}
 	if (m_attrShadowMap)
 	{
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap);
+    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
     m_attrShadowMap->Set(tu);
 	}
 }
@@ -369,18 +370,18 @@ void csDirectionalLightRendererGL4::RenderShadowMap(const csDirectionalLight *li
   }
   if (m_shadowMapRenderer.attrDepth)
   {
-    csTextureUnit tu = m_renderer->BindTexture(gBuffer->GetDepth());
+    csTextureUnit tu = m_renderer->BindTexture(gBuffer->GetDepth()->Get());
     m_shadowMapRenderer.attrDepth->Set(tu);
   }
   if (m_shadowMapRenderer.attrShadowMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer);
+    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
     m_shadowMapRenderer.attrShadowMap->Set(tu);
   }
   
   if (m_shadowMapRenderer.attrShadowColorMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_colorBuffer);
+    csTextureUnit tu = m_renderer->BindTexture(m_colorBuffer->Get());
     m_shadowMapRenderer.attrShadowColorMap->Set(tu);
   }
   /*
@@ -402,7 +403,7 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
 
   if (m_shadowMapBlurHori.attrColor0)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap);
+    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
     m_shadowMapBlurHori.attrColor0->Set(tu);
   }
   m_renderer->RenderFullScreenFrame();
@@ -421,7 +422,7 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
 
   if (m_shadowMapBlurVert.attrColor0)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMapPingPong);
+    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMapPingPong->Get());
     m_shadowMapBlurVert.attrColor0->Set(tu);
   }
   m_renderer->RenderFullScreenFrame();

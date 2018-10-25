@@ -7,7 +7,7 @@
 
 struct iGraphics;
 struct iRenderTarget;
-struct iSampler;
+class csSamplerWrapper;
 struct iShaderAttribute;
 class csCamera;
 class csClipper;
@@ -66,7 +66,7 @@ protected:
   iRenderTarget *m_shadowBuffer;
   csVector2f m_shadowIntensity;
 
-  iSampler *m_depthSampler;
+  csSamplerWrapper *m_depthSampler;
 };
 
 

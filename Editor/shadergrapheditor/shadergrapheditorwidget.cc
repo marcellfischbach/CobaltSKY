@@ -21,7 +21,7 @@
 #include <cobalt/csengine.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/graphics/shadergraph/cssgdefaultconsolelogger.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
@@ -288,7 +288,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, No
         continue;
       }
 
-      if (cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+      if (cls->IsInstanceOf(csTexture2DWrapper::GetStaticClass()))
       {
         validEntryFound = true;
         break;
@@ -376,7 +376,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
         continue;
       }
 
-      if (!cls->IsInstanceOf(iTexture2D::GetStaticClass()))
+      if (!cls->IsInstanceOf(csTexture2DWrapper::GetStaticClass()))
       {
         continue;
       }

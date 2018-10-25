@@ -2,7 +2,7 @@
 
 #include <cobalt/core/csclass.hh>
 #include <cobalt/csexport.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/graphics/irendertarget.refl.hh>
 
 
@@ -14,13 +14,13 @@ struct CSE_API iRenderTarget : public iObject
   virtual csUInt16 GetWidth() const = 0;
   virtual csUInt16 GetHeight() const = 0;
 
-  virtual void AddColorTexture(iTexture *color) = 0;
-  virtual void SetDepthTexture(iTexture *depth) = 0;
+  virtual void AddColorTexture(csTextureWrapper *color) = 0;
+  virtual void SetDepthTexture(csTextureWrapper *depth) = 0;
   virtual void SetDepthBuffer(csUInt16 width, csUInt16 height) = 0;
   virtual void Initialize(csUInt16 width, csUInt16 height) = 0;
   virtual bool Finilize() = 0;
 
-  virtual iTexture *GetColorBuffer(csUInt8 buffer) const = 0;
-  virtual iTexture *GetDepthBuffer() const = 0;
+  virtual csTextureWrapper *GetColorBuffer(csUInt8 buffer) const = 0;
+  virtual csTextureWrapper *GetDepthBuffer() const = 0;
 
 };

@@ -5,9 +5,9 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
-#include <cobalt/graphics/csmaterial.hh>
-#include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/csmaterialwrapper.hh>
+#include <cobalt/graphics/csmaterialdefwrapper.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 
 #include <csfile/csffile.hh>
 

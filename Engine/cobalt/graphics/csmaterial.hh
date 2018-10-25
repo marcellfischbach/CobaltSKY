@@ -10,7 +10,7 @@
 
 class csMaterialDefWrapper;
 struct iGraphics;
-struct iTexture;
+class csTextureWrapper;
 
 CS_CLASS();
 class CSE_API csMaterial : public CS_SUPER(csObject)
@@ -42,14 +42,14 @@ public:
   void Set(csSize idx, const csVector3f &v);
   void Set(csSize idx, const csVector4f &v);
   void Set(csSize idx, const csColor4f &c);
-  void Set(csSize idx, iTexture *texture);
+  void Set(csSize idx, csTextureWrapper *texture);
 
   float GetFloat(csSize idx);
   csVector2f GetFloat2(csSize idx);
   csVector3f GetFloat3(csSize idx);
   csVector4f GetFloat4(csSize idx);
   csColor4f GetColor4(csSize idx);
-  iTexture *GetTexture(csSize idx);
+  csTextureWrapper *GetTexture(csSize idx);
 
 
   void SetFillMode(csFillMode mode);
@@ -67,7 +67,7 @@ private:
     {
       float m_float[16];
       int m_int[16];
-      iTexture *m_texture;
+      csTextureWrapper *m_texture;
       // Add Texture later.
     };
     ShaderParameter();
@@ -80,17 +80,3 @@ private:
 
 
 };
-
-
-
-CS_CLASS()
-class CSE_API csMaterialWrapper : public csTypedResourceWrapper<csMaterial>
-{
-  CS_CLASS_GEN;
-public:
-  csMaterialWrapper(csMaterial *material = 0) : csTypedResourceWrapper<csMaterial>(material)
-  {
-  }
-
-};
-

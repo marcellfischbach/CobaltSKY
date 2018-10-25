@@ -1,10 +1,11 @@
 
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/csmaterialdefwrapper.hh>
 #include <cobalt/graphics/csnosuchparameterexception.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 
 
 csMaterial::csMaterial()
@@ -205,7 +206,7 @@ void csMaterial::Set(csSize idx, const csColor4f &c)
   param.m_float[3] = c.a;
 }
 
-void csMaterial::Set(csSize idx, iTexture *texture)
+void csMaterial::Set(csSize idx, csTextureWrapper *texture)
 {
   if (idx >= m_parameters.size())
   {
@@ -282,7 +283,7 @@ csColor4f csMaterial::GetColor4(csSize idx)
                    param.m_float[3]);
 }
 
-iTexture *csMaterial::GetTexture(csSize idx)
+csTextureWrapper *csMaterial::GetTexture(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -363,8 +364,9 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
           attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
           break;
         case eSPT_Texture:
+          if (param.m_texture)
           {
-            csTextureUnit unit = renderer->BindTexture(param.m_texture);
+            csTextureUnit unit = renderer->BindTexture(param.m_texture->Get());
             if (unit != eTU_Invalid)
             {
               attr->Set((csInt32)unit);

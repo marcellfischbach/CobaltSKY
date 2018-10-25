@@ -5,7 +5,7 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <string.h>
 
 csMaterialDef::csMaterialDef()
@@ -119,8 +119,9 @@ void csMaterialDef::BindParameter(iGraphics *renderer, csRenderPass pass, csSize
       attribute->Set(csMatrix4f(param.m_defaultFloat));
       break;
     case eSPT_Texture:
+      if (param.m_defaultTexture)
       {
-      csTextureUnit unit = renderer->BindTexture(param.m_defaultTexture);
+        csTextureUnit unit = renderer->BindTexture(param.m_defaultTexture->Get());
         if (unit != eTU_Invalid)
         {
           attribute->Set((csInt32)unit);
@@ -320,7 +321,7 @@ void csMaterialDef::SetDefault(csSize idx, const csMatrix4f &def)
   memcpy(m_params[idx].m_defaultFloat, &def, sizeof(float) * 16);
 }
 
-void csMaterialDef::SetDefault(csSize idx, iTexture *texture)
+void csMaterialDef::SetDefault(csSize idx, csTextureWrapper *texture)
 {
 #ifdef _DEBUG
   if (idx >= m_params.size())
@@ -421,7 +422,7 @@ csMatrix4f csMaterialDef::GetDefaultMatrix4(csSize idx) const
   return csMatrix4f(m_params[idx].m_defaultFloat);
 }
 
-iTexture *csMaterialDef::GetDefaultTexture(csSize idx) const
+csTextureWrapper *csMaterialDef::GetDefaultTexture(csSize idx) const
 {
 #ifdef _DEBUG
   if (idx >= m_params.size())

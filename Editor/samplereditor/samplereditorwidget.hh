@@ -8,7 +8,7 @@
 #include <samplereditor/ui_samplereditorwidget.h>
 
 class SamplerEditor;
-struct iSampler;
+class csSamplerWrapper;
 class SamplerEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -16,7 +16,7 @@ public:
   SamplerEditorWidget(SamplerEditor *parent);
   virtual ~SamplerEditorWidget();
 
-  void SetSampler(iSampler *sampler);
+  void SetSampler(csSamplerWrapper *sampler);
   void Store();
   void Reset();
   void Apply();
@@ -38,7 +38,7 @@ public:
   SamplerEditor *m_editor;
   Ui::SamplerEditorWidget m_gui;
 
-  iSampler *m_sampler;
+  csSamplerWrapper *m_sampler;
   csFilterMode m_filter;
   csUInt8 m_anisotropy;
   csInt16 m_minLOD;

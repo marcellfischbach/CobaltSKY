@@ -45,10 +45,9 @@
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 #include <cobalt/graphics/irendertarget.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/graphics/ishader.hh>
-#include <cobalt/graphics/itexture.hh>
-#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 #include <cobalt/graphics/csgenericshaderpostprocess.hh>
 #include <cobalt/graphics/cslight.hh>
 #include <cobalt/graphics/csmaterial.hh>
@@ -230,7 +229,7 @@ int initialize()
   iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, g_screenResolutionWidth, g_screenResolutionHeight, false);
   rt = graphicsGL4->CreateRenderTarget();
   rt->Initialize(g_screenResolutionWidth, g_screenResolutionHeight);
-  rt->AddColorTexture(color0);
+  rt->AddColorTexture(new csTexture2DWrapper(color0));
   rt->SetDepthBuffer(g_screenResolutionWidth, g_screenResolutionHeight);
   if (!rt->Finilize())
   {
@@ -239,7 +238,7 @@ int initialize()
 
   iSampler *sampler = graphicsGL4->CreateSampler();
   sampler->SetFilter(eFM_MinMagNearest);
-  color0->SetSampler(sampler);
+  color0->SetSampler(new csSamplerWrapper(sampler));
 
   scene = create_scene(graphicsGL4);
 
@@ -1080,8 +1079,8 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
   target->Initialize(width, height);
 
   iTexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
-  colorTexture->SetSampler(colorSampler);
-  target->AddColorTexture(colorTexture);
+  colorTexture->SetSampler(new csSamplerWrapper(colorSampler));
+  target->AddColorTexture(new csTexture2DWrapper(colorTexture));
 
 
   if (createDepthTexture)
@@ -1098,8 +1097,8 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
       depthSampler->SetAddressW(eTAM_Clamp);
     }
     iTexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
-    depthTexture->SetSampler(depthSampler);
-    target->SetDepthTexture(depthTexture);
+    depthTexture->SetSampler(new csSamplerWrapper(depthSampler));
+    target->SetDepthTexture(new csTexture2DWrapper(depthTexture));
 
   }
   else

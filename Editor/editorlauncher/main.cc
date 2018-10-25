@@ -23,6 +23,8 @@
 #include <textureeditor/textureeditormodule.hh>
 #include <QIcon>
 
+#include <cobalt/graphics/cstexturewrapper.hh>
+
 // #define GUI_TEST
 
 
@@ -48,7 +50,6 @@ int main (int argc, char **argv)
     qssFile.close();
     //app.setStyleSheet(qss);
   }
-
 
   if (true)
   {

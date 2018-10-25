@@ -6,7 +6,7 @@
 #include <cobalt/graphics/csshaderattributeid.hh>
 
 class TextureEditor;
-struct iTexture2D;
+class csTexture2DWrapper;
 class csResourceLocator;
 class TextureEditorWidget : public QWidget
 {
@@ -15,7 +15,7 @@ public:
   TextureEditorWidget(TextureEditor *parent);
   virtual ~TextureEditorWidget();
 
-  void SetTexture(iTexture2D *texture);
+  void SetTexture(csTexture2DWrapper *texture);
 public slots:
 void SamplerChanged(const csResourceLocator &locator);
 private slots:
@@ -29,5 +29,5 @@ void on_pbSave_clicked();
 private:
   TextureEditor *m_editor;
   Ui::TextureEditorWidget m_gui;
-  iTexture2D *m_texture;
+  csTexture2DWrapper *m_texture;
 };

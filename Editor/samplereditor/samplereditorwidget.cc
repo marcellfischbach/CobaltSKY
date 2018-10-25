@@ -2,7 +2,7 @@
 
 #include <samplereditor/samplereditorwidget.hh>
 #include <samplereditor/samplereditor.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 
 #include <QColor>
 
@@ -75,7 +75,7 @@ SamplerEditorWidget::~SamplerEditorWidget()
 
 }
 
-void SamplerEditorWidget::SetSampler(iSampler *sampler)
+void SamplerEditorWidget::SetSampler(csSamplerWrapper *sampler)
 {
   if (!sampler)
   {
@@ -90,16 +90,17 @@ void SamplerEditorWidget::SetSampler(iSampler *sampler)
 
 void SamplerEditorWidget::Store()
 {
-  m_filter = m_sampler->GetFilter();
-  m_anisotropy = m_sampler->GetAnisotropy();
-  m_minLOD = m_sampler->GetMinLOD();
-  m_maxLOD = m_sampler->GetMaxLOD();
-  m_addressU = m_sampler->GetAddressU();
-  m_addressV = m_sampler->GetAddressV();
-  m_addressW = m_sampler->GetAddressW();
-  m_borderColor = m_sampler->GetBorderColor();
-  m_compareFunc = m_sampler->GetTextureCompareFunc();
-  m_compareMode = m_sampler->GetTextureCompareMode();
+  iSampler* sampler = m_sampler->Get();
+  m_filter = sampler->GetFilter();
+  m_anisotropy = sampler->GetAnisotropy();
+  m_minLOD = sampler->GetMinLOD();
+  m_maxLOD = sampler->GetMaxLOD();
+  m_addressU = sampler->GetAddressU();
+  m_addressV = sampler->GetAddressV();
+  m_addressW = sampler->GetAddressW();
+  m_borderColor = sampler->GetBorderColor();
+  m_compareFunc = sampler->GetTextureCompareFunc();
+  m_compareMode = sampler->GetTextureCompareMode();
 
 }
 void SamplerEditorWidget::Reset()
@@ -120,15 +121,16 @@ void SamplerEditorWidget::Reset()
 
 void SamplerEditorWidget::Apply()
 {
-  m_sampler->SetFilter((csFilterMode)m_gui.cbFilter->currentIndex());
-  m_sampler->SetAnisotropy(m_gui.sbAnisotropy->value());
-  m_sampler->SetMinLOD(m_gui.sbMinLOD->value());
-  m_sampler->SetMaxLOD(m_gui.sbMaxLOD->value());
-  m_sampler->SetAddressU((csTextureAddressMode)m_gui.cbAddressU->currentIndex());
-  m_sampler->SetAddressV((csTextureAddressMode)m_gui.cbAddressV->currentIndex());
-  m_sampler->SetAddressW((csTextureAddressMode)m_gui.cbAddressW->currentIndex());
-  m_sampler->SetTextureCompareFunc((csTextureCompareFunc)m_gui.cbCompareFunc->currentIndex());
-  m_sampler->SetTextureCompareMode((csTextureCompareMode)m_gui.cbCompareMode->currentIndex());
+  iSampler* sampler = m_sampler->Get();
+  sampler->SetFilter((csFilterMode)m_gui.cbFilter->currentIndex());
+  sampler->SetAnisotropy(m_gui.sbAnisotropy->value());
+  sampler->SetMinLOD(m_gui.sbMinLOD->value());
+  sampler->SetMaxLOD(m_gui.sbMaxLOD->value());
+  sampler->SetAddressU((csTextureAddressMode)m_gui.cbAddressU->currentIndex());
+  sampler->SetAddressV((csTextureAddressMode)m_gui.cbAddressV->currentIndex());
+  sampler->SetAddressW((csTextureAddressMode)m_gui.cbAddressW->currentIndex());
+  sampler->SetTextureCompareFunc((csTextureCompareFunc)m_gui.cbCompareFunc->currentIndex());
+  sampler->SetTextureCompareMode((csTextureCompareMode)m_gui.cbCompareMode->currentIndex());
 }
 
 bool SamplerEditorWidget::IsDirty()

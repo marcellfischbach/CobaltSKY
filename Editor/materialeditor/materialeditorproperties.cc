@@ -3,8 +3,8 @@
 #include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/csmaterial.hh>
-#include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/itexture.hh>
+#include <cobalt/graphics/csmaterialdefwrapper.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
 
 #include <QFrame>
 #include <QGridLayout>
@@ -244,9 +244,9 @@ void MaterialEditorProperties::UpdateGUI()
     case eSPT_Texture:
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
-      iTexture *texture = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
+      csTextureWrapper *texture = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
       param.textureWidget->setEnabled(!inherit);
-      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture));
+      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture->Get()));
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       param.textureWidget->AddValidClass(iTexture::GetStaticClass());
       m_frameLayout->addWidget(param.textureWidget, row, 1, 1, 1);
@@ -401,7 +401,7 @@ void MaterialEditorProperties::UpdateMaterialValues()
         break;
       case eSPT_Texture:
       {
-        iTexture *texture = csResourceManager::Get()->Aquire<iTexture>(param.textureWidget->GetResourceLocator());
+        csTextureWrapper *texture = csResourceManager::Get()->Aquire<csTextureWrapper>(param.textureWidget->GetResourceLocator());
         m_material->Set(idx, texture);
       }break;
       }

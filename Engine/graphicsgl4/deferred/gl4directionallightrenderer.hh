@@ -3,8 +3,8 @@
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/deferred/gl4lightrenderer.hh>
 
-struct iTexture2D;
-struct iTexture2DArray;
+class csTexture2DWrapper;
+class csTexture2DArrayWrapper;
 class csDirectionalLight;
 
 class csDirectionalLightRendererGL4 : public csLightRendererGL4
@@ -49,9 +49,9 @@ private:
   LightProgram m_programPSSM;
   iShaderAttribute *m_attrLightDirectionPSSM;
   iShaderAttribute *m_attrShadowMap;
-  iTexture2DArray *m_colorBuffer;
-  iTexture2DArray *m_depthBuffer;
-  iTexture2DArray *m_colorBufferBlur;
+  csTexture2DArrayWrapper *m_colorBuffer;
+  csTexture2DArrayWrapper *m_depthBuffer;
+  csTexture2DArrayWrapper *m_colorBufferBlur;
   void BindDirectionalLightPSSM(csDirectionalLight *directionalLight);
 
   struct {
@@ -61,9 +61,9 @@ private:
 	  iShaderAttribute *attrShadowMatsProjView;
 	  iShaderAttribute *attrShadowColorMap;
 	  iShaderAttribute *attrShadowMap;
-    iTexture2D *shadowMap;
+   csTexture2DWrapper *shadowMap;
     iRenderTarget *shadowRenderTarget;
-    iTexture2D *shadowMapPingPong;
+    csTexture2DWrapper *shadowMapPingPong;
     iRenderTarget *shadowRenderTargetPingPong;
   } m_shadowMapRenderer;
 

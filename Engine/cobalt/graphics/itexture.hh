@@ -9,7 +9,7 @@
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/itexture.refl.hh>
 
-struct iSampler;
+class csSamplerWrapper;
 
 CS_INTERFACE();
 struct CSE_API iTexture : public iObject
@@ -20,9 +20,9 @@ struct CSE_API iTexture : public iObject
 
   virtual csTextureType GetType() const = 0;
 
-  virtual void SetSampler(iSampler *sampler) = 0;
-  virtual iSampler* GetSampler() = 0;
-  virtual const iSampler* GetSampler() const = 0;
+  virtual void SetSampler(csSamplerWrapper *sampler) = 0;
+  virtual csSamplerWrapper* GetSampler() = 0;
+  virtual const csSamplerWrapper* GetSampler() const = 0;
 
   virtual void GenerateMipMaps() = 0;
 

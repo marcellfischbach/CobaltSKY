@@ -6,7 +6,7 @@
 #include <cobalt/loaders/cstextureassetcsfloader.refl.hh>
 
 class csImage;
-struct iSampler;
+struct csSamplerWrapper;
 
 
 
@@ -32,7 +32,7 @@ private:
   iObject *LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
   iObject *LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
   csImage *LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  iSampler *LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  csSamplerWrapper *LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
 };
 
 

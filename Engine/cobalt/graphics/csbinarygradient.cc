@@ -1,11 +1,12 @@
 
-
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/igraphics.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/math/csvector.hh>
+
 #include <cobalt/csengine.hh>
 
-iTexture2DArray *csBinaryGradient::static_textureArray = 0;
+csTexture2DArrayWrapper *csBinaryGradient::static_textureArray = 0;
 
 static float assign_pattern(const char* pattern, void *colors)
 {
@@ -314,7 +315,7 @@ csBinaryGradient::~csBinaryGradient()
 
 }
 
-iTexture2D *csBinaryGradient::GetBinaryGradientLevel1()
+csTexture2DWrapper *csBinaryGradient::GetBinaryGradientLevel1()
 {
   if (!static_textureArray)
   {
@@ -323,11 +324,11 @@ iTexture2D *csBinaryGradient::GetBinaryGradientLevel1()
 }
 
 
-iTexture2DArray *csBinaryGradient::GetBinaryGradient()
+csTexture2DArrayWrapper *csBinaryGradient::GetBinaryGradient()
 {
   if (!static_textureArray)
   {
-    if (static_textureArray = csEng->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
+    if (iTexture2DArray *textureArray = csEng->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
     {
       csPixelFormat format = ePF_RGBA;
       csUInt32 colors[8 * 8 * 18];
@@ -350,7 +351,7 @@ iTexture2DArray *csBinaryGradient::GetBinaryGradient()
       create_pattern14(&colors[i++ * 64]);
       create_pattern15(&colors[i++ * 64]);
       create_pattern16(&colors[i++ * 64]);
-      static_textureArray->CopyData(0, format, colors);
+      textureArray->CopyData(0, format, colors);
 
       iSampler *sampler = csEng->CreateSampler();
       /*
@@ -358,7 +359,10 @@ iTexture2DArray *csBinaryGradient::GetBinaryGradient()
       sampler->SetAddressV(eTAM_Repeat);
       sampler->SetFilter(eFM_MinMagNearest);
       */
-      static_textureArray->SetSampler(sampler);
+      textureArray->SetSampler(new csSamplerWrapper(sampler));
+
+
+      static_textureArray = new csTexture2DArrayWrapper(textureArray);
     }
   }
   return static_textureArray;

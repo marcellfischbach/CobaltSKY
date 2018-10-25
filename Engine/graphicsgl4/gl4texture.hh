@@ -17,9 +17,9 @@ public:
 
   virtual csTextureType GetType() const ;
 
-  virtual void SetSampler(iSampler *sampler);
-  virtual iSampler *GetSampler();
-  virtual const iSampler *GetSampler() const;
+  virtual void SetSampler(csSamplerWrapper *sampler);
+  virtual csSamplerWrapper *GetSampler();
+  virtual const csSamplerWrapper *GetSampler() const;
 
   virtual void GenerateMipMaps();
 
@@ -35,7 +35,7 @@ protected:
 private:
   csTextureType m_type;
 
-  iSampler *m_sampler;
+  csSamplerWrapper *m_sampler;
 
 };
 

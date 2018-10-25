@@ -4,11 +4,8 @@
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/csimage.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/itexture.hh>
-#include <cobalt/graphics/itexture2d.hh>
-#include <cobalt/graphics/itexture2darray.hh>
-#include <cobalt/graphics/itexturecube.hh>
-#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/csengine.hh>
 #include <png.h>
 
@@ -46,9 +43,9 @@ const csClass *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const c
   switch (type)
   {
   case eTT_Texture2D:
-    return iTexture2D::GetStaticClass();
+    return csTexture2DWrapper::GetStaticClass();
   case eTT_Texture2DArray:
-    return iTexture2DArray::GetStaticClass();
+    return csTexture2DArrayWrapper::GetStaticClass();
   }
   return 0;
 }
@@ -71,7 +68,7 @@ iObject  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
 
 iObject *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  iSampler *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
+  csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
   csImage *image = LoadImage(entry->GetEntry("image"), locator, userData);
   if (!image)
   {
@@ -91,12 +88,12 @@ iObject *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csR
   }
   CS_RELEASE(image);
 
-  return texture;
+  return new csTexture2DWrapper(texture);
 }
 
 iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  iSampler *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
+  csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
 
 
   unsigned numImages = 0;
@@ -166,11 +163,11 @@ iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, cons
 
 
 
-  return texture;
+  return new csTexture2DArrayWrapper(texture);
 }
 
 
-iSampler *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   if (!entry)
   {
@@ -179,13 +176,13 @@ iSampler *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csRe
 
 
   csResourceLoadingMode rlm = GetResourceLoadingMode(entry);
-  iSampler *sampler = 0;
+  csSamplerWrapper *sampler = 0;
   switch (rlm)
   {
   case eRLM_Shared:
     if (HasLocator(entry))
     {
-      sampler = csResourceManager::Get()->GetOrLoad<iSampler>(GetLocator(entry));
+      sampler = csResourceManager::Get()->GetOrLoad<csSamplerWrapper>(GetLocator(entry));
       CS_ADDREF(sampler);
     }
     break;
@@ -193,12 +190,12 @@ iSampler *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csRe
   case eRLM_Instance:
     if (HasLocator(entry))
     {
-      sampler = csResourceManager::Get()->Load<iSampler>(GetLocator(entry));
+      sampler = csResourceManager::Get()->Load<csSamplerWrapper>(GetLocator(entry));
     }
     break;
 
   case eRLM_Inline:
-    sampler = csResourceManager::Get()->Load<iSampler>(entry, locator, userData);
+    sampler = csResourceManager::Get()->Load<csSamplerWrapper>(entry, locator, userData);
     break;
   }
 

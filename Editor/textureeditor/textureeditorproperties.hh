@@ -3,7 +3,7 @@
 #include <textureeditor/textureeditorexport.hh>
 #include <QWidget>
 
-struct iTexture;
+class csTextureWrapper;
 class AssetResourceWidget;
 class csResourceLocator;
 class TextureEditorProperties : public QWidget
@@ -13,12 +13,12 @@ public:
   TextureEditorProperties();
   virtual ~TextureEditorProperties();
 
-  void SetTexture(iTexture *texture);
+  void SetTexture(csTextureWrapper *texture);
 
 signals:
   void SamplerChanged(const csResourceLocator &locator);
 private:
   void InitGUI();
   AssetResourceWidget *m_samplerWidget = 0;
-  iTexture *m_texture = 0;
+  csTextureWrapper *m_texture = 0;
 };

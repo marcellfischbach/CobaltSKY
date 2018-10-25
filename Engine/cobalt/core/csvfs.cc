@@ -410,6 +410,7 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
     std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
     if (file->Open(absFileName.c_str(), mode, textMode))
     {
+      printf("FoundFile: %s\n", absFileName.c_str());
       return file;
     }
     printf("AbsFile: %s\n", absFileName.c_str());

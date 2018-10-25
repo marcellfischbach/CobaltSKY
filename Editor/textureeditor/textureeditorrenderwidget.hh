@@ -5,7 +5,7 @@
 #include <cobalt/graphics/csshaderattributeid.hh>
 
 
-struct iTexture2D;
+class csTexture2DWrapper;
 struct iShader;
 struct iVertexDeclaration;
 struct iVertexBuffer;
@@ -16,7 +16,7 @@ public:
   TextureEditorRenderWidget(QWidget *parent);
   ~TextureEditorRenderWidget();
 
-  void SetTexture(iTexture2D *texture);
+  void SetTexture(csTexture2DWrapper *texture);
   void SetLOD(int lod);
   void SetRed(bool red);
   void SetGreen(bool green);
@@ -28,7 +28,7 @@ protected:
   void paintGL();
 
 private:
-  iTexture2D *m_texture;
+  csTexture2DWrapper *m_texture;
 
 
   iShader *m_shader;

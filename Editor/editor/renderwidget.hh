@@ -6,7 +6,7 @@
 #include <cobalt/cstypes.hh>
 
 struct iRenderTarget;
-struct iTexture2D;
+class csTexture2DWrapper;
 class EDITOR_API RenderWidget : public QWidget
 {
   Q_OBJECT
@@ -34,11 +34,11 @@ public:
   }
 
 
-  iTexture2D *GetColorTexture()
+  csTexture2DWrapper *GetColorTexture()
   {
     return m_colorTexture;
   }
-  const iTexture2D *GetColorTexture() const
+  const csTexture2DWrapper *GetColorTexture() const
   {
     return m_colorTexture;
   }
@@ -58,7 +58,7 @@ private:
   QString m_name;
   //GLuint m_vao;
   iRenderTarget *m_renderTarget;
-  iTexture2D *m_colorTexture;
+  csTexture2DWrapper *m_colorTexture;
 
   csUInt8 *m_buffer;
   QImage *m_bufferImage;

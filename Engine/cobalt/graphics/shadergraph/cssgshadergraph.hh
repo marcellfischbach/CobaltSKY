@@ -2,6 +2,8 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/csmaterialdefwrapper.hh>
+
 #include <cobalt/graphics/shadergraph/cssgshadergraph.refl.hh>
 
 class csSGNode;
