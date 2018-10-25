@@ -14,6 +14,11 @@ MainWindow::MainWindow()
   : QMainWindow()
 {
   m_gui.setupUi(this);
+  m_gui.splitter->setCollapsible(0, true);
+  m_gui.splitter->setCollapsible(1, false);
+  m_gui.splitter->setStretchFactor(0, 0);
+  m_gui.splitter->setStretchFactor(1, 1);
+  m_gui.sidePanel->setVisible(false);
   setWindowTitle(QString(Editor::Get()->GetApplicationTitle().c_str()));
   /*
   QFile qssFile("D://Programming//CobaltSKY//Tools//Editor//cobalt.qss");
@@ -82,6 +87,7 @@ MainWindowMenuPanel *MainWindow::GetMenuPanel()
 {
   return m_gui.menuPanel;
 }
+
 
 void MainWindow::ShowSidePanel(QWidget *widget)
 {

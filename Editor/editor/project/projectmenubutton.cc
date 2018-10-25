@@ -3,6 +3,7 @@
 #include <editor/project/projectmenubutton.hh>
 #include <editor/editor.hh>
 #include <editor/mainwindow.hh>
+#include <QPushButton>
 
 ProjectMenuButton::ProjectMenuButton()
   : MainWindowMenuButton(tr("Project"), ":/icons/resources/UnknownAsset64.png")
@@ -24,5 +25,5 @@ ProjectMenuButton *ProjectMenuButton::Get()
 void ProjectMenuButton::ActionPerformed()
 {
   MainWindowMenuButton::ActionPerformed();
-  Editor::Get()->GetMainWindow()->ShowSidePanel(new QWidget());
+  Editor::Get()->GetMainWindow()->ShowSidePanel(new QPushButton("Hello, World1"));
 }

@@ -79,8 +79,8 @@ bool Editor::Initialize(int argc, char **argv)
 
   m_mainWindow = new MainWindow();
   m_mainWindow->GetMenuPanel()->AddButton(AssetManagerMenuButton::Get());
-  m_mainWindow->GetMenuPanel()->AddButton(ProjectMenuButton::Get());
-  //AssetManagerMenuButton::Get()->ActionPerformed();
+  //m_mainWindow->GetMenuPanel()->AddButton(ProjectMenuButton::Get());
+  AssetManagerMenuButton::Get()->ActionPerformed();
 
   //
   //
