@@ -7,3 +7,8 @@ csMaterialWrapper::csMaterialWrapper(csMaterial *material)
   , m_material(material)
 {
 }
+
+csMaterialWrapper::~csMaterialWrapper()
+{
+
+}

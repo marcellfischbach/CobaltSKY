@@ -43,8 +43,13 @@ namespace asset::model
     return new VFSEntry(this, entry);
   }
 
+  bool Model::IsMasterEntry(Entry *entry) const
+  {
+    return entry && IsMasterLocator(entry->GetResourceLocator());
+  }
 
-  bool Model::IsMasterLocator(const csResourceLocator &locator)
+
+  bool Model::IsMasterLocator(const csResourceLocator &locator) const
   {
     auto it = m_entries.find(locator.AsAnonymous());
     if (it == m_entries.end())
@@ -69,6 +74,48 @@ namespace asset::model
       }
     }
     return prio == highestPrio;
+  }
+
+
+  Entry *Model::GetMasterEntry(Entry *entry)
+  {
+    return const_cast<Entry*>(
+      static_cast<const Model*>(this)->GetMasterEntry(entry)
+      );
+  }
+
+  const Entry *Model::GetMasterEntry(Entry *entry) const
+  {
+    if (!entry)
+    {
+      return 0;
+    }
+
+    return GetMasterEntry(entry->GetResourceLocator());
+  }
+
+  Entry *Model::GetMasterEntry(const csResourceLocator &locator)
+  {
+    return const_cast<Entry*>(
+      static_cast<const Model*>(this)->GetMasterEntry(locator)
+      );
+  }
+
+
+  const Entry *Model::GetMasterEntry(const csResourceLocator &locator) const
+  {
+    auto entries = m_entries.find(locator);
+    int prio;
+    Entry *entry = 0;
+    for (auto entr : entries->second)
+    {
+      if (!entry || prio < entr->GetVFSEntryPriority())
+      {
+        prio = entr->GetVFSEntryPriority();
+        entry = entr;
+      }
+    }
+    return entry;
   }
 
   const Entry *Model::GetEntry(const csResourceLocator &entry) const

@@ -6,7 +6,7 @@
 #include <cobalt/loaders/cstextureassetcsfloader.refl.hh>
 
 class csImage;
-struct csSamplerWrapper;
+class csSamplerWrapper;
 
 
 

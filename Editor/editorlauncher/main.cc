@@ -53,8 +53,15 @@ int main (int argc, char **argv)
 
   if (true)
   {
+    printf("Styles:\n");
+    QStringList styles = QStyleFactory::keys();
+    for (QString style : styles)
+    {
+      printf("  %s\n", style.toLatin1().data());
+    }
+
     qApp->setStyle(QStyleFactory::create("Fusion"));
-    if (true)
+    if (false)
     {
       QPalette darkPalette;
       darkPalette.setColor(QPalette::Window, QColor(53, 64, 53));

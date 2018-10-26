@@ -9,7 +9,7 @@
 class csPostProcess;
 struct iGraphics;
 struct iRenderTarget;
-struct csTextureWrapper;
+class csTextureWrapper;
 
 CS_CLASS()
 class CSE_API csPostProcessor : public CS_SUPER(csObject)

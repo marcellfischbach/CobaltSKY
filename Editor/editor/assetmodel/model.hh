@@ -37,7 +37,14 @@ namespace asset::model
 		Folder* CreateFolder(const std::string &folderName);
 		VFSEntry* CreateVFSEntry(const csVFS::Entry &entry);
 
-    bool IsMasterLocator(const csResourceLocator &locator);
+    bool IsMasterEntry(Entry* entry) const;
+    bool IsMasterLocator(const csResourceLocator &locator) const;
+
+    const Entry *GetMasterEntry(Entry* entry) const;
+    const Entry *GetMasterEntry(const csResourceLocator &locator) const;
+
+    Entry *GetMasterEntry(Entry* entry);
+    Entry *GetMasterEntry(const csResourceLocator &locator);
 
 		Root *GetRoot() { return m_root; }
 		Entry *GetEntry(const csResourceLocator &locator);

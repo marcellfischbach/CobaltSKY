@@ -7,3 +7,10 @@ csSamplerWrapper::csSamplerWrapper(iSampler *sampler)
   , m_sampler(sampler)
 {
 }
+
+csSamplerWrapper::~csSamplerWrapper()
+{
+
+}
+
+

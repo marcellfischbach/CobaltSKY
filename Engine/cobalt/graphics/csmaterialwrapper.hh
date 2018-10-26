@@ -15,6 +15,13 @@ class CSE_API csMaterialWrapper : public CS_SUPER(csResourceWrapper)
   CS_CLASS_GEN;
 public:
   csMaterialWrapper(csMaterial *material = 0);
+  virtual ~csMaterialWrapper();
+
+  virtual void Set(iObject *material) override
+  {
+    csResourceWrapper::Set(material);
+    m_material = csQueryClass<csMaterial>(material);
+  }
 
   CS_FORCEINLINE csMaterial *Get()
   {

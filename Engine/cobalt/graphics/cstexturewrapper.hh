@@ -19,6 +19,13 @@ class CSE_API csTextureWrapper : public CS_SUPER(csResourceWrapper)
   CS_CLASS_GEN;
 public:
   csTextureWrapper(iTexture *texture = 0);
+  virtual ~csTextureWrapper();
+
+  virtual void Set(iObject *texture) override
+  {
+    csResourceWrapper::Set(texture);
+    m_texture = csQueryClass<iTexture>(texture);
+  }
 
   CS_FORCEINLINE iTexture *Get()
   {
@@ -40,6 +47,13 @@ class CSE_API csTexture2DWrapper : public CS_SUPER(csTextureWrapper)
   CS_CLASS_GEN;
 public:
   csTexture2DWrapper(iTexture2D *texture = 0);
+  virtual ~csTexture2DWrapper();
+
+  virtual void Set(iObject *texture) override
+  {
+    csTextureWrapper::Set(texture);
+    m_texture2D = csQueryClass<iTexture2D>(texture);
+  }
 
   CS_FORCEINLINE iTexture2D* Get()
   {
@@ -63,6 +77,14 @@ class CSE_API csTexture2DArrayWrapper : public CS_SUPER(csTextureWrapper)
   CS_CLASS_GEN;
 public:
   csTexture2DArrayWrapper(iTexture2DArray *texture = 0);
+  virtual ~csTexture2DArrayWrapper();
+
+  virtual void Set(iObject *texture) override
+  {
+    csTextureWrapper::Set(texture);
+    m_texture2DArray = csQueryClass<iTexture2DArray>(texture);
+  }
+
 
   CS_FORCEINLINE iTexture2DArray* Get()
   {
@@ -84,6 +106,14 @@ class CSE_API csTextureCubeWrapper : public CS_SUPER(csTextureWrapper)
   CS_CLASS_GEN;
 public:
   csTextureCubeWrapper(iTextureCube *texture = 0);
+  virtual ~csTextureCubeWrapper();
+
+  virtual void Set(iObject *texture) override
+  {
+    csTextureWrapper::Set(texture);
+    m_textureCube = csQueryClass<iTextureCube>(texture);
+  }
+
 
   CS_FORCEINLINE iTextureCube* Get()
   {

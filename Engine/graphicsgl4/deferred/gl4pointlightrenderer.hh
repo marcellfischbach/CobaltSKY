@@ -4,7 +4,7 @@
 #include <graphicsgl4/deferred/gl4lightrenderer.hh>
 
 
-struct csTexture2DArrayWrapper;
+class csTexture2DArrayWrapper;
 class csPointLight;
 
 

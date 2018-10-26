@@ -98,11 +98,20 @@ private:
 
 };
 
-class CSE_API csSGShaderGraphWrapper : public csMaterialDefWrapper
+class CSE_API csSGShaderGraphWrapper : public CS_SUPER(csMaterialDefWrapper)
 {
 public:
   csSGShaderGraphWrapper(csSGShaderGraph *shaderGraph);
   virtual ~csSGShaderGraphWrapper();
+
+  virtual void Set(iObject *object) override
+  {
+    csMaterialDefWrapper::Set(object);
+    m_shaderGraph = csQueryClass<csSGShaderGraph>(object);
+  }
+
+private:
+  csSGShaderGraph * m_shaderGraph;
 };
 
 struct CSE_API iSGShaderGraphLogger

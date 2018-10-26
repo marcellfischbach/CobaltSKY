@@ -16,7 +16,7 @@ public:
   csResourceWrapper(iObject *resource = 0);
   virtual ~csResourceWrapper();
 
-  virtual void SetResource(iObject *resource);
+  virtual void Set(iObject *resource);
 
   CS_FORCEINLINE iObject *Get()
   {

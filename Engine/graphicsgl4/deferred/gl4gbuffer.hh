@@ -7,8 +7,8 @@
 
 struct iGraphics;
 struct iRenderTarget;
-struct csTexture2DWrapper;
-struct csSamplerWrapper;
+class csTexture2DWrapper;
+class csSamplerWrapper;
 
 CS_INTERFACE()
 class CSGRAPHICSGL4_API csGBufferGL4 : public CS_SUPER(csObject)

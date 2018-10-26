@@ -14,7 +14,7 @@ csResourceWrapper::~csResourceWrapper()
 }
 
 
-void csResourceWrapper::SetResource(iObject *resource)
+void csResourceWrapper::Set(iObject *resource)
 {
   CS_SET(m_resource, resource);
 }

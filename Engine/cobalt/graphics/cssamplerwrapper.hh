@@ -14,6 +14,13 @@ class CSE_API csSamplerWrapper : public CS_SUPER(csResourceWrapper)
   CS_CLASS_GEN;
 public:
   csSamplerWrapper(iSampler *sampler = 0);
+  virtual ~csSamplerWrapper();
+
+  virtual void Set(iObject *sampler) override
+  {
+    csResourceWrapper::Set(sampler);
+    m_sampler = csQueryClass<iSampler>(sampler);
+  }
 
   CS_FORCEINLINE iSampler *Get()
   {
