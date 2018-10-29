@@ -13,6 +13,7 @@
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/cstexturewrapper.hh>
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
+#include <graphicsgl4/gl4rendertarget.hh>
 #include <editor/editor.hh>
 #include <editor/glcontext.hh>
 #include <QPaintEvent>
@@ -109,7 +110,7 @@ void SceneView::initializeGL()
 void SceneView::paintGL()
 {
   RenderWidget::paintGL();
-  m_onscreenTarget->Setup(width(), height());
+  //m_onscreenTarget->Setup(width(), height());
 
   csEntity *root = 0;
   if (m_scene)
@@ -117,19 +118,8 @@ void SceneView::paintGL()
     root = m_scene->GetRoot();
     root->UpdateBoundingBox();
   }
-  iTexture2D *colorTarget = 0;
-
   iRenderTarget *target = m_frameProcessor->Render(root, m_camera, GetRenderTarget());
-  colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
-  /*
-  //
-  // now render this image onscreen
-  m_graphics->SetRenderTarget(m_onscreenTarget);
-  m_graphics->SetViewport(m_onscreenTarget);
 
-  m_graphics->Clear(true, csVector4f(0, 0, 0, 1), true, 1.0f);
-  m_graphics->RenderFullScreenFrame(colorTarget);
-  */
 }
 
 void SceneView::resizeGL(int width, int height)

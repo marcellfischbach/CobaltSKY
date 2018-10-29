@@ -23,6 +23,13 @@
 #include <GL/glew.h>
 #include <assert.h>
 
+#define CHECK_RENDER_STATES
+
+#ifdef CHECK_RENDER_STATES
+#define RENDER_STATE_CHECK false
+#else
+#define RENDER_STATE_CHECK true
+#endif
 
 csGraphicsGL4::csGraphicsGL4()
   : iGraphics()
@@ -96,8 +103,11 @@ void csGraphicsGL4::ResetDefaults ()
   glDepthFunc(GL_LEQUAL);
   CS_CHECK_GL_ERROR;
 
-  SetClearColorValue(csVector4f(0.0f, 0.0f, 0.0f, 0.0f));
-  SetClearDepthValue(1.0f);
+  m_clearColor = csVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+  m_clearDepth = 1.0f;
+  glClearDepth(1.0f);
 
   glGetError();
   // initialize all 16 vertex buffer streams
@@ -112,9 +122,14 @@ void csGraphicsGL4::ResetDefaults ()
     m_matrixNeedsRecalculation[i] = false;
   }
 
+
   m_blendEnabled = false;
-  m_blendModeSrcColor = m_blendModeSrcAlpha = eBM_One;
-  m_blendModeDstColor = m_blendModeDstAlpha = eBM_Zero;
+  m_blendModeSrcColor = eBM_One;
+  m_blendModeSrcAlpha = eBM_One;
+  m_blendModeDstColor = eBM_Zero;
+  m_blendModeDstAlpha = eBM_Zero;
+  glDisable(GL_BLEND);
+  glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ZERO, GL_ZERO);
 
   memset(m_samplers, 0, sizeof(m_samplers));
   memset(m_textures, 0, sizeof(m_textures));
@@ -650,7 +665,7 @@ void csGraphicsGL4::SetIndexBuffer(iIndexBuffer *indexBuffer)
 void csGraphicsGL4::SetShader(iShader *shader)
 {
   csProgramGL4 *prog = static_cast<csProgramGL4*>(shader);
-  if (prog != m_program)
+  if (prog != m_program || RENDER_STATE_CHECK)
   {
     CS_SET(m_program, prog);
 
@@ -693,7 +708,7 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 {
   csTextureGL4 *textureGL = texture ? csQueryClass<csTextureGL4>(texture) : 0;
-  if (m_textures[unit] != textureGL)
+  if (m_textures[unit] != textureGL || RENDER_STATE_CHECK)
   {
     CS_SET(m_textures[unit], textureGL);
     m_textureChanged[unit] = true;
@@ -709,7 +724,7 @@ void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 {
   csSamplerGL4 *samplerGL = sampler ? csQueryClass<csSamplerGL4>(sampler) : 0;
-  if (m_samplers[unit] != samplerGL)
+  if (m_samplers[unit] != samplerGL || RENDER_STATE_CHECK)
   {
     CS_SET(m_samplers[unit], samplerGL);
     m_samplerChanged[unit] = true;
@@ -720,7 +735,7 @@ void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 {
   csRenderTargetGL4 *rtGL4 = csQueryClass<csRenderTargetGL4>(renderTarget);
-  if (m_renderTarget != rtGL4 )
+  if (m_renderTarget != rtGL4 || RENDER_STATE_CHECK)
   {
     CS_SET(m_renderTarget, rtGL4);
     if (m_renderTarget)
@@ -795,7 +810,7 @@ void csGraphicsGL4::PopRenderStates()
 
 void csGraphicsGL4::SetBlendEnabled(bool enable)
 {
-  if (m_blendEnabled != enable || true)
+  if (m_blendEnabled != enable || RENDER_STATE_CHECK)
   {
     m_blendEnabled = enable;
     if (enable)
@@ -817,7 +832,7 @@ bool csGraphicsGL4::IsBlendEnabled() const
 
 void csGraphicsGL4::SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst)
 {
-  if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha)
+  if (blendSrc != m_blendModeSrcColor || blendSrc != m_blendModeSrcAlpha || blendDst != m_blendModeDstColor || blendDst != m_blendModeDstAlpha || RENDER_STATE_CHECK)
   {
     m_blendModeSrcColor = m_blendModeSrcAlpha = blendSrc;
     m_blendModeDstColor = m_blendModeDstAlpha = blendDst;
@@ -828,7 +843,7 @@ void csGraphicsGL4::SetBlendMode(csBlendMode blendSrc, csBlendMode blendDst)
 
 void csGraphicsGL4::SetBlendMode(csBlendMode blendSrcColor, csBlendMode blendSrcAlpha, csBlendMode blendDstColor, csBlendMode blendDstAlpha)
 {
-  if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha)
+  if (blendSrcColor != m_blendModeSrcColor || blendSrcAlpha != m_blendModeSrcAlpha || blendDstColor != m_blendModeDstColor || blendDstAlpha != m_blendModeDstAlpha || RENDER_STATE_CHECK)
   {
     m_blendModeSrcColor = blendSrcColor;
     m_blendModeSrcAlpha = blendSrcAlpha;
@@ -850,7 +865,7 @@ void csGraphicsGL4::GetBlendMode(csBlendMode &blendSrcColor, csBlendMode &blendD
 
 void csGraphicsGL4::SetDepthMask(bool depth)
 {
-  if (m_depthMask != depth)
+  if (m_depthMask != depth || RENDER_STATE_CHECK)
   {
     m_depthMask = depth;
     glDepthMask(m_depthMask);
@@ -861,7 +876,7 @@ void csGraphicsGL4::SetDepthMask(bool depth)
 void csGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
 {
   csUInt8 colorMask = (red ? 0x8 : 0x0) | (green ? 0x4 : 0x0) | (blue ? 0x2 : 0x0) | (alpha ? 0x1 : 0x0);
-  if (colorMask != m_colorMask)
+  if (colorMask != m_colorMask || RENDER_STATE_CHECK)
   {
     m_colorMask = colorMask;
     glColorMask(red, green, blue, alpha);
@@ -871,7 +886,7 @@ void csGraphicsGL4::SetColorMask(bool red, bool green, bool blue, bool alpha)
 
 void csGraphicsGL4::SetDepthTest(bool depthTest)
 {
-  if (m_depthTest != depthTest)
+  if (m_depthTest != depthTest || RENDER_STATE_CHECK)
   {
     m_depthTest = depthTest;
     if (m_depthTest)
@@ -888,7 +903,7 @@ void csGraphicsGL4::SetDepthTest(bool depthTest)
 
 void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
 {
-  if (m_depthFunc != compareMode)
+  if (m_depthFunc != compareMode || RENDER_STATE_CHECK)
   {
     m_depthFunc = compareMode;
     glDepthFunc(compareFuncMap[compareMode]);
@@ -899,7 +914,7 @@ void csGraphicsGL4::SetDepthFunc(csCompareMode compareMode)
 
 void csGraphicsGL4::SetFrontFace(csFaceWinding frontFace)
 {
-  if (m_frontFace != frontFace)
+  if (m_frontFace != frontFace || RENDER_STATE_CHECK)
   {
     m_frontFace = frontFace;
     glFrontFace(faceWindingMap[frontFace]);
@@ -913,7 +928,7 @@ csFaceWinding csGraphicsGL4::GetFrontFace() const
 
 void csGraphicsGL4::SetCullFaceEnabled(bool enabled)
 {
-  if (m_cullFaceEnabled != enabled)
+  if (m_cullFaceEnabled != enabled || RENDER_STATE_CHECK)
   {
     m_cullFaceEnabled = enabled;
     if (enabled)
@@ -934,7 +949,7 @@ bool csGraphicsGL4::IsCullFaceEnabled() const
 
 void csGraphicsGL4::SetCullFace(csFaceSide cullFace)
 {
-  if (m_cullFace != cullFace)
+  if (m_cullFace != cullFace || RENDER_STATE_CHECK)
   {
     m_cullFace = cullFace;
     glCullFace(faceSideMap[cullFace]);
@@ -948,7 +963,7 @@ csFaceSide csGraphicsGL4::GetCullFace() const
 
 void csGraphicsGL4::SetFillMode(csFillMode fillMode)
 {
-  if (m_fillMode != fillMode)
+  if (m_fillMode != fillMode || RENDER_STATE_CHECK)
   {
     glPolygonMode(GL_FRONT_AND_BACK, fillModeMap[fillMode]);
     m_fillMode = fillMode;
@@ -994,7 +1009,7 @@ void csGraphicsGL4::SetRenderDestinations(csRenderDestination *renderDestination
 
 void csGraphicsGL4::SetClearColorValue(const csVector4f &colorValue)
 {
-  if (colorValue != m_clearColor)
+  if (colorValue != m_clearColor || RENDER_STATE_CHECK)
   {
     m_clearColor = colorValue;
     glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.w);
@@ -1004,7 +1019,7 @@ void csGraphicsGL4::SetClearColorValue(const csVector4f &colorValue)
 
 void csGraphicsGL4::SetClearDepthValue(float depthValue)
 {
-  if (depthValue != m_clearDepth)
+  if (depthValue != m_clearDepth || RENDER_STATE_CHECK)
   {
     m_clearDepth = depthValue;
     glClearDepth(m_clearDepth);
@@ -1014,7 +1029,7 @@ void csGraphicsGL4::SetClearDepthValue(float depthValue)
 
 void csGraphicsGL4::SetClearStencilValue(csUInt8 stencilValue)
 {
-  if (stencilValue != m_clearStencil)
+  if (stencilValue != m_clearStencil || RENDER_STATE_CHECK)
   {
     m_clearStencil = stencilValue;
     glClearStencil(m_clearStencil);

@@ -54,6 +54,10 @@ csProgramGL4::~csProgramGL4()
 
 void csProgramGL4::Bind()
 {
+  if (!glIsProgram(m_name))
+  {
+    return;
+  }
   glUseProgram(m_name);
   CS_CHECK_GL_ERROR;
 }
@@ -288,6 +292,12 @@ bool csProgramGL4::Link()
 
   if (param == GL_FALSE)
   {
+    for (auto shader : m_shaders)
+    {
+      glDetachShader(m_name, shader->GetName());
+    }
+    glDeleteProgram(m_name);
+    m_name = 0;
     return false;
   }
 

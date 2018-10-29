@@ -1,3 +1,4 @@
+
 #include <cobalt/csengine.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/cstexturewrapper.hh>
@@ -12,6 +13,45 @@
 #include <editor/renderwidget.hh>
 #include <QPainter>
 //#include <editor.hh>
+
+#ifdef USE_QT_OPENGL_WIDGET
+RenderWidget::RenderWidget(QWidget *parent, Qt::WindowFlags f)
+  : QOpenGLWidget(parent, f)
+{
+  //setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+}
+
+RenderWidget::~RenderWidget()
+{
+
+}
+
+
+void RenderWidget::paintGL()
+{
+  QOpenGLWidget::paintGL();
+  m_renderTarget.Setup(width(), height());
+#if 0
+  // GLContext::Get()->MakeCurrent();
+
+  iGraphics *gr = csEng->GetRenderer();
+
+  iRenderTarget *renderTarget = m_renderTarget.GetRenderTarget();
+
+  gr->SetRenderTarget(renderTarget);
+  gr->SetViewport(renderTarget);
+  gr->ResetDefaults();
+
+  if (m_clear)
+  {
+    gr->Clear(true, csVector4f(0.0f, 0.0f, 0.5f, 1.0f));
+  }
+#endif
+}
+
+
+#else
+
 
 RenderWidget::RenderWidget(QWidget *parent, Qt::WindowFlags f)
   : QWidget(parent, f)
@@ -161,3 +201,5 @@ void RenderWidget::resizeGL(int width, int height)
 {
 }
 
+
+#endif

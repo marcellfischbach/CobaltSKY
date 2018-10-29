@@ -141,7 +141,8 @@ void TextureEditorRenderWidget::initializeGL()
 
 void TextureEditorRenderWidget::paintGL()
 {
- // RenderWidget::paintGL();
+  RenderWidget::paintGL();
+
 
 
   iTexture2D *texture = m_texture->Get();

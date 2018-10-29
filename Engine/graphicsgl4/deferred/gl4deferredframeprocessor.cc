@@ -180,7 +180,7 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
     }
   }
   m_renderer->PopRenderStates();
-  //Sprintf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
+  //printf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
 }
 
 iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *camera, iRenderTarget *target)
