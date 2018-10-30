@@ -698,7 +698,10 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
   m_nextTextureUnit = static_cast<csTextureUnit>(m_nextTextureUnit + 1);
   glActiveTexture(GL_TEXTURE0 + m_nextTextureUnit);
   CS_CHECK_GL_ERROR;
-  SetSampler(unit, texture->GetSampler()->Get());
+  if (texture->GetSampler())
+  {
+    SetSampler(unit, texture->GetSampler()->Get());
+  }
   SetTexture(unit, texture);
 
 
