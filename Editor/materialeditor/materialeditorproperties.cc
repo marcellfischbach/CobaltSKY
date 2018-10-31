@@ -244,9 +244,10 @@ void MaterialEditorProperties::UpdateGUI()
     case eSPT_Texture:
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
-      csTextureWrapper *texture = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
+      csTextureWrapper *textureWrapper = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
+      iTexture *texture = textureWrapper ? textureWrapper->Get() : 0;
       param.textureWidget->setEnabled(!inherit);
-      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture->Get()));
+      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture));
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       param.textureWidget->AddValidClass(iTexture::GetStaticClass());
       m_frameLayout->addWidget(param.textureWidget, row, 1, 1, 1);
