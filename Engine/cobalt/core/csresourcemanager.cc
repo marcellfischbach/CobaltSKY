@@ -1,5 +1,6 @@
 
 #include <cobalt/core/csresourcemanager.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/resource/cscsffileloader.hh>
@@ -83,6 +84,11 @@ iObject *csResourceManager::Load(const csResourceLocator &locator, iObject *user
   }
 
   iObject *object = Load(file, locator, userData);
+  csResourceWrapper *resourceWrapper = csQueryClass<csResourceWrapper>(object);
+  if (resourceWrapper)
+  {
+    resourceWrapper->SetLocator(locator);
+  }
   file->Release();
   RegisterResource(object, locator);
   return object;

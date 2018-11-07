@@ -525,6 +525,7 @@ install(DIRECTORY . DESTINATION include/cobaltsky/cobalt FILES_MATCHING PATTERN 
 target_link_libraries(CobaltSKY
 	CobaltSKY-File
     ${PNG_LIBRARIES}
+    stdc++fs
     )
 
 CS_INSTALL_MOCCER(CobaltSKY cobalt CSE_API ALL_SOURCES)

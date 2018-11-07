@@ -43,6 +43,11 @@ public:
     return m_locator;
   }
 
+  CS_FORCEINLINE void SetLocator(const csResourceLocator &locator)
+  {
+    m_locator = locator;
+  }
+
 private:
   iObject * m_resource;
 
