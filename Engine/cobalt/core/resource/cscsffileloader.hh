@@ -11,9 +11,9 @@ class CSE_API csCSFFileLoader : public CS_SUPER(iFileLoader)
 public:
   csCSFFileLoader();
   virtual ~csCSFFileLoader();
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
-  iObject *Load(iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
 };
 

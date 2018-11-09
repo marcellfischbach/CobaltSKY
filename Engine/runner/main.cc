@@ -77,10 +77,8 @@
 #include <math.h>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <runner/event.hh>
-#include <runner/testresource.hh>
 #include <csfile/csffile.hh>
 #include <iostream>
-
 
 static bool g_CreateCharacter = false;
 

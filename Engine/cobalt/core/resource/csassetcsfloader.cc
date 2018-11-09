@@ -17,6 +17,8 @@ csAssetCSFLoader::~csAssetCSFLoader()
 
 bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   if (entry->IsRoot())
   {
     return entry->GetEntry("asset");
@@ -28,6 +30,7 @@ bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &l
 
 const csClass *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;
   if (assetEntry && assetEntry->IsRoot())
   {
@@ -35,26 +38,27 @@ const csClass *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResour
   }
   if (!assetEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   const csfEntry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
   if (!dataEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   const csfEntry *firstChild = dataEntry->GetChild(0);
   if (!firstChild)
   {
-    return 0;
+    return nullptr;
   }
 
   return csResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
-iObject *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;
   if (assetEntry && assetEntry->IsRoot())
   {
@@ -62,19 +66,19 @@ iObject *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &
   }
   if (!assetEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   const csfEntry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
   if (!dataEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   const csfEntry *firstChild = dataEntry->GetChild(0);
   if (!firstChild)
   {
-    return 0;
+    return nullptr;
   }
 
   return csResourceManager::Get()->Load(firstChild, locator);

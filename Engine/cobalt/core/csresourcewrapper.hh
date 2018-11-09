@@ -8,12 +8,42 @@
 
 #include <cobalt/core/csresourcewrapper.refl.hh>
 
+#define CS_RESOURCE_WRAPPER(resourceClass, wrapperClass, superWrapperClass) \
+  public:                                                                   \
+    wrapperClass (resourceClass *resource = nullptr)                        \
+      : superWrapperClass(resource)                                         \
+      , m_resource(nullptr)                                                 \
+    {                                                                       \
+      CS_SET(m_resource, resource);                                         \
+    }                                                                       \
+    virtual ~wrapperClass()                                                 \
+    {                                                                       \
+      CS_RELEASE(m_resource);                                               \
+    }                                                                       \
+                                                                            \
+    virtual void Set(iObject *object)                                       \
+    {                                                                       \
+      resourceClass *resource = csQueryClass<resourceClass>(object);        \
+      superWrapperClass::Set(resource);                                     \
+      CS_SET(m_resource, resource);                                         \
+    }                                                                       \
+                                                                            \
+    CS_FORCEINLINE resourceClass *Get()                                     \
+    {                                                                       \
+      return m_resource;                                                    \
+    }                                                                       \
+                                                                            \
+  private:                                                                  \
+    resourceClass *m_resource
+
+
+
 CS_CLASS()
 class CSE_API csResourceWrapper : public CS_SUPER(csObject)
 {
   CS_CLASS_GEN;
 public:
-  csResourceWrapper(iObject *resource = 0);
+  csResourceWrapper(iObject *resource = nullptr);
   virtual ~csResourceWrapper();
 
   virtual void Set(iObject *resource);

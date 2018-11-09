@@ -37,7 +37,6 @@ Editor::Editor()
   : QObject()
   , m_mainWindow(0)
 {
-
 }
 
 bool Editor::Initialize(int argc, char **argv)

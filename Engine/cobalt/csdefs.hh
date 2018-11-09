@@ -5,6 +5,8 @@
 #define CS_FLOAT_IS_ONE(e) (e < (1.0 + 1e-6) && e > (1.0 - 1e-6))
 #define CS_FLOAT_IS(e, v) (e < (v + 1e-6) && e > (v - 1e-6))
 
+#define CS_UNUSED(x) (void)x
+
 #define CS_VERSION(maj,min,mic) ((((maj) & 0xff) << 24) | (((min) & 0xff) << 16) | ((mic) & 0xffff))
 
 #if CS_WIN32

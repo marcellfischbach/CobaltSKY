@@ -8,6 +8,7 @@
 #include <cobalt/core/csassetinputstream.hh>
 #include <cobalt/core/csclass.hh>
 #include <cobalt/core/csresourcelocator.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/core/resource/iassetloader.hh>
 #include <cobalt/core/resource/icsfloader.hh>
 #include <cobalt/core/resource/ifileloader.hh>
@@ -52,8 +53,8 @@ public:
    *
    * \return The object
    */
-  virtual iObject *Load(const csResourceLocator &locator, iObject *userData = 0);
-  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = nullptr) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -66,9 +67,9 @@ public:
   *
   * \return The object
   */
-  virtual iObject *Load(iFile *file, const csResourceLocator &locator, iObject *userData = 0);
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr);
 
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
  
   /**
@@ -82,13 +83,11 @@ public:
   *
   * \return The object
   */
-  virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0);
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
-
-  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-
-  virtual iObject *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0);
-  virtual const csClass *EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual const csClass *EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
   /**
   * \brief Load an object from the \a asset \a file.
@@ -102,13 +101,13 @@ public:
   *
   * \return The object
   */
-  virtual iObject *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0);
-  virtual const csClass *EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual const csClass *EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
   template<typename T>
-  T *Load(const csResourceLocator &locator, iObject *userData = 0)
+  T *Load(const csResourceLocator &locator, iObject *userData = nullptr)
   {
-    iObject *object = Load(locator, userData);
+    csResourceWrapper *object = Load(locator, userData);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -122,42 +121,9 @@ public:
   }
 
   template<typename T>
-  T *Load(iFile *file, const csResourceLocator &locator, iObject *userData = 0)
+  T *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr)
   {
-    iObject *object = Load(file, locator, userData);
-    if (object)
-    {
-      T* t_instance = csQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
-      return t_instance;
-    }
-    return 0;
-  }
-
-
-  template<typename T>
-  T *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0)
-  {
-    iObject *object = Load(entry, locator, userData);
-    if (object)
-    {
-      T* t_instance = csQueryClass<T>(object);
-      if (!t_instance)
-      {
-        object->Release();
-      }
-      return t_instance;
-    }
-    return 0;
-  }
-
-  template<typename T>
-  T *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = 0)
-  {
-    iObject *object = Load(blob, locator, userData);
+    csResourceWrapper *object = Load(file, locator, userData);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -172,9 +138,42 @@ public:
 
 
   template<typename T>
-  T *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0)
+  T *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr)
   {
-    iObject *object = Load(typeID, inputStream, locator, userData);
+    csResourceWrapper *object = Load(entry, locator, userData);
+    if (object)
+    {
+      T* t_instance = csQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+  template<typename T>
+  T *Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData = nullptr)
+  {
+    csResourceWrapper *object = Load(blob, locator, userData);
+    if (object)
+    {
+      T* t_instance = csQueryClass<T>(object);
+      if (!t_instance)
+      {
+        object->Release();
+      }
+      return t_instance;
+    }
+    return 0;
+  }
+
+
+  template<typename T>
+  T *Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr)
+  {
+    csResourceWrapper *object = Load(typeID, inputStream, locator, userData);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -197,7 +196,7 @@ public:
    * 
    * \return The object or \a null if there is no such object registered.
    */
-  virtual iObject *Get(const csResourceLocator &resourceLocator) const;
+  virtual csResourceWrapper *Get(const csResourceLocator &resourceLocator) const;
 
 
   /**
@@ -220,16 +219,16 @@ public:
   *
   * \return The object or \a null if there is no such object registered.
   */
-  virtual iObject *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = 0);
+  virtual csResourceWrapper *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = nullptr);
 
-  virtual iObject *Aquire(const csResourceLocator &resourceLocator, iObject *userData = 0, csResourceLoadingMode mode = eRLM_Shared);
+  virtual csResourceWrapper *Aquire(const csResourceLocator &resourceLocator, iObject *userData = nullptr, csResourceLoadingMode mode = eRLM_Shared);
 
 
 
   template<typename T>
   T *Get(const csResourceLocator &resourceLocator) const
   {
-    iObject *object = Get(resourceLocator);
+    csResourceWrapper *object = Get(resourceLocator);
     if (object)
     {
       T *t_instance = csQueryClass<T>(object);
@@ -239,9 +238,9 @@ public:
   }
 
   template<typename T>
-  T *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = 0)
+  T *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = nullptr)
   {
-    iObject *object = GetOrLoad(resourceLocator, userData);
+    csResourceWrapper *object = GetOrLoad(resourceLocator, userData);
     if (object)
     {
       T *t_instance = csQueryClass<T>(object);
@@ -253,7 +252,7 @@ public:
   template<typename T>
   T *Aquire(const csResourceLocator &resourceLocator, iObject *userData = 0, csResourceLoadingMode mode = eRLM_Shared)
   {
-    iObject *object = Aquire(resourceLocator, userData, mode);
+    csResourceWrapper *object = Aquire(resourceLocator, userData, mode);
     if (object)
     {
       T *t_instance = csQueryClass<T>(object);
@@ -270,12 +269,9 @@ public:
   virtual void RegisterLoader(iFileLoader *loader);
   virtual void RegisterLoader(iAssetLoader *loader);
 
-  virtual bool RegisterObject(const csResourceLocator &locator, iObject *object);
+  virtual bool RegisterObject(const csResourceLocator &locator, csResourceWrapper *object);
   virtual void UnregisterObject(const csResourceLocator &locator);
-  virtual void UnregisterObject(iObject *object);
-
-  virtual void RegisterResource(iObject *object, const csResourceLocator &locator);
-  virtual void UnregisterResource(iObject *object);
+  virtual void UnregisterObject(csResourceWrapper *object);
 
   virtual void RenameResource(const csResourceLocator &from, const csResourceLocator &to);
 
@@ -292,8 +288,7 @@ protected:
   std::vector<iCSFLoader*> m_csfLoaders;
   std::vector<iAssetLoader*> m_assetLoaders;
 
-  std::map<csResourceLocator, iObject*> m_objects;
-  std::map<iObject*, csResourceLocator> m_resources;
+  std::map<csResourceLocator, csResourceWrapper*> m_objects;
 
   static csResourceManager *s_instance;
 };

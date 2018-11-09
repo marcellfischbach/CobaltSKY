@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 #include <cobalt/core/csevent.hh>
 #include <runner/event.refl.hh>
 

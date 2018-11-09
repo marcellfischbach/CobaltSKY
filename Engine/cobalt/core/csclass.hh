@@ -2,6 +2,8 @@
 #ifndef __COBALTSKY_CORE_OBJECT_H__
 #define __COBALTSKY_CORE_OBJECT_H__
 
+#include <cobalt/cstypes.hh>
+
 #define CS_CLASS(...)
 #define CS_INTERFACE(...)
 #define CS_SUPER(Cls) Cls
@@ -28,7 +30,7 @@
       } \
     } \
     private: \
-      int m_refCount
+      csInt64 m_refCount
     
 #define CS_CLASS_GEN_CONSTR m_refCount = 1
 

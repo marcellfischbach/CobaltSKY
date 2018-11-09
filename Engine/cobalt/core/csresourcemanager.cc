@@ -7,7 +7,7 @@
 #include <cobalt/core/csvfs.hh>
 
 
-csResourceManager *csResourceManager::s_instance = 0;
+csResourceManager *csResourceManager::s_instance = nullptr;
 
 
 csResourceManager *csResourceManager::Get()
@@ -75,22 +75,18 @@ iFile *csResourceManager::Open(const csResourceLocator &locator) const
   }
 }
 
-iObject *csResourceManager::Load(const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator, iObject *userData)
 {
   iFile *file = Open(locator);
   if (!file)
   {
-    return 0;
+    return nullptr;
   }
 
-  iObject *object = Load(file, locator, userData);
-  csResourceWrapper *resourceWrapper = csQueryClass<csResourceWrapper>(object);
-  if (resourceWrapper)
-  {
-    resourceWrapper->SetLocator(locator);
-  }
+  csResourceWrapper *object = Load(file, locator, userData);
+  object->SetLocator(locator);
+
   file->Release();
-  RegisterResource(object, locator);
   return object;
 }
 
@@ -99,7 +95,7 @@ const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iO
   iFile *file = Open(locator);
   if (!file)
   {
-    return 0;
+    return nullptr;
   }
 
   const csClass *cls = EvalClass(file, locator, userData);
@@ -108,66 +104,64 @@ const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iO
   return cls;
 }
 
-iObject *csResourceManager::Load(iFile *file, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = (int)m_fileLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
-    const iFileLoader *loader = m_fileLoaders[i];
+    const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
-      iObject *obj = loader->Load(file, locator, userData);
-      RegisterResource(obj, locator);
+      csResourceWrapper *obj = loader->Load(file, locator, userData);
       return obj;
 
     }
   }
-  return 0;
+  return nullptr;
 }
 
 const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = (int)m_fileLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
-    const iFileLoader *loader = m_fileLoaders[i];
+    const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
       return loader->EvalClass(file, locator, userData);
     }
   }
-  return 0;
+  return nullptr;
 }
 
 
-iObject *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = (int)m_csfLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
-    const iCSFLoader *loader = m_csfLoaders[i];
+    const iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(entry, locator))
     {
-      iObject *obj = loader->Load(entry, locator, userData);
-      RegisterResource(obj, locator);
+      csResourceWrapper *obj = loader->Load(entry, locator, userData);
       return obj;
     }
   }
-  return 0;
+  return nullptr;
 }
 
 const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = (int)m_csfLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
-    const iCSFLoader *loader = m_csfLoaders[i];
+    const iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(entry, locator))
     {
       return loader->EvalClass(entry, locator, userData);
     }
   }
-  return 0;
+  return nullptr;
 }
 
 
-iObject *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData)
 {
   csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return Load(blob->GetType(), stream, locator, userData);
@@ -179,69 +173,57 @@ const csClass *csResourceManager::EvalClass(const csfBlob *blob, const csResourc
 }
 
 
-iObject *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
 {
-  for (int i = (int)m_assetLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {
-    const iAssetLoader *loader = m_assetLoaders[i];
+    const iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(typeID, locator))
     {
-      iObject *obj = loader->Load(inputStream, locator, userData);
-      RegisterResource(obj, locator);
+      csResourceWrapper *obj = loader->Load(inputStream, locator, userData);
       return obj;
     }
   }
-  return 0;
+  return nullptr;
 }
 
 const csClass *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
 {
-  for (int i = (int)m_assetLoaders.size() - 1; i >= 0; --i)
+  for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {
-    const iAssetLoader *loader = m_assetLoaders[i];
+    const iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(typeID, locator))
     {
       return loader->EvalClass(inputStream, locator, userData);
     }
   }
-  return 0;
+  return nullptr;
 }
 
-iObject *csResourceManager::Get(const csResourceLocator &resourceLocator) const
+csResourceWrapper *csResourceManager::Get(const csResourceLocator &resourceLocator) const
 {
-  std::map<csResourceLocator, iObject*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<csResourceLocator, csResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
   }
-  return 0;
-}
-
-csResourceLocator csResourceManager::GetLocator(iObject *object) const
-{
-  std::map<iObject*, csResourceLocator>::const_iterator it = m_resources.find(object);
-  if (it != m_resources.end())
-  {
-    return it->second;
-  }
-
-  return csResourceLocator();
+  return nullptr;
 }
 
 
 
-iObject *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData)
+csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData)
 {
-  std::map<csResourceLocator, iObject*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<csResourceLocator, csResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
   }
 
-  iObject *object = Load(resourceLocator, userData);
+  csResourceWrapper *object = Load(resourceLocator, userData);
   if (!object)
   {
-    return 0;
+    return nullptr;
   }
 
   RegisterObject(resourceLocator, object);
@@ -249,9 +231,9 @@ iObject *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator, 
   return object;
 }
 
-iObject *csResourceManager::Aquire(const csResourceLocator &resourceLocator, iObject *userData, csResourceLoadingMode mode)
+csResourceWrapper *csResourceManager::Aquire(const csResourceLocator &resourceLocator, iObject *userData, csResourceLoadingMode mode)
 {
-  iObject* res = 0;
+  csResourceWrapper* res = nullptr;
   switch (mode)
   {
   case eRLM_Shared:
@@ -260,6 +242,8 @@ iObject *csResourceManager::Aquire(const csResourceLocator &resourceLocator, iOb
   case eRLM_Instance:
     res = Load(resourceLocator, userData);
     break;
+  case eRLM_Inline:
+    break;
   }
   return res;
 }
@@ -267,16 +251,14 @@ iObject *csResourceManager::Aquire(const csResourceLocator &resourceLocator, iOb
 
 
 
-bool csResourceManager::RegisterObject(const csResourceLocator &resourceLocator, iObject *object)
+bool csResourceManager::RegisterObject(const csResourceLocator &resourceLocator, csResourceWrapper *object)
 {
-  RegisterResource(object, resourceLocator);
-
   if (!object)
   {
     return false;
   }
 
-  std::map<csResourceLocator, iObject*>::iterator it = m_objects.find(resourceLocator);
+  std::map<csResourceLocator, csResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return false;
@@ -291,16 +273,16 @@ bool csResourceManager::RegisterObject(const csResourceLocator &resourceLocator,
 
 void csResourceManager::UnregisterObject(const csResourceLocator &resourceLocator)
 {
-  std::map<csResourceLocator, iObject*>::iterator it = m_objects.find(resourceLocator);
+  std::map<csResourceLocator, csResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
-    iObject *object = it->second;
+    csResourceWrapper *object = it->second;
     UnregisterObject(object);
   }
 
 }
 
-void csResourceManager::UnregisterObject(iObject *object)
+void csResourceManager::UnregisterObject(csResourceWrapper *object)
 {
   if (object)
   {
@@ -320,44 +302,6 @@ void csResourceManager::UnregisterObject(iObject *object)
     }
   }
 
-  UnregisterResource(object);
-}
-
-
-void csResourceManager::RegisterResource(iObject *object, const csResourceLocator &locator)
-{
-  if (!object)
-  {
-    return;
-  }
-
-  auto it = m_resources.find(object);
-  if (it != m_resources.end())
-  {
-    // this object is already registered and the resource manager hold a reference
-    return;
-  }
-
-  object->AddRef();
-  m_resources[object] = locator;
-}
-
-void csResourceManager::UnregisterResource(iObject *object)
-{
-  if (!object)
-  {
-    return;
-  }
-
-  auto it = m_resources.find(object);
-  if (it == m_resources.end())
-  {
-    // this object is not registered and the resource manager don't hold a reference
-    return;
-  }
-
-  m_resources.erase(it);
-  object->Release();
 }
 
 
@@ -369,10 +313,9 @@ void csResourceManager::RenameResource(const csResourceLocator &from, const csRe
   {
     return;
   }
-  iObject *object = it->second;
+  csResourceWrapper *object = it->second;
 
   m_objects.erase(it);
   m_objects[to] = object;
-  m_resources[object] = to;
 }
 

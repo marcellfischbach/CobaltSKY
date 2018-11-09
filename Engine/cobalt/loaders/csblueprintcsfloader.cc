@@ -21,15 +21,20 @@ csBlueprintCSFLoader::~csBlueprintCSFLoader()
 
 bool csBlueprintCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return std::string("blueprint") == entry->GetTagName();
 }
 
 const csClass *csBlueprintCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(entry);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return csBlueprint::GetStaticClass();
 }
 
-iObject *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csBlueprint *bp = new csBlueprint();
 
@@ -39,7 +44,7 @@ iObject *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocat
     LoadEntity(bp, entityEntry, locator, userData);
   }
 
-  return bp;
+  return new csBlueprintWrapper(bp);
 }
 
 
