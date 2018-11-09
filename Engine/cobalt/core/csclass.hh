@@ -184,8 +184,8 @@ class CSE_API csFunction
 public:
   const std::string &GetName() const;
   const csValueDeclaration &GetReturnType() const;
-  const csFunctionVirtuality GetVirtuality() const;
-  const csConstness GetConstness() const;
+  csFunctionVirtuality GetVirtuality() const;
+  csConstness GetConstness() const;
 
   size_t GetNumberOfAttributes() const;
   const csFunctionAttribute &GetAttribute(size_t idx) const;
@@ -369,6 +369,9 @@ public:
   size_t GetNumberOfSuperClasses() const;
   const csClass *GetSuperClass(size_t idx) const;
 
+  bool HasMeta(const std::string &meta) const;
+  const std::string GetMeta (const std::string &meta) const;
+
   const std::string &GetName() const;
 
   template<typename T>
@@ -384,13 +387,13 @@ protected:
   void AddSuperClass(csClass *parentClass);
   void AddProperty(csProperty *prop);
   void AddFunction(csFunction *function);
-
+  void AddMeta(const std::string &key, const std::string &value);
 private:
   std::string m_name;
   std::vector<csClass*> m_superClasses;
   std::vector<csProperty*> m_properties;
   std::vector<csFunction*> m_functions;
-
+  std::map<std::string, std::string> m_meta;
 };
 
 template<typename T>

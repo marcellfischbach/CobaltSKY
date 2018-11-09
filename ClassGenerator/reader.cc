@@ -5,8 +5,7 @@
 #include "tokenizer.hh"
 #include <string>
 #include <map>
-
-
+#include <set>
 
 
 Reader::Reader()
@@ -61,7 +60,94 @@ unsigned Containers::GetMasterTypeIdx(const std::string &name) const
   return 0;
 }
 
-Containers conts;
+static Containers conts;
+
+size_t readBlank(const std::string &line, size_t i)
+{
+  for (;i<line.length(); ++i)
+  {
+    if (line[i] == ' ' ||  line[i] == '\t')
+    {
+      continue;
+    }
+    break;
+  }
+  return i;
+}
+
+static std::set<MetaData> ReadMetaData(const std::string &line)
+{
+  std::set<MetaData> metaDatas;
+  size_t i = 0;
+  for (;i<line.length(); ++i)
+  {
+    if (line[i] == '(')
+    {
+      i++;
+      break;
+    }
+  }
+  while(i <= line.length())
+  {
+    std::string key = "";
+    std::string value = "";
+
+    // read blanks
+    i = readBlank(line, i);
+    if (!std::isalnum(line[i]) && line[i] != '_' && line[i] != '-')
+    {
+      break;
+    }
+
+    // read the key
+    for (;i<line.length(); ++i)
+    {
+      char ch = line[i];
+
+      if (std::isalnum(ch) || ch == '_' || ch == '-')
+      {
+        key += ch;
+        continue;
+      }
+
+      break;
+    }
+
+    // read blanks
+    i = readBlank(line, i);
+    if (line[i] == ':' || line[i] == '=')
+    {
+      ++i;
+      i = readBlank(line, i);
+      // read the value
+      for (;i<line.length(); ++i)
+      {
+        char ch = line[i];
+
+        if (std::isalnum(ch) || ch == '_' || ch == '-')
+        {
+          value += ch;
+          continue;
+        }
+        break;
+      }
+    }
+
+    // now an optional comma can be placed
+    i = readBlank(line, i);
+    if (line[i] == ',')
+    {
+      ++i;
+    }
+
+    MetaData metaData;
+    metaData.key = key;
+    metaData.value = value;
+    metaDatas.insert(metaData);
+  }
+  return metaDatas;
+}
+
 
 static bool isClassLine(const std::string &line)
 {
@@ -155,9 +241,13 @@ std::string ReadClassName2(SourceFile *sourceFile, size_t lineIdx)
 
 static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
 {
+  std::string line = source->GetLine(i);
+  std::set<MetaData> metaData = ReadMetaData(line);
+  ++i;
+
   bool readName = false;
   std::string lastToken = "";
-  Class *clazz = 0;
+  Class *clazz = nullptr;
   bool readSuperName = false;
   
   for (size_t in = source->GetNumberOfLines(); i < in; ++i)
@@ -185,11 +275,12 @@ static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
       {
         if (!readName)
         {
-          return 0;
+          return nullptr;
         }
         clazz = new Class();
         clazz->SetInterface(interf);
         clazz->SetName(lastToken);
+        clazz->SetMeta(metaData);
         readName = false;
         readSuperName = false;
       }
@@ -216,7 +307,7 @@ static Class *readClassDefinition(SourceFile *source, size_t i, bool interf)
   }
 
 
-  return 0;
+  return nullptr;
 }
 
 
@@ -280,40 +371,40 @@ void ReadPropertyMetaData(SourceFile *sourceFile, size_t lineIdx, std::map<std::
 
 namespace
 {
-  std::string FirstLetterUpperCase(const std::string name)
+std::string FirstLetterUpperCase(const std::string name)
+{
+  std::string result = name;
+  if (result.length() > 0)
   {
-    std::string result = name;
-    if (result.length() > 0)
+    char ch = result[0];
+    if (ch >= 'a' && ch <= 'z')
     {
-      char ch = result[0];
-      if (ch >= 'a' && ch <= 'z')
-      {
-        ch += 'A' - 'a';
-      }
-      result[0] = ch;
+      ch += 'A' - 'a';
     }
-    return result;
+    result[0] = ch;
   }
-  std::string ConvertPropertyName(const std::string propertyName)
+  return result;
+}
+std::string ConvertPropertyName(const std::string propertyName)
+{
+  size_t idx = 0;
+  std::string result = "";
+  if (propertyName.length() > 2)
   {
-    size_t idx = 0;
-    std::string result = "";
-    if (propertyName.length() > 2)
+    if (propertyName[0] == 'm' && propertyName[1] == '_')
     {
-      if (propertyName[0] == 'm' && propertyName[1] == '_')
-      {
-        idx = 2;
-      }
+      idx = 2;
     }
-    if (propertyName.length() > 1)
-    {
-      if (propertyName[0] == '_')
-      {
-        idx = 1;
-      }
-    }
-    return FirstLetterUpperCase(propertyName.substr(idx));
   }
+  if (propertyName.length() > 1)
+  {
+    if (propertyName[0] == '_')
+    {
+      idx = 1;
+    }
+  }
+  return FirstLetterUpperCase(propertyName.substr(idx));
+}
 }
 
 
@@ -639,12 +730,6 @@ void Reader::Read(SourceFile *source)
     const std::string &line = source->GetLine(i);
     if (isClassLine(line))
     {
-      i++;
-      if (i >= in)
-      {
-        return;
-      }
-
       cl = readClassDefinition(source, i, false);
       if (cl)
       {
@@ -653,12 +738,6 @@ void Reader::Read(SourceFile *source)
     }
     else if (isInterfaceLine(line))
     {
-      i++;
-      if (i >= in)
-      {
-        return;
-      }
-
       cl = readClassDefinition(source, i, true);
       if (cl)
       {

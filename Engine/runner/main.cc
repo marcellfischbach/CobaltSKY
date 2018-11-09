@@ -13,6 +13,7 @@
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
+#include <GraphicsGL4/gl4texture2d.hh>
 #include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>
 #include <cobalt/cstime.hh>
@@ -76,6 +77,7 @@
 #include <math.h>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <runner/event.hh>
+#include <runner/testresource.hh>
 #include <csfile/csffile.hh>
 #include <iostream>
 
@@ -93,24 +95,26 @@ void UpdateCamera(csCamera *cameraNode, csCharacterEntity *character, const iMou
 void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf);
 void handle_material(const iKeyboard *keyboard);
 
-SDLWindow *window = 0;
-csGraphicsGL4 *graphicsGL4 = 0;
-csBulletSystem *bulletSystem = 0;
-const iKeyboard *keyboard = 0;
-const iMouse *mouse = 0;
-csCamera *camera = 0;
-csCharacterEntity *character = 0;
-iFrameProcessor* fp = 0;
-csEntityScene *scene;
-iRenderTarget *rt = 0;
-csDirectionalLight *directionalLight;
-csParticle *particle;
-csSize numParticles;
-csEventBus masterBus;
-csMaterial *material;
-csEntity *sphereEntity;
-unsigned g_screenResolutionWidth;
-unsigned g_screenResolutionHeight;
+static SDLWindow *window = nullptr;
+static csGraphicsGL4 *graphicsGL4 = nullptr;
+static csBulletSystem *bulletSystem = nullptr;
+static const iKeyboard *keyboard = nullptr;
+static const iMouse *mouse = nullptr;
+static csCamera *camera = nullptr;
+static csCharacterEntity *character = nullptr;
+static iFrameProcessor* fp = nullptr;
+static csEntityScene *scene = nullptr;
+static iRenderTarget *rt = nullptr;
+static csDirectionalLight *directionalLight = nullptr;
+static csParticle *particle = nullptr;
+static csSize numParticles;
+static csEventBus masterBus;
+static csMaterial *material = nullptr;
+static csEntity *sphereEntity = nullptr;
+static unsigned g_screenResolutionWidth;
+static unsigned g_screenResolutionHeight;
+
+
 
 
 
@@ -122,9 +126,6 @@ int main(int argc, char **argv)
   }
   printf("\n");
 
-
-
-  
 
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());

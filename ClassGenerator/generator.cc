@@ -105,7 +105,6 @@ std::string GetCodeForAttrParam(TypeSpecifiction ts)
   case eTS_Value:
   case eTS_Reference:
     return "*";
-    break;
   case eTS_Pointer:
     res = "**";
     break;
@@ -123,7 +122,6 @@ std::string GetCodeForAttrPtr(TypeSpecifiction ts)
   {
   case eTS_Value:
     return "*";
-    break;
   case eTS_Reference:
   case eTS_Pointer:
     res = "**";
@@ -427,13 +425,17 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api)
   {
     result += "  AddFunction(new " + funcName + "());\n";
   }
+  for (auto meta : clazz->GetMeta())
+  {
+    result += "  AddMeta(\"" + meta.key + "\", \"" + meta.value + "\");\n";
+  }
   result += "}\n";
   result += "\n";
   result += "iObject *" + className + "::CreateInstance() const\n";
   result += "{\n";
   if (clazz->IsInterface())
   {
-    result += "  return 0;\n";
+    result += "  return nullptr;\n";
   }
   else
   {
@@ -451,51 +453,55 @@ static std::string CreateSourceFile(Class *clazz, const std::string &api)
   result += "  return " + className + "::Get();\n";
   result += "}\n";
   result += "\n";
-  result += "void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) \n";
-  result += "{\n";
-  result += "  if (clazz == " + className + "::Get ())\n";
-  result += "  {\n";
-  result += "    return static_cast<" + clazz->GetName() + "*>(this);\n";
-  result += "  }\n";
-  if (clazz->GetNumberOfSuperClasses() > 0)
+
+  if (!clazz->HasMeta("NoQueryClass"))
   {
-    result += "  void *super = 0;\n";
-    for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
+    result += "void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) \n";
+    result += "{\n";
+    result += "  if (clazz == " + className + "::Get ())\n";
+    result += "  {\n";
+    result += "    return static_cast<" + clazz->GetName() + "*>(this);\n";
+    result += "  }\n";
+    if (clazz->GetNumberOfSuperClasses() > 0)
     {
-      std::string super = clazz->GetSuperClass(s);
-      result += "  super = " + super + "::QueryClass(clazz);\n";
-      result += "  if (super != 0)\n";
-      result += "  {\n";
-      result += "    return super;\n";
-      result += "  }\n";
+      result += "  void *super = nullptr;\n";
+      for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
+      {
+        std::string super = clazz->GetSuperClass(s);
+        result += "  super = " + super + "::QueryClass(clazz);\n";
+        result += "  if (super != nullptr)\n";
+        result += "  {\n";
+        result += "    return super;\n";
+        result += "  }\n";
+      }
     }
-  }
-  result += "  return 0;\n";
-  result += "}\n";
-  result += "\n";
-  result += "\n";
-  result += "const void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) const\n";
-  result += "{\n";
-  result += "  if (clazz == " + className + "::Get ())\n";
-  result += "  {\n";
-  result += "    return static_cast<const " + clazz->GetName() + "*>(this);\n";
-  result += "  }\n";
-  if (clazz->GetNumberOfSuperClasses() > 0)
-  {
-    result += "  const void *super = 0;\n";
-    for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
+    result += "  return nullptr;\n";
+    result += "}\n";
+    result += "\n";
+    result += "\n";
+    result += "const void *" + clazz->GetName() + "::QueryClass(const csClass* clazz) const\n";
+    result += "{\n";
+    result += "  if (clazz == " + className + "::Get ())\n";
+    result += "  {\n";
+    result += "    return static_cast<const " + clazz->GetName() + "*>(this);\n";
+    result += "  }\n";
+    if (clazz->GetNumberOfSuperClasses() > 0)
     {
-      result += "  super = " + clazz->GetSuperClass(s) + "::QueryClass(clazz);\n";
-      result += "  if (super != 0)\n";
-      result += "  {\n";
-      result += "    return super;\n";
-      result += "  }\n";
+      result += "  const void *super = nullptr;\n";
+      for (size_t s = 0, sn = clazz->GetNumberOfSuperClasses(); s < sn; ++s)
+      {
+        result += "  super = " + clazz->GetSuperClass(s) + "::QueryClass(clazz);\n";
+        result += "  if (super != nullptr)\n";
+        result += "  {\n";
+        result += "    return super;\n";
+        result += "  }\n";
+      }
     }
+    result += "  return nullptr;\n";
+    result += "}\n";
+    result += "\n";
+    result += "\n";
   }
-  result += "  return 0;\n";
-  result += "}\n";
-  result += "\n";
-  result += "\n";
 
 
   return result;
@@ -697,10 +703,10 @@ void CreateDirectories (const std::string &path)
       break;
     }
     std::string part = path.substr(0, idx);
-    SHCreateDirectoryEx(0, part.c_str(), 0);
+    SHCreateDirectoryEx(nullptr, part.c_str(), nullptr);
     idx++;
   }
-  SHCreateDirectoryEx(0, path.c_str(), 0);
+  SHCreateDirectoryEx(nullptr, path.c_str(), nullptr);
 }
 
 int main(int argc, char **argv)
@@ -837,7 +843,7 @@ int main(int argc, char **argv)
   if (datas.size() != 0)
   {
 
-    // now print the master file containing all 
+    // now print the master file containing all
     //   #include <.../file.hh>
     //   #include <.../file.refl.hh>
     //   #include <.../file.refl.cc>

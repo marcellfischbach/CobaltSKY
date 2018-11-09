@@ -95,7 +95,7 @@ const csProperty *csClass::GetProperty(const std::string &propName) const
       return prop;
     }
   }
-  return 0;
+  return nullptr;
 }
 
 size_t csClass::GetNumberOfFunctions() const
@@ -107,7 +107,7 @@ const csFunction *csClass::GetFunction(size_t idx) const
 {
   if (idx >= m_functions.size())
   {
-    return 0;
+    return nullptr;
   }
   return m_functions[idx];
 }
@@ -135,14 +135,33 @@ const csClass *csClass::GetSuperClass(size_t idx) const
   return m_superClasses[idx];
 }
 
+void csClass::AddMeta(const std::string &key, const std::string &value)
+{
+  m_meta[key] = value;
+}
+
+bool csClass::HasMeta(const std::string &meta) const
+{
+  return m_meta.find(meta) != m_meta.end();
+}
+
+const std::string csClass::GetMeta(const std::string &meta) const
+{
+  auto it = m_meta.find(meta);
+  if (it != m_meta.end())
+  {
+    return it->second;
+  }
+  return std::string();
+}
 
 
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
 
 csProperty::csProperty(const csValueDeclaration &containerDecl, const std::string &name, const csValueDeclaration &decl)
-  : m_containerDecl(containerDecl)
-  , m_name(name)
+  : m_name(name)
+  , m_containerDecl(containerDecl)
   , m_decl(decl)
 {
 
@@ -256,9 +275,9 @@ const std::string &csFunctionAttribute::GetName() const
 
 csFunction::csFunction(csFunctionVirtuality virtuality, const csValueDeclaration &returnType, const std::string &name, csConstness constness)
   : m_virtuality(virtuality)
-  , m_returnType(returnType)
-  , m_name(name)
   , m_constness(constness)
+  , m_name(name)
+  , m_returnType(returnType)
 {
 
 }
@@ -293,12 +312,12 @@ const csValueDeclaration &csFunction::GetReturnType() const
   return m_returnType;
 }
 
-const csFunctionVirtuality csFunction::GetVirtuality() const
+csFunctionVirtuality csFunction::GetVirtuality() const
 {
   return m_virtuality;
 }
 
-const csConstness csFunction::GetConstness() const
+csConstness csFunction::GetConstness() const
 {
   return m_constness;
 }

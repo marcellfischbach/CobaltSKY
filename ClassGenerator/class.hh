@@ -5,7 +5,27 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
 #include "sourcefile.hh"
+
+struct MetaData
+{
+  std::string key;
+  std::string value;
+  bool operator<(const MetaData &o) const
+  {
+    if (key < o.key)
+    {
+      return true;
+    }
+    else if (key > o.key)
+    {
+      return false;
+    }
+    return value < o.value;
+  }
+};
+
 
 enum TypeSpecifiction
 {
@@ -120,6 +140,12 @@ public:
   void SetInterface(bool interf);
   bool IsInterface() const;
 
+  void SetMeta(const std::set<MetaData> &metaData);
+  const std::set<MetaData> &GetMeta() const;
+  bool HasMeta(const std::string &meta) const;
+  const std::string GetMeta(const std::string &meta) const;
+
+
   void AddProperty(const Property &property);
   size_t GetNumberOfProperties() const;
   Property GetProperty(size_t idx) const;
@@ -138,7 +164,7 @@ private:
   std::string m_name;
 
   bool m_interface;
-
+  std::set<MetaData> m_meta;
   std::vector<Property> m_properties;
   std::vector<Function> m_functions;
   std::vector<std::string> m_superClasses;

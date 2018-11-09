@@ -27,10 +27,47 @@ void Class::SetInterface(bool interf)
   m_interface = interf;
 }
 
+
+
 bool Class::IsInterface() const
 {
   return m_interface;
 }
+
+void Class::SetMeta(const std::set<MetaData> &metaData)
+{
+  m_meta = metaData;
+}
+
+const std::set<MetaData> &Class::GetMeta() const
+{
+  return m_meta;
+}
+
+bool Class::HasMeta(const std::string &meta) const
+{
+  for (auto m : m_meta)
+  {
+    if (m.key == meta)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+const std::string Class::GetMeta(const std::string &meta) const
+{
+  for (auto m : m_meta)
+  {
+    if (m.key == meta)
+    {
+      return m.value;
+    }
+  }
+  return std::string();
+}
+
 
 void Class::AddProperty(const Property &property)
 {
