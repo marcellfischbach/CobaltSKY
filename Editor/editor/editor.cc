@@ -19,7 +19,7 @@
 #include <editor/project/projectmenubutton.hh>
 #include <cobalt/core/csvfs.hh>
 #include <cobalt/csengine.hh>
-#include <GraphicsGL4/gl4graphics.hh>
+#include <graphicsgl4/gl4graphics.hh>
 #include <physicsbullet/bulletsystem.hh>
 
 #include <QApplication>

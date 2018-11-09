@@ -8,7 +8,7 @@
 #include <graphicsgl4/gl4indexbuffer.hh>
 #include <graphicsgl4/gl4program.hh>
 #include <graphicsgl4/gl4shader.hh>
-#include <GraphicsGL4/gl4texture2d.hh>
+#include <graphicsgl4/gl4texture2d.hh>
 #include <graphicsgl4/gl4vertexbuffer.hh>
 #include <graphicsgl4/gl4vertexdeclaration.hh>
 #include <editor/editor.hh>

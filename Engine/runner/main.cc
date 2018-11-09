@@ -13,7 +13,7 @@
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraph.hh>
-#include <GraphicsGL4/gl4texture2d.hh>
+#include <graphicsgl4/gl4texture2d.hh>
 #include <physicsbullet/bulletsystem.hh>
 #include <stdio.h>
 #include <cobalt/cstime.hh>
