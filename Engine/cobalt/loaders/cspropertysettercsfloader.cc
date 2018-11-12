@@ -29,7 +29,7 @@ const csClass *csPropertySetterCSFLoader::EvalClass(const csfEntry *entry, const
   return csPropertySetter::GetStaticClass();
 }
 
-iObject *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   if (!entry->HasAttribute("type"))
   {
@@ -102,7 +102,7 @@ iObject *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResource
       entry->GetAttributeFloat("m30", 0.0f), entry->GetAttributeFloat("m31", 0.0f), entry->GetAttributeFloat("m32", 0.0f), entry->GetAttributeFloat("m33", 1.0f)));
     result = prop;
   }
-  return result;
+  return new csPropertySetterWrapper(result);
 }
 
 

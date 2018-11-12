@@ -11,8 +11,8 @@ public:
   csSubMeshAssetLoader();
   virtual ~csSubMeshAssetLoader();
 
-  bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = 0)const;
-  virtual const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
-  iObject *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
+  bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = nullptr)const;
+  virtual const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
 };
 

@@ -49,4 +49,11 @@ struct CSE_API iSampler : public iObject
 
 };
 
+CS_CLASS()
+class CSE_API csSamplerWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iSampler, csSamplerWrapper, csResourceWrapper);
+};
+
 

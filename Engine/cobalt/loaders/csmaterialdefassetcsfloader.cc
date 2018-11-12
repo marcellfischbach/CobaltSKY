@@ -1,7 +1,7 @@
 
 #include <cobalt/loaders/csmaterialdefassetcsfloader.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/csengine.hh>
 
@@ -20,6 +20,8 @@ csMaterialDefAssetCSFLoader::~csMaterialDefAssetCSFLoader()
 
 bool csMaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   std::string tagName = entry->GetTagName();
 
   return tagName == std::string("materialDef");
@@ -49,15 +51,15 @@ csShaderParameterType get_shader_parameter_type(const std::string &name)
 
 const csClass *csMaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csMaterialDef::GetStaticClass();
+  return csMaterialDefWrapper::GetStaticClass();
 }
 
 
-iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   if (entry->GetTagName() != std::string("materialDef"))
   {
-    return 0;
+    return nullptr;
   }
 
   csMaterialDef *material = new csMaterialDef();
@@ -67,7 +69,7 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
   {
     material->Release();
     printf("Exit 1\n");
-    return 0;
+    return nullptr;
   }
 
   for (const csfEntry *passEntry = passesEntry->GetEntry("pass");
@@ -117,15 +119,15 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
     {
       material->Release();
       printf("Exit 2\n");
-      return 0;
+      return nullptr;
     }
     if (!HasLocator(passEntry))
     {
       material->Release();
       printf ("Exit 3\n");
-      return 0;
+      return nullptr;
     }
-    iShader *shader = csResourceManager::Get()->GetOrLoad<iShader>(GetLocator(passEntry));
+    csShaderWrapper *shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(GetLocator(passEntry));
     if (!shader)
     {
       material->Release();
@@ -246,7 +248,7 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
           if (HasLocator(parameterEntry))
           {
             csResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
-            csTextureWrapper *texture = 0;
+            csTextureWrapper *texture = nullptr;
             switch (rlm)
             {
             case eRLM_Shared:
@@ -271,7 +273,7 @@ iObject *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResour
 
 
 
-  return material;
+  return new csMaterialDefWrapper(material);
 }
 
 

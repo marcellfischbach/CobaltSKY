@@ -17,7 +17,7 @@ public:
 
   virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
   virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
-  virtual iObject *Load(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
 
 
 };

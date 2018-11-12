@@ -49,9 +49,10 @@ const csClass *csSkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, con
   return csSkinnedMesh::GetStaticClass();
 }
 
-iObject *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csSkinnedMesh *mesh = new csSkinnedMesh();
+  csSkinnedMeshWrapper *meshWrapper = new csSkinnedMeshWrapper(mesh);
 
   const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
   const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
@@ -60,7 +61,7 @@ iObject *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResour
 
   if (!materialSlotsEntry || !globalIndicesEntry || !subMeshesEntry || !bonesEntry)
   {
-    return mesh;
+    return meshWrapper;
   }
 
 
@@ -127,7 +128,7 @@ iObject *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResour
 
     if (HasLocator(subMeshEntry))
     {
-      csSubMesh *subMesh = csResourceManager::Get()->GetOrLoad<csSubMesh>(GetLocator(subMeshEntry));
+      csSubMeshWrapper *subMesh = csResourceManager::Get()->GetOrLoad<csSubMeshWrapper>(GetLocator(subMeshEntry));
       if (subMesh)
       {
         mesh->AddMesh(subMesh, materialSlot, (csUInt8)lod, name);
@@ -138,7 +139,7 @@ iObject *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResour
 
   mesh->OptimizeDataStruct();
   mesh->UpdateBoundingBox();
-  return mesh;
+  return meshWrapper;
 }
 
 

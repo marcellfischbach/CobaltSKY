@@ -19,33 +19,40 @@ csEntityStateCSFLoader::~csEntityStateCSFLoader()
 
 bool csEntityStateCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return entry->GetTagName() == std::string("entityState");
 }
 
 const csClass *csEntityStateCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csEntityState::GetStaticClass();
+  CS_UNUSED(entry);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
+  return csEntityStateWrapper::GetStaticClass();
 }
 
-iObject *csEntityStateCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csEntityStateCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  csEntityState *entityState = userData ? csQueryClass<csEntityState>(userData) : 0;
-  if (!entityState)
+  CS_UNUSED(userData);
+  csEntityStateWrapper *wrapper = userData ? csQueryClass<csEntityStateWrapper>(userData) : nullptr;
+  csEntityState *state = nullptr;
+  if (!wrapper)
   {
     if (entry->HasAttribute("locator"))
     {
-      iObject *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
+      csResourceWrapper *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
       if (!obj)
       {
-        return 0;
+        return nullptr;
       }
-      entityState = csQueryClass<csEntityState>(obj);
-      if (!entityState)
+      wrapper = csQueryClass<csEntityStateWrapper>(obj);
+      if (!wrapper)
       {
-        csBlueprint *blueprint = csQueryClass<csBlueprint>(obj);
-        if (blueprint)
+        csBlueprintWrapper *blueprint = csQueryClass<csBlueprintWrapper>(obj);
+        if (blueprint && blueprint->IsValid())
         {
-          entityState = blueprint->CreateEntityState();
+          wrapper = blueprint->Get()->CreateEntityState();
         }
       }
     }
@@ -54,28 +61,34 @@ iObject *csEntityStateCSFLoader::Load(const csfEntry *entry, const csResourceLoc
 
       if (!entry->HasAttribute("class"))
       {
-        return 0;
+        return nullptr;
       }
       const csClass *entityStateClass = csClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
       if (!entityStateClass)
       {
-        return 0;
+        return nullptr;
       }
-      entityState = entityStateClass->CreateInstance<csEntityState>();
+      state = entityStateClass->CreateInstance<csEntityState>();
+      wrapper = new csEntityStateWrapper(state);
     }
-    if (!entityState)
+    if (!state && (!wrapper || wrapper->IsNull()))
     {
-      return 0;
+      return nullptr;
+    }
+
+    if (!state)
+    {
+      state = wrapper->Get();
     }
   }
 
   for (const csfEntry *propEntry = entry->GetEntry("property");
     propEntry; propEntry = propEntry->GetSiblingEntry("property"))
   {
-    LoadProperty(entityState, propEntry, locator, userData);
+    LoadProperty(state, propEntry, locator, userData);
   }
 
-  return entityState;
+  return wrapper;
 }
 
 

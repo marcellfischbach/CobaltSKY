@@ -4,6 +4,7 @@
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
 #include <cobalt/graphics/ishaderstream.hh>
@@ -36,5 +37,13 @@ private:
   GLuint m_name;
 
 };
+
+CS_CLASS()
+class csShaderGL4Wrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csShaderGL4, csShaderGL4Wrapper, csResourceWrapper);
+};
+
 
 

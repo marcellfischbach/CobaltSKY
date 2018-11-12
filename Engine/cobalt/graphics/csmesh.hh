@@ -3,6 +3,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/graphics/imesh.hh>
 #include <cobalt/math/csboundingbox.hh>
 #include <map>
@@ -16,7 +17,7 @@ struct iVertexDeclaration;
 
 class csMaterial;
 class csSkeleton;
-class csSubMesh;
+class csSubMeshWrapper;
 
 
 
@@ -30,11 +31,11 @@ public:
   csMesh();
   virtual ~csMesh();
 
-  void AddMesh(csSubMesh *instance, csSize materialIndex = 0, csUInt8 lod = 0, const std::string &name = "");
+  void AddMesh(csSubMeshWrapper *instance, csSize materialIndex = 0, csUInt8 lod = 0, const std::string &name = "");
   csUInt8 GetNumberOfLODs() const;
   csSize GetNumberOfMeshes(csUInt8 lod = 0) const;
-  csSubMesh *GetMesh(csUInt8 lod = 0, csSize idx = 0);
-  const csSubMesh *GetMesh(csUInt8 lod = 0, csSize idx = 0) const;
+  csSubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0);
+  const csSubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0) const;
 
   const csBoundingBox &GetBoundingBox() const;
 
@@ -58,7 +59,7 @@ public:
 protected:
   struct Data
   {
-    csSubMesh *m_mesh;
+    csSubMeshWrapper *m_mesh;
     csSize m_materialIndex;
     std::string m_name;
   };
@@ -77,7 +78,12 @@ protected:
   csBoundingBox m_boundingBox;
 };
 
-
+CS_CLASS()
+class CSE_API csMeshWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csMesh, csMeshWrapper, csResourceWrapper);
+};
 
 
 

@@ -24,7 +24,7 @@ EditorResourceManager::~EditorResourceManager()
   EventBus::Get().Deregister(editor_resource_manager_asset_renamed, this);
 }
 
-iObject *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
@@ -82,7 +82,7 @@ bool EditorResourceManager::IsAnonymousLocator(const csResourceLocator &locator)
   return entry->GetName() == locator.GetResourceEntry();
 }
 
-bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, iObject *object)
+bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, csResourceWrapper *object)
 {
   bool res = csResourceManager::RegisterObject(locator, object);
   if (locator.GetResourceEntry().empty())

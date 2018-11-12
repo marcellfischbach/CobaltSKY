@@ -27,3 +27,9 @@ private:
 
 };
 
+CS_CLASS()
+class CSE_API csSkinnedMeshWrapper : public CS_SUPER(csMeshWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csSkinnedMesh, csSkinnedMeshWrapper, csMeshWrapper);
+};

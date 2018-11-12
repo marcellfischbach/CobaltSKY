@@ -271,9 +271,9 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   }
 
   csProgramGL4 *shadowShader = new csProgramGL4();
-  shadowShader->AttachShader(vertexShader);
-  shadowShader->AttachShader(geometryShader);
-  shadowShader->AttachShader(fragmentShader);
+  shadowShader->AttachShader(new csShaderGL4Wrapper(vertexShader));
+  shadowShader->AttachShader(new csShaderGL4Wrapper(geometryShader));
+  shadowShader->AttachShader(new csShaderGL4Wrapper(fragmentShader));
   if (!shadowShader->Link())
   {
     if (logger)
@@ -289,6 +289,6 @@ void csShaderGraphGL4::GenerateShadow(csSGShaderGraph *graph, unsigned numLayers
   }
 
 
-  graph->SetShader(renderPass, shadowShader);
+  graph->SetShader(renderPass, new csProgramGL4Wrapper(shadowShader));
 
 }

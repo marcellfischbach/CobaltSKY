@@ -1,7 +1,7 @@
 
 #include <cobalt/graphics/csbinarygradient.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <cobalt/math/csvector.hh>
 
 #include <cobalt/csengine.hh>

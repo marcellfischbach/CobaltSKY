@@ -1,6 +1,8 @@
 #include <cobalt/entity/blueprint/csblueprint.hh>
 #include <cobalt/entity/blueprint/csbpentity.hh>
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
+#include <cobalt/entity/csentity.hh>
+#include <cobalt/entity/csentitystate.hh>
 
 csBlueprint::csBlueprint()
   : iObject ()
@@ -22,25 +24,25 @@ csBlueprint::~csBlueprint()
   }
 }
 
-csEntity *csBlueprint::CreateEntity() const
+csEntityWrapper *csBlueprint::CreateEntity() const
 {
   if (!m_entity)
   {
-    return 0;
+    return nullptr;
   }
 
-  return m_entity->CreateEntity();
+  return new csEntityWrapper (m_entity->CreateEntity());
 }
 
 
-csEntityState *csBlueprint::CreateEntityState() const
+csEntityStateWrapper *csBlueprint::CreateEntityState() const
 {
   if (!m_entityState)
   {
-    return 0;
+    return nullptr;
   }
 
-  return m_entityState->CreateEntityState();
+  return new csEntityStateWrapper(m_entityState->CreateEntityState());
 }
 
 

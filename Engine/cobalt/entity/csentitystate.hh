@@ -2,6 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/csdefs.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/entity/csentitystate.refl.hh>
@@ -127,6 +128,15 @@ private:
   csEntity *m_entity;
   csEntityScene *m_scene;
 };
+
+
+CS_CLASS()
+class CSE_API csEntityStateWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csEntityState, csEntityStateWrapper, csResourceWrapper);
+};
+
 
 CS_FORCEINLINE csID csEntityState::GetId() const
 {

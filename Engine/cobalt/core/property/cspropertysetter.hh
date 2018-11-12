@@ -3,6 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/core/property/cspropertysetter.refl.hh>
 
 CS_INTERFACE()
@@ -54,4 +55,13 @@ private:
   const csFunction *m_collectionAdder;
 
 };
+
+
+CS_CLASS()
+class CSE_API csPropertySetterWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csPropertySetter, csPropertySetterWrapper, csResourceWrapper);
+};
+
 

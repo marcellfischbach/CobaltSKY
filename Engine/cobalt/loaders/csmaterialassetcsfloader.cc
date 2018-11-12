@@ -2,11 +2,10 @@
 #include <cobalt/loaders/csmaterialassetcsfloader.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/csmaterialdefwrapper.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/csengine.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <map>
 
 
@@ -25,32 +24,38 @@ csMaterialAssetCSFLoader::~csMaterialAssetCSFLoader()
 
 bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(entry);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return entry->GetTagName() == std::string("material");
 }
 
 const csClass *csMaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csMaterial::GetStaticClass();
+  CS_UNUSED(entry);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
+  return csMaterialWrapper::GetStaticClass();
 }
 
-iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csMaterial *material = new csMaterial();
 
   const csfEntry *materialDefEntry = entry->GetEntry("materialDef");
   if (!materialDefEntry)
   {
-    return material;
+    return new csMaterialWrapper(material);
   }
 
   if (!HasLocator(materialDefEntry))
   {
-    return material;
+    return new csMaterialWrapper(material);
   }
   csMaterialDefWrapper *materialDefWrapper = csResourceManager::Get()->GetOrLoad<csMaterialDefWrapper>(GetLocator(materialDefEntry));
   if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
-    return material;
+    return new csMaterialWrapper(material);
   }
   csMaterialDef *materialDef = materialDefWrapper->Get();
 
@@ -131,7 +136,7 @@ iObject *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
   }
 
 
-  return material;
+  return new csMaterialWrapper(material);
 }
 
 

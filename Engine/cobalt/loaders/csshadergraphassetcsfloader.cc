@@ -33,9 +33,10 @@ const csClass *csShaderGraphAssetCSFLoader::EvalClass(const csfEntry *entry, con
   return csSGShaderGraphWrapper::GetStaticClass();
 }
 
-iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csSGShaderGraph *shaderGraph = new csSGShaderGraph();
+  csSGShaderGraphWrapper *shaderGraphWrapper = new csSGShaderGraphWrapper(shaderGraph);
 
   const csfEntry *nodesEntry = entry->GetEntry("nodes");
   const csfEntry *inputsEntry = entry->GetEntry("inputs");
@@ -130,7 +131,7 @@ iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResour
   {
     for (const csfEntry *inputElement = inputsEntry->GetEntry(); inputElement; inputElement = inputElement->GetSiblingEntry())
     {
-      csSGOutput *output = 0;
+      csSGOutput *output = nullptr;
       float fl = 0.0f;
       bool validInput = false;
       const csfEntry *nodeElement = inputElement->GetEntry("node");
@@ -294,5 +295,5 @@ iObject *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResour
   }
 
 
-  return new csSGShaderGraphWrapper(shaderGraph);
+  return shaderGraphWrapper;
 }

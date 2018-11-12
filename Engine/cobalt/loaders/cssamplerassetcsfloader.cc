@@ -1,7 +1,7 @@
 
 #include <cobalt/loaders/cssamplerassetcsfloader.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/csengine.hh>
+#include <cobalt/graphics/isampler.hh>
 
 
 csSamplerAssetCSFLoader::csSamplerAssetCSFLoader()
@@ -17,6 +17,9 @@ csSamplerAssetCSFLoader::~csSamplerAssetCSFLoader()
 
 bool csSamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(entry);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return entry->GetTagName() == std::string("sampler");
 }
 
@@ -96,13 +99,14 @@ const csClass *csSamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const c
   return csSamplerWrapper::GetStaticClass();
 }
 
-iObject *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   iSampler *sampler = csEng->CreateSampler();
   if (!sampler)
   {
-    return 0;
+    return nullptr;
   }
+  csSamplerWrapper *samplerWrapper = new csSamplerWrapper(sampler);
 
 
   const csfEntry *filterElement = entry->GetEntry("filter");
@@ -162,6 +166,6 @@ iObject *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLo
     sampler->SetTextureCompareFunc(::evalCompareFunc(compareFuncElement->GetAttribute()));
   }
 
-  return new csSamplerWrapper(sampler);
+  return samplerWrapper;
 }
 

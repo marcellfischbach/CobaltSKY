@@ -32,7 +32,7 @@ public:
    * @{
    */
 
-  inline iObject *Get(const std::string &resourceName, bool forceInstance = false) const
+  inline csResourceWrapper *Get(const std::string &resourceName, bool forceInstance = false) const
   {
     return Get(csResourceLocator(resourceName), forceInstance);
   }
@@ -43,7 +43,7 @@ public:
   }
 
 
-  inline iObject *Get(const csResourceLocator &locator, bool forceInstance = false) const
+  inline csResourceWrapper *Get(const csResourceLocator &locator, bool forceInstance = false) const
   {
     return csResourceManager::Get()->Aquire(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
   }

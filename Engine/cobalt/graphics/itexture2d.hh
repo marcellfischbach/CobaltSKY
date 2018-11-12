@@ -20,3 +20,10 @@ struct CSE_API iTexture2D : public virtual CS_SUPER(iTexture)
   virtual bool CopyData(csUInt8 lod, csPixelFormat format, const void *data) = 0;
   virtual bool ReadData(csUInt8 lod, csPixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize) = 0;
 };
+
+CS_CLASS()
+class CSE_API csTexture2DWrapper : public CS_SUPER(csTextureWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iTexture2D, csTexture2DWrapper, csTextureWrapper);
+};

@@ -14,7 +14,7 @@ class csClipper;
 class csEntity;
 class csGBufferGL4;
 class csLight;
-struct iShader;
+class csShaderWrapper;
 class csRenderState;
 struct iRenderTarget;
 class csResourceLocator;
@@ -43,7 +43,7 @@ protected:
 
   struct LightProgram
   {
-    iShader *program;
+    csShaderWrapper *program;
     GBufferAttribs gbuffer;
     iShaderAttribute *attrColor;
     iShaderAttribute *attrEnergy;

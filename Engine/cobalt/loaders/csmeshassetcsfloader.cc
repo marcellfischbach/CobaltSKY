@@ -46,12 +46,13 @@ bool csMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocato
 
 const csClass *csMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  return csMesh::GetStaticClass();
+  return csMeshWrapper::GetStaticClass();
 }
 
-iObject *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csMesh *mesh = new csMesh();
+  csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);
 
   const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
   const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
@@ -59,7 +60,7 @@ iObject *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocat
 
   if (!materialSlotsEntry || !globalIndicesEntry || !subMeshesEntry)
   {
-    return mesh;
+    return meshWrapper;
   }
 
 
@@ -112,12 +113,12 @@ iObject *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocat
       lod = subMeshEntry->GetAttributeInt("lod");
     }
 
-    csSubMesh *subMesh = 0;
+    csSubMeshWrapper *subMesh = nullptr;
     std::string blobName = subMeshEntry->GetAttribute();
     const csfBlob *blob = subMeshEntry->GetFile()->GetBlob(blobName);
     if (blob)
     {
-      subMesh = csResourceManager::Get()->Load<csSubMesh>(blob, locator, userData);
+      subMesh = csResourceManager::Get()->Load<csSubMeshWrapper>(blob, locator, userData);
     }
     if (subMesh)
     {
@@ -128,7 +129,7 @@ iObject *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocat
 
   mesh->OptimizeDataStruct();
   mesh->UpdateBoundingBox();
-  return mesh;
+  return meshWrapper;
 }
 
 

@@ -5,7 +5,7 @@
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <set>
 #include <map>
 #include <string.h>
@@ -13,9 +13,9 @@
 
 csPostProcess::csPostProcess()
   : csObject()
-  , m_output(0)
-  , m_postProcessor(0)
-  , m_shader(0)
+  , m_output(nullptr)
+  , m_postProcessor(nullptr)
+  , m_shader(nullptr)
 {
 
 }

@@ -20,6 +20,9 @@ csPNGImageFileLoader::~csPNGImageFileLoader()
 
 bool csPNGImageFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(file);
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   return file->GetExtension() == std::string("png");
 }
 
@@ -57,23 +60,23 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 
 const csClass *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
-  return csImage::GetStaticClass();
+  return csImageWrapper::GetStaticClass();
 }
 
 
-iObject *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)
   {
-    return 0;
+    return nullptr;
   }
 
 
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr)
   {
-    return 0;
+    return nullptr;
   }
 
   png_set_read_fn(png_ptr, file, ::read_data_from_ifile);
@@ -92,12 +95,12 @@ iObject *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locato
 
   if (retval != 1)
   {
-    return 0;
+    return nullptr;
   }
 
   if (bitDepth != 8)
   {
-    return 0;
+    return nullptr;
   }
 
   const png_size_t bytesPerRow = png_get_rowbytes(png_ptr, info_ptr);
@@ -143,7 +146,7 @@ iObject *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locato
   image->SetData(bufferSize, buffer);
   delete[] buffer;
 
-  return image;
+  return new csImageWrapper(image);
 }
 
 

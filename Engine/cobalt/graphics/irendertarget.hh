@@ -2,7 +2,7 @@
 
 #include <cobalt/core/csclass.hh>
 #include <cobalt/csexport.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <cobalt/graphics/irendertarget.refl.hh>
 
 

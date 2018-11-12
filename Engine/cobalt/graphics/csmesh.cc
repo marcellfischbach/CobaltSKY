@@ -30,9 +30,9 @@ csMesh::~csMesh()
 
 
 
-void csMesh::AddMesh(csSubMesh *mesh, csSize materialIndex, csUInt8 lodIdx, const std::string &name)
+void csMesh::AddMesh(csSubMeshWrapper *mesh, csSize materialIndex, csUInt8 lodIdx, const std::string &name)
 {
-  if (mesh)
+  if (mesh && mesh->IsValid())
   {
     LOD &lod = GetLOD(lodIdx);
 
@@ -43,7 +43,7 @@ void csMesh::AddMesh(csSubMesh *mesh, csSize materialIndex, csUInt8 lodIdx, cons
     data.m_name = name;
     lod.m_meshes.push_back(data);
 
-    m_boundingBox.Add(mesh->GetBoundingBox());
+    m_boundingBox.Add(mesh->Get()->GetBoundingBox());
 
     if (materialIndex >= m_numberOfMaterials)
     {
@@ -108,12 +108,12 @@ csSize csMesh::GetNumberOfMeshes(csUInt8 lod) const
   return m_lods[lod].m_meshes.size();
 }
 
-csSubMesh *csMesh::GetMesh(csUInt8 lod, csSize idx)
+csSubMeshWrapper *csMesh::GetMesh(csUInt8 lod, csSize idx)
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
 
-const csSubMesh *csMesh::GetMesh(csUInt8 lod, csSize idx) const
+const csSubMeshWrapper *csMesh::GetMesh(csUInt8 lod, csSize idx) const
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
@@ -179,7 +179,7 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<cs
         }
         activeInstance = nextMaterial;
       }
-      data.m_mesh->Render(renderer);
+      data.m_mesh->Get()->Render(renderer);
     }
   }
 
@@ -199,8 +199,8 @@ csSize csMesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
   const LOD &lod = m_lods[lodIdx];
   for (auto data : lod.m_meshes)
   {
-    const csSubMesh *subMesh = data.m_mesh;
-    count += subMesh->GetNumberOfTrigons();
+    const csSubMeshWrapper *subMesh = data.m_mesh;
+    count += subMesh->Get()->GetNumberOfTrigons();
   }
   return count;
 

@@ -8,9 +8,9 @@
 #include <cobalt/graphics/ishaderattribute.hh>
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/itexture2darray.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/csdirectionallight.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/entity/csentity.hh>
@@ -27,34 +27,34 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
 	, m_depthBuffer(0)
 {
 	InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
-	m_attrLightDirectionNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightDirection"));
+  m_attrLightDirectionNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightDirection"));
 
 	InitializeLightProgram(&m_programPSSM, csResourceLocator("${shaders}/deferred/DirectionalLightPSSM.asset"));
-	m_attrLightDirectionPSSM = m_programPSSM.program->GetAttribute(csShaderAttributeID("LightDirection"));
-	m_attrShadowMap = m_programPSSM.program->GetAttribute(csShaderAttributeID("ShadowMap"));
+  m_attrLightDirectionPSSM = m_programPSSM.program->Get()->GetAttribute(csShaderAttributeID("LightDirection"));
+  m_attrShadowMap = m_programPSSM.program->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
 
 	//
 	// load and init the shadow map renderer
-	m_shadowMapRenderer.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.asset"));
-	if (m_shadowMapRenderer.shader)
+  m_shadowMapRenderer.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.asset"));
+  if (m_shadowMapRenderer.shader && m_shadowMapRenderer.shader->IsValid())
 	{
-		m_shadowMapRenderer.attrDepth = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("Depth"));
-		m_shadowMapRenderer.attrDistances = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("Distances"));
-		m_shadowMapRenderer.attrShadowColorMap = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("ShadowColorMap"));
-		m_shadowMapRenderer.attrShadowMap = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("ShadowMap"));
-		m_shadowMapRenderer.attrShadowMatsProjView = m_shadowMapRenderer.shader->GetAttribute(csShaderAttributeID("ShadowMatsProjView"));
+    m_shadowMapRenderer.attrDepth = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("Depth"));
+    m_shadowMapRenderer.attrDistances = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("Distances"));
+    m_shadowMapRenderer.attrShadowColorMap = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowColorMap"));
+    m_shadowMapRenderer.attrShadowMap = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
+    m_shadowMapRenderer.attrShadowMatsProjView = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowMatsProjView"));
 	}
 
-  m_shadowMapBlurHori.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurHori.asset"));
+  m_shadowMapBlurHori.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/ShadowMapBlurHori.asset"));
   if (m_shadowMapBlurHori.shader)
   {
-    m_shadowMapBlurHori.attrColor0 = m_shadowMapBlurHori.shader->GetAttribute(csShaderAttributeID("Color0"));
+    m_shadowMapBlurHori.attrColor0 = m_shadowMapBlurHori.shader->Get()->GetAttribute(csShaderAttributeID("Color0"));
   }
 
-  m_shadowMapBlurVert.shader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/ShadowMapBlurVert.asset"));
+  m_shadowMapBlurVert.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/ShadowMapBlurVert.asset"));
   if (m_shadowMapBlurVert.shader)
   {
-    m_shadowMapBlurVert.attrColor0 = m_shadowMapBlurVert.shader->GetAttribute(csShaderAttributeID("Color0"));
+    m_shadowMapBlurVert.attrColor0 = m_shadowMapBlurVert.shader->Get()->GetAttribute(csShaderAttributeID("Color0"));
   }
 
 
@@ -163,7 +163,7 @@ void csDirectionalLightRendererGL4::Render(csEntity *root, csCamera *camera, csL
 	m_renderer->SetRenderDestination(eRD_Color0);
 
 	LightProgram &prog = shadow ? m_programPSSM : m_programNoShadow;
-	m_renderer->SetShader(prog.program);
+  m_renderer->SetShader(prog.program->Get());
 	m_renderer->InvalidateTextures();
 	// bind the gbuffer this is used by the light program
 	BindGBuffer(prog.gbuffer, gbuffer);
@@ -356,7 +356,7 @@ void csDirectionalLightRendererGL4::RenderShadowMap(const csDirectionalLight *li
   // from now on we will only render to the single color buffer
   m_renderer->SetRenderDestination(eRD_Color0);
 
-  m_renderer->SetShader(m_shadowMapRenderer.shader);
+  m_renderer->SetShader(m_shadowMapRenderer.shader->Get());
   m_renderer->InvalidateTextures();
 
   if (m_shadowMapRenderer.attrDistances)
@@ -398,7 +398,7 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
   m_renderer->SetBlendEnabled(false);
   m_renderer->SetColorMask(true, true, true, true);
   m_renderer->SetRenderDestination(eRD_Color0);
-  m_renderer->SetShader(m_shadowMapBlurHori.shader);
+  m_renderer->SetShader(m_shadowMapBlurHori.shader->Get());
   m_renderer->InvalidateTextures();
 
   if (m_shadowMapBlurHori.attrColor0)
@@ -417,7 +417,7 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
   m_renderer->SetBlendEnabled(false);
   m_renderer->SetColorMask(true, true, true, true);
   m_renderer->SetRenderDestination(eRD_Color0);
-  m_renderer->SetShader(m_shadowMapBlurVert.shader);
+  m_renderer->SetShader(m_shadowMapBlurVert.shader->Get());
   m_renderer->InvalidateTextures();
 
   if (m_shadowMapBlurVert.attrColor0)

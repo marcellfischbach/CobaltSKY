@@ -2,13 +2,13 @@
 
 #include <samplereditor/samplereditorwidget.hh>
 #include <samplereditor/samplereditor.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
 
 #include <QColor>
 
 SamplerEditorWidget::SamplerEditorWidget(SamplerEditor *parent)
   : QWidget()
-  , m_sampler(0)
+  , m_sampler(nullptr)
   , m_editor(parent)
 {
   m_gui.setupUi(this);

@@ -3,7 +3,8 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/math/cscolor4f.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/itexture2darray.hh>
 
 class CSE_API csBinaryGradient
 {

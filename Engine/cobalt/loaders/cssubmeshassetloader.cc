@@ -31,16 +31,17 @@ const csClass *csSubMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, 
   return csSubMesh::GetStaticClass();
 }
 
-iObject *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
 {
   csUInt32 version;
 
   inputStream >> version;
   if (version > CS_VERSION(1, 0, 0))
   {
-    return 0;
+    return nullptr;
   }
   csSubMesh *subMesh = new csSubMesh();
+  csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
 
   csUInt8 numVertexDeclaration;
   csUInt32 primType, indexType;
@@ -110,7 +111,7 @@ iObject *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csRes
     if (!userData)
     {
       subMesh->Release();
-      return 0;
+      return nullptr;
     }
   }
   else
@@ -135,5 +136,5 @@ iObject *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csRes
   bbox.Finish();
   subMesh->SetBoundingBox(bbox);
 
-  return subMesh;
+  return subMeshWrapper;
 }

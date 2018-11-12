@@ -27,23 +27,25 @@ const csClass *csEntityCSFLoader::EvalClass(const csfEntry *entry, const csResou
   return csEntity::GetStaticClass();
 }
 
-iObject *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
-  csEntity *entity = 0;
+  CS_UNUSED(userData);
+  csEntity *entity = nullptr;
+  csEntityWrapper *wrapper= nullptr;
   if (entry->HasAttribute("locator"))
   { 
-    iObject *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
+    csResourceWrapper *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
     if (!obj)
     {
-      return 0;
+      return nullptr;
     }
-    entity = csQueryClass<csEntity>(obj);
+    wrapper = csQueryClass<csEntityWrapper>(obj);
     if (!entity)
     {
-      csBlueprint *blueprint = csQueryClass<csBlueprint>(obj);
-      if (blueprint)
+      csBlueprintWrapper *blueprint = csQueryClass<csBlueprintWrapper>(obj);
+      if (blueprint && blueprint->IsValid())
       {
-        entity = blueprint->CreateEntity();
+        wrapper = blueprint->Get()->CreateEntity();
       }
     }
   }
@@ -52,20 +54,28 @@ iObject *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator 
 
     if (!entry->HasAttribute("class"))
     {
-      return 0;
+      return nullptr;
     }
     const csClass *entityClass = csClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
     if (!entityClass)
     {
-      return 0;
+      return nullptr;
     }
 
     entity = entityClass->CreateInstance<csEntity>();
+    wrapper = new csEntityWrapper(entity);
   }
+  if (!entity && (!wrapper || wrapper->IsNull()))
+  {
+    return nullptr;
+  }
+
   if (!entity)
   {
-    return 0;
+    entity = wrapper->Get();
   }
+
+
 
   std::map<csID, csEntityState*> states;
   for (const csfEntry *entityStateEntry = entry->GetEntry("entityState");
@@ -78,7 +88,7 @@ iObject *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator 
     }
     csID id = csID_Undefined;
     std::string idStr = entityStateEntry->GetAttribute("id");
-    csEntityState *state = 0;
+    csEntityState *state = nullptr;
     if (idStr == std::string("root"))
     {
       state = entity->GetRootState();
@@ -149,5 +159,5 @@ iObject *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator 
     }
   }
 
-  return entity;
+  return wrapper;
 }

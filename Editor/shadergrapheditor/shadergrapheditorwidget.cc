@@ -21,7 +21,7 @@
 #include <cobalt/csengine.hh>
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/shadergraph/cssgdefaultconsolelogger.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>

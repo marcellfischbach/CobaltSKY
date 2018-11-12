@@ -5,7 +5,7 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/cstextureassetcsfloader.refl.hh>
 
-class csImage;
+class csImageWrapper;
 class csSamplerWrapper;
 
 
@@ -21,18 +21,18 @@ public:
   csTextureAssetCSFLoader();
   virtual ~csTextureAssetCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
 private:
   csTextureType GetTextureType(const std::string &typeName) const;
 
 
-  iObject *LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  iObject *LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  csImage *LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  csSamplerWrapper *LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  csResourceWrapper *LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csImageWrapper *LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csSamplerWrapper *LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
 };
 
 

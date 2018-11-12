@@ -41,18 +41,18 @@ const csClass *csStaticMeshAssetLoader::EvalClass(csAssetInputStream &inputStrea
   return csMesh::GetStaticClass();
 }
 
-iObject *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
 {
   csUInt32 version, numMaterials, numSubMeshes, numIndices;
   inputStream >> version;
 
   if (version > CS_VERSION(1, 0, 0))
   {
-    return 0;
+    return nullptr;
   }
 
   csMesh *mesh = new csMesh();
-
+  csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);
 
   // 
   // read the material names of the mesh
@@ -91,11 +91,11 @@ iObject *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const cs
       >> materialIndex
       >> lod
       >> name;
-    csSubMesh *subMesh = ReadSubMesh(inputStream, globalIndexBuffers, locator, userData);
+    csSubMeshWrapper *subMesh = ReadSubMesh(inputStream, globalIndexBuffers, locator, userData);
     if (!subMesh)
     {
       CS_RELEASE(mesh);
-      return 0;
+      return nullptr;
     }
     mesh->AddMesh(subMesh, materialIndex, lod, name);
     CS_RELEASE(subMesh);
@@ -112,13 +112,14 @@ iObject *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const cs
   const csBoundingBox& bbox = mesh->GetBoundingBox();
   bbox.Debug("StaticMeshLoader");
 
-  return mesh;
+  return meshWrapper;
 }
 
 
-csSubMesh *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData) const
+csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData) const
 {
   csSubMesh *subMesh = new csSubMesh();
+  csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
 
   csUInt8 numVertexDeclaration;
   csUInt32 primType, indexType;
@@ -209,5 +210,5 @@ csSubMesh *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream,
   bbox.Finish();
   subMesh->SetBoundingBox(bbox);
 
-  return subMesh;
+  return subMeshWrapper;
 }

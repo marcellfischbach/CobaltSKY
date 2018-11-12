@@ -4,7 +4,7 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/csstaticmeshassetloader.refl.hh>
 
-class csSubMesh;
+class csSubMeshWrapper;
 struct iIndexBuffer;
 
 CS_CLASS()
@@ -15,11 +15,11 @@ public:
   csStaticMeshAssetLoader();
   virtual ~csStaticMeshAssetLoader();
 
-  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = 0) const;
-  const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
-  iObject *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = 0) const;
+  csResourceWrapper *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
 private:
-  csSubMesh *ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData = 0) const;
+  csSubMeshWrapper *ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData = 0) const;
 };

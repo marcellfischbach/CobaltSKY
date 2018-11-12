@@ -3,6 +3,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csdefs.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/csenums.hh>
 #include <vector>
 #include <cobalt/graphics/csimage.refl.hh>
@@ -47,7 +48,12 @@ private:
   std::vector<csUInt8*> m_data;
 };
 
-
+CS_CLASS()
+class CSE_API csImageWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csImage, csImageWrapper, csResourceWrapper);
+};
 
 
 CS_FORCEINLINE void csImage::SetPixelFormat(csPixelFormat pixelFormat)

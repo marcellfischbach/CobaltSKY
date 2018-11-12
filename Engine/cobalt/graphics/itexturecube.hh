@@ -20,3 +20,10 @@ struct CSE_API iTextureCube : public virtual CS_SUPER(iTexture)
   virtual bool CopyData(csTextureCubeFace face, csUInt8 lod, csPixelFormat format, const void *data) = 0;
 
 };
+
+CS_CLASS()
+class CSE_API csTextureCubeWrapper : public CS_SUPER(csTextureWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iTextureCube, csTextureCubeWrapper, csTextureWrapper);
+};

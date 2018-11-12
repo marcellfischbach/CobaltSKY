@@ -270,16 +270,3 @@ csSGShaderGraph *csSGShaderGraph::Copy(csSGShaderGraph *dest) const
   return dest;
 }
 
-
-csSGShaderGraphWrapper::csSGShaderGraphWrapper(csSGShaderGraph *shaderGraph)
-  : csMaterialDefWrapper(shaderGraph)
-  , m_shaderGraph(shaderGraph)
-{
-
-}
-
-csSGShaderGraphWrapper::~csSGShaderGraphWrapper()
-{
-
-}
-

@@ -233,10 +233,6 @@ set(SOURCE_GRAPHICS
     graphics/csmaterial.hh
     graphics/csmaterialdef.cc
     graphics/csmaterialdef.hh
-    graphics/csmaterialdefwrapper.cc
-    graphics/csmaterialdefwrapper.hh
-    graphics/csmaterialwrapper.cc
-    graphics/csmaterialwrapper.hh
     graphics/csmultimaterial.cc
     graphics/csmultimaterial.hh
     graphics/csmesh.cc
@@ -254,8 +250,6 @@ set(SOURCE_GRAPHICS
     graphics/cspostprocessor.hh
     graphics/csskinnedmesh.cc
     graphics/csskinnedmesh.hh
-	graphics/cssamplerwrapper.cc
-	graphics/cssamplerwrapper.hh
     graphics/cssubmesh.cc
     graphics/cssubmesh.hh
     graphics/csshaderattributeid.cc
@@ -264,8 +258,6 @@ set(SOURCE_GRAPHICS
     graphics/csshaderstreamid.hh
     graphics/csterrainmesh.cc
     graphics/csterrainmesh.hh
-	graphics/cstexturewrapper.cc
-	graphics/cstexturewrapper.hh
     )
 
 source_group(

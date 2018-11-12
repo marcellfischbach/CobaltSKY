@@ -33,6 +33,11 @@
       return m_resource;                                                    \
     }                                                                       \
                                                                             \
+    CS_FORCEINLINE const resourceClass *Get() const                         \
+    {                                                                       \
+      return m_resource;                                                    \
+    }                                                                       \
+                                                                            \
   private:                                                                  \
     resourceClass *m_resource
 
@@ -61,6 +66,11 @@ public:
   CS_FORCEINLINE bool IsValid() const
   {
     return m_resource;
+  }
+
+  CS_FORCEINLINE bool IsNull() const
+  {
+    return !m_resource;
   }
 
   CS_FORCEINLINE csResourceLocator &GetLocator() 

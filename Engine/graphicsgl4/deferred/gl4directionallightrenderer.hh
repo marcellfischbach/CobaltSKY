@@ -55,7 +55,7 @@ private:
   void BindDirectionalLightPSSM(csDirectionalLight *directionalLight);
 
   struct {
-	  iShader *shader;
+    csShaderWrapper *shader;
 	  iShaderAttribute *attrDepth;
 	  iShaderAttribute *attrDistances;
 	  iShaderAttribute *attrShadowMatsProjView;
@@ -68,12 +68,12 @@ private:
   } m_shadowMapRenderer;
 
   struct {
-    iShader *shader;
+    csShaderWrapper *shader;
     iShaderAttribute *attrColor0;
   } m_shadowMapBlurHori;
 
   struct {
-    iShader *shader;
+    csShaderWrapper *shader;
     iShaderAttribute *attrColor0;
   } m_shadowMapBlurVert;
 

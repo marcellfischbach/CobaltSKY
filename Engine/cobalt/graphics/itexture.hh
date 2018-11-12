@@ -6,6 +6,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/itexture.refl.hh>
 
@@ -27,3 +28,12 @@ struct CSE_API iTexture : public iObject
   virtual void GenerateMipMaps() = 0;
 
 };
+
+
+CS_CLASS()
+class CSE_API csTextureWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iTexture, csTextureWrapper, csResourceWrapper);
+};
+

@@ -3,7 +3,6 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
-
 #include <cobalt/entity/blueprint/csbpentitystate.refl.hh>
 
 class csPropertySetter;

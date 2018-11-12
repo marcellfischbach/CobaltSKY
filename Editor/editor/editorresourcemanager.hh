@@ -10,11 +10,11 @@ public:
   EditorResourceManager();
   virtual ~EditorResourceManager();
 
-  virtual iObject *Load(const csResourceLocator &locator, iObject *userData = 0);
-  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = nullptr) const;
 
 
-  virtual bool RegisterObject(const csResourceLocator &locator, iObject *object);
+  virtual bool RegisterObject(const csResourceLocator &locator, csResourceWrapper *object);
   virtual void RenameResource(const csResourceLocator &from, const csResourceLocator &to);
 
 private:

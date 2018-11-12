@@ -25,36 +25,36 @@ const csClass *LoadersEditorIconAssetCSFLoader::EvalClass(const csfEntry *entry,
   return EditorImage::GetStaticClass();
 }
 
-iObject *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   std::string tagName = entry->GetTagName();
   if (tagName != std::string("editorIcon"))
   {
-    return 0;
+    return nullptr;
   }
 
   const csfEntry *imageEntry = entry->GetEntry("image");
   if (!imageEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   std::string imageName(imageEntry->GetAttribute());
   const csfBlob *blob = imageEntry->GetFile()->GetBlob(imageName);
   if (!blob)
   {
-    return 0;
+    return nullptr;
   }
   csImage *image = csResourceManager::Get()->Load<csImage>(blob, locator, userData);
   if (!image)
   {
-    return 0;
+    return nullptr;
   }
 
 
 
   EditorImage *res = new EditorImage(image);
   image->Release();
-  return res;
+  return new EditorImageWrapper(res);
 }
 

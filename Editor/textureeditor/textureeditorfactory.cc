@@ -2,7 +2,7 @@
 
 #include <textureeditor/textureeditorfactory.hh>
 #include <textureeditor/textureeditor.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
 
 bool TextureEditorFactory::CanEdit(iObject *object, asset::model::Asset *asset) const
 {

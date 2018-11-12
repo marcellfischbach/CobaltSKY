@@ -140,7 +140,7 @@ csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
   subMesh->SetIndexBuffer(indexBuffer, numIndices);
 
   csMesh *mesh = new csMesh();
-  mesh->AddMesh(subMesh);
+  mesh->AddMesh(new csSubMeshWrapper(subMesh));
 
   csStaticMeshState *staticMeshState = new csStaticMeshState();
   staticMeshState->SetMesh(mesh);

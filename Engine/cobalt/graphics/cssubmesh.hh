@@ -3,6 +3,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csboundingbox.hh>
 #include <cobalt/graphics/cssubmesh.refl.hh>
 
@@ -51,3 +52,12 @@ private:
 
   csBoundingBox m_boundingBox;
 };
+
+CS_CLASS()
+class CSE_API csSubMeshWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csSubMesh, csSubMeshWrapper, csResourceWrapper);
+};
+
+

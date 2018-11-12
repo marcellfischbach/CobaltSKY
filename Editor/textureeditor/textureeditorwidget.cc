@@ -1,8 +1,8 @@
 #include <textureeditor/textureeditorwidget.hh>
 #include <textureeditor/textureeditor.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <editor/editor.hh>
 #include <editor/project/project.hh>
 #include <QFile>
@@ -125,7 +125,7 @@ void TextureEditorWidget::on_pbSave_clicked()
 
   samplerEntry->RemoveAttributes();
 
-  csResourceLocator samplerLocator = csResourceManager::Get()->GetLocator(m_texture->Get()->GetSampler()->Get());
+  csResourceLocator samplerLocator = m_texture->Get()->GetSampler()->GetLocator();
   samplerEntry->AddAttribute(samplerLocator.GetResourceFile());
 
   outputFile.Output(std::string(absFileName.toLatin1()));

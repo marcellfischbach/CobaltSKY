@@ -23,7 +23,7 @@
 #include <textureeditor/textureeditormodule.hh>
 #include <QIcon>
 
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 
 // #define GUI_TEST
 

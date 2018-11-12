@@ -1,7 +1,7 @@
 
 
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/csengine.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <graphicsgl4/gl4rendertarget.hh>

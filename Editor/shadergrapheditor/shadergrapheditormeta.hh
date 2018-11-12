@@ -2,6 +2,7 @@
 
 #include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csvector2f.hh>
 #include <shadergrapheditor/shadergrapheditormeta.refl.hh>
 
@@ -27,4 +28,13 @@ private:
 
   std::map<csSize, csVector2f> m_poss;
 };
+
+
+CS_CLASS()
+class ShaderGraphEditorMetaWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(ShaderGraphEditorMeta, ShaderGraphEditorMetaWrapper, csResourceWrapper);
+};
+
 

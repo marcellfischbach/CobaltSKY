@@ -1,11 +1,11 @@
 
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/csmaterialdefwrapper.hh>
 #include <cobalt/graphics/csnosuchparameterexception.hh>
 #include <cobalt/graphics/igraphics.hh>
+#include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 
 
 csMaterial::csMaterial()
@@ -316,8 +316,8 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
     return false;
   }
   csMaterialDef *materialDef = m_materialDef->Get();
-  iShader *shader = materialDef->Bind(renderer, pass);
-  if (!shader)
+  csShaderWrapper *shader = materialDef->Bind(renderer, pass);
+  if (!shader || shader->IsNull())
   {
     return false;
   }

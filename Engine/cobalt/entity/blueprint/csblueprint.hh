@@ -8,8 +8,8 @@
 
 class csBPEntity;
 class csBPEntityState;
-class csEntity;
-class csEntityState;
+class csEntityWrapper;
+class csEntityStateWrapper;
 
 CS_CLASS()
 class CSE_API csBlueprint : public iObject
@@ -19,8 +19,8 @@ public:
   csBlueprint();
   virtual ~csBlueprint();
 
-  csEntity *CreateEntity() const;
-  csEntityState *CreateEntityState() const;
+  csEntityWrapper *CreateEntity() const;
+  csEntityStateWrapper *CreateEntityState() const;
 
   void SetEntity(csBPEntity *entity);
   void SetEntityState(csBPEntityState *entityState);
@@ -37,28 +37,3 @@ class csBlueprintWrapper : public CS_SUPER(csResourceWrapper)
   CS_CLASS_GEN;
   CS_RESOURCE_WRAPPER(csBlueprint, csBlueprintWrapper, csResourceWrapper);
 };
-
-//public:
-//  csBlueprintWrapper (csBlueprint *blueprint = nullptr)
-//    : csResourceWrapper(blueprint)
-//    , m_blueprint(nullptr)
-//  {
-//    CS_SET(m_blueprint, blueprint);
-//  }
-
-//  virtual void Set(iObject *object)
-//  {
-//    csBlueprint *blueprint = csQueryClass<csBlueprint>(object);
-//    csResourceWrapper::Set(blueprint);
-//    CS_SET(m_blueprint, blueprint);
-//  }
-
-//  CS_FORCEINLINE csBlueprint *Get()
-//  {
-//    return m_blueprint;
-//  }
-
-//private:
-//  csBlueprint *m_blueprint;
-//};
-

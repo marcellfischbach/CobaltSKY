@@ -33,7 +33,7 @@
 #include <graphicsgl4/shadergraph/gl4sgvarfloat4.hh>
 #include <graphicsgl4/gl4graphics.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <cobalt/graphics/shadergraph/cssgadd.hh>
 #include <cobalt/graphics/shadergraph/cssgconstfloat1.hh>

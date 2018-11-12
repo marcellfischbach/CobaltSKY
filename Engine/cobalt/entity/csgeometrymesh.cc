@@ -9,8 +9,8 @@
 
 csGeometryMesh::csGeometryMesh()
   : csGeometryData()
-  , m_mesh(0)
-  , m_material(0)
+  , m_mesh(nullptr)
+  , m_material(nullptr)
 {
   m_localTransform.SetIdentity();
   m_globalTransform.SetIdentity();
@@ -38,7 +38,7 @@ void csGeometryMesh::UpdateTransformation(const csMatrix4f &parentTransform)
 }
 
 
-void csGeometryMesh::SetMesh(csMesh *mesh)
+void csGeometryMesh::SetMesh(csMeshWrapper *mesh)
 {
   CS_SET(m_mesh, mesh);
 }

@@ -22,3 +22,10 @@ struct CSE_API iTexture2DArray : public virtual CS_SUPER(iTexture)
   virtual bool CopyData(csUInt16 layer, csUInt8 lod, csPixelFormat format, const void *data) = 0;
 
 };
+
+CS_CLASS()
+class CSE_API csTexture2DArrayWrapper : public CS_SUPER(csTextureWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iTexture2DArray, csTexture2DArrayWrapper, csTextureWrapper);
+};

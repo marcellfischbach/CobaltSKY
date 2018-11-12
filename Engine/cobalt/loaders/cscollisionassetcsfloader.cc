@@ -28,11 +28,11 @@ const csClass *csCollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const
   return csPhysicsShape::GetStaticClass();
 }
 
-iObject *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csPhysicsShape *container = new csPhysicsShape();
 
-  const csfEntry *shapesEntry = 0;
+  const csfEntry *shapesEntry = nullptr;
   if (entry->GetTagName() == std::string("shapes"))
   {
     shapesEntry = entry;
@@ -43,7 +43,7 @@ iObject *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResource
   }
   if (!shapesEntry)
   {
-    return container;
+    return new csPhysicsShapeWrapper(container);
   }
 
 
@@ -90,7 +90,7 @@ iObject *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResource
     container->AddShape(shape);
   }
 
-  return container;
+  return new csPhysicsShapeWrapper(container);
 }
 
 

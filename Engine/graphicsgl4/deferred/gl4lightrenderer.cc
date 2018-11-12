@@ -6,8 +6,8 @@
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csgeometrydata.hh>
@@ -40,17 +40,18 @@ csLightRendererGL4::~csLightRendererGL4()
 
 void csLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const csResourceLocator &locator)
 {
-  lightProgram->program = csResourceManager::Get()->GetOrLoad<iShader>(locator);
-  if (lightProgram->program)
+  lightProgram->program = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(locator);
+  if (lightProgram->program && lightProgram->program->IsValid())
   {
-    lightProgram->gbuffer.attrDiffuseRoughness = lightProgram->program->GetAttribute(csShaderAttributeID("DiffuseRoughness"));
-    lightProgram->gbuffer.attrNormalLightMode = lightProgram->program->GetAttribute(csShaderAttributeID("NormalLightMode"));
-    lightProgram->gbuffer.attrEmissiveMetallic = lightProgram->program->GetAttribute(csShaderAttributeID("EmissiveMetallic"));
-    lightProgram->gbuffer.attrSSSSpecular = lightProgram->program->GetAttribute(csShaderAttributeID("SSSSpecular"));
-    lightProgram->gbuffer.attrDepth = lightProgram->program->GetAttribute(csShaderAttributeID("Depth"));
+    iShader *program = lightProgram->program->Get();
+    lightProgram->gbuffer.attrDiffuseRoughness = program->GetAttribute(csShaderAttributeID("DiffuseRoughness"));
+    lightProgram->gbuffer.attrNormalLightMode = program->GetAttribute(csShaderAttributeID("NormalLightMode"));
+    lightProgram->gbuffer.attrEmissiveMetallic = program->GetAttribute(csShaderAttributeID("EmissiveMetallic"));
+    lightProgram->gbuffer.attrSSSSpecular = program->GetAttribute(csShaderAttributeID("SSSSpecular"));
+    lightProgram->gbuffer.attrDepth = program->GetAttribute(csShaderAttributeID("Depth"));
 
-    lightProgram->attrColor = lightProgram->program->GetAttribute(csShaderAttributeID("LightColor"));
-    lightProgram->attrEnergy = lightProgram->program->GetAttribute(csShaderAttributeID("LightEnergy"));
+    lightProgram->attrColor = program->GetAttribute(csShaderAttributeID("LightColor"));
+    lightProgram->attrEnergy = program->GetAttribute(csShaderAttributeID("LightEnergy"));
   }
 }
 

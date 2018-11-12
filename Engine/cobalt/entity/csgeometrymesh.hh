@@ -2,10 +2,12 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/entity/csgeometrydata.hh>
 
 #include <cobalt/entity/csgeometrymesh.refl.hh>
 
+class csMeshWrapper;
 /**
 * \ingroup entity
 */
@@ -19,9 +21,9 @@ public:
   csGeometryMesh();
   virtual ~csGeometryMesh();
 
-  void SetMesh(csMesh *mesh);
-  csMesh *GetMesh();
-  const csMesh *GetMesh() const;
+  void SetMesh(csMeshWrapper *mesh);
+  csMeshWrapper *GetMesh();
+  const csMeshWrapper *GetMesh() const;
 
   void SetMaterial(csMultiMaterial *material);
   csMultiMaterial *GetMaterial();
@@ -43,19 +45,30 @@ private:
   csMatrix4f m_localTransform;
   csMatrix4f m_globalTransform;
 
-  csMesh *m_mesh;
+  csMeshWrapper *m_mesh;
   csMultiMaterial *m_material;
 
 };
 
 
+CS_CLASS()
+class CSE_API csGeometryMeshWrapper : public CS_SUPER(csGeometryDataWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csGeometryMesh, csGeometryMeshWrapper, csGeometryDataWrapper);
+};
 
-CS_FORCEINLINE csMesh *csGeometryMesh::GetMesh()
+
+
+
+
+
+CS_FORCEINLINE csMeshWrapper *csGeometryMesh::GetMesh()
 {
   return m_mesh;
 }
 
-CS_FORCEINLINE const csMesh *csGeometryMesh::GetMesh() const
+CS_FORCEINLINE const csMeshWrapper *csGeometryMesh::GetMesh() const
 {
   return m_mesh;
 }

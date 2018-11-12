@@ -16,6 +16,7 @@ csShaderGL4Loader::~csShaderGL4Loader()
 
 bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *) const
 {
+  CS_UNUSED(locator);
   std::string ext = file->GetExtension();
   return
     ext == std::string("vert") ||
@@ -31,7 +32,7 @@ const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator
   return csShaderGL4::GetStaticClass();
 }
 
-iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, iObject *) const
+csResourceWrapper *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, iObject *) const
 {
   std::string ext = file->GetExtension();
 
@@ -62,7 +63,7 @@ iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, 
   }
   else
   {
-    return 0;
+    return nullptr;
   }
 
 
@@ -108,10 +109,10 @@ iObject *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, 
     }
     printf("Log:\n%s\n", log.c_str());
     shader->Release();
-    return 0;
+    return nullptr;
   }
 
-  return shader;
+  return new csShaderGL4Wrapper(shader);
 }
 
 

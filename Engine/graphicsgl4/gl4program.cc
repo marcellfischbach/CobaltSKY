@@ -22,7 +22,7 @@ csProgramGL4::~csProgramGL4()
   {
     if (m_name)
     {
-      glDetachShader(m_name, shader->GetName());
+      glDetachShader(m_name, shader->Get()->GetName());
       CS_CHECK_GL_ERROR;
     }
     shader->Release();
@@ -232,7 +232,7 @@ iShaderStream *csProgramGL4::GetStream(const std::string &name)
 
 
 
-void csProgramGL4::AttachShader(csShaderGL4 *shader)
+void csProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -247,7 +247,7 @@ void csProgramGL4::AttachShader(csShaderGL4 *shader)
 }
 
 
-void csProgramGL4::DetachShader(csShaderGL4 *shader)
+void csProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -256,7 +256,7 @@ void csProgramGL4::DetachShader(csShaderGL4 *shader)
   }
   if (shader)
   {
-    for (std::vector<csShaderGL4*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+    for (std::vector<csShaderGL4Wrapper*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
     {
       if (*it == shader)
       {
@@ -281,7 +281,7 @@ bool csProgramGL4::Link()
   CS_CHECK_GL_ERROR;
   for (auto shader : m_shaders)
   {
-    glAttachShader(m_name, shader->GetName());
+    glAttachShader(m_name, shader->Get()->GetName());
   }
 
   glLinkProgram(m_name);
@@ -294,7 +294,7 @@ bool csProgramGL4::Link()
   {
     for (auto shader : m_shaders)
     {
-      glDetachShader(m_name, shader->GetName());
+      glDetachShader(m_name, shader->Get()->GetName());
     }
     glDeleteProgram(m_name);
     m_name = 0;

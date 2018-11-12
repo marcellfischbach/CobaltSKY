@@ -3,6 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
@@ -14,7 +15,7 @@
 #define csInvalidShaderParamIndex (~0x00)
 
 struct iGraphics;
-struct iShader;
+struct csShaderWrapper;
 struct iShaderAttribute;
 class csTextureWrapper;
 
@@ -28,9 +29,9 @@ public:
   csMaterialDef();
   virtual ~csMaterialDef();
 
-  void SetShader(csRenderPass pass, iShader *shader);
-  iShader *GetShader(csRenderPass pass);
-  const iShader *GetShader(csRenderPass pass) const;
+  void SetShader(csRenderPass pass, csShaderWrapper *shader);
+  csShaderWrapper *GetShader(csRenderPass pass);
+  const csShaderWrapper *GetShader(csRenderPass pass) const;
 
   csSize GetNumberOfParameters() const;
   csShaderParameterType GetParamType(csSize idx) const;
@@ -67,7 +68,7 @@ public:
   void ClearParameters();
   csSize RegisterParam(const std::string &id, const std::string &parameterName, csShaderParameterType type);
 
-  iShader *Bind(iGraphics *renderer, csRenderPass pass);
+  csShaderWrapper *Bind(iGraphics *renderer, csRenderPass pass);
 protected:
   void BindParameter(iGraphics *renderer, csRenderPass pass, csSize idx);
   void BindFillMode(iGraphics *renderer);
@@ -91,9 +92,16 @@ private:
 
   std::vector<Param> m_params;
 
-  iShader *m_shaders[eRP_COUNT];
+  csShaderWrapper *m_shaders[eRP_COUNT];
 
   csFillMode m_fillMode;
 
+};
+
+CS_CLASS()
+class CSE_API csMaterialDefWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csMaterialDef, csMaterialDefWrapper, csResourceWrapper);
 };
 

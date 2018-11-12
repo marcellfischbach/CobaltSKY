@@ -33,37 +33,38 @@ const csClass *csProgramGL4Loader::EvalClass(const csfEntry *entry, const csReso
   return csProgramGL4::GetStaticClass();
 }
 
-iObject *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   if (std::string(entry->GetTagName()) != std::string("program"))
   {
-    return 0;
+    return nullptr;
   }
   CS_CHECK_GL_ERROR;
 
   const csfEntry *techniqueEntry = FindTechnique(entry);
   if (!techniqueEntry)
   {
-    return 0;
+    return nullptr;
   }
 
   csResourceManager *resourceManager = csResourceManager::Get();
 
   csProgramGL4 *program = new csProgramGL4();
+  csProgramGL4Wrapper *programWrapper = new csProgramGL4Wrapper(program);
   for (const csfEntry *shaderEntry = techniqueEntry->GetEntry("shader");
        shaderEntry;
        shaderEntry = shaderEntry->GetSiblingEntry("shader"))
   {
     if (!shaderEntry->HasAttribute("locator"))
     {
-      return 0;
+      return nullptr;
     }
     csResourceLocator locator(shaderEntry->GetAttribute("locator"));
-    csShaderGL4 *shader = resourceManager->GetOrLoad<csShaderGL4>(locator);
-    if (!shader)
+    csShaderGL4Wrapper *shader = resourceManager->GetOrLoad<csShaderGL4Wrapper>(locator);
+    if (!shader || shader->IsNull())
     {
       program->Release();
-      return 0;
+      return nullptr;
     }
     program->AttachShader(shader);
   }
@@ -77,7 +78,7 @@ iObject *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator
 
 
 
-  return program;
+  return programWrapper;
 }
 
 const csfEntry *csProgramGL4Loader::FindTechnique(const csfEntry *entry) const

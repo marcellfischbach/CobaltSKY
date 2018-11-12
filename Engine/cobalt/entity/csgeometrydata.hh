@@ -4,6 +4,7 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/entity/csgeometrydata.refl.hh>
 
@@ -49,6 +50,14 @@ private:
   std::string m_name;
 
   bool m_attached;
+};
+
+CS_CLASS()
+class CSE_API csGeometryDataWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csGeometryData, csGeometryDataWrapper, csResourceWrapper);
+
 };
 
 

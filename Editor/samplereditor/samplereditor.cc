@@ -4,7 +4,7 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <csfile/csffile.hh>
 
 #include <QFile>

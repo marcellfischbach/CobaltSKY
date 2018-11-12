@@ -4,7 +4,6 @@
 #include <graphicsgl4/gl4mapping.hh>
 #include <graphicsgl4/gl4sampler.hh>
 #include <graphicsgl4/gl4defines.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
 
 csTextureGL4::csTextureGL4(csTextureType type)
   : iTexture()

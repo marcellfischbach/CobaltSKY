@@ -22,16 +22,16 @@ csPointLightRendererGL4::csPointLightRendererGL4(iGraphics *renderer)
   : csLightRendererGL4(renderer)
 {
   InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/PointLight.asset"));
-  m_attrLightPositionNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightPosition"));
-  m_attrLightRangeNoShadow = m_programNoShadow.program->GetAttribute(csShaderAttributeID("LightRadius"));
+  m_attrLightPositionNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightPosition"));
+  m_attrLightRangeNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightRadius"));
 
   InitializeLightProgram(&m_programCubeShadow, csResourceLocator("${shaders}/deferred/PointLightCubeShadow.asset"));
-  m_attrLightPositionCubeShadow = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("LightPosition"));
-  m_attrLightRangeCubeShadow = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("LightRadius"));
-  m_attrShadowMats = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("ShadowMats"));
-  m_attrShadowMap = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("ShadowMap"));
-  m_attrMapBias = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("MapBias"));
-  m_attrShadowIntensity = m_programCubeShadow.program->GetAttribute(csShaderAttributeID("ShadowIntensity"));
+  m_attrLightPositionCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("LightPosition"));
+  m_attrLightRangeCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("LightRadius"));
+  m_attrShadowMats = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowMats"));
+  m_attrShadowMap = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
+  m_attrMapBias = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("MapBias"));
+  m_attrShadowIntensity = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowIntensity"));
 
 
   m_mapBias = 0.99f;
@@ -87,7 +87,7 @@ void csPointLightRendererGL4::Render(csEntity *root, csCamera *camera, csLight *
   m_renderer->SetRenderDestination(eRD_Color0);
 
   LightProgram &prog = shadow ? m_programCubeShadow : m_programNoShadow;
-  m_renderer->SetShader(prog.program);
+  m_renderer->SetShader(prog.program->Get());
   // bind the gbuffer this is used by the light program
   BindGBuffer(prog.gbuffer, gbuffer);
   BindLight(prog, light);

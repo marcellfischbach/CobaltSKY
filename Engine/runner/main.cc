@@ -46,9 +46,9 @@
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
 #include <cobalt/graphics/irendertarget.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <cobalt/graphics/ishader.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <cobalt/graphics/csgenericshaderpostprocess.hh>
 #include <cobalt/graphics/cslight.hh>
 #include <cobalt/graphics/csmaterial.hh>
@@ -259,7 +259,7 @@ int initialize()
   spatialState02->SetParentId(1);
   bpEntity->AddEntityState(spatialState02);
 
-  csEntity *newEntity = bp->CreateEntity();
+  csEntityWrapper *newEntity = bp->CreateEntity();
 
 
   camera = new csCamera();

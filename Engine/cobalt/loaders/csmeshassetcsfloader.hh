@@ -15,8 +15,8 @@ public:
   virtual ~csMeshAssetCSFLoader();
 
 
-  bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
 };

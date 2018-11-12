@@ -27,9 +27,10 @@ const csClass *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *en
   return ShaderGraphEditorMeta::GetStaticClass();
 }
 
-iObject *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   ShaderGraphEditorMeta *meta = new ShaderGraphEditorMeta();
+  ShaderGraphEditorMetaWrapper *metaWrapper = new ShaderGraphEditorMetaWrapper(meta);
   const csfEntry *nodesEntry = entry->GetEntry("nodes");
   if (nodesEntry)
   {
@@ -62,5 +63,5 @@ iObject *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const 
       meta->SetPos(pos);
     }
   }
-  return meta;
+  return metaWrapper;
 }

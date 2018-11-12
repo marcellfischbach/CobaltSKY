@@ -2,8 +2,8 @@
 #include <textureeditor/textureeditorproperties.hh>
 #include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture2d.hh>
 
 #include <QFrame>
 #include <QGridLayout>
@@ -26,7 +26,7 @@ void TextureEditorProperties::SetTexture(csTextureWrapper *texture)
   CS_SET(m_texture, texture);
   if (m_texture)
   {
-    csResourceLocator locator = csResourceManager::Get()->GetLocator(texture->Get()->GetSampler());
+    csResourceLocator locator = texture->GetLocator();
     m_samplerWidget->SetResourceLocator(locator);
   }
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/core/csclass.hh>
 #include <cobalt/csdefs.hh>
 #include <vector>
@@ -143,6 +144,13 @@ private:
   csEntityScene *m_scene;
   csEntity *m_parentEntity;
   std::vector<csEntity*> m_children;
+};
+
+CS_CLASS()
+class CSE_API csEntityWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csEntity, csEntityWrapper, csResourceWrapper);
 };
 
 CS_FORCEINLINE csID csEntity::GetID() const

@@ -10,7 +10,7 @@
 #include <graphicsgl4/gl4program.refl.hh>
 
 
-class csShaderGL4;
+class csShaderGL4Wrapper;
 class csShaderAttributeGL4;
 class csShaderStreamGL4;
 
@@ -39,8 +39,8 @@ public:
   virtual iShaderStream *GetStream(const std::string &streamName);
 
 
-  void AttachShader(csShaderGL4 *shader);
-  void DetachShader(csShaderGL4 *shader);
+  void AttachShader(csShaderGL4Wrapper *shader);
+  void DetachShader(csShaderGL4Wrapper *shader);
 
   bool Link();
   std::string GetLinkErrorLog() const;
@@ -48,7 +48,7 @@ public:
 private:
   GLuint m_name;
 
-  std::vector<csShaderGL4*> m_shaders;
+  std::vector<csShaderGL4Wrapper*> m_shaders;
 
   void InitializeSystemStreams();
   void InitializeSystemAttributes();
@@ -62,5 +62,14 @@ private:
   std::vector<csShaderStreamGL4*> m_namedStreams;
 
 };
+
+CS_CLASS()
+class csProgramGL4Wrapper : public CS_SUPER(csShaderWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csProgramGL4, csProgramGL4Wrapper, csShaderWrapper);
+};
+
+
 
 

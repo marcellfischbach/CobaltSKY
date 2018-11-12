@@ -3,6 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/graphics/csshaderattributeid.hh>
 #include <cobalt/graphics/csshaderstreamid.hh>
 #include <cobalt/csenums.hh>
@@ -34,3 +35,10 @@ struct CSE_API iShader : public iObject
 
 };
 
+
+CS_CLASS()
+class CSE_API csShaderWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(iShader, csShaderWrapper, csResourceWrapper);
+};

@@ -4,8 +4,10 @@
 #include <cobalt/core/csclassregistry.hh>
 #include <cobalt/graphics/csimage.hh>
 #include <cobalt/graphics/igraphics.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture2d.hh>
+#include <cobalt/graphics/itexture2darray.hh>
+#include <cobalt/graphics/itexturecube.hh>
 #include <cobalt/csengine.hh>
 #include <png.h>
 
@@ -28,6 +30,8 @@ csTextureAssetCSFLoader::~csTextureAssetCSFLoader()
 
 bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
+  CS_UNUSED(locator);
+  CS_UNUSED(userData);
   const std::string &tagName = entry->GetTagName();
   return tagName == std::string("texture1d")
     || tagName == std::string("texture2d")
@@ -47,11 +51,11 @@ const csClass *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const c
   case eTT_Texture2DArray:
     return csTexture2DArrayWrapper::GetStaticClass();
   }
-  return 0;
+  return nullptr;
 }
 
 
-iObject  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
 
   csTextureType type = GetTextureType(entry->GetTagName());
@@ -66,14 +70,16 @@ iObject  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceL
   return 0;
 }
 
-iObject *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
-  csImage *image = LoadImage(entry->GetEntry("image"), locator, userData);
-  if (!image)
+  csImageWrapper *imageWrapper = LoadImage(entry->GetEntry("image"), locator, userData);
+  if (!imageWrapper || imageWrapper->IsNull())
   {
-    return 0;
+    return nullptr;
   }
+
+  csImage *image = imageWrapper->Get();
 
   iTexture2D *texture = csEng->CreateTexture2D(image->GetPixelFormat(),
     image->GetWidth(),
@@ -91,7 +97,7 @@ iObject *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csR
   return new csTexture2DWrapper(texture);
 }
 
-iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
 
@@ -108,7 +114,7 @@ iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, cons
   }
 
   unsigned layer = 0;
-  iTexture2DArray *texture = 0;
+  iTexture2DArray *texture = nullptr;
   csPixelFormat pixelFormat;
   for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
   {
@@ -117,13 +123,14 @@ iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, cons
     {
       continue;
     }
-    csImage *image = LoadImage(imageEntry, locator, userData);
-    if (!image)
+    csImageWrapper *imageWrapper = LoadImage(imageEntry, locator, userData);
+    if (!imageWrapper || imageWrapper->IsNull())
     {
       CS_RELEASE(sampler);
       CS_RELEASE(texture);
-      return 0;
+      return nullptr;
     }
+    csImage *image = imageWrapper->Get();
 
     if (!texture)
     {
@@ -144,7 +151,7 @@ iObject *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, cons
         CS_RELEASE(image);
         CS_RELEASE(sampler);
         CS_RELEASE(texture);
-        return 0;
+        return nullptr;
       }
     }
 
@@ -171,12 +178,12 @@ csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, co
 {
   if (!entry)
   {
-    return 0;
+    return nullptr;
   }
 
 
   csResourceLoadingMode rlm = GetResourceLoadingMode(entry);
-  csSamplerWrapper *sampler = 0;
+  csSamplerWrapper *sampler = nullptr;
   switch (rlm)
   {
   case eRLM_Shared:
@@ -202,24 +209,26 @@ csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, co
   return sampler;
 }
 
-csImage *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
 {
   if (!entry)
   {
-    return 0;
+    return nullptr;
   }
 
   std::string imageName(entry->GetAttribute());
   const csfBlob *blob = entry->GetFile()->GetBlob(imageName);
   if (!blob)
   {
-    return 0;
+    return nullptr;
   }
-  csImage *image = csResourceManager::Get()->Load<csImage>(blob, locator, userData);
-  if (!image)
+  csImageWrapper *imageWrapper = csResourceManager::Get()->Load<csImageWrapper>(blob, locator, userData);
+  if (!imageWrapper || imageWrapper->IsNull())
   {
-    return 0;
+    return nullptr;
   }
+
+  csImage *image = imageWrapper->Get();
   printf("LoadImage: %s\n", imageName.c_str());
   if (LoadBool(entry, "mipmap"))
   {
@@ -232,7 +241,7 @@ csImage *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResou
       image->GenerateMipMaps(false);
     }
   }
-  return image;
+  return imageWrapper;
 }
 
 csTextureType csTextureAssetCSFLoader::GetTextureType(const std::string &typeName) const

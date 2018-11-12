@@ -80,3 +80,10 @@ private:
 
 
 };
+
+CS_CLASS()
+class CSE_API csMaterialWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csMaterial, csMaterialWrapper, csResourceWrapper);
+};

@@ -1,7 +1,7 @@
 
 #include <cobalt/graphics/cspostprocessor.hh>
 #include <cobalt/graphics/cspostprocess.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <string.h>
 
 csPostProcessor::csPostProcessor()

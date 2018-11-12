@@ -5,7 +5,7 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture.hh>
 #include <string.h>
 
 csMaterialDef::csMaterialDef()
@@ -29,7 +29,7 @@ csMaterialDef::~csMaterialDef()
 }
 
 
-void csMaterialDef::SetShader(csRenderPass pass, iShader *shader)
+void csMaterialDef::SetShader(csRenderPass pass, csShaderWrapper *shader)
 {
   CS_SET(m_shaders[pass], shader);
 }
@@ -45,7 +45,7 @@ csSize csMaterialDef::RegisterParam(const std::string &id, const std::string &pa
   Param param(id, parameterName, type);
   for (csSize i = 0; i < eRP_COUNT; ++i)
   {
-    iShader *shader = m_shaders[i];
+    iShader *shader = m_shaders[i] ? m_shaders[i]->Get() : nullptr;
     if (shader)
     {
       param.m_attribute[(csRenderPass)i] = shader->GetAttribute(parameterName);
@@ -56,21 +56,21 @@ csSize csMaterialDef::RegisterParam(const std::string &id, const std::string &pa
   return idx;
 }
 
-iShader *csMaterialDef::GetShader(csRenderPass pass)
+csShaderWrapper *csMaterialDef::GetShader(csRenderPass pass)
 {
   return m_shaders[pass];
 }
 
-const iShader *csMaterialDef::GetShader(csRenderPass pass) const
+const csShaderWrapper *csMaterialDef::GetShader(csRenderPass pass) const
 {
   return m_shaders[pass];
 }
 
-iShader *csMaterialDef::Bind(iGraphics *renderer, csRenderPass pass)
+csShaderWrapper *csMaterialDef::Bind(iGraphics *renderer, csRenderPass pass)
 {
-  iShader *shader = m_shaders[pass];
+  csShaderWrapper *shader = m_shaders[pass];
 
-  renderer->SetShader(shader);
+  renderer->SetShader(shader ? shader->Get() : nullptr);
 
 
 

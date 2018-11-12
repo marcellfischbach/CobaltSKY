@@ -3,8 +3,8 @@
 #include <editor/components/assetresourcewidget.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/csmaterial.hh>
-#include <cobalt/graphics/csmaterialdefwrapper.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <QFrame>
 #include <QGridLayout>
@@ -32,7 +32,7 @@ void MaterialEditorProperties::SetMaterial(csMaterial *material)
     CS_SET(m_material, material);
     if (m_material)
     {
-      csResourceLocator locator = csResourceManager::Get()->GetLocator(m_material->GetMaterialDef());
+      csResourceLocator locator; //csResourceManager::Get()->GetLocator(m_material->GetMaterialDef());
       m_materialDefWidget->SetResourceLocator(locator);
     }
     UpdateGUI();
@@ -245,9 +245,8 @@ void MaterialEditorProperties::UpdateGUI()
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
       csTextureWrapper *textureWrapper = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
-      iTexture *texture = textureWrapper ? textureWrapper->Get() : 0;
       param.textureWidget->setEnabled(!inherit);
-      param.textureWidget->SetResourceLocator(csResourceManager::Get()->GetLocator(texture));
+      param.textureWidget->SetResourceLocator(textureWrapper->GetLocator());
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       param.textureWidget->AddValidClass(iTexture::GetStaticClass());
       m_frameLayout->addWidget(param.textureWidget, row, 1, 1, 1);

@@ -11,7 +11,7 @@
 #include <cobalt/graphics/irendertarget.hh>
 #include <cobalt/graphics/isampler.hh>
 #include <cobalt/graphics/cscamera.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.hh>
 #include <graphicsgl4/gl4rendertarget.hh>
 #include <editor/editor.hh>

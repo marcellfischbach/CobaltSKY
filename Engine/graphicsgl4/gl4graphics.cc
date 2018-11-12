@@ -266,7 +266,7 @@ iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::s
     CS_RELEASE(program);
     return 0;
   }
-  program->AttachShader(vertexShader);
+  program->AttachShader(new csShaderGL4Wrapper(vertexShader));
   CS_RELEASE(vertexShader);
 
   if (tessCtrlCode.length() != 0)
@@ -281,7 +281,7 @@ iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::s
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(tessCtrlShader);
+    program->AttachShader(new csShaderGL4Wrapper(tessCtrlShader));
     CS_RELEASE(tessCtrlShader);
   }
   if (tessEvalCode.length() != 0)
@@ -296,7 +296,7 @@ iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::s
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(tessEvalShader);
+    program->AttachShader(new csShaderGL4Wrapper(tessEvalShader));
     CS_RELEASE(tessEvalShader);
   }
   if (geometryCode.length() != 0)
@@ -311,7 +311,7 @@ iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::s
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(geometryShader);
+    program->AttachShader(new csShaderGL4Wrapper(geometryShader));
     CS_RELEASE(geometryShader);
   }
   csShaderGL4 *fragmentShader = new csShaderGL4();
@@ -324,7 +324,7 @@ iShader *csGraphicsGL4::CreateShader(const std::string &vertexCode, const std::s
     CS_RELEASE(program);
     return 0;
   }
-  program->AttachShader(fragmentShader);
+  program->AttachShader(new csShaderGL4Wrapper(fragmentShader));
   CS_RELEASE(fragmentShader);
 
   if (!program->Link())

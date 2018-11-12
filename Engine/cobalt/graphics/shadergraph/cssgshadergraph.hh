@@ -2,7 +2,6 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
-#include <cobalt/graphics/csmaterialdefwrapper.hh>
 
 #include <cobalt/graphics/shadergraph/cssgshadergraph.refl.hh>
 
@@ -98,21 +97,13 @@ private:
 
 };
 
+CS_CLASS()
 class CSE_API csSGShaderGraphWrapper : public CS_SUPER(csMaterialDefWrapper)
 {
-public:
-  csSGShaderGraphWrapper(csSGShaderGraph *shaderGraph);
-  virtual ~csSGShaderGraphWrapper();
-
-  virtual void Set(iObject *object) override
-  {
-    csMaterialDefWrapper::Set(object);
-    m_shaderGraph = csQueryClass<csSGShaderGraph>(object);
-  }
-
-private:
-  csSGShaderGraph * m_shaderGraph;
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(csSGShaderGraph, csSGShaderGraphWrapper, csMaterialDefWrapper);
 };
+
 
 struct CSE_API iSGShaderGraphLogger
 {

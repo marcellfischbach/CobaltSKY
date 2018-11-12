@@ -118,8 +118,8 @@ struct Data
 {
   const csMatrix4f *matrix;
   csMaterial *material;
-  csSubMesh *mesh;
-  Data(const csMatrix4f *matrix, csMaterial *material, csSubMesh *mesh)
+  csSubMeshWrapper *mesh;
+  Data(const csMatrix4f *matrix, csMaterial *material, csSubMeshWrapper *mesh)
     : matrix(matrix)
     , material(material)
     , mesh(mesh)

@@ -60,7 +60,7 @@ const csClass *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &
   return csResourceManager::Get()->EvalClass(f.GetRoot(), locator);
 }
 
-iObject *csCSFFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csCSFFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
 {
   const std::string extension = file->GetExtension();
   if (extension != std::string("csf") && extension != std::string("asset"))

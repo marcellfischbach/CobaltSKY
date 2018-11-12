@@ -20,7 +20,7 @@ public:
 
   virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const;
   virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual iObject *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
 
 private:
   void LoadTransform(const csfEntry *entry, csMatrix4f &localTransform) const;

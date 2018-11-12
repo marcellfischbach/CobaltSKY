@@ -198,16 +198,6 @@ public:
    */
   virtual csResourceWrapper *Get(const csResourceLocator &resourceLocator) const;
 
-
-  /**
-   * \brief Get the resource locator for the given object
-   *
-   * \param object The object for which to query the resource locator
-   *
-   * \return The resource locator
-   */
-  virtual csResourceLocator GetLocator(iObject *object) const;
-
   /**
   * \brief Get the object from the resource cache. 
   * If the object is not in the cache it is loaded and than put into cache.

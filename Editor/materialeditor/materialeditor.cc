@@ -5,9 +5,9 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csvfs.hh>
-#include <cobalt/graphics/csmaterialwrapper.hh>
-#include <cobalt/graphics/csmaterialdefwrapper.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
+#include <cobalt/graphics/csmaterial.hh>
+#include <cobalt/graphics/csmaterialdef.hh>
+#include <cobalt/graphics/itexture.hh>
 
 #include <csfile/csffile.hh>
 
@@ -110,7 +110,7 @@ void MaterialEditor::MaterialAttributeChanged(const csResourceLocator &materialL
     materialLocator.GetDebugName().c_str(),
     attributeID.c_str(),
     attribureName.c_str());
-  csResourceLocator locator = csResourceManager::Get()->GetLocator(m_material->GetMaterialDef());
+  csResourceLocator locator = m_material->GetMaterialDef()->GetLocator();
   if (Editor::Get()->GetProject()->GetModel()->IsMasterLocator(materialLocator))
   {
     m_properties->AttributeChanged(attributeID, attribureName);
@@ -219,7 +219,7 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
     case eSPT_Texture:
       if (m_material->GetTexture(i))
       {
-        csResourceLocator loc = csResourceManager::Get()->GetLocator(m_material->GetTexture(i));
+        csResourceLocator loc = m_material->GetTexture(i)->GetLocator();
         parameterEntry->AddChild(file.CreateEntry("locator"))
             ->AddAttribute("locator", loc.Encode());
       }

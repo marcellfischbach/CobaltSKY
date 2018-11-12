@@ -2,8 +2,8 @@
 #include <graphicsgl4/deferred/gl4gbuffer.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/irendertarget.hh>
-#include <cobalt/graphics/cstexturewrapper.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
+#include <cobalt/graphics/itexture2d.hh>
 #include <stdio.h>
 
 

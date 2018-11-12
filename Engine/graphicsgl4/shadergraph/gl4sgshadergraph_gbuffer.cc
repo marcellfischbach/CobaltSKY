@@ -318,8 +318,8 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
 
   csProgramGL4 *gBufferShader = new csProgramGL4();
-  gBufferShader->AttachShader(vertexShader);
-  gBufferShader->AttachShader(fragmentShader);
+  gBufferShader->AttachShader(new csShaderGL4Wrapper(vertexShader));
+  gBufferShader->AttachShader(new csShaderGL4Wrapper(fragmentShader));
   if (!gBufferShader->Link())
   {
     if (logger)
@@ -334,7 +334,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
 
 
-  graph->SetShader(eRP_GBuffer, gBufferShader);
+  graph->SetShader(eRP_GBuffer, new csProgramGL4Wrapper(gBufferShader));
 
   vertexShader->Release();
   fragmentShader->Release();

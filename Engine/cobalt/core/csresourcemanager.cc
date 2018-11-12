@@ -84,7 +84,10 @@ csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator, iOb
   }
 
   csResourceWrapper *object = Load(file, locator, userData);
-  object->SetLocator(locator);
+  if (object)
+  {
+    object->SetLocator(locator);
+  }
 
   file->Release();
   return object;

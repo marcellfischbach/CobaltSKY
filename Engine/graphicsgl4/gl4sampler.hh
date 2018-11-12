@@ -3,9 +3,10 @@
 
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4texture.hh>
-#include <cobalt/graphics/cssamplerwrapper.hh>
+#include <cobalt/graphics/isampler.hh>
 #include <GL/glew.h>
 #include <graphicsgl4/gl4sampler.refl.hh>
+
 
 CS_CLASS();
 class CSGRAPHICSGL4_API csSamplerGL4 : public CS_SUPER(iSampler)

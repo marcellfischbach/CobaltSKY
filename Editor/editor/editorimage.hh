@@ -3,6 +3,7 @@
 
 #include <editor/editorexport.hh>
 #include <cobalt/core/csclass.hh>
+#include <cobalt/core/csresourcewrapper.hh>
 #include <QImage>
 #include <editor/editorimage.refl.hh>
 
@@ -27,3 +28,12 @@ private:
 
   QImage m_image;
 };
+
+CS_CLASS()
+class EDITOR_API EditorImageWrapper : public CS_SUPER(csResourceWrapper)
+{
+  CS_CLASS_GEN;
+  CS_RESOURCE_WRAPPER(EditorImage, EditorImageWrapper, csResourceWrapper);
+};
+
+
