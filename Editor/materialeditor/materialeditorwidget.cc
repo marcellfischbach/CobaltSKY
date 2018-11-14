@@ -9,7 +9,7 @@
 MaterialEditorWidget::MaterialEditorWidget(MaterialEditor *editor)
   : QWidget()
   , m_editor(editor)
-  , m_material(0)
+  , m_material(nullptr)
 {
   m_gui.setupUi(this);
 }
@@ -24,7 +24,7 @@ MaterialEditorPreviewSceneView *MaterialEditorWidget::GetSceneView()
   return m_gui.openGLWidget;
 }
 
-void MaterialEditorWidget::SetMaterial(csMaterial *material)
+void MaterialEditorWidget::SetMaterial(csMaterialWrapper *material)
 {
   CS_SET(m_material, material);
   m_gui.openGLWidget->SetMaterial(material);

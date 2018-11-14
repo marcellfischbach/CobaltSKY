@@ -15,9 +15,9 @@ public:
   csShaderGL4Loader();
   virtual ~csShaderGL4Loader();
 
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject * userData = 0) const;
+  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator0) const;
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator0) const;
 
 
 };

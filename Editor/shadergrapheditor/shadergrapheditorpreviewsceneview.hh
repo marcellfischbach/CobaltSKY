@@ -5,7 +5,7 @@
 #include <editor/components/preview/previewsceneview.hh>
 
 class csMaterialDefWrapper;
-class csMaterial;
+class csMaterialWrapper;
 class ShaderGraphEditorPreviewSceneView : public PreviewSceneView
 {
 public:
@@ -19,5 +19,5 @@ protected:
   virtual void initializeGL();
 
 private:
-  csMaterial *m_materialInstance;
+  csMaterialWrapper *m_materialInstance;
 };

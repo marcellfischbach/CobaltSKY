@@ -53,8 +53,8 @@ public:
    *
    * \return The object
    */
-  virtual csResourceWrapper *Load(const csResourceLocator &locator, iObject *userData = nullptr);
-  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual csResourceWrapper *Load(const csResourceLocator &locator);
+  virtual const csClass *EvalClass(const csResourceLocator &locator) const;
 
   /**
   * \brief Load an object from the \a file.
@@ -67,9 +67,9 @@ public:
   *
   * \return The object
   */
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr);
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator);
 
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator) const;
 
  
   /**
@@ -105,9 +105,9 @@ public:
   virtual const csClass *EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
 
   template<typename T>
-  T *Load(const csResourceLocator &locator, iObject *userData = nullptr)
+  T *Load(const csResourceLocator &locator)
   {
-    csResourceWrapper *object = Load(locator, userData);
+    csResourceWrapper *object = Load(locator);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -121,9 +121,9 @@ public:
   }
 
   template<typename T>
-  T *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr)
+  T *Load(iFile *file, const csResourceLocator &locator)
   {
-    csResourceWrapper *object = Load(file, locator, userData);
+    csResourceWrapper *object = Load(file, locator);
     if (object)
     {
       T* t_instance = csQueryClass<T>(object);
@@ -209,9 +209,9 @@ public:
   *
   * \return The object or \a null if there is no such object registered.
   */
-  virtual csResourceWrapper *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = nullptr);
+  virtual csResourceWrapper *GetOrLoad(const csResourceLocator &resourceLocator);
 
-  virtual csResourceWrapper *Aquire(const csResourceLocator &resourceLocator, iObject *userData = nullptr, csResourceLoadingMode mode = eRLM_Shared);
+  virtual csResourceWrapper *Aquire(const csResourceLocator &resourceLocator, csResourceLoadingMode mode = eRLM_Shared);
 
 
 
@@ -228,9 +228,9 @@ public:
   }
 
   template<typename T>
-  T *GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData = nullptr)
+  T *GetOrLoad(const csResourceLocator &resourceLocator)
   {
-    csResourceWrapper *object = GetOrLoad(resourceLocator, userData);
+    csResourceWrapper *object = GetOrLoad(resourceLocator);
     if (object)
     {
       T *t_instance = csQueryClass<T>(object);
@@ -240,9 +240,9 @@ public:
   }
 
   template<typename T>
-  T *Aquire(const csResourceLocator &resourceLocator, iObject *userData = 0, csResourceLoadingMode mode = eRLM_Shared)
+  T *Aquire(const csResourceLocator &resourceLocator, csResourceLoadingMode mode = eRLM_Shared)
   {
-    csResourceWrapper *object = Aquire(resourceLocator, userData, mode);
+    csResourceWrapper *object = Aquire(resourceLocator, mode);
     if (object)
     {
       T *t_instance = csQueryClass<T>(object);
@@ -254,6 +254,8 @@ public:
     }
     return 0;
   }
+
+  virtual void Reload(const csResourceLocator& locator);
 
   virtual void RegisterLoader(iCSFLoader *loader);
   virtual void RegisterLoader(iFileLoader *loader);

@@ -16,9 +16,9 @@ public:
   csPNGImageFileLoader();
   virtual ~csPNGImageFileLoader();
 
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator) const;
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const;
 
 };
 

@@ -14,7 +14,7 @@ csShaderGL4Loader::~csShaderGL4Loader()
 {
 }
 
-bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *) const
+bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   std::string ext = file->GetExtension();
@@ -27,13 +27,16 @@ bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator, i
     ext == std::string("comp");
 }
 
-const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *) const
+const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
+  CS_UNUSED(file);
+  CS_UNUSED(locator);
   return csShaderGL4::GetStaticClass();
 }
 
-csResourceWrapper *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator, iObject *) const
+csResourceWrapper *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator) const
 {
+  CS_UNUSED(locator);
   std::string ext = file->GetExtension();
 
   csShaderType type;

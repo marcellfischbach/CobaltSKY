@@ -9,7 +9,7 @@ class QDoubleSpinBox;
 class QFrame;
 class QGridLayout;
 class AssetResourceWidget;
-class csMaterial;
+class csMaterialWrapper;
 class csResourceLocator;
 class MATERIALEDITOR_API MaterialEditorProperties : public QWidget
 {
@@ -18,7 +18,7 @@ public:
   MaterialEditorProperties();
   virtual ~MaterialEditorProperties();
 
-  void SetMaterial(csMaterial *material);
+  void SetMaterial(csMaterialWrapper *material);
 
   void AttributeChanged(const std::string &id, const std::string &name);
 
@@ -34,7 +34,7 @@ private:
   void CleanUp();
   void UpdateMaterialValues();
   AssetResourceWidget *m_materialDefWidget = 0;
-  csMaterial *m_material = 0;
+  csMaterialWrapper *m_material = 0;
 
   QFrame *m_frame;
   QGridLayout *m_frameLayout;

@@ -25,15 +25,18 @@ MaterialEditorProperties::~MaterialEditorProperties()
   CS_RELEASE(m_material);
 }
 
-void MaterialEditorProperties::SetMaterial(csMaterial *material)
+void MaterialEditorProperties::SetMaterial(csMaterialWrapper *material)
 {
   if (m_material != material)
   {
     CS_SET(m_material, material);
     if (m_material)
     {
-      csResourceLocator locator; //csResourceManager::Get()->GetLocator(m_material->GetMaterialDef());
-      m_materialDefWidget->SetResourceLocator(locator);
+      csMaterialDefWrapper *defWrapper = m_material->Get()->GetMaterialDef();
+      if (defWrapper)
+      {
+        m_materialDefWidget->SetResourceLocator(defWrapper->GetLocator().AsAnonymous());
+      }
     }
     UpdateGUI();
   }
@@ -91,13 +94,13 @@ void MaterialEditorProperties::InitGUI()
 
 void MaterialEditorProperties::MaterialDefChanged(const csResourceLocator &locator)
 {
-  csMaterialDefWrapper *materialDef = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator);
-  if (materialDef == m_material->GetMaterialDef())
+  csMaterialDefWrapper *materialDef = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator.AsAnonymous());
+  if (materialDef == m_material->Get()->GetMaterialDef())
   {
     return;
   }
 
-  m_material->SetMaterialDef(materialDef);
+  m_material->Get()->SetMaterialDef(materialDef);
 
   UpdateGUI();
 
@@ -107,12 +110,13 @@ void MaterialEditorProperties::MaterialDefChanged(const csResourceLocator &locat
 void MaterialEditorProperties::UpdateGUI()
 {
   CleanUp();
-  if (!m_material || !m_material->GetMaterialDef() || !m_material->GetMaterialDef()->IsValid())
+  if (!m_material || !m_material->Get() || !m_material->Get()->GetMaterialDef() || !m_material->Get()->GetMaterialDef()->IsValid())
   {
     return;
   }
+  csMaterial *material = m_material->Get();
   unsigned row = 0;
-  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
+  csMaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
   csMaterialDef *materialDef = materialDefWrapper->Get();
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
@@ -122,7 +126,7 @@ void MaterialEditorProperties::UpdateGUI()
     std::string id = materialDef->GetParameterId(i);
     std::string name = materialDef->GetParameterName(i);
 
-    bool inherit = m_material->IsInherited(i);
+    bool inherit = material->IsInherited(i);
     param.id = id;
     param.checkBox = new QCheckBox(m_frame);
     param.checkBox->setText(QString(name.c_str()));
@@ -138,7 +142,7 @@ void MaterialEditorProperties::UpdateGUI()
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       sbF0->setSingleStep(0.1);
       sbF0->setEnabled(!inherit);
-      sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultFloat(i) : m_material->GetFloat(i));
+      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultFloat(i) : material->GetFloat(i));
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       param.doubleSpinBoxes.push_back(sbF0);
     }break;
@@ -152,8 +156,8 @@ void MaterialEditorProperties::UpdateGUI()
       sbF1->setEnabled(!inherit);
       sbF0->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector2(i).x : m_material->GetFloat2(i).x);
-      sbF1->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector2(i).y : m_material->GetFloat2(i).y);
+      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector2(i).x : material->GetFloat2(i).x);
+      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector2(i).y : material->GetFloat2(i).y);
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
       param.doubleSpinBoxes.push_back(sbF0);
@@ -173,9 +177,9 @@ void MaterialEditorProperties::UpdateGUI()
       sbF0->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF2->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector3(i).x : m_material->GetFloat3(i).x);
-      sbF1->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector3(i).y : m_material->GetFloat3(i).y);
-      sbF2->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector3(i).z : m_material->GetFloat3(i).z);
+      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector3(i).x : material->GetFloat3(i).x);
+      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector3(i).y : material->GetFloat3(i).y);
+      sbF2->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector3(i).z : material->GetFloat3(i).z);
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
       m_frameLayout->addWidget(sbF2, ++row, 1, 1, 1);
@@ -201,10 +205,10 @@ void MaterialEditorProperties::UpdateGUI()
       sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF2->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF3->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector4(i).x : m_material->GetFloat4(i).x);
-      sbF1->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector4(i).y : m_material->GetFloat4(i).y);
-      sbF2->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector4(i).z : m_material->GetFloat4(i).z);
-      sbF3->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultVector4(i).w : m_material->GetFloat4(i).w);
+      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).x : material->GetFloat4(i).x);
+      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).y : material->GetFloat4(i).y);
+      sbF2->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).z : material->GetFloat4(i).z);
+      sbF3->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).w : material->GetFloat4(i).w);
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
       m_frameLayout->addWidget(sbF2, ++row, 1, 1, 1);
@@ -228,10 +232,10 @@ void MaterialEditorProperties::UpdateGUI()
       sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF2->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
       sbF3->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultColor4(i).r : m_material->GetColor4(i).r);
-      sbF1->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultColor4(i).g : m_material->GetColor4(i).g);
-      sbF2->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultColor4(i).b : m_material->GetColor4(i).b);
-      sbF3->setValue(m_material->IsInherited(i) ? materialDef->GetDefaultColor4(i).a : m_material->GetColor4(i).a);
+      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).r : material->GetColor4(i).r);
+      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).g : material->GetColor4(i).g);
+      sbF2->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).b : material->GetColor4(i).b);
+      sbF3->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).a : material->GetColor4(i).a);
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
       m_frameLayout->addWidget(sbF2, ++row, 1, 1, 1);
@@ -244,7 +248,7 @@ void MaterialEditorProperties::UpdateGUI()
     case eSPT_Texture:
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
-      csTextureWrapper *textureWrapper = m_material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : m_material->GetTexture(i);
+      csTextureWrapper *textureWrapper = material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : material->GetTexture(i);
       param.textureWidget->setEnabled(!inherit);
       param.textureWidget->SetResourceLocator(textureWrapper->GetLocator());
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -308,8 +312,8 @@ void MaterialEditorProperties::CheckBoxChanged(int)
     bool enable = param.checkBox->isChecked();
     try
     {
-      csSize idx = m_material->GetIndex(param.id);
-      m_material->SetInherited(idx, !enable);
+      csSize idx = m_material->Get()->GetIndex(param.id);
+      m_material->Get()->SetInherited(idx, !enable);
       if (param.textureWidget)
       {
         param.textureWidget->setEnabled(enable);
@@ -340,12 +344,14 @@ void MaterialEditorProperties::TextureResourceChanged(const csResourceLocator &)
 
 void MaterialEditorProperties::UpdateMaterialValues()
 {
-  if (!m_material)
+  if (!m_material || !m_material->Get())
   {
     return;
   }
 
-  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
+  csMaterial *material = m_material->Get();
+
+  csMaterialDefWrapper *materialDefWrapper = m_material->Get()->GetMaterialDef();
   if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return;
@@ -358,8 +364,8 @@ void MaterialEditorProperties::UpdateMaterialValues()
   {
     try
     {
-      csSize idx = m_material->GetIndex(param.id);
-      m_material->SetInherited(idx, !param.checkBox->isChecked());
+      csSize idx = material->GetIndex(param.id);
+      material->SetInherited(idx, !param.checkBox->isChecked());
       if (!param.checkBox->isChecked())
       {
         continue;
@@ -368,23 +374,23 @@ void MaterialEditorProperties::UpdateMaterialValues()
       switch (materialDef->GetParamType(idx))
       {
       case eSPT_Float:
-        m_material->Set(idx, (float)param.doubleSpinBoxes[0]->value());
+        material->Set(idx, (float)param.doubleSpinBoxes[0]->value());
         break;
       case eSPT_Vector2:
-        m_material->Set(idx, csVector2f(
+        material->Set(idx, csVector2f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value()
         ));
         break;
       case eSPT_Vector3:
-        m_material->Set(idx, csVector3f(
+        material->Set(idx, csVector3f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value(),
           (float)param.doubleSpinBoxes[2]->value()
         ));
         break;
       case eSPT_Vector4:
-        m_material->Set(idx, csVector4f(
+        material->Set(idx, csVector4f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value(),
           (float)param.doubleSpinBoxes[2]->value(),
@@ -392,7 +398,7 @@ void MaterialEditorProperties::UpdateMaterialValues()
         ));
         break;
       case eSPT_Color4:
-        m_material->Set(idx, csColor4f(
+        material->Set(idx, csColor4f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value(),
           (float)param.doubleSpinBoxes[2]->value(),
@@ -402,7 +408,7 @@ void MaterialEditorProperties::UpdateMaterialValues()
       case eSPT_Texture:
       {
         csTextureWrapper *texture = csResourceManager::Get()->Aquire<csTextureWrapper>(param.textureWidget->GetResourceLocator());
-        m_material->Set(idx, texture);
+        material->Set(idx, texture);
       }break;
       }
     }

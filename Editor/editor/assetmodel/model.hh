@@ -37,14 +37,28 @@ namespace asset::model
 		Folder* CreateFolder(const std::string &folderName);
 		VFSEntry* CreateVFSEntry(const csVFS::Entry &entry);
 
-    bool IsMasterEntry(Entry* entry) const;
-    bool IsMasterLocator(const csResourceLocator &locator) const;
+    /**
+     * @brief Checks whether the given locator is the locator with the lowest priority
+     * @param locator The locator to check
+     * @return \a True if the locator is the known locator with the lowest known priority. Else \a false.
+     */
+    bool IsRootLocator(const csResourceLocator &locator) const;
+    /**
+     * @brief Checks whether the given locator is the locator with the hightes priority.
+     * @param locator The locator to check
+     * @return \a True if the locator is the known locator with the highest known priority. Else \a false.
+     */
+    bool IsFinalLocator(const csResourceLocator &locator) const;
 
-    const Entry *GetMasterEntry(Entry* entry) const;
-    const Entry *GetMasterEntry(const csResourceLocator &locator) const;
+    const Entry *GetRootEntry(Entry* entry) const;
+    const Entry *GetRootEntry(const csResourceLocator &locator) const;
+    Entry *GetRootEntry(Entry* entry);
+    Entry *GetRootEntry(const csResourceLocator &locator);
 
-    Entry *GetMasterEntry(Entry* entry);
-    Entry *GetMasterEntry(const csResourceLocator &locator);
+    const Entry *GetFinalEntry(Entry* entry) const;
+    const Entry *GetFinalEntry(const csResourceLocator &locator) const;
+    Entry *GetFinalEntry(Entry* entry);
+    Entry *GetFinalEntry(const csResourceLocator &locator);
 
 		Root *GetRoot() { return m_root; }
 		Entry *GetEntry(const csResourceLocator &locator);
@@ -53,7 +67,8 @@ namespace asset::model
 		const std::set<Entry*> &GetAllEntriesFor(const csResourceLocator &locator) const;
 		std::set<Entry*> GetReferencing(const csResourceLocator &locator) const;
 
-		int GetLowestPriority(const csResourceLocator &locator) const;
+    int GetRootPriority(const csResourceLocator &locator) const;
+    int GetFinalPriority(const csResourceLocator &locator) const;
 
 		void Add(Entry *parent, Entry *child, ModelTransaction &tr);
 		void Remove(Entry *parent, Entry *child, ModelTransaction &tr);
@@ -71,11 +86,12 @@ namespace asset::model
     void EntryDeleted(asset::model::Entry *entry, const csResourceLocator &oldLocator);
 		void ResourceRemoved(const csResourceLocator &locator);
 		void ResourceRenamed(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+    void ResourceChanged(const csResourceLocator &locator);
 
 	private:
 		void AddCommit(Entry *parent, Entry *child);
 		void AddRollback(Entry *parent, Entry *child);
-		void RemoveCommit(Entry *parent, Entry *child);
+    void RemoveCommit(Entry *parent, Entry *child, const csResourceLocator &oldLocator);
 		void RemoveRollback(Entry *parent, Entry *child);
 		void MoveCommit(TreeCollector collector);
     void DeleteCommit(Entry *entry, const csResourceLocator &locator);
@@ -83,7 +99,7 @@ namespace asset::model
 
 		void MergePath(Entry *oldParent, Entry *newParent, Entry *child, ModelTransaction &tr);
 		void UpdateCollector(TreeCollector &collector);
-		void UpdateCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+    void RenameCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
 		void InsertIntoEntryCache(Entry* entry);
 		bool RemoveFromEntryCache(Entry* entry);
 		void RemoveReference(const csResourceLocator &locator);

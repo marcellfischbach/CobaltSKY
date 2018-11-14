@@ -35,13 +35,13 @@ namespace asset::model
 	private:
     struct Callback
     {
+      iCallback *callback;
       std::function<void()> commit;
       std::function<void()> rollback;
     };
 
 
-    std::list<Callback> m_callbacks_;
-		std::list<iCallback*> m_callbacks;
+    std::list<Callback> m_callbacks;
 
 	};
 }

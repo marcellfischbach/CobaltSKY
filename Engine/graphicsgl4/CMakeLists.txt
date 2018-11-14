@@ -27,7 +27,7 @@ set(SOURCE
   gl4shaderattribute.cc
   gl4shaderattribute.hh
   gl4shaderloader.cc
-  gl4shaderLoader.hh
+  gl4shaderloader.hh
   gl4shaderstream.cc
   gl4shaderstream.hh
   gl4texture.cc

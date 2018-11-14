@@ -27,9 +27,9 @@ public:
   csStaticMeshLoader();
   virtual ~csStaticMeshLoader();
 
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
+  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator) const;
+  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const;
 
 private:
   struct HeaderEntry
@@ -41,13 +41,13 @@ private:
     csResourceWrapper *obj;
   };
 
-  csResourceWrapper *ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  csGeometryDataWrapper *ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  csGeometryMeshWrapper *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
+  csGeometryDataWrapper *ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
+  csGeometryMeshWrapper *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
   csMultiMaterial *ReadMultiMaterial(iFile *file) const;
-  csMeshWrapper *ReadMesh (csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  csPhysicsShapeWrapper *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  bool ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csMeshWrapper *ReadMesh (csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
+  csPhysicsShapeWrapper *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
+  bool ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
   iVertexDeclaration *ReadVertexDeclaration(iFile *file) const;
 
   std::string ReadString(iFile *file) const;

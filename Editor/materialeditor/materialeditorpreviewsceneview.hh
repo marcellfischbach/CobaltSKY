@@ -4,7 +4,7 @@
 #include <materialeditor/materialeditorexport.hh>
 #include <editor/components/preview/previewsceneview.hh>
 
-class csMaterial;
+class csMaterialWrapper;
 class csStaticMeshState;
 class MATERIALEDITOR_API MaterialEditorPreviewSceneView : public PreviewSceneView
 {
@@ -12,12 +12,12 @@ public:
   MaterialEditorPreviewSceneView(QWidget *parent);
   virtual ~MaterialEditorPreviewSceneView();
 
-  void SetMaterial(csMaterial *material);
+  void SetMaterial(csMaterialWrapper *material);
 
 protected:
   virtual void initializeGL();
 
 private:
-  csMaterial *m_material;
+  csMaterialWrapper *m_material;
   csStaticMeshState *m_staticMeshState;
 };

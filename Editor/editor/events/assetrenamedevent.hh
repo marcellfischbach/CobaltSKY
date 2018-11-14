@@ -17,7 +17,7 @@ class AssetRenamedEvent : public CS_SUPER(csEvent)
     eRFM_FetchNamedEntry,
   };
 public:
-  AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, ResourceFetchMode mode = eRFM_FetchAll, iObject *object = 0);
+  AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, ResourceFetchMode mode = eRFM_FetchAll, iObject *object = nullptr);
 
   const csResourceLocator &GetFrom() const;
   const csResourceLocator &GetTo() const;

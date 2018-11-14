@@ -10,8 +10,8 @@
 
 MaterialEditorPreviewSceneView::MaterialEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)
-  , m_material(0)
-  , m_staticMeshState(0)
+  , m_material(nullptr)
+  , m_staticMeshState(nullptr)
 {
 }
 
@@ -40,11 +40,11 @@ MaterialEditorPreviewSceneView::~MaterialEditorPreviewSceneView()
   CS_RELEASE(m_material);
 }
 
-void MaterialEditorPreviewSceneView::SetMaterial(csMaterial*material)
+void MaterialEditorPreviewSceneView::SetMaterial(csMaterialWrapper *material)
 {
   CS_SET(m_material, material);
-  if (m_staticMeshState)
+  if (m_staticMeshState && m_material)
   {
-    m_staticMeshState->SetMaterial(0, material);
+    m_staticMeshState->SetMaterial(0, material->Get());
   }
 }

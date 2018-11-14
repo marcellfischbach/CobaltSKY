@@ -24,19 +24,19 @@ EditorResourceManager::~EditorResourceManager()
   EventBus::Get().Deregister(editor_resource_manager_asset_renamed, this);
 }
 
-csResourceWrapper *EditorResourceManager::Load(const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *EditorResourceManager::Load(const csResourceLocator &locator)
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return csResourceManager::Load(fixedLocator, userData);
+  return csResourceManager::Load(fixedLocator);
 }
 
 
-const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator, iObject *userData) const
+const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator) const
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return csResourceManager::EvalClass(fixedLocator, userData);
+  return csResourceManager::EvalClass(fixedLocator);
 }
 
 void EditorResourceManager::RenameResource(const csResourceLocator &from, const csResourceLocator &to)

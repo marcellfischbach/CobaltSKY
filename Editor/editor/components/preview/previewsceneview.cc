@@ -49,7 +49,7 @@ PreviewSceneView::~PreviewSceneView()
 
 
 
-csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, csMaterial *materialInstance)
+csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, csMaterialWrapper *materialInstance)
 {
   unsigned numVertices = (numR + 1) * (numV + 1);
   unsigned numIndices = numR * numV * 3 * 2;
@@ -144,7 +144,7 @@ csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
 
   csStaticMeshState *staticMeshState = new csStaticMeshState();
   staticMeshState->SetMesh(mesh);
-  staticMeshState->SetMaterial(0, materialInstance);
+  staticMeshState->SetMaterial(0, materialInstance ? materialInstance->Get() : nullptr);
 
   csEntity *entity = new csEntity();
   entity->AddState(staticMeshState);

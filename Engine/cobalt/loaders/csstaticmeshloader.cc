@@ -57,24 +57,22 @@ csStaticMeshLoader::~csStaticMeshLoader()
 }
 
 
-bool csStaticMeshLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
+bool csStaticMeshLoader::CanLoad(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(locator);
-  CS_UNUSED(userData);
   return file->GetExtension() == std::string("staticmesh");
 }
 
 
-const csClass *csStaticMeshLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
+const csClass *csStaticMeshLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
-  CS_UNUSED(userData);
   return csMeshWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csStaticMeshLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csStaticMeshLoader::Load(iFile *file, const csResourceLocator &locator) const
 {
   // start at the beginning (should already be there)
   file->Seek(eSP_Set, 0L);
@@ -125,11 +123,11 @@ csResourceWrapper *csStaticMeshLoader::Load(iFile *file, const csResourceLocator
     entryToLoad = locator.GetResourceName();
   }
 
-  return ReadEntry(entries, entryToLoad, fileVersion, file, locator, userData);
+  return ReadEntry(entries, entryToLoad, fileVersion, file, locator);
 
 }
 
-csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   std::map<std::string, HeaderEntry>::iterator it = entries.find(entryName);
   if (it == entries.end())
@@ -151,13 +149,13 @@ csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEnt
   switch (he.type)
   {
   case eET_Geometry:
-    return ReadGeometry(entries, fileVersion, file, locator, userData);
+    return ReadGeometry(entries, fileVersion, file, locator);
 
   case eET_Mesh:
-    return ReadMesh(fileVersion, file, locator, userData);
+    return ReadMesh(fileVersion, file, locator);
 
   case eET_Collision:
-    return ReadCollision(fileVersion, file, locator, userData);
+    return ReadCollision(fileVersion, file, locator);
 
   case eET_Skeleton:
     printf("Cannot reader Skeleton. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
@@ -171,7 +169,7 @@ csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEnt
 }
 
 
-csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   std::map<std::string, csUInt32> materialIDs;
   std::map<csUInt32, std::string> materialNames;
@@ -194,10 +192,10 @@ csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, c
 
   for (csUInt32 i = 0; i < numSubMeshes; ++i)
   {
-    if (!ReadSubMesh(mesh, fileVersion, file, locator, userData))
+    if (!ReadSubMesh(mesh, fileVersion, file, locator))
     {
       mesh->Release();
-      return 0;
+      return nullptr;
     }
   }
 
@@ -208,7 +206,7 @@ csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, c
 }
 
 
-bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   csSubMesh *subMesh = new csSubMesh();
   csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
@@ -328,7 +326,7 @@ iVertexDeclaration *csStaticMeshLoader::ReadVertexDeclaration(iFile *file) const
 }
 
 
-csPhysicsShapeWrapper *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csPhysicsShapeWrapper *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   csPhysicsShape *container = new csPhysicsShape();
   csPhysicsShapeWrapper *containerWrapper = new csPhysicsShapeWrapper(container);
@@ -364,7 +362,7 @@ csPhysicsShapeWrapper *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, i
 }
 
 
-csGeometryDataWrapper* csStaticMeshLoader::ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csGeometryDataWrapper* csStaticMeshLoader::ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   csUInt32 type;
   file->Read(&type, sizeof(csUInt32));
@@ -372,23 +370,23 @@ csGeometryDataWrapper* csStaticMeshLoader::ReadGeometry(std::map<std::string, He
   switch (type)
   {
   case eGT_GeometryMesh:
-    return ReadGeometryMesh(entries, fileVersion, file, locator, userData);
+    return ReadGeometryMesh(entries, fileVersion, file, locator);
 
   case eGT_GeometryCollection:
     printf("Cannot reader geometry collection. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-    return 0;
+    return nullptr;
 
   case eGT_GeometryLOD:
     printf("Cannot reader geometry lod. Not implemented yet: %s:%s\n", locator.GetResourceFile().c_str(), locator.GetResourceName().c_str());
-    return 0;
+    return nullptr;
 
   }
 
-  return 0;
+  return nullptr;
 }
 
 
-csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator, iObject *userData) const
+csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
 {
   enum ReadMode
   {
@@ -408,7 +406,7 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
     {
       std::string name = ReadString(file);
       csSize currentPosition = file->Tell();
-      meshObj = ReadEntry(entries, name, fileVersion, file, locator, userData);
+      meshObj = ReadEntry(entries, name, fileVersion, file, locator);
       file->Seek(eSP_Set, (long)currentPosition);
     }
     break;
@@ -416,7 +414,7 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
     {
       std::string resourceFile = ReadString(file);
       std::string resourceName = ReadString(file);
-      meshObj = csResourceManager::Get()->GetOrLoad(csResourceLocator(resourceFile, resourceName), userData);
+      meshObj = csResourceManager::Get()->GetOrLoad(csResourceLocator(resourceFile, resourceName));
       if (meshObj)
       {
         // make me the owner, otherwise there is a difference between GetOrLoad and ReadEntry

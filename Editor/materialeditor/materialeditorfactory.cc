@@ -6,7 +6,7 @@
 
 bool MaterialEditorFactory::CanEdit(iObject *object, asset::model::Asset*asset) const
 {
-  return object->GetClass()->IsInstanceOf<csMaterial>();
+  return object->GetClass()->IsInstanceOf<csMaterialWrapper>();
 }
 
 iAssetEditor *MaterialEditorFactory::CreateEditor(iObject *object, asset::model::Asset*asset) const

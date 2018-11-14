@@ -18,11 +18,10 @@ csPNGImageFileLoader::~csPNGImageFileLoader()
 }
 
 
-bool csPNGImageFileLoader::CanLoad(iFile *file, const csResourceLocator &locator, iObject *userData) const
+bool csPNGImageFileLoader::CanLoad(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
-  CS_UNUSED(userData);
   return file->GetExtension() == std::string("png");
 }
 
@@ -58,14 +57,17 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 }
 }
 
-const csClass *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
+const csClass *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
+  CS_UNUSED(file);
+  CS_UNUSED(locator);
   return csImageWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locator) const
 {
+  CS_UNUSED(locator);
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)
   {

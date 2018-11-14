@@ -45,13 +45,13 @@ public:
 
   inline csResourceWrapper *Get(const csResourceLocator &locator, bool forceInstance = false) const
   {
-    return csResourceManager::Get()->Aquire(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
+    return csResourceManager::Get()->Aquire(locator, forceInstance ? eRLM_Instance : eRLM_Shared);
   }
 
   template<typename T>
   T *Get(const csResourceLocator &locator, bool forceInstance = false) const
   {
-    return csResourceManager::Get()->Aquire<T>(locator, 0, forceInstance ? eRLM_Instance : eRLM_Shared);
+    return csResourceManager::Get()->Aquire<T>(locator, forceInstance ? eRLM_Instance : eRLM_Shared);
   }
 
   virtual iIndexBuffer *CreateIndexBuffer(csSize size, const void *data, csBufferDataMode mode);

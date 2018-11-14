@@ -12,32 +12,41 @@ namespace asset::model
 
 	ModelTransaction::~ModelTransaction()
 	{
-		for (iCallback *callback : m_callbacks)
-		{
-			delete callback;
+    for (Callback &callback : m_callbacks)
+    {
+      if (callback.callback)
+      {
+        delete callback.callback;
+      }
 		}
 		m_callbacks.clear();
 	}
 
 	void ModelTransaction::Attach(ModelTransaction::iCallback *callback)
 	{
-		m_callbacks.push_back(callback);
+    Callback cb;
+    cb.callback = callback;
+    cb.commit = nullptr;
+    cb.rollback = nullptr;
+    m_callbacks.push_back(cb);
 	}
 
   void ModelTransaction::OnCommit(std::function<void()> commit)
   {
     Callback cb;
+    cb.callback = nullptr;
     cb.commit = commit;
-    cb.rollback = 0;
-    m_callbacks_.push_back(cb);
+    cb.rollback = nullptr;
+    m_callbacks.push_back(cb);
   }
 
   void ModelTransaction::OnRollback(std::function<void()> rollback)
   {
     Callback cb;
-    cb.commit = 0;
+    cb.callback = nullptr;
+    cb.commit = nullptr;
     cb.rollback = rollback;
-    m_callbacks_.push_back(cb);
+    m_callbacks.push_back(cb);
   }
 
 	void ModelTransaction::Finalize(bool commit)
@@ -54,32 +63,34 @@ namespace asset::model
 
 	void ModelTransaction::Commit()
 	{
-    for (Callback &callback : m_callbacks_)
+    for (Callback &callback : m_callbacks)
     {
       if (callback.commit)
       {
         callback.commit();
       }
+      if (callback.callback)
+      {
+        callback.callback->OnCommit();
+      }
     }
-		for (iCallback *callback : m_callbacks)
-		{
-			callback->OnCommit();
-		}
+
 	}
 
 	void ModelTransaction::Rollback()
 	{
-    for (auto it = m_callbacks_.rbegin(); it != m_callbacks_.rend(); ++it)
+    for (auto it = m_callbacks.rbegin(); it != m_callbacks.rend(); ++it)
     {
       if (it->rollback)
       {
         it->rollback();
       }
+      if (it->callback)
+      {
+        it->callback->OnRollback();
+      }
     }
-    for (auto it = m_callbacks.rbegin(); it != m_callbacks.rend(); ++it)
-    {
-      (*it)->OnRollback();
-    }
+
 	}
 
 

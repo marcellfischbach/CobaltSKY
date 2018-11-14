@@ -10,8 +10,8 @@ public:
   EditorResourceManager();
   virtual ~EditorResourceManager();
 
-  virtual csResourceWrapper *Load(const csResourceLocator &locator, iObject *userData = nullptr);
-  virtual const csClass *EvalClass(const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual csResourceWrapper *Load(const csResourceLocator &locator);
+  virtual const csClass *EvalClass(const csResourceLocator &locator) const;
 
 
   virtual bool RegisterObject(const csResourceLocator &locator, csResourceWrapper *object);

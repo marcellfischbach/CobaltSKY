@@ -14,7 +14,7 @@
 class csfEntry;
 class csfFile;
 class QImage;
-class csMaterial;
+class csMaterialWrapper;
 class MaterialEditorProperties;
 class MaterialEditorWidget;
 CS_CLASS()
@@ -40,7 +40,7 @@ private:
   void ReplaceFileContent();
   void Save(csfFile &file);
 
-  csMaterial *m_material;
+  csMaterialWrapper *m_material;
   MaterialEditorWidget *m_widget;
 
   MaterialEditorProperties *m_properties;

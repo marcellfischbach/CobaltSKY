@@ -22,6 +22,9 @@ public:
   const asset::model::Model* GetModel() const;
   asset::model::Model* GetModel();
 
+private slots:
+  void ResourceChanged(const csResourceLocator &locator);
+
 private:
 
   asset::model::Model* m_model;

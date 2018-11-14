@@ -5,6 +5,7 @@
 #include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/resource/cscsffileloader.hh>
 #include <cobalt/core/csvfs.hh>
+#include <iostream>
 
 
 csResourceManager *csResourceManager::s_instance = nullptr;
@@ -75,7 +76,27 @@ iFile *csResourceManager::Open(const csResourceLocator &locator) const
   }
 }
 
-csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator, iObject *userData)
+void csResourceManager::Reload(const csResourceLocator &locator)
+{
+  auto it = m_objects.find(locator);
+  if (it == m_objects.end())
+  {
+    return;
+  }
+
+  std::string path = csVFS::Get()->GetAbsolutePath(locator);
+  std::cout << "Reload from: " << path << "\n";
+
+  csResourceWrapper *currentWrapper = it->second;
+  csResourceWrapper *newWrapper = Load(locator);
+  if (newWrapper && currentWrapper)
+  {
+    currentWrapper->Set(newWrapper->Get());
+  }
+  std::flush(std::cout);
+}
+
+csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator)
 {
   iFile *file = Open(locator);
   if (!file)
@@ -83,7 +104,7 @@ csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator, iOb
     return nullptr;
   }
 
-  csResourceWrapper *object = Load(file, locator, userData);
+  csResourceWrapper *object = Load(file, locator);
   if (object)
   {
     object->SetLocator(locator);
@@ -93,7 +114,7 @@ csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator, iOb
   return object;
 }
 
-const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iObject *userData) const
+const csClass *csResourceManager::EvalClass(const csResourceLocator &locator) const
 {
   iFile *file = Open(locator);
   if (!file)
@@ -101,20 +122,20 @@ const csClass *csResourceManager::EvalClass(const csResourceLocator &locator, iO
     return nullptr;
   }
 
-  const csClass *cls = EvalClass(file, locator, userData);
+  const csClass *cls = EvalClass(file, locator);
   file->Release();
 
   return cls;
 }
 
-csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator &locator)
 {
   for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
     const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
-      csResourceWrapper *obj = loader->Load(file, locator, userData);
+      csResourceWrapper *obj = loader->Load(file, locator);
       return obj;
 
     }
@@ -122,14 +143,14 @@ csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator 
   return nullptr;
 }
 
-const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator, iObject *userData) const
+const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
     const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
-      return loader->EvalClass(file, locator, userData);
+      return loader->EvalClass(file, locator);
     }
   }
   return nullptr;
@@ -215,7 +236,7 @@ csResourceWrapper *csResourceManager::Get(const csResourceLocator &resourceLocat
 
 
 
-csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator, iObject *userData)
+csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator)
 {
   std::map<csResourceLocator, csResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
@@ -223,7 +244,7 @@ csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourc
     return it->second;
   }
 
-  csResourceWrapper *object = Load(resourceLocator, userData);
+  csResourceWrapper *object = Load(resourceLocator);
   if (!object)
   {
     return nullptr;
@@ -234,23 +255,22 @@ csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourc
   return object;
 }
 
-csResourceWrapper *csResourceManager::Aquire(const csResourceLocator &resourceLocator, iObject *userData, csResourceLoadingMode mode)
+csResourceWrapper *csResourceManager::Aquire(const csResourceLocator &resourceLocator, csResourceLoadingMode mode)
 {
   csResourceWrapper* res = nullptr;
   switch (mode)
   {
   case eRLM_Shared:
-    res = GetOrLoad(resourceLocator, userData);
+    res = GetOrLoad(resourceLocator);
     break;
   case eRLM_Instance:
-    res = Load(resourceLocator, userData);
+    res = Load(resourceLocator);
     break;
   case eRLM_Inline:
     break;
   }
   return res;
 }
-
 
 
 

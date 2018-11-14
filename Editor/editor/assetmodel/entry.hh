@@ -35,7 +35,7 @@ namespace asset::model
 		virtual void Add(Entry *entry, ModelTransaction &tr);
 		virtual void Remove(Entry *entry, ModelTransaction &tr);
 		virtual void MoveTo(Entry *newParent, ModelTransaction &tr);
-		void RemoveFromParent(ModelTransaction &tr);
+    virtual void RemoveFromParent(ModelTransaction &tr);
 		virtual void Delete(ModelTransaction &tr);
 		virtual void Rename(const std::string &newName, ModelTransaction &tr);
 

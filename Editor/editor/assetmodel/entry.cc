@@ -93,14 +93,14 @@ namespace asset::model
 			return false;
 		}
 
-		child->m_parent = 0;
+    child->m_parent = nullptr;
 		auto it = std::find(m_children.begin(), m_children.end(), child);
 		if (it == m_children.end())
 		{
 			return false;
 		}
 		m_children.erase(it);
-		child->m_parent = 0;
+    child->m_parent = nullptr;
 		return true;
 	}
 

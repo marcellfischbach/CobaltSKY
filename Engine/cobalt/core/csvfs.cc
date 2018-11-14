@@ -164,6 +164,7 @@ bool csVFS::ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry)
 
 bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEntry)
 {
+  CS_UNUSED(settings);
   if (!resolutionEntry->HasAttribute("name") || !resolutionEntry->HasAttribute("path"))
   {
     return false;
@@ -195,7 +196,7 @@ bool csVFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
             entry.SetPriority(rootPathEntry->GetAttributeInt("priority"));
           }
 
-          printf("AddRootPath: %s[%d] => %s => %s\n", entry.GetName().c_str(), entry.GetPriority(), entry.GetPath().c_str(), entry.GetAbsPath().c_str());
+//          printf("AddRootPath: %s[%d] => %s => %s\n", entry.GetName().c_str(), entry.GetPriority(), entry.GetPath().c_str(), entry.GetAbsPath().c_str());
           m_entries.push_back(entry);
         }
       }
@@ -399,7 +400,7 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
   if (filename.length() == 0)
   {
     printf ("%s@%d Unable to solve filename: %s\n", __FILE__, __LINE__, filename.c_str());
-    return 0;
+    return nullptr;
   }
 
 
@@ -410,15 +411,13 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
     std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
     if (file->Open(absFileName.c_str(), mode, textMode))
     {
-      printf("FoundFile: %s\n", absFileName.c_str());
       return file;
     }
-    printf("AbsFile: %s\n", absFileName.c_str());
   }
 
   delete file;
   printf("%s@%d Unable to open: %s %s\n", __FILE__, __LINE__, filename.c_str(), finalFilename.c_str());
-  return 0;
+  return nullptr;
 }
 
 
@@ -428,7 +427,7 @@ iFile *csVFS::Open(const std::string &filename, const std::string &entryName, cs
   if (filename.length() == 0)
   {
     printf("%s@%d Unable to solve filename: %s\n", __FILE__, __LINE__, filename.c_str());
-    return 0;
+    return nullptr;
   }
 
 
@@ -449,7 +448,7 @@ iFile *csVFS::Open(const std::string &filename, const std::string &entryName, cs
 
   delete file;
   printf("%s@%d Unable to open: %s\n", __FILE__, __LINE__, finalFilename.c_str());
-  return 0;
+  return nullptr;
 }
 
 
@@ -470,7 +469,7 @@ const csVFS::Entry *csVFS::FindEntryForFilename(const std::string &filename) con
   if (filename.length() == 0)
   {
     printf("Unable to solve filename: %s\n", filename.c_str());
-    return 0;
+    return nullptr;
   }
 
   for (const Entry &entry : m_entries)
@@ -482,7 +481,7 @@ const csVFS::Entry *csVFS::FindEntryForFilename(const std::string &filename) con
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 

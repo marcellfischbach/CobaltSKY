@@ -51,7 +51,7 @@ void MaterialEditor::UpdateAsset()
   const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
 
-  m_material = csResourceManager::Get()->Aquire<csMaterial>(locator);
+  m_material = csResourceManager::Get()->Aquire<csMaterialWrapper>(locator);
   m_widget->SetMaterial(m_material);
 
   m_properties->SetMaterial(m_material);
@@ -110,8 +110,8 @@ void MaterialEditor::MaterialAttributeChanged(const csResourceLocator &materialL
     materialLocator.GetDebugName().c_str(),
     attributeID.c_str(),
     attribureName.c_str());
-  csResourceLocator locator = m_material->GetMaterialDef()->GetLocator();
-  if (Editor::Get()->GetProject()->GetModel()->IsMasterLocator(materialLocator))
+  csResourceLocator locator = m_material->Get()->GetMaterialDef()->GetLocator();
+  if (Editor::Get()->GetProject()->GetModel()->IsFinalLocator(materialLocator))
   {
     m_properties->AttributeChanged(attributeID, attribureName);
   }
@@ -159,22 +159,23 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
-  csMaterialDefWrapper *materialDefWrapper = m_material->GetMaterialDef();
-  if (!materialDefWrapper || materialDefWrapper->IsValid())
+  csMaterial *material = m_material->Get();
+  csMaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
+  if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return;
   }
 
   if (materialDefWrapper->GetLocator().IsValid())
   {
-    materialDefEntry->AddAttribute("locator", materialDefWrapper->GetLocator().Encode());
+    materialDefEntry->AddAttribute("locator", materialDefWrapper->GetLocator().AsAnonymous().Encode());
   }
 
   csMaterialDef *materialDef = materialDefWrapper->Get();
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
-    if (m_material->IsInherited(i))
+    if (material->IsInherited(i))
     {
       continue;
     }
@@ -189,37 +190,37 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
     {
     case eSPT_Float:
       parameterEntry->AddChild(file.CreateEntry("float"))
-          ->AddAttributeFloat(m_material->GetFloat(i));
+          ->AddAttributeFloat(material->GetFloat(i));
       break;
     case eSPT_Vector2:
       parameterEntry->AddChild(file.CreateEntry("float2"))
-          ->AddAttributeFloat(m_material->GetFloat2(i).x)
-          ->AddAttributeFloat(m_material->GetFloat2(i).y);
+          ->AddAttributeFloat(material->GetFloat2(i).x)
+          ->AddAttributeFloat(material->GetFloat2(i).y);
       break;
     case eSPT_Vector3:
       parameterEntry->AddChild(file.CreateEntry("float3"))
-          ->AddAttributeFloat(m_material->GetFloat3(i).x)
-          ->AddAttributeFloat(m_material->GetFloat3(i).y)
-          ->AddAttributeFloat(m_material->GetFloat3(i).z);
+          ->AddAttributeFloat(material->GetFloat3(i).x)
+          ->AddAttributeFloat(material->GetFloat3(i).y)
+          ->AddAttributeFloat(material->GetFloat3(i).z);
       break;
     case eSPT_Vector4:
       parameterEntry->AddChild(file.CreateEntry("float4"))
-          ->AddAttributeFloat(m_material->GetFloat4(i).x)
-          ->AddAttributeFloat(m_material->GetFloat4(i).y)
-          ->AddAttributeFloat(m_material->GetFloat4(i).y)
-          ->AddAttributeFloat(m_material->GetFloat4(i).w);
+          ->AddAttributeFloat(material->GetFloat4(i).x)
+          ->AddAttributeFloat(material->GetFloat4(i).y)
+          ->AddAttributeFloat(material->GetFloat4(i).y)
+          ->AddAttributeFloat(material->GetFloat4(i).w);
       break;
     case eSPT_Color4:
       parameterEntry->AddChild(file.CreateEntry("color4"))
-          ->AddAttributeFloat(m_material->GetColor4(i).r)
-          ->AddAttributeFloat(m_material->GetColor4(i).g)
-          ->AddAttributeFloat(m_material->GetColor4(i).b)
-          ->AddAttributeFloat(m_material->GetColor4(i).a);
+          ->AddAttributeFloat(material->GetColor4(i).r)
+          ->AddAttributeFloat(material->GetColor4(i).g)
+          ->AddAttributeFloat(material->GetColor4(i).b)
+          ->AddAttributeFloat(material->GetColor4(i).a);
       break;
     case eSPT_Texture:
-      if (m_material->GetTexture(i))
+      if (material->GetTexture(i))
       {
-        csResourceLocator loc = m_material->GetTexture(i)->GetLocator();
+        csResourceLocator loc = material->GetTexture(i)->GetLocator();
         parameterEntry->AddChild(file.CreateEntry("locator"))
             ->AddAttribute("locator", loc.Encode());
       }

@@ -6,7 +6,7 @@
 class csDirectionalLight;
 class csEntity;
 class csLightState;
-class csMaterial;
+class csMaterialWrapper;
 class PreviewLightOrbitHandler;
 class EDITOR_API PreviewSceneView : public SceneView
 {
@@ -15,7 +15,7 @@ public:
   virtual ~PreviewSceneView();
 
 protected:
-  csEntity *CreateSphere(float radius, unsigned numR, unsigned numH, csMaterial *materialInstance);
+  csEntity *CreateSphere(float radius, unsigned numR, unsigned numH, csMaterialWrapper *materialInstance);
 
 private:
   csDirectionalLight *m_light = 0;

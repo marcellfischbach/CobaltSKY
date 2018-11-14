@@ -9,7 +9,7 @@
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)
-  , m_materialInstance(new csMaterial())
+  , m_materialInstance(new csMaterialWrapper(new csMaterial()))
 {
 }
 
@@ -37,10 +37,10 @@ ShaderGraphEditorPreviewSceneView::~ShaderGraphEditorPreviewSceneView()
 
 void ShaderGraphEditorPreviewSceneView::SetMaterial(csMaterialDefWrapper *material)
 {
-  m_materialInstance->SetMaterialDef(material);
+  m_materialInstance->Get()->SetMaterialDef(material);
 }
 
 void ShaderGraphEditorPreviewSceneView::UpdateMaterial()
 {
-  m_materialInstance->RebuildMaterialParameters();
+  m_materialInstance->Get()->RebuildMaterialParameters();
 }
