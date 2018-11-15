@@ -3,6 +3,8 @@
 #include <materialeditor/materialeditorexport.hh>
 #include <QWidget>
 #include <cobalt/cstypes.hh>
+#include <cobalt/math/cscolor4f.hh>
+#include <cobalt/math/csvector.hh>
 
 class QCheckBox;
 class QDoubleSpinBox;
@@ -11,6 +13,8 @@ class QGridLayout;
 class AssetResourceWidget;
 class csMaterialWrapper;
 class csResourceLocator;
+class Color4fLineEdit;
+class Vector4fLineEdit;
 class MATERIALEDITOR_API MaterialEditorProperties : public QWidget
 {
   Q_OBJECT;
@@ -23,6 +27,8 @@ public:
   void AttributeChanged(const std::string &id, const std::string &name);
 
 private slots:
+  void Vector4fChanged(const csVector4f &);
+  void Color4fChanged(const csColor4f &);
 void MaterialDefChanged(const csResourceLocator &locator);
 void CheckBoxChanged(int);
 void DoubleSpinBoxChanged(double);
@@ -45,6 +51,8 @@ private:
     QCheckBox *checkBox;
     AssetResourceWidget *textureWidget;
     std::vector<QDoubleSpinBox*> doubleSpinBoxes;
+    Vector4fLineEdit *vector4fLineEdit;
+    Color4fLineEdit *colorLineEdit;
   };
 
   std::vector<Param> m_params;

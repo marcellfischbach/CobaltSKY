@@ -43,12 +43,12 @@ int main (int argc, char **argv)
   icon.addFile(":/icons/resources/CobaltSKY-Editor64.png", QSize(), QIcon::Normal, QIcon::Off);
   app.setWindowIcon(icon);
 
-  QFile qssFile("d:/DEV/CobaltSKY/Tools/Editor/dark.qss");
-	if (qssFile.open(QIODevice::ReadOnly))
+  QFile qssFile("d:/DEV/CobaltSKY/Editor/editor/dark_orange.qss");
+  if (false && qssFile.open(QIODevice::ReadOnly))
   {
     QString qss = qssFile.readAll();
     qssFile.close();
-    //app.setStyleSheet(qss);
+    app.setStyleSheet(qss);
   }
 
   if (true)

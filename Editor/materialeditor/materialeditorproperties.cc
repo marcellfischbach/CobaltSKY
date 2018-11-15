@@ -1,6 +1,8 @@
 
 #include <materialeditor/materialeditorproperties.hh>
 #include <editor/components/assetresourcewidget.hh>
+#include <editor/components/colorlineedit.hh>
+#include <editor/components/vector4lineedit.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
@@ -122,7 +124,9 @@ void MaterialEditorProperties::UpdateGUI()
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
     Param param;
-    param.textureWidget = 0;
+    param.textureWidget = nullptr;
+    param.colorLineEdit = nullptr;
+    param.vector4fLineEdit = nullptr;
     std::string id = materialDef->GetParameterId(i);
     std::string name = materialDef->GetParameterName(i);
 
@@ -189,61 +193,21 @@ void MaterialEditorProperties::UpdateGUI()
     }break;
     case eSPT_Vector4:
     {
-      QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF2 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF3 = new QDoubleSpinBox(m_frame);
-      sbF0->setSingleStep(0.1);
-      sbF1->setSingleStep(0.1);
-      sbF2->setSingleStep(0.1);
-      sbF3->setSingleStep(0.1);
-      sbF0->setEnabled(!inherit);
-      sbF1->setEnabled(!inherit);
-      sbF2->setEnabled(!inherit);
-      sbF3->setEnabled(!inherit);
-      sbF0->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF2->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF3->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).x : material->GetFloat4(i).x);
-      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).y : material->GetFloat4(i).y);
-      sbF2->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).z : material->GetFloat4(i).z);
-      sbF3->setValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i).w : material->GetFloat4(i).w);
-      m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF2, ++row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF3, ++row, 1, 1, 1);
-      param.doubleSpinBoxes.push_back(sbF0);
-      param.doubleSpinBoxes.push_back(sbF1);
-      param.doubleSpinBoxes.push_back(sbF2);
-      param.doubleSpinBoxes.push_back(sbF3);
+      Vector4fLineEdit *lineEdit = new Vector4fLineEdit(m_frame);
+      lineEdit->SetValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i) : material->GetFloat4(i));
+      lineEdit->SetEnabled(!inherit);
+      connect(lineEdit, SIGNAL(ValueChanged(const csVector4f&)), this, SLOT(Vector4fChanged(const csVector4f&)));
+      param.vector4fLineEdit = lineEdit;
+      m_frameLayout->addWidget(lineEdit, row, 1, 1, 1);
     }break;
     case eSPT_Color4:
     {
-      QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF2 = new QDoubleSpinBox(m_frame);
-      QDoubleSpinBox *sbF3 = new QDoubleSpinBox(m_frame);
-      sbF0->setEnabled(!inherit);
-      sbF1->setEnabled(!inherit);
-      sbF2->setEnabled(!inherit);
-      sbF3->setEnabled(!inherit);
-      sbF0->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF1->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF2->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF3->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      sbF0->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).r : material->GetColor4(i).r);
-      sbF1->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).g : material->GetColor4(i).g);
-      sbF2->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).b : material->GetColor4(i).b);
-      sbF3->setValue(material->IsInherited(i) ? materialDef->GetDefaultColor4(i).a : material->GetColor4(i).a);
-      m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF1, ++row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF2, ++row, 1, 1, 1);
-      m_frameLayout->addWidget(sbF3, ++row, 1, 1, 1);
-      param.doubleSpinBoxes.push_back(sbF0);
-      param.doubleSpinBoxes.push_back(sbF1);
-      param.doubleSpinBoxes.push_back(sbF2);
-      param.doubleSpinBoxes.push_back(sbF3);
+      Color4fLineEdit *lineEdit = new Color4fLineEdit(m_frame);
+      lineEdit->SetColor(material->IsInherited(i) ? materialDef->GetDefaultColor4(i) : material->GetColor4(i));
+      lineEdit->SetEnabled(!inherit);
+      connect(lineEdit, SIGNAL(ColorChanged(const csColor4f&)), this, SLOT(Color4fChanged(const csColor4f&)));
+      param.colorLineEdit = lineEdit;
+      m_frameLayout->addWidget(lineEdit, row, 1, 1, 1);
     }break;
     case eSPT_Texture:
     {
@@ -300,6 +264,18 @@ void MaterialEditorProperties::CleanUp()
       m_frameLayout->removeWidget(param.textureWidget);
       param.textureWidget->deleteLater();
     }
+    if (param.vector4fLineEdit)
+    {
+      param.vector4fLineEdit->disconnect(this);
+      m_frameLayout->removeWidget(param.vector4fLineEdit);
+      param.vector4fLineEdit->deleteLater();
+    }
+    if (param.colorLineEdit)
+    {
+      param.colorLineEdit->disconnect(this);
+      m_frameLayout->removeWidget(param.colorLineEdit);
+      param.colorLineEdit->deleteLater();
+    }
     param.doubleSpinBoxes.clear();
   }
   m_params.clear();
@@ -314,13 +290,24 @@ void MaterialEditorProperties::CheckBoxChanged(int)
     {
       csSize idx = m_material->Get()->GetIndex(param.id);
       m_material->Get()->SetInherited(idx, !enable);
+      if (param.colorLineEdit)
+      {
+        param.colorLineEdit->SetEnabled(enable);
+      }
+      if (param.vector4fLineEdit)
+      {
+        param.vector4fLineEdit->SetEnabled(enable);
+      }
       if (param.textureWidget)
       {
         param.textureWidget->setEnabled(enable);
       }
       for (auto sb : param.doubleSpinBoxes)
       {
-        sb->setEnabled(enable);
+        if (sb)
+        {
+          sb->setEnabled(enable);
+        }
       }
     }
     catch (const std::exception &e)
@@ -329,6 +316,16 @@ void MaterialEditorProperties::CheckBoxChanged(int)
     }
   }
 
+  UpdateMaterialValues();
+}
+
+void MaterialEditorProperties::Color4fChanged(const csColor4f&)
+{
+  UpdateMaterialValues();
+}
+
+void MaterialEditorProperties::Vector4fChanged(const csVector4f &)
+{
   UpdateMaterialValues();
 }
 
@@ -390,20 +387,16 @@ void MaterialEditorProperties::UpdateMaterialValues()
         ));
         break;
       case eSPT_Vector4:
-        material->Set(idx, csVector4f(
-          (float)param.doubleSpinBoxes[0]->value(),
-          (float)param.doubleSpinBoxes[1]->value(),
-          (float)param.doubleSpinBoxes[2]->value(),
-          (float)param.doubleSpinBoxes[3]->value()
-        ));
+        if (param.vector4fLineEdit)
+        {
+          material->Set(idx, param.vector4fLineEdit->GetValue());
+        }
         break;
       case eSPT_Color4:
-        material->Set(idx, csColor4f(
-          (float)param.doubleSpinBoxes[0]->value(),
-          (float)param.doubleSpinBoxes[1]->value(),
-          (float)param.doubleSpinBoxes[2]->value(),
-          (float)param.doubleSpinBoxes[3]->value()
-        ));
+        if (param.colorLineEdit)
+        {
+          material->Set(idx, param.colorLineEdit->GetColor());
+        }
         break;
       case eSPT_Texture:
       {

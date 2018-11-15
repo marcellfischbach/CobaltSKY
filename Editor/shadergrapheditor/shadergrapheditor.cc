@@ -63,11 +63,13 @@ void ShaderGraphEditor::UpdateAsset()
   UpdateResourceNodeIDs(shaderGraph);
 
   csResourceLocator metaLocator(locator, "meta");
-  ShaderGraphEditorMeta *meta = csResourceManager::Get()->Load<ShaderGraphEditorMeta>(metaLocator);
+  ShaderGraphEditorMetaWrapper *metaWrapper = csResourceManager::Get()->Load<ShaderGraphEditorMetaWrapper>(metaLocator);
+  ShaderGraphEditorMeta *meta = metaWrapper ? metaWrapper->Get() : nullptr;
   if (!meta)
   { 
     meta = new ShaderGraphEditorMeta();
   }
+
   csSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
   m_preview->SetShaderGraph(shaderGraphWrapper);

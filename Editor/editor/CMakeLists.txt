@@ -337,8 +337,10 @@ set(COMPONENTS_SOURCES
     components/assetresourcelineedit.hh
     components/assetresourcewidget.cc
     components/assetresourcewidget.hh
-	components/baseeditorwidget.cc
-	components/baseeditorwidget.hh
+    components/baseeditorwidget.cc
+    components/baseeditorwidget.hh
+    components/colorlineedit.cc
+    components/colorlineedit.hh
     components/qtcsonscreenrendertarget.cc
     components/qtcsonscreenrendertarget.hh
     components/sceneview.cc
@@ -346,6 +348,12 @@ set(COMPONENTS_SOURCES
     components/sceneviewbaseinputhandler.cc
     components/sceneviewbaseinputhandler.hh
     components/sceneviewinputhandler.hh
+    components/vector2lineedit.cc
+    components/vector2lineedit.hh
+    components/vector3lineedit.cc
+    components/vector3lineedit.hh
+    components/vector4lineedit.cc
+    components/vector4lineedit.hh
     )
 
 set(COMPONENTS_UI
@@ -408,6 +416,7 @@ source_group(
     FILES
     ${COMPONENTS_PREVIEW_SOURCES}
     )
+
 
 
 set(EDITORS_STATICMESHEDITOR_SOURCES
