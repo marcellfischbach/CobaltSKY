@@ -556,8 +556,6 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
 
     RenameCache(data.entry, oldLocator, newLocator);
     emit EntryRenamed(data.entry, oldLocator, newLocator);
-    emit ResourceChanged(oldLocator);
-    emit ResourceChanged(newLocator);
   }
 
   // now check if the root entries are modified... in this case emit a resource renaming
@@ -582,6 +580,15 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
       }
     }
   }
+
+  for (TreeCollector::Data &data : treeCollector.m_entries)
+  {
+    csResourceLocator oldLocator = data.locator;
+    csResourceLocator newLocator = data.entry->GetResourceLocator();
+    emit ResourceChanged(oldLocator);
+    emit ResourceChanged(newLocator);
+  }
+
 }
 
 void Model::RenameCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
