@@ -22,6 +22,7 @@ namespace asset::model
     ViewEntry *GetParent();
 
 		virtual const std::string GetText() const;
+    virtual const std::string GetType() const;
 
     virtual void Add(ViewEntry *entry) = 0;
     virtual void Remove(ViewEntry *entry) = 0;

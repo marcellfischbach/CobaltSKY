@@ -75,6 +75,7 @@ set(SOURCE_CORE
 	core/csresourcewrapper.hh
     core/cssettings.cc
     core/cssettings.hh
+	core/cssignalslot.hh
     core/csstring.hh
     core/csthread.cc
     core/csthread.hh
@@ -517,8 +518,15 @@ install(DIRECTORY . DESTINATION include/cobaltsky/cobalt FILES_MATCHING PATTERN 
 target_link_libraries(CobaltSKY
 	CobaltSKY-File
     ${PNG_LIBRARIES}
-    stdc++fs
+    #stdc++fs
     )
+
+if (MINGW)
+    target_link_libraries(CobaltSKY
+        stdc++fs
+    )
+endif()
+
 
 CS_INSTALL_MOCCER(CobaltSKY cobalt CSE_API ALL_SOURCES)
 

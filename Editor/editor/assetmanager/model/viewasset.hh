@@ -22,6 +22,7 @@ namespace asset::model
     virtual void Remove(ViewEntry *entry);
     virtual void Sort();
     virtual const std::string GetText() const;
+    virtual const std::string GetType() const;
   private:
     Asset * m_asset;
   };

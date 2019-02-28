@@ -414,7 +414,7 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
     {
       std::string resourceFile = ReadString(file);
       std::string resourceName = ReadString(file);
-      meshObj = csResourceManager::Get()->GetOrLoad(csResourceLocator(resourceFile, resourceName));
+      meshObj = csResourceManager::Get()->GetOrLoad(csResourceLocator(csResourceFile(resourceFile), csResourceName(resourceName)));
       if (meshObj)
       {
         // make me the owner, otherwise there is a difference between GetOrLoad and ReadEntry
@@ -456,7 +456,7 @@ csMultiMaterial *csStaticMeshLoader::ReadMultiMaterial(iFile *file) const
   for (csUInt32 i = 0; i < numberOfMaterials; ++i)
   {
     std::string name = ReadString(file);
-    csMaterial *inst = mgr->GetOrLoad<csMaterial>(csResourceLocator("${materials}/materials.xml", name));
+    csMaterial *inst = mgr->GetOrLoad<csMaterial>(csResourceLocator(csResourceFile("${materials}/materials.xml"), csResourceName(name)));
     if (inst)
     {
       multiMaterial->AddMaterialInstance(inst);

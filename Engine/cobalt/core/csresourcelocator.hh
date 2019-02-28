@@ -3,12 +3,70 @@
 #include <cobalt/csexport.hh>
 #include <string>
 
+class csResourceName
+{
+public:
+  explicit csResourceName(const std::string &name)
+    : m_name(name)
+  {
+
+  }
+
+  const std::string &GetName() const
+  {
+    return m_name;
+  }
+private:
+  std::string m_name;
+};
+
+class csResourceEntry
+{
+public:
+  explicit csResourceEntry(const std::string &name)
+    : m_name(name)
+  {
+
+  }
+
+  const std::string &GetName() const
+  {
+    return m_name;
+  }
+private:
+  std::string m_name;
+};
+
+class csResourceFile
+{
+public:
+  explicit csResourceFile(const std::string &name)
+    : m_name(name)
+  {
+
+  }
+
+  const std::string &GetName() const
+  {
+    return m_name;
+  }
+private:
+  std::string m_name;
+};
+
+
+
 class CSE_API csResourceLocator
 {
 public:
   csResourceLocator(const std::string &encodedResourceName = "");
-  csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
-  explicit csResourceLocator(const csResourceLocator &resource, const std::string &resourceName);
+  csResourceLocator(const csResourceFile &file);
+  csResourceLocator(const csResourceFile &file, const csResourceName &name);
+  csResourceLocator(const csResourceEntry &entry, const csResourceFile &file);
+  csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name);
+
+//  csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
+//  explicit csResourceLocator(const csResourceLocator &resource, const std::string &resourceName);
   csResourceLocator(const csResourceLocator &other);
 
   csResourceLocator AsAnonymous() const;

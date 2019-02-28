@@ -23,4 +23,9 @@ namespace asset::model
 	{
 		return m_entry ? m_entry->GetName() : "<noname>";
 	}
+
+  const std::string asset::model::ViewEntry::GetType() const
+  {
+    return "";
+  }
 }

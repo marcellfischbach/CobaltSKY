@@ -40,14 +40,46 @@ csResourceLocator::csResourceLocator(const std::string &encodedResourceName)
 
 }
 
-csResourceLocator::csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry)
-	: m_resourceFile(resourceFile)
-	, m_resourceName(resourceName)
-	, m_resourceEntry(resourceEntry)
+
+csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResourceFile &file)
+	: m_resourceEntry(entry.GetName())
+	, m_resourceFile(file.GetName())
+	, m_resourceName("")
 {
 	FixResourceFile();
 }
 
+
+
+csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name)
+  : m_resourceEntry(entry.GetName())
+  , m_resourceFile(file.GetName())
+  , m_resourceName(name.GetName())
+{
+  FixResourceFile();
+}
+
+
+csResourceLocator::csResourceLocator(const csResourceFile &file)
+  : m_resourceEntry("")
+  , m_resourceFile(file.GetName())
+  , m_resourceName("")
+{
+  FixResourceFile();
+}
+
+
+
+csResourceLocator::csResourceLocator(const csResourceFile &file, const csResourceName &name)
+  : m_resourceEntry("")
+  , m_resourceFile(file.GetName())
+  , m_resourceName(name.GetName())
+{
+  FixResourceFile();
+}
+
+
+/*
 csResourceLocator::csResourceLocator(const csResourceLocator &resource, const std::string &resourceName)
 	: m_resourceFile(resource.GetResourceFile())
 	, m_resourceName(resourceName)
@@ -55,25 +87,40 @@ csResourceLocator::csResourceLocator(const csResourceLocator &resource, const st
 {
 	FixResourceFile();
 }
+*/
+
 
 csResourceLocator csResourceLocator::AsAnonymous() const
 {
-	return csResourceLocator(m_resourceFile, m_resourceName, "");
+  return csResourceLocator(
+    csResourceFile(m_resourceFile), 
+    csResourceName(m_resourceName)
+  );
 }
 
 csResourceLocator csResourceLocator::WithFileSuffix(const std::string &suffix) const
 {
-	return csResourceLocator(m_resourceFile + suffix, m_resourceName, m_resourceEntry);
+  return csResourceLocator(
+    csResourceEntry(m_resourceEntry),
+    csResourceFile(m_resourceFile + suffix),
+    csResourceName(m_resourceName)
+  );
 }
 
 csResourceLocator csResourceLocator::WithResourceName(const std::string &resourceName) const
 {
-	return csResourceLocator(m_resourceFile, resourceName, m_resourceEntry);
+  return csResourceLocator(
+    csResourceEntry(m_resourceEntry),
+    csResourceFile(m_resourceFile),
+    csResourceName(resourceName)
+  );
 }
 
 csResourceLocator csResourceLocator::AsFileName() const
 {
-	return csResourceLocator(m_resourceFile, "", "");
+  return csResourceLocator(
+    csResourceFile(m_resourceFile)
+  );
 }
 
 

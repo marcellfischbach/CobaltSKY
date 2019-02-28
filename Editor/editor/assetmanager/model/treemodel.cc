@@ -145,7 +145,7 @@ namespace asset::model
 
   int TreeModel::columnCount(const QModelIndex &parent) const
   {
-    return 1;
+    return 2;
   }
 
   QVariant TreeModel::data(const QModelIndex &index, int role) const
@@ -162,16 +162,26 @@ namespace asset::model
     switch (role)
     {
     case Qt::DisplayRole:
-      return QString(entry->GetText().c_str());
+      switch (index.column())
+      {
+      case 0:
+        return QString(entry->GetText().c_str());
+      case 1:
+        return QString(entry->GetType().c_str());
+      }
+      break;
 
     case Qt::DecorationRole:
-      if (entry->GetEntry()->IsAsset())
+      if (index.column() == 0)
       {
-        return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
-      }
-      if (entry->GetEntry()->IsFolder())
-      {
-        return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+        if (entry->GetEntry()->IsAsset())
+        {
+          return QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+        }
+        if (entry->GetEntry()->IsFolder())
+        {
+          return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+        }
       }
       break;
     }

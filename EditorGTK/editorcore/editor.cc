@@ -28,7 +28,7 @@ bool Editor::Initialize(int arg, char **argv)
   m_mainWindow = new MainWindow ();
 
 
-  m_mainWindow->AddView(AssetManagerView::Get());
+//  m_mainWindow->AddView(AssetManagerView::Get());
 
 
   return true;

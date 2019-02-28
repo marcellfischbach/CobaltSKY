@@ -60,8 +60,8 @@ int main (int argc, char **argv)
       printf("  %s\n", style.toLatin1().data());
     }
 
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-    if (true)
+    qApp->setStyle(QStyleFactory::create("Adwaita"));
+    if (false)
     {
       QPalette darkPalette;
       darkPalette.setColor(QPalette::Window, QColor(53, 53, 63));
