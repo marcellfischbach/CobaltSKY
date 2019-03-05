@@ -21,6 +21,10 @@ void NodeScanner::Scan(AssetNode *node)
 {
   csResourceLocator locator = node->GetResourceLocator();
   iFile* file = csVFS::Get()->Open(locator);
+  if (!file)
+  {
+    return;
+  }
 
   csSize length = file->GetLength();
   file->Seek(eSP_Set, 0);

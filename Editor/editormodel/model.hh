@@ -69,6 +69,8 @@ public:
   RootNode *GetRoot();
   const RootNode *GetRoot() const;
 
+  Transaction CreateTransaction();
+
 
   /**
    * @name Public interface
@@ -103,34 +105,19 @@ public:
     * @name Signals
     */
 
-  /**
-   * \brief Emitted when a node is added to another node within the tree structure.
-   */
   cs::Signal<Node*, Node*> & OnTreeStructNodeAdded() { return m_onTreeStructNodeAdded; }
-
-  /**
-  * \brief Emitted when a node is moved from one node to another within the tree structure.
-  */
   cs::Signal<Node*, Node*, Node*> & OnTreeStructNodeMoved() { return m_onTreeStructNodeMoved; }
-
-  /**
-  * \brief Emitted when a node is moved from one node to another within the tree structure.
-  */
+  cs::Signal<Node*> & OnTreeStructNodeChanged() { return m_onTreeStructNodeChanged; }
   cs::Signal<Node*> & OnTreeStructNodeRemoved() { return m_onTreeStructNodeRemoved; }
 
-  /**
-   * \brief Emitted when a named node is added to the model
-   */ 
-  cs::Signal<Node*, csResourceLocator> &OnNamedNodeNameAdded() { return m_onNamedNodeNameAdded; }
-  /**
-   * \brief Emitted whan a named node is renamed
-   */
-  cs::Signal<Node*, csResourceLocator, csResourceLocator> &OnNamedNodeNameChanged() { return m_onNamedNodeNameChanged;  };
+  cs::Signal<Node*, csResourceLocator> &OnNamedNodeAdded() { return m_onNamedNodeAdded; }
+  cs::Signal<Node*, csResourceLocator, csResourceLocator> &OnNamedNodeRenamed() { return m_onNamedNodeRenamed;  };
+  cs::Signal<Node*, csResourceLocator> &OnNamedNodeRemoved() { return m_onNamedNodeRemoved; }
+
 
   cs::Signal<csResourceLocator> &OnResourceNameAdded() { return m_onResourceNameAdded;  }
-
+  cs::Signal<csResourceLocator> &OnResourceNameChanged() { return m_onResourceNameChanged; }
   cs::Signal<csResourceLocator, csResourceLocator> &OnResourceNameRenamed() { return m_onResourceNameRenamed;  }
-
   cs::Signal<csResourceLocator> &OnResourceNameRemoved() { return m_onResourceNameRemoved;  }
   /**
    * @}
@@ -139,42 +126,59 @@ public:
   void Debug() const;
 
 private:
-  void RegisterAddCommit(Node *child, Node *toParent, Transaction &tx);
-  void AddCommit(Node *child, Node *toParent);
+  void AddRecursive(Node *child, Node *toParent, Transaction &tx);
   void AddRollback(Node *child, Node *toParent);
 
-  void RegisterRenameCommit(Node *node, Transaction &tx);
-  void RenameCommit(Node* child, const csResourceLocator &oldLocator);
   void RenameRollback(Node* child, const std::string &oldName);
 
   csResourceLocator FindCurrentName(const Node *node);
 
-  void SyncNodeToCache(Node *node);
   bool IsMasterNode(Node *node);
   void UpdateCurrentMasterEntry(const csResourceLocator &anonLocator);
   void SetCurrentMasterEntry(const csResourceLocator &anonLocator, Node *node);
+
+  void TxCommit();
+  void TxRollback();
+
+  void SyncNodeCacheRecursive(Node *node, Transaction &tx);
+  void SyncNodeCache(Node *node, Transaction &tx);
+  void SyncNamedNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx);
+  void SyncAnonNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx);
+
 
   RootNode * m_root;
 
   cs::Signal<Node*, Node*> m_onTreeStructNodeAdded;
   cs::Signal<Node*, Node*, Node*> m_onTreeStructNodeMoved;
+  cs::Signal<Node*> m_onTreeStructNodeChanged;
   cs::Signal<Node*> m_onTreeStructNodeRemoved;
 
 
-  cs::Signal<Node*> m_onNodeChanged;
-  cs::Signal<Node*, csResourceLocator> m_onNamedNodeNameAdded;
-  cs::Signal<Node*, csResourceLocator, csResourceLocator> m_onNamedNodeNameChanged;
+  cs::Signal<Node*, csResourceLocator> m_onNamedNodeAdded;
+  cs::Signal<Node*, csResourceLocator, csResourceLocator> m_onNamedNodeRenamed;
+  cs::Signal<Node*, csResourceLocator> m_onNamedNodeRemoved;
 
   cs::Signal<csResourceLocator> m_onResourceNameAdded;
+  cs::Signal<csResourceLocator> m_onResourceNameChanged;
   cs::Signal<csResourceLocator, csResourceLocator> m_onResourceNameRenamed;
   cs::Signal<csResourceLocator> m_onResourceNameRemoved;
 
-  std::map<csResourceLocator, Node*> m_namedNodes;
-  std::map<csResourceLocator, std::set<Node*>> m_anonNodes;
-  std::map<csResourceLocator, Node*> m_anonMasterNode;
+  struct Cache
+  {
 
-  std::map<Node*, std::set<csResourceLocator>> m_references;
-  std::map<csResourceLocator, std::set<Node*>> m_referencedBy;
+    std::map<csResourceLocator, Node*> NamedNodes;
+    std::map<csResourceLocator, std::set<Node*>> AnonNodes;
+    std::map<csResourceLocator, Node*> AnonMasterNode;
+
+    std::map<Node*, std::set<csResourceLocator>> References;
+    std::map<csResourceLocator, std::set<Node*>> ReferencedBy;
+  };
+
+  Cache m_cache;
+
+  Cache *m_txCache;
+
+  void Copy(const Cache &src, Cache &dst) const;
 };
 
 }

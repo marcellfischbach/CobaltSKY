@@ -60,7 +60,6 @@ void PathScanner::Scan(FolderNode *parentNode, const std::fs::path &path, Transa
       model->Add(assetNode, parentNode, tx);
       NodeScanner nodeScanner;
       nodeScanner.Scan(assetNode);
-      for (const std::string &referenceName : .GetReferences()
     }
   }
   else if (std::fs::is_directory(path))
@@ -69,8 +68,8 @@ void PathScanner::Scan(FolderNode *parentNode, const std::fs::path &path, Transa
 
     FolderNode *folderNode = model->CreateFolderNode();
     folderNode->SetName(path.filename().generic_string());
-    ScanFolder(folderNode, path, tx);
     model->Add(folderNode, parentNode, tx);
+    ScanFolder(folderNode, path, tx);
   }
 
 }

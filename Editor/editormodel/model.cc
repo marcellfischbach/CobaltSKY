@@ -11,6 +11,7 @@ namespace cs::editor::model
 
 Model::Model()
   : m_root(new RootNode(this))
+  , m_txCache(nullptr)
 {
 
 }
@@ -18,6 +19,24 @@ Model::Model()
 Model::~Model()
 {
 
+}
+
+Transaction Model::CreateTransaction()
+{
+  if (m_txCache)
+  {
+    // there is already an active transaction so return an invalid one
+    return Transaction(Transaction::eS_Invalid);
+  }
+
+  m_txCache = new Cache();
+  Copy(m_cache, *m_txCache);
+
+
+  Transaction tx;
+  tx.OnCommit([this]() { TxCommit(); });
+  tx.OnRollback([this]() { TxRollback(); });
+  return tx;
 }
 
 RootNode *Model::GetRoot()
@@ -46,6 +65,14 @@ VFSEntryNode *Model::CreateVFSEntryNode()
 }
 
 
+/* ******************************************************************
+ * ******************************************************************
+ *
+ *      Handling add
+ *
+ * ******************************************************************
+ * ******************************************************************/
+
 
 void Model::Add(Node *child, Node *toParent, Transaction &tx)
 {
@@ -68,28 +95,22 @@ void Model::Add(Node *child, Node *toParent, Transaction &tx)
 
   if (toParent->IsAttached())
   {
-    RegisterAddCommit(child, toParent, tx);
-
+    AddRecursive(child, toParent, tx);
   }
   tx.OnRollback([this, child, toParent]() { AddRollback(child, toParent);  });
 }
 
 
-void Model::RegisterAddCommit(Node *node, Node *toParent, Transaction &tx)
+void Model::AddRecursive(Node *node, Node *toParent, Transaction &tx)
 {
-  tx.OnCommit([this, node, toParent]() { AddCommit(node, toParent); });
+  SyncNodeCache(node, tx);
+
+  tx.OnCommit([this, node, toParent]() { m_onTreeStructNodeAdded.Call(node, toParent); });
 
   for (auto child : node->GetChildren())
   {
-    RegisterAddCommit(child, node, tx);
+    AddRecursive(child, node, tx);
   }
-}
-
-void Model::AddCommit(Node *child, Node *toParent)
-{
-  m_onTreeStructNodeAdded.Call(child, toParent);
-  SyncNodeToCache(child);
-
 }
 
 
@@ -100,14 +121,44 @@ void Model::AddRollback(Node *child, Node *toParent)
   toParent->m_children.erase(it);
 }
 
+
+/* ******************************************************************
+* ******************************************************************
+*
+*      Handling delete
+*
+* ******************************************************************
+* ******************************************************************/
+
+
 void Model::Delete(Node *node, Transaction &tx)
 {
 
 }
 
+
+/* ******************************************************************
+* ******************************************************************
+*
+*      Handling move
+*
+* ******************************************************************
+* ******************************************************************/
+
+
 void Model::Move(Node *child, Node *toNewParent, Transaction &tx)
 {
 }
+
+
+
+/* ******************************************************************
+* ******************************************************************
+*
+*      Handling rename
+*
+* ******************************************************************
+* ******************************************************************/
 
 
 void Model::Rename(Node *node, const std::string &newName, Transaction &tx)
@@ -122,27 +173,15 @@ void Model::Rename(Node *node, const std::string &newName, Transaction &tx)
   std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::DontCheckExistence));
   std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
 
-  RegisterRenameCommit(node, tx);
 
   std::string oldName = node->GetName();
   node->SetName(newName);
-  tx.OnRollback([this, node, oldName]() { RenameRollback(node, oldName); });
+  SyncNodeCacheRecursive(node, tx);
+
   SecureFS().Rename(oldPath, newPath, tx);
-}
+  tx.OnRollback([this, node, oldName]() { RenameRollback(node, oldName); });
 
-void Model::RegisterRenameCommit(Node *node, Transaction &tx)
-{
-  csResourceLocator oldLocator = node->GetResourceLocator();
-  tx.OnCommit([this, node, oldLocator]() {RenameCommit(node, oldLocator); });
-  for (auto child : node->GetChildren())
-  {
-    RegisterRenameCommit(child, tx);
-  }
-}
-
-void Model::RenameCommit(Node *node, const csResourceLocator &oldLocator)
-{
-  SyncNodeToCache(node);
+  tx.OnCommit([this, node]() { m_onTreeStructNodeChanged.Call(node); });
 }
 
 
@@ -152,9 +191,161 @@ void Model::RenameRollback(Node *node, const std::string &oldName)
 }
 
 
+
+/* ******************************************************************
+* ******************************************************************
+*
+*      Syncing
+*
+* ******************************************************************
+* ******************************************************************/
+
+void Model::SyncNodeCacheRecursive(Node *node, Transaction &tx)
+{
+  SyncNodeCache(node, tx);
+  for (auto child : node->GetChildren())
+  {
+    SyncNodeCacheRecursive(child, tx);
+  }
+}
+
+void Model::SyncNodeCache(Node *node, Transaction &tx)
+{
+  csResourceLocator newLocator = node->GetResourceLocator();
+  csResourceLocator oldLocator = FindCurrentName(node);
+
+  SyncNamedNode(node, oldLocator, newLocator, tx);
+  SyncAnonNode(node, oldLocator, newLocator, tx);
+}
+
+void Model::SyncNamedNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx)
+{
+  if (oldLocator == newLocator)
+  {
+    // is is specially including if both locators are invalid
+
+    // the old name is the same as the new name so nothing could have changed
+    return;
+  }
+
+  if (newLocator.IsValid())
+  {
+    m_cache.NamedNodes[newLocator] = node;
+  }
+
+  if (oldLocator.IsValid())
+  {
+    // remove the old entry because we have already added the new entry 
+    auto it = m_cache.NamedNodes.find(oldLocator);
+    if (it != m_cache.NamedNodes.end())
+    {
+      m_cache.NamedNodes.erase(it);
+    }
+  }
+
+  if (oldLocator.IsValid() && newLocator.IsValid())
+  {
+    // both locators are valid so this is a renaming
+    tx.OnCommit([this, node, oldLocator, newLocator]() {m_onNamedNodeRenamed.Call(node, oldLocator, newLocator); });
+  }
+  else if (oldLocator.IsValid() && !newLocator.IsValid())
+  {
+    // only the old locator was valid so this was a removal
+    tx.OnCommit([this, node, oldLocator]() { m_onNamedNodeRemoved.Call(node, oldLocator); });
+  }
+  else if (!oldLocator.IsValid() && newLocator.IsValid())
+  {
+    // only the new locator is valid so this was an add 
+    tx.OnCommit([this, node, newLocator]() { m_onNamedNodeAdded.Call(node, newLocator); });
+  }
+
+}
+
+void Model::SyncAnonNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx)
+{
+
+
+  csResourceLocator anonNewLocator = newLocator.AsAnonymous();
+  csResourceLocator anonOldLocator = oldLocator.AsAnonymous();
+
+  if (anonNewLocator == anonOldLocator)
+  {
+    if (anonNewLocator.IsValid())
+    {
+      tx.OnCommit([this, anonNewLocator]() { m_onResourceNameChanged.Call(anonNewLocator); });
+    }
+    return;
+  }
+
+
+
+
+  bool wasMasterNode = IsMasterNode(node);
+
+  // remove the old entry from the anon set
+  auto oldSetIt = m_cache.AnonNodes.find(anonOldLocator);
+  if (oldSetIt != m_cache.AnonNodes.end())
+  {
+    // this node was stored with the old name, so remove it.
+    auto oldSetEntryIt = oldSetIt->second.find(node);
+    if (oldSetEntryIt != oldSetIt->second.end())
+    {
+      oldSetIt->second.erase(oldSetEntryIt);
+    }
+
+    if (oldSetIt->second.empty())
+    {
+      // this was the last entry with the old anon locator, so remove the entire set
+      m_cache.AnonNodes.erase(oldSetIt);
+    }
+    //
+    // old locator has changed so update the old master entry
+    UpdateCurrentMasterEntry(oldLocator);
+  }
+
+
+
+  
+  // add the new name to the anon set
+  auto newSetIt = m_cache.AnonNodes.find(anonNewLocator);
+  bool isANewEntry = newSetIt == m_cache.AnonNodes.end();
+  m_cache.AnonNodes[anonNewLocator].insert(node);
+
+  //
+  // new locator has changed so update the new master entry
+  UpdateCurrentMasterEntry(newLocator);
+  bool isMasterNode = IsMasterNode(node);
+
+
+
+  if (wasMasterNode)
+  {
+    // this was a moving from an old master entry so we have a renaming from the old locator to the new locator
+    // it doesn't matter in this case if the new anon entry is a master entry aswell
+    tx.OnCommit([this, anonOldLocator, anonNewLocator]() { m_onResourceNameRenamed.Call(anonOldLocator, anonNewLocator); });
+  }
+  else if (isANewEntry)
+  {
+    // we astablished a new name in the anon locators
+    tx.OnCommit([this, anonNewLocator]() { m_onResourceNameAdded.Call(anonNewLocator); });
+  }
+}
+
+
+
+
+/* ******************************************************************
+* ******************************************************************
+*
+*      Other stuff
+*
+* ******************************************************************
+* ******************************************************************/
+
+
 csResourceLocator Model::FindCurrentName(const Node *node)
 {
-  for (auto entry : m_namedNodes)
+  for (auto entry : m_cache.NamedNodes)
   {
     if (entry.second == node)
     {
@@ -166,90 +357,10 @@ csResourceLocator Model::FindCurrentName(const Node *node)
 }
 
 
-void Model::SyncNodeToCache(Node *node)
-{
-  csResourceLocator newLocator = node->GetResourceLocator();
-  csResourceLocator oldLocator = FindCurrentName(node);
-  m_namedNodes[newLocator] = node;
-  if (oldLocator.IsValid())
-  {
-    // there is already an entry for thad node
-    if (oldLocator == newLocator)
-    {
-      // the old name is the same as the new name so nothing could have changed
-      return;
-    }
-
-    // remove the old entry because we have already added the new entry 
-    auto it = m_namedNodes.find(oldLocator);
-    m_namedNodes.erase(it);
-    m_onNamedNodeNameChanged.Call(node, oldLocator, newLocator);
-  }
-  else
-  {
-    m_onNamedNodeNameAdded.Call(node, newLocator);
-  }
-
-  csResourceLocator anonNewLocator = newLocator.AsAnonymous();
-  csResourceLocator anonOldLocator = oldLocator.AsAnonymous();
-
-  bool wasMasterNode = IsMasterNode(node);
-
-  if (anonNewLocator != anonOldLocator)
-  {
-
-    // handle renaming of the resource
-
-    auto newSetIt = m_anonNodes.find(anonNewLocator);
-    auto oldSetIt = m_anonNodes.find(anonOldLocator);
-
-
-    if (oldSetIt != m_anonNodes.end())
-    {
-      // this node was stored with the old name, so remove it.
-      auto oldSetEntryIt = oldSetIt->second.find(node);
-      if (oldSetEntryIt != oldSetIt->second.end())
-      {
-        oldSetIt->second.erase(oldSetEntryIt);
-      }
-
-      if (oldSetIt->second.empty())
-      {
-        // this was the last entry with the old anon locator, so remove the entire set
-        m_anonNodes.erase(oldSetIt);
-      }
-    }
-
-    bool isANewEntry = newSetIt == m_anonNodes.end();
-
-
-    // this node was previously stored by another name... 
-    if (wasMasterNode)
-    {
-      // this was previously the master node, so we have a rename not only a remove
-      m_onResourceNameRenamed.Call(anonOldLocator, anonNewLocator);
-    }
-    else if (isANewEntry)
-    {
-      m_onResourceNameAdded.Call(anonNewLocator);
-    }
-
-    m_anonNodes[anonNewLocator].insert(node);
-
-
-    if (anonOldLocator.IsValid())
-    {
-      UpdateCurrentMasterEntry(anonOldLocator);
-    }
-    UpdateCurrentMasterEntry(anonNewLocator);
-  }
-
-
-}
 
 bool Model::IsMasterNode(Node *node)
 {
-  for (auto e : m_anonMasterNode)
+  for (auto e : m_cache.AnonMasterNode)
   {
     if (e.second == node)
     {
@@ -263,8 +374,8 @@ void Model::UpdateCurrentMasterEntry(const csResourceLocator &locator)
 {
   Node *node = nullptr;
 
-  auto it = m_anonNodes.find(locator.AsAnonymous());
-  if (it != m_anonNodes.end())
+  auto it = m_cache.AnonNodes.find(locator.AsAnonymous());
+  if (it != m_cache.AnonNodes.end())
   {
     int lowestPrio = INT_MAX;
     for (auto n : it->second)
@@ -286,15 +397,15 @@ void Model::SetCurrentMasterEntry(const csResourceLocator &locator, Node *node)
 {
   if (node == nullptr)
   {
-    auto it = m_anonMasterNode.find(locator);
-    if (it != m_anonMasterNode.end())
+    auto it = m_cache.AnonMasterNode.find(locator);
+    if (it != m_cache.AnonMasterNode.end())
     {
-      m_anonMasterNode.erase(it);
+      m_cache.AnonMasterNode.erase(it);
     }
   }
   else
   {
-    m_anonMasterNode[locator] = node;
+    m_cache.AnonMasterNode[locator] = node;
   }
 }
 
@@ -303,8 +414,8 @@ const Node *Model::FindNode(const csResourceLocator &locator) const
 {
   if (locator.IsAnonymous())
   {
-    auto it = m_anonNodes.find(locator);
-    if (it == m_anonNodes.end())
+    auto it = m_cache.AnonNodes.find(locator);
+    if (it == m_cache.AnonNodes.end())
     {
       return nullptr;
     }
@@ -324,8 +435,8 @@ const Node *Model::FindNode(const csResourceLocator &locator) const
   }
   else
   {
-    auto it = m_namedNodes.find(locator);
-    if (it == m_namedNodes.end())
+    auto it = m_cache.NamedNodes.find(locator);
+    if (it == m_cache.NamedNodes.end())
     {
       return nullptr;
     }
@@ -337,8 +448,8 @@ const Node *Model::FindNode(const csResourceLocator &locator) const
 const Node *Model::FindNode(const csResourceLocator &locator, MinPriority &minPriority) const
 {
   csResourceLocator anonLocator = locator.AsAnonymous();
-  auto it = m_anonNodes.find(anonLocator);
-  if (it == m_anonNodes.end())
+  auto it = m_cache.AnonNodes.find(anonLocator);
+  if (it == m_cache.AnonNodes.end())
   {
     return nullptr;
   }
@@ -361,8 +472,8 @@ const Node *Model::FindNode(const csResourceLocator &locator, MinPriority &minPr
 const Node *Model::FindNode(const csResourceLocator &locator, MaxPriority &maxPriority) const
 {
   csResourceLocator anonLocator = locator.AsAnonymous();
-  auto it = m_anonNodes.find(anonLocator);
-  if (it == m_anonNodes.end())
+  auto it = m_cache.AnonNodes.find(anonLocator);
+  if (it == m_cache.AnonNodes.end())
   {
     return nullptr;
   }
@@ -403,6 +514,33 @@ void Model::Debug() const
 }
 
 
+void Model::TxCommit()
+{
+  if (m_txCache)
+  {
+    delete m_txCache;
+    m_txCache = nullptr;
+  }
+}
+
+void Model::TxRollback()
+{
+  if (m_txCache)
+  {
+    Copy(*m_txCache, m_cache);
+    delete m_txCache;
+    m_txCache = nullptr;
+  }
+}
+
+void Model::Copy(const Cache &src, Cache &dst) const
+{
+  dst.AnonMasterNode = src.AnonMasterNode;
+  dst.AnonNodes = src.AnonNodes;
+  dst.NamedNodes = src.NamedNodes;
+  dst.ReferencedBy = src.ReferencedBy;
+  dst.References = src.References;
+}
 
 }
 

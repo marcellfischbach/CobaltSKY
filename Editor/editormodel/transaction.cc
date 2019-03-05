@@ -23,8 +23,18 @@ namespace cs::editor::model
     return m_message;
   }
 
+  static unsigned long TX_ID = 0L;
+
   Transaction::Transaction()
     : m_state(eS_Undefined)
+    , m_txID(++TX_ID)
+  {
+
+  }
+
+  Transaction::Transaction(State state)
+    : m_state(state)
+    , m_txID(++TX_ID)
   {
 
   }
@@ -33,6 +43,17 @@ namespace cs::editor::model
   {
 
   }
+
+  unsigned long Transaction::GetTxID() const
+  {
+    return m_txID;
+  }
+
+  bool Transaction::IsValid() const
+  {
+    return m_state != eS_Invalid;
+  }
+
 
   void Transaction::Begin()
   {
@@ -82,7 +103,6 @@ namespace cs::editor::model
       }
     }
   }
-
 
   void Transaction::OnCommit(std::function<void()> func)
   {
