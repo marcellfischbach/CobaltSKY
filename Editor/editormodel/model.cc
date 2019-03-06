@@ -132,7 +132,7 @@ void Model::AddRollback(Node *child, Node *toParent)
 * ******************************************************************/
 
 
-void Model::Delete(Node *node, bool forceDelete, Transaction &tx)
+void Model::Delete(Node *node, Transaction &tx)
 {
   if (!node)
   {
@@ -142,7 +142,7 @@ void Model::Delete(Node *node, bool forceDelete, Transaction &tx)
 
   for (auto child : std::vector<Node*>(node->GetChildren()))
   {
-    Delete(child, forceDelete, tx);
+    Delete(child, tx);
   }
 
 
@@ -186,7 +186,7 @@ void Model::Delete(Node *node, bool forceDelete, Transaction &tx)
   });
 
   std::filesystem::path path(locatorPath);
-  SecureFS().Delete(path, forceDelete, tx);
+  SecureFS().Delete(path, tx);
 
 }
 
@@ -200,10 +200,145 @@ void Model::Delete(Node *node, bool forceDelete, Transaction &tx)
 * ******************************************************************/
 
 
-void Model::Move(Node *child, Node *toNewParent, Transaction &tx)
+void Model::Move(Node *node, FolderNode *toNewParent, Transaction &tx)
 {
+  if (!node || !toNewParent)
+  {
+    return;
+  }
+
+  if (node->IsVFSEntryNode() || node->IsRootNode())
+  {
+    throw IllegalModelTreeStructException("Cannot move root or VFSEntry");
+  }
+
+
+  if (node->IsAssetNode())
+  {
+    MoveAsset(node->AsAssetNode(), toNewParent, tx);
+  }
+  else if (node->IsFolderNode())
+  {
+    MoveFolder(node->AsFolderNode(), toNewParent, tx);
+  }
 }
 
+void Model::MoveAsset(AssetNode *assetNode, FolderNode *toNewParent, Transaction &tx)
+{
+
+  Node *oldParent = assetNode->m_parent;
+  if (oldParent == toNewParent)
+  {
+    return;
+  }
+
+  csResourceLocator assetLocator = assetNode->GetResourceLocator();
+  std::string assetLocatorPath = csVFS::Get()->GetAbsolutePath(assetLocator, csVFS::CheckExistence);
+
+  csResourceLocator destinationLocator = toNewParent->GetResourceLocator();
+  std::string destinationLocatorPath = csVFS::Get()->GetAbsolutePath(destinationLocator, csVFS::CheckExistence);
+
+  if (assetLocatorPath.empty() || destinationLocatorPath.empty())
+  {
+    throw IllegalModelTreeStructException("Source or destination path is not set. Source: " + assetLocator.Encode() + "   Destination: " + destinationLocator.Encode());
+  }
+
+
+  MoveNodeToNewParent(assetNode, oldParent, toNewParent);
+
+
+  tx.OnCommit([this, assetNode, oldParent, toNewParent]() {
+    m_onTreeStructNodeMoved.Call(assetNode, oldParent, toNewParent);
+  });
+
+  tx.OnRollback([this, assetNode, oldParent, toNewParent]() {
+    MoveNodeToNewParent(assetNode, toNewParent, oldParent);
+  });
+
+  SyncNodeCache(assetNode, tx);
+
+  SecureFS().Move(std::filesystem::path(assetLocatorPath), std::filesystem::path(destinationLocatorPath), tx);
+
+
+
+
+}
+
+void Model::MoveNodeToNewParent(Node *node, Node *oldParent, Node *toNewParent)
+{
+  if (oldParent)
+  {
+    auto it = std::find(oldParent->m_children.begin(), oldParent->m_children.end(), node);
+    if (it != oldParent->m_children.end())
+    {
+      oldParent->m_children.erase(it);
+    }
+  }
+
+  toNewParent->m_children.push_back(node);
+  node->m_parent = toNewParent;
+  node->UpdateResourceLocator();
+
+}
+
+
+void Model::MoveFolder(FolderNode *folderNode, FolderNode *toNewParent, Transaction &tx)
+{
+
+  Node *oldParent = folderNode->m_parent;
+  if (oldParent == toNewParent)
+  {
+    return;
+  }
+
+  //
+  // check if the is already a folder with the same name within the new parent
+  for (auto child : toNewParent->GetChildren())
+  {
+    if (child->IsFolderNode() && folderNode->GetName() == child->GetName())
+    {
+      MergeFolder(folderNode, child->AsFolderNode(), tx);
+      return;
+    }
+  }
+
+
+  //
+  // if we get here there is no such folder within the destination folder
+  // so we have a rename here actually
+  csResourceLocator oldLocator = folderNode->GetResourceLocator();
+  csResourceLocator newLocator = toNewParent->GetResourceLocator().WithFileSuffix(folderNode->GetName() + "/");
+
+  std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::DontCheckExistence));
+  std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
+
+  MoveNodeToNewParent(folderNode, oldParent, toNewParent);
+
+  SyncNodeCacheRecursive(folderNode, tx);
+
+  SecureFS().Rename(oldPath, newPath, tx);
+
+  tx.OnCommit([this, folderNode, oldParent, toNewParent]() {
+    m_onTreeStructNodeMoved.Call(folderNode, oldParent, toNewParent);
+  });
+
+  tx.OnRollback([this, folderNode, oldParent, toNewParent]() {
+    MoveNodeToNewParent(folderNode, toNewParent, oldParent);
+  });
+}
+
+void Model::MergeFolder(FolderNode *folderNode, FolderNode *toNewParent, Transaction &tx)
+{
+  for (auto child : std::vector<Node*>(folderNode->GetChildren()))
+  {
+    Move(child, toNewParent, tx);
+  }
+
+  csResourceLocator folderLocator = folderNode->GetResourceLocator();
+  std::string folderLocatorPath = csVFS::Get()->GetAbsolutePath(folderLocator, csVFS::CheckExistence);
+
+  SecureFS().Delete(std::filesystem::path(folderLocatorPath), tx);
+}
 
 
 /* ******************************************************************
@@ -233,16 +368,11 @@ void Model::Rename(Node *node, const std::string &newName, Transaction &tx)
   SyncNodeCacheRecursive(node, tx);
 
   SecureFS().Rename(oldPath, newPath, tx);
-  tx.OnRollback([this, node, oldName]() { RenameRollback(node, oldName); });
+  tx.OnRollback([this, node, oldName]() { node->SetName(oldName); });
 
   tx.OnCommit([this, node]() { m_onTreeStructNodeChanged.Call(node); });
 }
 
-
-void Model::RenameRollback(Node *node, const std::string &oldName)
-{
-  node->SetName(oldName);
-}
 
 
 

@@ -15,6 +15,24 @@ RootNode::~RootNode()
 
 }
 
+bool RootNode::IsRootNode() const
+{
+  return true;
+}
+
+RootNode *RootNode::AsRootNode()
+{
+  return this;
+}
+
+
+const RootNode *RootNode::AsRootNode() const
+{
+  return this;
+}
+
+
+
 const csResourceLocator RootNode::WithNewName(const std::string &newName) const
 {
   // root node cannot have a valid resource locator

@@ -16,6 +16,21 @@ VFSEntryNode::~VFSEntryNode()
 
 }
 
+bool VFSEntryNode::IsVFSEntryNode() const
+{
+  return true;
+}
+
+VFSEntryNode *VFSEntryNode::AsVFSEntryNode()
+{
+  return this;
+}
+
+const VFSEntryNode *VFSEntryNode::AsVFSEntryNode() const
+{
+  return this;
+}
+
 void VFSEntryNode::SetEntry(const csVFS::Entry *entry)
 {
   m_entry = entry;

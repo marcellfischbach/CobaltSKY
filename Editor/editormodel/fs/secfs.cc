@@ -70,7 +70,7 @@ void SecureFS::RenameDirectory(const std::filesystem::path &sourcePath, const st
  * ************************************************************************/
 
 
-void SecureFS::Delete(const std::filesystem::path &path, bool forceDelete, Transaction &tx)
+void SecureFS::Delete(const std::filesystem::path &path, Transaction &tx)
 {
   if (!std::filesystem::exists(path))
   {
@@ -80,17 +80,17 @@ void SecureFS::Delete(const std::filesystem::path &path, bool forceDelete, Trans
 
   if (std::filesystem::is_regular_file(path))
   {
-    DeleteFile(path, forceDelete, tx);
+    DeleteFile(path, tx);
   }
   else if (std::filesystem::is_directory(path))
   {
-    DeleteDirectory(path, forceDelete, tx);
+    DeleteDirectory(path, tx);
   }
 
 }
 
 
-void SecureFS::DeleteFile(const std::filesystem::path &path, bool forceDelete, Transaction &tx)
+void SecureFS::DeleteFile(const std::filesystem::path &path, Transaction &tx)
 {
   ValidateTempDirectory();
 
@@ -107,26 +107,52 @@ void SecureFS::DeleteFile(const std::filesystem::path &path, bool forceDelete, T
 
 }
 
-void SecureFS::DeleteDirectory(const std::filesystem::path &path, bool forceDelete, Transaction &tx)
+void SecureFS::DeleteDirectory(const std::filesystem::path &path, Transaction &tx)
 {
-  if (!std::filesystem::is_empty(path) && !forceDelete)
+  if (!std::filesystem::is_empty(path))
   {
     throw FSDirectoryNotEmptyException("The given path cannot be deleted. It is not empty", path);
   }
 
-  if (forceDelete)
-  {
-    std::filesystem::remove_all(path);
-  }
-  else
-  {
-    std::filesystem::remove(path);
-  }
+
+  std::filesystem::remove(path);
+
   tx.OnRollback([path]() {
     std::filesystem::create_directories(path);
   });
 
 }
+
+
+void SecureFS::Move(const std::filesystem::path &sourcePath, const std::filesystem::path &destinationPath, Transaction &tx)
+{
+  if (!std::filesystem::is_directory(destinationPath))
+  {
+    throw FSMoveTargetNotADirectory("The target of a move operation is not a directory", destinationPath);
+  }
+
+  if (std::filesystem::is_regular_file(sourcePath))
+  {
+    MoveFile(sourcePath, destinationPath, tx);
+  }
+
+}
+
+void SecureFS::MoveFile(const std::filesystem::path &sourceFilePath, const std::filesystem::path &folderPath, Transaction &tx)
+{
+  std::filesystem::path destinationFilePath = folderPath / sourceFilePath.filename();
+  if (std::filesystem::exists(destinationFilePath))
+  {
+    throw FSMoveTargetAlreadyExisting("Destination filename already existing", destinationFilePath);
+  }
+
+  std::filesystem::rename(sourceFilePath, destinationFilePath);
+
+  tx.OnRollback([sourceFilePath, destinationFilePath]() {
+    std::filesystem::rename(destinationFilePath, sourceFilePath);
+  });
+}
+
 
 
 void SecureFS::ValidateTempDirectory()

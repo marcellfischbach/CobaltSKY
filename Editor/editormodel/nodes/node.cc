@@ -66,6 +66,11 @@ const csResourceLocator &Node::GetResourceLocator() const
 }
 
 
+bool Node::IsAssetNode() const
+{
+  return false;
+}
+
 AssetNode *Node::AsAssetNode()
 {
   return nullptr;
@@ -76,15 +81,24 @@ const AssetNode *Node::AsAssetNode() const
   return nullptr;
 }
 
+bool Node::IsFolderNode() const
+{
+  return false;
+}
+
 FolderNode *Node::AsFolderNode()
 {
   return nullptr;
 }
 
-
 const FolderNode *Node::AsFolderNode() const
 {
   return nullptr;
+}
+
+bool Node::IsRootNode() const
+{
+  return false;
 }
 
 RootNode *Node::AsRootNode()
@@ -95,6 +109,11 @@ RootNode *Node::AsRootNode()
 const RootNode *Node::AsRootNode() const
 {
   return nullptr;
+}
+
+bool Node::IsVFSEntryNode() const
+{
+  return false;
 }
 
 VFSEntryNode *Node::AsVFSEntryNode()

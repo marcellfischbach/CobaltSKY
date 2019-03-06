@@ -14,6 +14,11 @@ class EDITOR_MODEL_API FolderNode : public Node
 public:
   virtual ~FolderNode();
 
+  virtual bool IsFolderNode() const override;
+  virtual FolderNode *AsFolderNode() override;
+  virtual const FolderNode *AsFolderNode() const override;
+
+
   virtual void SetName(const std::string &name) override;
   virtual const std::string &GetName() const override;
 

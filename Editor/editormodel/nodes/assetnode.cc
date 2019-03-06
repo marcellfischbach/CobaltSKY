@@ -15,6 +15,22 @@ AssetNode::~AssetNode()
 
 }
 
+bool AssetNode::IsAssetNode() const
+{
+  return true;
+}
+
+AssetNode *AssetNode::AsAssetNode()
+{
+  return this;
+}
+
+const AssetNode *AssetNode::AsAssetNode() const
+{
+  return this;
+}
+
+
 void AssetNode::SetName(const std::string &name)
 {
   m_name = name;

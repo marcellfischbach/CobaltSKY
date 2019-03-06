@@ -16,6 +16,11 @@ public:
   virtual ~VFSEntryNode();
 
 public:
+
+  virtual bool IsVFSEntryNode() const override;
+  virtual VFSEntryNode *AsVFSEntryNode() override;
+  virtual const VFSEntryNode *AsVFSEntryNode() const override;
+
   void SetEntry(const csVFS::Entry *entry);
   const csVFS::Entry *GetEntry() const;
 

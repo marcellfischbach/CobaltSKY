@@ -41,7 +41,7 @@ void copy_test_folder()
 }
 
 
-void test_delete(cs::editor::model::Model &model, bool force)
+void test_delete(cs::editor::model::Model &model)
 {
   cs::editor::model::Node *node;
 
@@ -63,7 +63,7 @@ void test_delete(cs::editor::model::Model &model, bool force)
     node = model.FindNode(csResourceLocator(locatorName));
     if (node)
     {
-      model.Delete(node, force, tx);
+      model.Delete(node, tx);
     }
     else
     {
@@ -77,13 +77,6 @@ void test_delete(cs::editor::model::Model &model, bool force)
     tx.Rollback();
 
     std::cout << "DirectoryNotEmpty: " << ne.what() << std::endl;
-    if (!force)
-    {
-      std::cout << "Retry delete folder with force" << std::endl;
-      model.Debug();
-      test_delete(model, true);
-    }
-
   }
   catch (const std::exception &e)
   {
@@ -130,6 +123,48 @@ void test_rename(cs::editor::model::Model &model)
   }
 
 }
+
+void test_move(cs::editor::model::Model &model)
+{
+  cs::editor::model::Node *sourceNode, *destinatioNode;
+
+  cs::editor::model::Transaction tx = model.CreateTransaction();
+
+  try
+  {
+    tx.Begin();
+  }
+  catch (const std::exception &e)
+  {
+    printf("Unable to begin transation: %s\n", e.what());
+    return;
+  }
+
+  std::string sourceLocatorName = "Engine@models/";
+  std::string destinationLocatorName = "Engine@materials/";
+  try
+  {
+    sourceNode = model.FindNode(csResourceLocator(sourceLocatorName));
+    destinatioNode = model.FindNode(csResourceLocator(destinationLocatorName));
+    if (sourceNode && destinatioNode)
+    {
+      model.Move(sourceNode, destinatioNode->AsFolderNode(), tx);
+    }
+    else
+    {
+      printf("Unable to find node: %s\n", sourceLocatorName.c_str());
+    }
+
+    tx.Commit();
+  }
+  catch (const std::exception &e)
+  {
+    tx.Rollback();
+    printf("Unable to comply: %s\n", e.what());
+  }
+
+}
+
 
 
 
@@ -229,7 +264,8 @@ int main(int argc, char **argv)
 
 
   //test_rename(model);
-  test_delete(model, false);
+  //test_delete(model);
+  test_move(model);
 
   std::cin.get();
   return 0;

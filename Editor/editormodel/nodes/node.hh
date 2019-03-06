@@ -43,15 +43,19 @@ public:
   const csResourceLocator &GetResourceLocator() const;
   virtual const csResourceLocator WithNewName(const std::string &newName) const = 0;
 
+  virtual bool IsAssetNode() const;
   virtual AssetNode *AsAssetNode();
   virtual const AssetNode *AsAssetNode() const;
 
+  virtual bool IsFolderNode() const;
   virtual FolderNode *AsFolderNode();
   virtual const FolderNode *AsFolderNode() const;
 
+  virtual bool IsRootNode() const;
   virtual RootNode *AsRootNode();
   virtual const RootNode *AsRootNode() const;
 
+  virtual bool IsVFSEntryNode() const;
   virtual VFSEntryNode *AsVFSEntryNode();
   virtual const VFSEntryNode *AsVFSEntryNode() const;
 

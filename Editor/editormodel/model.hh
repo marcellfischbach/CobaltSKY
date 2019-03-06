@@ -78,8 +78,8 @@ public:
    * @{
    */
   void Add(Node *child, Node *toParent, Transaction &tx);
-  void Delete(Node *child, bool forceDelete, Transaction &tx);
-  void Move(Node *child, Node *toNewParent, Transaction &tx);
+  void Delete(Node *child, Transaction &tx);
+  void Move(Node *child, FolderNode *toNewParent, Transaction &tx);
   void Rename(Node *node, const std::string &newName, Transaction &tx);
 
   /**
@@ -134,7 +134,11 @@ private:
   void AddRecursive(Node *child, Node *toParent, Transaction &tx);
   void AddRollback(Node *child, Node *toParent);
 
-  void RenameRollback(Node* child, const std::string &oldName);
+  void MoveAsset(AssetNode *assetNode, FolderNode *toParent, Transaction &tx);
+  void MoveFolder(FolderNode *folderNode, FolderNode *toParent, Transaction &tx);
+  void MergeFolder(FolderNode *folderNode, FolderNode *toParent, Transaction &tx);
+  void MoveNodeToNewParent(Node *node, Node *oldParent, Node *toNewParent);
+
 
   csResourceLocator FindCurrentName(const Node *node);
 

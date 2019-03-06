@@ -14,6 +14,10 @@ class EDITOR_MODEL_API AssetNode : public Node
 public:
   virtual ~AssetNode();
 
+  virtual bool IsAssetNode() const override;
+  virtual AssetNode *AsAssetNode() override;
+  virtual const AssetNode *AsAssetNode() const override;
+
   virtual void SetName(const std::string &name) override;
   virtual const std::string &GetName() const override;
 

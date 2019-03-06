@@ -80,4 +80,43 @@ private:
   std::filesystem::path m_path;
 };
 
+class FSMoveTargetNotADirectory : public std::exception
+{
+public:
+  FSMoveTargetNotADirectory(const std::string &message, std::filesystem::path path)
+    : std::exception(message.c_str())
+    , m_path(path)
+  {
+
+  }
+
+  const std::filesystem::path &GetPath() const
+  {
+    return m_path;
+  }
+
+private:
+  std::filesystem::path m_path;
+};
+
+
+class FSMoveTargetAlreadyExisting : public std::exception
+{
+public:
+  FSMoveTargetAlreadyExisting(const std::string &message, std::filesystem::path path)
+    : std::exception(message.c_str())
+    , m_path(path)
+  {
+
+  }
+
+  const std::filesystem::path &GetPath() const
+  {
+    return m_path;
+  }
+
+private:
+  std::filesystem::path m_path;
+};
+
 }

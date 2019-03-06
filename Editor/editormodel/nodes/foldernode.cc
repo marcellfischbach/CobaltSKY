@@ -15,6 +15,22 @@ FolderNode::~FolderNode()
 
 }
 
+bool FolderNode::IsFolderNode() const
+{
+  return true;
+}
+
+FolderNode *FolderNode::AsFolderNode()
+{
+  return this;
+}
+
+
+const FolderNode *FolderNode::AsFolderNode() const
+{
+  return this;
+}
+
 void FolderNode::SetName(const std::string &name)
 {
   m_name = name;
