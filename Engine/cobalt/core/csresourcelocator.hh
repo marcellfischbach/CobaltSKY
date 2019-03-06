@@ -65,6 +65,8 @@ public:
   csResourceLocator(const csResourceEntry &entry, const csResourceFile &file);
   csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name);
 
+  static csResourceLocator Invalid();
+
 //  csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
 //  explicit csResourceLocator(const csResourceLocator &resource, const std::string &resourceName);
   csResourceLocator(const csResourceLocator &other);
@@ -100,9 +102,9 @@ public:
 
 
 private:
+
   void FixResourceFile();
   std::string m_resourceEntry;
   std::string m_resourceFile;
   std::string m_resourceName;
-
 };

@@ -2,6 +2,7 @@
 
 #include <editormodel/transaction.hh>
 #include <editormodel/editormodelexport.hh>
+#include <editormodel/modelexceptions.hh>
 #include <editormodel/nodes/assetnode.hh>
 #include <editormodel/nodes/foldernode.hh>
 #include <editormodel/nodes/rootnode.hh>
@@ -77,7 +78,7 @@ public:
    * @{
    */
   void Add(Node *child, Node *toParent, Transaction &tx);
-  void Delete(Node *child, Transaction &tx);
+  void Delete(Node *child, bool forceDelete, Transaction &tx);
   void Move(Node *child, Node *toNewParent, Transaction &tx);
   void Rename(Node *node, const std::string &newName, Transaction &tx);
 
@@ -105,10 +106,14 @@ public:
     * @name Signals
     */
 
+  /// Signal[Node *child, Node *toParent]
   cs::Signal<Node*, Node*> & OnTreeStructNodeAdded() { return m_onTreeStructNodeAdded; }
+  /// Signal[Node *node, Node *oldParent, Node *newParent]
   cs::Signal<Node*, Node*, Node*> & OnTreeStructNodeMoved() { return m_onTreeStructNodeMoved; }
+  /// Signal[Node *node]
   cs::Signal<Node*> & OnTreeStructNodeChanged() { return m_onTreeStructNodeChanged; }
-  cs::Signal<Node*> & OnTreeStructNodeRemoved() { return m_onTreeStructNodeRemoved; }
+  /// Signal[Node *child, Node *oldParent]
+  cs::Signal<Node*, Node*> & OnTreeStructNodeRemoved() { return m_onTreeStructNodeRemoved; }
 
   cs::Signal<Node*, csResourceLocator> &OnNamedNodeAdded() { return m_onNamedNodeAdded; }
   cs::Signal<Node*, csResourceLocator, csResourceLocator> &OnNamedNodeRenamed() { return m_onNamedNodeRenamed;  };
@@ -148,20 +153,24 @@ private:
 
   RootNode * m_root;
 
-  cs::Signal<Node*, Node*> m_onTreeStructNodeAdded;
-  cs::Signal<Node*, Node*, Node*> m_onTreeStructNodeMoved;
-  cs::Signal<Node*> m_onTreeStructNodeChanged;
-  cs::Signal<Node*> m_onTreeStructNodeRemoved;
+  /// Signal[Node *child, Node *toParent]
+  cs::Signal<Node*, Node*>                                m_onTreeStructNodeAdded;
+  /// Signal[Node *node, Node *oldParent, Node *newParent]
+  cs::Signal<Node*, Node*, Node*>                         m_onTreeStructNodeMoved;
+  /// Signal[Node *node]
+  cs::Signal<Node*>                                       m_onTreeStructNodeChanged;
+  /// Signal[Node *child, Node *oldParent]
+  cs::Signal<Node*, Node*>                                m_onTreeStructNodeRemoved;
 
 
-  cs::Signal<Node*, csResourceLocator> m_onNamedNodeAdded;
+  cs::Signal<Node*, csResourceLocator>                    m_onNamedNodeAdded;
   cs::Signal<Node*, csResourceLocator, csResourceLocator> m_onNamedNodeRenamed;
-  cs::Signal<Node*, csResourceLocator> m_onNamedNodeRemoved;
+  cs::Signal<Node*, csResourceLocator>                    m_onNamedNodeRemoved;
 
-  cs::Signal<csResourceLocator> m_onResourceNameAdded;
-  cs::Signal<csResourceLocator> m_onResourceNameChanged;
-  cs::Signal<csResourceLocator, csResourceLocator> m_onResourceNameRenamed;
-  cs::Signal<csResourceLocator> m_onResourceNameRemoved;
+  cs::Signal<csResourceLocator>                           m_onResourceNameAdded;
+  cs::Signal<csResourceLocator>                           m_onResourceNameChanged;
+  cs::Signal<csResourceLocator, csResourceLocator>        m_onResourceNameRenamed;
+  cs::Signal<csResourceLocator>                           m_onResourceNameRemoved;
 
   struct Cache
   {

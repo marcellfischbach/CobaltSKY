@@ -7,12 +7,11 @@ set(ALL_SOURCES
     model.hh
 	nodescanner.cc
 	nodescanner.hh
-	illegaltypeexception.hh
+	modelexceptions.hh
 	pathscanner.cc
 	pathscanner.hh
     transaction.cc
     transaction.hh
-	fs/fsmodificationexception.hh
 	fs/secfs.cc
 	fs/secfs.hh
     nodes/assetnode.cc

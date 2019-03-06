@@ -1,6 +1,6 @@
 
 #include <editormodel/nodes/node.hh>
-#include <editormodel/illegaltypeexception.hh>
+#include <editormodel/modelexceptions.hh>
 
 namespace cs::editor::model
 {

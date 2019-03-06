@@ -15,7 +15,7 @@
 #define csInvalidShaderParamIndex (~0x00)
 
 struct iGraphics;
-struct csShaderWrapper;
+class csShaderWrapper;
 struct iShaderAttribute;
 class csTextureWrapper;
 

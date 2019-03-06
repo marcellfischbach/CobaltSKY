@@ -78,6 +78,15 @@ csResourceLocator::csResourceLocator(const csResourceFile &file, const csResourc
   FixResourceFile();
 }
 
+csResourceLocator csResourceLocator::Invalid()
+{
+  return csResourceLocator(
+    csResourceEntry(""),
+    csResourceFile(""),
+    csResourceName("")
+  );
+}
+
 
 /*
 csResourceLocator::csResourceLocator(const csResourceLocator &resource, const std::string &resourceName)
