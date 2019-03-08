@@ -35,7 +35,8 @@ add_library(
 	SHARED
     ${ALL_SOURCES}
     )
-
+	
+add_dependencies(EditorModel ClassGenerator)
 
 target_link_libraries(EditorModel
     CobaltSKY
@@ -51,6 +52,9 @@ add_executable(
         EditorModelTest
         main.cc
 )
+
+
+add_dependencies(EditorModelTest ClassGenerator)
 
 target_link_libraries(
         EditorModelTest

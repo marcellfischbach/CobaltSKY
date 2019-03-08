@@ -1,4 +1,5 @@
 
+add_subdirectory(assetmanager)
 add_subdirectory(editor)
 add_subdirectory(editorlauncher)
 add_subdirectory(editormodel)
