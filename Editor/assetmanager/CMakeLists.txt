@@ -1,8 +1,8 @@
+
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
 
 set(CMAKE_AUTOMOC ON)
-
 
 
 set(ALL_SOURCES
@@ -38,10 +38,6 @@ target_link_libraries(
 	)
 
 CS_INSTALL_MOCCER(EditorAssetManager assetmanager ASSET_MANAGER_API ALL_SOURCES)
-
-
-
-
 
 
 add_executable(

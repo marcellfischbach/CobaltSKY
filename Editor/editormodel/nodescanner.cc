@@ -38,7 +38,7 @@ void NodeScanner::Scan(AssetNode *node)
 
 
   csfFile f;
-  bool res = f.Parse(buffer, length);
+  bool res = f.Parse(buffer, length, false);
   delete[] buffer;
 
   if (f.IsError())
@@ -48,6 +48,7 @@ void NodeScanner::Scan(AssetNode *node)
     return;
   }
 
+  ScanTypeName(f.GetRoot());
 
   Scan(f.GetRoot());
 }
@@ -64,6 +65,33 @@ void NodeScanner::Scan(const csfEntry *entry)
     Scan(entry->GetChild(i));
   }
 
+}
+
+void NodeScanner::ScanTypeName(const csfEntry *rootEntry)
+{
+  if (!rootEntry)
+  {
+    return;
+  }
+
+  const csfEntry *dataEntry = rootEntry->GetEntry("asset.data");
+  if (!dataEntry)
+  {
+    return;
+  }
+  
+  const csfEntry *typeEntry = dataEntry->GetEntry(0);
+  if (!typeEntry)
+  {
+    return;
+  }
+
+  m_typeName = typeEntry->GetTagName();
+}
+
+std::string NodeScanner::GetTypeName() const
+{
+  return m_typeName;
 }
 
 std::set<csResourceLocator> NodeScanner::GetReferenceLocators() const

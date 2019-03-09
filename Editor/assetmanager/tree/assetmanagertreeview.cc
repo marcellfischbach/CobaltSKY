@@ -7,6 +7,8 @@
 #include <QTreeView>
 #include <QGridLayout>
 
+#include <iostream>
+
 
 namespace cs::editor::assetmanager
 {
@@ -19,9 +21,9 @@ TreeView::TreeView(model::Model *editorModel, QWidget *parent)
 {
   InitGUI();
 
-  assetmanager::TreeModel *treeModel = new assetmanager::TreeModel();
-  treeModel->SetEditorModel(editorModel);
-  m_treeView->setModel(treeModel);
+  m_treeModel = new assetmanager::TreeModel();
+  m_treeModel->SetEditorModel(editorModel);
+  m_treeView->setModel(m_treeModel);
 
 }
 
@@ -34,7 +36,17 @@ void TreeView::InitGUI()
 
 
   m_filter = new QLineEdit();
+  m_filter->setPlaceholderText(QObject::tr("Filter"));
+
   m_treeView = new QTreeView();
+  m_treeView->setAlternatingRowColors(true);
+  m_treeView->setDragEnabled(true);
+  m_treeView->setAcceptDrops(true);
+  m_treeView->setDropIndicatorShown(true);
+  m_treeView->setHeaderHidden(true);
+  m_treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  connect(m_treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(OnTreeViewCustomContextMenuRequested(const QPoint&)));
 
   m_filter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -43,6 +55,16 @@ void TreeView::InitGUI()
   layout->addWidget(m_treeView, 1, 0);
 
 
+}
+
+void TreeView::OnTreeViewCustomContextMenuRequested(const QPoint &pos)
+{
+  std::cout << "OnTreeViewCustomerContextMenuRequested: " << pos.x() << ":" << pos.y() << std::endl;
+
+  QModelIndex idx = m_treeView->indexAt(pos);
+
+  model::Node *node = m_treeModel->ModelNodeAt(idx);
+  std::cout << "  " << (node ? node->GetResourceLocator().Encode().c_str() : " null ") << std::endl;
 }
 
 }

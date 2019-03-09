@@ -7,6 +7,7 @@
 #pragma warning( disable : 4577)
 
 
+
 #ifdef ASSET_MANAGER_EXPORT
 #define ASSET_MANAGER_API __declspec(dllexport)
 #else

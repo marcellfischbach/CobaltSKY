@@ -21,9 +21,12 @@ public:
   virtual void SetName(const std::string &name) override;
   virtual const std::string &GetName() const override;
 
+  void SetAssetTypeName(const std::string &assetTypeName);
+  const std::string &GetAssetTypeName() const;
+
   virtual const csResourceLocator WithNewName(const std::string &newName) const;
 
-  std::set<std::string> &GetReferences();
+  std::set<csResourceLocator> &GetReferences();
 
 
 protected:
@@ -36,7 +39,9 @@ protected:
 private:
   std::string m_name;
 
-  std::set<std::string> m_references;
+  std::string m_assetTypeName;
+
+  std::set<csResourceLocator> m_references;
 };
 
 }

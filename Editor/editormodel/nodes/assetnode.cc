@@ -42,8 +42,18 @@ const std::string &AssetNode::GetName() const
   return m_name;
 }
 
+void AssetNode::SetAssetTypeName(const std::string &assetTypeName)
+{
+  m_assetTypeName = assetTypeName;
+}
 
-std::set<std::string> &AssetNode::GetReferences()
+const std::string &AssetNode::GetAssetTypeName() const
+{
+  return m_assetTypeName;
+}
+
+
+std::set<csResourceLocator> &AssetNode::GetReferences()
 {
   return m_references;
 }

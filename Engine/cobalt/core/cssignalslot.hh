@@ -17,25 +17,43 @@ class Slot
 {
   template<typename ... T> friend class Signal;
 public:
+  Slot()
+    : m_signal(nullptr)
+    , m_id(0)
+  {
+    
+  }
+
+
+
   void Call(T... t)
   {
-    m_function(t...);
+    if (m_signal)
+    {
+      m_function(t...);
+    }
   }
 
   void Disconnect();
 
+  bool IsValid() const
+  {
+    return m_signal != nullptr;
+  }
+
+
 
   bool operator==(const Slot<T...> &other) const
   {
-    return m_signal == other.m_signal  && m_id == other.m_id;
+    return  m_signal == other.m_signal  && m_id == other.m_id;
   }
 
 private:
   Slot(Signal<T...> *signal, unsigned long long id, std::function<void(T...)> function)
+    : m_signal(signal)
+    , m_id(id)
+    , m_function(function)
   {
-    m_signal = signal;
-    m_id = id;
-    m_function = function;
   }
 
 
@@ -88,7 +106,10 @@ private:
 template<typename ...T>
 void Slot<T...>::Disconnect()
 {
-  m_signal->Disconnect(*this);
+  if (m_signal)
+  {
+    m_signal->Disconnect(*this);
+  }
 }
 
 }

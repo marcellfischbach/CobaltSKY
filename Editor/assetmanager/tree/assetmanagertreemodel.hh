@@ -3,8 +3,12 @@
 #pragma once
 
 #include <assetmanager/assetmanagerexport.hh>
+#include <cobalt/core/cssignalslot.hh>
 #include <QAbstractItemModel>
 #include <map>
+
+
+class csResourceLocator;
 
 namespace cs::editor::model
 {
@@ -30,16 +34,44 @@ public:
   virtual QModelIndex parent(const QModelIndex &index) const;
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
+  virtual Qt::ItemFlags	flags(const QModelIndex &index) const;
+  virtual QStringList TreeModel::mimeTypes() const;
+  virtual QMimeData *TreeModel::mimeData(const QModelIndexList &indexes) const;
+  virtual bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const;
+  virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+
+  
+  TreeNode *FindNode(const csResourceLocator &locator);
+  const TreeNode *FindNode(const csResourceLocator &locator) const;
+
+  TreeNode *TreeNodeAt(const QModelIndex &index);
+  const TreeNode *TreeNodeAt(const QModelIndex &index) const;
+
+  model::Node *ModelNodeAt(const QModelIndex &index);
+  const model::Node *ModelNodeAt(const QModelIndex &index) const;
+
 
 private:
+  QModelIndex IndexOf(TreeNode *node, int column = 0) const;
+
+  void OnModelNodeAdded(model::Node* node, model::Node* parent);
+  void OnModelNodeMoved(model::Node* node, model::Node* oldParent, model::Node* newParent);
+  void OnModelNodeChanged(model::Node* node);
+  void OnModelNodeRemoved(model::Node* node, model::Node* oldParent);
+
+  cs::Slot<model::Node*, model::Node*> m_slotNodeAdded;
+  cs::Slot<model::Node*, model::Node*, model::Node *> m_slotNodeMoved;
+  cs::Slot<model::Node*> m_slotNodeChanged;
+  cs::Slot<model::Node*, model::Node*> m_slotNodeRemoved;
+
   void Cleanup();
   void Initialize();
-  TreeNode *CreateTreeNode(const model::Node* node);
+  TreeNode *CreateTreeNode(model::Node* node);
 
   TreeNode *m_rootNode;
   model::Model * m_editorModel;
 
-  std::map<model::Node*, TreeNode*> m_nodes;
+  std::map<const model::Node*, TreeNode*> m_nodes;
 
 };
 

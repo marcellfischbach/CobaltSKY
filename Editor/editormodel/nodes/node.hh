@@ -22,9 +22,10 @@ public:
   enum Type
   {
     eT_Root,
-    eT_Asset,
     eT_Folder,
     eT_VFSEntry,
+    eT_Asset,
+    eT_SIZE,
     eT_FORCE64 = 0xffffffffffffffff
   };
 public:

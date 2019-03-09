@@ -12,21 +12,27 @@ namespace cs::editor::model
 class Model;
 }
 
+
 namespace cs::editor::assetmanager
 {
 
-class ASSET_MANAGER_API TreeView : public QWidget
+class TreeModel;
+class TreeView : public QWidget
 {
-
+  Q_OBJECT;
 public:
   TreeView(model::Model *model, QWidget *parent = nullptr);
 
+private slots:
+  void OnTreeViewCustomContextMenuRequested(const QPoint &pos);
 
 private:
   void InitGUI();
 
   QLineEdit * m_filter;
   QTreeView * m_treeView;
+
+  TreeModel *m_treeModel;
 };
 
 }

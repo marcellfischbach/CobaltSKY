@@ -20,11 +20,14 @@ public:
   void Scan(AssetNode *asset);
 
 
+  std::string GetTypeName() const;
   std::set<csResourceLocator> GetReferenceLocators() const;
 
 private:
+  void ScanTypeName(const csfEntry *rootEntry);
   void Scan(const csfEntry *entry);
 
+  std::string m_typeName;
   std::set<std::string> m_references;
 
 };

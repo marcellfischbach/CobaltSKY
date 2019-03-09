@@ -1,4 +1,5 @@
 #include <editormodel/model.hh>
+#include <editormodel/nodescanner.hh>
 #include <editormodel/transaction.hh>
 #include <editormodel/nodes/assetnode.hh>
 #include <editormodel/nodes/foldernode.hh>
@@ -89,6 +90,15 @@ void Model::Add(Node *child, Node *toParent, Transaction &tx)
     return;
   }
 
+  if (child->IsAssetNode())
+  {
+    AssetNode *assetNode = child->AsAssetNode();
+    NodeScanner ns;
+    ns.Scan(assetNode);
+    assetNode->SetAssetTypeName(ns.GetTypeName());
+    assetNode->GetReferences() = ns.GetReferenceLocators();
+
+  }
 
   toParent->m_children.push_back(child);
   child->m_parent = toParent;

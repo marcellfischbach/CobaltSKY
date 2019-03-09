@@ -1,6 +1,5 @@
 
-#include <assetmanager/tree/assetmanagertreeview.hh>
-#include <assetmanager/tree/assetmanagertreemodel.hh>
+#include <assetmanager/assetmanager.hh>
 
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/core/csvfs.hh>
@@ -55,9 +54,9 @@ public:
   TestWindow(model::Model *model)
     : QMainWindow()
   {
-    assetmanager::TreeView *treeView = new assetmanager::TreeView(model, this);
+    assetmanager::AssetManager *assetManager = new assetmanager::AssetManager(model, this);
 
-    setCentralWidget(treeView);
+    setCentralWidget(assetManager);
   }
 };
 
@@ -93,8 +92,70 @@ int main(int argc, char **argv)
 
   model.Debug();
 
+  if (false)
+  {
+    model.OnTreeStructNodeAdded().Connect([](cs::editor::model::Node* child, cs::editor::model::Node* parent)
+    {
+      printf("TreeStructNodeAdded: %s -> %s\n", child->GetResourceLocator().Encode().c_str(), parent->GetResourceLocator().Encode().c_str());
+    }
+    );
+
+    model.OnTreeStructNodeMoved().Connect([](cs::editor::model::Node *node, cs::editor::model::Node* oldParent, cs::editor::model::Node* newParent)
+    {
+      printf("TreeStructNodeMoved: %s: %s -> %s\n", node->GetName().c_str(), oldParent->GetResourceLocator().Encode().c_str(), newParent->GetResourceLocator().Encode().c_str());
+    }
+    );
+    model.OnTreeStructNodeChanged().Connect([](cs::editor::model::Node* node)
+    {
+      printf("TreeStructNodeChanged: %s: %s\n", node->GetName().c_str(), node->GetResourceLocator().Encode().c_str());
+    }
+    );
+    model.OnTreeStructNodeRemoved().Connect([](cs::editor::model::Node* child, cs::editor::model::Node* parent)
+    {
+      printf("TreeStructNodeRemoved: %s <> %s\n", child->GetResourceLocator().Encode().c_str(), parent->GetResourceLocator().Encode().c_str());
+    }
+    );
+
+    model.OnNamedNodeAdded().Connect([](cs::editor::model::Node* child, csResourceLocator locator)
+    {
+      printf("NamedNodeAdded: %s: %s\n", child->GetName().c_str(), locator.Encode().c_str());
+    }
+    );
+
+    model.OnNamedNodeRenamed().Connect([](cs::editor::model::Node* child, csResourceLocator oldLocator, csResourceLocator newLocator)
+    {
+      printf("NamedNodeRenamed: %s: %s -> %s\n", child->GetName().c_str(), oldLocator.Encode().c_str(), newLocator.Encode().c_str());
+    }
+    );
+    model.OnNamedNodeRemoved().Connect([](cs::editor::model::Node* child, csResourceLocator locator)
+    {
+      printf("NamedNodeRemoved: %s: %s\n", child->GetName().c_str(), locator.Encode().c_str());
+    }
+    );
 
 
+    model.OnResourceNameAdded().Connect([](csResourceLocator locator)
+    {
+      printf("ResourceNameAdded: %s\n", locator.Encode().c_str());
+    }
+    );
+    model.OnResourceNameChanged().Connect([](csResourceLocator locator)
+    {
+      printf("ResourceNameChanged: %s\n", locator.Encode().c_str());
+    }
+    );
+    model.OnResourceNameRenamed().Connect([](csResourceLocator oldLocator, csResourceLocator newLocator)
+    {
+      printf("ResourceNameRenamed: %s -> %s\n", oldLocator.Encode().c_str(), newLocator.Encode().c_str());
+    }
+    );
+    model.OnResourceNameRemoved().Connect([](csResourceLocator locator)
+    {
+      printf("ResourceNameRemoved: %s\n", locator.Encode().c_str());
+    }
+    );
+
+  }
 
   QApplication app(argc, argv);
   qApp->setStyle(QStyleFactory::create("Adwaita"));
