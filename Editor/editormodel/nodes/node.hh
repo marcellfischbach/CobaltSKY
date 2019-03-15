@@ -62,6 +62,9 @@ public:
 
   const std::vector<Node*> &GetChildren() const;
 
+  virtual FolderNode *GetFolderNode();
+  virtual const FolderNode *GetFolderNode() const;
+
   virtual int GetPriority() const;
 
   void Debug(unsigned indent) const;

@@ -98,6 +98,9 @@ public:
 
   Node *FindNode(const csResourceLocator &locator, MaxPriority &maxPriority);
   const Node *FindNode(const csResourceLocator &locator, MaxPriority &maxPriority) const;
+
+  const std::set<Node*> GetNodes(const csResourceLocator &locator);
+  const std::set<const Node*> GetNodes(const csResourceLocator &locator) const;
   /**
    *@}
    */

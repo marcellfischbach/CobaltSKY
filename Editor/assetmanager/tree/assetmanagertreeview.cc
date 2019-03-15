@@ -1,9 +1,12 @@
 
 #include <assetmanager/tree/assetmanagertreeview.hh>
 #include <assetmanager/tree/assetmanagertreemodel.hh>
+#include <assetmanager/menu/menubuilder.hh>
+
 #include <editormodel/model.hh>
 
 #include <QLineEdit>
+#include <QMenu>
 #include <QTreeView>
 #include <QGridLayout>
 
@@ -45,6 +48,7 @@ void TreeView::InitGUI()
   m_treeView->setDropIndicatorShown(true);
   m_treeView->setHeaderHidden(true);
   m_treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+  m_treeView->setAllColumnsShowFocus(true);
 
   connect(m_treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(OnTreeViewCustomContextMenuRequested(const QPoint&)));
 
@@ -65,6 +69,12 @@ void TreeView::OnTreeViewCustomContextMenuRequested(const QPoint &pos)
 
   model::Node *node = m_treeModel->ModelNodeAt(idx);
   std::cout << "  " << (node ? node->GetResourceLocator().Encode().c_str() : " null ") << std::endl;
+
+  QMenu *menu = MenuBuilder::Build(node, m_treeView);
+  QPoint globalPos = m_treeView->mapToGlobal(pos);
+  menu->exec(globalPos);
+  delete menu;
+  std::cout << "menuPoppedUp\n";
 }
 
 }

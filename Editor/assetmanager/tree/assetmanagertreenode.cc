@@ -19,6 +19,14 @@ TreeNode::TreeNode(model::Node *node)
 
 }
 
+TreeNode::~TreeNode()
+{
+  for (auto child : m_children)
+  {
+    delete child;
+  }
+}
+
 QString TreeNode::GetName() const
 {
   if (m_node)

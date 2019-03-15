@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include <editormodel/editormodelexport.hh>
 #include <filesystem>
 
 namespace cs::editor::model
@@ -10,11 +10,12 @@ namespace cs::editor::model
 
 
 class Transaction;
-class SecureFS
+class EDITOR_MODEL_API SecureFS
 {
 public:
   SecureFS();
 
+  void CreateFolder(const std::filesystem::path &path, Transaction &tx);
   void Rename(const std::filesystem::path &sourcePath, const std::filesystem::path &destinationPath, Transaction &tx);
   void Delete(const std::filesystem::path &path, Transaction &tx);
   void Move(const std::filesystem::path &sourcePath, const std::filesystem::path &destinationPath, Transaction &tx);

@@ -437,7 +437,28 @@ void TreeModel::OnModelNodeChanged(model::Node* node)
 
 void TreeModel::OnModelNodeRemoved(model::Node* node, model::Node* oldParent)
 {
+  auto it = m_nodes.find(node);
+  TreeNode *treeNode = (it != m_nodes.end() ? it->second : nullptr);
+  it = m_nodes.find(oldParent);
+  TreeNode *treeOldParent = (it != m_nodes.end() ? it->second : nullptr);
 
+  if (!treeNode || !oldParent)
+  {
+    return;
+  }
+
+  int oldIdx = treeOldParent->GetIndexOfChild(treeNode);
+  if (oldIdx != -1)
+  {
+    beginRemoveRows(IndexOf(treeOldParent), oldIdx, oldIdx);
+    auto tnIt = std::find(treeOldParent->m_children.begin(), treeOldParent->m_children.end(), treeNode);
+    if (tnIt != treeOldParent->m_children.end())
+    {
+      treeOldParent->m_children.erase(tnIt);
+    }
+    endRemoveRows();
+  }
+  delete treeNode;
 }
 
 }

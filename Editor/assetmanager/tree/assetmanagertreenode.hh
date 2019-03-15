@@ -18,6 +18,7 @@ class TreeNode
   friend class TreeModel;
 public:
   TreeNode(model::Node* node);
+  ~TreeNode();
   
   QString GetName() const;
   QString GetType() const;

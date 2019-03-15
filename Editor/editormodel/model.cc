@@ -715,6 +715,33 @@ Node *Model::FindNode(const csResourceLocator &locator, MaxPriority &maxPriority
 }
 
 
+const std::set<Node*> Model::GetNodes(const csResourceLocator &locator)
+{
+  auto it = m_cache.AnonNodes.find(locator.AsAnonymous());
+  if (it == m_cache.AnonNodes.end())
+  {
+    return std::set<Node*>();
+  }
+
+  return it->second;
+}
+
+const std::set<const Node*> Model::GetNodes(const csResourceLocator &locator) const
+{
+  auto it = m_cache.AnonNodes.find(locator.AsAnonymous());
+  if (it == m_cache.AnonNodes.end())
+  {
+    return std::set<const Node*>();
+  }
+
+  std::set<const Node*> result;
+  for (auto node : it->second)
+  {
+    result.insert(node);
+  }
+  return result;
+}
+
 void Model::Debug() const
 {
   m_root->Debug(0);

@@ -126,6 +126,24 @@ const VFSEntryNode *Node::AsVFSEntryNode() const
   return nullptr;
 }
 
+FolderNode *Node::GetFolderNode()
+{
+  return const_cast<FolderNode*>(static_cast<const Node*>(this)->GetFolderNode());
+}
+
+const FolderNode *Node::GetFolderNode() const
+{
+  if (IsFolderNode())
+  {
+    return AsFolderNode();
+  }
+  if (m_parent)
+  {
+    return m_parent->GetFolderNode();
+  }
+  return nullptr;
+}
+
 const std::vector<Node*> &Node::GetChildren() const
 {
   return m_children;

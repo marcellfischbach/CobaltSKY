@@ -1,5 +1,9 @@
 
 #include <assetmanager/assetmanager.hh>
+#include <assetmanager/menu/menuitemfactories.hh>
+#include <assetmanager/menu/items/delete/deletemenuitem.hh>
+#include <assetmanager/menu/items/newfolder/newfoldermenuitem.hh>
+#include <assetmanager/menu/items/rename/renamemenuitem.hh>
 
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/core/csvfs.hh>
@@ -157,8 +161,14 @@ int main(int argc, char **argv)
 
   }
 
+  cs::editor::assetmanager::MenuItemFactories &factories = cs::editor::assetmanager::MenuItemFactories::Get();
+  factories.AddFactory(new cs::editor::assetmanager::NewFolderMenuItemFactory());
+  factories.AddFactory(new cs::editor::assetmanager::DeleteMenuItemFactory());
+  factories.AddFactory(new cs::editor::assetmanager::RenameMenuItemFactory());
+
   QApplication app(argc, argv);
-  qApp->setStyle(QStyleFactory::create("Adwaita"));
+  //qApp->setStyle(QStyleFactory::create("Adwaita"));
+  //qApp->setStyle(QStyleFactory::create("Fusion"));
 
 
   TestWindow window(&model);
