@@ -167,7 +167,7 @@ int main(int argc, char **argv)
   factories.AddFactory(new cs::editor::assetmanager::RenameMenuItemFactory());
 
   QApplication app(argc, argv);
-  //qApp->setStyle(QStyleFactory::create("Adwaita"));
+  qApp->setStyle(QStyleFactory::create("Adwaita"));
   //qApp->setStyle(QStyleFactory::create("Fusion"));
 
 

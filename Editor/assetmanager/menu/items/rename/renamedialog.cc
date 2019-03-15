@@ -11,6 +11,7 @@ RenameDialog::RenameDialog(model::Node* node, const std::string &oldName, bool h
   m_gui.setupUi(this);
   m_gui.message->setText(tr("Rename '%1'. Enter a new name").arg(node->GetName().c_str()));
   m_gui.leName->setText(QString(oldName.c_str()));
+  m_gui.leName->selectAll();
 
   m_gui.cbRenameSuper->setEnabled(hasSuper);
   m_gui.cbRenameOverriders->setEnabled(hasOverriders);

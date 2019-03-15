@@ -38,6 +38,12 @@ void NewFolderMenuItemHandler::OnActionTriggered(bool)
     return;
   }
 
+  std::string folderName = dlg.GetFolderName();
+  if (folderName.empty())
+  {
+    return;
+  }
+
   model::Model *model = GetModel();
   model::Node* selectedNode = GetSelectedNode();
   model::FolderNode *parentFolderNode = selectedNode->GetFolderNode();
@@ -53,7 +59,7 @@ void NewFolderMenuItemHandler::OnActionTriggered(bool)
   }
 
   std::filesystem::path path(absolutePath);
-  path /= dlg.GetFolderName();
+  path /= folderName;
 
   model::Transaction tx = GetModel()->CreateTransaction();
   try 
