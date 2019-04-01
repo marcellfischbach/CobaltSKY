@@ -12,16 +12,22 @@ class path;
 namespace cs::editor::model
 {
 
+// comment here	
 class FolderNode;
 class Model;
 class VFSEntryNode;
 class Transaction;
+	
+	
 
-class EDITOR_MODEL_API PathScanner
+class  EDITOR_MODEL_API  PathScanner
 {
 
 public:
-  PathScanner(Model *model);
+	/* comment
+    befor constructor */
+// line comment
+  PathScanner(Model *model,char * test = "hel\"//*lo");
 
   void Scan(VFSEntryNode *vfsEntry, Transaction &tx);
 
