@@ -55,7 +55,7 @@ void AssetManagerResourceScanner::ScanPath(const csVFS::Entry &vfsEntry, const s
     csFileInfo info(assetFileName);
     //m_allResourceLocators.insert(csResourceLocator(assetFileName, "", entry.GetName()));
     Entry entry;
-    entry.locator = csResourceLocator(assetFileName, "", vfsEntry.GetName());
+    entry.locator = csResourceLocator(csResourceEntry(vfsEntry.GetName()), csResourceFile(assetFileName));
     entry.name = info.GetName();
     entry.priority = vfsEntry.GetPriority();
     m_entries.push_back(entry);

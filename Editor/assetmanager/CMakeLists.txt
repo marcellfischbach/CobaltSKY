@@ -4,12 +4,22 @@ include_directories(${Qt5Core_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
 
 
 set(ALL_SOURCES
 	assetmanager.cc
 	assetmanager.hh
 	assetmanagerexport.hh
+	resources.qrc
+
+	list/assetmanagerlistview.cc
+	list/assetmanagerlistview.hh
+	list/assetmanagerlisttreemodel.cc
+	list/assetmanagerlisttreemodel.hh
+	list/assetmanagerlisttreenode.cc
+	list/assetmanagerlisttreenode.hh
+
 	menu/imenuitemfactory.hh
 	menu/menubuilder.cc
 	menu/menubuilder.hh

@@ -204,7 +204,7 @@ void ShaderGraphEditorNode::UpdateValues()
       if (resourceNode->GetDefaultTextureResource() != m_texturePreviewResourceLocator)
       {
         NodeGraphNodeImageProperty *imgProp = static_cast<NodeGraphNodeImageProperty*>(prop);
-        csResourceLocator locator(resourceNode->GetDefaultTextureResource(), "preview");
+        csResourceLocator locator = resourceNode->GetDefaultTextureResource().WithResourceName("preview");
         EditorImage *editorImage = csResourceManager::Get()->Aquire<EditorImage>(locator);
         if (editorImage)
         {

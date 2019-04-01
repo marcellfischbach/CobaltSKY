@@ -66,8 +66,10 @@ function(CS_INSTALL_MOCCER target prefix api inlist)
 endfunction(CS_INSTALL_MOCCER)
 
 if (WIN32)
+message("Use Win32")
 add_definitions(-DCS_WIN32)
 else()
+message("Use Linux")
 add_definitions(-DCS_LINUX)
 endif()
 

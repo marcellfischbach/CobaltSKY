@@ -45,12 +45,12 @@ void EditorResourceManager::RenameResource(const csResourceLocator &from, const 
   if (!to.GetResourceEntry().empty() && IsAnonymousLocator(to))
   {
     csResourceLocator fixedFrom = csResourceLocator(
-      from.GetResourceFile(),
-      from.GetResourceName()
+		csResourceFile(from.GetResourceFile()),
+      csResourceName(from.GetResourceName())
     );
     csResourceLocator fixedTo = csResourceLocator(
-      to.GetResourceFile(),
-      to.GetResourceName()
+      csResourceFile(to.GetResourceFile()),
+      csResourceName(to.GetResourceName())
     );
     csResourceManager::RenameResource(fixedFrom, fixedTo);
   }
@@ -65,8 +65,8 @@ csResourceLocator EditorResourceManager::FixResourceLocator(const csResourceLoca
   if (!locator.GetResourceEntry().empty() && IsAnonymousLocator(locator))
   {
     return csResourceLocator(
-      locator.GetResourceFile(),
-      locator.GetResourceName()
+      csResourceFile(locator.GetResourceFile()),
+      csResourceName(locator.GetResourceName())
     );
   }
   return locator;
@@ -92,7 +92,11 @@ bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, csR
     if (entry)
     {
       csResourceManager::RegisterObject(
-        csResourceLocator(locator.GetResourceFile(), locator.GetResourceName(), entry->GetName()),
+        csResourceLocator(
+			csResourceEntry(entry->GetName()),
+			csResourceFile(locator.GetResourceFile()),
+			csResourceName(locator.GetResourceName())
+		),
         object
       );
     }
@@ -100,7 +104,7 @@ bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, csR
   else if (IsAnonymousLocator(locator))
   {
     csResourceManager::RegisterObject(
-      csResourceLocator(locator.GetResourceFile(), locator.GetResourceName()),
+      csResourceLocator(csResourceFile(locator.GetResourceFile()), csResourceName(locator.GetResourceName())),
       object
     );
   }

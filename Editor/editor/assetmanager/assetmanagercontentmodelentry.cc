@@ -23,7 +23,7 @@ AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLoc
 
 void AssetManagerContentModelEntry::ReloadIcon()
 {
-  csResourceLocator previewLocator(m_locator, "preview");
+  csResourceLocator previewLocator = m_locator.WithResourceName("preview");
   EditorImage *editorImage = csResourceManager::Get()->Load<EditorImage>(previewLocator);
   if (editorImage)
   {

@@ -24,10 +24,9 @@ TreeView::TreeView(model::Model *editorModel, QWidget *parent)
 {
   InitGUI();
 
-  m_treeModel = new assetmanager::TreeModel();
+  m_treeModel = new assetmanager::TreeModel(m_treeView);
   m_treeModel->SetEditorModel(editorModel);
   m_treeView->setModel(m_treeModel);
-
 }
 
 

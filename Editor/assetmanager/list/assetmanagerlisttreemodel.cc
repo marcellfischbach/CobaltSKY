@@ -1,6 +1,6 @@
 
-#include <assetmanager/tree/assetmanagertreemodel.hh>
-#include <assetmanager/tree/assetmanagertreenode.hh>
+#include <assetmanager/list/assetmanagerlisttreemodel.hh>
+#include <assetmanager/list/assetmanagerlisttreenode.hh>
 #include <editormodel/model.hh>
 #include <editormodel/nodes/node.hh>
 
@@ -18,12 +18,12 @@
 namespace cs::editor::assetmanager
 {
 
-TreeNode* TreeNodeFrom(const QModelIndex& index)
+ListTreeNode* ListTreeNodeFrom(const QModelIndex& index)
 {
-  return index.isValid() ? reinterpret_cast<TreeNode*>(index.internalPointer()) : nullptr;
+  return index.isValid() ? reinterpret_cast<ListTreeNode*>(index.internalPointer()) : nullptr;
 }
 
-TreeModel::TreeModel(QTreeView* treeView)
+ListTreeModel::ListTreeModel(QTreeView* treeView)
   : m_editorModel(nullptr)
   , m_rootNode(nullptr)
   , m_treeView(treeView)
@@ -34,12 +34,12 @@ TreeModel::TreeModel(QTreeView* treeView)
 
 
 
-int TreeModel::columnCount(const QModelIndex& parent) const
+int ListTreeModel::columnCount(const QModelIndex& parent) const
 {
   return 1;
 }
 
-QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ListTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole)
   {
@@ -54,9 +54,9 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation, int rol
   return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-QVariant TreeModel::data(const QModelIndex& index, int role) const
+QVariant ListTreeModel::data(const QModelIndex& index, int role) const
 {
-  TreeNode* treeNode = TreeNodeFrom(index);
+  ListTreeNode* treeNode = ListTreeNodeFrom(index);
 
 
   if (treeNode)
@@ -88,14 +88,14 @@ QVariant TreeModel::data(const QModelIndex& index, int role) const
   }
   return QVariant();
 }
-QModelIndex	TreeModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex	ListTreeModel::index(int row, int column, const QModelIndex& parent) const
 {
-  TreeNode* parentTreeNode = TreeNodeFrom(parent);
-  if (parentTreeNode)
+  ListTreeNode* parentListTreeNode = ListTreeNodeFrom(parent);
+  if (parentListTreeNode)
   {
-    if (row >= 0 && row < parentTreeNode->m_children.size())
+    if (row >= 0 && row < parentListTreeNode->m_children.size())
     {
-      return createIndex(row, column, parentTreeNode->m_children[row]);
+      return createIndex(row, column, parentListTreeNode->m_children[row]);
     }
   }
   else if (row == 0)
@@ -105,29 +105,29 @@ QModelIndex	TreeModel::index(int row, int column, const QModelIndex& parent) con
   return QModelIndex();
 }
 
-QModelIndex	TreeModel::parent(const QModelIndex& index) const
+QModelIndex	ListTreeModel::parent(const QModelIndex& index) const
 {
-  TreeNode* treeNode = TreeNodeFrom(index);
+  ListTreeNode* treeNode = ListTreeNodeFrom(index);
   if (!treeNode)
   {
     return QModelIndex();
   }
 
-  TreeNode* parentTreeNode = treeNode->m_parent;
-  if (!parentTreeNode)
+  ListTreeNode* parentListTreeNode = treeNode->m_parent;
+  if (!parentListTreeNode)
   {
     return QModelIndex();
   }
 
-  return createIndex(parentTreeNode->GetIndexWithinParent(0), 0, parentTreeNode);
+  return createIndex(parentListTreeNode->GetIndexWithinParent(0), 0, parentListTreeNode);
 }
 
-int	TreeModel::rowCount(const QModelIndex& parent) const
+int	ListTreeModel::rowCount(const QModelIndex& parent) const
 {
-  TreeNode* parentTreeNode = TreeNodeFrom(parent);
-  if (parentTreeNode)
+  ListTreeNode* parentListTreeNode = ListTreeNodeFrom(parent);
+  if (parentListTreeNode)
   {
-    return parentTreeNode->m_children.size();
+    return parentListTreeNode->m_children.size();
   }
   else if (m_rootNode)
   {
@@ -136,11 +136,11 @@ int	TreeModel::rowCount(const QModelIndex& parent) const
   return 0;
 }
 
-Qt::ItemFlags	TreeModel::flags(const QModelIndex& index) const
+Qt::ItemFlags	ListTreeModel::flags(const QModelIndex& index) const
 {
   Qt::ItemFlags fl = QAbstractItemModel::flags(index);
 
-  TreeNode* treeNode = TreeNodeFrom(index);
+  ListTreeNode* treeNode = ListTreeNodeFrom(index);
   if (treeNode)
   {
     switch (treeNode->GetNode()->GetType())
@@ -159,7 +159,7 @@ Qt::ItemFlags	TreeModel::flags(const QModelIndex& index) const
 }
 
 
-QStringList TreeModel::mimeTypes() const
+QStringList ListTreeModel::mimeTypes() const
 {
   QStringList types;
   types << "text/csResourceLocator";
@@ -169,7 +169,7 @@ QStringList TreeModel::mimeTypes() const
 
 
 
-QMimeData* TreeModel::mimeData(const QModelIndexList& indexes) const
+QMimeData* ListTreeModel::mimeData(const QModelIndexList& indexes) const
 {
   QMimeData* md = new QMimeData();
 
@@ -181,7 +181,7 @@ QMimeData* TreeModel::mimeData(const QModelIndexList& indexes) const
   {
     if (idx.isValid() && idx.column() == 0)
     {
-      TreeNode* node = TreeNodeFrom(idx);
+      ListTreeNode* node = ListTreeNodeFrom(idx);
       stream << QString(node->GetNode()->GetResourceLocator().Encode().c_str());
     }
   }
@@ -190,7 +190,7 @@ QMimeData* TreeModel::mimeData(const QModelIndexList& indexes) const
   return md;
 }
 
-bool TreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) const
+bool ListTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) const
 {
   if (data->hasFormat("text/csResourceLocator"))
   {
@@ -201,8 +201,8 @@ bool TreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction action, in
     stream >> encodedLocator;
 
     csResourceLocator locator(encodedLocator.toLatin1().data());
-    const TreeNode* dragNode = FindNode(locator);
-    TreeNode* dropNode = TreeNodeFrom(parent);
+    const ListTreeNode* dragNode = FindNode(locator);
+    ListTreeNode* dropNode = ListTreeNodeFrom(parent);
     if (row != -1 || column != -1)
     {
       return false;
@@ -227,7 +227,7 @@ bool TreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction action, in
   return true;
 }
 
-bool TreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+bool ListTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
 {
   if (!canDropMimeData(data, action, row, column, parent))
   {
@@ -243,8 +243,8 @@ bool TreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
     stream >> encodedLocator;
 
     csResourceLocator locator(encodedLocator.toLatin1().data());
-    TreeNode* dragNode = FindNode(locator);
-    TreeNode* dropNode = TreeNodeFrom(parent);
+    ListTreeNode* dragNode = FindNode(locator);
+    ListTreeNode* dropNode = ListTreeNodeFrom(parent);
 
 
     model::Transaction tx = m_editorModel->CreateTransaction();
@@ -274,14 +274,14 @@ bool TreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
   return true;
 }
 
-TreeNode* TreeModel::FindNode(const csResourceLocator& locator)
+ListTreeNode* ListTreeModel::FindNode(const csResourceLocator& locator)
 {
-  return const_cast<TreeNode*>(
-    static_cast<const TreeModel*>(this)->FindNode(locator)
+  return const_cast<ListTreeNode*>(
+    static_cast<const ListTreeModel*>(this)->FindNode(locator)
     );
 }
 
-const TreeNode* TreeModel::FindNode(const csResourceLocator& locator) const
+const ListTreeNode* ListTreeModel::FindNode(const csResourceLocator& locator) const
 {
   for (auto e : m_nodes)
   {
@@ -294,37 +294,37 @@ const TreeNode* TreeModel::FindNode(const csResourceLocator& locator) const
 }
 
 
-TreeNode* TreeModel::TreeNodeAt(const QModelIndex& index)
+ListTreeNode* ListTreeModel::ListTreeNodeAt(const QModelIndex& index)
 {
-  return const_cast<TreeNode*>(
-    static_cast<const TreeModel*>(this)->TreeNodeAt(index)
+  return const_cast<ListTreeNode*>(
+    static_cast<const ListTreeModel*>(this)->ListTreeNodeAt(index)
     );
 }
 
-const TreeNode* TreeModel::TreeNodeAt(const QModelIndex& index) const
+const ListTreeNode* ListTreeModel::ListTreeNodeAt(const QModelIndex& index) const
 {
-  TreeNode* node = TreeNodeFrom(index);
+  ListTreeNode* node = ListTreeNodeFrom(index);
   return node;
 }
 
 
 
-model::Node* TreeModel::ModelNodeAt(const QModelIndex& index)
+model::Node* ListTreeModel::ModelNodeAt(const QModelIndex& index)
 {
   return const_cast<model::Node*>(
-    static_cast<const TreeModel*>(this)->ModelNodeAt(index)
+    static_cast<const ListTreeModel*>(this)->ModelNodeAt(index)
     );
 }
 
-const model::Node* TreeModel::ModelNodeAt(const QModelIndex& index) const
+const model::Node* ListTreeModel::ModelNodeAt(const QModelIndex& index) const
 {
-  const TreeNode* node = TreeNodeAt(index);
+  const ListTreeNode* node = ListTreeNodeAt(index);
 
   return node ? node->m_node : nullptr;
 }
 
 
-void TreeModel::SetEditorModel(model::Model* editorModel)
+void ListTreeModel::SetEditorModel(model::Model* editorModel)
 {
   Cleanup();
   m_editorModel = editorModel;
@@ -335,7 +335,7 @@ void TreeModel::SetEditorModel(model::Model* editorModel)
   }
 }
 
-void TreeModel::Cleanup()
+void ListTreeModel::Cleanup()
 {
   if (m_editorModel)
   {
@@ -352,7 +352,7 @@ void TreeModel::Cleanup()
   m_rootNode = nullptr;
 }
 
-void TreeModel::Initialize()
+void ListTreeModel::Initialize()
 {
   m_slotNodeAdded = m_editorModel->OnTreeStructNodeAdded().Connect([this](model::Node * child, model::Node * parent) { OnModelNodeAdded(child, parent); });
   m_slotNodeChanged = m_editorModel->OnTreeStructNodeChanged().Connect([this](model::Node * node) { OnModelNodeChanged(node); });
@@ -360,17 +360,22 @@ void TreeModel::Initialize()
   m_slotNodeRemoved = m_editorModel->OnTreeStructNodeRemoved().Connect([this](model::Node * child, model::Node * oldParent) { OnModelNodeRemoved(child, oldParent); });
 
   beginResetModel();
-  m_rootNode = CreateTreeNode(m_editorModel->GetRoot());
+  m_rootNode = CreateListTreeNode(m_editorModel->GetRoot());
   endResetModel();
 }
 
-TreeNode* TreeModel::CreateTreeNode(model::Node* node)
+ListTreeNode* ListTreeModel::CreateListTreeNode(model::Node* node)
 {
-  TreeNode* treeNode = new TreeNode(node);
+  if (node->IsAssetNode())
+  {
+    return nullptr;
+  }
+
+  ListTreeNode* treeNode = new ListTreeNode(node);
   m_nodes[node] = treeNode;
   for (auto child : static_cast<const model::Node*>(node)->GetChildren())
   {
-    TreeNode* childNode = CreateTreeNode(child);
+    ListTreeNode* childNode = CreateListTreeNode(child);
     if (childNode)
     {
       treeNode->m_children.push_back(childNode);
@@ -383,7 +388,7 @@ TreeNode* TreeModel::CreateTreeNode(model::Node* node)
 }
 
 
-QModelIndex TreeModel::IndexOf(TreeNode* node, int column) const
+QModelIndex ListTreeModel::IndexOf(ListTreeNode* node, int column) const
 {
   if (!node)
   {
@@ -395,15 +400,21 @@ QModelIndex TreeModel::IndexOf(TreeNode* node, int column) const
 
 
 
-void TreeModel::OnModelNodeAdded(model::Node* node, model::Node* parent)
+void ListTreeModel::OnModelNodeAdded(model::Node* node, model::Node* parent)
 {
-  TreeNode* treeNode = CreateTreeNode(node);
-  auto it = m_nodes.find(parent);
-  if (it == m_nodes.end())
+  ListTreeNode* treeNode = CreateListTreeNode(node);
+  if (treeNode == nullptr)
   {
     return;
   }
-  TreeNode* parentNode = it->second;
+
+  auto it = m_nodes.find(parent);
+  if (it == m_nodes.end())
+  {
+    delete treeNode;
+    return;
+  }
+  ListTreeNode* parentNode = it->second;
   parentNode->m_children.push_back(treeNode);
   treeNode->m_parent = parentNode;
   parentNode->Sort();
@@ -412,16 +423,16 @@ void TreeModel::OnModelNodeAdded(model::Node* node, model::Node* parent)
   endInsertRows();
 }
 
-void TreeModel::OnModelNodeMoved(model::Node* node, model::Node* oldParent, model::Node* newParent)
+void ListTreeModel::OnModelNodeMoved(model::Node* node, model::Node* oldParent, model::Node* newParent)
 {
   auto it = m_nodes.find(node);
-  TreeNode* treeNode = (it != m_nodes.end() ? it->second : nullptr);
+  ListTreeNode* treeNode = (it != m_nodes.end() ? it->second : nullptr);
 
   it = m_nodes.find(oldParent);
-  TreeNode * treeOldParent = (it != m_nodes.end() ? it->second : nullptr);
+  ListTreeNode * treeOldParent = (it != m_nodes.end() ? it->second : nullptr);
 
   it = m_nodes.find(newParent);
-  TreeNode * treeNewParent = (it != m_nodes.end() ? it->second : nullptr);
+  ListTreeNode * treeNewParent = (it != m_nodes.end() ? it->second : nullptr);
 
 
   if (!treeNode || !treeOldParent || !treeNewParent)
@@ -455,17 +466,17 @@ void TreeModel::OnModelNodeMoved(model::Node* node, model::Node* oldParent, mode
   endInsertRows();
 }
 
-void TreeModel::OnModelNodeChanged(model::Node* node)
+void ListTreeModel::OnModelNodeChanged(model::Node* node)
 {
 
 }
 
-void TreeModel::OnModelNodeRemoved(model::Node* node, model::Node* oldParent)
+void ListTreeModel::OnModelNodeRemoved(model::Node* node, model::Node* oldParent)
 {
   auto it = m_nodes.find(node);
-  TreeNode* treeNode = (it != m_nodes.end() ? it->second : nullptr);
+  ListTreeNode* treeNode = (it != m_nodes.end() ? it->second : nullptr);
   it = m_nodes.find(oldParent);
-  TreeNode * treeOldParent = (it != m_nodes.end() ? it->second : nullptr);
+  ListTreeNode * treeOldParent = (it != m_nodes.end() ? it->second : nullptr);
 
   if (!treeNode || !oldParent)
   {

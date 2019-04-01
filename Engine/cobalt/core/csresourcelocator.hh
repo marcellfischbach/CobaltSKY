@@ -61,6 +61,7 @@ class CSE_API csResourceLocator
 public:
   csResourceLocator(const std::string &encodedResourceName = "");
   csResourceLocator(const csResourceFile &file);
+  csResourceLocator(const csResourceEntry &entry);
   csResourceLocator(const csResourceFile &file, const csResourceName &name);
   csResourceLocator(const csResourceEntry &entry, const csResourceFile &file);
   csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name);

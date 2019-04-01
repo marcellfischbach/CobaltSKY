@@ -68,6 +68,15 @@ csResourceLocator::csResourceLocator(const csResourceFile &file)
   FixResourceFile();
 }
 
+csResourceLocator::csResourceLocator(const csResourceEntry& entry)
+	: m_resourceEntry("")
+	, m_resourceFile("")
+	, m_resourceName(entry.GetName())
+{
+	FixResourceFile();
+}
+
+
 
 
 csResourceLocator::csResourceLocator(const csResourceFile &file, const csResourceName &name)

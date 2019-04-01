@@ -86,7 +86,7 @@ void AssetManagerContentModel::Refresh()
   {
     std::string resourceFileName = m_locator.GetResourceFile() + "/" + std::string((const char*)fileName.toLatin1());
     printf("  %s\n", resourceFileName.c_str());
-    csResourceLocator fileLocator(resourceFileName, "", m_locator.GetResourceEntry());
+    csResourceLocator fileLocator(csResourceEntry(m_locator.GetResourceEntry()), csResourceFile(resourceFileName));
     m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
   }
 

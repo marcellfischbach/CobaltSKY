@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/icons32">
+	<file alias="folder_closed">resources/folder_closed_32.png</file>
+	<file alias="folder_opened">resources/folder_opened_32.png</file>
+</qresource>
+<qresource prefix="/icons16">
+	<file alias="folder_closed">resources/folder_closed_16.png</file>
+	<file alias="folder_opened">resources/folder_opened_16.png</file>
+</qresource>
+</RCC>

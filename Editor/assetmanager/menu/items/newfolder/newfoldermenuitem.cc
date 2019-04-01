@@ -115,7 +115,7 @@ std::vector<MenuItemDeclaration> NewFolderMenuItemFactory::GetMenuItemDeclaratio
 
 QAction *NewFolderMenuItemFactory::CreateAction(QMenu *menu, model::Node *selectedNode, QWidget * parent) const
 {
-  QAction *action = menu->addAction(QObject::tr("Folder"));
+  QAction *action = menu->addAction(QIcon(":/icons16/folder_closed"), QObject::tr("Folder"));
   if (selectedNode->IsRootNode())
   {
     action->setEnabled(false);

@@ -62,7 +62,7 @@ void ShaderGraphEditor::UpdateAsset()
   csSGShaderGraph *shaderGraph = csQueryClass<csSGShaderGraph>(shaderGraphWrapper->Get());
   UpdateResourceNodeIDs(shaderGraph);
 
-  csResourceLocator metaLocator(locator, "meta");
+  csResourceLocator metaLocator = locator.WithResourceName("meta");
   ShaderGraphEditorMetaWrapper *metaWrapper = csResourceManager::Get()->Load<ShaderGraphEditorMetaWrapper>(metaLocator);
   ShaderGraphEditorMeta *meta = metaWrapper ? metaWrapper->Get() : nullptr;
   if (!meta)

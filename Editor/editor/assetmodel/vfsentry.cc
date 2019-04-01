@@ -18,7 +18,7 @@ namespace asset::model
 
   csResourceLocator VFSEntry::GetResourceLocator() const
   {
-    return csResourceLocator("", "", m_entry.GetName());
+	  return csResourceLocator(csResourceEntry(m_entry.GetName()));
   }
 
   const VFSEntry *VFSEntry::GetVFSEntry() const

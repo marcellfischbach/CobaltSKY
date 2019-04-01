@@ -20,11 +20,11 @@ class QTreeView;
 namespace cs::editor::assetmanager
 {
 
-class TreeNode;
-class ASSET_MANAGER_API TreeModel : public QAbstractItemModel
+class ListTreeNode;
+class ASSET_MANAGER_API ListTreeModel : public QAbstractItemModel
 {
 public:
-  TreeModel(QTreeView* treeView);
+  ListTreeModel(QTreeView* treeView);
 
   void SetEditorModel(model::Model *editorModel);
 
@@ -36,24 +36,24 @@ public:
   virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
   virtual Qt::ItemFlags	flags(const QModelIndex &index) const;
-  virtual QStringList TreeModel::mimeTypes() const;
-  virtual QMimeData *TreeModel::mimeData(const QModelIndexList &indexes) const;
+  virtual QStringList mimeTypes() const;
+  virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   virtual bool canDropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) const;
   virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
   
-  TreeNode *FindNode(const csResourceLocator &locator);
-  const TreeNode *FindNode(const csResourceLocator &locator) const;
+  ListTreeNode *FindNode(const csResourceLocator &locator);
+  const ListTreeNode *FindNode(const csResourceLocator &locator) const;
 
-  TreeNode *TreeNodeAt(const QModelIndex &index);
-  const TreeNode *TreeNodeAt(const QModelIndex &index) const;
+  ListTreeNode *ListTreeNodeAt(const QModelIndex &index);
+  const ListTreeNode *ListTreeNodeAt(const QModelIndex &index) const;
 
   model::Node *ModelNodeAt(const QModelIndex &index);
   const model::Node *ModelNodeAt(const QModelIndex &index) const;
 
 
 private:
-  QModelIndex IndexOf(TreeNode *node, int column = 0) const;
+  QModelIndex IndexOf(ListTreeNode *node, int column = 0) const;
 
   void OnModelNodeAdded(model::Node* node, model::Node* parent);
   void OnModelNodeMoved(model::Node* node, model::Node* oldParent, model::Node* newParent);
@@ -67,13 +67,13 @@ private:
 
   void Cleanup();
   void Initialize();
-  TreeNode *CreateTreeNode(model::Node* node);
+  ListTreeNode *CreateListTreeNode(model::Node* node);
 
-  TreeNode *m_rootNode;
+  ListTreeNode *m_rootNode;
   model::Model * m_editorModel;
   QTreeView* m_treeView;
 
-  std::map<const model::Node*, TreeNode*> m_nodes;
+  std::map<const model::Node*, ListTreeNode*> m_nodes;
 
 };
 

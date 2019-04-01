@@ -55,10 +55,10 @@ void copy_test_folder()
 class TestWindow : public QMainWindow
 {
 public:
-  TestWindow(model::Model *model)
+  TestWindow(model::Model *model, assetmanager::AssetManager::Style style)
     : QMainWindow()
   {
-    assetmanager::AssetManager *assetManager = new assetmanager::AssetManager(model, this);
+    assetmanager::AssetManager *assetManager = new assetmanager::AssetManager(model, style, this);
 
     setCentralWidget(assetManager);
   }
@@ -170,10 +170,17 @@ int main(int argc, char **argv)
   qApp->setStyle(QStyleFactory::create("Adwaita"));
   //qApp->setStyle(QStyleFactory::create("Fusion"));
 
+  TestWindow windowTree(&model, cs::editor::assetmanager::AssetManager::eS_Tree);
+  windowTree.resize(256, 768);
+  windowTree.move(100, 50);
+  windowTree.setVisible(true);
 
-  TestWindow window(&model);
-  window.resize(256, 768);
-  window.setVisible(true);
+
+
+  TestWindow windowList(&model, cs::editor::assetmanager::AssetManager::eS_List);
+  windowList.resize(1024, 256);
+  windowList.move(100, 50 + 768 + 32);
+  windowList.setVisible(true);
 
   return app.exec();
 }
