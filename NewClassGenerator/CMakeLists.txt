@@ -10,11 +10,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 add_executable(NewClassGenerator
+	codenodes.cc
+	codenodes.hh
 	main.cc
-	namespace.cc
-	namespace.hh
+	parser.cc
+	parser.hh
 	sourcefile.cc
 	sourcefile.hh
+	token.cc
+	token.hh
 	tokenizer.cc
 	tokenizer.hh
 	)

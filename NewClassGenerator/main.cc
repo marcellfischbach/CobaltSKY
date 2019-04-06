@@ -1,8 +1,22 @@
 
 
 #include <iostream>
+#include "codenodes.hh"
 #include "sourcefile.hh"
+#include "token.hh"
 #include "tokenizer.hh"
+#include "parser.hh"
+
+
+namespace cs::test
+{
+class Narf
+{
+
+};
+}
+
+namespace something = cs::test;
 
 int main(int argc, char** argv)
 {
@@ -14,10 +28,16 @@ int main(int argc, char** argv)
   cs::classgenerator::Tokenizer tokenizer(sourceFile);
 
   std::cout << "Tokens\n";
-  for (const std::string& token : tokenizer.GetTokens())
+  for (const cs::classgenerator::Token& token : tokenizer.GetTokens())
   {
-    std::cout << token << std::endl;
+    std::cout << token.Get() << std::endl;
   }
+
+  something::Narf narf;
+
+  cs::classgenerator::Parser parser;
+  cs::classgenerator::CodeNode* ns = parser.Parse(tokenizer);
+  ns->DebugNode(0);
 
   return 0;
 }

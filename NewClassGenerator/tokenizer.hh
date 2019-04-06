@@ -1,13 +1,13 @@
 
 #pragma once
 
-
+#include "token.hh"
 #include <string>
 #include <vector>
 
-
 namespace cs::classgenerator
 {
+
 
 class SourceFile;
 class Tokenizer
@@ -15,11 +15,12 @@ class Tokenizer
 public:
   Tokenizer(const SourceFile& sourceFile);
 
-  const std::vector<std::string>& GetTokens() const;
+  const std::vector<Token>& GetTokens() const;
 
 private:
+  bool IsIdentifier(const std::string& token) const;
   
-  std::vector<std::string> m_tokens;
+  std::vector<Token> m_tokens;
 };
 
 
