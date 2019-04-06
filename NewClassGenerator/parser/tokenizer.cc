@@ -1,6 +1,6 @@
 
-#include "tokenizer.hh"
-#include "sourcefile.hh"
+#include <parser/tokenizer.hh>
+#include <parser/sourcefile.hh>
 
 #define PUSH(tkn) if (!tkn.empty()) { m_tokens.push_back(Token(tkn)); } tkn = ""
 #define PUSH_CH(tkn, ch) PUSH(tkn); tkn += ch; PUSH(tkn)

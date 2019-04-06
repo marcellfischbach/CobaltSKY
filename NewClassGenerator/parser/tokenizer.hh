@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "token.hh"
+#include <parser/token.hh>
 #include <string>
 #include <vector>
 

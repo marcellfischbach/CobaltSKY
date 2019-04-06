@@ -1,17 +1,23 @@
 
 
-#include "codenodes.hh"
+#include <ast.hh>
 
 
 namespace cs::classgenerator
 {
 
-CodeNode::CodeNode()
+ASTNode::ASTNode(ASTNodeType type)
+  : m_type(type)
 {
 
 }
 
-void CodeNode::Add(CodeNode* node)
+ASTNodeType ASTNode::GetType() const
+{
+  return m_type;
+}
+
+void ASTNode::Add(ASTNode* node)
 {
   if (node)
   {
@@ -19,12 +25,12 @@ void CodeNode::Add(CodeNode* node)
   }
 }
 
-const std::vector<CodeNode*>& CodeNode::GetChildren() const
+const std::vector<ASTNode*>& ASTNode::GetChildren() const
 {
   return m_children;
 }
 
-void CodeNode::DebugNode(int ind)
+void ASTNode::DebugNode(int ind)
 {
   for (int i = 0; i < ind; ++i)
   {
@@ -41,7 +47,7 @@ void CodeNode::DebugNode(int ind)
 }
 
 BlockNode::BlockNode()
-  : CodeNode()
+  : ASTNode(eANT_Block)
 {
 
 }
@@ -52,7 +58,7 @@ void BlockNode::Debug()
 }
 
 NamespaceNode::NamespaceNode()
-  : CodeNode()
+  : ASTNode(eANT_Namespace)
 {
 
 }
@@ -92,7 +98,7 @@ void NamespaceNode::Debug()
 
 
 ClassNode::ClassNode()
-  : CodeNode()
+  : ASTNode(eANT_Class)
 {
 
 }
@@ -115,12 +121,12 @@ void ClassNode::Debug()
 
 
 TokenNode::TokenNode()
-  : CodeNode()
+  : ASTNode(eANT_Token)
 {
 
 }
 TokenNode::TokenNode(const Token& token)
-  : CodeNode()
+  : ASTNode(eANT_Token)
   , m_token(token)
 {
 

@@ -4,32 +4,43 @@
 
 #include <vector>
 #include <string>
-#include "token.hh"
+#include <parser/token.hh>
 
 namespace cs::classgenerator
 {
 
+enum ASTNodeType
+{
+  eANT_Block,
+  eANT_Class,
+  eANT_Namespace,
+  eANT_Token
+};
 
-class CodeNode
+class ASTNode
 {
 public:
-  CodeNode();
 
-  void Add(CodeNode* codeNode);
-  const std::vector<CodeNode*>& GetChildren() const;
+  void Add(ASTNode* codeNode);
+  const std::vector<ASTNode*>& GetChildren() const;
+
+  ASTNodeType GetType() const;
 
   void DebugNode(int i);
 
 protected:
+  ASTNode(ASTNodeType type);
   virtual void Debug() = 0;
 
 private:
 
-  std::vector<CodeNode*> m_children;
+  ASTNodeType m_type;
+
+  std::vector<ASTNode*> m_children;
 };
 
 
-class BlockNode : public CodeNode
+class BlockNode : public ASTNode
 {
 public:
   BlockNode();
@@ -39,7 +50,7 @@ protected:
 };
 
 
-class NamespaceNode : public CodeNode
+class NamespaceNode : public ASTNode
 {
 public:
   NamespaceNode();
@@ -58,7 +69,7 @@ private:
   std::string m_alias;
 };
 
-class ClassNode : public CodeNode
+class ClassNode : public ASTNode
 {
 public:
   ClassNode();
@@ -75,7 +86,7 @@ private:
 };
 
 
-class TokenNode : public CodeNode
+class TokenNode : public ASTNode
 {
 public:
   TokenNode();

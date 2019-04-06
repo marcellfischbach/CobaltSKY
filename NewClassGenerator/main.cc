@@ -1,11 +1,11 @@
 
 
 #include <iostream>
-#include "codenodes.hh"
-#include "sourcefile.hh"
-#include "token.hh"
-#include "tokenizer.hh"
-#include "parser.hh"
+#include <ast.hh>
+#include <parser/sourcefile.hh>
+#include <parser/token.hh>
+#include <parser/tokenizer.hh>
+#include <parser/parser.hh>
 
 
 namespace cs::test
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
   something::Narf narf;
 
   cs::classgenerator::Parser parser;
-  cs::classgenerator::CodeNode* ns = parser.Parse(tokenizer);
+  cs::classgenerator::ASTNode* ns = parser.Parse(tokenizer);
   ns->DebugNode(0);
 
   return 0;

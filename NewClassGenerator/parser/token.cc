@@ -1,6 +1,6 @@
 
 
-#include "token.hh"
+#include <parser/token.hh>
 
 
 namespace cs::classgenerator

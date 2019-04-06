@@ -1,8 +1,8 @@
 
 
-#include "parser.hh"
-#include "codenodes.hh"
-#include "tokenizer.hh"
+#include <parser/parser.hh>
+#include <ast.hh>
+#include <parser/tokenizer.hh>
 
 
 
@@ -16,7 +16,7 @@ Parser::Parser()
 }
 
 
-CodeNode* Parser::Parse(Tokenizer& tokenizer)
+ASTNode* Parser::Parse(Tokenizer& tokenizer)
 {
   size_t idx = 0;
   return ParseBlock(tokenizer, idx);
@@ -35,7 +35,7 @@ BlockNode *Parser::ParseBlock(Tokenizer& tokenizer, size_t &idx)
       break;
     }
 
-    CodeNode* node = ParseNode(tokenizer, token, idx);
+    ASTNode* node = ParseNode(tokenizer, token, idx);
     if (node)
     {
       blockNode->Add(node);
@@ -44,7 +44,7 @@ BlockNode *Parser::ParseBlock(Tokenizer& tokenizer, size_t &idx)
   return blockNode;
 }
 
-CodeNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx)
+ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx)
 {
   switch (token.GetType())
   {
@@ -52,6 +52,8 @@ CodeNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx)
     return ParseBlock(tokenizer, ++idx);
   case eTT_Namespace:
     return ParseNamespace(tokenizer, idx);
+  case eTT_Class:
+    return ParseClass(tokenizer, idx);
 
   default:
     ++idx;
@@ -102,6 +104,13 @@ NamespaceNode* Parser::ParseNamespace(Tokenizer& tokenizer,  size_t& idx)
   namespaceNode->SetAlias(alias);
 
   return namespaceNode;
+}
+
+ClassNode* Parser::ParseClass(Tokenizer& tokenizer, size_t& idx)
+{
+  ClassNode* classNode = new ClassNode();
+
+  return classNode;
 }
 
 

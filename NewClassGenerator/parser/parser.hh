@@ -7,9 +7,10 @@ namespace cs::classgenerator
 {
 
 
+class ClassNode;
 class NamespaceNode;
 class BlockNode;
-class CodeNode;
+class ASTNode;
 class Token;
 class Tokenizer;
 class Parser
@@ -17,12 +18,13 @@ class Parser
 public:
   Parser();
 
-  CodeNode* Parse(Tokenizer& tokenizer);
+  ASTNode* Parse(Tokenizer& tokenizer);
 
 private:
   BlockNode *ParseBlock(Tokenizer& tokenizer, size_t &idx);
-  CodeNode *ParseNode(Tokenizer& tokenizer, Token &token, size_t& idx);
+  ASTNode *ParseNode(Tokenizer& tokenizer, Token &token, size_t& idx);
   NamespaceNode *ParseNamespace(Tokenizer& tokenizer, size_t& idx);
+  ClassNode *ParseClass(Tokenizer& tokenizer, size_t& idx);
 
 };
 
