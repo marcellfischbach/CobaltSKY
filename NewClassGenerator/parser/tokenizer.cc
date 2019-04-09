@@ -1,6 +1,7 @@
 
 #include <parser/tokenizer.hh>
 #include <parser/sourcefile.hh>
+#include <parser/parseexception.hh>
 
 #define PUSH(tkn) if (!tkn.empty()) { m_tokens.push_back(Token(tkn)); } tkn = ""
 #define PUSH_CH(tkn, ch) PUSH(tkn); tkn += ch; PUSH(tkn)
@@ -81,14 +82,36 @@ Tokenizer::Tokenizer(const SourceFile& sourceFile)
       case ';':
       case ',':
       case '<':
-      case '&':
-      case '*':
       case '+':
       case '-':
       case '=':
       case '/':
       case '~':
         PUSH(tkn);
+        tkn += ch;
+        break;
+
+      case '*':
+        if (tkn != "*")
+        {
+          PUSH(tkn);
+        }
+        tkn += ch;
+        break;
+
+      case '&':
+        if (tkn != "&")
+        {
+          PUSH(tkn);
+        }
+        tkn += ch;
+        break;
+
+      case '|':
+        if (tkn != "|")
+        {
+          PUSH(tkn);
+        }
         tkn += ch;
         break;
 
@@ -160,122 +183,36 @@ bool Tokenizer::IsIdentifier(const std::string& token) const
   return true;
 }
 
-#if 0
-Tokenizer::Tokenizer(const SourceFile& sourceFile)
-{
-  SourceFileIterator it = sourceFile.GetIterator();
-  std::string tkn = "";
-  char last = ' ';
-  char ch = ' ';
-
-  bool singleChar = false;
-  bool string = false;
-
-  bool readNext = true;
-  while (!readNext || it.HasMore())
-  {
-    if (readNext)
-    {
-      ch = it.Next();
-    }
-    readNext = true;
-
-    if (string)
-    {
-      tkn += ch;
-      if (ch == '\\')
-      {
-        if (it.HasMore())
-        {
-          char next = it.Next();
-          tkn += next;
-        }
-      }
-    }
-    else
-    {
-
-
-      switch (ch)
-      {
-      case '{':
-      case '}':
-      case '[':
-      case ']':
-      case '(':
-      case ')':
-      case '<':
-      case '>':
-      case '&':
-      case '*':
-      case '+':
-      case '=':
-      case '/':
-      case '~':
-      case ';':
-      case ',':
-        PUSH_CH(tkn, ch);
-        break;
-
-      case ':':
-        if (it.HasMore())
-        {
-          char next = it.Next();
-          if (next == ':')
-          {
-            PUSH_CH(tkn, "::");
-          }
-          else
-          {
-            PUSH_CH(tkn, ch);
-            ch = next;
-            readNext = false;
-          }
-        }
-        else
-        {
-          PUSH_CH(tkn, ch);
-        }
-        break;
-      case '-':
-        if (it.HasMore())
-        {
-          char next = it.Next();
-          if (next == '>')
-          {
-            PUSH_CH(tkn, "->");
-          }
-          else
-          {
-            PUSH_CH(tkn, ch);
-            ch = next;
-            readNext = false;
-          }
-        }
-        else
-        {
-          PUSH_CH(tkn, ch);
-        }
-        break;
-      case ' ':
-      case '\t':
-        PUSH(tkn);
-        break;
-
-      case '\'':
-      default:
-        tkn += ch;
-        break;
-      }
-    }
-  }
-  PUSH(tkn);
-}
-#endif
 
 const std::vector<Token> &Tokenizer::GetTokens() const
 {
   return m_tokens;
+}
+
+size_t Tokenizer::Find(TokenType type, size_t offset) const
+{
+  for (size_t i = offset, in = m_tokens.size(); i < in; ++i)
+  {
+    if (m_tokens[i].GetType() == type)
+    {
+      return i;
+    }
+  }
+
+  throw ParseException();
+}
+
+
+bool Tokenizer::Has(TokenType type, size_t startIncl, size_t endIncl) const
+{
+  for (size_t i = startIncl, in = m_tokens.size(); i < in && i <= endIncl; ++i)
+  {
+    if (m_tokens[i].GetType() == type)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 

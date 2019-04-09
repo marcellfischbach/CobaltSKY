@@ -33,7 +33,6 @@ int main(int argc, char** argv)
     std::cout << token.Get() << std::endl;
   }
 
-  something::Narf narf;
 
   cs::classgenerator::Parser parser;
   cs::classgenerator::ASTNode* ns = parser.Parse(tokenizer);

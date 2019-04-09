@@ -14,13 +14,30 @@ Token::Token(const std::string & token)
 {
   CHECK_TKN("class", eTT_Class);
   E_CHECK_TKN("namespace", eTT_Namespace);
+  E_CHECK_TKN("private", eTT_Private);
+  E_CHECK_TKN("protected", eTT_Public);
+  E_CHECK_TKN("public", eTT_Protected);
+  E_CHECK_TKN("virtual", eTT_Virtual);
+  E_CHECK_TKN("const", eTT_Const);
   E_CHECK_TKN("{", eTT_CurlyBraceOpen);
   E_CHECK_TKN("}", eTT_CurlyBraceClose);
+  E_CHECK_TKN("<", eTT_AngleBracketOpen);
+  E_CHECK_TKN(">", eTT_AngleBracketClose);
+  E_CHECK_TKN("(", eTT_ParenOpen);
+  E_CHECK_TKN(")", eTT_ParenClose);
   E_CHECK_TKN(":", eTT_Colon);
   E_CHECK_TKN("::", eTT_DoubleColon);
   E_CHECK_TKN(";", eTT_SemiColon);
+  E_CHECK_TKN(",", eTT_Comma);
   E_CHECK_TKN("=", eTT_Equal);
-  else if (IsIdentifier())
+  E_CHECK_TKN("&", eTT_Ampersand);
+  E_CHECK_TKN("*", eTT_Asterisk);
+  E_CHECK_TKN("**", eTT_DoubleAsterisk);
+  E_CHECK_TKN("enum", eTT_Enum);
+  E_CHECK_TKN("CS_CLASS", eTT_CS_CLASS);
+  E_CHECK_TKN("CS_MEMBER", eTT_CS_CLASS);
+  E_CHECK_TKN("CS_FUNCTION", eTT_CS_CLASS);
+else if (IsIdentifier())
   {
     m_type = eTT_Identifier;
   }

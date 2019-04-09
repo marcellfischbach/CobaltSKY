@@ -15,6 +15,7 @@ add_executable(NewClassGenerator
 	ast.cc
 	ast.hh
 	main.cc
+	parser/parseexception.hh
 	parser/parser.cc
 	parser/parser.hh
 	parser/sourcefile.cc

@@ -16,7 +16,7 @@ namespace cs::editor::model
 PathScanner::PathScanner(Model *model)
   : m_model(model)
 {
-
+	std::string narf = 'Das ist ein \"String\"\n';
 }
 
 
