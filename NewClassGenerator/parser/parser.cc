@@ -65,7 +65,7 @@ ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTN
   default:
     idx++;
     return  nullptr;
-    
+
   }
 }
 
@@ -143,7 +143,7 @@ ClassNode* Parser::ParseClass(Tokenizer& tokenizer, size_t& idx, ASTNode* parent
       {
       case eTT_SemiColon:
         classNode->SetName(tokens[i - 1].Get());
-        idx = i+1;
+        idx = i + 1;
         return classNode;
 
 
@@ -175,7 +175,7 @@ ClassNode* Parser::ParseClass(Tokenizer& tokenizer, size_t& idx, ASTNode* parent
 
       case eTT_CurlyBraceOpen:
       {
-        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i-1, classNode);
+        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i - 1, classNode);
         classNode->AddSuper(superDefinition);
         blockNode = ParseClassBlock(tokenizer, ++i, classNode);
         if (blockNode)
@@ -188,7 +188,7 @@ ClassNode* Parser::ParseClass(Tokenizer& tokenizer, size_t& idx, ASTNode* parent
 
       }
       case eTT_Comma:
-        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i-1, classNode);
+        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i - 1, classNode);
         classNode->AddSuper(superDefinition);
         break;
       }
@@ -275,7 +275,7 @@ ClassSuperDefinition Parser::GetSuperDefinition(Tokenizer& tokenizer, size_t idx
       virtuality = true;
       break;
     case eTT_Identifier:
-      if (token.Get() == "CS_SUPER" && tokens.size () > i+2)
+      if (token.Get() == "CS_SUPER" && tokens.size() > i + 2)
       {
         if (tokens[i + 1].GetType() == eTT_ParenOpen)
         {
@@ -306,11 +306,11 @@ VisibilityNode* Parser::ParseVisibility(Tokenizer& tokenizer, size_t& idx, ASTNo
     throw ParseException();
   }
   idx += 2;
-  return new VisibilityNode(tokenizer.GetTokens()[idx-2].Get());
+  return new VisibilityNode(tokenizer.GetTokens()[idx - 2].Get());
 }
 
 
-ASTNode *Parser::ParseFunctionOrMember(Tokenizer &tokenizer, size_t &idx, ASTNode* parent)
+ASTNode* Parser::ParseFunctionOrMember(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
 
   auto tokens = tokenizer.GetTokens();
@@ -335,7 +335,7 @@ ASTNode *Parser::ParseFunctionOrMember(Tokenizer &tokenizer, size_t &idx, ASTNod
     else if (token.GetType() == eTT_CurlyBraceOpen)
     {
       size_t idxCB = tokenizer.Find(eTT_CurlyBraceClose, i);
-      idx = idxCB+1;
+      idx = idxCB + 1;
       return nullptr;
 
     }
@@ -346,8 +346,12 @@ ASTNode *Parser::ParseFunctionOrMember(Tokenizer &tokenizer, size_t &idx, ASTNod
   return new TokenNode(tokens[idx - 1]);
 }
 
+FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
+{
+  return nullptr;
+}
 
-FunctionNode* Parser::ParseFunction(Tokenizer& tokenizer, size_t& idx, ASTNode* parent) 
+FunctionNode* Parser::ParseFunction2(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
   auto tokens = tokenizer.GetTokens();
   size_t startIdx = idx;
@@ -411,7 +415,7 @@ FunctionNode* Parser::ParseFunction(Tokenizer& tokenizer, size_t& idx, ASTNode* 
 }
 
 
-MemberNode* Parser::ParseMember(Tokenizer& tokenizer, size_t& idx, ASTNode* parent)
+MemberNode* Parser::ParseMember(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
   auto tokens = tokenizer.GetTokens();
   size_t startIdx = idx;
@@ -428,7 +432,7 @@ MemberNode* Parser::ParseMember(Tokenizer& tokenizer, size_t& idx, ASTNode* pare
 }
 
 
-void Parser::SkipBlock(Tokenizer& tokenizer, size_t& idx)
+void Parser::SkipBlock(Tokenizer & tokenizer, size_t & idx)
 {
   auto tokens = tokenizer.GetTokens();
   for (size_t in = tokens.size(); idx < in;)
@@ -445,7 +449,44 @@ void Parser::SkipBlock(Tokenizer& tokenizer, size_t& idx)
   }
 }
 
-std::string Parser::ReverseName(Tokenizer& tokenizer, size_t& idx)
+std::string Parser::GetName(Tokenizer & tokenizer, size_t & idx)
+{
+  std::string name;
+  auto tokens = tokenizer.GetTokens();
+  Token& token = tokens[idx++];
+
+  if (token.GetType() == eTT_Identifier)
+  {
+    name += token.Get();
+    while (true)
+    {
+      token = tokens[idx];
+      if (token.GetType() == eTT_DoubleColon)
+      {
+        idx++;
+        name += token.Get();
+      }
+      else
+      {
+        break;
+      }
+      token = tokens[idx];
+      if (token.GetType() == eTT_Identifier)
+      {
+        idx++;
+        name += token.Get();
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+  return name;
+}
+
+
+std::string Parser::ReverseName(Tokenizer & tokenizer, size_t & idx)
 {
   std::string name;
   auto tokens = tokenizer.GetTokens();
@@ -488,7 +529,80 @@ std::string Parser::ReverseName(Tokenizer& tokenizer, size_t& idx)
   return name;
 }
 
-TypeDef Parser::ReverseType(Tokenizer& tokenizer, size_t& idx)
+
+TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
+{
+  auto tokens = tokenizer.GetTokens();
+  TypeDef def;
+  while (true)
+  {
+    Token& token = tokens[idx++];
+    if (token.GetType() == eTT_AngleBracketOpen)
+    {
+      while (idx < tokens.size())
+      {
+        TypeDef subType = GetType(tokenizer, idx);
+        def.Add(subType);
+
+        token = tokens[idx];
+        if (token.GetType() == eTT_Comma)
+        {
+          idx++;
+          continue;
+        }
+        else if (token.GetType() == eTT_AngleBracketClose)
+        {
+          idx++;
+          break;
+        }
+      }
+      continue;
+    }
+
+    if (token.GetType() == eTT_Identifier)
+    {
+      def.Add(token);
+      while (true)
+      {
+        token = tokens[idx];
+        if (token.GetType() == eTT_DoubleColon)
+        {
+          idx++;
+          def.Add(token);
+        }
+        else
+        {
+          break;
+        }
+        token = tokens[idx];
+        if (token.GetType() == eTT_Identifier)
+        {
+          idx++;
+          def.Add(token);
+        }
+        else
+        {
+          break;
+        }
+      }
+    }
+    else if (token.GetType() == eTT_Const
+      || token.GetType() == eTT_Ampersand
+      || token.GetType() == eTT_Asterisk
+      || token.GetType() == eTT_DoubleAsterisk)
+    {
+      def.Add(token);
+    }
+    else
+    {
+      idx--;
+      break;
+    }
+  }
+
+}
+
+TypeDef Parser::ReverseType(Tokenizer & tokenizer, size_t & idx)
 {
   auto tokens = tokenizer.GetTokens();
   int angleBrackets = 0;
@@ -501,7 +615,7 @@ TypeDef Parser::ReverseType(Tokenizer& tokenizer, size_t& idx)
       while (idx > 0)
       {
         TypeDef subType = ReverseType(tokenizer, idx);
-        def.Add(subType);
+        def.AddFront(subType);
 
         token = tokens[idx];
         if (token.GetType() == eTT_Comma)
@@ -520,14 +634,14 @@ TypeDef Parser::ReverseType(Tokenizer& tokenizer, size_t& idx)
 
     if (token.GetType() == eTT_Identifier)
     {
-      def.Add(token);
+      def.AddFront(token);
       while (true)
       {
         token = tokens[idx];
         if (token.GetType() == eTT_DoubleColon)
         {
           idx--;
-          def.Add(token);
+          def.AddFront(token);
         }
         else
         {
@@ -537,7 +651,7 @@ TypeDef Parser::ReverseType(Tokenizer& tokenizer, size_t& idx)
         if (token.GetType() == eTT_Identifier)
         {
           idx--;
-          def.Add(token);
+          def.AddFront(token);
         }
         else
         {
@@ -550,7 +664,7 @@ TypeDef Parser::ReverseType(Tokenizer& tokenizer, size_t& idx)
       || token.GetType() == eTT_Asterisk
       || token.GetType() == eTT_DoubleAsterisk)
     {
-      def.Add(token);
+      def.AddFront(token);
     }
     else
     {

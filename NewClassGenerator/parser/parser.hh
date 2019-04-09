@@ -37,6 +37,7 @@ private:
   ClassSuperDefinition GetSuperDefinition(Tokenizer& tokenizer, size_t idx, ASTNode* parent);
   ASTNode* ParseFunctionOrMember(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
   FunctionNode* ParseFunction(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
+  FunctionNode* ParseFunction2(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
   MemberNode* ParseMember(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
 
   void SkipBlock(Tokenizer& tokenizer, size_t& idx);
@@ -46,6 +47,8 @@ private:
 
   TypeDef ReverseType(Tokenizer& tokenizer, size_t& idx);
 
+  TypeDef GetType(Tokenizer& tokenizer, size_t& idx);
+  std::string GetName(Tokenizer& tokenizer, size_t& idx);
 
 };
 

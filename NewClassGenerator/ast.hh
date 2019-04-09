@@ -139,6 +139,9 @@ public:
 
   void Add(const Token& token);
   void Add(const TypeDef& subType);
+
+  void AddFront(const Token& token);
+  void AddFront(const TypeDef& subType);
   void SetConst(bool constness);
   bool IsConst() const;
 

@@ -310,7 +310,7 @@ bool FunctionNode::IsConst() const
 
 void FunctionNode::Debug() 
 {
-  printf("MTHD [%s%s%s%s]: %s",
+  printf("FNCTN[%s%s%s%s]: %s",
     m_virtual ? "virtual " : "",
     m_name.c_str(),
     m_const ? " const" : "",
@@ -373,6 +373,30 @@ void TypeDef::Add(const Token& token)
   case eTT_DoubleAsterisk:
     m_constPtr = m_constPtr || m_const;
     m_const = false;
+    m_mems.push_back(token);
+    break;
+  default:
+    m_tokens.push_back(token);
+  }
+}
+
+void TypeDef::Add(const TypeDef& subType)
+{
+  m_subTypes.push_back(subType);
+}
+
+void TypeDef::AddFront(const Token& token)
+{
+  switch (token.GetType())
+  {
+  case eTT_Const:
+    m_const = true;
+    break;
+  case eTT_Ampersand:
+  case eTT_Asterisk:
+  case eTT_DoubleAsterisk:
+    m_constPtr = m_constPtr || m_const;
+    m_const = false;
     m_mems.insert(m_mems.begin(), token);
     break;
   default:
@@ -380,11 +404,10 @@ void TypeDef::Add(const Token& token)
   }
 }
 
-void TypeDef::Add(const TypeDef& subType)
+void TypeDef::AddFront(const TypeDef& subType)
 {
   m_subTypes.insert(m_subTypes.begin(), subType);
 }
-
 void TypeDef::SetConst(bool constness)
 {
   m_const = constness;
