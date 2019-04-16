@@ -62,9 +62,12 @@ ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTN
   case eTT_Protected:
     return ParseVisibility(tokenizer, idx, parent);
 
+
   default:
-    idx++;
-    return  nullptr;
+    return ParseFunctionOrMember(tokenizer, idx, parent);
+
+//    idx++;
+//    return  nullptr;
 
   }
 }
@@ -492,69 +495,6 @@ FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode
   return func;
 }
 
-FunctionNode* Parser::ParseFunction2(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
-{
-  auto tokens = tokenizer.GetTokens();
-  size_t startIdx = idx;
-  size_t parenIdx = tokenizer.Find(eTT_ParenOpen, idx);
-  size_t typeIdx = parenIdx;
-  std::string name = ReverseName(tokenizer, typeIdx);
-  TypeDef type = ReverseType(tokenizer, typeIdx);
-
-  FunctionNode* methodNode = new FunctionNode();
-  methodNode->SetName(name);
-  methodNode->SetReturnValue(type);
-
-  if (tokenizer.Has(eTT_Virtual, startIdx, parenIdx))
-  {
-    methodNode->SetVirtual(true);
-  }
-
-  idx = tokenizer.Find(eTT_ParenClose, parenIdx);
-  idx++;
-
-  bool done = false;
-  bool checkPureVirtual = false;
-  for (size_t in = tokens.size(); idx < in && !done; ++idx)
-  {
-
-    Token& token = tokens[idx];
-    switch (token.GetType())
-    {
-    case eTT_Const:
-      methodNode->SetConst(true);
-      break;
-    case eTT_SemiColon:
-      done = true;
-      break;
-
-    case eTT_Equal:
-      checkPureVirtual = true;
-      break;
-
-
-    case eTT_CurlyBraceOpen:
-      SkipBlock(tokenizer, idx);
-      done = true;
-      break;
-
-    case eTT_OtherCode:
-    case eTT_Identifier:
-      if (token.Get() == "0")
-      {
-        if (checkPureVirtual)
-        {
-          methodNode->SetPureVirtual(true);
-        }
-      }
-      break;
-    }
-  }
-
-
-  return methodNode;
-}
-
 
 MemberNode* Parser::ParseMember(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
@@ -578,14 +518,14 @@ void Parser::SkipBlock(Tokenizer & tokenizer, size_t & idx)
   auto tokens = tokenizer.GetTokens();
   for (size_t in = tokens.size(); idx < in;)
   {
-    Token& token = tokens[idx];
+    Token& token = tokens[idx++];
     if (token.GetType() == eTT_CurlyBraceOpen)
     {
-      SkipBlock(tokenizer, ++idx);
+      SkipBlock(tokenizer, idx);
     }
-    else
+    else if (token.GetType() == eTT_CurlyBraceClose)
     {
-      ++idx;
+      return;
     }
   }
 }

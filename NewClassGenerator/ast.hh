@@ -154,6 +154,7 @@ private:
 
   bool m_const;
   bool m_constPtr;
+
 };
 
 class Argument

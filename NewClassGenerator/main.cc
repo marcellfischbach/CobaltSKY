@@ -20,7 +20,7 @@ namespace something = cs::test;
 
 int main(int argc, char** argv)
 {
-  std::string fileName = argc >= 2 ? std::string(argv[1]) : std::string("D:\\DEV\\CobaltSKY\\Editor\\editormodel\\pathscanner.hh");
+  std::string fileName = argc >= 2 ? std::string(argv[1]) : std::string("D:\\DEV\\CobaltSKY\\Editor\\editormodel\\pathscanner.cc");
   
 
   cs::classgenerator::SourceFile sourceFile;
