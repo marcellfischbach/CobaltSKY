@@ -145,7 +145,7 @@ public:
   void SetConst(bool constness);
   bool IsConst() const;
 
-  std::string GetText();
+  std::string GetText() const;
 
 private:
   std::vector<Token> m_tokens;
@@ -154,6 +154,21 @@ private:
 
   bool m_const;
   bool m_constPtr;
+};
+
+class Argument
+{
+public:
+  Argument(const TypeDef& typeDef, const std::string& name = "");
+  const TypeDef& GetType() const;
+  const std::string& GetName() const;
+
+  std::string GetText() const;
+
+private:
+  TypeDef m_type;
+  std::string m_name;
+
 };
 
 
@@ -166,7 +181,7 @@ public:
   const std::string& GetName() const;
 
   void SetReturnValue(const TypeDef& returnValue);
-  const TypeDef& GetReturnValue() const;
+  const TypeDef &  GetReturnValue() const;
 
   void SetPureVirtual(bool pureVirtual);
   bool IsPureVirtual() const;
@@ -176,6 +191,8 @@ public:
 
   void SetConst(bool constness);
   bool IsConst() const;
+
+  void Add(const Argument& argument);
 protected:
   virtual void Debug();
 
@@ -188,6 +205,8 @@ private:
 
 
   std::string m_name;
+
+  std::vector<Argument> m_arguments;
 };
 
 

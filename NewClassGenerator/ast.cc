@@ -247,6 +247,32 @@ void VisibilityNode::Debug()
 }
 
 
+Argument::Argument(const TypeDef& type, const std::string& name)
+  : m_type(type)
+  , m_name(name)
+{
+
+}
+
+const TypeDef& Argument::GetType() const
+{
+  return m_type;
+}
+
+const std::string& Argument::GetName() const
+{
+  return m_name;
+}
+
+std::string Argument::GetText() const
+{
+  std::string text = m_type.GetText();
+  if (!m_name.empty())
+  {
+    text += " " + m_name;
+  }
+  return text;
+}
 
 FunctionNode::FunctionNode()
   : ASTNode(eANT_Function)
@@ -308,14 +334,32 @@ bool FunctionNode::IsConst() const
   return m_const;
 }
 
+void FunctionNode::Add(const Argument& argument)
+{
+  m_arguments.push_back(argument);
+}
+
 void FunctionNode::Debug() 
 {
-  printf("FNCTN[%s%s%s%s]: %s",
-    m_virtual ? "virtual " : "",
+  std::string arguments = "";
+  for (size_t i = 0, in = m_arguments.size(); i < in; ++i)
+  {
+    arguments += m_arguments[i].GetText();
+    if (i + 1 < m_arguments.size())
+    {
+      arguments += ", ";
+    }
+  }
+
+  printf("FNCTN[%s%s%s%s(%s)]: %s",
+    m_virtual ? "VIRTUAL " : "",
     m_name.c_str(),
-    m_const ? " const" : "",
-    m_pureVirtual ? " = 0" : "",
+    m_const ? " CONST" : "",
+    m_pureVirtual ? " PURE " : "",
+    arguments.c_str(),
     m_returnValue.GetText().c_str());
+
+
 }
 
 
@@ -418,7 +462,7 @@ bool TypeDef::IsConst() const
   return m_const;
 }
 
-std::string TypeDef::GetText()
+std::string TypeDef::GetText() const
 {
   std::string text;
   if (m_const)

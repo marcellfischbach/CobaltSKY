@@ -211,10 +211,15 @@ BlockNode* Parser::ParseClassBlock(Tokenizer& tokenizer, size_t& idx, ASTNode* p
       break;
     }
 
+    size_t IDX = idx;
     ASTNode* node = ParseClassNode(tokenizer, token, idx, blockNode);
     if (node)
     {
       blockNode->Add(node);
+    }
+    if (IDX == idx)
+    {
+      break;
     }
   }
   return blockNode;
@@ -348,7 +353,143 @@ ASTNode* Parser::ParseFunctionOrMember(Tokenizer & tokenizer, size_t & idx, ASTN
 
 FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
-  return nullptr;
+  auto tokens = tokenizer.GetTokens();
+
+  size_t idxParen = tokenizer.Find(eTT_ParenOpen, idx);
+  size_t lIDX = idxParen;
+  std::string name = ReverseName(tokenizer, lIDX);
+  TypeDef def;
+  if (lIDX >= idx)
+  {
+    size_t defIdx = idx;
+    def = GetType(tokenizer, defIdx);
+  }
+
+  FunctionNode* func = new FunctionNode();
+  func->SetName(name);
+  func->SetReturnValue(def);
+
+  try
+  {
+    size_t virtualIdx = tokenizer.Find(eTT_Virtual, idx);
+    if (virtualIdx < idxParen)
+    {
+      func->SetVirtual(true);
+    }
+  }
+  catch (std::exception & e)
+  {
+    //
+  }
+
+  idx = idxParen + 1;
+  for (size_t in = tokens.size(); idx < in;)
+  {
+    Token& token = tokens[idx];
+    if (token.GetType() == eTT_ParenClose)
+    {
+      break;
+    }
+    if (token.GetType() == eTT_Comma)
+    {
+      idx++;
+      continue;
+    }
+    TypeDef def = GetType(tokenizer, idx);
+
+    token = tokens[idx];
+    if (token.GetType() == eTT_Comma || token.GetType() == eTT_ParenClose)
+    {
+      func->Add(Argument(def));
+    }
+
+    if (token.GetType() == eTT_Identifier)
+    {
+      std::string name = GetName(tokenizer, idx);
+      func->Add(Argument(def, name));
+    }
+
+    token = tokens[idx];
+    if (token.GetType() == eTT_Comma)
+    {
+      idx++;
+    }
+    else if (token.GetType() == eTT_ParenClose)
+    {
+      break;
+    }
+    else
+    {
+      int paren = 0;
+      int angularBracket = 0;
+      int curlyBrace = 0;
+      int bracket = 0;
+      for (size_t in = tokens.size(); idx < in; idx++)
+      {
+        Token& token = tokens[idx];
+        switch (token.GetType())
+        {
+        case eTT_ParenOpen:
+          parent++;
+          break;
+        case eTT_ParenClose:
+          if (paren > 0)
+          {
+            parent--;
+          }
+          break;
+        case eTT_AngleBracketOpen:
+          angularBracket++;
+          break;
+        case eTT_AngleBracketClose:
+          angularBracket--;
+          break;
+        case eTT_CurlyBraceOpen:
+          curlyBrace++;
+          break;
+        case eTT_CurlyBraceClose:
+          curlyBrace--;
+          break;
+        }
+        if (token.GetType() == eTT_Comma || token.GetType() == eTT_ParenClose)
+        {
+          if (paren == 0 && angularBracket == 0 && curlyBrace == 0 && bracket == 0)
+          {
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  for (size_t in = tokens.size(); idx < in;)
+  {
+    Token& token = tokens[idx++];
+    if (token.GetType() == eTT_SemiColon)
+    {
+      break;
+    }
+    else if (token.GetType() == eTT_CurlyBraceOpen)
+    {
+      SkipBlock(tokenizer, idx);
+      break;
+    }
+    else if (token.GetType() == eTT_Const)
+    {
+      func->SetConst(true);
+    }
+    else if (token.GetType() == eTT_Equal)
+    {
+      if (tokens[idx].Get() == "0")
+      {
+        func->SetPureVirtual(true);
+      }
+    }
+
+  }
+
+
+  return func;
 }
 
 FunctionNode* Parser::ParseFunction2(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
@@ -534,9 +675,14 @@ TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
 {
   auto tokens = tokenizer.GetTokens();
   TypeDef def;
+  bool haveIdentifier = false;
   while (true)
   {
     Token& token = tokens[idx++];
+    if (token.GetType() == eTT_Virtual)
+    {
+      continue;
+    }
     if (token.GetType() == eTT_AngleBracketOpen)
     {
       while (idx < tokens.size())
@@ -561,6 +707,12 @@ TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
 
     if (token.GetType() == eTT_Identifier)
     {
+      if (haveIdentifier)
+      {
+        --idx;
+        break;
+      }
+      haveIdentifier = true;
       def.Add(token);
       while (true)
       {
@@ -600,6 +752,7 @@ TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
     }
   }
 
+  return def;
 }
 
 TypeDef Parser::ReverseType(Tokenizer & tokenizer, size_t & idx)
