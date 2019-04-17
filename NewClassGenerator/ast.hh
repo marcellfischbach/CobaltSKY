@@ -18,6 +18,7 @@ enum ASTNodeType
   eANT_Visibility,
   eANT_Function,
   eANT_Member,
+  eANT_CSMeta,
   eANT_Token
 };
 
@@ -53,6 +54,31 @@ private:
 };
 
 
+class TypeDef
+{
+public:
+  TypeDef();
+
+  void Add(const Token& token);
+  void Add(const TypeDef& subType);
+
+  void AddFront(const Token& token);
+  void AddFront(const TypeDef& subType);
+  void SetConst(bool constness);
+  bool IsConst() const;
+
+  std::string GetText() const;
+
+private:
+  std::vector<Token> m_tokens;
+  std::vector<Token> m_mems;
+  std::vector<TypeDef> m_subTypes;
+
+  bool m_const;
+  bool m_constPtr;
+
+};
+
 class BlockNode : public ASTNode
 {
 public:
@@ -85,24 +111,61 @@ private:
 class ClassSuperDefinition
 {
 public:
-  ClassSuperDefinition(bool csSuper, const std::string& name, const std::string& visibility, bool virtuality);
+  ClassSuperDefinition(bool csSuper, const TypeDef& name, const std::string& visibility, bool virtuality);
 
   bool IsCSSuper() const;
-  const std::string& GetName() const;
+  const TypeDef& GetType() const;
   const std::string& GetVisibility() const;
   bool IsVirtual() const;
 
 private:
   bool m_csSuper;
-  std::string m_name;
+  TypeDef m_type;
   std::string m_visibility;
   bool m_virtual;
+};
+
+class CSMetaNode : public ASTNode
+{
+public:
+  struct Attribute
+  {
+    std::string key;
+    std::string value;
+    Attribute(const std::string& key, const std::string& value)
+      : key(key)
+      , value(value)
+    {
+
+    }
+  };
+
+  enum MetaType
+  {
+    eMT_Class,
+    eMT_Property,
+    eMT_Function,
+  };
+public:
+  CSMetaNode(MetaType type);
+
+  void Add(const Attribute& attribute);
+
+protected:
+  virtual void Debug();
+
+private:
+  MetaType m_type;
+  std::vector<Attribute> m_attributes;
 };
 
 class ClassNode : public ASTNode
 {
 public:
   ClassNode();
+
+  void SetStruct(bool strct);
+  bool IsStruct() const;
 
   void SetName(const std::string& name);
   const std::string& GetName() const;
@@ -117,6 +180,8 @@ private:
   std::string m_name;
 
   std::vector<ClassSuperDefinition> m_supers;
+
+  bool m_struct;
 };
 
 class VisibilityNode : public ASTNode
@@ -130,31 +195,6 @@ protected:
 
 private:
   std::string m_visibility;
-};
-
-class TypeDef
-{
-public:
-  TypeDef();
-
-  void Add(const Token& token);
-  void Add(const TypeDef& subType);
-
-  void AddFront(const Token& token);
-  void AddFront(const TypeDef& subType);
-  void SetConst(bool constness);
-  bool IsConst() const;
-
-  std::string GetText() const;
-
-private:
-  std::vector<Token> m_tokens;
-  std::vector<Token> m_mems;
-  std::vector<TypeDef> m_subTypes;
-
-  bool m_const;
-  bool m_constPtr;
-
 };
 
 class Argument

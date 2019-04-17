@@ -131,7 +131,7 @@ SourceFileIterator::SourceFileIterator(const SourceFile& sourceFile)
 
 bool SourceFileIterator::HasMore() const
 {
-  if (m_idx + 1 < m_line.size())
+  if (m_idx  < m_line.size())
   {
     return true;
   }

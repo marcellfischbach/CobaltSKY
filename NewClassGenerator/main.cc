@@ -6,6 +6,7 @@
 #include <parser/token.hh>
 #include <parser/tokenizer.hh>
 #include <parser/parser.hh>
+#include <parser/parseexception.hh>
 
 
 namespace cs::test
@@ -20,7 +21,7 @@ namespace something = cs::test;
 
 int main(int argc, char** argv)
 {
-  std::string fileName = argc >= 2 ? std::string(argv[1]) : std::string("D:\\DEV\\CobaltSKY\\Editor\\editormodel\\pathscanner.cc");
+  std::string fileName = argc >= 2 ? std::string(argv[1]) : std::string("D:\\DEV\\CobaltSKY\\Editor\\editormodel\\pathscanner.hh");
   
 
   cs::classgenerator::SourceFile sourceFile;
@@ -30,13 +31,21 @@ int main(int argc, char** argv)
   std::cout << "Tokens\n";
   for (const cs::classgenerator::Token& token : tokenizer.GetTokens())
   {
-    std::cout << token.Get() << std::endl;
+    std::cout << "[" << token.Get() << "]" << std::endl;
   }
 
 
   cs::classgenerator::Parser parser;
-  cs::classgenerator::ASTNode* ns = parser.Parse(tokenizer);
-  ns->DebugNode(0);
+  try
+  {
+    cs::classgenerator::ASTNode* ns = parser.Parse(tokenizer);
+    ns->DebugNode(0);
+  }
+  catch (cs::classgenerator::ParseException & e)
+  {
+    std::cout << "Parse Exception: " << e.what() << std::endl;
+  }
+
 
   return 0;
 }

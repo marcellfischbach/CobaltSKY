@@ -1,5 +1,3 @@
-
-
 #include <parser/parseexception.hh>
 #include <parser/parser.hh>
 #include <ast.hh>
@@ -34,17 +32,29 @@ BlockNode* Parser::ParseBlock(Tokenizer& tokenizer, size_t& idx, ASTNode* parent
     if (token.GetType() == eTT_CurlyBraceClose)
     {
       ++idx;
+      if (idx < in && tokens[idx].GetType() == eTT_SemiColon)
+      {
+        ++idx;
+      }
       break;
     }
 
+    size_t IDX = idx;
     ASTNode* node = ParseNode(tokenizer, token, idx, blockNode);
     if (node)
     {
       blockNode->Add(node);
     }
+    if (IDX == idx)
+    {
+      throw ParseException();
+    }
   }
   return blockNode;
 }
+
+
+
 
 ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTNode* parent)
 {
@@ -55,7 +65,13 @@ ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTN
   case eTT_Namespace:
     return ParseNamespace(tokenizer, idx, parent);
   case eTT_Class:
+  case eTT_Struct:
     return ParseClass(tokenizer, idx, parent);
+
+  case eTT_CS_CLASS:
+  case eTT_CS_PROPERTY:
+  case eTT_CS_FUNCTION:
+    return ParseCSMeta(tokenizer, idx, parent);
 
   case eTT_Public:
   case eTT_Private:
@@ -66,11 +82,12 @@ ASTNode* Parser::ParseNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTN
   default:
     return ParseFunctionOrMember(tokenizer, idx, parent);
 
-//    idx++;
-//    return  nullptr;
+    //    idx++;
+    //    return  nullptr;
 
   }
 }
+
 
 NamespaceNode* Parser::ParseNamespace(Tokenizer& tokenizer, size_t& idx, ASTNode* parent)
 {
@@ -125,189 +142,115 @@ ClassNode* Parser::ParseClass(Tokenizer& tokenizer, size_t& idx, ASTNode* parent
   std::string alias = "";
   auto tokens = tokenizer.GetTokens();
   BlockNode* blockNode;
-
-  enum ClassParseState
+  Token& token = tokens[idx];
+  classNode->SetStruct(token.GetType() == eTT_Struct);
+  idx++;
+  for (size_t in = tokens.size(); idx < in; )
   {
-    eCPS_Name,
-    eCPS_Super,
-  };
-
-
-  ClassParseState state = eCPS_Name;
-
-  for (size_t i = idx + 1, in = tokens.size(); i < in; ++i)
-  {
-    Token& token = tokens[i];
-    switch (state)
+    Token& token = tokens[idx];
+    if (token.GetType() == eTT_Colon)
     {
-
-    case eCPS_Name:
-      switch (token.GetType())
+      classNode->SetName(tokens[idx - 1].Get());
+      idx++;
+      ClassSuperDefinition super = ParseSuperDefinition(tokenizer, idx, classNode);
+      classNode->AddSuper(super);
+    }
+    else if (token.GetType() == eTT_Comma)
+    {
+      idx++;
+      ClassSuperDefinition super = ParseSuperDefinition(tokenizer, idx, classNode);
+      classNode->AddSuper(super);
+    }
+    else if (token.GetType() == eTT_CurlyBraceOpen)
+    {
+      if (classNode->GetName().empty())
       {
-      case eTT_SemiColon:
-        classNode->SetName(tokens[i - 1].Get());
-        idx = i + 1;
-        return classNode;
-
-
-      case eTT_Colon:
-        classNode->SetName(tokens[i - 1].Get());
-        state = eCPS_Super;
-        break;
-
-      case eTT_CurlyBraceOpen:
-        classNode->SetName(tokens[i - 1].Get());
-
-        blockNode = ParseClassBlock(tokenizer, ++i, classNode);
-        if (blockNode)
-        {
-          classNode->Add(blockNode);
-        }
-        // when read block returns the index (i) already points to the next token
-        idx = i;
-        return classNode;
+        classNode->SetName(tokens[idx - 1].Get());
+      }
+      idx++;
+      BlockNode * block = ParseBlock(tokenizer, idx, classNode);
+      classNode->Add(block);
+      if (idx < tokens.size() && tokens[idx].GetType() == eTT_SemiColon)
+      {
+        idx++;
       }
       break;
-
-
-
-
-    case eCPS_Super:
-      switch (token.GetType())
-      {
-
-      case eTT_CurlyBraceOpen:
-      {
-        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i - 1, classNode);
-        classNode->AddSuper(superDefinition);
-        blockNode = ParseClassBlock(tokenizer, ++i, classNode);
-        if (blockNode)
-        {
-          classNode->Add(blockNode);
-        }
-        // when read block returns the index (i) already points to the next token
-        idx = i;
-        return classNode;
-
-      }
-      case eTT_Comma:
-        ClassSuperDefinition superDefinition = GetSuperDefinition(tokenizer, i - 1, classNode);
-        classNode->AddSuper(superDefinition);
-        break;
-      }
     }
-  };
+    else if (token.GetType() == eTT_SemiColon)
+    {
+      if (classNode->GetName().empty())
+      {
+        classNode->SetName(tokens[idx - 1].Get());
+      }
+      idx++;
+      break;
+    }
+    else
+    {
+      idx++;
+    }
+  }
+
   return classNode;
 }
 
 
-BlockNode* Parser::ParseClassBlock(Tokenizer& tokenizer, size_t& idx, ASTNode* parent)
-{
-  BlockNode* blockNode = new BlockNode();
-  auto tokens = tokenizer.GetTokens();
-  for (size_t in = tokens.size(); idx < in;)
-  {
-    Token& token = tokens[idx];
-    if (token.GetType() == eTT_CurlyBraceClose)
-    {
-      ++idx;
-      break;
-    }
-
-    size_t IDX = idx;
-    ASTNode* node = ParseClassNode(tokenizer, token, idx, blockNode);
-    if (node)
-    {
-      blockNode->Add(node);
-    }
-    if (IDX == idx)
-    {
-      break;
-    }
-  }
-  return blockNode;
-}
-
-ASTNode* Parser::ParseClassNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTNode* parent)
-{
-  switch (token.GetType())
-  {
-  case eTT_CurlyBraceOpen:
-    return ParseBlock(tokenizer, ++idx, parent);
-  case eTT_Namespace:
-    return ParseNamespace(tokenizer, idx, parent);
-  case eTT_Class:
-    return ParseClass(tokenizer, idx, parent);
-
-  case eTT_Public:
-  case eTT_Private:
-  case eTT_Protected:
-    return ParseVisibility(tokenizer, idx, parent);
-
-  default:
-    return ParseFunctionOrMember(tokenizer, idx, parent);
-
-  }
-}
-
-
-ClassSuperDefinition Parser::GetSuperDefinition(Tokenizer& tokenizer, size_t idx, ASTNode* parent)
+ClassSuperDefinition Parser::ParseSuperDefinition(Tokenizer & tokenizer, size_t &idx, ASTNode * parent)
 {
   auto tokens = tokenizer.GetTokens();
 
-  std::string name;
+  TypeDef type;
   std::string visibility = "";
   bool virtuality = false;
   bool csSuper = false;
 
-  size_t i = idx;
-  for (; i > 0; --i)
+  for (; idx < tokens.size(); )
   {
-    Token& token = tokens[i];
+    Token& token = tokens[idx];
     switch (token.GetType())
     {
-    case eTT_Colon:
-    case eTT_Comma:
-      return ClassSuperDefinition(csSuper, name, visibility, virtuality);
-
     case eTT_Public:
-      visibility = "public";
-      break;
     case eTT_Protected:
-      visibility = "protected";
-      break;
     case eTT_Private:
-      visibility = "private";
+      visibility = token.Get();
+      idx++;
       break;
     case eTT_Virtual:
       virtuality = true;
+      idx++;
       break;
+
+    case eTT_Comma:
+    case eTT_CurlyBraceOpen:
+      return ClassSuperDefinition(csSuper, type, visibility, virtuality);
+
     case eTT_Identifier:
-      if (token.Get() == "CS_SUPER" && tokens.size() > i + 2)
+      if (token.Get() == std::string("CS_SUPER") && idx + 1 < tokens.size() && tokens[idx + 1].GetType() == eTT_ParenOpen)
       {
-        if (tokens[i + 1].GetType() == eTT_ParenOpen)
-        {
-          csSuper = true;
-          name = tokens[i + 2].Get();
-        }
+        csSuper = true;
+        idx += 2;
       }
       else
       {
-        name = token.Get();
+        type = GetType(tokenizer, idx);
       }
       break;
-    case eTT_Class:
-      throw ParseException();
+    case eTT_ParenClose:
+      if (!csSuper)
+      {
+        throw ParseException("Unexpected token '('");
+      }
+      idx++;
+      break;
     }
   }
 
-  throw ParseException();
-
+  throw ParseException("Cannot ready super type.");
 }
 
 
 
-VisibilityNode* Parser::ParseVisibility(Tokenizer& tokenizer, size_t& idx, ASTNode* parent)
+VisibilityNode* Parser::ParseVisibility(Tokenizer & tokenizer, size_t & idx, ASTNode * parent)
 {
   if (tokenizer.GetTokens()[idx + 1].GetType() != eTT_Colon)
   {
@@ -339,6 +282,10 @@ ASTNode* Parser::ParseFunctionOrMember(Tokenizer & tokenizer, size_t & idx, ASTN
       SkipBlock(tokenizer, idxCB);
       idx = idxCB;
       return nullptr;
+    }
+    else if (token.GetType() == eTT_Class || token.GetType() == eTT_Struct)
+    {
+      break;
     }
     else if (token.GetType() == eTT_CurlyBraceOpen)
     {
@@ -502,6 +449,23 @@ MemberNode* Parser::ParseMember(Tokenizer & tokenizer, size_t & idx, ASTNode * p
   size_t startIdx = idx;
   size_t semiColonIdx = tokenizer.Find(eTT_SemiColon, idx);
   size_t typeIdx = semiColonIdx;
+  try
+  {
+    size_t equalIdx = tokenizer.Find(eTT_Equal, idx);
+    if (equalIdx < typeIdx)
+    {
+      typeIdx = equalIdx; 
+    }
+  
+  }
+  catch (std::exception & e)
+  {
+
+  }
+
+  SkipArrayInitializer(tokenizer, typeIdx);
+  typeIdx++;
+
   std::string name = ReverseName(tokenizer, typeIdx);
   TypeDef type = ReverseType(tokenizer, typeIdx);
 
@@ -512,6 +476,23 @@ MemberNode* Parser::ParseMember(Tokenizer & tokenizer, size_t & idx, ASTNode * p
   return memberNode;
 }
 
+void Parser::SkipArrayInitializer(Tokenizer& tokenizer, size_t& idx)
+{
+  auto tokens = tokenizer.GetTokens();
+  for (; idx>=0;)
+  {
+    if (idx == 0)
+    {
+      throw ParseException();
+    }
+    Token& token = tokens[--idx];
+    if (token.GetType() != eTT_BracketClose)
+    {
+      return;
+    }
+    idx = tokenizer.FindBack(eTT_BracketOpen, idx);
+  }
+}
 
 void Parser::SkipBlock(Tokenizer & tokenizer, size_t & idx)
 {
@@ -640,6 +621,10 @@ TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
         {
           idx++;
           break;
+        }
+        else
+        {
+          throw ParseException();
         }
       }
       continue;
@@ -770,5 +755,79 @@ TypeDef Parser::ReverseType(Tokenizer & tokenizer, size_t & idx)
 
 }
 
+CSMetaNode* Parser::ParseCSMeta(Tokenizer& tokenizer, size_t& idx, ASTNode* parent)
+{
+  auto tokens = tokenizer.GetTokens();
+  Token& token = tokens[idx];
+  CSMetaNode* metaNode = nullptr;
+
+  if (idx + 2 >= tokens.size())
+  {
+    throw ParseException();
+  }
+
+  if (tokens[idx + 1].GetType() != eTT_ParenOpen)
+  {
+    throw ParseException();
+  }
+  idx++;
+
+  switch (token.GetType())
+  {
+  case eTT_CS_CLASS:
+    metaNode = new CSMetaNode(CSMetaNode::eMT_Class);
+    break;
+  case eTT_CS_PROPERTY:
+    metaNode = new CSMetaNode(CSMetaNode::eMT_Property);
+    break;
+  case eTT_CS_FUNCTION:
+    metaNode = new CSMetaNode(CSMetaNode::eMT_Function);
+    break;
+  default:
+    idx++;
+    return nullptr;
+  }
+
+  std::string value = "";
+  std::string key = "";
+  for (size_t in = tokens.size(); idx < in; idx++)
+  {
+
+    token = tokens[idx];
+    switch (token.GetType())
+    {
+    case eTT_ParenOpen:
+      break;
+    case eTT_ParenClose:
+      if (!key.empty() || !value.empty())
+      {
+        metaNode->Add(CSMetaNode::Attribute(key, value));
+      }
+      key = "";
+      value = "";
+      idx++;
+      return metaNode;
+    case eTT_Identifier:
+    case eTT_OtherCode:
+      value = token.Get();
+      break;
+    case eTT_Equal:
+    case eTT_Colon:
+      key = value;
+      value = "";
+      break;
+    case eTT_Comma:
+      if (!key.empty() || !value.empty())
+      {
+        metaNode->Add(CSMetaNode::Attribute(key, value));
+      }
+      key = "";
+      value = "";
+      break;
+    }
+  }
+  throw ParseException();
+
+}
 
 }

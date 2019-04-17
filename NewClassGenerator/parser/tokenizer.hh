@@ -18,6 +18,7 @@ public:
   const std::vector<Token>& GetTokens() const;
 
   size_t Find(TokenType type, size_t offset) const;
+  size_t FindBack(TokenType type, size_t offset) const;
   bool Has(TokenType type, size_t startIncl, size_t endIncl) const;
 
 private:

@@ -12,6 +12,7 @@ class ClassSuperDefinition;
 class NamespaceNode;
 class BlockNode;
 class ASTNode;
+class CSMetaNode;
 class VisibilityNode;
 class FunctionNode;
 class MemberNode;
@@ -31,16 +32,16 @@ private:
   ASTNode *ParseNode(Tokenizer& tokenizer, Token &token, size_t& idx, ASTNode* parent);
   NamespaceNode *ParseNamespace(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
   ClassNode *ParseClass(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
-  BlockNode* ParseClassBlock(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
-  ASTNode* ParseClassNode(Tokenizer& tokenizer, Token& token, size_t& idx, ASTNode* parent);
   VisibilityNode *ParseVisibility(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
-  ClassSuperDefinition GetSuperDefinition(Tokenizer& tokenizer, size_t idx, ASTNode* parent);
+  ClassSuperDefinition ParseSuperDefinition(Tokenizer& tokenizer, size_t &idx, ASTNode* parent);
   ASTNode* ParseFunctionOrMember(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
   FunctionNode* ParseFunction(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
-  FunctionNode* ParseFunction2(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
   MemberNode* ParseMember(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
+  CSMetaNode* ParseCSMeta(Tokenizer& tokenizer, size_t& idx, ASTNode* parent);
 
+  
   void SkipBlock(Tokenizer& tokenizer, size_t& idx);
+  void SkipArrayInitializer(Tokenizer &tokenizer, size_t& idx);
 
 
   std::string ReverseName(Tokenizer& tokenizer, size_t& idx);

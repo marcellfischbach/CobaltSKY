@@ -203,6 +203,25 @@ size_t Tokenizer::Find(TokenType type, size_t offset) const
 }
 
 
+size_t Tokenizer::FindBack(TokenType type, size_t offset) const
+{
+  for (size_t i = offset; i >= 0; --i)
+  {
+    if (m_tokens[i].GetType() == type)
+    {
+      return i;
+    }
+    if (i == 0)
+    {
+      throw ParseException();
+    }
+  }
+
+  throw ParseException();
+}
+
+
+
 bool Tokenizer::Has(TokenType type, size_t startIncl, size_t endIncl) const
 {
   for (size_t i = startIncl, in = m_tokens.size(); i < in && i <= endIncl; ++i)

@@ -10,6 +10,7 @@ enum TokenType
 {
   eTT_Identifier,
   eTT_Class,
+  eTT_Struct,
   eTT_Namespace,
   eTT_Private,
   eTT_Protected,
@@ -22,6 +23,8 @@ enum TokenType
   eTT_ParenClose,
   eTT_AngleBracketOpen,
   eTT_AngleBracketClose,
+  eTT_BracketOpen,
+  eTT_BracketClose,
   eTT_Colon,
   eTT_DoubleColon,
   eTT_SemiColon,
@@ -32,9 +35,8 @@ enum TokenType
   eTT_Equal,
   eTT_Enum,
   eTT_CS_CLASS,
-  eTT_CS_INTERFACE,
-  eTT_CS_MEMBER,
-  eTT_CS_METHOD,
+  eTT_CS_PROPERTY,
+  eTT_CS_FUNCTION,
   eTT_OtherCode,
 };
 

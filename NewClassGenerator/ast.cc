@@ -147,9 +147,9 @@ void NamespaceNode::Debug()
 
 
 
-ClassSuperDefinition::ClassSuperDefinition(bool csSuper, const std::string & name, const std::string & visibility, bool virtuality)
+ClassSuperDefinition::ClassSuperDefinition(bool csSuper, const TypeDef & type, const std::string & visibility, bool virtuality)
   : m_csSuper(csSuper)
-  , m_name(name)
+  , m_type(type)
   , m_visibility(visibility)
   , m_virtual(virtuality)
 {
@@ -161,9 +161,9 @@ bool ClassSuperDefinition::IsCSSuper() const
   return m_csSuper;
 }
 
-const std::string& ClassSuperDefinition::GetName() const
+const TypeDef& ClassSuperDefinition::GetType() const
 {
-  return m_name;
+  return m_type;
 }
 
 const std::string& ClassSuperDefinition::GetVisibility() const
@@ -176,10 +176,59 @@ bool ClassSuperDefinition::IsVirtual() const
   return m_virtual;
 }
 
-ClassNode::ClassNode()
-  : ASTNode(eANT_Class)
+CSMetaNode::CSMetaNode(CSMetaNode::MetaType type)
+  : ASTNode(eANT_CSMeta)
+  , m_type(type)
 {
 
+}
+
+void CSMetaNode::Add(const CSMetaNode::Attribute& attribute)
+{
+  m_attributes.push_back(attribute);
+}
+
+void CSMetaNode::Debug()
+{
+  switch (m_type)
+  {
+  case eMT_Class:
+    printf("CS_CLASS(");
+    break;
+  case eMT_Property:
+    printf("CS_PROPERTY(");
+    break;
+  case eMT_Function:
+    printf("CS_FUNCTION(");
+    break;
+  }
+  for (auto attribute : m_attributes)
+  {
+    printf("[");
+    if (!attribute.key.empty())
+    {
+      printf("%s=", attribute.key.c_str());
+    }
+    printf("%s]", attribute.value.c_str());
+  }
+  printf(")");
+}
+
+ClassNode::ClassNode()
+  : ASTNode(eANT_Class)
+  , m_struct(false)
+{
+
+}
+
+void ClassNode::SetStruct(bool strct)
+{
+  m_struct = strct;
+}
+
+bool ClassNode::IsStruct() const
+{
+  return m_struct;
 }
 
 void ClassNode::SetName(const std::string & name)
@@ -204,23 +253,23 @@ const std::vector<ClassSuperDefinition>& ClassNode::GetSupers() const
 
 void ClassNode::Debug()
 {
-  printf("CLS[%s", m_name.c_str());
+  printf("%s[%s", m_struct ? "STRCT" : "CLS", m_name.c_str());
   for (auto super : m_supers)
   {
     if (super.IsCSSuper())
     {
-      printf(":CS_SUPER(%s%s%s)",
+      printf(" CS_SUPER(%s%s%s)",
         super.IsVirtual() ? "virtual " : "",
         super.GetVisibility().empty() ? "" : (super.GetVisibility() + " ").c_str(),
-        super.GetName().c_str());
+        super.GetType().GetText().c_str());
     }
     else
     {
 
-      printf(":%s%s%s",
+      printf(" native(%s%s%s)",
         super.IsVirtual() ? "virtual " : "",
         super.GetVisibility().empty() ? "" : (super.GetVisibility() + " ").c_str(),
-        super.GetName().c_str()
+        super.GetType().GetText().c_str()
       );
     }
   }
