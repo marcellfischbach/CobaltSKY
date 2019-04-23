@@ -38,6 +38,9 @@ public:
   ASTNode* FindPrevSibling(ASTNodeType type);
   ASTNode* FindNextSibling(ASTNodeType type);
 
+  ASTNode* FindPrevSibling();
+  ASTNode* FindNextSibling();
+
   void DebugNode(int i);
 
   
@@ -66,6 +69,11 @@ public:
   void AddFront(const TypeDef& subType);
   void SetConst(bool constness);
   bool IsConst() const;
+
+  bool IsValue() const;
+  bool IsReference() const;
+  bool IsPointer() const;
+  bool IsPointerToPointer() const;
 
   std::string GetText() const;
 
@@ -147,7 +155,13 @@ public:
     eMT_Function,
   };
 public:
+  
   CSMetaNode(MetaType type);
+
+  inline MetaType GetMetaType() const
+  {
+    return m_type;
+  }
 
   void Add(const Attribute& attribute);
 

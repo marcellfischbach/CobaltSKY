@@ -242,6 +242,8 @@ ClassSuperDefinition Parser::ParseSuperDefinition(Tokenizer & tokenizer, size_t 
       }
       idx++;
       break;
+    default:
+      throw ParseException();
     }
   }
 
@@ -283,7 +285,12 @@ ASTNode* Parser::ParseFunctionOrMember(Tokenizer & tokenizer, size_t & idx, ASTN
       idx = idxCB;
       return nullptr;
     }
-    else if (token.GetType() == eTT_Class || token.GetType() == eTT_Struct)
+    else if (token.GetType() == eTT_Class 
+      || token.GetType() == eTT_Struct 
+      || token.GetType() == eTT_Public
+      || token.GetType() == eTT_Private
+      || token.GetType() == eTT_Protected
+      )
     {
       break;
     }
@@ -380,12 +387,12 @@ FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode
         switch (token.GetType())
         {
         case eTT_ParenOpen:
-          parent++;
+          paren++;
           break;
         case eTT_ParenClose:
           if (paren > 0)
           {
-            parent--;
+            paren--;
           }
           break;
         case eTT_AngleBracketOpen:
@@ -467,7 +474,8 @@ MemberNode* Parser::ParseMember(Tokenizer & tokenizer, size_t & idx, ASTNode * p
   typeIdx++;
 
   std::string name = ReverseName(tokenizer, typeIdx);
-  TypeDef type = ReverseType(tokenizer, typeIdx);
+  typeIdx = idx;
+  TypeDef type = GetType(tokenizer, typeIdx);
 
   idx = semiColonIdx + 1;
   MemberNode* memberNode = new MemberNode();
@@ -603,6 +611,15 @@ TypeDef Parser::GetType(Tokenizer & tokenizer, size_t & idx)
     if (token.GetType() == eTT_Virtual)
     {
       continue;
+    }
+    if (token.GetType() == eTT_Identifier)
+    {
+      if (token.Get() == std::string("CS_FORCEINLINE")
+        || token.Get() == std::string("inline")
+        || token.Get() == std::string("__forceinline"))
+      {
+        continue;
+      }
     }
     if (token.GetType() == eTT_AngleBracketOpen)
     {

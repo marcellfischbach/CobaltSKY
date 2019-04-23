@@ -19,7 +19,6 @@ SourceFile::SourceFile()
 
 void SourceFile::Read(const std::string& fileName)
 {
-  std::cout << "Scan: " << fileName << "\n";
   std::ifstream stream(fileName);
   std::string line;
   int l = 1;
@@ -29,10 +28,12 @@ void SourceFile::Read(const std::string& fileName)
     state = PutLine(state, l++, line);
   }
 
+  /*
   for (size_t i = 0, in = m_lines.size(); i < in; ++i)
   {
     std::cout << std::setw(4) << std::setfill(' ') << (i + 1) << " " << m_lines[i] << std::endl;
   }
+  */
 }
 
 

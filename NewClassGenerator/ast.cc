@@ -39,6 +39,20 @@ ASTNode* ASTNode::FindPrevSibling(ASTNodeType type)
     return nullptr;
   }
 
+  std::vector<ASTNode*>::iterator it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
+  for (;; it--)
+  {
+    if ((*it)->GetType() == type)
+    {
+      return *it;
+    }
+    if (it == m_parent->m_children.begin())
+    {
+      break;
+    }
+  }
+
+
   return nullptr;
 }
 
@@ -49,9 +63,61 @@ ASTNode* ASTNode::FindNextSibling(ASTNodeType type)
     return nullptr;
   }
 
+  std::vector<ASTNode*>::iterator it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
+  for (;it != m_parent->m_children.end(); it++)
+  {
+    if ((*it)->GetType() == type)
+    {
+      return *it;
+    }
+  }
+
+
   return nullptr;
 
 }
+
+
+ASTNode* ASTNode::FindPrevSibling()
+{
+  if (!m_parent)
+  {
+    return nullptr;
+  }
+
+  std::vector<ASTNode*>::iterator it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
+  if (it == m_parent->m_children.end() || it == m_parent->m_children.begin())
+  {
+    return nullptr;
+  }
+
+  it--;
+  return *it;
+}
+
+ASTNode* ASTNode::FindNextSibling()
+{
+  if (!m_parent)
+  {
+    return nullptr;
+  }
+
+  std::vector<ASTNode*>::iterator it = std::find(m_parent->m_children.begin(), m_parent->m_children.end(), this);
+  if (it == m_parent->m_children.end())
+  {
+    return nullptr;
+  }
+
+  it++;
+  if (it == m_parent->m_children.end())
+  {
+    return nullptr;
+  }
+
+  return *it;
+
+}
+
 
 void ASTNode::Add(ASTNode* node)
 {
@@ -516,6 +582,48 @@ bool TypeDef::IsConst() const
 {
   return m_const;
 }
+
+bool TypeDef::IsValue() const
+{
+  return this->m_mems.size() == 0;
+}
+
+bool TypeDef::IsReference() const
+{
+  for (auto mem : m_mems)
+  {
+    if (mem.GetType() == eTT_Ampersand)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool TypeDef::IsPointer() const
+{
+  for (auto mem : m_mems)
+  {
+    if (mem.GetType() == eTT_Asterisk)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool TypeDef::IsPointerToPointer() const
+{
+  for (auto mem : m_mems)
+  {
+    if (mem.GetType() == eTT_DoubleAsterisk)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
 
 std::string TypeDef::GetText() const
 {
