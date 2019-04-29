@@ -17,27 +17,23 @@ class FolderNode;
 class Model;
 class VFSEntryNode;
 class Transaction;
-	
-	
-{
-class  EDITOR_MODEL_API  PathScanner : public CS_SUPER(AnotherObjectClass), virtual CS_SUPER(iObject), virtual private NormalClass
+
+
+
+class  EDITOR_MODEL_API  PathScanner
 {
 
 public:
-	/* comment
-    befor constructor */
-// line comment
-  PathScanner(Model *model,char * test = "hel\"//*lo");
+  PathScanner(Model* model);
 
-  virtual void Scan(VFSEntryNode *vfsEntry, Transaction &tx) const = 0;
+  void Scan(VFSEntryNode* vfsEntry, Transaction& tx);
 
 private:
-  void Scan(FolderNode *parent, const std::filesystem::path &path, Transaction &tx);
-  void ScanFolder(FolderNode *parent, const std::filesystem::path &path, Transaction &tx);
+  void Scan(FolderNode* parent, const std::filesystem::path& path, Transaction& tx);
+  void ScanFolder(FolderNode* parent, const std::filesystem::path& path, Transaction& tx);
 
 private:
-  std::vectory<const Model &**, std::list<const *int, std::vector<int>>>  m_model;
+  Model* m_model;
 };
 
-}
 }
