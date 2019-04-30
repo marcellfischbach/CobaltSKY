@@ -34,6 +34,7 @@ public:
 
   ASTNodeType GetType() const;
 
+  ASTNode* FindChildNode(ASTNodeType type);
   ASTNode* FindParentNode(ASTNodeType type);
   ASTNode* FindPrevSibling(ASTNodeType type);
   ASTNode* FindNextSibling(ASTNodeType type);
@@ -76,6 +77,12 @@ public:
   bool IsPointerToPointer() const;
 
   std::string GetText() const;
+  std::string GetTypeName(bool withSubTypes = true) const;
+
+  bool IsVoid() const;
+  bool IsValid() const;
+
+  const std::vector<TypeDef>& GetSubTypes() const;
 
 private:
   std::vector<Token> m_tokens;
@@ -84,6 +91,7 @@ private:
 
   bool m_const;
   bool m_constPtr;
+
 
 };
 
@@ -140,9 +148,9 @@ public:
   {
     std::string key;
     std::string value;
-    Attribute(const std::string& key, const std::string& value)
-      : key(key)
-      , value(value)
+    Attribute(const std::string& lkey, const std::string& lvalue)
+      : key(lkey.empty () ? lvalue : lkey)
+      , value(lkey.empty () ? "" : value)
     {
 
     }
@@ -165,6 +173,11 @@ public:
 
   void Add(const Attribute& attribute);
 
+
+  bool Has(const std::string& key) const;
+  std::string Get(const std::string& key) const;
+
+
 protected:
   virtual void Debug();
 
@@ -186,6 +199,9 @@ public:
 
   void AddSuper(const ClassSuperDefinition& super);
   const std::vector<ClassSuperDefinition>& GetSupers() const;
+
+  bool HasPureVirtualMethod();
+  bool HasPublicDefaultConstructor();
 
 protected:
   virtual void Debug();
@@ -214,15 +230,17 @@ private:
 class Argument
 {
 public:
-  Argument(const TypeDef& typeDef, const std::string& name = "");
+  Argument(const TypeDef& typeDef, const std::string& name = "", bool defaultValue = false);
   const TypeDef& GetType() const;
   const std::string& GetName() const;
 
   std::string GetText() const;
+  bool HasDefaultValue() const;
 
 private:
   TypeDef m_type;
   std::string m_name;
+  bool m_defaultValue;
 
 };
 
@@ -248,6 +266,7 @@ public:
   bool IsConst() const;
 
   void Add(const Argument& argument);
+  const std::vector<Argument>& GetArguments() const;
 protected:
   virtual void Debug();
 

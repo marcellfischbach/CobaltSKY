@@ -33,6 +33,7 @@ Token::Token(const std::string & token)
   E_CHECK_TKN(";", eTT_SemiColon);
   E_CHECK_TKN(",", eTT_Comma);
   E_CHECK_TKN("=", eTT_Equal);
+  E_CHECK_TKN("~", eTT_Tilde);
   E_CHECK_TKN("&", eTT_Ampersand);
   E_CHECK_TKN("*", eTT_Asterisk);
   E_CHECK_TKN("**", eTT_DoubleAsterisk);

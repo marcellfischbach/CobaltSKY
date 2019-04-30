@@ -50,5 +50,3 @@ CS_FORCEINLINE csUInt64 csTime::GetCurrentTimeMicro()
 {
   return m_runTimeMicro;
 }
-
-

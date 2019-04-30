@@ -124,6 +124,8 @@ int main(int argc, char **argv)
   }
   printf("\n");
 
+  printf("Starting\n");
+
 
   csSettings::Get()->Initialize(argc, argv);
   csVFS::Get()->Initialize(csSettings::Get());

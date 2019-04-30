@@ -11,9 +11,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 
-add_executable(NewClassGenerator
+add_executable(csmoc
 	ast.cc
 	ast.hh
+	cache.cc
+	cache.hh
 	main.cc
 	generate/generator.cc
 	generate/generator.hh
@@ -33,3 +35,4 @@ add_executable(NewClassGenerator
 	)
 
 
+install(TARGETS csmoc DESTINATION ${NewClassGenerator_SOURCE_DIR}/../bin)

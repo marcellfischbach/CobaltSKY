@@ -1,5 +1,6 @@
 
 #include <generate/header.hh>
+#include <generate/ioutput.hh>
 #include <ast.hh>
 
 namespace cs::classgenerator
@@ -11,7 +12,7 @@ HeaderGenerator::HeaderGenerator()
 
 }
 
-void HeaderGenerator::Output(const std::string& filename, const std::string& exp)
+void HeaderGenerator::Output(const std::string& filename, const std::string& exp, iOutput* output)
 {
   std::vector<ClassNode*> classes = FindAllMajorClasses();
 
@@ -31,7 +32,10 @@ void HeaderGenerator::Output(const std::string& filename, const std::string& exp
     }
 
     std::string clsSource = OutputClass(cls, exp);
-    printf("Header:\n%s\n", clsSource.c_str());
+    if (output)
+    {
+      output->output(clsSource);
+    }
   }
 }
 
@@ -51,12 +55,12 @@ std::string HeaderGenerator::OutputClass(ClassNode* clsNode, const std::string& 
     source += "{\n";
   }
 
-  source += "class " + exp + " " + clsName + " : public csClass\n";
+  source += "\nclass " + exp + " " + clsName + " : public csClass\n";
   source += "{\n";
   source += "public:\n";
   source += " " + clsName + "();\n";
   source += " static " + clsName  + "() *Get();\n";
-  source += " iObject *CreateInstance() const;\n";
+  source += " virtual iObject *CreateInstance() const;\n";
   source += "};\n";
 
 
@@ -64,6 +68,7 @@ std::string HeaderGenerator::OutputClass(ClassNode* clsNode, const std::string& 
   {
     source += "}\n";
   }
+  source += "\n";
   return source;
 }
 }

@@ -33,6 +33,7 @@ enum TokenType
   eTT_Asterisk,
   eTT_DoubleAsterisk,
   eTT_Equal,
+  eTT_Tilde,
   eTT_Enum,
   eTT_CS_CLASS,
   eTT_CS_PROPERTY,

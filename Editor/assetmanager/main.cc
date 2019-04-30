@@ -167,6 +167,15 @@ int main(int argc, char **argv)
   factories.AddFactory(new cs::editor::assetmanager::RenameMenuItemFactory());
 
   QApplication app(argc, argv);
+
+  QIcon icon;
+  icon.addFile(":/icons/cs_16");
+  icon.addFile(":/icons/cs_24");
+  icon.addFile(":/icons/cs_32");
+  icon.addFile(":/icons/cs_48");
+  icon.addFile(":/icons/cs_64");
+  app.setWindowIcon(icon);
+
   qApp->setStyle(QStyleFactory::create("Adwaita"));
   //qApp->setStyle(QStyleFactory::create("Fusion"));
 

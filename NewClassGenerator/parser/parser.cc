@@ -318,6 +318,15 @@ FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode
   TypeDef def;
   if (lIDX >= idx)
   {
+    if (tokens[lIDX].GetType() == eTT_Tilde)
+    {
+      name = "~" + name;
+      lIDX--;
+    }
+  }
+
+  if (lIDX >= idx)
+  {
     size_t defIdx = idx;
     def = GetType(tokenizer, defIdx);
   }
@@ -363,7 +372,8 @@ FunctionNode* Parser::ParseFunction(Tokenizer & tokenizer, size_t & idx, ASTNode
     if (token.GetType() == eTT_Identifier)
     {
       std::string name = GetName(tokenizer, idx);
-      func->Add(Argument(def, name));
+      bool defaultValue = tokens[idx].GetType() == eTT_Equal;
+      func->Add(Argument(def, name, defaultValue));
     }
 
     token = tokens[idx];
