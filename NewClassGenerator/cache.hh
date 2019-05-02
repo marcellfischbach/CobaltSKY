@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 #include <Windows.h>
 
@@ -17,7 +18,17 @@ public:
 
 private:
 
-  std::map<std::string, FILETIME> m_fileCache;
+  struct Data 
+  {
+    std::string filename;
+    FILETIME filetime;
+    FILETIME cacheTime;
+    std::vector<std::string> classes;
+  };
+
+  bool getFileTime(const std::string& filename, LPFILETIME lpft) const;
+
+  std::map<std::string, Data> m_fileCache;
 };
 
 }
