@@ -1,6 +1,6 @@
 #pragma once
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/graphics/shadergraph/cssgfloat4.refl.hh>
 

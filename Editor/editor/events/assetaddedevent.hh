@@ -7,20 +7,20 @@
 #include <editor/events/assetaddedevent.refl.hh>
 
 
-CS_INTERFACE()
+CS_CLASS()
 class AssetAddedEvent : public CS_SUPER(csEvent)
 {
   CS_CLASS_GEN;
 public:
-  AssetAddedEvent(const csResourceLocator &locator, iObject *object = 0);
+  AssetAddedEvent(const csResourceLocator &locator, cs::iObject *object = 0);
 
   const csResourceLocator &GetLocator() const;
-  const iObject *GetObject() const;
+  const cs::iObject *GetObject() const;
 
 private:
 
   csResourceLocator m_locator;
-  iObject *m_object;
+  cs::iObject *m_object;
 
 
 };

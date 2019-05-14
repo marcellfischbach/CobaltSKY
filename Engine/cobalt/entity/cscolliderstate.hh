@@ -13,7 +13,7 @@ struct iPhysicsCollider;
 class csPhysicsShape;
 
 
-CS_INTERFACE()
+CS_CLASS()
 class CSE_API csColliderState : public CS_SUPER(csSpatialState)
 {
   CS_CLASS_GEN;

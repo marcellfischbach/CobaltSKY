@@ -42,10 +42,6 @@ set(SOURCE_CORE
     core/csassetinputstream.hh
     core/csassetoutputstream.cc
     core/csassetoutputstream.hh
-    core/csclass.cc
-    core/csclass.hh
-    core/csclassregistry.cc
-    core/csclassregistry.hh
     core/cscollection.hh
     core/csevent.cc
     core/csevent.hh
@@ -506,7 +502,8 @@ add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
 
-add_dependencies(CobaltSKY ClassGenerator)
+add_dependencies(CobaltSKY csmoc)
+
 
 install(TARGETS CobaltSKY 
 		RUNTIME DESTINATION bin
@@ -516,17 +513,11 @@ install(TARGETS CobaltSKY
 install(DIRECTORY . DESTINATION include/cobaltsky/cobalt FILES_MATCHING PATTERN "*.hh")
 
 target_link_libraries(CobaltSKY
+	CobaltREFL
 	CobaltSKY-File
-    ${PNG_LIBRARIES}
-    #stdc++fs
+	${PNG_LIBRARIES}
     )
 
-if (MINGW)
-    target_link_libraries(CobaltSKY
-        stdc++fs
-    )
-endif()
 
-
-CS_INSTALL_MOCCER(CobaltSKY cobalt CSE_API ALL_SOURCES)
+CS_MOC(CobaltSKY cobalt)
 

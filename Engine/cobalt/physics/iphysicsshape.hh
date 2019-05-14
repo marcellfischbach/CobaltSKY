@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/physics/iphysicsshape.refl.hh>
@@ -37,8 +37,8 @@ struct csPhysGeometry
 };
 
 
-CS_INTERFACE()
-struct CSE_API iPhysicsShape : public iObject
+CS_CLASS()
+struct CSE_API iPhysicsShape : public cs::iObject
 {
   CS_CLASS_GEN;
   virtual ~iPhysicsShape () { }

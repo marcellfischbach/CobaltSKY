@@ -5,7 +5,7 @@
 
 
 csSGNode::csSGNode()
-  : csObject()
+  : cs::Object()
 {
 }
 

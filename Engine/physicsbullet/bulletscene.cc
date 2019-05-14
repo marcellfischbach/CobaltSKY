@@ -172,7 +172,7 @@ void csBulletScene::AddCharacterController(iPhysicsCharacterController *controll
   {
     return;
   }
-  csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
+  csBulletCapsuleCharacterController *capsController = cs::QueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     m_characterControllers.push_back(capsController);
@@ -186,7 +186,7 @@ void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *contr
   {
     return;
   }
-  csBulletCapsuleCharacterController *capsController = csQueryClass<csBulletCapsuleCharacterController>(controller);
+  csBulletCapsuleCharacterController *capsController = cs::QueryClass<csBulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     for (size_t i = 0, in = m_characterControllers.size(); i < in; ++i)
@@ -204,7 +204,7 @@ void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *contr
 
 void csBulletScene::AddJoint(iPhysicsJoint *joint)
 {
-  csBulletJoint *j = csQueryClass<csBulletJoint>(joint);
+  csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
   if (j)
   {
     j->AttachToScene(this);
@@ -214,7 +214,7 @@ void csBulletScene::AddJoint(iPhysicsJoint *joint)
 
 void csBulletScene::RemoveJoint(iPhysicsJoint *joint)
 {
-  csBulletJoint *j = csQueryClass<csBulletJoint>(joint);
+  csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
   if (j)
   {
     j->DetachFromScene(this);

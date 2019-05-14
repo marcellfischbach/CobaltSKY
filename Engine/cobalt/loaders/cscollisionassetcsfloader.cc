@@ -17,18 +17,18 @@ csCollisionAssetCSFLoader::~csCollisionAssetCSFLoader()
 }
 
 
-bool csCollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csCollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("collider") ||
     entry->GetTagName() == std::string("shapes");
 }
 
-const csClass *csCollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csCollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csPhysicsShape::GetStaticClass();
 }
 
-csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csPhysicsShape *container = new csPhysicsShape();
 

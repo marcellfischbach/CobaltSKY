@@ -64,7 +64,7 @@ bool csStaticMeshLoader::CanLoad(iFile *file, const csResourceLocator &locator) 
 }
 
 
-const csClass *csStaticMeshLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csStaticMeshLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
@@ -429,7 +429,7 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
     return nullptr;
   }
 
-  csMeshWrapper *mesh = csQueryClass<csMeshWrapper>(meshObj);
+  csMeshWrapper *mesh = cs::QueryClass<csMeshWrapper>(meshObj);
   if (!mesh)
   {
     meshObj->Release();

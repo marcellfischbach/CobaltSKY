@@ -21,17 +21,17 @@ csSubMeshAssetLoader::~csSubMeshAssetLoader()
 
 }
 
-bool csSubMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData)const
+bool csSubMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData)const
 {
   return typeID == std::string("SUBMESH");
 }
 
-const csClass *csSubMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csSubMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csSubMesh::GetStaticClass();
 }
 
-csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csUInt32 version;
 

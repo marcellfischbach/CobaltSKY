@@ -2,7 +2,7 @@
 
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <cobalt/graphics/shadergraph/cssgtexture2d.refl.hh>
 

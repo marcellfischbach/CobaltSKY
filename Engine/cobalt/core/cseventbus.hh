@@ -2,7 +2,8 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <cobalt/cstypes.hh>
+#include <csrefl/class.hh>
 #include <string>
 #include <vector>
 #include <map>
@@ -30,16 +31,16 @@ public:
 
 
   void Register(csEventDelegate delegate, void *userObject = 0);
-  void Register(const csClass *cls, csEventDelegate delegate, void *userObject = 0);
+  void Register(const cs::Class *cls, csEventDelegate delegate, void *userObject = 0);
   void Deregister(csEventDelegate delegate);
   void Deregister(csEventDelegate delegate, void *userObject);
 
   void Register(iEventHandler *handler);
-  void Register(const csClass *cls, iEventHandler *handler);
+  void Register(const cs::Class *cls, iEventHandler *handler);
   void Deregister(iEventHandler *handler);
 
 private:
-  void Fire(csEvent &event, const csClass *cls);
+  void Fire(csEvent &event, const cs::Class *cls);
 
   struct Delegate
   {
@@ -47,7 +48,7 @@ private:
     void *ptr;
   };
   
-  std::map<const csClass *, std::vector<iEventHandler *>> m_handlers;
-  std::map<const csClass *, std::vector<Delegate>> m_delegates;
+  std::map<const cs::Class *, std::vector<iEventHandler *>> m_handlers;
+  std::map<const cs::Class *, std::vector<Delegate>> m_delegates;
 };
 

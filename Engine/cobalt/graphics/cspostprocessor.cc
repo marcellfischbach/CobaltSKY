@@ -5,7 +5,7 @@
 #include <string.h>
 
 csPostProcessor::csPostProcessor()
-  : csObject()
+  : cs::Object()
   , m_finalProcess(0)
 {
   memset(m_originInputs, 0, sizeof(m_originInputs));

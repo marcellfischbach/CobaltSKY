@@ -30,7 +30,7 @@ static iVertexDeclaration* create_particle_vertex_declaration(iGraphics *graphic
 
 
 csParticle::csParticle()
-  : csObject()
+  : cs::Object()
   , m_buffer(0)
   , m_vertexDeclaration(0)
   , m_numParticles(0)

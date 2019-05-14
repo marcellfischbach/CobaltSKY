@@ -1,7 +1,7 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.refl.hh>
 
@@ -9,8 +9,8 @@ class csShaderGraphCtx;
 
 
 
-CS_INTERFACE()
-class CSGRAPHICSGL4_API csSGNodeGL4 : public CS_SUPER(csObject)
+CS_CLASS()
+class CSGRAPHICSGL4_API csSGNodeGL4 : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

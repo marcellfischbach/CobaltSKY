@@ -1,13 +1,14 @@
 #pragma once
 
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csexport.hh>
 #include <cobalt/graphics/itexture.hh>
+#include <cobalt/cstypes.hh>
 #include <cobalt/graphics/irendertarget.refl.hh>
 
 
-CS_INTERFACE();
-struct CSE_API iRenderTarget : public iObject
+CS_CLASS();
+struct CSE_API iRenderTarget : public cs::iObject
 {
   CS_CLASS_GEN;
 

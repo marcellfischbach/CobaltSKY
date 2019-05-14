@@ -7,7 +7,7 @@
 
 
 csSubMesh::csSubMesh()
-  : csObject()
+  : cs::Object()
   , m_vertexDeclaration(0)
   , m_indexType(eDT_UnsignedShort)
   , m_primitiveType(ePT_Triangles)

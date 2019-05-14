@@ -14,9 +14,9 @@ public:
   csProgramGL4Loader();
   virtual ~csProgramGL4Loader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = 0) const;
+  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = 0) const;
 
 private:
   const csfEntry *FindTechnique(const csfEntry *entry) const;

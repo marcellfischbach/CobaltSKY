@@ -3,7 +3,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csdefs.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcelocator.hh>
 
 #include <cobalt/core/csresourcewrapper.refl.hh>
@@ -21,9 +21,9 @@
       CS_RELEASE(m_resource);                                               \
     }                                                                       \
                                                                             \
-    virtual void Set(iObject *object)                                       \
+    virtual void Set(cs::iObject *object)                                   \
     {                                                                       \
-      resourceClass *resource = csQueryClass<resourceClass>(object);        \
+      resourceClass *resource = cs::QueryClass<resourceClass>(object);      \
       superWrapperClass::Set(resource);                                     \
       CS_SET(m_resource, resource);                                         \
     }                                                                       \
@@ -44,21 +44,21 @@
 
 
 CS_CLASS()
-class CSE_API csResourceWrapper : public CS_SUPER(csObject)
+class CSE_API csResourceWrapper : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csResourceWrapper(iObject *resource = nullptr);
+  csResourceWrapper(cs::iObject *resource = nullptr);
   virtual ~csResourceWrapper();
 
-  virtual void Set(iObject *resource);
+  virtual void Set(cs::iObject *resource);
 
-  CS_FORCEINLINE iObject *Get()
+  CS_FORCEINLINE cs::iObject *Get()
   {
     return m_resource;
   }
 
-  CS_FORCEINLINE const iObject *Get() const
+  CS_FORCEINLINE const cs::iObject *Get() const
   {
     return m_resource;
   }
@@ -89,7 +89,7 @@ public:
   }
 
 private:
-  iObject * m_resource;
+  cs::iObject * m_resource;
 
   csResourceLocator m_locator;
 };

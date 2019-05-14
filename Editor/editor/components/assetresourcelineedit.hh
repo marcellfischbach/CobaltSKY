@@ -5,7 +5,7 @@
 #include <QList>
 #include <vector>
 
-class csClass;
+class cs::Class;
 class csResourceLocator;
 namespace asset::model
 {
@@ -22,11 +22,11 @@ public:
   virtual void dragEnterEvent(QDragEnterEvent *event);
   virtual void dropEvent(QDropEvent *event);
 
-  void AddValidClass(const csClass *cls);
+  void AddValidClass(const cs::Class *cls);
 
 signals:
   void ResourceChanged(const csResourceLocator &locator);
 private:
   void get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const;
-  QList<const csClass*> m_validClasses;
+  QList<const cs::Class*> m_validClasses;
 };

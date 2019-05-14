@@ -8,7 +8,7 @@ namespace asset::model
   class Asset;
 }
 
-struct iObject;
+struct cs::iObject;
 struct iAssetImporterFactory;
 class EDITOR_API ImporterFactoryManager
 {

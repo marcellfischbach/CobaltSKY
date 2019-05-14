@@ -6,7 +6,7 @@
 void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   csSGNode *txt = GetNode();
-  csSGResourceNode *res = csQueryClass<csSGResourceNode>(txt);
+  csSGResourceNode *res = cs::QueryClass<csSGResourceNode>(txt);
   if (!res)
   {
     return;

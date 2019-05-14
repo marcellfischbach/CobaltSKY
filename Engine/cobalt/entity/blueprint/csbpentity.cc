@@ -24,12 +24,12 @@ csBPEntity::~csBPEntity()
   m_entityStates.clear();
 }
 
-void csBPEntity::SetEntityClass(const csClass *entityClass)
+void csBPEntity::SetEntityClass(const cs::Class *entityClass)
 {
   m_entityClass = entityClass;
 }
 
-const csClass *csBPEntity::GetEntityClass() const
+const cs::Class *csBPEntity::GetEntityClass() const
 {
   return m_entityClass;
 }
@@ -87,8 +87,8 @@ csEntity *csBPEntity::CreateEntity() const
     if (stat->GetParentId())
     {
       csEntityState *parentState = entityStates[stat->GetParentId()];
-      csSpatialState *spatialState = csQueryClass<csSpatialState>(state);
-      csSpatialState *spatialParentState = csQueryClass<csSpatialState>(parentState);
+      csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
+      csSpatialState *spatialParentState = cs::QueryClass<csSpatialState>(parentState);
       if (spatialState && spatialParentState)
       {
         entity->AddState(spatialState, spatialParentState);
@@ -108,7 +108,7 @@ csEntity *csBPEntity::CreateEntity() const
         }
         else
         {
-          csSpatialState *spatialState = csQueryClass<csSpatialState>(state);
+          csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
           if (spatialState)
           {
             entity->SetRootState(spatialState);

@@ -15,20 +15,20 @@ csResourcePropertySetter::~csResourcePropertySetter()
 }
 
 
-void csResourcePropertySetter::SetValue(iObject *obj)
+void csResourcePropertySetter::SetValue(cs::iObject *obj)
 {
-  const csFunction *setter = GetSetter(obj->GetClass());
-  iObject *res = GetResource();
+  const cs::Function *setter = GetSetter(obj->GetClass());
+  cs::iObject *res = GetResource();
   if (setter && res)
   {
     setter->InvokeVoid(obj, res);
   }
 }
 
-void csResourcePropertySetter::SetCollectionValue(iObject *obj, csUInt64 idx)
+void csResourcePropertySetter::SetCollectionValue(cs::iObject *obj, csUInt64 idx)
 {
-  const csFunction *setter = GetCollectionSetter(obj->GetClass());
-  iObject *res = GetResource();
+  const cs::Function *setter = GetCollectionSetter(obj->GetClass());
+  cs::iObject *res = GetResource();
   if (setter && res)
   {
     setter->InvokeVoid(obj, idx, res);
@@ -36,10 +36,10 @@ void csResourcePropertySetter::SetCollectionValue(iObject *obj, csUInt64 idx)
 }
 
 
-void csResourcePropertySetter::AddCollectionValue(iObject *obj)
+void csResourcePropertySetter::AddCollectionValue(cs::iObject *obj)
 {
-  const csFunction *setter = GetCollectionAdder(obj->GetClass());
-  iObject *res = GetResource();
+  const cs::Function *setter = GetCollectionAdder(obj->GetClass());
+  cs::iObject *res = GetResource();
   if (setter && res)
   {
     setter->InvokeVoid(obj, res);
@@ -57,14 +57,14 @@ const csResourceLocator &csResourcePropertySetter::GetResourceLocator() const
 }
 
 
-iObject *csResourcePropertySetter::GetResource()
+cs::iObject *csResourcePropertySetter::GetResource()
 {
-  iObject *object = csResourceManager::Get()->Aquire(m_locator);
+  cs::iObject *object = csResourceManager::Get()->Aquire(m_locator);
   return object;
 }
 
-const iObject *csResourcePropertySetter::GetResource() const
+const cs::iObject *csResourcePropertySetter::GetResource() const
 {
-  iObject *object = csResourceManager::Get()->Aquire(m_locator);
+  cs::iObject *object = csResourceManager::Get()->Aquire(m_locator);
   return object;
 }

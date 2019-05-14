@@ -15,7 +15,7 @@ csSamplerAssetCSFLoader::~csSamplerAssetCSFLoader()
 
 }
 
-bool csSamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csSamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -94,12 +94,12 @@ namespace
 
 }
 
-const csClass *csSamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csSamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csSamplerWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   iSampler *sampler = csEng->CreateSampler();
   if (!sampler)

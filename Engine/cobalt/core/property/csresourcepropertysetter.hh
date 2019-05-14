@@ -10,17 +10,17 @@ public:
   csResourcePropertySetter();
   virtual ~csResourcePropertySetter();
 
-  virtual void SetValue(iObject *obj);
-  virtual void SetCollectionValue(iObject *obj, csUInt64 idx);
-  virtual void AddCollectionValue(iObject *obj);
+  virtual void SetValue(cs::iObject *obj);
+  virtual void SetCollectionValue(cs::iObject *obj, csUInt64 idx);
+  virtual void AddCollectionValue(cs::iObject *obj);
 
-  const iObject *GetResource() const;
+  const cs::iObject *GetResource() const;
 
   void SetResourceLocator(const csResourceLocator& locator);
   const csResourceLocator& GetResourceLocator() const;
 
 private:
-  iObject *GetResource();;
+  cs::iObject *GetResource();;
   csResourceLocator m_locator;
 
 };

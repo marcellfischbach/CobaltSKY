@@ -8,7 +8,7 @@
 #include <string>
 
 class AssetManagerContentModelEntry;
-class csClass;
+class cs::Class;
 
 class AssetManagerContentModel : public QAbstractItemModel
 {

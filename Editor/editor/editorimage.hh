@@ -2,7 +2,7 @@
 
 
 #include <editor/editorexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <QImage>
 #include <editor/editorimage.refl.hh>
@@ -11,7 +11,7 @@ class csImage;
 
 
 CS_CLASS()
-class EDITOR_API EditorImage : public CS_SUPER(iObject)
+class EDITOR_API EditorImage : public CS_SUPER(cs::iObject)
 {
   CS_CLASS_GEN_OBJECT;
 public:

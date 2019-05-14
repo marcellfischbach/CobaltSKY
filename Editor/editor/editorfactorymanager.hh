@@ -8,7 +8,7 @@ namespace asset::model
   class Asset;
 }
 
-struct iObject;
+struct cs::iObject;
 struct iAssetEditorFactory;
 class EDITOR_API EditorFactoryManager
 {
@@ -17,7 +17,7 @@ public:
   static EditorFactoryManager *Get();
 
   void AddEditorFactory(iAssetEditorFactory *factory);
-  iAssetEditorFactory *FindFactory(iObject *object, asset::model::Asset *asset);
+  iAssetEditorFactory *FindFactory(cs::iObject *object, asset::model::Asset *asset);
 
 
 private:

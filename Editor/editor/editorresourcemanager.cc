@@ -32,7 +32,7 @@ csResourceWrapper *EditorResourceManager::Load(const csResourceLocator &locator)
 }
 
 
-const csClass *EditorResourceManager::EvalClass(const csResourceLocator &locator) const
+const cs::Class *EditorResourceManager::EvalClass(const csResourceLocator &locator) const
 {
   csResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());

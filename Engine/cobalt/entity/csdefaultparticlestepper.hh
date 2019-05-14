@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/entity/iparticlestepper.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/math/csvector.hh>

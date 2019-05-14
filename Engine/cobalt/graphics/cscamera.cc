@@ -4,7 +4,7 @@
 
 
 csCamera::csCamera()
-  : csObject()
+  : cs::Object()
   , m_near(1.0f)
   , m_far(1024.0f)
   , m_projectionChanged(false)

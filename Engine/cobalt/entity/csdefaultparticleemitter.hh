@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/entity/iparticleemitter.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csrandomrange.hh>

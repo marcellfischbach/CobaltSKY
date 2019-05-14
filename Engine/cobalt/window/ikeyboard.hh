@@ -1,12 +1,12 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/window/ikeyboard.refl.hh>
 
-CS_INTERFACE()
-struct CSE_API iKeyboard : public iObject
+CS_CLASS()
+struct CSE_API iKeyboard : public cs::iObject
 {
   CS_CLASS_GEN;
 

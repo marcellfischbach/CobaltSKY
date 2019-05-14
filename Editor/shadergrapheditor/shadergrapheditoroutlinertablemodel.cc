@@ -119,8 +119,8 @@ QVariant ShaderGraphEditorOutlinerTableModel::data(const QModelIndex &index, int
     else 
     {
       csSGNode *node = m_shaderGraph->GetNode(index.row() - 1);
-      csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
-      const csClass *cls = node->GetClass();
+      csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+      const cs::Class *cls = node->GetClass();
       switch (index.column())
       {
       case 0:

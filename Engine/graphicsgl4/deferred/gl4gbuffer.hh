@@ -1,8 +1,9 @@
 #pragma once
 
 #include <graphicsgl4/gl4export.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csdefs.hh>
+#include <cobalt/cstypes.hh>
 #include <graphicsgl4/deferred/gl4gbuffer.refl.hh>
 
 struct iGraphics;
@@ -10,8 +11,8 @@ struct iRenderTarget;
 class csTexture2DWrapper;
 class csSamplerWrapper;
 
-CS_INTERFACE()
-class CSGRAPHICSGL4_API csGBufferGL4 : public CS_SUPER(csObject)
+CS_CLASS()
+class CSGRAPHICSGL4_API csGBufferGL4 : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

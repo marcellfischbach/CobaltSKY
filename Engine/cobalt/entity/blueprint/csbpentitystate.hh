@@ -2,8 +2,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
-#include <cobalt/entity/blueprint/csbpentitystate.refl.hh>
+#include <csrefl/class.hh>
 
 class csPropertySetter;
 class csEntity;
@@ -24,8 +23,8 @@ public:
   void SetRoot(bool root);
   bool IsRoot() const;
 
-  void SetEntityStateClass(const csClass *entityStateClass);
-  const csClass *GetEntityStateClass() const;
+  void SetEntityStateClass(const cs::Class *entityStateClass);
+  const cs::Class *GetEntityStateClass() const;
   void AddProperty(csPropertySetter *property);
 
   csEntityState *CreateEntityState() const;
@@ -36,7 +35,7 @@ private:
   unsigned m_parentId;
   bool m_root;
 
-  const csClass *m_entityStateClass;
+  const cs::Class *m_entityStateClass;
   std::vector<csPropertySetter*> m_properties;
 
 };

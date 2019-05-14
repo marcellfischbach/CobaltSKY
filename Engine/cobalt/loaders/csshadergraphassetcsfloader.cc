@@ -1,6 +1,6 @@
 
 #include <cobalt/loaders/csshadergraphassetcsfloader.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/graphics/shadergraph/cssgnodes.hh>
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <cobalt/csengine.hh>
@@ -23,17 +23,17 @@ csShaderGraphAssetCSFLoader::~csShaderGraphAssetCSFLoader()
 
 }
 
-bool csShaderGraphAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csShaderGraphAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("shaderGraph");
 }
 
-const csClass *csShaderGraphAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csShaderGraphAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csSGShaderGraphWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csSGShaderGraph *shaderGraph = new csSGShaderGraph();
   csSGShaderGraphWrapper *shaderGraphWrapper = new csSGShaderGraphWrapper(shaderGraph);
@@ -55,7 +55,7 @@ csResourceWrapper *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, cons
       csUInt32 id = nodeElement->GetAttributeInt("id");
       std::string className = nodeElement->GetAttribute("class");
 
-      const csClass *cls = csClassRegistry::Get()->GetClass(className);
+      const cs::Class *cls = cs::ClassRegistry::Get()->GetClass(className);
       if (!cls)
       {
         continue;
@@ -74,7 +74,7 @@ csResourceWrapper *csShaderGraphAssetCSFLoader::Load(const csfEntry *entry, cons
       node->Release();
 
 
-      csSGResourceNode *resource = csQueryClass<csSGResourceNode>(node);
+      csSGResourceNode *resource = cs::QueryClass<csSGResourceNode>(node);
       const csfEntry *resourceElement = nodeElement->GetEntry("resource");
       if (resource && resourceElement)
       {

@@ -8,7 +8,7 @@
 #include <editor/events/assetpreviewiconchangedevent.refl.hh>
 
 
-CS_INTERFACE()
+CS_CLASS()
 class AssetPreviewIconChangedEvent : public CS_SUPER(csEvent)
 {
   CS_CLASS_GEN;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <editor/iasseteditorfactory.hh>
 #include <editor/editor.refl.hh>
 #include <QDir>

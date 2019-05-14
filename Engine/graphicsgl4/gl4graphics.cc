@@ -710,7 +710,7 @@ csTextureUnit csGraphicsGL4::BindTexture(iTexture *texture)
 
 void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 {
-  csTextureGL4 *textureGL = texture ? csQueryClass<csTextureGL4>(texture) : 0;
+  csTextureGL4 *textureGL = texture ? cs::QueryClass<csTextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL || RENDER_STATE_CHECK)
   {
     CS_SET(m_textures[unit], textureGL);
@@ -726,7 +726,7 @@ void csGraphicsGL4::SetTexture(csTextureUnit unit, iTexture *texture)
 
 void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 {
-  csSamplerGL4 *samplerGL = sampler ? csQueryClass<csSamplerGL4>(sampler) : 0;
+  csSamplerGL4 *samplerGL = sampler ? cs::QueryClass<csSamplerGL4>(sampler) : 0;
   if (m_samplers[unit] != samplerGL || RENDER_STATE_CHECK)
   {
     CS_SET(m_samplers[unit], samplerGL);
@@ -737,7 +737,7 @@ void csGraphicsGL4::SetSampler(csTextureUnit unit, iSampler *sampler)
 
 void csGraphicsGL4::SetRenderTarget(iRenderTarget *renderTarget)
 {
-  csRenderTargetGL4 *rtGL4 = csQueryClass<csRenderTargetGL4>(renderTarget);
+  csRenderTargetGL4 *rtGL4 = cs::QueryClass<csRenderTargetGL4>(renderTarget);
   if (m_renderTarget != rtGL4 || RENDER_STATE_CHECK)
   {
     CS_SET(m_renderTarget, rtGL4);

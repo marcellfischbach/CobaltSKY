@@ -5,7 +5,7 @@
 
 class csResourceLocator;
 class QMimeData;
-class csClass;
+class cs::Class;
 
 class MimeHelper
 {
@@ -22,8 +22,8 @@ public:
   static std::string GetResourceType(const QMimeData *data);
 
   static std::string GetClassMimeType();
-  static void PutClassMimeData(QMimeData *mimeData, const csClass *cls);
+  static void PutClassMimeData(QMimeData *mimeData, const cs::Class *cls);
   static bool HasClass(const QMimeData *data);
-  static const csClass *GetClass(const QMimeData *data);
+  static const cs::Class *GetClass(const QMimeData *data);
 
 };

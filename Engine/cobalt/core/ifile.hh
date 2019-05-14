@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <string>
+#include <cobalt/cstypes.hh>
 
 #include <cobalt/core/ifile.refl.hh>
 
@@ -34,8 +35,8 @@ enum csTextMode
  * @brief Generic interface for handling IO operations on file-like
  *        datasources.
  */
-CS_INTERFACE()
-struct CSE_API iFile : public iObject
+CS_CLASS()
+struct CSE_API iFile : public cs::iObject
 {
   CS_CLASS_GEN;
 

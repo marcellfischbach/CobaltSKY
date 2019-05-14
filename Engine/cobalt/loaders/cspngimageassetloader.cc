@@ -2,7 +2,7 @@
 
 #include <cobalt/loaders/cspngimageassetloader.hh>
 #include <cobalt/graphics/csimage.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <png.h>
 
 
@@ -21,14 +21,14 @@ csPNGImageAssetLoader::~csPNGImageAssetLoader()
 
 
 
-bool csPNGImageAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData) const
+bool csPNGImageAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return typeID == std::string("PNG");
 }
 
-const csClass *csPNGImageAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csPNGImageAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csImageWrapper::GetStaticClass();
 }
@@ -65,7 +65,7 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 }
 }
 
-csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)

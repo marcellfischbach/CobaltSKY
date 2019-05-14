@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 
 #include <cobalt/graphics/shadergraph/cssgadd.hh>
 #include <cobalt/graphics/shadergraph/cssgconstfloat1.hh>
@@ -38,8 +38,8 @@ public:
   struct Entry
   {
     std::string name;
-    const csClass *clazz;
-    Entry(const std::string &name, const csClass *clazz);
+    const cs::Class *clazz;
+    Entry(const std::string &name, const cs::Class *clazz);
   };
 
 public:

@@ -33,7 +33,7 @@ AssetResourceWidget::~AssetResourceWidget()
   EventBus::Get().Deregister(asset_resource_widget_asset_renamed, this);
 }
 
-void AssetResourceWidget::AddValidClass(const csClass *cls)
+void AssetResourceWidget::AddValidClass(const cs::Class *cls)
 {
   m_gui.lineEdit->AddValidClass(cls);
 }

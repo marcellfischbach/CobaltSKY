@@ -174,5 +174,5 @@ target_link_libraries(CobaltSKY-GraphicsGL4
 	${GLEW_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(CobaltSKY-GraphicsGL4 graphicsgl4 CSGRAPHICSGL4_API ALL_SOURCES)
+CS_MOC(CobaltSKY-GraphicsGL4 graphicsgl4)
 

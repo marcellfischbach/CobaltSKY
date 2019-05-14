@@ -79,7 +79,7 @@ target_link_libraries(
 	EditorModel
 	)
 
-CS_INSTALL_MOCCER(EditorAssetManager assetmanager ASSET_MANAGER_API ALL_SOURCES)
+CS_MOC(EditorAssetManager assetmanager)
 
 
 add_executable(

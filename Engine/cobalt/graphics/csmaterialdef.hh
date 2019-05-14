@@ -2,7 +2,7 @@
 
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
@@ -20,7 +20,7 @@ struct iShaderAttribute;
 class csTextureWrapper;
 
 CS_CLASS();
-class CSE_API csMaterialDef : public CS_SUPER(csObject)
+class CSE_API csMaterialDef : public CS_SUPER(cs::Object)
 {
   friend class csMaterial;
   CS_CLASS_GEN;

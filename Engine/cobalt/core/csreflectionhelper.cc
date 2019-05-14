@@ -3,7 +3,7 @@
 #include <cobalt/core/csreflectionhelper.hh>
 
 
-csReflectionPropertyHelper::csReflectionPropertyHelper(const csClass *cls, const std::string &propertyName)
+csReflectionPropertyHelper::csReflectionPropertyHelper(const cs::Class *cls, const std::string &propertyName)
   : m_cls(cls)
   , m_propertyName(propertyName)
   , m_property(0)
@@ -23,9 +23,9 @@ std::string csReflectionPropertyHelper::GetMethodName(const std::string &prefix)
 }
 
 
-const csFunction *csReflectionPropertyHelper::GetGetter(csConstness constness) const
+const cs::Function*csReflectionPropertyHelper::GetGetter(cs::eConstness constness) const
 {
-  const csFunction *function = GetGetter(m_cls, GetMethodName("Get"), constness);
+  const cs::Function*function = GetGetter(m_cls, GetMethodName("Get"), constness);
   if (function)
   {
     return function;
@@ -45,10 +45,10 @@ const csFunction *csReflectionPropertyHelper::GetGetter(csConstness constness) c
   return GetGetter(m_cls, GetMethodName("is"), constness);
 }
 
-const csFunction *csReflectionPropertyHelper::GetSetter(const csValueDeclaration &decl) const
+const cs::Function*csReflectionPropertyHelper::GetSetter(const cs::ValueDeclaration&decl) const
 {
 
-  const csFunction *function = GetSetter(m_cls, GetMethodName("Set"), decl);
+  const cs::Function*function = GetSetter(m_cls, GetMethodName("Set"), decl);
   if (function)
   {
     return function;
@@ -57,9 +57,9 @@ const csFunction *csReflectionPropertyHelper::GetSetter(const csValueDeclaration
   return function = GetSetter(m_cls, GetMethodName("set"), decl);
 }
 
-const csProperty *csReflectionPropertyHelper::GetProperty(const csClass *cls) const
+const cs::Property*csReflectionPropertyHelper::GetProperty(const cs::Class *cls) const
 {
-  const csProperty *property = cls->GetProperty(m_propertyName);
+  const cs::Property*property = cls->GetProperty(m_propertyName);
   if (property)
   {
     return property;
@@ -76,15 +76,15 @@ const csProperty *csReflectionPropertyHelper::GetProperty(const csClass *cls) co
   return 0;
 }
 
-const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, const std::string &name, csConstness constness) const
+const cs::Function*csReflectionPropertyHelper::GetGetter(const cs::Class *cls, const std::string &name, cs::eConstness constness) const
 {
   if (!cls)
   {
     return 0;
   }
 
-  std::vector<const csFunction*> functions = cls->GetFunction(name);
-  for (const csFunction* fnc : functions)
+  std::vector<const cs::Function*> functions = cls->GetFunction(name);
+  for (const cs::Function* fnc : functions)
   {
     if (fnc->GetConstness() == constness && fnc->GetNumberOfAttributes() == 0)
     {
@@ -94,7 +94,7 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
 
   for (size_t i = 0, in = cls->GetNumberOfSuperClasses(); i<in; ++i)
   {
-    const csFunction *func = GetGetter(cls->GetSuperClass(i), name, constness);
+    const cs::Function*func = GetGetter(cls->GetSuperClass(i), name, constness);
     if (func)
     {
       return func;
@@ -103,14 +103,14 @@ const csFunction *csReflectionPropertyHelper::GetGetter(const csClass *cls, cons
   return 0;
 }
 
-const csFunction *csReflectionPropertyHelper::GetSetter(const csClass *cls, const std::string &name, const csValueDeclaration &decl) const
+const cs::Function*csReflectionPropertyHelper::GetSetter(const cs::Class *cls, const std::string &name, const cs::ValueDeclaration&decl) const
 {
   if (!cls)
   {
     return 0;
   }
-  std::vector<const csFunction*> functions = cls->GetFunction(name);
-  for (const csFunction* fnc : functions)
+  std::vector<const cs::Function*> functions = cls->GetFunction(name);
+  for (const cs::Function* fnc : functions)
   {
     if (fnc->GetNumberOfAttributes() == 1 && fnc->GetAttribute(0).GetType() == decl)
     {
@@ -119,7 +119,7 @@ const csFunction *csReflectionPropertyHelper::GetSetter(const csClass *cls, cons
   }
   for (size_t i = 0, in = cls->GetNumberOfSuperClasses(); i<in; ++i)
   {
-    const csFunction *func = GetSetter(cls->GetSuperClass(i), name, decl);
+    const cs::Function*func = GetSetter(cls->GetSuperClass(i), name, decl);
     if (func)
     {
       return func;

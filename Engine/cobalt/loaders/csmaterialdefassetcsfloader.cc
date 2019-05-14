@@ -18,7 +18,7 @@ csMaterialDefAssetCSFLoader::~csMaterialDefAssetCSFLoader()
 }
 
 
-bool csMaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csMaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -49,13 +49,13 @@ csShaderParameterType get_shader_parameter_type(const std::string &name)
 }
 }
 
-const csClass *csMaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csMaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csMaterialDefWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (entry->GetTagName() != std::string("materialDef"))
   {

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/entity/cscolliderstate.hh>
 
 #include <cobalt/entity/csbasecolliderstate.refl.hh>
 
 struct iPhysicsBaseCollider;
 
-CS_INTERFACE()
+CS_CLASS()
 class CSE_API csBaseColliderState : public CS_SUPER(csColliderState)
 {
   CS_CLASS_GEN;

@@ -19,7 +19,7 @@ csProgramGL4Loader::~csProgramGL4Loader()
 }
 
 
-bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   std::string tagName(entry->GetTagName());
 
@@ -28,12 +28,12 @@ bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator 
 
 
 
-const csClass *csProgramGL4Loader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csProgramGL4Loader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csProgramGL4::GetStaticClass();
 }
 
-csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (std::string(entry->GetTagName()) != std::string("program"))
   {

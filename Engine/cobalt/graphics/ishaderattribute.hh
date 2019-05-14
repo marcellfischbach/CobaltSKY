@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
@@ -9,8 +9,8 @@
 
 #include <cobalt/graphics/ishaderattribute.refl.hh>
 
-CS_INTERFACE();
-struct CSE_API iShaderAttribute : public iObject
+CS_CLASS();
+struct CSE_API iShaderAttribute : public cs::iObject
 {
   CS_CLASS_GEN;
 

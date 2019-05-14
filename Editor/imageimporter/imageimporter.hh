@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <imageimporter/imageimporter.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 class IMAGEIMPORTER_API ImageImporter : public iAssetImporter
 {
   CS_CLASS_GEN_OBJECT;

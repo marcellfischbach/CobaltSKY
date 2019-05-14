@@ -3,7 +3,7 @@
 
 
 csEntityState::csEntityState()
-  : csObject()
+  : cs::Object()
   , m_scene(0)
   , m_entity(0)
   , m_id (csID_Undefined)

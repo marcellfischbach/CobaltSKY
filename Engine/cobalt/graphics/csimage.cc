@@ -5,7 +5,7 @@
 
 
 csImage::csImage()
-  : csObject()
+  : cs::Object()
   , m_width(0)
   , m_height(0)
   , m_depth(1)

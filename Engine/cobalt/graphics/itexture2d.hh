@@ -1,11 +1,12 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
+#include <cobalt/cstypes.hh>
 #include <cobalt/graphics/itexture.hh>
 #include <cobalt/graphics/itexture2d.refl.hh>
 
-CS_INTERFACE();
+CS_CLASS();
 struct CSE_API iTexture2D : public virtual CS_SUPER(iTexture)
 {
   CS_CLASS_GEN;

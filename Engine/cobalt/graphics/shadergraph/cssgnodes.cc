@@ -1,7 +1,7 @@
 
 #include <cobalt/graphics/shadergraph/cssgnodes.hh>
 
-csSGNodes::Entry::Entry(const std::string &name, const csClass *clazz)
+csSGNodes::Entry::Entry(const std::string &name, const cs::Class *clazz)
   : name(name)
   , clazz(clazz)
 {

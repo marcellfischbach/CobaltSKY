@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csmatrix4f.hh>
 #include <cobalt/animation/csskeleton.refl.hh>
 
 const csSize csInvalidBoneIdx = ~0x00;
 
 CS_CLASS()
-class CSE_API csSkeleton : public CS_SUPER(csObject)
+class CSE_API csSkeleton : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

@@ -11,7 +11,7 @@ struct iGraphics;
 * \ingroup entity
 */
 
-CS_INTERFACE()
+CS_CLASS()
 class CSE_API csRenderState : public CS_SUPER(csSpatialState)
 {
   CS_CLASS_GEN;

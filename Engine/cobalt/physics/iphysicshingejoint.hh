@@ -4,7 +4,7 @@
 
 #include <cobalt/physics/iphysicshingejoint.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 struct CSE_API iPhysicsHingeJoint : public virtual CS_SUPER(iPhysicsJoint)
 {
   CS_CLASS_GEN;

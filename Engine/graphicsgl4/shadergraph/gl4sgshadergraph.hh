@@ -4,7 +4,6 @@
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <map>
-#include <graphicsgl4/shadergraph/gl4sgshadergraph.refl.hh>
 
 class csSGNodeGL4;
 class csGraphicsGL4;
@@ -22,7 +21,7 @@ public:
   std::string CreateCode(csSGOutput *output);
 
 
-  csSGNodeGL4 *CreateNode(const csClass *nodeClass);
+  csSGNodeGL4 *CreateNode(const cs::Class *nodeClass);
 
 
   virtual bool GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
@@ -36,9 +35,9 @@ private:
 private:
   struct Map 
   {
-    const csClass *nodeClass;
-    const csClass *nodeClassGL4;
-    Map(const csClass *nodeClass, const csClass *nodeClassGL4)
+    const cs::Class *nodeClass;
+    const cs::Class *nodeClassGL4;
+    Map(const cs::Class *nodeClass, const cs::Class *nodeClassGL4)
       : nodeClass(nodeClass)
       , nodeClassGL4(nodeClassGL4)
     {
@@ -47,5 +46,5 @@ private:
   };
   csGraphicsGL4 *m_graphics;
   std::vector<Map> m_classMapping;
-  //std::map<const csClass*, const csClass*> m_classMapping;
+  //std::map<const cs::Class*, const cs::Class*> m_classMapping;
 };

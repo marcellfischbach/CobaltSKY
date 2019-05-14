@@ -1,7 +1,7 @@
 
 
 #include <cobalt/loaders/cstextureassetcsfloader.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/graphics/csimage.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/isampler.hh>
@@ -28,7 +28,7 @@ csTextureAssetCSFLoader::~csTextureAssetCSFLoader()
 }
 
 
-bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -41,7 +41,7 @@ bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLoc
     || tagName == std::string("texturecube");
 }
 
-const csClass *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csTextureType type = GetTextureType(entry->GetTagName());
   switch (type)
@@ -55,7 +55,7 @@ const csClass *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const c
 }
 
 
-csResourceWrapper  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
 
   csTextureType type = GetTextureType(entry->GetTagName());
@@ -70,7 +70,7 @@ csResourceWrapper  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const c
   return 0;
 }
 
-csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
   csImageWrapper *imageWrapper = LoadImage(entry->GetEntry("image"), locator, userData);
@@ -97,7 +97,7 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry,
   return new csTexture2DWrapper(texture);
 }
 
-csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
 
@@ -174,7 +174,7 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *e
 }
 
 
-csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {
@@ -209,7 +209,7 @@ csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, co
   return sampler;
 }
 
-csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {

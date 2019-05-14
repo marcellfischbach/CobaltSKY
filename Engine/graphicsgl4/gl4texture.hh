@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texture.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 class CSGRAPHICSGL4_API csTextureGL4 : public virtual CS_SUPER(iTexture)
 {
   CS_CLASS_GEN_OBJECT;

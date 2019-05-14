@@ -2,11 +2,10 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 
 #include <vector>
 
-#include <cobalt/entity/blueprint/csbpentity.refl.hh>
 
 class csBPEntityState;
 class csPropertySetter;
@@ -20,8 +19,8 @@ public:
   csBPEntity();
   ~csBPEntity();
 
-  void SetEntityClass(const csClass *entityClass);
-  const csClass *GetEntityClass() const;
+  void SetEntityClass(const cs::Class *entityClass);
+  const cs::Class *GetEntityClass() const;
 
   void AddProperty(csPropertySetter *property);
   void AddEntityState(csBPEntityState *entityState);
@@ -31,7 +30,7 @@ public:
   csBPEntityState *GetEntityStateByID(unsigned id) const;
 
 private:
-  const csClass *m_entityClass;
+  const cs::Class *m_entityClass;
 
   std::vector<csPropertySetter*> m_properties;
   std::vector<csBPEntityState*> m_entityStates;

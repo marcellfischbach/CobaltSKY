@@ -14,7 +14,7 @@ csSGVarGL4::csSGVarGL4(const std::string &typeName)
 void csSGVarGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
   csSGNode *fl = GetNode();
-  csSGResourceNode *res = csQueryClass<csSGResourceNode>(fl);
+  csSGResourceNode *res = cs::QueryClass<csSGResourceNode>(fl);
   if (res)
   {
     std::string bindingName = "cs_" + res->GetResourceName();

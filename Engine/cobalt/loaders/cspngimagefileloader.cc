@@ -3,7 +3,7 @@
 
 #include <cobalt/loaders/cspngimagefileloader.hh>
 #include <cobalt/graphics/csimage.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <png.h>
 
 csPNGImageFileLoader::csPNGImageFileLoader()
@@ -57,7 +57,7 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
 }
 }
 
-const csClass *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);

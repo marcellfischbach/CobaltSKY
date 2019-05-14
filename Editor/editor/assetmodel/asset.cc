@@ -100,7 +100,7 @@ namespace asset::model
 		GetModel()->AddReference(this, locator);
 	}
 
-  const csClass *Asset::GetClass() const
+  const cs::Class *Asset::GetClass() const
   {
     if (!m_cls)
     {

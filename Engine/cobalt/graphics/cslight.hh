@@ -2,14 +2,14 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/cslight.refl.hh>
 
 
-CS_INTERFACE()
-class CSE_API csLight : public CS_SUPER(csObject)
+CS_CLASS()
+class CSE_API csLight : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 

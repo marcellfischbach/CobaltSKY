@@ -78,7 +78,7 @@ csShaderGraphGL4::~csShaderGraphGL4()
 
 }
 
-csSGNodeGL4 *csShaderGraphGL4::CreateNode(const csClass *nodeClass)
+csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
 {
   static bool initialized = false;
   if (!initialized)
@@ -176,7 +176,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
       continue;
     }
 
-    csSGResourceNode *resNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resNode = cs::QueryClass<csSGResourceNode>(node);
     if (!resNode)
     {
       continue;

@@ -6,7 +6,7 @@
 #include <cobalt/csengine.hh>
 
 csEntityScene::csEntityScene()
-  : csObject()
+  : cs::Object()
 {
   m_physicsScene = csEng->CreateScene();
   m_rootEntity = new csEntity();

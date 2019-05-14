@@ -9,7 +9,7 @@
 
 #define CS_VERSION(maj,min,mic) ((((maj) & 0xff) << 24) | (((min) & 0xff) << 16) | ((mic) & 0xffff))
 
-#if CS_WIN32
+#ifdef CS_WIN32
 
 
 #define CS_FORCEINLINE __forceinline

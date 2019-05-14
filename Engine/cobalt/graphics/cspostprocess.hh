@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/cspostprocessoutput.hh>
 #include <vector>
@@ -19,8 +19,8 @@ class csTextureWrapper;
 
 
 
-CS_INTERFACE()
-class CSE_API csPostProcess : public CS_SUPER(csObject)
+CS_CLASS()
+class CSE_API csPostProcess : public CS_SUPER(cs::Object)
 {
   friend class csPostProcessor;
   CS_CLASS_GEN;

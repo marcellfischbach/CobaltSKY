@@ -27,7 +27,7 @@ SamplerEditor::~SamplerEditor()
 
 void SamplerEditor::UpdateAsset()
 {
-  csSamplerWrapper *sampler = csQueryClass<csSamplerWrapper>(GetEditObject());
+  csSamplerWrapper *sampler = cs::QueryClass<csSamplerWrapper>(GetEditObject());
   if (sampler)
   {
     m_widget->SetSampler(sampler);
@@ -49,7 +49,7 @@ void SamplerEditor::Save()
 
 void SamplerEditor::MergeSampler()
 {
-  csSamplerWrapper *editorSamplerWrapper = csQueryClass<csSamplerWrapper>(GetEditObject());
+  csSamplerWrapper *editorSamplerWrapper = cs::QueryClass<csSamplerWrapper>(GetEditObject());
   csSamplerWrapper *engineSamplerWrapper = csResourceManager::Get()->Get<csSamplerWrapper>(GetAsset()->GetResourceLocator());
   iSampler *editorSampler = editorSamplerWrapper ? editorSamplerWrapper->Get() : 0;
   iSampler *engineSampler = engineSamplerWrapper ? engineSamplerWrapper->Get() : 0;

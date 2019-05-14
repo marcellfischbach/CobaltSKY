@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/scene/iscancallback.hh>
 #include <cobalt/math/csboundingbox.hh>
 #include <cobalt/math/csclipper.hh>
@@ -11,8 +11,8 @@
 class csGroupNode;
 struct iGraphics;
 
-CS_INTERFACE()
-class CSE_API csNode : public CS_SUPER(csObject)
+CS_CLASS()
+class CSE_API csNode : public CS_SUPER(cs::Object)
 {
   friend class csGroupNode;
   CS_CLASS_GEN;

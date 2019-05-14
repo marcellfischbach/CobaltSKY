@@ -2,12 +2,13 @@
 
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csenums.hh>
+#include <cobalt/cstypes.hh>
 #include <cobalt/window/imouse.refl.hh>
 
-CS_INTERFACE()
-struct CSE_API iMouse : public iObject
+CS_CLASS()
+struct CSE_API iMouse : public cs::iObject
 {
   CS_CLASS_GEN;
 

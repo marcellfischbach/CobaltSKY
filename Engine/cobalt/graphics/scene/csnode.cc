@@ -5,7 +5,7 @@
 
 
 csNode::csNode()
-  : csObject()
+  : cs::Object()
   , m_parent(0)
 {
   m_updateFlags = 0x00;

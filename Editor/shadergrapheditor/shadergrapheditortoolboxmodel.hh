@@ -5,9 +5,9 @@
 #include <vector>
 #include <string>
 
-#define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/csClassName"
+#define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/cs::ClassName"
 
-class csClass;
+class cs::Class;
 
 
 
@@ -31,7 +31,7 @@ private:
   struct Data
   {
     std::string name;
-    const csClass *cls;
+    const cs::Class *cls;
     QList<Data*> children;
     Data* parent;
     Data(const std::string &name)

@@ -32,7 +32,7 @@ void csHingeJointState::OnAssembled()
   iPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
   iPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
   iPhysicsJoint *joint = csEng->CreateJoint(ePJT_Hinge, colliderA, colliderB);
-  m_hingeJoint = csQueryClass<iPhysicsHingeJoint>(joint);
+  m_hingeJoint = cs::QueryClass<iPhysicsHingeJoint>(joint);
   if (!m_hingeJoint)
   {
     return;

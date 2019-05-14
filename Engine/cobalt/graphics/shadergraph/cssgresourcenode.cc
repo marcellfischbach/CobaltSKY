@@ -15,7 +15,7 @@ csSGResourceNode::~csSGResourceNode()
 
 csSGNode *csSGResourceNode::Copy(csSGNode *node) const
 {
-  csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+  csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
   if (resourceNode)
   {
     resourceNode->m_resourceId = m_resourceId;

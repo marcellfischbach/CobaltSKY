@@ -184,7 +184,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     iTexture2D *colorTarget = 0;
 
     iRenderTarget *target = frameProcessor->Render(root, m_camera, renderTarget);
-    colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
+    colorTarget = cs::QueryClass<iTexture2D>(target->GetColorBuffer(0));
 
     unsigned dataSize = 0;
     colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, 0, dataSize);

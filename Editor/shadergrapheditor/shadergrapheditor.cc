@@ -59,7 +59,7 @@ void ShaderGraphEditor::UpdateAsset()
 	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
 
   csMaterialDefWrapper *shaderGraphWrapper = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator);
-  csSGShaderGraph *shaderGraph = csQueryClass<csSGShaderGraph>(shaderGraphWrapper->Get());
+  csSGShaderGraph *shaderGraph = cs::QueryClass<csSGShaderGraph>(shaderGraphWrapper->Get());
   UpdateResourceNodeIDs(shaderGraph);
 
   csResourceLocator metaLocator = locator.WithResourceName("meta");
@@ -83,7 +83,7 @@ void ShaderGraphEditor::UpdateResourceNodeIDs(csSGShaderGraph *shaderGraph)
   for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
     csSGNode *node = shaderGraph->GetNode(i);
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       std::string resourceId = resourceNode->GetResourceId();

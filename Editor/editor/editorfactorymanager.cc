@@ -2,7 +2,7 @@
 #include <editor/editorfactorymanager.hh>
 #include <editor/iasseteditorfactory.hh>
 #include <editor/assetmodel/asset.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 
 
 EditorFactoryManager::EditorFactoryManager()
@@ -24,7 +24,7 @@ void EditorFactoryManager::AddEditorFactory(iAssetEditorFactory *factory)
 }
 
 
-iAssetEditorFactory *EditorFactoryManager::FindFactory(iObject *object, asset::model::Asset *asset)
+iAssetEditorFactory *EditorFactoryManager::FindFactory(cs::iObject *object, asset::model::Asset *asset)
 {
   for (iAssetEditorFactory *factory : m_factories)
   {

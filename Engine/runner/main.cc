@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <cobalt/cstime.hh>
 #include <cobalt/animation/csskeleton.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/entity/csblueprint.hh>
 #include <cobalt/entity/cscharacterentity.hh>
@@ -172,18 +172,18 @@ int main(int argc, char **argv)
   printf("StateInertia: %f %f %f\n", inertia.x, inertia.y, inertia.z);
 
   const csDynamicColliderState *constState = static_cast<const csDynamicColliderState*>(state);
-  const csClass *stateClass = state->GetClass();
-  std::vector<const csFunction*> functions = stateClass->GetFunction("GetInertia");
+  const cs::Class *stateClass = state->GetClass();
+  std::vector<const cs::Function*> functions = stateClass->GetFunction("GetInertia");
   if (!functions.empty())
   {
-    const csFunction *func = functions[0];
-    const csVector3f &in = func->InvokeReference<const csVector3f>(constState);
+    const cs::Function *func = functions[0];
+    const csVector3f &in = func->InvokeConstReference<const csVector3f>(constState);
     printf("StateInertia: %f %f %f\n", in.x, in.y, in.z);
   }
   functions = stateClass->GetFunction("SetInertia");
   if (!functions.empty())
   {
-    const csFunction *func = functions[0];
+    const cs::Function *func = functions[0];
     csVector3f in(2, 3, 4);
     func->InvokeVoid<const csVector3f &>(state, in);
   }
@@ -362,7 +362,7 @@ int main_loop()
     scene->GetRoot()->UpdateBoundingBox();
 
     iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
-    iTexture2D *colorTarget = csQueryClass<iTexture2D>(target->GetColorBuffer(0));
+    iTexture2D *colorTarget = cs::QueryClass<iTexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 

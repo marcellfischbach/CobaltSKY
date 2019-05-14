@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csplaneclipper.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
@@ -12,7 +12,7 @@
 struct iGraphics;
 
 CS_CLASS();
-class CSE_API csCamera : public CS_SUPER(csObject)
+class CSE_API csCamera : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

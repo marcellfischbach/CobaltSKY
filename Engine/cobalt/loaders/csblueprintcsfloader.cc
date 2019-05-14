@@ -3,7 +3,7 @@
 #include <cobalt/entity/blueprint/csblueprint.hh>
 #include <cobalt/entity/blueprint/csbpentity.hh>
 #include <cobalt/entity/blueprint/csbpentitystate.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/core/property/csgenericpropertysetter.hh>
 #include <cobalt/core/property/csresourcepropertysetter.hh>
 
@@ -19,14 +19,14 @@ csBlueprintCSFLoader::~csBlueprintCSFLoader()
 
 }
 
-bool csBlueprintCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csBlueprintCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return std::string("blueprint") == entry->GetTagName();
 }
 
-const csClass *csBlueprintCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csBlueprintCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -34,7 +34,7 @@ const csClass *csBlueprintCSFLoader::EvalClass(const csfEntry *entry, const csRe
   return csBlueprint::GetStaticClass();
 }
 
-csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csBlueprint *bp = new csBlueprint();
 
@@ -48,13 +48,13 @@ csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csRes
 }
 
 
-void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class"))
   {
     return;
   }
-  const csClass *entityClass = csClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
+  const cs::Class *entityClass = cs::ClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
   if (!entityClass)
   {
     return;
@@ -72,13 +72,13 @@ void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *en
 }
 
 
-void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class") || !entry->HasAttribute("id"))
   {
     return;
   }
-  const csClass *entityStateClass = csClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
+  const cs::Class *entityStateClass = cs::ClassRegistry::Get()->GetClass(entry->GetAttribute("class"));
   if (!entityStateClass)
   {
     return;
@@ -103,7 +103,7 @@ void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *e
 }
 
 
-void csBlueprintCSFLoader::LoadProperty(csBPEntityState *bpEntityState, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+void csBlueprintCSFLoader::LoadProperty(csBPEntityState *bpEntityState, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("name"))
   {

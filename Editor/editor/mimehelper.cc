@@ -1,8 +1,8 @@
 
 #include <editor/mimehelper.hh>
 #include <cobalt/core/csresourcelocator.hh>
-#include <cobalt/core/csclass.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/class.hh>
+#include <csrefl/classregistry.hh>
 #include <QMimeData>
 
 #define CS_RESOURCE_LOCATOR_MIME_TYPE "application/resourceLocator"
@@ -95,7 +95,7 @@ std::string MimeHelper::GetClassMimeType()
 	return CS_CLASS_MIME_TYPE;
 }
 
-void MimeHelper::PutClassMimeData(QMimeData* mimeData, const csClass* cls)
+void MimeHelper::PutClassMimeData(QMimeData* mimeData, const cs::Class* cls)
 {
 	mimeData->setData(
 		QString(CS_CLASS_MIME_TYPE),
@@ -113,10 +113,10 @@ bool MimeHelper::HasClass(const QMimeData* data)
 	return data->hasFormat(CS_CLASS_MIME_TYPE);
 }
 
-const csClass* MimeHelper::GetClass(const QMimeData* mimeData)
+const cs::Class* MimeHelper::GetClass(const QMimeData* mimeData)
 {
 	QByteArray ba = mimeData->data(CS_CLASS_MIME_TYPE);
 	QString name(ba);
 
-	return csClassRegistry::Get()->GetClass(std::string((const char*)name.toLatin1()));
+	return cs::ClassRegistry::Get()->GetClass(std::string((const char*)name.toLatin1()));
 }

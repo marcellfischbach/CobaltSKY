@@ -169,7 +169,7 @@ QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) co
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
 
   const csResourceLocator &locator = entry->GetLocator();
-  const csClass *cls = csResourceManager::Get()->EvalClass(locator);
+  const cs::Class *cls = csResourceManager::Get()->EvalClass(locator);
 
   QMimeData *data = new QMimeData();
   MimeHelper::PutResourceLocatorMimeData(data, locator.GetResourceFile());

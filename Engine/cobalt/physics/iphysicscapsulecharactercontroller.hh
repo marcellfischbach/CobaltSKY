@@ -4,7 +4,7 @@
 #include <cobalt/physics/iphysicscharactercontroller.hh>
 #include <cobalt/physics/iphysicscapsulecharactercontroller.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 struct CSE_API iPhysicsCapsuleCharacterController : public CS_SUPER(iPhysicsCharacterController)
 {
   CS_CLASS_GEN;

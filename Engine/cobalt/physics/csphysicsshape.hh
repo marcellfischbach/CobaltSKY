@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/physics/iphysicsshape.hh>
 #include <vector>
 #include <cobalt/physics/csphysicsshape.refl.hh>
 
 CS_CLASS()
-class CSE_API csPhysicsShape : public CS_SUPER(csObject)
+class CSE_API csPhysicsShape : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

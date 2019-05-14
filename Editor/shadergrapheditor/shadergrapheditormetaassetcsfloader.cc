@@ -17,17 +17,17 @@ ShaderGraphEditorMetaAssetCSFLoader::~ShaderGraphEditorMetaAssetCSFLoader()
 
 }
 
-bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("shaderGraphMeta");
 }
 
-const csClass *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return ShaderGraphEditorMeta::GetStaticClass();
 }
 
-csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   ShaderGraphEditorMeta *meta = new ShaderGraphEditorMeta();
   ShaderGraphEditorMetaWrapper *metaWrapper = new ShaderGraphEditorMetaWrapper(meta);

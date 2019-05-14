@@ -2,12 +2,13 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <cobalt/cstypes.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/core/property/cspropertysetter.refl.hh>
 
-CS_INTERFACE()
-class CSE_API csPropertySetter : public csObject
+CS_CLASS()
+class CSE_API csPropertySetter : public cs::Object
 {
   CS_CLASS_GEN;
 public:
@@ -19,40 +20,40 @@ public:
   void SetCollectionIdx(csUInt64 collectionIdx);
   csUInt64 GetCollectionIdx() const;
 
-  virtual void Apply(iObject *obj);
+  virtual void Apply(cs::iObject *obj);
 
-  virtual void SetValue(iObject *obj) = 0;
-  virtual void SetCollectionValue(iObject *obj, csUInt64 idx) = 0;
-  virtual void AddCollectionValue(iObject *obj) = 0;
+  virtual void SetValue(cs::iObject *obj) = 0;
+  virtual void SetCollectionValue(cs::iObject *obj, csUInt64 idx) = 0;
+  virtual void AddCollectionValue(cs::iObject *obj) = 0;
 
 protected:
   csPropertySetter();
 
-  const csProperty *GetProperty(const csClass *ownerClass);
-  const csFunction *GetSetter(const csClass *ownerClass);
-  const csFunction *GetCollectionSetter(const csClass *ownerClass);
-  const csFunction *GetCollectionAdder(const csClass *ownerClass);
+  const cs::Property *GetProperty(const cs::Class *ownerClass);
+  const cs::Function *GetSetter(const cs::Class *ownerClass);
+  const cs::Function *GetCollectionSetter(const cs::Class *ownerClass);
+  const cs::Function *GetCollectionAdder(const cs::Class *ownerClass);
 
 
 
 private:
-  const csFunction *GetSetter(const csClass *ownerClass, const std::string &setterName);
-  const csFunction *GetSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
-  const csFunction *GetCollectionSetter(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName);
-  const csFunction *GetCollectionSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
-  const csFunction *GetCollectionAdder(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName);
-  const csFunction *GetCollectionAdder(const csClass *ownerClass, const std::string &setterName, const std::string &typeName);
+  const cs::Function *GetSetter(const cs::Class *ownerClass, const std::string &setterName);
+  const cs::Function *GetSetter(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName);
+  const cs::Function *GetCollectionSetter(const cs::Class *ownerClass, const cs::Property *prop, const std::string &setterName, bool absName);
+  const cs::Function *GetCollectionSetter(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName);
+  const cs::Function *GetCollectionAdder(const cs::Class *ownerClass, const cs::Property *prop, const std::string &setterName, bool absName);
+  const cs::Function *GetCollectionAdder(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName);
 
   std::string m_name;
 
   bool m_collection;
   csUInt64 m_collectionIdx;
 
-  const csProperty *m_property;
+  const cs::Property*m_property;
 
-  const csFunction *m_setter;
-  const csFunction *m_collectionSetter;
-  const csFunction *m_collectionAdder;
+  const cs::Function *m_setter;
+  const cs::Function *m_collectionSetter;
+  const cs::Function *m_collectionAdder;
 
 };
 

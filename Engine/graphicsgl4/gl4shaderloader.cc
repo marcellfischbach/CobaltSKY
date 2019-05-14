@@ -27,7 +27,7 @@ bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator) c
     ext == std::string("comp");
 }
 
-const csClass *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);

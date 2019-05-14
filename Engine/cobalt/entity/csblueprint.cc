@@ -6,7 +6,7 @@
 
 
 csBlueprint::csBlueprint()
-  : csObject()
+  : cs::Object()
   , m_nextEntityID(0)
   , m_nextEntityStateID(0)
 {
@@ -19,7 +19,7 @@ csBlueprint::~csBlueprint()
 
 }
 
-csUInt32 csBlueprint::CreateEntity(const csClass *cls, csUInt32 parentEntityID)
+csUInt32 csBlueprint::CreateEntity(const cs::Class *cls, csUInt32 parentEntityID)
 {
   Decl decl;
   decl.m_id = ++m_nextEntityID;
@@ -30,7 +30,7 @@ csUInt32 csBlueprint::CreateEntity(const csClass *cls, csUInt32 parentEntityID)
   return decl.m_id;
 }
 
-csUInt32 csBlueprint::CreateEntityState(const csClass *cls, csUInt32 parentEntityID)
+csUInt32 csBlueprint::CreateEntityState(const cs::Class *cls, csUInt32 parentEntityID)
 {
   Decl decl;
   decl.m_id = ++m_nextEntityStateID;
@@ -194,7 +194,7 @@ void csBlueprint::SetEntityStateProperty(csUInt32 entityStateID, csBlueprint::Pr
 
 
 
-iObject *csBlueprint::NewInstance() const
+cs::iObject *csBlueprint::NewInstance() const
 {
   csEntity *rootEntity;
   std::map<csUInt32, csEntity*> entities;
@@ -203,8 +203,8 @@ iObject *csBlueprint::NewInstance() const
   {
     const Decl &decl = it->second;
 
-    iObject *obj = decl.m_class->CreateInstance();
-    csEntity *entity = csQueryClass<csEntity>(obj);
+    cs::iObject *obj = decl.m_class->CreateInstance();
+    csEntity *entity = cs::QueryClass<csEntity>(obj);
     if (entity)
     {
       entities[it->first] = entity;
@@ -219,8 +219,8 @@ iObject *csBlueprint::NewInstance() const
   {
     const Decl &decl = it->second;
 
-    iObject *obj = decl.m_class->CreateInstance();
-    csEntityState *entityState = csQueryClass<csEntityState>(obj);
+    cs::iObject *obj = decl.m_class->CreateInstance();
+    csEntityState *entityState = cs::QueryClass<csEntityState>(obj);
     if (entityState)
     {
       for (const Property &prop : decl.m_properties)
@@ -249,14 +249,14 @@ void csBlueprint::SetEntityStatePropertyValue(csEntityState *entityState, const 
   }
 }
 
-bool csBlueprint::SetEntityStatePropertyValue(const csClass *cls, csEntityState *entityState, const csBlueprint::Property &prop) const
+bool csBlueprint::SetEntityStatePropertyValue(const cs::Class *cls, csEntityState *entityState, const csBlueprint::Property &prop) const
 {
   if (!cls)
   {
     return false;
   }
 
-  const csProperty *property = cls->GetProperty(prop.m_propertyName);
+  const cs::Property *property = cls->GetProperty(prop.m_propertyName);
   if (!property)
   {
     for (size_t i = 0, in = cls->GetNumberOfSuperClasses(); i < in; ++i)
@@ -313,7 +313,7 @@ bool csBlueprint::SetEntityStatePropertyValue(const csClass *cls, csEntityState 
   return true;
 }
 
-const csFunction *csBlueprint::FindFunction(const csClass *cls, const std::string &name, const std::string &typeName) const
+const cs::Function *csBlueprint::FindFunction(const cs::Class *cls, const std::string &name, const std::string &typeName) const
 {
   cls->
 }

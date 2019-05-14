@@ -2,8 +2,9 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/core/csresourcewrapper.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csdefs.hh>
+#include <cobalt/cstypes.hh>
 #include <vector>
 #include <float.h>
 
@@ -27,7 +28,7 @@ struct iPhysicsBody;
  * \ingroup entity
  */
 CS_CLASS()
-class CSE_API csEntity : public CS_SUPER(csObject)
+class CSE_API csEntity : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
@@ -50,9 +51,9 @@ public:
   csEntityState *GetState(const std::string &name);
   const csEntityState *GetState(const std::string &name) const;
 
-  std::vector<csEntityState*> FindStates(const csClass *cls) const;
-  csEntityState* FindState(const csClass *cls) const;
-
+  std::vector<csEntityState*> FindStates(const cs::Class *cls) const;
+  csEntityState* FindState(const cs::Class *cls) const;
+  
   template<typename T>
   T* FindState() const
   {
@@ -61,8 +62,9 @@ public:
     {
       return 0;
     }
-    return csQueryClass<T>(state);
+    return cs::QueryClass<T>(state);
   }
+  
 
 
   void SetRootState(csSpatialState *rootState);
@@ -146,12 +148,14 @@ private:
   std::vector<csEntity*> m_children;
 };
 
+
 CS_CLASS()
 class CSE_API csEntityWrapper : public CS_SUPER(csResourceWrapper)
 {
   CS_CLASS_GEN;
   CS_RESOURCE_WRAPPER(csEntity, csEntityWrapper, csResourceWrapper);
 };
+
 
 CS_FORCEINLINE csID csEntity::GetID() const
 {

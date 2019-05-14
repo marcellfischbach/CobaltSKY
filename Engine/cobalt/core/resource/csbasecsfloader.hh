@@ -12,7 +12,7 @@
 #include <cobalt/core/resource/csbasecsfloader.refl.hh>
 
 
-CS_INTERFACE()
+CS_CLASS()
 class CSE_API csBaseCSFLoader : public CS_SUPER(iCSFLoader)
 {
   CS_CLASS_GEN_OBJECT;

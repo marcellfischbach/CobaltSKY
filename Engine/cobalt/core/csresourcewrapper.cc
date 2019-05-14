@@ -1,8 +1,8 @@
 
 #include <cobalt/core/csresourcewrapper.hh>
 
-csResourceWrapper::csResourceWrapper(iObject *resource)
-  : csObject()
+csResourceWrapper::csResourceWrapper(cs::iObject *resource)
+  : cs::Object()
   , m_resource(0)
 {
   CS_SET(m_resource, resource);
@@ -14,7 +14,7 @@ csResourceWrapper::~csResourceWrapper()
 }
 
 
-void csResourceWrapper::Set(iObject *resource)
+void csResourceWrapper::Set(cs::iObject *resource)
 {
   CS_SET(m_resource, resource);
 }

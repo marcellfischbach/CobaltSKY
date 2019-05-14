@@ -35,7 +35,7 @@ TextureEditor::~TextureEditor()
 
 void TextureEditor::UpdateAsset()
 {
-  csTexture2DWrapper *texture = csQueryClass<csTexture2DWrapper>(GetEditObject());
+  csTexture2DWrapper *texture = cs::QueryClass<csTexture2DWrapper>(GetEditObject());
   if (texture)
   {
 

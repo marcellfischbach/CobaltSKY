@@ -1,10 +1,10 @@
 
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/core/csresourcewrapper.hh>
-#include <cobalt/core/csclassregistry.hh>
 #include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/resource/cscsffileloader.hh>
 #include <cobalt/core/csvfs.hh>
+#include <csrefl/classregistry.hh>
 #include <iostream>
 
 
@@ -114,7 +114,7 @@ csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator)
   return object;
 }
 
-const csClass *csResourceManager::EvalClass(const csResourceLocator &locator) const
+const cs::Class *csResourceManager::EvalClass(const csResourceLocator &locator) const
 {
   iFile *file = Open(locator);
   if (!file)
@@ -122,7 +122,7 @@ const csClass *csResourceManager::EvalClass(const csResourceLocator &locator) co
     return nullptr;
   }
 
-  const csClass *cls = EvalClass(file, locator);
+  const cs::Class *cls = EvalClass(file, locator);
   file->Release();
 
   return cls;
@@ -143,7 +143,7 @@ csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator 
   return nullptr;
 }
 
-const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
@@ -157,7 +157,7 @@ const csClass *csResourceManager::EvalClass(iFile *file, const csResourceLocator
 }
 
 
-csResourceWrapper *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData)
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
@@ -171,7 +171,7 @@ csResourceWrapper *csResourceManager::Load(const csfEntry *entry, const csResour
   return nullptr;
 }
 
-const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
@@ -185,19 +185,19 @@ const csClass *csResourceManager::EvalClass(const csfEntry *entry, const csResou
 }
 
 
-csResourceWrapper *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, cs::iObject *userData)
 {
   csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return Load(blob->GetType(), stream, locator, userData);
 }
-const csClass *csResourceManager::EvalClass(const csfBlob *blob, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csResourceManager::EvalClass(const csfBlob *blob, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return EvalClass(blob->GetType(), stream, locator, userData);
 }
 
 
-csResourceWrapper *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData)
+csResourceWrapper *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData)
 {
   for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {
@@ -211,7 +211,7 @@ csResourceWrapper *csResourceManager::Load(const std::string &typeID, csAssetInp
   return nullptr;
 }
 
-const csClass *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {

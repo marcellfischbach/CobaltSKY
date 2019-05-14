@@ -25,7 +25,7 @@ csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGNode *node)
   csSGNodeGL4 *glNode = m_nodes[node];
   if (!glNode)
   {
-    const csClass *cls = node->GetClass();
+    const cs::Class *cls = node->GetClass();
     glNode = m_graph->CreateNode(cls);
     if (glNode == 0)
     {

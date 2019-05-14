@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/csenums.hh>
 #include <string>
@@ -29,8 +29,8 @@ class csSkeleton;
 #endif
 
 
-CS_INTERFACE()
-struct CSE_API iGraphics : public iObject
+CS_CLASS()
+struct CSE_API iGraphics : public cs::iObject
 {
   CS_CLASS_GEN;
 

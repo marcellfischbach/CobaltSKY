@@ -24,7 +24,7 @@ bool csCSFFileLoader::CanLoad(iFile *file, const csResourceLocator &locator) con
 }
 
 
-const csClass *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
 {
   const std::string extension = file->GetExtension();
   if (extension != std::string("csf") && extension != std::string("asset"))

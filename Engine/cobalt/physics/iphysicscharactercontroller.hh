@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/physics/iphysicscharactercontroller.refl.hh>
 
 struct iTransformationCallback;
 
-CS_INTERFACE()
-struct CSE_API iPhysicsCharacterController : public iObject
+CS_CLASS()
+struct CSE_API iPhysicsCharacterController : public cs::iObject
 {
   CS_CLASS_GEN;
   virtual ~iPhysicsCharacterController () { }

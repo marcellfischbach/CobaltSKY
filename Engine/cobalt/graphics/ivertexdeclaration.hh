@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
 #include <cobalt/cstypes.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
+#include <cobalt/cstypes.hh>
 #include <cobalt/graphics/ivertexdeclaration.refl.hh>
 
 /**
@@ -41,8 +43,8 @@ struct csVertexElement
 /**
 * @brief Interface for controlling how the vertex data should be passed into the shading system.
 */
-CS_INTERFACE();
-struct CSE_API iVertexDeclaration : public iObject
+CS_CLASS();
+struct CSE_API iVertexDeclaration : public cs::iObject
 {
   CS_CLASS_GEN;
 

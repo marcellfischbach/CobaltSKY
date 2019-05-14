@@ -23,23 +23,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 unset(CMAKE_CXX_CL_SHOWINCLUDE)
 
 
-#function(CS_MOC prefix api inlist outlist)
-#	set(out)
-#	foreach(file ${${inlist}})
-#		execute_process(COMMAND ClassGenerator "--file" ${prefix} ${api} ${CMAKE_CURRENT_BINARY_DIR} ${file} 
-#										WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-#										RESULT_VARIABLE output)
-#		if(${output} EQUAL 1)
-#			string(REPLACE ".hh" ".refl.hh" refl_hh ${file})
-#			string(REPLACE ".hh" ".refl.cc" refl_cc ${file})
-		
-#			set(out ${out} ${refl_hh} ${refl_cc})
-#		endif()
-#	endforeach(file)
-	
-#	set(${outlist} ${out} PARENT_SCOPE)
-#endfunction(CS_MOC)
-
 include(${CobaltSKY_SOURCE_DIR}/Scripts/CobaltSKY.cmake) 
 
 
@@ -72,14 +55,14 @@ include(${CobaltSKY_SOURCE_DIR}/Scripts/FindSDL2.cmake)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${PNG_INCLUDE_DIRS})
 include_directories(${BULLET_INCLUDE_DIRS})
-include_directories(${CobaltSKY_SOURCE_DIR}/3rdparty)
 include_directories(${CobaltSKY_SOURCE_DIR}/Engine)
 include_directories(${CobaltSKY_BINARY_DIR}/Engine)
 include_directories(${CobaltSKY_SOURCE_DIR}/Editor)
 include_directories(${CobaltSKY_BINARY_DIR}/Editor)
 
 
-add_subdirectory(3rdparty)
-add_subdirectory(ClassGenerator)
+#add_subdirectory(3rdparty)
+#add_subdirectory(ClassGenerator)
 add_subdirectory(Engine)
-add_subdirectory(Editor)
+add_subdirectory(moc)
+#add_subdirectory(Editor)

@@ -4,7 +4,7 @@
 #include <cobalt/physics/iphysicsbasecollider.hh>
 #include <cobalt/physics/iphysicsstaticcollider.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS(NoInstance)
 struct CSE_API iPhysicsStaticCollider : public CS_SUPER(iPhysicsBaseCollider)
 {
   CS_CLASS_GEN;

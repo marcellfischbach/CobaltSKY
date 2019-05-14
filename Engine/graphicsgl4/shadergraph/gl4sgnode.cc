@@ -3,7 +3,7 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 
 csSGNodeGL4::csSGNodeGL4()
-  : csObject()
+  : cs::Object()
   , m_inline(true)
   , m_forceInline(false)
   , m_inlineEvaluated(false)

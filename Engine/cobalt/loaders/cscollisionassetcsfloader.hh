@@ -18,9 +18,9 @@ public:
   virtual ~csCollisionAssetCSFLoader();
 
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const;
-  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = 0) const;
+  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
+  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = 0) const;
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = 0) const;
 
 private:
   void LoadTransform(const csfEntry *entry, csMatrix4f &localTransform) const;

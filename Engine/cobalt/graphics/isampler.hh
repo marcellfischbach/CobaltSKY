@@ -2,14 +2,15 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csvector.hh>
+#include <cobalt/cstypes.hh>
 
 #include <cobalt/graphics/isampler.refl.hh>
 
-CS_INTERFACE();
-struct CSE_API iSampler : public iObject
+CS_CLASS();
+struct CSE_API iSampler : public cs::iObject
 {
   virtual ~iSampler() { }
   CS_CLASS_GEN;

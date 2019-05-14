@@ -15,17 +15,17 @@ LoadersEditorIconAssetCSFLoader::~LoadersEditorIconAssetCSFLoader()
 }
 
 
-bool LoadersEditorIconAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool LoadersEditorIconAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("editorIcon");
 }
 
-const csClass *LoadersEditorIconAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *LoadersEditorIconAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return EditorImage::GetStaticClass();
 }
 
-csResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   std::string tagName = entry->GetTagName();
   if (tagName != std::string("editorIcon"))

@@ -15,11 +15,11 @@ public:
   csStaticMeshAssetLoader();
   virtual ~csStaticMeshAssetLoader();
 
-  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  const csClass *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual bool CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  const cs::Class *EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
-  csResourceWrapper *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  csResourceWrapper *Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
 private:
-  csSubMeshWrapper *ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData = 0) const;
+  csSubMeshWrapper *ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, cs::iObject *userData = 0) const;
 };

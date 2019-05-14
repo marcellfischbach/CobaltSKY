@@ -3,7 +3,7 @@
 #include <cobalt/physics/iphysicsbasecollider.hh>
 #include <cobalt/physics/iphysicsdynamiccollider.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 struct CSE_API iPhysicsDynamicCollider : public CS_SUPER(iPhysicsBaseCollider)
 {
   CS_CLASS_GEN;

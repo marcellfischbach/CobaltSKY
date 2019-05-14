@@ -9,7 +9,7 @@
 #include <QImage>
 
 
-CS_INTERFACE()
+CS_CLASS()
 class EDITOR_API AbstractAssetEditor : public iAssetEditor
 {
   friend class AbstractAssetEditorObject;
@@ -19,9 +19,9 @@ public:
   virtual ~AbstractAssetEditor();
 
 
-  virtual void SetObject(iObject *object, asset::model::Asset *asset);
-  iObject *GetEditObject();
-  const iObject *GetEditObject() const;
+  virtual void SetObject(cs::iObject *object, asset::model::Asset *asset);
+  cs::iObject *GetEditObject();
+  const cs::iObject *GetEditObject() const;
   asset::model::Asset *GetAsset();
   const asset::model::Asset *GetAsset() const;
   QString GetResourceFileName() const;
@@ -47,7 +47,7 @@ private:
 
 private:
 	asset::model::Asset *m_asset;
-  iObject *m_editObject;
+  cs::iObject *m_editObject;
 
   QWidget *m_widget;
 

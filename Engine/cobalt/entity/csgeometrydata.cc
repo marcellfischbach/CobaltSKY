@@ -7,7 +7,7 @@
 #include <cobalt/math/csclipper.hh>
 
 csGeometryData::csGeometryData()
-  : csObject()
+  : cs::Object()
   , m_attached(false)
 {
 

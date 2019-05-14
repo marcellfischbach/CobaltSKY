@@ -34,13 +34,13 @@ StaticMeshEditor::~StaticMeshEditor()
 
 void StaticMeshEditor::UpdateAsset()
 {
-  csStaticMeshState *staticMeshState = csQueryClass<csStaticMeshState>(GetEditObject());
+  csStaticMeshState *staticMeshState = cs::QueryClass<csStaticMeshState>(GetEditObject());
   if (staticMeshState)
   {
     m_widget->SetStaticMeshState(staticMeshState);
   }
   /*
-  iTexture2D *texture = csQueryClass<iTexture2D>(GetEditObject());
+  iTexture2D *texture = cs::QueryClass<iTexture2D>(GetEditObject());
   if (texture)
   {
 

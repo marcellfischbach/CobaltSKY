@@ -1,7 +1,7 @@
 #pragma once
 
 #include <shadergrapheditor/shadergrapheditorexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csvector2f.hh>
 #include <shadergrapheditor/shadergrapheditormeta.refl.hh>
@@ -9,7 +9,7 @@
 #include <map>
 
 CS_CLASS()
-class ShaderGraphEditorMeta : public CS_SUPER(iObject)
+class ShaderGraphEditorMeta : public CS_SUPER(cs::iObject)
 {
   CS_CLASS_GEN_OBJECT;
 public:

@@ -1,0 +1,44 @@
+
+#pragma once
+
+#include <string>
+#include <map>
+#include <vector>
+
+#include <Windows.h>
+
+namespace cs::moc
+{
+
+
+class Cache
+{
+public:
+
+  struct Data
+  {
+    std::string filename;
+    FILETIME filetime;
+    FILETIME cacheTime;
+    std::vector<std::string> classes;
+  };
+
+  void Load(const std::string& path);
+  void Store(const std::string& path);
+
+  void Clear(const std::string& filename);
+  void Put(const std::string& filename, const std::string& className);
+  void Touch(const std::string& filename);
+
+  bool NeedRevalidation(const std::string& filename) const;
+
+  const std::map<std::string, Data>& GetFileCache() const;
+
+private:
+
+  bool getFileTime(const std::string& filename, LPFILETIME lpft) const;
+
+  std::map<std::string, Data> m_fileCache;
+};
+
+}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/shadergraph/cssginput.hh>
 #include <cobalt/graphics/shadergraph/cssgoutput.hh>
 #include <cobalt/csdefs.hh>
@@ -15,7 +15,7 @@
 
 
 CS_CLASS()
-class CSE_API csSGNode : public CS_SUPER(csObject)
+class CSE_API csSGNode : public CS_SUPER(cs::Object)
 {
 
   CS_CLASS_GEN;

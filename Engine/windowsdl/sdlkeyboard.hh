@@ -2,6 +2,7 @@
 
 #include <windowsdl/sdlexport.hh>
 #include <cobalt/window/ikeyboard.hh>
+#include <cobalt/cstypes.hh>
 #include <windowsdl/sdlkeyboard.refl.hh>
 
 CS_CLASS()

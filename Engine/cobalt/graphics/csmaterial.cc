@@ -9,7 +9,7 @@
 
 
 csMaterial::csMaterial()
-  : csObject()
+  : cs::Object()
   , m_materialDef(0)
   , m_fillMode(eFM_Fill)
   , m_fillModeInherited(true)

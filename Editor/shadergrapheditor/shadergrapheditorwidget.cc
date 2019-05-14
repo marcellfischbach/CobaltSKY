@@ -19,7 +19,7 @@
 #include <editor/project/project.hh>
 
 #include <cobalt/csengine.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/shadergraph/cssgdefaultconsolelogger.hh>
@@ -137,7 +137,7 @@ void ShaderGraphEditorWidget::QueryResources(csSGShaderGraph *graph)
   for (csSize i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
     csSGNode *node = graph->GetNode(i);
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       m_resourceIDs.insert(resourceNode->GetResourceId());
@@ -282,7 +282,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, No
         continue;
       }
 
-      const csClass *cls = asset->GetClass();
+      const cs::Class *cls = asset->GetClass();
       if (!cls)
       {
         continue;
@@ -312,7 +312,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
     QDataStream stream(&ba, QIODevice::ReadOnly);
     QString className;
     stream >> className;
-    const csClass *cls = csClassRegistry::Get()->GetClass(std::string((const char*)className.toLatin1()));
+    const cs::Class *cls = cs::ClassRegistry::Get()->GetClass(std::string((const char*)className.toLatin1()));
     if (!cls)
     {
       return;
@@ -324,7 +324,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       QString uuid = QUuid::createUuid().toString();
@@ -370,7 +370,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
         return;
       }
 
-      const csClass *cls = asset->GetClass();
+      const cs::Class *cls = asset->GetClass();
       if (!cls)
       {
         continue;
@@ -513,7 +513,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       nodeEntry->AddAttribute("class", node->GetClass()->GetName());
       nodesEntry->AddChild(nodeEntry);
 
-      csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+      csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
       if (resourceNode)
       {
         csfEntry *resourceEntry = file.CreateEntry("resource");
@@ -767,7 +767,7 @@ bool ShaderGraphEditorWidget::Apply()
     for (csSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
     {
       csSGNode *node = m_shaderGraph->GetNode(i);
-      csSGResourceNode *resNode = csQueryClass<csSGResourceNode>(node);
+      csSGResourceNode *resNode = cs::QueryClass<csSGResourceNode>(node);
       if (resNode)
       {
         thisResources.insert(resNode->GetResourceId());

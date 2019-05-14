@@ -2,7 +2,6 @@
 #include <cobalt/core/resource/csassetcsfloader.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csresourcemanager.hh>
-#include <tixml/tinyxml.h>
 
 csAssetCSFLoader::csAssetCSFLoader()
   : csBaseCSFLoader()
@@ -15,7 +14,7 @@ csAssetCSFLoader::~csAssetCSFLoader()
 
 }
 
-bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -28,7 +27,7 @@ bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &l
 }
 
 
-const csClass *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;
@@ -56,7 +55,7 @@ const csClass *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResour
   return csResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
-csResourceWrapper *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;

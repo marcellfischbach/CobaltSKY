@@ -38,4 +38,4 @@ target_link_libraries(CobaltSKY-Runner
 
 
 
-CS_INSTALL_MOCCER(CobaltSKY-Runner runner NO_API ALL_SOURCES)
+CS_MOC(CobaltSKY-Runner runner)

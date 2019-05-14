@@ -1,15 +1,15 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/graphics/csimage.hh>
 #include <cobalt/window/iwindow.refl.hh>
 
 struct iKeyboard;
 struct iMouse;
-CS_INTERFACE()
-struct CSE_API iWindow : public iObject
+CS_CLASS()
+struct CSE_API iWindow : public cs::iObject
 {
   CS_CLASS_GEN;
 

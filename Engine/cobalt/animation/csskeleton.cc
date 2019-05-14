@@ -4,7 +4,7 @@
 
 
 csSkeleton::csSkeleton()
-  : csObject()
+  : cs::Object()
   , m_numberOfBones(0)
   , m_matrices(0)
 {

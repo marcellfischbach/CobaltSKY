@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/csdefs.hh>
 #include <cobalt/cstypes.hh>
@@ -19,8 +19,8 @@ struct iGraphics;
 */
 
 
-CS_INTERFACE()
-class CSE_API csEntityState : public CS_SUPER(csObject)
+CS_CLASS()
+class CSE_API csEntityState : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <cobalt/csenums.hh>

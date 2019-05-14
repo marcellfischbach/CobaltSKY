@@ -2,7 +2,8 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
+#include <cobalt/cstypes.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csvector.hh>
@@ -13,7 +14,7 @@ struct iGraphics;
 class csTextureWrapper;
 
 CS_CLASS();
-class CSE_API csMaterial : public CS_SUPER(csObject)
+class CSE_API csMaterial : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 

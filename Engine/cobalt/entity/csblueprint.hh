@@ -1,7 +1,7 @@
 #pragma once
 /*
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/math/cscolor4f.hh>
 #include <cobalt/math/csmatrix.hh>
@@ -13,17 +13,17 @@
 class csEntityState;
 
 CS_CLASS()
-class CSE_API csBlueprint : public CS_SUPER(csObject)
+class CSE_API csBlueprint : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
   csBlueprint();
   virtual ~csBlueprint();
 
-  iObject *NewInstance() const;
+  cs::iObject *NewInstance() const;
 
-  csUInt32 CreateEntity(const csClass *cls, csUInt32 parentEntityID = 0);
-  csUInt32 CreateEntityState(const csClass *cls, csUInt32 parentEntityID, csUInt32 parentStateID = 0);
+  csUInt32 CreateEntity(const cs::Class *cls, csUInt32 parentEntityID = 0);
+  csUInt32 CreateEntityState(const cs::Class *cls, csUInt32 parentEntityID, csUInt32 parentStateID = 0);
 
   void SetEntityStateString(csUInt32 entityStateID, const std::string &propertyName, long idx, const std::string &value);
   void SetEntityStateBool(csUInt32 entityStateID, const std::string &propertyName, long idx, bool value);
@@ -99,14 +99,14 @@ private:
   {
     csUInt32 m_id;
     csUInt32 m_parentEntityID;
-    const csClass *m_class;
+    const cs::Class *m_class;
     std::vector<Property> m_properties;
   };
 
   void SetEntityStateProperty(csUInt32 entityStateID, Property prop);
   void SetEntityStatePropertyValue(csEntityState *entityState, const Property &prop) const;
-  bool SetEntityStatePropertyValue(const csClass *cls, csEntityState *entityState, const Property &prop) const;
-  const csFunction *FindFunction(const csClass *cls, const std::string &name, const std::string &typeName) const;
+  bool SetEntityStatePropertyValue(const cs::Class *cls, csEntityState *entityState, const Property &prop) const;
+  const cs::Function *FindFunction(const cs::Class *cls, const std::string &name, const std::string &typeName) const;
 
   std::map<csUInt32, Decl> m_entities;
   std::map<csUInt32, Decl> m_entityStates;

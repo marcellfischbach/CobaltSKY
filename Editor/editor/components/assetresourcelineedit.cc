@@ -6,7 +6,7 @@
 #include <QDropEvent>
 #include <QMimeData>
 #include <editor/mimehelper.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <editor/assetmodel/asset.hh>
 
@@ -48,14 +48,14 @@ void AssetResourceLineEdit::dragEnterEvent(QDragEnterEvent *event)
     return;
   }
 
-  const csClass *cls = asset->GetClass();
+  const cs::Class *cls = asset->GetClass();
   if (!cls)
   {
     return;
   }
 
   
-  for (const csClass *validClass : m_validClasses)
+  for (const cs::Class *validClass : m_validClasses)
   {
     if (cls->IsInstanceOf(validClass))
     {
@@ -101,7 +101,7 @@ void AssetResourceLineEdit::dropEvent(QDropEvent *event)
 }
 
 
-void AssetResourceLineEdit::AddValidClass(const csClass *cls)
+void AssetResourceLineEdit::AddValidClass(const cs::Class *cls)
 {
   m_validClasses << cls;
 }

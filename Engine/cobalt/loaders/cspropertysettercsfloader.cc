@@ -19,17 +19,17 @@ csPropertySetterCSFLoader::~csPropertySetterCSFLoader()
 
 
 
-bool csPropertySetterCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csPropertySetterCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("property");
 }
 
-const csClass *csPropertySetterCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csPropertySetterCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csPropertySetter::GetStaticClass();
 }
 
-csResourceWrapper *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csPropertySetterCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("type"))
   {

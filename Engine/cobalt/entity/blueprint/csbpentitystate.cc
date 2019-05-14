@@ -52,12 +52,12 @@ bool csBPEntityState::IsRoot() const
 {
   return m_root;
 }
-void csBPEntityState::SetEntityStateClass(const csClass *entityStateClass)
+void csBPEntityState::SetEntityStateClass(const cs::Class *entityStateClass)
 {
   m_entityStateClass = entityStateClass;
 }
 
-const csClass *csBPEntityState::GetEntityStateClass() const
+const cs::Class *csBPEntityState::GetEntityStateClass() const
 {
   return m_entityStateClass;
 }

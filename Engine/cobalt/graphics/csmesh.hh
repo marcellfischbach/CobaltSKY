@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/graphics/imesh.hh>
 #include <cobalt/math/csboundingbox.hh>

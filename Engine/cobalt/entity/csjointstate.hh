@@ -9,7 +9,7 @@
 
 class csDynamicColliderState;
 
-CS_INTERFACE()
+CS_CLASS()
 class CSE_API csJointState : public CS_SUPER(csSpatialState)
 {
   CS_CLASS_GEN;

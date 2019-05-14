@@ -19,14 +19,14 @@ public:
   csBlueprintCSFLoader();
   virtual ~csBlueprintCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual const csClass *EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData = nullptr) const;
+  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
 private:
-  void LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const;
-  void LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const;
-  void LoadProperty(csBPEntityState *entityState, const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const;
+  void LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
+  void LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
+  void LoadProperty(csBPEntityState *entityState, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
 
   csPropertySetter* CreateProperty(const csfEntry *entry) const;
 };

@@ -1,9 +1,10 @@
 #pragma once
 
 
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/imesh.refl.hh>
 #include <cobalt/csenums.hh>
+#include <cobalt/cstypes.hh>
 #include <vector>
 
 class csBoundingBox;
@@ -12,8 +13,8 @@ struct iGraphics;
 class csMaterial;
 struct csVector3f;
 
-CS_INTERFACE()
-struct CSE_API iMesh : public CS_SUPER(iObject)
+CS_CLASS()
+struct CSE_API iMesh : public CS_SUPER(cs::iObject)
 {
   CS_CLASS_GEN;
   virtual ~iMesh () { }

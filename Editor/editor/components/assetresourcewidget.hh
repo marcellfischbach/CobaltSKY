@@ -15,7 +15,7 @@ public:
 
   void SetResourceLocator(const csResourceLocator &locator);
   const csResourceLocator &GetResourceLocator() const;
-  void AddValidClass(const csClass *cls);
+  void AddValidClass(const cs::Class *cls);
 
   void Renamed(const csResourceLocator &from, const csResourceLocator &resourceLocator);
 

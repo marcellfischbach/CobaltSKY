@@ -39,17 +39,17 @@ csSkinnedMeshAssetCSFLoader::~csSkinnedMeshAssetCSFLoader()
 
 
 
-bool csSkinnedMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csSkinnedMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("skinnedMesh");
 }
 
-const csClass *csSkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csSkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csSkinnedMesh::GetStaticClass();
 }
 
-csResourceWrapper *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csSkinnedMesh *mesh = new csSkinnedMesh();
   csSkinnedMeshWrapper *meshWrapper = new csSkinnedMeshWrapper(mesh);

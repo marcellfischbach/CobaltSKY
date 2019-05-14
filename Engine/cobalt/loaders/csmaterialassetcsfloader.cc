@@ -1,6 +1,6 @@
 
 #include <cobalt/loaders/csmaterialassetcsfloader.hh>
-#include <cobalt/core/csclassregistry.hh>
+#include <csrefl/classregistry.hh>
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/csengine.hh>
@@ -22,7 +22,7 @@ csMaterialAssetCSFLoader::~csMaterialAssetCSFLoader()
 
 }
 
-bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -30,7 +30,7 @@ bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLo
   return entry->GetTagName() == std::string("material");
 }
 
-const csClass *csMaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csMaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -38,7 +38,7 @@ const csClass *csMaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const 
   return csMaterialWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csMaterial *material = new csMaterial();
 

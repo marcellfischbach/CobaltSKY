@@ -28,7 +28,7 @@ public:
   virtual ~csStaticMeshLoader();
 
   virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
-  virtual const csClass *EvalClass(iFile *file, const csResourceLocator &locator) const;
+  virtual const cs::Class *EvalClass(iFile *file, const csResourceLocator &locator) const;
   virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const;
 
 private:

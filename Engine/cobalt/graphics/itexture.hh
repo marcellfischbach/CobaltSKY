@@ -5,18 +5,18 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/itexture.refl.hh>
 
 class csSamplerWrapper;
 
-CS_INTERFACE();
-struct CSE_API iTexture : public iObject
+CS_CLASS();
+struct CSE_API iTexture : public cs::iObject
 {
   CS_CLASS_GEN;
-  iTexture() : iObject() { }
+  iTexture() : cs::iObject() { }
   virtual ~iTexture() { }
 
   virtual csTextureType GetType() const = 0;

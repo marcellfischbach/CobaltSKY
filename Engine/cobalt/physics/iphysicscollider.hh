@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/math/csvector.hh>
 #include <cobalt/entity/itransformationcallback.hh>
@@ -16,8 +16,8 @@ struct iPhysicsShape;
 class csEntity;
 
 
-CS_INTERFACE()
-struct CSE_API iPhysicsCollider : public iObject
+CS_CLASS()
+struct CSE_API iPhysicsCollider : public cs::iObject
 {
   CS_CLASS_GEN;
 

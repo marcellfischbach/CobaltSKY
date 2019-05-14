@@ -1,16 +1,16 @@
 
 #include <cobalt/graphics/csmultimaterial.hh>
 #include <cobalt/graphics/csmaterial.hh>
-
+#include <cobalt/cstypes.hh>
 
 csMultiMaterial::csMultiMaterial()
-  : csObject()
+  : cs::Object()
 {
 
 }
 
 csMultiMaterial::csMultiMaterial(csMaterial *instance)
-  : csObject()
+  : cs::Object()
 {
   AddMaterialInstance(instance);
 }

@@ -18,7 +18,7 @@ class csLightRendererGL4;
 class csGeometryMesh;
 class csParticleRendererGL4;
 
-CS_INTERFACE()
+CS_CLASS()
 class CSGRAPHICSGL4_API csDeferredFrameProcessorGL4 : public  CS_SUPER(iFrameProcessor)
 {
   CS_CLASS_GEN_OBJECT;

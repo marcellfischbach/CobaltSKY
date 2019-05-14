@@ -39,17 +39,17 @@ csMeshAssetCSFLoader::~csMeshAssetCSFLoader()
 
 
 
-bool csMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+bool csMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("mesh");
 }
 
-const csClass *csMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csMeshWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csMesh *mesh = new csMesh();
   csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);

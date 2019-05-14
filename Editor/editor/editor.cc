@@ -140,7 +140,7 @@ void Editor::OpenAsset(asset::model::Asset *asset)
 	else
 	{
 
-    iObject *data = csResourceManager::Get()->Load(asset->GetResourceLocator());
+    cs::iObject *data = csResourceManager::Get()->Load(asset->GetResourceLocator());
     if (!data)
     {
 			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),

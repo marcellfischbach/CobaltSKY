@@ -1,7 +1,7 @@
 #pragma once
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/gl4enums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/graphics/ishader.hh>
 #include <cobalt/graphics/ishaderattribute.hh>
 #include <cobalt/graphics/ishaderstream.hh>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 
 #include <cobalt/entity/blueprint/csblueprint.refl.hh>
@@ -12,7 +12,7 @@ class csEntityWrapper;
 class csEntityStateWrapper;
 
 CS_CLASS()
-class CSE_API csBlueprint : public iObject
+class CSE_API csBlueprint : public cs::iObject
 {
   CS_CLASS_GEN_OBJECT;
 public:

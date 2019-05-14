@@ -5,7 +5,7 @@
 #include <cobalt/entity/csentitystate.hh>
 
 csBlueprint::csBlueprint()
-  : iObject ()
+  : cs::iObject ()
   , m_entity(0)
   , m_entityState(0)
 {

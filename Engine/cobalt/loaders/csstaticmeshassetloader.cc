@@ -31,17 +31,17 @@ csStaticMeshAssetLoader::~csStaticMeshAssetLoader()
 
 }
 
-bool csStaticMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, iObject *userData) const
+bool csStaticMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return typeID == std::string("MESH");// && name == std::string("DATA");
 }
 
-const csClass *csStaticMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+const cs::Class *csStaticMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   return csMesh::GetStaticClass();
 }
 
-csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, iObject *userData) const
+csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csUInt32 version, numMaterials, numSubMeshes, numIndices;
   inputStream >> version;
@@ -116,7 +116,7 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
 }
 
 
-csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, iObject *userData) const
+csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, cs::iObject *userData) const
 {
   csSubMesh *subMesh = new csSubMesh();
   csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);

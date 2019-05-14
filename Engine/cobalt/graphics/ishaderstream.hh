@@ -1,14 +1,14 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/cstypes.hh>
 #include <cobalt/csenums.hh>
 
 #include <cobalt/graphics/ishaderstream.refl.hh>
 
-CS_INTERFACE();
-struct CSE_API iShaderStream : public iObject
+CS_CLASS();
+struct CSE_API iShaderStream : public cs::iObject
 {
   CS_CLASS_GEN;
 

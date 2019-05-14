@@ -3,7 +3,7 @@
 #include <shadergrapheditor/shadergrapheditormeta.hh>
 
 ShaderGraphEditorMeta::ShaderGraphEditorMeta()
-  : iObject()
+  : cs::iObject()
 {
   CS_CLASS_GEN_CONSTR;
 }

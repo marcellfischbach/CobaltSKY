@@ -12,7 +12,7 @@
 
 
 csPostProcess::csPostProcess()
-  : csObject()
+  : cs::Object()
   , m_output(nullptr)
   , m_postProcessor(nullptr)
   , m_shader(nullptr)
@@ -138,7 +138,7 @@ bool csPostProcess::BindInputs(iGraphics *graphics)
     {
     case eTT_Texture2D:
       {
-        iTexture2D *txt2D = csQueryClass<iTexture2D>(inputTexture);
+        iTexture2D *txt2D = cs::QueryClass<iTexture2D>(inputTexture);
         if (input.m_attrInputSize)
         {
           input.m_attrInputSize->Set((float)txt2D->GetWidth(), (float)txt2D->GetHeight());

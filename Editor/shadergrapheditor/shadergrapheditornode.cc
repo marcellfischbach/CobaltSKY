@@ -97,7 +97,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGNode *node)
   }
 
   GetHeader()->SetName(QString(node->GetName().c_str()));
-  csSGResourceNode *resource = csQueryClass<csSGResourceNode>(node);
+  csSGResourceNode *resource = cs::QueryClass<csSGResourceNode>(node);
   if (resource)
   {
     NodeGraphNodeImageProperty *prop = new NodeGraphNodeImageProperty(this);
@@ -195,7 +195,7 @@ void ShaderGraphEditorNode::UpdateValues()
     }
   }
 
-  csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(m_sgNode);
+  csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(m_sgNode);
   if (resourceNode)
   {
     NodeGraphNodeProperty *prop = GetInputProperty(IDX_TEXTURE_IMAGE);

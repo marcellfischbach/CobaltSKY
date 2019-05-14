@@ -45,5 +45,5 @@ target_link_libraries(CobaltSKY-WindowSDL
 	${OPENGL_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(CobaltSKY-WindowSDL windowsdl CSWINDOWSDL_API ALL_SOURCES)
+CS_MOC(CobaltSKY-WindowSDL windowsdl CSWINDOWSDL_API ALL_SOURCES)
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/physics/iphysicsscene.refl.hh>
 
 struct iPhysicsCharacterController;
@@ -10,8 +10,8 @@ struct iPhysicsDynamicCollider;
 struct iPhysicsJoint;
 struct iPhysicsStaticCollider;
 
-CS_INTERFACE()
-struct CSE_API iPhysicsScene : public iObject
+CS_CLASS()
+struct CSE_API iPhysicsScene : public cs::iObject
 {
   CS_CLASS_GEN;
 public:

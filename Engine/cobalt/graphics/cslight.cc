@@ -3,7 +3,7 @@
 
 
 csLight::csLight(csLightType type)
-  : csObject()
+  : cs::Object()
   , m_lightType(type)
   , m_color(1.0f, 1.0f, 1.0f, 1.0f)
   , m_energy(1.0f)

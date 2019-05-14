@@ -61,7 +61,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     int row = 0;
 
     bool needSeparator = false;
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(sgNode);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(sgNode);
     if (resourceNode)
     {
       QLabel *label = new QLabel(m_group);
@@ -277,7 +277,7 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
   csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       resourceNode->SetResourceName(std::string((const char*)name.toLatin1()));
@@ -299,7 +299,7 @@ void ShaderGraphEditorProperties::DefaultFloat_valueChanged(double value)
   csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -325,7 +325,7 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
   csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -351,7 +351,7 @@ void ShaderGraphEditorProperties::ResourceChanged(const csResourceLocator &locat
   csSGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = csQueryClass<csSGResourceNode>(node);
+    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
     if (resourceNode)
     {
       resourceNode->SetDefaultTextureResource(locator);

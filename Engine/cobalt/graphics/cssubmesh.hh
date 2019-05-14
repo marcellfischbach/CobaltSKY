@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csenums.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcewrapper.hh>
 #include <cobalt/math/csboundingbox.hh>
 #include <cobalt/graphics/cssubmesh.refl.hh>
@@ -17,7 +17,7 @@ struct iVertexDeclaration;
 
 
 CS_CLASS()
-class CSE_API csSubMesh : public CS_SUPER(csObject)
+class CSE_API csSubMesh : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 

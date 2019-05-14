@@ -2,7 +2,7 @@
 
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/physics/iphysicsshape.hh>
 #include <cobalt/physics/iphysicssystem.refl.hh>
 
@@ -13,8 +13,8 @@ struct iPhysicsStaticCollider;
 struct iPhysicsTriggerCollider;
 struct iPhysicsJoint;
 
-CS_INTERFACE()
-struct CSE_API iPhysicsSystem : public iObject
+CS_CLASS()
+struct CSE_API iPhysicsSystem : public cs::iObject
 {
   CS_CLASS_GEN;
   virtual ~iPhysicsSystem () { }

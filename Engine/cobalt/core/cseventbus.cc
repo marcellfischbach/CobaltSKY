@@ -19,14 +19,14 @@ void csEventBus::Fire(csEvent &event)
   Fire(event, event.GetClass());
 }
 
-void csEventBus::Fire(csEvent &event, const csClass *cls)
+void csEventBus::Fire(csEvent &event, const cs::Class *cls)
 {
-  if (!cls || cls == csObject::GetStaticClass())
+  if (!cls || cls == cs::Object::GetStaticClass())
   {
     return;
   }
 
-  std::map<const csClass *, std::vector<Delegate>>::iterator it = m_delegates.find(cls);
+  std::map<const cs::Class *, std::vector<Delegate>>::iterator it = m_delegates.find(cls);
   if (it != m_delegates.end())
   {
     for (auto del : it->second)
@@ -35,7 +35,7 @@ void csEventBus::Fire(csEvent &event, const csClass *cls)
     }
   }
 
-  std::map<const csClass *, std::vector<iEventHandler*>>::iterator it1 = m_handlers.find(cls);
+  std::map<const cs::Class *, std::vector<iEventHandler*>>::iterator it1 = m_handlers.find(cls);
   if (it1 != m_handlers.end())
   {
     for (auto handler : it1->second)
@@ -62,7 +62,7 @@ void csEventBus::Register(csEventDelegate delegate, void *ptr)
   Register(csEvent::GetStaticClass(), delegate, ptr);
 }
 
-void csEventBus::Register(const csClass *eventClass, csEventDelegate delegate, void *ptr)
+void csEventBus::Register(const cs::Class *eventClass, csEventDelegate delegate, void *ptr)
 {
   Delegate del;
   del.delegate = delegate;
@@ -119,7 +119,7 @@ void csEventBus::Register(iEventHandler *handler)
   Register(csEvent::GetStaticClass(), handler);
 }
 
-void csEventBus::Register(const csClass *eventClass, iEventHandler *handler)
+void csEventBus::Register(const cs::Class *eventClass, iEventHandler *handler)
 {
   m_handlers[eventClass].push_back(handler);
 }

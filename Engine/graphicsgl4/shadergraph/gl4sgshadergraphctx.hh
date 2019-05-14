@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cobalt/cstypes.hh>
-#include <graphicsgl4/shadergraph/gl4sgshadergraphctx.refl.hh>
 #include <string>
 #include <set>
 #include <map>

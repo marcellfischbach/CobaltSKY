@@ -9,7 +9,7 @@
 #include <string.h>
 
 csMaterialDef::csMaterialDef()
-  : csObject ()
+  : cs::Object ()
   , m_fillMode(eFM_Fill)
 {
   memset(m_shaders, 0, sizeof(m_shaders));

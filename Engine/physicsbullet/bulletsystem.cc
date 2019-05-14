@@ -78,8 +78,8 @@ iPhysicsCapsuleCharacterController *csBulletSystem::CreateCapsulseCharacterContr
 
 iPhysicsJoint *csBulletSystem::CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
 {
-  csBulletDynamicCollider *colA = csQueryClass<csBulletDynamicCollider>(colliderA);
-  csBulletDynamicCollider *colB = csQueryClass<csBulletDynamicCollider>(colliderB);
+  csBulletDynamicCollider *colA = cs::QueryClass<csBulletDynamicCollider>(colliderA);
+  csBulletDynamicCollider *colB = cs::QueryClass<csBulletDynamicCollider>(colliderB);
   switch (type)
   {
   case ePJT_Hinge:

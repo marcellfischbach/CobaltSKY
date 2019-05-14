@@ -41,7 +41,7 @@ AbstractAssetEditor::~AbstractAssetEditor()
 	EventBus::Get().Deregister(abstract_asset_editor_asset_renamed, this);
 }
 
-void AbstractAssetEditor::SetObject(iObject *object, asset::model::Asset *asset)
+void AbstractAssetEditor::SetObject(cs::iObject *object, asset::model::Asset *asset)
 {
 	CS_SET(m_editObject, object);
 	m_asset = asset;
@@ -57,12 +57,12 @@ void AbstractAssetEditor::UpdateName()
 
 }
 
-iObject *AbstractAssetEditor::GetEditObject()
+cs::iObject *AbstractAssetEditor::GetEditObject()
 {
 	return m_editObject;
 }
 
-const iObject *AbstractAssetEditor::GetEditObject() const
+const cs::iObject *AbstractAssetEditor::GetEditObject() const
 {
 	return m_editObject;
 }

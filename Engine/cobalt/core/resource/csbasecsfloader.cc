@@ -1,6 +1,5 @@
 
 #include <cobalt/core/resource/csbasecsfloader.hh>
-#include <tixml/tinyxml.h>
 
 
 csBaseCSFLoader::csBaseCSFLoader()

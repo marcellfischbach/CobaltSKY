@@ -61,5 +61,5 @@ target_link_libraries(CobaltSKY-PhysicsBullet
 	${BULLET_LIBRARIES}
   )
 
-CS_INSTALL_MOCCER(CobaltSKY-PhysicsBullet physicsbullet CSBULLETPHYSICS_API ALL_SOURCES)
+CS_MOC(CobaltSKY-PhysicsBullet physicsbullet)
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/csdefs.hh>
 #include <vector>
 #include <cobalt/entity/csentityscene.refl.hh>
@@ -10,7 +10,7 @@ struct iPhysicsScene;
 class csEntity;
 
 CS_CLASS()
-class CSE_API csEntityScene : public CS_SUPER(csObject)
+class CSE_API csEntityScene : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

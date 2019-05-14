@@ -7,7 +7,7 @@
 #include <physicsbullet/bulletjoint.refl.hh>
 
 
-CS_INTERFACE()
+CS_CLASS()
 class CSBULLETPHYSICS_API csBulletJoint : public virtual CS_SUPER(iPhysicsJoint)
 {
   CS_CLASS_GEN_OBJECT;

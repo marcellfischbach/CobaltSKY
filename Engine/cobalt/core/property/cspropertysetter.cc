@@ -43,7 +43,7 @@ csUInt64 csPropertySetter::GetCollectionIdx() const
   return m_collectionIdx;
 }
 
-void csPropertySetter::Apply(iObject *obj)
+void csPropertySetter::Apply(cs::iObject *obj)
 {
   if (!m_collection)
   {
@@ -59,7 +59,7 @@ void csPropertySetter::Apply(iObject *obj)
   }
 }
 
-const csProperty *csPropertySetter::GetProperty(const csClass *ownerClass)
+const cs::Property*csPropertySetter::GetProperty(const cs::Class *ownerClass)
 {
   if (!m_property)
   {
@@ -68,7 +68,7 @@ const csProperty *csPropertySetter::GetProperty(const csClass *ownerClass)
     {
       for (csSize i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
       {
-        const csClass *superClass = ownerClass->GetSuperClass(i);
+        const cs::Class *superClass = ownerClass->GetSuperClass(i);
         m_property = GetProperty(superClass);
         if (m_property)
         {
@@ -81,11 +81,11 @@ const csProperty *csPropertySetter::GetProperty(const csClass *ownerClass)
 }
 
 
-const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass)
+const cs::Function *csPropertySetter::GetSetter(const cs::Class *ownerClass)
 {
   if (!m_setter)
   {
-    const csFunction *setter = GetSetter(ownerClass, "Set");
+    const cs::Function *setter = GetSetter(ownerClass, "Set");
     if (!setter)
     {
       setter = GetSetter(ownerClass, "set");
@@ -99,11 +99,11 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass)
   return m_setter;
 }
 
-const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass)
+const cs::Function *csPropertySetter::GetCollectionSetter(const cs::Class *ownerClass)
 {
   if (!m_collectionSetter)
   {
-    const csProperty *prop = GetProperty(ownerClass);
+    const cs::Property*prop = GetProperty(ownerClass);
     if (!prop)
     {
       return 0;
@@ -111,7 +111,7 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
 
     if (prop->HasProperty("setter"))
     {
-      const csFunction *setter = GetCollectionSetter(ownerClass, prop, prop->GetProperty("setter"), true);
+      const cs::Function *setter = GetCollectionSetter(ownerClass, prop, prop->GetProperty("setter"), true);
       if (setter)
       {
         m_collectionSetter = setter;
@@ -119,7 +119,7 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
       }
     }
 
-    const csFunction *setter = GetCollectionSetter(ownerClass, prop, "Set", false);
+    const cs::Function *setter = GetCollectionSetter(ownerClass, prop, "Set", false);
     if (!setter)
     {
       setter = GetCollectionSetter(ownerClass, prop, "set", false);
@@ -133,18 +133,18 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
   return m_collectionSetter;
 }
 
-const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass)
+const cs::Function *csPropertySetter::GetCollectionAdder(const cs::Class *ownerClass)
 {
   if (!m_collectionAdder)
   {
-    const csProperty *prop = GetProperty(ownerClass);
+    const cs::Property *prop = GetProperty(ownerClass);
     if (!prop)
     {
       return 0;
     }
     if (prop->HasProperty("adder"))
     {
-      const csFunction *adder = GetCollectionAdder(ownerClass, prop, prop->GetProperty("adder"), true);
+      const cs::Function *adder = GetCollectionAdder(ownerClass, prop, prop->GetProperty("adder"), true);
       if (adder)
       {
         m_collectionAdder = adder;
@@ -153,7 +153,7 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
     }
 
 
-    const csFunction *adder = GetCollectionAdder(ownerClass, prop, "Add", false);
+    const cs::Function *adder = GetCollectionAdder(ownerClass, prop, "Add", false);
     if (!adder)
     {
       adder = GetCollectionAdder(ownerClass, prop, "add", false);
@@ -168,9 +168,9 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
 }
 
 
-const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const std::string &setterName)
+const cs::Function *csPropertySetter::GetSetter(const cs::Class *ownerClass, const std::string &setterName)
 {
-  const csProperty *prop = GetProperty(ownerClass);
+  const cs::Property *prop = GetProperty(ownerClass);
   if (!prop)
   {
     return 0;
@@ -186,10 +186,10 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const s
   return GetSetter(ownerClass, propName, prop->GetDecl().GetType());
 }
 
-const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+const cs::Function *csPropertySetter::GetSetter(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName)
 {
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
-  for (const csFunction *func : funcs)
+  std::vector<const cs::Function*> funcs = ownerClass->GetFunction(setterName);
+  for (const cs::Function *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 1)
     {
@@ -203,8 +203,8 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const s
   }
   for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
   {
-    const csClass *superClass = ownerClass->GetSuperClass(i);
-    const csFunction *function = GetSetter(superClass, setterName, typeName);
+    const cs::Class *superClass = ownerClass->GetSuperClass(i);
+    const cs::Function *function = GetSetter(superClass, setterName, typeName);
     if (function)
     {
       return function;
@@ -214,7 +214,7 @@ const csFunction *csPropertySetter::GetSetter(const csClass *ownerClass, const s
 }
 
 
-const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
+const cs::Function *csPropertySetter::GetCollectionSetter(const cs::Class *ownerClass, const cs::Property *prop, const std::string &setterName, bool absName)
 {
   std::string propName = absName ? setterName : m_name;
   if (!absName)
@@ -239,10 +239,10 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
   return GetCollectionSetter(ownerClass, propName, typeName);
 }
 
-const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+const cs::Function *csPropertySetter::GetCollectionSetter(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName)
 {
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
-  for (const csFunction *func : funcs)
+  std::vector<const cs::Function*> funcs = ownerClass->GetFunction(setterName);
+  for (const cs::Function *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 2)
     {
@@ -257,8 +257,8 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
 
   for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
   {
-    const csClass *superClass = ownerClass->GetSuperClass(i);
-    const csFunction *function = GetCollectionSetter(superClass, setterName, typeName);
+    const cs::Class *superClass = ownerClass->GetSuperClass(i);
+    const cs::Function *function = GetCollectionSetter(superClass, setterName, typeName);
     if (function)
     {
       return function;
@@ -269,7 +269,7 @@ const csFunction *csPropertySetter::GetCollectionSetter(const csClass *ownerClas
 
 
 
-const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass, const csProperty *prop, const std::string &setterName, bool absName)
+const cs::Function *csPropertySetter::GetCollectionAdder(const cs::Class *ownerClass, const cs::Property *prop, const std::string &setterName, bool absName)
 {
 
   std::string propName = absName ? setterName : m_name;
@@ -295,10 +295,10 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
   return GetCollectionAdder(ownerClass, propName, typeName);
 }
 
-const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass, const std::string &setterName, const std::string &typeName)
+const cs::Function *csPropertySetter::GetCollectionAdder(const cs::Class *ownerClass, const std::string &setterName, const std::string &typeName)
 {
-  std::vector<const csFunction*> funcs = ownerClass->GetFunction(setterName);
-  for (const csFunction *func : funcs)
+  std::vector<const cs::Function*> funcs = ownerClass->GetFunction(setterName);
+  for (const cs::Function *func : funcs)
   {
     if (func->GetNumberOfAttributes() != 1)
     {
@@ -313,8 +313,8 @@ const csFunction *csPropertySetter::GetCollectionAdder(const csClass *ownerClass
 
   for (size_t i = 0, in = ownerClass->GetNumberOfSuperClasses(); i < in; ++i)
   {
-    const csClass *superClass = ownerClass->GetSuperClass(i);
-    const csFunction *function = GetCollectionAdder(superClass, setterName, typeName);
+    const cs::Class *superClass = ownerClass->GetSuperClass(i);
+    const cs::Function *function = GetCollectionAdder(superClass, setterName, typeName);
     if (function)
     {
       return function;

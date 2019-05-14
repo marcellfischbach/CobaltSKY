@@ -4,7 +4,7 @@
 static long s_event_id = 0;
 
 csEvent::csEvent()
-  : csObject()
+  : cs::Object()
   , m_id(s_event_id++)
   , m_accepted(false)
 {

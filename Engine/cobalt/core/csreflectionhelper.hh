@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 
 #include <string>
 
@@ -9,19 +9,19 @@
 class CSE_API csReflectionPropertyHelper
 {
 public:
-  csReflectionPropertyHelper(const csClass *cls, const std::string &propertyName);
+  csReflectionPropertyHelper(const cs::Class *cls, const std::string &propertyName);
 
-  const csFunction *GetSetter(const csValueDeclaration &decl) const;
-  const csFunction *GetGetter(csConstness constness) const;
+  const cs::Function *GetSetter(const cs::ValueDeclaration &decl) const;
+  const cs::Function *GetGetter(cs::eConstness constness) const;
 
 private:
   std::string GetMethodName(const std::string &prefix) const;
-  const csProperty *GetProperty(const csClass *cls) const;
+  const cs::Property *GetProperty(const cs::Class *cls) const;
 
-  const csFunction *GetSetter(const csClass *cls, const std::string &name, const csValueDeclaration &decl) const;
-  const csFunction *GetGetter(const csClass *cls, const std::string &name, csConstness constness) const;
+  const cs::Function*GetSetter(const cs::Class *cls, const std::string &name, const cs::ValueDeclaration&decl) const;
+  const cs::Function*GetGetter(const cs::Class *cls, const std::string &name, cs::eConstness constness) const;
 
-  const csClass *m_cls;
-  const csProperty *m_property;
+  const cs::Class *m_cls;
+  const cs::Property*m_property;
   std::string m_propertyName;
 };

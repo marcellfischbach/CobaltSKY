@@ -2,7 +2,7 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <cobalt/core/csresourcelocator.hh>
 #include <QWidget>
 #include <string>
@@ -14,11 +14,11 @@ namespace asset::model
   class Folder;
 }
 
-CS_INTERFACE()
-struct EDITOR_API iAssetImporter : public iObject
+CS_CLASS()
+struct EDITOR_API iAssetImporter : public cs::iObject
 {
   CS_CLASS_GEN;
-  iAssetImporter() : iObject() { }
+  iAssetImporter() : cs::iObject() { }
   virtual ~iAssetImporter() { }
 
   virtual const std::filesystem::path &GetFile() const = 0;

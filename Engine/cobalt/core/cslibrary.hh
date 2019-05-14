@@ -2,7 +2,7 @@
 
 
 #include <cobalt/csexport.hh>
-#include <cobalt/core/csclass.hh>
+#include <csrefl/class.hh>
 #include <string>
 #include <cobalt/core/cslibrary.refl.hh>
 
@@ -10,7 +10,7 @@
 struct csLibraryPriv;
 
 CS_CLASS();
-class csLibrary : public CS_SUPER(csObject)
+class csLibrary : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:

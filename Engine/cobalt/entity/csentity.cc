@@ -17,7 +17,7 @@ csID csEntity::GetNextID()
 }
 
 csEntity::csEntity()
-  : csObject ()
+  : cs::Object ()
   , m_rootState(0)
   , m_created(false)
   , m_assemabled(false)
@@ -108,7 +108,7 @@ const csEntityState *csEntity::GetState(const std::string &name) const
   return 0;
 }
 
-std::vector<csEntityState*> csEntity::FindStates(const csClass* cls) const
+std::vector<csEntityState*> csEntity::FindStates(const cs::Class* cls) const
 {
   std::vector<csEntityState*> result;
 
@@ -124,7 +124,7 @@ std::vector<csEntityState*> csEntity::FindStates(const csClass* cls) const
   return result;
 }
 
-csEntityState* csEntity::FindState(const csClass* cls) const
+csEntityState* csEntity::FindState(const cs::Class* cls) const
 {
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {

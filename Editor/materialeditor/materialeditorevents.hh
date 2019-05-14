@@ -8,7 +8,7 @@
 
 #include <materialeditor/materialeditorevents.refl.hh>
 
-CS_INTERFACE()
+CS_CLASS()
 class MATERIALEDITOR_API MaterialEditorAttributeAdded : public csEvent
 {
   CS_CLASS_GEN;
@@ -33,7 +33,7 @@ private:
 };
 
 
-CS_INTERFACE()
+CS_CLASS()
 class MATERIALEDITOR_API MaterialEditorAttributeChanged : public csEvent
 {
   CS_CLASS_GEN;
@@ -59,7 +59,7 @@ private:
 
 
 
-CS_INTERFACE()
+CS_CLASS()
 class MATERIALEDITOR_API MaterialEditorAttributeRemoved : public csEvent
 {
   CS_CLASS_GEN;

@@ -8,7 +8,7 @@
 
 
 csGBufferGL4::csGBufferGL4(iGraphics *renderer)
-  : csObject()
+  : cs::Object()
   , m_renderer(renderer)
   , m_diffuseRoughness(0)
   , m_normalLightMode(0)
@@ -38,11 +38,11 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   CS_RELEASE(m_depth);
   CS_RELEASE(m_renderTarget);
 
-  m_diffuseRoughness = new csTexture2DWrapper(csQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_normalLightMode = new csTexture2DWrapper(csQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false)));
-  m_emissiveMetallic = new csTexture2DWrapper(csQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_sssSpec = new csTexture2DWrapper(csQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_depth = new csTexture2DWrapper(csQueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false)));
+  m_diffuseRoughness = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
+  m_normalLightMode = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false)));
+  m_emissiveMetallic = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
+  m_sssSpec = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
+  m_depth = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false)));
 
   csSamplerWrapper *colorSampler = csGBufferGL4::GetColorSampler(m_renderer);
   csSamplerWrapper *depthSampler = csGBufferGL4::GetDepthSampler(m_renderer);
@@ -54,7 +54,7 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   m_depth->Get()->SetSampler(depthSampler);
 
 
-  m_renderTarget = csQueryClass<iRenderTarget>(m_renderer->CreateRenderTarget());
+  m_renderTarget = cs::QueryClass<iRenderTarget>(m_renderer->CreateRenderTarget());
   m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(m_diffuseRoughness);
   m_renderTarget->AddColorTexture(m_normalLightMode);
