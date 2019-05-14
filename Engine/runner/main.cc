@@ -353,7 +353,7 @@ int main_loop()
       masterBus << evt;
     }
 
-    handle_material(keyboard);
+    //handle_material(keyboard);
 
     UpdateCamera(camera, character, mouse, keyboard);
     UpdateCharacter(character, mouse, keyboard, tpf);

@@ -66,14 +66,16 @@ bool csDeferredFrameProcessorGL4::Initialize()
 
   csResourceManager *mgr = csResourceManager::Get();
 
-  m_simplePresentShader = mgr->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/SimplePresent.asset"));
+  csShaderWrapper *shaderWrapper = mgr->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/SimplePresent.asset"));
+  m_simplePresentShader = shaderWrapper ? shaderWrapper->Get() : nullptr;
   if (!m_simplePresentShader)
   {
     return false;
   }
   m_simplePresentShader->AddRef();
 
-  m_directionLightShader = mgr->GetOrLoad<iShader>(csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
+  shaderWrapper = mgr->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
+  m_directionLightShader = shaderWrapper ? shaderWrapper->Get() : nullptr;
   if (!m_directionLightShader)
   {
     return false;
