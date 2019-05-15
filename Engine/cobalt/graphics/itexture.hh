@@ -10,6 +10,7 @@
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/itexture.refl.hh>
 
+
 class csSamplerWrapper;
 
 CS_CLASS();

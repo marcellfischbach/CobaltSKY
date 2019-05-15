@@ -17,6 +17,7 @@ public:
 
   struct Data
   {
+    bool touched;
     std::string filename;
     FILETIME filetime;
     FILETIME cacheTime;
@@ -31,7 +32,7 @@ public:
   void Touch(const std::string& filename);
 
   bool NeedRevalidation(const std::string& filename) const;
-
+  bool HaveUntouched() const;
   const std::map<std::string, Data>& GetFileCache() const;
 
 private:

@@ -497,7 +497,6 @@ set(ALL_SOURCES
     ${SOURCE_WINDOW}
     )
 
-
 add_library(CobaltSKY SHARED
     ${ALL_SOURCES}
     )
@@ -520,4 +519,5 @@ target_link_libraries(CobaltSKY
 
 
 CS_MOC(CobaltSKY cobalt)
+
 

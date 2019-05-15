@@ -17,7 +17,6 @@ namespace cs::moc
 
 void Cache::Load(const std::string& path)
 {
-  std::cout << "Open Cache: '" << path << "/.cscache" << std::endl;
   std::ifstream stream(path + "/.cscache");
   std::string line;
   int l = 1;
@@ -56,6 +55,7 @@ void Cache::Load(const std::string& path)
     long long time1 = std::atoll(sTime1.c_str());
 
     Data data;
+    data.touched = false;
     data.filename = headerName;
     data.cacheTime.dwLowDateTime = (DWORD)time0;
     data.cacheTime.dwHighDateTime = (DWORD)time1;
@@ -111,6 +111,7 @@ void Cache::Clear(const std::string& filename)
 void Cache::Put(const std::string& filename, const std::string& className)
 {
   Data& data = m_fileCache[filename];
+  data.touched = true;
   data.filename = filename;
   auto it = std::find(data.classes.begin(), data.classes.end(), className);
   if (it == data.classes.end())
@@ -129,10 +130,12 @@ void Cache::Touch(const std::string& filename)
   auto it = m_fileCache.find(filename);
   if (it != m_fileCache.end())
   {
+    it->second.touched = true;
     return;
   }
 
   Data data;
+  data.touched = true;
   data.filename = filename;
   data.classes.clear();
   getFileTime(data.filename, &data.filetime);
@@ -151,6 +154,18 @@ bool Cache::NeedRevalidation(const std::string& filename) const
   // revalidation is neede when the cached data is older than the real file
   return CompareFileTime(&it->second.cacheTime, &it->second.filetime) < 0;
   //return true;
+}
+
+bool Cache::HaveUntouched() const
+{
+  for (auto entry : m_fileCache)
+  {
+    if (!entry.second.touched)
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 const std::map<std::string, Cache::Data>& Cache::GetFileCache() const

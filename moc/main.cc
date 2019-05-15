@@ -74,13 +74,12 @@ private:
 
 void put_classes_to_cache(cs::moc::Cache& cache, const std::string& sourceName, cs::moc::ASTNode* root)
 {
-  cache.Clear(sourceName);
-  cache.Touch(sourceName);
   std::vector<cs::moc::ClassNode*> classes = cs::moc::Generator::FindAllMajorClasses(root);
   for (auto cls : classes)
   {
     std::list<cs::moc::NamespaceNode*> nss = cs::moc::Generator::GetAllNamespaces(cls);
     std::string nsName = cs::moc::Generator::GetFullNamespaceName(nss);
+    std::cout << "  " << nsName + cls->GetName() << std::endl;
 
     cache.Put(sourceName, nsName + cls->GetName());
   }
@@ -100,6 +99,12 @@ void generate(
 
   cs::moc::Parser parser;
   cs::moc::ASTNode* ns = nullptr;
+  if (cache)
+  {
+    cache->Clear(input);
+    cache->Touch(input);
+  }
+
   try
   {
     ns = parser.Parse(tokenizer);
@@ -177,6 +182,7 @@ void generate_list(const std::string & path, const std::string & exp, const std:
 
   std::ifstream stream(path + "/.csmoc");
   std::string filename;
+  bool neededRevalidation = false;
   while (std::getline(stream, filename))
   {
     size_t idx = filename.rfind('.');
@@ -197,6 +203,7 @@ void generate_list(const std::string & path, const std::string & exp, const std:
 
     if (cache.NeedRevalidation(filename))
     {
+      neededRevalidation = true;
       try
       {
         std::cout << "csmoc: " << filename << std::endl;
@@ -223,11 +230,15 @@ void generate_list(const std::string & path, const std::string & exp, const std:
     }
   }
 
+  std::filesystem::path masterPath(path + "/master.refl.cc");
+  if (neededRevalidation || cache.HaveUntouched() || !std::filesystem::exists(masterPath))
+  {
+    cs::moc::MasterGenerator masterGenerator;
+    FileOutput output(path + "/master.refl.cc");
+    masterGenerator.Generate(cache, prefix, &output);
+  }
   cache.Store(path);
-  cs::moc::MasterGenerator masterGenerator;
-  FileOutput output(path + "/master.refl.cc");
 
-  masterGenerator.Generate(cache, prefix, &output);
 }
 
 
@@ -264,6 +275,7 @@ int main(int argc, char** argv)
         return -1;
       }
       file = std::string(argv[++i]);
+      // std::cout << " file: '" << file << "'";
     }
     else if (arg == "--header")
     {
@@ -273,6 +285,7 @@ int main(int argc, char** argv)
         return -1;
       }
       header = std::string(argv[++i]);
+      // std::cout << " header: '" << header << "'";
     }
     else if (arg == "--source")
     {
@@ -282,6 +295,7 @@ int main(int argc, char** argv)
         return -1;
       }
       source = std::string(argv[++i]);
+      // std::cout << " source: '" << source << "'";
     }
     else if (arg == "--path")
     {
@@ -291,6 +305,7 @@ int main(int argc, char** argv)
         return -1;
       }
       path = std::string(argv[++i]);
+      // std::cout << " path: '" << path << "'";
     }
     else if (arg == "--prefix")
     {
@@ -300,6 +315,7 @@ int main(int argc, char** argv)
         return -1;
       }
       prefix = std::string(argv[++i]);
+      //std::cout << " prefix: '" << prefix << "'";
     }
     else if (arg == "--export")
     {
@@ -309,6 +325,7 @@ int main(int argc, char** argv)
         return -1;
       }
       exp = std::string(argv[++i]);
+      //std::cout << " exp: '" << exp << "'";
     }
     else
     {
@@ -326,6 +343,7 @@ int main(int argc, char** argv)
   }
   else if (!path.empty())
   {
+
     generate_list(path, exp, prefix);
   }
 

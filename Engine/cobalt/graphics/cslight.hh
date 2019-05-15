@@ -8,6 +8,7 @@
 #include <cobalt/graphics/cslight.refl.hh>
 
 
+
 CS_CLASS()
 class CSE_API csLight : public CS_SUPER(cs::Object)
 {
