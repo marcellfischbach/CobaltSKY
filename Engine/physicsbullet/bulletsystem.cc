@@ -8,28 +8,28 @@
 #include <physicsbullet/bulletscene.hh>
 #include <physicsbullet/bulletshape.hh>
 
-csBulletSystem::csBulletSystem()
+cs::BulletSystem::BulletSystem()
   : cs::iPhysicsSystem ()
 {
 
 }
 
 
-csBulletSystem::~csBulletSystem()
+cs::BulletSystem::~BulletSystem()
 {
 
 }
 
 
-void csBulletSystem::Initialize()
+void cs::BulletSystem::Initialize()
 {
 
 }
 
 
-cs::iPhysicsScene *csBulletSystem::CreateScene()
+cs::iPhysicsScene *cs::BulletSystem::CreateScene()
 {
-  csBulletScene *scene = new csBulletScene(); 
+  cs::BulletScene *scene = new cs::BulletScene(); 
   if (!scene->Initialize(false))
   {
     delete scene;
@@ -39,27 +39,27 @@ cs::iPhysicsScene *csBulletSystem::CreateScene()
 }
 
 
-cs::iPhysicsDynamicCollider *csBulletSystem::CreateDynamicCollider()
+cs::iPhysicsDynamicCollider *cs::BulletSystem::CreateDynamicCollider()
 {
-  csBulletDynamicCollider *dyn = new csBulletDynamicCollider();
+  cs::BulletDynamicCollider *dyn = new cs::BulletDynamicCollider();
   return dyn;
 }
 
-cs::iPhysicsStaticCollider *csBulletSystem::CreateStaticCollider()
+cs::iPhysicsStaticCollider *cs::BulletSystem::CreateStaticCollider()
 {
-  csBulletStaticCollider *stat = new csBulletStaticCollider();
+  cs::BulletStaticCollider *stat = new cs::BulletStaticCollider();
   return stat;
 }
 
-cs::iPhysicsTriggerCollider *csBulletSystem::CreateTriggerCollider()
+cs::iPhysicsTriggerCollider *cs::BulletSystem::CreateTriggerCollider()
 {
   return 0;
 }
 
 
-cs::iPhysicsShape *csBulletSystem::CreateShape(const cs::PhysGeometry &geometry)
+cs::iPhysicsShape *cs::BulletSystem::CreateShape(const cs::PhysGeometry &geometry)
 {
-  csBulletShape *shape = new csBulletShape();
+  cs::BulletShape *shape = new cs::BulletShape();
   if (!shape->Initialize(geometry))
   {
     delete shape;
@@ -69,22 +69,22 @@ cs::iPhysicsShape *csBulletSystem::CreateShape(const cs::PhysGeometry &geometry)
   return shape;
 }
 
-cs::iPhysicsCapsuleCharacterController *csBulletSystem::CreateCapsulseCharacterController()
+cs::iPhysicsCapsuleCharacterController *cs::BulletSystem::CreateCapsulseCharacterController()
 {
-  csBulletCapsuleCharacterController *controller = new csBulletCapsuleCharacterController();
+  cs::BulletCapsuleCharacterController *controller = new cs::BulletCapsuleCharacterController();
   return controller;
 }
 
 
-cs::iPhysicsJoint *csBulletSystem::CreateJoint(cs::ePhysicsJointType type, cs::iPhysicsDynamicCollider *colliderA, cs::iPhysicsDynamicCollider *colliderB)
+cs::iPhysicsJoint *cs::BulletSystem::CreateJoint(cs::ePhysicsJointType type, cs::iPhysicsDynamicCollider *colliderA, cs::iPhysicsDynamicCollider *colliderB)
 {
-  csBulletDynamicCollider *colA = cs::QueryClass<csBulletDynamicCollider>(colliderA);
-  csBulletDynamicCollider *colB = cs::QueryClass<csBulletDynamicCollider>(colliderB);
+  cs::BulletDynamicCollider *colA = cs::QueryClass<cs::BulletDynamicCollider>(colliderA);
+  cs::BulletDynamicCollider *colB = cs::QueryClass<cs::BulletDynamicCollider>(colliderB);
   switch (type)
   {
   case cs::ePJT_Hinge:
     {
-      csBulletHingeJoint *hingeJoint = new csBulletHingeJoint();
+      cs::BulletHingeJoint *hingeJoint = new cs::BulletHingeJoint();
       if (!hingeJoint->Initialize(colA, colB))
       {
         delete hingeJoint;

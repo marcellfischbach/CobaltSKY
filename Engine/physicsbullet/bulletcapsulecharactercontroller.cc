@@ -12,7 +12,7 @@
 
 
 
-csBulletCapsuleCharacterController::csBulletCapsuleCharacterController()
+cs::BulletCapsuleCharacterController::BulletCapsuleCharacterController()
   : cs::iPhysicsCapsuleCharacterController()
   , m_characterController(0)
   , m_ghostObject(0)
@@ -21,13 +21,13 @@ csBulletCapsuleCharacterController::csBulletCapsuleCharacterController()
 
 }
 
-csBulletCapsuleCharacterController::~csBulletCapsuleCharacterController()
+cs::BulletCapsuleCharacterController::~BulletCapsuleCharacterController()
 {
 
 }
 
 
-void csBulletCapsuleCharacterController::Initialize(float height, float radius)
+void cs::BulletCapsuleCharacterController::Initialize(float height, float radius)
 {
   m_capsuleShape = new btCapsuleShapeZ(radius, height - 2.0f * radius);
   m_ghostObject = new btPairCachingGhostObject();
@@ -42,12 +42,12 @@ void csBulletCapsuleCharacterController::Initialize(float height, float radius)
 
 }
 
-void csBulletCapsuleCharacterController::SetTransformationCallback(cs::iTransformationCallback *callback)
+void cs::BulletCapsuleCharacterController::SetTransformationCallback(cs::iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
 
-void csBulletCapsuleCharacterController::AttachToScene(csBulletScene *scene)
+void cs::BulletCapsuleCharacterController::AttachToScene(cs::BulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->addCharacter(m_characterController);
@@ -57,14 +57,14 @@ void csBulletCapsuleCharacterController::AttachToScene(csBulletScene *scene)
 }
 
 
-void csBulletCapsuleCharacterController::DetachFromScene(csBulletScene *scene)
+void cs::BulletCapsuleCharacterController::DetachFromScene(cs::BulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->removeCharacter(m_characterController);
   world->removeCollisionObject(m_ghostObject);
 }
 
-void csBulletCapsuleCharacterController::UpdateCallbacks()
+void cs::BulletCapsuleCharacterController::UpdateCallbacks()
 {
   if (m_transformationCallback)
   {
@@ -74,7 +74,7 @@ void csBulletCapsuleCharacterController::UpdateCallbacks()
   }
 }
 
-void csBulletCapsuleCharacterController::Warp(const cs::Matrix4f &transformation)
+void cs::BulletCapsuleCharacterController::Warp(const cs::Matrix4f &transformation)
 {
   cs::Vector3f translation;
   transformation.GetTranslation(translation);
@@ -85,12 +85,12 @@ void csBulletCapsuleCharacterController::Warp(const cs::Matrix4f &transformation
   m_ghostObject->setWorldTransform(trans);
 }
 
-void csBulletCapsuleCharacterController::WarpToPosition(const cs::Vector3f &position)
+void cs::BulletCapsuleCharacterController::WarpToPosition(const cs::Vector3f &position)
 {
   m_characterController->warp(btVector3(position.x, position.y, position.z));
 }
 
-void csBulletCapsuleCharacterController::SetLocalWalkDirection(const cs::Vector3f &direction)
+void cs::BulletCapsuleCharacterController::SetLocalWalkDirection(const cs::Vector3f &direction)
 {
   btTransform trans = m_ghostObject->getWorldTransform();
   cs::Matrix4f mat;
@@ -101,12 +101,12 @@ void csBulletCapsuleCharacterController::SetLocalWalkDirection(const cs::Vector3
 }
 
 
-void csBulletCapsuleCharacterController::SetGlobalWalkDirection(const cs::Vector3f &direction)
+void cs::BulletCapsuleCharacterController::SetGlobalWalkDirection(const cs::Vector3f &direction)
 {
   m_characterController->setWalkDirection(btVector3(direction.x, direction.y, direction.z));
 }
 
-void csBulletCapsuleCharacterController::Rotate(float angle)
+void cs::BulletCapsuleCharacterController::Rotate(float angle)
 {
   btTransform trans = m_ghostObject->getWorldTransform();
   btTransform r;
@@ -117,43 +117,43 @@ void csBulletCapsuleCharacterController::Rotate(float angle)
 }
 
 
-bool csBulletCapsuleCharacterController::IsOnGround() const
+bool cs::BulletCapsuleCharacterController::IsOnGround() const
 {
   return m_characterController->onGround();
 }
 
-bool csBulletCapsuleCharacterController::CanJump() const
+bool cs::BulletCapsuleCharacterController::CanJump() const
 {
   return m_characterController->canJump();
 }
 
-void csBulletCapsuleCharacterController::Jump()
+void cs::BulletCapsuleCharacterController::Jump()
 {
   m_characterController->jump(btVector3(0, 0, 0));
 }
 
-void csBulletCapsuleCharacterController::SetJumpSpeed(float jumpSpeed)
+void cs::BulletCapsuleCharacterController::SetJumpSpeed(float jumpSpeed)
 {
   m_characterController->setJumpSpeed(jumpSpeed);
 }
 
-void csBulletCapsuleCharacterController::SetMaxFallSpeed(float fallSpeed)
+void cs::BulletCapsuleCharacterController::SetMaxFallSpeed(float fallSpeed)
 {
   m_characterController->setFallSpeed(fallSpeed);
 }
 
-void csBulletCapsuleCharacterController::SetGravity(const cs::Vector3f &gravity)
+void cs::BulletCapsuleCharacterController::SetGravity(const cs::Vector3f &gravity)
 {
   // m_characterController->setGravity()
 }
 
 
-void csBulletCapsuleCharacterController::SetGravity(float gravity)
+void cs::BulletCapsuleCharacterController::SetGravity(float gravity)
 {
   m_characterController->setGravity(btVector3(0.0f, 0.0f, -gravity));
 }
 
-void csBulletCapsuleCharacterController::SetMaxSlope(float maxSlope)
+void cs::BulletCapsuleCharacterController::SetMaxSlope(float maxSlope)
 {
   m_characterController->setMaxSlope(maxSlope);
 }

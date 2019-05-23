@@ -70,7 +70,7 @@ bool Editor::Initialize(int argc, char **argv)
 //  m_rootPath = QDir(QString(cs::VFS::Get()->GetRootPath().c_str()));
 
   m_engine = new cs::Engine();
-  m_physicsSystem = new csBulletSystem();
+  m_physicsSystem = new cs::BulletSystem();
   m_physicsSystem->Initialize();
   m_engine->SetPhysicsSystem(m_physicsSystem);
 

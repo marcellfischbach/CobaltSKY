@@ -4,7 +4,7 @@
 
 #include <physicsbullet/master.refl.cc>
 
-void PhysicsBulletModule::Initialize()
+void cs::PhysicsBulletModule::Initialize()
 {
   register_classes();
 }

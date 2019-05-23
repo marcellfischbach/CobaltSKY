@@ -95,7 +95,7 @@ void handle_material(const cs::iKeyboard *keyboard);
 
 static SDLWindow *window = nullptr;
 static cs::GraphicsGL4 *graphicsGL4 = nullptr;
-static csBulletSystem *bulletSystem = nullptr;
+static cs::BulletSystem *bulletSystem = nullptr;
 static const cs::iKeyboard *keyboard = nullptr;
 static const cs::iMouse *mouse = nullptr;
 static cs::Camera *camera = nullptr;
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
   graphicsGL4 = new cs::GraphicsGL4();
   csEng->SetRenderer(graphicsGL4);
 
-  bulletSystem = new csBulletSystem();
+  bulletSystem = new cs::BulletSystem();
   bulletSystem->Initialize();
   csEng->SetPhysicsSystem(bulletSystem);
 

@@ -2,39 +2,39 @@
 
 #include <physicsbullet/bulletshape.hh>
 
-csBulletShape::csBulletShape()
+cs::BulletShape::BulletShape()
   : cs::iPhysicsShape()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csBulletShape::~csBulletShape()
+cs::BulletShape::~BulletShape()
 {
 
 }
 
 
-const cs::PhysGeometry &csBulletShape::GetGeometry() const
+const cs::PhysGeometry &cs::BulletShape::GetGeometry() const
 {
   return m_geometry;
 }
 
-void csBulletShape::SetLocalTransform(const cs::Matrix4f &localTransform)
+void cs::BulletShape::SetLocalTransform(const cs::Matrix4f &localTransform)
 {
   m_localTransform = localTransform;
 }
 
-const cs::Matrix4f &csBulletShape::GetLocalTransform() const
+const cs::Matrix4f &cs::BulletShape::GetLocalTransform() const
 {
   return m_localTransform;
 }
 
-bool csBulletShape::IsTransformed() const
+bool cs::BulletShape::IsTransformed() const
 {
   return !m_localTransform.IsIdentity();
 }
 
-bool csBulletShape::Initialize(const cs::PhysGeometry &geometry)
+bool cs::BulletShape::Initialize(const cs::PhysGeometry &geometry)
 {
   memcpy(&m_geometry, &geometry, sizeof(cs::PhysGeometry));
 

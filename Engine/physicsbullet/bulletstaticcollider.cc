@@ -6,14 +6,14 @@
 #include <cobalt/physics/csphysicsshape.hh>
 
 
-csBulletStaticCollider::csBulletStaticCollider()
+cs::BulletStaticCollider::BulletStaticCollider()
   : cs::iPhysicsStaticCollider()
   , m_friction(0.0f)
   , m_restitution(0.0f)
 {
 }
 
-csBulletStaticCollider::~csBulletStaticCollider()
+cs::BulletStaticCollider::~BulletStaticCollider()
 {
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
@@ -31,7 +31,7 @@ csBulletStaticCollider::~csBulletStaticCollider()
   m_shapes.clear();
 }
 
-void csBulletStaticCollider::AttachShape(cs::iPhysicsShape *shape)
+void cs::BulletStaticCollider::AttachShape(cs::iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -40,7 +40,7 @@ void csBulletStaticCollider::AttachShape(cs::iPhysicsShape *shape)
 
   shape->AddRef();
 
-  csBulletShape *btShape = static_cast<csBulletShape*>(shape);
+  cs::BulletShape *btShape = static_cast<cs::BulletShape*>(shape);
 
   Data data;
   data.btShape = btShape->GetBulletShape();
@@ -61,12 +61,12 @@ void csBulletStaticCollider::AttachShape(cs::iPhysicsShape *shape)
   m_shapes.push_back(data);
 }
 
-void csBulletStaticCollider::DetachShape(cs::iPhysicsShape *shape)
+void cs::BulletStaticCollider::DetachShape(cs::iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void csBulletStaticCollider::AttachShape(cs::PhysicsShape *shapes)
+void cs::BulletStaticCollider::AttachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -78,7 +78,7 @@ void csBulletStaticCollider::AttachShape(cs::PhysicsShape *shapes)
   }
 }
 
-void csBulletStaticCollider::DetachShape(cs::PhysicsShape *shapes)
+void cs::BulletStaticCollider::DetachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -90,13 +90,13 @@ void csBulletStaticCollider::DetachShape(cs::PhysicsShape *shapes)
   }
 }
 
-cs::Transformation csBulletStaticCollider::GetTransform()
+cs::Transformation cs::BulletStaticCollider::GetTransform()
 {
   return cs::Transformation(&m_transformation, 0, 0, 0);
 }
 
 
-void csBulletStaticCollider::FinishTransformation()
+void cs::BulletStaticCollider::FinishTransformation()
 {
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
@@ -113,7 +113,7 @@ void csBulletStaticCollider::FinishTransformation()
 
 
 
-void csBulletStaticCollider::SetFriction(float friction)
+void cs::BulletStaticCollider::SetFriction(float friction)
 {
   m_friction = friction;
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
@@ -123,7 +123,7 @@ void csBulletStaticCollider::SetFriction(float friction)
   }
 }
 
-void csBulletStaticCollider::SetRestitution(float restitution)
+void cs::BulletStaticCollider::SetRestitution(float restitution)
 {
   m_restitution = restitution;
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
@@ -135,7 +135,7 @@ void csBulletStaticCollider::SetRestitution(float restitution)
 
 
 
-void csBulletStaticCollider::AttachToScene(csBulletScene *scene)
+void cs::BulletStaticCollider::AttachToScene(cs::BulletScene *scene)
 {
   m_scene = scene;
   if (m_scene && m_scene->GetBulletScene())
@@ -149,7 +149,7 @@ void csBulletStaticCollider::AttachToScene(csBulletScene *scene)
   }
 }
 
-void csBulletStaticCollider::DetachFromScene(csBulletScene *scene)
+void cs::BulletStaticCollider::DetachFromScene(cs::BulletScene *scene)
 {
   if (m_scene && m_scene->GetBulletScene())
   {

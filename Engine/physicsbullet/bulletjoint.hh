@@ -6,38 +6,43 @@
 #include <cobalt/physics/iphysicshingejoint.hh>
 #include <physicsbullet/bulletjoint.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletJoint : public virtual CS_SUPER(cs::iPhysicsJoint)
+class CSBULLETPHYSICS_API BulletJoint : public virtual CS_SUPER(cs::iPhysicsJoint)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  virtual ~csBulletJoint();
+  virtual ~BulletJoint();
 
   virtual cs::ePhysicsJointType GetType() const;
 
-  virtual cs::iPhysicsDynamicCollider *GetColliderA() const;
-  virtual cs::iPhysicsDynamicCollider *GetColliderB() const;
+  virtual cs::iPhysicsDynamicCollider* GetColliderA() const;
+  virtual cs::iPhysicsDynamicCollider* GetColliderB() const;
 
-  btTypedConstraint *GetConstraint();
-  const btTypedConstraint *GetConstraint() const;
+  btTypedConstraint* GetConstraint();
+  const btTypedConstraint* GetConstraint() const;
 
-  virtual void AttachToScene(csBulletScene *scene);
-  virtual void DetachFromScene(csBulletScene *scene);
+  virtual void AttachToScene(cs::BulletScene * scene);
+  virtual void DetachFromScene(cs::BulletScene * scene);
 
 protected:
-  csBulletJoint(cs::ePhysicsJointType type);
+  BulletJoint(cs::ePhysicsJointType type);
 
-  void SetCollider(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB);
+  void SetCollider(cs::BulletDynamicCollider * colliderA, cs::BulletDynamicCollider * colliderB);
 
 
-  void SetConstraint(btTypedConstraint *constraint);
+  void SetConstraint(btTypedConstraint * constraint);
 
 private:
   cs::ePhysicsJointType m_type;
 
-  csBulletDynamicCollider *m_colliderA;
-  csBulletDynamicCollider *m_colliderB;
+  cs::BulletDynamicCollider* m_colliderA;
+  cs::BulletDynamicCollider* m_colliderB;
 
-  btTypedConstraint *m_constraint;
+  btTypedConstraint* m_constraint;
 };
+
+}
+

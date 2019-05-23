@@ -7,7 +7,7 @@
 #include <cobalt/entity/cstransformation.hh>
 #include <cobalt/entity/cscolliderstate.hh>
 
-csBulletDynamicCollider::csBulletDynamicCollider()
+cs::BulletDynamicCollider::BulletDynamicCollider()
   : cs::iPhysicsDynamicCollider()
   , m_kinematic(true)
   , m_friction(0.0f)
@@ -30,7 +30,7 @@ csBulletDynamicCollider::csBulletDynamicCollider()
 }
 
 
-csBulletDynamicCollider::~csBulletDynamicCollider()
+cs::BulletDynamicCollider::~BulletDynamicCollider()
 {
   if (m_body)
   {
@@ -39,7 +39,7 @@ csBulletDynamicCollider::~csBulletDynamicCollider()
 }
 
 
-void csBulletDynamicCollider::AttachShape(cs::iPhysicsShape *shape)
+void cs::BulletDynamicCollider::AttachShape(cs::iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -50,7 +50,7 @@ void csBulletDynamicCollider::AttachShape(cs::iPhysicsShape *shape)
   m_shapes.push_back(shape);
   shape->AddRef();
 
-  csBulletShape *btShape = static_cast<csBulletShape*>(shape);
+  cs::BulletShape *btShape = static_cast<cs::BulletShape*>(shape);
 
 
   // now check if we just have to attach the shape or if this is already a compound shape
@@ -83,12 +83,12 @@ void csBulletDynamicCollider::AttachShape(cs::iPhysicsShape *shape)
   UpdateInertia();
  }
 
-void csBulletDynamicCollider::DetachShape(cs::iPhysicsShape *shape)
+void cs::BulletDynamicCollider::DetachShape(cs::iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void csBulletDynamicCollider::AttachShape(cs::PhysicsShape *shapes)
+void cs::BulletDynamicCollider::AttachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -101,7 +101,7 @@ void csBulletDynamicCollider::AttachShape(cs::PhysicsShape *shapes)
   }
 }
 
-void csBulletDynamicCollider::DetachShape(cs::PhysicsShape *shapes)
+void cs::BulletDynamicCollider::DetachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -115,13 +115,13 @@ void csBulletDynamicCollider::DetachShape(cs::PhysicsShape *shapes)
 }
 
 
-cs::Transformation csBulletDynamicCollider::GetTransform()
+cs::Transformation cs::BulletDynamicCollider::GetTransform()
 {
   return cs::Transformation(&m_transformation, 0, 0, 0);
 }
 
 
-void csBulletDynamicCollider::FinishTransformation()
+void cs::BulletDynamicCollider::FinishTransformation()
 {
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_transformation.m00));
@@ -129,12 +129,12 @@ void csBulletDynamicCollider::FinishTransformation()
   m_body->updateInertiaTensor();
 }
 
-void csBulletDynamicCollider::SetTransformationCallback(cs::iTransformationCallback *callback)
+void cs::BulletDynamicCollider::SetTransformationCallback(cs::iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
 
-void csBulletDynamicCollider::SetKinematic(bool kinematic)
+void cs::BulletDynamicCollider::SetKinematic(bool kinematic)
 {
   m_kinematic = kinematic;
 
@@ -148,27 +148,27 @@ void csBulletDynamicCollider::SetKinematic(bool kinematic)
   }
 }
 
-void csBulletDynamicCollider::SetFriction(float friction)
+void cs::BulletDynamicCollider::SetFriction(float friction)
 {
   m_friction = friction;
   m_body->setFriction(friction);
 }
 
-void csBulletDynamicCollider::SetRestitution(float restitution)
+void cs::BulletDynamicCollider::SetRestitution(float restitution)
 {
   m_restitution = restitution;
   m_body->setRestitution(restitution);
 }
 
 
-void csBulletDynamicCollider::SetMass(float mass)
+void cs::BulletDynamicCollider::SetMass(float mass)
 {
   m_mass = mass;
 
   UpdateInertia();
 }
 
-void csBulletDynamicCollider::SetInertia(const cs::Vector3f &inertia)
+void cs::BulletDynamicCollider::SetInertia(const cs::Vector3f &inertia)
 {
   m_inertia = inertia;
   m_autoInertia = false;
@@ -176,14 +176,14 @@ void csBulletDynamicCollider::SetInertia(const cs::Vector3f &inertia)
   UpdateInertia();
 }
 
-void csBulletDynamicCollider::SetAutoInertia(bool autoInertia)
+void cs::BulletDynamicCollider::SetAutoInertia(bool autoInertia)
 {
   m_autoInertia = autoInertia;
 
   UpdateInertia();
 }
 
-void csBulletDynamicCollider::UpdateInertia()
+void cs::BulletDynamicCollider::UpdateInertia()
 {
   if (m_autoInertia)
   {
@@ -206,7 +206,7 @@ void csBulletDynamicCollider::UpdateInertia()
 }
 
 
-void csBulletDynamicCollider::AttachToScene(csBulletScene *scene)
+void cs::BulletDynamicCollider::AttachToScene(cs::BulletScene *scene)
 {
   m_scene = scene;
   if (m_scene && m_scene->GetBulletScene())
@@ -215,7 +215,7 @@ void csBulletDynamicCollider::AttachToScene(csBulletScene *scene)
   }
 }
 
-void csBulletDynamicCollider::DetachFromScene(csBulletScene *scene)
+void cs::BulletDynamicCollider::DetachFromScene(cs::BulletScene *scene)
 {
   if (m_scene && m_scene->GetBulletScene())
   {
@@ -228,12 +228,12 @@ void csBulletDynamicCollider::DetachFromScene(csBulletScene *scene)
 
 
 
-void csBulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldTrans) const
+void cs::BulletDynamicCollider::MotionState::getWorldTransform(btTransform& worldTrans) const
 {
   worldTrans.setFromOpenGLMatrix(static_cast<const btScalar*>(&m_parent->m_transformation.m00));
 }
 
-void csBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& worldTrans)
+void cs::BulletDynamicCollider::MotionState::setWorldTransform(const btTransform& worldTrans)
 {
   worldTrans.getOpenGLMatrix(static_cast<btScalar*>(&m_parent->m_transformation.m00));
 
@@ -245,7 +245,7 @@ void csBulletDynamicCollider::MotionState::setWorldTransform(const btTransform& 
   // inform bullet system that this dynamic collider has changed
 }
 
-void csBulletDynamicCollider::PropagateTransformation()
+void cs::BulletDynamicCollider::PropagateTransformation()
 {
   if (m_transformationCallback)
   {
@@ -254,7 +254,7 @@ void csBulletDynamicCollider::PropagateTransformation()
 }
 
 
-void csBulletDynamicCollider::DetachJoints(csBulletScene *scene)
+void cs::BulletDynamicCollider::DetachJoints(cs::BulletScene *scene)
 {
   for (size_t i = 0, in = m_joints.size(); i < in; ++i)
   {
@@ -262,13 +262,13 @@ void csBulletDynamicCollider::DetachJoints(csBulletScene *scene)
   }
 }
 
-void csBulletDynamicCollider::AddJoint(csBulletJoint *joint)
+void cs::BulletDynamicCollider::AddJoint(cs::BulletJoint *joint)
 {
   m_joints.push_back(joint);
 }
 
 
-void csBulletDynamicCollider::RemoveJoint(csBulletJoint *joint)
+void cs::BulletDynamicCollider::RemoveJoint(cs::BulletJoint *joint)
 {
   for (size_t i = 0, in = m_joints.size(); i < in; ++i)
   {

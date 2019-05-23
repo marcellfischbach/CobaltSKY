@@ -9,18 +9,21 @@
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
-class csBulletScene;
-class csBulletJoint;
 
+
+namespace cs
+{
+class BulletScene;
+class BulletJoint;
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletDynamicCollider : public CS_SUPER(cs::iPhysicsDynamicCollider)
+class CSBULLETPHYSICS_API BulletDynamicCollider : public CS_SUPER(cs::iPhysicsDynamicCollider)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csBulletDynamicCollider();
-  virtual ~csBulletDynamicCollider();
+  BulletDynamicCollider();
+  virtual ~BulletDynamicCollider();
 
   /**
    * \name cs::iPhysicsCollider interface
@@ -28,17 +31,17 @@ public:
    */
   virtual cs::ePhysicsColliderType GetType() const;
 
-  virtual const cs::Matrix4f &GetMatrix() const;
+  virtual const cs::Matrix4f& GetMatrix() const;
   virtual cs::Transformation GetTransform();
   virtual void FinishTransformation();
-  virtual void SetTransformationCallback(cs::iTransformationCallback *callback);
+  virtual void SetTransformationCallback(cs::iTransformationCallback * callback);
 
 
-  virtual void AttachShape(cs::iPhysicsShape *shape);
-  virtual void DetachShape(cs::iPhysicsShape *shape);
+  virtual void AttachShape(cs::iPhysicsShape * shape);
+  virtual void DetachShape(cs::iPhysicsShape * shape);
 
-  virtual void AttachShape(cs::PhysicsShape *shapes);
-  virtual void DetachShape(cs::PhysicsShape *shapes);
+  virtual void AttachShape(cs::PhysicsShape * shapes);
+  virtual void DetachShape(cs::PhysicsShape * shapes);
 
   /**
    * @}
@@ -69,8 +72,8 @@ public:
   virtual void SetMass(float mass);
   virtual float GetMass() const;
 
-  virtual void SetInertia(const cs::Vector3f &inertia);
-  virtual const cs::Vector3f &GetInertia() const;
+  virtual void SetInertia(const cs::Vector3f & inertia);
+  virtual const cs::Vector3f& GetInertia() const;
 
   virtual void SetAutoInertia(bool autoInertia);
   virtual bool IsAutoInertia() const;
@@ -80,22 +83,22 @@ public:
    */
 
 
-  void AttachToScene(csBulletScene *scene);
-  void DetachFromScene(csBulletScene *scene);
+  void AttachToScene(cs::BulletScene * scene);
+  void DetachFromScene(cs::BulletScene * scene);
 
   void PropagateTransformation();
 
-  btRigidBody *GetRigidBody();
-  const btRigidBody *GetRigidBody() const;
+  btRigidBody* GetRigidBody();
+  const btRigidBody* GetRigidBody() const;
 
-  void AddJoint(csBulletJoint *joint);
-  void RemoveJoint(csBulletJoint *joint);
+  void AddJoint(cs::BulletJoint * joint);
+  void RemoveJoint(cs::BulletJoint * joint);
 
 private:
   class MotionState : public btMotionState
   {
   public:
-    csBulletDynamicCollider *m_parent;
+    cs::BulletDynamicCollider* m_parent;
 
     virtual void	getWorldTransform(btTransform& worldTrans) const;
 
@@ -107,7 +110,7 @@ private:
   void UpdateInertia();
   std::vector<cs::iPhysicsShape*> m_shapes;
 
-  cs::iTransformationCallback *m_transformationCallback;
+  cs::iTransformationCallback* m_transformationCallback;
   //cs::DynamicColliderState *m_dynamicColliderState;
   cs::Matrix4f m_transformation;
 
@@ -120,63 +123,66 @@ private:
   cs::Vector3f m_inertia;
 
 
-  csBulletScene *m_scene;
-  btRigidBody *m_body;
-  btCollisionShape *m_shape;
-  btCompoundShape *m_compoundShape;
+  cs::BulletScene* m_scene;
+  btRigidBody* m_body;
+  btCollisionShape* m_shape;
+  btCompoundShape* m_compoundShape;
 
-  void DetachJoints(csBulletScene *scene);
-  std::vector<csBulletJoint*> m_joints;
+  void DetachJoints(cs::BulletScene * scene);
+  std::vector<cs::BulletJoint*> m_joints;
 };
 
-CS_FORCEINLINE cs::ePhysicsColliderType csBulletDynamicCollider::GetType() const
+}
+
+CS_FORCEINLINE cs::ePhysicsColliderType cs::BulletDynamicCollider::GetType() const
 {
   return cs::ePCT_Dynamic;
 }
 
-CS_FORCEINLINE const cs::Matrix4f &csBulletDynamicCollider::GetMatrix() const
+CS_FORCEINLINE const cs::Matrix4f &cs::BulletDynamicCollider::GetMatrix() const
 {
   return m_transformation;
 }
 
-CS_FORCEINLINE float csBulletDynamicCollider::GetFriction() const
+CS_FORCEINLINE float cs::BulletDynamicCollider::GetFriction() const
 {
   return m_friction;
 }
 
-CS_FORCEINLINE float csBulletDynamicCollider::GetRestitution() const
+CS_FORCEINLINE float cs::BulletDynamicCollider::GetRestitution() const
 {
   return m_restitution;
 }
 
-CS_FORCEINLINE bool csBulletDynamicCollider::IsKinematic() const
+CS_FORCEINLINE bool cs::BulletDynamicCollider::IsKinematic() const
 {
   return m_kinematic;
 }
 
-CS_FORCEINLINE float csBulletDynamicCollider::GetMass() const
+CS_FORCEINLINE float cs::BulletDynamicCollider::GetMass() const
 {
   return m_mass;
 }
 
-CS_FORCEINLINE const cs::Vector3f &csBulletDynamicCollider::GetInertia() const
+CS_FORCEINLINE const cs::Vector3f &cs::BulletDynamicCollider::GetInertia() const
 {
   return m_inertia;
 }
 
-CS_FORCEINLINE bool csBulletDynamicCollider::IsAutoInertia() const
+CS_FORCEINLINE bool cs::BulletDynamicCollider::IsAutoInertia() const
 {
   return m_autoInertia;
 }
 
 
 
-CS_FORCEINLINE btRigidBody *csBulletDynamicCollider::GetRigidBody()
+CS_FORCEINLINE btRigidBody *cs::BulletDynamicCollider::GetRigidBody()
 {
   return m_body;
 }
 
-CS_FORCEINLINE const btRigidBody *csBulletDynamicCollider::GetRigidBody() const
+CS_FORCEINLINE const btRigidBody *cs::BulletDynamicCollider::GetRigidBody() const
 {
   return m_body;
 }
+

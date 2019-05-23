@@ -6,20 +6,23 @@
 #include <vector>
 #include <physicsbullet/bulletstaticcollider.refl.hh>
 
-class csBulletScene;
-class csBulletShape;
 class btRigidBody;
 class btCollisionShape;
 class btCompoundShape;
 
+namespace cs
+{
+class BulletScene;
+class BulletShape;
+
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletStaticCollider : public CS_SUPER(cs::iPhysicsStaticCollider)
+class CSBULLETPHYSICS_API BulletStaticCollider : public CS_SUPER(cs::iPhysicsStaticCollider)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csBulletStaticCollider();
-  virtual ~csBulletStaticCollider();
+  BulletStaticCollider();
+  virtual ~BulletStaticCollider();
 
   /**
   * \name cs::iPhysicsCollider interface
@@ -27,15 +30,15 @@ public:
   */
   virtual cs::ePhysicsColliderType GetType() const;
 
-  virtual const cs::Matrix4f &GetMatrix() const;
+  virtual const cs::Matrix4f& GetMatrix() const;
   virtual cs::Transformation GetTransform();
   virtual void FinishTransformation();
 
-  virtual void AttachShape(cs::iPhysicsShape *shape);
-  virtual void DetachShape(cs::iPhysicsShape *shape);
+  virtual void AttachShape(cs::iPhysicsShape * shape);
+  virtual void DetachShape(cs::iPhysicsShape * shape);
 
-  virtual void AttachShape(cs::PhysicsShape *shapes);
-  virtual void DetachShape(cs::PhysicsShape *shapes);
+  virtual void AttachShape(cs::PhysicsShape * shapes);
+  virtual void DetachShape(cs::PhysicsShape * shapes);
 
   /**
   * @}
@@ -55,8 +58,8 @@ public:
   * @}
   */
 
-  void AttachToScene(csBulletScene *scene);
-  void DetachFromScene(csBulletScene *scene);
+  void AttachToScene(cs::BulletScene * scene);
+  void DetachFromScene(cs::BulletScene * scene);
 
 
 private:
@@ -72,34 +75,35 @@ private:
     {
       localTransform.SetIdentity();
     }
-    csBulletShape *shape;
-    btCollisionShape *btShape;
-    btCollisionObject *object;
+    cs::BulletShape* shape;
+    btCollisionShape* btShape;
+    btCollisionObject* object;
     cs::Matrix4f localTransform;
   };
 
   std::vector<Data> m_shapes;
-  csBulletScene *m_scene;
+  cs::BulletScene* m_scene;
 
 };
 
+}
 
-CS_FORCEINLINE cs::ePhysicsColliderType csBulletStaticCollider::GetType() const
+CS_FORCEINLINE cs::ePhysicsColliderType cs::BulletStaticCollider::GetType() const
 {
   return cs::ePCT_Static;
 }
 
-CS_FORCEINLINE const cs::Matrix4f &csBulletStaticCollider::GetMatrix() const
+CS_FORCEINLINE const cs::Matrix4f &cs::BulletStaticCollider::GetMatrix() const
 {
   return m_transformation;
 }
 
-CS_FORCEINLINE float csBulletStaticCollider::GetFriction() const
+CS_FORCEINLINE float cs::BulletStaticCollider::GetFriction() const
 {
   return m_friction;
 }
 
-CS_FORCEINLINE float csBulletStaticCollider::GetRestitution() const
+CS_FORCEINLINE float cs::BulletStaticCollider::GetRestitution() const
 {
   return m_restitution;
 }

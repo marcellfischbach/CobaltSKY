@@ -6,19 +6,19 @@
 #include <physicsbullet/bulletjoint.hh>
 #include <physicsbullet/bulletstaticcollider.hh>
 
-csBulletScene::csBulletScene()
+cs::BulletScene::BulletScene()
   : cs::iPhysicsScene()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csBulletScene::~csBulletScene()
+cs::BulletScene::~BulletScene()
 {
 
 }
 
 
-bool csBulletScene::Initialize(bool softBody)
+bool cs::BulletScene::Initialize(bool softBody)
 {
   btDefaultCollisionConstructionInfo constructionInfo;
 
@@ -74,7 +74,7 @@ bool csBulletScene::Initialize(bool softBody)
   return true;
 }
 
-void csBulletScene::AddCollider(cs::iPhysicsCollider *collider)
+void cs::BulletScene::AddCollider(cs::iPhysicsCollider *collider)
 {
   if (!collider)
   {
@@ -93,7 +93,7 @@ void csBulletScene::AddCollider(cs::iPhysicsCollider *collider)
   }
 }
 
-void csBulletScene::RemoveCollider(cs::iPhysicsCollider *collider)
+void cs::BulletScene::RemoveCollider(cs::iPhysicsCollider *collider)
 {
   if (!collider)
   {
@@ -113,52 +113,52 @@ void csBulletScene::RemoveCollider(cs::iPhysicsCollider *collider)
 }
 
 
-void csBulletScene::AddStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
+void cs::BulletScene::AddStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
 {
   if (!staticCollider)
   {
     return;
   }
-  csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
+  cs::BulletStaticCollider *btCollider = static_cast<cs::BulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
     btCollider->AttachToScene(this);
   }
 }
 
-void csBulletScene::RemoveStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
+void cs::BulletScene::RemoveStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
 {
   if (!staticCollider)
   {
     return;
   }
-  csBulletStaticCollider *btCollider = static_cast<csBulletStaticCollider*>(staticCollider);
+  cs::BulletStaticCollider *btCollider = static_cast<cs::BulletStaticCollider*>(staticCollider);
   if (btCollider)
   {
     btCollider->DetachFromScene(this);
   }
 }
 
-void csBulletScene::AddDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
+void cs::BulletScene::AddDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
 {
   if (!dynamicCollider)
   {
     return;
   }
-  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
+  cs::BulletDynamicCollider *btCollider = static_cast<cs::BulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
   {
     btCollider->AttachToScene(this);
   }
 }
 
-void csBulletScene::RemoveDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
+void cs::BulletScene::RemoveDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
 {
   if (!dynamicCollider)
   {
     return;
   }
-  csBulletDynamicCollider *btCollider = static_cast<csBulletDynamicCollider*>(dynamicCollider);
+  cs::BulletDynamicCollider *btCollider = static_cast<cs::BulletDynamicCollider*>(dynamicCollider);
   if (btCollider)
   {
     btCollider->DetachFromScene(this);
@@ -166,13 +166,13 @@ void csBulletScene::RemoveDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCo
 }
 
 
-void csBulletScene::AddCharacterController(cs::iPhysicsCharacterController *controller)
+void cs::BulletScene::AddCharacterController(cs::iPhysicsCharacterController *controller)
 {
   if (!controller)
   {
     return;
   }
-  csBulletCapsuleCharacterController *capsController = cs::QueryClass<csBulletCapsuleCharacterController>(controller);
+  cs::BulletCapsuleCharacterController *capsController = cs::QueryClass<cs::BulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     m_characterControllers.push_back(capsController);
@@ -180,13 +180,13 @@ void csBulletScene::AddCharacterController(cs::iPhysicsCharacterController *cont
   }
 }
 
-void csBulletScene::RemoveCharacterController(cs::iPhysicsCharacterController *controller)
+void cs::BulletScene::RemoveCharacterController(cs::iPhysicsCharacterController *controller)
 {
   if (!controller)
   {
     return;
   }
-  csBulletCapsuleCharacterController *capsController = cs::QueryClass<csBulletCapsuleCharacterController>(controller);
+  cs::BulletCapsuleCharacterController *capsController = cs::QueryClass<cs::BulletCapsuleCharacterController>(controller);
   if (capsController)
   {
     for (size_t i = 0, in = m_characterControllers.size(); i < in; ++i)
@@ -202,9 +202,9 @@ void csBulletScene::RemoveCharacterController(cs::iPhysicsCharacterController *c
 }
 
 
-void csBulletScene::AddJoint(cs::iPhysicsJoint *joint)
+void cs::BulletScene::AddJoint(cs::iPhysicsJoint *joint)
 {
-  csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
+  cs::BulletJoint *j = cs::QueryClass<cs::BulletJoint>(joint);
   if (j)
   {
     j->AttachToScene(this);
@@ -212,9 +212,9 @@ void csBulletScene::AddJoint(cs::iPhysicsJoint *joint)
 }
 
 
-void csBulletScene::RemoveJoint(cs::iPhysicsJoint *joint)
+void cs::BulletScene::RemoveJoint(cs::iPhysicsJoint *joint)
 {
-  csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
+  cs::BulletJoint *j = cs::QueryClass<cs::BulletJoint>(joint);
   if (j)
   {
     j->DetachFromScene(this);
@@ -222,24 +222,24 @@ void csBulletScene::RemoveJoint(cs::iPhysicsJoint *joint)
 
 }
 
-void csBulletScene::BodyChanged(csBulletBody *body)
+void cs::BulletScene::BodyChanged(cs::BulletBody *body)
 {
   m_changedBodies.Add(body);
 }
 
-void csBulletScene::DynamicColliderChanged(csBulletDynamicCollider *dynamicCollider)
+void cs::BulletScene::DynamicColliderChanged(cs::BulletDynamicCollider *dynamicCollider)
 {
   m_changedDynamicColliders.Add(dynamicCollider);
 }
 
-void csBulletScene::StepSimulation(float tpf)
+void cs::BulletScene::StepSimulation(float tpf)
 {
   m_changedBodies.Clear();
   m_changedDynamicColliders.Clear();
   m_world->stepSimulation(tpf);
 }
 
-void csBulletScene::UpdateColliders()
+void cs::BulletScene::UpdateColliders()
 {
   for (size_t i = 0; i < m_changedDynamicColliders.length; ++i)
   {

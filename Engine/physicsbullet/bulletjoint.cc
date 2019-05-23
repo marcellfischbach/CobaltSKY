@@ -4,7 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-csBulletJoint::csBulletJoint(cs::ePhysicsJointType type)
+cs::BulletJoint::BulletJoint(cs::ePhysicsJointType type)
   : m_type(type)
   , m_colliderA(0)
   , m_colliderB(0)
@@ -12,34 +12,34 @@ csBulletJoint::csBulletJoint(cs::ePhysicsJointType type)
 
 }
 
-csBulletJoint::~csBulletJoint()
+cs::BulletJoint::~BulletJoint()
 {
 
 }
 
 
-cs::ePhysicsJointType csBulletJoint::GetType() const
+cs::ePhysicsJointType cs::BulletJoint::GetType() const
 {
   return m_type;
 }
 
-void csBulletJoint::SetConstraint(btTypedConstraint *constraint)
+void cs::BulletJoint::SetConstraint(btTypedConstraint *constraint)
 {
   m_constraint = constraint;
 }
 
-btTypedConstraint *csBulletJoint::GetConstraint()
+btTypedConstraint *cs::BulletJoint::GetConstraint()
 {
   return m_constraint;
 }
 
 
-const btTypedConstraint *csBulletJoint::GetConstraint() const
+const btTypedConstraint *cs::BulletJoint::GetConstraint() const
 {
   return m_constraint;
 }
 
-void csBulletJoint::SetCollider(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB)
+void cs::BulletJoint::SetCollider(cs::BulletDynamicCollider *colliderA, cs::BulletDynamicCollider *colliderB)
 {
   if (m_colliderA)
   {
@@ -61,23 +61,23 @@ void csBulletJoint::SetCollider(csBulletDynamicCollider *colliderA, csBulletDyna
   }
 }
 
-cs::iPhysicsDynamicCollider *csBulletJoint::GetColliderA() const
+cs::iPhysicsDynamicCollider *cs::BulletJoint::GetColliderA() const
 {
   return m_colliderA;
 }
 
-cs::iPhysicsDynamicCollider *csBulletJoint::GetColliderB() const
+cs::iPhysicsDynamicCollider *cs::BulletJoint::GetColliderB() const
 {
   return m_colliderB;
 }
 
-void csBulletJoint::AttachToScene(csBulletScene *scene)
+void cs::BulletJoint::AttachToScene(cs::BulletScene *scene)
 {
   btDiscreteDynamicsWorld *world = scene->GetBulletScene();
   world->addConstraint(m_constraint, true);
 }
 
-void csBulletJoint::DetachFromScene(csBulletScene* scene)
+void cs::BulletJoint::DetachFromScene(cs::BulletScene* scene)
 {
   if (m_colliderA)
   {
