@@ -7,26 +7,30 @@
 #include <cobalt/cstypes.hh>
 #include <cobalt/graphics/ivertexdeclaration.refl.hh>
 
+
+namespace cs
+{
+
 /**
 * @brief One element within the entire vertex declaration
 */
-struct csVertexElement
+struct VertexElement
 {
-  csVertexStreamType    StreamDefinition;
-  csDataType                  Type;
+  cs::eVertexStreamType    StreamDefinition;
+  cs::eDataType                  Type;
   csSize                      Size;
   csUInt32                    Offset;
   csSize                      Stride;
   csUInt8                    Stream;
   bool                        Valid;
 
-  csVertexElement()
+  VertexElement()
     : Valid(false)
   {
 
   }
 
-  csVertexElement(csVertexStreamType streamDefinition, csDataType type, csSize size, csUInt32 offset, csSize stride, csUInt8 stream)
+  VertexElement(cs::eVertexStreamType streamDefinition, cs::eDataType type, csSize size, csUInt32 offset, csSize stride, csUInt8 stream)
     : StreamDefinition(streamDefinition)
     , Type(type)
     , Size(size)
@@ -47,11 +51,13 @@ CS_CLASS();
 struct CSE_API iVertexDeclaration : public cs::iObject
 {
   CS_CLASS_GEN;
+  virtual ~iVertexDeclaration() { }
 
   virtual unsigned GetNumberOfStreams() const = 0;
-  virtual const csVertexElement* GetElements(csUInt8 stream) const = 0;
-  virtual const csVertexElement* GetElement(csVertexStreamType streamDefinition, csUInt8 stream) const = 0;
+  virtual const cs::VertexElement* GetElements(csUInt8 stream) const = 0;
+  virtual const cs::VertexElement* GetElement(cs::eVertexStreamType streamDefinition, csUInt8 stream) const = 0;
   virtual csSize GetStride(csUInt8 stream) const = 0;
   virtual csSize GetTotalSize() const = 0;
 };
 
+}

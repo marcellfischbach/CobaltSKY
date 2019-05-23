@@ -3,7 +3,7 @@
 #include <cobalt/core/cslogger.hh>
 #include <iostream>
 
-csLogger::csLogger(const std::string &name)
+cs::Logger::Logger(const std::string &name)
   : m_name(name)
   , m_outputName("")
 {
@@ -29,7 +29,7 @@ csLogger::csLogger(const std::string &name)
 
 
 
-void csLogger::Debug(const std::string &info)
+void cs::Logger::Debug(const std::string &info)
 {
   if (m_debug)
   {
@@ -42,7 +42,7 @@ void csLogger::Debug(const std::string &info)
   }
 }
 
-void csLogger::Info(const std::string &info)
+void cs::Logger::Info(const std::string &info)
 {
   if (m_info)
   {
@@ -55,7 +55,7 @@ void csLogger::Info(const std::string &info)
   }
 }
 
-void csLogger::Warn(const std::string &info)
+void cs::Logger::Warn(const std::string &info)
 {
   if (m_warn)
   {
@@ -68,7 +68,7 @@ void csLogger::Warn(const std::string &info)
   }
 }
 
-void csLogger::Error(const std::string &info)
+void cs::Logger::Error(const std::string &info)
 { 
   if (m_error)
   {
@@ -81,7 +81,7 @@ void csLogger::Error(const std::string &info)
   }
 }
 
-void csLogger::Fatal(const std::string &info)
+void cs::Logger::Fatal(const std::string &info)
 {
   if (m_fatal)
   {

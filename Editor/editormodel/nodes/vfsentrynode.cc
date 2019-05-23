@@ -31,13 +31,13 @@ const VFSEntryNode *VFSEntryNode::AsVFSEntryNode() const
   return this;
 }
 
-void VFSEntryNode::SetEntry(const csVFS::Entry *entry)
+void VFSEntryNode::SetEntry(const cs::VFS::Entry *entry)
 {
   m_entry = entry;
   UpdateResourceLocator();
 }
 
-const csVFS::Entry *VFSEntryNode::GetEntry() const
+const cs::VFS::Entry *VFSEntryNode::GetEntry() const
 {
   return m_entry;
 }
@@ -48,34 +48,34 @@ int VFSEntryNode::GetPriority() const
 }
 
 
-const csResourceLocator VFSEntryNode::WithNewName(const std::string &newName) const
+const cs::ResourceLocator VFSEntryNode::WithNewName(const std::string &newName) const
 {
   if (m_entry)
   {
-    return csResourceLocator(
-      csResourceEntry(m_entry->GetName()),
-      csResourceFile("")
+    return cs::ResourceLocator(
+      cs::ResourceEntry(m_entry->GetName()),
+      cs::ResourceFile("")
     );
   }
 
-  return csResourceLocator(
-    csResourceFile("")
+  return cs::ResourceLocator(
+    cs::ResourceFile("")
   );
 
 }
 
-csResourceLocator VFSEntryNode::GetNewResourceLocator()
+cs::ResourceLocator VFSEntryNode::GetNewResourceLocator()
 {
   if (m_entry)
   {
-    return csResourceLocator(
-      csResourceEntry(m_entry->GetName()),
-      csResourceFile("")
+    return cs::ResourceLocator(
+      cs::ResourceEntry(m_entry->GetName()),
+      cs::ResourceFile("")
     );
   }
 
-  return csResourceLocator(
-      csResourceFile("")
+  return cs::ResourceLocator(
+      cs::ResourceFile("")
     );
   
 }

@@ -2,18 +2,18 @@
 #include <cobalt/graphics/scene/csgroupnode.hh>
 
 
-csGroupNode::csGroupNode()
-  : csNode()
+cs::GroupNode::GroupNode()
+  : cs::Node()
 {
 
 }
 
-csGroupNode::~csGroupNode()
+cs::GroupNode::~GroupNode()
 {
 
 }
 
-bool csGroupNode::AddChild(csNode *node)
+bool cs::GroupNode::AddChild(cs::Node *node)
 {
   node->AddRef();
   m_children.push_back(node);
@@ -21,7 +21,7 @@ bool csGroupNode::AddChild(csNode *node)
 }
 
 
-bool csGroupNode::RemoveChild(csNode *node)
+bool cs::GroupNode::RemoveChild(cs::Node *node)
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -36,7 +36,7 @@ bool csGroupNode::RemoveChild(csNode *node)
   return false;
 }
 
-void csGroupNode::PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback)
+void cs::GroupNode::PrivScan(const cs::Clipper *clipper, cs::iGraphics *renderer, cs::iScanCallback *callback)
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -44,20 +44,20 @@ void csGroupNode::PrivScan(const csClipper *clipper, iGraphics *renderer, iScanC
   }
 }
 
-void csGroupNode::UpdateStates()
+void cs::GroupNode::UpdateStates()
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
     m_children[i]->UpdateStates();
   }
 
-  csNode::UpdateStates();
+  cs::Node::UpdateStates();
 
 }
 
-void csGroupNode::UpdateBoundingBox(csBoundingBox &bbox)
+void cs::GroupNode::UpdateBoundingBox(cs::BoundingBox &bbox)
 {
-  csNode::UpdateBoundingBox(bbox);
+  cs::Node::UpdateBoundingBox(bbox);
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
     bbox.Add(m_children[i]->GetBoundingBox());

@@ -8,27 +8,30 @@
 
 #include <cobalt/graphics/csterrainmesh.refl.hh>
 
+
+namespace cs
+{
 struct iGraphics;
-struct iVertexBuffer;
 struct iIndexBuffer;
+struct iVertexBuffer;
 struct iVertexDeclaration;
-class csMaterial;
+class Material;
 
 
 CS_CLASS()
-class CSE_API csTerrainMesh : public CS_SUPER(iMesh)
+class CSE_API TerrainMesh : public CS_SUPER(cs::iMesh)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csTerrainMesh();
-  virtual ~csTerrainMesh();
+  TerrainMesh();
+  virtual ~TerrainMesh();
 
-  bool Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const csVector3f *normals);
+  bool Initialize(cs::iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const cs::Vector3f *normals);
 
-  virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
-  virtual void Render(iGraphics *gfx, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod = 0);
+  virtual void Update(cs::iGraphics *renderer, const cs::Vector3f &cameraPos, csUInt64 frameNo);
+  virtual void Render(cs::iGraphics *gfx, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lod = 0);
 
-  const csBoundingBox &GetBoundingBox() const;
+  const cs::BoundingBox &GetBoundingBox() const;
 
   virtual csSize GetNumberOfMaterials() const;
 
@@ -46,8 +49,8 @@ private:
   struct Line;
   struct RenderObject;
 
-  void Update(const csVector3f &referencePos);
-  bool UpdateLine(Line &line, const csVector3f &referencePos);
+  void Update(const cs::Vector3f &referencePos);
+  bool UpdateLine(Line &line, const cs::Vector3f &referencePos);
   void UpdateDirtyRenderObject(RenderObject *renderObject);
   unsigned UpdateDirtyQuad(Quad *quad);
 
@@ -60,8 +63,8 @@ private:
   csUInt64 m_lastUpdateFrame;
   bool m_clean;
 
-  iVertexDeclaration *m_vertexDeclaration;
-  iVertexBuffer *m_vertices;
+  cs::iVertexDeclaration *m_vertexDeclaration;
+  cs::iVertexBuffer *m_vertices;
 
   unsigned m_scanline;
   unsigned m_quadSize;
@@ -72,10 +75,10 @@ private:
 
   struct Line
   {
-    csVector3f pos0;
-    csVector3f pos1;
-    csVector3f min;
-    csVector3f max;
+    cs::Vector3f pos0;
+    cs::Vector3f pos1;
+    cs::Vector3f min;
+    cs::Vector3f max;
     int scale;
     Quad *quad0;
     Quad *quad1;
@@ -100,9 +103,9 @@ private:
 
   struct RenderObject
   {
-    csBoundingBox boundingBox;
+    cs::BoundingBox boundingBox;
     unsigned numberOfIndices;
-    iIndexBuffer *indexBuffer;
+    cs::iIndexBuffer *indexBuffer;
     bool dirty;
     unsigned numberOfQuads;
     Quad **quads;
@@ -117,12 +120,15 @@ private:
   unsigned m_numberORenderObjects;
   RenderObject *m_renderObjects;
 
-  csBoundingBox m_boundingBox;
+  cs::BoundingBox m_boundingBox;
 
   std::string m_materialName;
 };
 
-CS_FORCEINLINE const csBoundingBox &csTerrainMesh::GetBoundingBox() const
+}
+
+
+CS_FORCEINLINE const cs::BoundingBox &cs::TerrainMesh::GetBoundingBox() const
 {
   return m_boundingBox;
 }

@@ -17,7 +17,7 @@ void ShaderGraphEditorModule::Initialize(int argc, char **argv)
   asset::contextmenu::Handler *contextMenu = asset::contextmenu::Handler::Get();
   contextMenu->AddFactory(new ShaderGraphEditorContextMenuFactory());
 
-  csResourceManager *mgr = csResourceManager::Get();
+  cs::ResourceManager *mgr = cs::ResourceManager::Get();
   mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
 
 }

@@ -23,8 +23,8 @@ void ShaderGraphEditorToolboxModel::CreateModelData(const QString &filter)
   }
 
   m_root = new Data("root");
-  csSGNodes *nodes = csSGNodes::Get();
-  for (const csSGNodes::Entry &entry : nodes->GetEntries())
+  cs::SGNodes *nodes = cs::SGNodes::Get();
+  for (const cs::SGNodes::Entry &entry : nodes->GetEntries())
   {
     QString v(entry.name.c_str());
     if (filter.isEmpty() || v.contains(filter, Qt::CaseInsensitive))

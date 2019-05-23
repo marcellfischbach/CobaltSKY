@@ -2,7 +2,7 @@
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csfileinfo.hh>
 
-csResourceLocator::csResourceLocator(const csResourceLocator &other)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceLocator &other)
 	: m_resourceEntry(other.m_resourceEntry)
 	, m_resourceFile(other.m_resourceFile)
 	, m_resourceName(other.m_resourceName)
@@ -10,7 +10,7 @@ csResourceLocator::csResourceLocator(const csResourceLocator &other)
 	FixResourceFile();
 }
 
-csResourceLocator::csResourceLocator(const std::string &encodedResourceName)
+cs::ResourceLocator::ResourceLocator(const std::string &encodedResourceName)
 	: m_resourceEntry("")
 	, m_resourceFile("")
 	, m_resourceName("")
@@ -41,7 +41,7 @@ csResourceLocator::csResourceLocator(const std::string &encodedResourceName)
 }
 
 
-csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResourceFile &file)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceEntry &entry, const cs::ResourceFile &file)
 	: m_resourceEntry(entry.GetName())
 	, m_resourceFile(file.GetName())
 	, m_resourceName("")
@@ -51,7 +51,7 @@ csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResou
 
 
 
-csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceEntry &entry, const cs::ResourceFile &file, const cs::ResourceName &name)
   : m_resourceEntry(entry.GetName())
   , m_resourceFile(file.GetName())
   , m_resourceName(name.GetName())
@@ -60,7 +60,7 @@ csResourceLocator::csResourceLocator(const csResourceEntry &entry, const csResou
 }
 
 
-csResourceLocator::csResourceLocator(const csResourceFile &file)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceFile &file)
   : m_resourceEntry("")
   , m_resourceFile(file.GetName())
   , m_resourceName("")
@@ -68,7 +68,7 @@ csResourceLocator::csResourceLocator(const csResourceFile &file)
   FixResourceFile();
 }
 
-csResourceLocator::csResourceLocator(const csResourceEntry& entry)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceEntry& entry)
 	: m_resourceEntry("")
 	, m_resourceFile("")
 	, m_resourceName(entry.GetName())
@@ -79,7 +79,7 @@ csResourceLocator::csResourceLocator(const csResourceEntry& entry)
 
 
 
-csResourceLocator::csResourceLocator(const csResourceFile &file, const csResourceName &name)
+cs::ResourceLocator::ResourceLocator(const cs::ResourceFile &file, const cs::ResourceName &name)
   : m_resourceEntry("")
   , m_resourceFile(file.GetName())
   , m_resourceName(name.GetName())
@@ -87,18 +87,18 @@ csResourceLocator::csResourceLocator(const csResourceFile &file, const csResourc
   FixResourceFile();
 }
 
-csResourceLocator csResourceLocator::Invalid()
+cs::ResourceLocator cs::ResourceLocator::Invalid()
 {
-  return csResourceLocator(
-    csResourceEntry(""),
-    csResourceFile(""),
-    csResourceName("")
+  return cs::ResourceLocator(
+    cs::ResourceEntry(""),
+    cs::ResourceFile(""),
+    cs::ResourceName("")
   );
 }
 
 
 /*
-csResourceLocator::csResourceLocator(const csResourceLocator &resource, const std::string &resourceName)
+cs::ResourceLocator::cs::ResourceLocator(const cs::ResourceLocator &resource, const std::string &resourceName)
 	: m_resourceFile(resource.GetResourceFile())
 	, m_resourceName(resourceName)
 	, m_resourceEntry(resource.GetResourceEntry())
@@ -108,61 +108,61 @@ csResourceLocator::csResourceLocator(const csResourceLocator &resource, const st
 */
 
 
-csResourceLocator csResourceLocator::AsAnonymous() const
+cs::ResourceLocator cs::ResourceLocator::AsAnonymous() const
 {
-  return csResourceLocator(
-    csResourceFile(m_resourceFile), 
-    csResourceName(m_resourceName)
+  return cs::ResourceLocator(
+    cs::ResourceFile(m_resourceFile), 
+    cs::ResourceName(m_resourceName)
   );
 }
 
-csResourceLocator csResourceLocator::WithFileSuffix(const std::string &suffix) const
+cs::ResourceLocator cs::ResourceLocator::WithFileSuffix(const std::string &suffix) const
 {
-  return csResourceLocator(
-    csResourceEntry(m_resourceEntry),
-    csResourceFile(m_resourceFile + suffix),
-    csResourceName(m_resourceName)
+  return cs::ResourceLocator(
+    cs::ResourceEntry(m_resourceEntry),
+    cs::ResourceFile(m_resourceFile + suffix),
+    cs::ResourceName(m_resourceName)
   );
 }
 
-csResourceLocator csResourceLocator::WithResourceName(const std::string &resourceName) const
+cs::ResourceLocator cs::ResourceLocator::WithResourceName(const std::string &resourceName) const
 {
-  return csResourceLocator(
-    csResourceEntry(m_resourceEntry),
-    csResourceFile(m_resourceFile),
-    csResourceName(resourceName)
+  return cs::ResourceLocator(
+    cs::ResourceEntry(m_resourceEntry),
+    cs::ResourceFile(m_resourceFile),
+    cs::ResourceName(resourceName)
   );
 }
 
-csResourceLocator csResourceLocator::AsFileName() const
+cs::ResourceLocator cs::ResourceLocator::AsFileName() const
 {
-  return csResourceLocator(
-    csResourceFile(m_resourceFile)
+  return cs::ResourceLocator(
+    cs::ResourceFile(m_resourceFile)
   );
 }
 
 
-bool csResourceLocator::IsAnonymous() const
+bool cs::ResourceLocator::IsAnonymous() const
 {
 	return m_resourceEntry.empty();
 }
 
-const std::string &csResourceLocator::GetResourceFile() const
+const std::string &cs::ResourceLocator::GetResourceFile() const
 {
 	return m_resourceFile;
 }
 
-const std::string &csResourceLocator::GetResourceName() const
+const std::string &cs::ResourceLocator::GetResourceName() const
 {
 	return m_resourceName;
 }
 
-const std::string &csResourceLocator::GetResourceEntry() const
+const std::string &cs::ResourceLocator::GetResourceEntry() const
 {
 	return m_resourceEntry;
 }
 
-std::string csResourceLocator::Encode() const
+std::string cs::ResourceLocator::Encode() const
 {
 	std::string result;
 	if (!m_resourceEntry.empty())
@@ -177,12 +177,12 @@ std::string csResourceLocator::Encode() const
 	return result;
 }
 
-std::string csResourceLocator::GetDebugName() const
+std::string cs::ResourceLocator::GetDebugName() const
 {
 	return m_resourceEntry + "@" + m_resourceFile + "?" + m_resourceName;
 }
 
-bool csResourceLocator::operator<(const csResourceLocator &o) const
+bool cs::ResourceLocator::operator<(const cs::ResourceLocator &o) const
 {
 	if (m_resourceEntry < o.m_resourceEntry) return true;
 	if (m_resourceEntry > o.m_resourceEntry) return false;
@@ -192,12 +192,12 @@ bool csResourceLocator::operator<(const csResourceLocator &o) const
 	return false;
 }
 
-bool csResourceLocator::Equals(const csResourceLocator &o) const
+bool cs::ResourceLocator::Equals(const cs::ResourceLocator &o) const
 {
 	return *this == o;
 }
 
-bool csResourceLocator::EqualsAnonymous(const csResourceLocator &o) const
+bool cs::ResourceLocator::EqualsAnonymous(const cs::ResourceLocator &o) const
 {
 	if (IsAnonymous() || o.IsAnonymous())
 	{
@@ -207,17 +207,17 @@ bool csResourceLocator::EqualsAnonymous(const csResourceLocator &o) const
 	return *this == o;
 }
 
-bool csResourceLocator::operator==(const csResourceLocator &o) const
+bool cs::ResourceLocator::operator==(const cs::ResourceLocator &o) const
 {
 	return m_resourceEntry == o.m_resourceEntry &&  m_resourceFile == o.m_resourceFile && m_resourceName == o.m_resourceName;
 }
 
-bool csResourceLocator::IsValid() const
+bool cs::ResourceLocator::IsValid() const
 {
 	return !m_resourceFile.empty() || !m_resourceEntry.empty();
 }
 
-void csResourceLocator::FixResourceFile()
+void cs::ResourceLocator::FixResourceFile()
 {
 	size_t s = 0;
 	for (size_t i = 0, in = m_resourceFile.length(); i < in; ++i)

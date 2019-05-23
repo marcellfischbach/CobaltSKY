@@ -3,25 +3,25 @@
 #include <cobalt/physics/iphysicsbasecollider.hh>
 
 
-csBaseColliderState::csBaseColliderState()
-  : csColliderState()
+cs::BaseColliderState::BaseColliderState()
+  : cs::ColliderState()
   , m_baseCollider(0)
 {
 
 }
 
-csBaseColliderState::~csBaseColliderState()
+cs::BaseColliderState::~BaseColliderState()
 {
   CS_RELEASE(m_baseCollider);
 }
 
-void csBaseColliderState::SetBaseCollider(iPhysicsBaseCollider *baseCollider)
+void cs::BaseColliderState::SetBaseCollider(cs::iPhysicsBaseCollider *baseCollider)
 {
   CS_SET(m_baseCollider, baseCollider);
   SetCollider(m_baseCollider);
 }
 
-void csBaseColliderState::SetFriction(float friction)
+void cs::BaseColliderState::SetFriction(float friction)
 {
   if (m_baseCollider)
   {
@@ -29,7 +29,7 @@ void csBaseColliderState::SetFriction(float friction)
   }
 }
 
-float csBaseColliderState::GetFriction() const
+float cs::BaseColliderState::GetFriction() const
 {
   if (m_baseCollider)
   {
@@ -38,7 +38,7 @@ float csBaseColliderState::GetFriction() const
   return 0.0f;
 }
 
-void csBaseColliderState::SetRestitution(float restitution)
+void cs::BaseColliderState::SetRestitution(float restitution)
 {
   if (m_baseCollider)
   {
@@ -46,7 +46,7 @@ void csBaseColliderState::SetRestitution(float restitution)
   }
 }
 
-float csBaseColliderState::GetRestitution() const
+float cs::BaseColliderState::GetRestitution() const
 {
   if (m_baseCollider)
   {

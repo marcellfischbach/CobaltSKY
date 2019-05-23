@@ -3,7 +3,7 @@
 
 #include <graphicsgl4/master.refl.cc>
 
-void GraphicsGL4Module::Initialize()
+void cs::GraphicsGL4Module::Initialize()
 {
   register_classes();
 }

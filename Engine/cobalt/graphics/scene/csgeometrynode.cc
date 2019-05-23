@@ -6,8 +6,8 @@
 #include <cobalt/graphics/csmesh.hh>
 
 
-csGeometryNode::csGeometryNode(csMesh *mesh, csMaterial *material)
-  : csSpatialNode()
+cs::GeometryNode::GeometryNode(cs::Mesh *mesh, cs::Material *material)
+  : cs::SpatialNode()
   , m_mesh(0)
   , m_material(0)
 {
@@ -15,25 +15,25 @@ csGeometryNode::csGeometryNode(csMesh *mesh, csMaterial *material)
   SetMaterial(material);
 }
 
-csGeometryNode::~csGeometryNode()
+cs::GeometryNode::~GeometryNode()
 {
 
 }
 
 
-void csGeometryNode::SetMesh(csMesh* mesh)
+void cs::GeometryNode::SetMesh(cs::Mesh* mesh)
 {
   CS_SET(m_mesh, mesh);
 }
 
 
-void csGeometryNode::SetMaterial(csMaterial *material)
+void cs::GeometryNode::SetMaterial(cs::Material *material)
 {
   CS_SET(m_material, material);
 }
 
 
-void csGeometryNode::Render(iGraphics *renderer, csRenderPass pass, csUInt8 lod)
+void cs::GeometryNode::Render(cs::iGraphics *renderer, cs::eRenderPass pass, csUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {
@@ -53,14 +53,14 @@ void csGeometryNode::Render(iGraphics *renderer, csRenderPass pass, csUInt8 lod)
   */
 }
 
-void csGeometryNode::PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback)
+void cs::GeometryNode::PrivScan(const cs::Clipper *clipper, cs::iGraphics *renderer, cs::iScanCallback *callback)
 {
   callback->ScanGeometryNode(this);
 }
 
-void csGeometryNode::UpdateBoundingBox(csBoundingBox &bbox)
+void cs::GeometryNode::UpdateBoundingBox(cs::BoundingBox &bbox)
 {
-  csSpatialNode::UpdateBoundingBox(bbox);
+  cs::SpatialNode::UpdateBoundingBox(bbox);
 
   if (m_mesh)
   {

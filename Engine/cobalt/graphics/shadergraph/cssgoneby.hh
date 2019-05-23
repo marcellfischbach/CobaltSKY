@@ -7,14 +7,19 @@
 
 #define CS_ONE_BY_NAME "Math/1 by X"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGOneBy : public CS_SUPER(csSGNode)
+class CSE_API SGOneBy : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGOneBy();
-  virtual ~csSGOneBy() { }
+  SGOneBy();
+  virtual ~SGOneBy() { }
 
   virtual bool Validate();
 
 };
+
+}

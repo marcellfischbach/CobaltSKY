@@ -2,12 +2,12 @@
 #include <cobalt/physics/csphysicsshape.hh>
 
 
-csPhysicsShape::csPhysicsShape()
+cs::PhysicsShape::PhysicsShape()
 {
   m_shapes.clear();
 }
 
-csPhysicsShape::~csPhysicsShape()
+cs::PhysicsShape::~PhysicsShape()
 {
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
@@ -16,7 +16,7 @@ csPhysicsShape::~csPhysicsShape()
   m_shapes.clear();
 }
 
-void csPhysicsShape::AddShape(iPhysicsShape *shape)
+void cs::PhysicsShape::AddShape(cs::iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -27,7 +27,7 @@ void csPhysicsShape::AddShape(iPhysicsShape *shape)
   m_shapes.push_back(shape);
 }
 
-void csPhysicsShape::RemoveShape(csSize idx)
+void cs::PhysicsShape::RemoveShape(csSize idx)
 {
   if (idx >= m_shapes.size())
   {
@@ -38,12 +38,12 @@ void csPhysicsShape::RemoveShape(csSize idx)
   m_shapes.erase(m_shapes.begin() + idx);
 }
 
-csSize csPhysicsShape::GetNumberOfShapes() const
+csSize cs::PhysicsShape::GetNumberOfShapes() const
 {
   return m_shapes.size();
 }
 
-iPhysicsShape* csPhysicsShape::GetShape(csSize idx)
+cs::iPhysicsShape* cs::PhysicsShape::GetShape(csSize idx)
 {
   if (idx >= m_shapes.size())
   {
@@ -52,7 +52,7 @@ iPhysicsShape* csPhysicsShape::GetShape(csSize idx)
   return m_shapes[idx];
 }
 
-const iPhysicsShape* csPhysicsShape::GetShape(csSize idx) const
+const cs::iPhysicsShape* cs::PhysicsShape::GetShape(csSize idx) const
 {
   if (idx >= m_shapes.size())
   {

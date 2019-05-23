@@ -27,14 +27,14 @@ MaterialEditorProperties::~MaterialEditorProperties()
   CS_RELEASE(m_material);
 }
 
-void MaterialEditorProperties::SetMaterial(csMaterialWrapper *material)
+void MaterialEditorProperties::SetMaterial(cs::MaterialWrapper *material)
 {
   if (m_material != material)
   {
     CS_SET(m_material, material);
     if (m_material)
     {
-      csMaterialDefWrapper *defWrapper = m_material->Get()->GetMaterialDef();
+      cs::MaterialDefWrapper *defWrapper = m_material->Get()->GetMaterialDef();
       if (defWrapper)
       {
         m_materialDefWidget->SetResourceLocator(defWrapper->GetLocator().AsAnonymous());
@@ -66,8 +66,8 @@ void MaterialEditorProperties::InitGUI()
   QLabel *label = new QLabel(tr("MaterialDef"), frame);
   m_materialDefWidget = new AssetResourceWidget(frame);
   m_materialDefWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-  m_materialDefWidget->AddValidClass(csMaterialDefWrapper::GetStaticClass());
-  connect(m_materialDefWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SLOT(MaterialDefChanged(const csResourceLocator &)));
+  m_materialDefWidget->AddValidClass(cs::MaterialDefWrapper::GetStaticClass());
+  connect(m_materialDefWidget, SIGNAL(ResourceChanged(const cs::ResourceLocator &)), this, SLOT(MaterialDefChanged(const cs::ResourceLocator &)));
 
   frameLayout->addWidget(label, 0, 0, 1, 1);
   frameLayout->addWidget(m_materialDefWidget, 0, 1, 1, 1);
@@ -94,9 +94,9 @@ void MaterialEditorProperties::InitGUI()
 }
 
 
-void MaterialEditorProperties::MaterialDefChanged(const csResourceLocator &locator)
+void MaterialEditorProperties::MaterialDefChanged(const cs::ResourceLocator &locator)
 {
-  csMaterialDefWrapper *materialDef = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator.AsAnonymous());
+  cs::MaterialDefWrapper *materialDef = cs::ResourceManager::Get()->Aquire<cs::MaterialDefWrapper>(locator.AsAnonymous());
   if (materialDef == m_material->Get()->GetMaterialDef())
   {
     return;
@@ -116,10 +116,10 @@ void MaterialEditorProperties::UpdateGUI()
   {
     return;
   }
-  csMaterial *material = m_material->Get();
+  cs::Material *material = m_material->Get();
   unsigned row = 0;
-  csMaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
-  csMaterialDef *materialDef = materialDefWrapper->Get();
+  cs::MaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
+  cs::MaterialDef *materialDef = materialDefWrapper->Get();
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
@@ -141,7 +141,7 @@ void MaterialEditorProperties::UpdateGUI()
 
     switch (materialDef->GetParamType(i))
     {
-    case eSPT_Float:
+    case cs::eSPT_Float:
     {
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       sbF0->setSingleStep(0.1);
@@ -150,7 +150,7 @@ void MaterialEditorProperties::UpdateGUI()
       m_frameLayout->addWidget(sbF0, row, 1, 1, 1);
       param.doubleSpinBoxes.push_back(sbF0);
     }break;
-    case eSPT_Vector2:
+    case cs::eSPT_Vector2:
     {
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
@@ -167,7 +167,7 @@ void MaterialEditorProperties::UpdateGUI()
       param.doubleSpinBoxes.push_back(sbF0);
       param.doubleSpinBoxes.push_back(sbF1);
     }break;
-    case eSPT_Vector3:
+    case cs::eSPT_Vector3:
     {
       QDoubleSpinBox *sbF0 = new QDoubleSpinBox(m_frame);
       QDoubleSpinBox *sbF1 = new QDoubleSpinBox(m_frame);
@@ -191,46 +191,46 @@ void MaterialEditorProperties::UpdateGUI()
       param.doubleSpinBoxes.push_back(sbF1);
       param.doubleSpinBoxes.push_back(sbF2);
     }break;
-    case eSPT_Vector4:
+    case cs::eSPT_Vector4:
     {
       Vector4fLineEdit *lineEdit = new Vector4fLineEdit(m_frame);
       lineEdit->SetValue(material->IsInherited(i) ? materialDef->GetDefaultVector4(i) : material->GetFloat4(i));
       lineEdit->SetEnabled(!inherit);
-      connect(lineEdit, SIGNAL(ValueChanged(const csVector4f&)), this, SLOT(Vector4fChanged(const csVector4f&)));
+      connect(lineEdit, SIGNAL(ValueChanged(const cs::Vector4f&)), this, SLOT(Vector4fChanged(const cs::Vector4f&)));
       param.vector4fLineEdit = lineEdit;
       m_frameLayout->addWidget(lineEdit, row, 1, 1, 1);
     }break;
-    case eSPT_Color4:
+    case cs::eSPT_Color4:
     {
       Color4fLineEdit *lineEdit = new Color4fLineEdit(m_frame);
       lineEdit->SetColor(material->IsInherited(i) ? materialDef->GetDefaultColor4(i) : material->GetColor4(i));
       lineEdit->SetEnabled(!inherit);
-      connect(lineEdit, SIGNAL(ColorChanged(const csColor4f&)), this, SLOT(Color4fChanged(const csColor4f&)));
+      connect(lineEdit, SIGNAL(ColorChanged(const cs::Color4f&)), this, SLOT(Color4fChanged(const cs::Color4f&)));
       param.colorLineEdit = lineEdit;
       m_frameLayout->addWidget(lineEdit, row, 1, 1, 1);
     }break;
-    case eSPT_Texture:
+    case cs::eSPT_Texture:
     {
       param.textureWidget = new AssetResourceWidget(m_frame);
-      csTextureWrapper *textureWrapper = material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : material->GetTexture(i);
+      cs::TextureWrapper *textureWrapper = material->IsInherited(i) ? materialDef->GetDefaultTexture(i) : material->GetTexture(i);
       param.textureWidget->setEnabled(!inherit);
       param.textureWidget->SetResourceLocator(textureWrapper->GetLocator());
       param.textureWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-      param.textureWidget->AddValidClass(iTexture::GetStaticClass());
+      param.textureWidget->AddValidClass(cs::iTexture::GetStaticClass());
       m_frameLayout->addWidget(param.textureWidget, row, 1, 1, 1);
-      connect(param.textureWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SLOT(TextureResourceChanged(const csResourceLocator &)));
+      connect(param.textureWidget, SIGNAL(ResourceChanged(const cs::ResourceLocator &)), this, SLOT(TextureResourceChanged(const cs::ResourceLocator &)));
     }break;
     /*
-        eSPT_Vector3,
-        eSPT_Vector4,
-        eSPT_Int,
-        eSPT_IVector2,
-        eSPT_IVector3,
-        eSPT_IVector4,
-        eSPT_Color4,
-        eSPT_Matrix3,
-        eSPT_Matrix4,
-        eSPT_Texture,
+        cs::eSPT_Vector3,
+        cs::eSPT_Vector4,
+        cs::eSPT_Int,
+        cs::eSPT_IVector2,
+        cs::eSPT_IVector3,
+        cs::eSPT_IVector4,
+        cs::eSPT_Color4,
+        cs::eSPT_Matrix3,
+        cs::eSPT_Matrix4,
+        cs::eSPT_Texture,
         */
     default:
       break;
@@ -319,12 +319,12 @@ void MaterialEditorProperties::CheckBoxChanged(int)
   UpdateMaterialValues();
 }
 
-void MaterialEditorProperties::Color4fChanged(const csColor4f&)
+void MaterialEditorProperties::Color4fChanged(const cs::Color4f&)
 {
   UpdateMaterialValues();
 }
 
-void MaterialEditorProperties::Vector4fChanged(const csVector4f &)
+void MaterialEditorProperties::Vector4fChanged(const cs::Vector4f &)
 {
   UpdateMaterialValues();
 }
@@ -334,7 +334,7 @@ void MaterialEditorProperties::DoubleSpinBoxChanged(double)
   UpdateMaterialValues();
 }
 
-void MaterialEditorProperties::TextureResourceChanged(const csResourceLocator &)
+void MaterialEditorProperties::TextureResourceChanged(const cs::ResourceLocator &)
 {
   UpdateMaterialValues();
 }
@@ -346,15 +346,15 @@ void MaterialEditorProperties::UpdateMaterialValues()
     return;
   }
 
-  csMaterial *material = m_material->Get();
+  cs::Material *material = m_material->Get();
 
-  csMaterialDefWrapper *materialDefWrapper = m_material->Get()->GetMaterialDef();
+  cs::MaterialDefWrapper *materialDefWrapper = m_material->Get()->GetMaterialDef();
   if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return;
   }
 
-  csMaterialDef *materialDef = materialDefWrapper->Get();
+  cs::MaterialDef *materialDef = materialDefWrapper->Get();
 
 
   for (auto param : m_params)
@@ -370,37 +370,37 @@ void MaterialEditorProperties::UpdateMaterialValues()
 
       switch (materialDef->GetParamType(idx))
       {
-      case eSPT_Float:
+      case cs::eSPT_Float:
         material->Set(idx, (float)param.doubleSpinBoxes[0]->value());
         break;
-      case eSPT_Vector2:
-        material->Set(idx, csVector2f(
+      case cs::eSPT_Vector2:
+        material->Set(idx, cs::Vector2f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value()
         ));
         break;
-      case eSPT_Vector3:
-        material->Set(idx, csVector3f(
+      case cs::eSPT_Vector3:
+        material->Set(idx, cs::Vector3f(
           (float)param.doubleSpinBoxes[0]->value(),
           (float)param.doubleSpinBoxes[1]->value(),
           (float)param.doubleSpinBoxes[2]->value()
         ));
         break;
-      case eSPT_Vector4:
+      case cs::eSPT_Vector4:
         if (param.vector4fLineEdit)
         {
           material->Set(idx, param.vector4fLineEdit->GetValue());
         }
         break;
-      case eSPT_Color4:
+      case cs::eSPT_Color4:
         if (param.colorLineEdit)
         {
           material->Set(idx, param.colorLineEdit->GetColor());
         }
         break;
-      case eSPT_Texture:
+      case cs::eSPT_Texture:
       {
-        csTextureWrapper *texture = csResourceManager::Get()->Aquire<csTextureWrapper>(param.textureWidget->GetResourceLocator());
+        cs::TextureWrapper *texture = cs::ResourceManager::Get()->Aquire<cs::TextureWrapper>(param.textureWidget->GetResourceLocator());
         material->Set(idx, texture);
       }break;
       }

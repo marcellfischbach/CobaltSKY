@@ -8,7 +8,11 @@
 #include <cobalt/math/csvector4f.hh>
 #include <materialeditor/ui_materialeditorwidget.h>
 
-class csMaterialWrapper;
+namespace cs
+{
+class MaterialWrapper;
+}
+
 class MaterialEditor;
 class MATERIALEDITOR_API MaterialEditorWidget : public QWidget
 {
@@ -17,7 +21,7 @@ public:
   MaterialEditorWidget(MaterialEditor *editor);
   virtual ~MaterialEditorWidget();
 
-  void SetMaterial(csMaterialWrapper *material);
+  void SetMaterial(cs::MaterialWrapper *material);
 
   MaterialEditorPreviewSceneView *GetSceneView();
 
@@ -30,7 +34,7 @@ private:
 
   MaterialEditor *m_editor;
 
-  csMaterialWrapper *m_material;
+  cs::MaterialWrapper *m_material;
 
   Ui::MaterialEditorWidget m_gui;
 

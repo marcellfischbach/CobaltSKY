@@ -1,9 +1,9 @@
 #include <cobalt/graphics/shadergraph/cssgvarfloat1.hh>
 
-csSGVarFloat::csSGVarFloat()
-  : csSGResourceNode()
+cs::SGVarFloat::SGVarFloat()
+  : cs::SGResourceNode()
 {
   SetName(CS_VAR_FLOAT_NAME);
-  SetResourceType(eSPT_Float);
-  AddOutput(new csSGOutput(eSGDT_Float, "v"));
+  SetResourceType(cs::eSPT_Float);
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "v"));
 }

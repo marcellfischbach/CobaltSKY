@@ -18,7 +18,7 @@ namespace asset::model
 
     virtual bool IsAttached() const;
 
-    virtual csResourceLocator GetResourceLocator() const;
+    virtual cs::ResourceLocator GetResourceLocator() const;
 
 		virtual bool IsRoot() const;
 		virtual Root *AsRoot();

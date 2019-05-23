@@ -17,18 +17,18 @@ static const char *compareMode[] = {
   "!="
 };
 
-void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLogger *logger)
+void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
 {
-  graph->SetShader(eRP_GBuffer, 0);
+  graph->SetShader(cs::eRP_GBuffer, 0);
 
-  std::set<csSGOutput*> outputs;
-  std::set<csSGOutput*> preAlphaOutputs;
-  std::set<csSGOutput*> postAlphaOutputs;
+  std::set<cs::SGOutput*> outputs;
+  std::set<cs::SGOutput*> preAlphaOutputs;
+  std::set<cs::SGOutput*> postAlphaOutputs;
 
-  csSGOutput *diffuseOutput = graph->GetDiffuse();
-  csSGOutput *normalOutput = graph->GetNormal();
-  csSGOutput *roughnessOutput = graph->GetRoughness();
-  csSGOutput *alphaOutput = graph->GetAlpha();
+  cs::SGOutput *diffuseOutput = graph->GetDiffuse();
+  cs::SGOutput *normalOutput = graph->GetNormal();
+  cs::SGOutput *roughnessOutput = graph->GetRoughness();
+  cs::SGOutput *alphaOutput = graph->GetAlpha();
   if (!diffuseOutput)
   {
     if (logger)
@@ -37,26 +37,26 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
     }
     return;
   }
-  if (diffuseOutput->GetDataType() == eSGDT_Float4)
+  if (diffuseOutput->GetDataType() == cs::eSGDT_Float4)
   {
-    csSGSplitFloat4 *diffuseSplit = new csSGSplitFloat4();
+    cs::SGSplitFloat4 *diffuseSplit = new cs::SGSplitFloat4();
     diffuseSplit->GetInput(0)->SetInput(diffuseOutput);
 
-    csSGFloat3 *vec3 = new csSGFloat3();
+    cs::SGFloat3 *vec3 = new cs::SGFloat3();
     vec3->SetInput(0, diffuseSplit, 0);
     vec3->SetInput(1, diffuseSplit, 1);
     vec3->SetInput(2, diffuseSplit, 2);
 
     diffuseOutput = vec3->GetOutput(0);
   }
-  else if (diffuseOutput->GetDataType() == eSGDT_Float2)
+  else if (diffuseOutput->GetDataType() == cs::eSGDT_Float2)
   {
     logger->LogInfo("GBuffer", "Invalid input type for diffuse");
     return;
   }
-  else if (diffuseOutput->GetDataType() == eSGDT_Float)
+  else if (diffuseOutput->GetDataType() == cs::eSGDT_Float)
   {
-    csSGFloat3 *vec3 = new csSGFloat3();
+    cs::SGFloat3 *vec3 = new cs::SGFloat3();
     vec3->GetInput(0)->SetInput(diffuseOutput);
     vec3->GetInput(1)->SetInput(diffuseOutput);
     vec3->GetInput(2)->SetInput(diffuseOutput);
@@ -65,26 +65,26 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
   if (normalOutput)
   {
-    if (normalOutput->GetDataType() == eSGDT_Float4)
+    if (normalOutput->GetDataType() == cs::eSGDT_Float4)
     {
-      csSGSplitFloat4 *normalSplit = new csSGSplitFloat4();
+      cs::SGSplitFloat4 *normalSplit = new cs::SGSplitFloat4();
       normalSplit->GetInput(0)->SetInput(normalOutput);
 
-      csSGFloat3 *vec3 = new csSGFloat3();
+      cs::SGFloat3 *vec3 = new cs::SGFloat3();
       vec3->SetInput(0, normalSplit, 0);
       vec3->SetInput(1, normalSplit, 1);
       vec3->SetInput(2, normalSplit, 2);
 
       normalOutput = vec3->GetOutput(0);
     }
-    else if (normalOutput->GetDataType() == eSGDT_Float2)
+    else if (normalOutput->GetDataType() == cs::eSGDT_Float2)
     {
       logger->LogInfo("GBuffer", "Invalid input type for diffuse");
       return;
     }
-    else if (normalOutput->GetDataType() == eSGDT_Float)
+    else if (normalOutput->GetDataType() == cs::eSGDT_Float)
     {
-      csSGFloat3 *vec3 = new csSGFloat3();
+      cs::SGFloat3 *vec3 = new cs::SGFloat3();
       vec3->GetInput(0)->SetInput(normalOutput);
       vec3->GetInput(1)->SetInput(normalOutput);
       vec3->GetInput(2)->SetInput(normalOutput);
@@ -94,7 +94,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
   if (roughnessOutput)
   {
-    if (roughnessOutput->GetDataType() != eSGDT_Float)
+    if (roughnessOutput->GetDataType() != cs::eSGDT_Float)
     {
       roughnessOutput = 0;
     }
@@ -106,7 +106,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
   if (graph->IsDiscardAlpha() && alphaOutput)
   {
-    if (alphaOutput->GetDataType() != eSGDT_Float)
+    if (alphaOutput->GetDataType() != cs::eSGDT_Float)
     {
       alphaOutput = 0;
     }
@@ -290,7 +290,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
 
 
   csShaderGL4 *vertexShader = new csShaderGL4();
-  vertexShader->SetShaderType(eST_Vertex);
+  vertexShader->SetShaderType(cs::eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
   {
@@ -303,7 +303,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
 
   csShaderGL4 *fragmentShader = new csShaderGL4();
-  fragmentShader->SetShaderType(eST_Fragment);
+  fragmentShader->SetShaderType(cs::eST_Fragment);
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
   {
@@ -317,7 +317,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
     return;
   }
 
-  csProgramGL4 *gBufferShader = new csProgramGL4();
+  cs::ProgramGL4 *gBufferShader = new cs::ProgramGL4();
   gBufferShader->AttachShader(new csShaderGL4Wrapper(vertexShader));
   gBufferShader->AttachShader(new csShaderGL4Wrapper(fragmentShader));
   if (!gBufferShader->Link())
@@ -334,7 +334,7 @@ void csShaderGraphGL4::GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLog
   }
 
 
-  graph->SetShader(eRP_GBuffer, new csProgramGL4Wrapper(gBufferShader));
+  graph->SetShader(cs::eRP_GBuffer, new cs::ProgramGL4Wrapper(gBufferShader));
 
   vertexShader->Release();
   fragmentShader->Release();

@@ -20,28 +20,28 @@
 
 
 
-csStaticMeshAssetLoader::csStaticMeshAssetLoader()
-  : iAssetLoader()
+cs::StaticMeshAssetLoader::StaticMeshAssetLoader()
+  : cs::iAssetLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csStaticMeshAssetLoader::~csStaticMeshAssetLoader()
+cs::StaticMeshAssetLoader::~StaticMeshAssetLoader()
 {
 
 }
 
-bool csStaticMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::StaticMeshAssetLoader::CanLoad(const std::string &typeID, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return typeID == std::string("MESH");// && name == std::string("DATA");
 }
 
-const cs::Class *csStaticMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::StaticMeshAssetLoader::EvalClass(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csMesh::GetStaticClass();
+  return cs::Mesh::GetStaticClass();
 }
 
-csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::StaticMeshAssetLoader::Load(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   csUInt32 version, numMaterials, numSubMeshes, numIndices;
   inputStream >> version;
@@ -51,8 +51,8 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
     return nullptr;
   }
 
-  csMesh *mesh = new csMesh();
-  csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);
+  cs::Mesh *mesh = new cs::Mesh();
+  cs::MeshWrapper *meshWrapper = new cs::MeshWrapper(mesh);
 
   // 
   // read the material names of the mesh
@@ -66,7 +66,7 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
 
   //
   // read and create the global index buffers that can be shared among multiple submeshes
-  std::vector<iIndexBuffer*> globalIndexBuffers;
+  std::vector<cs::iIndexBuffer*> globalIndexBuffers;
   inputStream >> numIndices;
   for (csUInt32 i = 0; i < numIndices; ++i)
   {
@@ -74,7 +74,7 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    cs::iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, cs::eBDM_Static);
     globalIndexBuffers.push_back(indexBuffer);
     delete[] buffer;
   }
@@ -91,7 +91,7 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
       >> materialIndex
       >> lod
       >> name;
-    csSubMeshWrapper *subMesh = ReadSubMesh(inputStream, globalIndexBuffers, locator, userData);
+    cs::SubMeshWrapper *subMesh = ReadSubMesh(inputStream, globalIndexBuffers, locator, userData);
     if (!subMesh)
     {
       CS_RELEASE(mesh);
@@ -109,27 +109,27 @@ csResourceWrapper *csStaticMeshAssetLoader::Load(csAssetInputStream &inputStream
 
   mesh->OptimizeDataStruct();
   mesh->UpdateBoundingBox();
-  const csBoundingBox& bbox = mesh->GetBoundingBox();
+  const cs::BoundingBox& bbox = mesh->GetBoundingBox();
   bbox.Debug("StaticMeshLoader");
 
   return meshWrapper;
 }
 
 
-csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &inputStream, std::vector<iIndexBuffer*> &globalIndexBuffers, const csResourceLocator &locator, cs::iObject *userData) const
+cs::SubMeshWrapper *cs::StaticMeshAssetLoader::ReadSubMesh(cs::AssetInputStream &inputStream, std::vector<cs::iIndexBuffer*> &globalIndexBuffers, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csSubMesh *subMesh = new csSubMesh();
-  csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
+  cs::SubMesh *subMesh = new cs::SubMesh();
+  cs::SubMeshWrapper *subMeshWrapper = new cs::SubMeshWrapper(subMesh);
 
   csUInt8 numVertexDeclaration;
   csUInt32 primType, indexType;
   inputStream >> primType >> indexType;
 
-  subMesh->SetPrimitiveType((csPrimitiveType)primType);
-  subMesh->SetIndexType((csDataType)indexType);
+  subMesh->SetPrimitiveType((cs::ePrimitiveType)primType);
+  subMesh->SetIndexType((cs::eDataType)indexType);
   //
   // read and create the vertex declaration
-  std::vector<csVertexElement> vertexElements;
+  std::vector<cs::VertexElement> vertexElements;
   inputStream >> numVertexDeclaration;
   for (csUInt32 i = 0; i < numVertexDeclaration; ++i)
   {
@@ -146,16 +146,16 @@ csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &input
       >> offset
       >> stride
       >> stream;
-    vertexElements.push_back(csVertexElement(
-      (csVertexStreamType)streamType,
-      (csDataType)dataType,
+    vertexElements.push_back(cs::VertexElement(
+      (cs::eVertexStreamType)streamType,
+      (cs::eDataType)dataType,
       size,
       offset,
       stride,
       stream));
   }
-  vertexElements.push_back(csVertexElement());
-  iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(vertexElements.data());
+  vertexElements.push_back(cs::VertexElement());
+  cs::iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(vertexElements.data());
   subMesh->SetVertexDeclaration(vertexDeclaration);
   CS_RELEASE(vertexDeclaration);
 
@@ -169,7 +169,7 @@ csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &input
     inputStream >> vertexBufferSize;
     unsigned char *buffer = new unsigned char[vertexBufferSize];
     inputStream.Read(buffer, vertexBufferSize);
-    iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
+    cs::iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(vertexBufferSize, buffer, cs::eBDM_Static);
     subMesh->AddVertexBuffer(vertexBuffer);
     CS_RELEASE(vertexBuffer);
     delete[] buffer;
@@ -195,16 +195,16 @@ csSubMeshWrapper *csStaticMeshAssetLoader::ReadSubMesh(csAssetInputStream &input
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    cs::iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, cs::eBDM_Static);
     delete[] buffer;
     subMesh->SetIndexBuffer(indexBuffer, count, offset);
   }
 
   //
   // read the bounding box
-  csVector3f min, max;
+  cs::Vector3f min, max;
   inputStream >> min >> max;
-  csBoundingBox bbox;
+  cs::BoundingBox bbox;
   bbox.Add(min);
   bbox.Add(max);
   bbox.Finish();

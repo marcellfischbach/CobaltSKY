@@ -6,7 +6,7 @@
 
 #include <cobalt/csengine.hh>
 
-csTexture2DArrayWrapper *csBinaryGradient::static_textureArray = 0;
+cs::Texture2DArrayWrapper *cs::BinaryGradient::static_textureArray = 0;
 
 static float assign_pattern(const char* pattern, void *colors)
 {
@@ -306,16 +306,16 @@ static void create_pattern16(void *colors)
     );
 }
 
-csBinaryGradient::csBinaryGradient()
+cs::BinaryGradient::BinaryGradient()
 {
 }
 
-csBinaryGradient::~csBinaryGradient()
+cs::BinaryGradient::~BinaryGradient()
 {
 
 }
 
-csTexture2DWrapper *csBinaryGradient::GetBinaryGradientLevel1()
+cs::Texture2DWrapper *cs::BinaryGradient::GetBinaryGradientLevel1()
 {
   if (!static_textureArray)
   {
@@ -324,13 +324,13 @@ csTexture2DWrapper *csBinaryGradient::GetBinaryGradientLevel1()
 }
 
 
-csTexture2DArrayWrapper *csBinaryGradient::GetBinaryGradient()
+cs::Texture2DArrayWrapper *cs::BinaryGradient::GetBinaryGradient()
 {
   if (!static_textureArray)
   {
-    if (iTexture2DArray *textureArray = csEng->CreateTexture2DArray(ePF_RGBA, 8, 8, 18, false))
+    if (cs::iTexture2DArray *textureArray = csEng->CreateTexture2DArray(cs::ePF_RGBA, 8, 8, 18, false))
     {
-      csPixelFormat format = ePF_RGBA;
+      cs::ePixelFormat format = cs::ePF_RGBA;
       csUInt32 colors[8 * 8 * 18];
       int i = 0;
       create_pattern0(&colors[i++ * 64]);
@@ -353,16 +353,16 @@ csTexture2DArrayWrapper *csBinaryGradient::GetBinaryGradient()
       create_pattern16(&colors[i++ * 64]);
       textureArray->CopyData(0, format, colors);
 
-      iSampler *sampler = csEng->CreateSampler();
+      cs::iSampler *sampler = csEng->CreateSampler();
       /*
-      sampler->SetAddressU(eTAM_Repeat);
-      sampler->SetAddressV(eTAM_Repeat);
-      sampler->SetFilter(eFM_MinMagNearest);
+      sampler->SetAddressU(cs::eTAM_Repeat);
+      sampler->SetAddressV(cs::eTAM_Repeat);
+      sampler->SetFilter(cs::eFM_MinMagNearest);
       */
-      textureArray->SetSampler(new csSamplerWrapper(sampler));
+      textureArray->SetSampler(new cs::SamplerWrapper(sampler));
 
 
-      static_textureArray = new csTexture2DArrayWrapper(textureArray);
+      static_textureArray = new cs::Texture2DArrayWrapper(textureArray);
     }
   }
   return static_textureArray;

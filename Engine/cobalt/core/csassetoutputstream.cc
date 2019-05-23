@@ -8,7 +8,7 @@
 
 
 
-csAssetOutputStream::csAssetOutputStream(size_t initialCapacity, size_t allocationSize)
+cs::AssetOutputStream::AssetOutputStream(size_t initialCapacity, size_t allocationSize)
   : m_buffer(0)
   , m_writePointer(0)
   , m_size(0)
@@ -20,14 +20,14 @@ csAssetOutputStream::csAssetOutputStream(size_t initialCapacity, size_t allocati
 }
 
 
-csAssetOutputStream::~csAssetOutputStream()
+cs::AssetOutputStream::~AssetOutputStream()
 {
   delete[] m_buffer;
   m_buffer = 0;
   m_writePointer = 0;
 }
 
-void csAssetOutputStream::AcquireCapacity(size_t capacity)
+void cs::AssetOutputStream::AcquireCapacity(size_t capacity)
 {
   if ((m_size + capacity) > m_capacity)
   {
@@ -40,7 +40,7 @@ void csAssetOutputStream::AcquireCapacity(size_t capacity)
   }
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csInt8 &i) 
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csInt8 &i) 
 {
   AcquireCapacity(sizeof(csInt8));
   *reinterpret_cast<csInt8*>(m_writePointer) = i;
@@ -49,7 +49,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csInt8 &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt8 &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csUInt8 &i)
 {
   AcquireCapacity(sizeof(csUInt8));
   *reinterpret_cast<csUInt8*>(m_writePointer) = i;
@@ -59,7 +59,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt8 &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csInt16 &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csInt16 &i)
 {
   AcquireCapacity(sizeof(csInt16));
   *reinterpret_cast<csInt16*>(m_writePointer) = i;
@@ -68,7 +68,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csInt16 &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt16 &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csUInt16 &i)
 {
   AcquireCapacity(sizeof(csUInt16));
   *reinterpret_cast<csUInt16*>(m_writePointer) = i;
@@ -79,7 +79,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt16 &i)
 
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csInt32 &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csInt32 &i)
 {
   AcquireCapacity(sizeof(csInt32));
   *reinterpret_cast<csInt32*>(m_writePointer) = i;
@@ -88,7 +88,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csInt32 &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt32 &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const csUInt32 &i)
 {
   AcquireCapacity(sizeof(csUInt32));
   *reinterpret_cast<csUInt32*>(m_writePointer) = i;
@@ -98,7 +98,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csUInt32 &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const size_t &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const size_t &i)
 {
   AcquireCapacity(sizeof(size_t));
   *reinterpret_cast<size_t*>(m_writePointer) = i;
@@ -108,7 +108,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const size_t &i)
 }
 
 
-csAssetOutputStream & csAssetOutputStream::operator<< (const float &i)
+cs::AssetOutputStream & cs::AssetOutputStream::operator<< (const float &i)
 {
   AcquireCapacity(sizeof(float));
   *reinterpret_cast<float*>(m_writePointer) = i;
@@ -118,7 +118,7 @@ csAssetOutputStream & csAssetOutputStream::operator<< (const float &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csVector2f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Vector2f &i)
 {
   AcquireCapacity(sizeof(float)*2);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
@@ -131,7 +131,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csVector2f &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csVector3f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Vector3f &i)
 {
   AcquireCapacity(sizeof(float) * 3);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
@@ -146,7 +146,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csVector3f &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csVector4f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Vector4f &i)
 {
   AcquireCapacity(sizeof(float) * 4);
   *reinterpret_cast<float*>(m_writePointer) = i.x;
@@ -164,7 +164,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csVector4f &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csColor4f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Color4f &i)
 {
   AcquireCapacity(sizeof(float) * 4);
   *reinterpret_cast<float*>(m_writePointer) = i.r;
@@ -182,7 +182,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csColor4f &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csMatrix3f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Matrix3f &i)
 {
   AcquireCapacity(sizeof(float) * 9);
   memcpy(reinterpret_cast<float*>(m_writePointer), &i.m00, sizeof(float) * 9);
@@ -193,7 +193,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csMatrix3f &i)
 }
 
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const csMatrix4f &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const cs::Matrix4f &i)
 {
   AcquireCapacity(sizeof(float) * 16);
   memcpy(reinterpret_cast<float*>(m_writePointer), &i.m00, sizeof(float) * 16);
@@ -202,7 +202,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const csMatrix4f &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::operator<<(const std::string &i)
+cs::AssetOutputStream &cs::AssetOutputStream::operator<<(const std::string &i)
 {
   AcquireCapacity(sizeof(csUInt16) + i.length());
   *this << (csUInt16)i.length();
@@ -213,7 +213,7 @@ csAssetOutputStream &csAssetOutputStream::operator<<(const std::string &i)
   return *this;
 }
 
-csAssetOutputStream &csAssetOutputStream::Write(const void *buffer, size_t size)
+cs::AssetOutputStream &cs::AssetOutputStream::Write(const void *buffer, size_t size)
 {
   AcquireCapacity(size);
 

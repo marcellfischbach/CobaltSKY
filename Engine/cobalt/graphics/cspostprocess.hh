@@ -11,44 +11,47 @@
 #include <cobalt/graphics/cspostprocess.refl.hh>
 
 
-class csPostProcess;
-class csPostProcessor;
+
+
+namespace cs
+{
 struct iRenderTarget;
 struct iShaderAttribute;
-class csTextureWrapper;
-
+class PostProcess;
+class PostProcessor;
+class TextureWrapper;
 
 
 CS_CLASS()
-class CSE_API csPostProcess : public CS_SUPER(cs::Object)
+class CSE_API PostProcess : public CS_SUPER(cs::Object)
 {
-  friend class csPostProcessor;
+  friend class cs::PostProcessor;
   CS_CLASS_GEN;
 public:
-  virtual ~csPostProcess();
+  virtual ~PostProcess();
 
-  virtual bool Render(iGraphics *graphics);
-  virtual bool Initialize(iGraphics *graphics);
+  virtual bool Render(cs::iGraphics * graphics);
+  virtual bool Initialize(cs::iGraphics * graphics);
 
-  int BindInput(csTextureWrapper *texture, const std::string &inputName = "");
-  int BindInput(csPostProcess *postProcess, int outputIdx, const std::string &inputName = "");
-  int BindInput(csPostProcessOutput originOutput, const std::string &inputName = "");
+  int BindInput(cs::TextureWrapper * texture, const std::string & inputName = "");
+  int BindInput(cs::PostProcess * postProcess, int outputIdx, const std::string & inputName = "");
+  int BindInput(cs::ePostProcessOutput originOutput, const std::string & inputName = "");
 
-  void SetOutput(iRenderTarget *output);
-  iRenderTarget *GetOutput();
+  void SetOutput(cs::iRenderTarget * output);
+  cs::iRenderTarget * GetOutput();
 
-  iShader *GetShader();
-  const iShader *GetShader() const;
+  cs::iShader * GetShader();
+  const cs::iShader * GetShader() const;
 
 protected:
-  csPostProcess();
+  PostProcess();
 
-  void SetInputBindingName(int idx, const std::string &name);
-  void SetShader(iShader *shader);
-  
-  bool BindShader(iGraphics *graphics);
-  bool BindInputs(iGraphics *graphics);
-  bool BindOutput(iGraphics *graphics);
+  void SetInputBindingName(int idx, const std::string & name);
+  void SetShader(cs::iShader * shader);
+
+  bool BindShader(cs::iGraphics * graphics);
+  bool BindInputs(cs::iGraphics * graphics);
+  bool BindOutput(cs::iGraphics * graphics);
 
 private:
   enum InputSource
@@ -62,29 +65,30 @@ private:
   {
     InputSource m_inputSource;
     std::string m_inputName;
-    csTextureWrapper *m_texture;
-    csPostProcess *m_postProcess;
+    cs::TextureWrapper* m_texture;
+    cs::PostProcess* m_postProcess;
     int m_postProcessOutput;
-    csPostProcessOutput m_originOutput;
+    cs::ePostProcessOutput m_originOutput;
 
     // shader attributes
     bool m_initialized;
-    iShaderAttribute *m_attrInput;
-    iShaderAttribute *m_attrInputSize;
-    iShaderAttribute *m_attrInputSizeInv;
+    cs::iShaderAttribute* m_attrInput;
+    cs::iShaderAttribute* m_attrInputSize;
+    cs::iShaderAttribute* m_attrInputSizeInv;
   };
 
   std::vector<Input> m_inputs;
 
-  iRenderTarget *m_output;
-  csPostProcessor *m_postProcessor;
+  cs::iRenderTarget* m_output;
+  cs::PostProcessor* m_postProcessor;
 
-  iShader *m_shader;
+  cs::iShader* m_shader;
 
 };
 
+}
 
-CS_FORCEINLINE iShader *csPostProcess::GetShader()
+CS_FORCEINLINE cs::iShader *cs::PostProcess::GetShader()
 {
   return m_shader;
 }

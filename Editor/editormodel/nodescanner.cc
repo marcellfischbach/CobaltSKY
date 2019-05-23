@@ -19,8 +19,8 @@ NodeScanner::NodeScanner()
 
 void NodeScanner::Scan(AssetNode *node)
 {
-  csResourceLocator locator = node->GetResourceLocator();
-  iFile* file = csVFS::Get()->Open(locator);
+  cs::ResourceLocator locator = node->GetResourceLocator();
+  cs::iFile* file = cs::VFS::Get()->Open(locator);
   if (!file)
   {
     return;
@@ -94,12 +94,12 @@ std::string NodeScanner::GetTypeName() const
   return m_typeName;
 }
 
-std::set<csResourceLocator> NodeScanner::GetReferenceLocators() const
+std::set<cs::ResourceLocator> NodeScanner::GetReferenceLocators() const
 {
-  std::set<csResourceLocator> locators;
+  std::set<cs::ResourceLocator> locators;
   for (const std::string &ref : m_references)
   {
-    locators.insert(csResourceLocator(ref));
+    locators.insert(cs::ResourceLocator(ref));
   }
   return locators;
 }

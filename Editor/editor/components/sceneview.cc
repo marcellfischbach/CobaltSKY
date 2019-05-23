@@ -46,27 +46,27 @@ void SceneView::AddInputHandler(SceneViewInputHandler *handler)
   m_handlers.push_back(handler);
 }
 
-void SceneView::SetScene(csEntityScene *scene)
+void SceneView::SetScene(cs::EntityScene *scene)
 {
   CS_SET(m_scene, scene);
 }
 
-csEntityScene *SceneView::GetScene()
+cs::EntityScene *SceneView::GetScene()
 {
   return m_scene;
 }
 
-const csEntityScene *SceneView::GetScene() const
+const cs::EntityScene *SceneView::GetScene() const
 {
   return m_scene;
 }
 
-const csCamera *SceneView::GetCamera() const
+const cs::Camera *SceneView::GetCamera() const
 {
   return m_camera;
 }
 
-csCamera *SceneView::GetCamera()
+cs::Camera *SceneView::GetCamera()
 {
   return m_camera;
 }
@@ -84,12 +84,12 @@ void SceneView::initializeGL()
     //
     // the sampler that is used for sampling the color buffer
     //m_sampler = m_graphics->CreateSampler();
-    //m_sampler->SetFilter(eFM_MinMagNearest);
+    //m_sampler->SetFilter(cs::eFM_MinMagNearest);
 
 
     //
     // the camera for viewing the scene
-    m_camera = new csCamera();
+    m_camera = new cs::Camera();
     m_camera->SetPerspective(3.14159f / 4.0f, 768.0f / 1366.0f);
     m_camera->UpdateCameraMatrices();
 
@@ -112,13 +112,13 @@ void SceneView::paintGL()
   RenderWidget::paintGL();
   //m_onscreenTarget->Setup(width(), height());
 
-  csEntity *root = 0;
+  cs::Entity *root = 0;
   if (m_scene)
   {
     root = m_scene->GetRoot();
     root->UpdateBoundingBox();
   }
-  iRenderTarget *target = m_frameProcessor->Render(root, m_camera, GetRenderTarget());
+  cs::iRenderTarget *target = m_frameProcessor->Render(root, m_camera, GetRenderTarget());
 
 }
 
@@ -161,11 +161,11 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     return result;
   }
   frameProcessor->Resize(width, height);
-  frameProcessor->SetClearColor(csColor4f(0.0f, 0.0f, 0.0f, 0.0f));
+  frameProcessor->SetClearColor(cs::Color4f(0.0f, 0.0f, 0.0f, 0.0f));
   m_camera->SetPerspective(3.14159f / 4.0f, (float)height / (float)width);
 
-  csTexture2DWrapper *colorTexture = new csTexture2DWrapper(m_graphics->CreateTexture2D(ePF_R8G8B8A8U, width, height, false));
-  iRenderTarget *renderTarget = m_graphics->CreateRenderTarget();
+  cs::Texture2DWrapper *colorTexture = new cs::Texture2DWrapper(m_graphics->CreateTexture2D(cs::ePF_R8G8B8A8U, width, height, false));
+  cs::iRenderTarget *renderTarget = m_graphics->CreateRenderTarget();
   renderTarget->Initialize(width, height);
   renderTarget->SetDepthBuffer(width, height);
   renderTarget->AddColorTexture(colorTexture);
@@ -174,22 +174,22 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
 
     m_graphics->ResetDefaults();
 
-    csEntity *root = 0;
+    cs::Entity *root = 0;
     if (m_scene)
     {
       root = m_scene->GetRoot();
       root->UpdateBoundingBox();
     }
 
-    iTexture2D *colorTarget = 0;
+    cs::iTexture2D *colorTarget = 0;
 
-    iRenderTarget *target = frameProcessor->Render(root, m_camera, renderTarget);
-    colorTarget = cs::QueryClass<iTexture2D>(target->GetColorBuffer(0));
+    cs::iRenderTarget *target = frameProcessor->Render(root, m_camera, renderTarget);
+    colorTarget = cs::QueryClass<cs::iTexture2D>(target->GetColorBuffer(0));
 
     unsigned dataSize = 0;
-    colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, 0, dataSize);
+    colorTarget->ReadData(0, cs::ePF_R8G8B8A8U, dataSize, 0, dataSize);
     unsigned char *buffer = new unsigned char[dataSize];
-    colorTarget->ReadData(0, ePF_R8G8B8A8U, dataSize, buffer, dataSize);
+    colorTarget->ReadData(0, cs::ePF_R8G8B8A8U, dataSize, buffer, dataSize);
 
     result = QImage(buffer, width, height, QImage::Format_RGBA8888, scene_view_cleanup_screenshot_data, buffer);
     result = result.mirrored();

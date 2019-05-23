@@ -4,19 +4,24 @@
 #include <cobalt/core/cscollection.hh>
 #include <cobalt/entity/ientityscan.hh>
 
-class csRenderState;
-class csDefaultCollectorGL4 : public iEntityScan
+namespace cs
+{
+class RenderState;
+}
+
+
+class csDefaultCollectorGL4 : public cs::iEntityScan
 {
 public:
-  csDefaultCollectorGL4(csCollection<csRenderState*> *renderStates,
-                     csCollection<csLightState*> *lightStates);
+  csDefaultCollectorGL4(cs::Collection<cs::RenderState*> *renderStates,
+                     cs::Collection<cs::LightState*> *lightStates);
 
-  virtual void ScanRenderState(csRenderState *renderState);
+  virtual void ScanRenderState(cs::RenderState *renderState);
 
-  virtual void ScanLightState(csLightState *lightState);
+  virtual void ScanLightState(cs::LightState *lightState);
 
 
 private:
-  csCollection<csRenderState*> *m_renderStates;
-  csCollection<csLightState*> *m_lightStates;
+  cs::Collection<cs::RenderState*> *m_renderStates;
+  cs::Collection<cs::LightState*> *m_lightStates;
 };

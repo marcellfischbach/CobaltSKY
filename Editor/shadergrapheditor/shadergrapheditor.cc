@@ -37,10 +37,10 @@ ShaderGraphEditor::ShaderGraphEditor()
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)), m_properties, SLOT(SetNodes(const QList<ShaderGraphEditorNode*>&)));
 
   QObject::connect(m_widget, SIGNAL(SelectionChanged(const QList<ShaderGraphEditorNode*>&)), m_outliner, SLOT(SetSelectedNodes(const QList<ShaderGraphEditorNode*>&)));
-  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToAdd(csSGNode*)), m_outliner, SLOT(NodeAboutToAdd(csSGNode*)));
-  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAdded(csSGNode*)), m_outliner, SLOT(NodeAdded(csSGNode*)));
-  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToRemove(csSGNode*)), m_outliner, SLOT(NodeAboutToRemove(csSGNode*)));
-  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeRemoved(csSGNode*)), m_outliner, SLOT(NodeRemoved(csSGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToAdd(cs::SGNode*)), m_outliner, SLOT(NodeAboutToAdd(cs::SGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAdded(cs::SGNode*)), m_outliner, SLOT(NodeAdded(cs::SGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeAboutToRemove(cs::SGNode*)), m_outliner, SLOT(NodeAboutToRemove(cs::SGNode*)));
+  QObject::connect(m_widget, SIGNAL(ShaderGraphNodeRemoved(cs::SGNode*)), m_outliner, SLOT(NodeRemoved(cs::SGNode*)));
   QObject::connect(m_properties, SIGNAL(NodeChanged(ShaderGraphEditorNode*)), m_outliner, SLOT(NodeChanged(ShaderGraphEditorNode*)));
 
   QObject::connect(m_properties, SIGNAL(NodeChanged(ShaderGraphEditorNode*)), m_widget, SLOT(RepaintGraph()));
@@ -56,21 +56,21 @@ void ShaderGraphEditor::UpdateAsset()
 {
   // GLContext::Get()->MakeCurrent();
 
-	const csResourceLocator &locator = GetAsset()->GetResourceLocator();
+	const cs::ResourceLocator &locator = GetAsset()->GetResourceLocator();
 
-  csMaterialDefWrapper *shaderGraphWrapper = csResourceManager::Get()->Aquire<csMaterialDefWrapper>(locator);
-  csSGShaderGraph *shaderGraph = cs::QueryClass<csSGShaderGraph>(shaderGraphWrapper->Get());
+  cs::MaterialDefWrapper *shaderGraphWrapper = cs::ResourceManager::Get()->Aquire<cs::MaterialDefWrapper>(locator);
+  cs::SGShaderGraph *shaderGraph = cs::QueryClass<cs::SGShaderGraph>(shaderGraphWrapper->Get());
   UpdateResourceNodeIDs(shaderGraph);
 
-  csResourceLocator metaLocator = locator.WithResourceName("meta");
-  ShaderGraphEditorMetaWrapper *metaWrapper = csResourceManager::Get()->Load<ShaderGraphEditorMetaWrapper>(metaLocator);
+  cs::ResourceLocator metaLocator = locator.WithResourceName("meta");
+  ShaderGraphEditorMetaWrapper *metaWrapper = cs::ResourceManager::Get()->Load<ShaderGraphEditorMetaWrapper>(metaLocator);
   ShaderGraphEditorMeta *meta = metaWrapper ? metaWrapper->Get() : nullptr;
   if (!meta)
   { 
     meta = new ShaderGraphEditorMeta();
   }
 
-  csSGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
+  cs::SGShaderGraph *graph = m_widget->SetShaderGraph(shaderGraph, meta);
   m_outliner->SetShaderGraph(graph);
   m_preview->SetShaderGraph(shaderGraphWrapper);
 
@@ -78,12 +78,12 @@ void ShaderGraphEditor::UpdateAsset()
 
 }
 
-void ShaderGraphEditor::UpdateResourceNodeIDs(csSGShaderGraph *shaderGraph)
+void ShaderGraphEditor::UpdateResourceNodeIDs(cs::SGShaderGraph *shaderGraph)
 {
   for (size_t i = 0, in = shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = shaderGraph->GetNode(i);
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGNode *node = shaderGraph->GetNode(i);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       std::string resourceId = resourceNode->GetResourceId();

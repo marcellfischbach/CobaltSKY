@@ -4,15 +4,17 @@
 #include <cobalt/csexport.hh>
 #include <csrefl/class.hh>
 
-class csPropertySetter;
-class csEntity;
-class csEntityState;
+namespace cs
+{
+class PropertySetter;
+class Entity;
+class EntityState;
 
-class CSE_API csBPEntityState 
+class CSE_API BPEntityState
 {
 public:
-  csBPEntityState();
-  ~csBPEntityState();
+  BPEntityState();
+  ~BPEntityState();
 
   void SetId(unsigned id);
   unsigned GetId() const;
@@ -23,11 +25,11 @@ public:
   void SetRoot(bool root);
   bool IsRoot() const;
 
-  void SetEntityStateClass(const cs::Class *entityStateClass);
-  const cs::Class *GetEntityStateClass() const;
-  void AddProperty(csPropertySetter *property);
+  void SetEntityStateClass(const cs::Class* entityStateClass);
+  const cs::Class* GetEntityStateClass() const;
+  void AddProperty(cs::PropertySetter* property);
 
-  csEntityState *CreateEntityState() const;
+  cs::EntityState* CreateEntityState() const;
 
 private:
 
@@ -35,9 +37,12 @@ private:
   unsigned m_parentId;
   bool m_root;
 
-  const cs::Class *m_entityStateClass;
-  std::vector<csPropertySetter*> m_properties;
+  const cs::Class* m_entityStateClass;
+  std::vector<cs::PropertySetter*> m_properties;
 
 };
 
+
+
+}
 

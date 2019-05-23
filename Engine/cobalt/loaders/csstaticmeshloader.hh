@@ -6,30 +6,34 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/csstaticmeshloader.refl.hh>
 
-class csGeometryDataWrapper;
-class csGeometryMeshWrapper;
-class csMesh;
-class csMeshWrapper;
-class csMultiMaterial;
-class csPhysicsShapeWrapper;
-class csSubMeshWrapper;
-struct iVertexDeclaration;
+
+namespace cs
+{
 struct iIndexBuffer;
+struct iVertexDeclaration;
+class GeometryMeshWrapper;
+class GeometryDataWrapper;
+class Mesh;
+class MeshWrapper;
+class MultiMaterial;
+class PhysicsShapeWrapper;
+class SubMeshWrapper;
+
 /**
 * \ingroup loading
 */
 CS_CLASS()
-class CSE_API csStaticMeshLoader : public CS_SUPER(iFileLoader)
+class CSE_API StaticMeshLoader : public CS_SUPER(cs::iFileLoader)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csStaticMeshLoader();
-  virtual ~csStaticMeshLoader();
+  StaticMeshLoader();
+  virtual ~StaticMeshLoader();
 
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
-  virtual const cs::Class *EvalClass(iFile *file, const csResourceLocator &locator) const;
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const;
+  virtual bool CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const;
+  virtual const cs::Class *EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const;
+  virtual cs::ResourceWrapper *Load(cs::iFile *file, const cs::ResourceLocator &locator) const;
 
 private:
   struct HeaderEntry
@@ -38,19 +42,22 @@ private:
     csUInt32 type;
     csUInt32 position;
     csUInt32 size;
-    csResourceWrapper *obj;
+    cs::ResourceWrapper *obj;
   };
 
-  csResourceWrapper *ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  csGeometryDataWrapper *ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  csGeometryMeshWrapper *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  csMultiMaterial *ReadMultiMaterial(iFile *file) const;
-  csMeshWrapper *ReadMesh (csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  csPhysicsShapeWrapper *ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  bool ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const;
-  iVertexDeclaration *ReadVertexDeclaration(iFile *file) const;
+  cs::ResourceWrapper *ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  cs::GeometryDataWrapper *ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  cs::GeometryMeshWrapper *ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  cs::MultiMaterial *ReadMultiMaterial(cs::iFile *file) const;
+  cs::MeshWrapper *ReadMesh (csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  cs::PhysicsShapeWrapper *ReadCollision(csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  bool ReadSubMesh(cs::Mesh *mesh, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const;
+  cs::iVertexDeclaration *ReadVertexDeclaration(cs::iFile *file) const;
 
-  std::string ReadString(iFile *file) const;
+  std::string ReadString(cs::iFile *file) const;
   
 };
+
+
+}
 

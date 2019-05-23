@@ -5,40 +5,40 @@
 
 
 
-csSkinnedMesh::csSkinnedMesh()
-  : csMesh()
+cs::SkinnedMesh::SkinnedMesh()
+  : cs::Mesh()
 {
 
 }
 
 
-csSkinnedMesh::~csSkinnedMesh()
+cs::SkinnedMesh::~SkinnedMesh()
 {
 
 }
 
 
 
-void csSkinnedMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod)
+void cs::SkinnedMesh::Render(cs::iGraphics *renderer, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lod)
 {
   if (m_boneIdxMapping && m_numberOfIndexMapping > 0)
   {
     renderer->SetSkeletonBoneMapping(m_boneIdxMapping, m_numberOfIndexMapping);
 
-    csMesh::Render(renderer, pass, materials, lod);
+    cs::Mesh::Render(renderer, pass, materials, lod);
   }
 }
 
 
 
 
-void csSkinnedMesh::AddBoneName(const std::string &boneName, csUInt8 boneIdx)
+void cs::SkinnedMesh::AddBoneName(const std::string &boneName, csUInt8 boneIdx)
 {
   m_boneNameMapping[boneName] = boneIdx;
 }
 
 
-void csSkinnedMesh::GenerateMapping(const csSkeleton *skeleton)
+void cs::SkinnedMesh::GenerateMapping(const cs::Skeleton *skeleton)
 {
   if (m_boneIdxMapping)
   {
@@ -50,7 +50,7 @@ void csSkinnedMesh::GenerateMapping(const csSkeleton *skeleton)
   for (std::map<std::string, csUInt8>::iterator it = m_boneNameMapping.begin(); it != m_boneNameMapping.end(); ++it)
   {
     csSize boneIdx = skeleton->GetBoneIndex(it->first);
-    if (boneIdx == csInvalidBoneIdx)
+    if (boneIdx == cs::InvalidBoneIdx)
     {
       continue;
     }

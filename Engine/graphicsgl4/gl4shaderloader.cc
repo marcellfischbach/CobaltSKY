@@ -14,7 +14,7 @@ csShaderGL4Loader::~csShaderGL4Loader()
 {
 }
 
-bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator) const
+bool csShaderGL4Loader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   std::string ext = file->GetExtension();
@@ -27,42 +27,42 @@ bool csShaderGL4Loader::CanLoad(iFile *file, const csResourceLocator &locator) c
     ext == std::string("comp");
 }
 
-const cs::Class *csShaderGL4Loader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *csShaderGL4Loader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
   return csShaderGL4::GetStaticClass();
 }
 
-csResourceWrapper *csShaderGL4Loader::Load(iFile *file, const csResourceLocator &locator) const
+cs::ResourceWrapper *csShaderGL4Loader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   std::string ext = file->GetExtension();
 
-  csShaderType type;
+  cs::eShaderType type;
   if (ext == std::string("vert"))
   {
-    type = eST_Vertex;
+    type = cs::eST_Vertex;
   }
   else if (ext == std::string("ctrl"))
   {
-    type = eST_TessCtrl;
+    type = cs::eST_TessCtrl;
   }
   else if (ext == std::string("eval"))
   {
-    type = eST_TessEval;
+    type = cs::eST_TessEval;
   }
   else if (ext == std::string("geom"))
   {
-    type = eST_Geometry;
+    type = cs::eST_Geometry;
   }
   else if (ext == std::string("frag"))
   {
-    type = eST_Fragment;
+    type = cs::eST_Fragment;
   }
   else if (ext == std::string("comp"))
   {
-    type = eST_Compute;
+    type = cs::eST_Compute;
   }
   else
   {

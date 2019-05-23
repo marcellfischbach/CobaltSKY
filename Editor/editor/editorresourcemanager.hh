@@ -4,21 +4,21 @@
 #include <editor/editorexport.hh>
 #include <cobalt/core/csresourcemanager.hh>
 
-class EditorResourceManager : public csResourceManager
+class EditorResourceManager : public cs::ResourceManager
 {
 public:
   EditorResourceManager();
   virtual ~EditorResourceManager();
 
-  virtual csResourceWrapper *Load(const csResourceLocator &locator);
-  virtual const cs::Class *EvalClass(const csResourceLocator &locator) const;
+  virtual cs::ResourceWrapper *Load(const cs::ResourceLocator &locator);
+  virtual const cs::Class *EvalClass(const cs::ResourceLocator &locator) const;
 
 
-  virtual bool RegisterObject(const csResourceLocator &locator, csResourceWrapper *object);
-  virtual void RenameResource(const csResourceLocator &from, const csResourceLocator &to);
+  virtual bool RegisterObject(const cs::ResourceLocator &locator, cs::ResourceWrapper *object);
+  virtual void RenameResource(const cs::ResourceLocator &from, const cs::ResourceLocator &to);
 
 private:
-  csResourceLocator FixResourceLocator(const csResourceLocator &locator) const;
-  bool IsAnonymousLocator(const csResourceLocator &locator) const;
+  cs::ResourceLocator FixResourceLocator(const cs::ResourceLocator &locator) const;
+  bool IsAnonymousLocator(const cs::ResourceLocator &locator) const;
 
 };

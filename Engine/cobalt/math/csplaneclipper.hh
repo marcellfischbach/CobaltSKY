@@ -4,20 +4,25 @@
 #include <cobalt/math/csclipper.hh>
 #include <cobalt/math/csplane.hh>
 
-class CSE_API csPlaneClipper : public csClipper
+namespace cs
+{
+
+class CSE_API PlaneClipper : public cs::Clipper
 {
 public:
-  csPlaneClipper();
-  virtual ~csPlaneClipper();
+  PlaneClipper();
+  virtual ~PlaneClipper();
 
   void Clear();
 
-  virtual ClipResult Test(const csVector3f &pos) const;
-  virtual ClipResult Test(const csBoundingBox &bbox, bool debug = false) const;
+  virtual ClipResult Test(const cs::Vector3f& pos) const;
+  virtual ClipResult Test(const cs::BoundingBox& bbox, bool debug = false) const;
 
-  void AddPlane(const csPlane &plane);
+  void AddPlane(const cs::Plane& plane);
 
 private:
-  std::vector<csPlane> m_planes;
+  std::vector<cs::Plane> m_planes;
 
 };
+
+}

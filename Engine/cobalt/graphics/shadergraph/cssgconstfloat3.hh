@@ -9,12 +9,16 @@
 
 #define CS_CONST_FLOAT3_NAME "Const/Float3"
 
+namespace cs
+{
 
 CS_CLASS()
-class CSE_API csSGConstFloat3 : public CS_SUPER(csSGNode)
+class CSE_API SGConstFloat3 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGConstFloat3();
-  virtual ~csSGConstFloat3() { };
-}; 
+  SGConstFloat3();
+  virtual ~SGConstFloat3() { };
+};
+
+}

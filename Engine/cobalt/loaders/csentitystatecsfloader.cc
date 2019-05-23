@@ -6,50 +6,50 @@
 #include <csrefl/classregistry.hh>
 #include <cobalt/core/property/cspropertysetter.hh>
 
-csEntityStateCSFLoader::csEntityStateCSFLoader()
-  : csBaseCSFLoader()
+cs::EntityStateCSFLoader::EntityStateCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
-csEntityStateCSFLoader::~csEntityStateCSFLoader()
+cs::EntityStateCSFLoader::~EntityStateCSFLoader()
 {
 
 }
 
-bool csEntityStateCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::EntityStateCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return entry->GetTagName() == std::string("entityState");
 }
 
-const cs::Class *csEntityStateCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::EntityStateCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
   CS_UNUSED(userData);
-  return csEntityStateWrapper::GetStaticClass();
+  return cs::EntityStateWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csEntityStateCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::EntityStateCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
-  csEntityStateWrapper *wrapper = userData ? cs::QueryClass<csEntityStateWrapper>(userData) : nullptr;
-  csEntityState *state = nullptr;
+  cs::EntityStateWrapper *wrapper = userData ? cs::QueryClass<cs::EntityStateWrapper>(userData) : nullptr;
+  cs::EntityState *state = nullptr;
   if (!wrapper)
   {
     if (entry->HasAttribute("locator"))
     {
-      csResourceWrapper *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
+      cs::ResourceWrapper *obj = csEng->Get(cs::ResourceLocator(entry->GetAttribute("locator")));
       if (!obj)
       {
         return nullptr;
       }
-      wrapper = cs::QueryClass<csEntityStateWrapper>(obj);
+      wrapper = cs::QueryClass<cs::EntityStateWrapper>(obj);
       if (!wrapper)
       {
-        csBlueprintWrapper *blueprint = cs::QueryClass<csBlueprintWrapper>(obj);
+        cs::BlueprintWrapper *blueprint = cs::QueryClass<cs::BlueprintWrapper>(obj);
         if (blueprint && blueprint->IsValid())
         {
           wrapper = blueprint->Get()->CreateEntityState();
@@ -68,8 +68,8 @@ csResourceWrapper *csEntityStateCSFLoader::Load(const csfEntry *entry, const csR
       {
         return nullptr;
       }
-      state = entityStateClass->CreateInstance<csEntityState>();
-      wrapper = new csEntityStateWrapper(state);
+      state = entityStateClass->CreateInstance<cs::EntityState>();
+      wrapper = new cs::EntityStateWrapper(state);
     }
     if (!state && (!wrapper || wrapper->IsNull()))
     {
@@ -92,13 +92,13 @@ csResourceWrapper *csEntityStateCSFLoader::Load(const csfEntry *entry, const csR
 }
 
 
-void csEntityStateCSFLoader::LoadProperty(csEntityState *entityState, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+void cs::EntityStateCSFLoader::LoadProperty(cs::EntityState *entityState, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("name"))
   {
     return;
   }
-  csPropertySetter *prop = csResourceManager::Get()->Load<csPropertySetter>(entry, locator, userData);
+  cs::PropertySetter *prop = cs::ResourceManager::Get()->Load<cs::PropertySetter>(entry, locator, userData);
   if (!prop)
   {
     return;

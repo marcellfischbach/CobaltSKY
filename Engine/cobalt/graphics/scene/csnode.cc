@@ -4,7 +4,7 @@
 
 
 
-csNode::csNode()
+cs::Node::Node()
   : cs::Object()
   , m_parent(0)
 {
@@ -12,17 +12,17 @@ csNode::csNode()
 }
 
 
-csNode::~csNode()
+cs::Node::~Node()
 {
 
 }
 
-void csNode::SetParent(csGroupNode *parent)
+void cs::Node::SetParent(cs::GroupNode *parent)
 {
   CS_SET(m_parent, parent);
 }
 
-bool csNode::AttachTo(csGroupNode *parent)
+bool cs::Node::AttachTo(cs::GroupNode *parent)
 {
   if (m_parent || !parent)
   {
@@ -35,7 +35,7 @@ bool csNode::AttachTo(csGroupNode *parent)
   return true;
 }
 
-void csNode::DetachFromParent()
+void cs::Node::DetachFromParent()
 {
   if (!m_parent)
   {
@@ -47,7 +47,7 @@ void csNode::DetachFromParent()
 }
 
 
-void csNode::FlagUpdateBoundingBox()
+void cs::Node::FlagUpdateBoundingBox()
 {
   if (m_updateFlags & eUF_UpdateBoundingBox)
   {
@@ -63,13 +63,13 @@ void csNode::FlagUpdateBoundingBox()
 
 
 
-void csNode::UpdateBoundingBox(csBoundingBox &bbox)
+void cs::Node::UpdateBoundingBox(cs::BoundingBox &bbox)
 {
   bbox.Clear();
 }
 
 
-void csNode::UpdateStates()
+void cs::Node::UpdateStates()
 {
   if (m_updateFlags & eUF_UpdateBoundingBox)
   {
@@ -79,19 +79,19 @@ void csNode::UpdateStates()
   }
 }
 
-void csNode::Scan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback)
+void cs::Node::Scan(const cs::Clipper *clipper, cs::iGraphics *renderer, cs::iScanCallback *callback)
 {
   //
   // TODO: handle the clipping of the bounding box here
   if (clipper)
   {
-    csClipper::ClipResult rc = clipper->Test(m_boundingBox);
+    cs::Clipper::ClipResult rc = clipper->Test(m_boundingBox);
     switch (rc)
     {
-    case csClipper::eCR_In:
+    case cs::Clipper::eCR_In:
       clipper = 0;
       break;
-    case csClipper::eCR_Out:
+    case cs::Clipper::eCR_Out:
       return;
     }
   }
@@ -99,7 +99,7 @@ void csNode::Scan(const csClipper *clipper, iGraphics *renderer, iScanCallback *
   PrivScan(clipper, renderer, callback);
 }
 
-void csNode::PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback)
+void cs::Node::PrivScan(const cs::Clipper *clipper, cs::iGraphics *renderer, cs::iScanCallback *callback)
 {
 
 }

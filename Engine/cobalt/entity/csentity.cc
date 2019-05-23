@@ -11,30 +11,30 @@
 
 csID nextID = 1;
 
-csID csEntity::GetNextID()
+csID cs::Entity::GetNextID()
 {
   return nextID++;
 }
 
-csEntity::csEntity()
+cs::Entity::Entity()
   : cs::Object ()
   , m_rootState(0)
   , m_created(false)
   , m_assemabled(false)
   , m_scene(0)
   , m_parentEntity(0)
-  , m_id(csEntity::GetNextID())
+  , m_id(cs::Entity::GetNextID())
 {
 
 }
 
 
-csEntity::~csEntity()
+cs::Entity::~Entity()
 {
 
 }
 
-csEntityState *csEntity::GetState(csID id)
+cs::EntityState *cs::Entity::GetState(csID id)
 {
   if (id == csID_Undefined)
   {
@@ -43,7 +43,7 @@ csEntityState *csEntity::GetState(csID id)
 
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state && state->GetId() == id)
     {
       return state;
@@ -53,7 +53,7 @@ csEntityState *csEntity::GetState(csID id)
 }
 
 
-const csEntityState *csEntity::GetState(csID id) const
+const cs::EntityState *cs::Entity::GetState(csID id) const
 {
   if (id == csID_Undefined)
   {
@@ -62,7 +62,7 @@ const csEntityState *csEntity::GetState(csID id) const
 
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state && state->GetId() == id)
     {
       return state;
@@ -71,7 +71,7 @@ const csEntityState *csEntity::GetState(csID id) const
   return 0;
 }
 
-csEntityState *csEntity::GetState(const std::string &name)
+cs::EntityState *cs::Entity::GetState(const std::string &name)
 {
   if (name == "")
   {
@@ -80,7 +80,7 @@ csEntityState *csEntity::GetState(const std::string &name)
 
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state && state->GetName() == name)
     {
       return state;
@@ -90,7 +90,7 @@ csEntityState *csEntity::GetState(const std::string &name)
 }
 
 
-const csEntityState *csEntity::GetState(const std::string &name) const
+const cs::EntityState *cs::Entity::GetState(const std::string &name) const
 {
   if (name == "")
   {
@@ -99,7 +99,7 @@ const csEntityState *csEntity::GetState(const std::string &name) const
 
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state && state->GetName() == name)
     {
       return state;
@@ -108,13 +108,13 @@ const csEntityState *csEntity::GetState(const std::string &name) const
   return 0;
 }
 
-std::vector<csEntityState*> csEntity::FindStates(const cs::Class* cls) const
+std::vector<cs::EntityState*> cs::Entity::FindStates(const cs::Class* cls) const
 {
-  std::vector<csEntityState*> result;
+  std::vector<cs::EntityState*> result;
 
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state->GetClass()->IsInstanceOf(cls))
     {
       result.push_back(state);
@@ -124,11 +124,11 @@ std::vector<csEntityState*> csEntity::FindStates(const cs::Class* cls) const
   return result;
 }
 
-csEntityState* csEntity::FindState(const cs::Class* cls) const
+cs::EntityState* cs::Entity::FindState(const cs::Class* cls) const
 {
   for (size_t i = 0, in = m_states.size(); i < in; ++i)
   {
-    csEntityState *state = m_states[i];
+    cs::EntityState *state = m_states[i];
     if (state->GetClass()->IsInstanceOf(cls))
     {
       return state;
@@ -138,17 +138,17 @@ csEntityState* csEntity::FindState(const cs::Class* cls) const
 }
 
 
-csTransformation csEntity::GetTransformation()
+cs::Transformation cs::Entity::GetTransformation()
 {
   if (m_rootState)
   {
     return m_rootState->GetTransformation();
   }
 
-  return csTransformation();
+  return cs::Transformation();
 }
 
-void csEntity::FinishTransformation()
+void cs::Entity::FinishTransformation()
 {
   if (m_rootState)
   {
@@ -156,7 +156,7 @@ void csEntity::FinishTransformation()
   }
 }
 
-void csEntity::PerformTransformation()
+void cs::Entity::PerformTransformation()
 {
   if (m_rootState)
   {
@@ -164,7 +164,7 @@ void csEntity::PerformTransformation()
   }
 }
 
-void csEntity::UpdateBoundingBox()
+void cs::Entity::UpdateBoundingBox()
 {
   if (m_rootState)
   {
@@ -172,13 +172,13 @@ void csEntity::UpdateBoundingBox()
   }
 }
 
-void csEntity::SetRootState(csSpatialState *rootState)
+void cs::Entity::SetRootState(cs::SpatialState *rootState)
 {
   CS_SET(m_rootState, rootState);
 
 }
 
-void csEntity::RemoveState(csEntityState *state)
+void cs::Entity::RemoveState(cs::EntityState *state)
 {
   if (state->GetEntity() != this)
   {
@@ -205,7 +205,7 @@ void csEntity::RemoveState(csEntityState *state)
   state->Release();
 }
 
-void csEntity::AddState(csEntityState *state)
+void cs::Entity::AddState(cs::EntityState *state)
 {
   if (!state)
   {
@@ -218,7 +218,7 @@ void csEntity::AddState(csEntityState *state)
   m_assemabled = false;
 }
 
-void csEntity::AddState(csSpatialState *state, csSpatialState *parentState)
+void cs::Entity::AddState(cs::SpatialState *state, cs::SpatialState *parentState)
 {
   AddState(state);
 
@@ -228,7 +228,7 @@ void csEntity::AddState(csSpatialState *state, csSpatialState *parentState)
   }
 }
 
-void csEntity::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::Entity::Scan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   if (m_rootState)
   {
@@ -236,7 +236,7 @@ void csEntity::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entity
   }
 }
 
-void csEntity::Update(float tpf)
+void cs::Entity::Update(float tpf)
 {
   for (csSize i = 0, in = m_states.size(); i < in; ++i)
   {
@@ -248,14 +248,14 @@ void csEntity::Update(float tpf)
   }
 }
 
-const csBoundingBox& csEntity::GetBoundingBox() const
+const cs::BoundingBox& cs::Entity::GetBoundingBox() const
 {
   return m_rootState->GetBoundingBox();
 }
 
 
 
-void csEntity::AttachEntity(csEntity *entity, csSpatialState *parentState)
+void cs::Entity::AttachEntity(cs::Entity *entity, cs::SpatialState *parentState)
 {
   if (!entity)
   {
@@ -278,17 +278,17 @@ void csEntity::AttachEntity(csEntity *entity, csSpatialState *parentState)
   entity->AttachToScene(m_scene);
 }
 
-void csEntity::AttachEntity(csEntity *entity, const std::string &parentStateName)
+void cs::Entity::AttachEntity(cs::Entity *entity, const std::string &parentStateName)
 {
   if (!m_rootState)
   {
     return;
   }
-  csSpatialState *parentState = m_rootState->FindState(parentStateName);
+  cs::SpatialState *parentState = m_rootState->FindState(parentStateName);
   AttachEntity(entity, parentState);
 }
 
-void csEntity::DetachEntity(csEntity *entity)
+void cs::Entity::DetachEntity(cs::Entity *entity)
 {
   if (!entity)
   {
@@ -297,7 +297,7 @@ void csEntity::DetachEntity(csEntity *entity)
 
   if (entity->m_parentEntity == this && entity->m_rootState)
   {
-    csSpatialState *parentState = entity->m_rootState->GetParentState();
+    cs::SpatialState *parentState = entity->m_rootState->GetParentState();
     if (parentState)
     {
       parentState->RemoveSpatialState(entity->m_rootState);
@@ -306,7 +306,7 @@ void csEntity::DetachEntity(csEntity *entity)
 
 }
 
-void csEntity::SetClippingRange(float min, float max)
+void cs::Entity::SetClippingRange(float min, float max)
 {
   if (m_rootState)
   {
@@ -316,7 +316,7 @@ void csEntity::SetClippingRange(float min, float max)
 
 
 
-void csEntity::Create()
+void cs::Entity::Create()
 {
   if (m_created)
   {
@@ -326,7 +326,7 @@ void csEntity::Create()
   OnCreated();
 }
 
-void csEntity::Assemble()
+void cs::Entity::Assemble()
 {
   if (m_assemabled)
   {
@@ -336,7 +336,7 @@ void csEntity::Assemble()
   OnAssembled();
 }
 
-void csEntity::AttachToEntity(csEntity *entity)
+void cs::Entity::AttachToEntity(cs::Entity *entity)
 {
   if (m_parentEntity)
   {
@@ -346,7 +346,7 @@ void csEntity::AttachToEntity(csEntity *entity)
   OnAttachedToEntity(entity);
 }
 
-void csEntity::AttachToScene(csEntityScene *scene)
+void cs::Entity::AttachToScene(cs::EntityScene *scene)
 {
   if (m_scene)
   {
@@ -357,7 +357,7 @@ void csEntity::AttachToScene(csEntityScene *scene)
   OnAttachedToScene(scene);
 }
 
-void csEntity::DetachFromScene(csEntityScene* scene)
+void cs::Entity::DetachFromScene(cs::EntityScene* scene)
 {
   if (m_scene != scene)
   {
@@ -368,7 +368,7 @@ void csEntity::DetachFromScene(csEntityScene* scene)
   OnDetachedFromScene(scene);
 }
 
-void csEntity::DetachFromEntity(csEntity *entity)
+void cs::Entity::DetachFromEntity(cs::Entity *entity)
 {
   if (m_parentEntity != entity)
   {
@@ -378,7 +378,7 @@ void csEntity::DetachFromEntity(csEntity *entity)
   OnDetachedFromEntity(entity);
 }
 
-void csEntity::Disassemble()
+void cs::Entity::Disassemble()
 {
   if (!m_assemabled)
   {
@@ -388,7 +388,7 @@ void csEntity::Disassemble()
   OnDisassembled();
 }
 
-void csEntity::Destroy()
+void cs::Entity::Destroy()
 {
   if (!m_created)
   { 
@@ -400,12 +400,12 @@ void csEntity::Destroy()
 
 
 
-void csEntity::OnCreated()
+void cs::Entity::OnCreated()
 {
 
 }
 
-void csEntity::OnAssembled()
+void cs::Entity::OnAssembled()
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -417,12 +417,12 @@ void csEntity::OnAssembled()
   }
 }
 
-void csEntity::OnAttachedToEntity(csEntity *entity)
+void cs::Entity::OnAttachedToEntity(cs::Entity *entity)
 {
 
 }
 
-void csEntity::OnAttachedToScene(csEntityScene *scene)
+void cs::Entity::OnAttachedToScene(cs::EntityScene *scene)
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -434,7 +434,7 @@ void csEntity::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csEntity::OnDetachedFromScene(csEntityScene *scene)
+void cs::Entity::OnDetachedFromScene(cs::EntityScene *scene)
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -446,12 +446,12 @@ void csEntity::OnDetachedFromScene(csEntityScene *scene)
   }
 }
 
-void csEntity::OnDetachedFromEntity(csEntity *entity)
+void cs::Entity::OnDetachedFromEntity(cs::Entity *entity)
 {
 
 }
 
-void csEntity::OnDisassembled()
+void cs::Entity::OnDisassembled()
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -463,7 +463,7 @@ void csEntity::OnDisassembled()
   }
 }
 
-void csEntity::OnDestroyed()
+void cs::Entity::OnDestroyed()
 {
 
 }

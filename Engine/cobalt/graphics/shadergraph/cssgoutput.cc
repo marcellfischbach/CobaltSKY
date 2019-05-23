@@ -2,7 +2,7 @@
 #include <cobalt/graphics/shadergraph/cssgoutput.hh>
 
 
-csSGOutput::csSGOutput(csSGDataType type, const std::string &name, const std::string &attr)
+cs::SGOutput::SGOutput(cs::eSGDataType type, const std::string &name, const std::string &attr)
   : m_dataType(type)
   , m_name(name)
   , m_node(0)
@@ -11,8 +11,8 @@ csSGOutput::csSGOutput(csSGDataType type, const std::string &name, const std::st
 
 }
 
-csSGOutput::csSGOutput(const std::string &name, const std::string &attr)
-  : m_dataType(eSGDT_Inval)
+cs::SGOutput::SGOutput(const std::string &name, const std::string &attr)
+  : m_dataType(cs::eSGDT_Inval)
   , m_name(name)
   , m_node(0)
   , m_attr(attr)
@@ -20,7 +20,7 @@ csSGOutput::csSGOutput(const std::string &name, const std::string &attr)
 
 }
 
-csSGOutput::~csSGOutput()
+cs::SGOutput::~SGOutput()
 {
 
 }

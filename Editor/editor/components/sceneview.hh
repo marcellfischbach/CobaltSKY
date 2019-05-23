@@ -5,15 +5,20 @@
 
 #include <vector>
 
-struct iFrameProcessor;
-struct iGraphics;
-struct iSampler;
-class csEntityScene;
-class csCamera;
 struct SceneViewInputHandler;
 class QTCSOnscreenRenderTarget;
 class QImage;
 class QTimer;
+
+namespace cs
+{
+struct iGraphics;
+struct iSampler;
+class EntityScene;
+struct iFrameProcessor;
+class Camera;
+}
+
 class EDITOR_API SceneView : public RenderWidget
 {
   Q_OBJECT
@@ -21,11 +26,11 @@ public:
   SceneView(QWidget *parent = 0);
   virtual ~SceneView();
 
-  const csEntityScene *GetScene() const;
-  csEntityScene *GetScene();
+  const cs::EntityScene *GetScene() const;
+  cs::EntityScene *GetScene();
 
-  const csCamera *GetCamera() const;
-  csCamera *GetCamera();
+  const cs::Camera *GetCamera() const;
+  cs::Camera *GetCamera();
 
   QImage TakeScreenshot(unsigned width, unsigned height);
 
@@ -36,7 +41,7 @@ protected:
   void paintGL();
   void resizeGL(int w, int h);
 
-  void SetScene(csEntityScene *scene);
+  void SetScene(cs::EntityScene *scene);
 
   void mousePressEvent(QMouseEvent *event);
   void mouseReleaseEvent(QMouseEvent *event);
@@ -49,10 +54,10 @@ protected:
 private slots:
 void Timeout();
 private:
-  csCamera *m_camera = 0;
-  csEntityScene *m_scene = 0;
-  iGraphics *m_graphics = 0;
-  iFrameProcessor* m_frameProcessor = 0;
+  cs::Camera *m_camera = 0;
+  cs::EntityScene *m_scene = 0;
+  cs::iGraphics *m_graphics = 0;
+  cs::iFrameProcessor* m_frameProcessor = 0;
   QTCSOnscreenRenderTarget *m_onscreenTarget = 0;
   QTimer *m_timer;
 

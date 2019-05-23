@@ -29,7 +29,7 @@ namespace
   }
 }
 
-csFileInfo::csFileInfo (const std::string &filename)
+cs::FileInfo::FileInfo(const std::string &filename)
 {
   m_location = "";
   m_name = "";
@@ -89,7 +89,7 @@ csFileInfo::csFileInfo (const std::string &filename)
 
 }
 
-void csFileInfo::Lower()
+void cs::FileInfo::Lower()
 {
   
   for (int i = 0; i < m_name.length(); ++i)
@@ -111,7 +111,7 @@ void csFileInfo::Lower()
 }
 
 
-void csFileInfo::Upper()
+void cs::FileInfo::Upper()
 {
 
   for (int i = 0; i < m_name.length(); ++i)
@@ -132,53 +132,53 @@ void csFileInfo::Upper()
   }
 }
 
-const std::string &csFileInfo::GetName () const
+const std::string &cs::FileInfo::GetName () const
 {
   return m_name;
 }
 
-const std::string &csFileInfo::GetExtension () const
+const std::string &cs::FileInfo::GetExtension () const
 {
   return m_extension;
 }
 
-const std::string &csFileInfo::GetLocation () const
+const std::string &cs::FileInfo::GetLocation () const
 {
   return m_location;
 }
 
-bool csFileInfo::Exists() const
+bool cs::FileInfo::Exists() const
 {
-  return csFileInfo::Exists(m_fileName);
+  return cs::FileInfo::Exists(m_fileName);
 }
 
 
-bool csFileInfo::IsFile() const
+bool cs::FileInfo::IsFile() const
 {
-  return csFileInfo::IsFile(m_fileName);
+  return cs::FileInfo::IsFile(m_fileName);
 }
 
 
-bool csFileInfo::IsFolder() const
+bool cs::FileInfo::IsFolder() const
 {
-  return csFileInfo::IsFolder(m_fileName);
+  return cs::FileInfo::IsFolder(m_fileName);
 }
 
-bool csFileInfo::Exists(const std::string &filename)
+bool cs::FileInfo::Exists(const std::string &filename)
 {
   struct stat s;
   return stat(filename.c_str(), &s) == 0;
 }
 
 
-bool csFileInfo::IsFile(const std::string &filename)
+bool cs::FileInfo::IsFile(const std::string &filename)
 {
   std::filesystem::path path(filename);
   return std::filesystem::is_regular_file(path);
 }
 
 
-bool csFileInfo::IsFolder(const std::string &filename)
+bool cs::FileInfo::IsFolder(const std::string &filename)
 {
   std::filesystem::path path(filename);
   return std::filesystem::is_directory(path);

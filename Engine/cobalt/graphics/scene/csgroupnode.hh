@@ -5,27 +5,32 @@
 #include <vector>
 #include <cobalt/graphics/scene/csgroupnode.refl.hh>
 
-CS_CLASS()
-class CSE_API csGroupNode : public CS_SUPER(csNode)
+namespace cs
 {
-  friend class csNode;
+
+CS_CLASS()
+class CSE_API GroupNode : public CS_SUPER(cs::Node)
+{
+  friend class cs::Node;
   CS_CLASS_GEN;
 
 public:
-  csGroupNode();
-  virtual ~csGroupNode();
+  GroupNode();
+  virtual ~GroupNode();
 
   virtual void UpdateStates();
 
 protected:
-  virtual void PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback);
+  virtual void PrivScan(const cs::Clipper * clipper, cs::iGraphics * renderer, cs::iScanCallback * callback);
 
-  virtual void UpdateBoundingBox(csBoundingBox &bbox);
+  virtual void UpdateBoundingBox(cs::BoundingBox & bbox);
 private:
 
-  bool AddChild(csNode *child);
-  bool RemoveChild(csNode *child);
+  bool AddChild(cs::Node * child);
+  bool RemoveChild(cs::Node * child);
 
-  std::vector<csNode *> m_children;
+  std::vector<cs::Node*> m_children;
 
 };
+
+}

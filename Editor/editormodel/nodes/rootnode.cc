@@ -33,18 +33,18 @@ const RootNode *RootNode::AsRootNode() const
 
 
 
-const csResourceLocator RootNode::WithNewName(const std::string &newName) const
+const cs::ResourceLocator RootNode::WithNewName(const std::string &newName) const
 {
   // root node cannot have a valid resource locator
-  return csResourceLocator(csResourceFile(""));
+  return cs::ResourceLocator(cs::ResourceFile(""));
 
 }
 
-csResourceLocator RootNode::GetNewResourceLocator()
+cs::ResourceLocator RootNode::GetNewResourceLocator()
 {
   // root node cannot have a valid resource locator
-  return csResourceLocator(
-    csResourceFile("")
+  return cs::ResourceLocator(
+    cs::ResourceFile("")
   );
 }
 

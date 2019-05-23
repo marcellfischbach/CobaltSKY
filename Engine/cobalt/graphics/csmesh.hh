@@ -10,34 +10,37 @@
 #include <vector>
 #include <cobalt/graphics/csmesh.refl.hh>
 
-struct iIndexBuffer;
+
+
+namespace cs
+{
 struct iGraphics;
+struct iIndexBuffer;
+class Skeleton;
+class SubMeshWrapper;
+class Material;
 struct iVertexBuffer;
 struct iVertexDeclaration;
 
-class csMaterial;
-class csSkeleton;
-class csSubMeshWrapper;
 
 
-
-const csUInt32 csInvalidMaterialIndex = ~0x00;
+const csUInt32 InvalidMaterialIndex = ~0x00;
 
 CS_CLASS()
-class CSE_API csMesh : public CS_SUPER(iMesh)
+class CSE_API Mesh : public CS_SUPER(cs::iMesh)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csMesh();
-  virtual ~csMesh();
+  Mesh();
+  virtual ~Mesh();
 
-  void AddMesh(csSubMeshWrapper *instance, csSize materialIndex = 0, csUInt8 lod = 0, const std::string &name = "");
+  void AddMesh(cs::SubMeshWrapper *instance, csSize materialIndex = 0, csUInt8 lod = 0, const std::string &name = "");
   csUInt8 GetNumberOfLODs() const;
   csSize GetNumberOfMeshes(csUInt8 lod = 0) const;
-  csSubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0);
-  const csSubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0) const;
+  cs::SubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0);
+  const cs::SubMeshWrapper *GetMesh(csUInt8 lod = 0, csSize idx = 0) const;
 
-  const csBoundingBox &GetBoundingBox() const;
+  const cs::BoundingBox &GetBoundingBox() const;
 
   csSize GetMaterialIndex(csUInt8 lod = 0, csSize idx = 0) const;
   void OptimizeDataStruct();
@@ -49,8 +52,8 @@ public:
   const std::string &GetMaterialName(csSize idx) const;
   csUInt32 GetMaterialIndex(const std::string &materialName) const;
 
-  virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo);
-  virtual void Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod = 0);
+  virtual void Update(cs::iGraphics *renderer, const cs::Vector3f &cameraPos, csUInt64 frameNo);
+  virtual void Render(cs::iGraphics *renderer, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lod = 0);
 
   csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const;
   csSize GetNumberOfTotalTrigons(csUInt8 lod = 0) const;
@@ -59,7 +62,7 @@ public:
 protected:
   struct Data
   {
-    csSubMeshWrapper *m_mesh;
+    cs::SubMeshWrapper *m_mesh;
     csSize m_materialIndex;
     std::string m_name;
   };
@@ -75,24 +78,25 @@ protected:
 
   LOD &GetLOD(csUInt8 lod);
 
-  csBoundingBox m_boundingBox;
+  cs::BoundingBox m_boundingBox;
 };
 
 CS_CLASS()
-class CSE_API csMeshWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API MeshWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csMesh, csMeshWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::Mesh, MeshWrapper, cs::ResourceWrapper);
 };
 
+}
 
 
-CS_FORCEINLINE csSize csMesh::GetNumberOfMaterials() const
+CS_FORCEINLINE csSize cs::Mesh::GetNumberOfMaterials() const
 {
   return m_numberOfMaterials;
 }
 
-CS_FORCEINLINE const csBoundingBox &csMesh::GetBoundingBox() const
+CS_FORCEINLINE const cs::BoundingBox &cs::Mesh::GetBoundingBox() const
 {
   return m_boundingBox;
 }

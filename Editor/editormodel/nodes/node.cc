@@ -60,7 +60,7 @@ bool Node::IsAttached() const
   return false;
 }
 
-const csResourceLocator &Node::GetResourceLocator() const
+const cs::ResourceLocator &Node::GetResourceLocator() const
 {
   return m_locator;
 }

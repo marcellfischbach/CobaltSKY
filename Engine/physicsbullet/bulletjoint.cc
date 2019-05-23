@@ -4,7 +4,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-csBulletJoint::csBulletJoint(csPhysicsJointType type)
+csBulletJoint::csBulletJoint(cs::ePhysicsJointType type)
   : m_type(type)
   , m_colliderA(0)
   , m_colliderB(0)
@@ -18,7 +18,7 @@ csBulletJoint::~csBulletJoint()
 }
 
 
-csPhysicsJointType csBulletJoint::GetType() const
+cs::ePhysicsJointType csBulletJoint::GetType() const
 {
   return m_type;
 }
@@ -61,12 +61,12 @@ void csBulletJoint::SetCollider(csBulletDynamicCollider *colliderA, csBulletDyna
   }
 }
 
-iPhysicsDynamicCollider *csBulletJoint::GetColliderA() const
+cs::iPhysicsDynamicCollider *csBulletJoint::GetColliderA() const
 {
   return m_colliderA;
 }
 
-iPhysicsDynamicCollider *csBulletJoint::GetColliderB() const
+cs::iPhysicsDynamicCollider *csBulletJoint::GetColliderB() const
 {
   return m_colliderB;
 }

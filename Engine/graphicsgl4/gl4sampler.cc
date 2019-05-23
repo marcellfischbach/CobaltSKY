@@ -4,18 +4,18 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-csSamplerGL4::csSamplerGL4()
-  : iSampler()
+cs::SamplerGL4::SamplerGL4()
+  : cs::iSampler()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csSamplerGL4::~csSamplerGL4()
+cs::SamplerGL4::~SamplerGL4()
 {
 
 }
 
-bool csSamplerGL4::Initialize()
+bool cs::SamplerGL4::Initialize()
 {
   glGenSamplers(1, &m_name);
   glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -32,86 +32,86 @@ bool csSamplerGL4::Initialize()
   GLfloat color[] = { 0.0f, 0.0f, 0.0f, 0.0f };
   glSamplerParameterfv(m_name, GL_TEXTURE_BORDER_COLOR, color);
 
-  m_filterMode = eFM_MinMagNearest;
-  m_addressU = eTAM_Repeat;
-  m_addressV = eTAM_Repeat;
-  m_addressW = eTAM_Repeat;
+  m_filterMode = cs::eFM_MinMagNearest;
+  m_addressU = cs::eTAM_Repeat;
+  m_addressV = cs::eTAM_Repeat;
+  m_addressW = cs::eTAM_Repeat;
   m_minLOD = -1000;
   m_maxLOD = 1000;
   m_anisotropy = 1.0f;
-  m_borderColor = csVector4f(0.0f, 0.0f, 0.0f, 0.0f);
-  m_textureCompareMode = eTCM_CompareToR;
-  m_textureCompareFunc = eTCF_Always;
+  m_borderColor = cs::Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
+  m_textureCompareMode = cs::eTCM_CompareToR;
+  m_textureCompareFunc = cs::eTCF_Always;
 
   CS_CHECK_GL_ERROR;
   return m_name != 0;
 }
 
-void csSamplerGL4::Bind(GLuint unit)
+void cs::SamplerGL4::Bind(GLuint unit)
 {
   glBindSampler(unit, m_name);
   CS_CHECK_GL_ERROR;
 }
 
-void csSamplerGL4::SetFilter(csFilterMode filterMode)
+void cs::SamplerGL4::SetFilter(cs::eFilterMode filterMode)
 {
   if (m_filterMode != filterMode)
   {
     m_filterMode = filterMode;
     switch (filterMode)
     {
-    case eFM_MinMagNearest:
+    case cs::eFM_MinMagNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinNearestMagLinear:
+    case cs::eFM_MinNearestMagLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
-    case eFM_MinLinearMagNearest:
+    case cs::eFM_MinLinearMagNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinMagLinear:
+    case cs::eFM_MinMagLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
 
-    case eFM_MinMagMipNearest:
+    case cs::eFM_MinMagMipNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinMagNearestMipLinear:
+    case cs::eFM_MinMagNearestMipLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinNearestMagLinearMipNearest:
+    case cs::eFM_MinNearestMagLinearMipNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
-    case eFM_MinNearestMagMipLinear:
+    case cs::eFM_MinNearestMagMipLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
 
-    case eFM_MinLinearMagMipNearest:
+    case cs::eFM_MinLinearMagMipNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinLinearMagNearestMipLinear:
+    case cs::eFM_MinLinearMagNearestMipLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
       break;
-    case eFM_MinMagLinearMipNearest:
+    case cs::eFM_MinMagLinearMipNearest:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
-    case eFM_MinMagMipLinear:
+    case cs::eFM_MinMagMipLinear:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
 
-    case eFM_Anisotropic:
+    case cs::eFM_Anisotropic:
       glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       break;
@@ -121,12 +121,12 @@ void csSamplerGL4::SetFilter(csFilterMode filterMode)
   }
 }
 
-csFilterMode csSamplerGL4::GetFilter() const
+cs::eFilterMode cs::SamplerGL4::GetFilter() const
 {
   return m_filterMode;
 }
 
-void csSamplerGL4::SetAnisotropy(csUInt8 anisotropy)
+void cs::SamplerGL4::SetAnisotropy(csUInt8 anisotropy)
 {
   if (anisotropy == 0)
   {
@@ -140,12 +140,12 @@ void csSamplerGL4::SetAnisotropy(csUInt8 anisotropy)
   }
 }
 
-csUInt8 csSamplerGL4::GetAnisotropy() const
+csUInt8 cs::SamplerGL4::GetAnisotropy() const
 {
   return m_anisotropy;
 }
 
-void csSamplerGL4::SetMinLOD(csInt16 minLOD)
+void cs::SamplerGL4::SetMinLOD(csInt16 minLOD)
 {
   if (m_minLOD != minLOD)
   {
@@ -155,12 +155,12 @@ void csSamplerGL4::SetMinLOD(csInt16 minLOD)
   }
 }
 
-csInt16 csSamplerGL4::GetMinLOD() const
+csInt16 cs::SamplerGL4::GetMinLOD() const
 {
   return m_minLOD;
 }
 
-void csSamplerGL4::SetMaxLOD(csInt16 maxLOD)
+void cs::SamplerGL4::SetMaxLOD(csInt16 maxLOD)
 {
   if (m_maxLOD != maxLOD)
   {
@@ -170,12 +170,12 @@ void csSamplerGL4::SetMaxLOD(csInt16 maxLOD)
   }
 }
 
-csInt16 csSamplerGL4::GetMaxLOD() const
+csInt16 cs::SamplerGL4::GetMaxLOD() const
 {
   return m_maxLOD;
 }
 
-void csSamplerGL4::SetAddressU(csTextureAddressMode addressMode)
+void cs::SamplerGL4::SetAddressU(cs::eTextureAddressMode addressMode)
 {
   if (m_addressU != addressMode)
   {
@@ -185,12 +185,12 @@ void csSamplerGL4::SetAddressU(csTextureAddressMode addressMode)
   }
 }
 
-csTextureAddressMode csSamplerGL4::GetAddressU() const
+cs::eTextureAddressMode cs::SamplerGL4::GetAddressU() const
 {
   return m_addressU;
 }
 
-void csSamplerGL4::SetAddressV(csTextureAddressMode addressMode)
+void cs::SamplerGL4::SetAddressV(cs::eTextureAddressMode addressMode)
 {
   if (m_addressV != addressMode)
   {
@@ -200,12 +200,12 @@ void csSamplerGL4::SetAddressV(csTextureAddressMode addressMode)
   }
 }
 
-csTextureAddressMode csSamplerGL4::GetAddressV() const
+cs::eTextureAddressMode cs::SamplerGL4::GetAddressV() const
 {
   return m_addressV;
 }
 
-void csSamplerGL4::SetAddressW(csTextureAddressMode addressMode)
+void cs::SamplerGL4::SetAddressW(cs::eTextureAddressMode addressMode)
 {
   if (m_addressW != addressMode)
   {
@@ -215,13 +215,13 @@ void csSamplerGL4::SetAddressW(csTextureAddressMode addressMode)
   }
 }
 
-csTextureAddressMode csSamplerGL4::GetAddressW() const
+cs::eTextureAddressMode cs::SamplerGL4::GetAddressW() const
 {
   return m_addressW;
 }
 
 
-void csSamplerGL4::SetBorderColor(const csVector4f &color)
+void cs::SamplerGL4::SetBorderColor(const cs::Vector4f &color)
 {
   if (m_borderColor != color)
   {
@@ -231,12 +231,12 @@ void csSamplerGL4::SetBorderColor(const csVector4f &color)
   }
 }
 
-const csVector4f &csSamplerGL4::GetBorderColor() const
+const cs::Vector4f &cs::SamplerGL4::GetBorderColor() const
 {
   return m_borderColor;
 }
 
-void csSamplerGL4::SetTextureCompareMode(csTextureCompareMode compareMode)
+void cs::SamplerGL4::SetTextureCompareMode(cs::eTextureCompareMode compareMode)
 {
   if (m_textureCompareMode != compareMode)
   {
@@ -246,12 +246,12 @@ void csSamplerGL4::SetTextureCompareMode(csTextureCompareMode compareMode)
   }
 }
 
-csTextureCompareMode csSamplerGL4::GetTextureCompareMode() const
+cs::eTextureCompareMode cs::SamplerGL4::GetTextureCompareMode() const
 {
   return m_textureCompareMode;
 }
 
-void csSamplerGL4::SetTextureCompareFunc(csTextureCompareFunc compareFunc)
+void cs::SamplerGL4::SetTextureCompareFunc(cs::eTextureCompareFunc compareFunc)
 {
   if (m_textureCompareFunc != compareFunc)
   {
@@ -261,13 +261,13 @@ void csSamplerGL4::SetTextureCompareFunc(csTextureCompareFunc compareFunc)
   }
 }
 
-csTextureCompareFunc csSamplerGL4::GetTextureCompareFunc() const
+cs::eTextureCompareFunc cs::SamplerGL4::GetTextureCompareFunc() const
 {
   return m_textureCompareFunc;
 }
 
-bool csSamplerGL4::NeedsMipMaps() const
+bool cs::SamplerGL4::NeedsMipMaps() const
 {
-  return m_filterMode >= eFM_MinMagMipNearest;
+  return m_filterMode >= cs::eFM_MinMagMipNearest;
 }
 

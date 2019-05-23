@@ -7,8 +7,8 @@
 
 
 
-csGeometryMesh::csGeometryMesh()
-  : csGeometryData()
+cs::GeometryMesh::GeometryMesh()
+  : cs::GeometryData()
   , m_mesh(nullptr)
   , m_material(nullptr)
 {
@@ -16,45 +16,45 @@ csGeometryMesh::csGeometryMesh()
   m_globalTransform.SetIdentity();
 }
 
-csGeometryMesh::~csGeometryMesh()
+cs::GeometryMesh::~GeometryMesh()
 {
 
 }
 
 
-void csGeometryMesh::SetLocalTransorm(const csMatrix4f &localTransform)
+void cs::GeometryMesh::SetLocalTransorm(const cs::Matrix4f &localTransform)
 {
   m_localTransform = localTransform;
 }
 
-const csMatrix4f &csGeometryMesh::GetLocalTransform() const
+const cs::Matrix4f &cs::GeometryMesh::GetLocalTransform() const
 {
   return m_localTransform;
 }
 
-void csGeometryMesh::UpdateTransformation(const csMatrix4f &parentTransform)
+void cs::GeometryMesh::UpdateTransformation(const cs::Matrix4f &parentTransform)
 {
-  csMatrix4f::Mult(parentTransform, m_localTransform, m_globalTransform);
+  cs::Matrix4f::Mult(parentTransform, m_localTransform, m_globalTransform);
 }
 
 
-void csGeometryMesh::SetMesh(csMeshWrapper *mesh)
+void cs::GeometryMesh::SetMesh(cs::MeshWrapper *mesh)
 {
   CS_SET(m_mesh, mesh);
 }
 
-void csGeometryMesh::SetMaterial(csMultiMaterial *material)
+void cs::GeometryMesh::SetMaterial(cs::MultiMaterial *material)
 {
   CS_SET(m_material, material);
 }
 
 
-void csGeometryMesh::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::GeometryMesh::Scan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   //entityScan->ScanGeometry(this);
 }
 
-void csGeometryMesh::Render(iGraphics *graphics, csRenderPass pass, csUInt8 lod)
+void cs::GeometryMesh::Render(cs::iGraphics *graphics, cs::eRenderPass pass, csUInt8 lod)
 {
   if (!m_material || !m_mesh)
   {
@@ -67,9 +67,9 @@ void csGeometryMesh::Render(iGraphics *graphics, csRenderPass pass, csUInt8 lod)
 
 
 
-csGeometryData *csGeometryMesh::Clone()
+cs::GeometryData *cs::GeometryMesh::Clone()
 {
-  csGeometryMesh *mesh = new csGeometryMesh();
+  cs::GeometryMesh *mesh = new cs::GeometryMesh();
   mesh->SetAttached(false);
   mesh->SetLocalTransorm(m_localTransform);
   mesh->SetMesh(m_mesh);

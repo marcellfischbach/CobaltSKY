@@ -3,10 +3,13 @@
 #include <cobalt/csexport.hh>
 #include <stdlib.h>
 
-class CSE_API csRandomRange
+namespace cs
+{
+
+class CSE_API RandomRange
 {
 public:
-  csRandomRange()
+  RandomRange()
     : m_min(0)
     , m_range(0)
   {
@@ -36,16 +39,16 @@ public:
     return m_min + (float)rand() / (float)RAND_MAX * m_range;
   }
 
-  static csRandomRange Range(float min, float max)
+  static cs::RandomRange Range(float min, float max)
   {
-    csRandomRange rr;
+    cs::RandomRange rr;
     rr.SetRange(min, max);
     return rr;
   }
 
-  static csRandomRange Value(float value, float jitter = 0.0f)
+  static cs::RandomRange Value(float value, float jitter = 0.0f)
   {
-    csRandomRange rr;
+    cs::RandomRange rr;
     rr.SetValue(value, jitter);
     return rr;
   }
@@ -64,3 +67,5 @@ private:
   float m_min;
   float m_range;
 };
+
+}

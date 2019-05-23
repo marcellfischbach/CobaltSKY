@@ -5,8 +5,8 @@
 #include <graphicsgl4/gl4sampler.hh>
 #include <graphicsgl4/gl4defines.hh>
 
-csTextureGL4::csTextureGL4(csTextureType type)
-  : iTexture()
+csTextureGL4::csTextureGL4(cs::eTextureType type)
+  : cs::iTexture()
   , m_name(0)
   , m_type(type)
   , m_target(textureTypeMap[type])
@@ -34,17 +34,17 @@ bool csTextureGL4::Initialize()
   return m_name != 0;
 }
 
-void csTextureGL4::SetSampler(csSamplerWrapper *sampler)
+void csTextureGL4::SetSampler(cs::SamplerWrapper *sampler)
 {
   CS_SET(m_sampler, sampler);
 }
 
-csSamplerWrapper *csTextureGL4::GetSampler()
+cs::SamplerWrapper *csTextureGL4::GetSampler()
 {
   return m_sampler;
 }
 
-const csSamplerWrapper *csTextureGL4::GetSampler() const
+const cs::SamplerWrapper *csTextureGL4::GetSampler() const
 {
   return m_sampler;
 }
@@ -55,7 +55,7 @@ void csTextureGL4::Bind()
   CS_CHECK_GL_ERROR;
 }
 
-csTextureType csTextureGL4::GetType() const
+cs::eTextureType csTextureGL4::GetType() const
 {
   return m_type;
 }

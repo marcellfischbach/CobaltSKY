@@ -14,14 +14,14 @@ class EDITOR_API Vector4fLineEdit : public QWidget
 public:
   Vector4fLineEdit(QWidget* parent = nullptr);
 
-  void SetValue(const csVector4f &color);
-  csVector4f GetValue() const;
+  void SetValue(const cs::Vector4f &color);
+  cs::Vector4f GetValue() const;
   bool IsEnabled () const;
 
 public slots:
   void SetEnabled (bool enabled);
 signals:
-  void ValueChanged (const csVector4f &color);
+  void ValueChanged (const cs::Vector4f &color);
 
 
 private slots:

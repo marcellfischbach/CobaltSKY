@@ -8,15 +8,18 @@
 
 class csTextureGL4;
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csRenderTargetGL4 : public CS_SUPER(iRenderTarget)
+class CSGRAPHICSGL4_API RenderTargetGL4 : public CS_SUPER(cs::iRenderTarget)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csRenderTargetGL4();
-  csRenderTargetGL4(GLuint name, csUInt16 width, csUInt16 height);
-  virtual ~csRenderTargetGL4();
+  RenderTargetGL4();
+  RenderTargetGL4(GLuint name, csUInt16 width, csUInt16 height);
+  virtual ~RenderTargetGL4();
 
   void Setup(GLuint name, csUInt16 width, csUInt16 heigth);
   void Bind();
@@ -26,25 +29,27 @@ public:
   csUInt16 GetHeight() const;
 
 
-  void AddColorTexture(csTextureWrapper *color);
-  void SetDepthTexture(csTextureWrapper *depth);
+  void AddColorTexture(cs::TextureWrapper * color);
+  void SetDepthTexture(cs::TextureWrapper * depth);
   void SetDepthBuffer(csUInt16 width, csUInt16 height);
   void Initialize(csUInt16 width, csUInt16 height);
   bool Finilize();
 
 
-  virtual csTextureWrapper *GetColorBuffer(csUInt8 buffer) const;
-  virtual csTextureWrapper *GetDepthBuffer() const;
+  virtual cs::TextureWrapper* GetColorBuffer(csUInt8 buffer) const;
+  virtual cs::TextureWrapper* GetDepthBuffer() const;
 
 private:
   csUInt16 m_width;
   csUInt16 m_height;
 
-  std::vector<csTextureWrapper*> m_colorTextures;
-  csTextureWrapper *m_depthTexture;
+  std::vector<cs::TextureWrapper*> m_colorTextures;
+  cs::TextureWrapper* m_depthTexture;
   GLuint m_depthBuffer;
   GLuint m_name;
   bool m_provided;
 };
 
 
+
+}

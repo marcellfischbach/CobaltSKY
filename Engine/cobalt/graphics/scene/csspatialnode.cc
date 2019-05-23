@@ -3,25 +3,25 @@
 #include <cobalt/graphics/scene/csspatialnode.hh>
 
 
-csSpatialNode::csSpatialNode()
-  : csNode()
+cs::SpatialNode::SpatialNode()
+  : cs::Node()
 {
 }
 
-csSpatialNode::~csSpatialNode()
+cs::SpatialNode::~SpatialNode()
 {
 
 }
 
 
-void csSpatialNode::SetMatrix(const csMatrix4f &matrix)
+void cs::SpatialNode::SetMatrix(const cs::Matrix4f &matrix)
 {
   m_matrix.Set(matrix);
   FlagUpdateBoundingBox();
   TransformationChanged();
 }
 
-void csSpatialNode::TransformationChanged()
+void cs::SpatialNode::TransformationChanged()
 {
 
 }

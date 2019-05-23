@@ -4,8 +4,11 @@
 #include <cobalt/physics/iphysicscollider.hh>
 #include <cobalt/physics/iphysicsbasecollider.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-struct CSE_API iPhysicsBaseCollider : public CS_SUPER(iPhysicsCollider)
+struct CSE_API iPhysicsBaseCollider : public CS_SUPER(cs::iPhysicsCollider)
 {
   CS_CLASS_GEN;
   virtual ~iPhysicsBaseCollider() { }
@@ -17,3 +20,6 @@ struct CSE_API iPhysicsBaseCollider : public CS_SUPER(iPhysicsCollider)
   virtual float GetRestitution() const = 0;
 
 };
+
+
+}

@@ -18,7 +18,7 @@ namespace asset::model
 
   void AssetScanner::Scan()
   {
-    std::string path = csVFS::Get()->GetAbsolutePath(m_asset->GetResourceLocator());
+    std::string path = cs::VFS::Get()->GetAbsolutePath(m_asset->GetResourceLocator());
     if (path.empty())
     {
       return;
@@ -49,7 +49,7 @@ namespace asset::model
   {
     if (entry->HasAttribute("locator"))
     {
-      csResourceLocator locator(entry->GetAttribute("locator"));
+      cs::ResourceLocator locator(entry->GetAttribute("locator"));
       if (locator.IsValid())
       {
         m_asset->AddReference(locator);

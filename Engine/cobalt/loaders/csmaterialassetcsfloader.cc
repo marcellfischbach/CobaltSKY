@@ -10,19 +10,19 @@
 
 
 
-csMaterialAssetCSFLoader::csMaterialAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::MaterialAssetCSFLoader::MaterialAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
 
-csMaterialAssetCSFLoader::~csMaterialAssetCSFLoader()
+cs::MaterialAssetCSFLoader::~MaterialAssetCSFLoader()
 {
 
 }
 
-bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::MaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -30,34 +30,34 @@ bool csMaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLo
   return entry->GetTagName() == std::string("material");
 }
 
-const cs::Class *csMaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
   CS_UNUSED(userData);
-  return csMaterialWrapper::GetStaticClass();
+  return cs::MaterialWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csMaterial *material = new csMaterial();
+  cs::Material *material = new cs::Material();
 
   const csfEntry *materialDefEntry = entry->GetEntry("materialDef");
   if (!materialDefEntry)
   {
-    return new csMaterialWrapper(material);
+    return new cs::MaterialWrapper(material);
   }
 
   if (!HasLocator(materialDefEntry))
   {
-    return new csMaterialWrapper(material);
+    return new cs::MaterialWrapper(material);
   }
-  csMaterialDefWrapper *materialDefWrapper = csResourceManager::Get()->GetOrLoad<csMaterialDefWrapper>(GetLocator(materialDefEntry));
+  cs::MaterialDefWrapper *materialDefWrapper = cs::ResourceManager::Get()->GetOrLoad<cs::MaterialDefWrapper>(GetLocator(materialDefEntry));
   if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
-    return new csMaterialWrapper(material);
+    return new cs::MaterialWrapper(material);
   }
-  csMaterialDef *materialDef = materialDefWrapper->Get();
+  cs::MaterialDef *materialDef = materialDefWrapper->Get();
 
   material->SetMaterialDef(materialDefWrapper);
   materialDefWrapper->Release();
@@ -99,7 +99,7 @@ csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const c
 
 
 
-      csShaderParameterType type = materialDef->GetParamType(index);
+      cs::eShaderParameterType type = materialDef->GetParamType(index);
       const csfEntry *valueEntry = parameterEntry->GetEntry();
       if (!valueEntry)
       {
@@ -129,14 +129,14 @@ csResourceWrapper *csMaterialAssetCSFLoader::Load(const csfEntry *entry, const c
       }
       else if (tagName == std::string("locator") && HasLocator(valueEntry))
       {
-        csTextureWrapper *texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(GetLocator(valueEntry));
+        cs::TextureWrapper *texture = cs::ResourceManager::Get()->GetOrLoad<cs::TextureWrapper>(GetLocator(valueEntry));
         material->Set(index, texture);
       }
     }
   }
 
 
-  return new csMaterialWrapper(material);
+  return new cs::MaterialWrapper(material);
 }
 
 

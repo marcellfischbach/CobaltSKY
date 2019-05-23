@@ -17,18 +17,18 @@
 
 
 
-csTextureAssetCSFLoader::csTextureAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::TextureAssetCSFLoader::TextureAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 }
 
-csTextureAssetCSFLoader::~csTextureAssetCSFLoader()
+cs::TextureAssetCSFLoader::~TextureAssetCSFLoader()
 {
 
 }
 
 
-bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::TextureAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -41,47 +41,47 @@ bool csTextureAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLoc
     || tagName == std::string("texturecube");
 }
 
-const cs::Class *csTextureAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::TextureAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csTextureType type = GetTextureType(entry->GetTagName());
+  cs::eTextureType type = GetTextureType(entry->GetTagName());
   switch (type)
   {
-  case eTT_Texture2D:
-    return csTexture2DWrapper::GetStaticClass();
-  case eTT_Texture2DArray:
-    return csTexture2DArrayWrapper::GetStaticClass();
+  case cs::eTT_Texture2D:
+    return cs::Texture2DWrapper::GetStaticClass();
+  case cs::eTT_Texture2DArray:
+    return cs::Texture2DArrayWrapper::GetStaticClass();
   }
   return nullptr;
 }
 
 
-csResourceWrapper  *csTextureAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper  *cs::TextureAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
 
-  csTextureType type = GetTextureType(entry->GetTagName());
+  cs::eTextureType type = GetTextureType(entry->GetTagName());
   switch (type)
   {
-  case eTT_Texture2D:
+  case cs::eTT_Texture2D:
     return LoadTexture2D(entry, locator, userData);
-  case eTT_Texture2DArray:
+  case cs::eTT_Texture2DArray:
     return LoadTexture2DArray(entry, locator, userData);
   }
 
   return 0;
 }
 
-csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
-  csImageWrapper *imageWrapper = LoadImage(entry->GetEntry("image"), locator, userData);
+  cs::SamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
+  cs::ImageWrapper *imageWrapper = LoadImage(entry->GetEntry("image"), locator, userData);
   if (!imageWrapper || imageWrapper->IsNull())
   {
     return nullptr;
   }
 
-  csImage *image = imageWrapper->Get();
+  cs::Image *image = imageWrapper->Get();
 
-  iTexture2D *texture = csEng->CreateTexture2D(image->GetPixelFormat(),
+  cs::iTexture2D *texture = csEng->CreateTexture2D(image->GetPixelFormat(),
     image->GetWidth(),
     image->GetHeight(),
     image->GetNumberOfLevels() > 1);
@@ -94,12 +94,12 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry,
   }
   CS_RELEASE(image);
 
-  return new csTexture2DWrapper(texture);
+  return new cs::Texture2DWrapper(texture);
 }
 
-csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csSamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
+  cs::SamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
 
 
   unsigned numImages = 0;
@@ -114,8 +114,8 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *e
   }
 
   unsigned layer = 0;
-  iTexture2DArray *texture = nullptr;
-  csPixelFormat pixelFormat;
+  cs::iTexture2DArray *texture = nullptr;
+  cs::ePixelFormat pixelFormat;
   for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
   {
     const csfEntry *imageEntry = entry->GetChild(i);
@@ -123,14 +123,14 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *e
     {
       continue;
     }
-    csImageWrapper *imageWrapper = LoadImage(imageEntry, locator, userData);
+    cs::ImageWrapper *imageWrapper = LoadImage(imageEntry, locator, userData);
     if (!imageWrapper || imageWrapper->IsNull())
     {
       CS_RELEASE(sampler);
       CS_RELEASE(texture);
       return nullptr;
     }
-    csImage *image = imageWrapper->Get();
+    cs::Image *image = imageWrapper->Get();
 
     if (!texture)
     {
@@ -170,11 +170,11 @@ csResourceWrapper *csTextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *e
 
 
 
-  return new csTexture2DArrayWrapper(texture);
+  return new cs::Texture2DArrayWrapper(texture);
 }
 
 
-csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::SamplerWrapper *cs::TextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {
@@ -182,34 +182,34 @@ csSamplerWrapper *csTextureAssetCSFLoader::LoadSampler(const csfEntry *entry, co
   }
 
 
-  csResourceLoadingMode rlm = GetResourceLoadingMode(entry);
-  csSamplerWrapper *sampler = nullptr;
+  cs::eResourceLoadingMode rlm = GetResourceLoadingMode(entry);
+  cs::SamplerWrapper *sampler = nullptr;
   switch (rlm)
   {
-  case eRLM_Shared:
+  case cs::eRLM_Shared:
     if (HasLocator(entry))
     {
-      sampler = csResourceManager::Get()->GetOrLoad<csSamplerWrapper>(GetLocator(entry));
+      sampler = cs::ResourceManager::Get()->GetOrLoad<cs::SamplerWrapper>(GetLocator(entry));
       CS_ADDREF(sampler);
     }
     break;
 
-  case eRLM_Instance:
+  case cs::eRLM_Instance:
     if (HasLocator(entry))
     {
-      sampler = csResourceManager::Get()->Load<csSamplerWrapper>(GetLocator(entry));
+      sampler = cs::ResourceManager::Get()->Load<cs::SamplerWrapper>(GetLocator(entry));
     }
     break;
 
-  case eRLM_Inline:
-    sampler = csResourceManager::Get()->Load<csSamplerWrapper>(entry, locator, userData);
+  case cs::eRLM_Inline:
+    sampler = cs::ResourceManager::Get()->Load<cs::SamplerWrapper>(entry, locator, userData);
     break;
   }
 
   return sampler;
 }
 
-csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ImageWrapper *cs::TextureAssetCSFLoader::LoadImage(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {
@@ -222,13 +222,13 @@ csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const 
   {
     return nullptr;
   }
-  csImageWrapper *imageWrapper = csResourceManager::Get()->Load<csImageWrapper>(blob, locator, userData);
+  cs::ImageWrapper *imageWrapper = cs::ResourceManager::Get()->Load<cs::ImageWrapper>(blob, locator, userData);
   if (!imageWrapper || imageWrapper->IsNull())
   {
     return nullptr;
   }
 
-  csImage *image = imageWrapper->Get();
+  cs::Image *image = imageWrapper->Get();
   printf("LoadImage: %s\n", imageName.c_str());
   if (LoadBool(entry, "mipmap"))
   {
@@ -244,33 +244,33 @@ csImageWrapper *csTextureAssetCSFLoader::LoadImage(const csfEntry *entry, const 
   return imageWrapper;
 }
 
-csTextureType csTextureAssetCSFLoader::GetTextureType(const std::string &typeName) const
+cs::eTextureType cs::TextureAssetCSFLoader::GetTextureType(const std::string &typeName) const
 {
   if (typeName == std::string("textue1d"))
   {
-    return eTT_Texture1D;
+    return cs::eTT_Texture1D;
   }
   else if (typeName == std::string("textue2d"))
   {
-    return eTT_Texture2D;
+    return cs::eTT_Texture2D;
   }
   else if (typeName == std::string("textue3d"))
   {
-    return eTT_Texture3D;
+    return cs::eTT_Texture3D;
   }
   else if (typeName == std::string("textue1darray"))
   {
-    return eTT_Texture1DArray;
+    return cs::eTT_Texture1DArray;
   }
   else if (typeName == std::string("texture2darray"))
   {
-    return eTT_Texture2DArray;
+    return cs::eTT_Texture2DArray;
   }
   else if (typeName == std::string("textuecube"))
   {
-    return eTT_TextureCube;
+    return cs::eTT_TextureCube;
   }
-  return eTT_Texture2D;
+  return cs::eTT_Texture2D;
 }
 
 

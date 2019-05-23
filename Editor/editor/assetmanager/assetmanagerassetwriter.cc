@@ -65,7 +65,7 @@ void AssetManagerAssetWriter::AddEntry(const std::string &name, const std::strin
   m_entries.push_back(entry);
 }
 
-bool AssetManagerAssetWriter::Import(iFile *file)
+bool AssetManagerAssetWriter::Import(cs::iFile *file)
 {
   m_entries.clear();
 
@@ -112,7 +112,7 @@ bool AssetManagerAssetWriter::Import(iFile *file)
   return true;
 }
 
-void AssetManagerAssetWriter::Output(iFile *file)
+void AssetManagerAssetWriter::Output(cs::iFile *file)
 {
   const csUInt32 HEADER_SIZE = 14;
   const csUInt32 ENTRY_HEADER_SIZE = 132;

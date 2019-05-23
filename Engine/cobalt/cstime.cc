@@ -10,7 +10,7 @@ LARGE_INTEGER FrequencyCounter;
 #define MILLI 1000
 
 
-csTime::csTime()
+cs::Time::Time()
 {
 #ifdef CS_WIN32
   LARGE_INTEGER StartTime;
@@ -22,14 +22,14 @@ csTime::csTime()
   Tick();
 }
 
-csTime &csTime::Get()
+cs::Time &cs::Time::Get()
 {
-  static csTime time;
+  static cs::Time time;
   return time;
 }
 
 
-void csTime::Tick()
+void cs::Time::Tick()
 {
 #ifdef CS_WIN32
   LARGE_INTEGER CurrentTime;

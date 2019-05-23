@@ -5,11 +5,14 @@
 #include <cobalt/math/csmatrix4f.hh>
 #include <QPoint>
 
-class csCamera;
+namespace cs
+{
+class Camera;
+}
 class EDITOR_API PreviewCameraFlowHandler : public SceneViewBaseInputHandler
 {
 public:
-  PreviewCameraFlowHandler(csCamera *camera);
+  PreviewCameraFlowHandler(cs::Camera *camera);
   virtual ~PreviewCameraFlowHandler();
 
   virtual void mousePressEvent(QMouseEvent *event);
@@ -37,7 +40,7 @@ private:
 
   CameraMode m_mode;
 
-  csMatrix4f m_matrix;
+  cs::Matrix4f m_matrix;
   bool m_shiftDown;
   bool m_ctrlDown;
 
@@ -60,6 +63,6 @@ private:
   float m_moveDecel;
   float m_maxSpeed;
 
-  csCamera *m_camera = 0;
+  cs::Camera *m_camera = 0;
   QPoint m_mousePos;
 };

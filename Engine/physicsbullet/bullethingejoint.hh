@@ -11,7 +11,7 @@ class csBulletDynamicCollider;
 
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletHingeJoint : public  CS_SUPER(csBulletJoint), public CS_SUPER(iPhysicsHingeJoint)
+class CSBULLETPHYSICS_API csBulletHingeJoint : public  CS_SUPER(csBulletJoint), public CS_SUPER(cs::iPhysicsHingeJoint)
 {
   CS_CLASS_GEN;
 public:
@@ -20,20 +20,20 @@ public:
 
   bool Initialize(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB);
 
-  virtual void SetFrameA(const csMatrix4f &frame);
-  virtual const csMatrix4f &GetFrameA() const;
+  virtual void SetFrameA(const cs::Matrix4f &frame);
+  virtual const cs::Matrix4f &GetFrameA() const;
 
-  virtual void SetFrameB(const csMatrix4f &frame);
-  virtual const csMatrix4f &GetFrameB() const;
+  virtual void SetFrameB(const cs::Matrix4f &frame);
+  virtual const cs::Matrix4f &GetFrameB() const;
 
-  virtual void SetFrames(const csMatrix4f &frameA, const csMatrix4f &frameB);
+  virtual void SetFrames(const cs::Matrix4f &frameA, const cs::Matrix4f &frameB);
 
   btHingeConstraint *GetHingeConstraint();
   const btHingeConstraint *GetHingeConstraint() const;
 
 private:
-  csMatrix4f m_frameA;
-  csMatrix4f m_frameB;
+  cs::Matrix4f m_frameA;
+  cs::Matrix4f m_frameB;
 
   btHingeConstraint *m_hingeConstraints;
 };
@@ -51,12 +51,12 @@ CS_FORCEINLINE const btHingeConstraint *csBulletHingeJoint::GetHingeConstraint()
 }
 
 
-CS_FORCEINLINE const csMatrix4f &csBulletHingeJoint::GetFrameA() const
+CS_FORCEINLINE const cs::Matrix4f &csBulletHingeJoint::GetFrameA() const
 {
   return m_frameA;
 }
 
-CS_FORCEINLINE const csMatrix4f &csBulletHingeJoint::GetFrameB() const
+CS_FORCEINLINE const cs::Matrix4f &csBulletHingeJoint::GetFrameB() const
 {
   return m_frameB;
 }

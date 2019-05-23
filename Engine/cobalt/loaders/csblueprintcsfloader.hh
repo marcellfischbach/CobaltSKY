@@ -6,27 +6,31 @@
 #include <cobalt/loaders/csblueprintcsfloader.refl.hh>
 
 
-class csBlueprint;
-class csBPEntity;
-class csBPEntityState;
-class csPropertySetter;
+namespace cs
+{
+class BPEntity;
+class BPEntityState;
+class PropertySetter;
+class Blueprint;
 
 CS_CLASS()
-class CSE_API csBlueprintCSFLoader : public CS_SUPER(csBaseCSFLoader)
+class CSE_API BlueprintCSFLoader : public CS_SUPER(cs::BaseCSFLoader)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csBlueprintCSFLoader();
-  virtual ~csBlueprintCSFLoader();
+  BlueprintCSFLoader();
+  virtual ~BlueprintCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual bool CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual const cs::Class *EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual cs::ResourceWrapper *Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
 private:
-  void LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
-  void LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
-  void LoadProperty(csBPEntityState *entityState, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const;
+  void LoadEntity(cs::Blueprint *blueprint, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const;
+  void LoadEntityState(cs::BPEntity *entity, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const;
+  void LoadProperty(cs::BPEntityState *entityState, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const;
 
-  csPropertySetter* CreateProperty(const csfEntry *entry) const;
+  cs::PropertySetter* CreateProperty(const csfEntry *entry) const;
 };
+
+}

@@ -1,22 +1,22 @@
 
 #include <cobalt/graphics/shadergraph/cssgsub.hh>
 
-csSGSub::csSGSub()
-  : csSGNode()
+cs::SGSub::SGSub()
+  : cs::SGNode()
 {
   SetName(CS_SUB_NAME);
-  AddInput(new csSGInput("a", true, true));
-  AddInput(new csSGInput("b", true, true));
-  AddOutput(new csSGOutput("v"));
+  AddInput(new cs::SGInput("a", true, true));
+  AddInput(new cs::SGInput("b", true, true));
+  AddOutput(new cs::SGOutput("v"));
 }
 
 
-bool csSGSub::Validate()
+bool cs::SGSub::Validate()
 {
-  bool success = csSGNode::Validate();
+  bool success = cs::SGNode::Validate();
 
-  csSGDataType dtA = GetInputDataType(0);
-  csSGDataType dtB = GetInputDataType(1);
+  cs::eSGDataType dtA = GetInputDataType(0);
+  cs::eSGDataType dtB = GetInputDataType(1);
   if (!ScalarType(dtA, dtB))
   {
     SetValidationMessage("Invalid input type");

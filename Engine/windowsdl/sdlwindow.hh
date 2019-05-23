@@ -11,7 +11,7 @@ class SDLKeyboard;
 class SDLMouse;
 
 CS_CLASS()
-class CSWINDOWSDL_API SDLWindow : public CS_SUPER(iWindow)
+class CSWINDOWSDL_API SDLWindow : public CS_SUPER(cs::iWindow)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -29,10 +29,10 @@ public:
     csUInt8 openGLMajor,
     csUInt8 openGLMinor);
 
-  virtual void SetIcon(const csImage *image);
+  virtual void SetIcon(const cs::Image *image);
 
-  virtual const iKeyboard *GetKeyboard() const;
-  virtual const iMouse *GetMouse() const;
+  virtual const cs::iKeyboard *GetKeyboard() const;
+  virtual const cs::iMouse *GetMouse() const;
 
   virtual csUInt16 GetWidth() const;
   virtual csUInt16 GetHeight() const;

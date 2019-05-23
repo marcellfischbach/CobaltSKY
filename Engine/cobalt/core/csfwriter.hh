@@ -5,12 +5,23 @@
 
 
 class csfFile;
-class csResourceLocator;
 
-class CSE_API csfWriter
+namespace cs
+{
+class ResourceLocator;
+
+namespace file
+{
+
+
+
+class CSE_API Writer
 {
 public:
-  static bool Write(const csfFile &file, const csResourceLocator &locator, bool tight = false, unsigned indent = 2);
+  static bool Write(const csfFile& file, const cs::ResourceLocator& locator, bool tight = false, unsigned indent = 2);
 private:
-  csfWriter() { };
+  Writer() { };
 };
+
+}
+}

@@ -30,7 +30,7 @@
 #include <editor/abstractdockitem.hh>
 
 
-void editor_resource_renamed(csEvent &event, void *userData);
+void editor_resource_renamed(cs::Event &event, void *userData);
 
 
 Editor::Editor()
@@ -42,7 +42,7 @@ Editor::Editor()
 bool Editor::Initialize(int argc, char **argv)
 {
   // we use a specialized resource manager within the editor
-  csResourceManager::Register(new EditorResourceManager());
+  cs::ResourceManager::Register(new EditorResourceManager());
 
 
   EditorModule::Initialize();
@@ -63,13 +63,13 @@ bool Editor::Initialize(int argc, char **argv)
 
   std::string settingsPath = projectPath + "/config.csf";
 
-  csSettings::Get()->Initialize(settingsPath.c_str());
-  csVFS::Get()->Initialize(csSettings::Get());
+  cs::Settings::Get()->Initialize(settingsPath.c_str());
+  cs::VFS::Get()->Initialize(cs::Settings::Get());
 
 
-//  m_rootPath = QDir(QString(csVFS::Get()->GetRootPath().c_str()));
+//  m_rootPath = QDir(QString(cs::VFS::Get()->GetRootPath().c_str()));
 
-  m_engine = new csEngine();
+  m_engine = new cs::Engine();
   m_physicsSystem = new csBulletSystem();
   m_physicsSystem->Initialize();
   m_engine->SetPhysicsSystem(m_physicsSystem);
@@ -108,11 +108,11 @@ bool Editor::Initialize(int argc, char **argv)
 }
 
 #include <cobalt/graphics/itexture2d.hh>
-csGraphicsGL4 *Editor::GetGraphics()
+cs::GraphicsGL4 *Editor::GetGraphics()
 {
   if (!m_graphics)
   {
-    m_graphics = new csGraphicsGL4();
+    m_graphics = new cs::GraphicsGL4();
     m_engine->SetRenderer(m_graphics);
   }
 
@@ -140,7 +140,7 @@ void Editor::OpenAsset(asset::model::Asset *asset)
 	else
 	{
 
-    cs::iObject *data = csResourceManager::Get()->Load(asset->GetResourceLocator());
+    cs::iObject *data = cs::ResourceManager::Get()->Load(asset->GetResourceLocator());
     if (!data)
     {
 			QMessageBox::critical(m_mainWindow, GetApplicationTitle().c_str(),
@@ -205,9 +205,9 @@ std::string Editor::ConvertToResourcePath(const std::string &filePath) const
 {
   const QDir& assetDir(QString(filePath.c_str()));
 
-  for (unsigned i = 0, in = csVFS::Get()->GetNumberOfEntries(); i < in; ++i)
+  for (unsigned i = 0, in = cs::VFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
-    const csVFS::Entry &entry = csVFS::Get()->GetEntry(i);
+    const cs::VFS::Entry &entry = cs::VFS::Get()->GetEntry(i);
     QDir dir(QString(entry.GetAbsPath().c_str()));
     QString canonicalRoot = dir.canonicalPath();
     QString canonicalAssetDir = assetDir.canonicalPath();
@@ -271,14 +271,14 @@ void Editor::OpenProject(const std::string &projectPath)
 }
 
 
-void editor_resource_renamed(csEvent &event, void *userData)
+void editor_resource_renamed(cs::Event &event, void *userData)
 {
   AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
   Editor *editor = reinterpret_cast<Editor*>(userData);
   editor->ResourceRenamed(evt.GetFrom(), evt.GetTo());
 }
 
-void Editor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
+void Editor::ResourceRenamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
 
   for (std::map<asset::model::Asset *, iAssetEditor*>::iterator it = m_openEditors.begin(); it != m_openEditors.end(); ++it)

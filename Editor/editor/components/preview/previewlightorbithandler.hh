@@ -4,11 +4,14 @@
 #include <editor/components/sceneviewbaseinputhandler.hh>
 #include <QPoint>
 
-class csDirectionalLight;
+namespace cs
+{
+class DirectionalLight;
+}
 class EDITOR_API PreviewLightOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
-  PreviewLightOrbitHandler(csDirectionalLight *light);
+  PreviewLightOrbitHandler(cs::DirectionalLight *light);
   virtual ~PreviewLightOrbitHandler();
 
   virtual void mousePressEvent(QMouseEvent *event);
@@ -27,6 +30,6 @@ private:
   float m_rotV = 0.0f;
 
 
-  csDirectionalLight *m_light = 0;
+  cs::DirectionalLight *m_light = 0;
   QPoint m_mousePos;
 };

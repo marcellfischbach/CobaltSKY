@@ -7,24 +7,24 @@
 #include <csfile/csffile.hh>
 
 
-csCSFFileLoader::csCSFFileLoader()
-  : iFileLoader()
+cs::CSFFileLoader::CSFFileLoader()
+  : cs::iFileLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csCSFFileLoader::~csCSFFileLoader()
+cs::CSFFileLoader::~CSFFileLoader()
 {
 }
 
-bool csCSFFileLoader::CanLoad(iFile *file, const csResourceLocator &locator) const
+bool cs::CSFFileLoader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   const std::string extension = file->GetExtension();
   return extension == std::string("csf") || extension == std::string("asset");
 }
 
 
-const cs::Class *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *cs::CSFFileLoader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   const std::string extension = file->GetExtension();
   if (extension != std::string("csf") && extension != std::string("asset"))
@@ -57,10 +57,10 @@ const cs::Class *csCSFFileLoader::EvalClass(iFile *file, const csResourceLocator
     return 0;
   }
 
-  return csResourceManager::Get()->EvalClass(f.GetRoot(), locator);
+  return cs::ResourceManager::Get()->EvalClass(f.GetRoot(), locator);
 }
 
-csResourceWrapper *csCSFFileLoader::Load(iFile *file, const csResourceLocator &locator) const
+cs::ResourceWrapper *cs::CSFFileLoader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   const std::string extension = file->GetExtension();
   if (extension != std::string("csf") && extension != std::string("asset"))
@@ -93,5 +93,5 @@ csResourceWrapper *csCSFFileLoader::Load(iFile *file, const csResourceLocator &l
     return 0;
   }
 
-  return csResourceManager::Get()->Load(f.GetRoot(), locator);
+  return cs::ResourceManager::Get()->Load(f.GetRoot(), locator);
 }

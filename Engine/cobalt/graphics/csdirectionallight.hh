@@ -5,20 +5,26 @@
 #include <cobalt/graphics/cslight.hh>
 #include <cobalt/graphics/csdirectionallight.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csDirectionalLight : public CS_SUPER(csLight)
+class CSE_API DirectionalLight : public CS_SUPER(cs::Light)
 {
   CS_CLASS_GEN;
 public:
-  csDirectionalLight();
-  virtual ~csDirectionalLight();
+  DirectionalLight();
+  virtual ~DirectionalLight();
 
-  void SetArbDirection(const csVector3f &arbDirection);
-  void SetDirection(const csVector3f &direction);
-  const csVector3f &GetDirection() const;
+  void SetArbDirection(const cs::Vector3f & arbDirection);
+  void SetDirection(const cs::Vector3f & direction);
+  const cs::Vector3f& GetDirection() const;
 
 private:
-  csVector3f m_direction;
+  cs::Vector3f m_direction;
 
 };
+
+
+}
 

@@ -17,7 +17,7 @@ Project::Project()
 void Project::Open(const std::string &projectPath)
 {
   m_model = new asset::model::Model();
-  connect (m_model, SIGNAL(ResourceChanged(const csResourceLocator&)), this, SLOT(ResourceChanged(const csResourceLocator&)));
+  connect (m_model, SIGNAL(ResourceChanged(const cs::ResourceLocator&)), this, SLOT(ResourceChanged(const cs::ResourceLocator&)));
   asset::model::ModelScanner(m_model).Scan();
 }
 
@@ -26,11 +26,11 @@ void Project::Close()
 }
 
 
-void Project::ResourceChanged(const csResourceLocator &locator)
+void Project::ResourceChanged(const cs::ResourceLocator &locator)
 {
   std::cout << "ResourceChanged: " << locator.Encode() << "\n";
   fflush(stdout);
-  csResourceManager::Get()->Reload(locator.AsAnonymous());
+  cs::ResourceManager::Get()->Reload(locator.AsAnonymous());
 }
 
 

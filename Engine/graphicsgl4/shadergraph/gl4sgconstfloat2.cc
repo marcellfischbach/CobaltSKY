@@ -4,7 +4,7 @@
 
 void csSGConstFloat2GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  csSGNode *n = GetNode();
+  cs::SGNode *n = GetNode();
 
   std::ostringstream ss;
   ss << "vec2("

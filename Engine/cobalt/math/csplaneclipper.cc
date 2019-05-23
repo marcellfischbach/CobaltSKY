@@ -1,31 +1,31 @@
 
 #include <cobalt/math/csplaneclipper.hh>
 
-csPlaneClipper::csPlaneClipper()
+cs::PlaneClipper::PlaneClipper()
 {
 
 }
 
-csPlaneClipper::~csPlaneClipper()
-{
-  m_planes.clear();
-}
-
-void csPlaneClipper::Clear()
+cs::PlaneClipper::~PlaneClipper()
 {
   m_planes.clear();
 }
 
-void csPlaneClipper::AddPlane(const csPlane &plane)
+void cs::PlaneClipper::Clear()
+{
+  m_planes.clear();
+}
+
+void cs::PlaneClipper::AddPlane(const cs::Plane &plane)
 {
   m_planes.push_back(plane);
 }
 
-csClipper::ClipResult csPlaneClipper::Test(const csVector3f &p) const
+cs::Clipper::ClipResult cs::PlaneClipper::Test(const cs::Vector3f &p) const
 {
   for (size_t i = 0, in = m_planes.size(); i < in; ++i)
   {
-    const csPlane &plane = m_planes[i];
+    const cs::Plane &plane = m_planes[i];
     if (plane.Distance(p) < 0.0f)
     {
       return eCR_Out;
@@ -36,7 +36,7 @@ csClipper::ClipResult csPlaneClipper::Test(const csVector3f &p) const
 }
 
 
-csClipper::ClipResult csPlaneClipper::Test(const csBoundingBox &bbox, bool debug) const
+cs::Clipper::ClipResult cs::PlaneClipper::Test(const cs::BoundingBox &bbox, bool debug) const
 {
   if (!bbox.IsValid())
   {
@@ -45,10 +45,10 @@ csClipper::ClipResult csPlaneClipper::Test(const csBoundingBox &bbox, bool debug
 
   ClipResult res = eCR_In;
   if (debug) printf("    Clipper::Test\n");
-  const csVector3f *points = bbox.GetPoints();
+  const cs::Vector3f *points = bbox.GetPoints();
   for (size_t i = 0, in = m_planes.size(); i < in; ++i)
   {
-    const csPlane &plane = m_planes[i];
+    const cs::Plane &plane = m_planes[i];
     if (debug) printf("      <%.2f %.2f %.2f %.2f>\n", plane.x, plane.y, plane.z, plane.d);
     int out = 0;
     for (size_t j = 0; j < 8; ++j)

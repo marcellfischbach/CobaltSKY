@@ -5,7 +5,7 @@
 #include <runner/event.refl.hh>
 
 CS_CLASS()
-class MyEvent0 : public CS_SUPER(csEvent)
+class MyEvent0 : public CS_SUPER(cs::Event)
 {
   CS_CLASS_GEN;
 public:
@@ -14,7 +14,7 @@ public:
 
 
 CS_CLASS()
-class MyEvent1 : public CS_SUPER(csEvent)
+class MyEvent1 : public CS_SUPER(cs::Event)
 {
   CS_CLASS_GEN;
 public:

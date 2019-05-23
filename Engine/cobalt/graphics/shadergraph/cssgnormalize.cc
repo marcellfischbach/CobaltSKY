@@ -4,20 +4,20 @@
 
 
 
-csSGNormalize::csSGNormalize()
-  : csSGNode()
+cs::SGNormalize::SGNormalize()
+  : cs::SGNode()
 {
   SetName(CS_NORMALIZE_NAME);
-  AddInput(new csSGInput("a", true, true));
-  AddOutput(new csSGOutput("v"));
+  AddInput(new cs::SGInput("a", true, true));
+  AddOutput(new cs::SGOutput("v"));
 }
 
 
-bool csSGNormalize::Validate()
+bool cs::SGNormalize::Validate()
 {
-  bool success = csSGNode::Validate();
+  bool success = cs::SGNode::Validate();
 
-  csSGDataType dtA = GetInputDataType(0);
+  cs::eSGDataType dtA = GetInputDataType(0);
 
   if (!FloatType(dtA))
   {

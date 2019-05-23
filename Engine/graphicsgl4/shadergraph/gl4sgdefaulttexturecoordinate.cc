@@ -4,7 +4,7 @@
 
 void csSGDefaultTextureCoordinateGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  csSGNode *coord = GetNode();
+  cs::SGNode *coord = GetNode();
 
   ctx.SetOutputValue(coord->GetOutput(0), ctx.GetDefaultTextureCoordinate());
 

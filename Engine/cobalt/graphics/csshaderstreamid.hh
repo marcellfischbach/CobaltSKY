@@ -4,20 +4,23 @@
 #include <cobalt/cstypes.hh>
 #include <string>
 
+namespace cs
+{
 
-
-class CSE_API csShaderStreamID
+class CSE_API ShaderStreamID
 {
 public:
-  csShaderStreamID(const std::string &attribute);
-  csShaderStreamID(csUInt32 id);
+  ShaderStreamID(const std::string& attribute);
+  ShaderStreamID(csUInt32 id);
 
-  const std::string &GetName() const;
+  const std::string& GetName() const;
   csUInt32 GetID() const;
 
-  bool operator== (const csShaderStreamID &other) const;
-  bool operator< (const csShaderStreamID &other) const;
+  bool operator== (const cs::ShaderStreamID& other) const;
+  bool operator< (const cs::ShaderStreamID& other) const;
 private:
   std::string m_name;
   csUInt32 m_id;
 };
+
+}

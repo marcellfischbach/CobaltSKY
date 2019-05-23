@@ -3,19 +3,19 @@
 #include <cobalt/graphics/csmaterial.hh>
 #include <cobalt/cstypes.hh>
 
-csMultiMaterial::csMultiMaterial()
+cs::MultiMaterial::MultiMaterial()
   : cs::Object()
 {
 
 }
 
-csMultiMaterial::csMultiMaterial(csMaterial *instance)
+cs::MultiMaterial::MultiMaterial(cs::Material *instance)
   : cs::Object()
 {
   AddMaterialInstance(instance);
 }
 
-csMultiMaterial::~csMultiMaterial()
+cs::MultiMaterial::~MultiMaterial()
 {
   for (csSize i = 0, in = m_instances.size(); i < in; ++i)
   {
@@ -26,7 +26,7 @@ csMultiMaterial::~csMultiMaterial()
 
 
 
-void csMultiMaterial::AddMaterialInstance(csMaterial *instance)
+void cs::MultiMaterial::AddMaterialInstance(cs::Material *instance)
 {
   if (instance)
   {
@@ -35,12 +35,12 @@ void csMultiMaterial::AddMaterialInstance(csMaterial *instance)
   }
 }
 
-csSize csMultiMaterial::GetNumberOfInstances() const
+csSize cs::MultiMaterial::GetNumberOfInstances() const
 {
   return m_instances.size();
 }
 
-csMaterial *csMultiMaterial::GetMaterialInstance(csSize idx)
+cs::Material *cs::MultiMaterial::GetMaterialInstance(csSize idx)
 {
   if (idx >= m_instances.size())
   {
@@ -49,7 +49,7 @@ csMaterial *csMultiMaterial::GetMaterialInstance(csSize idx)
   return m_instances[idx];
 }
 
-const csMaterial *csMultiMaterial::GetMaterialInstance(csSize idx) const
+const cs::Material *cs::MultiMaterial::GetMaterialInstance(csSize idx) const
 {
   if (idx >= m_instances.size())
   {

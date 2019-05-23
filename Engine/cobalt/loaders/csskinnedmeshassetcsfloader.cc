@@ -26,33 +26,33 @@ bool slot_sort(MaterialSlot &slot0, MaterialSlot &slot1)
 }
 }
 
-csSkinnedMeshAssetCSFLoader::csSkinnedMeshAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::SkinnedMeshAssetCSFLoader::SkinnedMeshAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csSkinnedMeshAssetCSFLoader::~csSkinnedMeshAssetCSFLoader()
+cs::SkinnedMeshAssetCSFLoader::~SkinnedMeshAssetCSFLoader()
 {
 
 }
 
 
 
-bool csSkinnedMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::SkinnedMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("skinnedMesh");
 }
 
-const cs::Class *csSkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::SkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csSkinnedMesh::GetStaticClass();
+  return cs::SkinnedMesh::GetStaticClass();
 }
 
-csResourceWrapper *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csSkinnedMesh *mesh = new csSkinnedMesh();
-  csSkinnedMeshWrapper *meshWrapper = new csSkinnedMeshWrapper(mesh);
+  cs::SkinnedMesh *mesh = new cs::SkinnedMesh();
+  cs::SkinnedMeshWrapper *meshWrapper = new cs::SkinnedMeshWrapper(mesh);
 
   const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
   const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
@@ -128,7 +128,7 @@ csResourceWrapper *csSkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, cons
 
     if (HasLocator(subMeshEntry))
     {
-      csSubMeshWrapper *subMesh = csResourceManager::Get()->GetOrLoad<csSubMeshWrapper>(GetLocator(subMeshEntry));
+      cs::SubMeshWrapper *subMesh = cs::ResourceManager::Get()->GetOrLoad<cs::SubMeshWrapper>(GetLocator(subMeshEntry));
       if (subMesh)
       {
         mesh->AddMesh(subMesh, materialSlot, (csUInt8)lod, name);

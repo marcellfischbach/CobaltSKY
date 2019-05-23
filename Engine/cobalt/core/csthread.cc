@@ -2,22 +2,27 @@
 #include <cobalt/core/csthread.hh>
 #include <Windows.h>
 
+
+
 #ifdef CS_WIN32
-struct csThreadPriv
+namespace cs
+{
+struct ThreadPriv
 {
   DWORD m_threadID;
   HANDLE m_threadHandle;
 };
+}
 #endif
 
-csThread::csThread()
+cs::Thread::Thread()
   : m_running(false)
-  , m_priv(new csThreadPriv())
+  , m_priv(new cs::ThreadPriv())
 {
 
 }
 
-csThread::~csThread()
+cs::Thread::~Thread()
 {
   delete m_priv;
 }
@@ -25,13 +30,13 @@ csThread::~csThread()
 #if CS_WIN32
 static DWORD WINAPI cs_run_thread(LPVOID voidthread)
 {
-  csThread *thread = reinterpret_cast<csThread*>(voidthread);
+  cs::Thread *thread = reinterpret_cast<cs::Thread*>(voidthread);
   thread->Run();
   return 0;
 }
 #endif
 
-void csThread::Start()
+void cs::Thread::Start()
 {
   m_running = true;
 
@@ -42,12 +47,12 @@ void csThread::Start()
 #endif
 }
 
-void csThread::Stop()
+void cs::Thread::Stop()
 {
   m_running = false;
 }
 
-bool csThread::IsFinished() const
+bool cs::Thread::IsFinished() const
 {
 #ifdef CS_WIN32
   DWORD exitCode;
@@ -56,7 +61,7 @@ bool csThread::IsFinished() const
 #endif
 }
 
-void csThread::WaitForFinished() const
+void cs::Thread::WaitForFinished() const
 {
   while (!IsFinished());
 }

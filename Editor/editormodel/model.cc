@@ -156,8 +156,8 @@ void Model::Delete(Node *node, Transaction &tx)
   }
 
 
-  csResourceLocator locator = node->GetResourceLocator();
-  std::string locatorPath = csVFS::Get()->GetAbsolutePath(locator, csVFS::CheckExistence);
+  cs::ResourceLocator locator = node->GetResourceLocator();
+  std::string locatorPath = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::CheckExistence);
   if (locatorPath.empty())
   {
     return;
@@ -242,11 +242,11 @@ void Model::MoveAsset(AssetNode *assetNode, FolderNode *toNewParent, Transaction
     return;
   }
 
-  csResourceLocator assetLocator = assetNode->GetResourceLocator();
-  std::string assetLocatorPath = csVFS::Get()->GetAbsolutePath(assetLocator, csVFS::CheckExistence);
+  cs::ResourceLocator assetLocator = assetNode->GetResourceLocator();
+  std::string assetLocatorPath = cs::VFS::Get()->GetAbsolutePath(assetLocator, cs::VFS::CheckExistence);
 
-  csResourceLocator destinationLocator = toNewParent->GetResourceLocator();
-  std::string destinationLocatorPath = csVFS::Get()->GetAbsolutePath(destinationLocator, csVFS::CheckExistence);
+  cs::ResourceLocator destinationLocator = toNewParent->GetResourceLocator();
+  std::string destinationLocatorPath = cs::VFS::Get()->GetAbsolutePath(destinationLocator, cs::VFS::CheckExistence);
 
   if (assetLocatorPath.empty() || destinationLocatorPath.empty())
   {
@@ -316,11 +316,11 @@ void Model::MoveFolder(FolderNode *folderNode, FolderNode *toNewParent, Transact
   //
   // if we get here there is no such folder within the destination folder
   // so we have a rename here actually
-  csResourceLocator oldLocator = folderNode->GetResourceLocator();
-  csResourceLocator newLocator = toNewParent->GetResourceLocator().WithFileSuffix(folderNode->GetName() + "/");
+  cs::ResourceLocator oldLocator = folderNode->GetResourceLocator();
+  cs::ResourceLocator newLocator = toNewParent->GetResourceLocator().WithFileSuffix(folderNode->GetName() + "/");
 
-  std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::DontCheckExistence));
-  std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
+  std::filesystem::path oldPath(cs::VFS::Get()->GetAbsolutePath(oldLocator, cs::VFS::DontCheckExistence));
+  std::filesystem::path newPath(cs::VFS::Get()->GetAbsolutePath(newLocator, cs::VFS::DontCheckExistence));
 
   MoveNodeToNewParent(folderNode, oldParent, toNewParent);
 
@@ -344,8 +344,8 @@ void Model::MergeFolder(FolderNode *folderNode, FolderNode *toNewParent, Transac
     Move(child, toNewParent, tx);
   }
 
-  csResourceLocator folderLocator = folderNode->GetResourceLocator();
-  std::string folderLocatorPath = csVFS::Get()->GetAbsolutePath(folderLocator, csVFS::CheckExistence);
+  cs::ResourceLocator folderLocator = folderNode->GetResourceLocator();
+  std::string folderLocatorPath = cs::VFS::Get()->GetAbsolutePath(folderLocator, cs::VFS::CheckExistence);
 
   SecureFS().Delete(std::filesystem::path(folderLocatorPath), tx);
 }
@@ -362,15 +362,15 @@ void Model::MergeFolder(FolderNode *folderNode, FolderNode *toNewParent, Transac
 
 void Model::Rename(Node *node, const std::string &newName, Transaction &tx)
 {
-  csResourceLocator oldLocator = node->GetResourceLocator();
-  csResourceLocator newLocator = node->WithNewName(newName);
+  cs::ResourceLocator oldLocator = node->GetResourceLocator();
+  cs::ResourceLocator newLocator = node->WithNewName(newName);
   if (oldLocator == newLocator)
   {
     return;
   }
 
-  std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::DontCheckExistence));
-  std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
+  std::filesystem::path oldPath(cs::VFS::Get()->GetAbsolutePath(oldLocator, cs::VFS::DontCheckExistence));
+  std::filesystem::path newPath(cs::VFS::Get()->GetAbsolutePath(newLocator, cs::VFS::DontCheckExistence));
 
 
   std::string oldName = node->GetName();
@@ -405,14 +405,14 @@ void Model::SyncNodeCacheRecursive(Node *node, Transaction &tx)
 
 void Model::SyncNodeCache(Node *node, Transaction &tx)
 {
-  csResourceLocator newLocator = node->IsAttached() ? node->GetResourceLocator() : csResourceLocator::Invalid();
-  csResourceLocator oldLocator = FindCurrentName(node);
+  cs::ResourceLocator newLocator = node->IsAttached() ? node->GetResourceLocator() : cs::ResourceLocator::Invalid();
+  cs::ResourceLocator oldLocator = FindCurrentName(node);
 
   SyncNamedNode(node, oldLocator, newLocator, tx);
   SyncAnonNode(node, oldLocator, newLocator, tx);
 }
 
-void Model::SyncNamedNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx)
+void Model::SyncNamedNode(Node *node, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator, Transaction &tx)
 {
   if (oldLocator == newLocator)
   {
@@ -456,12 +456,12 @@ void Model::SyncNamedNode(Node *node, const csResourceLocator &oldLocator, const
 
 }
 
-void Model::SyncAnonNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx)
+void Model::SyncAnonNode(Node *node, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator, Transaction &tx)
 {
 
 
-  csResourceLocator anonNewLocator = newLocator.AsAnonymous();
-  csResourceLocator anonOldLocator = oldLocator.AsAnonymous();
+  cs::ResourceLocator anonNewLocator = newLocator.AsAnonymous();
+  cs::ResourceLocator anonOldLocator = oldLocator.AsAnonymous();
   if (anonNewLocator == anonOldLocator)
   {
     if (anonNewLocator.IsValid())
@@ -550,7 +550,7 @@ void Model::SyncAnonNode(Node *node, const csResourceLocator &oldLocator, const 
 * ******************************************************************/
 
 
-csResourceLocator Model::FindCurrentName(const Node *node)
+cs::ResourceLocator Model::FindCurrentName(const Node *node)
 {
   for (auto entry : m_cache.NamedNodes)
   {
@@ -560,7 +560,7 @@ csResourceLocator Model::FindCurrentName(const Node *node)
     }
   }
 
-  return csResourceLocator();
+  return cs::ResourceLocator();
 }
 
 
@@ -577,7 +577,7 @@ bool Model::IsMasterNode(Node *node)
   return false;
 }
 
-void Model::UpdateCurrentMasterEntry(const csResourceLocator &locator)
+void Model::UpdateCurrentMasterEntry(const cs::ResourceLocator &locator)
 {
   Node *node = nullptr;
 
@@ -600,7 +600,7 @@ void Model::UpdateCurrentMasterEntry(const csResourceLocator &locator)
 }
 
 
-void Model::SetCurrentMasterEntry(const csResourceLocator &locator, Node *node)
+void Model::SetCurrentMasterEntry(const cs::ResourceLocator &locator, Node *node)
 {
   if (node == nullptr)
   {
@@ -617,7 +617,7 @@ void Model::SetCurrentMasterEntry(const csResourceLocator &locator, Node *node)
 }
 
 
-const Node *Model::FindNode(const csResourceLocator &locator) const
+const Node *Model::FindNode(const cs::ResourceLocator &locator) const
 {
   if (locator.IsAnonymous())
   {
@@ -652,9 +652,9 @@ const Node *Model::FindNode(const csResourceLocator &locator) const
 }
 
 
-const Node *Model::FindNode(const csResourceLocator &locator, MinPriority &minPriority) const
+const Node *Model::FindNode(const cs::ResourceLocator &locator, MinPriority &minPriority) const
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
   auto it = m_cache.AnonNodes.find(anonLocator);
   if (it == m_cache.AnonNodes.end())
   {
@@ -676,9 +676,9 @@ const Node *Model::FindNode(const csResourceLocator &locator, MinPriority &minPr
 }
 
 
-const Node *Model::FindNode(const csResourceLocator &locator, MaxPriority &maxPriority) const
+const Node *Model::FindNode(const cs::ResourceLocator &locator, MaxPriority &maxPriority) const
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
   auto it = m_cache.AnonNodes.find(anonLocator);
   if (it == m_cache.AnonNodes.end())
   {
@@ -699,23 +699,23 @@ const Node *Model::FindNode(const csResourceLocator &locator, MaxPriority &maxPr
   return res;
 }
 
-Node *Model::FindNode(const csResourceLocator &locator)
+Node *Model::FindNode(const cs::ResourceLocator &locator)
 {
   return const_cast<Node*>(static_cast<const Model*>(this)->FindNode(locator));
 }
 
-Node *Model::FindNode(const csResourceLocator &locator, MinPriority &minPriority)
+Node *Model::FindNode(const cs::ResourceLocator &locator, MinPriority &minPriority)
 {
   return const_cast<Node*>(static_cast<const Model*>(this)->FindNode(locator, minPriority));
 }
 
-Node *Model::FindNode(const csResourceLocator &locator, MaxPriority &maxPriority)
+Node *Model::FindNode(const cs::ResourceLocator &locator, MaxPriority &maxPriority)
 {
   return const_cast<Node*>(static_cast<const Model*>(this)->FindNode(locator, maxPriority));
 }
 
 
-const std::set<Node*> Model::GetNodes(const csResourceLocator &locator)
+const std::set<Node*> Model::GetNodes(const cs::ResourceLocator &locator)
 {
   auto it = m_cache.AnonNodes.find(locator.AsAnonymous());
   if (it == m_cache.AnonNodes.end())
@@ -726,7 +726,7 @@ const std::set<Node*> Model::GetNodes(const csResourceLocator &locator)
   return it->second;
 }
 
-const std::set<const Node*> Model::GetNodes(const csResourceLocator &locator) const
+const std::set<const Node*> Model::GetNodes(const cs::ResourceLocator &locator) const
 {
   auto it = m_cache.AnonNodes.find(locator.AsAnonymous());
   if (it == m_cache.AnonNodes.end())

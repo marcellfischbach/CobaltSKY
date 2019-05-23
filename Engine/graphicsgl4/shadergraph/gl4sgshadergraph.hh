@@ -6,29 +6,33 @@
 #include <map>
 
 class csSGNodeGL4;
-class csGraphicsGL4;
 
-class CSGRAPHICSGL4_API csShaderGraphGL4 : public CS_SUPER(ISGShaderGraphFactory)
+namespace cs
+{
+class GraphicsGL4;
+}
+
+class CSGRAPHICSGL4_API csShaderGraphGL4 : public CS_SUPER(cs::iSGShaderGraphFactory)
 {
 public:
-  csShaderGraphGL4(csGraphicsGL4 *graphics);
+  csShaderGraphGL4(cs::GraphicsGL4 *graphics);
   ~csShaderGraphGL4();
 
 
-  std::string CreateCode(csSGNode *node, csSize output);
-  std::string CreateCode(csSGNode *node, const std::string &outputName);
+  std::string CreateCode(cs::SGNode *node, csSize output);
+  std::string CreateCode(cs::SGNode *node, const std::string &outputName);
 
-  std::string CreateCode(csSGOutput *output);
+  std::string CreateCode(cs::SGOutput *output);
 
 
   csSGNodeGL4 *CreateNode(const cs::Class *nodeClass);
 
 
-  virtual bool GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
+  virtual bool GenerateShaderGraph(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger);
 
 private:
-  void GenerateGBuffer(csSGShaderGraph *graph, iSGShaderGraphLogger *logger);
-  void GenerateShadow(csSGShaderGraph *graph, unsigned layers, csRenderPass renderPass, iSGShaderGraphLogger *logger);
+  void GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger);
+  void GenerateShadow(cs::SGShaderGraph *graph, unsigned layers, cs::eRenderPass renderPass, cs::iSGShaderGraphLogger *logger);
 
   void DebugCode(const std::string &title, const std::string &source);
 
@@ -44,7 +48,7 @@ private:
 
     }
   };
-  csGraphicsGL4 *m_graphics;
+  cs::GraphicsGL4 *m_graphics;
   std::vector<Map> m_classMapping;
   //std::map<const cs::Class*, const cs::Class*> m_classMapping;
 };

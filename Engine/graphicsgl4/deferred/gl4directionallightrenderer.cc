@@ -20,69 +20,69 @@
 
 
 
-csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer)
+csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(cs::iGraphics *renderer)
 	: csLightRendererGL4(renderer)
 	, m_colorBuffer(0)
 	, m_colorBufferBlur(0)
 	, m_depthBuffer(0)
 {
-	InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
-  m_attrLightDirectionNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightDirection"));
+	InitializeLightProgram(&m_programNoShadow, cs::ResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
+  m_attrLightDirectionNoShadow = m_programNoShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightDirection"));
 
-	InitializeLightProgram(&m_programPSSM, csResourceLocator("${shaders}/deferred/DirectionalLightPSSM.asset"));
-  m_attrLightDirectionPSSM = m_programPSSM.program->Get()->GetAttribute(csShaderAttributeID("LightDirection"));
-  m_attrShadowMap = m_programPSSM.program->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
+	InitializeLightProgram(&m_programPSSM, cs::ResourceLocator("${shaders}/deferred/DirectionalLightPSSM.asset"));
+  m_attrLightDirectionPSSM = m_programPSSM.program->Get()->GetAttribute(cs::ShaderAttributeID("LightDirection"));
+  m_attrShadowMap = m_programPSSM.program->Get()->GetAttribute(cs::ShaderAttributeID("ShadowMap"));
 
 	//
 	// load and init the shadow map renderer
-  m_shadowMapRenderer.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.asset"));
+  m_shadowMapRenderer.shader = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(cs::ResourceLocator("${shaders}/deferred/DirectionalLightShadowPSSM.asset"));
   if (m_shadowMapRenderer.shader && m_shadowMapRenderer.shader->IsValid())
 	{
-    m_shadowMapRenderer.attrDepth = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("Depth"));
-    m_shadowMapRenderer.attrDistances = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("Distances"));
-    m_shadowMapRenderer.attrShadowColorMap = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowColorMap"));
-    m_shadowMapRenderer.attrShadowMap = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
-    m_shadowMapRenderer.attrShadowMatsProjView = m_shadowMapRenderer.shader->Get()->GetAttribute(csShaderAttributeID("ShadowMatsProjView"));
+    m_shadowMapRenderer.attrDepth = m_shadowMapRenderer.shader->Get()->GetAttribute(cs::ShaderAttributeID("Depth"));
+    m_shadowMapRenderer.attrDistances = m_shadowMapRenderer.shader->Get()->GetAttribute(cs::ShaderAttributeID("Distances"));
+    m_shadowMapRenderer.attrShadowColorMap = m_shadowMapRenderer.shader->Get()->GetAttribute(cs::ShaderAttributeID("ShadowColorMap"));
+    m_shadowMapRenderer.attrShadowMap = m_shadowMapRenderer.shader->Get()->GetAttribute(cs::ShaderAttributeID("ShadowMap"));
+    m_shadowMapRenderer.attrShadowMatsProjView = m_shadowMapRenderer.shader->Get()->GetAttribute(cs::ShaderAttributeID("ShadowMatsProjView"));
 	}
 
-  m_shadowMapBlurHori.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/ShadowMapBlurHori.asset"));
+  m_shadowMapBlurHori.shader = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(cs::ResourceLocator("${shaders}/deferred/ShadowMapBlurHori.asset"));
   if (m_shadowMapBlurHori.shader)
   {
-    m_shadowMapBlurHori.attrColor0 = m_shadowMapBlurHori.shader->Get()->GetAttribute(csShaderAttributeID("Color0"));
+    m_shadowMapBlurHori.attrColor0 = m_shadowMapBlurHori.shader->Get()->GetAttribute(cs::ShaderAttributeID("Color0"));
   }
 
-  m_shadowMapBlurVert.shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/ShadowMapBlurVert.asset"));
+  m_shadowMapBlurVert.shader = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(cs::ResourceLocator("${shaders}/deferred/ShadowMapBlurVert.asset"));
   if (m_shadowMapBlurVert.shader)
   {
-    m_shadowMapBlurVert.attrColor0 = m_shadowMapBlurVert.shader->Get()->GetAttribute(csShaderAttributeID("Color0"));
+    m_shadowMapBlurVert.attrColor0 = m_shadowMapBlurVert.shader->Get()->GetAttribute(cs::ShaderAttributeID("Color0"));
   }
 
 
-	m_distances.x = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 0, 5.0f);
-	m_distances.y = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 1, 25.0f);
-	m_distances.z = csSettings::Get()->GetFloatValue("graphics.pssm.distances", 2, 120.0f); 
-	m_shadowBufferSize = csSettings::Get()->GetIntValue("graphics.pssm.bufferSize", 0, 1024);
+	m_distances.x = cs::Settings::Get()->GetFloatValue("graphics.pssm.distances", 0, 5.0f);
+	m_distances.y = cs::Settings::Get()->GetFloatValue("graphics.pssm.distances", 1, 25.0f);
+	m_distances.z = cs::Settings::Get()->GetFloatValue("graphics.pssm.distances", 2, 120.0f); 
+	m_shadowBufferSize = cs::Settings::Get()->GetIntValue("graphics.pssm.bufferSize", 0, 1024);
 
   printf("PSSM.Distances: %f %f %f\n", m_distances.x, m_distances.y, m_distances.z);
   printf("PSSM.MapSize : %d\n", m_shadowBufferSize);
 
-	csPixelFormat shadowBufferFormat = ePF_R16G16F;
-  m_colorBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false));
-  m_depthBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false));
+	cs::ePixelFormat shadowBufferFormat = cs::ePF_R16G16F;
+  m_colorBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(shadowBufferFormat, m_shadowBufferSize, m_shadowBufferSize, 3, false));
+  m_depthBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(cs::ePF_D24S8, m_shadowBufferSize, m_shadowBufferSize, 3, false));
 
-	iSampler *colorSmplr = renderer->CreateSampler();
-  colorSmplr->SetBorderColor(csVector4f(1, 1, 1, 1));
-  colorSmplr->SetFilter(eFM_MinMagLinear);
-  colorSmplr->SetAddressU(eTAM_ClampBorder);
-  colorSmplr->SetAddressV(eTAM_ClampBorder);
-  colorSmplr->SetAddressW(eTAM_ClampBorder);
-  csSamplerWrapper* colorSampler = new csSamplerWrapper(colorSmplr);
+	cs::iSampler *colorSmplr = renderer->CreateSampler();
+  colorSmplr->SetBorderColor(cs::Vector4f(1, 1, 1, 1));
+  colorSmplr->SetFilter(cs::eFM_MinMagLinear);
+  colorSmplr->SetAddressU(cs::eTAM_ClampBorder);
+  colorSmplr->SetAddressV(cs::eTAM_ClampBorder);
+  colorSmplr->SetAddressW(cs::eTAM_ClampBorder);
+  cs::SamplerWrapper* colorSampler = new cs::SamplerWrapper(colorSmplr);
 
 	m_colorBuffer->Get()->SetSampler(colorSampler);
 	m_depthBuffer->Get()->SetSampler(m_depthSampler);
 
 
-	m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
+	m_shadowBuffer = static_cast<cs::iRenderTarget*>(renderer->CreateRenderTarget());
 	m_shadowBuffer->Initialize(m_shadowBufferSize, m_shadowBufferSize);
 	m_shadowBuffer->AddColorTexture(m_colorBuffer);
 	m_shadowBuffer->SetDepthTexture(m_depthBuffer);
@@ -91,13 +91,13 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
 		printf("Unable to finalize shadow buffer object.\n");
 	}
 
-  unsigned screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
-  unsigned screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
+  unsigned screenResolutionWidth = cs::Settings::Get()->GetIntValue("video.resolution", 0, 1366);
+  unsigned screenResolutionHeight = cs::Settings::Get()->GetIntValue("video.resolution", 1, 768);
 
   unsigned shadowMapWidth = screenResolutionWidth / 2.0f;
   unsigned shadowMapHeight = screenResolutionHeight /2.0f;
 
-  m_shadowMapRenderer.shadowMap = new csTexture2DWrapper(m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
+  m_shadowMapRenderer.shadowMap = new cs::Texture2DWrapper(m_renderer->CreateTexture2D(cs::ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
   m_shadowMapRenderer.shadowMap->Get()->SetSampler(colorSampler);
 
   m_shadowMapRenderer.shadowRenderTarget = m_renderer->CreateRenderTarget();
@@ -109,7 +109,7 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
     printf("Unable to finalize shadow map render target.\n");
   }
 
-  m_shadowMapRenderer.shadowMapPingPong = new csTexture2DWrapper(m_renderer->CreateTexture2D(ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
+  m_shadowMapRenderer.shadowMapPingPong = new cs::Texture2DWrapper(m_renderer->CreateTexture2D(cs::ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
   m_shadowMapRenderer.shadowMapPingPong->Get()->SetSampler(colorSampler);
 
   m_shadowMapRenderer.shadowRenderTargetPingPong = m_renderer->CreateRenderTarget();
@@ -135,13 +135,13 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(iGraphics *renderer
 
 
 
-void csDirectionalLightRendererGL4::Render(csEntity *root, csCamera *camera, csLight *light, csGBufferGL4 *gbuffer, iRenderTarget *target)
+void csDirectionalLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target)
 {
-	csBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
+	cs::eBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
 	m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
 	bool blendEnabled = m_renderer->IsBlendEnabled();
 
-	csDirectionalLight *directionalLight = static_cast<csDirectionalLight*>(light);
+	cs::DirectionalLight *directionalLight = static_cast<cs::DirectionalLight*>(light);
 
 	bool shadow = directionalLight->IsCastingShadow();
 	if (shadow)
@@ -160,7 +160,7 @@ void csDirectionalLightRendererGL4::Render(csEntity *root, csCamera *camera, csL
 	m_renderer->SetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
 
 	// from now on we will only render to the single color buffer
-	m_renderer->SetRenderDestination(eRD_Color0);
+	m_renderer->SetRenderDestination(cs::eRD_Color0);
 
 	LightProgram &prog = shadow ? m_programPSSM : m_programNoShadow;
   m_renderer->SetShader(prog.program->Get());
@@ -182,7 +182,7 @@ void csDirectionalLightRendererGL4::Render(csEntity *root, csCamera *camera, csL
 }
 
 
-void csDirectionalLightRendererGL4::BindDirectionalLightNoShadow(csDirectionalLight *directionalLight)
+void csDirectionalLightRendererGL4::BindDirectionalLightNoShadow(cs::DirectionalLight *directionalLight)
 {
 	if (m_attrLightDirectionNoShadow)
 	{
@@ -193,7 +193,7 @@ void csDirectionalLightRendererGL4::BindDirectionalLightNoShadow(csDirectionalLi
 
 
 
-void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(csDirectionalLight *directionalLight)
+void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(cs::DirectionalLight *directionalLight)
 {
 	if (m_attrLightDirectionPSSM)
 	{
@@ -201,7 +201,7 @@ void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(csDirectionalLight 
 	}
 	if (m_attrShadowMap)
 	{
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
     m_attrShadowMap->Set(tu);
 	}
 }
@@ -212,20 +212,20 @@ void csDirectionalLightRendererGL4::UpdateProjectionMatrices()
 {
 	float min = FLT_MAX;
 	float max = -FLT_MAX;
-	const csMatrix4f &view = m_shadowCamAll;
-	for (csSize i = 0; i < eRQ_COUNT; ++i)
+	const cs::Matrix4f &view = m_shadowCamAll;
+	for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
 	{
-		csCollection<csRenderState*> &queue = m_renderStates[i];
+		cs::Collection<cs::RenderState*> &queue = m_renderStates[i];
 		for (csSize j = 0; j < queue.length; ++j)
 		{
-			csRenderState *renderState = queue[j];
+			cs::RenderState *renderState = queue[j];
 			if (renderState)
 			{
-				const csBoundingBox &bbox = renderState->GetBoundingBox();
+				const cs::BoundingBox &bbox = renderState->GetBoundingBox();
 				for (unsigned k = 0; k < 8; ++k)
 				{
-					csVector3f p;
-					csMatrix4f::Transform(view, bbox.GetPoints()[k], p);
+					cs::Vector3f p;
+					cs::Matrix4f::Transform(view, bbox.GetPoints()[k], p);
 					if (p.y < min)
 					{
 						min = p.y;
@@ -243,45 +243,45 @@ void csDirectionalLightRendererGL4::UpdateProjectionMatrices()
 		m_min[i].y = min;
 		m_shadowNearFar[i].Set(m_min[i].y, m_max[i].y);
 		m_renderer->GetOrthographicProjection(m_min[i].x, m_max[i].x, m_min[i].z, m_max[i].z, m_min[i].y, m_max[i].y, m_shadowProj[i]);
-		csMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
+		cs::Matrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
 
 	}
 }
 
-csClipper *csDirectionalLightRendererGL4::CreateClipper()
+cs::Clipper *csDirectionalLightRendererGL4::CreateClipper()
 {
-	csVector3f topLeft(m_min[2].x, 0.0, m_max[2].z);
-	csVector3f topRight(m_max[2].x, 0.0, m_max[2].z);
-	csVector3f bottomLeft(m_min[2].x, 0.0, m_min[2].z);
-	csVector3f bottomRight(m_max[2].x, 0.0, m_min[2].z);
+	cs::Vector3f topLeft(m_min[2].x, 0.0, m_max[2].z);
+	cs::Vector3f topRight(m_max[2].x, 0.0, m_max[2].z);
+	cs::Vector3f bottomLeft(m_min[2].x, 0.0, m_min[2].z);
+	cs::Vector3f bottomRight(m_max[2].x, 0.0, m_min[2].z);
 
-	const csMatrix4f &camInv = m_shadowCamInv[2];
-	csVector3f tl, tr, bl, br;
-	csMatrix4f::Transform(camInv, topLeft, tl);
-	csMatrix4f::Transform(camInv, topRight, tr);
-	csMatrix4f::Transform(camInv, bottomLeft, bl);
-	csMatrix4f::Transform(camInv, bottomRight, br);
+	const cs::Matrix4f &camInv = m_shadowCamInv[2];
+	cs::Vector3f tl, tr, bl, br;
+	cs::Matrix4f::Transform(camInv, topLeft, tl);
+	cs::Matrix4f::Transform(camInv, topRight, tr);
+	cs::Matrix4f::Transform(camInv, bottomLeft, bl);
+	cs::Matrix4f::Transform(camInv, bottomRight, br);
 
-	csVector3f r;
+	cs::Vector3f r;
 	camInv.GetXAxis(r);
-	csVector3f l(r);
+	cs::Vector3f l(r);
 	l *= -1.0f;
 
-	csVector3f t;
+	cs::Vector3f t;
 	camInv.GetZAxis(t);
-	csVector3f b(t);
+	cs::Vector3f b(t);
 	b *= -1.0f;
 
 
-	csPlaneClipper *clipper = new csPlaneClipper();
-	clipper->AddPlane(csPlane(tl, r));
-	clipper->AddPlane(csPlane(tl, b));
-	clipper->AddPlane(csPlane(br, l));
-	clipper->AddPlane(csPlane(br, t));
+	cs::PlaneClipper *clipper = new cs::PlaneClipper();
+	clipper->AddPlane(cs::Plane(tl, r));
+	clipper->AddPlane(cs::Plane(tl, b));
+	clipper->AddPlane(cs::Plane(br, l));
+	clipper->AddPlane(cs::Plane(br, t));
 	return clipper;
 }
 
-void csDirectionalLightRendererGL4::RenderShadow(csEntity *root, csCamera *camera, const csDirectionalLight *light)
+void csDirectionalLightRendererGL4::RenderShadow(cs::Entity *root, cs::Camera *camera, const cs::DirectionalLight *light)
 {
   m_renderer->PushRenderStates();
 
@@ -290,19 +290,19 @@ void csDirectionalLightRendererGL4::RenderShadow(csEntity *root, csCamera *camer
 
 	CalcShadowIntensity(light);
 
-	csScanConfig config;
+	cs::ScanConfig config;
   
 	config.ScanShadowCasters = true;
 	config.ScanNonShadowCasters = false;
 	config.MainCameraPosition = camera->GetEye();
 	// collect the shadow casting objects
 	csDefaultCollectorGL4 collector(m_renderStates, 0);
-	for (csSize i = 0; i < eRQ_COUNT; ++i)
+	for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
 	{
 		m_renderStates[i].Clear();
 	}
 
-	csClipper *clipper = CreateClipper();
+	cs::Clipper *clipper = CreateClipper();
 	root->Scan(clipper, m_renderer, &collector, config);
 	delete clipper;
 
@@ -312,40 +312,40 @@ void csDirectionalLightRendererGL4::RenderShadow(csEntity *root, csCamera *camer
 	// setup the rendering 
 	m_renderer->SetRenderTarget(m_shadowBuffer);
 	m_renderer->SetViewport(m_shadowBuffer);
-	m_renderer->SetRenderDestination(eRD_Color0);
+	m_renderer->SetRenderDestination(cs::eRD_Color0);
 	m_renderer->SetDepthMask(true);
 	m_renderer->SetDepthTest(true);
-	m_renderer->SetDepthFunc(eCM_LessOrEqual);
+	m_renderer->SetDepthFunc(cs::eCM_LessOrEqual);
 	m_renderer->SetColorMask(true, true, false, false);
 	//m_renderer->SetColorMask(false, false, false, false);
 
 
-	csFaceSide current = m_renderer->GetCullFace();
-	m_renderer->SetCullFace(eFS_Back);
+	cs::eFaceSide current = m_renderer->GetCullFace();
+	m_renderer->SetCullFace(cs::eFS_Back);
 
 	m_renderer->Clear(true);
 	m_renderer->SetShadowMatrices(m_shadowProjView, m_shadowProj, m_shadowCam, m_shadowNearFar, 3);
 	m_renderer->SetBlendEnabled(false);
 
-	for (csSize i = 0; i < eRQ_COUNT; ++i)
+	for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
 	{
-		csCollection<csRenderState*> &queue = m_renderStates[i];
+		cs::Collection<cs::RenderState*> &queue = m_renderStates[i];
 		for (csSize j = 0; j < queue.length; ++j)
 		{
-			csRenderState *renderState = queue[j];
+			cs::RenderState *renderState = queue[j];
 			if (renderState)
 			{
-				renderState->Render(m_renderer, eRP_ShadowPSSM);
+				renderState->Render(m_renderer, cs::eRP_ShadowPSSM);
 			}
 		}
 	}
-	m_renderer->SetCullFace(eFS_Back);
+	m_renderer->SetCullFace(cs::eFS_Back);
 	m_renderer->SetColorMask(true, true, true, true);
 
   m_renderer->PopRenderStates();
 }
 
-void csDirectionalLightRendererGL4::RenderShadowMap(const csDirectionalLight *light, csGBufferGL4 *gBuffer)
+void csDirectionalLightRendererGL4::RenderShadowMap(const cs::DirectionalLight *light, csGBufferGL4 *gBuffer)
 {
   // now the final image will be assembled
   m_renderer->SetRenderTarget(m_shadowMapRenderer.shadowRenderTarget);
@@ -354,7 +354,7 @@ void csDirectionalLightRendererGL4::RenderShadowMap(const csDirectionalLight *li
   m_renderer->SetColorMask(true, true, true, true);
 
   // from now on we will only render to the single color buffer
-  m_renderer->SetRenderDestination(eRD_Color0);
+  m_renderer->SetRenderDestination(cs::eRD_Color0);
 
   m_renderer->SetShader(m_shadowMapRenderer.shader->Get());
   m_renderer->InvalidateTextures();
@@ -370,18 +370,18 @@ void csDirectionalLightRendererGL4::RenderShadowMap(const csDirectionalLight *li
   }
   if (m_shadowMapRenderer.attrDepth)
   {
-    csTextureUnit tu = m_renderer->BindTexture(gBuffer->GetDepth()->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(gBuffer->GetDepth()->Get());
     m_shadowMapRenderer.attrDepth->Set(tu);
   }
   if (m_shadowMapRenderer.attrShadowMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
     m_shadowMapRenderer.attrShadowMap->Set(tu);
   }
   
   if (m_shadowMapRenderer.attrShadowColorMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_colorBuffer->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_colorBuffer->Get());
     m_shadowMapRenderer.attrShadowColorMap->Set(tu);
   }
   /*
@@ -397,13 +397,13 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
   m_renderer->SetViewport(m_shadowMapRenderer.shadowRenderTargetPingPong);
   m_renderer->SetBlendEnabled(false);
   m_renderer->SetColorMask(true, true, true, true);
-  m_renderer->SetRenderDestination(eRD_Color0);
+  m_renderer->SetRenderDestination(cs::eRD_Color0);
   m_renderer->SetShader(m_shadowMapBlurHori.shader->Get());
   m_renderer->InvalidateTextures();
 
   if (m_shadowMapBlurHori.attrColor0)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMap->Get());
     m_shadowMapBlurHori.attrColor0->Set(tu);
   }
   m_renderer->RenderFullScreenFrame();
@@ -416,23 +416,23 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
   m_renderer->SetViewport(m_shadowMapRenderer.shadowRenderTarget);
   m_renderer->SetBlendEnabled(false);
   m_renderer->SetColorMask(true, true, true, true);
-  m_renderer->SetRenderDestination(eRD_Color0);
+  m_renderer->SetRenderDestination(cs::eRD_Color0);
   m_renderer->SetShader(m_shadowMapBlurVert.shader->Get());
   m_renderer->InvalidateTextures();
 
   if (m_shadowMapBlurVert.attrColor0)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMapPingPong->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_shadowMapRenderer.shadowMapPingPong->Get());
     m_shadowMapBlurVert.attrColor0->Set(tu);
   }
   m_renderer->RenderFullScreenFrame();
 
 }
 
-void csDirectionalLightRendererGL4::CalcPSSMMatrices(const csDirectionalLight *light, const csCamera *camera)
+void csDirectionalLightRendererGL4::CalcPSSMMatrices(const cs::DirectionalLight *light, const cs::Camera *camera)
 {
 	float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
-	csVector3f points[8];
+	cs::Vector3f points[8];
 
 	for (csSize i = 0; i < 3; ++i)
 	{
@@ -446,21 +446,21 @@ void csDirectionalLightRendererGL4::CalcPSSMMatrices(const csDirectionalLight *l
 	CalcMatrix(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
 }
 
-void csDirectionalLightRendererGL4::CalcMatrix(const csVector3f &dir, const csVector3f &cameraPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const
+void csDirectionalLightRendererGL4::CalcMatrix(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
 {
   /*
-	csVector3f spot;
+	cs::Vector3f spot;
 	for (csSize i = 0; i < numPoints; i++)
 	{
-		csVector3f::Add(spot, points[i], spot);
+		cs::Vector3f::Add(spot, points[i], spot);
 	}
-	csVector3f::Div(spot, (float)numPoints, spot);
+	cs::Vector3f::Div(spot, (float)numPoints, spot);
 
-	csVector3f eye;
-	csVector3f::Mul(dir, -100.0f, eye);
-	csVector3f::Add(eye, spot, eye);
+	cs::Vector3f eye;
+	cs::Vector3f::Mul(dir, -100.0f, eye);
+	cs::Vector3f::Add(eye, spot, eye);
   */
-	csVector3f up(0.0f, 0.0f, 1.0f);
+	cs::Vector3f up(0.0f, 0.0f, 1.0f);
 	if (dir.z >= 0.9999999)
 	{
 		up.Set(1.0f, 0.0f, 0.0f);
@@ -470,18 +470,18 @@ void csDirectionalLightRendererGL4::CalcMatrix(const csVector3f &dir, const csVe
 		up.Set(-1.0f, 0.0f, 0.0f);
 	}
 
-  csVector3f at = cameraPos + dir;
+  cs::Vector3f at = cameraPos + dir;
 
 	cam.SetLookAt(cameraPos, at, up);
 	camInv.SetLookAtInv(cameraPos, at, up);
 
 	min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
 	max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-	csVector3f t;
+	cs::Vector3f t;
 	for (csSize i = 0; i < numPoints; i++)
 	{
-		csVector3f &p = points[i];
-		csMatrix4f::Transform(cam, p, t);
+		cs::Vector3f &p = points[i];
+		cs::Matrix4f::Transform(cam, p, t);
 		if (min.x > t.x)
 		{
 			min.x = t.x;
@@ -512,10 +512,10 @@ void csDirectionalLightRendererGL4::CalcMatrix(const csVector3f &dir, const csVe
 
 
 
-void csDirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const csDirectionalLight *light, const csCamera *camera)
+void csDirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const cs::DirectionalLight *light, const cs::Camera *camera)
 {
   float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
-  csVector3f points[8];
+  cs::Vector3f points[8];
 
   for (csSize i = 0; i < 3; ++i)
   {
@@ -529,9 +529,9 @@ void csDirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const csDirectio
   CalcMatrixAlternative(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
 }
 
-void csDirectionalLightRendererGL4::CalcMatrixAlternative(const csVector3f &dir, const csVector3f &cameraPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const
+void csDirectionalLightRendererGL4::CalcMatrixAlternative(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
 {
-  csVector3f up(0.0f, 0.0f, 1.0f);
+  cs::Vector3f up(0.0f, 0.0f, 1.0f);
   if (dir.z >= 0.9999999)
   {
     up.Set(1.0f, 0.0f, 0.0f);
@@ -542,7 +542,7 @@ void csDirectionalLightRendererGL4::CalcMatrixAlternative(const csVector3f &dir,
   }
 
 
-  csVector3f center(0.0f, 0.0f, 0.0f);
+  cs::Vector3f center(0.0f, 0.0f, 0.0f);
   for (size_t i = 0; i < numPoints; ++i)
   {
     center += points[i];
@@ -559,20 +559,20 @@ void csDirectionalLightRendererGL4::CalcMatrixAlternative(const csVector3f &dir,
     }
   }
 
-  csVector3f at = center + dir;
+  cs::Vector3f at = center + dir;
   cam.SetLookAt(center, at, up);
   camInv.SetLookAtInv(center, at, up);
 
   float radius = sqrt(maxDistSqr);
   float sizePerPixel = 2.0f * radius / (float)m_shadowBufferSize;
 
-  csVector3f c = csMatrix4f::Mult(cam, center, c);
+  cs::Vector3f c = cs::Matrix4f::Mult(cam, center, c);
 
   c.x -= fmodf(c.x, sizePerPixel);
   c.y -= fmodf(c.y, sizePerPixel);
   c.z -= fmodf(c.z, sizePerPixel);
 
-  csMatrix4f::Mult(camInv, c, center);
+  cs::Matrix4f::Mult(camInv, c, center);
 
   at = center + dir;
   cam.SetLookAt(center, at, up);

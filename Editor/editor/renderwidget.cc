@@ -34,9 +34,9 @@ void RenderWidget::paintGL()
 #if 0
   // GLContext::Get()->MakeCurrent();
 
-  iGraphics *gr = csEng->GetRenderer();
+  cs::iGraphics *gr = csEng->GetRenderer();
 
-  iRenderTarget *renderTarget = m_renderTarget.GetRenderTarget();
+  cs::iRenderTarget *renderTarget = m_renderTarget.GetRenderTarget();
 
   gr->SetRenderTarget(renderTarget);
   gr->SetViewport(renderTarget);
@@ -44,7 +44,7 @@ void RenderWidget::paintGL()
 
   if (m_clear)
   {
-    gr->Clear(true, csVector4f(0.0f, 0.0f, 0.5f, 1.0f));
+    gr->Clear(true, cs::Vector4f(0.0f, 0.0f, 0.5f, 1.0f));
   }
 #endif
 }
@@ -80,7 +80,7 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
     return;
   }
 
-  iGraphics *gr = csEng->GetRenderer();
+  cs::iGraphics *gr = csEng->GetRenderer();
 
   gr->SetRenderTarget(m_renderTarget);
   gr->SetViewport(m_renderTarget);
@@ -88,14 +88,14 @@ void	RenderWidget::paintEvent(QPaintEvent *event)
 
   if (m_clear)
   {
-    gr->Clear(true, csVector4f(0.0f, 0.0f, 0.5f, 1.0f));
+    gr->Clear(true, cs::Vector4f(0.0f, 0.0f, 0.5f, 1.0f));
   }
 
   paintGL();
 
   unsigned size = width() * height() * 4;
   unsigned resSize;
-  if (!m_colorTexture->Get()->ReadData(0, ePF_R8G8B8A8U, size, m_buffer, resSize))
+  if (!m_colorTexture->Get()->ReadData(0, cs::ePF_R8G8B8A8U, size, m_buffer, resSize))
   {
     return;
   }
@@ -144,7 +144,7 @@ bool RenderWidget::CheckRenderConditions()
   if (!m_renderTarget)
   {
     // buffer is already initialized but has the wrong size
-    m_colorTexture = new csTexture2DWrapper(csEng->GetRenderer()->CreateTexture2D(ePF_R8G8B8A8U, width(), height(), false));
+    m_colorTexture = new cs::Texture2DWrapper(csEng->GetRenderer()->CreateTexture2D(cs::ePF_R8G8B8A8U, width(), height(), false));
     m_renderTarget = csEng->GetRenderer()->CreateRenderTarget();
     m_renderTarget->Initialize(width(), height());
     m_renderTarget->AddColorTexture(m_colorTexture);

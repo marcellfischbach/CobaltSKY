@@ -8,14 +8,19 @@
 
 #define CS_ADD_NAME "Math/Add"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGAdd : public CS_SUPER(csSGNode)
+class CSE_API SGAdd : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGAdd();
-  virtual ~csSGAdd() { }
+  SGAdd();
+  virtual ~SGAdd() { }
 
   virtual bool Validate();
 
 };
+
+}

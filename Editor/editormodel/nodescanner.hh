@@ -6,7 +6,10 @@
 #include <string>
 
 class csfEntry;
-class csResourceLocator;
+namespace cs
+{
+class ResourceLocator;
+}
 
 namespace cs::editor::model
 {
@@ -21,7 +24,7 @@ public:
 
 
   std::string GetTypeName() const;
-  std::set<csResourceLocator> GetReferenceLocators() const;
+  std::set<cs::ResourceLocator> GetReferenceLocators() const;
 
 private:
   void ScanTypeName(const csfEntry *rootEntry);

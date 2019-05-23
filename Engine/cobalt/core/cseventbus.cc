@@ -4,22 +4,22 @@
 #include <cobalt/core/csevent.hh>
 
 
-csEventBus::csEventBus()
+cs::EventBus::EventBus()
 {
 
 }
 
-csEventBus::~csEventBus()
+cs::EventBus::~EventBus()
 {
 
 }
 
-void csEventBus::Fire(csEvent &event)
+void cs::EventBus::Fire(cs::Event &event)
 {
   Fire(event, event.GetClass());
 }
 
-void csEventBus::Fire(csEvent &event, const cs::Class *cls)
+void cs::EventBus::Fire(cs::Event &event, const cs::Class *cls)
 {
   if (!cls || cls == cs::Object::GetStaticClass())
   {
@@ -50,19 +50,19 @@ void csEventBus::Fire(csEvent &event, const cs::Class *cls)
   }
 }
 
-csEventBus &csEventBus::operator<<(csEvent &event)
+cs::EventBus &cs::EventBus::operator<<(cs::Event &event)
 {
   Fire(event);
   return *this;
 }
 
 
-void csEventBus::Register(csEventDelegate delegate, void *ptr)
+void cs::EventBus::Register(cs::EventDelegate delegate, void *ptr)
 {
-  Register(csEvent::GetStaticClass(), delegate, ptr);
+  Register(cs::Event::GetStaticClass(), delegate, ptr);
 }
 
-void csEventBus::Register(const cs::Class *eventClass, csEventDelegate delegate, void *ptr)
+void cs::EventBus::Register(const cs::Class *eventClass, cs::EventDelegate delegate, void *ptr)
 {
   Delegate del;
   del.delegate = delegate;
@@ -70,7 +70,7 @@ void csEventBus::Register(const cs::Class *eventClass, csEventDelegate delegate,
   m_delegates[eventClass].push_back(del);
 }
 
-void csEventBus::Deregister(csEventDelegate delegate, void *ptr)
+void cs::EventBus::Deregister(cs::EventDelegate delegate, void *ptr)
 {
   
   for (auto dels: m_delegates)
@@ -91,7 +91,7 @@ void csEventBus::Deregister(csEventDelegate delegate, void *ptr)
 }
 
 
-void csEventBus::Deregister(csEventDelegate delegate)
+void cs::EventBus::Deregister(cs::EventDelegate delegate)
 {
 
   for (auto dels : m_delegates)
@@ -114,17 +114,17 @@ void csEventBus::Deregister(csEventDelegate delegate)
 
 
 
-void csEventBus::Register(iEventHandler *handler)
+void cs::EventBus::Register(iEventHandler *handler)
 {
-  Register(csEvent::GetStaticClass(), handler);
+  Register(cs::Event::GetStaticClass(), handler);
 }
 
-void csEventBus::Register(const cs::Class *eventClass, iEventHandler *handler)
+void cs::EventBus::Register(const cs::Class *eventClass, iEventHandler *handler)
 {
   m_handlers[eventClass].push_back(handler);
 }
 
-void csEventBus::Deregister(iEventHandler *handler)
+void cs::EventBus::Deregister(iEventHandler *handler)
 {
 
   for (auto hndl : m_handlers)

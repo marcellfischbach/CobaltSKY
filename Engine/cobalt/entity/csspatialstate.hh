@@ -8,9 +8,12 @@
 #include <cobalt/entity/csspatialstate.refl.hh>
 #include <float.h>
 
-struct csScanConfig;
 
-class CSE_API csDistanceState
+namespace cs
+{
+struct ScanConfig;
+
+class CSE_API DistanceState
 {
 public:
   enum State
@@ -23,7 +26,7 @@ public:
   };
 
 public:
-  csDistanceState();
+  DistanceState();
 
   void SetupDistance(float min = -FLT_MAX, float max = FLT_MAX);
   void SetupState(State state, csUInt8 fadeValue);
@@ -50,107 +53,108 @@ private:
 * \ingroup entity
 */
 CS_CLASS()
-class CSE_API csSpatialState : public CS_SUPER(csEntityState)
+class CSE_API SpatialState : public CS_SUPER(cs::EntityState)
 {
-  friend class csEntity;
+  friend class cs::Entity;
   CS_CLASS_GEN;
 
 public:
-  csSpatialState();
-  virtual ~csSpatialState();
+  SpatialState();
+  virtual ~SpatialState();
 
-  csTransformation GetTransformation();
+  cs::Transformation GetTransformation();
   virtual void FinishTransformation();
 
   CS_FUNCTION()
-    void SetLocalMatrix(const csMatrix4f &matrix);
+    void SetLocalMatrix(const cs::Matrix4f & matrix);
   CS_FUNCTION()
-    const csMatrix4f &GetLocalMatrix() const;
+    const cs::Matrix4f& GetLocalMatrix() const;
 
-  const csMatrix4f &GetLocalTransformation() const;
-  const csMatrix4f &GetGlobalTransformation() const;
-  const csMatrix4f &GetGlobalTransformationInv() const;
-  const csBoundingBox &GetBoundingBox() const;
+  const cs::Matrix4f& GetLocalTransformation() const;
+  const cs::Matrix4f& GetGlobalTransformation() const;
+  const cs::Matrix4f& GetGlobalTransformationInv() const;
+  const cs::BoundingBox& GetBoundingBox() const;
 
-  virtual csSpatialState *ToSpatialState();
-  virtual const csSpatialState *ToSpatialState() const;
+  virtual cs::SpatialState* ToSpatialState();
+  virtual const cs::SpatialState* ToSpatialState() const;
 
-  csSpatialState *FindState(const std::string &stateName);
-  const csSpatialState *FindState(const std::string &stateName) const;
+  cs::SpatialState* FindState(const std::string & stateName);
+  const cs::SpatialState* FindState(const std::string & stateName) const;
 
   csSize GetNumberOfChildState() const;
-  csSpatialState *GetChildState(csSize idx);
-  const csSpatialState *GetChildState(csSize idx) const;
+  cs::SpatialState* GetChildState(csSize idx);
+  const cs::SpatialState* GetChildState(csSize idx) const;
 
 
-  csSpatialState *GetParentState();
-  const csSpatialState *GetParentState() const;
+  cs::SpatialState* GetParentState();
+  const cs::SpatialState* GetParentState() const;
 
   void SetClippingRange(float min = -FLT_MAX, float max = FLT_MAX);
 
   void UpdateBoundingBox();
 
-  virtual void Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
+  virtual void Scan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config);
 
 protected:
   virtual void UpdateTransformation();
-  virtual void FillBoundingBox (csBoundingBox &bbox);
-  virtual void PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
+  virtual void FillBoundingBox(cs::BoundingBox & bbox);
+  virtual void PrivScan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config);
 
   void PerformTransformation();
 
   CS_PROPERTY()
-    csMatrix4f m_localMatrix;
+    cs::Matrix4f m_localMatrix;
   CS_PROPERTY()
-    csMatrix4f m_globalMatrix;
+    cs::Matrix4f m_globalMatrix;
   CS_PROPERTY()
-    csMatrix4f m_globalMatrixInv;
+    cs::Matrix4f m_globalMatrixInv;
 
   bool m_boundingBoxDirty;
-  csBoundingBox m_boundingBox;
-  csDistanceState m_distanceState;
+  cs::BoundingBox m_boundingBox;
+  cs::DistanceState m_distanceState;
 
 private:
   void FlagBoundingBoxDirty();
   void FlagParentBoundingBoxDirty();
-  void AddSpatialState(csSpatialState *state);
-  void RemoveSpatialState(csSpatialState *state);
+  void AddSpatialState(cs::SpatialState * state);
+  void RemoveSpatialState(cs::SpatialState * state);
 
 
-  
-  csSpatialState *m_parentState;
-  std::vector<csSpatialState*> m_childStates;
+
+  cs::SpatialState * m_parentState;
+  std::vector<cs::SpatialState*> m_childStates;
 
 };
 
+}
 
-CS_FORCEINLINE const csMatrix4f &csSpatialState::GetLocalTransformation() const
+CS_FORCEINLINE const cs::Matrix4f &cs::SpatialState::GetLocalTransformation() const
 {
   return m_localMatrix;
 }
 
-CS_FORCEINLINE const csMatrix4f &csSpatialState::GetGlobalTransformation() const
+CS_FORCEINLINE const cs::Matrix4f &cs::SpatialState::GetGlobalTransformation() const
 {
   return m_globalMatrix;
 }
 
 
-CS_FORCEINLINE const csMatrix4f &csSpatialState::GetGlobalTransformationInv() const
+CS_FORCEINLINE const cs::Matrix4f &cs::SpatialState::GetGlobalTransformationInv() const
 {
   return m_globalMatrixInv;
 }
 
-CS_FORCEINLINE const csBoundingBox &csSpatialState::GetBoundingBox() const
+CS_FORCEINLINE const cs::BoundingBox &cs::SpatialState::GetBoundingBox() const
 {
   return m_boundingBox;
 }
 
-CS_FORCEINLINE csSpatialState *csSpatialState::GetParentState()
+CS_FORCEINLINE cs::SpatialState *cs::SpatialState::GetParentState()
 {
   return m_parentState;
 }
 
-CS_FORCEINLINE const csSpatialState *csSpatialState::GetParentState() const
+CS_FORCEINLINE const cs::SpatialState *cs::SpatialState::GetParentState() const
 {
   return m_parentState;
 }
@@ -158,12 +162,12 @@ CS_FORCEINLINE const csSpatialState *csSpatialState::GetParentState() const
 
 
 
-CS_FORCEINLINE csUInt8 csDistanceState::GetFadeValue() const
+CS_FORCEINLINE csUInt8 cs::DistanceState::GetFadeValue() const
 {
   return m_fadeValue;
 }
 
-CS_FORCEINLINE bool csDistanceState::IsOut() const
+CS_FORCEINLINE bool cs::DistanceState::IsOut() const
 {
   return m_state == eOut;
 }

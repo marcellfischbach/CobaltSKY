@@ -14,33 +14,35 @@ class csShaderGL4Wrapper;
 class csShaderAttributeGL4;
 class csShaderStreamGL4;
 
+namespace cs
+{
 
 CS_CLASS()
-class csProgramGL4 : public CS_SUPER(iShader)
+class ProgramGL4 : public CS_SUPER(cs::iShader)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csProgramGL4();
-  virtual ~csProgramGL4();
+  ProgramGL4();
+  virtual ~ProgramGL4();
 
   void Bind();
 
-  virtual void RegisterAttribute(const csShaderAttributeID &id);
-  virtual void RegisterStream(const csShaderStreamID &id);
+  virtual void RegisterAttribute(const cs::ShaderAttributeID & id);
+  virtual void RegisterStream(const cs::ShaderStreamID & id);
 
   virtual csUInt32 GetNumberOfAttributes() const;
-  virtual iShaderAttribute *GetAttribute(csUInt32 idx);
-  virtual iShaderAttribute *GetAttribute(const csShaderAttributeID &id);
-  virtual iShaderAttribute *GetAttribute(const std::string &attributeName);
+  virtual cs::iShaderAttribute* GetAttribute(csUInt32 idx);
+  virtual cs::iShaderAttribute* GetAttribute(const cs::ShaderAttributeID & id);
+  virtual cs::iShaderAttribute* GetAttribute(const std::string & attributeName);
 
   virtual csUInt16 GetNumberOfStreams() const;
-  virtual iShaderStream *GetStream(const csShaderStreamID &id);
-  virtual iShaderStream *GetStream(const std::string &streamName);
+  virtual cs::iShaderStream* GetStream(const cs::ShaderStreamID & id);
+  virtual cs::iShaderStream* GetStream(const std::string & streamName);
 
 
-  void AttachShader(csShaderGL4Wrapper *shader);
-  void DetachShader(csShaderGL4Wrapper *shader);
+  void AttachShader(csShaderGL4Wrapper * shader);
+  void DetachShader(csShaderGL4Wrapper * shader);
 
   bool Link();
   std::string GetLinkErrorLog() const;
@@ -64,12 +66,13 @@ private:
 };
 
 CS_CLASS()
-class csProgramGL4Wrapper : public CS_SUPER(csShaderWrapper)
+class ProgramGL4Wrapper : public CS_SUPER(cs::ShaderWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csProgramGL4, csProgramGL4Wrapper, csShaderWrapper);
+  CS_RESOURCE_WRAPPER(cs::ProgramGL4, ProgramGL4Wrapper, cs::ShaderWrapper);
 };
 
 
 
 
+}

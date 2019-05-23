@@ -25,7 +25,7 @@ public:
     m_name = QObject::tr("AssetManager");
   }
 
-  AssetManagerFolderModelEntry(const csVFS::Entry &entry)
+  AssetManagerFolderModelEntry(const cs::VFS::Entry &entry)
     : m_parent(0)
     , m_scanned(false)
     , m_type(Entry)
@@ -89,28 +89,28 @@ public:
     return 0;
   }
 
-  csResourceLocator GetResourceLocator() const
+  cs::ResourceLocator GetResourceLocator() const
   {
     switch (m_type)
     {
     case Root:
-      return csResourceLocator();
+      return cs::ResourceLocator();
     case Entry:
-      return csResourceLocator(csResourceEntry(std::string((const char*)m_name.toLatin1())));
+      return cs::ResourceLocator(cs::ResourceEntry(std::string((const char*)m_name.toLatin1())));
     case Dir:
       if (!m_parent)
       {
-        return csResourceLocator();
+        return cs::ResourceLocator();
       }
       else
       {
-        csResourceLocator parentLocator = m_parent->GetResourceLocator();
-		return csResourceLocator(
-			csResourceEntry(parentLocator.GetResourceEntry()),
-			csResourceFile(parentLocator.GetResourceFile() + "/" + std::string((const char*)m_name.toLatin1())));
+        cs::ResourceLocator parentLocator = m_parent->GetResourceLocator();
+		return cs::ResourceLocator(
+			cs::ResourceEntry(parentLocator.GetResourceEntry()),
+			cs::ResourceFile(parentLocator.GetResourceFile() + "/" + std::string((const char*)m_name.toLatin1())));
       }
     }
-    return csResourceLocator();
+    return cs::ResourceLocator();
   }
 
 private:
@@ -150,9 +150,9 @@ AssetManagerFolderModel::AssetManagerFolderModel()
   : QAbstractItemModel()
 {
   m_root = new AssetManagerFolderModelEntry();
-  for (csSize i = 0, in = csVFS::Get()->GetNumberOfEntries(); i < in; ++i)
+  for (csSize i = 0, in = cs::VFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
-    const csVFS::Entry &entry = csVFS::Get()->GetEntry(i);
+    const cs::VFS::Entry &entry = cs::VFS::Get()->GetEntry(i);
     m_root->AddEntry(new AssetManagerFolderModelEntry(entry));
   }
 }
@@ -231,11 +231,11 @@ QDir AssetManagerFolderModel::GetDir(const QModelIndex &index) const
   return entry->GetDir();
 }
 
-csResourceLocator AssetManagerFolderModel::GetResourceLocator(const QModelIndex &index) const
+cs::ResourceLocator AssetManagerFolderModel::GetResourceLocator(const QModelIndex &index) const
 {
   if (!index.isValid())
   {
-    return csResourceLocator();
+    return cs::ResourceLocator();
   }
   AssetManagerFolderModelEntry *entry = FROM_INDEX(index);
   return entry->GetResourceLocator();

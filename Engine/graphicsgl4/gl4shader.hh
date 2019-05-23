@@ -25,13 +25,13 @@ public:
 
   GLuint GetName() const;
 
-  void SetShaderType(csShaderType shaderType);
-  csShaderType GetShaderType() const;
+  void SetShaderType(cs::eShaderType shaderType);
+  cs::eShaderType GetShaderType() const;
 
   bool Compile();
   std::string GetCompileErrorLog() const;
 private:
-  csShaderType m_shaderType;
+  cs::eShaderType m_shaderType;
 
   std::string m_shader;
   GLuint m_name;
@@ -39,10 +39,10 @@ private:
 };
 
 CS_CLASS()
-class csShaderGL4Wrapper : public CS_SUPER(csResourceWrapper)
+class csShaderGL4Wrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csShaderGL4, csShaderGL4Wrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(csShaderGL4, csShaderGL4Wrapper, cs::ResourceWrapper);
 };
 
 

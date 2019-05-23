@@ -6,6 +6,9 @@
 #include <cobalt/graphics/csimage.hh>
 #include <cobalt/window/iwindow.refl.hh>
 
+namespace cs
+{
+
 struct iKeyboard;
 struct iMouse;
 CS_CLASS()
@@ -13,10 +16,12 @@ struct CSE_API iWindow : public cs::iObject
 {
   CS_CLASS_GEN;
 
-  virtual void SetIcon(const csImage *image) = 0;
+  virtual ~iWindow () { }
 
-  virtual const iKeyboard *GetKeyboard() const = 0;
-  virtual const iMouse *GetMouse() const = 0;
+  virtual void SetIcon(const cs::Image* image) = 0;
+
+  virtual const cs::iKeyboard* GetKeyboard() const = 0;
+  virtual const cs::iMouse* GetMouse() const = 0;
 
   virtual csUInt16 GetWidth() const = 0;
   virtual csUInt16 GetHeight() const = 0;
@@ -31,4 +36,4 @@ struct CSE_API iWindow : public cs::iObject
 };
 
 
-
+}

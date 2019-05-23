@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 
-csGBufferGL4::csGBufferGL4(iGraphics *renderer)
+csGBufferGL4::csGBufferGL4(cs::iGraphics *renderer)
   : cs::Object()
   , m_renderer(renderer)
   , m_diffuseRoughness(0)
@@ -38,14 +38,14 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   CS_RELEASE(m_depth);
   CS_RELEASE(m_renderTarget);
 
-  m_diffuseRoughness = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_normalLightMode = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_R10G10B10A2, width, height, false)));
-  m_emissiveMetallic = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_sssSpec = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_RGBA, width, height, false)));
-  m_depth = new csTexture2DWrapper(cs::QueryClass<iTexture2D>(m_renderer->CreateTexture2D(ePF_D24S8, width, height, false)));
+  m_diffuseRoughness = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_RGBA, width, height, false)));
+  m_normalLightMode = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_R10G10B10A2, width, height, false)));
+  m_emissiveMetallic = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_RGBA, width, height, false)));
+  m_sssSpec = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_RGBA, width, height, false)));
+  m_depth = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_D24S8, width, height, false)));
 
-  csSamplerWrapper *colorSampler = csGBufferGL4::GetColorSampler(m_renderer);
-  csSamplerWrapper *depthSampler = csGBufferGL4::GetDepthSampler(m_renderer);
+  cs::SamplerWrapper *colorSampler = csGBufferGL4::GetColorSampler(m_renderer);
+  cs::SamplerWrapper *depthSampler = csGBufferGL4::GetDepthSampler(m_renderer);
 
   m_diffuseRoughness->Get()->SetSampler(colorSampler);
   m_normalLightMode->Get()->SetSampler(colorSampler);
@@ -54,7 +54,7 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   m_depth->Get()->SetSampler(depthSampler);
 
 
-  m_renderTarget = cs::QueryClass<iRenderTarget>(m_renderer->CreateRenderTarget());
+  m_renderTarget = cs::QueryClass<cs::iRenderTarget>(m_renderer->CreateRenderTarget());
   m_renderTarget->Initialize(width, height);
   m_renderTarget->AddColorTexture(m_diffuseRoughness);
   m_renderTarget->AddColorTexture(m_normalLightMode);
@@ -82,7 +82,7 @@ bool csGBufferGL4::IsValid() const
   return m_renderTarget != 0;
 }
 
-bool csGBufferGL4::Bind(iGraphics *renderer)
+bool csGBufferGL4::Bind(cs::iGraphics *renderer)
 {
   if (!m_renderTarget)
   {
@@ -97,36 +97,36 @@ bool csGBufferGL4::Bind(iGraphics *renderer)
 
 
 
-csSamplerWrapper *csGBufferGL4::GetColorSampler(iGraphics *renderer)
+cs::SamplerWrapper *csGBufferGL4::GetColorSampler(cs::iGraphics *renderer)
 {
-  static csSamplerWrapper *sampler = 0;
+  static cs::SamplerWrapper *sampler = 0;
   if (!sampler)
   {
-    iSampler *smplr = renderer->CreateSampler();
-    smplr->SetFilter(eFM_MinMagNearest);
-    smplr->SetAddressU(eTAM_ClampBorder);
-    smplr->SetAddressV(eTAM_ClampBorder);
-    smplr->SetAddressW(eTAM_ClampBorder);
-    sampler = new csSamplerWrapper(smplr);
+    cs::iSampler *smplr = renderer->CreateSampler();
+    smplr->SetFilter(cs::eFM_MinMagNearest);
+    smplr->SetAddressU(cs::eTAM_ClampBorder);
+    smplr->SetAddressV(cs::eTAM_ClampBorder);
+    smplr->SetAddressW(cs::eTAM_ClampBorder);
+    sampler = new cs::SamplerWrapper(smplr);
   }
 
   return sampler;
 }
 
 
-csSamplerWrapper *csGBufferGL4::GetDepthSampler(iGraphics *renderer)
+cs::SamplerWrapper *csGBufferGL4::GetDepthSampler(cs::iGraphics *renderer)
 {
-  static csSamplerWrapper *sampler = 0;
+  static cs::SamplerWrapper *sampler = 0;
   if (!sampler)
   {
-    iSampler *smplr = renderer->CreateSampler();
-    smplr->SetFilter(eFM_MinMagNearest);
-    smplr->SetAddressU(eTAM_ClampBorder);
-    smplr->SetAddressV(eTAM_ClampBorder);
-    smplr->SetAddressW(eTAM_ClampBorder);
-    smplr->SetTextureCompareMode(eTCM_None);
-    smplr->SetTextureCompareFunc(eTCF_Less);
-    sampler = new csSamplerWrapper(smplr);
+    cs::iSampler *smplr = renderer->CreateSampler();
+    smplr->SetFilter(cs::eFM_MinMagNearest);
+    smplr->SetAddressU(cs::eTAM_ClampBorder);
+    smplr->SetAddressV(cs::eTAM_ClampBorder);
+    smplr->SetAddressW(cs::eTAM_ClampBorder);
+    smplr->SetTextureCompareMode(cs::eTCM_None);
+    smplr->SetTextureCompareFunc(cs::eTCF_Less);
+    sampler = new cs::SamplerWrapper(smplr);
   }
 
   return sampler;

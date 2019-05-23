@@ -20,7 +20,7 @@ namespace asset::model
 		void SetFolder(ViewFolder *folder);
 		ViewFolder *GetFolder();
 
-    csResourceLocator GetResourceLocator() const;
+    cs::ResourceLocator GetResourceLocator() const;
 
 		virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 		virtual QModelIndex parent(const QModelIndex &child) const;

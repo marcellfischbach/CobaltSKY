@@ -1,8 +1,11 @@
 #pragma once
 
 
+namespace cs
+{
 
-enum csShaderType
+
+enum eShaderType
 {
   eST_Vertex,
   eST_TessCtrl,
@@ -11,3 +14,5 @@ enum csShaderType
   eST_Fragment,
   eST_Compute
 };
+
+}

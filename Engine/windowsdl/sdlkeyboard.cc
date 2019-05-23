@@ -2,7 +2,7 @@
 #include <windowsdl/sdlkeyboard.hh>
 #include <SDL.h>
 
-static csKey keyMap[SDL_NUM_SCANCODES];
+static cs::eKey keyMap[SDL_NUM_SCANCODES];
 
 SDLKeyboard::SDLKeyboard()
 {
@@ -27,7 +27,7 @@ void SDLKeyboard::SetKeyDown(csUInt32 key)
 {
   if (key < 300)
   {
-    csKey k = keyMap[key];
+    cs::eKey k = keyMap[key];
     m_current[k] = true;
   }
 
@@ -37,27 +37,27 @@ void SDLKeyboard::SetKeyUp(csUInt32 key)
 {
   if (key < 300)
   {
-    csKey k = keyMap[key];
+    cs::eKey k = keyMap[key];
     m_current[k] = false;
   }
 }
 
-bool SDLKeyboard::IsKeyDown(csKey key) const
+bool SDLKeyboard::IsKeyDown(cs::eKey key) const
 {
   return m_current[key];
 }
 
-bool SDLKeyboard::IsKeyUp(csKey key) const
+bool SDLKeyboard::IsKeyUp(cs::eKey key) const
 {
   return !m_current[key];
 }
 
-bool SDLKeyboard::IsKeyPressed(csKey key) const
+bool SDLKeyboard::IsKeyPressed(cs::eKey key) const
 {
   return m_current[key] && !m_prev[key];
 }
 
-bool SDLKeyboard::IsKeyReleased(csKey key) const
+bool SDLKeyboard::IsKeyReleased(cs::eKey key) const
 {
   return !m_current[key] && m_prev[key];
 }

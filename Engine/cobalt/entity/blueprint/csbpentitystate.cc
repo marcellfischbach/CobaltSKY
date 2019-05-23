@@ -4,7 +4,7 @@
 #include <cobalt/entity/csentitystate.hh>
 
 
-csBPEntityState::csBPEntityState()
+cs::BPEntityState::BPEntityState()
   : m_entityStateClass(0)
   , m_id(0)
   , m_parentId(0)
@@ -12,7 +12,7 @@ csBPEntityState::csBPEntityState()
 {
 }
 
-csBPEntityState::~csBPEntityState()
+cs::BPEntityState::~BPEntityState()
 {
   for (auto prop : m_properties)
   {
@@ -23,66 +23,66 @@ csBPEntityState::~csBPEntityState()
 }
 
 
-void csBPEntityState::SetId(unsigned id)
+void cs::BPEntityState::SetId(unsigned id)
 {
   m_id = id;
 }
 
-unsigned csBPEntityState::GetId() const
+unsigned cs::BPEntityState::GetId() const
 {
   return m_id;
 }
 
-void csBPEntityState::SetParentId(unsigned parentId)
+void cs::BPEntityState::SetParentId(unsigned parentId)
 {
   m_parentId = parentId;
 }
 
-unsigned csBPEntityState::GetParentId() const
+unsigned cs::BPEntityState::GetParentId() const
 {
   return m_parentId;
 }
 
-void csBPEntityState::SetRoot(bool root)
+void cs::BPEntityState::SetRoot(bool root)
 {
   m_root = root;
 }
 
-bool csBPEntityState::IsRoot() const
+bool cs::BPEntityState::IsRoot() const
 {
   return m_root;
 }
-void csBPEntityState::SetEntityStateClass(const cs::Class *entityStateClass)
+void cs::BPEntityState::SetEntityStateClass(const cs::Class *entityStateClass)
 {
   m_entityStateClass = entityStateClass;
 }
 
-const cs::Class *csBPEntityState::GetEntityStateClass() const
+const cs::Class *cs::BPEntityState::GetEntityStateClass() const
 {
   return m_entityStateClass;
 }
 
-void csBPEntityState::AddProperty(csPropertySetter *property)
+void cs::BPEntityState::AddProperty(cs::PropertySetter *property)
 {
   CS_ADDREF(property);
   m_properties.push_back(property);
 }
 
-csEntityState *csBPEntityState::CreateEntityState() const
+cs::EntityState *cs::BPEntityState::CreateEntityState() const
 {
   if (!m_entityStateClass)
   {
     return 0;
   }
 
-  csEntityState *state =  m_entityStateClass->CreateInstance<csEntityState>();
+  cs::EntityState *state =  m_entityStateClass->CreateInstance<cs::EntityState>();
   if (!state)
   {
     return 0;
   }
   state->SetId(GetId());
 
-  for (csPropertySetter *prop : m_properties)
+  for (cs::PropertySetter *prop : m_properties)
   {
     prop->Apply(state);
   }

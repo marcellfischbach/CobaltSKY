@@ -70,7 +70,7 @@ add_library(
 	)
 
 
-add_dependencies(EditorAssetManager ClassGenerator)
+add_dependencies(EditorAssetManager csmoc)
 
 target_link_libraries(
 	EditorAssetManager
@@ -88,7 +88,7 @@ add_executable(
 	)
 
 	
-add_dependencies(EditorAssetManagerTest ClassGenerator)
+add_dependencies(EditorAssetManagerTest csmoc)
 
 target_link_libraries(
 	EditorAssetManagerTest

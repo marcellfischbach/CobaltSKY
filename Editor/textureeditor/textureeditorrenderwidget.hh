@@ -5,18 +5,21 @@
 #include <cobalt/graphics/csshaderattributeid.hh>
 
 
-class csTexture2DWrapper;
-struct iShader;
-struct iVertexDeclaration;
-struct iVertexBuffer;
+class cs::Texture2DWrapper;
+struct cs::iShader;
+struct cs::iVertexDeclaration;
+struct cs::iVertexBuffer;
+namespace cs
+{
 struct iIndexBuffer;
+}
 class TextureEditorRenderWidget : public RenderWidget
 {
 public:
   TextureEditorRenderWidget(QWidget *parent);
   ~TextureEditorRenderWidget();
 
-  void SetTexture(csTexture2DWrapper *texture);
+  void SetTexture(cs::Texture2DWrapper *texture);
   void SetLOD(int lod);
   void SetRed(bool red);
   void SetGreen(bool green);
@@ -28,19 +31,19 @@ protected:
   void paintGL();
 
 private:
-  csTexture2DWrapper *m_texture;
+  cs::Texture2DWrapper *m_texture;
 
 
-  iShader *m_shader;
-  iVertexDeclaration *m_vertexDeclaration;
-  iVertexBuffer *m_vertexBuffer;
-  iIndexBuffer *m_indexBuffer;
+  cs::iShader *m_shader;
+  cs::iVertexDeclaration *m_vertexDeclaration;
+  cs::iVertexBuffer *m_vertexBuffer;
+  cs::iIndexBuffer *m_indexBuffer;
 
-  csShaderAttributeID m_idOffset;
-  csShaderAttributeID m_idScale;
-  csShaderAttributeID m_idDiffuse;
-  csShaderAttributeID m_idLOD;
-  csShaderAttributeID m_idColorTrans;
+  cs::ShaderAttributeID m_idOffset;
+  cs::ShaderAttributeID m_idScale;
+  cs::ShaderAttributeID m_idDiffuse;
+  cs::ShaderAttributeID m_idLOD;
+  cs::ShaderAttributeID m_idColorTrans;
 
   float m_lod;
   bool m_red;

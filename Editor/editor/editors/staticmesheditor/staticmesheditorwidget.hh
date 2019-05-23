@@ -5,7 +5,11 @@
 
 #include <editor/ui_staticmesheditorwidget.h>
 
-class csStaticMeshState;
+namespace cs
+{
+class StaticMeshState;
+}
+
 class StaticMeshEditor;
 class StaticMeshEditorWidget : public QWidget
 {
@@ -14,7 +18,7 @@ public:
   StaticMeshEditorWidget(StaticMeshEditor *editor);
   virtual ~StaticMeshEditorWidget();
 
-  void SetStaticMeshState(csStaticMeshState *staticMeshState);
+  void SetStaticMeshState(cs::StaticMeshState *staticMeshState);
 
 private:
   Ui::StaticMeshEditorWidget m_gui;

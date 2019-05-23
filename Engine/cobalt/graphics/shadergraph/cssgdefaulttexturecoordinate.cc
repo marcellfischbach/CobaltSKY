@@ -2,9 +2,9 @@
 #include <cobalt/graphics/shadergraph/cssgdefaulttexturecoordinate.hh>
 
 
-csSGDefaultTextureCoordinate::csSGDefaultTextureCoordinate()
-  : csSGNode()
+cs::SGDefaultTextureCoordinate::SGDefaultTextureCoordinate()
+  : cs::SGNode()
 {
   SetName(CS_DEFAULT_TEXTURE_COORDINATE_NAME);
-  AddOutput(new csSGOutput(eSGDT_Float2, "uv"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float2, "uv"));
 }

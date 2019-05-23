@@ -15,7 +15,7 @@ csShaderGraphCtx::csShaderGraphCtx(csShaderGraphGL4 *graph)
 
 }
 
-csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGNode *node)
+csSGNodeGL4 *csShaderGraphCtx::GetNode(cs::SGNode *node)
 {
   if (!node)
   {
@@ -38,7 +38,7 @@ csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGNode *node)
   return glNode;
 }
 
-csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGOutput *output)
+csSGNodeGL4 *csShaderGraphCtx::GetNode(cs::SGOutput *output)
 {
   if (!output)
   {
@@ -48,7 +48,7 @@ csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGOutput *output)
   return GetNode(output->GetNode());
 }
 
-csSGNodeGL4 *csShaderGraphCtx::GetNode(csSGInput *input)
+csSGNodeGL4 *csShaderGraphCtx::GetNode(cs::SGInput *input)
 {
   if (!input)
   {
@@ -66,18 +66,18 @@ void csShaderGraphCtx::Evaluate(csSGNodeGL4 *node)
   }
 }
 
-void csShaderGraphCtx::Evaluate(csSGNode *node)
+void csShaderGraphCtx::Evaluate(cs::SGNode *node)
 {
   Evaluate(GetNode(node));
 }
 
 
-void csShaderGraphCtx::Evaluate(csSGOutput *output)
+void csShaderGraphCtx::Evaluate(cs::SGOutput *output)
 {
   Evaluate(GetNode(output));
 }
 
-void csShaderGraphCtx::Evaluate(csSGInput *input)
+void csShaderGraphCtx::Evaluate(cs::SGInput *input)
 {
   Evaluate(GetNode(input));
 }
@@ -91,25 +91,25 @@ void csShaderGraphCtx::EvaluateInline(csSGNodeGL4 *node)
   }
 }
 
-void csShaderGraphCtx::EvaluateInline(csSGNode *node)
+void csShaderGraphCtx::EvaluateInline(cs::SGNode *node)
 {
   EvaluateInline(GetNode(node));
 }
 
 
-void csShaderGraphCtx::EvaluateInline(csSGOutput *output)
+void csShaderGraphCtx::EvaluateInline(cs::SGOutput *output)
 {
   EvaluateInline(GetNode(output));
 }
 
-void csShaderGraphCtx::EvaluateInline(csSGInput *input)
+void csShaderGraphCtx::EvaluateInline(cs::SGInput *input)
 {
   EvaluateInline(GetNode(input));
 }
 
 
 
-std::string csShaderGraphCtx::CreateCode(csSGOutput *output)
+std::string csShaderGraphCtx::CreateCode(cs::SGOutput *output)
 {
   csSGNodeGL4 *node = GetNode(output->GetNode());
   EvaluateInline(node);
@@ -121,20 +121,20 @@ std::string csShaderGraphCtx::CreateCode(csSGOutput *output)
   return code;
 }
 
-void csShaderGraphCtx::EvaluateInlines(std::set<csSGOutput*> outputs)
+void csShaderGraphCtx::EvaluateInlines(std::set<cs::SGOutput*> outputs)
 {
-  for (csSGOutput *output : outputs)
+  for (cs::SGOutput *output : outputs)
   {
     EvaluateInline(output);
   }
 }
 
-void csShaderGraphCtx::GenerateCode(std::set<csSGOutput*> outputs)
+void csShaderGraphCtx::GenerateCode(std::set<cs::SGOutput*> outputs)
 {
   m_code = "";
-  for (csSGOutput *output : outputs)
+  for (cs::SGOutput *output : outputs)
   {
-    csSGNode *node = output->GetNode();
+    cs::SGNode *node = output->GetNode();
     Evaluate(output);
   }
 }
@@ -162,7 +162,7 @@ std::string csShaderGraphCtx::GetNextVariable()
 }
 
 
-void csShaderGraphCtx::AddBinding(csSGNode *node, const std::string &variableType, const std::string &variableName)
+void csShaderGraphCtx::AddBinding(cs::SGNode *node, const std::string &variableType, const std::string &variableName)
 {
   ExternalBinding binding;
   binding.variableName = variableName;
@@ -171,7 +171,7 @@ void csShaderGraphCtx::AddBinding(csSGNode *node, const std::string &variableTyp
   m_unisformBindingNames[variableName] = binding;;
 }
 
-bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSGNode *node) const
+bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, cs::SGNode *node) const
 {
   if (!node)
   {
@@ -186,7 +186,7 @@ bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSG
 
   for (csSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
   {
-    csSGInput *input = node->GetInput(i);
+    cs::SGInput *input = node->GetInput(i);
     if (IsBindingApplyingFor(bindingName, input))
     {
       return true;
@@ -195,7 +195,7 @@ bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSG
   return false;
 }
 
-bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSGOutput *output) const
+bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, cs::SGOutput *output) const
 {
   if (!output)
   {
@@ -204,7 +204,7 @@ bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSG
   return IsBindingApplyingFor(bindingName, output->GetNode());
 }
 
-bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSGInput *input) const
+bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, cs::SGInput *input) const
 {
   if (!input)
   {
@@ -214,13 +214,13 @@ bool csShaderGraphCtx::IsBindingApplyingFor(const std::string &bindingName, csSG
   return IsBindingApplyingFor(bindingName, input->GetInput());
 }
 
-std::set<csShaderGraphCtx::ExternalBinding> csShaderGraphCtx::GetBindingsFor(std::set<csSGOutput*> outputs) const
+std::set<csShaderGraphCtx::ExternalBinding> csShaderGraphCtx::GetBindingsFor(std::set<cs::SGOutput*> outputs) const
 {
   std::set<ExternalBinding> result;
   std::map<std::string, ExternalBinding>::const_iterator it;
   for (it = m_unisformBindingNames.begin(); it != m_unisformBindingNames.end(); ++it)
   {
-    for (csSGOutput* output : outputs)
+    for (cs::SGOutput* output : outputs)
     {
       if (IsBindingApplyingFor(it->second.variableName, output))
       {
@@ -242,7 +242,7 @@ const std::string &csShaderGraphCtx::GetDefaultTextureCoordinate() const
   return m_defaultTextureCoordinate;
 }
 
-void csShaderGraphCtx::SetOutputValue(csSGOutput *output, const std::string &value)
+void csShaderGraphCtx::SetOutputValue(cs::SGOutput *output, const std::string &value)
 {
   if (output)
   {
@@ -250,20 +250,20 @@ void csShaderGraphCtx::SetOutputValue(csSGOutput *output, const std::string &val
   }
 }
 
-bool csShaderGraphCtx::HasInputValue(csSGInput *input) const
+bool csShaderGraphCtx::HasInputValue(cs::SGInput *input) const
 {
   return HasOutputValue(input ? input->GetInput() : 0);
 }
 
-bool csShaderGraphCtx::HasOutputValue(csSGOutput *output) const
+bool csShaderGraphCtx::HasOutputValue(cs::SGOutput *output) const
 {
-  std::map<csSGOutput *, std::string>::const_iterator it = m_outputValue.find(output);
+  std::map<cs::SGOutput *, std::string>::const_iterator it = m_outputValue.find(output);
   return it != m_outputValue.end();
 }
 
-std::string csShaderGraphCtx::GetOutputValue(csSGOutput *output)
+std::string csShaderGraphCtx::GetOutputValue(cs::SGOutput *output)
 {
-  std::map<csSGOutput *, std::string>::iterator it = m_outputValue.find(output);
+  std::map<cs::SGOutput *, std::string>::iterator it = m_outputValue.find(output);
   if (it == m_outputValue.end())
   {
     return std::string("<inval>");
@@ -271,14 +271,14 @@ std::string csShaderGraphCtx::GetOutputValue(csSGOutput *output)
   return it->second;
 }
 
-std::string csShaderGraphCtx::GetInputValue(csSGInput *input)
+std::string csShaderGraphCtx::GetInputValue(cs::SGInput *input)
 {
   return GetOutputValue(input ? input->GetInput() : 0);
 }
 
-std::string csShaderGraphCtx::GetFullOutputValue(csSGOutput *output)
+std::string csShaderGraphCtx::GetFullOutputValue(cs::SGOutput *output)
 {
-  std::map<csSGOutput *, std::string>::iterator it = m_outputValue.find(output);
+  std::map<cs::SGOutput *, std::string>::iterator it = m_outputValue.find(output);
   if (it == m_outputValue.end())
   {
     return std::string("<inval>");
@@ -293,7 +293,7 @@ std::string csShaderGraphCtx::GetFullOutputValue(csSGOutput *output)
   return res;
 }
 
-std::string csShaderGraphCtx::GetFullInputValue(csSGInput *input)
+std::string csShaderGraphCtx::GetFullInputValue(cs::SGInput *input)
 {
   if (input->GetInput() == 0 && input->CanInputConst())
   {

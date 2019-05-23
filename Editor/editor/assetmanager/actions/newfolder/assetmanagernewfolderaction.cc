@@ -86,8 +86,8 @@ namespace asset::actions
       return;
 
     }
-    csResourceLocator newLocator = folder->CreateResourceLocator(newName);
-    std::string newPathStr = csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence);
+    cs::ResourceLocator newLocator = folder->CreateResourceLocator(newName);
+    std::string newPathStr = cs::VFS::Get()->GetAbsolutePath(newLocator, cs::VFS::DontCheckExistence);
     if (newPathStr.empty())
     {
       QMessageBox::warning(Editor::Get()->GetMainWindow(),

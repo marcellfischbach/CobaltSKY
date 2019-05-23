@@ -5,38 +5,38 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/csloaders.hh>
 
-csEngine *csEngine::static_instance = 0;
+cs::Engine *cs::Engine::static_instance = 0;
 
-csEngine::csEngine()
+cs::Engine::Engine()
   : m_window(0)
   , m_renderer(0)
   , m_physicsSystem(0)
 {
-  csEngine::static_instance = this;
+  cs::Engine::static_instance = this;
 
-  csCobaltSKYModule::Initialize();
-  csLoaders::Register(csResourceManager::Get());
+  cs::CobaltSKYModule::Initialize();
+  cs::Loaders::Register(cs::ResourceManager::Get());
 }
 
 
-void csEngine::SetWindow(iWindow *window)
+void cs::Engine::SetWindow(cs::iWindow *window)
 {
   CS_SET(m_window, window);
 }
 
-void csEngine::SetRenderer(iGraphics *renderer)
+void cs::Engine::SetRenderer(cs::iGraphics *renderer)
 {
   CS_SET(m_renderer, renderer);
 }
 
-void csEngine::SetPhysicsSystem(iPhysicsSystem *physicsSystem)
+void cs::Engine::SetPhysicsSystem(cs::iPhysicsSystem *physicsSystem)
 {
   CS_SET(m_physicsSystem, physicsSystem);
 }
 
 
 
-iIndexBuffer *csEngine::CreateIndexBuffer(csSize size, const void *data, csBufferDataMode mode) 
+cs::iIndexBuffer *cs::Engine::CreateIndexBuffer(csSize size, const void *data, cs::eBufferDataMode mode) 
 {
   if (m_renderer)
   {
@@ -46,7 +46,7 @@ iIndexBuffer *csEngine::CreateIndexBuffer(csSize size, const void *data, csBuffe
 }
 
 
-iVertexBuffer *csEngine::CreateVertexBuffer(csSize size, const void *data, csBufferDataMode mode) 
+cs::iVertexBuffer *cs::Engine::CreateVertexBuffer(csSize size, const void *data, cs::eBufferDataMode mode) 
 {
   if (m_renderer)
   {
@@ -55,7 +55,7 @@ iVertexBuffer *csEngine::CreateVertexBuffer(csSize size, const void *data, csBuf
   return 0;
 }
 
-iVertexDeclaration *csEngine::CreateVertexDeclaration(const csVertexElement *elements) 
+cs::iVertexDeclaration *cs::Engine::CreateVertexDeclaration(const cs::VertexElement *elements) 
 {
   if (m_renderer)
   {
@@ -64,7 +64,7 @@ iVertexDeclaration *csEngine::CreateVertexDeclaration(const csVertexElement *ele
   return 0;
 }
 
-iRenderTarget *csEngine::CreateRenderTarget() 
+cs::iRenderTarget *cs::Engine::CreateRenderTarget() 
 {
   if (m_renderer)
   {
@@ -73,7 +73,7 @@ iRenderTarget *csEngine::CreateRenderTarget()
   return 0;
 }
 
-iSampler *csEngine::CreateSampler()
+cs::iSampler *cs::Engine::CreateSampler()
 {
   if (m_renderer)
   {
@@ -82,7 +82,7 @@ iSampler *csEngine::CreateSampler()
   return 0;
 }
 
-iTexture2D *csEngine::CreateTexture2D(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
+cs::iTexture2D *cs::Engine::CreateTexture2D(cs::ePixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
 { 
   if (m_renderer)
   {
@@ -91,7 +91,7 @@ iTexture2D *csEngine::CreateTexture2D(csPixelFormat format, csUInt16 width, csUI
   return 0;
 }
 
-iTexture2DArray *csEngine::CreateTexture2DArray(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps) 
+cs::iTexture2DArray *cs::Engine::CreateTexture2DArray(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps) 
 {
   if (m_renderer)
   {
@@ -100,7 +100,7 @@ iTexture2DArray *csEngine::CreateTexture2DArray(csPixelFormat format, csUInt16 w
   return 0;
 }
 
-iTextureCube *csEngine::CreateTextureCube(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth) 
+cs::iTextureCube *cs::Engine::CreateTextureCube(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth) 
 {
   if (m_renderer)
   {
@@ -109,7 +109,7 @@ iTextureCube *csEngine::CreateTextureCube(csPixelFormat format, csUInt16 width, 
   return 0;
 }
 
-iShader *csEngine::CreateShader(const std::string &vertexCode, const std::string &tessCtrl, const std::string &tessEval, const std::string &geometry, const std::string &fragmentCode) 
+cs::iShader *cs::Engine::CreateShader(const std::string &vertexCode, const std::string &tessCtrl, const std::string &tessEval, const std::string &geometry, const std::string &fragmentCode) 
 {
   if (m_renderer)
   {
@@ -122,7 +122,7 @@ iShader *csEngine::CreateShader(const std::string &vertexCode, const std::string
 
 
 
-iPhysicsScene *csEngine::CreateScene()
+cs::iPhysicsScene *cs::Engine::CreateScene()
 {
   if (m_physicsSystem)
   {
@@ -131,7 +131,7 @@ iPhysicsScene *csEngine::CreateScene()
   return 0;
 }
 
-iPhysicsShape *csEngine::CreateShape(const csPhysGeometry &geometry)
+cs::iPhysicsShape *cs::Engine::CreateShape(const cs::PhysGeometry &geometry)
 {
   if (m_physicsSystem)
   {
@@ -140,7 +140,7 @@ iPhysicsShape *csEngine::CreateShape(const csPhysGeometry &geometry)
   return 0;
 }
 
-iPhysicsDynamicCollider *csEngine::CreateDynamicCollider()
+cs::iPhysicsDynamicCollider *cs::Engine::CreateDynamicCollider()
 {
   if (m_physicsSystem)
   {
@@ -149,7 +149,7 @@ iPhysicsDynamicCollider *csEngine::CreateDynamicCollider()
   return 0;
 }
 
-iPhysicsStaticCollider *csEngine::CreateStaticCollider()
+cs::iPhysicsStaticCollider *cs::Engine::CreateStaticCollider()
 {
   if (m_physicsSystem)
   {
@@ -158,7 +158,7 @@ iPhysicsStaticCollider *csEngine::CreateStaticCollider()
   return 0;
 }
 
-iPhysicsTriggerCollider *csEngine::CreateTriggerCollider()
+cs::iPhysicsTriggerCollider *cs::Engine::CreateTriggerCollider()
 {
   if (m_physicsSystem)
   {
@@ -167,7 +167,7 @@ iPhysicsTriggerCollider *csEngine::CreateTriggerCollider()
   return 0;
 }
 
-iPhysicsCapsuleCharacterController *csEngine::CreateCapsulseCharacterController()
+cs::iPhysicsCapsuleCharacterController *cs::Engine::CreateCapsulseCharacterController()
 {
   if (m_physicsSystem)
   {
@@ -176,7 +176,7 @@ iPhysicsCapsuleCharacterController *csEngine::CreateCapsulseCharacterController(
   return 0;
 }
 
-iPhysicsJoint *csEngine::CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
+cs::iPhysicsJoint *cs::Engine::CreateJoint(cs::ePhysicsJointType type, cs::iPhysicsDynamicCollider *colliderA, cs::iPhysicsDynamicCollider *colliderB)
 {
   if (m_physicsSystem)
   {

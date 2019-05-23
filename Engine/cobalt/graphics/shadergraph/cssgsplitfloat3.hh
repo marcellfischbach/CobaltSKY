@@ -6,13 +6,18 @@
 
 #define CS_SPLIT_FLOAT3_NAME "Assemble/SplitFloat3"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGSplitFloat3 : public CS_SUPER(csSGNode)
+class CSE_API SGSplitFloat3 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGSplitFloat3();
-  virtual ~csSGSplitFloat3() { }
+  SGSplitFloat3();
+  virtual ~SGSplitFloat3() { }
 
   virtual bool Validate();
 };
+
+}

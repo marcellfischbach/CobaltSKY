@@ -49,7 +49,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
 
   m_node = nodes[0];
 
-  csSGNode *sgNode = m_node->GetSGNode();
+  cs::SGNode *sgNode = m_node->GetSGNode();
   if (sgNode)
   {
     m_group = new QWidget();
@@ -61,7 +61,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     int row = 0;
 
     bool needSeparator = false;
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(sgNode);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(sgNode);
     if (resourceNode)
     {
       QLabel *label = new QLabel(m_group);
@@ -86,7 +86,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
 
       switch (resourceNode->GetResourceType())
       {
-      case eSPT_Float:
+      case cs::eSPT_Float:
         doubleSpinBox = new QDoubleSpinBox(m_group);
         doubleSpinBox->setValue(resourceNode->GetDefaultFloats()[0]);
         doubleSpinBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -94,7 +94,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         m_spinBoxDefaultFloatResource.push_back(doubleSpinBox);
         lo->addWidget(doubleSpinBox, row++, 1, 1, 1);
         break;
-      case eSPT_Vector2:
+      case cs::eSPT_Vector2:
         doubleSpinBox = new QDoubleSpinBox(m_group);
         doubleSpinBox->setValue(resourceNode->GetDefaultFloats()[0]);
         doubleSpinBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -109,7 +109,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         m_spinBoxDefaultFloatResource.push_back(doubleSpinBox);
         lo->addWidget(doubleSpinBox, row++, 1, 1, 1);
         break;
-      case eSPT_Vector3:
+      case cs::eSPT_Vector3:
         doubleSpinBox = new QDoubleSpinBox(m_group);
         doubleSpinBox->setValue(resourceNode->GetDefaultFloats()[0]);
         doubleSpinBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -132,8 +132,8 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         lo->addWidget(doubleSpinBox, row++, 1, 1, 1);
         break;
 
-      case eSPT_Color4:
-      case eSPT_Vector4:
+      case cs::eSPT_Color4:
+      case cs::eSPT_Vector4:
         doubleSpinBox = new QDoubleSpinBox(m_group);
         doubleSpinBox->setValue(resourceNode->GetDefaultFloats()[0]);
         doubleSpinBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
@@ -163,12 +163,12 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
         lo->addWidget(doubleSpinBox, row++, 1, 1, 1);
         break;
 
-      case eSPT_Texture:
+      case cs::eSPT_Texture:
         assetResourceWidget = new AssetResourceWidget(m_group);
         assetResourceWidget->SetResourceLocator(resourceNode->GetDefaultTextureResource());
-        assetResourceWidget->AddValidClass(iTexture::GetStaticClass());
-        connect(assetResourceWidget, SIGNAL(ResourceChanged(const csResourceLocator&)),
-          this, SLOT(ResourceChanged(const csResourceLocator &)));
+        assetResourceWidget->AddValidClass(cs::iTexture::GetStaticClass());
+        connect(assetResourceWidget, SIGNAL(ResourceChanged(const cs::ResourceLocator&)),
+          this, SLOT(ResourceChanged(const cs::ResourceLocator &)));
         lo->addWidget(assetResourceWidget, row++, 1, 1, 1);
         break;
 
@@ -181,7 +181,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
 
     for (csSize i = 0, in = sgNode->GetNumberOfInputs(); i < in; ++i)
     {
-      csSGInput *input = sgNode->GetInput(i);
+      cs::SGInput *input = sgNode->GetInput(i);
       if (input->CanInputConst())
       {
         if (needSeparator)
@@ -214,7 +214,7 @@ void ShaderGraphEditorProperties::SetNodes(const QList<ShaderGraphEditorNode*> &
     lo->addItem(new QSpacerItem(1, 1, QSizePolicy::Maximum, QSizePolicy::MinimumExpanding), row, 0, 1, 2);
   }
 
-  csSGShaderGraph *sgShaderGraph = m_node->GetShaderGraph();
+  cs::SGShaderGraph *sgShaderGraph = m_node->GetShaderGraph();
   if (sgShaderGraph)
   {
     ShaderGraphEditorShaderGraphProperties *props = new ShaderGraphEditorShaderGraphProperties();
@@ -247,14 +247,14 @@ void ShaderGraphEditorProperties::SpinBox_valueChanged(double value)
     return;
   }
 
-  csSGNode *node = m_node->GetSGNode();
+  cs::SGNode *node = m_node->GetSGNode();
   if (node)
   {
     for (std::map<unsigned, QDoubleSpinBox*>::iterator it = m_spinBoxes.begin();
       it != m_spinBoxes.end();
       ++it)
     {
-      csSGInput *input = node->GetInput(it->first);
+      cs::SGInput *input = node->GetInput(it->first);
       if (input->CanInputConst())
       {
         input->SetConst(it->second->value());
@@ -274,10 +274,10 @@ void ShaderGraphEditorProperties::Resource_nameChanged(const QString &name)
     return;
   }
 
-  csSGNode *node = m_node->GetSGNode();
+  cs::SGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       resourceNode->SetResourceName(std::string((const char*)name.toLatin1()));
@@ -296,10 +296,10 @@ void ShaderGraphEditorProperties::DefaultFloat_valueChanged(double value)
     return;
   }
 
-  csSGNode *node = m_node->GetSGNode();
+  cs::SGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -322,10 +322,10 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
     return;
   }
 
-  csSGNode *node = m_node->GetSGNode();
+  cs::SGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       unsigned i = 0;
@@ -341,17 +341,17 @@ void ShaderGraphEditorProperties::DefaultInt_valueChanged(int value)
   emit NodeChanged(m_node);
 }
 
-void ShaderGraphEditorProperties::ResourceChanged(const csResourceLocator &locator)
+void ShaderGraphEditorProperties::ResourceChanged(const cs::ResourceLocator &locator)
 {
   if (!m_node)
   {
     return;
   }
 
-  csSGNode *node = m_node->GetSGNode();
+  cs::SGNode *node = m_node->GetSGNode();
   if (node)
   {
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       resourceNode->SetDefaultTextureResource(locator);

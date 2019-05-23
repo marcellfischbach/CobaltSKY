@@ -36,14 +36,14 @@ add_library(
     ${ALL_SOURCES}
     )
 	
-add_dependencies(EditorModel ClassGenerator)
+add_dependencies(EditorModel csmoc)
 
 target_link_libraries(EditorModel
     CobaltSKY
 	CobaltSKY-File
     )
 
-CS_INSTALL_MOCCER(EditorModel editormodel EDITOR_MODEL_API ALL_SOURCES)
+CS_MOC(EditorModel editormodel)
 
 
 
@@ -54,7 +54,7 @@ add_executable(
 )
 
 
-add_dependencies(EditorModelTest ClassGenerator)
+add_dependencies(EditorModelTest csmoc)
 
 target_link_libraries(
         EditorModelTest

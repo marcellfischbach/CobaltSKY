@@ -9,16 +9,19 @@
 
 #include <cobalt/entity/csdefaultparticlestepper.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csDefaultParticleStepper : public CS_SUPER(iParticleStepper)
+class CSE_API DefaultParticleStepper : public CS_SUPER(cs::iParticleStepper)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csDefaultParticleStepper();
-  virtual ~csDefaultParticleStepper();
+  DefaultParticleStepper();
+  virtual ~DefaultParticleStepper();
 
-  void SetSizeMode(csParticleSizeMode sizeMode);
-  csParticleSizeMode GetSizeMode() const;
+  void SetSizeMode(cs::eParticleSizeMode sizeMode);
+  cs::eParticleSizeMode GetSizeMode() const;
 
   void SetSizeCicleTime(float sizeCicleTime);
   float GetSizeCicleTime() const;
@@ -29,20 +32,23 @@ public:
   void SetTextPageTime(float textPageTime);
   float GetTextPageTime() const;
 
-  void SetGravity(const csVector3f &gravity);
-  const csVector3f &GetGravity() const;
+  void SetGravity(const cs::Vector3f & gravity);
+  const cs::Vector3f& GetGravity() const;
 
-  void Update(float tpf, csParticle *particle);
+  void Update(float tpf, cs::Particle * particle);
 
 protected:
-  virtual void UpdateParticle(float tpf, csParticle::ParticleData *particle);
+  virtual void UpdateParticle(float tpf, cs::Particle::ParticleData * particle);
 
 
 private:
-  csParticleSizeMode m_sizeMode;
+  cs::eParticleSizeMode m_sizeMode;
   float m_sizeCicleTime;
   csUInt8 m_numTextPages;
   float m_textPageTime;
-  csVector3f m_gravity;
+  cs::Vector3f m_gravity;
 };
+
+
+}
 

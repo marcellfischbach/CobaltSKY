@@ -7,8 +7,8 @@
 
 
 csBulletHingeJoint::csBulletHingeJoint()
-  : csBulletJoint(ePJT_Hinge)
-  , iPhysicsHingeJoint()
+  : csBulletJoint(cs::ePJT_Hinge)
+  , cs::iPhysicsHingeJoint()
 {
 
 }
@@ -52,7 +52,7 @@ bool csBulletHingeJoint::Initialize(csBulletDynamicCollider *colliderA, csBullet
 
 
 
-void csBulletHingeJoint::SetFrameA(const csMatrix4f &frameA)
+void csBulletHingeJoint::SetFrameA(const cs::Matrix4f &frameA)
 {
   m_frameA = frameA;
   btTransform transA, transB;
@@ -62,7 +62,7 @@ void csBulletHingeJoint::SetFrameA(const csMatrix4f &frameA)
   m_hingeConstraints->setFrames(transA, transB);
 }
 
-void csBulletHingeJoint::SetFrameB(const csMatrix4f &frameB)
+void csBulletHingeJoint::SetFrameB(const cs::Matrix4f &frameB)
 {
   m_frameB = frameB;
 
@@ -74,7 +74,7 @@ void csBulletHingeJoint::SetFrameB(const csMatrix4f &frameB)
 }
 
 
-void csBulletHingeJoint::SetFrames(const csMatrix4f &frameA, const csMatrix4f &frameB)
+void csBulletHingeJoint::SetFrames(const cs::Matrix4f &frameA, const cs::Matrix4f &frameB)
 {
   m_frameA = frameA;
   m_frameB = frameB;

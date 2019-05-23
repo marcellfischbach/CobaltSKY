@@ -7,14 +7,20 @@
 
 #define CS_SUB_NAME "Math/Sub"
 
+
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGSub : public CS_SUPER(csSGNode)
+class CSE_API SGSub : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGSub();
-  virtual ~csSGSub() { }
+  SGSub();
+  virtual ~SGSub() { }
 
   virtual bool Validate();
 
 };
+
+}

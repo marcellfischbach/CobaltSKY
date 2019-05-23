@@ -2,13 +2,13 @@
 #include <runner/event.hh>
 
 MyEvent0::MyEvent0()
-  : csEvent()
+  : cs::Event()
 {
 
 }
 
 MyEvent1::MyEvent1()
-  : csEvent()
+  : cs::Event()
 {
 
 }

@@ -2,7 +2,7 @@
 #include <cobalt/graphics/cslight.hh>
 
 
-csLight::csLight(csLightType type)
+cs::Light::Light(cs::eLightType type)
   : cs::Object()
   , m_lightType(type)
   , m_color(1.0f, 1.0f, 1.0f, 1.0f)
@@ -13,53 +13,53 @@ csLight::csLight(csLightType type)
 
 }
 
-csLight::~csLight()
+cs::Light::~Light()
 {
 
 }
 
-csLightType csLight::GetLightType() const
+cs::eLightType cs::Light::GetLightType() const
 {
   return m_lightType;
 }
 
-void csLight::SetColor(const csColor4f &color)
+void cs::Light::SetColor(const cs::Color4f &color)
 {
   m_color = color;
 }
 
-const csColor4f &csLight::GetColor() const
+const cs::Color4f &cs::Light::GetColor() const
 {
   return m_color;
 }
 
-void csLight::SetEnergy(float energy)
+void cs::Light::SetEnergy(float energy)
 {
   m_energy = energy;
 }
 
-float csLight::GetEnergy() const
+float cs::Light::GetEnergy() const
 {
   return m_energy;
 }
 
 
-void csLight::SetCastShadow(bool castShadow)
+void cs::Light::SetCastShadow(bool castShadow)
 {
   m_castShadow = castShadow;
 }
 
-bool csLight::IsCastingShadow() const
+bool cs::Light::IsCastingShadow() const
 {
   return m_castShadow;
 }
 
-void csLight::SetShadowIntensity(float shadowIntensity)
+void cs::Light::SetShadowIntensity(float shadowIntensity)
 {
   m_shadowIntensity = shadowIntensity;
 }
 
-float csLight::GetShadowIntensity() const
+float cs::Light::GetShadowIntensity() const
 {
   return m_shadowIntensity;
 }

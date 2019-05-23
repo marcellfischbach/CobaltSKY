@@ -5,37 +5,42 @@
 #include <cobalt/graphics/scene/cscameranode.refl.hh>
 
 
-class csCamera;
+
+namespace cs
+{
+class Camera;
 
 CS_CLASS()
-class CSE_API csCameraNode : public CS_SUPER(csSpatialNode)
+class CSE_API CameraNode : public CS_SUPER(cs::SpatialNode)
 {
   CS_CLASS_GEN;
 public:
-  csCameraNode();
-  virtual ~csCameraNode();
+  CameraNode();
+  virtual ~CameraNode();
 
-  void SetCamera(csCamera *camera);
-  const csCamera *GetCamera() const;
-  csCamera *GetCamera();
+  void SetCamera(cs::Camera * camera);
+  const cs::Camera* GetCamera() const;
+  cs::Camera* GetCamera();
 
-  
+
 
 protected:
-  virtual void TransformationChanged ();
+  virtual void TransformationChanged();
 
 private:
-  csCamera *m_camera;
+  cs::Camera* m_camera;
 
 
 };
 
-CS_FORCEINLINE csCamera *csCameraNode::GetCamera()
+}
+
+CS_FORCEINLINE cs::Camera *cs::CameraNode::GetCamera()
 {
   return m_camera;
 }
 
-CS_FORCEINLINE const csCamera *csCameraNode::GetCamera() const
+CS_FORCEINLINE const cs::Camera *cs::CameraNode::GetCamera() const
 {
   return m_camera;
 }

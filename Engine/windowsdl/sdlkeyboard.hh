@@ -6,7 +6,7 @@
 #include <windowsdl/sdlkeyboard.refl.hh>
 
 CS_CLASS()
-class CSWINDOWSDL_API SDLKeyboard : public CS_SUPER(iKeyboard)
+class CSWINDOWSDL_API SDLKeyboard : public CS_SUPER(cs::iKeyboard)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -18,13 +18,13 @@ public:
   void SetKeyDown(csUInt32 key);
   void SetKeyUp(csUInt32 key);
 
-  bool IsKeyDown(csKey key) const;
-  bool IsKeyUp(csKey key) const;
+  bool IsKeyDown(cs::eKey key) const;
+  bool IsKeyUp(cs::eKey key) const;
 
-  bool IsKeyPressed(csKey key) const;
-  bool IsKeyReleased(csKey key) const;
+  bool IsKeyPressed(cs::eKey key) const;
+  bool IsKeyReleased(cs::eKey key) const;
 
 private:
-  bool m_current[eK_COUNT];
-  bool m_prev[eK_COUNT];
+  bool m_current[cs::eK_COUNT];
+  bool m_prev[cs::eK_COUNT];
 };

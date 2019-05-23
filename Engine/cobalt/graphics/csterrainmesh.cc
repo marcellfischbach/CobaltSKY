@@ -30,22 +30,22 @@ namespace
   }
 }
 
-csTerrainMesh::csTerrainMesh()
-  : iMesh()
+cs::TerrainMesh::TerrainMesh()
+  : cs::iMesh()
   , m_materialName("Material")
   , m_lastUpdateFrame(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csTerrainMesh::~csTerrainMesh()
+cs::TerrainMesh::~TerrainMesh()
 {
 
 
 
 }
 
-void csTerrainMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo)
+void cs::TerrainMesh::Update(cs::iGraphics *renderer, const cs::Vector3f &cameraPos, csUInt64 frameNo)
 {
   if (m_lastUpdateFrame < frameNo || m_clean)
   {
@@ -55,7 +55,7 @@ void csTerrainMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csU
   }
 }
 
-void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod)
+void cs::TerrainMesh::Render(cs::iGraphics *gfx, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lod)
 {
   if (materials.size() != 1)
   {
@@ -72,17 +72,17 @@ void csTerrainMesh::Render(iGraphics *gfx, csRenderPass pass, const std::vector<
   {
     RenderObject &obj = m_renderObjects[i];
     gfx->SetIndexBuffer(obj.indexBuffer);
-    gfx->RenderIndexed(ePT_Triangles, obj.numberOfIndices, eDT_UnsignedInt);
+    gfx->RenderIndexed(cs::ePT_Triangles, obj.numberOfIndices, cs::eDT_UnsignedInt);
   }
 }
 
-csSize csTerrainMesh::GetNumberOfMaterials() const
+csSize cs::TerrainMesh::GetNumberOfMaterials() const
 {
   // terrains only have one materials (yet)
   return 1;
 }
 
-const std::string &csTerrainMesh::GetMaterialName(csSize idx) const
+const std::string &cs::TerrainMesh::GetMaterialName(csSize idx) const
 {
   if (idx != 0)
   {
@@ -93,7 +93,7 @@ const std::string &csTerrainMesh::GetMaterialName(csSize idx) const
 }
 
 
-csUInt32 csTerrainMesh::GetMaterialIndex(const std::string &name) const
+csUInt32 cs::TerrainMesh::GetMaterialIndex(const std::string &name) const
 {
   if (name == m_materialName)
   {
@@ -102,12 +102,12 @@ csUInt32 csTerrainMesh::GetMaterialIndex(const std::string &name) const
   return ~0x00;
 }
 
-csSize csTerrainMesh::GetNumberOfRenderCalls(csUInt8) const
+csSize cs::TerrainMesh::GetNumberOfRenderCalls(csUInt8) const
 {
   return m_numberORenderObjects;
 }
 
-csSize csTerrainMesh::GetNumberOfTotalTrigons(csUInt8) const
+csSize cs::TerrainMesh::GetNumberOfTotalTrigons(csUInt8) const
 {
   csSize result = 0;
   for (unsigned i = 0; i < m_numberORenderObjects; ++i)
@@ -141,17 +141,17 @@ static unsigned GetPowerOfTwo(unsigned i)
 
 struct Vertex
 {
-  csVector3f pos;
-  csVector3f normal;
-  csVector3f tangent;
-  csVector3f binormal;
-  csVector2f texCoord;
+  cs::Vector3f pos;
+  cs::Vector3f normal;
+  cs::Vector3f tangent;
+  cs::Vector3f binormal;
+  cs::Vector2f texCoord;
 };
 
 namespace
 {
 
-csVector3f GetPos (Vertex *vertices, int numVertices, int ix, int iy)
+cs::Vector3f GetPos (Vertex *vertices, int numVertices, int ix, int iy)
 {
   if (ix < 0)
   {
@@ -180,17 +180,17 @@ void GenerateNormals (Vertex *vertices, int numVertices)
   {
     for (int ix=0; ix<numVertices; ++ix)
     {
-      csVector3f c = GetPos(vertices, numVertices, ix, iy);
-      csVector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
-      csVector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
-      csVector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
-      csVector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
+      cs::Vector3f c = GetPos(vertices, numVertices, ix, iy);
+      cs::Vector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
+      cs::Vector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
+      cs::Vector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
+      cs::Vector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
 
 
-      csVector3f n0 = csVector3f::Cross(py, nx, n0);
-      csVector3f n1 = csVector3f::Cross(px, py, n1);
-      csVector3f n2 = csVector3f::Cross(ny, px, n2);
-      csVector3f n3 = csVector3f::Cross(nx, ny, n3);
+      cs::Vector3f n0 = cs::Vector3f::Cross(py, nx, n0);
+      cs::Vector3f n1 = cs::Vector3f::Cross(px, py, n1);
+      cs::Vector3f n2 = cs::Vector3f::Cross(ny, px, n2);
+      cs::Vector3f n3 = cs::Vector3f::Cross(nx, ny, n3);
 
       vertices[iy * numVertices + ix].normal = (n0 + n1 + n2 + n3).Normalize();
     }
@@ -203,17 +203,17 @@ void GenerateTangentsAndBiNormal(Vertex *vertices, int numVertices)
   {
     for (int ix=0; ix<numVertices; ++ix)
     {
-      csVector3f c = GetPos(vertices, numVertices, ix, iy);
-      csVector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
-      csVector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
-      csVector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
-      csVector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
+      cs::Vector3f c = GetPos(vertices, numVertices, ix, iy);
+      cs::Vector3f nx = GetPos(vertices, numVertices, ix-1, iy) - c;
+      cs::Vector3f px = GetPos(vertices, numVertices, ix+1, iy) - c;
+      cs::Vector3f ny = GetPos(vertices, numVertices, ix, iy-1) - c;
+      cs::Vector3f py = GetPos(vertices, numVertices, ix, iy+1) - c;
 
 
-      csVector3f dx0 = c - nx;
-      csVector3f dx1 = px - c;
-      csVector3f dy0 = c - ny;
-      csVector3f dy1 = py - c;
+      cs::Vector3f dx0 = c - nx;
+      cs::Vector3f dx1 = px - c;
+      cs::Vector3f dy0 = c - ny;
+      cs::Vector3f dy1 = py - c;
 
 
       vertices[iy * numVertices + ix].tangent = (dx0 + dx1).Normalize();
@@ -224,7 +224,7 @@ void GenerateTangentsAndBiNormal(Vertex *vertices, int numVertices)
 }
 }
 
-bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const csVector3f *normals)
+bool cs::TerrainMesh::Initialize(cs::iGraphics *gfx, unsigned numVertices, unsigned numQuads, float width, float length, const float *heights, const cs::Vector3f *normals)
 {
   if (!IsPowerOfTwo(numVertices - 1))
   {
@@ -253,13 +253,13 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
 
 
 
-  csVertexElement vertexElements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 3, offsetof(Vertex, pos), sizeof(Vertex), 0),
-    csVertexElement(eVST_Normal, eDT_Float, 3, offsetof(Vertex, normal), sizeof(Vertex), 0),
-    csVertexElement(eVST_Tangent, eDT_Float, 3, offsetof(Vertex, tangent), sizeof(Vertex), 0),
-    csVertexElement(eVST_BiNormal, eDT_Float, 3, offsetof(Vertex, binormal), sizeof(Vertex), 0),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, offsetof(Vertex, texCoord), sizeof(Vertex), 0),
-    csVertexElement()
+  cs::VertexElement vertexElements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 3, offsetof(Vertex, pos), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_Normal, cs::eDT_Float, 3, offsetof(Vertex, normal), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_Tangent, cs::eDT_Float, 3, offsetof(Vertex, tangent), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_BiNormal, cs::eDT_Float, 3, offsetof(Vertex, binormal), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, offsetof(Vertex, texCoord), sizeof(Vertex), 0),
+    cs::VertexElement()
   };
 
   m_vertexDeclaration = gfx->CreateVertexDeclaration(vertexElements);
@@ -272,7 +272,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   const float *hptr = heights;
   Vertex *vptr = vertices;
   unsigned idx = 0;
-  const csVector3f *normal = normals;
+  const cs::Vector3f *normal = normals;
   for (unsigned iy = 0; iy < numVertices; ++iy)
   {
     float fy = (float)iy / (float)(numVertices - 1);
@@ -280,11 +280,11 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
     {
       float fx = (float)ix / (float)(numVertices - 1);
 
-      vptr->pos = csVector3f(x0 + fx *width, y0 + fy *length, *hptr);
-      vptr->normal = normal ? *normal : csVector3f(0.0f, 0.0f, 1.0f);
-      vptr->tangent = csVector3f(1.0f, 0.0f, 0.0f);
-      vptr->binormal = csVector3f(0.0f, 1.0f, 0.0f);
-      vptr->texCoord = csVector2f(fx, fy);
+      vptr->pos = cs::Vector3f(x0 + fx *width, y0 + fy *length, *hptr);
+      vptr->normal = normal ? *normal : cs::Vector3f(0.0f, 0.0f, 1.0f);
+      vptr->tangent = cs::Vector3f(1.0f, 0.0f, 0.0f);
+      vptr->binormal = cs::Vector3f(0.0f, 1.0f, 0.0f);
+      vptr->texCoord = cs::Vector2f(fx, fy);
       m_boundingBox.Add(vptr->pos);
       if (normal)
       {
@@ -300,14 +300,14 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
 
   m_boundingBox.Finish();
 
-  m_vertices = gfx->CreateVertexBuffer(sizeof(Vertex) * numV, vertices, eBDM_Static);
+  m_vertices = gfx->CreateVertexBuffer(sizeof(Vertex) * numV, vertices, cs::eBDM_Static);
 
 
   m_numberORenderObjects = 1;
   m_renderObjects = new RenderObject[m_numberORenderObjects];
   m_renderObjects[0].numberOfQuads = numQuads * numQuads;
   m_renderObjects[0].quads = new Quad*[m_renderObjects[0].numberOfQuads];
-  m_renderObjects[0].indexBuffer = gfx->CreateIndexBuffer((numVertices - 1) * (numVertices - 1) * 6 * sizeof(unsigned), 0, eBDM_Static);
+  m_renderObjects[0].indexBuffer = gfx->CreateIndexBuffer((numVertices - 1) * (numVertices - 1) * 6 * sizeof(unsigned), 0, cs::eBDM_Static);
   m_renderObjects[0].numberOfIndices = 0;
   m_renderObjects[0].dirty = true;
 
@@ -341,8 +341,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       unsigned v1 = v0 + m_quadSize * m_scanline;
       lptr->pos0 = vertices[v0].pos;
       lptr->pos1 = vertices[v1].pos;
-      lptr->min = csVector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
-      lptr->max = csVector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
+      lptr->min = cs::Vector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = cs::Vector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
       lptr->quad0 = 0;
       lptr->quad1 = 0;
       if (j > 0)
@@ -363,8 +363,8 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
       unsigned h1 = h0 + m_quadSize;
       lptr->pos0 = vertices[h0].pos;
       lptr->pos1 = vertices[h1].pos;
-      lptr->min = csVector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
-      lptr->max = csVector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
+      lptr->min = cs::Vector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = cs::Vector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
       if (j > 0)
       {
         lptr->quad0 = &m_quads[(j - 1) * numQuads + i];
@@ -383,7 +383,7 @@ bool csTerrainMesh::Initialize(iGraphics *gfx, unsigned numVertices, unsigned nu
   return true;
 };
 
-void csTerrainMesh::Update(const csVector3f &referencePoint)
+void cs::TerrainMesh::Update(const cs::Vector3f &referencePoint)
 {
   // update the lines
   bool changed = false;
@@ -404,9 +404,9 @@ void csTerrainMesh::Update(const csVector3f &referencePoint)
   }
 }
 
-bool csTerrainMesh::UpdateLine(Line &line, const csVector3f &referencePoint)
+bool cs::TerrainMesh::UpdateLine(Line &line, const cs::Vector3f &referencePoint)
 {
-  csVector3f refOnLine = referencePoint;
+  cs::Vector3f refOnLine = referencePoint;
   if (refOnLine.x < line.min.x)
   {
     refOnLine.x = line.min.x;
@@ -433,7 +433,7 @@ bool csTerrainMesh::UpdateLine(Line &line, const csVector3f &referencePoint)
   }
 
 
-  csVector3f r = csVector3f::Sub(referencePoint, refOnLine, r);
+  cs::Vector3f r = cs::Vector3f::Sub(referencePoint, refOnLine, r);
   float distance = r.Length();
 
   float f = distance / 25.0;
@@ -454,7 +454,7 @@ bool csTerrainMesh::UpdateLine(Line &line, const csVector3f &referencePoint)
   return true;
 }
 
-void csTerrainMesh::UpdateDirtyRenderObject(csTerrainMesh::RenderObject *renderObject)
+void cs::TerrainMesh::UpdateDirtyRenderObject(cs::TerrainMesh::RenderObject *renderObject)
 {
   if (!renderObject->dirty)
   {
@@ -482,7 +482,7 @@ void csTerrainMesh::UpdateDirtyRenderObject(csTerrainMesh::RenderObject *renderO
 }
 
 
-unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
+unsigned cs::TerrainMesh::UpdateDirtyQuad(cs::TerrainMesh::Quad *quad)
 {
   // get the min scale
   int min = quad->lineT->scale;
@@ -533,28 +533,28 @@ unsigned csTerrainMesh::UpdateDirtyQuad(csTerrainMesh::Quad *quad)
 }
 
 
-unsigned csTerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+unsigned cs::TerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
   return MakeIndices(innerScale, outerScale, m_scanline, 1, false, iptr, ic);
 }
 
-unsigned csTerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+unsigned cs::TerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
   return MakeIndices(innerScale, outerScale, -1, m_scanline, false, iptr, ic);
 }
 
-unsigned csTerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+unsigned cs::TerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
   return MakeIndices(innerScale, outerScale, -m_scanline, -1, false, iptr, ic);
 }
 
-unsigned csTerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
+unsigned cs::TerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
   return MakeIndices(innerScale, outerScale, 1, -m_scanline, false, iptr, ic);
 }
 
 
-unsigned csTerrainMesh::MakeIndices(unsigned innerScale, unsigned outerScale, int majorStep, int minorStep, bool invert, unsigned *iptr, unsigned ic) const
+unsigned cs::TerrainMesh::MakeIndices(unsigned innerScale, unsigned outerScale, int majorStep, int minorStep, bool invert, unsigned *iptr, unsigned ic) const
 {
   int innerMajorStep = innerScale * majorStep;
   int innerMinorStep = innerScale * minorStep;

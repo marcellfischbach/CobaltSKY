@@ -3,18 +3,18 @@
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csresourcemanager.hh>
 
-csAssetCSFLoader::csAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::AssetCSFLoader::AssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
-csAssetCSFLoader::~csAssetCSFLoader()
+cs::AssetCSFLoader::~AssetCSFLoader()
 {
 
 }
 
-bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::AssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -27,7 +27,7 @@ bool csAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &l
 }
 
 
-const cs::Class *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::AssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;
@@ -52,10 +52,10 @@ const cs::Class *csAssetCSFLoader::EvalClass(const csfEntry *entry, const csReso
     return nullptr;
   }
 
-  return csResourceManager::Get()->EvalClass(firstChild, locator);
+  return cs::ResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
-csResourceWrapper *csAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::AssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   const csfEntry *assetEntry = entry;
@@ -80,5 +80,5 @@ csResourceWrapper *csAssetCSFLoader::Load(const csfEntry *entry, const csResourc
     return nullptr;
   }
 
-  return csResourceManager::Get()->Load(firstChild, locator);
+  return cs::ResourceManager::Get()->Load(firstChild, locator);
 }

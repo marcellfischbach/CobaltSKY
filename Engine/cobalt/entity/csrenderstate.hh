@@ -6,36 +6,41 @@
 #include <cobalt/csenums.hh>
 #include <cobalt/entity/csrenderstate.refl.hh>
 
-struct iGraphics;
 /**
 * \ingroup entity
 */
 
+namespace cs
+{
+
+struct iGraphics;
+
 CS_CLASS()
-class CSE_API csRenderState : public CS_SUPER(csSpatialState)
+class CSE_API RenderState : public CS_SUPER(cs::SpatialState)
 {
   CS_CLASS_GEN;
 public:
-  csRenderState();
-  virtual ~csRenderState();
+  RenderState();
+  virtual ~RenderState();
 
   void SetFadeOut(float start, float end);
 
-  void SetRenderQueue (csRenderQueue queue);
-  csRenderQueue GetRenderQueue () const;
+  void SetRenderQueue(cs::eRenderQueue queue);
+  cs::eRenderQueue GetRenderQueue() const;
 
-  void SetShadingMode (csShadingMode shadingMode);
-  csShadingMode GetShadingMode() const;
+  void SetShadingMode(cs::eShadingMode shadingMode);
+  cs::eShadingMode GetShadingMode() const;
 
-  virtual unsigned GetNumberOfRenderCalls() const { return 0;  }
+  virtual unsigned GetNumberOfRenderCalls() const { return 0; }
   virtual unsigned GetNumberOfTotalTrigons() const { return 0; }
 
-  virtual void Render(iGraphics *graphics, csRenderPass pass) const;
+  virtual void Render(cs::iGraphics * graphics, cs::eRenderPass pass) const;
 
 private:
   float m_renderStartFade;
   float m_renderEndFade;
-  csRenderQueue m_queue;
-  csShadingMode m_shadingMode;
+  cs::eRenderQueue m_queue;
+  cs::eShadingMode m_shadingMode;
 };
 
+}

@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-PreviewCameraOrbitHandler::PreviewCameraOrbitHandler(csCamera *camera)
+PreviewCameraOrbitHandler::PreviewCameraOrbitHandler(cs::Camera *camera)
 {
   CS_SET(m_camera, camera);
   UpdateCamera();
@@ -77,18 +77,18 @@ void PreviewCameraOrbitHandler::wheelEvent(QWheelEvent *event)
 
 void PreviewCameraOrbitHandler::UpdateCamera()
 {
-  csMatrix4f M, rH, rV;
+  cs::Matrix4f M, rH, rV;
 
 
   rH.SetRotationZ(m_rotH);
   rV.SetRotationX(m_rotV);
-  csMatrix4f::Mult(rH, rV, M);
+  cs::Matrix4f::Mult(rH, rV, M);
 
 
-  csVector3f p(0.0f, 0.0f, 0.0f);
-  csVector3f y;
-  csVector3f e = csVector3f::MulAdd(p, M.GetYAxis(y), m_cameraDistance, e);
-  csVector3f u(0.0f, 0.0f, 1.0f);
+  cs::Vector3f p(0.0f, 0.0f, 0.0f);
+  cs::Vector3f y;
+  cs::Vector3f e = cs::Vector3f::MulAdd(p, M.GetYAxis(y), m_cameraDistance, e);
+  cs::Vector3f u(0.0f, 0.0f, 1.0f);
 
   m_camera->SetEye(e);
   m_camera->SetSpot(p);

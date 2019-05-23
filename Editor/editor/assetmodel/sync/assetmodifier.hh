@@ -2,7 +2,12 @@
 #pragma once
 
 #include <editor/editorexport.hh>
-class csResourceLocator;
+
+namespace cs
+{
+class ResourceLocator;
+}
+
 class csfEntry;
 
 namespace asset::model
@@ -13,11 +18,11 @@ namespace asset::model
   public:
     AssetModifier(asset::model::Asset *asset);
 
-    void ReplaceLocator(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
-    void ClearLocator(const csResourceLocator &locator);
+    void ReplaceLocator(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
+    void ClearLocator(const cs::ResourceLocator &locator);
 
   private:
-    void ReplaceLocator(csfEntry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
+    void ReplaceLocator(csfEntry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
     asset::model::Asset *m_asset;
   };
 }

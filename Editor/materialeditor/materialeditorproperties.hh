@@ -11,10 +11,15 @@ class QDoubleSpinBox;
 class QFrame;
 class QGridLayout;
 class AssetResourceWidget;
-class csMaterialWrapper;
-class csResourceLocator;
 class Color4fLineEdit;
 class Vector4fLineEdit;
+
+namespace cs
+{
+class MaterialWrapper;
+class ResourceLocator;
+}
+
 class MATERIALEDITOR_API MaterialEditorProperties : public QWidget
 {
   Q_OBJECT;
@@ -22,17 +27,17 @@ public:
   MaterialEditorProperties();
   virtual ~MaterialEditorProperties();
 
-  void SetMaterial(csMaterialWrapper *material);
+  void SetMaterial(cs::MaterialWrapper *material);
 
   void AttributeChanged(const std::string &id, const std::string &name);
 
 private slots:
-  void Vector4fChanged(const csVector4f &);
-  void Color4fChanged(const csColor4f &);
-void MaterialDefChanged(const csResourceLocator &locator);
+  void Vector4fChanged(const cs::Vector4f &);
+  void Color4fChanged(const cs::Color4f &);
+void MaterialDefChanged(const cs::ResourceLocator &locator);
 void CheckBoxChanged(int);
 void DoubleSpinBoxChanged(double);
-void TextureResourceChanged (const csResourceLocator &locator);
+void TextureResourceChanged (const cs::ResourceLocator &locator);
 
 private:
   void InitGUI();
@@ -40,7 +45,7 @@ private:
   void CleanUp();
   void UpdateMaterialValues();
   AssetResourceWidget *m_materialDefWidget = 0;
-  csMaterialWrapper *m_material = 0;
+  cs::MaterialWrapper *m_material = 0;
 
   QFrame *m_frame;
   QGridLayout *m_frameLayout;

@@ -24,7 +24,7 @@ ShaderGraphEditorShaderGraphProperties::~ShaderGraphEditorShaderGraphProperties(
 }
 
 
-void ShaderGraphEditorShaderGraphProperties::SetShaderGraph(csSGShaderGraph *shaderGraph)
+void ShaderGraphEditorShaderGraphProperties::SetShaderGraph(cs::SGShaderGraph *shaderGraph)
 {
   CS_SET(m_shaderGraph, shaderGraph);
 
@@ -78,7 +78,7 @@ void ShaderGraphEditorShaderGraphProperties::on_sbAlphaThreshold_valueChanged(do
   }
   m_shaderGraph->SetDiscardAlpha(
     (float)m_gui.sbAlphaThreshold->value(),
-    (csCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
+    (cs::eCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
   );
 
 }
@@ -92,7 +92,7 @@ void ShaderGraphEditorShaderGraphProperties::on_cbAlphaCompareMode_currentIndexC
 
   m_shaderGraph->SetDiscardAlpha(
     (float)m_gui.sbAlphaThreshold->value(),
-    (csCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
+    (cs::eCompareMode)m_gui.cbAlphaCompareMode->currentIndex()
   );
 }
 

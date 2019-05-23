@@ -5,26 +5,26 @@
 
 
 
-csLightState::csLightState()
-  : csSpatialState()
+cs::LightState::LightState()
+  : cs::SpatialState()
   , m_light(0)
 {
 
 }
 
-csLightState::~csLightState()
+cs::LightState::~LightState()
 {
 
 }
 
 
-void csLightState::SetLight(csLight *light)
+void cs::LightState::SetLight(cs::Light *light)
 {
   CS_SET(m_light, light);
 }
 
 
-void csLightState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::LightState::PrivScan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   if (m_light)
   {
@@ -32,15 +32,15 @@ void csLightState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan
   }
 }
 
-void csLightState::FillBoundingBox(csBoundingBox &bbox)
+void cs::LightState::FillBoundingBox(cs::BoundingBox &bbox)
 {
   if (m_light)
   {
     switch (m_light->GetLightType())
     {
-    case eLT_DirectionalLight:
-      bbox.Add(csVector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX));
-      bbox.Add(csVector3f(FLT_MAX, FLT_MAX, FLT_MAX));
+    case cs::eLT_DirectionalLight:
+      bbox.Add(cs::Vector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX));
+      bbox.Add(cs::Vector3f(FLT_MAX, FLT_MAX, FLT_MAX));
       break;
     }
   }

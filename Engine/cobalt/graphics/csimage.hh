@@ -9,66 +9,69 @@
 #include <vector>
 #include <cobalt/graphics/csimage.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS();
-class CSE_API csImage : public CS_SUPER(cs::Object)
+class CSE_API Image : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  csImage();
-  virtual ~csImage();
+  Image();
+  virtual ~Image();
 
 
-  void SetData(csSize size, const void *data);
-  const void *GetData(csUInt16 level = 0) const;
+  void SetData(csSize size, const void* data);
+  const void* GetData(csUInt16 level = 0) const;
 
   void SetWidth(csUInt16 width);
   void SetHeight(csUInt16 height);
   void SetDepth(csUInt16 depth);
-  void SetPixelFormat(csPixelFormat pixelFormat);
+  void SetPixelFormat(cs::ePixelFormat pixelFormat);
 
   csUInt16 GetWidth(csUInt16 level = 0) const;
   csUInt16 GetHeight(csUInt16 level = 0) const;
   csUInt16 GetDepth(csUInt16 level = 0) const;
   csUInt8 GetNumberOfLevels() const;
-  csPixelFormat GetPixelFormat() const;
+  cs::ePixelFormat GetPixelFormat() const;
   csUInt32 GetSize(csUInt16 level = 0) const;
 
   bool GenerateMipMaps(bool normal);
-  
+
 private:
   void Delete();
-  csUInt32 GetBytesPerPixel(csPixelFormat format) const;
+  csUInt32 GetBytesPerPixel(cs::ePixelFormat format) const;
 
   csUInt16 m_width;
   csUInt16 m_height;
   csUInt16 m_depth;
-  csPixelFormat m_pixelFormat;
+  cs::ePixelFormat m_pixelFormat;
 
   std::vector<csUInt8*> m_data;
 };
 
 CS_CLASS()
-class CSE_API csImageWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API ImageWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csImage, csImageWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::Image, ImageWrapper, cs::ResourceWrapper);
 };
 
+}
 
-CS_FORCEINLINE void csImage::SetPixelFormat(csPixelFormat pixelFormat)
+CS_FORCEINLINE void cs::Image::SetPixelFormat(cs::ePixelFormat pixelFormat)
 {
   m_pixelFormat = pixelFormat;
 }
 
 
-CS_FORCEINLINE csPixelFormat csImage::GetPixelFormat() const
+CS_FORCEINLINE cs::ePixelFormat cs::Image::GetPixelFormat() const
 {
   return m_pixelFormat;
 }
 
-CS_FORCEINLINE csUInt8 csImage::GetNumberOfLevels() const
+CS_FORCEINLINE csUInt8 cs::Image::GetNumberOfLevels() const
 {
   return (csUInt8)m_data.size();
 }

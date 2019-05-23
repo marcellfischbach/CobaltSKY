@@ -8,16 +8,16 @@
 class AssetDescriptor
 {
 public:
-  AssetDescriptor(const csResourceLocator &locator = csResourceLocator(), const std::string &assetType = std::string(""));
+  AssetDescriptor(const cs::ResourceLocator &locator = cs::ResourceLocator(), const std::string &assetType = std::string(""));
 
-  bool Renamed(const csResourceLocator &from, const csResourceLocator &to);
+  bool Renamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to);
 
-  const csResourceLocator &GetLocator() const;
+  const cs::ResourceLocator &GetLocator() const;
   const std::string &GetAssetType() const;
 
   bool operator<(const AssetDescriptor &other) const;
   bool operator==(const AssetDescriptor &other) const;
 private:
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
   std::string m_assetType;
 };

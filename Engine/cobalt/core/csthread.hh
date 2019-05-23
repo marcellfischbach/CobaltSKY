@@ -5,15 +5,19 @@
 
 #include <cobalt/core/csthread.refl.hh>
 
-struct csThreadPriv;
+namespace cs
+{
+
+
+struct ThreadPriv;
 CS_CLASS();
-class CSE_API csThread : public CS_SUPER(cs::Object)
+class CSE_API Thread : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  csThread();
-  virtual ~csThread();
+  Thread();
+  virtual ~Thread();
 
   void Start();
   void Stop();
@@ -25,5 +29,8 @@ public:
 protected:
   bool m_running;
 
-  csThreadPriv *m_priv;
+  cs::ThreadPriv* m_priv;
 };
+
+}
+

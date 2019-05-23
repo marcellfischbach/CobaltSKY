@@ -7,14 +7,20 @@
 
 #define CS_MUL_NAME "Math/Mul"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGMul : public CS_SUPER(csSGNode)
+class CSE_API SGMul : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGMul();
-  virtual ~csSGMul() { }
+  SGMul();
+  virtual ~SGMul() { }
 
   virtual bool Validate();
 
 };
+
+}
+

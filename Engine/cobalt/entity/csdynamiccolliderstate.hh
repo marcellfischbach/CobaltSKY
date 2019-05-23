@@ -8,20 +8,23 @@
 
 
 
+
+namespace cs
+{
 struct iPhysicsTriggerCollider;
 struct iPhysicsDynamicCollider;
-class csDynamicColliderStateTransformationCallback;
+class DynamicColliderStateTransformationCallback;
 
 CS_CLASS()
-class CSE_API csDynamicColliderState : public CS_SUPER(csBaseColliderState)
+class CSE_API DynamicColliderState : public CS_SUPER(cs::BaseColliderState)
 {
   CS_CLASS_GEN;
 public:
-  csDynamicColliderState();
-  virtual ~csDynamicColliderState();
+  DynamicColliderState();
+  virtual ~DynamicColliderState();
 
-  iPhysicsDynamicCollider *GetDynamicCollider();
-  const iPhysicsDynamicCollider *GetDynamicCollider() const;
+  cs::iPhysicsDynamicCollider* GetDynamicCollider();
+  const cs::iPhysicsDynamicCollider* GetDynamicCollider() const;
 
   CS_FUNCTION()
     virtual void SetKinematic(bool kinematic);
@@ -35,44 +38,44 @@ public:
     virtual float GetMass() const;
 
   CS_FUNCTION()
-    virtual void SetInertia(const csVector3f &inertia);
+    virtual void SetInertia(const cs::Vector3f & inertia);
   CS_FUNCTION()
-    virtual const csVector3f &GetInertia() const;
+    virtual const cs::Vector3f& GetInertia() const;
 
   CS_FUNCTION()
     virtual void SetAutoInertia(bool autoInertia);
   CS_FUNCTION()
     virtual bool IsAutoInertia() const;
 
-  virtual void DynamicTransformationChanged(const csMatrix4f &transformation);
+  virtual void DynamicTransformationChanged(const cs::Matrix4f & transformation);
 
 protected:
-  virtual void OnAttachedToScene(csEntityScene *scene);
-  virtual void OnDetachedFromScene(csEntityScene *scene);
+  virtual void OnAttachedToScene(cs::EntityScene * scene);
+  virtual void OnDetachedFromScene(cs::EntityScene * scene);
 
 private:
   CS_PROPERTY()
     float m_mass;
 
   CS_PROPERTY()
-    csVector3f m_inertia;
+    cs::Vector3f m_inertia;
 
   CS_PROPERTY()
     bool m_autoInertia;
 
 
-  iPhysicsDynamicCollider *m_dynamicCollider;
-  csDynamicColliderStateTransformationCallback *m_callback;
+  cs::iPhysicsDynamicCollider* m_dynamicCollider;
+  cs::DynamicColliderStateTransformationCallback* m_callback;
 };
 
+}
 
-
-CS_FORCEINLINE iPhysicsDynamicCollider *csDynamicColliderState::GetDynamicCollider()
+CS_FORCEINLINE cs::iPhysicsDynamicCollider* cs::DynamicColliderState::GetDynamicCollider()
 {
   return m_dynamicCollider;
 }
 
-CS_FORCEINLINE const iPhysicsDynamicCollider *csDynamicColliderState::GetDynamicCollider() const
+CS_FORCEINLINE const cs::iPhysicsDynamicCollider* cs::DynamicColliderState::GetDynamicCollider() const
 {
   return m_dynamicCollider;
 }

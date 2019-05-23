@@ -8,12 +8,17 @@
 
 #define CS_DEFAULT_TEXTURE_COORDINATE_NAME "Texture/DefaultTextureCoordinate"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGDefaultTextureCoordinate : public CS_SUPER(csSGNode)
+class CSE_API SGDefaultTextureCoordinate : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGDefaultTextureCoordinate();
-  virtual ~csSGDefaultTextureCoordinate() { }
+  SGDefaultTextureCoordinate();
+  virtual ~SGDefaultTextureCoordinate() { }
 
 };
+
+}

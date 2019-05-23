@@ -39,14 +39,14 @@ Folder *Model::CreateFolder(const std::string &folderName)
   return new Folder(this, folderName);
 }
 
-VFSEntry *Model::CreateVFSEntry(const csVFS::Entry &entry)
+VFSEntry *Model::CreateVFSEntry(const cs::VFS::Entry &entry)
 {
   return new VFSEntry(this, entry);
 }
 
 
 
-bool Model::IsRootLocator(const csResourceLocator &locator) const
+bool Model::IsRootLocator(const cs::ResourceLocator &locator) const
 {
   auto it = m_entries.find(locator.AsAnonymous());
   if (it == m_entries.end())
@@ -77,7 +77,7 @@ bool Model::IsRootLocator(const csResourceLocator &locator) const
   return prio == lowestPrio;
 }
 
-bool Model::IsFinalLocator(const csResourceLocator &locator) const
+bool Model::IsFinalLocator(const cs::ResourceLocator &locator) const
 {
   auto it = m_entries.find(locator.AsAnonymous());
   if (it == m_entries.end())
@@ -126,7 +126,7 @@ const Entry *Model::GetFinalEntry(Entry *entry) const
   return GetFinalEntry(entry->GetResourceLocator());
 }
 
-Entry *Model::GetFinalEntry(const csResourceLocator &locator)
+Entry *Model::GetFinalEntry(const cs::ResourceLocator &locator)
 {
   return const_cast<Entry*>(
         static_cast<const Model*>(this)->GetFinalEntry(locator)
@@ -134,7 +134,7 @@ Entry *Model::GetFinalEntry(const csResourceLocator &locator)
 }
 
 
-const Entry *Model::GetFinalEntry(const csResourceLocator &locator) const
+const Entry *Model::GetFinalEntry(const cs::ResourceLocator &locator) const
 {
   auto entries = m_entries.find(locator.AsAnonymous());
   int prio = 0;
@@ -174,7 +174,7 @@ const Entry *Model::GetRootEntry(Entry *entry) const
   return GetRootEntry(entry->GetResourceLocator());
 }
 
-Entry *Model::GetRootEntry(const csResourceLocator &locator)
+Entry *Model::GetRootEntry(const cs::ResourceLocator &locator)
 {
   return const_cast<Entry*>(
         static_cast<const Model*>(this)->GetRootEntry(locator)
@@ -182,7 +182,7 @@ Entry *Model::GetRootEntry(const csResourceLocator &locator)
 }
 
 
-const Entry *Model::GetRootEntry(const csResourceLocator &locator) const
+const Entry *Model::GetRootEntry(const cs::ResourceLocator &locator) const
 {
   auto entries = m_entries.find(locator.AsAnonymous());
   int prio = INT_MAX;
@@ -205,7 +205,7 @@ const Entry *Model::GetRootEntry(const csResourceLocator &locator) const
   return rootEntry;
 }
 
-const Entry *Model::GetEntry(const csResourceLocator &entry) const
+const Entry *Model::GetEntry(const cs::ResourceLocator &entry) const
 {
 
   auto it = m_namedEntries.find(entry);
@@ -217,14 +217,14 @@ const Entry *Model::GetEntry(const csResourceLocator &entry) const
 }
 
 
-Entry *Model::GetEntry(const csResourceLocator &entry)
+Entry *Model::GetEntry(const cs::ResourceLocator &entry)
 {
   return const_cast<Entry*>(
         static_cast<const Model*>(this)->GetEntry(entry)
         );
 }
 
-const std::set<Entry*> &Model::GetAllEntriesFor(const csResourceLocator &locator) const
+const std::set<Entry*> &Model::GetAllEntriesFor(const cs::ResourceLocator &locator) const
 {
   auto it = m_entries.find(locator.AsAnonymous());
   if (it == m_entries.end())
@@ -234,9 +234,9 @@ const std::set<Entry*> &Model::GetAllEntriesFor(const csResourceLocator &locator
   return it->second;
 }
 
-std::set<Entry*> Model::GetReferencing(const csResourceLocator &locator) const
+std::set<Entry*> Model::GetReferencing(const cs::ResourceLocator &locator) const
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
   std::set<Entry*> entriesReferencingLocator;
   for (auto it = m_references.begin(); it != m_references.end(); ++it)
   {
@@ -248,9 +248,9 @@ std::set<Entry*> Model::GetReferencing(const csResourceLocator &locator) const
   return entriesReferencingLocator;
 }
 
-int Model::GetRootPriority(const csResourceLocator &locator) const
+int Model::GetRootPriority(const cs::ResourceLocator &locator) const
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
 
   auto it = m_entries.find(anonLocator);
   if (it == m_entries.end())
@@ -275,9 +275,9 @@ int Model::GetRootPriority(const csResourceLocator &locator) const
 }
 
 
-int Model::GetFinalPriority(const csResourceLocator &locator) const
+int Model::GetFinalPriority(const cs::ResourceLocator &locator) const
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
 
   auto it = m_entries.find(anonLocator);
   if (it == m_entries.end())
@@ -343,14 +343,14 @@ void Model::Remove(asset::model::Entry *parent, asset::model::Entry *child, Mode
     return;
   }
 
-  csResourceLocator oldLocator = child->GetResourceLocator();
+  cs::ResourceLocator oldLocator = child->GetResourceLocator();
   parent->RemoveChild(child);
 
   tr.OnCommit([this, parent, child, oldLocator]() { RemoveCommit(parent, child, oldLocator); });
   tr.OnRollback([this, parent, child]() { RemoveRollback(parent, child); });
 }
 
-void Model::RemoveCommit(asset::model::Entry *parent, asset::model::Entry *child, const csResourceLocator &oldLocator)
+void Model::RemoveCommit(asset::model::Entry *parent, asset::model::Entry *child, const cs::ResourceLocator &oldLocator)
 {
   emit EntryRemoved(parent, child);
   emit ResourceChanged(oldLocator.AsAnonymous());
@@ -376,7 +376,7 @@ public:
   struct Data
   {
     Entry *entry;
-    csResourceLocator locator;
+    cs::ResourceLocator locator;
     int priority;
     int rootPriority;
     int finalPriority;
@@ -411,8 +411,8 @@ void Model::Move(Entry *oldParent, Entry *newParent, Entry *child, ModelTransact
     return;
   }
   TreeCollector treeCollector(child);
-  csResourceLocator oldLocator = child->GetResourceLocator();
-  csResourceLocator newLocator = newParent->CreateResourceLocator(child->GetName());
+  cs::ResourceLocator oldLocator = child->GetResourceLocator();
+  cs::ResourceLocator newLocator = newParent->CreateResourceLocator(child->GetName());
 
   SecureFS secureFS(tr);
   try
@@ -478,7 +478,7 @@ void Model::Delete(Entry *entry, ModelTransaction &tr)
   }
 
 
-  csResourceLocator locator = entry->GetResourceLocator();
+  cs::ResourceLocator locator = entry->GetResourceLocator();
   tr.OnCommit([this, entry, locator]() { DeleteCommit(entry, locator); });
   entry->RemoveFromParent(tr);
 
@@ -495,7 +495,7 @@ void Model::Delete(Entry *entry, ModelTransaction &tr)
 
 }
 
-void Model::DeleteCommit(Entry *entry, const csResourceLocator &locator)
+void Model::DeleteCommit(Entry *entry, const cs::ResourceLocator &locator)
 {
   printf("DeleteCommit: %s <- %s\n",
          entry->GetName().c_str(),
@@ -505,7 +505,7 @@ void Model::DeleteCommit(Entry *entry, const csResourceLocator &locator)
     return;
   }
 
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
   emit EntryDeleted(entry, locator);
   if (RemoveFromEntryCache(entry))
   {
@@ -524,8 +524,8 @@ void Model::Rename(Entry *entry, const std::string &name, ModelTransaction &tr)
 
   TreeCollector treeCollector(entry);
 
-  csResourceLocator oldLocator = entry->GetResourceLocator();
-  csResourceLocator newLocator = entry->GetParent()->CreateResourceLocator(entry->FakeName(name));
+  cs::ResourceLocator oldLocator = entry->GetResourceLocator();
+  cs::ResourceLocator newLocator = entry->GetParent()->CreateResourceLocator(entry->FakeName(name));
 
   try
   {
@@ -551,8 +551,8 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
   // rename the cache
   for (TreeCollector::Data &data : treeCollector.m_entries)
   {
-    csResourceLocator oldLocator = data.locator;
-    csResourceLocator newLocator = data.entry->GetResourceLocator();
+    cs::ResourceLocator oldLocator = data.locator;
+    cs::ResourceLocator newLocator = data.entry->GetResourceLocator();
 
     RenameCache(data.entry, oldLocator, newLocator);
     emit EntryRenamed(data.entry, oldLocator, newLocator);
@@ -563,8 +563,8 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
   {
     if (data.priority <= data.rootPriority)
     {
-      csResourceLocator oldAnonLocator = data.locator.AsAnonymous();
-      csResourceLocator newLocator = data.entry->GetResourceLocator();
+      cs::ResourceLocator oldAnonLocator = data.locator.AsAnonymous();
+      cs::ResourceLocator newLocator = data.entry->GetResourceLocator();
       if (!data.entry->IsAttached() || !newLocator.IsValid())
       {
         emit ResourceRemoved(oldAnonLocator);
@@ -572,7 +572,7 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
       }
       else
       {
-        csResourceLocator newAnonLocator = newLocator.AsAnonymous();
+        cs::ResourceLocator newAnonLocator = newLocator.AsAnonymous();
         emit ResourceRenamed(oldAnonLocator, newAnonLocator);
         RenameReference(oldAnonLocator, newAnonLocator);
         AssetRenamedEvent evt (oldAnonLocator, newAnonLocator);
@@ -583,15 +583,15 @@ void Model::UpdateCollector(TreeCollector &treeCollector)
 
   for (TreeCollector::Data &data : treeCollector.m_entries)
   {
-    csResourceLocator oldLocator = data.locator;
-    csResourceLocator newLocator = data.entry->GetResourceLocator();
+    cs::ResourceLocator oldLocator = data.locator;
+    cs::ResourceLocator newLocator = data.entry->GetResourceLocator();
     emit ResourceChanged(oldLocator);
     emit ResourceChanged(newLocator);
   }
 
 }
 
-void Model::RenameCache(Entry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+void Model::RenameCache(Entry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
 {
   auto itNE = m_namedEntries.find(oldLocator);
   if (itNE != m_namedEntries.end())
@@ -630,7 +630,7 @@ void Model::InsertIntoEntryCache(Entry *entry)
     return;
   }
 
-  csResourceLocator locator = entry->GetResourceLocator();
+  cs::ResourceLocator locator = entry->GetResourceLocator();
   if (!locator.IsValid())
   {
     return;
@@ -648,7 +648,7 @@ bool Model::RemoveFromEntryCache(Entry *entry)
     return removedLastEntry;
   }
 
-  csResourceLocator locator = EvaluateEntryLocator(entry);
+  cs::ResourceLocator locator = EvaluateEntryLocator(entry);
   if (!locator.IsValid())
   {
     return removedLastEntry;
@@ -678,9 +678,9 @@ bool Model::RemoveFromEntryCache(Entry *entry)
 }
 
 
-void Model::RemoveReference(const csResourceLocator &locator)
+void Model::RemoveReference(const cs::ResourceLocator &locator)
 {
-  csResourceLocator anonLocator = locator.AsAnonymous();
+  cs::ResourceLocator anonLocator = locator.AsAnonymous();
   std::set<Entry*> referencingEntries = GetReferencing(anonLocator);
 
   for (Entry *entry : referencingEntries)
@@ -704,10 +704,10 @@ void Model::RemoveReference(const csResourceLocator &locator)
   }
 }
 
-void Model::RenameReference(const csResourceLocator &olLocator, const csResourceLocator &newLocator)
+void Model::RenameReference(const cs::ResourceLocator &olLocator, const cs::ResourceLocator &newLocator)
 {
-  csResourceLocator oldAnonLocator = olLocator.AsAnonymous();
-  csResourceLocator newAnonLocator = newLocator.AsAnonymous();
+  cs::ResourceLocator oldAnonLocator = olLocator.AsAnonymous();
+  cs::ResourceLocator newAnonLocator = newLocator.AsAnonymous();
   std::set<Entry*> referencingEntries = GetReferencing(oldAnonLocator);
 
   for (Entry *entry : referencingEntries)
@@ -732,9 +732,9 @@ void Model::RenameReference(const csResourceLocator &olLocator, const csResource
   }
 }
 
-csResourceLocator Model::EvaluateEntryLocator(const Entry *entry) const
+cs::ResourceLocator Model::EvaluateEntryLocator(const Entry *entry) const
 {
-  csResourceLocator locator = entry->GetResourceLocator();
+  cs::ResourceLocator locator = entry->GetResourceLocator();
   if (locator.IsValid())
   {
     return locator;
@@ -748,7 +748,7 @@ csResourceLocator Model::EvaluateEntryLocator(const Entry *entry) const
     }
   }
 
-  return csResourceLocator();
+  return cs::ResourceLocator();
 }
 
 
@@ -765,7 +765,7 @@ void Model::ClearReferences(Entry *entry)
   }
 }
 
-void Model::AddReference(Entry *entry, const csResourceLocator &reference)
+void Model::AddReference(Entry *entry, const cs::ResourceLocator &reference)
 {
   if (!entry)
   {

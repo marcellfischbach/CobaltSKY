@@ -7,19 +7,19 @@
 #include <cobalt/graphics/csmaterial.hh>
 #include <stddef.h>
 
-static iVertexDeclaration* create_particle_vertex_declaration(iGraphics *graphics)
+static cs::iVertexDeclaration* create_particle_vertex_declaration(cs::iGraphics *graphics)
 {
-  static iVertexDeclaration *result = 0;
+  static cs::iVertexDeclaration *result = 0;
   if (!result)
   {
 
-    csVertexElement elements[] = {
-      csVertexElement(eVST_Position, eDT_Float, 3, offsetof(csParticle::ParticleData, position), sizeof(csParticle::ParticleData), 0),
-      csVertexElement(eVST_ParticleSize, eDT_Float, 2, offsetof(csParticle::ParticleData, size), sizeof(csParticle::ParticleData), 0),
-      csVertexElement(eVST_ParticleRotation, eDT_Float, 1, offsetof(csParticle::ParticleData, rotation), sizeof(csParticle::ParticleData), 0),
-      csVertexElement(eVST_ParticleTimeToLive, eDT_Float, 1, offsetof(csParticle::ParticleData, timeToLive), sizeof(csParticle::ParticleData), 0),
-      csVertexElement(eVST_ParticleTextPage, eDT_Float, 3, offsetof(csParticle::ParticleData, textPage), sizeof(csParticle::ParticleData), 0),
-      csVertexElement()
+    cs::VertexElement elements[] = {
+      cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 3, offsetof(cs::Particle::ParticleData, position), sizeof(cs::Particle::ParticleData), 0),
+      cs::VertexElement(cs::eVST_ParticleSize, cs::eDT_Float, 2, offsetof(cs::Particle::ParticleData, size), sizeof(cs::Particle::ParticleData), 0),
+      cs::VertexElement(cs::eVST_ParticleRotation, cs::eDT_Float, 1, offsetof(cs::Particle::ParticleData, rotation), sizeof(cs::Particle::ParticleData), 0),
+      cs::VertexElement(cs::eVST_ParticleTimeToLive, cs::eDT_Float, 1, offsetof(cs::Particle::ParticleData, timeToLive), sizeof(cs::Particle::ParticleData), 0),
+      cs::VertexElement(cs::eVST_ParticleTextPage, cs::eDT_Float, 3, offsetof(cs::Particle::ParticleData, textPage), sizeof(cs::Particle::ParticleData), 0),
+      cs::VertexElement()
     };
 
     result = graphics->CreateVertexDeclaration(elements);
@@ -29,7 +29,7 @@ static iVertexDeclaration* create_particle_vertex_declaration(iGraphics *graphic
 }
 
 
-csParticle::csParticle()
+cs::Particle::Particle()
   : cs::Object()
   , m_buffer(0)
   , m_vertexDeclaration(0)
@@ -39,7 +39,7 @@ csParticle::csParticle()
 {
 }
 
-csParticle::~csParticle()
+cs::Particle::~Particle()
 {
   CS_RELEASE(m_buffer);
 
@@ -48,18 +48,18 @@ csParticle::~csParticle()
   m_vertexDeclaration = 0;
 }
 
-bool csParticle::Initialize(iGraphics *graphics, csSize numPartilces)
+bool cs::Particle::Initialize(cs::iGraphics *graphics, csSize numPartilces)
 {
   SetNumberOfParticles(numPartilces);
 
-  m_buffer = graphics->CreateVertexBuffer(numPartilces * sizeof(ParticleData), 0, eBDM_Static);
+  m_buffer = graphics->CreateVertexBuffer(numPartilces * sizeof(ParticleData), 0, cs::eBDM_Static);
   m_vertexDeclaration = create_particle_vertex_declaration(graphics);
 
 
   return true;
 }
 
-void csParticle::SetParticleData(unsigned numParticles, const csParticle::ParticleData *data)
+void cs::Particle::SetParticleData(unsigned numParticles, const cs::Particle::ParticleData *data)
 {
   if (m_buffer)
   {
@@ -67,17 +67,17 @@ void csParticle::SetParticleData(unsigned numParticles, const csParticle::Partic
   }
 }
 
-iVertexBuffer *csParticle::GetParticleBuffer()
+cs::iVertexBuffer *cs::Particle::GetParticleBuffer()
 {
   return m_buffer;
 }
 
-const iVertexBuffer *csParticle::GetParticleBuffer() const
+const cs::iVertexBuffer *cs::Particle::GetParticleBuffer() const
 {
   return m_buffer;
 }
 
-void csParticle::SetNumberOfParticles(csSize numParticles)
+void cs::Particle::SetNumberOfParticles(csSize numParticles)
 {
   m_numParticles = numParticles;
   if (m_numParticles < m_numRenderParticles)
@@ -86,56 +86,56 @@ void csParticle::SetNumberOfParticles(csSize numParticles)
   }
 }
 
-csSize csParticle::GetNumberOfParticles() const
+csSize cs::Particle::GetNumberOfParticles() const
 {
   return m_numParticles;
 }
 
-void csParticle::SetNumberOfRenderParticles(csSize numRenderParticles)
+void cs::Particle::SetNumberOfRenderParticles(csSize numRenderParticles)
 {
   m_numRenderParticles = numRenderParticles;
 }
 
-csSize csParticle::GetNumberOfRenderParticles() const
+csSize cs::Particle::GetNumberOfRenderParticles() const
 {
   return m_numRenderParticles;
 }
 
 
 
-void csParticle::Render(iGraphics *renderer, csRenderPass pass, csMaterial *material)
+void cs::Particle::Render(cs::iGraphics *renderer, cs::eRenderPass pass, cs::Material *material)
 {
   if (material->Bind(renderer, pass))
   {
     renderer->SetVertexBuffer(0, m_buffer);
     renderer->SetVertexDeclaration(m_vertexDeclaration);
 
-    renderer->Render(ePT_Points, (csUInt32)m_numRenderParticles);
+    renderer->Render(cs::ePT_Points, (csUInt32)m_numRenderParticles);
   }
 }
 
 
-bool csParticle::LockParticleData(bool readOnly)
+bool cs::Particle::LockParticleData(bool readOnly)
 {
   m_particleData = 0;
-  if (m_buffer->Lock(0, (void**)&m_particleData, readOnly ? eBAM_Read : eBAM_ReadWrite))
+  if (m_buffer->Lock(0, (void**)&m_particleData, readOnly ? cs::eBAM_Read : cs::eBAM_ReadWrite))
   {
     return true;
   }
   return false;
 }
 
-csParticle::ParticleData *csParticle::GetParticleData()
+cs::Particle::ParticleData *cs::Particle::GetParticleData()
 {
   return m_particleData;
 }
 
-const csParticle::ParticleData *csParticle::GetParticleData() const
+const cs::Particle::ParticleData *cs::Particle::GetParticleData() const
 {
   return m_particleData;
 }
 
-void csParticle::UnlockParticleData()
+void cs::Particle::UnlockParticleData()
 {
   if (m_particleData)
   {

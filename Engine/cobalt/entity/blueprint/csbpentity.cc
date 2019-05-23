@@ -4,12 +4,12 @@
 #include <cobalt/entity/csspatialstate.hh>
 #include <cobalt/core/property/cspropertysetter.hh>
 
-csBPEntity::csBPEntity()
+cs::BPEntity::BPEntity()
   : m_entityClass(0)
 {
 }
 
-csBPEntity::~csBPEntity()
+cs::BPEntity::~BPEntity()
 {
   for (auto prop : m_properties)
   {
@@ -24,28 +24,28 @@ csBPEntity::~csBPEntity()
   m_entityStates.clear();
 }
 
-void csBPEntity::SetEntityClass(const cs::Class *entityClass)
+void cs::BPEntity::SetEntityClass(const cs::Class *entityClass)
 {
   m_entityClass = entityClass;
 }
 
-const cs::Class *csBPEntity::GetEntityClass() const
+const cs::Class *cs::BPEntity::GetEntityClass() const
 {
   return m_entityClass;
 }
 
-void csBPEntity::AddProperty(csPropertySetter *property)
+void cs::BPEntity::AddProperty(cs::PropertySetter *property)
 {
   CS_ADDREF(property);
   m_properties.push_back(property);
 }
 
-void csBPEntity::AddEntityState(csBPEntityState *entityState)
+void cs::BPEntity::AddEntityState(cs::BPEntityState *entityState)
 {
   m_entityStates.push_back(entityState);
 }
 
-csBPEntityState* csBPEntity::GetEntityStateByID(unsigned id) const
+cs::BPEntityState* cs::BPEntity::GetEntityStateByID(unsigned id) const
 {
   for (auto state : m_entityStates)
   {
@@ -57,28 +57,28 @@ csBPEntityState* csBPEntity::GetEntityStateByID(unsigned id) const
   return 0;
 }
 
-csEntity *csBPEntity::CreateEntity() const
+cs::Entity *cs::BPEntity::CreateEntity() const
 {
   if (!m_entityClass)
   {
     return 0;
   }
-  csEntity *entity = m_entityClass->CreateInstance<csEntity>();
+  cs::Entity *entity = m_entityClass->CreateInstance<cs::Entity>();
   if (!entity)
   {
     return 0;
   }
 
-  for (csPropertySetter *prop : m_properties)
+  for (cs::PropertySetter *prop : m_properties)
   {
     prop->Apply(entity);
   }
 
 
-  std::map<unsigned, csEntityState*> entityStates;
-  for (csBPEntityState *stat : m_entityStates)
+  std::map<unsigned, cs::EntityState*> entityStates;
+  for (cs::BPEntityState *stat : m_entityStates)
   {
-    csEntityState *state = stat->CreateEntityState();
+    cs::EntityState *state = stat->CreateEntityState();
     if (state && stat->GetId())
     {
       entityStates[stat->GetId()] = state;
@@ -86,9 +86,9 @@ csEntity *csBPEntity::CreateEntity() const
 
     if (stat->GetParentId())
     {
-      csEntityState *parentState = entityStates[stat->GetParentId()];
-      csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
-      csSpatialState *spatialParentState = cs::QueryClass<csSpatialState>(parentState);
+      cs::EntityState *parentState = entityStates[stat->GetParentId()];
+      cs::SpatialState *spatialState = cs::QueryClass<cs::SpatialState>(state);
+      cs::SpatialState *spatialParentState = cs::QueryClass<cs::SpatialState>(parentState);
       if (spatialState && spatialParentState)
       {
         entity->AddState(spatialState, spatialParentState);
@@ -108,7 +108,7 @@ csEntity *csBPEntity::CreateEntity() const
         }
         else
         {
-          csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
+          cs::SpatialState *spatialState = cs::QueryClass<cs::SpatialState>(state);
           if (spatialState)
           {
             entity->SetRootState(spatialState);

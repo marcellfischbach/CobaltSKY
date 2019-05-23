@@ -6,37 +6,41 @@
 #include <set>
 #include <cobalt/graphics/cspostprocessor.refl.hh>
 
-class csPostProcess;
+
+namespace cs
+{
 struct iGraphics;
 struct iRenderTarget;
-class csTextureWrapper;
+class PostProcess;
+class TextureWrapper;
 
 CS_CLASS()
-class CSE_API csPostProcessor : public CS_SUPER(cs::Object)
+class CSE_API PostProcessor : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
 
 public:
-  csPostProcessor();
-  virtual ~csPostProcessor();
+  PostProcessor();
+  virtual ~PostProcessor();
 
-  void SetInput(csPostProcessOutput originOutput, csTextureWrapper *texture);
-  const csTextureWrapper *GetInput(csPostProcessOutput originOutput) const;
-  csTextureWrapper *GetInput(csPostProcessOutput originOutput);
+  void SetInput(cs::ePostProcessOutput originOutput, cs::TextureWrapper * texture);
+  const cs::TextureWrapper* GetInput(cs::ePostProcessOutput originOutput) const;
+  cs::TextureWrapper* GetInput(cs::ePostProcessOutput originOutput);
 
-  void SetFinalProcess(csPostProcess *postProcess);
-  bool BuildPostProcessing(iGraphics *graphics);
+  void SetFinalProcess(cs::PostProcess * postProcess);
+  bool BuildPostProcessing(cs::iGraphics * graphics);
 
-  void Render(iGraphics *graphics);
+  void Render(cs::iGraphics * graphics);
 
-  iRenderTarget *GetOutput();
+  cs::iRenderTarget* GetOutput();
 
 
 private:
-  void BuildSet(csPostProcess *process, std::set<csPostProcess*> &processes);
-  csPostProcess *m_finalProcess;
-  std::vector<csPostProcess*> m_processes;
-  csTextureWrapper *m_originInputs[ePPO_COUNT];
+  void BuildSet(cs::PostProcess * process, std::set<cs::PostProcess*> & processes);
+  cs::PostProcess* m_finalProcess;
+  std::vector<cs::PostProcess*> m_processes;
+  cs::TextureWrapper* m_originInputs[cs::ePPO_COUNT];
 };
 
+}

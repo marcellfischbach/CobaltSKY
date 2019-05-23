@@ -8,7 +8,10 @@ namespace asset::model
   class Asset;
 }
 
-struct cs::iObject;
+namespace cs
+{
+struct iObject;
+}
 struct iAssetEditorFactory;
 class EDITOR_API EditorFactoryManager
 {

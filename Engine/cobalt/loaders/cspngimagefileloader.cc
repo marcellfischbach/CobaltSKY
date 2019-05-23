@@ -6,19 +6,19 @@
 #include <csrefl/classregistry.hh>
 #include <png.h>
 
-csPNGImageFileLoader::csPNGImageFileLoader()
-  : iFileLoader()
+cs::PNGImageFileLoader::PNGImageFileLoader()
+  : cs::iFileLoader()
 {
 
 }
 
-csPNGImageFileLoader::~csPNGImageFileLoader()
+cs::PNGImageFileLoader::~PNGImageFileLoader()
 {
 
 }
 
 
-bool csPNGImageFileLoader::CanLoad(iFile *file, const csResourceLocator &locator) const
+bool cs::PNGImageFileLoader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
@@ -38,7 +38,7 @@ void read_data_from_ifile(png_structp png_ptr,
     return;
   }
 
-  iFile *file = static_cast<iFile*>(io);
+  cs::iFile *file = static_cast<cs::iFile*>(io);
   file->Read(outBytes, (long)byteCountToRead);
 }
 
@@ -52,20 +52,20 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
     return;
   }
 
-  csAssetInputStream *stream = static_cast<csAssetInputStream*>(io);
+  cs::AssetInputStream *stream = static_cast<cs::AssetInputStream*>(io);
   stream->Read(outBytes, (long)byteCountToRead);
 }
 }
 
-const cs::Class *csPNGImageFileLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *cs::PNGImageFileLoader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
-  return csImageWrapper::GetStaticClass();
+  return cs::ImageWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocator &locator) const
+cs::ResourceWrapper *cs::PNGImageFileLoader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
@@ -109,24 +109,24 @@ csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocat
 
   csUInt8 *buffer = 0;
   csSize bufferSize = 0;
-  csPixelFormat pixelFormat = ePF_R8G8B8A8U;
+  cs::ePixelFormat pixelFormat = cs::ePF_R8G8B8A8U;
   switch (colorType)
   {
   case PNG_COLOR_TYPE_RGB:
     bufferSize = width * height * 3;
-    pixelFormat = ePF_R8G8B8U;
+    pixelFormat = cs::ePF_R8G8B8U;
     break;
   case PNG_COLOR_TYPE_RGBA:
     bufferSize = width * height * 4;
-    pixelFormat = ePF_R8G8B8A8U;
+    pixelFormat = cs::ePF_R8G8B8A8U;
     break;
   case PNG_COLOR_TYPE_GRAY:
     bufferSize = width * height * 1;
-    pixelFormat = ePF_R8U;
+    pixelFormat = cs::ePF_R8U;
     break;
   case PNG_COLOR_TYPE_GA:
     bufferSize = width * height * 2;
-    pixelFormat = ePF_R8G8U;
+    pixelFormat = cs::ePF_R8G8U;
     break;
   default:
     break;
@@ -140,7 +140,7 @@ csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocat
     ptr += bytesPerRow;
   }
 
-  csImage *image = new csImage();
+  cs::Image *image = new cs::Image();
   image->SetWidth(width);
   image->SetHeight(height);
   image->SetDepth(1);
@@ -148,7 +148,7 @@ csResourceWrapper *csPNGImageFileLoader::Load(iFile *file, const csResourceLocat
   image->SetData(bufferSize, buffer);
   delete[] buffer;
 
-  return new csImageWrapper(image);
+  return new cs::ImageWrapper(image);
 }
 
 

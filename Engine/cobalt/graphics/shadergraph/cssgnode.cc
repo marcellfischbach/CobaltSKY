@@ -4,12 +4,12 @@
 
 
 
-csSGNode::csSGNode()
+cs::SGNode::SGNode()
   : cs::Object()
 {
 }
 
-csSGNode::~csSGNode()
+cs::SGNode::~SGNode()
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -25,13 +25,13 @@ csSGNode::~csSGNode()
 
 }
 
-csSGNode *csSGNode::Copy(csSGNode *node) const
+cs::SGNode *cs::SGNode::Copy(cs::SGNode *node) const
 {
   node->m_name = m_name;
   return node;
 }
 
-void csSGNode::AddInput(csSGInput *input)
+void cs::SGNode::AddInput(cs::SGInput *input)
 {
   if (input)
   {
@@ -41,12 +41,12 @@ void csSGNode::AddInput(csSGInput *input)
   }
 }
 
-csSize csSGNode::GetNumberOfInputs() const
+csSize cs::SGNode::GetNumberOfInputs() const
 {
   return m_inputs.size();
 }
 
-csSGInput *csSGNode::GetInput(csSize idx) const
+cs::SGInput *cs::SGNode::GetInput(csSize idx) const
 {
   if (idx >= m_inputs.size())
   {
@@ -55,11 +55,11 @@ csSGInput *csSGNode::GetInput(csSize idx) const
   return m_inputs[idx];
 }
 
-csSGInput *csSGNode::GetInput(const std::string &name) const
+cs::SGInput *cs::SGNode::GetInput(const std::string &name) const
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
-    csSGInput *input = m_inputs[i];
+    cs::SGInput *input = m_inputs[i];
     if (name == input->GetName())
     {
       return input;
@@ -68,29 +68,29 @@ csSGInput *csSGNode::GetInput(const std::string &name) const
   return 0;
 }
 
-csSGDataType csSGNode::GetInputDataType(csSize idx) const
+cs::eSGDataType cs::SGNode::GetInputDataType(csSize idx) const
 {
-  csSGInput *input = GetInput(idx);
+  cs::SGInput *input = GetInput(idx);
   if (!input)
   {
-    return eSGDT_Inval;
+    return cs::eSGDT_Inval;
   }
   return input->GetDataType();
 }
 
-csSGDataType csSGNode::GetInputDataType(const std::string &name) const
+cs::eSGDataType cs::SGNode::GetInputDataType(const std::string &name) const
 {
-  csSGInput *input = GetInput(name);
+  cs::SGInput *input = GetInput(name);
   if (!input)
   {
-    return eSGDT_Inval;
+    return cs::eSGDT_Inval;
   }
   return input->GetDataType();
 }
 
-void csSGNode::SetOutputDataType(csSize idx, csSGDataType dataType)
+void cs::SGNode::SetOutputDataType(csSize idx, cs::eSGDataType dataType)
 {
-  csSGOutput *output = GetOutput(idx);
+  cs::SGOutput *output = GetOutput(idx);
   if (output)
   {
     output->SetDataType(dataType);
@@ -98,9 +98,9 @@ void csSGNode::SetOutputDataType(csSize idx, csSGDataType dataType)
 }
 
 
-void csSGNode::SetOutputDataType(const std::string &name, csSGDataType dataType)
+void cs::SGNode::SetOutputDataType(const std::string &name, cs::eSGDataType dataType)
 {
-  csSGOutput *output = GetOutput(name);
+  cs::SGOutput *output = GetOutput(name);
   if (output)
   {
     output->SetDataType(dataType);
@@ -108,14 +108,14 @@ void csSGNode::SetOutputDataType(const std::string &name, csSGDataType dataType)
 }
 
 
-void csSGNode::SetInput(int inputIdx, csSGNode *node, int outputIdx)
+void cs::SGNode::SetInput(int inputIdx, cs::SGNode *node, int outputIdx)
 {
-  csSGInput *input = GetInput(inputIdx);
+  cs::SGInput *input = GetInput(inputIdx);
   if (!input)
   {
     return;
   }
-  csSGOutput *output = 0;
+  cs::SGOutput *output = 0;
   if (node)
   {
     output = node->GetOutput(outputIdx);
@@ -124,14 +124,14 @@ void csSGNode::SetInput(int inputIdx, csSGNode *node, int outputIdx)
   input->SetInput(output);
 }
 
-void csSGNode::SetInput(const std::string &inputName, csSGNode *node, int outputIdx)
+void cs::SGNode::SetInput(const std::string &inputName, cs::SGNode *node, int outputIdx)
 {
-  csSGInput *input = GetInput(inputName);
+  cs::SGInput *input = GetInput(inputName);
   if (!input)
   {
     return;
   }
-  csSGOutput *output = 0;
+  cs::SGOutput *output = 0;
   if (node)
   {
     output = node->GetOutput(outputIdx);
@@ -141,14 +141,14 @@ void csSGNode::SetInput(const std::string &inputName, csSGNode *node, int output
 }
 
 
-void csSGNode::SetInput(int inputIdx, csSGNode *node, const std::string &outputName)
+void cs::SGNode::SetInput(int inputIdx, cs::SGNode *node, const std::string &outputName)
 {
-  csSGInput *input = GetInput(inputIdx);
+  cs::SGInput *input = GetInput(inputIdx);
   if (!input)
   {
     return;
   }
-  csSGOutput *output = 0;
+  cs::SGOutput *output = 0;
   if (node)
   {
     output = node->GetOutput(outputName);
@@ -157,14 +157,14 @@ void csSGNode::SetInput(int inputIdx, csSGNode *node, const std::string &outputN
   input->SetInput(output);
 }
 
-void csSGNode::SetInput(const std::string &inputName, csSGNode *node, const std::string &outputName)
+void cs::SGNode::SetInput(const std::string &inputName, cs::SGNode *node, const std::string &outputName)
 {
-  csSGInput *input = GetInput(inputName);
+  cs::SGInput *input = GetInput(inputName);
   if (!input)
   {
     return;
   }
-  csSGOutput *output = 0;
+  cs::SGOutput *output = 0;
   if (node)
   {
     output = node->GetOutput(outputName);
@@ -173,9 +173,9 @@ void csSGNode::SetInput(const std::string &inputName, csSGNode *node, const std:
   input->SetInput(output);
 }
 
-void csSGNode::SetInput(int idx, float constFloat)
+void cs::SGNode::SetInput(int idx, float constFloat)
 {
-  csSGInput *input = GetInput(idx);
+  cs::SGInput *input = GetInput(idx);
   if (!input)
   {
     return;
@@ -184,9 +184,9 @@ void csSGNode::SetInput(int idx, float constFloat)
   input->SetConst(constFloat);
 }
 
-void csSGNode::SetInput(const std::string &inputName, float constFloat)
+void cs::SGNode::SetInput(const std::string &inputName, float constFloat)
 {
-  csSGInput *input = GetInput(inputName);
+  cs::SGInput *input = GetInput(inputName);
   if (!input)
   {
     return;
@@ -195,19 +195,19 @@ void csSGNode::SetInput(const std::string &inputName, float constFloat)
   input->SetConst(constFloat);
 }
 
-csSGNode *csSGNode::GetInputNode(csSize idx)
+cs::SGNode *cs::SGNode::GetInputNode(csSize idx)
 {
-  csSGInput *input = GetInput(idx);
+  cs::SGInput *input = GetInput(idx);
   return (input ? input->GetInputNode() : 0);
 }
 
-csSGNode *csSGNode::GetInputNode(const std::string &name)
+cs::SGNode *cs::SGNode::GetInputNode(const std::string &name)
 {
-  csSGInput *input = GetInput(name);
+  cs::SGInput *input = GetInput(name);
   return input ? input->GetInputNode() : 0;
 }
 
-void csSGNode::AddOutput(csSGOutput *output)
+void cs::SGNode::AddOutput(cs::SGOutput *output)
 {
   if (output)
   {
@@ -217,12 +217,12 @@ void csSGNode::AddOutput(csSGOutput *output)
   }
 }
 
-csSize csSGNode::GetNumberOfOutputs() const
+csSize cs::SGNode::GetNumberOfOutputs() const
 {
   return m_outputs.size();
 }
 
-csSGOutput *csSGNode::GetOutput(csSize idx)
+cs::SGOutput *cs::SGNode::GetOutput(csSize idx)
 {
   if (idx >= m_outputs.size())
   {
@@ -231,11 +231,11 @@ csSGOutput *csSGNode::GetOutput(csSize idx)
   return m_outputs[idx];
 }
 
-csSGOutput *csSGNode::GetOutput(const std::string &name)
+cs::SGOutput *cs::SGNode::GetOutput(const std::string &name)
 {
   for (size_t i = 0, in = m_outputs.size(); i < in; ++i)
   {
-    csSGOutput *output = m_outputs[i];
+    cs::SGOutput *output = m_outputs[i];
     if (name == output->GetName())
     {
       return output;
@@ -244,94 +244,94 @@ csSGOutput *csSGNode::GetOutput(const std::string &name)
   return 0;
 }
 
-bool csSGNode::NotInvalid(csSGDataType dt) const
+bool cs::SGNode::NotInvalid(cs::eSGDataType dt) const
 {
-  return dt != eSGDT_Inval;
+  return dt != cs::eSGDT_Inval;
 }
 
-bool csSGNode::ScalarType(csSGDataType dt) const
+bool cs::SGNode::ScalarType(cs::eSGDataType dt) const
 {
-  return (dt & eSGDT_ScalarTypes) == dt;
+  return (dt & cs::eSGDT_ScalarTypes) == dt;
 }
 
-bool csSGNode::FloatType(csSGDataType dt) const
+bool cs::SGNode::FloatType(cs::eSGDataType dt) const
 {
-  return (dt & eSGDT_FloatTypes) == dt;
+  return (dt & cs::eSGDT_FloatTypes) == dt;
 }
 
-bool csSGNode::IntType(csSGDataType dt) const
+bool cs::SGNode::IntType(cs::eSGDataType dt) const
 {
-  return (dt & eSGDT_IntTypes) == dt;
+  return (dt & cs::eSGDT_IntTypes) == dt;
 }
 
-bool csSGNode::NotInvalid(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::NotInvalid(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return NotInvalid(dtA) && NotInvalid(dtB);
 }
 
-bool csSGNode::ScalarType(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::ScalarType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return ScalarType(dtA) && ScalarType(dtB);
 }
 
 
-bool csSGNode::FloatType(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::FloatType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return FloatType(dtA) && FloatType(dtB);
 }
 
 
-bool csSGNode::IntType(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::IntType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return IntType(dtA) && IntType(dtB);
 }
 
-bool csSGNode::SameType(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::SameType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return dtA == dtB;
 }
 
-bool csSGNode::SameScalarType(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::SameScalarType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return FloatType(dtA, dtB) || IntType(dtA, dtB);
 }
 
-bool csSGNode::SameTypeOrOne(csSGDataType dtA, csSGDataType dtB) const
+bool cs::SGNode::SameTypeOrOne(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   if (FloatType(dtA, dtB))
   {
-    return dtA == dtB || dtA == eSGDT_Float || dtB == eSGDT_Float;
+    return dtA == dtB || dtA == cs::eSGDT_Float || dtB == cs::eSGDT_Float;
   }
   if (IntType(dtA, dtB))
   {
-    return dtA == dtB || dtA == eSGDT_Int || dtB == eSGDT_Int;
+    return dtA == dtB || dtA == cs::eSGDT_Int || dtB == cs::eSGDT_Int;
   }
   return false;
 }
 
 
-csSGDataType csSGNode::HighOrderType(csSGDataType dtA, csSGDataType dtB) const
+cs::eSGDataType cs::SGNode::HighOrderType(cs::eSGDataType dtA, cs::eSGDataType dtB) const
 {
   return dtA > dtB ? dtA : dtB;
 }
 
-bool csSGNode::Validate()
+bool cs::SGNode::Validate()
 {
   SetValidationMessage("");
   bool success = true;
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
-    csSGInput *input = m_inputs[i];
+    cs::SGInput *input = m_inputs[i];
     if (!input)
     {
       continue;
     }
-    csSGOutput *output = input->GetInput();
+    cs::SGOutput *output = input->GetInput();
     if (!output)
     {
       continue;
     }
-    csSGNode *node = output->GetNode();
+    cs::SGNode *node = output->GetNode();
     if (node)
     {
       if (node == this)

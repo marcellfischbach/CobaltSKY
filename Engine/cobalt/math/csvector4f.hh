@@ -8,7 +8,11 @@
 #include <stdio.h>
 
 
-struct CSE_API csVector4f
+namespace cs
+{
+
+
+struct CSE_API Vector4f
 {
 public:
   float x;
@@ -17,7 +21,7 @@ public:
   float w;
 
 public:
-  CS_FORCEINLINE csVector4f(const float *f)
+  CS_FORCEINLINE Vector4f(const float* f)
     : x(f[0])
     , y(f[1])
     , z(f[2])
@@ -26,7 +30,7 @@ public:
 
   }
 
-  CS_FORCEINLINE csVector4f(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
+  CS_FORCEINLINE Vector4f(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 0.0f)
     : x(x)
     , y(y)
     , z(z)
@@ -35,7 +39,7 @@ public:
 
   }
 
-  CS_FORCEINLINE csVector4f(const csVector3f &v, float w = 0.0f)
+  CS_FORCEINLINE Vector4f(const cs::Vector3f& v, float w = 0.0f)
     : x(v.x)
     , y(v.y)
     , z(v.z)
@@ -44,7 +48,7 @@ public:
 
   }
 
-  CS_FORCEINLINE csVector4f(const csVector2f &v, float z = 0.0f, float w = 0.0f)
+  CS_FORCEINLINE Vector4f(const cs::Vector2f& v, float z = 0.0f, float w = 0.0f)
     : x(v.x)
     , y(v.y)
     , z(z)
@@ -53,7 +57,7 @@ public:
 
   }
 
-  CS_FORCEINLINE csVector4f(const csVector2f &v0, const csVector2f &v1)
+  CS_FORCEINLINE cs::Vector4f(const cs::Vector2f& v0, const cs::Vector2f& v1)
     : x(v0.x)
     , y(v0.y)
     , z(v1.x)
@@ -63,24 +67,24 @@ public:
   }
 
 
-  CS_FORCEINLINE csVector2f AsVector2f() const
+  CS_FORCEINLINE cs::Vector2f AsVector2f() const
   {
-    return csVector2f(x, y);
+    return cs::Vector2f(x, y);
   }
 
-  CS_FORCEINLINE csVector2f& AsVector2f(csVector2f &v) const
+  CS_FORCEINLINE cs::Vector2f& AsVector2f(cs::Vector2f& v) const
   {
     v.x = x;
     v.y = y;
     return v;
   }
 
-  CS_FORCEINLINE csVector2f AsVector2fHigh() const
+  CS_FORCEINLINE cs::Vector2f AsVector2fHigh() const
   {
-    return csVector2f(z, w);
+    return cs::Vector2f(z, w);
   }
 
-  CS_FORCEINLINE csVector2f& AsVector2fHigh(csVector2f &v) const
+  CS_FORCEINLINE cs::Vector2f& AsVector2fHigh(cs::Vector2f& v) const
   {
     v.x = z;
     v.y = w;
@@ -88,12 +92,12 @@ public:
   }
 
 
-  CS_FORCEINLINE csVector3f AsVector3f() const
+  CS_FORCEINLINE cs::Vector3f AsVector3f() const
   {
-    return csVector3f(x, y, z);
+    return cs::Vector3f(x, y, z);
   }
 
-  CS_FORCEINLINE csVector3f& AsVector3f(csVector3f &v) const
+  CS_FORCEINLINE cs::Vector3f& AsVector3f(cs::Vector3f& v) const
   {
     v.x = x;
     v.y = y;
@@ -103,7 +107,7 @@ public:
 
 
 
-  CS_FORCEINLINE csVector4f &operator+=(const csVector4f &v)
+  CS_FORCEINLINE cs::Vector4f& operator+=(const cs::Vector4f& v)
   {
     x += v.x;
     y += v.y;
@@ -112,7 +116,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator+=(float v)
+  CS_FORCEINLINE cs::Vector4f& operator+=(float v)
   {
     x += v;
     y += v;
@@ -121,7 +125,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator-=(const csVector4f &v)
+  CS_FORCEINLINE cs::Vector4f& operator-=(const cs::Vector4f& v)
   {
     x -= v.x;
     y -= v.y;
@@ -130,7 +134,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator-=(float v)
+  CS_FORCEINLINE cs::Vector4f& operator-=(float v)
   {
     x -= v;
     y -= v;
@@ -139,7 +143,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator*=(const csVector4f &v)
+  CS_FORCEINLINE cs::Vector4f& operator*=(const cs::Vector4f& v)
   {
     x *= v.x;
     y *= v.y;
@@ -148,7 +152,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator*=(float v)
+  CS_FORCEINLINE cs::Vector4f& operator*=(float v)
   {
     x *= v;
     y *= v;
@@ -157,7 +161,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator/=(const csVector4f &v)
+  CS_FORCEINLINE cs::Vector4f& operator/=(const cs::Vector4f& v)
   {
     x /= v.x;
     y /= v.y;
@@ -166,7 +170,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &operator/=(float v)
+  CS_FORCEINLINE cs::Vector4f& operator/=(float v)
   {
     x /= v;
     y /= v;
@@ -175,7 +179,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE static csVector4f &Add(const csVector4f &v0, const csVector4f &v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Add(const cs::Vector4f& v0, const cs::Vector4f& v1, cs::Vector4f& r)
   {
     r.x = v0.x + v1.x;
     r.y = v0.y + v1.y;
@@ -184,7 +188,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Add(const csVector4f &v0, float v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Add(const cs::Vector4f& v0, float v1, cs::Vector4f& r)
   {
     r.x = v0.x + v1;
     r.y = v0.y + v1;
@@ -193,7 +197,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Sub(const csVector4f &v0, const csVector4f &v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Sub(const cs::Vector4f& v0, const cs::Vector4f& v1, cs::Vector4f& r)
   {
     r.x = v0.x - v1.x;
     r.y = v0.y - v1.y;
@@ -202,7 +206,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Sub(const csVector4f &v0, float v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Sub(const cs::Vector4f& v0, float v1, cs::Vector4f& r)
   {
     r.x = v0.x - v1;
     r.y = v0.y - v1;
@@ -210,7 +214,7 @@ public:
     r.w = v0.w - v1;
     return r;
   }
-  CS_FORCEINLINE static csVector4f &Mul(const csVector4f &v0, const csVector4f &v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Mul(const cs::Vector4f& v0, const cs::Vector4f& v1, cs::Vector4f& r)
   {
     r.x = v0.x * v1.x;
     r.y = v0.y * v1.y;
@@ -219,7 +223,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Mul(const csVector4f &v0, float v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Mul(const cs::Vector4f& v0, float v1, cs::Vector4f& r)
   {
     r.x = v0.x * v1;
     r.y = v0.y * v1;
@@ -228,7 +232,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Div(const csVector4f &v0, const csVector4f &v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Div(const cs::Vector4f& v0, const cs::Vector4f& v1, cs::Vector4f& r)
   {
     r.x = v0.x / v1.x;
     r.y = v0.y / v1.y;
@@ -237,7 +241,7 @@ public:
     return r;
   }
 
-  CS_FORCEINLINE static csVector4f &Div(const csVector4f &v0, float v1, csVector4f &r)
+  CS_FORCEINLINE static cs::Vector4f& Div(const cs::Vector4f& v0, float v1, cs::Vector4f& r)
   {
     r.x = v0.x / v1;
     r.y = v0.y / v1;
@@ -248,25 +252,25 @@ public:
 
   CS_FORCEINLINE float Dot() const
   {
-    return x*x + y*y + z*z + w*w;
+    return x * x + y * y + z * z + w * w;
   }
 
-  CS_FORCEINLINE float Dot(const csVector4f &v) const
+  CS_FORCEINLINE float Dot(const cs::Vector4f& v) const
   {
-    return x*v.x + y*v.y + z*v.z + w*v.w;
+    return x * v.x + y * v.y + z * v.z + w * v.w;
   }
 
-  CS_FORCEINLINE static float Dot(const csVector4f &v0, const csVector4f &v1)
+  CS_FORCEINLINE static float Dot(const cs::Vector4f& v0, const cs::Vector4f& v1)
   {
-    return v0.x*v1.x + v0.y*v1.y + v0.z*v1.z + v0.w*v1.w;
+    return v0.x* v1.x + v0.y * v1.y + v0.z * v1.z + v0.w * v1.w;
   }
 
   CS_FORCEINLINE float Length() const
   {
-    return (float)sqrt(x*x + y*y + z*z + w*w);
+    return (float)sqrt(x * x + y * y + z * z + w * w);
   }
 
-  CS_FORCEINLINE csVector4f &Normalize()
+  CS_FORCEINLINE cs::Vector4f& Normalize()
   {
     float l = Length();
     x /= l;
@@ -276,7 +280,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csVector4f &Normalized(csVector4f &r)
+  CS_FORCEINLINE cs::Vector4f& Normalized(cs::Vector4f & r)
   {
     float l = Length();
     r.x = x / l;
@@ -287,20 +291,20 @@ public:
   }
 
 
-  CS_FORCEINLINE bool operator== (const csVector4f &o) const
+  CS_FORCEINLINE bool operator== (const cs::Vector4f & o) const
   {
     return x == o.x && y == o.y && z == o.z && w == o.w;
   }
 
-  CS_FORCEINLINE bool operator!= (const csVector4f &o) const
+  CS_FORCEINLINE bool operator!= (const cs::Vector4f & o) const
   {
     return !(x == o.x && y == o.y && z == o.z && w == o.w);
   }
 
 
-  CS_FORCEINLINE void Debug(const char *message)
+  CS_FORCEINLINE void Debug(const char* message)
   {
-    printf("csVector3f ");
+    printf("cs::Vector3f ");
     if (message)
     {
       printf("%s ", message);
@@ -308,3 +312,6 @@ public:
     printf("<%f %f %f %f>\n", x, y, z, w);
   }
 };
+
+}
+

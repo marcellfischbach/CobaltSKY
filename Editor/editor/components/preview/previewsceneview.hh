@@ -3,10 +3,14 @@
 #include <editor/editorexport.hh>
 #include <editor/components/sceneview.hh>
 
-class csDirectionalLight;
-class csEntity;
-class csLightState;
-class csMaterialWrapper;
+namespace cs
+{
+class DirectionalLight;
+class Entity;
+class LightState;
+class MaterialWrapper;
+
+}
 class PreviewLightOrbitHandler;
 class EDITOR_API PreviewSceneView : public SceneView
 {
@@ -15,12 +19,12 @@ public:
   virtual ~PreviewSceneView();
 
 protected:
-  csEntity *CreateSphere(float radius, unsigned numR, unsigned numH, csMaterialWrapper *materialInstance);
+  cs::Entity *CreateSphere(float radius, unsigned numR, unsigned numH, cs::MaterialWrapper *materialInstance);
 
 private:
-  csDirectionalLight *m_light = 0;
-  csLightState *m_lightState = 0;
-  csEntity *m_lightEntity = 0;
+  cs::DirectionalLight *m_light = 0;
+  cs::LightState *m_lightState = 0;
+  cs::Entity *m_lightEntity = 0;
 
   PreviewLightOrbitHandler *m_lightHandler = 0;
 };

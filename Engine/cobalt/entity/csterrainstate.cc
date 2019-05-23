@@ -11,7 +11,7 @@
 #include <cobalt/csengine.hh>
 
 csTerrainState::csTerrainState()
-  : csRenderState()
+  : cs::RenderState()
   , m_terrainMesh(0)
   , m_material(0)
   , m_castShadow(true)
@@ -34,21 +34,21 @@ csTerrainState::~csTerrainState()
 }
 
 
-void csTerrainState::SetTerrainMesh(csTerrainMesh *terrainMesh)
+void csTerrainState::SetTerrainMesh(cs::TerrainMesh *terrainMesh)
 {
   CS_SET(m_terrainMesh, terrainMesh);
 
   UpdateBoundingBox();
 }
 
-void csTerrainState::SetMaterial(csMaterial *material)
+void csTerrainState::SetMaterial(cs::Material *material)
 {
   CS_SET(m_material, material);
 }
 
 
 
-void csTerrainState::SetColliderShape(csPhysicsShapeContainer *shapes)
+void csTerrainState::SetColliderShape(cs::PhysicsShapeContainer *shapes)
 {
   if (shapes == m_shapes)
   {
@@ -101,7 +101,7 @@ void csTerrainState::SetRestitution(float restitution)
 
 void csTerrainState::UpdateTransformation()
 {
-  csSpatialState::UpdateTransformation();
+  cs::SpatialState::UpdateTransformation();
 
   if (m_staticCollider)
   {
@@ -111,7 +111,7 @@ void csTerrainState::UpdateTransformation()
 
 }
 
-void csTerrainState::OnAttachedToScene(csEntityScene *scene)
+void csTerrainState::OnAttachedToScene(cs::EntityScene *scene)
 {
   if (m_staticCollider && scene)
   {
@@ -119,7 +119,7 @@ void csTerrainState::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csTerrainState::OnDetachedFromScene(csEntityScene *scene)
+void csTerrainState::OnDetachedFromScene(cs::EntityScene *scene)
 {
   if (m_staticCollider && scene)
   {
@@ -127,7 +127,7 @@ void csTerrainState::OnDetachedFromScene(csEntityScene *scene)
   }
 }
 
-void csTerrainState::FillBoundingBox(csBoundingBox &bbox)
+void csTerrainState::FillBoundingBox(cs::BoundingBox &bbox)
 {
   if (m_terrainMesh)
   {
@@ -136,11 +136,11 @@ void csTerrainState::FillBoundingBox(csBoundingBox &bbox)
 
 }
 
-void csTerrainState::Render(iGraphics *graphics, csRenderPass pass) const
+void csTerrainState::Render(cs::iGraphics *graphics, cs::eRenderPass pass) const
 {
   if (m_terrainMesh)
   {
-    csRenderState::Render(graphics, pass);
+    cs::RenderState::Render(graphics, pass);
     graphics->SetModelMatrix(GetGlobalTransformation());
     m_terrainMesh->Render(graphics, pass, m_material);
   }
@@ -165,7 +165,7 @@ unsigned csTerrainState::GetNumberOfTotalTrigons() const
   return 0;
 }
 
-void csTerrainState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void csTerrainState::PrivScan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   if (m_materials && m_terrainMesh)
   {

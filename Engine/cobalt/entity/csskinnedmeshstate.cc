@@ -4,32 +4,32 @@
 #include <cobalt/graphics/igraphics.hh>
 
 
-csSkinnedMeshState::csSkinnedMeshState()
-  : csStaticMeshState()
+cs::SkinnedMeshState::SkinnedMeshState()
+  : cs::StaticMeshState()
   , m_skeleton(0)
 {
 
 }
 
 
-csSkinnedMeshState::~csSkinnedMeshState()
+cs::SkinnedMeshState::~SkinnedMeshState()
 {
   CS_RELEASE(m_skeleton);
 }
 
 
-void csSkinnedMeshState::SetSkeleton(csSkeleton *skeleton)
+void cs::SkinnedMeshState::SetSkeleton(cs::Skeleton *skeleton)
 {
   CS_SET(m_skeleton, skeleton);
 }
 
 
-void csSkinnedMeshState::Render(iGraphics *graphics, csRenderPass pass) const
+void cs::SkinnedMeshState::Render(cs::iGraphics *graphics, cs::eRenderPass pass) const
 {
   if (m_skeleton)
   {
     graphics->SetSkeleton(m_skeleton);
 
-    csStaticMeshState::Render(graphics, pass);
+    cs::StaticMeshState::Render(graphics, pass);
   }
 }

@@ -2,11 +2,14 @@
 
 #include <cobalt/cstypes.hh>
 
+namespace cs
+{
+
 template<typename T>
-class csCollection
+class Collection
 {
 public:
-  csCollection(csSize initialSize = 64, csSize resizeStep = 16)
+  Collection(csSize initialSize = 64, csSize resizeStep = 16)
   {
     data = new T[initialSize];
     length = 0;
@@ -26,7 +29,7 @@ public:
     }
   }
 
-  ~csCollection()
+  ~Collection()
   {
     delete[] data;
     length = 0;
@@ -89,3 +92,5 @@ private:
     capacity += resizeStep;
   }
 };
+
+}

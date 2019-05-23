@@ -3,7 +3,7 @@
 #include <cobalt/math/csboundingbox.hh>
 #include <float.h>
 
-csBoundingBox::csBoundingBox()
+cs::BoundingBox::BoundingBox()
   : m_valid(false)
   , m_min(FLT_MAX, FLT_MAX, FLT_MAX)
   , m_max(-FLT_MAX, -FLT_MAX, -FLT_MAX)
@@ -11,12 +11,12 @@ csBoundingBox::csBoundingBox()
 
 }
 
-csBoundingBox::~csBoundingBox()
+cs::BoundingBox::~BoundingBox()
 {
 
 }
 
-void csBoundingBox::Add(const csVector3f &p)
+void cs::BoundingBox::Add(const cs::Vector3f &p)
 {
   if (p.x > m_max.x) m_max.x = p.x;
   if (p.y > m_max.y) m_max.y = p.y;
@@ -26,7 +26,7 @@ void csBoundingBox::Add(const csVector3f &p)
   if (p.z < m_min.z) m_min.z = p.z;
 }
 
-void csBoundingBox::Add(const csBoundingBox &bbox)
+void cs::BoundingBox::Add(const cs::BoundingBox &bbox)
 {
   if (bbox.m_max.x > m_max.x) m_max.x = bbox.m_max.x;
   if (bbox.m_max.y > m_max.y) m_max.y = bbox.m_max.y;
@@ -37,10 +37,10 @@ void csBoundingBox::Add(const csBoundingBox &bbox)
 }
 
 
-void csBoundingBox::Add(const csMatrix4f &M, const csVector3f &p)
+void cs::BoundingBox::Add(const cs::Matrix4f &M, const cs::Vector3f &p)
 {
-  csVector3f mp;
-  csMatrix4f::Transform(M, p, mp);
+  cs::Vector3f mp;
+  cs::Matrix4f::Transform(M, p, mp);
   if (mp.x > m_max.x) m_max.x = mp.x;
   if (mp.y > m_max.y) m_max.y = mp.y;
   if (mp.z > m_max.z) m_max.z = mp.z;
@@ -49,7 +49,7 @@ void csBoundingBox::Add(const csMatrix4f &M, const csVector3f &p)
   if (mp.z < m_min.z) m_min.z = mp.z;
 }
 
-void csBoundingBox::Add(const csMatrix4f &M, const csBoundingBox &bbox)
+void cs::BoundingBox::Add(const cs::Matrix4f &M, const cs::BoundingBox &bbox)
 {
   for (size_t i = 0; i < 8; ++i)
   {
@@ -58,35 +58,35 @@ void csBoundingBox::Add(const csMatrix4f &M, const csBoundingBox &bbox)
 }
 
 
-void csBoundingBox::Clear()
+void cs::BoundingBox::Clear()
 {
   m_valid = false;
   m_min.Set(FLT_MAX, FLT_MAX, FLT_MAX);
   m_max.Set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 }
 
-void csBoundingBox::Finish()
+void cs::BoundingBox::Finish()
 {
   m_center.Set(m_min);
   m_center += m_max;
   m_center *= 0.5f;
 
-  m_points[0] = csVector3f(m_min.x, m_min.y, m_min.z);
-  m_points[1] = csVector3f(m_min.x, m_min.y, m_max.z);
-  m_points[2] = csVector3f(m_min.x, m_max.y, m_min.z);
-  m_points[3] = csVector3f(m_min.x, m_max.y, m_max.z);
-  m_points[4] = csVector3f(m_max.x, m_min.y, m_min.z);
-  m_points[5] = csVector3f(m_max.x, m_min.y, m_max.z);
-  m_points[6] = csVector3f(m_max.x, m_max.y, m_min.z);
-  m_points[7] = csVector3f(m_max.x, m_max.y, m_max.z);
+  m_points[0] = cs::Vector3f(m_min.x, m_min.y, m_min.z);
+  m_points[1] = cs::Vector3f(m_min.x, m_min.y, m_max.z);
+  m_points[2] = cs::Vector3f(m_min.x, m_max.y, m_min.z);
+  m_points[3] = cs::Vector3f(m_min.x, m_max.y, m_max.z);
+  m_points[4] = cs::Vector3f(m_max.x, m_min.y, m_min.z);
+  m_points[5] = cs::Vector3f(m_max.x, m_min.y, m_max.z);
+  m_points[6] = cs::Vector3f(m_max.x, m_max.y, m_min.z);
+  m_points[7] = cs::Vector3f(m_max.x, m_max.y, m_max.z);
 
   m_valid = true;
 }
 
 
-void csBoundingBox::Debug(const char *message) const
+void cs::BoundingBox::Debug(const char *message) const
 {
-  printf("csBoundingBox ");
+  printf("cs::BoundingBox ");
   if (message)
   {
     printf("\"%s\" ", message);

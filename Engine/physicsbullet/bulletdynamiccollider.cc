@@ -8,7 +8,7 @@
 #include <cobalt/entity/cscolliderstate.hh>
 
 csBulletDynamicCollider::csBulletDynamicCollider()
-  : iPhysicsDynamicCollider()
+  : cs::iPhysicsDynamicCollider()
   , m_kinematic(true)
   , m_friction(0.0f)
   , m_restitution(0.0f)
@@ -39,7 +39,7 @@ csBulletDynamicCollider::~csBulletDynamicCollider()
 }
 
 
-void csBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
+void csBulletDynamicCollider::AttachShape(cs::iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -83,12 +83,12 @@ void csBulletDynamicCollider::AttachShape(iPhysicsShape *shape)
   UpdateInertia();
  }
 
-void csBulletDynamicCollider::DetachShape(iPhysicsShape *shape)
+void csBulletDynamicCollider::DetachShape(cs::iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void csBulletDynamicCollider::AttachShape(csPhysicsShape *shapes)
+void csBulletDynamicCollider::AttachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -101,7 +101,7 @@ void csBulletDynamicCollider::AttachShape(csPhysicsShape *shapes)
   }
 }
 
-void csBulletDynamicCollider::DetachShape(csPhysicsShape *shapes)
+void csBulletDynamicCollider::DetachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -115,9 +115,9 @@ void csBulletDynamicCollider::DetachShape(csPhysicsShape *shapes)
 }
 
 
-csTransformation csBulletDynamicCollider::GetTransform()
+cs::Transformation csBulletDynamicCollider::GetTransform()
 {
-  return csTransformation(&m_transformation, 0, 0, 0);
+  return cs::Transformation(&m_transformation, 0, 0, 0);
 }
 
 
@@ -129,7 +129,7 @@ void csBulletDynamicCollider::FinishTransformation()
   m_body->updateInertiaTensor();
 }
 
-void csBulletDynamicCollider::SetTransformationCallback(iTransformationCallback *callback)
+void csBulletDynamicCollider::SetTransformationCallback(cs::iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
@@ -168,7 +168,7 @@ void csBulletDynamicCollider::SetMass(float mass)
   UpdateInertia();
 }
 
-void csBulletDynamicCollider::SetInertia(const csVector3f &inertia)
+void csBulletDynamicCollider::SetInertia(const cs::Vector3f &inertia)
 {
   m_inertia = inertia;
   m_autoInertia = false;
@@ -192,11 +192,11 @@ void csBulletDynamicCollider::UpdateInertia()
     {
       btVector3 btInertia;
       shape->calculateLocalInertia(m_mass, btInertia);
-      m_inertia = csVector3f(btInertia.getX(), btInertia.getY(), btInertia.getZ());
+      m_inertia = cs::Vector3f(btInertia.getX(), btInertia.getY(), btInertia.getZ());
     }
     else
     {
-      m_inertia = csVector3f(0.0f, 0.0f, 0.0f);
+      m_inertia = cs::Vector3f(0.0f, 0.0f, 0.0f);
     }
   }
 

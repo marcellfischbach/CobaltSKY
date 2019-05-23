@@ -85,8 +85,8 @@ namespace asset::actions
 		asset::model::Asset *asset = m_parent->GetModel()->CreateAsset(dlg.GetName());
 		asset->SetAssetType(m_creator->GetAssetType());
 
-		csResourceLocator locator = folder->CreateResourceLocator(asset->GetName());
-		std::string pathStr = csVFS::Get()->GetAbsolutePath(locator, csVFS::DontCheckExistence);
+		cs::ResourceLocator locator = folder->CreateResourceLocator(asset->GetName());
+		std::string pathStr = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::DontCheckExistence);
 		
 
 		csfFile file;

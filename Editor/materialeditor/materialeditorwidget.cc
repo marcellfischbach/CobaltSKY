@@ -24,7 +24,7 @@ MaterialEditorPreviewSceneView *MaterialEditorWidget::GetSceneView()
   return m_gui.openGLWidget;
 }
 
-void MaterialEditorWidget::SetMaterial(csMaterialWrapper *material)
+void MaterialEditorWidget::SetMaterial(cs::MaterialWrapper *material)
 {
   CS_SET(m_material, material);
   m_gui.openGLWidget->SetMaterial(material);

@@ -2,10 +2,10 @@
 #include <cobalt/graphics/shadergraph/cssgconstfloat1.hh>
 
 
-csSGConstFloat::csSGConstFloat()
-  : csSGNode()
+cs::SGConstFloat::SGConstFloat()
+  : cs::SGNode()
 {
   SetName(CS_CONST_FLOAT_NAME);
-  AddInput(new csSGInput("x", true, false));
-  AddOutput(new csSGOutput(eSGDT_Float, "v", ""));
+  AddInput(new cs::SGInput("x", true, false));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "v", ""));
 }

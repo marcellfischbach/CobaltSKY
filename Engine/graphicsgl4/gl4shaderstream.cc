@@ -56,13 +56,13 @@ void csShaderStreamGL4::SetArrayIndex(csUInt32 arrayIndex)
   m_absLocation = m_location + m_arrayIndex;
 }
 
-void csShaderStreamGL4::Set(csSize size, csSize stride, csSize offset, csDataType type)
+void csShaderStreamGL4::Set(csSize size, csSize stride, csSize offset, cs::eDataType type)
 {
   glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, CS_GL_OFFSET(offset));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderStreamGL4::Set(csSize size, csSize stride, const void *data, csDataType type)
+void csShaderStreamGL4::Set(csSize size, csSize stride, const void *data, cs::eDataType type)
 {
   glVertexAttribPointer(m_absLocation, (GLsizei)size, dataTypeMap[type], false, (GLsizei)stride, (const GLvoid*)data);
   CS_CHECK_GL_ERROR;

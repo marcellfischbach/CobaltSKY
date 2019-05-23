@@ -6,7 +6,7 @@
 
 bool SamplerEditorFactory::CanEdit(cs::iObject *object, asset::model::Asset*asset) const
 {
-  return object->GetClass()->IsInstanceOf<csSamplerWrapper>();
+  return object->GetClass()->IsInstanceOf<cs::SamplerWrapper>();
 }
 
 iAssetEditor *SamplerEditorFactory::CreateEditor(cs::iObject *object, asset::model::Asset*asset) const

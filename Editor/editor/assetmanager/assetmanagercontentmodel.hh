@@ -8,7 +8,11 @@
 #include <string>
 
 class AssetManagerContentModelEntry;
-class cs::Class;
+
+namespace cs
+{
+class Class;
+}
 
 class AssetManagerContentModel : public QAbstractItemModel
 {
@@ -17,8 +21,8 @@ public:
   AssetManagerContentModel();
   virtual ~AssetManagerContentModel();
 
-  void SetResourceLocator(const csResourceLocator &locator);
-  const csResourceLocator &GetResourceLocator() const;
+  void SetResourceLocator(const cs::ResourceLocator &locator);
+  const cs::ResourceLocator &GetResourceLocator() const;
   void Refresh();
 
   virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
@@ -29,14 +33,14 @@ public:
   virtual QStringList mimeTypes() const;
   virtual QMimeData *mimeData(const QModelIndexList &indexes) const;
   virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-  csResourceLocator GetLocator(const QModelIndex &index) const;
+  cs::ResourceLocator GetLocator(const QModelIndex &index) const;
 
   const AssetManagerContentModelEntry *GetEntry(const QModelIndex &index) const;
-  void PreviewIconChanged(const csResourceLocator &locator);
+  void PreviewIconChanged(const cs::ResourceLocator &locator);
 private:
   void CleanupEntries();
-  std::string ReadType(const csResourceLocator &fileName) const;
+  std::string ReadType(const cs::ResourceLocator &fileName) const;
 
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
   QList<AssetManagerContentModelEntry*> m_entries;
 };

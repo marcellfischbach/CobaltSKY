@@ -6,13 +6,16 @@
 #include <filesystem>
 #include <string>
 
-class csResourceLocator;
+namespace cs
+{
+class :ResourceLocator;
+}
 
 namespace asset::model
 {
 	class ModelTransaction;
 
-    class AlterFSException : public csException
+    class AlterFSException : public cs::Exception
 	{
 	public:
         AlterFSException(const std::string &message);
@@ -26,8 +29,8 @@ namespace asset::model
 	public:
 		SecureFS(ModelTransaction &tr);
 
-		void Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
-    void Delete(const csResourceLocator &locator);
+		void Move(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
+    void Delete(const cs::ResourceLocator &locator);
 
 	private:
 

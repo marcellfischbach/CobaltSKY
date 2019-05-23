@@ -6,59 +6,59 @@
 #include <cobalt/cstime.hh>
 #include <cobalt/entity/cscolliderstate.hh>
 
-csSpatialState::csSpatialState()
-  : csEntityState()
+cs::SpatialState::SpatialState()
+  : cs::EntityState()
   , m_parentState(0)
   , m_boundingBoxDirty(true)
 {
 
 }
 
-csSpatialState::~csSpatialState()
+cs::SpatialState::~SpatialState()
 {
 
 }
 
-csSpatialState *csSpatialState::ToSpatialState()
-{
-  return this;
-}
-
-const csSpatialState *csSpatialState::ToSpatialState() const
+cs::SpatialState *cs::SpatialState::ToSpatialState()
 {
   return this;
 }
 
+const cs::SpatialState *cs::SpatialState::ToSpatialState() const
+{
+  return this;
+}
 
 
-csTransformation csSpatialState::GetTransformation()
+
+cs::Transformation cs::SpatialState::GetTransformation()
 {
   if (m_parentState)
   {
-    return csTransformation(&m_localMatrix, &m_globalMatrix, &m_parentState->m_globalMatrix, &m_parentState->m_globalMatrixInv);
+    return cs::Transformation(&m_localMatrix, &m_globalMatrix, &m_parentState->m_globalMatrix, &m_parentState->m_globalMatrixInv);
   }
   else
   {
-    return csTransformation(&m_localMatrix, &m_globalMatrix, 0, 0);
+    return cs::Transformation(&m_localMatrix, &m_globalMatrix, 0, 0);
   }
 }
 
-void csSpatialState::FinishTransformation()
+void cs::SpatialState::FinishTransformation()
 {
   PerformTransformation();
 }
 
-void csSpatialState::SetLocalMatrix(const csMatrix4f &localMatrix)
+void cs::SpatialState::SetLocalMatrix(const cs::Matrix4f &localMatrix)
 {
   m_localMatrix.Set(localMatrix);
 }
 
-const csMatrix4f &csSpatialState::GetLocalMatrix() const
+const cs::Matrix4f &cs::SpatialState::GetLocalMatrix() const
 {
   return m_localMatrix;
 }
 
-void csSpatialState::PerformTransformation()
+void cs::SpatialState::PerformTransformation()
 {
   // make propagate the transformation to the children
   // this will also update the bounding box of all those child states (incl. this one)
@@ -71,11 +71,11 @@ void csSpatialState::PerformTransformation()
   }
 }
 
-void csSpatialState::UpdateTransformation()
+void cs::SpatialState::UpdateTransformation()
 {
   if (m_parentState)
   {
-    csMatrix4f::Mult(m_parentState->GetGlobalTransformation(), m_localMatrix, m_globalMatrix);
+    cs::Matrix4f::Mult(m_parentState->GetGlobalTransformation(), m_localMatrix, m_globalMatrix);
   }
   else
   {
@@ -93,7 +93,7 @@ void csSpatialState::UpdateTransformation()
 
 }
 
-void csSpatialState::FlagParentBoundingBoxDirty()
+void cs::SpatialState::FlagParentBoundingBoxDirty()
 {
   if (m_parentState)
   {
@@ -101,7 +101,7 @@ void csSpatialState::FlagParentBoundingBoxDirty()
   }
 }
 
-void csSpatialState::FlagBoundingBoxDirty()
+void cs::SpatialState::FlagBoundingBoxDirty()
 {
   if (m_boundingBoxDirty)
   {
@@ -115,13 +115,13 @@ void csSpatialState::FlagBoundingBoxDirty()
   }
 }
 
-void csSpatialState::SetClippingRange(float min, float max)
+void cs::SpatialState::SetClippingRange(float min, float max)
 {
   m_distanceState.SetupDistance(min, max);
 
 }
 
-void csSpatialState::UpdateBoundingBox()
+void cs::SpatialState::UpdateBoundingBox()
 {
   if (!m_boundingBoxDirty)
   {
@@ -134,11 +134,11 @@ void csSpatialState::UpdateBoundingBox()
   m_boundingBox.Finish();
 }
 
-void csSpatialState::FillBoundingBox(csBoundingBox &bbox)
+void cs::SpatialState::FillBoundingBox(cs::BoundingBox &bbox)
 {
   for (csSize i = 0, in = GetNumberOfChildState(); i < in; ++i)
   {
-    csSpatialState *state = GetChildState(i);
+    cs::SpatialState *state = GetChildState(i);
     if (state)
     {
       state->UpdateBoundingBox();
@@ -147,12 +147,12 @@ void csSpatialState::FillBoundingBox(csBoundingBox &bbox)
   }
 }
 
-csSize csSpatialState::GetNumberOfChildState() const
+csSize cs::SpatialState::GetNumberOfChildState() const
 {
   return m_childStates.size();
 }
 
-csSpatialState *csSpatialState::GetChildState(csSize idx)
+cs::SpatialState *cs::SpatialState::GetChildState(csSize idx)
 {
   if (idx >= m_childStates.size())
   {
@@ -162,7 +162,7 @@ csSpatialState *csSpatialState::GetChildState(csSize idx)
   return m_childStates[idx];
 }
 
-const csSpatialState *csSpatialState::GetChildState(csSize idx) const
+const cs::SpatialState *cs::SpatialState::GetChildState(csSize idx) const
 {
   if (idx >= m_childStates.size())
   {
@@ -172,7 +172,7 @@ const csSpatialState *csSpatialState::GetChildState(csSize idx) const
   return m_childStates[idx];
 }
 
-void csSpatialState::AddSpatialState(csSpatialState *state)
+void cs::SpatialState::AddSpatialState(cs::SpatialState *state)
 {
   if (state)
   {
@@ -183,7 +183,7 @@ void csSpatialState::AddSpatialState(csSpatialState *state)
   }
 }
 
-void csSpatialState::RemoveSpatialState(csSpatialState *state)
+void cs::SpatialState::RemoveSpatialState(cs::SpatialState *state)
 {
   if (state)
   {
@@ -201,7 +201,7 @@ void csSpatialState::RemoveSpatialState(csSpatialState *state)
   }
 }
 
-csSpatialState *csSpatialState::FindState(const std::string &stateName)
+cs::SpatialState *cs::SpatialState::FindState(const std::string &stateName)
 {
   if (stateName == GetName())
   {
@@ -210,7 +210,7 @@ csSpatialState *csSpatialState::FindState(const std::string &stateName)
 
   for (size_t i = 0, in = m_childStates.size(); i < in; ++i)
   {
-    csSpatialState *state = m_childStates[i]->FindState(stateName);
+    cs::SpatialState *state = m_childStates[i]->FindState(stateName);
     if (state)
     {
       return state;
@@ -219,7 +219,7 @@ csSpatialState *csSpatialState::FindState(const std::string &stateName)
   return 0;
 }
 
-const csSpatialState *csSpatialState::FindState(const std::string &stateName) const
+const cs::SpatialState *cs::SpatialState::FindState(const std::string &stateName) const
 {
   if (stateName == GetName())
   {
@@ -228,7 +228,7 @@ const csSpatialState *csSpatialState::FindState(const std::string &stateName) co
 
   for (size_t i = 0, in = m_childStates.size(); i < in; ++i)
   {
-    csSpatialState *state = m_childStates[i]->FindState(stateName);
+    cs::SpatialState *state = m_childStates[i]->FindState(stateName);
     if (state)
     {
       return state;
@@ -238,31 +238,31 @@ const csSpatialState *csSpatialState::FindState(const std::string &stateName) co
 }
 
 
-void csSpatialState::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::SpatialState::Scan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   if (clipper)
   {
-    csClipper::ClipResult cr = clipper->Test(m_boundingBox);
+    cs::Clipper::ClipResult cr = clipper->Test(m_boundingBox);
     switch (cr)
     {
-    case csClipper::eCR_In:
+    case cs::Clipper::eCR_In:
       // we are completely within the viewing frustum no need to test states below.
       clipper = 0;
       break;
 
-    case csClipper::eCR_Out:
+    case cs::Clipper::eCR_Out:
       // we are out... nothin to clip
       return;
 
-    case csClipper::eCR_Intermediate:
+    case cs::Clipper::eCR_Intermediate:
       // we are partially within the viewing frustum.. the entity will be rendered, but states below 
       // must be tested aswell.
       break;
     }
   }
 
-  csVector3f dir;
-  csVector3f::Sub(config.MainCameraPosition, m_boundingBox.GetCenter(), dir);
+  cs::Vector3f dir;
+  cs::Vector3f::Sub(config.MainCameraPosition, m_boundingBox.GetCenter(), dir);
   float distanceSqr = dir.Dot();
 
   m_distanceState.UpdateDistance(distanceSqr);
@@ -280,7 +280,7 @@ void csSpatialState::Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *
   }
 }
 
-void csSpatialState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::SpatialState::PrivScan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
 
 }
@@ -296,7 +296,7 @@ void csSpatialState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntitySc
 #define CS_FADE_VALUE_FIRST_OUT 16
 
 
-csDistanceState::csDistanceState()
+cs::DistanceState::DistanceState()
   : m_min (-FLT_MAX)
   , m_max (FLT_MAX)
   , m_state(eInitial)
@@ -304,7 +304,7 @@ csDistanceState::csDistanceState()
   SetFadeTime(500L);
 }
 
-void csDistanceState::SetupDistance(float min, float max)
+void cs::DistanceState::SetupDistance(float min, float max)
 {
   m_min = min;
   m_max = max;
@@ -318,21 +318,21 @@ void csDistanceState::SetupDistance(float min, float max)
   }
 }
 
-void csDistanceState::SetupState(State state, csUInt8 fadeValue)
+void cs::DistanceState::SetupState(State state, csUInt8 fadeValue)
 {
   m_fadeValue = fadeValue;
   m_state = state;
 }
 
-void csDistanceState::SetFadeTime(csUInt64 fadeTimeMilli)
+void cs::DistanceState::SetFadeTime(csUInt64 fadeTimeMilli)
 {
   m_fadeTimeMicroPerValue = fadeTimeMilli * 1000L / (csUInt64)CS_NUM_FADE_VALUES;
 }
 
-void csDistanceState::UpdateDistance(float distance)
+void cs::DistanceState::UpdateDistance(float distance)
 {
   bool in = m_min <= distance && distance <= m_max;
-  csUInt64 ct = csTime::Get().GetCurrentTimeMicro();
+  csUInt64 ct = cs::Time::Get().GetCurrentTimeMicro();
 
   switch (m_state)
   {
@@ -385,14 +385,14 @@ void csDistanceState::UpdateDistance(float distance)
     if (!in)
     {
       m_state = eFadeOut;
-      m_nextFadeValueChange = csTime::Get().GetCurrentTimeMicro() + m_fadeTimeMicroPerValue;
+      m_nextFadeValueChange = cs::Time::Get().GetCurrentTimeMicro() + m_fadeTimeMicroPerValue;
       m_fadeValue = CS_FADE_VALUE_FIRST_OUT;
     }
     break;
   case eFadeOut:
     if (!in)
     {
-      csUInt64 ct = csTime::Get().GetCurrentTimeMicro();
+      csUInt64 ct = cs::Time::Get().GetCurrentTimeMicro();
       if (ct >= m_nextFadeValueChange)
       {
         m_fadeValue--;

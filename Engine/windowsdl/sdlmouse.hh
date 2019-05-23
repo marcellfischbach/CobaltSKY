@@ -5,7 +5,7 @@
 #include <windowsdl/sdlmouse.refl.hh>
 
 CS_CLASS()
-class CSWINDOWSDL_API SDLMouse : public CS_SUPER(iMouse)
+class CSWINDOWSDL_API SDLMouse : public CS_SUPER(cs::iMouse)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -17,11 +17,11 @@ public:
   void SetButtonDown(csUInt8 key);
   void SetButtonUp(csUInt8 key);
 
-  bool IsButtonDown(csButton button) const;
-  bool IsButtonUp(csButton button) const;
+  bool IsButtonDown(cs::eButton button) const;
+  bool IsButtonUp(cs::eButton button) const;
 
-  bool IsButtonPressed(csButton button) const;
-  bool IsButtonReleased(csButton button) const;
+  bool IsButtonPressed(cs::eButton button) const;
+  bool IsButtonReleased(cs::eButton button) const;
 
   virtual csInt32 GetPosX() const;
   virtual csInt32 GetPosY() const;
@@ -34,8 +34,8 @@ public:
   void SetMotion(csInt32 x, csInt32 y, csInt32 relX, csInt32 relY);
 
 private:
-  bool m_current[eB_COUNT];
-  bool m_prev[eB_COUNT];
+  bool m_current[cs::eB_COUNT];
+  bool m_prev[cs::eB_COUNT];
 
   csInt32 m_posX;
   csInt32 m_posY;

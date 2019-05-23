@@ -6,30 +6,35 @@
 #include <cobalt/cstypes.hh>
 #include <string>
 
+namespace cs
+{
 
-class csNoSuchParameterNameException : public std::exception
+
+class NoSuchParameterNameException : public std::exception
 {
 public:
-  csNoSuchParameterNameException(const std::string &name);
+  NoSuchParameterNameException(const std::string& name);
 
 private:
   std::string m_name;
 };
 
-class csNoSuchParameterIdException : public std::exception
+class NoSuchParameterIdException : public std::exception
 {
 public:
-  csNoSuchParameterIdException(const std::string &id);
+  NoSuchParameterIdException(const std::string& id);
 
 private:
   std::string m_id;
 };
 
-class csNoSuchParameterIndexException : public std::exception
+class NoSuchParameterIndexException : public std::exception
 {
 public:
-  csNoSuchParameterIndexException(csSize idx);
+  NoSuchParameterIndexException(csSize idx);
 
 private:
   csSize m_idx;
 };
+
+}

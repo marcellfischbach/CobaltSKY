@@ -7,29 +7,34 @@
 #include <vector>
 #include <cobalt/physics/csphysicsshape.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csPhysicsShape : public CS_SUPER(cs::Object)
+class CSE_API PhysicsShape : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csPhysicsShape();
-  virtual ~csPhysicsShape();
+  PhysicsShape();
+  virtual ~PhysicsShape();
 
-  void AddShape(iPhysicsShape *shape);
+  void AddShape(cs::iPhysicsShape * shape);
   void RemoveShape(csSize idx);
 
   csSize GetNumberOfShapes() const;
-  iPhysicsShape *GetShape(csSize idx);
-  const iPhysicsShape *GetShape(csSize idx) const;
+  cs::iPhysicsShape* GetShape(csSize idx);
+  const cs::iPhysicsShape* GetShape(csSize idx) const;
 
 private:
-  std::vector<iPhysicsShape*> m_shapes;
+  std::vector<cs::iPhysicsShape*> m_shapes;
 
 };
 
 CS_CLASS()
-class CSE_API csPhysicsShapeWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API PhysicsShapeWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csPhysicsShape, csPhysicsShapeWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::PhysicsShape, PhysicsShapeWrapper, cs::ResourceWrapper);
 };
+
+}

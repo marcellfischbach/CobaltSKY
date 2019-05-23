@@ -6,58 +6,63 @@
 #include <cobalt/graphics/scene/csspatialnode.hh>
 #include <cobalt/graphics/scene/csgeometrynode.refl.hh>
 
+
+namespace cs
+{
 struct iGraphics;
-class csMaterial;
-class csMesh;
+class Material;
+class Mesh;
 
 CS_CLASS()
-class CSE_API csGeometryNode : public CS_SUPER(csSpatialNode)
+class CSE_API GeometryNode : public CS_SUPER(cs::SpatialNode)
 {
   CS_CLASS_GEN;
 public:
-  csGeometryNode(csMesh *mesh = 0, csMaterial *material = 0);
-  virtual ~csGeometryNode();
+  GeometryNode(cs::Mesh * mesh = 0, cs::Material * material = 0);
+  virtual ~GeometryNode();
 
 
-  void SetMesh(csMesh *mesh);
-  csMesh *GetMesh();
-  const csMesh *GetMesh() const;
+  void SetMesh(cs::Mesh * mesh);
+  cs::Mesh * GetMesh();
+  const cs::Mesh * GetMesh() const;
 
-  void SetMaterial(csMaterial *material);
-  csMaterial *GetMaterial();
-  const csMaterial *GetMaterial() const;
+  void SetMaterial(cs::Material * material);
+  cs::Material * GetMaterial();
+  const cs::Material * GetMaterial() const;
 
-  void Render(iGraphics *renderer, csRenderPass renderPass, csUInt8 lod = 0);
+  void Render(cs::iGraphics * renderer, cs::eRenderPass renderPass, csUInt8 lod = 0);
 
 protected:
-  virtual void PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback);
+  virtual void PrivScan(const cs::Clipper * clipper, cs::iGraphics * renderer, cs::iScanCallback * callback);
 
-  virtual void UpdateBoundingBox(csBoundingBox &bbox);
+  virtual void UpdateBoundingBox(cs::BoundingBox & bbox);
 
 private:
-  csMesh *m_mesh;
-  csMaterial *m_material;
+  cs::Mesh * m_mesh;
+  cs::Material * m_material;
 
 };
 
+}
 
-CS_FORCEINLINE csMesh *csGeometryNode::GetMesh()
+
+CS_FORCEINLINE cs::Mesh *cs::GeometryNode::GetMesh()
 {
   return m_mesh;
 }
 
-CS_FORCEINLINE const csMesh *csGeometryNode::GetMesh() const
+CS_FORCEINLINE const cs::Mesh *cs::GeometryNode::GetMesh() const
 {
   return m_mesh;
 }
 
 
-CS_FORCEINLINE csMaterial *csGeometryNode::GetMaterial()
+CS_FORCEINLINE cs::Material *cs::GeometryNode::GetMaterial()
 {
   return m_material;
 }
 
-CS_FORCEINLINE const csMaterial *csGeometryNode::GetMaterial() const
+CS_FORCEINLINE const cs::Material *cs::GeometryNode::GetMaterial() const
 {
   return m_material;
 }

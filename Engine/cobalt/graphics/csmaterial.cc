@@ -8,16 +8,16 @@
 #include <cobalt/graphics/itexture.hh>
 
 
-csMaterial::csMaterial()
+cs::Material::Material()
   : cs::Object()
   , m_materialDef(0)
-  , m_fillMode(eFM_Fill)
+  , m_fillMode(cs::eFM_Fill)
   , m_fillModeInherited(true)
 {
 
 }
 
-csMaterial::~csMaterial()
+cs::Material::~Material()
 {
   if (m_materialDef)
   {
@@ -25,21 +25,21 @@ csMaterial::~csMaterial()
   }
 }
 
-void csMaterial::SetMaterialDef(csMaterialDefWrapper *material)
+void cs::Material::SetMaterialDef(cs::MaterialDefWrapper *material)
 {
   CS_SET(m_materialDef, material);
   RebuildMaterialParameters();
 }
 
-void csMaterial::RebuildMaterialParameters()
+void cs::Material::RebuildMaterialParameters()
 {
   if (m_materialDef && m_materialDef->IsValid())
   {
     m_parameters.clear();
-    csMaterialDef *materialDef = m_materialDef->Get();
+    cs::MaterialDef *materialDef = m_materialDef->Get();
     for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
     {
-      csShaderParameterType type = materialDef->GetParamType(i);
+      cs::eShaderParameterType type = materialDef->GetParamType(i);
       ShaderParameter param;
       param.m_inherit = true;
       param.m_paramType = type;
@@ -49,58 +49,58 @@ void csMaterial::RebuildMaterialParameters()
   }
 }
 
-csMaterialDefWrapper *csMaterial::GetMaterialDef()
+cs::MaterialDefWrapper *cs::Material::GetMaterialDef()
 {
   return m_materialDef;
 }
 
-const csMaterialDefWrapper *csMaterial::GetMaterialDef() const
+const cs::MaterialDefWrapper *cs::Material::GetMaterialDef() const
 {
   return m_materialDef;
 }
 
-csSize csMaterial::GetIndex(const std::string &id) const
+csSize cs::Material::GetIndex(const std::string &id) const
 {
   if (!m_materialDef || !m_materialDef->IsValid())
   {
-    throw csNoSuchParameterIdException(id);
+    throw cs::NoSuchParameterIdException(id);
   }
   return m_materialDef->Get()->GetIndex(id);
 }
 
-csSize csMaterial::GetIndexByName(const std::string &name) const
+csSize cs::Material::GetIndexByName(const std::string &name) const
 {
   if (!m_materialDef || !m_materialDef->IsValid())
   {
-    throw csNoSuchParameterNameException(name);
+    throw cs::NoSuchParameterNameException(name);
   }
   return m_materialDef->Get()->GetIndex(name);
 }
 
-const std::string &csMaterial::GetParameterId(csSize idx) const
+const std::string &cs::Material::GetParameterId(csSize idx) const
 {
   if (!m_materialDef || !m_materialDef->IsValid())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
   return m_materialDef->Get()->GetParameterId(idx);
 }
 
-const std::string &csMaterial::GetParameterName(csSize idx) const
+const std::string &cs::Material::GetParameterName(csSize idx) const
 {
   if (!m_materialDef || !m_materialDef->IsValid())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
   return m_materialDef->Get()->GetParameterName(idx);
 }
 
-void csMaterial::SetInherited(csSize idx, bool inherited)
+void cs::Material::SetInherited(csSize idx, bool inherited)
 {
 #ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
 #endif
 
@@ -109,12 +109,12 @@ void csMaterial::SetInherited(csSize idx, bool inherited)
   param.m_inherit = inherited;
 }
 
-bool csMaterial::IsInherited(csSize idx) const
+bool cs::Material::IsInherited(csSize idx) const
 {
 #ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
 #endif
 
@@ -123,12 +123,12 @@ bool csMaterial::IsInherited(csSize idx) const
   return param.m_inherit;
 }
 
-void csMaterial::Set(csSize idx, float v)
+void cs::Material::Set(csSize idx, float v)
 {
 #ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
 #endif
 
@@ -138,12 +138,12 @@ void csMaterial::Set(csSize idx, float v)
   param.m_float[0] = v;
 }
 
-void csMaterial::Set(csSize idx, const csVector2f &v)
+void cs::Material::Set(csSize idx, const cs::Vector2f &v)
 {
 #ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
 #endif
 
@@ -155,12 +155,12 @@ void csMaterial::Set(csSize idx, const csVector2f &v)
 }
 
 
-void csMaterial::Set(csSize idx, const csVector3f &v)
+void cs::Material::Set(csSize idx, const cs::Vector3f &v)
 {
 #ifdef _DEBUG
   if (idx >= m_parameters.size())
   {
-    throw csNoSuchParameterIndexException(idx);
+    throw cs::NoSuchParameterIndexException(idx);
   }
 #endif
 
@@ -173,7 +173,7 @@ void csMaterial::Set(csSize idx, const csVector3f &v)
 }
 
 
-void csMaterial::Set(csSize idx, const csVector4f &v)
+void cs::Material::Set(csSize idx, const cs::Vector4f &v)
 {
   if (idx >= m_parameters.size())
   {
@@ -190,7 +190,7 @@ void csMaterial::Set(csSize idx, const csVector4f &v)
 }
 
 
-void csMaterial::Set(csSize idx, const csColor4f &c)
+void cs::Material::Set(csSize idx, const cs::Color4f &c)
 {
   if (idx >= m_parameters.size())
   {
@@ -206,7 +206,7 @@ void csMaterial::Set(csSize idx, const csColor4f &c)
   param.m_float[3] = c.a;
 }
 
-void csMaterial::Set(csSize idx, csTextureWrapper *texture)
+void cs::Material::Set(csSize idx, cs::TextureWrapper *texture)
 {
   if (idx >= m_parameters.size())
   {
@@ -219,7 +219,7 @@ void csMaterial::Set(csSize idx, csTextureWrapper *texture)
   param.m_inherit = false;
 }
 
-float csMaterial::GetFloat(csSize idx)
+float cs::Material::GetFloat(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -230,60 +230,60 @@ float csMaterial::GetFloat(csSize idx)
   return param.m_float[0];
 }
 
-csVector2f csMaterial::GetFloat2(csSize idx)
+cs::Vector2f cs::Material::GetFloat2(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
-    return csVector2f(0.0f, 0.0f);
+    return cs::Vector2f(0.0f, 0.0f);
   }
 
   ShaderParameter &param = m_parameters[idx];
-  return csVector2f(param.m_float[0],
+  return cs::Vector2f(param.m_float[0],
                     param.m_float[1]);
 }
-csVector3f csMaterial::GetFloat3(csSize idx)
+cs::Vector3f cs::Material::GetFloat3(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
-    return csVector3f(0.0f, 0.0f, 0.0f);
+    return cs::Vector3f(0.0f, 0.0f, 0.0f);
   }
 
   ShaderParameter &param = m_parameters[idx];
-  return csVector3f(param.m_float[0],
+  return cs::Vector3f(param.m_float[0],
                     param.m_float[1],
                     param.m_float[2]);
 }
 
-csVector4f csMaterial::GetFloat4(csSize idx)
+cs::Vector4f cs::Material::GetFloat4(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
-    return csVector4f(0.0f, 0.0f, 0.0f, 0.0f);
+    return cs::Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
   }
 
   ShaderParameter &param = m_parameters[idx];
-  return csVector4f(param.m_float[0],
+  return cs::Vector4f(param.m_float[0],
                     param.m_float[1],
                     param.m_float[2],
                     param.m_float[3]);
 }
 
 
-csColor4f csMaterial::GetColor4(csSize idx)
+cs::Color4f cs::Material::GetColor4(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
-    return csColor4f(0.0f, 0.0f, 0.0f, 0.0f);
+    return cs::Color4f(0.0f, 0.0f, 0.0f, 0.0f);
   }
 
   ShaderParameter &param = m_parameters[idx];
-  return csColor4f(param.m_float[0],
+  return cs::Color4f(param.m_float[0],
                    param.m_float[1],
                    param.m_float[2],
                    param.m_float[3]);
 }
 
-csTextureWrapper *csMaterial::GetTexture(csSize idx)
+cs::TextureWrapper *cs::Material::GetTexture(csSize idx)
 {
   if (idx >= m_parameters.size())
   {
@@ -293,30 +293,30 @@ csTextureWrapper *csMaterial::GetTexture(csSize idx)
   return m_parameters[idx].m_texture;
 }
 
-void csMaterial::SetFillMode(csFillMode mode)
+void cs::Material::SetFillMode(cs::eFillMode mode)
 {
   m_fillMode = mode;
   m_fillModeInherited = false;
 }
 
-csFillMode csMaterial::GetFillMode() const
+cs::eFillMode cs::Material::GetFillMode() const
 {
   return m_fillMode;
 }
 
-bool csMaterial::IsFillModeInherited() const
+bool cs::Material::IsFillModeInherited() const
 {
   return m_fillModeInherited;
 }
 
-bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
+bool cs::Material::Bind(cs::iGraphics *renderer, cs::eRenderPass pass)
 {
   if (!m_materialDef || !m_materialDef->IsValid())
   {
     return false;
   }
-  csMaterialDef *materialDef = m_materialDef->Get();
-  csShaderWrapper *shader = materialDef->Bind(renderer, pass);
+  cs::MaterialDef *materialDef = m_materialDef->Get();
+  cs::ShaderWrapper *shader = materialDef->Bind(renderer, pass);
   if (!shader || shader->IsNull())
   {
     return false;
@@ -331,43 +331,43 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
     }
     else
     {
-      iShaderAttribute *attr = materialDef->GetAttributeUnsafe((csSize)i, pass);
+      cs::iShaderAttribute *attr = materialDef->GetAttributeUnsafe((csSize)i, pass);
       if (attr)
       {
         switch (param.m_paramType)
         {
-        case eSPT_Float:
+        case cs::eSPT_Float:
           attr->Set(param.m_float[0]);
           break;
-        case eSPT_Vector2:
+        case cs::eSPT_Vector2:
           attr->Set(param.m_float[0], param.m_float[1]);
           break;
-        case eSPT_Vector3:
+        case cs::eSPT_Vector3:
           attr->Set(param.m_float[0], param.m_float[1], param.m_float[2]);
           break;
-        case eSPT_Vector4:
+        case cs::eSPT_Vector4:
           attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
           break;
-        case eSPT_Int:
+        case cs::eSPT_Int:
           attr->Set(param.m_int[0]);
           break;
-        case eSPT_IVector2:
+        case cs::eSPT_IVector2:
           attr->Set(param.m_int[0], param.m_int[1]);
           break;
-        case eSPT_IVector3:
+        case cs::eSPT_IVector3:
           attr->Set(param.m_int[0], param.m_int[1], param.m_int[2]);
           break;
-        case eSPT_IVector4:
+        case cs::eSPT_IVector4:
           attr->Set(param.m_int[0], param.m_int[1], param.m_int[2], param.m_int[3]);
           break;
-        case eSPT_Color4:
+        case cs::eSPT_Color4:
           attr->Set(param.m_float[0], param.m_float[1], param.m_float[2], param.m_float[3]);
           break;
-        case eSPT_Texture:
+        case cs::eSPT_Texture:
           if (param.m_texture)
           {
-            csTextureUnit unit = renderer->BindTexture(param.m_texture->Get());
-            if (unit != eTU_Invalid)
+            cs::eTextureUnit unit = renderer->BindTexture(param.m_texture->Get());
+            if (unit != cs::eTU_Invalid)
             {
               attr->Set((csInt32)unit);
             }
@@ -394,7 +394,7 @@ bool csMaterial::Bind(iGraphics *renderer, csRenderPass pass)
   return true;
 }
 
-csMaterial::ShaderParameter::ShaderParameter()
+cs::Material::ShaderParameter::ShaderParameter()
 {
 
 }

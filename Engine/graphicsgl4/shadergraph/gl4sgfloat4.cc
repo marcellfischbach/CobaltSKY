@@ -5,7 +5,7 @@
 
 void csSGFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  csSGNode *n = GetNode();
+  cs::SGNode *n = GetNode();
   std::string src[] = {
     n->GetInput(0)->GetInput() ? ctx.GetInputValue(n->GetInput(0)) : "",
     n->GetInput(1)->GetInput() ? ctx.GetInputValue(n->GetInput(1)) : "",
@@ -13,11 +13,11 @@ void csSGFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
     n->GetInput(3)->GetInput() ? ctx.GetInputValue(n->GetInput(3)) : ""
   };
 
-  csSGDataType dt[] = {
-    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : eSGDT_Inval,
-    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : eSGDT_Inval,
-    n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetDataType() : eSGDT_Inval,
-    n->GetInput(3)->GetInput() ? n->GetInput(3)->GetInput()->GetDataType() : eSGDT_Inval,
+  cs::eSGDataType dt[] = {
+    n->GetInput(0)->GetInput() ? n->GetInput(0)->GetInput()->GetDataType() : cs::eSGDT_Inval,
+    n->GetInput(1)->GetInput() ? n->GetInput(1)->GetInput()->GetDataType() : cs::eSGDT_Inval,
+    n->GetInput(2)->GetInput() ? n->GetInput(2)->GetInput()->GetDataType() : cs::eSGDT_Inval,
+    n->GetInput(3)->GetInput() ? n->GetInput(3)->GetInput()->GetDataType() : cs::eSGDT_Inval,
   };
   std::ostringstream ss;
   if (src[0] == src[1] && src[0] == src[2] && src[0] == src[3] && src[0].length() != 0)

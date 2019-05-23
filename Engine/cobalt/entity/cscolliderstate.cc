@@ -10,25 +10,25 @@
 
 
 
-csColliderState::csColliderState()
-  : csSpatialState()
+cs::ColliderState::ColliderState()
+  : cs::SpatialState()
   , m_collider(0)
   , m_updateTransformationGuard(false)
 {
   
 }
 
-csColliderState::~csColliderState()
+cs::ColliderState::~ColliderState()
 {
   CS_RELEASE(m_collider);
 }
 
-void csColliderState::SetCollider(iPhysicsCollider *collider)
+void cs::ColliderState::SetCollider(cs::iPhysicsCollider *collider)
 {
   CS_SET(m_collider, collider);
 }
 
-void csColliderState::AttachShape(iPhysicsShape* shape)
+void cs::ColliderState::AttachShape(cs::iPhysicsShape* shape)
 {
   if (m_collider)
   {
@@ -36,7 +36,7 @@ void csColliderState::AttachShape(iPhysicsShape* shape)
   }
 }
 
-void csColliderState::DetachShape(iPhysicsShape *shape)
+void cs::ColliderState::DetachShape(cs::iPhysicsShape *shape)
 {
   if (m_collider)
   {
@@ -45,7 +45,7 @@ void csColliderState::DetachShape(iPhysicsShape *shape)
 }
 
 
-void csColliderState::AttachShape(csPhysicsShape *shapes)
+void cs::ColliderState::AttachShape(cs::PhysicsShape *shapes)
 {
   if (m_collider)
   {
@@ -55,7 +55,7 @@ void csColliderState::AttachShape(csPhysicsShape *shapes)
 
 
 
-void csColliderState::DetachShape(csPhysicsShape *shapes)
+void cs::ColliderState::DetachShape(cs::PhysicsShape *shapes)
 {
   if (m_collider)
   {
@@ -63,11 +63,11 @@ void csColliderState::DetachShape(csPhysicsShape *shapes)
   }
 }
 
-void csColliderState::UpdateTransformation()
+void cs::ColliderState::UpdateTransformation()
 {
 
   // don't perform cyclic update with dynmaic bodies
-  csSpatialState::UpdateTransformation();
+  cs::SpatialState::UpdateTransformation();
 
   if (m_updateTransformationGuard)
   {

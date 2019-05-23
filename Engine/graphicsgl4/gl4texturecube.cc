@@ -5,8 +5,8 @@
 
 
 csTextureCubeGL4::csTextureCubeGL4()
-  : csTextureGL4(eTT_TextureCube)
-  , iTextureCube()
+  : csTextureGL4(cs::eTT_TextureCube)
+  , cs::iTextureCube()
 {
 
 }
@@ -16,7 +16,7 @@ csTextureCubeGL4::~csTextureCubeGL4()
 
 }
 
-bool csTextureCubeGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
+bool csTextureCubeGL4::Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
 {
   if (!csTextureGL4::Initialize())
   {
@@ -45,24 +45,24 @@ bool csTextureCubeGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16
   return true;
 }
 
-bool csTextureCubeGL4::CopyData(csTextureCubeFace face, csUInt8 lod, csPixelFormat format, const void *data)
+bool csTextureCubeGL4::CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void *data)
 {
   csUInt16 width;
   csUInt16 height;
   switch (face)
   {
-  case eTCF_PositiveX:
-  case eTCF_NegativeX:
+  case cs::eTCF_PositiveX:
+  case cs::eTCF_NegativeX:
     width = m_depth;
     height = m_height;
     break;
-  case eTCF_PositiveY:
-  case eTCF_NegativeY:
+  case cs::eTCF_PositiveY:
+  case cs::eTCF_NegativeY:
     width = m_width;
     height = m_height;
     break;
-  case eTCF_PositiveZ:
-  case eTCF_NegativeZ:
+  case cs::eTCF_PositiveZ:
+  case cs::eTCF_NegativeZ:
     width = m_width;
     height = m_depth;
     break;

@@ -20,36 +20,36 @@
 
 
 
-csLoaders::csLoaders()
+cs::Loaders::Loaders()
 {
 
 }
 
 
-void csLoaders::Register(csResourceManager *mgr)
+void cs::Loaders::Register(cs::ResourceManager *mgr)
 {
 
 
   //
   // The new loaders go here
-  mgr->RegisterLoader(new csBlueprintCSFLoader());
+  mgr->RegisterLoader(new cs::BlueprintCSFLoader());
 
-  mgr->RegisterLoader(new csCollisionAssetCSFLoader());
-  mgr->RegisterLoader(new csEntityCSFLoader());
-  mgr->RegisterLoader(new csEntityStateCSFLoader());
-  mgr->RegisterLoader(new csMaterialAssetCSFLoader());
-  mgr->RegisterLoader(new csMaterialDefAssetCSFLoader());
-  mgr->RegisterLoader(new csMeshAssetCSFLoader());
-  mgr->RegisterLoader(new csPropertySetterCSFLoader());
-  mgr->RegisterLoader(new csSamplerAssetCSFLoader());
-  mgr->RegisterLoader(new csShaderGraphAssetCSFLoader());
-  mgr->RegisterLoader(new csSkinnedMeshAssetCSFLoader());
-  mgr->RegisterLoader(new csTextureAssetCSFLoader());
+  mgr->RegisterLoader(new cs::CollisionAssetCSFLoader());
+  mgr->RegisterLoader(new cs::EntityCSFLoader());
+  mgr->RegisterLoader(new cs::EntityStateCSFLoader());
+  mgr->RegisterLoader(new cs::MaterialAssetCSFLoader());
+  mgr->RegisterLoader(new cs::MaterialDefAssetCSFLoader());
+  mgr->RegisterLoader(new cs::MeshAssetCSFLoader());
+  mgr->RegisterLoader(new cs::PropertySetterCSFLoader());
+  mgr->RegisterLoader(new cs::SamplerAssetCSFLoader());
+  mgr->RegisterLoader(new cs::ShaderGraphAssetCSFLoader());
+  mgr->RegisterLoader(new cs::SkinnedMeshAssetCSFLoader());
+  mgr->RegisterLoader(new cs::TextureAssetCSFLoader());
 
 
   // image loaders
-  mgr->RegisterLoader(new csPNGImageAssetLoader());
-  mgr->RegisterLoader(new csPNGImageFileLoader());
-  mgr->RegisterLoader(new csSubMeshAssetLoader());
+  mgr->RegisterLoader(new cs::PNGImageAssetLoader());
+  mgr->RegisterLoader(new cs::PNGImageFileLoader());
+  mgr->RegisterLoader(new cs::SubMeshAssetLoader());
 
 }

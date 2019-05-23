@@ -21,12 +21,12 @@ TextureEditorProperties::~TextureEditorProperties()
   CS_RELEASE(m_texture);
 }
 
-void TextureEditorProperties::SetTexture(csTextureWrapper *texture)
+void TextureEditorProperties::SetTexture(cs::TextureWrapper *texture)
 {
   CS_SET(m_texture, texture);
   if (m_texture)
   {
-    csResourceLocator locator = texture->GetLocator();
+    cs::ResourceLocator locator = texture->GetLocator();
     m_samplerWidget->SetResourceLocator(locator);
   }
 }
@@ -42,8 +42,8 @@ void TextureEditorProperties::InitGUI()
   QLabel *label = new QLabel(tr("Sampler"), frame);
   m_samplerWidget = new AssetResourceWidget(frame);
   m_samplerWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Maximum);
-  m_samplerWidget->AddValidClass(csSamplerWrapper::GetStaticClass());
-  connect(m_samplerWidget, SIGNAL(ResourceChanged(const csResourceLocator &)), this, SIGNAL(SamplerChanged(const csResourceLocator &)));
+  m_samplerWidget->AddValidClass(cs::SamplerWrapper::GetStaticClass());
+  connect(m_samplerWidget, SIGNAL(ResourceChanged(const cs::ResourceLocator &)), this, SIGNAL(SamplerChanged(const cs::ResourceLocator &)));
 
   frameLayout->addWidget(label, 0, 0, 1, 1);
   frameLayout->addWidget(m_samplerWidget, 0, 1, 1, 1);

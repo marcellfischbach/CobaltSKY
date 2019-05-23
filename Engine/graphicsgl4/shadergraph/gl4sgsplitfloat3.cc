@@ -11,7 +11,7 @@ csSGSplitFloat3GL4::csSGSplitFloat3GL4()
 
 void csSGSplitFloat3GL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  csSGNode *node = GetNode();
+  cs::SGNode *node = GetNode();
   csSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
   if (!inputNode)
   {

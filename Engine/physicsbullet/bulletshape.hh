@@ -7,27 +7,27 @@
 #include <physicsbullet/bulletshape.refl.hh>
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletShape : public CS_SUPER(iPhysicsShape)
+class CSBULLETPHYSICS_API csBulletShape : public CS_SUPER(cs::iPhysicsShape)
 {
   CS_CLASS_GEN_OBJECT;
 public:
   csBulletShape();
   virtual ~csBulletShape();
 
-  virtual const csPhysGeometry &GetGeometry() const;
-  virtual void SetLocalTransform(const csMatrix4f &localTransform);
-  virtual const csMatrix4f &GetLocalTransform() const;
+  virtual const cs::PhysGeometry &GetGeometry() const;
+  virtual void SetLocalTransform(const cs::Matrix4f &localTransform);
+  virtual const cs::Matrix4f &GetLocalTransform() const;
 
   bool IsTransformed() const;
 
 public:
-  virtual bool Initialize(const csPhysGeometry &geometry);
+  virtual bool Initialize(const cs::PhysGeometry &geometry);
 
   btCollisionShape *GetBulletShape();
 
 private:
-  csMatrix4f m_localTransform;
-  csPhysGeometry m_geometry;
+  cs::Matrix4f m_localTransform;
+  cs::PhysGeometry m_geometry;
   btCollisionShape *m_bulletShape;
 };
 

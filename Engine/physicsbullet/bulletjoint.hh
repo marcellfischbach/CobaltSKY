@@ -8,16 +8,16 @@
 
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletJoint : public virtual CS_SUPER(iPhysicsJoint)
+class CSBULLETPHYSICS_API csBulletJoint : public virtual CS_SUPER(cs::iPhysicsJoint)
 {
   CS_CLASS_GEN_OBJECT;
 public:
   virtual ~csBulletJoint();
 
-  virtual csPhysicsJointType GetType() const;
+  virtual cs::ePhysicsJointType GetType() const;
 
-  virtual iPhysicsDynamicCollider *GetColliderA() const;
-  virtual iPhysicsDynamicCollider *GetColliderB() const;
+  virtual cs::iPhysicsDynamicCollider *GetColliderA() const;
+  virtual cs::iPhysicsDynamicCollider *GetColliderB() const;
 
   btTypedConstraint *GetConstraint();
   const btTypedConstraint *GetConstraint() const;
@@ -26,7 +26,7 @@ public:
   virtual void DetachFromScene(csBulletScene *scene);
 
 protected:
-  csBulletJoint(csPhysicsJointType type);
+  csBulletJoint(cs::ePhysicsJointType type);
 
   void SetCollider(csBulletDynamicCollider *colliderA, csBulletDynamicCollider *colliderB);
 
@@ -34,7 +34,7 @@ protected:
   void SetConstraint(btTypedConstraint *constraint);
 
 private:
-  csPhysicsJointType m_type;
+  cs::ePhysicsJointType m_type;
 
   csBulletDynamicCollider *m_colliderA;
   csBulletDynamicCollider *m_colliderB;

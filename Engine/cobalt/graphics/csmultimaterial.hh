@@ -6,23 +6,28 @@
 #include <vector>
 #include <cobalt/graphics/csmultimaterial.refl.hh>
 
-class csMaterial;
+
+namespace cs
+{
+class Material;
 
 CS_CLASS()
-class CSE_API csMultiMaterial : public CS_SUPER(cs::Object)
+class CSE_API MultiMaterial : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csMultiMaterial();
-  csMultiMaterial(csMaterial *instance);
-  virtual ~csMultiMaterial();
+  MultiMaterial();
+  MultiMaterial(cs::Material *instance);
+  virtual ~MultiMaterial();
 
-  void AddMaterialInstance(csMaterial *instance);
+  void AddMaterialInstance(cs::Material *instance);
   csSize GetNumberOfInstances() const;
-  csMaterial *GetMaterialInstance(csSize idx = 0);
-  const csMaterial *GetMaterialInstance(csSize idx = 0) const;
+  cs::Material *GetMaterialInstance(csSize idx = 0);
+  const cs::Material *GetMaterialInstance(csSize idx = 0) const;
 
 private:
-  std::vector<csMaterial *> m_instances;
+  std::vector<cs::Material *> m_instances;
 
 };
+
+}

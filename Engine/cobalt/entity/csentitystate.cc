@@ -2,7 +2,7 @@
 #include <cobalt/entity/csentitystate.hh>
 
 
-csEntityState::csEntityState()
+cs::EntityState::EntityState()
   : cs::Object()
   , m_scene(0)
   , m_entity(0)
@@ -13,28 +13,28 @@ csEntityState::csEntityState()
 
 }
 
-void csEntityState::SetId(csID id)
+void cs::EntityState::SetId(csID id)
 {
   m_id = id;
 }
 
-csEntityState::~csEntityState()
+cs::EntityState::~EntityState()
 {
 
 }
 
-csSpatialState *csEntityState::ToSpatialState()
-{
-  return 0;
-}
-
-const csSpatialState *csEntityState::ToSpatialState() const
+cs::SpatialState *cs::EntityState::ToSpatialState()
 {
   return 0;
 }
 
+const cs::SpatialState *cs::EntityState::ToSpatialState() const
+{
+  return 0;
+}
 
-void csEntityState::Create()
+
+void cs::EntityState::Create()
 {
   if (m_created)
   {
@@ -44,7 +44,7 @@ void csEntityState::Create()
   OnCreated();
 }
 
-void csEntityState::Assemble()
+void cs::EntityState::Assemble()
 {
   if (m_assembled)
   {
@@ -54,7 +54,7 @@ void csEntityState::Assemble()
   OnAssembled();
 }
 
-void csEntityState::AttachToEntity(csEntity *entity)
+void cs::EntityState::AttachToEntity(cs::Entity *entity)
 {
   if (m_entity)
   {
@@ -64,7 +64,7 @@ void csEntityState::AttachToEntity(csEntity *entity)
   OnAttachedToEntity(entity);
 }
 
-void csEntityState::AttachToScene(csEntityScene *scene)
+void cs::EntityState::AttachToScene(cs::EntityScene *scene)
 {
   if (m_scene || !scene)
   {
@@ -75,7 +75,7 @@ void csEntityState::AttachToScene(csEntityScene *scene)
   OnAttachedToScene(scene);
 }
 
-void csEntityState::DetachFromScene(csEntityScene *scene)
+void cs::EntityState::DetachFromScene(cs::EntityScene *scene)
 {
   if (!m_scene || m_scene != scene)
   {
@@ -85,7 +85,7 @@ void csEntityState::DetachFromScene(csEntityScene *scene)
   OnDetachedFromScene(scene);
 }
 
-void csEntityState::DetachFromEntity(csEntity *entity)
+void cs::EntityState::DetachFromEntity(cs::Entity *entity)
 {
   if (!m_entity || m_entity != entity)
   {
@@ -96,7 +96,7 @@ void csEntityState::DetachFromEntity(csEntity *entity)
   OnDetachedFromEntity(entity);
 }
 
-void csEntityState::Disassemble()
+void cs::EntityState::Disassemble()
 {
   if (!m_assembled)
   {
@@ -106,7 +106,7 @@ void csEntityState::Disassemble()
   OnDisassembled();
 }
 
-void csEntityState::Destroy()
+void cs::EntityState::Destroy()
 {
   if (!m_created)
   {
@@ -119,47 +119,47 @@ void csEntityState::Destroy()
 
 
 
-void csEntityState::OnCreated()
+void cs::EntityState::OnCreated()
 {
 
 }
 
-void csEntityState::OnAssembled()
+void cs::EntityState::OnAssembled()
 {
 
 }
 
-void csEntityState::OnAttachedToEntity(csEntity *entity)
+void cs::EntityState::OnAttachedToEntity(cs::Entity *entity)
 {
 }
 
 
-void csEntityState::OnAttachedToScene(csEntityScene *scene)
+void cs::EntityState::OnAttachedToScene(cs::EntityScene *scene)
 {
 
 }
 
-void csEntityState::OnDetachedFromScene(csEntityScene *scene)
+void cs::EntityState::OnDetachedFromScene(cs::EntityScene *scene)
 {
 
 }
 
 
-void csEntityState::OnDetachedFromEntity(csEntity *entity)
+void cs::EntityState::OnDetachedFromEntity(cs::Entity *entity)
 {
 }
 
-void csEntityState::OnDisassembled()
-{
-
-}
-
-void csEntityState::OnDestroyed()
+void cs::EntityState::OnDisassembled()
 {
 
 }
 
-void csEntityState::Update(float tpf)
+void cs::EntityState::OnDestroyed()
+{
+
+}
+
+void cs::EntityState::Update(float tpf)
 {
 
 }

@@ -3,19 +3,19 @@
 #include <cobalt/core/csresourcemanager.hh>
 
 
-csResourcePropertySetter::csResourcePropertySetter()
-  : csPropertySetter()
+cs::ResourcePropertySetter::ResourcePropertySetter()
+  : cs::PropertySetter()
 {
 
 }
 
-csResourcePropertySetter::~csResourcePropertySetter()
+cs::ResourcePropertySetter::~ResourcePropertySetter()
 {
 
 }
 
 
-void csResourcePropertySetter::SetValue(cs::iObject *obj)
+void cs::ResourcePropertySetter::SetValue(cs::iObject *obj)
 {
   const cs::Function *setter = GetSetter(obj->GetClass());
   cs::iObject *res = GetResource();
@@ -25,7 +25,7 @@ void csResourcePropertySetter::SetValue(cs::iObject *obj)
   }
 }
 
-void csResourcePropertySetter::SetCollectionValue(cs::iObject *obj, csUInt64 idx)
+void cs::ResourcePropertySetter::SetCollectionValue(cs::iObject *obj, csUInt64 idx)
 {
   const cs::Function *setter = GetCollectionSetter(obj->GetClass());
   cs::iObject *res = GetResource();
@@ -36,7 +36,7 @@ void csResourcePropertySetter::SetCollectionValue(cs::iObject *obj, csUInt64 idx
 }
 
 
-void csResourcePropertySetter::AddCollectionValue(cs::iObject *obj)
+void cs::ResourcePropertySetter::AddCollectionValue(cs::iObject *obj)
 {
   const cs::Function *setter = GetCollectionAdder(obj->GetClass());
   cs::iObject *res = GetResource();
@@ -46,25 +46,25 @@ void csResourcePropertySetter::AddCollectionValue(cs::iObject *obj)
   }
 }
 
-void csResourcePropertySetter::SetResourceLocator(const csResourceLocator &locator)
+void cs::ResourcePropertySetter::SetResourceLocator(const cs::ResourceLocator &locator)
 {
   m_locator = locator;
 }
 
-const csResourceLocator &csResourcePropertySetter::GetResourceLocator() const
+const cs::ResourceLocator &cs::ResourcePropertySetter::GetResourceLocator() const
 {
   return m_locator;
 }
 
 
-cs::iObject *csResourcePropertySetter::GetResource()
+cs::iObject *cs::ResourcePropertySetter::GetResource()
 {
-  cs::iObject *object = csResourceManager::Get()->Aquire(m_locator);
+  cs::iObject *object = cs::ResourceManager::Get()->Aquire(m_locator);
   return object;
 }
 
-const cs::iObject *csResourcePropertySetter::GetResource() const
+const cs::iObject *cs::ResourcePropertySetter::GetResource() const
 {
-  cs::iObject *object = csResourceManager::Get()->Aquire(m_locator);
+  cs::iObject *object = cs::ResourceManager::Get()->Aquire(m_locator);
   return object;
 }

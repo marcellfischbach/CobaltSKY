@@ -6,14 +6,17 @@
 
 #include <cobalt/entity/csbasecolliderstate.refl.hh>
 
+
+namespace cs
+{
 struct iPhysicsBaseCollider;
 
 CS_CLASS()
-class CSE_API csBaseColliderState : public CS_SUPER(csColliderState)
+class CSE_API BaseColliderState : public CS_SUPER(cs::ColliderState)
 {
   CS_CLASS_GEN;
 public:
-  virtual ~csBaseColliderState();
+  virtual ~BaseColliderState();
 
   void SetFriction(float friction);
   float GetFriction() const;
@@ -21,27 +24,29 @@ public:
   void SetRestitution(float restitution);
   float GetRestitution() const;
 
-  iPhysicsBaseCollider *GetBaseCollider();
-  const iPhysicsBaseCollider *GetBaseCollider() const;
+  cs::iPhysicsBaseCollider* GetBaseCollider();
+  const cs::iPhysicsBaseCollider* GetBaseCollider() const;
 
 protected:
-  csBaseColliderState();
+  BaseColliderState();
 
-  void SetBaseCollider(iPhysicsBaseCollider *baseCollider);
+  void SetBaseCollider(cs::iPhysicsBaseCollider * baseCollider);
 
 private:
 
-  iPhysicsBaseCollider *m_baseCollider;
+  cs::iPhysicsBaseCollider* m_baseCollider;
 };
+}
 
 
-CS_FORCEINLINE iPhysicsBaseCollider *csBaseColliderState::GetBaseCollider()
+CS_FORCEINLINE cs::iPhysicsBaseCollider* cs::BaseColliderState::GetBaseCollider()
 {
   return m_baseCollider;
 }
 
-CS_FORCEINLINE const iPhysicsBaseCollider *csBaseColliderState::GetBaseCollider() const
+CS_FORCEINLINE const cs::iPhysicsBaseCollider* cs::BaseColliderState::GetBaseCollider() const
 {
   return m_baseCollider;
 }
+
 

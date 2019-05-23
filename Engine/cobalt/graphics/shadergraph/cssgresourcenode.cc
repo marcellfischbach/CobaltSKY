@@ -1,21 +1,21 @@
 
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 
-csSGResourceNode::csSGResourceNode()
-  : csSGNode()
+cs::SGResourceNode::SGResourceNode()
+  : cs::SGNode()
   , m_resourceName("")
 {
 
 }
 
-csSGResourceNode::~csSGResourceNode()
+cs::SGResourceNode::~SGResourceNode()
 {
 
 }
 
-csSGNode *csSGResourceNode::Copy(csSGNode *node) const
+cs::SGNode *cs::SGResourceNode::Copy(cs::SGNode *node) const
 {
-  csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+  cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
   if (resourceNode)
   {
     resourceNode->m_resourceId = m_resourceId;
@@ -25,56 +25,56 @@ csSGNode *csSGResourceNode::Copy(csSGNode *node) const
     memcpy(resourceNode->m_defaultInts, m_defaultInts, sizeof(m_defaultInts));
     resourceNode->m_defaultTextureResource = m_defaultTextureResource;
   }
-  return csSGNode::Copy(node);
+  return cs::SGNode::Copy(node);
 }
 
-void csSGResourceNode::SetResourceName(const std::string &resourceName)
+void cs::SGResourceNode::SetResourceName(const std::string &resourceName)
 {
   m_resourceName = resourceName;
 }
 
-const std::string &csSGResourceNode::GetResourceName() const
+const std::string &cs::SGResourceNode::GetResourceName() const
 {
   return m_resourceName;
 }
 
-void csSGResourceNode::SetResourceId(const std::string &resourceId)
+void cs::SGResourceNode::SetResourceId(const std::string &resourceId)
 {
   m_resourceId = resourceId;
 }
 
-const std::string &csSGResourceNode::GetResourceId() const
+const std::string &cs::SGResourceNode::GetResourceId() const
 {
   return m_resourceId;
 }
 
-void csSGResourceNode::SetResourceType(csShaderParameterType resourceType)
+void cs::SGResourceNode::SetResourceType(cs::eShaderParameterType resourceType)
 {
   m_resourceType = resourceType;
 }
 
-csShaderParameterType csSGResourceNode::GetResourceType() const
+cs::eShaderParameterType cs::SGResourceNode::GetResourceType() const
 {
   return m_resourceType;
 }
 
-void csSGResourceNode::SetDefault(float value)
+void cs::SGResourceNode::SetDefault(float value)
 {
   m_defaultFloats[0] = value;
 }
 
-void csSGResourceNode::SetDefault(const csVector2f &value)
+void cs::SGResourceNode::SetDefault(const cs::Vector2f &value)
 {
   m_defaultFloats[0] = value.x;
   m_defaultFloats[1] = value.y;
 }
-void csSGResourceNode::SetDefault(const csVector3f &value)
+void cs::SGResourceNode::SetDefault(const cs::Vector3f &value)
 {
   m_defaultFloats[0] = value.x;
   m_defaultFloats[1] = value.y;
   m_defaultFloats[2] = value.z;
 }
-void csSGResourceNode::SetDefault(const csVector4f &value)
+void cs::SGResourceNode::SetDefault(const cs::Vector4f &value)
 {
   m_defaultFloats[0] = value.x;
   m_defaultFloats[1] = value.y;
@@ -82,14 +82,14 @@ void csSGResourceNode::SetDefault(const csVector4f &value)
   m_defaultFloats[3] = value.w;
 }
 
-void csSGResourceNode::SetDefault(const csColor4f &value)
+void cs::SGResourceNode::SetDefault(const cs::Color4f &value)
 {
   m_defaultFloats[0] = value.r;
   m_defaultFloats[1] = value.g;
   m_defaultFloats[2] = value.b;
   m_defaultFloats[3] = value.a;
 }
-void csSGResourceNode::SetDefault(const csMatrix3f &value)
+void cs::SGResourceNode::SetDefault(const cs::Matrix3f &value)
 {
   m_defaultFloats[0] = value.m00;
   m_defaultFloats[1] = value.m01;
@@ -103,7 +103,7 @@ void csSGResourceNode::SetDefault(const csMatrix3f &value)
 }
 
 
-void csSGResourceNode::SetDefault(const csMatrix4f &value)
+void cs::SGResourceNode::SetDefault(const cs::Matrix4f &value)
 {
   m_defaultFloats[0] = value.m00;
   m_defaultFloats[1] = value.m01;
@@ -123,37 +123,37 @@ void csSGResourceNode::SetDefault(const csMatrix4f &value)
   m_defaultFloats[15] = value.m33;
 }
 
-float *csSGResourceNode::GetDefaultFloats()
+float *cs::SGResourceNode::GetDefaultFloats()
 {
   return m_defaultFloats;
 }
 
-int *csSGResourceNode::GetDefaultInts()
+int *cs::SGResourceNode::GetDefaultInts()
 {
   return m_defaultInts;
 }
 
-void csSGResourceNode::SetDefaultTextureResource(const csResourceLocator &locator)
+void cs::SGResourceNode::SetDefaultTextureResource(const cs::ResourceLocator &locator)
 {
   m_defaultTextureResource = locator;
 }
 
-csResourceLocator &csSGResourceNode::GetDefaultTextureResource()
+cs::ResourceLocator &cs::SGResourceNode::GetDefaultTextureResource()
 {
   return m_defaultTextureResource;
 }
 
-const float *csSGResourceNode::GetDefaultFloats() const
+const float *cs::SGResourceNode::GetDefaultFloats() const
 {
   return m_defaultFloats;
 }
 
-const int *csSGResourceNode::GetDefaultInts() const
+const int *cs::SGResourceNode::GetDefaultInts() const
 {
   return m_defaultInts;
 }
 
-const csResourceLocator &csSGResourceNode::GetDefaultTextureResource() const
+const cs::ResourceLocator &cs::SGResourceNode::GetDefaultTextureResource() const
 {
   return m_defaultTextureResource;
 }

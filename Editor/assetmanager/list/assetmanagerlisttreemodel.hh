@@ -8,7 +8,11 @@
 #include <map>
 
 
-class csResourceLocator;
+namespace cs
+{
+class ResourceLocator;
+
+}
 
 namespace cs::editor::model
 {
@@ -42,8 +46,8 @@ public:
   virtual bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
 
   
-  ListTreeNode *FindNode(const csResourceLocator &locator);
-  const ListTreeNode *FindNode(const csResourceLocator &locator) const;
+  ListTreeNode *FindNode(const cs::ResourceLocator &locator);
+  const ListTreeNode *FindNode(const cs::ResourceLocator &locator) const;
 
   ListTreeNode *ListTreeNodeAt(const QModelIndex &index);
   const ListTreeNode *ListTreeNodeAt(const QModelIndex &index) const;

@@ -8,18 +8,18 @@
 
 
 
-csProgramGL4Loader::csProgramGL4Loader()
-  : csBaseCSFLoader()
+cs::ProgramGL4Loader::ProgramGL4Loader()
+  : cs::BaseCSFLoader()
 {
 }
 
-csProgramGL4Loader::~csProgramGL4Loader()
+cs::ProgramGL4Loader::~ProgramGL4Loader()
 {
 
 }
 
 
-bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::ProgramGL4Loader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   std::string tagName(entry->GetTagName());
 
@@ -28,12 +28,12 @@ bool csProgramGL4Loader::CanLoad(const csfEntry *entry, const csResourceLocator 
 
 
 
-const cs::Class *csProgramGL4Loader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ProgramGL4Loader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csProgramGL4::GetStaticClass();
+  return cs::ProgramGL4::GetStaticClass();
 }
 
-csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (std::string(entry->GetTagName()) != std::string("program"))
   {
@@ -47,10 +47,10 @@ csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResou
     return nullptr;
   }
 
-  csResourceManager *resourceManager = csResourceManager::Get();
+  cs::ResourceManager *resourceManager = cs::ResourceManager::Get();
 
-  csProgramGL4 *program = new csProgramGL4();
-  csProgramGL4Wrapper *programWrapper = new csProgramGL4Wrapper(program);
+  cs::ProgramGL4 *program = new cs::ProgramGL4();
+  cs::ProgramGL4Wrapper *programWrapper = new cs::ProgramGL4Wrapper(program);
   for (const csfEntry *shaderEntry = techniqueEntry->GetEntry("shader");
        shaderEntry;
        shaderEntry = shaderEntry->GetSiblingEntry("shader"))
@@ -59,7 +59,7 @@ csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResou
     {
       return nullptr;
     }
-    csResourceLocator locator(shaderEntry->GetAttribute("locator"));
+    cs::ResourceLocator locator(shaderEntry->GetAttribute("locator"));
     csShaderGL4Wrapper *shader = resourceManager->GetOrLoad<csShaderGL4Wrapper>(locator);
     if (!shader || shader->IsNull())
     {
@@ -81,7 +81,7 @@ csResourceWrapper *csProgramGL4Loader::Load(const csfEntry *entry, const csResou
   return programWrapper;
 }
 
-const csfEntry *csProgramGL4Loader::FindTechnique(const csfEntry *entry) const
+const csfEntry *cs::ProgramGL4Loader::FindTechnique(const csfEntry *entry) const
 {
   if (!entry)
   {

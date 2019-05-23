@@ -7,7 +7,7 @@
 #include <graphicsgl4/gl4texture.refl.hh>
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csTextureGL4 : public virtual CS_SUPER(iTexture)
+class CSGRAPHICSGL4_API csTextureGL4 : public virtual CS_SUPER(cs::iTexture)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -15,11 +15,11 @@ public:
 
   virtual bool Initialize();
 
-  virtual csTextureType GetType() const ;
+  virtual cs::eTextureType GetType() const ;
 
-  virtual void SetSampler(csSamplerWrapper *sampler);
-  virtual csSamplerWrapper *GetSampler();
-  virtual const csSamplerWrapper *GetSampler() const;
+  virtual void SetSampler(cs::SamplerWrapper *sampler);
+  virtual cs::SamplerWrapper *GetSampler();
+  virtual const cs::SamplerWrapper *GetSampler() const;
 
   virtual void GenerateMipMaps();
 
@@ -27,15 +27,15 @@ public:
   GLuint GetName() const;
 
 protected:
-  csTextureGL4(csTextureType type);
+  csTextureGL4(cs::eTextureType type);
 
   GLuint m_name;
   GLenum m_target;
 
 private:
-  csTextureType m_type;
+  cs::eTextureType m_type;
 
-  csSamplerWrapper *m_sampler;
+  cs::SamplerWrapper *m_sampler;
 
 };
 

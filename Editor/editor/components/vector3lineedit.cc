@@ -76,11 +76,11 @@ QWidget *Vector3fLineEdit::CreateFrame(QLabel *label, QDoubleSpinBox *spinBox, c
 
 void Vector3fLineEdit::spinBoxValueChanged(double)
 {
-  csVector3f v = GetValue();
+  cs::Vector3f v = GetValue();
   emit ValueChanged(v);
 }
 
-void Vector3fLineEdit::SetValue(const csVector3f &v)
+void Vector3fLineEdit::SetValue(const cs::Vector3f &v)
 {
   m_sbX->blockSignals(true);
   m_sbY->blockSignals(true);
@@ -95,9 +95,9 @@ void Vector3fLineEdit::SetValue(const csVector3f &v)
   m_sbZ->blockSignals(false);
 }
 
-csVector3f Vector3fLineEdit::GetValue() const
+cs::Vector3f Vector3fLineEdit::GetValue() const
 {
-  csVector3f v (
+  cs::Vector3f v (
         static_cast<float>(m_sbX->value()),
         static_cast<float>(m_sbY->value()),
         static_cast<float>(m_sbZ->value())

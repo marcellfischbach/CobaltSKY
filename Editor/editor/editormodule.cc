@@ -53,7 +53,7 @@ void EditorModule::Initialize()
 	// importManager->RegisterImporter(new ImageImporter());
 	// importManager->RegisterImporter(new ModelImporter());
 
-	csResourceManager *mgr = csResourceManager::Get();
+	cs::ResourceManager *mgr = cs::ResourceManager::Get();
 	//mgr->RegisterLoader(new ShaderGraphEditorMetaAssetCSFLoader());
 	mgr->RegisterLoader(new LoadersEditorIconAssetCSFLoader());
 

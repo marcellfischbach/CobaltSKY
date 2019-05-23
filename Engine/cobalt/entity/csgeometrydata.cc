@@ -6,14 +6,14 @@
 #include <cobalt/graphics/csmaterialdef.hh>
 #include <cobalt/math/csclipper.hh>
 
-csGeometryData::csGeometryData()
+cs::GeometryData::GeometryData()
   : cs::Object()
   , m_attached(false)
 {
 
 }
 
-csGeometryData::~csGeometryData()
+cs::GeometryData::~GeometryData()
 {
 
 }

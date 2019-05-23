@@ -53,29 +53,29 @@ const std::string &AssetNode::GetAssetTypeName() const
 }
 
 
-std::set<csResourceLocator> &AssetNode::GetReferences()
+std::set<cs::ResourceLocator> &AssetNode::GetReferences()
 {
   return m_references;
 }
 
-const csResourceLocator AssetNode::WithNewName(const std::string &newName) const
+const cs::ResourceLocator AssetNode::WithNewName(const std::string &newName) const
 {
   if (m_parent)
   {
     return m_parent->GetResourceLocator().WithFileSuffix(newName);
   }
-  return csResourceLocator(csResourceFile(newName));
+  return cs::ResourceLocator(cs::ResourceFile(newName));
 
 }
 
 
-csResourceLocator AssetNode::GetNewResourceLocator()
+cs::ResourceLocator AssetNode::GetNewResourceLocator()
 {
   if (m_parent)
   {
     return m_parent->GetResourceLocator().WithFileSuffix(m_name);
   }
-  return csResourceLocator(csResourceFile(m_name));
+  return cs::ResourceLocator(cs::ResourceFile(m_name));
 }
 
 void AssetNode::DebugNode() const

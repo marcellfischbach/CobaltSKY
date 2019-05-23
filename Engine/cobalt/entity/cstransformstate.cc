@@ -2,29 +2,29 @@
 #include <cobalt/entity/cstransformstate.hh>
 
 
-csTransformState::csTransformState()
-  : csEntityState()
+cs::TransformState::TransformState()
+  : cs::EntityState()
   , m_parent(0)
   , m_dirty (true)
 {
 
 }
 
-csTransformation csTransformState::GetTransformation()
+cs::Transformation cs::TransformState::GetTransformation()
 {
   if (m_parent)
   {
-    return csTransformation(&m_localMatrix, &m_globalMatrix, &m_parent->m_globalMatrix, &m_parent->m_globalMatrixInv);
+    return cs::Transformation(&m_localMatrix, &m_globalMatrix, &m_parent->m_globalMatrix, &m_parent->m_globalMatrixInv);
   }
   else
   {
-    return csTransformation(&m_localMatrix, &m_globalMatrix, 0, 0);
+    return cs::Transformation(&m_localMatrix, &m_globalMatrix, 0, 0);
   }
 }
 
 
 
-void csTransformState::SetLocalTransformation(const csMatrix4f &matrix)
+void cs::TransformState::SetLocalTransformation(const cs::Matrix4f &matrix)
 {
   m_localMatrix = matrix;
   m_dirty = true;
@@ -33,23 +33,23 @@ void csTransformState::SetLocalTransformation(const csMatrix4f &matrix)
 
 
 
-const csMatrix4f &csTransformState::GetGlobalTransformation() const
+const cs::Matrix4f &cs::TransformState::GetGlobalTransformation() const
 {
   return m_globalMatrix;
 }
 
-const csMatrix4f &csTransformState::GetGlobalTransformationInv() const
+const cs::Matrix4f &cs::TransformState::GetGlobalTransformationInv() const
 {
   return m_globalMatrixInv;
 }
 
-void csTransformState::FinishTransformation()
+void cs::TransformState::FinishTransformation()
 {
   PerformTransformation();
 }
 
 
-void csTransformState::PerformTransformation()
+void cs::TransformState::PerformTransformation()
 {
   // make propagate the transformation to the children
   // this will also update the bounding box of all those child states (incl. this one)
@@ -62,11 +62,11 @@ void csTransformState::PerformTransformation()
   }
 }
 
-void csTransformState::UpdateTransformation()
+void cs::TransformState::UpdateTransformation()
 {
   if (m_parent)
   {
-    csMatrix4f::Mult(m_parent->GetGlobalTransformation(), m_localMatrix, m_globalMatrix);
+    cs::Matrix4f::Mult(m_parent->GetGlobalTransformation(), m_localMatrix, m_globalMatrix);
   }
   else
   {

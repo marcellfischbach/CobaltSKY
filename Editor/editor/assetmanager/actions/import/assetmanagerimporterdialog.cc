@@ -92,7 +92,7 @@ void AssetManagerImporterDialog::on_pbOK_clicked(bool)
     if (page->IsImporting())
     {
       iAssetImporter *importer = page->GetImporter();
-      csResourceLocator loc = importer->Import(m_folder);
+      cs::ResourceLocator loc = importer->Import(m_folder);
       AssetAddedEvent evt(loc, 0);
       bus << evt;
     }

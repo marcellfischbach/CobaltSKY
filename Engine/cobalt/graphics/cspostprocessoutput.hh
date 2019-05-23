@@ -1,6 +1,9 @@
 #pragma once
 
-enum csPostProcessOutput
+namespace cs
+{
+
+enum ePostProcessOutput
 {
   ePPO_GBuffer_Depth,
   ePPO_GBuffer_DiffuseRoughness,
@@ -11,3 +14,5 @@ enum csPostProcessOutput
   ePPO_FinalTarget_Depth,
   ePPO_COUNT
 };
+
+}

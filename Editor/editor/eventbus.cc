@@ -2,7 +2,7 @@
 #include <editor/eventbus.hh>
 
 EventBus::EventBus()
-  : csEventBus()
+  : cs::EventBus()
 {
 
 }

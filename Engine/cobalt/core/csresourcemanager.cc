@@ -8,37 +8,37 @@
 #include <iostream>
 
 
-csResourceManager *csResourceManager::s_instance = nullptr;
+cs::ResourceManager *cs::ResourceManager::s_instance = nullptr;
 
 
-csResourceManager *csResourceManager::Get()
+cs::ResourceManager *cs::ResourceManager::Get()
 {
-  if (!csResourceManager::s_instance)
+  if (!cs::ResourceManager::s_instance)
   {
-    csResourceManager::s_instance = new csResourceManager();
+    cs::ResourceManager::s_instance = new cs::ResourceManager();
   }
-  return csResourceManager::s_instance;
+  return cs::ResourceManager::s_instance;
 }
 
-void csResourceManager::Register(csResourceManager *resourceManager)
+void cs::ResourceManager::Register(cs::ResourceManager *resourceManager)
 {
-  if (csResourceManager::s_instance)
+  if (cs::ResourceManager::s_instance)
   {
     // TODO: move all resources from the current resource manager to the new
-    delete csResourceManager::s_instance;
+    delete cs::ResourceManager::s_instance;
   }
-  csResourceManager::s_instance = resourceManager;
+  cs::ResourceManager::s_instance = resourceManager;
 }
 
 
-csResourceManager::csResourceManager()
+cs::ResourceManager::ResourceManager()
 {
-  RegisterLoader(new csCSFFileLoader());
-  RegisterLoader(new csAssetCSFLoader());
+  RegisterLoader(new cs::CSFFileLoader());
+  RegisterLoader(new cs::AssetCSFLoader());
 }
 
 
-void csResourceManager::RegisterLoader(iFileLoader *loader)
+void cs::ResourceManager::RegisterLoader(cs::iFileLoader *loader)
 {
   if (loader)
   {
@@ -47,7 +47,7 @@ void csResourceManager::RegisterLoader(iFileLoader *loader)
   }
 }
 
-void csResourceManager::RegisterLoader(iCSFLoader *loader)
+void cs::ResourceManager::RegisterLoader(cs::iCSFLoader *loader)
 {
   if (loader)
   {
@@ -55,7 +55,7 @@ void csResourceManager::RegisterLoader(iCSFLoader *loader)
     m_csfLoaders.push_back(loader);
   }
 }
-void csResourceManager::RegisterLoader(iAssetLoader *loader)
+void cs::ResourceManager::RegisterLoader(cs::iAssetLoader *loader)
 {
   if (loader)
   {
@@ -64,19 +64,19 @@ void csResourceManager::RegisterLoader(iAssetLoader *loader)
   }
 }
 
-iFile *csResourceManager::Open(const csResourceLocator &locator) const
+cs::iFile *cs::ResourceManager::Open(const cs::ResourceLocator &locator) const
 {
   if (locator.GetResourceEntry().empty())
   {
-    return csVFS::Get()->Open(locator.GetResourceFile());
+    return cs::VFS::Get()->Open(locator.GetResourceFile());
   }
   else
   {
-    return csVFS::Get()->Open(locator.GetResourceFile(), locator.GetResourceEntry());
+    return cs::VFS::Get()->Open(locator.GetResourceFile(), locator.GetResourceEntry());
   }
 }
 
-void csResourceManager::Reload(const csResourceLocator &locator)
+void cs::ResourceManager::Reload(const cs::ResourceLocator &locator)
 {
   auto it = m_objects.find(locator);
   if (it == m_objects.end())
@@ -84,11 +84,11 @@ void csResourceManager::Reload(const csResourceLocator &locator)
     return;
   }
 
-  std::string path = csVFS::Get()->GetAbsolutePath(locator);
+  std::string path = cs::VFS::Get()->GetAbsolutePath(locator);
   std::cout << "Reload from: " << path << "\n";
 
-  csResourceWrapper *currentWrapper = it->second;
-  csResourceWrapper *newWrapper = Load(locator);
+  cs::ResourceWrapper *currentWrapper = it->second;
+  cs::ResourceWrapper *newWrapper = Load(locator);
   if (newWrapper && currentWrapper)
   {
     currentWrapper->Set(newWrapper->Get());
@@ -96,15 +96,15 @@ void csResourceManager::Reload(const csResourceLocator &locator)
   std::flush(std::cout);
 }
 
-csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator)
+cs::ResourceWrapper *cs::ResourceManager::Load(const cs::ResourceLocator &locator)
 {
-  iFile *file = Open(locator);
+  cs::iFile *file = Open(locator);
   if (!file)
   {
     return nullptr;
   }
 
-  csResourceWrapper *object = Load(file, locator);
+  cs::ResourceWrapper *object = Load(file, locator);
   if (object)
   {
     object->SetLocator(locator);
@@ -114,9 +114,9 @@ csResourceWrapper *csResourceManager::Load(const csResourceLocator &locator)
   return object;
 }
 
-const cs::Class *csResourceManager::EvalClass(const csResourceLocator &locator) const
+const cs::Class *cs::ResourceManager::EvalClass(const cs::ResourceLocator &locator) const
 {
-  iFile *file = Open(locator);
+  cs::iFile *file = Open(locator);
   if (!file)
   {
     return nullptr;
@@ -128,14 +128,14 @@ const cs::Class *csResourceManager::EvalClass(const csResourceLocator &locator) 
   return cls;
 }
 
-csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator &locator)
+cs::ResourceWrapper *cs::ResourceManager::Load(cs::iFile *file, const cs::ResourceLocator &locator)
 {
   for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
-    const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
+    const cs::iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
-      csResourceWrapper *obj = loader->Load(file, locator);
+      cs::ResourceWrapper *obj = loader->Load(file, locator);
       return obj;
 
     }
@@ -143,11 +143,11 @@ csResourceWrapper *csResourceManager::Load(iFile *file, const csResourceLocator 
   return nullptr;
 }
 
-const cs::Class *csResourceManager::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *cs::ResourceManager::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   for (int i = static_cast<int>(m_fileLoaders.size()) - 1; i >= 0; --i)
   {
-    const iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
+    const cs::iFileLoader *loader = m_fileLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(file, locator))
     {
       return loader->EvalClass(file, locator);
@@ -157,25 +157,25 @@ const cs::Class *csResourceManager::EvalClass(iFile *file, const csResourceLocat
 }
 
 
-csResourceWrapper *csResourceManager::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData)
+cs::ResourceWrapper *cs::ResourceManager::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData)
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
-    const iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
+    const cs::iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(entry, locator))
     {
-      csResourceWrapper *obj = loader->Load(entry, locator, userData);
+      cs::ResourceWrapper *obj = loader->Load(entry, locator, userData);
       return obj;
     }
   }
   return nullptr;
 }
 
-const cs::Class *csResourceManager::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ResourceManager::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
-    const iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
+    const cs::iCSFLoader *loader = m_csfLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(entry, locator))
     {
       return loader->EvalClass(entry, locator, userData);
@@ -185,37 +185,37 @@ const cs::Class *csResourceManager::EvalClass(const csfEntry *entry, const csRes
 }
 
 
-csResourceWrapper *csResourceManager::Load(const csfBlob *blob, const csResourceLocator &locator, cs::iObject *userData)
+cs::ResourceWrapper *cs::ResourceManager::Load(const csfBlob *blob, const cs::ResourceLocator &locator, cs::iObject *userData)
 {
-  csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
+  cs::AssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return Load(blob->GetType(), stream, locator, userData);
 }
-const cs::Class *csResourceManager::EvalClass(const csfBlob *blob, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ResourceManager::EvalClass(const csfBlob *blob, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csAssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
+  cs::AssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return EvalClass(blob->GetType(), stream, locator, userData);
 }
 
 
-csResourceWrapper *csResourceManager::Load(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData)
+cs::ResourceWrapper *cs::ResourceManager::Load(const std::string &typeID, cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData)
 {
   for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {
-    const iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
+    const cs::iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(typeID, locator))
     {
-      csResourceWrapper *obj = loader->Load(inputStream, locator, userData);
+      cs::ResourceWrapper *obj = loader->Load(inputStream, locator, userData);
       return obj;
     }
   }
   return nullptr;
 }
 
-const cs::Class *csResourceManager::EvalClass(const std::string &typeID, csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ResourceManager::EvalClass(const std::string &typeID, cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   for (int i = static_cast<int>(m_assetLoaders.size()) - 1; i >= 0; --i)
   {
-    const iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
+    const cs::iAssetLoader *loader = m_assetLoaders[static_cast<size_t>(i)];
     if (loader->CanLoad(typeID, locator))
     {
       return loader->EvalClass(inputStream, locator, userData);
@@ -224,9 +224,9 @@ const cs::Class *csResourceManager::EvalClass(const std::string &typeID, csAsset
   return nullptr;
 }
 
-csResourceWrapper *csResourceManager::Get(const csResourceLocator &resourceLocator) const
+cs::ResourceWrapper *cs::ResourceManager::Get(const cs::ResourceLocator &resourceLocator) const
 {
-  std::map<csResourceLocator, csResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<cs::ResourceLocator, cs::ResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
@@ -236,15 +236,15 @@ csResourceWrapper *csResourceManager::Get(const csResourceLocator &resourceLocat
 
 
 
-csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourceLocator)
+cs::ResourceWrapper *cs::ResourceManager::GetOrLoad(const cs::ResourceLocator &resourceLocator)
 {
-  std::map<csResourceLocator, csResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
+  std::map<cs::ResourceLocator, cs::ResourceWrapper*>::const_iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return it->second;
   }
 
-  csResourceWrapper *object = Load(resourceLocator);
+  cs::ResourceWrapper *object = Load(resourceLocator);
   if (!object)
   {
     return nullptr;
@@ -255,18 +255,18 @@ csResourceWrapper *csResourceManager::GetOrLoad(const csResourceLocator &resourc
   return object;
 }
 
-csResourceWrapper *csResourceManager::Aquire(const csResourceLocator &resourceLocator, csResourceLoadingMode mode)
+cs::ResourceWrapper *cs::ResourceManager::Aquire(const cs::ResourceLocator &resourceLocator, cs::eResourceLoadingMode mode)
 {
-  csResourceWrapper* res = nullptr;
+  cs::ResourceWrapper* res = nullptr;
   switch (mode)
   {
-  case eRLM_Shared:
+  case cs::eRLM_Shared:
     res = GetOrLoad(resourceLocator);
     break;
-  case eRLM_Instance:
+  case cs::eRLM_Instance:
     res = Load(resourceLocator);
     break;
-  case eRLM_Inline:
+  case cs::eRLM_Inline:
     break;
   }
   return res;
@@ -274,14 +274,14 @@ csResourceWrapper *csResourceManager::Aquire(const csResourceLocator &resourceLo
 
 
 
-bool csResourceManager::RegisterObject(const csResourceLocator &resourceLocator, csResourceWrapper *object)
+bool cs::ResourceManager::RegisterObject(const cs::ResourceLocator &resourceLocator, cs::ResourceWrapper *object)
 {
   if (!object)
   {
     return false;
   }
 
-  std::map<csResourceLocator, csResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
+  std::map<cs::ResourceLocator, cs::ResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
     return false;
@@ -294,23 +294,23 @@ bool csResourceManager::RegisterObject(const csResourceLocator &resourceLocator,
 }
 
 
-void csResourceManager::UnregisterObject(const csResourceLocator &resourceLocator)
+void cs::ResourceManager::UnregisterObject(const cs::ResourceLocator &resourceLocator)
 {
-  std::map<csResourceLocator, csResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
+  std::map<cs::ResourceLocator, cs::ResourceWrapper*>::iterator it = m_objects.find(resourceLocator);
   if (it != m_objects.end())
   {
-    csResourceWrapper *object = it->second;
+    cs::ResourceWrapper *object = it->second;
     UnregisterObject(object);
   }
 
 }
 
-void csResourceManager::UnregisterObject(csResourceWrapper *object)
+void cs::ResourceManager::UnregisterObject(cs::ResourceWrapper *object)
 {
   if (object)
   {
 
-    std::vector<csResourceLocator> toDelete;
+    std::vector<cs::ResourceLocator> toDelete;
     for (auto it : m_objects)
     {
       if (it.second == object)
@@ -319,7 +319,7 @@ void csResourceManager::UnregisterObject(csResourceWrapper *object)
       }
     }
 
-    for (csResourceLocator loc : toDelete)
+    for (cs::ResourceLocator loc : toDelete)
     {
       m_objects.erase(loc);
     }
@@ -329,14 +329,14 @@ void csResourceManager::UnregisterObject(csResourceWrapper *object)
 
 
 
-void csResourceManager::RenameResource(const csResourceLocator &from, const csResourceLocator &to)
+void cs::ResourceManager::RenameResource(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
   auto it = m_objects.find(from);
   if (it == m_objects.end())
   {
     return;
   }
-  csResourceWrapper *object = it->second;
+  cs::ResourceWrapper *object = it->second;
 
   m_objects.erase(it);
   m_objects[to] = object;

@@ -9,7 +9,7 @@
 #include <physicsbullet/bulletshape.hh>
 
 csBulletSystem::csBulletSystem()
-  : iPhysicsSystem ()
+  : cs::iPhysicsSystem ()
 {
 
 }
@@ -27,7 +27,7 @@ void csBulletSystem::Initialize()
 }
 
 
-iPhysicsScene *csBulletSystem::CreateScene()
+cs::iPhysicsScene *csBulletSystem::CreateScene()
 {
   csBulletScene *scene = new csBulletScene(); 
   if (!scene->Initialize(false))
@@ -39,25 +39,25 @@ iPhysicsScene *csBulletSystem::CreateScene()
 }
 
 
-iPhysicsDynamicCollider *csBulletSystem::CreateDynamicCollider()
+cs::iPhysicsDynamicCollider *csBulletSystem::CreateDynamicCollider()
 {
   csBulletDynamicCollider *dyn = new csBulletDynamicCollider();
   return dyn;
 }
 
-iPhysicsStaticCollider *csBulletSystem::CreateStaticCollider()
+cs::iPhysicsStaticCollider *csBulletSystem::CreateStaticCollider()
 {
   csBulletStaticCollider *stat = new csBulletStaticCollider();
   return stat;
 }
 
-iPhysicsTriggerCollider *csBulletSystem::CreateTriggerCollider()
+cs::iPhysicsTriggerCollider *csBulletSystem::CreateTriggerCollider()
 {
   return 0;
 }
 
 
-iPhysicsShape *csBulletSystem::CreateShape(const csPhysGeometry &geometry)
+cs::iPhysicsShape *csBulletSystem::CreateShape(const cs::PhysGeometry &geometry)
 {
   csBulletShape *shape = new csBulletShape();
   if (!shape->Initialize(geometry))
@@ -69,20 +69,20 @@ iPhysicsShape *csBulletSystem::CreateShape(const csPhysGeometry &geometry)
   return shape;
 }
 
-iPhysicsCapsuleCharacterController *csBulletSystem::CreateCapsulseCharacterController()
+cs::iPhysicsCapsuleCharacterController *csBulletSystem::CreateCapsulseCharacterController()
 {
   csBulletCapsuleCharacterController *controller = new csBulletCapsuleCharacterController();
   return controller;
 }
 
 
-iPhysicsJoint *csBulletSystem::CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB)
+cs::iPhysicsJoint *csBulletSystem::CreateJoint(cs::ePhysicsJointType type, cs::iPhysicsDynamicCollider *colliderA, cs::iPhysicsDynamicCollider *colliderB)
 {
   csBulletDynamicCollider *colA = cs::QueryClass<csBulletDynamicCollider>(colliderA);
   csBulletDynamicCollider *colB = cs::QueryClass<csBulletDynamicCollider>(colliderB);
   switch (type)
   {
-  case ePJT_Hinge:
+  case cs::ePJT_Hinge:
     {
       csBulletHingeJoint *hingeJoint = new csBulletHingeJoint();
       if (!hingeJoint->Initialize(colA, colB))

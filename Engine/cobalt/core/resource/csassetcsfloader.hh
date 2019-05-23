@@ -4,16 +4,21 @@
 #include <cobalt/core/resource/csbasecsfloader.hh>
 #include <cobalt/core/resource/csassetcsfloader.refl.hh>
 
-CS_CLASS()
-class CSE_API csAssetCSFLoader : public CS_SUPER(csBaseCSFLoader)
+namespace cs
 {
-  CS_CLASS_GEN;
-public:
-  csAssetCSFLoader();
-  virtual ~csAssetCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+CS_CLASS()
+class CSE_API AssetCSFLoader : public CS_SUPER(cs::BaseCSFLoader)
+{
+	CS_CLASS_GEN;
+public:
+  AssetCSFLoader();
+	virtual ~AssetCSFLoader();
+
+	virtual bool CanLoad(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+	virtual const cs::Class * EvalClass(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+	virtual cs::ResourceWrapper * Load(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
 
 };
+
+}

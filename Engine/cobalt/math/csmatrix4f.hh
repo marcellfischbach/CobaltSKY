@@ -5,7 +5,10 @@
 #include <cobalt/cstypes.hh>
 #include <cobalt/math/csvector4f.hh>
 
-struct CSE_API csMatrix4f
+namespace cs
+{
+
+struct CSE_API Matrix4f
 {
 public:
   float m00;
@@ -26,7 +29,7 @@ public:
   float m33;
 
 public:
-  CS_FORCEINLINE csMatrix4f(const float *f)
+  CS_FORCEINLINE Matrix4f(const float* f)
     : m00(f[0])
     , m01(f[1])
     , m02(f[2])
@@ -46,7 +49,7 @@ public:
   {
   }
 
-  CS_FORCEINLINE csMatrix4f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m03 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m13 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f, float m23 = 0.0f, float m30 = 0.0f, float m31 = 0.0f, float m32 = 0.0f, float m33 = 1.0f)
+  CS_FORCEINLINE Matrix4f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m03 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m13 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f, float m23 = 0.0f, float m30 = 0.0f, float m31 = 0.0f, float m32 = 0.0f, float m33 = 1.0f)
     : m00(m00)
     , m01(m01)
     , m02(m02)
@@ -92,7 +95,7 @@ public:
     this->m33 = m33;
   }
 
-  CS_FORCEINLINE void Set(const csMatrix4f &matrix)
+  CS_FORCEINLINE void Set(const cs::Matrix4f& matrix)
   {
     m00 = matrix.m00;
     m01 = matrix.m01;
@@ -120,7 +123,7 @@ public:
     m03 = 0.0f;
   }
 
-  CS_FORCEINLINE void SetXAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetXAxis(const cs::Vector3f& v)
   {
     m00 = v.x;
     m01 = v.y;
@@ -136,7 +139,7 @@ public:
     m13 = 0.0f;
   }
 
-  CS_FORCEINLINE void SetYAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetYAxis(const cs::Vector3f& v)
   {
     m10 = v.x;
     m11 = v.y;
@@ -153,7 +156,7 @@ public:
     m23 = 0.0f;
   }
 
-  CS_FORCEINLINE void SetZAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetZAxis(const cs::Vector3f& v)
   {
     m20 = v.x;
     m21 = v.y;
@@ -161,7 +164,7 @@ public:
     m23 = 0.0f;
   }
 
-  CS_FORCEINLINE csVector3f &GetXAxis(csVector3f &res) const
+  CS_FORCEINLINE cs::Vector3f& GetXAxis(cs::Vector3f& res) const
   {
     res.x = m00;
     res.y = m01;
@@ -170,7 +173,7 @@ public:
   }
 
 
-  CS_FORCEINLINE csVector3f &GetYAxis(csVector3f &res) const
+  CS_FORCEINLINE cs::Vector3f& GetYAxis(cs::Vector3f& res) const
   {
     res.x = m10;
     res.y = m11;
@@ -179,7 +182,7 @@ public:
   }
 
 
-  CS_FORCEINLINE csVector3f &GetZAxis(csVector3f &res) const
+  CS_FORCEINLINE cs::Vector3f& GetZAxis(cs::Vector3f& res) const
   {
     res.x = m20;
     res.y = m21;
@@ -187,7 +190,7 @@ public:
     return res;
   }
 
-  CS_FORCEINLINE csVector3f &GetAxis(csUInt8 axis, csVector3f &res) const
+  CS_FORCEINLINE cs::Vector3f& GetAxis(csUInt8 axis, cs::Vector3f& res) const
   {
     switch (axis)
     {
@@ -224,7 +227,7 @@ public:
     m33 = w;
   }
 
-  CS_FORCEINLINE void SetTranslation(const csVector3f &tr, float w = 1.0f)
+  CS_FORCEINLINE void SetTranslation(const cs::Vector3f& tr, float w = 1.0f)
   {
     m30 = tr.x;
     m31 = tr.y;
@@ -232,7 +235,7 @@ public:
     m33 = w;
   }
 
-  CS_FORCEINLINE csVector3f &GetTranslation(csVector3f &res) const
+  CS_FORCEINLINE cs::Vector3f& GetTranslation(cs::Vector3f& res) const
   {
     res.x = m30;
     res.y = m31;
@@ -240,7 +243,7 @@ public:
     return res;
   }
 
-  CS_FORCEINLINE csMatrix4f &SetRotationX(float angle)
+  CS_FORCEINLINE cs::Matrix4f& SetRotationX(float angle)
   {
     float c = (float)cos(angle);
     float s = (float)sin(angle);
@@ -252,7 +255,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f &SetRotationY(float angle)
+  CS_FORCEINLINE cs::Matrix4f& SetRotationY(float angle)
   {
     float c = (float)cos(angle);
     float s = (float)sin(angle);
@@ -264,7 +267,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f &SetRotationZ(float angle)
+  CS_FORCEINLINE cs::Matrix4f& SetRotationZ(float angle)
   {
     float c = (float)cos(angle);
     float s = (float)sin(angle);
@@ -276,7 +279,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f &SetRotation(const csVector3f &axis, float angle)
+  CS_FORCEINLINE cs::Matrix4f& SetRotation(const cs::Vector3f& axis, float angle)
   {
     float c = cosf(angle);
     float s = sinf(angle);
@@ -299,7 +302,7 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f &Inverted(csMatrix4f &res) const
+  CS_FORCEINLINE cs::Matrix4f& Inverted(cs::Matrix4f& res) const
   {
     float v0 = m20 * m31 - m21 * m30;
     float v1 = m20 * m32 - m22 * m30;
@@ -373,7 +376,7 @@ public:
     return res;
   }
 
-  CS_FORCEINLINE csMatrix4f &Invert()
+  CS_FORCEINLINE cs::Matrix4f & Invert()
   {
     float v0 = m20 * m31 - m21 * m30;
     float v1 = m20 * m32 - m22 * m30;
@@ -447,16 +450,16 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f Transposed() const
+  CS_FORCEINLINE cs::Matrix4f Transposed() const
   {
-    return csMatrix4f(
+    return cs::Matrix4f(
       m00, m10, m20, m30,
       m01, m11, m21, m31,
       m02, m12, m22, m32,
       m03, m13, m23, m33);
   }
 #define SWAP(a, b, s) (s) = (a); (a)=(b); (b)=(s)
-  CS_FORCEINLINE csMatrix4f& Transpose()
+  CS_FORCEINLINE cs::Matrix4f & Transpose()
   {
     float s;
     SWAP(m01, m10, s);
@@ -469,16 +472,16 @@ public:
   }
 #undef SWAP
 
-  CS_FORCEINLINE csMatrix4f &SetLookAt(const csVector3f& eye, const csVector3f& spot, const csVector3f& up)
+  CS_FORCEINLINE cs::Matrix4f& SetLookAt(const cs::Vector3f & eye, const cs::Vector3f & spot, const cs::Vector3f & up)
   {
-    csVector3f xAxis, yAxis, zAxis;
-    csVector3f::Sub(eye, spot, zAxis).Normalize();
-    csVector3f::Cross(up, zAxis, xAxis).Normalize();
-    csVector3f::Cross(zAxis, xAxis, yAxis);
+    cs::Vector3f xAxis, yAxis, zAxis;
+    cs::Vector3f::Sub(eye, spot, zAxis).Normalize();
+    cs::Vector3f::Cross(up, zAxis, xAxis).Normalize();
+    cs::Vector3f::Cross(zAxis, xAxis, yAxis);
 
-    csVector3f::Sub(spot, eye, yAxis).Normalize();
-    csVector3f::Cross(yAxis, up, xAxis).Normalize();
-    csVector3f::Cross(xAxis, yAxis, zAxis);
+    cs::Vector3f::Sub(spot, eye, yAxis).Normalize();
+    cs::Vector3f::Cross(yAxis, up, xAxis).Normalize();
+    cs::Vector3f::Cross(xAxis, yAxis, zAxis);
 
     SetXAxis(xAxis.x, yAxis.x, zAxis.x);
     SetYAxis(xAxis.y, yAxis.y, zAxis.y);
@@ -488,16 +491,16 @@ public:
     return *this;
   }
 
-  CS_FORCEINLINE csMatrix4f &SetLookAtInv(const csVector3f& eye, const csVector3f& spot, const csVector3f& up)
+  CS_FORCEINLINE cs::Matrix4f& SetLookAtInv(const cs::Vector3f & eye, const cs::Vector3f & spot, const cs::Vector3f & up)
   {
-    csVector3f xAxis, yAxis, zAxis;
-    csVector3f::Sub(eye, spot, zAxis).Normalize();
-    csVector3f::Cross(up, zAxis, xAxis).Normalize();
-    csVector3f::Cross(zAxis, xAxis, yAxis);
+    cs::Vector3f xAxis, yAxis, zAxis;
+    cs::Vector3f::Sub(eye, spot, zAxis).Normalize();
+    cs::Vector3f::Cross(up, zAxis, xAxis).Normalize();
+    cs::Vector3f::Cross(zAxis, xAxis, yAxis);
 
-    csVector3f::Sub(spot, eye, yAxis).Normalize();
-    csVector3f::Cross(yAxis, up, xAxis).Normalize();
-    csVector3f::Cross(xAxis, yAxis, zAxis);
+    cs::Vector3f::Sub(spot, eye, yAxis).Normalize();
+    cs::Vector3f::Cross(yAxis, up, xAxis).Normalize();
+    cs::Vector3f::Cross(xAxis, yAxis, zAxis);
 
     SetXAxis(xAxis);
     SetYAxis(yAxis);
@@ -512,7 +515,7 @@ public:
 
 
 
-  CS_FORCEINLINE static csMatrix4f &Mult(const csMatrix4f &m0, const csMatrix4f &m1, csMatrix4f &r)
+  CS_FORCEINLINE static cs::Matrix4f& Mult(const cs::Matrix4f & m0, const cs::Matrix4f & m1, cs::Matrix4f & r)
   {
     float m00 = m0.m00 * m1.m00 + m0.m10 * m1.m01 + m0.m20 * m1.m02 + m0.m30 * m1.m03;
     float m01 = m0.m01 * m1.m00 + m0.m11 * m1.m01 + m0.m21 * m1.m02 + m0.m31 * m1.m03;
@@ -554,7 +557,7 @@ public:
   }
 
 
-  static csVector3f &Mult(const csMatrix4f &m, const csVector3f &v, csVector3f &res)
+  static cs::Vector3f& Mult(const cs::Matrix4f & m, const cs::Vector3f & v, cs::Vector3f & res)
   {
     float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z;
     float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z;
@@ -565,7 +568,7 @@ public:
     return res;
   }
 
-  static csVector3f &Transform(const csMatrix4f &m, const csVector3f &v, csVector3f &res)
+  static cs::Vector3f& Transform(const cs::Matrix4f & m, const cs::Vector3f & v, cs::Vector3f & res)
   {
     res.Set(
       m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30,
@@ -576,7 +579,7 @@ public:
   }
 
 
-  static csVector4f &Mult(const csMatrix4f &m, const csVector4f &v, csVector4f &res)
+  static cs::Vector4f& Mult(const cs::Matrix4f & m, const cs::Vector4f & v, cs::Vector4f & res)
   {
     float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30 * v.w;
     float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31 * v.w;
@@ -589,7 +592,7 @@ public:
     return res;
   }
 
-  CS_FORCEINLINE void Debug(const char *message = 0) const
+  CS_FORCEINLINE void Debug(const char* message = 0) const
   {
     if (message)
     {
@@ -629,3 +632,6 @@ public:
   }
 
 };
+
+}
+

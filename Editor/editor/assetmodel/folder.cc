@@ -21,18 +21,18 @@ namespace asset::model
 
   }
 
-	csResourceLocator Folder::GetResourceLocator() const
+	cs::ResourceLocator Folder::GetResourceLocator() const
 	{
 		const Entry *parent = GetParent();
 		if (!parent)
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 
-		csResourceLocator parentLocator = parent->GetResourceLocator();
+		cs::ResourceLocator parentLocator = parent->GetResourceLocator();
 		if (!parentLocator.IsValid())
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 		return parent->GetResourceLocator().WithFileSuffix(GetName() + "/");
 	}
@@ -69,12 +69,12 @@ namespace asset::model
 		return std::string();
 	}
 
-	csResourceLocator Folder::GetNewResourceLocator(const std::string &baseName) const
+	cs::ResourceLocator Folder::GetNewResourceLocator(const std::string &baseName) const
 	{
 		std::string assetName = GetNewAssetName(baseName);
 		if (assetName.empty())
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 		return GetResourceLocator().WithFileSuffix(assetName);
 	}

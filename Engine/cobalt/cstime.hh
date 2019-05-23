@@ -4,11 +4,13 @@
 #include <cobalt/cstypes.hh>
 #include <cobalt/csdefs.hh>
 
+namespace cs
+{
 
-class CSE_API csTime
+class CSE_API Time
 {
 public:
-  static csTime &Get();
+  static cs::Time& Get();
   void Tick();
 
 
@@ -18,7 +20,7 @@ public:
   csUInt64 GetRunTimeMicro();
   csUInt64 GetCurrentTimeMicro();
 private:
-  csTime();
+  Time();
 
   csUInt64 m_startTimeMicro;
   csUInt64 m_currentTimeMicro;
@@ -30,23 +32,24 @@ private:
 
 };
 
+}
 
-CS_FORCEINLINE csUInt64 csTime::GetRunTimeMilli()
+CS_FORCEINLINE csUInt64 cs::Time::GetRunTimeMilli()
 {
   return m_currentTimeMilli;
 }
 
-CS_FORCEINLINE csUInt64 csTime::GetCurrentTimeMilli()
+CS_FORCEINLINE csUInt64 cs::Time::GetCurrentTimeMilli()
 {
   return m_runTimeMilli;
 }
 
-CS_FORCEINLINE csUInt64 csTime::GetRunTimeMicro()
+CS_FORCEINLINE csUInt64 cs::Time::GetRunTimeMicro()
 {
   return m_currentTimeMicro;
 }
 
-CS_FORCEINLINE csUInt64 csTime::GetCurrentTimeMicro()
+CS_FORCEINLINE csUInt64 cs::Time::GetCurrentTimeMicro()
 {
   return m_runTimeMicro;
 }

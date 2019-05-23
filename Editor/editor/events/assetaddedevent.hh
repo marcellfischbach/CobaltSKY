@@ -8,18 +8,18 @@
 
 
 CS_CLASS()
-class AssetAddedEvent : public CS_SUPER(csEvent)
+class AssetAddedEvent : public CS_SUPER(cs::Event)
 {
   CS_CLASS_GEN;
 public:
-  AssetAddedEvent(const csResourceLocator &locator, cs::iObject *object = 0);
+  AssetAddedEvent(const cs::ResourceLocator &locator, cs::iObject *object = 0);
 
-  const csResourceLocator &GetLocator() const;
+  const cs::ResourceLocator &GetLocator() const;
   const cs::iObject *GetObject() const;
 
 private:
 
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
   cs::iObject *m_object;
 
 

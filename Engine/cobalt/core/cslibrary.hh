@@ -6,24 +6,28 @@
 #include <string>
 #include <cobalt/core/cslibrary.refl.hh>
 
+namespace cs
+{
 
-struct csLibraryPriv;
+struct LibraryPriv;
 
 CS_CLASS();
-class csLibrary : public CS_SUPER(cs::Object)
+class Library : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csLibrary();
-  virtual ~csLibrary();
+  Library();
+  virtual ~Library();
 
-  bool Open(const std::string &libName);
+  bool Open(const std::string & libName);
   bool IsOpen() const;
   void Close();
 
-  void *GetProcAddress(const std::string &procName);
+  void* GetProcAddress(const std::string & procName);
 
 private:
-  csLibraryPriv *m_priv;
+  cs::LibraryPriv* m_priv;
 
 };
+
+}

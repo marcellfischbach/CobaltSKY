@@ -9,15 +9,15 @@
 
 
 CS_CLASS()
-class AssetPreviewIconChangedEvent : public CS_SUPER(csEvent)
+class AssetPreviewIconChangedEvent : public CS_SUPER(cs::Event)
 {
   CS_CLASS_GEN;
 public:
-  AssetPreviewIconChangedEvent(const csResourceLocator &locator);
+  AssetPreviewIconChangedEvent(const cs::ResourceLocator &locator);
 
-  const csResourceLocator &GetLocator() const;
+  const cs::ResourceLocator &GetLocator() const;
 
 private:
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
 
 };

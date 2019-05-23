@@ -18,32 +18,32 @@
 
 
 
-csPointLightRendererGL4::csPointLightRendererGL4(iGraphics *renderer)
+csPointLightRendererGL4::csPointLightRendererGL4(cs::iGraphics *renderer)
   : csLightRendererGL4(renderer)
 {
-  InitializeLightProgram(&m_programNoShadow, csResourceLocator("${shaders}/deferred/PointLight.asset"));
-  m_attrLightPositionNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightPosition"));
-  m_attrLightRangeNoShadow = m_programNoShadow.program->Get()->GetAttribute(csShaderAttributeID("LightRadius"));
+  InitializeLightProgram(&m_programNoShadow, cs::ResourceLocator("${shaders}/deferred/PointLight.asset"));
+  m_attrLightPositionNoShadow = m_programNoShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightPosition"));
+  m_attrLightRangeNoShadow = m_programNoShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightRadius"));
 
-  InitializeLightProgram(&m_programCubeShadow, csResourceLocator("${shaders}/deferred/PointLightCubeShadow.asset"));
-  m_attrLightPositionCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("LightPosition"));
-  m_attrLightRangeCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("LightRadius"));
-  m_attrShadowMats = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowMats"));
-  m_attrShadowMap = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowMap"));
-  m_attrMapBias = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("MapBias"));
-  m_attrShadowIntensity = m_programCubeShadow.program->Get()->GetAttribute(csShaderAttributeID("ShadowIntensity"));
+  InitializeLightProgram(&m_programCubeShadow, cs::ResourceLocator("${shaders}/deferred/PointLightCubeShadow.asset"));
+  m_attrLightPositionCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightPosition"));
+  m_attrLightRangeCubeShadow = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightRadius"));
+  m_attrShadowMats = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("ShadowMats"));
+  m_attrShadowMap = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("ShadowMap"));
+  m_attrMapBias = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("MapBias"));
+  m_attrShadowIntensity = m_programCubeShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("ShadowIntensity"));
 
 
   m_mapBias = 0.99f;
 
   csUInt16 bufferSize = 1024;
-  csTexture2DArrayWrapper *colorBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_RGBA, bufferSize, bufferSize, 6, false));
-  m_depthBuffer = new csTexture2DArrayWrapper(renderer->CreateTexture2DArray(ePF_D24S8, bufferSize, bufferSize, 6, false));
+  cs::Texture2DArrayWrapper *colorBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(cs::ePF_RGBA, bufferSize, bufferSize, 6, false));
+  m_depthBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(cs::ePF_D24S8, bufferSize, bufferSize, 6, false));
 
   colorBuffer->Get()->SetSampler(csGBufferGL4::GetColorSampler(renderer));
   m_depthBuffer->Get()->SetSampler(m_depthSampler);
 
-  m_shadowBuffer = static_cast<iRenderTarget*>(renderer->CreateRenderTarget());
+  m_shadowBuffer = static_cast<cs::iRenderTarget*>(renderer->CreateRenderTarget());
   m_shadowBuffer->Initialize(bufferSize, bufferSize);
   m_shadowBuffer->AddColorTexture(colorBuffer);
   m_shadowBuffer->SetDepthTexture(m_depthBuffer);
@@ -62,13 +62,13 @@ csPointLightRendererGL4::~csPointLightRendererGL4()
 
 
 
-void csPointLightRendererGL4::Render(csEntity *root, csCamera *camera, csLight *light, csGBufferGL4 *gbuffer, iRenderTarget *target)
+void csPointLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target)
 {
-  csBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
+  cs::eBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
   bool blendEnabled = m_renderer->IsBlendEnabled();
 
-  csPointLight *pointLight = static_cast<csPointLight*>(light);
+  cs::PointLight *pointLight = static_cast<cs::PointLight*>(light);
 
 
   bool shadow = pointLight->IsCastingShadow();
@@ -84,7 +84,7 @@ void csPointLightRendererGL4::Render(csEntity *root, csCamera *camera, csLight *
   m_renderer->SetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
 
   // from now on we will only render to the single color buffer
-  m_renderer->SetRenderDestination(eRD_Color0);
+  m_renderer->SetRenderDestination(cs::eRD_Color0);
 
   LightProgram &prog = shadow ? m_programCubeShadow : m_programNoShadow;
   m_renderer->SetShader(prog.program->Get());
@@ -108,7 +108,7 @@ void csPointLightRendererGL4::Render(csEntity *root, csCamera *camera, csLight *
 
 
 
-void csPointLightRendererGL4::BindPointLightNo(csPointLight *pointLight)
+void csPointLightRendererGL4::BindPointLightNo(cs::PointLight *pointLight)
 {
   if (m_attrLightPositionNoShadow)
   {
@@ -121,7 +121,7 @@ void csPointLightRendererGL4::BindPointLightNo(csPointLight *pointLight)
 }
 
 
-void csPointLightRendererGL4::BindPointLightCubeShadow(csPointLight *pointLight)
+void csPointLightRendererGL4::BindPointLightCubeShadow(cs::PointLight *pointLight)
 {
   if (m_attrLightPositionCubeShadow)
   {
@@ -137,7 +137,7 @@ void csPointLightRendererGL4::BindPointLightCubeShadow(csPointLight *pointLight)
   }
   if (m_attrShadowMap)
   {
-    csTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
+    cs::eTextureUnit tu = m_renderer->BindTexture(m_depthBuffer->Get());
     m_attrShadowMap->Set(tu);
   }
   if (m_attrMapBias)
@@ -150,7 +150,7 @@ void csPointLightRendererGL4::BindPointLightCubeShadow(csPointLight *pointLight)
   }
 
 }
-void csPointLightRendererGL4::RenderShadow(csEntity *root, const csPointLight *light)
+void csPointLightRendererGL4::RenderShadow(cs::Entity *root, const cs::PointLight *light)
 {
   m_renderer->PushRenderStates();
 
@@ -158,12 +158,12 @@ void csPointLightRendererGL4::RenderShadow(csEntity *root, const csPointLight *l
 
   CalcShadowIntensity(light);
 
-  csScanConfig config;
+  cs::ScanConfig config;
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
   csDefaultCollectorGL4 collector(m_renderStates, 0);
-  for (csSize i = 0; i < eRQ_COUNT; ++i)
+  for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
   {
     m_renderStates[i].Clear();
   }
@@ -172,10 +172,10 @@ void csPointLightRendererGL4::RenderShadow(csEntity *root, const csPointLight *l
   // setup the rendering 
   m_renderer->SetRenderTarget(m_shadowBuffer);
   m_renderer->SetViewport(m_shadowBuffer);
-  m_renderer->SetRenderDestination(eRD_Color0);
+  m_renderer->SetRenderDestination(cs::eRD_Color0);
   m_renderer->SetDepthMask(true);
   m_renderer->SetDepthTest(true);
-  m_renderer->SetDepthFunc(eCM_LessOrEqual);
+  m_renderer->SetDepthFunc(cs::eCM_LessOrEqual);
   m_renderer->SetColorMask(true, true, true, true);
 
 
@@ -186,15 +186,15 @@ void csPointLightRendererGL4::RenderShadow(csEntity *root, const csPointLight *l
   m_renderer->SetBlendEnabled(false);
 
   // render all geometries
-  for (csSize i = 0; i < eRQ_COUNT; ++i)
+  for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
   {
-    csCollection<csRenderState*> &queue = m_renderStates[i];
+    cs::Collection<cs::RenderState*> &queue = m_renderStates[i];
     for (csSize j = 0; j < queue.length; ++j)
     {
-      csRenderState *renderState = queue[j];
+      cs::RenderState *renderState = queue[j];
       if (renderState)
       {
-        renderState->Render(m_renderer, eRP_ShadowCube);
+        renderState->Render(m_renderer, cs::eRP_ShadowCube);
       }
     }
   }
@@ -203,38 +203,38 @@ void csPointLightRendererGL4::RenderShadow(csEntity *root, const csPointLight *l
   m_renderer->PopRenderStates();
 }
 
-void csPointLightRendererGL4::CalcCubeMatrices(const csPointLight *light)
+void csPointLightRendererGL4::CalcCubeMatrices(const cs::PointLight *light)
 {
   float radius = light->GetRadius();
 
-  csMatrix4f proj;
+  cs::Matrix4f proj;
   m_renderer->GetPerspectiveProjection(-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, radius, proj);
 
-  csVector3f spot;
-  csVector3f dirs[] = {
-    csVector3f(1, 0, 0),
-    csVector3f(-1, 0, 0),
-    csVector3f(0, 1, 0),
-    csVector3f(0, -1, 0),
-    csVector3f(0, 0, 1),
-    csVector3f(0, 0, -1),
+  cs::Vector3f spot;
+  cs::Vector3f dirs[] = {
+    cs::Vector3f(1, 0, 0),
+    cs::Vector3f(-1, 0, 0),
+    cs::Vector3f(0, 1, 0),
+    cs::Vector3f(0, -1, 0),
+    cs::Vector3f(0, 0, 1),
+    cs::Vector3f(0, 0, -1),
   };
-  csVector3f ups[] = {
-    csVector3f(0, 0, 1),
-    csVector3f(0, 0, 1),
-    csVector3f(0, 0, 1),
-    csVector3f(0, 0, 1),
-    csVector3f(1, 0, 0),
-    csVector3f(-1, 0, 0),
+  cs::Vector3f ups[] = {
+    cs::Vector3f(0, 0, 1),
+    cs::Vector3f(0, 0, 1),
+    cs::Vector3f(0, 0, 1),
+    cs::Vector3f(0, 0, 1),
+    cs::Vector3f(1, 0, 0),
+    cs::Vector3f(-1, 0, 0),
   };
 
   for (int i = 0; i < 6; ++i)
   {
-    csVector3f::Add(light->GetPosition(), dirs[i], spot);
+    cs::Vector3f::Add(light->GetPosition(), dirs[i], spot);
     m_shadowCam[i].SetLookAt(light->GetPosition(), spot, ups[i]);
     m_shadowProj[i] = proj;
     m_shadowNearFar[i].Set(1.0f, radius);
-    csMatrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
+    cs::Matrix4f::Mult(m_shadowProj[i], m_shadowCam[i], m_shadowProjView[i]);
   }
 
 }

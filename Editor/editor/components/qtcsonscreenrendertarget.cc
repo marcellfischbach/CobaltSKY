@@ -20,7 +20,7 @@ void QTCSOnscreenRenderTarget::Setup(unsigned width, unsigned height)
 
   if (!m_renderTarget)
   {
-    m_renderTarget = new csRenderTargetGL4(name, width, height);
+    m_renderTarget = new cs::RenderTargetGL4(name, width, height);
   }
   else
   {
@@ -30,7 +30,7 @@ void QTCSOnscreenRenderTarget::Setup(unsigned width, unsigned height)
 }
 
 
-iRenderTarget *QTCSOnscreenRenderTarget::GetRenderTarget()
+cs::iRenderTarget *QTCSOnscreenRenderTarget::GetRenderTarget()
 {
   return m_renderTarget;
 }

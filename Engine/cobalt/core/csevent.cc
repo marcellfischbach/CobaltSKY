@@ -3,32 +3,32 @@
 
 static long s_event_id = 0;
 
-csEvent::csEvent()
+cs::Event::Event()
   : cs::Object()
   , m_id(s_event_id++)
   , m_accepted(false)
 {
 }
 
-csEvent::~csEvent()
+cs::Event::~Event()
 {
 
 }
 
 
 
-unsigned long csEvent::GetId() const
+unsigned long cs::Event::GetId() const
 {
   return m_id;
 }
 
 
-void csEvent::Accept()
+void cs::Event::Accept()
 {
   m_accepted = true;
 }
 
-bool csEvent::IsAccepted() const
+bool cs::Event::IsAccepted() const
 {
   return m_accepted;
 }

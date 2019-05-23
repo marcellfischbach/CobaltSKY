@@ -24,15 +24,15 @@ public:
   void SetAssetTypeName(const std::string &assetTypeName);
   const std::string &GetAssetTypeName() const;
 
-  virtual const csResourceLocator WithNewName(const std::string &newName) const;
+  virtual const cs::ResourceLocator WithNewName(const std::string &newName) const;
 
-  std::set<csResourceLocator> &GetReferences();
+  std::set<cs::ResourceLocator> &GetReferences();
 
 
 protected:
   AssetNode(Model *model);
 
-  csResourceLocator GetNewResourceLocator();
+  cs::ResourceLocator GetNewResourceLocator();
 
   virtual void DebugNode() const;
 
@@ -41,7 +41,7 @@ private:
 
   std::string m_assetTypeName;
 
-  std::set<csResourceLocator> m_references;
+  std::set<cs::ResourceLocator> m_references;
 };
 
 }

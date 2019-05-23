@@ -17,17 +17,17 @@
 #include <cobalt/math/csclipper.hh>
 
 
-csLightRendererGL4::csLightRendererGL4(iGraphics *renderer)
+csLightRendererGL4::csLightRendererGL4(cs::iGraphics *renderer)
   : m_renderer(renderer)
 {
-  iSampler *depthSampler = m_renderer->CreateSampler();
-  depthSampler->SetFilter(eFM_MinMagLinear);
-  depthSampler->SetAddressU(eTAM_ClampBorder);
-  depthSampler->SetAddressV(eTAM_ClampBorder);
-  depthSampler->SetAddressW(eTAM_ClampBorder);
-  depthSampler->SetTextureCompareMode(eTCM_CompareToR);
-  depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
-  m_depthSampler = new csSamplerWrapper(depthSampler);
+  cs::iSampler *depthSampler = m_renderer->CreateSampler();
+  depthSampler->SetFilter(cs::eFM_MinMagLinear);
+  depthSampler->SetAddressU(cs::eTAM_ClampBorder);
+  depthSampler->SetAddressV(cs::eTAM_ClampBorder);
+  depthSampler->SetAddressW(cs::eTAM_ClampBorder);
+  depthSampler->SetTextureCompareMode(cs::eTCM_CompareToR);
+  depthSampler->SetTextureCompareFunc(cs::eTCF_LessOrEqual);
+  m_depthSampler = new cs::SamplerWrapper(depthSampler);
 }
 
 
@@ -38,20 +38,20 @@ csLightRendererGL4::~csLightRendererGL4()
 }
 
 
-void csLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const csResourceLocator &locator)
+void csLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const cs::ResourceLocator &locator)
 {
-  lightProgram->program = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(locator);
+  lightProgram->program = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(locator);
   if (lightProgram->program && lightProgram->program->IsValid())
   {
-    iShader *program = lightProgram->program->Get();
-    lightProgram->gbuffer.attrDiffuseRoughness = program->GetAttribute(csShaderAttributeID("DiffuseRoughness"));
-    lightProgram->gbuffer.attrNormalLightMode = program->GetAttribute(csShaderAttributeID("NormalLightMode"));
-    lightProgram->gbuffer.attrEmissiveMetallic = program->GetAttribute(csShaderAttributeID("EmissiveMetallic"));
-    lightProgram->gbuffer.attrSSSSpecular = program->GetAttribute(csShaderAttributeID("SSSSpecular"));
-    lightProgram->gbuffer.attrDepth = program->GetAttribute(csShaderAttributeID("Depth"));
+    cs::iShader *program = lightProgram->program->Get();
+    lightProgram->gbuffer.attrDiffuseRoughness = program->GetAttribute(cs::ShaderAttributeID("DiffuseRoughness"));
+    lightProgram->gbuffer.attrNormalLightMode = program->GetAttribute(cs::ShaderAttributeID("NormalLightMode"));
+    lightProgram->gbuffer.attrEmissiveMetallic = program->GetAttribute(cs::ShaderAttributeID("EmissiveMetallic"));
+    lightProgram->gbuffer.attrSSSSpecular = program->GetAttribute(cs::ShaderAttributeID("SSSSpecular"));
+    lightProgram->gbuffer.attrDepth = program->GetAttribute(cs::ShaderAttributeID("Depth"));
 
-    lightProgram->attrColor = program->GetAttribute(csShaderAttributeID("LightColor"));
-    lightProgram->attrEnergy = program->GetAttribute(csShaderAttributeID("LightEnergy"));
+    lightProgram->attrColor = program->GetAttribute(cs::ShaderAttributeID("LightColor"));
+    lightProgram->attrEnergy = program->GetAttribute(cs::ShaderAttributeID("LightEnergy"));
   }
 }
 
@@ -60,32 +60,32 @@ void csLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, csGBufferGL4 *gbuf
 {
   if (attribs.attrDiffuseRoughness)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDiffuseRoughness()->Get());
+    cs::eTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDiffuseRoughness()->Get());
     attribs.attrDiffuseRoughness->Set(unit);
   }
   if (attribs.attrNormalLightMode)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetNormalLightMode()->Get());
+    cs::eTextureUnit unit = m_renderer->BindTexture(gbuffer->GetNormalLightMode()->Get());
     attribs.attrNormalLightMode->Set(unit);
   }
   if (attribs.attrEmissiveMetallic)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetEmissiveMetallic()->Get());
+    cs::eTextureUnit unit = m_renderer->BindTexture(gbuffer->GetEmissiveMetallic()->Get());
     attribs.attrEmissiveMetallic->Set(unit);
   }
   if (attribs.attrSSSSpecular)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetSSSSpec()->Get());
+    cs::eTextureUnit unit = m_renderer->BindTexture(gbuffer->GetSSSSpec()->Get());
     attribs.attrSSSSpecular->Set(unit);
   }
   if (attribs.attrDepth)
   {
-    csTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDepth()->Get());
+    cs::eTextureUnit unit = m_renderer->BindTexture(gbuffer->GetDepth()->Get());
     attribs.attrDepth->Set(unit);
   }
 }
 
-void csLightRendererGL4::BindLight(LightProgram &lightProgram, csLight *light)
+void csLightRendererGL4::BindLight(LightProgram &lightProgram, cs::Light *light)
 {
   if (lightProgram.attrColor)
   {
@@ -101,7 +101,7 @@ void csLightRendererGL4::BindLight(LightProgram &lightProgram, csLight *light)
 
 
 
-void csLightRendererGL4::CalcShadowIntensity(const csLight *light)
+void csLightRendererGL4::CalcShadowIntensity(const cs::Light *light)
 {
   float shadowIntensity = light->GetShadowIntensity();
   m_shadowIntensity.Set(1.0f - shadowIntensity, shadowIntensity);

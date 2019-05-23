@@ -4,39 +4,44 @@
 #include <cobalt/entity/csspatialstate.hh>
 #include <cobalt/entity/cslightstate.refl.hh>
 
-class csLight;
 /**
 * \ingroup entity
 */
 
+namespace cs
+{
+class Light;
+
 CS_CLASS()
-class CSE_API csLightState : public CS_SUPER(csSpatialState)
+class CSE_API LightState : public CS_SUPER(cs::SpatialState)
 {
   CS_CLASS_GEN;
 public:
-  csLightState();
-  virtual ~csLightState();
+  LightState();
+  virtual ~LightState();
 
-  void SetLight(csLight* light);
-  csLight *GetLight();
-  const csLight *GetLight() const;
+  void SetLight(cs::Light * light);
+  cs::Light* GetLight();
+  const cs::Light* GetLight() const;
 
-  virtual void PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
+  virtual void PrivScan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config);
 protected:
-  virtual void FillBoundingBox(csBoundingBox &bbox);
+  virtual void FillBoundingBox(cs::BoundingBox & bbox);
 
 private:
-  csLight *m_light;
+  cs::Light* m_light;
 
 };
 
+}
 
-CS_FORCEINLINE csLight *csLightState::GetLight()
+
+CS_FORCEINLINE cs::Light *cs::LightState::GetLight()
 {
   return m_light;
 }
 
-CS_FORCEINLINE const csLight *csLightState::GetLight() const
+CS_FORCEINLINE const cs::Light *cs::LightState::GetLight() const
 {
   return m_light;
 }

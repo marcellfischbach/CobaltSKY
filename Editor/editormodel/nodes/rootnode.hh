@@ -17,10 +17,10 @@ public:
   virtual RootNode *AsRootNode() override;
   virtual const RootNode *AsRootNode() const override;
 
-  virtual const csResourceLocator WithNewName(const std::string &newName) const;
+  virtual const cs::ResourceLocator WithNewName(const std::string &newName) const;
 
 protected:
-  csResourceLocator GetNewResourceLocator();
+  cs::ResourceLocator GetNewResourceLocator();
 
   virtual void DebugNode() const;
 

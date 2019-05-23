@@ -7,23 +7,28 @@
 #include <cobalt/entity/cshingejointstate.refl.hh>
 
 
+
+namespace cs
+{
 struct iPhysicsHingeJoint;
 
 CS_CLASS()
-class CSE_API csHingeJointState : public CS_SUPER(csJointState)
+class CSE_API HingeJointState : public CS_SUPER(cs::JointState)
 {
   CS_CLASS_GEN;
 public:
-  csHingeJointState();
-  virtual ~csHingeJointState();
+  HingeJointState();
+  virtual ~HingeJointState();
 
 protected:
   virtual void UpdateTransformation();
 
   virtual void OnAssembled();
-  virtual void OnAttachedToScene(csEntityScene *scene);
-  virtual void OnDetachedFromScene(csEntityScene *scene);
+  virtual void OnAttachedToScene(cs::EntityScene * scene);
+  virtual void OnDetachedFromScene(cs::EntityScene * scene);
 
 private:
-  iPhysicsHingeJoint *m_hingeJoint;
+  cs::iPhysicsHingeJoint* m_hingeJoint;
 };
+
+}

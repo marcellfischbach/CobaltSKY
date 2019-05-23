@@ -7,17 +7,17 @@
 #include <cobalt/entity/ientityscan.hh>
 #include <math.h>
 
-csParticleState::csParticleState()
-  : csRenderState()
+cs::ParticleState::ParticleState()
+  : cs::RenderState()
   , m_particle(0)
   , m_materialInstance(0)
-  , m_shadingMode(ePSM_Emitting)
+  , m_shadingMode(cs::ePSM_Emitting)
   , m_emitter(0)
   , m_stepper(0)
 {
 }
 
-csParticleState::~csParticleState()
+cs::ParticleState::~ParticleState()
 {
   CS_RELEASE(m_particle);
   CS_RELEASE(m_materialInstance);
@@ -25,90 +25,90 @@ csParticleState::~csParticleState()
   CS_RELEASE(m_stepper);
 }
 
-void csParticleState::SetParticle(csParticle *particle)
+void cs::ParticleState::SetParticle(cs::Particle *particle)
 {
   CS_SET(m_particle, particle);
 }
 
-csParticle *csParticleState::GetParticle()
+cs::Particle *cs::ParticleState::GetParticle()
 {
   return m_particle;
 }
 
-const csParticle *csParticleState::GetParticle() const
+const cs::Particle *cs::ParticleState::GetParticle() const
 {
   return m_particle;
 }
 
 
-void csParticleState::SetMaterial(csMaterial *material)
+void cs::ParticleState::SetMaterial(cs::Material *material)
 {
   CS_SET(m_materialInstance, material);
 }
 
-csMaterial *csParticleState::GetMaterial()
+cs::Material *cs::ParticleState::GetMaterial()
 {
   return m_materialInstance;
 }
 
-const csMaterial *csParticleState::GetMaterial() const
+const cs::Material *cs::ParticleState::GetMaterial() const
 {
   return m_materialInstance;
 }
 
-void csParticleState::SetShadingMode(csParticleShadingMode shadingMode)
+void cs::ParticleState::SetShadingMode(cs::eParticleShadingMode shadingMode)
 {
   m_shadingMode = shadingMode;
 }
 
-csParticleShadingMode csParticleState::GetShadingMode() const
+cs::eParticleShadingMode cs::ParticleState::GetShadingMode() const
 {
   return m_shadingMode;
 }
 
-void csParticleState::SetEmitter(iParticleEmitter *emitter)
+void cs::ParticleState::SetEmitter(cs::iParticleEmitter *emitter)
 {
   CS_SET(m_emitter, emitter);
 }
 
-iParticleEmitter *csParticleState::GetEmitter()
+cs::iParticleEmitter *cs::ParticleState::GetEmitter()
 {
   return m_emitter;
 }
 
-const iParticleEmitter *csParticleState::GetEmitter() const
+const cs::iParticleEmitter *cs::ParticleState::GetEmitter() const
 {
   return m_emitter;
 }
 
-void csParticleState::SetStepper(iParticleStepper *stepper)
+void cs::ParticleState::SetStepper(cs::iParticleStepper *stepper)
 {
   CS_SET(m_stepper,  stepper);
 }
 
-iParticleStepper *csParticleState::GetStepper()
+cs::iParticleStepper *cs::ParticleState::GetStepper()
 {
   return m_stepper;
 }
 
-const iParticleStepper *csParticleState::GetStepper() const
+const cs::iParticleStepper *cs::ParticleState::GetStepper() const
 {
   return m_stepper;
 }
 
 
-void csParticleState::Render(iGraphics *graphics, csRenderPass pass)  const
+void cs::ParticleState::Render(cs::iGraphics *graphics, cs::eRenderPass pass)  const
 {
-  csRenderState::Render(graphics, pass);
+  cs::RenderState::Render(graphics, pass);
   if (m_particle && m_materialInstance)
   {
     switch (m_shadingMode)
     {
-    case ePSM_Emitting:
-      graphics->SetBlendMode(eBM_SrcAlpha, eBM_One);
+    case cs::ePSM_Emitting:
+      graphics->SetBlendMode(cs::eBM_SrcAlpha, cs::eBM_One);
       break;
-    case ePSM_Shaded:
-      graphics->SetBlendMode(eBM_SrcAlpha, eBM_InvSrcAlpha);
+    case cs::ePSM_Shaded:
+      graphics->SetBlendMode(cs::eBM_SrcAlpha, cs::eBM_InvSrcAlpha);
       break;
     }
 
@@ -116,7 +116,7 @@ void csParticleState::Render(iGraphics *graphics, csRenderPass pass)  const
   }
 }
 
-void csParticleState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config)
+void cs::ParticleState::PrivScan(cs::Clipper *clipper, cs::iGraphics *graphics, cs::iEntityScan *entityScan, const cs::ScanConfig &config)
 {
   if (m_materialInstance && m_particle)
   {
@@ -128,7 +128,7 @@ void csParticleState::PrivScan(csClipper *clipper, iGraphics *graphics, iEntityS
 }
 
 
-void csParticleState::Update(float tpf)
+void cs::ParticleState::Update(float tpf)
 {
   if (m_particle)
   {

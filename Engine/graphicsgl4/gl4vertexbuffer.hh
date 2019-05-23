@@ -6,20 +6,20 @@
 #include <graphicsgl4/gl4vertexbuffer.refl.hh>
 
 CS_CLASS();
-class VertexBufferGL4 : public CS_SUPER(iVertexBuffer)
+class VertexBufferGL4 : public CS_SUPER(cs::iVertexBuffer)
 {
   CS_CLASS_GEN_OBJECT;
 public:
   VertexBufferGL4();
   virtual ~VertexBufferGL4();
 
-  bool CreateBuffer(csSize size, const void *data, csBufferDataMode dataMode);
+  bool CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode);
 
   virtual csSize GetSize() const;
 
   virtual bool Copy(unsigned offset, csSize size, const void* data);
 
-  virtual bool Lock(unsigned offset, void** data, csBufferAccessMode mode);
+  virtual bool Lock(unsigned offset, void** data, cs::eBufferAccessMode mode);
 
   virtual bool Unlock();
 

@@ -10,7 +10,7 @@
 #include <graphicsgl4/gl4shaderstream.refl.hh>
 
 CS_CLASS()
-class csShaderStreamGL4 : public CS_SUPER(iShaderStream)
+class csShaderStreamGL4 : public CS_SUPER(cs::iShaderStream)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -25,8 +25,8 @@ public:
 
   virtual void SetArrayIndex(csUInt32 idx);
 
-  virtual void Set(csSize size, csSize stride, csSize offset, csDataType type);
-  virtual void Set(csSize size, csSize stride, const void *data, csDataType type);
+  virtual void Set(csSize size, csSize stride, csSize offset, cs::eDataType type);
+  virtual void Set(csSize size, csSize stride, const void *data, cs::eDataType type);
 
   virtual void SetFrequency(csUInt8 frequency);
 

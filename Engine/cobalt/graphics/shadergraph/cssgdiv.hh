@@ -7,14 +7,19 @@
 
 #define CS_DIV_NAME "Math/Div"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGDiv : public CS_SUPER(csSGNode)
+class CSE_API SGDiv : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGDiv();
-  virtual ~csSGDiv() { }
+  SGDiv();
+  virtual ~SGDiv() { }
 
   virtual bool Validate();
 
 };
+
+}

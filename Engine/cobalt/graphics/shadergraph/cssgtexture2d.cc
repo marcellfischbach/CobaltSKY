@@ -2,17 +2,17 @@
 
 
 
-csSGTexture2D::csSGTexture2D()
-  : csSGResourceNode()
+cs::SGTexture2D::SGTexture2D()
+  : cs::SGResourceNode()
 {
   SetName(CS_TEXTURE2D_NAME);
-  SetResourceType(eSPT_Texture);
+  SetResourceType(cs::eSPT_Texture);
 
-  AddInput(new csSGInput("uv", false, true));
-  AddOutput(new csSGOutput(eSGDT_Float4, "c"));
-  AddOutput(new csSGOutput(eSGDT_Float, "r", "r"));
-  AddOutput(new csSGOutput(eSGDT_Float, "g", "g"));
-  AddOutput(new csSGOutput(eSGDT_Float, "b", "b"));
-  AddOutput(new csSGOutput(eSGDT_Float, "a", "a"));
+  AddInput(new cs::SGInput("uv", false, true));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float4, "c"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "r", "r"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "g", "g"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "b", "b"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "a", "a"));
 
 }

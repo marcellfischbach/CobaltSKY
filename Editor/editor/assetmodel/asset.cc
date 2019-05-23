@@ -57,18 +57,18 @@ namespace asset::model
 	}
 
 
-  csResourceLocator Asset::GetResourceLocator() const
+  cs::ResourceLocator Asset::GetResourceLocator() const
   {
 		const Entry *parent = GetParent();
 		if (!parent)
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 
-		csResourceLocator parentLocator = parent->GetResourceLocator();
+		cs::ResourceLocator parentLocator = parent->GetResourceLocator();
 		if (!parentLocator.IsValid())
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 		return parent->GetResourceLocator().WithFileSuffix(GetName());
 	}
@@ -95,7 +95,7 @@ namespace asset::model
 		GetModel()->ClearReferences(this);
 	}
 
-	void Asset::AddReference(const csResourceLocator &locator)
+	void Asset::AddReference(const cs::ResourceLocator &locator)
 	{
 		GetModel()->AddReference(this, locator);
 	}
@@ -104,7 +104,7 @@ namespace asset::model
   {
     if (!m_cls)
     {
-      m_cls = csResourceManager::Get()->EvalClass(GetResourceLocator());
+      m_cls = cs::ResourceManager::Get()->EvalClass(GetResourceLocator());
     }
     return m_cls;
   }

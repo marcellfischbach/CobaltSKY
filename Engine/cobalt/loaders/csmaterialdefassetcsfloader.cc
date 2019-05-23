@@ -7,18 +7,18 @@
 
 
 
-csMaterialDefAssetCSFLoader::csMaterialDefAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::MaterialDefAssetCSFLoader::MaterialDefAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 }
 
-csMaterialDefAssetCSFLoader::~csMaterialDefAssetCSFLoader()
+cs::MaterialDefAssetCSFLoader::~MaterialDefAssetCSFLoader()
 {
 
 }
 
 
-bool csMaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::MaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -31,38 +31,38 @@ bool csMaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourc
 
 namespace
 {
-csShaderParameterType get_shader_parameter_type(const std::string &name)
+cs::eShaderParameterType get_shader_parameter_type(const std::string &name)
 {
-  if (name == std::string("float")) return eSPT_Float;
-  else if (name == std::string("vec2")) return eSPT_Vector2;
-  else if (name == std::string("vec3")) return eSPT_Vector3;
-  else if (name == std::string("vec4")) return eSPT_Vector4;
-  else if (name == std::string("int")) return eSPT_Int;
-  else if (name == std::string("ivec2")) return eSPT_IVector2;
-  else if (name == std::string("ivec3")) return eSPT_IVector3;
-  else if (name == std::string("ivec4")) return eSPT_IVector4;
-  else if (name == std::string("col")) return eSPT_Color4;
-  else if (name == std::string("mat3")) return eSPT_Matrix3;
-  else if (name == std::string("mat4")) return eSPT_Matrix4;
-  else if (name == std::string("texture")) return eSPT_Texture;
-  return eSPT_Float;
+  if (name == std::string("float")) return cs::eSPT_Float;
+  else if (name == std::string("vec2")) return cs::eSPT_Vector2;
+  else if (name == std::string("vec3")) return cs::eSPT_Vector3;
+  else if (name == std::string("vec4")) return cs::eSPT_Vector4;
+  else if (name == std::string("int")) return cs::eSPT_Int;
+  else if (name == std::string("ivec2")) return cs::eSPT_IVector2;
+  else if (name == std::string("ivec3")) return cs::eSPT_IVector3;
+  else if (name == std::string("ivec4")) return cs::eSPT_IVector4;
+  else if (name == std::string("col")) return cs::eSPT_Color4;
+  else if (name == std::string("mat3")) return cs::eSPT_Matrix3;
+  else if (name == std::string("mat4")) return cs::eSPT_Matrix4;
+  else if (name == std::string("texture")) return cs::eSPT_Texture;
+  return cs::eSPT_Float;
 }
 }
 
-const cs::Class *csMaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csMaterialDefWrapper::GetStaticClass();
+  return cs::MaterialDefWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (entry->GetTagName() != std::string("materialDef"))
   {
     return nullptr;
   }
 
-  csMaterialDef *material = new csMaterialDef();
+  cs::MaterialDef *material = new cs::MaterialDef();
 
   const csfEntry *passesEntry = entry->GetEntry("passes");
   if (!passesEntry)
@@ -82,38 +82,38 @@ csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, cons
       passName = passEntry->GetAttribute("name");
     }
 
-    csRenderPass renderPass;
+    cs::eRenderPass renderPass;
     if (passName == std::string("GBuffer"))
     {
-      renderPass = eRP_GBuffer;
+      renderPass = cs::eRP_GBuffer;
     }
     else if (passName == std::string("ShadowPSSM"))
     {
-      renderPass = eRP_ShadowPSSM;
+      renderPass = cs::eRP_ShadowPSSM;
     }
     else if (passName == std::string("ShadowCube"))
     {
-      renderPass = eRP_ShadowCube;
+      renderPass = cs::eRP_ShadowCube;
     }
     else if (passName == std::string("ForwardUnlit"))
     {
-      renderPass = eRP_ForwardUnlit;
+      renderPass = cs::eRP_ForwardUnlit;
     }
     else if (passName == std::string("Forward1Light"))
     {
-      renderPass = eRP_Forward1Light;
+      renderPass = cs::eRP_Forward1Light;
     }
     else if (passName == std::string("Forward2Light"))
     {
-      renderPass = eRP_Forward2Light;
+      renderPass = cs::eRP_Forward2Light;
     }
     else if (passName == std::string("Forward3Light"))
     {
-      renderPass = eRP_Forward3Light;
+      renderPass = cs::eRP_Forward3Light;
     }
     else if (passName == std::string("Forward4Light"))
     {
-      renderPass = eRP_Forward4Light;
+      renderPass = cs::eRP_Forward4Light;
     }
     else
     {
@@ -127,7 +127,7 @@ csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, cons
       printf ("Exit 3\n");
       return nullptr;
     }
-    csShaderWrapper *shader = csResourceManager::Get()->GetOrLoad<csShaderWrapper>(GetLocator(passEntry));
+    cs::ShaderWrapper *shader = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(GetLocator(passEntry));
     if (!shader)
     {
       material->Release();
@@ -156,54 +156,54 @@ csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, cons
       id= parameterEntry->GetAttribute("id");
       name = parameterEntry->GetAttribute("name");
 
-      csShaderParameterType paramType;
+      cs::eShaderParameterType paramType;
       if (type == std::string("float"))
       {
-        paramType = eSPT_Float;
+        paramType = cs::eSPT_Float;
       }
       else if (type == std::string("vec2"))
       {
-        paramType = eSPT_Vector2;
+        paramType = cs::eSPT_Vector2;
       }
       else if (type == std::string("vec3"))
       {
-        paramType = eSPT_Vector3;
+        paramType = cs::eSPT_Vector3;
       }
       else if (type == std::string("vec4"))
       {
-        paramType = eSPT_Vector4;
+        paramType = cs::eSPT_Vector4;
       }
       else if (type == std::string("int"))
       {
-        paramType = eSPT_Int;
+        paramType = cs::eSPT_Int;
       }
       else if (type == std::string("ivec2"))
       {
-        paramType = eSPT_IVector2;
+        paramType = cs::eSPT_IVector2;
       }
       else if (type == std::string("ivec3"))
       {
-        paramType = eSPT_IVector3;
+        paramType = cs::eSPT_IVector3;
       }
       else if (type == std::string("ivec4"))
       {
-        paramType = eSPT_IVector4;
+        paramType = cs::eSPT_IVector4;
       }
       else if (type == std::string("col"))
       {
-        paramType = eSPT_Color4;
+        paramType = cs::eSPT_Color4;
       }
       else if (type == std::string("mat3"))
       {
-        paramType = eSPT_Matrix3;
+        paramType = cs::eSPT_Matrix3;
       }
       else if (type == std::string("mat4"))
       {
-        paramType = eSPT_Matrix4;
+        paramType = cs::eSPT_Matrix4;
       }
       else if (type == std::string("texture"))
       {
-        paramType = eSPT_Texture;
+        paramType = cs::eSPT_Texture;
       }
       else
       {
@@ -213,50 +213,50 @@ csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, cons
       csSize idx = material->RegisterParam(id, name, paramType);
       switch (paramType)
       {
-      case eSPT_Float:
+      case cs::eSPT_Float:
         {
           float f = LoadFloat(parameterEntry);
           material->SetDefault(idx, f);
         }
         break;
-      case eSPT_Vector2:
+      case cs::eSPT_Vector2:
         {
-          csVector2f v = LoadVector2f(parameterEntry);
+          cs::Vector2f v = LoadVector2f(parameterEntry);
           material->SetDefault(idx, v);
         }
         break;
-      case eSPT_Vector3:
+      case cs::eSPT_Vector3:
         {
-          csVector3f v = LoadVector3f(parameterEntry);
+          cs::Vector3f v = LoadVector3f(parameterEntry);
           material->SetDefault(idx, v);
         }
         break;
-      case eSPT_Vector4:
+      case cs::eSPT_Vector4:
         {
-          csVector4f v = LoadVector4f(parameterEntry);
+          cs::Vector4f v = LoadVector4f(parameterEntry);
           material->SetDefault(idx, v);
         }
         break;
-      case eSPT_Color4:
+      case cs::eSPT_Color4:
         {
-          csColor4f v = LoadColor4f(parameterEntry);
+          cs::Color4f v = LoadColor4f(parameterEntry);
           material->SetDefault(idx, v);
         }
         break;
-      case eSPT_Texture:
+      case cs::eSPT_Texture:
         {
           if (HasLocator(parameterEntry))
           {
-            csResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
-            csTextureWrapper *texture = nullptr;
+            cs::eResourceLoadingMode rlm = GetResourceLoadingMode(parameterEntry);
+            cs::TextureWrapper *texture = nullptr;
             switch (rlm)
             {
-            case eRLM_Shared:
-              texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(GetLocator(parameterEntry));
+            case cs::eRLM_Shared:
+              texture = cs::ResourceManager::Get()->GetOrLoad<cs::TextureWrapper>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               break;
-            case eRLM_Instance:
-              texture = csResourceManager::Get()->Load<csTextureWrapper>(GetLocator(parameterEntry));
+            case cs::eRLM_Instance:
+              texture = cs::ResourceManager::Get()->Load<cs::TextureWrapper>(GetLocator(parameterEntry));
               material->SetDefault(idx, texture);
               if (texture) texture->Release();
               break;
@@ -273,7 +273,7 @@ csResourceWrapper *csMaterialDefAssetCSFLoader::Load(const csfEntry *entry, cons
 
 
 
-  return new csMaterialDefWrapper(material);
+  return new cs::MaterialDefWrapper(material);
 }
 
 

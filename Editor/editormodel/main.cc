@@ -60,7 +60,7 @@ void test_delete(cs::editor::model::Model &model)
   std::string locatorName = "Engine@models/";
   try
   {
-    node = model.FindNode(csResourceLocator(locatorName));
+    node = model.FindNode(cs::ResourceLocator(locatorName));
     if (node)
     {
       model.Delete(node, tx);
@@ -104,7 +104,7 @@ void test_rename(cs::editor::model::Model &model)
   std::string locatorName = "Engine@models/";
   try
   {
-    node = model.FindNode(csResourceLocator(locatorName));
+    node = model.FindNode(cs::ResourceLocator(locatorName));
     if (node)
     {
       model.Rename(node, "other_models", tx);
@@ -144,8 +144,8 @@ void test_move(cs::editor::model::Model &model)
   std::string destinationLocatorName = "Engine@materials/";
   try
   {
-    sourceNode = model.FindNode(csResourceLocator(sourceLocatorName));
-    destinatioNode = model.FindNode(csResourceLocator(destinationLocatorName));
+    sourceNode = model.FindNode(cs::ResourceLocator(sourceLocatorName));
+    destinatioNode = model.FindNode(cs::ResourceLocator(destinationLocatorName));
     if (sourceNode && destinatioNode)
     {
       model.Move(sourceNode, destinatioNode->AsFolderNode(), tx);
@@ -175,20 +175,20 @@ int main(int argc, char **argv)
   copy_test_folder();
 
 
-  csSettings::Get()->Initialize("d:/DEV/temp/CobaltSKYModelTest-Ref/config.csf");
-  csVFS::Get()->Initialize(csSettings::Get());
+  cs::Settings::Get()->Initialize("d:/DEV/temp/CobaltSKYModelTest-Ref/config.csf");
+  cs::VFS::Get()->Initialize(cs::Settings::Get());
 
-  csVFS* vfs = csVFS::Get();
+  cs::VFS* vfs = cs::VFS::Get();
 
   cs::editor::model::Model model;
   cs::editor::model::PathScanner ps(&model);
 
 
 
-  for (size_t i = 0, in = csVFS::Get()->GetNumberOfEntries(); i < in; ++i)
+  for (size_t i = 0, in = cs::VFS::Get()->GetNumberOfEntries(); i < in; ++i)
   {
     cs::editor::model::VFSEntryNode *entryNode = model.CreateVFSEntryNode();
-    entryNode->SetEntry(&csVFS::Get()->GetEntry(i));
+    entryNode->SetEntry(&cs::VFS::Get()->GetEntry(i));
 
     cs::editor::model::Transaction tx = model.CreateTransaction();
     tx.Begin();
@@ -223,40 +223,40 @@ int main(int argc, char **argv)
   }
   );
 
-  model.OnNamedNodeAdded().Connect([](cs::editor::model::Node* child, csResourceLocator locator)
+  model.OnNamedNodeAdded().Connect([](cs::editor::model::Node* child, cs::ResourceLocator locator)
   {
     printf("NamedNodeAdded: %s: %s\n", child->GetName().c_str(), locator.Encode().c_str());
   }
   );
 
-  model.OnNamedNodeRenamed().Connect([](cs::editor::model::Node* child, csResourceLocator oldLocator, csResourceLocator newLocator)
+  model.OnNamedNodeRenamed().Connect([](cs::editor::model::Node* child, cs::ResourceLocator oldLocator, cs::ResourceLocator newLocator)
   {
     printf("NamedNodeRenamed: %s: %s -> %s\n", child->GetName().c_str(), oldLocator.Encode().c_str(), newLocator.Encode().c_str());
   }
   );
-  model.OnNamedNodeRemoved().Connect([](cs::editor::model::Node* child, csResourceLocator locator)
+  model.OnNamedNodeRemoved().Connect([](cs::editor::model::Node* child, cs::ResourceLocator locator)
   {
     printf("NamedNodeRemoved: %s: %s\n", child->GetName().c_str(), locator.Encode().c_str());
   }
   );
 
 
-  model.OnResourceNameAdded().Connect([](csResourceLocator locator) 
+  model.OnResourceNameAdded().Connect([](cs::ResourceLocator locator) 
   {
     printf("ResourceNameAdded: %s\n", locator.Encode().c_str());
   }
   );
-  model.OnResourceNameChanged().Connect([](csResourceLocator locator)
+  model.OnResourceNameChanged().Connect([](cs::ResourceLocator locator)
   {
     printf("ResourceNameChanged: %s\n", locator.Encode().c_str());
   }
   );
-  model.OnResourceNameRenamed().Connect([](csResourceLocator oldLocator, csResourceLocator newLocator)
+  model.OnResourceNameRenamed().Connect([](cs::ResourceLocator oldLocator, cs::ResourceLocator newLocator)
   {
     printf("ResourceNameRenamed: %s -> %s\n", oldLocator.Encode().c_str(), newLocator.Encode().c_str());
   }
   );
-  model.OnResourceNameRemoved().Connect([](csResourceLocator locator)
+  model.OnResourceNameRemoved().Connect([](cs::ResourceLocator locator)
   {
     printf("ResourceNameRemoved: %s\n", locator.Encode().c_str());
   }

@@ -39,9 +39,9 @@ namespace asset::model
     return true;
   }
 
-  csResourceLocator Root::GetResourceLocator() const
+  cs::ResourceLocator Root::GetResourceLocator() const
   {
-    return csResourceLocator();
+    return cs::ResourceLocator();
   }
 
 	bool Root::IsRoot() const

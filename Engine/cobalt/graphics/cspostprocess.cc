@@ -11,7 +11,7 @@
 #include <string.h>
 
 
-csPostProcess::csPostProcess()
+cs::PostProcess::PostProcess()
   : cs::Object()
   , m_output(nullptr)
   , m_postProcessor(nullptr)
@@ -21,18 +21,18 @@ csPostProcess::csPostProcess()
 }
 
 
-csPostProcess::~csPostProcess()
+cs::PostProcess::~PostProcess()
 {
 
 }
 
-void csPostProcess::SetShader(iShader *shader)
+void cs::PostProcess::SetShader(cs::iShader *shader)
 {
   CS_SET(m_shader, shader);
 }
 
 
-void csPostProcess::SetInputBindingName(int idx, const std::string &inputName)
+void cs::PostProcess::SetInputBindingName(int idx, const std::string &inputName)
 {
   if (idx >= m_inputs.size())
   {
@@ -43,7 +43,7 @@ void csPostProcess::SetInputBindingName(int idx, const std::string &inputName)
 }
 
 
-int csPostProcess::BindInput(csTextureWrapper *texture, const std::string &inputName)
+int cs::PostProcess::BindInput(cs::TextureWrapper *texture, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -58,7 +58,7 @@ int csPostProcess::BindInput(csTextureWrapper *texture, const std::string &input
   return res;
 }
 
-int csPostProcess::BindInput(csPostProcess *postProcess, int outputIdx, const std::string &inputName)
+int cs::PostProcess::BindInput(cs::PostProcess *postProcess, int outputIdx, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -74,7 +74,7 @@ int csPostProcess::BindInput(csPostProcess *postProcess, int outputIdx, const st
   return res;
 }
 
-int csPostProcess::BindInput(csPostProcessOutput originOutput, const std::string &inputName)
+int cs::PostProcess::BindInput(cs::ePostProcessOutput originOutput, const std::string &inputName)
 {
   int res = (int)m_inputs.size();
 
@@ -89,17 +89,17 @@ int csPostProcess::BindInput(csPostProcessOutput originOutput, const std::string
   return res;
 }
 
-void csPostProcess::SetOutput(iRenderTarget *output)
+void cs::PostProcess::SetOutput(cs::iRenderTarget *output)
 {
   CS_SET(m_output, output);
 }
 
-iRenderTarget *csPostProcess::GetOutput()
+cs::iRenderTarget *cs::PostProcess::GetOutput()
 {
   return m_output;
 }
 
-bool csPostProcess::BindShader(iGraphics *graphics)
+bool cs::PostProcess::BindShader(cs::iGraphics *graphics)
 {
   if (!m_shader)
   {
@@ -109,7 +109,7 @@ bool csPostProcess::BindShader(iGraphics *graphics)
   return true;
 }
 
-bool csPostProcess::BindInputs(iGraphics *graphics)
+bool cs::PostProcess::BindInputs(cs::iGraphics *graphics)
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -128,17 +128,17 @@ bool csPostProcess::BindInputs(iGraphics *graphics)
       continue;
     }
 
-    iTexture *inputTexture = input.m_texture->Get();
+    cs::iTexture *inputTexture = input.m_texture->Get();
     if (input.m_attrInput)
     {
-      csTextureUnit tu = graphics->BindTexture(inputTexture);
+      cs::eTextureUnit tu = graphics->BindTexture(inputTexture);
       input.m_attrInput->Set(tu);
     }
     switch (input.m_texture->Get()->GetType())
     {
-    case eTT_Texture2D:
+    case cs::eTT_Texture2D:
       {
-        iTexture2D *txt2D = cs::QueryClass<iTexture2D>(inputTexture);
+        cs::iTexture2D *txt2D = cs::QueryClass<cs::iTexture2D>(inputTexture);
         if (input.m_attrInputSize)
         {
           input.m_attrInputSize->Set((float)txt2D->GetWidth(), (float)txt2D->GetHeight());
@@ -154,7 +154,7 @@ bool csPostProcess::BindInputs(iGraphics *graphics)
   return true;
 }
 
-bool csPostProcess::BindOutput(iGraphics *graphics)
+bool cs::PostProcess::BindOutput(cs::iGraphics *graphics)
 {
   if (!m_output)
   {
@@ -165,7 +165,7 @@ bool csPostProcess::BindOutput(iGraphics *graphics)
   return true;
 }
 
-bool csPostProcess::Initialize(iGraphics *graphics)
+bool cs::PostProcess::Initialize(cs::iGraphics *graphics)
 {
   for (size_t i = 0, in = m_inputs.size(); i < in; ++i)
   {
@@ -174,14 +174,14 @@ bool csPostProcess::Initialize(iGraphics *graphics)
     std::string inputName = input.m_inputName;
     std::string inputSizeName = inputName + std::string("Size");
     std::string inputSizeInvName = inputSizeName + std::string("Inv");
-    input.m_attrInput = m_shader->GetAttribute(csShaderAttributeID(inputName));
-    input.m_attrInputSize = m_shader->GetAttribute(csShaderAttributeID(inputSizeName));
-    input.m_attrInputSizeInv = m_shader->GetAttribute(csShaderAttributeID(inputSizeInvName));
+    input.m_attrInput = m_shader->GetAttribute(cs::ShaderAttributeID(inputName));
+    input.m_attrInputSize = m_shader->GetAttribute(cs::ShaderAttributeID(inputSizeName));
+    input.m_attrInputSizeInv = m_shader->GetAttribute(cs::ShaderAttributeID(inputSizeInvName));
   }
   return true;
 }
 
-bool csPostProcess::Render(iGraphics *graphics)
+bool cs::PostProcess::Render(cs::iGraphics *graphics)
 {
   bool success = BindShader(graphics) && BindInputs(graphics) && BindOutput(graphics) ;
   if (!success)

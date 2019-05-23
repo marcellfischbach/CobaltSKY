@@ -4,7 +4,7 @@
 
 void csSGConstFloatGL4::PrivEvaluate(csShaderGraphCtx &ctx)
 {
-  csSGNode *n = GetNode();
+  cs::SGNode *n = GetNode();
 
   ctx.SetOutputValue(n->GetOutput(0), std::to_string(n->GetInput(0)->GetConst()));
 }

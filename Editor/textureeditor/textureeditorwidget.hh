@@ -6,8 +6,11 @@
 #include <cobalt/graphics/csshaderattributeid.hh>
 
 class TextureEditor;
-class csTexture2DWrapper;
-class csResourceLocator;
+class cs::Texture2DWrapper;
+namespace cs
+{
+class ResourceLocator;
+}
 class TextureEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -15,9 +18,9 @@ public:
   TextureEditorWidget(TextureEditor *parent);
   virtual ~TextureEditorWidget();
 
-  void SetTexture(csTexture2DWrapper *texture);
+  void SetTexture(cs::Texture2DWrapper *texture);
 public slots:
-void SamplerChanged(const csResourceLocator &locator);
+void SamplerChanged(const cs::ResourceLocator &locator);
 private slots:
 void on_pbRed_toggled(bool checked);
 void on_pbGreen_toggled(bool checked);
@@ -29,5 +32,5 @@ void on_pbSave_clicked();
 private:
   TextureEditor *m_editor;
   Ui::TextureEditorWidget m_gui;
-  csTexture2DWrapper *m_texture;
+  cs::Texture2DWrapper *m_texture;
 };

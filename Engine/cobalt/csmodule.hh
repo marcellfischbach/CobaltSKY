@@ -1,11 +1,16 @@
 #pragma once
 
 
-class csCobaltSKYModule
+namespace cs
+{
+
+class CobaltSKYModule
 {
 public:
   static void Initialize();
 
 private:
-  csCobaltSKYModule() {}
+  CobaltSKYModule() {}
 };
+
+}

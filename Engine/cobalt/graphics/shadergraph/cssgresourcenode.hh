@@ -11,51 +11,56 @@
 
 #include <cobalt/graphics/shadergraph/cssgresourcenode.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGResourceNode : public CS_SUPER(csSGNode)
+class CSE_API SGResourceNode : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGResourceNode();
-  virtual ~csSGResourceNode();
+  SGResourceNode();
+  virtual ~SGResourceNode();
 
-  virtual csSGNode *Copy(csSGNode *node) const;
+  virtual cs::SGNode* Copy(cs::SGNode * node) const;
 
-  void SetResourceName(const std::string &resourceName);
-  const std::string &GetResourceName() const;
+  void SetResourceName(const std::string & resourceName);
+  const std::string& GetResourceName() const;
 
-  void SetResourceId(const std::string &resourceId);
-  const std::string &GetResourceId() const;
+  void SetResourceId(const std::string & resourceId);
+  const std::string& GetResourceId() const;
 
-  csShaderParameterType GetResourceType() const;
+  cs::eShaderParameterType GetResourceType() const;
 
   void SetDefault(float value);
-  void SetDefault(const csVector2f &value);
-  void SetDefault(const csVector3f &value);
-  void SetDefault(const csVector4f &value);
-  void SetDefault(const csColor4f &value);
-  void SetDefault(const csMatrix3f &value);
-  void SetDefault(const csMatrix4f &value);
-  float *GetDefaultFloats();
-  int *GetDefaultInts();
+  void SetDefault(const cs::Vector2f & value);
+  void SetDefault(const cs::Vector3f & value);
+  void SetDefault(const cs::Vector4f & value);
+  void SetDefault(const cs::Color4f & value);
+  void SetDefault(const cs::Matrix3f & value);
+  void SetDefault(const cs::Matrix4f & value);
+  float* GetDefaultFloats();
+  int* GetDefaultInts();
 
-  void SetDefaultTextureResource(const csResourceLocator &locator);
-  csResourceLocator &GetDefaultTextureResource();
+  void SetDefaultTextureResource(const cs::ResourceLocator & locator);
+  cs::ResourceLocator& GetDefaultTextureResource();
 
-  const float *GetDefaultFloats() const;
-  const int *GetDefaultInts() const;
-  const csResourceLocator &GetDefaultTextureResource() const;
+  const float* GetDefaultFloats() const;
+  const int* GetDefaultInts() const;
+  const cs::ResourceLocator& GetDefaultTextureResource() const;
 
 protected:
-  void SetResourceType(csShaderParameterType type);
+  void SetResourceType(cs::eShaderParameterType type);
 
 private:
   std::string m_resourceId;
   std::string m_resourceName;
-  csShaderParameterType m_resourceType;
+  cs::eShaderParameterType m_resourceType;
 
   float m_defaultFloats[16];
   int m_defaultInts[16];
-  csResourceLocator m_defaultTextureResource;
+  cs::ResourceLocator m_defaultTextureResource;
 
 };
+
+}

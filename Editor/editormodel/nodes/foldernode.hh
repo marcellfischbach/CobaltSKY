@@ -22,13 +22,13 @@ public:
   virtual void SetName(const std::string &name) override;
   virtual const std::string &GetName() const override;
 
-  virtual const csResourceLocator WithNewName(const std::string &newName) const;
+  virtual const cs::ResourceLocator WithNewName(const std::string &newName) const;
 
 
 protected:
   FolderNode(Model *model, Type type = eT_Folder);
 
-  csResourceLocator GetNewResourceLocator();
+  cs::ResourceLocator GetNewResourceLocator();
 
   virtual void DebugNode() const;
 

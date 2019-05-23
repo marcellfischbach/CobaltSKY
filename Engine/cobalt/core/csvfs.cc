@@ -10,7 +10,7 @@
 // #include <csini/csiini.h>
 
 
-csVFS::Entry::Entry()
+cs::VFS::Entry::Entry()
   : m_name("")
   , m_path("")
   , m_absPath("")
@@ -18,58 +18,58 @@ csVFS::Entry::Entry()
 {
 }
 
-void csVFS::Entry::SetName(const std::string &name)
+void cs::VFS::Entry::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-const std::string &csVFS::Entry::GetName() const
+const std::string &cs::VFS::Entry::GetName() const
 {
   return m_name;
 }
 
-void csVFS::Entry::SetPath(const std::string &path)
+void cs::VFS::Entry::SetPath(const std::string &path)
 {
   m_path = path;
 }
 
-const std::string &csVFS::Entry::GetPath() const
+const std::string &cs::VFS::Entry::GetPath() const
 {
   return m_path;
 }
 
-void csVFS::Entry::SetAbsPath(const std::string &absPath)
+void cs::VFS::Entry::SetAbsPath(const std::string &absPath)
 {
   m_absPath = absPath;
 }
 
-const std::string &csVFS::Entry::GetAbsPath() const
+const std::string &cs::VFS::Entry::GetAbsPath() const
 {
   return m_absPath;
 }
 
-void csVFS::Entry::SetPriority(int priority)
+void cs::VFS::Entry::SetPriority(int priority)
 {
   m_priority = priority;
 }
 
-int csVFS::Entry::GetPriority() const
+int cs::VFS::Entry::GetPriority() const
 {
   return m_priority;
 }
 
 
-csVFS::csVFS()
+cs::VFS::VFS()
 {
 }
 
-csVFS* csVFS::Get()
+cs::VFS* cs::VFS::Get()
 {
-  static csVFS static_vfs;
+  static cs::VFS static_vfs;
   return &static_vfs;
 }
 
-bool csVFS::Initialize(int argc, char** argv)
+bool cs::VFS::Initialize(int argc, char** argv)
 {
   for (int i = 0; i < argc - 1; ++i)
   {
@@ -83,9 +83,9 @@ bool csVFS::Initialize(int argc, char** argv)
   return false;
 }
 
-bool csVFS::LoadConfig(const std::string &configFileName)
+bool cs::VFS::LoadConfig(const std::string &configFileName)
 {
-  csFileInfo fileInfo(configFileName.c_str());
+  cs::FileInfo fileInfo(configFileName.c_str());
 
   csfFile file;
   if (!file.Parse(configFileName))
@@ -103,7 +103,7 @@ bool csVFS::LoadConfig(const std::string &configFileName)
   return LoadConfig(rootEntry, fileInfo.GetLocation());
 }
 
-bool csVFS::Initialize(csSettings *settings)
+bool cs::VFS::Initialize(cs::Settings *settings)
 {
   if (!settings)
   {
@@ -145,7 +145,7 @@ bool csVFS::Initialize(csSettings *settings)
   return true;
 }
 
-bool csVFS::ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry)
+bool cs::VFS::ImportRootPath(cs::Settings *settings, const csfEntry *rootPathEntry)
 {
   if (!rootPathEntry || !rootPathEntry->HasAttribute("name") || !rootPathEntry->HasAttribute("path"))
   {
@@ -162,7 +162,7 @@ bool csVFS::ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry)
   return true;
 }
 
-bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEntry)
+bool cs::VFS::ImportResolution(cs::Settings *settings, const csfEntry *resolutionEntry)
 {
   CS_UNUSED(settings);
   if (!resolutionEntry->HasAttribute("name") || !resolutionEntry->HasAttribute("path"))
@@ -173,7 +173,7 @@ bool csVFS::ImportResolution(csSettings *settings, const csfEntry *resolutionEnt
   return true;
 }
 
-bool csVFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
+bool cs::VFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
 {
     const csfEntry *rootPathsEntry = vfsEntry->GetEntry("rootPaths");
     if (rootPathsEntry)
@@ -227,18 +227,18 @@ bool csVFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
 
 }
 
-bool csVFS::HasPath(const std::string &vfsName) const
+bool cs::VFS::HasPath(const std::string &vfsName) const
 {
   map<std::string, std::string>::const_iterator it = m_pathMapping.find(vfsName);
   return it != m_pathMapping.end();
 }
 
-void csVFS::AddPath(const std::string &vfsName, const std::string &path)
+void cs::VFS::AddPath(const std::string &vfsName, const std::string &path)
 {
   m_pathMapping[vfsName] = path;
 }
 
-void csVFS::RemovePath(const std::string &vfsName)
+void cs::VFS::RemovePath(const std::string &vfsName)
 {
   std::map<std::string, std::string>::iterator it = m_pathMapping.find(vfsName);
   if (it != m_pathMapping.end())
@@ -247,7 +247,7 @@ void csVFS::RemovePath(const std::string &vfsName)
   }
 }
 
-const std::string &csVFS::GetPath(const std::string & vfsName) const
+const std::string &cs::VFS::GetPath(const std::string & vfsName) const
 {
   map<std::string, std::string>::const_iterator it = m_pathMapping.find(vfsName);
   if (it == m_pathMapping.end())
@@ -258,7 +258,7 @@ const std::string &csVFS::GetPath(const std::string & vfsName) const
   return it->second;
 }
 
-std::string csVFS::ExtractSymbol(const std::string &path, unsigned idx, unsigned &length)
+std::string cs::VFS::ExtractSymbol(const std::string &path, unsigned idx, unsigned &length)
 {
   if (path.length() - idx < 3)
   {
@@ -293,7 +293,7 @@ std::string csVFS::ExtractSymbol(const std::string &path, unsigned idx, unsigned
   return path.substr(firstChar, lastChar - firstChar);
 }
 
-std::string csVFS::GetPathResolution(const std::string &pathName) const
+std::string cs::VFS::GetPathResolution(const std::string &pathName) const
 {
   std::string res = pathName;
   for (unsigned i = 0; i < res.length(); )
@@ -323,13 +323,13 @@ std::string csVFS::GetPathResolution(const std::string &pathName) const
   return res;
 }
 
-std::string csVFS::GetAbsolutePath(const std::string &path) const
+std::string cs::VFS::GetAbsolutePath(const std::string &path) const
 {
   std::string finalName = GetPathResolution(path);
   for (auto entry : m_entries)
   {
     std::string absPath = entry.GetAbsPath() + "/" + finalName;
-    if (csFileInfo::Exists(absPath))
+    if (cs::FileInfo::Exists(absPath))
     {
       return absPath;
     }
@@ -337,7 +337,7 @@ std::string csVFS::GetAbsolutePath(const std::string &path) const
   return "";
 }
 
-std::string csVFS::GetAbsolutePath(const std::string &path, const std::string &entryName, ExistenceCheck checkExistence) const
+std::string cs::VFS::GetAbsolutePath(const std::string &path, const std::string &entryName, ExistenceCheck checkExistence) const
 {
   if (entryName.empty())
   {
@@ -349,7 +349,7 @@ std::string csVFS::GetAbsolutePath(const std::string &path, const std::string &e
     if (entry.GetName() == entryName)
     {
       std::string absPath = entry.GetAbsPath() + "/" + finalName;
-      if (csFileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
+      if (cs::FileInfo::Exists(absPath) || checkExistence == DontCheckExistence)
       {
         return absPath;
       }
@@ -361,7 +361,7 @@ std::string csVFS::GetAbsolutePath(const std::string &path, const std::string &e
 
 
 
-std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence) const
+std::string cs::VFS::GetAbsolutePath(const cs::ResourceLocator &locator, ExistenceCheck checkExistence) const
 {
   if (locator.GetResourceEntry().empty())
   {
@@ -373,7 +373,7 @@ std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCh
     if (entry.GetName() == locator.GetResourceEntry())
     {
       std::string absPath = entry.GetAbsPath() + "/" + finalName;
-      if (checkExistence == DontCheckExistence || csFileInfo::Exists(absPath))
+      if (checkExistence == DontCheckExistence || cs::FileInfo::Exists(absPath))
       {
         return absPath;
       }
@@ -384,17 +384,17 @@ std::string csVFS::GetAbsolutePath(const csResourceLocator &locator, ExistenceCh
 }
 
 
-//void csVFS::SetRootPath(const std::string &rootPath)
+//void cs::VFS::SetRootPath(const std::string &rootPath)
 //{
 //  m_rootPath = rootPath;
 //}
 
-//const std::string &csVFS::GetRootPath() const
+//const std::string &cs::VFS::GetRootPath() const
 //{
 //  return m_rootPath;
 //}
 
-iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode textMode)
+cs::iFile *cs::VFS::Open(const std::string &filename, cs::eOpenMode mode, cs::eTextMode textMode)
 {
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
@@ -405,7 +405,7 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
 
 
 
-  csFileStd* file = new csFileStd();
+  cs::FileStd* file = new cs::FileStd();
   for (Entry &entry : m_entries)
   {
     std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
@@ -421,7 +421,7 @@ iFile *csVFS::Open(const std::string &filename, csOpenMode mode, csTextMode text
 }
 
 
-iFile *csVFS::Open(const std::string &filename, const std::string &entryName, csOpenMode mode, csTextMode textMode)
+cs::iFile *cs::VFS::Open(const std::string &filename, const std::string &entryName, cs::eOpenMode mode, cs::eTextMode textMode)
 {
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
@@ -432,7 +432,7 @@ iFile *csVFS::Open(const std::string &filename, const std::string &entryName, cs
 
 
 
-  csFileStd* file = new csFileStd();
+  cs::FileStd* file = new cs::FileStd();
   for (Entry &entry : m_entries)
   {
     if (entry.GetName() == entryName)
@@ -452,7 +452,7 @@ iFile *csVFS::Open(const std::string &filename, const std::string &entryName, cs
 }
 
 
-iFile *csVFS::Open(const csResourceLocator &locator, csOpenMode mode, csTextMode textMode)
+cs::iFile *cs::VFS::Open(const cs::ResourceLocator &locator, cs::eOpenMode mode, cs::eTextMode textMode)
 {
   if (locator.GetResourceEntry().empty())
   {
@@ -463,7 +463,7 @@ iFile *csVFS::Open(const csResourceLocator &locator, csOpenMode mode, csTextMode
 }
 
 
-const csVFS::Entry *csVFS::FindEntryForFilename(const std::string &filename) const
+const cs::VFS::Entry *cs::VFS::FindEntryForFilename(const std::string &filename) const
 {
   std::string finalFilename = GetPathResolution(filename);
   if (filename.length() == 0)
@@ -475,7 +475,7 @@ const csVFS::Entry *csVFS::FindEntryForFilename(const std::string &filename) con
   for (const Entry &entry : m_entries)
   {
     std::string absFileName = entry.GetAbsPath() + std::string("/") + finalFilename;
-    if (csFileInfo::Exists(absFileName))
+    if (cs::FileInfo::Exists(absFileName))
     {
       return &entry;
     }
@@ -485,12 +485,12 @@ const csVFS::Entry *csVFS::FindEntryForFilename(const std::string &filename) con
 }
 
 
-csSize csVFS::GetNumberOfEntries() const
+csSize cs::VFS::GetNumberOfEntries() const
 {
   return m_entries.size();
 }
 
-const csVFS::Entry &csVFS::GetEntry(csSize idx) const
+const cs::VFS::Entry &cs::VFS::GetEntry(csSize idx) const
 {
   return m_entries[idx];
 }

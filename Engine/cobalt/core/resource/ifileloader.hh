@@ -4,16 +4,22 @@
 #include <csrefl/class.hh>
 #include <cobalt/core/resource/ifileloader.refl.hh>
 
+
+namespace cs
+{
 struct iFile;
-class csResourceLocator;
-class csResourceWrapper;
+
+class ResourceLocator;
+class ResourceWrapper;
 
 CS_CLASS()
 struct CSE_API iFileLoader : public cs::iObject
 {
   CS_CLASS_GEN;
 
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const = 0;
-  virtual const cs::Class *EvalClass(iFile *file, const csResourceLocator &locator) const = 0;
-  virtual csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const = 0;
+  virtual bool CanLoad(cs::iFile* file, const cs::ResourceLocator& locator) const = 0;
+  virtual const cs::Class* EvalClass(cs::iFile* file, const cs::ResourceLocator& locator) const = 0;
+  virtual cs::ResourceWrapper* Load(cs::iFile* file, const cs::ResourceLocator& locator) const = 0;
 };
+
+}

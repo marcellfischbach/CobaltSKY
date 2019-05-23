@@ -12,7 +12,7 @@ class csBulletDynamicCollider;
 class csBulletCapsuleCharacterController;
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletScene : public CS_SUPER(iPhysicsScene)
+class CSBULLETPHYSICS_API csBulletScene : public CS_SUPER(cs::iPhysicsScene)
 {
   CS_CLASS_GEN_OBJECT;
 public:
@@ -21,20 +21,20 @@ public:
 
   bool Initialize(bool softBody);
 
-  virtual void AddCollider(iPhysicsCollider *collider);
-  virtual void RemoveCollider(iPhysicsCollider *collider);
+  virtual void AddCollider(cs::iPhysicsCollider *collider);
+  virtual void RemoveCollider(cs::iPhysicsCollider *collider);
 
-  virtual void AddStaticCollider(iPhysicsStaticCollider *collider);
-  virtual void RemoveStaticCollider(iPhysicsStaticCollider *collider);
+  virtual void AddStaticCollider(cs::iPhysicsStaticCollider *collider);
+  virtual void RemoveStaticCollider(cs::iPhysicsStaticCollider *collider);
 
-  virtual void AddDynamicCollider(iPhysicsDynamicCollider *collider);
-  virtual void RemoveDynamicCollider(iPhysicsDynamicCollider *collider);
+  virtual void AddDynamicCollider(cs::iPhysicsDynamicCollider *collider);
+  virtual void RemoveDynamicCollider(cs::iPhysicsDynamicCollider *collider);
 
-  virtual void AddCharacterController(iPhysicsCharacterController *controller);
-  virtual void RemoveCharacterController(iPhysicsCharacterController *controller);
+  virtual void AddCharacterController(cs::iPhysicsCharacterController *controller);
+  virtual void RemoveCharacterController(cs::iPhysicsCharacterController *controller);
 
-  virtual void AddJoint(iPhysicsJoint *joint);
-  virtual void RemoveJoint(iPhysicsJoint *joint);
+  virtual void AddJoint(cs::iPhysicsJoint *joint);
+  virtual void RemoveJoint(cs::iPhysicsJoint *joint);
 
   virtual void StepSimulation(float tpf = 1.0f / 60.0f);
   virtual void UpdateColliders();
@@ -52,8 +52,8 @@ private:
   btConstraintSolver *m_constraintSolver;
   btDiscreteDynamicsWorld *m_world;
 
-  csCollection<csBulletBody*> m_changedBodies;
-  csCollection<csBulletDynamicCollider*> m_changedDynamicColliders;
+  cs::Collection<csBulletBody*> m_changedBodies;
+  cs::Collection<csBulletDynamicCollider*> m_changedDynamicColliders;
   std::vector<csBulletCapsuleCharacterController*> m_characterControllers;
 };
 

@@ -4,7 +4,7 @@
 #include <cobalt/entity/csentity.hh>
 #include <cobalt/entity/csentitystate.hh>
 
-csBlueprint::csBlueprint()
+cs::Blueprint::Blueprint()
   : cs::iObject ()
   , m_entity(0)
   , m_entityState(0)
@@ -12,7 +12,7 @@ csBlueprint::csBlueprint()
   CS_CLASS_GEN_CONSTR;
 }
 
-csBlueprint::~csBlueprint()
+cs::Blueprint::~Blueprint()
 {
   if (m_entity)
   {
@@ -24,34 +24,34 @@ csBlueprint::~csBlueprint()
   }
 }
 
-csEntityWrapper *csBlueprint::CreateEntity() const
+cs::EntityWrapper *cs::Blueprint::CreateEntity() const
 {
   if (!m_entity)
   {
     return nullptr;
   }
 
-  return new csEntityWrapper (m_entity->CreateEntity());
+  return new cs::EntityWrapper (m_entity->CreateEntity());
 }
 
 
-csEntityStateWrapper *csBlueprint::CreateEntityState() const
+cs::EntityStateWrapper *cs::Blueprint::CreateEntityState() const
 {
   if (!m_entityState)
   {
     return nullptr;
   }
 
-  return new csEntityStateWrapper(m_entityState->CreateEntityState());
+  return new cs::EntityStateWrapper(m_entityState->CreateEntityState());
 }
 
 
-void csBlueprint::SetEntity(csBPEntity *entity)
+void cs::Blueprint::SetEntity(cs::BPEntity *entity)
 {
   m_entity = entity;
 }
 
-void csBlueprint::SetEntityState(csBPEntityState *entityState)
+void cs::Blueprint::SetEntityState(cs::BPEntityState *entityState)
 {
   m_entityState = entityState;
 }

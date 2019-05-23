@@ -26,8 +26,8 @@
 #include <cobalt/math/cscolor4f.hh>
 #include <algorithm>
 
-csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(iGraphics *renderer)
-  : iFrameProcessor()
+csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(cs::iGraphics *renderer)
+  : cs::iFrameProcessor()
   , m_frameNo(1)
   , m_renderer(renderer)
   , m_gbuffer(0)
@@ -36,12 +36,12 @@ csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(iGraphics *renderer)
 {
   CS_CLASS_GEN_CONSTR;
 
-  for (unsigned i = 0; i < eRQ_COUNT; ++i)
+  for (unsigned i = 0; i < cs::eRQ_COUNT; ++i)
   {
     m_renderStates[i].Initialize(64, 16);
   }
-  m_lightRenderers[eLT_DirectionalLight] = new csDirectionalLightRendererGL4(renderer);
-  m_lightRenderers[eLT_PointLight] = new csPointLightRendererGL4(renderer);
+  m_lightRenderers[cs::eLT_DirectionalLight] = new csDirectionalLightRendererGL4(renderer);
+  m_lightRenderers[cs::eLT_PointLight] = new csPointLightRendererGL4(renderer);
 
   m_particleRenderer = new csParticleRendererGL4();
 
@@ -51,8 +51,8 @@ csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(iGraphics *renderer)
 
 csDeferredFrameProcessorGL4::~csDeferredFrameProcessorGL4()
 {
-  delete m_lightRenderers[eLT_DirectionalLight];
-  delete m_lightRenderers[eLT_PointLight];
+  delete m_lightRenderers[cs::eLT_DirectionalLight];
+  delete m_lightRenderers[cs::eLT_PointLight];
 
   CS_RELEASE(m_simplePresentShader);
   CS_RELEASE(m_directionLightShader);
@@ -64,9 +64,9 @@ csDeferredFrameProcessorGL4::~csDeferredFrameProcessorGL4()
 bool csDeferredFrameProcessorGL4::Initialize()
 {
 
-  csResourceManager *mgr = csResourceManager::Get();
+  cs::ResourceManager *mgr = cs::ResourceManager::Get();
 
-  csShaderWrapper *shaderWrapper = mgr->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/SimplePresent.asset"));
+  cs::ShaderWrapper *shaderWrapper = mgr->GetOrLoad<cs::ShaderWrapper>(cs::ResourceLocator("${shaders}/deferred/SimplePresent.asset"));
   m_simplePresentShader = shaderWrapper ? shaderWrapper->Get() : nullptr;
   if (!m_simplePresentShader)
   {
@@ -74,7 +74,7 @@ bool csDeferredFrameProcessorGL4::Initialize()
   }
   m_simplePresentShader->AddRef();
 
-  shaderWrapper = mgr->GetOrLoad<csShaderWrapper>(csResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
+  shaderWrapper = mgr->GetOrLoad<cs::ShaderWrapper>(cs::ResourceLocator("${shaders}/deferred/DirectionalLight.asset"));
   m_directionLightShader = shaderWrapper ? shaderWrapper->Get() : nullptr;
   if (!m_directionLightShader)
   {
@@ -101,27 +101,27 @@ bool csDeferredFrameProcessorGL4::Resize(csUInt16 width, csUInt16 height)
   return true;
 }
 
-void csDeferredFrameProcessorGL4::SetPostProcessor(csPostProcessor *postProcessor)
+void csDeferredFrameProcessorGL4::SetPostProcessor(cs::PostProcessor *postProcessor)
 {
   CS_SET(m_postProcessor, postProcessor);
 }
 
-void csDeferredFrameProcessorGL4::SetClearColor(const csColor4f &color)
+void csDeferredFrameProcessorGL4::SetClearColor(const cs::Color4f &color)
 {
   m_clearColor = color;
 }
 
-const csColor4f &csDeferredFrameProcessorGL4::GetClearColor() const
+const cs::Color4f &csDeferredFrameProcessorGL4::GetClearColor() const
 {
   return m_clearColor;
 }
 
 struct Data
 {
-  const csMatrix4f *matrix;
-  csMaterial *material;
-  csSubMeshWrapper *mesh;
-  Data(const csMatrix4f *matrix, csMaterial *material, csSubMeshWrapper *mesh)
+  const cs::Matrix4f *matrix;
+  cs::Material *material;
+  cs::SubMeshWrapper *mesh;
+  Data(const cs::Matrix4f *matrix, cs::Material *material, cs::SubMeshWrapper *mesh)
     : matrix(matrix)
     , material(material)
     , mesh(mesh)
@@ -137,7 +137,7 @@ struct Data
 
 
 
-void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
+void csDeferredFrameProcessorGL4::RenderGBuffer(cs::Entity *root)
 {
 
   // render the scene to the GBuffer
@@ -148,7 +148,7 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
 
   m_renderer->SetDepthMask(true);
   m_renderer->SetDepthTest(true);
-  m_renderer->SetDepthFunc(eCM_LessOrEqual);
+  m_renderer->SetDepthFunc(cs::eCM_LessOrEqual);
 
 //  glDepthMask(true);
 //  glEnable(GL_DEPTH_TEST);
@@ -156,11 +156,11 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
 //  glClearDepth(1.0);
 
 
-  csRenderDestination destinations[] = {
-    eRD_Color0,
-    eRD_Color1,
-    eRD_Color2,
-    eRD_Color3,
+  cs::eRenderDestination destinations[] = {
+    cs::eRD_Color0,
+    cs::eRD_Color1,
+    cs::eRD_Color2,
+    cs::eRD_Color3,
   };
   m_renderer->SetRenderDestinations(destinations, 4);
   m_renderer->Clear();
@@ -170,12 +170,12 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
   unsigned calls = 0;
   unsigned trigons = 0;
   m_renderer->PushRenderStates();
-  for (csSize i = 0; i < m_renderStates[eRQ_Deferred].length; ++i)
+  for (csSize i = 0; i < m_renderStates[cs::eRQ_Deferred].length; ++i)
   {
-    csRenderState *renderState = m_renderStates[eRQ_Deferred][i];
+    cs::RenderState *renderState = m_renderStates[cs::eRQ_Deferred][i];
     if (renderState)
     {
-      renderState->Render(m_renderer, eRP_GBuffer);
+      renderState->Render(m_renderer, cs::eRP_GBuffer);
       ++cnt;
       //calls += renderState->GetNumberOfRenderCalls();
       //trigons += renderState->GetNumberOfTotalTrigons();
@@ -185,23 +185,23 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(csEntity *root)
   //printf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
 }
 
-iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *camera, iRenderTarget *target)
+cs::iRenderTarget *csDeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Camera *camera, cs::iRenderTarget *target)
 {
-  for (unsigned i = 0; i < eRQ_COUNT; i++)
+  for (unsigned i = 0; i < cs::eRQ_COUNT; i++)
   {
     m_renderStates[i].Clear();
   }
   m_lightStates.Clear();
 
 
-  csScanConfig config;
+  cs::ScanConfig config;
   config.FrameNo = m_frameNo++;
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
   config.MainCameraPosition = camera->GetEye();
   csDefaultCollectorGL4 collector(m_renderStates,
                                &m_lightStates);
-  csClipper *clipper = camera->GetClipper();
+  cs::Clipper *clipper = camera->GetClipper();
   if (root)
   {
     root->Scan(clipper, m_renderer, &collector, config);
@@ -221,20 +221,20 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
   //glBeginQuery(GL_TIME_ELAPSED, queries[1]);
   m_renderer->SetRenderTarget(target);
   m_renderer->SetViewport(target);
-  m_renderer->Clear(true, csVector4f(m_clearColor.r, m_clearColor.g, m_clearColor.g, m_clearColor.a), false, 1.0f, false, 0);
+  m_renderer->Clear(true, cs::Vector4f(m_clearColor.r, m_clearColor.g, m_clearColor.g, m_clearColor.a), false, 1.0f, false, 0);
 
 
   m_renderer->SetBlendEnabled(true);
-  m_renderer->SetBlendMode(eBM_One, eBM_One);
+  m_renderer->SetBlendMode(cs::eBM_One, cs::eBM_One);
 
   for (csSize i = 0; i < m_lightStates.length; ++i)
   {
-    csLightState *lightState = m_lightStates[i];
+    cs::LightState *lightState = m_lightStates[i];
     if (!lightState)
     {
       continue;
     }
-    csLight* light = lightState->GetLight();
+    cs::Light* light = lightState->GetLight();
 
     csLightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
@@ -250,10 +250,10 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
   m_renderer->SetBlendEnabled(false);
   m_renderer->SetDepthMask(true);
   m_renderer->SetDepthTest(true);
-  m_renderer->SetDepthFunc(eCM_LessOrEqual);
-  for (csSize i=0; i<m_renderStates[eRQ_Forward].length; ++i)
+  m_renderer->SetDepthFunc(cs::eCM_LessOrEqual);
+  for (csSize i=0; i<m_renderStates[cs::eRQ_Forward].length; ++i)
   {
-    csRenderState *renderState = m_renderStates[eRQ_Forward][i];
+    cs::RenderState *renderState = m_renderStates[cs::eRQ_Forward][i];
     if (!renderState)
     {
       continue;
@@ -263,7 +263,7 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
 
   }
 
-  m_particleRenderer->Render(m_renderer, m_renderStates[eRQ_Particles]);
+  m_particleRenderer->Render(m_renderer, m_renderStates[cs::eRQ_Particles]);
 
 
 #if 0
@@ -278,17 +278,17 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
   {
     // rebind the camera because it might be switched by a light renderer
     camera->Apply(m_renderer);
-    m_postProcessor->SetInput(ePPO_GBuffer_Depth, m_gbuffer->GetDepth());
-    m_postProcessor->SetInput(ePPO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
-    m_postProcessor->SetInput(ePPO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
-    m_postProcessor->SetInput(ePPO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());
-    m_postProcessor->SetInput(ePPO_GBuffer_SSSSpec, m_gbuffer->GetSSSSpec());
-    m_postProcessor->SetInput(ePPO_FinalTarget_Color, target->GetColorBuffer(0));
-    m_postProcessor->SetInput(ePPO_FinalTarget_Depth, target->GetDepthBuffer());
+    m_postProcessor->SetInput(cs::ePPO_GBuffer_Depth, m_gbuffer->GetDepth());
+    m_postProcessor->SetInput(cs::ePPO_GBuffer_DiffuseRoughness, m_gbuffer->GetDiffuseRoughness());
+    m_postProcessor->SetInput(cs::ePPO_GBuffer_NormalLightMode, m_gbuffer->GetNormalLightMode());
+    m_postProcessor->SetInput(cs::ePPO_GBuffer_EmissiveMetallic, m_gbuffer->GetEmissiveMetallic());
+    m_postProcessor->SetInput(cs::ePPO_GBuffer_SSSSpec, m_gbuffer->GetSSSSpec());
+    m_postProcessor->SetInput(cs::ePPO_FinalTarget_Color, target->GetColorBuffer(0));
+    m_postProcessor->SetInput(cs::ePPO_FinalTarget_Depth, target->GetDepthBuffer());
     m_postProcessor->Render(m_renderer);
   }
 
-  iTexture2DArray *txt = cs::QueryClass<iTexture2DArray>(m_lightRenderers[eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));
+  cs::iTexture2DArray *txt = cs::QueryClass<cs::iTexture2DArray>(m_lightRenderers[cs::eLT_PointLight]->GetShadowBuffer()->GetColorBuffer(0));
   //m_renderer->RenderFullScreenFrame(m_gbuffer->GetDiffuseRoughness());
   //m_renderer->RenderFullScreenFrame(0.0f, 0.25, 0.0, 0.25, txt, 0);
   //m_renderer->RenderFullScreenFrame(0.25f, 0.5, 0.0, 0.25, txt, 3);
@@ -306,7 +306,7 @@ iRenderTarget *csDeferredFrameProcessorGL4::Render(csEntity *root, csCamera *cam
   return target;
 }
 
-void csDeferredFrameProcessorGL4::RenderForward(csRenderState *renderState)
+void csDeferredFrameProcessorGL4::RenderForward(cs::RenderState *renderState)
 {
-  renderState->Render(m_renderer, eRP_ForwardUnlit);
+  renderState->Render(m_renderer, cs::eRP_ForwardUnlit);
 }

@@ -9,8 +9,8 @@
 
 
 
-csJointState::csJointState()
-  : csSpatialState()
+cs::JointState::JointState()
+  : cs::SpatialState()
   , m_colliderA(0)
   , m_colliderB(0)
   , m_transformReference(eTR_ColliderA)
@@ -18,25 +18,25 @@ csJointState::csJointState()
 
 }
 
-csJointState::~csJointState()
+cs::JointState::~JointState()
 {
   CS_RELEASE(m_colliderA);
   CS_RELEASE(m_colliderB);
 }
 
-void csJointState::SetColliderA(csDynamicColliderState *collider)
+void cs::JointState::SetColliderA(cs::DynamicColliderState *collider)
 {
   CS_SET(m_colliderA, collider);
 }
 
-void csJointState::SetColliderB(csDynamicColliderState *collider)
+void cs::JointState::SetColliderB(cs::DynamicColliderState *collider)
 {
   CS_SET(m_colliderB, collider);
 }
 
-void csJointState::OnAssembled()
+void cs::JointState::OnAssembled()
 {
-  csSpatialState::OnAssembled();
+  cs::SpatialState::OnAssembled();
 
   if (m_colliderA)
   {

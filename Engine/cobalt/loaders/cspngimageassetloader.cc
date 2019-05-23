@@ -8,29 +8,29 @@
 
 
 
-csPNGImageAssetLoader::csPNGImageAssetLoader()
-  : iAssetLoader()
+cs::PNGImageAssetLoader::PNGImageAssetLoader()
+  : cs::iAssetLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csPNGImageAssetLoader::~csPNGImageAssetLoader()
+cs::PNGImageAssetLoader::~PNGImageAssetLoader()
 {
 
 }
 
 
 
-bool csPNGImageAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::PNGImageAssetLoader::CanLoad(const std::string &typeID, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return typeID == std::string("PNG");
 }
 
-const cs::Class *csPNGImageAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::PNGImageAssetLoader::EvalClass(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csImageWrapper::GetStaticClass();
+  return cs::ImageWrapper::GetStaticClass();
 }
 
 
@@ -46,7 +46,7 @@ void read_data_from_ifile(png_structp png_ptr,
     return;
   }
 
-  iFile *file = static_cast<iFile*>(io);
+  cs::iFile *file = static_cast<cs::iFile*>(io);
   file->Read(outBytes, (long)byteCountToRead);
 }
 
@@ -60,12 +60,12 @@ void read_data_from_asset_input_stream(png_structp png_ptr,
     return;
   }
 
-  csAssetInputStream *stream = static_cast<csAssetInputStream*>(io);
+  cs::AssetInputStream *stream = static_cast<cs::AssetInputStream*>(io);
   stream->Read(outBytes, (long)byteCountToRead);
 }
 }
 
-csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::PNGImageAssetLoader::Load(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
   if (!png_ptr)
@@ -108,24 +108,24 @@ csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, 
 
   csUInt8 *buffer = nullptr;
   csSize bufferSize = 0;
-  csPixelFormat pixelFormat = ePF_R8G8B8A8U;
+  cs::ePixelFormat pixelFormat = cs::ePF_R8G8B8A8U;
   switch (colorType)
   {
   case PNG_COLOR_TYPE_RGB:
     bufferSize = width * height * 3;
-    pixelFormat = ePF_R8G8B8U;
+    pixelFormat = cs::ePF_R8G8B8U;
     break;
   case PNG_COLOR_TYPE_RGBA:
     bufferSize = width * height * 4;
-    pixelFormat = ePF_R8G8B8A8U;
+    pixelFormat = cs::ePF_R8G8B8A8U;
     break;
   case PNG_COLOR_TYPE_GRAY:
     bufferSize = width * height * 1;
-    pixelFormat = ePF_R8U;
+    pixelFormat = cs::ePF_R8U;
     break;
   case PNG_COLOR_TYPE_GA:
     bufferSize = width * height * 2;
-    pixelFormat = ePF_R8G8U;
+    pixelFormat = cs::ePF_R8G8U;
     break;
   default:
     break;
@@ -141,7 +141,7 @@ csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, 
 
 
 
-  csImage *image = new csImage();
+  cs::Image *image = new cs::Image();
   image->SetWidth(width);
   image->SetHeight(height);
   image->SetDepth(1);
@@ -149,6 +149,6 @@ csResourceWrapper *csPNGImageAssetLoader::Load(csAssetInputStream &inputStream, 
   image->SetData(bufferSize, buffer);
   delete[] buffer;
 
-  return new csImageWrapper(image);
+  return new cs::ImageWrapper(image);
 
 }

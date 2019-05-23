@@ -4,16 +4,20 @@
 #include <cobalt/core/resource/ifileloader.hh>
 #include <cobalt/core/resource/cscsffileloader.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csCSFFileLoader : public CS_SUPER(iFileLoader)
+class CSE_API CSFFileLoader : public CS_SUPER(cs::iFileLoader)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csCSFFileLoader();
-  virtual ~csCSFFileLoader();
-  virtual bool CanLoad(iFile *file, const csResourceLocator &locator) const;
-  virtual const cs::Class *EvalClass(iFile *file, const csResourceLocator &locator) const;
-  csResourceWrapper *Load(iFile *file, const csResourceLocator &locator) const;
+  CSFFileLoader();
+  virtual ~CSFFileLoader();
+  virtual bool CanLoad(cs::iFile * file, const cs::ResourceLocator & locator) const;
+  virtual const cs::Class* EvalClass(cs::iFile * file, const cs::ResourceLocator & locator) const;
+  cs::ResourceWrapper* Load(cs::iFile * file, const cs::ResourceLocator & locator) const;
 
 };
 
+}

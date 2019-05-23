@@ -7,19 +7,25 @@
 #include <string>
 
 
+namespace cs
+{
 
-class CSE_API csShaderAttributeID
+
+class CSE_API ShaderAttributeID
 {
 public:
-  csShaderAttributeID(const std::string &attribute);
-  explicit csShaderAttributeID(csUInt32 id);
+  ShaderAttributeID(const std::string& attribute);
+  explicit ShaderAttributeID(csUInt32 id);
 
-  const std::string &GetName() const;
+  const std::string& GetName() const;
   csUInt32 GetID() const;
 
-  bool operator== (const csShaderAttributeID &other) const;
-  bool operator< (const csShaderAttributeID &other) const;
+  bool operator== (const cs::ShaderAttributeID& other) const;
+  bool operator< (const cs::ShaderAttributeID& other) const;
 private:
   std::string m_name;
   csUInt32 m_id;
 };
+
+}
+

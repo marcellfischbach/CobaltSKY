@@ -5,24 +5,24 @@
 #include <cobalt/entity/csspatialstate.hh>
 #include <cobalt/csengine.hh>
 
-csEntityScene::csEntityScene()
+cs::EntityScene::EntityScene()
   : cs::Object()
 {
   m_physicsScene = csEng->CreateScene();
-  m_rootEntity = new csEntity();
-  csSpatialState *rootState = new csSpatialState();
+  m_rootEntity = new cs::Entity();
+  cs::SpatialState *rootState = new cs::SpatialState();
   m_rootEntity->SetRootState(rootState);
   m_rootEntity->AddState(rootState);
 }
 
-csEntityScene::~csEntityScene()
+cs::EntityScene::~EntityScene()
 {
 
 }
 
 
 
-void csEntityScene::AddEntity(csEntity *entity, csEntity *parent)
+void cs::EntityScene::AddEntity(cs::Entity *entity, cs::Entity *parent)
 {
   if (!entity)
   {
@@ -46,12 +46,12 @@ void csEntityScene::AddEntity(csEntity *entity, csEntity *parent)
   }
 }
 
-void csEntityScene::RemoveEntity(csEntity *entity)
+void cs::EntityScene::RemoveEntity(cs::Entity *entity)
 {
   if (entity->GetScene() == this)
   {
     entity->DetachFromScene(this);
-    csEntity* parent = entity->GetParentEntity();
+    cs::Entity* parent = entity->GetParentEntity();
     if (!parent)
     {
       return;
@@ -62,7 +62,7 @@ void csEntityScene::RemoveEntity(csEntity *entity)
 
 }
 
-void csEntityScene::Update(float tpf)
+void cs::EntityScene::Update(float tpf)
 {
   if (m_rootEntity)
   {

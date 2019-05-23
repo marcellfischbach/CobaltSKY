@@ -7,7 +7,7 @@
 
 
 csBulletStaticCollider::csBulletStaticCollider()
-  : iPhysicsStaticCollider()
+  : cs::iPhysicsStaticCollider()
   , m_friction(0.0f)
   , m_restitution(0.0f)
 {
@@ -31,7 +31,7 @@ csBulletStaticCollider::~csBulletStaticCollider()
   m_shapes.clear();
 }
 
-void csBulletStaticCollider::AttachShape(iPhysicsShape *shape)
+void csBulletStaticCollider::AttachShape(cs::iPhysicsShape *shape)
 {
   if (!shape)
   {
@@ -51,8 +51,8 @@ void csBulletStaticCollider::AttachShape(iPhysicsShape *shape)
   data.object->setFriction(m_friction);
   data.object->setRestitution(m_restitution);
 
-  csMatrix4f global;
-  csMatrix4f::Mult(m_transformation, data.localTransform, global);
+  cs::Matrix4f global;
+  cs::Matrix4f::Mult(m_transformation, data.localTransform, global);
   // global.Debug("Global");
   btTransform trans;
   trans.setFromOpenGLMatrix(static_cast<const btScalar*>(&global.m00));
@@ -61,12 +61,12 @@ void csBulletStaticCollider::AttachShape(iPhysicsShape *shape)
   m_shapes.push_back(data);
 }
 
-void csBulletStaticCollider::DetachShape(iPhysicsShape *shape)
+void csBulletStaticCollider::DetachShape(cs::iPhysicsShape *shape)
 {
   // not implemented yet
 }
 
-void csBulletStaticCollider::AttachShape(csPhysicsShape *shapes)
+void csBulletStaticCollider::AttachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -78,7 +78,7 @@ void csBulletStaticCollider::AttachShape(csPhysicsShape *shapes)
   }
 }
 
-void csBulletStaticCollider::DetachShape(csPhysicsShape *shapes)
+void csBulletStaticCollider::DetachShape(cs::PhysicsShape *shapes)
 {
   if (!shapes)
   {
@@ -90,9 +90,9 @@ void csBulletStaticCollider::DetachShape(csPhysicsShape *shapes)
   }
 }
 
-csTransformation csBulletStaticCollider::GetTransform()
+cs::Transformation csBulletStaticCollider::GetTransform()
 {
-  return csTransformation(&m_transformation, 0, 0, 0);
+  return cs::Transformation(&m_transformation, 0, 0, 0);
 }
 
 
@@ -101,8 +101,8 @@ void csBulletStaticCollider::FinishTransformation()
   for (size_t i = 0, in = m_shapes.size(); i < in; ++i)
   {
     Data &data = m_shapes[i];
-    csMatrix4f global;
-    csMatrix4f::Mult(m_transformation, data.localTransform, global);
+    cs::Matrix4f global;
+    cs::Matrix4f::Mult(m_transformation, data.localTransform, global);
 
     // global.Debug("Final global");
     btTransform trans;

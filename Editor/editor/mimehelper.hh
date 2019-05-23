@@ -3,18 +3,21 @@
 #include <editor/editorexport.hh>
 #include <string>
 
-class csResourceLocator;
+namespace cs
+{
+class ResourceLocator;
+class Class;
+}
 class QMimeData;
-class cs::Class;
 
 class MimeHelper
 {
 public:
   static std::string GetResourceLocatorMimeType();
-  static void PutResourceLocatorMimeData(QMimeData *mimeData, const csResourceLocator &locator);
+  static void PutResourceLocatorMimeData(QMimeData *mimeData, const cs::ResourceLocator &locator);
   static void PutResourceLocatorMimeData(QMimeData * mimeData, const std::string &locatorName);
   static bool HasResourceLocator(const QMimeData *data);
-  static csResourceLocator GetResourceLocator(const QMimeData *data, const std::string &resource = "");
+  static cs::ResourceLocator GetResourceLocator(const QMimeData *data, const std::string &resource = "");
 
   static std::string GetResourceTypeMimeType();
   static void PutResourceTypeMimeData(QMimeData *mimeData, const std::string &type);

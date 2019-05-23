@@ -6,10 +6,15 @@
 #include <map>
 
 class csShaderGraphGL4;
-class csSGNode;
-class csSGOutput;
-class csSGInput;
 class csSGNodeGL4;
+
+namespace cs
+{
+class SGNode;
+class SGOutput;
+class SGInput;
+}
+
 
 class csShaderGraphCtx
 {
@@ -18,7 +23,7 @@ public:
   {
     std::string variableName;
     std::string variableType;
-    csSGNode *node;
+    cs::SGNode *node;
     friend bool operator<(const ExternalBinding &b0, const ExternalBinding &b1)
     {
       return b0.variableName < b1.variableName;
@@ -28,44 +33,44 @@ public:
 public:
   csShaderGraphCtx(csShaderGraphGL4 *graph);
 
-  csSGNodeGL4 *GetNode(csSGNode *node);
-  csSGNodeGL4 *GetNode(csSGOutput *output);
-  csSGNodeGL4 *GetNode(csSGInput *input);
+  csSGNodeGL4 *GetNode(cs::SGNode *node);
+  csSGNodeGL4 *GetNode(cs::SGOutput *output);
+  csSGNodeGL4 *GetNode(cs::SGInput *input);
 
-  std::string CreateCode(csSGOutput* outputs);
+  std::string CreateCode(cs::SGOutput* outputs);
 
-  void EvaluateInlines(std::set<csSGOutput*> outputs);
-  void GenerateCode(std::set<csSGOutput*> outputs);
+  void EvaluateInlines(std::set<cs::SGOutput*> outputs);
+  void GenerateCode(std::set<cs::SGOutput*> outputs);
 
   void Evaluate(csSGNodeGL4 *node);
-  void Evaluate(csSGNode *node);
-  void Evaluate(csSGOutput *node);
-  void Evaluate(csSGInput *node);
+  void Evaluate(cs::SGNode *node);
+  void Evaluate(cs::SGOutput *node);
+  void Evaluate(cs::SGInput *node);
 
   void EvaluateInline(csSGNodeGL4 *node);
-  void EvaluateInline(csSGNode *node);
-  void EvaluateInline(csSGOutput *node);
-  void EvaluateInline(csSGInput *node);
+  void EvaluateInline(cs::SGNode *node);
+  void EvaluateInline(cs::SGOutput *node);
+  void EvaluateInline(cs::SGInput *node);
 
   void AddExpression(const std::string &expression);
   std::string AddAssignment(const std::string &type, const std::string &statement);
-  void SetOutputValue(csSGOutput *output, const std::string &value);
+  void SetOutputValue(cs::SGOutput *output, const std::string &value);
 
-  bool HasOutputValue(csSGOutput *output) const;
-  bool HasInputValue(csSGInput *input) const;
-  std::string GetOutputValue(csSGOutput *output);
-  std::string GetInputValue(csSGInput *input);
+  bool HasOutputValue(cs::SGOutput *output) const;
+  bool HasInputValue(cs::SGInput *input) const;
+  std::string GetOutputValue(cs::SGOutput *output);
+  std::string GetInputValue(cs::SGInput *input);
 
-  std::string GetFullOutputValue(csSGOutput *output);
-  std::string GetFullInputValue(csSGInput *input);
+  std::string GetFullOutputValue(cs::SGOutput *output);
+  std::string GetFullInputValue(cs::SGInput *input);
 
   std::string GetNextVariable();
 
-  void AddBinding(csSGNode *node, const std::string &variableType, const std::string &variableName);
-  bool IsBindingApplyingFor(const std::string &bindingName, csSGNode *node) const;
-  bool IsBindingApplyingFor(const std::string &bindingName, csSGOutput *output) const;
-  bool IsBindingApplyingFor(const std::string &bindingName, csSGInput *input) const;
-  std::set<ExternalBinding> GetBindingsFor(std::set<csSGOutput*> outputs) const;
+  void AddBinding(cs::SGNode *node, const std::string &variableType, const std::string &variableName);
+  bool IsBindingApplyingFor(const std::string &bindingName, cs::SGNode *node) const;
+  bool IsBindingApplyingFor(const std::string &bindingName, cs::SGOutput *output) const;
+  bool IsBindingApplyingFor(const std::string &bindingName, cs::SGInput *input) const;
+  std::set<ExternalBinding> GetBindingsFor(std::set<cs::SGOutput*> outputs) const;
 
   void SetDefaultTextureCoordinate(const std::string &defaultTextureCoordinat);
   const std::string &GetDefaultTextureCoordinate() const;
@@ -81,9 +86,9 @@ private:
   std::string m_code;
   csUInt32 m_variableCounter;
   std::string m_defaultTextureCoordinate;
-  std::map<csSGOutput *, std::string> m_outputValue;
-  std::map<csSGNode *, csSGNodeGL4*> m_nodes;
-  std::map<csSGOutput *, std::string> m_outputToVar;
+  std::map<cs::SGOutput *, std::string> m_outputValue;
+  std::map<cs::SGNode *, csSGNodeGL4*> m_nodes;
+  std::map<cs::SGOutput *, std::string> m_outputToVar;
 
 
   std::map<std::string, ExternalBinding> m_unisformBindingNames;

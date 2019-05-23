@@ -5,18 +5,20 @@
 #include <cobalt/math/csmatrix4f.hh>
 #include <cobalt/math/csvector3f.hh>
 
+namespace cs
+{
 
-class CSE_API csBoundingBox
+class CSE_API BoundingBox
 {
 public:
-  csBoundingBox();
-  ~csBoundingBox();
+  BoundingBox();
+  ~BoundingBox();
 
-  void Add(const csVector3f &pos);
-  void Add(const csBoundingBox &bbox);
+  void Add(const cs::Vector3f& pos);
+  void Add(const cs::BoundingBox& bbox);
 
-  void Add(const csMatrix4f &M, const csVector3f &pos);
-  void Add(const csMatrix4f &M, const csBoundingBox &bbox);
+  void Add(const cs::Matrix4f& M, const cs::Vector3f& pos);
+  void Add(const cs::Matrix4f& M, const cs::BoundingBox& bbox);
 
   void Clear();
   void Finish();
@@ -26,36 +28,38 @@ public:
     return m_valid;
   }
 
-  CS_FORCEINLINE const csVector3f &GetMin() const
+  CS_FORCEINLINE const cs::Vector3f& GetMin() const
   {
     return m_min;
   }
 
-  CS_FORCEINLINE const csVector3f &GetMax() const
+  CS_FORCEINLINE const cs::Vector3f& GetMax() const
   {
     return m_max;
   }
-  CS_FORCEINLINE const csVector3f &GetCenter() const
+  CS_FORCEINLINE const cs::Vector3f& GetCenter() const
   {
     return m_center;
   }
 
-  CS_FORCEINLINE const csVector3f *GetPoints() const
+  CS_FORCEINLINE const cs::Vector3f* GetPoints() const
   {
     return m_points;
   }
 
-  void Debug(const char *message = 0) const;
+  void Debug(const char* message = 0) const;
 
 private:
   bool m_valid;
 
-  csVector3f m_min;
-  csVector3f m_max;
-  csVector3f m_center;
+  cs::Vector3f m_min;
+  cs::Vector3f m_max;
+  cs::Vector3f m_center;
 
-  csVector3f m_points[8];
+  cs::Vector3f m_points[8];
 
 };
 
 
+
+}

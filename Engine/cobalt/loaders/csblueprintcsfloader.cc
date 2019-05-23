@@ -8,35 +8,35 @@
 #include <cobalt/core/property/csresourcepropertysetter.hh>
 
 
-csBlueprintCSFLoader::csBlueprintCSFLoader()
-  : csBaseCSFLoader()
+cs::BlueprintCSFLoader::BlueprintCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
-csBlueprintCSFLoader::~csBlueprintCSFLoader()
+cs::BlueprintCSFLoader::~BlueprintCSFLoader()
 {
 
 }
 
-bool csBlueprintCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::BlueprintCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return std::string("blueprint") == entry->GetTagName();
 }
 
-const cs::Class *csBlueprintCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::BlueprintCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
   CS_UNUSED(userData);
-  return csBlueprint::GetStaticClass();
+  return cs::Blueprint::GetStaticClass();
 }
 
-csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::BlueprintCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csBlueprint *bp = new csBlueprint();
+  cs::Blueprint *bp = new cs::Blueprint();
 
   const csfEntry *entityEntry = entry->GetEntry("entity");
   if (entityEntry)
@@ -44,11 +44,11 @@ csResourceWrapper *csBlueprintCSFLoader::Load(const csfEntry *entry, const csRes
     LoadEntity(bp, entityEntry, locator, userData);
   }
 
-  return new csBlueprintWrapper(bp);
+  return new cs::BlueprintWrapper(bp);
 }
 
 
-void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadEntity(cs::Blueprint *blueprint, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class"))
   {
@@ -59,11 +59,11 @@ void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *en
   {
     return;
   }
-  csBPEntity *bpEntity = new csBPEntity();
+  cs::BPEntity *bpEntity = new cs::BPEntity();
   bpEntity->SetEntityClass(entityClass);
   blueprint->SetEntity(bpEntity);
 
-  std::map<unsigned, csBPEntityState*> states;
+  std::map<unsigned, cs::BPEntityState*> states;
   for (const csfEntry *entityStateEntry = entry->GetEntry("entityState");
     entityStateEntry; entityStateEntry = entityStateEntry->GetSiblingEntry("entityState"))
   {
@@ -72,7 +72,7 @@ void csBlueprintCSFLoader::LoadEntity(csBlueprint *blueprint, const csfEntry *en
 }
 
 
-void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadEntityState(cs::BPEntity *entity, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class") || !entry->HasAttribute("id"))
   {
@@ -83,7 +83,7 @@ void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *e
   {
     return;
   }
-  csBPEntityState *bpEntityState = new csBPEntityState();
+  cs::BPEntityState *bpEntityState = new cs::BPEntityState();
   bpEntityState->SetEntityStateClass(entityStateClass);
   bpEntityState->SetId(entry->GetAttributeInt("id"));
   bpEntityState->SetParentId(entry->GetAttributeInt("parentId"));
@@ -103,13 +103,13 @@ void csBlueprintCSFLoader::LoadEntityState(csBPEntity *entity, const csfEntry *e
 }
 
 
-void csBlueprintCSFLoader::LoadProperty(csBPEntityState *bpEntityState, const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadProperty(cs::BPEntityState *bpEntityState, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("name"))
   {
     return;
   }
-  csPropertySetter *prop = csResourceManager::Get()->Load<csPropertySetter>(entry, locator, userData);
+  cs::PropertySetter *prop = cs::ResourceManager::Get()->Load<cs::PropertySetter>(entry, locator, userData);
   if (!prop)
   {
     return;
@@ -129,40 +129,40 @@ void csBlueprintCSFLoader::LoadProperty(csBPEntityState *bpEntityState, const cs
 
 }
 
-csPropertySetter *csBlueprintCSFLoader::CreateProperty(const csfEntry *entry) const
+cs::PropertySetter *cs::BlueprintCSFLoader::CreateProperty(const csfEntry *entry) const
 {
-  csPropertySetter *result = 0;
+  cs::PropertySetter *result = 0;
   std::string tag = entry->GetTagName();
   if (std::string("resource") == tag && entry->HasAttribute("locator"))
   {
-    csResourcePropertySetter *prop = new csResourcePropertySetter();
-    prop->SetResourceLocator(csResourceLocator(entry->GetAttribute("locator")));
+    cs::ResourcePropertySetter *prop = new cs::ResourcePropertySetter();
+    prop->SetResourceLocator(cs::ResourceLocator(entry->GetAttribute("locator")));
     result = prop;
   }
   else if (std::string("bool") == tag && entry->HasAttribute("value"))
   {
-    csGenericPropertySetter<bool> *prop = new csGenericPropertySetter<bool>;
+    cs::GenericPropertySetter<bool> *prop = new cs::GenericPropertySetter<bool>;
     prop->Set(entry->GetAttribute("value") == "true");
     result = prop;
   }
   else if (std::string("float") == tag && entry->HasAttribute("value"))
   {
-    csGenericPropertySetter<float> *prop = new csGenericPropertySetter<float>;
+    cs::GenericPropertySetter<float> *prop = new cs::GenericPropertySetter<float>;
     prop->Set(entry->GetAttributeFloat("value"));
     result = prop;
   }
   else if (std::string("vector2f") == tag && entry->HasAttribute("x") && entry->HasAttribute("y"))
   {
-    csGenericPropertySetter<csVector2f> *prop = new csGenericPropertySetter<csVector2f>;
-    prop->Set(csVector2f (
+    cs::GenericPropertySetter<cs::Vector2f> *prop = new cs::GenericPropertySetter<cs::Vector2f>;
+    prop->Set(cs::Vector2f (
       entry->GetAttributeFloat("x"),
       entry->GetAttributeFloat("y")));
     result = prop;
   }
   else if (std::string("vector3f") == tag && entry->HasAttribute("x") && entry->HasAttribute("y") && entry->HasAttribute("z"))
   {
-    csGenericPropertySetter<csVector3f> *prop = new csGenericPropertySetter<csVector3f>;
-    prop->Set(csVector3f(
+    cs::GenericPropertySetter<cs::Vector3f> *prop = new cs::GenericPropertySetter<cs::Vector3f>;
+    prop->Set(cs::Vector3f(
       entry->GetAttributeFloat("x"),
       entry->GetAttributeFloat("y"),
       entry->GetAttributeFloat("z")));
@@ -170,8 +170,8 @@ csPropertySetter *csBlueprintCSFLoader::CreateProperty(const csfEntry *entry) co
   }
   else if (std::string("vector4f") == tag && entry->HasAttribute("x") && entry->HasAttribute("y") && entry->HasAttribute("z") && entry->HasAttribute("w"))
   {
-    csGenericPropertySetter<csVector4f> *prop = new csGenericPropertySetter<csVector4f>;
-    prop->Set(csVector4f(
+    cs::GenericPropertySetter<cs::Vector4f> *prop = new cs::GenericPropertySetter<cs::Vector4f>;
+    prop->Set(cs::Vector4f(
       entry->GetAttributeFloat("x"),
       entry->GetAttributeFloat("y"),
       entry->GetAttributeFloat("z"),

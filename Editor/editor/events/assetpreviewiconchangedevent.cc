@@ -1,14 +1,14 @@
 
 #include <editor/events/assetpreviewiconchangedevent.hh>
 
-AssetPreviewIconChangedEvent::AssetPreviewIconChangedEvent(const csResourceLocator &locator)
-  : csEvent ()
+AssetPreviewIconChangedEvent::AssetPreviewIconChangedEvent(const cs::ResourceLocator &locator)
+  : cs::Event ()
   , m_locator(locator)
 {
 
 }
 
-const csResourceLocator &AssetPreviewIconChangedEvent::GetLocator() const
+const cs::ResourceLocator &AssetPreviewIconChangedEvent::GetLocator() const
 {
   return m_locator;
 }

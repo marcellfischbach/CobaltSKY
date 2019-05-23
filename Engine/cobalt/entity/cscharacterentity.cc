@@ -9,16 +9,18 @@
 #include <cobalt/physics/iphysicscapsulecharactercontroller.hh>
 #include <cobalt/physics/iphysicsscene.hh>
 
-class csCharacterEntityTransformationCallback : public iTransformationCallback
+namespace cs
+{
+class CharacterEntityTransformationCallback : public cs::iTransformationCallback
 {
 public:
-  csCharacterEntityTransformationCallback(csCharacterEntity *entity)
+  CharacterEntityTransformationCallback(cs::CharacterEntity* entity)
     : m_entity(entity)
   {
 
   }
 
-  void TransformationChanged(const csMatrix4f &transformation)
+  void TransformationChanged(const cs::Matrix4f& transformation)
   {
     m_entity->GetTransformation().GetTransformation(m_transform);
     transformation.GetTranslation(m_translation);
@@ -26,59 +28,59 @@ public:
     m_entity->TransformationChanged(m_transform);
   }
 
-  csVector3f m_translation;
-  csMatrix4f m_transform;
-  csCharacterEntity *m_entity;
+  cs::Vector3f m_translation;
+  cs::Matrix4f m_transform;
+  cs::CharacterEntity* m_entity;
 };
-
-csCharacterEntity::csCharacterEntity()
-  : csEntity()
+}
+cs::CharacterEntity::CharacterEntity()
+  : cs::Entity()
   , m_height(1.8f)
   , m_radius(0.35f)
   , m_rotation(0.0f)
 {
-  m_callback = new csCharacterEntityTransformationCallback(this);
+  m_callback = new cs::CharacterEntityTransformationCallback(this);
   m_characterController = csEng->CreateCapsulseCharacterController();
   m_characterController->Initialize(m_height, m_radius);
   m_characterController->SetTransformationCallback(m_callback);
 
 }
 
-csCharacterEntity::~csCharacterEntity()
+cs::CharacterEntity::~CharacterEntity()
 {
   m_characterController->SetTransformationCallback(0);
   delete m_callback;
 
 }
 
-void csCharacterEntity::Rotate(float angle)
+void cs::CharacterEntity::Rotate(float angle)
 {
   m_rotation += angle;
   GetTransformation().SetRotationZ(m_rotation);
 }
 
-void csCharacterEntity::SetRotation(float rotation)
+void cs::CharacterEntity::SetRotation(float rotation)
 {
   m_rotation = rotation;
   GetTransformation().SetRotationZ(m_rotation);
 }
 
-float csCharacterEntity::GetRotation() const
+float cs::CharacterEntity::GetRotation() const
 {
   return m_rotation;
 }
 
-void csCharacterEntity::SetHeight(float height)
+void cs::CharacterEntity::SetHeight(float height)
 {
   m_height = height;
 }
 
-void csCharacterEntity::SetRadius(float radius)
+void cs::CharacterEntity::SetRadius(float radius)
 {
   m_radius = radius;
 }
 
-void csCharacterEntity::OnAttachedToScene(csEntityScene *scene)
+void cs::CharacterEntity::OnAttachedToScene(cs::EntityScene *scene)
 {
   if (scene)
   {
@@ -86,7 +88,7 @@ void csCharacterEntity::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csCharacterEntity::OnDetachedFromScene(csEntityScene *scene)
+void cs::CharacterEntity::OnDetachedFromScene(cs::EntityScene *scene)
 {
   if (scene)
   {
@@ -95,26 +97,26 @@ void csCharacterEntity::OnDetachedFromScene(csEntityScene *scene)
   
 }
 
-void csCharacterEntity::FinishTransformation()
+void cs::CharacterEntity::FinishTransformation()
 {
-  csEntity::FinishTransformation();
+  cs::Entity::FinishTransformation();
 
   m_characterController->Warp(GetRootState()->GetGlobalTransformation());
 }
 
-void csCharacterEntity::TransformationChanged(const csMatrix4f &transformation)
+void cs::CharacterEntity::TransformationChanged(const cs::Matrix4f &transformation)
 {
   GetTransformation().SetTransformation(transformation);
   PerformTransformation();
 }
 
 
-void csCharacterEntity::SetWalkDirection(const csVector3f &walkDirection)
+void cs::CharacterEntity::SetWalkDirection(const cs::Vector3f &walkDirection)
 {
   m_characterController->SetGlobalWalkDirection(walkDirection);
 }
 
-void csCharacterEntity::Jump()
+void cs::CharacterEntity::Jump()
 {
   m_characterController->Jump();
 }

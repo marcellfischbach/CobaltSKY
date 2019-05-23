@@ -7,14 +7,19 @@
 
 #define CS_NEG_NAME "Math/Neg"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGNeg : public CS_SUPER(csSGNode)
+class CSE_API SGNeg : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGNeg();
-  virtual ~csSGNeg() { }
+  SGNeg();
+  virtual ~SGNeg() { }
 
   virtual bool Validate();
 
 };
+
+}

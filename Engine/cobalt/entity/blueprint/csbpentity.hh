@@ -7,32 +7,38 @@
 #include <vector>
 
 
-class csBPEntityState;
-class csPropertySetter;
-class csEntity;
-class csEntityState;
+namespace cs
+{
+class BPEntityState;
+class PropertySetter;
 
 
-class CSE_API csBPEntity 
+class Entity;
+class EntityState;
+
+class CSE_API BPEntity
 {
 public:
-  csBPEntity();
-  ~csBPEntity();
+  BPEntity();
+  ~BPEntity();
 
-  void SetEntityClass(const cs::Class *entityClass);
-  const cs::Class *GetEntityClass() const;
+  void SetEntityClass(const cs::Class* entityClass);
+  const cs::Class* GetEntityClass() const;
 
-  void AddProperty(csPropertySetter *property);
-  void AddEntityState(csBPEntityState *entityState);
+  void AddProperty(cs::PropertySetter* property);
+  void AddEntityState(cs::BPEntityState* entityState);
 
-  csEntity *CreateEntity() const;
+  cs::Entity* CreateEntity() const;
 
-  csBPEntityState *GetEntityStateByID(unsigned id) const;
+  cs::BPEntityState* GetEntityStateByID(unsigned id) const;
 
 private:
-  const cs::Class *m_entityClass;
+  const cs::Class* m_entityClass;
 
-  std::vector<csPropertySetter*> m_properties;
-  std::vector<csBPEntityState*> m_entityStates;
+  std::vector<cs::PropertySetter*> m_properties;
+  std::vector<cs::BPEntityState*> m_entityStates;
 };
+
+
+}
 

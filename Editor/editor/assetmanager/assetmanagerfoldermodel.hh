@@ -22,7 +22,7 @@ public:
   virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
   QDir GetDir(const QModelIndex &index) const;
-  csResourceLocator GetResourceLocator(const QModelIndex &index) const;
+  cs::ResourceLocator GetResourceLocator(const QModelIndex &index) const;
 
 private:
 

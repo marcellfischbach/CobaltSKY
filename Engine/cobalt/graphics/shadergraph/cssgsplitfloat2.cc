@@ -1,21 +1,21 @@
 
 #include <cobalt/graphics/shadergraph/cssgsplitfloat2.hh>
 
-csSGSplitFloat2::csSGSplitFloat2()
-  : csSGNode()
+cs::SGSplitFloat2::SGSplitFloat2()
+  : cs::SGNode()
 {
   SetName(CS_SPLIT_FLOAT2_NAME);
-  AddInput(new csSGInput("v", false, true));
-  AddOutput(new csSGOutput(eSGDT_Float, "x", "x"));
-  AddOutput(new csSGOutput(eSGDT_Float, "y", "y"));
+  AddInput(new cs::SGInput("v", false, true));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "x", "x"));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float, "y", "y"));
 }
 
-bool csSGSplitFloat2::Validate()
+bool cs::SGSplitFloat2::Validate()
 {
-  bool success = csSGNode::Validate();
+  bool success = cs::SGNode::Validate();
 
-  csSGDataType dt = GetInputDataType(0);
+  cs::eSGDataType dt = GetInputDataType(0);
 
-  return success && dt == eSGDT_Float2;
+  return success && dt == cs::eSGDT_Float2;
 }
 

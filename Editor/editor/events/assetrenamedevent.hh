@@ -8,7 +8,7 @@
 
 
 CS_CLASS()
-class AssetRenamedEvent : public CS_SUPER(csEvent)
+class AssetRenamedEvent : public CS_SUPER(cs::Event)
 {
   CS_CLASS_GEN;
   enum ResourceFetchMode
@@ -17,17 +17,17 @@ class AssetRenamedEvent : public CS_SUPER(csEvent)
     eRFM_FetchNamedEntry,
   };
 public:
-  AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, ResourceFetchMode mode = eRFM_FetchAll, cs::iObject *object = nullptr);
+  AssetRenamedEvent(const cs::ResourceLocator &from, const cs::ResourceLocator &to, ResourceFetchMode mode = eRFM_FetchAll, cs::iObject *object = nullptr);
 
-  const csResourceLocator &GetFrom() const;
-  const csResourceLocator &GetTo() const;
+  const cs::ResourceLocator &GetFrom() const;
+  const cs::ResourceLocator &GetTo() const;
   ResourceFetchMode GetFetchMode() const;
   const cs::iObject *GetObject() const;
 
 private:
 
-  csResourceLocator m_from;
-  csResourceLocator m_to;
+  cs::ResourceLocator m_from;
+  cs::ResourceLocator m_to;
   ResourceFetchMode m_mode;
   cs::iObject *m_object;
 

@@ -19,16 +19,16 @@ void MaterialEditorPreviewSceneView::initializeGL()
 {
   PreviewSceneView::initializeGL();
 
-  csEntity *entity = CreateSphere(10.0f, 64, 32, m_material);
-  m_staticMeshState = entity->FindState<csStaticMeshState>();
+  cs::Entity *entity = CreateSphere(10.0f, 64, 32, m_material);
+  m_staticMeshState = entity->FindState<cs::StaticMeshState>();
   CS_ADDREF(m_staticMeshState);
 
   GetScene()->AddEntity(entity);
 
-  csCamera *camera = GetCamera();
-  camera->SetEye(csVector3f(20, 20, 20));
-  camera->SetSpot(csVector3f(0, 0, 0));
-  camera->SetUp(csVector3f(0, 0, 1));
+  cs::Camera *camera = GetCamera();
+  camera->SetEye(cs::Vector3f(20, 20, 20));
+  camera->SetSpot(cs::Vector3f(0, 0, 0));
+  camera->SetUp(cs::Vector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
 
   AddInputHandler(new PreviewCameraOrbitHandler(camera));
@@ -40,7 +40,7 @@ MaterialEditorPreviewSceneView::~MaterialEditorPreviewSceneView()
   CS_RELEASE(m_material);
 }
 
-void MaterialEditorPreviewSceneView::SetMaterial(csMaterialWrapper *material)
+void MaterialEditorPreviewSceneView::SetMaterial(cs::MaterialWrapper *material)
 {
   CS_SET(m_material, material);
   if (m_staticMeshState && m_material)

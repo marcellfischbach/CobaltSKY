@@ -4,20 +4,24 @@
 #include <materialeditor/materialeditorexport.hh>
 #include <editor/components/preview/previewsceneview.hh>
 
-class csMaterialWrapper;
-class csStaticMeshState;
+namespace cs
+{
+class MaterialWrapper;
+class StaticMeshState;
+}
+
 class MATERIALEDITOR_API MaterialEditorPreviewSceneView : public PreviewSceneView
 {
 public:
   MaterialEditorPreviewSceneView(QWidget *parent);
   virtual ~MaterialEditorPreviewSceneView();
 
-  void SetMaterial(csMaterialWrapper *material);
+  void SetMaterial(cs::MaterialWrapper *material);
 
 protected:
   virtual void initializeGL();
 
 private:
-  csMaterialWrapper *m_material;
-  csStaticMeshState *m_staticMeshState;
+  cs::MaterialWrapper *m_material;
+  cs::StaticMeshState *m_staticMeshState;
 };

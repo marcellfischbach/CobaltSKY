@@ -2,7 +2,7 @@
 #include <cobalt/graphics/csnosuchparameterexception.hh>
 
 
-csNoSuchParameterNameException::csNoSuchParameterNameException(const std::string &name)
+cs::NoSuchParameterNameException::NoSuchParameterNameException(const std::string &name)
   : std::exception()
   , m_name(name)
 {
@@ -10,14 +10,14 @@ csNoSuchParameterNameException::csNoSuchParameterNameException(const std::string
 }
 
 
-csNoSuchParameterIdException::csNoSuchParameterIdException(const std::string &id)
+cs::NoSuchParameterIdException::NoSuchParameterIdException(const std::string &id)
   : std::exception()
   , m_id(id)
 {
 
 }
 
-csNoSuchParameterIndexException::csNoSuchParameterIndexException(csSize idx)
+cs::NoSuchParameterIndexException::NoSuchParameterIndexException(csSize idx)
   : std::exception()
   , m_idx(idx)
 {

@@ -5,8 +5,10 @@
 #include <cobalt/cstypes.hh>
 #include <cobalt/math/csvector3f.hh>
 
+namespace cs
+{
 
-struct CSE_API csMatrix3f
+struct CSE_API Matrix3f
 {
 public:
   float m00;
@@ -20,7 +22,7 @@ public:
   float m22;
 
 public:
-  CS_FORCEINLINE csMatrix3f(const float *f)
+  CS_FORCEINLINE Matrix3f(const float* f)
     : m00(f[0])
     , m01(f[1])
     , m02(f[2])
@@ -33,7 +35,7 @@ public:
   {
   }
 
-  CS_FORCEINLINE csMatrix3f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f)
+  CS_FORCEINLINE Matrix3f(float m00 = 1.0f, float m01 = 0.0f, float m02 = 0.0f, float m10 = 0.0f, float m11 = 1.0f, float m12 = 0.0f, float m20 = 0.0f, float m21 = 0.0f, float m22 = 1.0f)
     : m00(m00)
     , m01(m01)
     , m02(m02)
@@ -54,7 +56,7 @@ public:
     m02 = z;
   }
 
-  CS_FORCEINLINE void SetXAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetXAxis(const cs::Vector3f& v)
   {
     m00 = v.x;
     m01 = v.y;
@@ -68,7 +70,7 @@ public:
     m12 = z;
   }
 
-  CS_FORCEINLINE void SetYAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetYAxis(const cs::Vector3f& v)
   {
     m10 = v.x;
     m11 = v.y;
@@ -83,14 +85,14 @@ public:
     m22 = z;
   }
 
-  CS_FORCEINLINE void SetZAxis(const csVector3f &v)
+  CS_FORCEINLINE void SetZAxis(const cs::Vector3f& v)
   {
     m20 = v.x;
     m21 = v.y;
     m22 = v.z;
   }
 
-  CS_FORCEINLINE static csMatrix3f &Mult(const csMatrix3f &m0, const csMatrix3f &m1, csMatrix3f &r)
+  CS_FORCEINLINE static cs::Matrix3f& Mult(const cs::Matrix3f& m0, const cs::Matrix3f& m1, cs::Matrix3f& r)
   {
     float m00 = m0.m00 * m1.m00 + m0.m10 * m1.m01 + m0.m20 * m1.m02;
     float m01 = m0.m01 * m1.m00 + m0.m11 * m1.m01 + m0.m21 * m1.m02;
@@ -118,7 +120,7 @@ public:
   }
 
 
-  static csVector3f &Mult(const csMatrix3f &m, const csVector3f &v, csVector3f &res)
+  static cs::Vector3f& Mult(const cs::Matrix3f& m, const cs::Vector3f& v, cs::Vector3f& res)
   {
     float x = m.m00 * v.x + m.m10 * v.y + m.m20 * v.z;
     float y = m.m01 * v.x + m.m11 * v.y + m.m21 * v.z;
@@ -131,4 +133,7 @@ public:
 
 
 };
+
+
+}
 

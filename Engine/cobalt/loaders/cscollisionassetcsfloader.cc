@@ -6,31 +6,31 @@
 #include <cobalt/csengine.hh>
 #include <cobalt/csenums.hh>
 
-csCollisionAssetCSFLoader::csCollisionAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::CollisionAssetCSFLoader::CollisionAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 }
 
-csCollisionAssetCSFLoader::~csCollisionAssetCSFLoader()
+cs::CollisionAssetCSFLoader::~CollisionAssetCSFLoader()
 {
 
 }
 
 
-bool csCollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::CollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("collider") ||
     entry->GetTagName() == std::string("shapes");
 }
 
-const cs::Class *csCollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::CollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csPhysicsShape::GetStaticClass();
+  return cs::PhysicsShape::GetStaticClass();
 }
 
-csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csPhysicsShape *container = new csPhysicsShape();
+  cs::PhysicsShape *container = new cs::PhysicsShape();
 
   const csfEntry *shapesEntry = nullptr;
   if (entry->GetTagName() == std::string("shapes"))
@@ -43,7 +43,7 @@ csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const 
   }
   if (!shapesEntry)
   {
-    return new csPhysicsShapeWrapper(container);
+    return new cs::PhysicsShapeWrapper(container);
   }
 
 
@@ -53,11 +53,11 @@ csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const 
        shapeEntry = shapeEntry->GetSiblingEntry("shape"))
   {
 
-    csMatrix4f localTransform;
+    cs::Matrix4f localTransform;
     localTransform.SetIdentity();
-    csPhysGeometry geometryDesc;
+    cs::PhysGeometry geometryDesc;
     memset(&geometryDesc, 0, sizeof(geometryDesc));
-    geometryDesc.Type = (csPhysGeometryType)-1;
+    geometryDesc.Type = (cs::ePhysGeometryType)-1;
 
     for (const csfEntry *child = shapeEntry->GetEntry();
          child;
@@ -85,16 +85,16 @@ csResourceWrapper *csCollisionAssetCSFLoader::Load(const csfEntry *entry, const 
     {
       continue;
     }
-    iPhysicsShape *shape = csEng->CreateShape(geometryDesc);
+    cs::iPhysicsShape *shape = csEng->CreateShape(geometryDesc);
     shape->SetLocalTransform(localTransform);
     container->AddShape(shape);
   }
 
-  return new csPhysicsShapeWrapper(container);
+  return new cs::PhysicsShapeWrapper(container);
 }
 
 
-void csCollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, csMatrix4f &localTransform) const
+void cs::CollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, cs::Matrix4f &localTransform) const
 {
   const csfEntry *matrixEntry = transformEntry->GetEntry("matrix");
   if (!matrixEntry)
@@ -103,7 +103,7 @@ void csCollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, cs
   }
 
 
-  csVector4f r0, r1, r2, r3;
+  cs::Vector4f r0, r1, r2, r3;
   const csfEntry *row0 = matrixEntry->GetEntry("row0");
   const csfEntry *row1 = matrixEntry->GetEntry("row1");
   const csfEntry *row2 = matrixEntry->GetEntry("row2");
@@ -124,13 +124,13 @@ void csCollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, cs
   );
 }
 
-void csCollisionAssetCSFLoader::LoadBox(const csfEntry *transformEntry, csPhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadBox(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("halfX") &&
       transformEntry->HasAttribute("halfY") &&
       transformEntry->HasAttribute("halfZ"))
   {
-    geometry.Type = ePGT_Box;
+    geometry.Type = cs::ePGT_Box;
     geometry.Dimensions.x = transformEntry->GetAttributeFloat("halfX") * 2.0f;
     geometry.Dimensions.y = transformEntry->GetAttributeFloat("halfY") * 2.0f;
     geometry.Dimensions.z = transformEntry->GetAttributeFloat("halfZ") * 2.0f;
@@ -138,22 +138,22 @@ void csCollisionAssetCSFLoader::LoadBox(const csfEntry *transformEntry, csPhysGe
 }
 
 
-void csCollisionAssetCSFLoader::LoadCylinder(const csfEntry *transformEntry, csPhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadCylinder(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("radius") &&
       transformEntry->HasAttribute("halfHeight"))
   {
-    geometry.Type = ePGT_CylinderZ;
+    geometry.Type = cs::ePGT_CylinderZ;
     geometry.Radius = transformEntry->GetAttributeFloat("radius");
     geometry.Height = transformEntry->GetAttributeFloat("halfHeight") * 2.0f;
   }
 }
 
-void csCollisionAssetCSFLoader::LoadSphere(const csfEntry *transformEntry, csPhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadSphere(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("radius"))
   {
-    geometry.Type = ePGT_Sphere;
+    geometry.Type = cs::ePGT_Sphere;
     geometry.Radius = transformEntry->GetAttributeFloat("radius");
   }
 }

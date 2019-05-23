@@ -8,47 +8,51 @@
 #include <vector>
 #include <map>
 
-class csEvent;
+namespace cs
+{
+class Event;
 
-typedef  void(*csEventDelegate)(csEvent &, void*);
+typedef  void(*EventDelegate)(cs::Event&, void*);
 
-struct iEventHandler 
+struct iEventHandler
 {
   virtual ~iEventHandler() {}
-  virtual void HandleEvent(csEvent &event) = 0;
+  virtual void HandleEvent(cs::Event& event) = 0;
 };
 
-class CSE_API csEventBus 
+class CSE_API EventBus
 {
 public:
-  csEventBus();
-  ~csEventBus();
+  EventBus();
+  ~EventBus();
 
 public:
-  void Fire(csEvent &event);
-  csEventBus &operator <<(csEvent &event);
+  void Fire(cs::Event& event);
+  cs::EventBus& operator <<(cs::Event& event);
 
 
 
-  void Register(csEventDelegate delegate, void *userObject = 0);
-  void Register(const cs::Class *cls, csEventDelegate delegate, void *userObject = 0);
-  void Deregister(csEventDelegate delegate);
-  void Deregister(csEventDelegate delegate, void *userObject);
+  void Register(cs::EventDelegate delegate, void* userObject = 0);
+  void Register(const cs::Class* cls, cs::EventDelegate delegate, void* userObject = 0);
+  void Deregister(cs::EventDelegate delegate);
+  void Deregister(cs::EventDelegate delegate, void* userObject);
 
-  void Register(iEventHandler *handler);
-  void Register(const cs::Class *cls, iEventHandler *handler);
-  void Deregister(iEventHandler *handler);
+  void Register(iEventHandler* handler);
+  void Register(const cs::Class* cls, iEventHandler* handler);
+  void Deregister(iEventHandler* handler);
 
 private:
-  void Fire(csEvent &event, const cs::Class *cls);
+  void Fire(cs::Event& event, const cs::Class* cls);
 
   struct Delegate
   {
-    csEventDelegate delegate;
-    void *ptr;
+    cs::EventDelegate delegate;
+    void* ptr;
   };
-  
-  std::map<const cs::Class *, std::vector<iEventHandler *>> m_handlers;
-  std::map<const cs::Class *, std::vector<Delegate>> m_delegates;
+
+  std::map<const cs::Class*, std::vector<iEventHandler*>> m_handlers;
+  std::map<const cs::Class*, std::vector<Delegate>> m_delegates;
 };
+
+}
 

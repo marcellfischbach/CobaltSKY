@@ -14,7 +14,9 @@ using std::vector;
 
 
 class csfEntry;
-class csSettings;
+namespace cs
+{
+class Settings;
 
 /**
 * \addtogroup engine
@@ -24,7 +26,7 @@ class csSettings;
 /**
 * @brief A simple virtual file system.
 */
-class CSE_API csVFS
+class CSE_API VFS
 {
 public:
   class CSE_API Entry
@@ -57,11 +59,11 @@ public:
     DontCheckExistence,
   };
 
-  static csVFS* Get ();
+  static cs::VFS* Get ();
 
   bool LoadConfig(const std::string &configFilename);
   bool Initialize(int argc, char** argv);
-  bool Initialize(csSettings *settings);
+  bool Initialize(cs::Settings *settings);
 
   bool HasPath (const std::string &vfsName) const;
   void AddPath (const std::string &vfsName, const std::string &path);
@@ -71,14 +73,14 @@ public:
   std::string GetPathResolution (const std::string &path) const;
   std::string GetAbsolutePath(const std::string &path) const;
   std::string GetAbsolutePath(const std::string &path, const std::string &entryName, ExistenceCheck checkExistence = CheckExistence) const;
-  std::string GetAbsolutePath(const csResourceLocator &locator, ExistenceCheck checkExistence = CheckExistence) const;
+  std::string GetAbsolutePath(const cs::ResourceLocator &locator, ExistenceCheck checkExistence = CheckExistence) const;
   /**
   * \name Functions for opening files
   * @{
   */
-  iFile* Open(const std::string& filename, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
-  iFile* Open(const std::string& filename, const std::string &entryName, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
-  iFile *Open(const csResourceLocator &locator, csOpenMode mode = eOM_Read, csTextMode textMode = eTM_Binary);
+  cs::iFile* Open(const std::string& filename, cs::eOpenMode mode = eOM_Read, cs::eTextMode textMode = eTM_Binary);
+  cs::iFile* Open(const std::string& filename, const std::string &entryName, cs::eOpenMode mode = eOM_Read, cs::eTextMode textMode = eTM_Binary);
+  cs::iFile *Open(const cs::ResourceLocator &locator, cs::eOpenMode mode = eOM_Read, cs::eTextMode textMode = eTM_Binary);
   /**
   * @}
   */
@@ -89,10 +91,10 @@ public:
   const Entry &GetEntry (csSize idx) const;
 
 private:
-  csVFS ();
+  VFS();
   bool LoadConfig(const csfEntry *vfsEntry, const std::string &basePath);
-  bool ImportRootPath(csSettings *settings, const csfEntry *rootPathEntry);
-  bool ImportResolution(csSettings *settings, const csfEntry *resolutionEntry);
+  bool ImportRootPath(cs::Settings *settings, const csfEntry *rootPathEntry);
+  bool ImportResolution(cs::Settings *settings, const csfEntry *resolutionEntry);
 
   static std::string ExtractSymbol (const std::string &path, unsigned idx, unsigned &length);
 
@@ -107,3 +109,4 @@ private:
 /** @} */
 
 
+}

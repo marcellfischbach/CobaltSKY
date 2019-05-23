@@ -4,19 +4,19 @@
 
 
 
-csSGNeg::csSGNeg()
-  : csSGNode()
+cs::SGNeg::SGNeg()
+  : cs::SGNode()
 {
   SetName(CS_NEG_NAME);
-  AddInput(new csSGInput("x", true, true));
-  AddOutput(new csSGOutput("v"));
+  AddInput(new cs::SGInput("x", true, true));
+  AddOutput(new cs::SGOutput("v"));
 }
 
 
-bool csSGNeg::Validate()
+bool cs::SGNeg::Validate()
 {
-  csSGDataType dtA = GetInputDataType(0);
-  if (dtA == eSGDT_Inval)
+  cs::eSGDataType dtA = GetInputDataType(0);
+  if (dtA == cs::eSGDT_Inval)
   {
     return false;
   }

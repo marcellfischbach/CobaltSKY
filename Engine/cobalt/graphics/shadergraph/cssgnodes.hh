@@ -32,23 +32,28 @@
 #include <cobalt/graphics/shadergraph/cssgvarfloat4.hh>
 #include <string>
 
-class CSE_API csSGNodes
+namespace cs
+{
+
+class CSE_API SGNodes
 {
 public:
   struct Entry
   {
     std::string name;
-    const cs::Class *clazz;
-    Entry(const std::string &name, const cs::Class *clazz);
+    const cs::Class* clazz;
+    Entry(const std::string& name, const cs::Class* clazz);
   };
 
 public:
-  static csSGNodes *Get();
+  static cs::SGNodes* Get();
 
-  const std::vector<Entry> &GetEntries() const;
+  const std::vector<Entry>& GetEntries() const;
 
 private:
-  csSGNodes();
+  SGNodes();
 
   std::vector<Entry> m_entries;
 };
+
+}

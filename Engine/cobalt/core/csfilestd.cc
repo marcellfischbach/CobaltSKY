@@ -6,7 +6,7 @@
 
 
 
-csFileStd::csFileStd ()
+cs::FileStd::FileStd()
 : m_file (0)
 , m_read (false)
 , m_write (false)
@@ -14,7 +14,7 @@ csFileStd::csFileStd ()
   CS_CLASS_GEN_CONSTR;
 }
 
-csFileStd::~csFileStd ()
+cs::FileStd::~FileStd()
 {
   if (m_file)
   {
@@ -22,7 +22,7 @@ csFileStd::~csFileStd ()
   }
 }
 
-bool csFileStd::Open (const char *filename, csOpenMode mode, csTextMode textMode)
+bool cs::FileStd::Open (const char *filename, cs::eOpenMode mode, cs::eTextMode textMode)
 {
   m_read = false;
   m_write = false;
@@ -108,12 +108,12 @@ bool csFileStd::Open (const char *filename, csOpenMode mode, csTextMode textMode
   return true;
 }
 
-bool csFileStd::IsOpen () const
+bool cs::FileStd::IsOpen () const
 {
   return m_file != 0;
 }
 
-bool csFileStd::Close ()
+bool cs::FileStd::Close ()
 {
   assert (m_file);
   fclose (m_file);
@@ -122,27 +122,27 @@ bool csFileStd::Close ()
 }
 
 
-bool csFileStd::IsRandomAccess () const
+bool cs::FileStd::IsRandomAccess () const
 {
   return true;
 }
 
-bool csFileStd::IsReadable () const
+bool cs::FileStd::IsReadable () const
 {
   return m_read;
 }
 
-bool csFileStd::IsWritable () const
+bool cs::FileStd::IsWritable () const
 {
   return m_write;
 }
 
-bool csFileStd::IsEof () const
+bool cs::FileStd::IsEof () const
 {
   return feof (m_file) != 0;
 }
 
-bool csFileStd::Seek (csSeekPos pos, long num)
+bool cs::FileStd::Seek (cs::eSeekPos pos, long num)
 {
   assert (m_file);
   int sm = 0;
@@ -165,13 +165,13 @@ bool csFileStd::Seek (csSeekPos pos, long num)
   return true;
 }
 
-csSize csFileStd::Tell ()
+csSize cs::FileStd::Tell ()
 {
   assert (m_file);
   return ftell (m_file);
 }
 
-csSize csFileStd::GetLength ()
+csSize cs::FileStd::GetLength ()
 {
   csSize cp = Tell ();
   Seek (eSP_End, 0);
@@ -180,13 +180,13 @@ csSize csFileStd::GetLength ()
   return size;
 }
 
-csSize csFileStd::Read (void *buffer, csSize size)
+csSize cs::FileStd::Read (void *buffer, csSize size)
 {
   assert (m_file);
   return fread (buffer, sizeof(char), size, m_file);
 }
 
-csSize csFileStd::ReadLine (char *buffer, csSize maxSize)
+csSize cs::FileStd::ReadLine (char *buffer, csSize maxSize)
 {
   assert (m_file);
   unsigned p = 0;
@@ -228,24 +228,24 @@ csSize csFileStd::ReadLine (char *buffer, csSize maxSize)
   return p - 1;
 }
 
-csSize csFileStd::Write (const void *buffer, csSize size)
+csSize cs::FileStd::Write (const void *buffer, csSize size)
 {
   assert (m_file);
   return fwrite (buffer, sizeof(char), size, m_file);
 }
 
-const std::string& csFileStd::GetExtension () const
+const std::string& cs::FileStd::GetExtension () const
 {
   return m_extension;
 }
 
-const std::string& csFileStd::GetName () const
+const std::string& cs::FileStd::GetName () const
 {
   return m_name;
 }
 
 
-const std::string& csFileStd::GetLocation () const
+const std::string& cs::FileStd::GetLocation () const
 {
   return m_location;
 }

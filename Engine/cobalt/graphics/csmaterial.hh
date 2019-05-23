@@ -9,72 +9,75 @@
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/csmaterial.refl.hh>
 
-class csMaterialDefWrapper;
+
+namespace cs
+{
 struct iGraphics;
-class csTextureWrapper;
+class MaterialDefWrapper;
+class TextureWrapper;
 
 CS_CLASS();
-class CSE_API csMaterial : public CS_SUPER(cs::Object)
+class CSE_API Material : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  csMaterial();
-  virtual ~csMaterial();
+  Material();
+  virtual ~Material();
 
-  void SetMaterialDef(csMaterialDefWrapper *material);
-  csMaterialDefWrapper *GetMaterialDef();
-  const csMaterialDefWrapper  *GetMaterialDef() const;
+  void SetMaterialDef(cs::MaterialDefWrapper * material);
+  cs::MaterialDefWrapper* GetMaterialDef();
+  const cs::MaterialDefWrapper* GetMaterialDef() const;
 
   void RebuildMaterialParameters();
 
-  csSize GetIndex(const std::string &id) const;
-  csSize GetIndexByName(const std::string &name) const;
-  const std::string &GetParameterId(csSize idx) const;
-  const std::string &GetParameterName(csSize idx) const;
+  csSize GetIndex(const std::string & id) const;
+  csSize GetIndexByName(const std::string & name) const;
+  const std::string& GetParameterId(csSize idx) const;
+  const std::string& GetParameterName(csSize idx) const;
 
-  bool Bind(iGraphics *renderer, csRenderPass pass);
+  bool Bind(cs::iGraphics * renderer, cs::eRenderPass pass);
 
   void SetInherited(csSize idx, bool inherited);
   bool IsInherited(csSize idx) const;
 
   void Set(csSize idx, float v);
-  void Set(csSize idx, const csVector2f &v);
-  void Set(csSize idx, const csVector3f &v);
-  void Set(csSize idx, const csVector4f &v);
-  void Set(csSize idx, const csColor4f &c);
-  void Set(csSize idx, csTextureWrapper *texture);
+  void Set(csSize idx, const cs::Vector2f & v);
+  void Set(csSize idx, const cs::Vector3f & v);
+  void Set(csSize idx, const cs::Vector4f & v);
+  void Set(csSize idx, const cs::Color4f & c);
+  void Set(csSize idx, cs::TextureWrapper * texture);
 
   float GetFloat(csSize idx);
-  csVector2f GetFloat2(csSize idx);
-  csVector3f GetFloat3(csSize idx);
-  csVector4f GetFloat4(csSize idx);
-  csColor4f GetColor4(csSize idx);
-  csTextureWrapper *GetTexture(csSize idx);
+  cs::Vector2f GetFloat2(csSize idx);
+  cs::Vector3f GetFloat3(csSize idx);
+  cs::Vector4f GetFloat4(csSize idx);
+  cs::Color4f GetColor4(csSize idx);
+  cs::TextureWrapper* GetTexture(csSize idx);
 
 
-  void SetFillMode(csFillMode mode);
-  csFillMode GetFillMode() const;
+  void SetFillMode(cs::eFillMode mode);
+  cs::eFillMode GetFillMode() const;
   bool IsFillModeInherited() const;
 
 private:
-  csMaterialDefWrapper *m_materialDef;
+  cs::MaterialDefWrapper* m_materialDef;
 
   struct ShaderParameter
   {
     bool m_inherit;
-    csShaderParameterType m_paramType;
+    cs::eShaderParameterType m_paramType;
     union
     {
       float m_float[16];
       int m_int[16];
-      csTextureWrapper *m_texture;
+      cs::TextureWrapper* m_texture;
       // Add Texture later.
     };
     ShaderParameter();
   };
 
-  csFillMode m_fillMode;
+  cs::eFillMode m_fillMode;
   bool m_fillModeInherited;
 
   std::vector<ShaderParameter> m_parameters;
@@ -83,8 +86,10 @@ private:
 };
 
 CS_CLASS()
-class CSE_API csMaterialWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API MaterialWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csMaterial, csMaterialWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::Material, MaterialWrapper, cs::ResourceWrapper);
 };
+
+}

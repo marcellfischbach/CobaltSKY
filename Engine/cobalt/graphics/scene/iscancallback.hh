@@ -1,15 +1,19 @@
 #pragma once
 
 
-class csGeometryNode;
-class csLightNode;
+namespace cs
+{
+class GeometryNode;
+class LightNode;
 
 struct iScanCallback
 {
 
-  virtual bool ScanGeometryNode(csGeometryNode *geometryNode) = 0;
+  virtual bool ScanGeometryNode(cs::GeometryNode* geometryNode) = 0;
 
-  virtual bool ScanLightNode(csLightNode *lightNode) = 0;
+  virtual bool ScanLightNode(cs::LightNode* lightNode) = 0;
 
 };
 
+
+}

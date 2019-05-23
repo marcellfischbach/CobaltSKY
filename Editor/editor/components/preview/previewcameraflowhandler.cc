@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-PreviewCameraFlowHandler::PreviewCameraFlowHandler(csCamera *camera)
+PreviewCameraFlowHandler::PreviewCameraFlowHandler(cs::Camera *camera)
   : m_mode(Idle)
   , m_maxSpeed(6.0f)
   , m_moveAccel(6.0f)
@@ -76,15 +76,15 @@ void PreviewCameraFlowHandler::mouseMoveEvent(QMouseEvent *event)
     float rotH = -(float)d.x() / 250.0f;
     float rotV = -(float)d.y() / 250.0f;
 
-    csMatrix4f rH, rV;
+    cs::Matrix4f rH, rV;
     rH.SetRotationZ(rotH);
     rV.SetRotationX(rotV);
 
-    csVector3f t = m_matrix.GetTranslation(t);
-    m_matrix.SetTranslation(csVector3f(0.0f, 0.0f, 0.0f));
+    cs::Vector3f t = m_matrix.GetTranslation(t);
+    m_matrix.SetTranslation(cs::Vector3f(0.0f, 0.0f, 0.0f));
 
-    csMatrix4f::Mult(rH, m_matrix, m_matrix);
-    csMatrix4f::Mult(m_matrix, rV, m_matrix);
+    cs::Matrix4f::Mult(rH, m_matrix, m_matrix);
+    cs::Matrix4f::Mult(m_matrix, rV, m_matrix);
 
     m_matrix.SetTranslation(t);
 
@@ -207,12 +207,12 @@ void PreviewCameraFlowHandler::timedUpdate(float deltaT)
 
     printf("DeltaT: W: %f   A: %f   S: %f  D: %f\n", m_moveSpeedForward, m_moveSpeedLeft, m_moveSpeedBackward, m_moveSpeedRight);
 
-    csVector3f e = m_matrix.GetTranslation(e);
-    csVector3f d = m_matrix.GetYAxis(d);
-    csVector3f r = m_matrix.GetXAxis(r);
+    cs::Vector3f e = m_matrix.GetTranslation(e);
+    cs::Vector3f d = m_matrix.GetYAxis(d);
+    cs::Vector3f r = m_matrix.GetXAxis(r);
 
-    csVector3f::MulAdd(e, d, (m_moveSpeedForward - m_moveSpeedBackward) * deltaT, e);
-    csVector3f::MulAdd(e, r, (m_moveSpeedRight - m_moveSpeedLeft) * deltaT, e);
+    cs::Vector3f::MulAdd(e, d, (m_moveSpeedForward - m_moveSpeedBackward) * deltaT, e);
+    cs::Vector3f::MulAdd(e, r, (m_moveSpeedRight - m_moveSpeedLeft) * deltaT, e);
 
     m_matrix.SetTranslation(e);
     UpdateCamera();
@@ -223,10 +223,10 @@ void PreviewCameraFlowHandler::timedUpdate(float deltaT)
 void PreviewCameraFlowHandler::UpdateCamera()
 {
 
-  csVector3f e = m_matrix.GetTranslation(e);
-  csVector3f d = m_matrix.GetYAxis(d);
-  csVector3f s = csVector3f::MulAdd(e, d, 1.0f, s);
-  csVector3f u = m_matrix.GetZAxis(u);
+  cs::Vector3f e = m_matrix.GetTranslation(e);
+  cs::Vector3f d = m_matrix.GetYAxis(d);
+  cs::Vector3f s = cs::Vector3f::MulAdd(e, d, 1.0f, s);
+  cs::Vector3f u = m_matrix.GetZAxis(u);
 
 
 

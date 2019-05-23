@@ -2,8 +2,10 @@
 
 #include <cobalt/math/csvector.hh>
 
-class csRenderState;
-class csLightState;
+namespace cs
+{
+class LightState;
+class RenderState;
 
 /**
 * \ingroup entity
@@ -12,9 +14,9 @@ class csLightState;
 struct iEntityScan
 {
 
-  virtual void ScanRenderState(csRenderState *renderState) = 0;
+  virtual void ScanRenderState(cs::RenderState *renderState) = 0;
 
-  virtual void ScanLightState(csLightState *lightState) = 0;
+  virtual void ScanLightState(cs::LightState *lightState) = 0;
 
 };
 
@@ -22,9 +24,9 @@ struct iEntityScan
 * \ingroup entity
 */
 
-struct csScanConfig
+struct ScanConfig
 {
-  csScanConfig()
+  ScanConfig()
     : FrameNo(0)
   {
   }
@@ -34,5 +36,7 @@ struct csScanConfig
   bool ScanShadowCasters;
   bool ScanNonShadowCasters;
 
-  csVector3f MainCameraPosition;
+  cs::Vector3f MainCameraPosition;
 };
+
+}

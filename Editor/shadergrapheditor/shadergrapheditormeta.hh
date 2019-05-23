@@ -16,25 +16,25 @@ public:
   ShaderGraphEditorMeta();
   virtual ~ShaderGraphEditorMeta();
 
-  void SetPos(const csVector2f &pos);
-  void SetPos(csSize idx, const csVector2f &pos);
+  void SetPos(const cs::Vector2f &pos);
+  void SetPos(csSize idx, const cs::Vector2f &pos);
 
-  csVector2f GetPos() const;
-  csVector2f GetPos(csSize idx) const;
+  cs::Vector2f GetPos() const;
+  cs::Vector2f GetPos(csSize idx) const;
 
 private:
 
-  csVector2f m_pos;
+  cs::Vector2f m_pos;
 
-  std::map<csSize, csVector2f> m_poss;
+  std::map<csSize, cs::Vector2f> m_poss;
 };
 
 
 CS_CLASS()
-class ShaderGraphEditorMetaWrapper : public CS_SUPER(csResourceWrapper)
+class ShaderGraphEditorMetaWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(ShaderGraphEditorMeta, ShaderGraphEditorMetaWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(ShaderGraphEditorMeta, ShaderGraphEditorMetaWrapper, cs::ResourceWrapper);
 };
 
 

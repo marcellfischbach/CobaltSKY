@@ -21,7 +21,7 @@ csSGNodeGL4::~csSGNodeGL4()
 
 
 
-std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const std::string &exp, const std::string &type)
+std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, cs::SGOutput *output, const std::string &exp, const std::string &type)
 {
   if (IsInline())
   {
@@ -36,47 +36,47 @@ std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output,
   }
 }
 
-csSGDataType csSGNodeGL4::GetHigher(csSGDataType dtA, csSGDataType dtB)
+cs::eSGDataType csSGNodeGL4::GetHigher(cs::eSGDataType dtA, cs::eSGDataType dtB)
 {
   return dtA > dtB ? dtA : dtB;
 }
 
-std::string csSGNodeGL4::GetDataTypeVar(csSGDataType dt)
+std::string csSGNodeGL4::GetDataTypeVar(cs::eSGDataType dt)
 {
   switch (dt)
   {
-  case eSGDT_Float:
+  case cs::eSGDT_Float:
     return "float";
-  case eSGDT_Float2:
+  case cs::eSGDT_Float2:
     return "vec2";
-  case eSGDT_Float3:
+  case cs::eSGDT_Float3:
     return "vec3";
-  case eSGDT_Float4:
+  case cs::eSGDT_Float4:
     return "vec4";
-  case eSGDT_Int:
+  case cs::eSGDT_Int:
     return "int";
-  case eSGDT_Int2:
+  case cs::eSGDT_Int2:
     return "uvec2";
-  case eSGDT_Int3:
+  case cs::eSGDT_Int3:
     return "uvec3";
-  case eSGDT_Int4:
+  case cs::eSGDT_Int4:
     return "uvec4";
-  case eSGDT_Texture1D:
+  case cs::eSGDT_Texture1D:
     return "sampler1D";
-  case eSGDT_Texture1DArray:
+  case cs::eSGDT_Texture1DArray:
     return "sampler1DArray";
 
-  case eSGDT_Texture2D:
+  case cs::eSGDT_Texture2D:
     return "sampler2D";
-  case eSGDT_Texture2DArray:
+  case cs::eSGDT_Texture2DArray:
     return "sampler2DArray";
 
-  case eSGDT_Texture3D:
+  case cs::eSGDT_Texture3D:
     return "sampler3D";
 
-  case eSGDT_TextureCube:
+  case cs::eSGDT_TextureCube:
     return "samplerCube";
-  case eSGDT_TextureCubeArray:
+  case cs::eSGDT_TextureCubeArray:
     return "samplerCubeArray";
   }
   return "inval";
@@ -94,8 +94,8 @@ bool csSGNodeGL4::EvaluateInline(csShaderGraphCtx &ctx)
     m_inlineEvaluated = true;
     for (csSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
     {
-      csSGInput *input = m_node->GetInput(i);
-      csSGNode *node = input->GetNode();
+      cs::SGInput *input = m_node->GetInput(i);
+      cs::SGNode *node = input->GetNode();
 
       ctx.EvaluateInline(input);
       if (m_doubleInlineEvaluateInput)
@@ -121,7 +121,7 @@ bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
   m_evaluated = true;
   for (csSize i = 0, in = m_node->GetNumberOfInputs(); i < in; ++i)
   {
-    csSGInput *input = m_node->GetInput(i);
+    cs::SGInput *input = m_node->GetInput(i);
     ctx.Evaluate(input);
   }
 
@@ -135,7 +135,7 @@ bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
 
 std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 {
-  csSGInput *input = m_node->GetInput(x);
+  cs::SGInput *input = m_node->GetInput(x);
   if (!input)
   {
     return std::to_string(0.0f);
@@ -143,7 +143,7 @@ std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 
   if (input->CanInputNode())
   {
-    csSGOutput *output = input->GetInput();
+    cs::SGOutput *output = input->GetInput();
     if (output)
     {
       return ctx.GetFullOutputValue(output);
@@ -159,7 +159,7 @@ std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 
 std::string csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
 {
-  csSGInput *input = m_node->GetInput(x);
+  cs::SGInput *input = m_node->GetInput(x);
   if (!input)
   {
     return std::to_string(0);
@@ -167,7 +167,7 @@ std::string csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
 
   if (input->CanInputNode())
   {
-    csSGOutput *output = input->GetInput();
+    cs::SGOutput *output = input->GetInput();
     if (output)
     {
       return ctx.GetFullOutputValue(output);

@@ -7,7 +7,10 @@
 
 #define SHADER_GRAPH_EDITO_TOOLBOX_MODEL_CLASS_MIME "application/cs::ClassName"
 
-class cs::Class;
+namespace cs
+{
+class Class;
+}
 
 
 

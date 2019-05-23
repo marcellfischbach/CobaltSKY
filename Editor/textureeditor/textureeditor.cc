@@ -24,8 +24,8 @@ TextureEditor::TextureEditor()
   SetWidget(widget);
   //AddDockItemName(PROPERTIES_DOCK_NAME);
 
-  QObject::connect(m_properties, SIGNAL(SamplerChanged(const csResourceLocator &)),
-    m_widget, SLOT(SamplerChanged(const csResourceLocator &)));
+  QObject::connect(m_properties, SIGNAL(SamplerChanged(const cs::ResourceLocator &)),
+    m_widget, SLOT(SamplerChanged(const cs::ResourceLocator &)));
 }
 
 TextureEditor::~TextureEditor()
@@ -35,7 +35,7 @@ TextureEditor::~TextureEditor()
 
 void TextureEditor::UpdateAsset()
 {
-  csTexture2DWrapper *texture = cs::QueryClass<csTexture2DWrapper>(GetEditObject());
+  cs::Texture2DWrapper *texture = cs::QueryClass<cs::Texture2DWrapper>(GetEditObject());
   if (texture)
   {
 

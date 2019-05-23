@@ -4,7 +4,11 @@
 
 #include <editor/editorexport.hh>
 
-class csResourceLocator;
+namespace cs
+{
+class ResourceLocator;
+}
+
 namespace asset::model
 {
 
@@ -13,8 +17,8 @@ namespace asset::model
 	{
 		friend class Model;
 	public:
-		bool Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator);
-		bool Delete(const csResourceLocator &locator);
+		bool Move(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
+		bool Delete(const cs::ResourceLocator &locator);
 	private:
 		ModelSync();
 	};

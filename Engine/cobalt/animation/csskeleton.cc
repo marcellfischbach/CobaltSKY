@@ -3,7 +3,7 @@
 #include <cobalt/animation/csskeleton.hh>
 
 
-csSkeleton::csSkeleton()
+cs::Skeleton::Skeleton()
   : cs::Object()
   , m_numberOfBones(0)
   , m_matrices(0)
@@ -11,7 +11,7 @@ csSkeleton::csSkeleton()
 
 }
 
-csSkeleton::~csSkeleton()
+cs::Skeleton::~Skeleton()
 {
   if (m_matrices)
   {
@@ -20,21 +20,21 @@ csSkeleton::~csSkeleton()
 }
 
 
-void csSkeleton::PrepareBones(csSize numberOfBones)
+void cs::Skeleton::PrepareBones(csSize numberOfBones)
 {
   if (m_matrices)
   {
     delete[] m_matrices;
     delete[] m_boneNames;
   }
-  m_matrices = new csMatrix4f[numberOfBones];
+  m_matrices = new cs::Matrix4f[numberOfBones];
   m_boneNames = new std::string[numberOfBones];
   m_numberOfBones = numberOfBones;
 }
 
 
 
-void csSkeleton::SetBoneName(csSize boneIdx, const std::string &boneName)
+void cs::Skeleton::SetBoneName(csSize boneIdx, const std::string &boneName)
 {
   if (boneIdx >= m_numberOfBones)
   {
@@ -45,7 +45,7 @@ void csSkeleton::SetBoneName(csSize boneIdx, const std::string &boneName)
 }
 
 
-std::string csSkeleton::GetBoneName(csSize idx) const
+std::string cs::Skeleton::GetBoneName(csSize idx) const
 {
   if (idx >= m_numberOfBones)
   {
@@ -55,7 +55,7 @@ std::string csSkeleton::GetBoneName(csSize idx) const
   return m_boneNames[idx];
 }
 
-csSize csSkeleton::GetBoneIndex(const std::string &boneName) const
+csSize cs::Skeleton::GetBoneIndex(const std::string &boneName) const
 {
   for (csSize i = 0; i < m_numberOfBones; ++i)
   {
@@ -64,7 +64,7 @@ csSize csSkeleton::GetBoneIndex(const std::string &boneName) const
       return i;
     }
   }
-  return csInvalidBoneIdx;
+  return cs::InvalidBoneIdx;
 }
 
 

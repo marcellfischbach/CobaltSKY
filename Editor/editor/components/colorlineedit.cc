@@ -83,11 +83,11 @@ QWidget *Color4fLineEdit::CreateFrame(QLabel *label, QDoubleSpinBox *spinBox, co
 
 void Color4fLineEdit::spinBoxValueChanged(double)
 {
-  csColor4f color = GetColor();
+  cs::Color4f color = GetColor();
   emit ColorChanged(color);
 }
 
-void Color4fLineEdit::SetColor(const csColor4f &color)
+void Color4fLineEdit::SetColor(const cs::Color4f &color)
 {
   m_sbRed->blockSignals(true);
   m_sbGreen->blockSignals(true);
@@ -105,9 +105,9 @@ void Color4fLineEdit::SetColor(const csColor4f &color)
   m_sbAlpha->blockSignals(false);
 }
 
-csColor4f Color4fLineEdit::GetColor() const
+cs::Color4f Color4fLineEdit::GetColor() const
 {
-  csColor4f col (
+  cs::Color4f col (
         static_cast<float>(m_sbRed->value()),
         static_cast<float>(m_sbGreen->value()),
         static_cast<float>(m_sbBlue->value()),

@@ -41,11 +41,11 @@ namespace asset::model
 		}
 	}
 
-  csResourceLocator  AssetListModel::GetResourceLocator() const
+  cs::ResourceLocator  AssetListModel::GetResourceLocator() const
   {
     if (!m_folder)
     {
-      return csResourceLocator();
+      return cs::ResourceLocator();
     }
 
     return m_folder->GetFolder()->GetResourceLocator();

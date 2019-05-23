@@ -7,58 +7,61 @@
 #include <cobalt/cstypes.hh>
 #include <cobalt/entity/csentitystate.refl.hh>
 
-class csClipper;
-class csEntity;
-class csEntityScene;
-class csSpatialState;
-struct iEntityScan;
-struct iGraphics;
 
 /**
 * \ingroup entity
 */
 
+namespace cs
+{
+struct iEntityScan;
+struct iGraphics;
+class Clipper;
+class Entity;
+class EntityScene;
+class SpatialState;
+
 
 CS_CLASS()
-class CSE_API csEntityState : public CS_SUPER(cs::Object)
+class CSE_API EntityState : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  virtual ~csEntityState();
+  virtual ~EntityState();
 
   virtual void SetId(csID id);
   csID GetId() const;
 
-  void SetName(const std::string &name);
-  const std::string &GetName() const;
+  void SetName(const std::string & name);
+  const std::string& GetName() const;
 
-  virtual csSpatialState *ToSpatialState();
-  virtual const csSpatialState *ToSpatialState() const;
+  virtual cs::SpatialState* ToSpatialState();
+  virtual const cs::SpatialState* ToSpatialState() const;
 
-  csEntity *GetEntity();
-  const csEntity *GetEntity() const;
+  cs::Entity* GetEntity();
+  const cs::Entity* GetEntity() const;
 
   /**
    * \name Live-cycles
    * @{
    */
   void Create();
-  void AttachToEntity(csEntity *entity);
+  void AttachToEntity(cs::Entity * entity);
   void Assemble();
-  void AttachToScene(csEntityScene *scene);
-  void DetachFromScene(csEntityScene *scene);
+  void AttachToScene(cs::EntityScene * scene);
+  void DetachFromScene(cs::EntityScene * scene);
   void Disassemble();
-  void DetachFromEntity(csEntity *entity);
+  void DetachFromEntity(cs::Entity * entity);
   void Destroy();
-  /** 
+  /**
    * @}
    */
 
   virtual void Update(float tpf);
 
 protected:
-  csEntityState();
+  EntityState();
 
   /**
   * \name Live-cycle event listeners
@@ -73,7 +76,7 @@ protected:
   /**
    * \brief Called when the entitye state is attached to the entity it belongs to.
    */
-  virtual void OnAttachedToEntity(csEntity *entity);
+  virtual void OnAttachedToEntity(cs::Entity * entity);
 
   /**
    * \brief Called after all state have been attached to the same entity this state is attached to.
@@ -88,13 +91,13 @@ protected:
   /**
    * \brief Called when the entity has been attached to the scene.
    */
-  virtual void OnAttachedToScene(csEntityScene *scene);
+  virtual void OnAttachedToScene(cs::EntityScene * scene);
 
   /**
    * \brief Called when the entity has been detached from the scene
    */
-  virtual void OnDetachedFromScene(csEntityScene *scene);
-  
+  virtual void OnDetachedFromScene(cs::EntityScene * scene);
+
   /**
    * \brief Call when the entity was removed from scene but still all entity states are present
    *        with the entity.
@@ -104,7 +107,7 @@ protected:
   /**
    * \brief Called when the state has been removed from the entity
    */
-  virtual void OnDetachedFromEntity(csEntity *entity);
+  virtual void OnDetachedFromEntity(cs::Entity * entity);
 
   /**
    * \brief Called right before the entity object is removed from memory.
@@ -120,47 +123,49 @@ protected:
 private:
   csID m_id;
 
-  CS_PROPERTY(name=Name)
-  std::string m_name;
+  CS_PROPERTY(name = Name)
+    std::string m_name;
 
   bool m_created;
   bool m_assembled;
-  csEntity *m_entity;
-  csEntityScene *m_scene;
+  cs::Entity * m_entity;
+  cs::EntityScene * m_scene;
 };
 
 
 CS_CLASS()
-class CSE_API csEntityStateWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API EntityStateWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csEntityState, csEntityStateWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::EntityState, EntityStateWrapper, cs::ResourceWrapper);
 };
 
 
-CS_FORCEINLINE csID csEntityState::GetId() const
+}
+
+CS_FORCEINLINE csID cs::EntityState::GetId() const
 {
   return m_id;
 }
 
 
 
-CS_FORCEINLINE void csEntityState::SetName(const std::string &name)
+CS_FORCEINLINE void cs::EntityState::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE const std::string &csEntityState::GetName() const
+CS_FORCEINLINE const std::string &cs::EntityState::GetName() const
 {
   return m_name;
 }
 
-CS_FORCEINLINE csEntity *csEntityState::GetEntity()
+CS_FORCEINLINE cs::Entity *cs::EntityState::GetEntity()
 {
   return m_entity;
 }
 
-CS_FORCEINLINE const csEntity *csEntityState::GetEntity() const
+CS_FORCEINLINE const cs::Entity *cs::EntityState::GetEntity() const
 {
   return m_entity;
 }

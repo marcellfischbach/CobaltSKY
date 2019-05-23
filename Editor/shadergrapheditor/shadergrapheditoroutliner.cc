@@ -22,7 +22,7 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
   m_gui.treeView->clearSelection();
   for (ShaderGraphEditorNode *editorNode : nodes)
   {
-    csSGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
+    cs::SGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
     if (shaderGraph)
     {
       for (unsigned i = 0; i < columnCount; ++i)
@@ -31,7 +31,7 @@ void ShaderGraphEditorOutliner::SetSelectedNodes(const QList<ShaderGraphEditorNo
       }
     }
 
-    csSGNode *node = editorNode->GetSGNode();
+    cs::SGNode *node = editorNode->GetSGNode();
     if (node)
     {
       for (unsigned i = 0; i < columnCount; ++i)
@@ -50,29 +50,29 @@ void ShaderGraphEditorOutliner::NodeChanged(ShaderGraphEditorNode* node)
   }
 }
 
-void ShaderGraphEditorOutliner::NodeAboutToAdd(csSGNode *node)
+void ShaderGraphEditorOutliner::NodeAboutToAdd(cs::SGNode *node)
 {
   m_model->NodeAboutToAdd(node);
 }
 
 
-void ShaderGraphEditorOutliner::NodeAdded(csSGNode *node)
+void ShaderGraphEditorOutliner::NodeAdded(cs::SGNode *node)
 {
   m_model->NodeAdded(node);
 }
 
-void ShaderGraphEditorOutliner::NodeAboutToRemove(csSGNode *node)
+void ShaderGraphEditorOutliner::NodeAboutToRemove(cs::SGNode *node)
 {
   m_model->NodeAboutToRemove(node);
 }
 
-void ShaderGraphEditorOutliner::NodeRemoved(csSGNode *node)
+void ShaderGraphEditorOutliner::NodeRemoved(cs::SGNode *node)
 {
   m_model->NodeRemoved(node);
 }
 
 
-void ShaderGraphEditorOutliner::SetShaderGraph(csSGShaderGraph *shaderGraph)
+void ShaderGraphEditorOutliner::SetShaderGraph(cs::SGShaderGraph *shaderGraph)
 {
   m_model->SetShaderGraph(shaderGraph);
 }

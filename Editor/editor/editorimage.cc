@@ -2,7 +2,7 @@
 #include <editor/editorimage.hh>
 #include <cobalt/graphics/csimage.hh>
 
-EditorImage::EditorImage(csImage *image)
+EditorImage::EditorImage(cs::Image *image)
 {
   CS_CLASS_GEN_CONSTR;
   SetImage(image);
@@ -21,7 +21,7 @@ void editor_image_clean_up(void *data)
   delete[] imageBuffer;
 }
 
-void EditorImage::SetImage(csImage *image)
+void EditorImage::SetImage(cs::Image *image)
 {
   if (!image)
   {
@@ -36,10 +36,10 @@ void EditorImage::SetImage(csImage *image)
     QImage::Format format;
     switch (image->GetPixelFormat())
     {
-    case ePF_R8G8B8A8U:
+    case cs::ePF_R8G8B8A8U:
       format = QImage::Format_RGBA8888;
       break;
-    case ePF_R8G8B8U:
+    case cs::ePF_R8G8B8U:
       format = QImage::Format_RGB888;
       break;
     }

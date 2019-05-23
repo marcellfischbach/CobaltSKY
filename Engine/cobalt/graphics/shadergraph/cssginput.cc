@@ -4,7 +4,7 @@
 
 
 
-csSGInput::csSGInput(const std::string &name, bool canConst, bool canInputNode)
+cs::SGInput::SGInput(const std::string &name, bool canConst, bool canInputNode)
   : m_name(name)
   , m_node(0)
   , m_input(0)
@@ -15,13 +15,13 @@ csSGInput::csSGInput(const std::string &name, bool canConst, bool canInputNode)
 }
 
 
-csSGInput::~csSGInput()
+cs::SGInput::~SGInput()
 {
 
 }
 
 
-csSGNode *csSGInput::GetInputNode()
+cs::SGNode *cs::SGInput::GetInputNode()
 {
   if (!m_input)
   {
@@ -30,7 +30,7 @@ csSGNode *csSGInput::GetInputNode()
   return m_input->GetNode();
 }
 
-void csSGInput::SetInput(csSGOutput *input)
+void cs::SGInput::SetInput(cs::SGOutput *input)
 {
   if (m_canInputNode)
   {
@@ -38,7 +38,7 @@ void csSGInput::SetInput(csSGOutput *input)
   }
 }
 
-csSGDataType csSGInput::GetDataType() const
+cs::eSGDataType cs::SGInput::GetDataType() const
 {
   if (m_canInputNode && m_input)
   {
@@ -46,7 +46,7 @@ csSGDataType csSGInput::GetDataType() const
   }
   if (m_canInputConst)
   {
-    return eSGDT_Float;
+    return cs::eSGDT_Float;
   }
-  return eSGDT_Inval;
+  return cs::eSGDT_Inval;
 }

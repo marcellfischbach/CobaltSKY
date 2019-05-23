@@ -4,7 +4,7 @@
 
 #include <cobalt/master.refl.cc>
 
-void csCobaltSKYModule::Initialize()
+void cs::CobaltSKYModule::Initialize()
 {
   register_classes();
 }

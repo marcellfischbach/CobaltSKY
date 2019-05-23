@@ -8,7 +8,7 @@
 
 #define USE_QT_OPENGL_WIDGET 
 
-struct iRenderTarget;
+struct cs::iRenderTarget;
 
 #ifdef USE_QT_OPENGL_WIDGET
 #include <QOpenGLWidget>
@@ -30,7 +30,7 @@ public:
     m_clear = clear;
   } 
   
-  iRenderTarget *GetRenderTarget()
+  cs::iRenderTarget *GetRenderTarget()
   {
     return m_renderTarget.GetRenderTarget();
   }
@@ -46,7 +46,7 @@ private:
 };
 #else
 
-class csTexture2DWrapper;
+class cs::Texture2DWrapper;
 class EDITOR_API RenderWidget : public QWidget
 {
   Q_OBJECT
@@ -64,21 +64,21 @@ public:
     m_clear = clear;
   }
 
-  iRenderTarget *GetRenderTarget()
+  cs::iRenderTarget *GetRenderTarget()
   {
     return m_renderTarget;
   }
-  const iRenderTarget *GetRenderTarget() const
+  const cs::iRenderTarget *GetRenderTarget() const
   {
     return m_renderTarget;
   }
 
 
-  csTexture2DWrapper *GetColorTexture()
+  cs::Texture2DWrapper *GetColorTexture()
   {
     return m_colorTexture;
   }
-  const csTexture2DWrapper *GetColorTexture() const
+  const cs::Texture2DWrapper *GetColorTexture() const
   {
     return m_colorTexture;
   }
@@ -97,8 +97,8 @@ private:
 private:
   QString m_name;
   //GLuint m_vao;
-  iRenderTarget *m_renderTarget;
-  csTexture2DWrapper *m_colorTexture;
+  cs::iRenderTarget *m_renderTarget;
+  cs::Texture2DWrapper *m_colorTexture;
 
   csUInt8 *m_buffer;
   QImage *m_bufferImage;

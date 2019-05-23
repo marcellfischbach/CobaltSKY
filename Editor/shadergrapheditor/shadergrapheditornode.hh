@@ -7,29 +7,32 @@
 #include <cobalt/graphics/shadergraph/cssgshadergraph.hh>
 #include <map>
 
-class csSGNode;
-class csSGShaderGraph;
+namespace
+{
+class SGNode;
+class SGShaderGraph;
+}
 class NodeGraphNodeValueProperty;
 class ShaderGraphEditorNode : public NodeGraphNode
 {
 public:
-  ShaderGraphEditorNode(csSGShaderGraph *shaderGraph);
-  ShaderGraphEditorNode(csSGNode *node);
+  ShaderGraphEditorNode(cs::SGShaderGraph *shaderGraph);
+  ShaderGraphEditorNode(cs::SGNode *node);
   virtual ~ShaderGraphEditorNode();
 
   NodeGraphNodeAnchor* GetInputAnchor(csUInt32 idx) const;
   NodeGraphNodeAnchor* GetOutputAnchor(csUInt32 idx) const;
 
-  csSGShaderGraph *GetShaderGraph() const;
-  csSGNode *GetSGNode() const;
+  cs::SGShaderGraph *GetShaderGraph() const;
+  cs::SGNode *GetSGNode() const;
 
   void UpdateValues();
 
 private:
-  csSGShaderGraph *m_shaderGraph;
-  csSGNode *m_sgNode;
+  cs::SGShaderGraph *m_shaderGraph;
+  cs::SGNode *m_sgNode;
 
-  csResourceLocator m_texturePreviewResourceLocator;
+  cs::ResourceLocator m_texturePreviewResourceLocator;
 
   std::map<unsigned, NodeGraphNodeValueProperty*> m_valueProperties;
   std::map<csUInt32, NodeGraphNodeAnchor *> m_inputAnchors;

@@ -14,19 +14,19 @@ csParticleRendererGL4::~csParticleRendererGL4()
 
 }
 
-void csParticleRendererGL4::Render(iGraphics *renderer, csCollection<csRenderState*> &particles)
+void csParticleRendererGL4::Render(cs::iGraphics *renderer, cs::Collection<cs::RenderState*> &particles)
 {
   renderer->SetBlendEnabled(true);
   renderer->SetDepthMask(false);
   for (csSize i = 0; i<particles.length; ++i)
   {
-    csRenderState *renderState = particles[i];
+    cs::RenderState *renderState = particles[i];
     if (!renderState)
     {
       continue;
     }
 
-    renderState->Render(renderer, eRP_ForwardUnlit);
+    renderState->Render(renderer, cs::eRP_ForwardUnlit);
   }
 }
 

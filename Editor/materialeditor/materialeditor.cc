@@ -21,7 +21,7 @@
 #include <editor/components/baseeditorwidget.hh>
 #include <materialeditor/materialeditorevents.hh>
 
-void material_attribute_changed(csEvent &event, void *ptr);
+void material_attribute_changed(cs::Event &event, void *ptr);
 
 MaterialEditor::MaterialEditor()
   : AbstractAssetEditor()
@@ -48,10 +48,10 @@ MaterialEditor::~MaterialEditor()
 
 void MaterialEditor::UpdateAsset()
 {
-  const csResourceLocator &locator = GetAsset()->GetResourceLocator();
+  const cs::ResourceLocator &locator = GetAsset()->GetResourceLocator();
 
 
-  m_material = csResourceManager::Get()->Aquire<csMaterialWrapper>(locator);
+  m_material = cs::ResourceManager::Get()->Aquire<cs::MaterialWrapper>(locator);
   m_widget->SetMaterial(m_material);
 
   m_properties->SetMaterial(m_material);
@@ -104,13 +104,13 @@ void MaterialEditor::Save()
 
 }
 
-void MaterialEditor::MaterialAttributeChanged(const csResourceLocator &materialLocator, const std::string &attributeID, const std::string &attribureName)
+void MaterialEditor::MaterialAttributeChanged(const cs::ResourceLocator &materialLocator, const std::string &attributeID, const std::string &attribureName)
 {
   printf("MaterialEditor::AttributeChanged %s -> %s -> %s\n",
     materialLocator.GetDebugName().c_str(),
     attributeID.c_str(),
     attribureName.c_str());
-  csResourceLocator locator = m_material->Get()->GetMaterialDef()->GetLocator();
+  cs::ResourceLocator locator = m_material->Get()->GetMaterialDef()->GetLocator();
   if (Editor::Get()->GetProject()->GetModel()->IsFinalLocator(materialLocator))
   {
     m_properties->AttributeChanged(attributeID, attribureName);
@@ -122,7 +122,7 @@ void MaterialEditor::MaterialAttributeChanged(const csResourceLocator &materialL
 
 }
 
-void material_attribute_changed(csEvent &event, void *ptr)
+void material_attribute_changed(cs::Event &event, void *ptr)
 {
   MaterialEditorAttributeChanged &meac = (MaterialEditorAttributeChanged&)event;
   reinterpret_cast<MaterialEditor*>(ptr)->MaterialAttributeChanged(meac.GetMaterialLocator(), meac.GetAttributeID(), meac.GetAttributeName());
@@ -159,8 +159,8 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
-  csMaterial *material = m_material->Get();
-  csMaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
+  cs::Material *material = m_material->Get();
+  cs::MaterialDefWrapper *materialDefWrapper = material->GetMaterialDef();
   if (!materialDefWrapper || !materialDefWrapper->IsValid())
   {
     return;
@@ -171,7 +171,7 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
     materialDefEntry->AddAttribute("locator", materialDefWrapper->GetLocator().AsAnonymous().Encode());
   }
 
-  csMaterialDef *materialDef = materialDefWrapper->Get();
+  cs::MaterialDef *materialDef = materialDefWrapper->Get();
 
   for (csSize i = 0, in = materialDef->GetNumberOfParameters(); i < in; ++i)
   {
@@ -188,39 +188,39 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
 
     switch (materialDef->GetParamType(i))
     {
-    case eSPT_Float:
+    case cs::eSPT_Float:
       parameterEntry->AddChild(file.CreateEntry("float"))
           ->AddAttributeFloat(material->GetFloat(i));
       break;
-    case eSPT_Vector2:
+    case cs::eSPT_Vector2:
       parameterEntry->AddChild(file.CreateEntry("float2"))
           ->AddAttributeFloat(material->GetFloat2(i).x)
           ->AddAttributeFloat(material->GetFloat2(i).y);
       break;
-    case eSPT_Vector3:
+    case cs::eSPT_Vector3:
       parameterEntry->AddChild(file.CreateEntry("float3"))
           ->AddAttributeFloat(material->GetFloat3(i).x)
           ->AddAttributeFloat(material->GetFloat3(i).y)
           ->AddAttributeFloat(material->GetFloat3(i).z);
       break;
-    case eSPT_Vector4:
+    case cs::eSPT_Vector4:
       parameterEntry->AddChild(file.CreateEntry("float4"))
           ->AddAttributeFloat(material->GetFloat4(i).x)
           ->AddAttributeFloat(material->GetFloat4(i).y)
           ->AddAttributeFloat(material->GetFloat4(i).y)
           ->AddAttributeFloat(material->GetFloat4(i).w);
       break;
-    case eSPT_Color4:
+    case cs::eSPT_Color4:
       parameterEntry->AddChild(file.CreateEntry("color4"))
           ->AddAttributeFloat(material->GetColor4(i).r)
           ->AddAttributeFloat(material->GetColor4(i).g)
           ->AddAttributeFloat(material->GetColor4(i).b)
           ->AddAttributeFloat(material->GetColor4(i).a);
       break;
-    case eSPT_Texture:
+    case cs::eSPT_Texture:
       if (material->GetTexture(i))
       {
-        csResourceLocator loc = material->GetTexture(i)->GetLocator();
+        cs::ResourceLocator loc = material->GetTexture(i)->GetLocator();
         parameterEntry->AddChild(file.CreateEntry("locator"))
             ->AddAttribute("locator", loc.Encode());
       }

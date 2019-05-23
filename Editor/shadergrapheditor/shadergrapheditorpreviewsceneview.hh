@@ -4,20 +4,24 @@
 #include <shadergrapheditor/shadergrapheditorexport.hh>
 #include <editor/components/preview/previewsceneview.hh>
 
-class csMaterialDefWrapper;
-class csMaterialWrapper;
+namespace cs
+{
+class MaterialDefWrapper;
+class MaterialWrapper;
+}
+
 class ShaderGraphEditorPreviewSceneView : public PreviewSceneView
 {
 public:
   ShaderGraphEditorPreviewSceneView(QWidget *parent);
   virtual ~ShaderGraphEditorPreviewSceneView();
 
-  void SetMaterial(csMaterialDefWrapper *material);
+  void SetMaterial(cs::MaterialDefWrapper *material);
   void UpdateMaterial();
 
 protected:
   virtual void initializeGL();
 
 private:
-  csMaterialWrapper *m_materialInstance;
+  cs::MaterialWrapper *m_materialInstance;
 };

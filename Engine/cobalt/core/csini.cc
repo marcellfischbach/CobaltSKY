@@ -4,7 +4,7 @@
 #include <iostream>
 
 const std::string MasterGroup = "master";
-csINI::csINI()
+cs::INI::INI()
 {
   Group masterGroup;
   masterGroup.name = MasterGroup;
@@ -52,12 +52,12 @@ namespace
 
 }
 
-bool csINI::Import(const std::string &fileName)
+bool cs::INI::Import(const std::string &fileName)
 {
   std::ifstream infile(fileName);
   if (!infile.is_open())
   {
-    std::cerr << "csINI: Unable to open file: " << fileName << std::endl;
+    std::cerr << "cs::INI: Unable to open file: " << fileName << std::endl;
     return false;
   }
 
@@ -81,7 +81,7 @@ bool csINI::Import(const std::string &fileName)
       std::string groupString = ::strip_back(plainLine);
       if (groupString[groupString.length() - 1] != ']')
       {
-        std::cerr << "csINI: Unable to parse line: " << line << std::endl;
+        std::cerr << "cs::INI: Unable to parse line: " << line << std::endl;
         continue;
       }
       std::string groupName = groupString.substr(1, groupString.length() - 2);
@@ -106,13 +106,13 @@ bool csINI::Import(const std::string &fileName)
     size_t sepIdx = plainLine.find('=');
     if (sepIdx == -1)
     {
-      std::cerr << "csINI: Unable to parse line: " << line << std::endl;
+      std::cerr << "cs::INI: Unable to parse line: " << line << std::endl;
       continue;
     }
 
     if (!group)
     {
-      std::cerr << "csINI: No group found" << std::endl;
+      std::cerr << "cs::INI: No group found" << std::endl;
       continue;
     }
 
@@ -142,7 +142,7 @@ bool csINI::Import(const std::string &fileName)
   return true;
 }
 
-std::vector<std::string> csINI::FindSubGroupNames(const std::string &groupSubName) const
+std::vector<std::string> cs::INI::FindSubGroupNames(const std::string &groupSubName) const
 {
   std::string part = groupSubName + std::string(":");
   size_t length = part.length();
@@ -159,7 +159,7 @@ std::vector<std::string> csINI::FindSubGroupNames(const std::string &groupSubNam
   return result;
 }
 
-const csINI::Group *csINI::GetGroup(const std::string &group) const
+const cs::INI::Group *cs::INI::GetGroup(const std::string &group) const
 {
   std::string gr = group;
   if (gr.empty())
@@ -176,7 +176,7 @@ const csINI::Group *csINI::GetGroup(const std::string &group) const
   return &it->second;
 }
 
-const csINI::Entry *csINI::GetEntry(const Group *group, const std::string &entry) const
+const cs::INI::Entry *cs::INI::GetEntry(const Group *group, const std::string &entry) const
 {
   if (group)
   {
@@ -191,9 +191,9 @@ const csINI::Entry *csINI::GetEntry(const Group *group, const std::string &entry
   }
   return 0;
 }
-std::string csINI::GetEntryValue(const Group *group, const std::string &entry) const
+std::string cs::INI::GetEntryValue(const Group *group, const std::string &entry) const
 {
-  const csINI::Entry *ent = GetEntry(group, entry);
+  const cs::INI::Entry *ent = GetEntry(group, entry);
   if (ent)
   {
     return ent->value;
@@ -202,49 +202,49 @@ std::string csINI::GetEntryValue(const Group *group, const std::string &entry) c
 }
 
 
-bool csINI::HasGroup(const std::string &group) const
+bool cs::INI::HasGroup(const std::string &group) const
 {
   return m_groups.find(group) != m_groups.end();
 }
 
-bool csINI::HasEntry(const std::string &entry) const
+bool cs::INI::HasEntry(const std::string &entry) const
 {
   return HasEntry(MasterGroup, entry);
 }
 
-std::string csINI::GetValue(const std::string &entry) const
+std::string cs::INI::GetValue(const std::string &entry) const
 {
   return GetValue(MasterGroup, entry);
 }
 
-int csINI::GetIntValue(const std::string &entry, int defaultValue) const
+int cs::INI::GetIntValue(const std::string &entry, int defaultValue) const
 {
   return GetIntValue(MasterGroup, entry, defaultValue);
 }
 
 
-float csINI::GetFloatValue(const std::string &entry, float defaultValue) const
+float cs::INI::GetFloatValue(const std::string &entry, float defaultValue) const
 {
   return GetFloatValue(MasterGroup, entry, defaultValue);
 }
 
 
-bool csINI::GetBoolValue(const std::string &entry, bool defaultValue) const
+bool cs::INI::GetBoolValue(const std::string &entry, bool defaultValue) const
 {
   return GetFloatValue(MasterGroup, entry, defaultValue);
 }
 
-bool csINI::HasEntry(const std::string &group, const std::string &entry) const
+bool cs::INI::HasEntry(const std::string &group, const std::string &entry) const
 {
   return GetEntry(GetGroup(group), entry);
 }
 
-std::string csINI::GetValue(const std::string &group, const std::string &entry) const
+std::string cs::INI::GetValue(const std::string &group, const std::string &entry) const
 {
   return GetEntryValue(GetGroup(group), entry);
 }
 
-int csINI::GetIntValue(const std::string &group, const std::string &entry, int defaultValue) const
+int cs::INI::GetIntValue(const std::string &group, const std::string &entry, int defaultValue) const
 {
   std::string value = GetEntryValue(GetGroup(group), entry);
   if (value.empty())
@@ -256,7 +256,7 @@ int csINI::GetIntValue(const std::string &group, const std::string &entry, int d
 }
 
 
-float csINI::GetFloatValue(const std::string &group, const std::string &entry, float defaultValue) const
+float cs::INI::GetFloatValue(const std::string &group, const std::string &entry, float defaultValue) const
 {
   std::string value = GetEntryValue(GetGroup(group), entry);
   if (value.empty())
@@ -268,7 +268,7 @@ float csINI::GetFloatValue(const std::string &group, const std::string &entry, f
 }
 
 
-bool csINI::GetBoolValue(const std::string &group, const std::string &entry, bool defaultValue) const
+bool cs::INI::GetBoolValue(const std::string &group, const std::string &entry, bool defaultValue) const
 {
   std::string value = GetEntryValue(GetGroup(group), entry);
   if (value.empty())
@@ -280,16 +280,16 @@ bool csINI::GetBoolValue(const std::string &group, const std::string &entry, boo
 }
 
 
-void csINI::Debug() const
+void cs::INI::Debug() const
 {
-  std::cout << "csINI: Debug" << std::endl;
+  std::cout << "cs::INI: Debug" << std::endl;
   for (const std::pair<std::string, Group> &entry : m_groups)
   {
     const Group &group = entry.second;
-    std::cout << "csINI:   Group: " << group.name << std::endl;
+    std::cout << "cs::INI:   Group: " << group.name << std::endl;
     for (const Entry &entry : group.entries)
     {
-      std::cout << "csINI:     Entry: '" << entry.key << "' = '" << entry.value << "'" << std::endl;
+      std::cout << "cs::INI:     Entry: '" << entry.key << "' = '" << entry.value << "'" << std::endl;
     }
   }
 }

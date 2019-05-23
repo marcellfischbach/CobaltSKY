@@ -6,11 +6,16 @@
 
 #define CS_FLOAT4_NAME "Assemble/Float4"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGFloat4 : public CS_SUPER(csSGNode)
+class CSE_API SGFloat4 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGFloat4();
-  virtual ~csSGFloat4() { };
+  SGFloat4();
+  virtual ~SGFloat4() { };
 };
+
+}

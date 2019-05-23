@@ -41,8 +41,8 @@ public:
   virtual void SetName (const std::string &name);
   virtual const std::string &GetName() const;
 
-  const csResourceLocator &GetResourceLocator() const;
-  virtual const csResourceLocator WithNewName(const std::string &newName) const = 0;
+  const cs::ResourceLocator &GetResourceLocator() const;
+  virtual const cs::ResourceLocator WithNewName(const std::string &newName) const = 0;
 
   virtual bool IsAssetNode() const;
   virtual AssetNode *AsAssetNode();
@@ -74,7 +74,7 @@ protected:
   Node(Model *model, Type type);
 
   void UpdateResourceLocator();
-  virtual csResourceLocator GetNewResourceLocator() = 0;
+  virtual cs::ResourceLocator GetNewResourceLocator() = 0;
 
   virtual void DebugNode() const = 0;
 
@@ -86,7 +86,7 @@ protected:
   Type m_type;
   Model *m_model;
 
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
 
   Node *m_parent;
   std::vector<Node*> m_children;

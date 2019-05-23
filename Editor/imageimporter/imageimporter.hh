@@ -25,7 +25,7 @@ public:
 
   virtual void SetEnabled(bool enable);
 
-  virtual csResourceLocator Import(const asset::model::Folder *folder);
+  virtual cs::ResourceLocator Import(const asset::model::Folder *folder);
 
 private:
   std::filesystem::path m_path;

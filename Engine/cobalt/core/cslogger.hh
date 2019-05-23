@@ -9,16 +9,19 @@
 #include <windows.h>
 #endif
 
-class CSE_API csLogger
+namespace cs
+{
+
+class CSE_API Logger
 {
 public:
-  csLogger(const std::string &name = std::string(""));
+  Logger(const std::string& name = std::string(""));
 
-  void Debug(const std::string &debug);
-  void Info(const std::string &info);
-  void Warn(const std::string &warning);
-  void Error(const std::string &error);
-  void Fatal(const std::string &fatal);
+  void Debug(const std::string& debug);
+  void Info(const std::string& info);
+  void Warn(const std::string& warning);
+  void Error(const std::string& error);
+  void Fatal(const std::string& fatal);
 
 private:
   bool m_debug = true;
@@ -33,4 +36,7 @@ private:
   HANDLE m_consoleHandle;
 #endif
 };
+
+
+}
 

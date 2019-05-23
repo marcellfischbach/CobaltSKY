@@ -4,18 +4,18 @@
 #include <cobalt/graphics/isampler.hh>
 
 
-csSamplerAssetCSFLoader::csSamplerAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::SamplerAssetCSFLoader::SamplerAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
-csSamplerAssetCSFLoader::~csSamplerAssetCSFLoader()
+cs::SamplerAssetCSFLoader::~SamplerAssetCSFLoader()
 {
 
 }
 
-bool csSamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::SamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -26,9 +26,9 @@ bool csSamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLoc
 
 namespace
 {
-  csFilterMode evalFilterMode(const std::string &filterString)
+  cs::eFilterMode evalFilterMode(const std::string &filterString)
   {
-#define IF_FILTER(flt) if (filterString == std::string (#flt)) return eFM_##flt
+#define IF_FILTER(flt) if (filterString == std::string (#flt)) return cs::eFM_##flt
 #define ELSE_IF_FILTER(flt) else IF_FILTER(flt)
 
     IF_FILTER(MinMagNearest);
@@ -46,12 +46,12 @@ namespace
     ELSE_IF_FILTER(Anisotropic);
 #undef IF_FILTER
 #undef ELSE_IF_FILTER
-    return eFM_MinMagMipLinear;
+    return cs::eFM_MinMagMipLinear;
   }
 
-  csTextureAddressMode evalAddressMode(const std::string &addressModeString)
+  cs::eTextureAddressMode evalAddressMode(const std::string &addressModeString)
   {
-#define IF_ADDRESS(addr) if (addressModeString == std::string (#addr)) return eTAM_##addr
+#define IF_ADDRESS(addr) if (addressModeString == std::string (#addr)) return cs::eTAM_##addr
 #define ELSE_IF_ADDRESS(addr) else IF_ADDRESS(addr)
     IF_ADDRESS(Repeat);
     ELSE_IF_ADDRESS(RepeatMirror);
@@ -60,23 +60,23 @@ namespace
     ELSE_IF_ADDRESS(MirrowOnce);
 #undef IF_ADDRESS
 #undef ELSE_IF_ADDRESS
-    return  eTAM_Repeat;
+    return  cs::eTAM_Repeat;
   }
 
-  csTextureCompareMode evalCompareMode(const std::string &compareString)
+  cs::eTextureCompareMode evalCompareMode(const std::string &compareString)
   {
-#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return eTCM_##cmp
+#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return cs::eTCM_##cmp
 #define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
     IF_COMPARE(CompareToR);
     ELSE_IF_COMPARE(None);
 #undef IF_COMPARE
 #undef ELSE_IF_COMPARE
-    return eTCM_None;
+    return cs::eTCM_None;
   }
 
-  csTextureCompareFunc evalCompareFunc(const std::string &compareString)
+  cs::eTextureCompareFunc evalCompareFunc(const std::string &compareString)
   {
-#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return eTCF_##cmp
+#define IF_COMPARE(cmp) if (compareString == std::string (#cmp)) return cs::eTCF_##cmp
 #define ELSE_IF_COMPARE(cmp) else IF_COMPARE(cmp)
     IF_COMPARE(LessOrEqual);
     ELSE_IF_COMPARE(GreaterOrEqual);
@@ -88,25 +88,25 @@ namespace
     ELSE_IF_COMPARE(Never);
 #undef IF_COMPARE
 #undef ELSE_IF_COMPARE
-    return eTCF_Less;
+    return cs::eTCF_Less;
   }
 
 
 }
 
-const cs::Class *csSamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::SamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csSamplerWrapper::GetStaticClass();
+  return cs::SamplerWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csSamplerAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::SamplerAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  iSampler *sampler = csEng->CreateSampler();
+  cs::iSampler *sampler = csEng->CreateSampler();
   if (!sampler)
   {
     return nullptr;
   }
-  csSamplerWrapper *samplerWrapper = new csSamplerWrapper(sampler);
+  cs::SamplerWrapper *samplerWrapper = new cs::SamplerWrapper(sampler);
 
 
   const csfEntry *filterElement = entry->GetEntry("filter");

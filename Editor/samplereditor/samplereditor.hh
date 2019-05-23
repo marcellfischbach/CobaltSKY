@@ -42,9 +42,9 @@ private:
   void SetAddressU(csfEntry *entry);
   void SetAddressV(csfEntry *entry);
   void SetAddressW(csfEntry *entry);
-  void SetAddress(csfEntry *entry, csTextureAddressMode mode);
+  void SetAddress(csfEntry *entry, cs::eTextureAddressMode mode);
   void SetBorderColor(csfEntry *entry);
-  void SetTextureCompareMode(csfEntry *entry);
+  void Setcs::eTextureCompareMode(csfEntry *entry);
   void SetTextureCompareFunc(csfEntry *entry);
 
 private:

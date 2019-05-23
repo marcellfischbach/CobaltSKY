@@ -84,31 +84,31 @@ static bool g_CreateCharacter = false;
 
 int initialize();
 int main_loop();
-csEntityScene *create_scene(iGraphics *graphics);
-csSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height);
-csSubMesh* createCubeMesh(iGraphics *renderer, float size);
-csSubMesh *create_skeleton_mesh(iGraphics *renderer, float size);
-csPostProcessor *createPostProcessor(iGraphics *graphics);
-void UpdateCamera(csCamera *cameraNode, csCharacterEntity *character, const iMouse *mouser, const iKeyboard *keyboard);
-void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf);
-void handle_material(const iKeyboard *keyboard);
+cs::EntityScene *create_scene(cs::iGraphics *graphics);
+cs::SubMesh* createPlaneMesh(cs::iGraphics *renderer, float size, float height);
+cs::SubMesh* createCubeMesh(cs::iGraphics *renderer, float size);
+cs::SubMesh *create_skeleton_mesh(cs::iGraphics *renderer, float size);
+cs::PostProcessor *createPostProcessor(cs::iGraphics *graphics);
+void UpdateCamera(cs::Camera *cameraNode, cs::CharacterEntity *character, const cs::iMouse *mouser, const cs::iKeyboard *keyboard);
+void UpdateCharacter(cs::CharacterEntity *character, const cs::iMouse *mouse, const cs::iKeyboard *keyboard, float tpf);
+void handle_material(const cs::iKeyboard *keyboard);
 
 static SDLWindow *window = nullptr;
-static csGraphicsGL4 *graphicsGL4 = nullptr;
+static cs::GraphicsGL4 *graphicsGL4 = nullptr;
 static csBulletSystem *bulletSystem = nullptr;
-static const iKeyboard *keyboard = nullptr;
-static const iMouse *mouse = nullptr;
-static csCamera *camera = nullptr;
-static csCharacterEntity *character = nullptr;
-static iFrameProcessor* fp = nullptr;
-static csEntityScene *scene = nullptr;
-static iRenderTarget *rt = nullptr;
-static csDirectionalLight *directionalLight = nullptr;
-static csParticle *particle = nullptr;
+static const cs::iKeyboard *keyboard = nullptr;
+static const cs::iMouse *mouse = nullptr;
+static cs::Camera *camera = nullptr;
+static cs::CharacterEntity *character = nullptr;
+static cs::iFrameProcessor* fp = nullptr;
+static cs::EntityScene *scene = nullptr;
+static cs::iRenderTarget *rt = nullptr;
+static cs::DirectionalLight *directionalLight = nullptr;
+static cs::Particle *particle = nullptr;
 static csSize numParticles;
-static csEventBus masterBus;
-static csMaterial *material = nullptr;
-static csEntity *sphereEntity = nullptr;
+static cs::EventBus masterBus;
+static cs::Material *material = nullptr;
+static cs::Entity *sphereEntity = nullptr;
 static unsigned g_screenResolutionWidth;
 static unsigned g_screenResolutionHeight;
 
@@ -127,9 +127,9 @@ int main(int argc, char **argv)
   printf("Starting\n");
 
 
-  csSettings::Get()->Initialize(argc, argv);
-  csVFS::Get()->Initialize(csSettings::Get());
-  csEngine engine;
+  cs::Settings::Get()->Initialize(argc, argv);
+  cs::VFS::Get()->Initialize(cs::Settings::Get());
+  cs::Engine engine;
 
 
 
@@ -139,8 +139,8 @@ int main(int argc, char **argv)
   csInt16 posX = 100;
   csInt16 posY = 100;
 
-  g_screenResolutionWidth = csSettings::Get()->GetIntValue("video.resolution", 0, 1366);
-  g_screenResolutionHeight = csSettings::Get()->GetIntValue("video.resolution", 1, 768);
+  g_screenResolutionWidth = cs::Settings::Get()->GetIntValue("video.resolution", 0, 1366);
+  g_screenResolutionHeight = cs::Settings::Get()->GetIntValue("video.resolution", 1, 768);
 
 #if 0
   posX = -1500;
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 
   csEng->SetWindow(window);
 
-  graphicsGL4 = new csGraphicsGL4();
+  graphicsGL4 = new cs::GraphicsGL4();
   csEng->SetRenderer(graphicsGL4);
 
   bulletSystem = new csBulletSystem();
@@ -165,29 +165,29 @@ int main(int argc, char **argv)
   csEng->SetPhysicsSystem(bulletSystem);
 
 
-  csDynamicColliderState *state = new csDynamicColliderState();
+  cs::DynamicColliderState *state = new cs::DynamicColliderState();
   state->SetMass(10.0f);
-  state->SetInertia(csVector3f(1, 2, 3));
-  const csVector3f &inertia = state->GetInertia();
+  state->SetInertia(cs::Vector3f(1, 2, 3));
+  const cs::Vector3f &inertia = state->GetInertia();
   printf("StateInertia: %f %f %f\n", inertia.x, inertia.y, inertia.z);
 
-  const csDynamicColliderState *constState = static_cast<const csDynamicColliderState*>(state);
+  const cs::DynamicColliderState *constState = static_cast<const cs::DynamicColliderState*>(state);
   const cs::Class *stateClass = state->GetClass();
   std::vector<const cs::Function*> functions = stateClass->GetFunction("GetInertia");
   if (!functions.empty())
   {
     const cs::Function *func = functions[0];
-    const csVector3f &in = func->InvokeConstReference<const csVector3f>(constState);
+    const cs::Vector3f &in = func->InvokeConstReference<const cs::Vector3f>(constState);
     printf("StateInertia: %f %f %f\n", in.x, in.y, in.z);
   }
   functions = stateClass->GetFunction("SetInertia");
   if (!functions.empty())
   {
     const cs::Function *func = functions[0];
-    csVector3f in(2, 3, 4);
-    func->InvokeVoid<const csVector3f &>(state, in);
+    cs::Vector3f in(2, 3, 4);
+    func->InvokeVoid<const cs::Vector3f &>(state, in);
   }
-  const csVector3f &inertia2 = state->GetInertia();
+  const cs::Vector3f &inertia2 = state->GetInertia();
   printf("StateInertia: %f %f %f\n", inertia2.x, inertia2.y, inertia2.z);
 
 //  return 0;
@@ -200,17 +200,17 @@ int main(int argc, char **argv)
   return main_loop();
 }
 
-void handle_master_event(csEvent &event, void *ptr)
+void handle_master_event(cs::Event &event, void *ptr)
 {
   printf("HandleMasterEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
 
-void handle_an_event(csEvent &event, void *ptr)
+void handle_an_event(cs::Event &event, void *ptr)
 {
   printf("HandleAnEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
 
-void handle_an_other_event(csEvent &event, void *ptr)
+void handle_an_other_event(cs::Event &event, void *ptr)
 {
   printf("HandleAnOtherEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
@@ -227,53 +227,53 @@ int initialize()
   masterBus.Register(MyEvent0::GetStaticClass(), handle_an_event);
   masterBus.Register(MyEvent1::GetStaticClass(), handle_an_other_event);
 
-  iTexture2D *color0 = graphicsGL4->CreateTexture2D(ePF_RGBA, g_screenResolutionWidth, g_screenResolutionHeight, false);
+  cs::iTexture2D *color0 = graphicsGL4->CreateTexture2D(cs::ePF_RGBA, g_screenResolutionWidth, g_screenResolutionHeight, false);
   rt = graphicsGL4->CreateRenderTarget();
   rt->Initialize(g_screenResolutionWidth, g_screenResolutionHeight);
-  rt->AddColorTexture(new csTexture2DWrapper(color0));
+  rt->AddColorTexture(new cs::Texture2DWrapper(color0));
   rt->SetDepthBuffer(g_screenResolutionWidth, g_screenResolutionHeight);
   if (!rt->Finilize())
   {
     printf("Unable to create render target!!!\n");
   }
 
-  iSampler *sampler = graphicsGL4->CreateSampler();
-  sampler->SetFilter(eFM_MinMagNearest);
-  color0->SetSampler(new csSamplerWrapper(sampler));
+  cs::iSampler *sampler = graphicsGL4->CreateSampler();
+  sampler->SetFilter(cs::eFM_MinMagNearest);
+  color0->SetSampler(new cs::SamplerWrapper(sampler));
 
   scene = create_scene(graphicsGL4);
 
-  csBlueprint *bp = new csBlueprint();
+  cs::Blueprint *bp = new cs::Blueprint();
   
-  csBPEntity *bpEntity = new csBPEntity();
-  bpEntity->SetEntityClass(csEntity::GetStaticClass());
+  cs::BPEntity *bpEntity = new cs::BPEntity();
+  bpEntity->SetEntityClass(cs::Entity::GetStaticClass());
   bp->SetEntity(bpEntity);
 
-  csBPEntityState *spatialState01 = new csBPEntityState();
-  spatialState01->SetEntityStateClass(csSpatialState::GetStaticClass());
+  cs::BPEntityState *spatialState01 = new cs::BPEntityState();
+  spatialState01->SetEntityStateClass(cs::SpatialState::GetStaticClass());
   spatialState01->SetRoot(true);
   spatialState01->SetId(1);
   bpEntity->AddEntityState(spatialState01);
 
-  csBPEntityState *spatialState02 = new csBPEntityState();
-  spatialState02->SetEntityStateClass(csStaticMeshState::GetStaticClass());
+  cs::BPEntityState *spatialState02 = new cs::BPEntityState();
+  spatialState02->SetEntityStateClass(cs::StaticMeshState::GetStaticClass());
   spatialState02->SetId(2);
   spatialState02->SetParentId(1);
   bpEntity->AddEntityState(spatialState02);
 
-  csEntityWrapper *newEntity = bp->CreateEntity();
+  cs::EntityWrapper *newEntity = bp->CreateEntity();
 
 
-  camera = new csCamera();
+  camera = new cs::Camera();
   camera->SetPerspective(3.14159f / 4.0f, (float)g_screenResolutionHeight / (float)g_screenResolutionWidth);
-  camera->SetEye(csVector3f(7.814438f, 8.341354f, 7.872684f));
-  camera->SetSpot(csVector3f(0, 0, 0));
-  camera->SetUp(csVector3f(0, 0, 1));
+  camera->SetEye(cs::Vector3f(7.814438f, 8.341354f, 7.872684f));
+  camera->SetSpot(cs::Vector3f(0, 0, 0));
+  camera->SetUp(cs::Vector3f(0, 0, 1));
   camera->SetFar(10.0f * 1000 * 1000);
   camera->UpdateCameraMatrices();
 
 
-  csBinaryGradient::GetBinaryGradient();
+  cs::BinaryGradient::GetBinaryGradient();
 
   float v = 0.0f;
   float m = 0.0f;
@@ -287,7 +287,7 @@ int initialize()
     return -1;
   }
 
-  csPostProcessor *pp = createPostProcessor(graphicsGL4);
+  cs::PostProcessor *pp = createPostProcessor(graphicsGL4);
   printf("Using post processor: %s\n", (pp ? "yes" : "no"));
   fp->SetPostProcessor(pp);
 
@@ -298,7 +298,7 @@ int initialize()
   float cd = 0.0f;
   float ct = 0.0f;
   csUInt32 fps = 0;
-  csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli();
+  csUInt64 nextFPS = cs::Time::Get().GetCurrentTimeMilli();
 
   return 0;
 }
@@ -308,17 +308,17 @@ int main_loop()
 {
 
   csUInt32 fps = 0;
-  csUInt64 nextFPS = csTime::Get().GetCurrentTimeMilli() + 1000;
+  csUInt64 nextFPS = cs::Time::Get().GetCurrentTimeMilli() + 1000;
   bool anim = false;
   float angle = 0.0f;
   float height = 2.5f;
-  csUInt64 lastTime = csTime::Get().GetCurrentTimeMilli();
+  csUInt64 lastTime = cs::Time::Get().GetCurrentTimeMilli();
   unsigned run = 1;
   while (true)
   {
-    csTime::Get().Tick();
+    cs::Time::Get().Tick();
     fps++;
-    csUInt64 time = csTime::Get().GetCurrentTimeMilli();
+    csUInt64 time = cs::Time::Get().GetCurrentTimeMilli();
     if (time >= nextFPS)
     {
       csUInt16 idx = material->GetIndex("Roughness");
@@ -334,20 +334,20 @@ int main_loop()
     float tpf = (float)deltaT / 1000.0f;
 
     window->UpdateEvents();
-    if (keyboard->IsKeyPressed(eK_Esc))
+    if (keyboard->IsKeyPressed(cs::eK_Esc))
     {
       break;
     }
-    if (keyboard->IsKeyPressed(eK_P))
+    if (keyboard->IsKeyPressed(cs::eK_P))
       anim = !anim;
 
-    if (keyboard->IsKeyPressed(eK_U))
+    if (keyboard->IsKeyPressed(cs::eK_U))
     {
       MyEvent0 evt;
       masterBus << evt;
     }
 
-    if (keyboard->IsKeyPressed(eK_I))
+    if (keyboard->IsKeyPressed(cs::eK_I))
     {
       MyEvent1 evt;
       masterBus << evt;
@@ -361,8 +361,8 @@ int main_loop()
 
     scene->GetRoot()->UpdateBoundingBox();
 
-    iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
-    iTexture2D *colorTarget = cs::QueryClass<iTexture2D>(target->GetColorBuffer(0));
+    cs::iRenderTarget *target = fp->Render(scene->GetRoot(), camera, rt);
+    cs::iTexture2D *colorTarget = cs::QueryClass<cs::iTexture2D>(target->GetColorBuffer(0));
     //fp->Render(groupNode, camera, rt);
 
 
@@ -385,25 +385,25 @@ int main_loop()
       if (sphereEntity)
       {
         height = 2.5f + sin(angle* 4.0f) * 2.5f;
-        sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, height));
+        sphereEntity->GetTransformation().SetTranslation(cs::Vector3f(0.0f, 0.0f, height));
         sphereEntity->FinishTransformation();
       }
 
     }
-    directionalLight->SetArbDirection(csVector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.25f));
+    directionalLight->SetArbDirection(cs::Vector3f(1.0f * cos(angle), 1.0f * sin(angle), -0.25f));
   }
 
   return 0;
 }
 
 
-csMatrix4f create_matrix(const csVector3f &eye, const csVector3f &spot, const csVector3f &up)
+cs::Matrix4f create_matrix(const cs::Vector3f &eye, const cs::Vector3f &spot, const cs::Vector3f &up)
 {
-  csMatrix4f M;
-  csVector3f x, y, z;
-  csVector3f::Sub(spot, eye, y).Normalize();
-  csVector3f::Cross(y, up, x).Normalize();
-  csVector3f::Cross(x, y, z);
+  cs::Matrix4f M;
+  cs::Vector3f x, y, z;
+  cs::Vector3f::Sub(spot, eye, y).Normalize();
+  cs::Vector3f::Cross(y, up, x).Normalize();
+  cs::Vector3f::Cross(x, y, z);
 
   M.SetXAxis(x);
   M.SetYAxis(y);
@@ -416,7 +416,7 @@ csMatrix4f create_matrix(const csVector3f &eye, const csVector3f &spot, const cs
 
 
 
-csSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height)
+cs::SubMesh* createPlaneMesh(cs::iGraphics *renderer, float size, float height)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -457,31 +457,31 @@ csSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height)
   };
 
 
-  csVertexElement elements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
-    csVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
-    csVertexElement(eVST_Tangent, eDT_Float, 3, 0, sizeof(float) * 3, 2),
-    csVertexElement(eVST_BiNormal, eDT_Float, 3, 0, sizeof(float) * 3, 3),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 4),
-    csVertexElement()
+  cs::VertexElement elements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 4, 0, sizeof(float) * 4, 0),
+    cs::VertexElement(cs::eVST_Normal, cs::eDT_Float, 3, 0, sizeof(float) * 3, 1),
+    cs::VertexElement(cs::eVST_Tangent, cs::eDT_Float, 3, 0, sizeof(float) * 3, 2),
+    cs::VertexElement(cs::eVST_BiNormal, cs::eDT_Float, 3, 0, sizeof(float) * 3, 3),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, 0, sizeof(float) * 2, 4),
+    cs::VertexElement()
   };
 
-  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  iVertexBuffer *tanb = renderer->CreateVertexBuffer(sizeof(tangentBuffer), tangentBuffer, eBDM_Static);
-  iVertexBuffer *binb = renderer->CreateVertexBuffer(sizeof(biNormalBuffer), biNormalBuffer, eBDM_Static);
-  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  cs::iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *tanb = renderer->CreateVertexBuffer(sizeof(tangentBuffer), tangentBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *binb = renderer->CreateVertexBuffer(sizeof(biNormalBuffer), biNormalBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, cs::eBDM_Static);
+  cs::iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, cs::eBDM_Static);
+  cs::iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
-  csBoundingBox bbox;
-  bbox.Add(csVector3f(-s, -s, 0));
-  bbox.Add(csVector3f(s, s, 0));
+  cs::BoundingBox bbox;
+  bbox.Add(cs::Vector3f(-s, -s, 0));
+  bbox.Add(cs::Vector3f(s, s, 0));
   bbox.Finish();
 
-  csSubMesh *mesh = new csSubMesh();
-  mesh->SetIndexType(eDT_UnsignedShort);
-  mesh->SetPrimitiveType(ePT_Triangles);
+  cs::SubMesh *mesh = new cs::SubMesh();
+  mesh->SetIndexType(cs::eDT_UnsignedShort);
+  mesh->SetPrimitiveType(cs::ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
@@ -494,7 +494,7 @@ csSubMesh* createPlaneMesh(iGraphics *renderer, float size, float height)
   return mesh;
 }
 
-csSubMesh* createCubeMesh(iGraphics *renderer, float size)
+cs::SubMesh* createCubeMesh(cs::iGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -606,27 +606,27 @@ csSubMesh* createCubeMesh(iGraphics *renderer, float size)
   };
 
 
-  csVertexElement elements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
-    csVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 2),
-    csVertexElement()
+  cs::VertexElement elements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 4, 0, sizeof(float) * 4, 0),
+    cs::VertexElement(cs::eVST_Normal, cs::eDT_Float, 3, 0, sizeof(float) * 3, 1),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, 0, sizeof(float) * 2, 2),
+    cs::VertexElement()
   };
 
-  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  cs::iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, cs::eBDM_Static);
+  cs::iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, cs::eBDM_Static);
+  cs::iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
-  csBoundingBox bbox;
-  bbox.Add(csVector3f(-s, -s, -s));
-  bbox.Add(csVector3f(s, s, s));
+  cs::BoundingBox bbox;
+  bbox.Add(cs::Vector3f(-s, -s, -s));
+  bbox.Add(cs::Vector3f(s, s, s));
   bbox.Finish();
 
-  csSubMesh *mesh = new csSubMesh();
-  mesh->SetIndexType(eDT_UnsignedShort);
-  mesh->SetPrimitiveType(ePT_Triangles);
+  cs::SubMesh *mesh = new cs::SubMesh();
+  mesh->SetIndexType(cs::eDT_UnsignedShort);
+  mesh->SetPrimitiveType(cs::ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
@@ -638,7 +638,7 @@ csSubMesh* createCubeMesh(iGraphics *renderer, float size)
 }
 
 
-csSubMesh* create_skeleton_mesh(iGraphics *renderer, float size)
+cs::SubMesh* create_skeleton_mesh(cs::iGraphics *renderer, float size)
 {
   float s = size;
   float vertexBuffer[] = {
@@ -699,31 +699,31 @@ csSubMesh* create_skeleton_mesh(iGraphics *renderer, float size)
   };
 
 
-  csVertexElement elements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 4, 0, sizeof(float) * 4, 0),
-    csVertexElement(eVST_Normal, eDT_Float, 3, 0, sizeof(float) * 3, 1),
-    csVertexElement(eVST_BoneWeight, eDT_Float, 4, 0, sizeof(float) * 4, 2),
-    csVertexElement(eVST_BoneIndex, eDT_UnsignedShort, 4, 0, sizeof(unsigned short) * 4, 3),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 0, sizeof(float) * 2, 4),
-    csVertexElement()
+  cs::VertexElement elements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 4, 0, sizeof(float) * 4, 0),
+    cs::VertexElement(cs::eVST_Normal, cs::eDT_Float, 3, 0, sizeof(float) * 3, 1),
+    cs::VertexElement(cs::eVST_BoneWeight, cs::eDT_Float, 4, 0, sizeof(float) * 4, 2),
+    cs::VertexElement(cs::eVST_BoneIndex, cs::eDT_UnsignedShort, 4, 0, sizeof(unsigned short) * 4, 3),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, 0, sizeof(float) * 2, 4),
+    cs::VertexElement()
   };
 
-  iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, eBDM_Static);
-  iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, eBDM_Static);
-  iVertexBuffer *bwb = renderer->CreateVertexBuffer(sizeof(boneWeightBuffer), boneWeightBuffer, eBDM_Static);
-  iVertexBuffer *bib = renderer->CreateVertexBuffer(sizeof(boneIndexBuffer), boneIndexBuffer, eBDM_Static);
-  iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, eBDM_Static);
-  iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, eBDM_Static);
-  iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
+  cs::iVertexBuffer *vb = renderer->CreateVertexBuffer(sizeof(vertexBuffer), vertexBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *nb = renderer->CreateVertexBuffer(sizeof(normalBuffer), normalBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *bwb = renderer->CreateVertexBuffer(sizeof(boneWeightBuffer), boneWeightBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *bib = renderer->CreateVertexBuffer(sizeof(boneIndexBuffer), boneIndexBuffer, cs::eBDM_Static);
+  cs::iVertexBuffer *tb = renderer->CreateVertexBuffer(sizeof(texCoordBuffer), texCoordBuffer, cs::eBDM_Static);
+  cs::iIndexBuffer *ib = renderer->CreateIndexBuffer(sizeof(indexBuffer), indexBuffer, cs::eBDM_Static);
+  cs::iVertexDeclaration *vd = renderer->CreateVertexDeclaration(elements);
 
-  csBoundingBox bbox;
-  bbox.Add(csVector3f(-s * 4, -s * 4, -s * 4));
-  bbox.Add(csVector3f(s * 4, s * 4, s * 4));
+  cs::BoundingBox bbox;
+  bbox.Add(cs::Vector3f(-s * 4, -s * 4, -s * 4));
+  bbox.Add(cs::Vector3f(s * 4, s * 4, s * 4));
   bbox.Finish();
 
-  csSubMesh *mesh = new csSubMesh();
-  mesh->SetIndexType(eDT_UnsignedShort);
-  mesh->SetPrimitiveType(ePT_Triangles);
+  cs::SubMesh *mesh = new cs::SubMesh();
+  mesh->SetIndexType(cs::eDT_UnsignedShort);
+  mesh->SetPrimitiveType(cs::ePT_Triangles);
   mesh->SetVertexDeclaration(vd);
   mesh->AddVertexBuffer(vb);
   mesh->AddVertexBuffer(nb);
@@ -736,15 +736,15 @@ csSubMesh* create_skeleton_mesh(iGraphics *renderer, float size)
   return mesh;
 }
 
-csParticle *CreateParticle(iGraphics *graphics, csSize numParticles)
+cs::Particle *CreateParticle(cs::iGraphics *graphics, csSize numParticles)
 {
-  csParticle *particle = new csParticle();
+  cs::Particle *particle = new cs::Particle();
   if (particle->Initialize(graphics, numParticles))
   {
     particle->SetNumberOfRenderParticles(numParticles);
 
-    csParticle::ParticleData *data;
-    if (particle->GetParticleBuffer()->Lock(0, (void**)&data, eBAM_ReadWrite))
+    cs::Particle::ParticleData *data;
+    if (particle->GetParticleBuffer()->Lock(0, (void**)&data, cs::eBAM_ReadWrite))
     {
 
       srand(4567898);
@@ -753,8 +753,8 @@ csParticle *CreateParticle(iGraphics *graphics, csSize numParticles)
         float x = (float)rand() / (float)RAND_MAX;
         float y = (float)rand() / (float)RAND_MAX;
         float z = (float)rand() / (float)RAND_MAX;
-        data[i].position = csVector3f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f);
-        data[i].size = csVector2f(1.0f, 1.0f);
+        data[i].position = cs::Vector3f(-10.0f + x * 20.0f, -10.0f + y * 20.0f, z * 20.0f);
+        data[i].size = cs::Vector2f(1.0f, 1.0f);
         data[i].rotation = 0.0f;
         data[i].timeToLive = -1.0f;// 5.0f + (float)(5.0 * (float)rand() / (float)RAND_MAX);
       }
@@ -766,16 +766,16 @@ csParticle *CreateParticle(iGraphics *graphics, csSize numParticles)
 }
 
 
-void UpdateCamera(csCamera *cam, csCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard)
+void UpdateCamera(cs::Camera *cam, cs::CharacterEntity *character, const cs::iMouse *mouse, const cs::iKeyboard *keyboard)
 {
   if (character)
   {
     static float upSight = 0.0f;
-    csTransformation trans = character->GetTransformation();
-    csVector3f pos = trans.GetGlobalTranslation(pos);
+    cs::Transformation trans = character->GetTransformation();
+    cs::Vector3f pos = trans.GetGlobalTranslation(pos);
     pos.z += 0.8f;
-    csVector3f dir = trans.GetGlobalYAxis(dir);
-    csVector3f spot = csVector3f::Add(pos, dir, spot);
+    cs::Vector3f dir = trans.GetGlobalYAxis(dir);
+    cs::Vector3f spot = cs::Vector3f::Add(pos, dir, spot);
     upSight += (float)-mouse->GetRelY() / 1000.0f;
     if (upSight > 2.0f) upSight = 2.0f;
     if (upSight < -2.0f) upSight = -2.0f;
@@ -783,7 +783,7 @@ void UpdateCamera(csCamera *cam, csCharacterEntity *character, const iMouse *mou
 
     cam->SetEye(pos);
     cam->SetSpot(spot);
-    cam->SetUp(csVector3f(0, 0, 1));
+    cam->SetUp(cs::Vector3f(0, 0, 1));
     cam->UpdateCameraMatrices();
     return;
   }
@@ -794,57 +794,57 @@ void UpdateCamera(csCamera *cam, csCharacterEntity *character, const iMouse *mou
   if (rotV > 3.14f) rotV = 3.14f;
   if (rotV < -3.14f) rotV = -3.14f;
 
-  csMatrix4f TX, TZ, T;
+  cs::Matrix4f TX, TZ, T;
   TZ.SetRotationZ(rotH);
   TX.SetRotationX(rotV);
-  csMatrix4f::Mult(TZ, TX, T);
+  cs::Matrix4f::Mult(TZ, TX, T);
 
   float speed = 0.1f;
-  if (keyboard->IsKeyDown(eK_LShift) || keyboard->IsKeyDown(eK_RShift))
+  if (keyboard->IsKeyDown(cs::eK_LShift) || keyboard->IsKeyDown(cs::eK_RShift))
   {
     speed *= 2.0f;
   }
   float sx = 0.0f;
   float sy = 0.0f;
 
-  if (keyboard->IsKeyDown(eK_W))
+  if (keyboard->IsKeyDown(cs::eK_W))
   {
     sy += speed;
   }
-  if (keyboard->IsKeyDown(eK_S))
+  if (keyboard->IsKeyDown(cs::eK_S))
   {
     sy -= speed;
   }
-  if (keyboard->IsKeyDown(eK_D))
+  if (keyboard->IsKeyDown(cs::eK_D))
   {
     sx += speed;
   }
-  if (keyboard->IsKeyDown(eK_A))
+  if (keyboard->IsKeyDown(cs::eK_A))
   {
     sx -= speed;
   }
 
-  csVector3f dx = T.GetXAxis(dx);
-  csVector3f dy = T.GetYAxis(dy);
-  csVector3f camdir = dy;
-  csVector3f::Mul(dx, sx, dx);
-  csVector3f::Mul(dy, sy, dy);
-  csVector3f d = csVector3f::Add(dx, dy, d);
+  cs::Vector3f dx = T.GetXAxis(dx);
+  cs::Vector3f dy = T.GetYAxis(dy);
+  cs::Vector3f camdir = dy;
+  cs::Vector3f::Mul(dx, sx, dx);
+  cs::Vector3f::Mul(dy, sy, dy);
+  cs::Vector3f d = cs::Vector3f::Add(dx, dy, d);
 
-  csVector3f e = cam->GetEye();
-  csVector3f::Add(e, d, e);
-  csVector3f s;
-  csVector3f::Add(e, camdir, s);
+  cs::Vector3f e = cam->GetEye();
+  cs::Vector3f::Add(e, d, e);
+  cs::Vector3f s;
+  cs::Vector3f::Add(e, camdir, s);
   cam->SetEye(e);
   cam->SetSpot(s);
-  cam->SetUp(csVector3f(0, 0, 1));
+  cam->SetUp(cs::Vector3f(0, 0, 1));
   cam->UpdateCameraMatrices();
 
 
 }
 
 
-void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iKeyboard *keyboard, float tpf)
+void UpdateCharacter(cs::CharacterEntity *character, const cs::iMouse *mouse, const cs::iKeyboard *keyboard, float tpf)
 {
   if (!character)
   {
@@ -854,38 +854,38 @@ void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iK
   float sy = 0.0f;
   float speed = 5.0f * tpf;
   float rotate = (float)-mouse->GetRelX() / 1000.0f;
-  if (keyboard->IsKeyDown(eK_LShift))
+  if (keyboard->IsKeyDown(cs::eK_LShift))
   {
     speed *= 2.0f;
   }
-  if (keyboard->IsKeyDown(eK_Left) || keyboard->IsKeyDown(eK_A))
+  if (keyboard->IsKeyDown(cs::eK_Left) || keyboard->IsKeyDown(cs::eK_A))
   {
     sx -= speed;
   }
-  if (keyboard->IsKeyDown(eK_Right) || keyboard->IsKeyDown(eK_D))
+  if (keyboard->IsKeyDown(cs::eK_Right) || keyboard->IsKeyDown(cs::eK_D))
   {
     sx += speed;
   }
-  if (keyboard->IsKeyDown(eK_Up) || keyboard->IsKeyDown(eK_W))
+  if (keyboard->IsKeyDown(cs::eK_Up) || keyboard->IsKeyDown(cs::eK_W))
   {
     sy += speed;
   }
-  if (keyboard->IsKeyDown(eK_Down) || keyboard->IsKeyDown(eK_S))
+  if (keyboard->IsKeyDown(cs::eK_Down) || keyboard->IsKeyDown(cs::eK_S))
   {
     sy -= speed;
   }
-  if (keyboard->IsKeyPressed(eK_Space))
+  if (keyboard->IsKeyPressed(cs::eK_Space))
   {
     character->Jump();
   }
   character->Rotate(rotate);
 
 
-  csMatrix4f mat = character->GetTransformation().GetTransformation(mat);
-  csVector3f pos;
+  cs::Matrix4f mat = character->GetTransformation().GetTransformation(mat);
+  cs::Vector3f pos;
 
-  csVector3f direction(sx, sy, 0.0f);
-  csMatrix4f::Mult(mat, direction, direction);
+  cs::Vector3f direction(sx, sy, 0.0f);
+  cs::Matrix4f::Mult(mat, direction, direction);
 
 
   character->SetWalkDirection(direction);
@@ -893,26 +893,26 @@ void UpdateCharacter(csCharacterEntity *character, const iMouse *mouse, const iK
 
 
 
-csEntityScene *create_scene(iGraphics *graphics)
+cs::EntityScene *create_scene(cs::iGraphics *graphics)
 {
-  material = csEng->Get<csMaterial>("materials/DefaultMaterial.csf");
-  csStaticMeshState *groundMeshState = csEng->Get<csStaticMeshState>("models/ground_plane.xasset");
-  csStaticMeshState *gardenFenceMeshState = csEng->Get<csStaticMeshState>("models/garden_fence_Mesh.xasset");
-  csMaterial *groundMaterial = csEng->Get<csMaterial>("materials/Solid.csf");
+  material = csEng->Get<cs::Material>("materials/DefaultMaterial.csf");
+  cs::StaticMeshState *groundMeshState = csEng->Get<cs::StaticMeshState>("models/ground_plane.xasset");
+  cs::StaticMeshState *gardenFenceMeshState = csEng->Get<cs::StaticMeshState>("models/garden_fence_Mesh.xasset");
+  cs::Material *groundMaterial = csEng->Get<cs::Material>("materials/Solid.csf");
   printf("GroundMaterial: %p\n", groundMaterial);
 
   if (groundMaterial)
   {
-    //groundMaterial->SetFillMode(eFM_Wireframe);
+    //groundMaterial->SetFillMode(cs::eFM_Wireframe);
   }
 
-  csEntityScene *entityScene = new csEntityScene();
+  cs::EntityScene *entityScene = new cs::EntityScene();
 
   /*
-  csBlueprint *blueprint = csEng->Get<csBlueprint>("models/area.csf");
+  cs::Blueprint *blueprint = csEng->Get<cs::Blueprint>("models/area.csf");
   if (blueprint)
   {
-    csEntity *entity = blueprint->CreateEntity();
+    cs::Entity *entity = blueprint->CreateEntity();
     if (entity)
     {
       entity->FinishTransformation();
@@ -921,7 +921,7 @@ csEntityScene *create_scene(iGraphics *graphics)
   }
   */
 
-  csEntity *testEntity = csEng->Get<csEntity>("models/test_ref_bp.csf");
+  cs::Entity *testEntity = csEng->Get<cs::Entity>("models/test_ref_bp.csf");
   if (testEntity)
   {
     testEntity->FinishTransformation();
@@ -930,7 +930,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   unsigned numVerticesPerSide = 257;
   unsigned numVertices = numVerticesPerSide*numVerticesPerSide;
-  csTerrainMesh *terrainMesh = new csTerrainMesh();
+  cs::TerrainMesh *terrainMesh = new cs::TerrainMesh();
   float *heights = new float[numVertices];
   memset(heights, 0, sizeof(float) * numVertices);
 
@@ -948,12 +948,12 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   terrainMesh->Initialize(graphics, numVerticesPerSide, 8, 200.0f, 200.0f, heights, 0);
 
-  csStaticMeshState *terrainState = new csStaticMeshState();
+  cs::StaticMeshState *terrainState = new cs::StaticMeshState();
   terrainState->SetMesh(terrainMesh);
   terrainState->SetMaterial(0, groundMaterial);
   terrainState->SetCastShadow(true);
 
-  csEntity *terrainEntity = new csEntity();
+  cs::Entity *terrainEntity = new cs::Entity();
   terrainEntity->SetRootState(terrainState);
   terrainEntity->AddState(terrainState);
   terrainEntity->FinishTransformation();
@@ -961,7 +961,7 @@ csEntityScene *create_scene(iGraphics *graphics)
 
   // 
   // Add the ground plane with physics
-  csEntity *planeEntity = new csEntity();
+  cs::Entity *planeEntity = new cs::Entity();
   planeEntity->SetRootState(groundMeshState);
   planeEntity->AddState(groundMeshState);
   planeEntity->FinishTransformation();
@@ -972,11 +972,11 @@ csEntityScene *create_scene(iGraphics *graphics)
 #if 1
   for (unsigned i = 0; i < 10; ++i)
   {
-    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
-    //    csStaticMeshState *templeMeshState = csResourceManager::Get()->Load<csStaticMeshState>(csResourceLocator("models/temple.xasset"));
+    cs::StaticMeshState *templeMeshState = cs::ResourceManager::Get()->Load<cs::StaticMeshState>(cs::ResourceLocator("models/temple.xasset"));
+    //    cs::StaticMeshState *templeMeshState = cs::ResourceManager::Get()->Load<cs::StaticMeshState>(cs::ResourceLocator("models/temple.xasset"));
         //
         // Add the temple to the scene
-    csEntity *templeEntity = new csEntity();
+    cs::Entity *templeEntity = new cs::Entity();
     templeEntity->SetRootState(templeMeshState);
     templeEntity->AddState(templeMeshState);
     templeEntity->UpdateBoundingBox();
@@ -984,23 +984,23 @@ csEntityScene *create_scene(iGraphics *graphics)
     {
       float x = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
       float y = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
-      templeEntity->GetTransformation().SetTranslation(csVector3f(x, y, 2.0f));
+      templeEntity->GetTransformation().SetTranslation(cs::Vector3f(x, y, 2.0f));
     }
     else
     {
-      templeEntity->GetTransformation().SetTranslation(csVector3f(20.0f, 20.0f, 2.0f));
+      templeEntity->GetTransformation().SetTranslation(cs::Vector3f(20.0f, 20.0f, 2.0f));
     }
     //templeEntity->GetTransformation().SetRotationZ(0.25f);
     templeEntity->FinishTransformation();
     entityScene->AddEntity(templeEntity);
   }
 #else
-  csStaticMeshState *sphereMeshState = csEng->Get<csStaticMeshState>("models/sphere_Mesh.xasset");
-  sphereEntity = new csEntity();
+  cs::StaticMeshState *sphereMeshState = csEng->Get<cs::StaticMeshState>("models/sphere_Mesh.xasset");
+  sphereEntity = new cs::Entity();
   sphereEntity->SetRootState(sphereMeshState);
   sphereEntity->AddState(sphereMeshState);
   sphereEntity->UpdateBoundingBox();
-  sphereEntity->GetTransformation().SetTranslation(csVector3f(0.0f, 0.0f, 2.5f));
+  sphereEntity->GetTransformation().SetTranslation(cs::Vector3f(0.0f, 0.0f, 2.5f));
   //templeEntity->GetTransformation().SetRotationZ(0.25f);
   sphereEntity->FinishTransformation();
   entityScene->AddEntity(sphereEntity);
@@ -1009,11 +1009,11 @@ csEntityScene *create_scene(iGraphics *graphics)
   //
   // Add the temple to the scene
   /*
-  csEntity *gardenFenceEntity = new csEntity();
+  cs::Entity *gardenFenceEntity = new cs::Entity();
   gardenFenceEntity->SetRootState(gardenFenceMeshState);
   gardenFenceEntity->AddState(gardenFenceMeshState);
   gardenFenceEntity->UpdateBoundingBox();
-  gardenFenceEntity->GetTransformation().SetTranslation(csVector3f(5.0f, 5.0f, 2.0f));
+  gardenFenceEntity->GetTransformation().SetTranslation(cs::Vector3f(5.0f, 5.0f, 2.0f));
   //templeEntity->GetTransformation().SetRotationZ(0.25f);
   gardenFenceEntity->FinishTransformation();
   entityScene->AddEntity(gardenFenceEntity);
@@ -1024,17 +1024,17 @@ csEntityScene *create_scene(iGraphics *graphics)
   // Setup the character 
   if (g_CreateCharacter)
   {
-    character = new csCharacterEntity();
+    character = new cs::CharacterEntity();
 
-    csStaticMeshState *characterMesh = new csStaticMeshState();
-    csSpatialState *spatialState = new csSpatialState();
-    //  characterMesh->SetMesh(csResourceManager::Get()->GetOrLoad<csMesh>(csResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
-    //  characterMesh->SetMaterial(csResourceManager::Get()->GetOrLoad<csMaterialInstance>(csResourceLocator("${materials}/materials.xml", "White")));
+    cs::StaticMeshState *characterMesh = new cs::StaticMeshState();
+    cs::SpatialState *spatialState = new cs::SpatialState();
+    //  characterMesh->SetMesh(cs::ResourceManager::Get()->GetOrLoad<cs::Mesh>(cs::ResourceLocator("${models}/character_capsule.staticmesh", "Mesh")));
+    //  characterMesh->SetMaterial(cs::ResourceManager::Get()->GetOrLoad<cs::MaterialInstance>(cs::ResourceLocator("${materials}/materials.xml", "White")));
 
     character->SetRootState(spatialState);
     character->AddState(spatialState);
 
-    character->GetTransformation().SetTranslation(csVector3f(10.0f, 10.0f, 20.0f));
+    character->GetTransformation().SetTranslation(cs::Vector3f(10.0f, 10.0f, 20.0f));
     character->FinishTransformation();
 
     entityScene->AddEntity(character);
@@ -1043,16 +1043,16 @@ csEntityScene *create_scene(iGraphics *graphics)
   // Add Lighting
 
 
-  directionalLight = new csDirectionalLight();
-  directionalLight->SetColor(csColor4f(1.0f, 1.0f, 1.0f));
-  directionalLight->SetArbDirection(csVector3f(-1.0f, -1.0f, -0.0f));
+  directionalLight = new cs::DirectionalLight();
+  directionalLight->SetColor(cs::Color4f(1.0f, 1.0f, 1.0f));
+  directionalLight->SetArbDirection(cs::Vector3f(-1.0f, -1.0f, -0.0f));
   directionalLight->SetCastShadow(true);
   directionalLight->SetShadowIntensity(0.0f);
 
-  csLightState *directionalLightState = new csLightState();
+  cs::LightState *directionalLightState = new cs::LightState();
   directionalLightState->SetLight(directionalLight);
 
-  csEntity *directionalLightEntity = new csEntity();
+  cs::Entity *directionalLightEntity = new cs::Entity();
   directionalLightEntity->SetRootState(directionalLightState);
   directionalLightEntity->AddState(directionalLightState);
   entityScene->AddEntity(directionalLightEntity);
@@ -1064,42 +1064,42 @@ csEntityScene *create_scene(iGraphics *graphics)
 }
 
 
-iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height, csPixelFormat colorFormat, bool createDepthTexture)
+cs::iRenderTarget *createTarget(cs::iGraphics *graphics, unsigned width, unsigned height, cs::ePixelFormat colorFormat, bool createDepthTexture)
 {
-  static iSampler *colorSampler = 0;
+  static cs::iSampler *colorSampler = 0;
   if (!colorSampler)
   {
     colorSampler = graphics->CreateSampler();
-    colorSampler->SetFilter(eFM_MinMagNearest);
-    colorSampler->SetAddressU(eTAM_Clamp);
-    colorSampler->SetAddressV(eTAM_Clamp);
-    colorSampler->SetAddressW(eTAM_Clamp);
+    colorSampler->SetFilter(cs::eFM_MinMagNearest);
+    colorSampler->SetAddressU(cs::eTAM_Clamp);
+    colorSampler->SetAddressV(cs::eTAM_Clamp);
+    colorSampler->SetAddressW(cs::eTAM_Clamp);
   }
 
-  iRenderTarget *target = graphics->CreateRenderTarget();
+  cs::iRenderTarget *target = graphics->CreateRenderTarget();
   target->Initialize(width, height);
 
-  iTexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
-  colorTexture->SetSampler(new csSamplerWrapper(colorSampler));
-  target->AddColorTexture(new csTexture2DWrapper(colorTexture));
+  cs::iTexture2D *colorTexture = graphics->CreateTexture2D(colorFormat, width, height, false);
+  colorTexture->SetSampler(new cs::SamplerWrapper(colorSampler));
+  target->AddColorTexture(new cs::Texture2DWrapper(colorTexture));
 
 
   if (createDepthTexture)
   {
-    static iSampler *depthSampler = 0;
+    static cs::iSampler *depthSampler = 0;
     if (!depthSampler)
     {
       depthSampler = graphics->CreateSampler();
-      depthSampler->SetFilter(eFM_MinMagNearest);
-      depthSampler->SetTextureCompareFunc(eTCF_LessOrEqual);
-      depthSampler->SetTextureCompareMode(eTCM_CompareToR);
-      depthSampler->SetAddressU(eTAM_Clamp);
-      depthSampler->SetAddressV(eTAM_Clamp);
-      depthSampler->SetAddressW(eTAM_Clamp);
+      depthSampler->SetFilter(cs::eFM_MinMagNearest);
+      depthSampler->SetTextureCompareFunc(cs::eTCF_LessOrEqual);
+      depthSampler->SetTextureCompareMode(cs::eTCM_CompareToR);
+      depthSampler->SetAddressU(cs::eTAM_Clamp);
+      depthSampler->SetAddressV(cs::eTAM_Clamp);
+      depthSampler->SetAddressW(cs::eTAM_Clamp);
     }
-    iTexture2D *depthTexture = graphics->CreateTexture2D(ePF_D24S8, width, height, false);
-    depthTexture->SetSampler(new csSamplerWrapper(depthSampler));
-    target->SetDepthTexture(new csTexture2DWrapper(depthTexture));
+    cs::iTexture2D *depthTexture = graphics->CreateTexture2D(cs::ePF_D24S8, width, height, false);
+    depthTexture->SetSampler(new cs::SamplerWrapper(depthSampler));
+    target->SetDepthTexture(new cs::Texture2DWrapper(depthTexture));
 
   }
   else
@@ -1116,49 +1116,49 @@ iRenderTarget *createTarget(iGraphics *graphics, unsigned width, unsigned height
 }
 
 
-csPostProcessor *createPostProcessor(iGraphics *graphics)
+cs::PostProcessor *createPostProcessor(cs::iGraphics *graphics)
 {
-  csPostProcessor *pp = 0;
+  cs::PostProcessor *pp = 0;
 #if 0
-  pp = new csPostProcessor();
-  iShader *fsaoShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/FSAO.xasset"));
-  iShader *combineAddMultShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAddMult.xasset"));
-  iShader *combineAddShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/CombineAdd.xasset"));
-  iShader *blurVertShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurVertLo.xasset"));
-  iShader *blurHoriShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/BlurHoriLo.xasset"));
-  iShader *downScaleBrightPassShader = csResourceManager::Get()->GetOrLoad<iShader>(csResourceLocator("${shaders}/post/DownScaleBrightPass.xasset"));
+  pp = new cs::PostProcessor();
+  cs::iShader *fsaoShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/FSAO.xasset"));
+  cs::iShader *combineAddMultShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/CombineAddMult.xasset"));
+  cs::iShader *combineAddShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/CombineAdd.xasset"));
+  cs::iShader *blurVertShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/BlurVertLo.xasset"));
+  cs::iShader *blurHorcs::iShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/BlurHoriLo.xasset"));
+  cs::iShader *downScaleBrightPassShader = cs::ResourceManager::Get()->GetOrLoad<cs::iShader>(cs::ResourceLocator("${shaders}/post/DownScaleBrightPass.xasset"));
 
-  csGenericShaderPostProcess *fsaoPP = new csGenericShaderPostProcess();
-  fsaoPP->BindInput(ePPO_FinalTarget_Color, "Color");
-  fsaoPP->BindInput(ePPO_GBuffer_NormalLightMode, "Normal");
-  fsaoPP->BindInput(ePPO_GBuffer_Depth, "Depth");
+  cs::GenericShaderPostProcess *fsaoPP = new cs::GenericShaderPostProcess();
+  fsaoPP->BindInput(cs::ePPO_FinalTarget_Color, "Color");
+  fsaoPP->BindInput(cs::ePPO_GBuffer_NormalLightMode, "Normal");
+  fsaoPP->BindInput(cs::ePPO_GBuffer_Depth, "Depth");
   fsaoPP->SetShader(fsaoShader);
-  fsaoPP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, ePF_RGBA, false));
+  fsaoPP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, cs::ePF_RGBA, false));
 
-  csGenericShaderPostProcess *downScaleBrighPass = new csGenericShaderPostProcess();
-  downScaleBrighPass->BindInput(ePPO_FinalTarget_Color, "Color0");
+  cs::GenericShaderPostProcess *downScaleBrighPass = new cs::GenericShaderPostProcess();
+  downScaleBrighPass->BindInput(cs::ePPO_FinalTarget_Color, "Color0");
   downScaleBrighPass->SetShader(downScaleBrightPassShader);
-  downScaleBrighPass->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
+  downScaleBrighPass->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, cs::ePF_RGBA, false));
 
 
-  csGenericShaderPostProcess *blurVertPP = new csGenericShaderPostProcess();
+  cs::GenericShaderPostProcess *blurVertPP = new cs::GenericShaderPostProcess();
   blurVertPP->BindInput(downScaleBrighPass, 0, "Color0");
   blurVertPP->SetShader(blurVertShader);
-  blurVertPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
+  blurVertPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, cs::ePF_RGBA, false));
 
 
-  csGenericShaderPostProcess *blurHoriPP = new csGenericShaderPostProcess();
+  cs::GenericShaderPostProcess *blurHoriPP = new cs::GenericShaderPostProcess();
   blurHoriPP->BindInput(blurVertPP, 0, "Color0");
-  blurHoriPP->SetShader(blurHoriShader);
-  blurHoriPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, ePF_RGBA, false));
+  blurHoriPP->SetShader(blurHorcs::iShader);
+  blurHoriPP->SetOutput(createTarget(graphics, g_screenResolutionWidth/2, g_screenResolutionHeight/2, cs::ePF_RGBA, false));
 
 
-  csGenericShaderPostProcess *combinePP = new csGenericShaderPostProcess();
-  combinePP->BindInput(ePPO_FinalTarget_Color, "Color0");
+  cs::GenericShaderPostProcess *combinePP = new cs::GenericShaderPostProcess();
+  combinePP->BindInput(cs::ePPO_FinalTarget_Color, "Color0");
   combinePP->BindInput(blurHoriPP, 0, "Color1");
   //combinePP->BindInput(fsaoPP, 0, "Color2");
   combinePP->SetShader(combineAddShader);
-  combinePP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, ePF_RGBA, false));
+  combinePP->SetOutput(createTarget(graphics, g_screenResolutionWidth, g_screenResolutionHeight, cs::ePF_RGBA, false));
 
 
   pp->SetFinalProcess(combinePP);
@@ -1174,7 +1174,7 @@ csPostProcessor *createPostProcessor(iGraphics *graphics)
 }
 
 
-void handle_material(const iKeyboard *keyboard)
+void handle_material(const cs::iKeyboard *keyboard)
 {
   static csInt16 idx = material->GetIndex("Roughness");
   if (idx == -1)
@@ -1183,7 +1183,7 @@ void handle_material(const iKeyboard *keyboard)
   }
 
   float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->Get()->GetDefaultFloat(idx) : material->GetFloat(idx);
-  if (keyboard->IsKeyDown(eK_O))
+  if (keyboard->IsKeyDown(cs::eK_O))
   {
     currentRoughness += 0.01f;
     if (currentRoughness > 1.0)
@@ -1191,7 +1191,7 @@ void handle_material(const iKeyboard *keyboard)
       currentRoughness = 1.0;
     }
   }
-  else if (keyboard->IsKeyDown(eK_L))
+  else if (keyboard->IsKeyDown(cs::eK_L))
   {
     currentRoughness -= 0.01f;
     if (currentRoughness < 0.01)

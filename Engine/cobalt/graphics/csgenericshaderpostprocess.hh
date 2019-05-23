@@ -5,17 +5,23 @@
 
 #include <cobalt/graphics/csgenericshaderpostprocess.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csGenericShaderPostProcess : public CS_SUPER(csPostProcess)
+class CSE_API GenericShaderPostProcess : public CS_SUPER(cs::PostProcess)
 {
   CS_CLASS_GEN;
 public:
-  csGenericShaderPostProcess();
-  virtual ~csGenericShaderPostProcess();
+  GenericShaderPostProcess();
+  virtual ~GenericShaderPostProcess();
 
-  virtual bool Render(iGraphics *graphics);
+  virtual bool Render(cs::iGraphics * graphics);
 
-  void SetShader(iShader *shader);
+  void SetShader(cs::iShader * shader);
 
 
 };
+
+}
+

@@ -1,36 +1,36 @@
 
 #include <cobalt/graphics/cspointlight.hh>
 
-csPointLight::csPointLight()
-  : csLight(eLT_PointLight)
+cs::PointLight::PointLight()
+  : cs::Light(cs::eLT_PointLight)
   , m_position(0.0f, 0.0f, 0.0f)
   , m_radius(100.0f)
 {
 
 }
 
-csPointLight::~csPointLight()
+cs::PointLight::~PointLight()
 {
 }
 
 
-void csPointLight::SetPosition(const csVector3f &position)
+void cs::PointLight::SetPosition(const cs::Vector3f &position)
 {
   m_position = position;
 }
 
-const csVector3f &csPointLight::GetPosition() const
+const cs::Vector3f &cs::PointLight::GetPosition() const
 {
   return m_position;
 }
 
 
-void csPointLight::SetRadius(float radius)
+void cs::PointLight::SetRadius(float radius)
 {
   m_radius = radius;
 }
 
-float csPointLight::GetRadius() const
+float cs::PointLight::GetRadius() const
 {
   return m_radius;
 }

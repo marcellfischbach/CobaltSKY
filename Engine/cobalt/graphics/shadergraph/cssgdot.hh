@@ -7,14 +7,19 @@
 
 #define CS_DOT_NAME "Math/Dot"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGDot : public CS_SUPER(csSGNode)
+class CSE_API SGDot : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGDot();
-  virtual ~csSGDot() { }
+  SGDot();
+  virtual ~SGDot() { }
 
   virtual bool Validate();
 
 };
+
+}

@@ -10,15 +10,15 @@
 
 #include <cobalt/entity/csblueprint.refl.hh>
 
-class csEntityState;
+class cs::EntityState;
 
 CS_CLASS()
-class CSE_API csBlueprint : public CS_SUPER(cs::Object)
+class CSE_API cs::Blueprint : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csBlueprint();
-  virtual ~csBlueprint();
+  cs::Blueprint();
+  virtual ~cs::Blueprint();
 
   cs::iObject *NewInstance() const;
 
@@ -37,35 +37,35 @@ public:
   void SetEntityStateInt64(csUInt32 entityStateID, const std::string &propertyName, long idx, csInt64 value);
   void SetEntityStateFloat(csUInt32 entityStateID, const std::string &propertyName, long idx, float value);
   void SetEntityStateDouble(csUInt32 entityStateID, const std::string &propertyName, long idx, double value);
-  void SetEntityStateVector2f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector3f &value);
-  void SetEntityStateVector3f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector3f &value);
-  void SetEntityStateVector4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csVector4f &value);
-  void SetEntityStateColor4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csColor4f &value);
-  void SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const csMatrix4f &value);
-  void SetEntityStateResourceLocator(csUInt32 entityStateID, const std::string &propertyName, long idx, const csResourceLocator &value);
+  void SetEntityStateVector2f(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::Vector3f &value);
+  void SetEntityStateVector3f(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::Vector3f &value);
+  void SetEntityStateVector4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::Vector4f &value);
+  void SetEntityStateColor4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::Color4f &value);
+  void SetEntityStateMatrix4f(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::Matrix4f &value);
+  void SetEntityStateResourceLocator(csUInt32 entityStateID, const std::string &propertyName, long idx, const cs::ResourceLocator &value);
 
 private:
 
   enum PropertyType
   {
-    ePT_String,
-    ePT_Bool,
-    ePT_UInt8,
-    ePT_UInt16,
-    ePT_UInt32,
-    ePT_UInt64,
-    ePT_Int8,
-    ePT_Int16,
-    ePT_Int32,
-    ePT_Int64,
-    ePT_Float,
-    ePT_Double,
-    ePT_Vector2f,
-    ePT_Vector3f,
-    ePT_Vector4f,
-    ePT_Color4f,
-    ePT_Matrix4f,
-    ePT_ResourceLocator,
+    cs::ePT_String,
+    cs::ePT_Bool,
+    cs::ePT_UInt8,
+    cs::ePT_UInt16,
+    cs::ePT_UInt32,
+    cs::ePT_UInt64,
+    cs::ePT_Int8,
+    cs::ePT_Int16,
+    cs::ePT_Int32,
+    cs::ePT_Int64,
+    cs::ePT_Float,
+    cs::ePT_Double,
+    cs::ePT_Vector2f,
+    cs::ePT_Vector3f,
+    cs::ePT_Vector4f,
+    cs::ePT_Color4f,
+    cs::ePT_Matrix4f,
+    cs::ePT_ResourceLocator,
   };
 
   struct Property
@@ -85,12 +85,12 @@ private:
     csInt64 m_int64;
     float m_float;
     double m_double;
-    csVector2f m_vector2f;
-    csVector3f m_vector3f;
-    csVector4f m_vector4f;
-    csColor4f m_color4f;
-    csMatrix4f m_matrix4f;
-    csResourceLocator m_resourceLocator;
+    cs::Vector2f m_vector2f;
+    cs::Vector3f m_vector3f;
+    cs::Vector4f m_vector4f;
+    cs::Color4f m_color4f;
+    cs::Matrix4f m_matrix4f;
+    cs::ResourceLocator m_resourceLocator;
   };
 
 
@@ -104,8 +104,8 @@ private:
   };
 
   void SetEntityStateProperty(csUInt32 entityStateID, Property prop);
-  void SetEntityStatePropertyValue(csEntityState *entityState, const Property &prop) const;
-  bool SetEntityStatePropertyValue(const cs::Class *cls, csEntityState *entityState, const Property &prop) const;
+  void SetEntityStatePropertyValue(cs::EntityState *entityState, const Property &prop) const;
+  bool SetEntityStatePropertyValue(const cs::Class *cls, cs::EntityState *entityState, const Property &prop) const;
   const cs::Function *FindFunction(const cs::Class *cls, const std::string &name, const std::string &typeName) const;
 
   std::map<csUInt32, Decl> m_entities;

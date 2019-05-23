@@ -7,7 +7,7 @@
 #include <physicsbullet/bulletstaticcollider.hh>
 
 csBulletScene::csBulletScene()
-  : iPhysicsScene()
+  : cs::iPhysicsScene()
 {
   CS_CLASS_GEN_CONSTR;
 }
@@ -74,7 +74,7 @@ bool csBulletScene::Initialize(bool softBody)
   return true;
 }
 
-void csBulletScene::AddCollider(iPhysicsCollider *collider)
+void csBulletScene::AddCollider(cs::iPhysicsCollider *collider)
 {
   if (!collider)
   {
@@ -83,17 +83,17 @@ void csBulletScene::AddCollider(iPhysicsCollider *collider)
 
   switch (collider->GetType())
   {
-  case ePCT_Static:
-    AddStaticCollider(static_cast<iPhysicsStaticCollider*>(collider));
+  case cs::ePCT_Static:
+    AddStaticCollider(static_cast<cs::iPhysicsStaticCollider*>(collider));
     break;
-  case ePCT_Dynamic:
-  case ePCT_Kinematic:
-    AddDynamicCollider(static_cast<iPhysicsDynamicCollider*>(collider));
+  case cs::ePCT_Dynamic:
+  case cs::ePCT_Kinematic:
+    AddDynamicCollider(static_cast<cs::iPhysicsDynamicCollider*>(collider));
     break;
   }
 }
 
-void csBulletScene::RemoveCollider(iPhysicsCollider *collider)
+void csBulletScene::RemoveCollider(cs::iPhysicsCollider *collider)
 {
   if (!collider)
   {
@@ -102,18 +102,18 @@ void csBulletScene::RemoveCollider(iPhysicsCollider *collider)
 
   switch (collider->GetType())
   {
-  case ePCT_Static:
-    RemoveStaticCollider(static_cast<iPhysicsStaticCollider*>(collider));
+  case cs::ePCT_Static:
+    RemoveStaticCollider(static_cast<cs::iPhysicsStaticCollider*>(collider));
     break;
-  case ePCT_Dynamic:
-  case ePCT_Kinematic:
-    RemoveDynamicCollider(static_cast<iPhysicsDynamicCollider*>(collider));
+  case cs::ePCT_Dynamic:
+  case cs::ePCT_Kinematic:
+    RemoveDynamicCollider(static_cast<cs::iPhysicsDynamicCollider*>(collider));
     break;
   }
 }
 
 
-void csBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
+void csBulletScene::AddStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
 {
   if (!staticCollider)
   {
@@ -126,7 +126,7 @@ void csBulletScene::AddStaticCollider(iPhysicsStaticCollider *staticCollider)
   }
 }
 
-void csBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
+void csBulletScene::RemoveStaticCollider(cs::iPhysicsStaticCollider *staticCollider)
 {
   if (!staticCollider)
   {
@@ -139,7 +139,7 @@ void csBulletScene::RemoveStaticCollider(iPhysicsStaticCollider *staticCollider)
   }
 }
 
-void csBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::AddDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
 {
   if (!dynamicCollider)
   {
@@ -152,7 +152,7 @@ void csBulletScene::AddDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
   }
 }
 
-void csBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollider)
+void csBulletScene::RemoveDynamicCollider(cs::iPhysicsDynamicCollider *dynamicCollider)
 {
   if (!dynamicCollider)
   {
@@ -166,7 +166,7 @@ void csBulletScene::RemoveDynamicCollider(iPhysicsDynamicCollider *dynamicCollid
 }
 
 
-void csBulletScene::AddCharacterController(iPhysicsCharacterController *controller)
+void csBulletScene::AddCharacterController(cs::iPhysicsCharacterController *controller)
 {
   if (!controller)
   {
@@ -180,7 +180,7 @@ void csBulletScene::AddCharacterController(iPhysicsCharacterController *controll
   }
 }
 
-void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *controller)
+void csBulletScene::RemoveCharacterController(cs::iPhysicsCharacterController *controller)
 {
   if (!controller)
   {
@@ -202,7 +202,7 @@ void csBulletScene::RemoveCharacterController(iPhysicsCharacterController *contr
 }
 
 
-void csBulletScene::AddJoint(iPhysicsJoint *joint)
+void csBulletScene::AddJoint(cs::iPhysicsJoint *joint)
 {
   csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
   if (j)
@@ -212,7 +212,7 @@ void csBulletScene::AddJoint(iPhysicsJoint *joint)
 }
 
 
-void csBulletScene::RemoveJoint(iPhysicsJoint *joint)
+void csBulletScene::RemoveJoint(cs::iPhysicsJoint *joint)
 {
   csBulletJoint *j = cs::QueryClass<csBulletJoint>(joint);
   if (j)

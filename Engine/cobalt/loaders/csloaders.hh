@@ -1,16 +1,20 @@
 
 #pragma once
 
-class csResourceManager;
+namespace cs
+{
+class ResourceManager;
 
 /**
 * \ingroup loading
 */
-class csLoaders
+class Loaders
 {
 public:
-  static void Register(csResourceManager *resourceManager);
+  static void Register(cs::ResourceManager *resourceManager);
 
 private:
-  csLoaders();
+  Loaders();
 };
+
+}

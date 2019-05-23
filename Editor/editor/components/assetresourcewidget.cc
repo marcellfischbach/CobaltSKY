@@ -10,7 +10,7 @@
 #include <QPushButton>
 
 
-void asset_resource_widget_asset_renamed(csEvent &event, void *userData)
+void asset_resource_widget_asset_renamed(cs::Event &event, void *userData)
 {
   AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
   AssetResourceWidget *widget = reinterpret_cast<AssetResourceWidget*>(userData);
@@ -22,8 +22,8 @@ AssetResourceWidget::AssetResourceWidget(QWidget *parent)
 {
   m_gui.setupUi(this);
   connect(
-    m_gui.lineEdit, SIGNAL(ResourceChanged(const csResourceLocator&)), 
-    this, SLOT(ResourceChangedSlot(const csResourceLocator &)));
+    m_gui.lineEdit, SIGNAL(ResourceChanged(const cs::ResourceLocator&)), 
+    this, SLOT(ResourceChangedSlot(const cs::ResourceLocator &)));
 
   EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), asset_resource_widget_asset_renamed, this);
 }
@@ -38,24 +38,24 @@ void AssetResourceWidget::AddValidClass(const cs::Class *cls)
   m_gui.lineEdit->AddValidClass(cls);
 }
 
-void AssetResourceWidget::ResourceChangedSlot(const csResourceLocator &locator)
+void AssetResourceWidget::ResourceChangedSlot(const cs::ResourceLocator &locator)
 {
   SetResourceLocator(locator);
   emit ResourceChanged(locator);
 }
 
-void AssetResourceWidget::SetResourceLocator(const csResourceLocator &locator)
+void AssetResourceWidget::SetResourceLocator(const cs::ResourceLocator &locator)
 {
   m_locator = locator;
   m_gui.lineEdit->setText(QString(locator.GetResourceFile().c_str())); 
 }
 
-const csResourceLocator &AssetResourceWidget::GetResourceLocator() const
+const cs::ResourceLocator &AssetResourceWidget::GetResourceLocator() const
 {
   return m_locator;
 }
 
-void AssetResourceWidget::Renamed(const csResourceLocator &from, const csResourceLocator &to)
+void AssetResourceWidget::Renamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
   if (m_locator.EqualsAnonymous(from))
   {

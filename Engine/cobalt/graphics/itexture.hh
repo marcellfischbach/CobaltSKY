@@ -11,7 +11,9 @@
 #include <cobalt/graphics/itexture.refl.hh>
 
 
-class csSamplerWrapper;
+namespace cs
+{
+class SamplerWrapper;
 
 CS_CLASS();
 struct CSE_API iTexture : public cs::iObject
@@ -20,11 +22,11 @@ struct CSE_API iTexture : public cs::iObject
   iTexture() : cs::iObject() { }
   virtual ~iTexture() { }
 
-  virtual csTextureType GetType() const = 0;
+  virtual cs::eTextureType GetType() const = 0;
 
-  virtual void SetSampler(csSamplerWrapper *sampler) = 0;
-  virtual csSamplerWrapper* GetSampler() = 0;
-  virtual const csSamplerWrapper* GetSampler() const = 0;
+  virtual void SetSampler(cs::SamplerWrapper *sampler) = 0;
+  virtual cs::SamplerWrapper* GetSampler() = 0;
+  virtual const cs::SamplerWrapper* GetSampler() const = 0;
 
   virtual void GenerateMipMaps() = 0;
 
@@ -32,9 +34,11 @@ struct CSE_API iTexture : public cs::iObject
 
 
 CS_CLASS()
-class CSE_API csTextureWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API TextureWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(iTexture, csTextureWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::iTexture, TextureWrapper, cs::ResourceWrapper);
 };
 
+
+}

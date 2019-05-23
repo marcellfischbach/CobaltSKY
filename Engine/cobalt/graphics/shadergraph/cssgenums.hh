@@ -1,6 +1,10 @@
 #pragma once
 
-enum csSGDataType
+namespace cs
+{
+
+
+enum eSGDataType
 {
   eSGDT_Inval = 0x00,
   eSGDT_Int = 0x01,
@@ -24,3 +28,5 @@ enum csSGDataType
   eSGDT_TextureCubeArray = 0x4000,
   eSGDT_Textures = 0x7f00,
 };
+
+}

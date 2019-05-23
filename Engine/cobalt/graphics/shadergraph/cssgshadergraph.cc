@@ -6,14 +6,14 @@
 #include <map>
 
 
-csSGShaderGraph::csSGShaderGraph()
-  : csMaterialDef()
+cs::SGShaderGraph::SGShaderGraph()
+  : cs::MaterialDef()
   , m_diffuse(0)
   , m_roughness(0)
   , m_alpha(0)
   , m_discardAlpha(false)
   , m_discardAlphaThreshold(0.0f)
-  , m_discardAlphaCompareMode(eCM_Less)
+  , m_discardAlphaCompareMode(cs::eCM_Less)
   , m_normal(0)
   , m_skinnedMaterial(false)
   , m_maxBones(64)
@@ -21,7 +21,7 @@ csSGShaderGraph::csSGShaderGraph()
 
 }
 
-void csSGShaderGraph::Clear()
+void cs::SGShaderGraph::Clear()
 {
   for (size_t i = eIT_START; i < eIT_COUNT; ++i)
   {
@@ -35,7 +35,7 @@ void csSGShaderGraph::Clear()
   m_allNodes.clear();
 }
 
-void csSGShaderGraph::SetInput(csSGShaderGraph::InputType type, csSGOutput *output)
+void cs::SGShaderGraph::SetInput(cs::SGShaderGraph::InputType type, cs::SGOutput *output)
 {
   switch (type)
   {
@@ -54,7 +54,7 @@ void csSGShaderGraph::SetInput(csSGShaderGraph::InputType type, csSGOutput *outp
   }
 }
 
-csSGOutput *csSGShaderGraph::GetInput(csSGShaderGraph::InputType type)
+cs::SGOutput *cs::SGShaderGraph::GetInput(cs::SGShaderGraph::InputType type)
 {
   switch (type)
   {
@@ -70,7 +70,7 @@ csSGOutput *csSGShaderGraph::GetInput(csSGShaderGraph::InputType type)
   return 0;
 }
 
-const csSGOutput *csSGShaderGraph::GetInput(csSGShaderGraph::InputType type) const
+const cs::SGOutput *cs::SGShaderGraph::GetInput(cs::SGShaderGraph::InputType type) const
 {
   switch (type)
   {
@@ -86,7 +86,7 @@ const csSGOutput *csSGShaderGraph::GetInput(csSGShaderGraph::InputType type) con
   return 0;
 }
 
-bool csSGShaderGraph::Validate()
+bool cs::SGShaderGraph::Validate()
 {
   bool success = true;
 
@@ -99,7 +99,7 @@ bool csSGShaderGraph::Validate()
 }
 
 
-csSGNode *csSGShaderGraph::GetNode(csSGOutput *output)
+cs::SGNode *cs::SGShaderGraph::GetNode(cs::SGOutput *output)
 {
   if (!output)
   {
@@ -109,9 +109,9 @@ csSGNode *csSGShaderGraph::GetNode(csSGOutput *output)
   return output->GetNode();
 }
 
-bool csSGShaderGraph::ValidateNode(csSGOutput *output)
+bool cs::SGShaderGraph::ValidateNode(cs::SGOutput *output)
 {
-  csSGNode *node = GetNode(output);
+  cs::SGNode *node = GetNode(output);
   if (!node)
   {
     return true;
@@ -121,7 +121,7 @@ bool csSGShaderGraph::ValidateNode(csSGOutput *output)
 }
 
 
-void csSGShaderGraph::AddNode(csSGNode *node)
+void cs::SGShaderGraph::AddNode(cs::SGNode *node)
 {
   if (!node)
   {
@@ -131,12 +131,12 @@ void csSGShaderGraph::AddNode(csSGNode *node)
   m_allNodes.push_back(node);
 }
 
-size_t csSGShaderGraph::GetNumberOfTotalNodes() const
+size_t cs::SGShaderGraph::GetNumberOfTotalNodes() const
 {
   return m_allNodes.size();
 }
 
-csSGNode* csSGShaderGraph::GetNode(size_t idx)
+cs::SGNode* cs::SGShaderGraph::GetNode(size_t idx)
 {
   if (idx >= m_allNodes.size())
   {
@@ -145,7 +145,7 @@ csSGNode* csSGShaderGraph::GetNode(size_t idx)
   return m_allNodes[idx];
 }
 
-const csSGNode* csSGShaderGraph::GetNode(size_t idx) const
+const cs::SGNode* cs::SGShaderGraph::GetNode(size_t idx) const
 {
   if (idx >= m_allNodes.size())
   {
@@ -154,9 +154,9 @@ const csSGNode* csSGShaderGraph::GetNode(size_t idx) const
   return m_allNodes[idx];
 }
 
-bool csSGShaderGraph::ContainsNode(const csSGNode *node) const
+bool cs::SGShaderGraph::ContainsNode(const cs::SGNode *node) const
 {
-  for (csSGNode *n : m_allNodes)
+  for (cs::SGNode *n : m_allNodes)
   {
     if (n == node)
     {
@@ -168,7 +168,7 @@ bool csSGShaderGraph::ContainsNode(const csSGNode *node) const
 }
 
 
-int csSGShaderGraph::GetIndexOfNode(const csSGNode *node) const
+int cs::SGShaderGraph::GetIndexOfNode(const cs::SGNode *node) const
 {
   for (csSize i=0, in=m_allNodes.size(); i<in; ++i)
   {
@@ -181,18 +181,18 @@ int csSGShaderGraph::GetIndexOfNode(const csSGNode *node) const
   return -1;
 }
 
-void csSGShaderGraph::RemoveNode(csSGNode *node)
+void cs::SGShaderGraph::RemoveNode(cs::SGNode *node)
 {
   int i = GetIndexOfNode(node);
   RemoveNode((size_t)i);
 }
 
-void csSGShaderGraph::RemoveNode(size_t idx)
+void cs::SGShaderGraph::RemoveNode(size_t idx)
 {
-  std::vector<csSGNode*>::iterator it = m_allNodes.begin() + idx;
+  std::vector<cs::SGNode*>::iterator it = m_allNodes.begin() + idx;
   if (it != m_allNodes.end())
   {
-    csSGNode *node = *it;
+    cs::SGNode *node = *it;
     if (node)
     {
       node->Release();
@@ -201,45 +201,45 @@ void csSGShaderGraph::RemoveNode(size_t idx)
   m_allNodes.erase(it);
 }
 
-csSGShaderGraph *csSGShaderGraph::Copy(csSGShaderGraph *dest) const
+cs::SGShaderGraph *cs::SGShaderGraph::Copy(cs::SGShaderGraph *dest) const
 {
   if (!dest)
   {
-    dest = new csSGShaderGraph();
+    dest = new cs::SGShaderGraph();
   }
 
   dest->Clear();
 
   //
   // create a duplicate of all nodes
-  std::map<const csSGNode*, csSGNode*> mapping;
-  for (csSGNode *node : m_allNodes)
+  std::map<const cs::SGNode*, cs::SGNode*> mapping;
+  for (cs::SGNode *node : m_allNodes)
   {
-    csSGNode *newNode = node->GetClass()->CreateInstance<csSGNode>();
+    cs::SGNode *newNode = node->GetClass()->CreateInstance<cs::SGNode>();
     newNode = node->Copy(newNode);
 
     dest->m_allNodes.push_back(newNode);
     mapping[node] = newNode;
   }
-  for (csSGNode *node : m_allNodes)
+  for (cs::SGNode *node : m_allNodes)
   {
-    csSGNode *newNode = mapping[node];
+    cs::SGNode *newNode = mapping[node];
     for (csSize i=0, in = node->GetNumberOfInputs(); i < in; ++i)
     {
-      csSGInput *input = node->GetInput(i);
-      csSGInput *newInput = newNode->GetInput(i);
+      cs::SGInput *input = node->GetInput(i);
+      cs::SGInput *newInput = newNode->GetInput(i);
 
       if (input->CanInputConst())
       {
         newInput->SetConst(input->GetConst());
       }
 
-      csSGOutput *output = input->GetInput();
+      cs::SGOutput *output = input->GetInput();
       if (output)
       {
-        csSGNode *outputNode = output->GetNode();
-        csSGNode *newOutputNode = mapping[outputNode];
-        csSGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
+        cs::SGNode *outputNode = output->GetNode();
+        cs::SGNode *newOutputNode = mapping[outputNode];
+        cs::SGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
         newInput->SetInput(newOutput);
       }
     }
@@ -247,12 +247,12 @@ csSGShaderGraph *csSGShaderGraph::Copy(csSGShaderGraph *dest) const
 
   for (csSize i = 0; i < eIT_COUNT; ++i)
   {
-    const csSGOutput *output = GetInput((InputType)i);
+    const cs::SGOutput *output = GetInput((InputType)i);
     if (output)
     {
-      const csSGNode *outputNode = output->GetNode();
-      csSGNode *newOutputNode = mapping[outputNode];
-      csSGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
+      const cs::SGNode *outputNode = output->GetNode();
+      cs::SGNode *newOutputNode = mapping[outputNode];
+      cs::SGOutput *newOutput = newOutputNode->GetOutput(output->GetIdx());
       dest->SetInput((InputType)i, newOutput);
     }
   }

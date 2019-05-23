@@ -13,7 +13,7 @@ class btCollisionShape;
 class btCompoundShape;
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletStaticCollider : public CS_SUPER(iPhysicsStaticCollider)
+class CSBULLETPHYSICS_API csBulletStaticCollider : public CS_SUPER(cs::iPhysicsStaticCollider)
 {
   CS_CLASS_GEN_OBJECT;
 
@@ -22,27 +22,27 @@ public:
   virtual ~csBulletStaticCollider();
 
   /**
-  * \name iPhysicsCollider interface
+  * \name cs::iPhysicsCollider interface
   * @{
   */
-  virtual csPhysicsColliderType GetType() const;
+  virtual cs::ePhysicsColliderType GetType() const;
 
-  virtual const csMatrix4f &GetMatrix() const;
-  virtual csTransformation GetTransform();
+  virtual const cs::Matrix4f &GetMatrix() const;
+  virtual cs::Transformation GetTransform();
   virtual void FinishTransformation();
 
-  virtual void AttachShape(iPhysicsShape *shape);
-  virtual void DetachShape(iPhysicsShape *shape);
+  virtual void AttachShape(cs::iPhysicsShape *shape);
+  virtual void DetachShape(cs::iPhysicsShape *shape);
 
-  virtual void AttachShape(csPhysicsShape *shapes);
-  virtual void DetachShape(csPhysicsShape *shapes);
+  virtual void AttachShape(cs::PhysicsShape *shapes);
+  virtual void DetachShape(cs::PhysicsShape *shapes);
 
   /**
   * @}
   */
 
   /**
-  * \name iPhysicsBaseCollider interface
+  * \name cs::iPhysicsBaseCollider interface
   * @{
   */
   virtual void SetFriction(float friction);
@@ -61,7 +61,7 @@ public:
 
 private:
 
-  csMatrix4f m_transformation;
+  cs::Matrix4f m_transformation;
 
   float m_friction;
   float m_restitution;
@@ -75,7 +75,7 @@ private:
     csBulletShape *shape;
     btCollisionShape *btShape;
     btCollisionObject *object;
-    csMatrix4f localTransform;
+    cs::Matrix4f localTransform;
   };
 
   std::vector<Data> m_shapes;
@@ -84,12 +84,12 @@ private:
 };
 
 
-CS_FORCEINLINE csPhysicsColliderType csBulletStaticCollider::GetType() const
+CS_FORCEINLINE cs::ePhysicsColliderType csBulletStaticCollider::GetType() const
 {
-  return ePCT_Static;
+  return cs::ePCT_Static;
 }
 
-CS_FORCEINLINE const csMatrix4f &csBulletStaticCollider::GetMatrix() const
+CS_FORCEINLINE const cs::Matrix4f &csBulletStaticCollider::GetMatrix() const
 {
   return m_transformation;
 }

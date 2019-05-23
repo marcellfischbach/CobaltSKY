@@ -7,14 +7,19 @@
 
 #define CS_LERP_NAME "Math/Lerp"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGLerp : public CS_SUPER(csSGNode)
+class CSE_API SGLerp : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGLerp();
-  virtual ~csSGLerp() { }
+  SGLerp();
+  virtual ~SGLerp() { }
 
   virtual bool Validate();
 
 };
+
+}

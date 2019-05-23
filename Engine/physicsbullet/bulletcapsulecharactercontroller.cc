@@ -13,7 +13,7 @@
 
 
 csBulletCapsuleCharacterController::csBulletCapsuleCharacterController()
-  : iPhysicsCapsuleCharacterController()
+  : cs::iPhysicsCapsuleCharacterController()
   , m_characterController(0)
   , m_ghostObject(0)
   , m_transformationCallback(0)
@@ -42,7 +42,7 @@ void csBulletCapsuleCharacterController::Initialize(float height, float radius)
 
 }
 
-void csBulletCapsuleCharacterController::SetTransformationCallback(iTransformationCallback *callback)
+void csBulletCapsuleCharacterController::SetTransformationCallback(cs::iTransformationCallback *callback)
 {
   m_transformationCallback = callback;
 }
@@ -68,15 +68,15 @@ void csBulletCapsuleCharacterController::UpdateCallbacks()
 {
   if (m_transformationCallback)
   {
-    csMatrix4f trans;
+    cs::Matrix4f trans;
     m_ghostObject->getWorldTransform().getOpenGLMatrix(static_cast<btScalar*>(&trans.m00));
     m_transformationCallback->TransformationChanged(trans);
   }
 }
 
-void csBulletCapsuleCharacterController::Warp(const csMatrix4f &transformation)
+void csBulletCapsuleCharacterController::Warp(const cs::Matrix4f &transformation)
 {
-  csVector3f translation;
+  cs::Vector3f translation;
   transformation.GetTranslation(translation);
   WarpToPosition(translation);
 
@@ -85,23 +85,23 @@ void csBulletCapsuleCharacterController::Warp(const csMatrix4f &transformation)
   m_ghostObject->setWorldTransform(trans);
 }
 
-void csBulletCapsuleCharacterController::WarpToPosition(const csVector3f &position)
+void csBulletCapsuleCharacterController::WarpToPosition(const cs::Vector3f &position)
 {
   m_characterController->warp(btVector3(position.x, position.y, position.z));
 }
 
-void csBulletCapsuleCharacterController::SetLocalWalkDirection(const csVector3f &direction)
+void csBulletCapsuleCharacterController::SetLocalWalkDirection(const cs::Vector3f &direction)
 {
   btTransform trans = m_ghostObject->getWorldTransform();
-  csMatrix4f mat;
+  cs::Matrix4f mat;
   trans.getOpenGLMatrix(static_cast<btScalar*>(&mat.m00));
-  csVector3f absDir = csMatrix4f::Mult(mat, direction, absDir);
+  cs::Vector3f absDir = cs::Matrix4f::Mult(mat, direction, absDir);
 
   m_characterController->setWalkDirection(btVector3(absDir.x, absDir.y, absDir.z));
 }
 
 
-void csBulletCapsuleCharacterController::SetGlobalWalkDirection(const csVector3f &direction)
+void csBulletCapsuleCharacterController::SetGlobalWalkDirection(const cs::Vector3f &direction)
 {
   m_characterController->setWalkDirection(btVector3(direction.x, direction.y, direction.z));
 }
@@ -142,7 +142,7 @@ void csBulletCapsuleCharacterController::SetMaxFallSpeed(float fallSpeed)
   m_characterController->setFallSpeed(fallSpeed);
 }
 
-void csBulletCapsuleCharacterController::SetGravity(const csVector3f &gravity)
+void csBulletCapsuleCharacterController::SetGravity(const cs::Vector3f &gravity)
 {
   // m_characterController->setGravity()
 }

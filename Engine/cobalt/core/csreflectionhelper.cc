@@ -3,7 +3,7 @@
 #include <cobalt/core/csreflectionhelper.hh>
 
 
-csReflectionPropertyHelper::csReflectionPropertyHelper(const cs::Class *cls, const std::string &propertyName)
+cs::ReflectionPropertyHelper::ReflectionPropertyHelper(const cs::Class *cls, const std::string &propertyName)
   : m_cls(cls)
   , m_propertyName(propertyName)
   , m_property(0)
@@ -12,7 +12,7 @@ csReflectionPropertyHelper::csReflectionPropertyHelper(const cs::Class *cls, con
 }
 
 
-std::string csReflectionPropertyHelper::GetMethodName(const std::string &prefix) const
+std::string cs::ReflectionPropertyHelper::GetMethodName(const std::string &prefix) const
 {
   std::string propName = m_propertyName;
   if (propName[0] >= 'a' && propName[0] <= 'z')
@@ -23,7 +23,7 @@ std::string csReflectionPropertyHelper::GetMethodName(const std::string &prefix)
 }
 
 
-const cs::Function*csReflectionPropertyHelper::GetGetter(cs::eConstness constness) const
+const cs::Function*cs::ReflectionPropertyHelper::GetGetter(cs::eConstness constness) const
 {
   const cs::Function*function = GetGetter(m_cls, GetMethodName("Get"), constness);
   if (function)
@@ -45,7 +45,7 @@ const cs::Function*csReflectionPropertyHelper::GetGetter(cs::eConstness constnes
   return GetGetter(m_cls, GetMethodName("is"), constness);
 }
 
-const cs::Function*csReflectionPropertyHelper::GetSetter(const cs::ValueDeclaration&decl) const
+const cs::Function*cs::ReflectionPropertyHelper::GetSetter(const cs::ValueDeclaration&decl) const
 {
 
   const cs::Function*function = GetSetter(m_cls, GetMethodName("Set"), decl);
@@ -57,7 +57,7 @@ const cs::Function*csReflectionPropertyHelper::GetSetter(const cs::ValueDeclarat
   return function = GetSetter(m_cls, GetMethodName("set"), decl);
 }
 
-const cs::Property*csReflectionPropertyHelper::GetProperty(const cs::Class *cls) const
+const cs::Property*cs::ReflectionPropertyHelper::GetProperty(const cs::Class *cls) const
 {
   const cs::Property*property = cls->GetProperty(m_propertyName);
   if (property)
@@ -76,7 +76,7 @@ const cs::Property*csReflectionPropertyHelper::GetProperty(const cs::Class *cls)
   return 0;
 }
 
-const cs::Function*csReflectionPropertyHelper::GetGetter(const cs::Class *cls, const std::string &name, cs::eConstness constness) const
+const cs::Function*cs::ReflectionPropertyHelper::GetGetter(const cs::Class *cls, const std::string &name, cs::eConstness constness) const
 {
   if (!cls)
   {
@@ -103,7 +103,7 @@ const cs::Function*csReflectionPropertyHelper::GetGetter(const cs::Class *cls, c
   return 0;
 }
 
-const cs::Function*csReflectionPropertyHelper::GetSetter(const cs::Class *cls, const std::string &name, const cs::ValueDeclaration&decl) const
+const cs::Function*cs::ReflectionPropertyHelper::GetSetter(const cs::Class *cls, const std::string &name, const cs::ValueDeclaration&decl) const
 {
   if (!cls)
   {

@@ -6,19 +6,24 @@
 #include <cobalt/graphics/itexture2d.hh>
 #include <cobalt/graphics/itexture2darray.hh>
 
-class CSE_API csBinaryGradient
+namespace cs
+{
+
+class CSE_API BinaryGradient
 {
 public:
-  virtual ~csBinaryGradient();
+  virtual ~BinaryGradient();
 
-  
-  static csTexture2DWrapper *GetBinaryGradientLevel1();
-  static csTexture2DArrayWrapper *GetBinaryGradient();
+
+  static cs::Texture2DWrapper* GetBinaryGradientLevel1();
+  static cs::Texture2DArrayWrapper* GetBinaryGradient();
 
 private:
-  csBinaryGradient();
+  BinaryGradient();
 
-  
-  static csTexture2DWrapper *static_texture1;
-  static csTexture2DArrayWrapper *static_textureArray;
+
+  static cs::Texture2DWrapper* static_texture1;
+  static cs::Texture2DArrayWrapper* static_textureArray;
 };
+
+}

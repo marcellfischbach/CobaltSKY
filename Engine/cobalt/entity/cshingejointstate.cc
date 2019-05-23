@@ -9,30 +9,30 @@
 
 
 
-csHingeJointState::csHingeJointState()
-  : csJointState()
+cs::HingeJointState::HingeJointState()
+  : cs::JointState()
   , m_hingeJoint(0)
 {
 
 }
 
-csHingeJointState::~csHingeJointState()
+cs::HingeJointState::~HingeJointState()
 {
 
 }
 
-void csHingeJointState::OnAssembled()
+void cs::HingeJointState::OnAssembled()
 {
   // make all connected joints be assembled
-  csJointState::OnAssembled();
+  cs::JointState::OnAssembled();
 
   // create the joint
-  csDynamicColliderState *colA = GetColliderA();
-  csDynamicColliderState *colB = GetColliderB();
-  iPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
-  iPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
-  iPhysicsJoint *joint = csEng->CreateJoint(ePJT_Hinge, colliderA, colliderB);
-  m_hingeJoint = cs::QueryClass<iPhysicsHingeJoint>(joint);
+  cs::DynamicColliderState *colA = GetColliderA();
+  cs::DynamicColliderState *colB = GetColliderB();
+  cs::iPhysicsDynamicCollider *colliderA = colA ? colA->GetDynamicCollider() : 0;
+  cs::iPhysicsDynamicCollider *colliderB = colB ? colB->GetDynamicCollider() : 0;
+  cs::iPhysicsJoint *joint = csEng->CreateJoint(cs::ePJT_Hinge, colliderA, colliderB);
+  m_hingeJoint = cs::QueryClass<cs::iPhysicsHingeJoint>(joint);
   if (!m_hingeJoint)
   {
     return;
@@ -40,13 +40,13 @@ void csHingeJointState::OnAssembled()
 
 
 
-  const csMatrix4f &globalMatrix = GetGlobalTransformation();
+  const cs::Matrix4f &globalMatrix = GetGlobalTransformation();
 
-  csMatrix4f frameA, frameB;
+  cs::Matrix4f frameA, frameB;
   if (colA)
   {
-    csMatrix4f calInv = colA->GetGlobalTransformationInv();
-    csMatrix4f::Mult(calInv, globalMatrix, frameA);
+    cs::Matrix4f calInv = colA->GetGlobalTransformationInv();
+    cs::Matrix4f::Mult(calInv, globalMatrix, frameA);
   }
   else
   {
@@ -55,8 +55,8 @@ void csHingeJointState::OnAssembled()
 
   if (colB)
   {
-    csMatrix4f calInv = colB->GetGlobalTransformationInv();
-    csMatrix4f::Mult(calInv, globalMatrix, frameB);
+    cs::Matrix4f calInv = colB->GetGlobalTransformationInv();
+    cs::Matrix4f::Mult(calInv, globalMatrix, frameB);
   }
   else
   {
@@ -67,7 +67,7 @@ void csHingeJointState::OnAssembled()
 
 }
 
-void csHingeJointState::OnAttachedToScene(csEntityScene *scene)
+void cs::HingeJointState::OnAttachedToScene(cs::EntityScene *scene)
 {
   if (m_hingeJoint && scene)
   {
@@ -75,7 +75,7 @@ void csHingeJointState::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csHingeJointState::OnDetachedFromScene(csEntityScene *scene)
+void cs::HingeJointState::OnDetachedFromScene(cs::EntityScene *scene)
 {
   if (m_hingeJoint && scene)
   {
@@ -84,25 +84,25 @@ void csHingeJointState::OnDetachedFromScene(csEntityScene *scene)
 }
 
 
-void csHingeJointState::UpdateTransformation()
+void cs::HingeJointState::UpdateTransformation()
 {
-  csSpatialState::UpdateTransformation();
+  cs::SpatialState::UpdateTransformation();
 
   if (!m_hingeJoint)
   {
     return;
   }
 
-  csDynamicColliderState *colA = GetColliderA();
-  csDynamicColliderState *colB = GetColliderB();
+  cs::DynamicColliderState *colA = GetColliderA();
+  cs::DynamicColliderState *colB = GetColliderB();
   if (colA && colB)
   {
     return;
   }
 
-  const csMatrix4f &globalMatrix = GetGlobalTransformation();
+  const cs::Matrix4f &globalMatrix = GetGlobalTransformation();
 
-  csMatrix4f frameA, frameB;
+  cs::Matrix4f frameA, frameB;
   if (!colA)
   {
     m_hingeJoint->SetFrameA(globalMatrix);

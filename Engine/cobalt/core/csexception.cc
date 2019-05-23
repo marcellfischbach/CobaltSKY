@@ -1,14 +1,14 @@
 
 #include <cobalt/core/csexception.hh>
 
-csException::csException()
+cs::Exception::Exception()
     : std::exception()
     , m_what("")
 {
 
 }
 
-csException::csException(const std::string &what)
+cs::Exception::Exception(const std::string &what)
     : std::exception()
     , m_what(what)
 {
@@ -16,7 +16,7 @@ csException::csException(const std::string &what)
 }
 
 
-csException::~csException()
+cs::Exception::~Exception()
 {
 
 }

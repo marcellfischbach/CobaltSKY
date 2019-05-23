@@ -5,15 +5,15 @@
 #include <cobalt/physics/iphysicsscene.hh>
 #include <cobalt/csengine.hh>
 
-csStaticColliderState::csStaticColliderState()
-  : csBaseColliderState()
+cs::StaticColliderState::StaticColliderState()
+  : cs::BaseColliderState()
   , m_staticCollider(0)
 {
   m_staticCollider = csEng->CreateStaticCollider();
   SetBaseCollider(m_staticCollider);
 }
 
-csStaticColliderState::~csStaticColliderState()
+cs::StaticColliderState::~StaticColliderState ()
 {
   CS_RELEASE(m_staticCollider);
 }
@@ -21,7 +21,7 @@ csStaticColliderState::~csStaticColliderState()
 
 
 
-void csStaticColliderState::OnAttachedToScene(csEntityScene *scene)
+void cs::StaticColliderState::OnAttachedToScene(cs::EntityScene *scene)
 {
   if (scene)
   {
@@ -29,7 +29,7 @@ void csStaticColliderState::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csStaticColliderState::OnDetachedFromScene(csEntityScene *scene)
+void cs::StaticColliderState::OnDetachedFromScene(cs::EntityScene *scene)
 {
   if (scene)
   {

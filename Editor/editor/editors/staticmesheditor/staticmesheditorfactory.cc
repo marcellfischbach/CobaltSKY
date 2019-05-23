@@ -6,7 +6,7 @@
 
 bool StaticMeshEditorFactory::CanEdit(cs::iObject *object, asset::model::Asset *asset) const
 {
-  return object->GetClass()->IsInstanceOf<csStaticMeshState>();
+  return object->GetClass()->IsInstanceOf<cs::StaticMeshState>();
 }
 
 iAssetEditor *StaticMeshEditorFactory::CreateEditor(cs::iObject *object, asset::model::Asset *asset) const

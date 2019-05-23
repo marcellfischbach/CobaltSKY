@@ -16,7 +16,7 @@ ShaderGraphEditorOutlinerTableModel::~ShaderGraphEditorOutlinerTableModel()
 
 }
 
-void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(csSGShaderGraph *shaderGraph)
+void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(cs::SGShaderGraph *shaderGraph)
 {
   beginResetModel();
   m_shaderGraph = shaderGraph;
@@ -25,7 +25,7 @@ void ShaderGraphEditorOutlinerTableModel::SetShaderGraph(csSGShaderGraph *shader
 }
 
 
-void ShaderGraphEditorOutlinerTableModel::NodeChanged(csSGNode *node)
+void ShaderGraphEditorOutlinerTableModel::NodeChanged(cs::SGNode *node)
 {
   int idx = m_shaderGraph->GetIndexOfNode(node);
   if (idx == -1)
@@ -36,12 +36,12 @@ void ShaderGraphEditorOutlinerTableModel::NodeChanged(csSGNode *node)
   emit dataChanged(createIndex(idx, 0, node), createIndex(idx, 1, node));
 }
 
-void ShaderGraphEditorOutlinerTableModel::NodeAboutToAdd(csSGNode *node)
+void ShaderGraphEditorOutlinerTableModel::NodeAboutToAdd(cs::SGNode *node)
 {
 
 }
 
-void ShaderGraphEditorOutlinerTableModel::NodeAdded(csSGNode *node)
+void ShaderGraphEditorOutlinerTableModel::NodeAdded(cs::SGNode *node)
 {
   int idx = m_shaderGraph->GetIndexOfNode(node);
   if (idx == -1)
@@ -53,7 +53,7 @@ void ShaderGraphEditorOutlinerTableModel::NodeAdded(csSGNode *node)
   endInsertRows();
 }
 
-void ShaderGraphEditorOutlinerTableModel::NodeAboutToRemove(csSGNode *node)
+void ShaderGraphEditorOutlinerTableModel::NodeAboutToRemove(cs::SGNode *node)
 {
   int idx = m_shaderGraph->GetIndexOfNode(node);
   if (idx == -1)
@@ -63,7 +63,7 @@ void ShaderGraphEditorOutlinerTableModel::NodeAboutToRemove(csSGNode *node)
   beginRemoveRows(QModelIndex(), idx, idx);
 }
 
-void ShaderGraphEditorOutlinerTableModel::NodeRemoved(csSGNode *node)
+void ShaderGraphEditorOutlinerTableModel::NodeRemoved(cs::SGNode *node)
 {
   endRemoveRows();
 }
@@ -118,8 +118,8 @@ QVariant ShaderGraphEditorOutlinerTableModel::data(const QModelIndex &index, int
     }
     else 
     {
-      csSGNode *node = m_shaderGraph->GetNode(index.row() - 1);
-      csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+      cs::SGNode *node = m_shaderGraph->GetNode(index.row() - 1);
+      cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
       const cs::Class *cls = node->GetClass();
       switch (index.column())
       {
@@ -155,12 +155,12 @@ QVariant ShaderGraphEditorOutlinerTableModel::headerData(int section, Qt::Orient
 }
 
 
-QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(csSGShaderGraph *graph, int column)
+QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(cs::SGShaderGraph *graph, int column)
 {
   return createIndex(0, column, (void*)this);
 }
 
-QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(csSGNode *node, int column)
+QModelIndex ShaderGraphEditorOutlinerTableModel::GetIndex(cs::SGNode *node, int column)
 {
   for (csSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
   {

@@ -8,7 +8,7 @@
 #include <samplereditor/ui_samplereditorwidget.h>
 
 class SamplerEditor;
-class csSamplerWrapper;
+class cs::SamplerWrapper;
 class SamplerEditorWidget : public QWidget
 {
   Q_OBJECT
@@ -16,39 +16,39 @@ public:
   SamplerEditorWidget(SamplerEditor *parent);
   virtual ~SamplerEditorWidget();
 
-  void SetSampler(csSamplerWrapper *sampler);
+  void SetSampler(cs::SamplerWrapper *sampler);
   void Store();
   void Reset();
   void Apply();
 
   bool IsDirty();
 
-  inline csFilterMode GetFilter() const;
+  inline cs::eFilterMode GetFilter() const;
   inline csUInt8 GetAnisotropy() const;
   inline csInt16 GetMinLOD() const;
   inline csInt16 GetMaxLOD() const;
-  inline csTextureAddressMode GetAddressU() const;
-  inline csTextureAddressMode GetAddressV() const;
-  inline csTextureAddressMode GetAddressW() const;
-  inline const csVector4f &GetBorderColor() const;
-  inline csTextureCompareMode GetTextureCompareMode() const;
-  inline csTextureCompareFunc GetTextureCompareFunc() const;
+  inline cs::eTextureAddressMode GetAddressU() const;
+  inline cs::eTextureAddressMode GetAddressV() const;
+  inline cs::eTextureAddressMode GetAddressW() const;
+  inline const cs::Vector4f &GetBorderColor() const;
+  inline cs::eTextureCompareMode Getcs::eTextureCompareMode() const;
+  inline cs::eTextureCompareFunc GetTextureCompareFunc() const;
 
 public:
   SamplerEditor *m_editor;
   Ui::SamplerEditorWidget m_gui;
 
-  csSamplerWrapper *m_sampler;
-  csFilterMode m_filter;
+  cs::SamplerWrapper *m_sampler;
+  cs::eFilterMode m_filter;
   csUInt8 m_anisotropy;
   csInt16 m_minLOD;
   csInt16 m_maxLOD;
-  csTextureAddressMode m_addressU;
-  csTextureAddressMode m_addressV;
-  csTextureAddressMode m_addressW;
-  csVector4f m_borderColor;
-  csTextureCompareMode m_compareMode;
-  csTextureCompareFunc m_compareFunc;
+  cs::eTextureAddressMode m_addressU;
+  cs::eTextureAddressMode m_addressV;
+  cs::eTextureAddressMode m_addressW;
+  cs::Vector4f m_borderColor;
+  cs::eTextureCompareMode m_compareMode;
+  cs::eTextureCompareFunc m_compareFunc;
 
 private slots:
 void on_pbApply_clicked();
@@ -57,7 +57,7 @@ void on_pbReset_clicked();
 };
 
 
-csFilterMode SamplerEditorWidget::GetFilter() const
+cs::eFilterMode SamplerEditorWidget::GetFilter() const
 {
   return m_filter;
 }
@@ -77,32 +77,32 @@ csInt16 SamplerEditorWidget::GetMaxLOD() const
   return m_maxLOD;
 }
 
-csTextureAddressMode SamplerEditorWidget::GetAddressU() const
+cs::eTextureAddressMode SamplerEditorWidget::GetAddressU() const
 {
   return m_addressU;
 }
 
-csTextureAddressMode SamplerEditorWidget::GetAddressV() const
+cs::eTextureAddressMode SamplerEditorWidget::GetAddressV() const
 {
   return m_addressV;
 }
 
-csTextureAddressMode SamplerEditorWidget::GetAddressW() const
+cs::eTextureAddressMode SamplerEditorWidget::GetAddressW() const
 {
   return m_addressW;
 }
 
-const csVector4f &SamplerEditorWidget::GetBorderColor() const
+const cs::Vector4f &SamplerEditorWidget::GetBorderColor() const
 {
   return m_borderColor;
 }
 
-csTextureCompareMode SamplerEditorWidget::GetTextureCompareMode() const
+cs::eTextureCompareMode SamplerEditorWidget::Getcs::eTextureCompareMode() const
 {
   return m_compareMode;
 }
 
-csTextureCompareFunc SamplerEditorWidget::GetTextureCompareFunc() const
+cs::eTextureCompareFunc SamplerEditorWidget::GetTextureCompareFunc() const
 {
   return m_compareFunc;
 }

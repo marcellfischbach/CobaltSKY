@@ -13,10 +13,10 @@ namespace
 {
 
 
-const csVertexElement* find_element(const csVertexElement* elems, csUInt32 stream, csUInt32 idx)
+const cs::VertexElement* find_element(const cs::VertexElement* elems, csUInt32 stream, csUInt32 idx)
 {
   unsigned v = 0;
-  for (const csVertexElement* ve = elems; ve->Valid; ve++)
+  for (const cs::VertexElement* ve = elems; ve->Valid; ve++)
   {
     if (ve->Stream != stream)
     {
@@ -32,7 +32,7 @@ const csVertexElement* find_element(const csVertexElement* elems, csUInt32 strea
 }
 
 
-void copy_element(csVertexElement* dst, const csVertexElement* src)
+void copy_element(cs::VertexElement* dst, const cs::VertexElement* src)
 {
   assert(dst);
   if (src)
@@ -56,13 +56,13 @@ csVertexDeclarationGL4::csVertexDeclarationGL4()
   CS_CLASS_GEN_CONSTR;
 }
 
-bool csVertexDeclarationGL4::Create(const csVertexElement* elements)
+bool csVertexDeclarationGL4::Create(const cs::VertexElement* elements)
 {
 
   // evaluate the number of streams and the number of elements per stream
   std::map<unsigned, unsigned> str;
   std::map<unsigned, csSize> strSize;
-  for (const csVertexElement* vptr = elements; vptr->Valid; vptr++)
+  for (const cs::VertexElement* vptr = elements; vptr->Valid; vptr++)
   {
     (str[vptr->Stream])++;
     m_streams = m_streams < vptr->Stream ? vptr->Stream : m_streams;
@@ -73,12 +73,12 @@ bool csVertexDeclarationGL4::Create(const csVertexElement* elements)
 
 
   // now create elements grouped by the streams.
-  m_elements = new csVertexElement*[m_streams];
+  m_elements = new cs::VertexElement*[m_streams];
   for (unsigned i = 0; i<m_streams; i++)
   {
     unsigned numElems = str[i] + 1;
     // create the elements for this stream
-    m_elements[i] = new csVertexElement[numElems];
+    m_elements[i] = new cs::VertexElement[numElems];
 
     for (unsigned j = 0; j<numElems; j++)
     {
@@ -105,16 +105,16 @@ unsigned csVertexDeclarationGL4::GetNumberOfStreams() const
   return m_streams;
 }
 
-const csVertexElement* csVertexDeclarationGL4::GetElements(csUInt8 stream) const
+const cs::VertexElement* csVertexDeclarationGL4::GetElements(csUInt8 stream) const
 {
   assert(stream < m_streams);
 
   return m_elements[stream];
 }
 
-const csVertexElement* csVertexDeclarationGL4::GetElement(csVertexStreamType streamDefinition, csUInt8 stream) const
+const cs::VertexElement* csVertexDeclarationGL4::GetElement(cs::eVertexStreamType streamDefinition, csUInt8 stream) const
 {
-  const csVertexElement* elements = GetElements(stream);
+  const cs::VertexElement* elements = GetElements(stream);
   if (!elements)
   {
     return 0;
@@ -130,17 +130,17 @@ const csVertexElement* csVertexDeclarationGL4::GetElement(csVertexStreamType str
   return 0;
 }
 
-void csVertexDeclarationGL4::BindStream(csProgramGL4* shader, csUInt8 stream, void* ptr)
+void csVertexDeclarationGL4::BindStream(cs::ProgramGL4* shader, csUInt8 stream, void* ptr)
 {
   assert(stream < m_streams);
 
-  csVertexElement* elements = m_elements[stream];
+  cs::VertexElement* elements = m_elements[stream];
 
   if (shader)
   {
     while (elements && elements->Valid)
     {
-      iShaderStream *s = shader->GetStream(elements->StreamDefinition);
+      cs::iShaderStream *s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         if (ptr)
@@ -164,17 +164,17 @@ void csVertexDeclarationGL4::BindStream(csProgramGL4* shader, csUInt8 stream, vo
   }
 }
 
-void csVertexDeclarationGL4::UnbindStream(csProgramGL4* shader, csUInt8 stream)
+void csVertexDeclarationGL4::UnbindStream(cs::ProgramGL4* shader, csUInt8 stream)
 {
   assert(stream < m_streams);
 
-  csVertexElement* elements = m_elements[stream];
+  cs::VertexElement* elements = m_elements[stream];
 
   if (shader)
   {
     while (elements && elements->Valid)
     {
-      iShaderStream* s = shader->GetStream(elements->StreamDefinition);
+      cs::iShaderStream* s = shader->GetStream(elements->StreamDefinition);
       if (s)
       {
         s->Disable();
@@ -192,7 +192,7 @@ csSize csVertexDeclarationGL4::GetTotalSize() const
 
 csSize csVertexDeclarationGL4::GetStride(csUInt8 stream) const
 {
-  const csVertexElement* elements = GetElements(stream);
+  const cs::VertexElement* elements = GetElements(stream);
   if (!elements)
   {
     return 0;

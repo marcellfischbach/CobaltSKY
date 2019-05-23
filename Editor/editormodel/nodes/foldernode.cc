@@ -44,24 +44,24 @@ const std::string &FolderNode::GetName() const
 
 
 
-const csResourceLocator FolderNode::WithNewName(const std::string &newName) const
+const cs::ResourceLocator FolderNode::WithNewName(const std::string &newName) const
 {
   if (m_parent)
   {
     return m_parent->GetResourceLocator().WithFileSuffix(newName + "/");
   }
-  return csResourceLocator(csResourceFile(newName + "/"));
+  return cs::ResourceLocator(cs::ResourceFile(newName + "/"));
 
 }
 
 
-csResourceLocator FolderNode::GetNewResourceLocator()
+cs::ResourceLocator FolderNode::GetNewResourceLocator()
 {
   if (m_parent)
   {
     return m_parent->GetResourceLocator().WithFileSuffix(m_name + "/");
   }
-  return csResourceLocator(csResourceFile(m_name + "/"));
+  return cs::ResourceLocator(cs::ResourceFile(m_name + "/"));
 }
 
 void FolderNode::DebugNode() const

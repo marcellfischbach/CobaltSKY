@@ -23,8 +23,8 @@ StaticMeshEditor::StaticMeshEditor()
   //m_properties = new TextureEditorProperties();
   //AddDockItemName(PROPERTIES_DOCK_NAME);
 
-  //QObject::connect(m_properties, SIGNAL(SamplerChanged(const csResourceLocator &)),
-  //    m_widget, SLOT(SamplerChanged(const csResourceLocator &)));
+  //QObject::connect(m_properties, SIGNAL(SamplerChanged(const cs::ResourceLocator &)),
+  //    m_widget, SLOT(SamplerChanged(const cs::ResourceLocator &)));
 }
 
 StaticMeshEditor::~StaticMeshEditor()
@@ -34,13 +34,13 @@ StaticMeshEditor::~StaticMeshEditor()
 
 void StaticMeshEditor::UpdateAsset()
 {
-  csStaticMeshState *staticMeshState = cs::QueryClass<csStaticMeshState>(GetEditObject());
+  cs::StaticMeshState *staticMeshState = cs::QueryClass<cs::StaticMeshState>(GetEditObject());
   if (staticMeshState)
   {
     m_widget->SetStaticMeshState(staticMeshState);
   }
   /*
-  iTexture2D *texture = cs::QueryClass<iTexture2D>(GetEditObject());
+  cs::iTexture2D *texture = cs::QueryClass<cs::iTexture2D>(GetEditObject());
   if (texture)
   {
 

@@ -4,8 +4,8 @@
 #include <graphicsgl4/gl4defines.hh>
 
 csTexture2DGL4::csTexture2DGL4()
-  : csTextureGL4(eTT_Texture2D)
-  , iTexture2D()
+  : csTextureGL4(cs::eTT_Texture2D)
+  , cs::iTexture2D()
 {
 
 }
@@ -14,7 +14,7 @@ csTexture2DGL4::~csTexture2DGL4()
 {
 }
 
-bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
+bool csTexture2DGL4::Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
 {
   if (!csTextureGL4::Initialize())
   {
@@ -50,7 +50,7 @@ bool csTexture2DGL4::Initialize(csPixelFormat format, csUInt16 width, csUInt16 h
   return true;
 }
 
-bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *data)
+bool csTexture2DGL4::CopyData(csUInt8 layer, cs::ePixelFormat format, const void *data)
 {
   csUInt16 layerWidth = m_width >> layer;
   csUInt16 layerHeight = m_height >> layer;
@@ -74,7 +74,7 @@ bool csTexture2DGL4::CopyData(csUInt8 layer, csPixelFormat format, const void *d
   return true;
 }
 
-bool csTexture2DGL4::ReadData(csUInt8 layer, csPixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize)
+bool csTexture2DGL4::ReadData(csUInt8 layer, cs::ePixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize)
 {
   csUInt16 layerWidth = m_width >> layer;
   csUInt16 layerHeight = m_height >> layer;

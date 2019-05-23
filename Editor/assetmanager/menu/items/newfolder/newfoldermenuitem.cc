@@ -52,7 +52,7 @@ void NewFolderMenuItemHandler::OnActionTriggered(bool)
     return;
   }
 
-  std::string absolutePath = csVFS::Get()->GetAbsolutePath(parentFolderNode->GetResourceLocator(), csVFS::CheckExistence);
+  std::string absolutePath = cs::VFS::Get()->GetAbsolutePath(parentFolderNode->GetResourceLocator(), cs::VFS::CheckExistence);
   if (absolutePath.empty())
   {
     return;

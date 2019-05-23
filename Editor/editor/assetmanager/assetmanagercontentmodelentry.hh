@@ -10,7 +10,7 @@
 class AssetManagerContentModelEntry
 {
 public:
-  AssetManagerContentModelEntry(const csResourceLocator &locator);
+  AssetManagerContentModelEntry(const cs::ResourceLocator &locator);
 
   void ReloadIcon();
 
@@ -29,7 +29,7 @@ public:
     return m_typeName;
   }
 
-  const csResourceLocator &GetLocator() const
+  const cs::ResourceLocator &GetLocator() const
   {
     return m_locator;
   }
@@ -38,5 +38,5 @@ private:
   QString m_entryName;
   QString m_typeName;
   QPixmap m_pixmap;
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
 };

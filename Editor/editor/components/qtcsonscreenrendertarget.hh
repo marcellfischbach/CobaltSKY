@@ -3,8 +3,12 @@
 
 #include <editor/editorexport.hh>
 
-struct iRenderTarget;
-class csRenderTargetGL4;
+struct cs::iRenderTarget;
+namespace cs
+{
+class cs::RenderTargetGL4;
+}
+
 class EDITOR_API QTCSOnscreenRenderTarget
 {
 public:
@@ -13,10 +17,10 @@ public:
 
   void Setup (unsigned width, unsigned height);
 
-  iRenderTarget *GetRenderTarget ();
+  cs::iRenderTarget *GetRenderTarget ();
 
 private:
-  csRenderTargetGL4 *m_renderTarget = 0;
+  cs::RenderTargetGL4 *m_renderTarget = 0;
 };
 
 #endif // QTCSONSCREENRENDERTARGET_HH

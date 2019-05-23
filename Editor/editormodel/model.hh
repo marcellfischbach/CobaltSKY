@@ -90,17 +90,17 @@ public:
    * @name Acquisition
    * @{
    */
-  Node *FindNode(const csResourceLocator &locator);
-  const Node *FindNode(const csResourceLocator &locator) const;
+  Node *FindNode(const cs::ResourceLocator &locator);
+  const Node *FindNode(const cs::ResourceLocator &locator) const;
 
-  Node *FindNode(const csResourceLocator &locator, MinPriority &minPriority);
-  const Node *FindNode(const csResourceLocator &locator, MinPriority &minPriority) const;
+  Node *FindNode(const cs::ResourceLocator &locator, MinPriority &minPriority);
+  const Node *FindNode(const cs::ResourceLocator &locator, MinPriority &minPriority) const;
 
-  Node *FindNode(const csResourceLocator &locator, MaxPriority &maxPriority);
-  const Node *FindNode(const csResourceLocator &locator, MaxPriority &maxPriority) const;
+  Node *FindNode(const cs::ResourceLocator &locator, MaxPriority &maxPriority);
+  const Node *FindNode(const cs::ResourceLocator &locator, MaxPriority &maxPriority) const;
 
-  const std::set<Node*> GetNodes(const csResourceLocator &locator);
-  const std::set<const Node*> GetNodes(const csResourceLocator &locator) const;
+  const std::set<Node*> GetNodes(const cs::ResourceLocator &locator);
+  const std::set<const Node*> GetNodes(const cs::ResourceLocator &locator) const;
   /**
    *@}
    */
@@ -118,15 +118,15 @@ public:
   /// Signal[Node *child, Node *oldParent]
   cs::Signal<Node*, Node*> & OnTreeStructNodeRemoved() { return m_onTreeStructNodeRemoved; }
 
-  cs::Signal<Node*, csResourceLocator> &OnNamedNodeAdded() { return m_onNamedNodeAdded; }
-  cs::Signal<Node*, csResourceLocator, csResourceLocator> &OnNamedNodeRenamed() { return m_onNamedNodeRenamed;  };
-  cs::Signal<Node*, csResourceLocator> &OnNamedNodeRemoved() { return m_onNamedNodeRemoved; }
+  cs::Signal<Node*, cs::ResourceLocator> &OnNamedNodeAdded() { return m_onNamedNodeAdded; }
+  cs::Signal<Node*, cs::ResourceLocator, cs::ResourceLocator> &OnNamedNodeRenamed() { return m_onNamedNodeRenamed;  };
+  cs::Signal<Node*, cs::ResourceLocator> &OnNamedNodeRemoved() { return m_onNamedNodeRemoved; }
 
 
-  cs::Signal<csResourceLocator> &OnResourceNameAdded() { return m_onResourceNameAdded;  }
-  cs::Signal<csResourceLocator> &OnResourceNameChanged() { return m_onResourceNameChanged; }
-  cs::Signal<csResourceLocator, csResourceLocator> &OnResourceNameRenamed() { return m_onResourceNameRenamed;  }
-  cs::Signal<csResourceLocator> &OnResourceNameRemoved() { return m_onResourceNameRemoved;  }
+  cs::Signal<cs::ResourceLocator> &OnResourceNameAdded() { return m_onResourceNameAdded;  }
+  cs::Signal<cs::ResourceLocator> &OnResourceNameChanged() { return m_onResourceNameChanged; }
+  cs::Signal<cs::ResourceLocator, cs::ResourceLocator> &OnResourceNameRenamed() { return m_onResourceNameRenamed;  }
+  cs::Signal<cs::ResourceLocator> &OnResourceNameRemoved() { return m_onResourceNameRemoved;  }
   /**
    * @}
    */
@@ -143,19 +143,19 @@ private:
   void MoveNodeToNewParent(Node *node, Node *oldParent, Node *toNewParent);
 
 
-  csResourceLocator FindCurrentName(const Node *node);
+  cs::ResourceLocator FindCurrentName(const Node *node);
 
   bool IsMasterNode(Node *node);
-  void UpdateCurrentMasterEntry(const csResourceLocator &anonLocator);
-  void SetCurrentMasterEntry(const csResourceLocator &anonLocator, Node *node);
+  void UpdateCurrentMasterEntry(const cs::ResourceLocator &anonLocator);
+  void SetCurrentMasterEntry(const cs::ResourceLocator &anonLocator, Node *node);
 
   void TxCommit();
   void TxRollback();
 
   void SyncNodeCacheRecursive(Node *node, Transaction &tx);
   void SyncNodeCache(Node *node, Transaction &tx);
-  void SyncNamedNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx);
-  void SyncAnonNode(Node *node, const csResourceLocator &oldLocator, const csResourceLocator &newLocator, Transaction &tx);
+  void SyncNamedNode(Node *node, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator, Transaction &tx);
+  void SyncAnonNode(Node *node, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator, Transaction &tx);
 
 
   RootNode * m_root;
@@ -170,24 +170,24 @@ private:
   cs::Signal<Node*, Node*>                                m_onTreeStructNodeRemoved;
 
 
-  cs::Signal<Node*, csResourceLocator>                    m_onNamedNodeAdded;
-  cs::Signal<Node*, csResourceLocator, csResourceLocator> m_onNamedNodeRenamed;
-  cs::Signal<Node*, csResourceLocator>                    m_onNamedNodeRemoved;
+  cs::Signal<Node*, cs::ResourceLocator>                    m_onNamedNodeAdded;
+  cs::Signal<Node*, cs::ResourceLocator, cs::ResourceLocator> m_onNamedNodeRenamed;
+  cs::Signal<Node*, cs::ResourceLocator>                    m_onNamedNodeRemoved;
 
-  cs::Signal<csResourceLocator>                           m_onResourceNameAdded;
-  cs::Signal<csResourceLocator>                           m_onResourceNameChanged;
-  cs::Signal<csResourceLocator, csResourceLocator>        m_onResourceNameRenamed;
-  cs::Signal<csResourceLocator>                           m_onResourceNameRemoved;
+  cs::Signal<cs::ResourceLocator>                           m_onResourceNameAdded;
+  cs::Signal<cs::ResourceLocator>                           m_onResourceNameChanged;
+  cs::Signal<cs::ResourceLocator, cs::ResourceLocator>        m_onResourceNameRenamed;
+  cs::Signal<cs::ResourceLocator>                           m_onResourceNameRemoved;
 
   struct Cache
   {
 
-    std::map<csResourceLocator, Node*> NamedNodes;
-    std::map<csResourceLocator, std::set<Node*>> AnonNodes;
-    std::map<csResourceLocator, Node*> AnonMasterNode;
+    std::map<cs::ResourceLocator, Node*> NamedNodes;
+    std::map<cs::ResourceLocator, std::set<Node*>> AnonNodes;
+    std::map<cs::ResourceLocator, Node*> AnonMasterNode;
 
-    std::map<Node*, std::set<csResourceLocator>> References;
-    std::map<csResourceLocator, std::set<Node*>> ReferencedBy;
+    std::map<Node*, std::set<cs::ResourceLocator>> References;
+    std::map<cs::ResourceLocator, std::set<Node*>> ReferencedBy;
   };
 
   Cache m_cache;

@@ -2,7 +2,7 @@
 #include <windowsdl/sdlmouse.hh>
 #include <SDL.h>
 
-static csButton buttonMap[32];
+static cs::eButton buttonMap[32];
 
 SDLMouse::SDLMouse()
 {
@@ -28,7 +28,7 @@ void SDLMouse::SetButtonDown(csUInt8 key)
 {
   if (key < 32)
   {
-    csButton b = buttonMap[key];
+    cs::eButton b = buttonMap[key];
     m_current[b] = true;
   }
 
@@ -38,27 +38,27 @@ void SDLMouse::SetButtonUp(csUInt8 key)
 {
   if (key < 32)
   {
-    csButton b = buttonMap[key];
+    cs::eButton b = buttonMap[key];
     m_current[b] = false;
   }
 }
 
-bool SDLMouse::IsButtonDown(csButton button) const
+bool SDLMouse::IsButtonDown(cs::eButton button) const
 {
   return m_current[button];
 }
 
-bool SDLMouse::IsButtonUp(csButton button) const
+bool SDLMouse::IsButtonUp(cs::eButton button) const
 {
   return !m_current[button];
 }
 
-bool SDLMouse::IsButtonPressed(csButton button) const
+bool SDLMouse::IsButtonPressed(cs::eButton button) const
 {
   return m_current[button] && !m_prev[button];
 }
 
-bool SDLMouse::IsButtonReleased(csButton button) const
+bool SDLMouse::IsButtonReleased(cs::eButton button) const
 {
   return !m_current[button] && m_prev[button];
 }

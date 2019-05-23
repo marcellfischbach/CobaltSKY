@@ -6,17 +6,17 @@
 #include <cobalt/graphics/ivertexdeclaration.hh>
 
 
-csSubMesh::csSubMesh()
+cs::SubMesh::SubMesh()
   : cs::Object()
   , m_vertexDeclaration(0)
-  , m_indexType(eDT_UnsignedShort)
-  , m_primitiveType(ePT_Triangles)
+  , m_indexType(cs::eDT_UnsignedShort)
+  , m_primitiveType(cs::ePT_Triangles)
   , m_indexBuffer(0)
 {
   m_boundingBox.Clear();
 }
 
-csSubMesh::~csSubMesh()
+cs::SubMesh::~SubMesh()
 {
   if (m_vertexDeclaration)
   {
@@ -28,28 +28,28 @@ csSubMesh::~csSubMesh()
     m_indexBuffer->Release();
   }
 
-  for (iVertexBuffer *vertexBuffer : m_vertexBuffer)
+  for (cs::iVertexBuffer *vertexBuffer : m_vertexBuffer)
   {
     vertexBuffer->Release();
   }
 }
 
-void csSubMesh::SetPrimitiveType(csPrimitiveType type)
+void cs::SubMesh::SetPrimitiveType(cs::ePrimitiveType type)
 {
   m_primitiveType = type;
 }
 
-void csSubMesh::SetIndexType(csDataType indexType)
+void cs::SubMesh::SetIndexType(cs::eDataType indexType)
 {
   m_indexType = indexType;
 }
 
-void csSubMesh::SetVertexDeclaration(iVertexDeclaration *vertexDeclaration)
+void cs::SubMesh::SetVertexDeclaration(cs::iVertexDeclaration *vertexDeclaration)
 {
   CS_SET(m_vertexDeclaration, vertexDeclaration);
 }
 
-void csSubMesh::AddVertexBuffer(iVertexBuffer *vertexBuffer)
+void cs::SubMesh::AddVertexBuffer(cs::iVertexBuffer *vertexBuffer)
 {
   if (vertexBuffer)
   {
@@ -58,7 +58,7 @@ void csSubMesh::AddVertexBuffer(iVertexBuffer *vertexBuffer)
   m_vertexBuffer.push_back(vertexBuffer);
 }
 
-void csSubMesh::SetIndexBuffer(iIndexBuffer *indexBuffer, csSize count, csSize offset)
+void cs::SubMesh::SetIndexBuffer(cs::iIndexBuffer *indexBuffer, csSize count, csSize offset)
 {
   CS_SET(m_indexBuffer, indexBuffer);
 
@@ -66,18 +66,18 @@ void csSubMesh::SetIndexBuffer(iIndexBuffer *indexBuffer, csSize count, csSize o
   m_offset = offset;
 }
 
-void csSubMesh::SetBoundingBox(const csBoundingBox &bbox)
+void cs::SubMesh::SetBoundingBox(const cs::BoundingBox &bbox)
 {
   m_boundingBox = bbox;
 }
 
-const csBoundingBox &csSubMesh::GetBoundingBox() const
+const cs::BoundingBox &cs::SubMesh::GetBoundingBox() const
 {
   return m_boundingBox;
 }
 
 
-void csSubMesh::Render(iGraphics *renderer)
+void cs::SubMesh::Render(cs::iGraphics *renderer)
 {
   renderer->SetIndexBuffer(m_indexBuffer);
   for (csSize i = 0, in = m_vertexBuffer.size(); i < in; ++i)
@@ -88,9 +88,9 @@ void csSubMesh::Render(iGraphics *renderer)
   renderer->RenderIndexed(m_primitiveType, (csUInt32)m_count, m_indexType);
 }
 
-unsigned csSubMesh::GetNumberOfTrigons() const
+unsigned cs::SubMesh::GetNumberOfTrigons() const
 {
-  if (m_primitiveType == ePT_Triangles)
+  if (m_primitiveType == cs::ePT_Triangles)
   {
     return m_count / 3;
   }

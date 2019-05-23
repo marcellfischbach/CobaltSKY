@@ -3,37 +3,37 @@
 #include <cobalt/graphics/cscamera.hh>
 
 
-csCameraNode::csCameraNode()
-  : csSpatialNode()
+cs::CameraNode::CameraNode()
+  : cs::SpatialNode()
   , m_camera(0)
 {
 }
 
-csCameraNode::~csCameraNode()
+cs::CameraNode::~CameraNode()
 {
   CS_RELEASE(m_camera);
 }
 
 
-void csCameraNode::SetCamera(csCamera *camera)
+void cs::CameraNode::SetCamera(cs::Camera *camera)
 {
   CS_SET(m_camera, camera);
 }
 
 
-void csCameraNode::TransformationChanged()
+void cs::CameraNode::TransformationChanged()
 {
-  csSpatialNode::TransformationChanged();
+  cs::SpatialNode::TransformationChanged();
 
   if (m_camera)
   {
-    const csMatrix4f &m = GetMatrix();
+    const cs::Matrix4f &m = GetMatrix();
 
-    csVector3f e, v;
+    cs::Vector3f e, v;
     m_camera->SetUp(m.GetZAxis(v));
     m_camera->SetEye(m.GetTranslation(e));
     m.GetYAxis(v);
-    csVector3f::Add(e, v, e);
+    cs::Vector3f::Add(e, v, e);
     m_camera->SetSpot(e);
     m_camera->UpdateCameraMatrices();
   }

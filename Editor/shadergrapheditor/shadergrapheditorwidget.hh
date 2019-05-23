@@ -14,9 +14,12 @@ namespace asset::model
 }
 
 
-class csResourceLocator;
-class csSGNode;
-class csSGShaderGraph;
+namespace cs
+{
+class ResourceLocator;
+class SGNode;
+class SGShaderGraph;
+}
 class ShaderGraphEditor;
 class ShaderGraphEditorMeta;
 class ShaderGraphEditorNode;
@@ -27,7 +30,7 @@ public:
   ShaderGraphEditorWidget(ShaderGraphEditor *parent);
   virtual ~ShaderGraphEditorWidget();
 
-  csSGShaderGraph *SetShaderGraph(csSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
+  cs::SGShaderGraph *SetShaderGraph(cs::SGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta);
 
 public slots:
 void RepaintGraph();
@@ -50,17 +53,17 @@ private slots:
   void on_pbScreenshot_clicked();
 
 private:
-  void QueryResources(csSGShaderGraph *graph);
+  void QueryResources(cs::SGShaderGraph *graph);
   void SaveCSFFile();
-  std::string ExtractName(const csResourceLocator &locator);
+  std::string ExtractName(const cs::ResourceLocator &locator);
   bool Apply();
   void get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const;
-  ShaderGraphEditorNode *GetEditorNode(csSGNode *node);
+  ShaderGraphEditorNode *GetEditorNode(cs::SGNode *node);
   ShaderGraphEditorNode *GetShaderGraphNode();
   Ui::ShaderGraphEditorWidget m_gui;
   ShaderGraphEditor *m_editor;
-  csSGShaderGraph *m_shaderGraph;
-  csSGShaderGraph *m_shaderGraphCopy;
+  cs::SGShaderGraph *m_shaderGraph;
+  cs::SGShaderGraph *m_shaderGraphCopy;
 
   struct Resource
   {
@@ -74,9 +77,9 @@ private:
 
 signals:
   void SelectionChanged(const QList<ShaderGraphEditorNode*> &nodes);
-  void ShaderGraphNodeAboutToAdd(csSGNode *node);
-  void ShaderGraphNodeAdded(csSGNode *node);
-  void ShaderGraphNodeAboutToRemove(csSGNode *node);
-  void ShaderGraphNodeRemoved(csSGNode *node);
+  void ShaderGraphNodeAboutToAdd(cs::SGNode *node);
+  void ShaderGraphNodeAdded(cs::SGNode *node);
+  void ShaderGraphNodeAboutToRemove(cs::SGNode *node);
+  void ShaderGraphNodeRemoved(cs::SGNode *node);
   void ShaderGraphChanged();
 };

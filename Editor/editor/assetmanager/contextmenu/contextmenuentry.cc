@@ -315,7 +315,7 @@ namespace asset::contextmenu
 	}
 
     EntryMergeException::EntryMergeException (const std::string &message)
-        : csException(message)
+        : cs::Exception(message)
     {
 
     }

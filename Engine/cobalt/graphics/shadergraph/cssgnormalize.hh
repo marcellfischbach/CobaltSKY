@@ -7,14 +7,19 @@
 
 #define CS_NORMALIZE_NAME "Math/Normalize"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGNormalize : public CS_SUPER(csSGNode)
+class CSE_API SGNormalize : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGNormalize();
-  virtual ~csSGNormalize() { }
+  SGNormalize();
+  virtual ~SGNormalize() { }
 
   virtual bool Validate();
 
 };
+
+}

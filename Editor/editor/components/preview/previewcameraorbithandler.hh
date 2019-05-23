@@ -4,11 +4,14 @@
 #include <editor/components/sceneviewbaseinputhandler.hh>
 #include <QPoint>
 
-class csCamera;
+namespace cs
+{
+class Camera;
+}
 class EDITOR_API PreviewCameraOrbitHandler : public SceneViewBaseInputHandler
 {
 public:
-  PreviewCameraOrbitHandler(csCamera *camera);
+  PreviewCameraOrbitHandler(cs::Camera *camera);
   virtual ~PreviewCameraOrbitHandler();
 
   virtual void mousePressEvent(QMouseEvent *event);
@@ -28,6 +31,6 @@ private:
 
   float m_cameraDistance = 25.0f;
 
-  csCamera *m_camera = 0;
+  cs::Camera *m_camera = 0;
   QPoint m_mousePos;
 };

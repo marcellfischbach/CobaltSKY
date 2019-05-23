@@ -10,7 +10,12 @@ class QGridLayout;
 class QScrollArea;
 class QSpinBox;
 class ShaderGraphEditorNode;
-class csResourceLocator;
+
+namespace cs
+{
+class ResourceLocator;
+}
+
 class ShaderGraphEditorProperties : public QWidget
 {
   Q_OBJECT;
@@ -27,7 +32,7 @@ private slots:
   void Resource_nameChanged(const QString &text);
   void DefaultFloat_valueChanged(double value);
   void DefaultInt_valueChanged(int value);
-  void ResourceChanged(const csResourceLocator &locator);
+  void ResourceChanged(const cs::ResourceLocator &locator);
 
 signals:
   void NodeChanged(ShaderGraphEditorNode *node);

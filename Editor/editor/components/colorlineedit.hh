@@ -16,8 +16,8 @@ class EDITOR_API Color4fLineEdit : public QWidget
 public:
   Color4fLineEdit(QWidget *parent = nullptr);
 
-  void SetColor(const csColor4f &color);
-  csColor4f GetColor() const;
+  void SetColor(const cs::Color4f &color);
+  cs::Color4f GetColor() const;
 
   bool IsEnabled () const;
 
@@ -25,7 +25,7 @@ public slots:
   void SetEnabled (bool enabled);
 
 signals:
-  void ColorChanged (const csColor4f &color);
+  void ColorChanged (const cs::Color4f &color);
 
 private slots:
   void spinBoxValueChanged (double value);

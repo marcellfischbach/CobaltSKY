@@ -14,7 +14,7 @@ std::string MimeHelper::GetResourceLocatorMimeType()
 	return CS_RESOURCE_LOCATOR_MIME_TYPE;
 }
 
-void MimeHelper::PutResourceLocatorMimeData(QMimeData* mimeData, const csResourceLocator& locator)
+void MimeHelper::PutResourceLocatorMimeData(QMimeData* mimeData, const cs::ResourceLocator& locator)
 {
 	if (!mimeData)
 	{
@@ -46,14 +46,14 @@ bool MimeHelper::HasResourceLocator(const QMimeData* mimeData)
 	return mimeData->hasFormat(CS_RESOURCE_LOCATOR_MIME_TYPE);
 }
 
-csResourceLocator MimeHelper::GetResourceLocator(const QMimeData* mimeData, const std::string& resource)
+cs::ResourceLocator MimeHelper::GetResourceLocator(const QMimeData* mimeData, const std::string& resource)
 {
 	QByteArray ba = mimeData->data(CS_RESOURCE_LOCATOR_MIME_TYPE);
 	QString name(ba);
 
-	return csResourceLocator(
-		csResourceFile(std::string((const char*)name.toLatin1())),
-		csResourceName(resource)
+	return cs::ResourceLocator(
+		cs::ResourceFile(std::string((const char*)name.toLatin1())),
+		cs::ResourceName(resource)
 	);
 }
 

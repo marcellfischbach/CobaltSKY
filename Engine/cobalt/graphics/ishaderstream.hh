@@ -7,6 +7,9 @@
 
 #include <cobalt/graphics/ishaderstream.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS();
 struct CSE_API iShaderStream : public cs::iObject
 {
@@ -14,12 +17,12 @@ struct CSE_API iShaderStream : public cs::iObject
 
   virtual ~iShaderStream() { }
 
-  virtual const std::string &GetName() const = 0;
+  virtual const std::string& GetName() const = 0;
 
   virtual void SetArrayIndex(csUInt32 idx) = 0;
 
-  virtual void Set(csSize size, csSize stride, csSize offset, csDataType type) = 0;
-  virtual void Set(csSize size, csSize stride, const void *data, csDataType type) = 0;
+  virtual void Set(csSize size, csSize stride, csSize offset, cs::eDataType type) = 0;
+  virtual void Set(csSize size, csSize stride, const void* data, cs::eDataType type) = 0;
 
   virtual void SetFrequency(csUInt8 frequency) = 0;
 
@@ -27,3 +30,6 @@ struct CSE_API iShaderStream : public cs::iObject
   virtual void Disable() = 0;
 
 };
+
+
+}

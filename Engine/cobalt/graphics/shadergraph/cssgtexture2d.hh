@@ -8,12 +8,18 @@
 
 #define CS_TEXTURE2D_NAME "Texture/Texture2D"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGTexture2D : public CS_SUPER(csSGResourceNode)
+class CSE_API SGTexture2D : public CS_SUPER(cs::SGResourceNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGTexture2D();
-  virtual ~csSGTexture2D() { }
+  SGTexture2D();
+  virtual ~SGTexture2D() { }
 
 };
+
+}
+

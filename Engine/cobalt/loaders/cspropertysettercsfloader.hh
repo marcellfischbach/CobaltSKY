@@ -6,17 +6,23 @@
 #include <cobalt/loaders/cspropertysettercsfloader.refl.hh>
 
 
-CS_CLASS()
-class CSE_API csPropertySetterCSFLoader : public CS_SUPER(csBaseCSFLoader)
+namespace cs
 {
-  CS_CLASS_GEN_OBJECT;
+
+CS_CLASS()
+class CSE_API PropertySetterCSFLoader : public CS_SUPER(cs::BaseCSFLoader)
+{
+	CS_CLASS_GEN_OBJECT;
 public:
-  csPropertySetterCSFLoader();
-  virtual ~csPropertySetterCSFLoader();
+	PropertySetterCSFLoader();
+	virtual ~PropertySetterCSFLoader();
 
 
-  bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+	bool CanLoad(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+	const cs::Class * EvalClass(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+	cs::ResourceWrapper * Load(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
 
 };
+
+
+}

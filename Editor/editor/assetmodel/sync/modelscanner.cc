@@ -33,11 +33,11 @@ namespace asset::model
 
   void ModelScanner::Scan()
   {
-    csVFS *vfs = csVFS::Get();
+    cs::VFS *vfs = cs::VFS::Get();
     Root *root = m_model->GetRoot();
     for (csSize i = 0, in = vfs->GetNumberOfEntries(); i < in; ++i)
     {
-      const csVFS::Entry &entry = vfs->GetEntry(i);
+      const cs::VFS::Entry &entry = vfs->GetEntry(i);
       VFSEntry *vfsEntry = m_model->CreateVFSEntry(entry);
 			ModelTransaction tr;
 			try
@@ -56,8 +56,8 @@ namespace asset::model
 
   void ModelScanner::Scan(asset::model::Folder *folder)
   {
-    csResourceLocator l = folder->GetResourceLocator();
-    std::string path = csVFS::Get()->GetAbsolutePath(l);
+    cs::ResourceLocator l = folder->GetResourceLocator();
+    std::string path = cs::VFS::Get()->GetAbsolutePath(l);
     printf("MS_Scan: %s => %s\n", l.Encode().c_str(), path.c_str());
 
     for (const std::fs::directory_entry &p : std::fs::directory_iterator(path))
@@ -102,8 +102,8 @@ namespace asset::model
 
   void ModelScanner::Scan(asset::model::Asset *asset)
   {
-    csResourceLocator assetLocator = asset->GetResourceLocator();
-    std::fs::path path(csVFS::Get()->GetAbsolutePath(assetLocator));
+    cs::ResourceLocator assetLocator = asset->GetResourceLocator();
+    std::fs::path path(cs::VFS::Get()->GetAbsolutePath(assetLocator));
     std::string ext = path.extension().string();
     if (ext == std::string(".csf") || ext == std::string(".asset"))
     {

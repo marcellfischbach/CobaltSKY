@@ -14,7 +14,7 @@ class csBulletJoint;
 
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletDynamicCollider : public CS_SUPER(iPhysicsDynamicCollider)
+class CSBULLETPHYSICS_API csBulletDynamicCollider : public CS_SUPER(cs::iPhysicsDynamicCollider)
 {
   CS_CLASS_GEN_OBJECT;
 
@@ -23,29 +23,29 @@ public:
   virtual ~csBulletDynamicCollider();
 
   /**
-   * \name iPhysicsCollider interface
+   * \name cs::iPhysicsCollider interface
    * @{
    */
-  virtual csPhysicsColliderType GetType() const;
+  virtual cs::ePhysicsColliderType GetType() const;
 
-  virtual const csMatrix4f &GetMatrix() const;
-  virtual csTransformation GetTransform();
+  virtual const cs::Matrix4f &GetMatrix() const;
+  virtual cs::Transformation GetTransform();
   virtual void FinishTransformation();
-  virtual void SetTransformationCallback(iTransformationCallback *callback);
+  virtual void SetTransformationCallback(cs::iTransformationCallback *callback);
 
 
-  virtual void AttachShape(iPhysicsShape *shape);
-  virtual void DetachShape(iPhysicsShape *shape);
+  virtual void AttachShape(cs::iPhysicsShape *shape);
+  virtual void DetachShape(cs::iPhysicsShape *shape);
 
-  virtual void AttachShape(csPhysicsShape *shapes);
-  virtual void DetachShape(csPhysicsShape *shapes);
+  virtual void AttachShape(cs::PhysicsShape *shapes);
+  virtual void DetachShape(cs::PhysicsShape *shapes);
 
   /**
    * @}
    */
 
    /**
-    * \name iPhysicsBaseCollider interface
+    * \name cs::iPhysicsBaseCollider interface
     * @{
     */
   virtual void SetFriction(float friction);
@@ -59,7 +59,7 @@ public:
    */
 
    /**
-    * \name iPhysicsDynamicCollider interface
+    * \name cs::iPhysicsDynamicCollider interface
     * @{
     */
 
@@ -69,8 +69,8 @@ public:
   virtual void SetMass(float mass);
   virtual float GetMass() const;
 
-  virtual void SetInertia(const csVector3f &inertia);
-  virtual const csVector3f &GetInertia() const;
+  virtual void SetInertia(const cs::Vector3f &inertia);
+  virtual const cs::Vector3f &GetInertia() const;
 
   virtual void SetAutoInertia(bool autoInertia);
   virtual bool IsAutoInertia() const;
@@ -105,11 +105,11 @@ private:
 
 
   void UpdateInertia();
-  std::vector<iPhysicsShape*> m_shapes;
+  std::vector<cs::iPhysicsShape*> m_shapes;
 
-  iTransformationCallback *m_transformationCallback;
-  //csDynamicColliderState *m_dynamicColliderState;
-  csMatrix4f m_transformation;
+  cs::iTransformationCallback *m_transformationCallback;
+  //cs::DynamicColliderState *m_dynamicColliderState;
+  cs::Matrix4f m_transformation;
 
   float m_friction;
   float m_restitution;
@@ -117,7 +117,7 @@ private:
   bool m_kinematic;
   float m_mass;
   bool m_autoInertia;
-  csVector3f m_inertia;
+  cs::Vector3f m_inertia;
 
 
   csBulletScene *m_scene;
@@ -129,12 +129,12 @@ private:
   std::vector<csBulletJoint*> m_joints;
 };
 
-CS_FORCEINLINE csPhysicsColliderType csBulletDynamicCollider::GetType() const
+CS_FORCEINLINE cs::ePhysicsColliderType csBulletDynamicCollider::GetType() const
 {
-  return ePCT_Dynamic;
+  return cs::ePCT_Dynamic;
 }
 
-CS_FORCEINLINE const csMatrix4f &csBulletDynamicCollider::GetMatrix() const
+CS_FORCEINLINE const cs::Matrix4f &csBulletDynamicCollider::GetMatrix() const
 {
   return m_transformation;
 }
@@ -159,7 +159,7 @@ CS_FORCEINLINE float csBulletDynamicCollider::GetMass() const
   return m_mass;
 }
 
-CS_FORCEINLINE const csVector3f &csBulletDynamicCollider::GetInertia() const
+CS_FORCEINLINE const cs::Vector3f &csBulletDynamicCollider::GetInertia() const
 {
   return m_inertia;
 }

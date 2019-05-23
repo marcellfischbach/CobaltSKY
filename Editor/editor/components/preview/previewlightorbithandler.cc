@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-PreviewLightOrbitHandler::PreviewLightOrbitHandler(csDirectionalLight *light)
+PreviewLightOrbitHandler::PreviewLightOrbitHandler(cs::DirectionalLight *light)
 {
   CS_SET(m_light, light);
   UpdateLight();
@@ -66,15 +66,15 @@ void PreviewLightOrbitHandler::wheelEvent(QWheelEvent *event)
 
 void PreviewLightOrbitHandler::UpdateLight()
 {
-  csMatrix4f M, rH, rV;
+  cs::Matrix4f M, rH, rV;
 
 
   rH.SetRotationZ(m_rotH);
   rV.SetRotationX(m_rotV);
-  csMatrix4f::Mult(rH, rV, M);
+  cs::Matrix4f::Mult(rH, rV, M);
 
-  csVector3f d = M.GetYAxis(d);
-  csVector3f::Mul(d, -1.0f, d);
+  cs::Vector3f d = M.GetYAxis(d);
+  cs::Vector3f::Mul(d, -1.0f, d);
   m_light->SetDirection(d);
 }
 

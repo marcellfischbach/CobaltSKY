@@ -5,10 +5,13 @@
 
 #include <cobalt/entity/iparticleemitter.refl.hh>
 
-class csParticle;
 /**
 * \ingroup entity
 */
+
+namespace cs
+{
+class Particle;
 
 CS_CLASS()
 struct CSE_API iParticleEmitter : public cs::iObject
@@ -17,6 +20,8 @@ struct CSE_API iParticleEmitter : public cs::iObject
 
   virtual ~iParticleEmitter() { }
 
-  virtual void Update(float tpf, csParticle *particle) = 0;
+  virtual void Update(float tpf, cs::Particle* particle) = 0;
 
 };
+
+}

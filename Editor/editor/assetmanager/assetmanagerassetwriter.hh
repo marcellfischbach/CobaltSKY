@@ -5,7 +5,11 @@
 #include <cobalt/cstypes.hh>
 
 
+namespace cs
+{
 struct iFile;
+
+}
 
 
 class AssetManagerAssetWriter
@@ -17,8 +21,8 @@ public:
   void AddEntry(const std::string &name, const std::string &typeID, csUInt32 length, const csUInt8* buffer);
   void RemoveEntry(const std::string &name);
 
-  bool Import(iFile *file);
-  void Output(iFile *file);
+  bool Import(cs::iFile *file);
+  void Output(cs::iFile *file);
 
 private:
 

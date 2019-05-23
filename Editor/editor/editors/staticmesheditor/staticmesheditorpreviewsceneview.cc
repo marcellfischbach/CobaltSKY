@@ -20,7 +20,7 @@ void StaticMeshEditorPreviewSceneView::initializeGL()
 {
   PreviewSceneView::initializeGL();
 
-  m_entity = new csEntity ();
+  m_entity = new cs::Entity ();
   if (m_staticMeshState)
   {
     m_entity->AddState(m_staticMeshState);
@@ -29,10 +29,10 @@ void StaticMeshEditorPreviewSceneView::initializeGL()
 
   GetScene()->AddEntity(m_entity);
 
-  csCamera *camera = GetCamera();
-  camera->SetEye(csVector3f(20, 20, 20));
-  camera->SetSpot(csVector3f(0, 0, 0));
-  camera->SetUp(csVector3f(0, 0, 1));
+  cs::Camera *camera = GetCamera();
+  camera->SetEye(cs::Vector3f(20, 20, 20));
+  camera->SetSpot(cs::Vector3f(0, 0, 0));
+  camera->SetUp(cs::Vector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
 
   //AddInputHandler(new PreviewCameraOrbitHandler(camera));
@@ -45,7 +45,7 @@ StaticMeshEditorPreviewSceneView::~StaticMeshEditorPreviewSceneView()
   CS_RELEASE(m_staticMeshState);
 }
 
-void StaticMeshEditorPreviewSceneView::SetStaticMeshState(csStaticMeshState *staticMeshState)
+void StaticMeshEditorPreviewSceneView::SetStaticMeshState(cs::StaticMeshState *staticMeshState)
 {
   if (m_staticMeshState && m_entity)
   {

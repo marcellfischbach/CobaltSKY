@@ -3,13 +3,13 @@
 #include <editor/editor.hh>
 
 
-AssetDescriptor::AssetDescriptor(const csResourceLocator &locator, const std::string &assetType)
+AssetDescriptor::AssetDescriptor(const cs::ResourceLocator &locator, const std::string &assetType)
   : m_locator(locator)
   , m_assetType(assetType)
 {
 }
 
-bool AssetDescriptor::Renamed(const csResourceLocator &from, const csResourceLocator &to)
+bool AssetDescriptor::Renamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
   if (m_locator == from)
   {
@@ -19,7 +19,7 @@ bool AssetDescriptor::Renamed(const csResourceLocator &from, const csResourceLoc
   return false;
 }
 
-const csResourceLocator &AssetDescriptor::GetLocator() const
+const cs::ResourceLocator &AssetDescriptor::GetLocator() const
 {
   return m_locator;
 }

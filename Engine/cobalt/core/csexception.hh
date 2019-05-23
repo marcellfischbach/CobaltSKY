@@ -4,19 +4,24 @@
 #include <exception>
 #include <string>
 
+namespace cs
+{
 
-class CSE_API csException : public std::exception
+
+class CSE_API Exception : public std::exception
 {
 public:
-    csException ();
-    csException (const std::string &what);
-    virtual ~csException ();
-    virtual const char *what () const noexcept
-    {
-        return m_what.c_str();
-    }
+  Exception();
+  Exception(const std::string& what);
+  virtual ~Exception();
+  virtual const char* what() const noexcept
+  {
+    return m_what.c_str();
+  }
 
 private:
-    std::string m_what;
+  std::string m_what;
 };
 
+
+}

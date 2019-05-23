@@ -2,12 +2,12 @@
 #include <cobalt/graphics/shadergraph/cssgconstfloat3.hh>
 
 
-csSGConstFloat3::csSGConstFloat3()
-  : csSGNode()
+cs::SGConstFloat3::SGConstFloat3()
+  : cs::SGNode()
 {
   SetName(CS_CONST_FLOAT3_NAME);
-  AddInput(new csSGInput("x", true, false));
-  AddInput(new csSGInput("y", true, false));
-  AddInput(new csSGInput("z", true, false));
-  AddOutput(new csSGOutput(eSGDT_Float3, "v", ""));
+  AddInput(new cs::SGInput("x", true, false));
+  AddInput(new cs::SGInput("y", true, false));
+  AddInput(new cs::SGInput("z", true, false));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float3, "v", ""));
 }

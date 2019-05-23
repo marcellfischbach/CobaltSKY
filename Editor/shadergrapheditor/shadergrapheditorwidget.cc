@@ -40,13 +40,13 @@ ShaderGraphEditorWidget::ShaderGraphEditorWidget(ShaderGraphEditor *editor)
   : QWidget()
   , m_editor(editor)
   , m_shaderGraph(0)
-  , m_shaderGraphCopy(new csSGShaderGraph())
+  , m_shaderGraphCopy(new cs::SGShaderGraph())
   , m_updateGuard(false)
 {
   m_gui.setupUi(this);
   on_nodeGraph_ScaleChanged(1.0f);
 
-  csSGShaderGraph *shaderGraph = new csSGShaderGraph();
+  cs::SGShaderGraph *shaderGraph = new cs::SGShaderGraph();
   ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(shaderGraph);
   m_gui.nodeGraph->AddNode(shaderGraphNode);
 }
@@ -57,7 +57,7 @@ ShaderGraphEditorWidget::~ShaderGraphEditorWidget()
   CS_RELEASE(m_shaderGraphCopy);
 }
 
-csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta)
+cs::SGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(cs::SGShaderGraph *shaderGraph, ShaderGraphEditorMeta *meta)
 {
   CS_SET(m_shaderGraph, shaderGraph);
   if (!m_shaderGraph)
@@ -71,17 +71,17 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
 
   m_gui.nodeGraph->Clear();
   ShaderGraphEditorNode *shaderGraphNode = new ShaderGraphEditorNode(m_shaderGraphCopy);
-  csVector2f shaderGraphNodePos = meta->GetPos();
+  cs::Vector2f shaderGraphNodePos = meta->GetPos();
   shaderGraphNode->SetLocation(QPointF(shaderGraphNodePos.x, shaderGraphNodePos.y));
   m_gui.nodeGraph->AddNode(shaderGraphNode);
 
-  std::map<csSGNode *, ShaderGraphEditorNode*> mapping;
+  std::map<cs::SGNode *, ShaderGraphEditorNode*> mapping;
   for (csSize i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = m_shaderGraphCopy->GetNode(i);
+    cs::SGNode *node = m_shaderGraphCopy->GetNode(i);
 
     ShaderGraphEditorNode *editorNode = new ShaderGraphEditorNode(node);
-    csVector2f nodePos = meta->GetPos(i);
+    cs::Vector2f nodePos = meta->GetPos(i);
     editorNode->SetLocation(QPointF(nodePos.x, nodePos.y));
     m_gui.nodeGraph->AddNode(editorNode);
 
@@ -90,14 +90,14 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
 
   for (csSize i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = m_shaderGraphCopy->GetNode(i);
+    cs::SGNode *node = m_shaderGraphCopy->GetNode(i);
     for (csSize j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
     {
-      csSGInput* input = node->GetInput(j);
-      csSGOutput *output = input->GetInput();
+      cs::SGInput* input = node->GetInput(j);
+      cs::SGOutput *output = input->GetInput();
       if (output)
       {
-        csSGNode *outputNode = output->GetNode();
+        cs::SGNode *outputNode = output->GetNode();
 
         ShaderGraphEditorNode* editorNode = mapping[node];
         ShaderGraphEditorNode* editorOutputNode = mapping[outputNode];
@@ -110,13 +110,13 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
     }
   }
 
-  for (csSize i = 0; i < csSGShaderGraph::eIT_COUNT; ++i)
+  for (csSize i = 0; i < cs::SGShaderGraph::eIT_COUNT; ++i)
   {
-    csSGShaderGraph::InputType inputType = (csSGShaderGraph::InputType)i;
-    csSGOutput *output = m_shaderGraphCopy->GetInput(inputType);
+    cs::SGShaderGraph::InputType inputType = (cs::SGShaderGraph::InputType)i;
+    cs::SGOutput *output = m_shaderGraphCopy->GetInput(inputType);
     if (output)
     {
-      csSGNode *outputNode = output->GetNode();
+      cs::SGNode *outputNode = output->GetNode();
       ShaderGraphEditorNode* editorOutputNode = mapping[outputNode];
 
       NodeGraphNodeAnchor *outputAnchor = editorOutputNode->GetOutputAnchor(output->GetIdx());
@@ -131,13 +131,13 @@ csSGShaderGraph *ShaderGraphEditorWidget::SetShaderGraph(csSGShaderGraph *shader
 }
 
 
-void ShaderGraphEditorWidget::QueryResources(csSGShaderGraph *graph)
+void ShaderGraphEditorWidget::QueryResources(cs::SGShaderGraph *graph)
 {
   m_resourceIDs.clear();
   for (csSize i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = graph->GetNode(i);
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGNode *node = graph->GetNode(i);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       m_resourceIDs.insert(resourceNode->GetResourceId());
@@ -190,20 +190,20 @@ void ShaderGraphEditorWidget::on_nodeGraph_Connected(NodeGraphNodeAnchor *anchor
   if (editorNodeInput->GetShaderGraph())
   {
     // make the connection to the shader graph
-    csSGNode *nodeOutput = editorNodeOutput->GetSGNode();
-    csSGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
+    cs::SGNode *nodeOutput = editorNodeOutput->GetSGNode();
+    cs::SGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
 
-    csSGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
-    shaderGraph->SetInput((csSGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), output);
+    cs::SGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
+    shaderGraph->SetInput((cs::SGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), output);
   }
   else
   {
     // make the connection between two nodes
-    csSGNode *nodeOutput = editorNodeOutput->GetSGNode();
-    csSGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
+    cs::SGNode *nodeOutput = editorNodeOutput->GetSGNode();
+    cs::SGOutput *output = nodeOutput->GetOutput(outputAnchor->GetProperty()->GetIdx());
 
-    csSGNode *nodeInput = editorNodeInput->GetSGNode();
-    csSGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
+    cs::SGNode *nodeInput = editorNodeInput->GetSGNode();
+    cs::SGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
 
     input->SetInput(output);
   }
@@ -223,14 +223,14 @@ void ShaderGraphEditorWidget::on_nodeGraph_Disconnected(NodeGraphNodeAnchor *anc
   if (editorNodeInput->GetShaderGraph())
   {
     // make the connection to the shader graph
-    csSGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
-    shaderGraph->SetInput((csSGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), 0);
+    cs::SGShaderGraph *shaderGraph = editorNodeInput->GetShaderGraph();
+    shaderGraph->SetInput((cs::SGShaderGraph::InputType)inputAnchor->GetProperty()->GetIdx(), 0);
   }
   else
   {
     // make the connection between two nodes
-    csSGNode *nodeInput = editorNodeInput->GetSGNode();
-    csSGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
+    cs::SGNode *nodeInput = editorNodeInput->GetSGNode();
+    cs::SGInput *input = nodeInput->GetInput(inputAnchor->GetProperty()->GetIdx());
     input->SetInput(0);
   }
 }
@@ -288,7 +288,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_CheckDrag(const QDropEvent *event, No
         continue;
       }
 
-      if (cls->IsInstanceOf(csTexture2DWrapper::GetStaticClass()))
+      if (cls->IsInstanceOf(cs::Texture2DWrapper::GetStaticClass()))
       {
         validEntryFound = true;
         break;
@@ -318,13 +318,13 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
       return;
     }
 
-    csSGNode *node = cls->CreateInstance<csSGNode>();
+    cs::SGNode *node = cls->CreateInstance<cs::SGNode>();
     if (!node)
     {
       return;
     }
 
-    csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (resourceNode)
     {
       QString uuid = QUuid::createUuid().toString();
@@ -376,15 +376,15 @@ void ShaderGraphEditorWidget::on_nodeGraph_DragDropped(const QDropEvent *event)
         continue;
       }
 
-      if (!cls->IsInstanceOf(csTexture2DWrapper::GetStaticClass()))
+      if (!cls->IsInstanceOf(cs::Texture2DWrapper::GetStaticClass()))
       {
         continue;
       }
 
 
-      csResourceLocator locator = asset->GetResourceLocator();
+      cs::ResourceLocator locator = asset->GetResourceLocator();
 
-      csSGTexture2D *txtNode = new csSGTexture2D();
+      cs::SGTexture2D *txtNode = new cs::SGTexture2D();
 
       txtNode->SetDefaultTextureResource(locator);
       txtNode->SetResourceName(ExtractName(locator));
@@ -440,7 +440,7 @@ void ShaderGraphEditorWidget::on_nodeGraph_NodeRemoved(NodeGraphNode* node)
   }
   ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(node);
 
-  csSGNode *sgNode = editorNode->GetSGNode();
+  cs::SGNode *sgNode = editorNode->GetSGNode();
   if (sgNode)
   {
     emit ShaderGraphNodeAboutToRemove(sgNode);
@@ -498,11 +498,11 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   shaderGraphMetaEntry->AddChild(metaNodesEntry);
 
   size_t nodeId = 0;
-  std::map<csSGNode*, size_t> nodeMap;
+  std::map<cs::SGNode*, size_t> nodeMap;
   for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfNodes(); i < in; ++i)
   {
     ShaderGraphEditorNode *editorNode = static_cast<ShaderGraphEditorNode*>(m_gui.nodeGraph->GetNode(i));
-    csSGNode *node = editorNode->GetSGNode();
+    cs::SGNode *node = editorNode->GetSGNode();
     if (node)
     {
 
@@ -513,7 +513,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       nodeEntry->AddAttribute("class", node->GetClass()->GetName());
       nodesEntry->AddChild(nodeEntry);
 
-      csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(node);
+      cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
       if (resourceNode)
       {
         csfEntry *resourceEntry = file.CreateEntry("resource");
@@ -524,62 +524,62 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
         csfEntry *valueEntry = 0;
         switch (resourceNode->GetResourceType())
         {
-        case eSPT_Float:
+        case cs::eSPT_Float:
           valueEntry = file.CreateEntry("float");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[0]));
           break;
-        case eSPT_Vector2:
+        case cs::eSPT_Vector2:
           valueEntry = file.CreateEntry("float2");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[1]));
           break;
-        case eSPT_Vector3:
+        case cs::eSPT_Vector3:
           valueEntry = file.CreateEntry("float3");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[1]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[2]));
           break;
-        case eSPT_Vector4:
+        case cs::eSPT_Vector4:
           valueEntry = file.CreateEntry("float4");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[1]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[2]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[3]));
           break;
-        case eSPT_Int:
+        case cs::eSPT_Int:
           valueEntry = file.CreateEntry("int");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[0]));
           break;
-        case eSPT_IVector2:
+        case cs::eSPT_IVector2:
           valueEntry = file.CreateEntry("int2");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[1]));
           break;
-        case eSPT_IVector3:
+        case cs::eSPT_IVector3:
           valueEntry = file.CreateEntry("int3");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[1]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[2]));
           break;
-        case eSPT_IVector4:
+        case cs::eSPT_IVector4:
           valueEntry = file.CreateEntry("int4");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[1]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[2]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultInts()[3]));
           break;
-        case eSPT_Color4:
+        case cs::eSPT_Color4:
           valueEntry = file.CreateEntry("color4");
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[0]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[1]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[2]));
           valueEntry->AddAttribute(std::to_string(resourceNode->GetDefaultFloats()[3]));
           break;
-        case eSPT_Matrix3:
+        case cs::eSPT_Matrix3:
           break;
-        case eSPT_Matrix4:
+        case cs::eSPT_Matrix4:
           break;
-        case eSPT_Texture:
+        case cs::eSPT_Texture:
           valueEntry = file.CreateEntry("locator");
           valueEntry->AddAttribute("locator", resourceNode->GetDefaultTextureResource().GetResourceFile());
           break;
@@ -600,7 +600,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
       nodeId++;
     }
-    csSGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
+    cs::SGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
     if (shaderGraph)
     {
       csfEntry *attributesEntry = file.CreateEntry("attributes");
@@ -628,14 +628,14 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       std::string modeString;
       switch (shaderGraph->GetDiscardAlphaCompareMode())
       {
-      case eCM_LessOrEqual: modeString = "LessOrEqual"; break;
-      case eCM_GreaterOrEqual: modeString = "GreaterOrEqual"; break;
-      case eCM_Less: modeString = "Less"; break;
-      case eCM_Greater: modeString = "Greater"; break;
-      case eCM_Equal: modeString = "Equal"; break;
-      case eCM_NotEqual: modeString = "NotEqual"; break;
-      case eCM_Never: modeString = "Never"; break;
-      case eCM_Always: modeString = "Always"; break;
+      case cs::eCM_LessOrEqual: modeString = "LessOrEqual"; break;
+      case cs::eCM_GreaterOrEqual: modeString = "GreaterOrEqual"; break;
+      case cs::eCM_Less: modeString = "Less"; break;
+      case cs::eCM_Greater: modeString = "Greater"; break;
+      case cs::eCM_Equal: modeString = "Equal"; break;
+      case cs::eCM_NotEqual: modeString = "NotEqual"; break;
+      case cs::eCM_Never: modeString = "Never"; break;
+      case cs::eCM_Always: modeString = "Always"; break;
       }
       csfEntry *modeEntry = file.CreateEntry("mode");
       modeEntry->AddAttribute(modeString);
@@ -657,7 +657,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
   for (size_t i = 0, in = m_shaderGraphCopy->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = m_shaderGraphCopy->GetNode(i);
+    cs::SGNode *node = m_shaderGraphCopy->GetNode(i);
     for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
     {
       csfEntry *inputEntry = file.CreateEntry("node");
@@ -666,11 +666,11 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       inputsEntry->AddChild(inputEntry);
 
 
-      csSGInput *input = node->GetInput(j);
-      csSGOutput *output = input->GetInput();
+      cs::SGInput *input = node->GetInput(j);
+      cs::SGOutput *output = input->GetInput();
       if (output)
       {
-        csSGNode *outputNode = output->GetNode();
+        cs::SGNode *outputNode = output->GetNode();
 
         csfEntry *outputEntry = file.CreateEntry("node");
         outputEntry->AddAttribute("id", std::to_string(nodeMap[outputNode]));
@@ -686,30 +686,30 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     }
   }
 
-  for (size_t i = 0; i < csSGShaderGraph::eIT_COUNT; ++i)
+  for (size_t i = 0; i < cs::SGShaderGraph::eIT_COUNT; ++i)
   {
-    csSGOutput *output = m_shaderGraphCopy->GetInput((csSGShaderGraph::InputType)i);
+    cs::SGOutput *output = m_shaderGraphCopy->GetInput((cs::SGShaderGraph::InputType)i);
     if (output)
     {
       csfEntry *sgEntry = file.CreateEntry("shaderGraph");
       switch (i)
       {
-      case csSGShaderGraph::eIT_Diffuse:
+      case cs::SGShaderGraph::eIT_Diffuse:
         sgEntry->AddAttribute("input", "Diffuse");
         break;
-      case csSGShaderGraph::eIT_Alpha:
+      case cs::SGShaderGraph::eIT_Alpha:
         sgEntry->AddAttribute("input", "Alpha");
         break;
-      case csSGShaderGraph::eIT_Roughness:
+      case cs::SGShaderGraph::eIT_Roughness:
         sgEntry->AddAttribute("input", "Roughness");
         break;
-      case csSGShaderGraph::eIT_Normal:
+      case cs::SGShaderGraph::eIT_Normal:
         sgEntry->AddAttribute("input", "Normal");
         break;
       }
       inputsEntry->AddChild(sgEntry);
 
-      csSGNode *outputNode = output->GetNode();
+      cs::SGNode *outputNode = output->GetNode();
       nodeId = nodeMap[outputNode];
 
       csfEntry *outputEntry = file.CreateEntry("node");
@@ -740,7 +740,7 @@ bool ShaderGraphEditorWidget::Apply()
 
   printf("Apply\n");
   printf("Compile shader graph copy\n");
-  csSGDefaultConsoleLogger logger;
+  cs::SGDefaultConsoleLogger logger;
 
   if (csEng->GetRenderer()->GetShaderGraphFactory()->GenerateShaderGraph(m_shaderGraphCopy, &logger))
   {
@@ -761,13 +761,13 @@ bool ShaderGraphEditorWidget::Apply()
   printf("Compile done: %d\n", result);
 
   std::set<std::string> thisResources;
-  csResourceLocator locator = m_editor->GetAsset()->GetResourceLocator();
+  cs::ResourceLocator locator = m_editor->GetAsset()->GetResourceLocator();
   if (locator.IsValid())
   {
     for (csSize i = 0, in = m_shaderGraph->GetNumberOfTotalNodes(); i < in; ++i)
     {
-      csSGNode *node = m_shaderGraph->GetNode(i);
-      csSGResourceNode *resNode = cs::QueryClass<csSGResourceNode>(node);
+      cs::SGNode *node = m_shaderGraph->GetNode(i);
+      cs::SGResourceNode *resNode = cs::QueryClass<cs::SGResourceNode>(node);
       if (resNode)
       {
         thisResources.insert(resNode->GetResourceId());
@@ -801,7 +801,7 @@ bool ShaderGraphEditorWidget::Apply()
   return true;
 }
 
-ShaderGraphEditorNode *ShaderGraphEditorWidget::GetEditorNode(csSGNode* node)
+ShaderGraphEditorNode *ShaderGraphEditorWidget::GetEditorNode(cs::SGNode* node)
 {
   for (size_t i = 0, in = m_gui.nodeGraph->GetNumberOfNodes(); i < in; ++i)
   {
@@ -830,7 +830,7 @@ ShaderGraphEditorNode *ShaderGraphEditorWidget::GetShaderGraphNode()
 }
 
 
-std::string ShaderGraphEditorWidget::ExtractName(const csResourceLocator &locator)
+std::string ShaderGraphEditorWidget::ExtractName(const cs::ResourceLocator &locator)
 {
   QString name(locator.GetResourceFile().c_str());
   name = name.replace("\\", "/");

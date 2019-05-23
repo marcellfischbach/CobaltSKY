@@ -9,53 +9,56 @@
 
 #include <cobalt/entity/csparticlestate.refl.hh>
 
-class csParticle;
-class csMaterial;
+class cs::Particle;
 
 
-
+namespace cs
+{
+class Material;
 
 CS_CLASS()
-class CSE_API csParticleState : public CS_SUPER(csRenderState)
+class CSE_API ParticleState : public CS_SUPER(cs::RenderState)
 {
   CS_CLASS_GEN;
 public:
-  csParticleState();
-  virtual ~csParticleState();
+  ParticleState();
+  virtual ~ParticleState();
 
-  void SetParticle(csParticle *particle);
-  csParticle *GetParticle();
-  const csParticle *GetParticle() const;
+  void SetParticle(cs::Particle * particle);
+  cs::Particle* GetParticle();
+  const cs::Particle* GetParticle() const;
 
-  void SetMaterial(csMaterial *materialInstance);
-  csMaterial *GetMaterial();
-  const csMaterial *GetMaterial() const;
+  void SetMaterial(cs::Material * materialInstance);
+  cs::Material* GetMaterial();
+  const cs::Material* GetMaterial() const;
 
-  void SetShadingMode(csParticleShadingMode shadingMode);
-  csParticleShadingMode GetShadingMode() const;
+  void SetShadingMode(cs::eParticleShadingMode shadingMode);
+  cs::eParticleShadingMode GetShadingMode() const;
 
-  void SetEmitter(iParticleEmitter *emitter);
-  iParticleEmitter *GetEmitter();
-  const iParticleEmitter *GetEmitter() const;
+  void SetEmitter(cs::iParticleEmitter * emitter);
+  cs::iParticleEmitter* GetEmitter();
+  const cs::iParticleEmitter* GetEmitter() const;
 
-  void SetStepper(iParticleStepper *emitter);
-  iParticleStepper *GetStepper();
-  const iParticleStepper *GetStepper() const;
+  void SetStepper(cs::iParticleStepper * emitter);
+  cs::iParticleStepper* GetStepper();
+  const cs::iParticleStepper* GetStepper() const;
 
 
   virtual void Update(float tpf);
-  virtual void Render(iGraphics *graphics, csRenderPass pass) const;
-  virtual void PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
+  virtual void Render(cs::iGraphics * graphics, cs::eRenderPass pass) const;
+  virtual void PrivScan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config);
 
 
 private:
   bool m_castShadow;
-  csParticle *m_particle;
-  csMaterial *m_materialInstance;
+  cs::Particle* m_particle;
+  cs::Material* m_materialInstance;
 
-  csParticleShadingMode m_shadingMode;
+  cs::eParticleShadingMode m_shadingMode;
 
-  iParticleEmitter *m_emitter;
-  iParticleStepper *m_stepper;
+  cs::iParticleEmitter* m_emitter;
+  cs::iParticleStepper* m_stepper;
 
 };
+
+}

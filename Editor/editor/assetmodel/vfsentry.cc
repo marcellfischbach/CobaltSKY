@@ -3,7 +3,7 @@
 
 namespace asset::model
 {
-  VFSEntry::VFSEntry(Model *model, const csVFS::Entry &entry)
+  VFSEntry::VFSEntry(Model *model, const cs::VFS::Entry &entry)
     : Folder(model, Entry::eT_VFSEntry)
     , m_entry(entry)
   {
@@ -16,9 +16,9 @@ namespace asset::model
   }
 
 
-  csResourceLocator VFSEntry::GetResourceLocator() const
+  cs::ResourceLocator VFSEntry::GetResourceLocator() const
   {
-	  return csResourceLocator(csResourceEntry(m_entry.GetName()));
+	  return cs::ResourceLocator(cs::ResourceEntry(m_entry.GetName()));
   }
 
   const VFSEntry *VFSEntry::GetVFSEntry() const

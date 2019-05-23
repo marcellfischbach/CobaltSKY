@@ -8,42 +8,46 @@
 #include <cobalt/math/csmatrix.hh>
 #include <cobalt/entity/csgeometrydata.refl.hh>
 
-class csClipper;
-class csMultiMaterial;
-class csMesh;
 
-struct csScanConfig;
-struct iGraphics;
-struct iEntityScan;
 /**
 * \ingroup entity
 */
 
+namespace cs
+{
+
+struct iEntityScan;
+struct iGraphics;
+struct ScanConfig;
+class Clipper;
+class Mesh;
+class MultiMaterial;
+
 CS_CLASS()
-class CSE_API csGeometryData : public CS_SUPER(cs::Object)
+class CSE_API GeometryData : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  virtual ~csGeometryData();
+  virtual ~GeometryData();
 
   csID GetID() const;
 
-  void SetName(const std::string &name);
-  const std::string &GetName() const;
+  void SetName(const std::string & name);
+  const std::string& GetName() const;
 
-  virtual void Scan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config) = 0;
+  virtual void Scan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config) = 0;
 
-  virtual void UpdateTransformation(const csMatrix4f &parentTransformation) = 0;
+  virtual void UpdateTransformation(const cs::Matrix4f & parentTransformation) = 0;
 
-  virtual csGeometryData *Clone()  = 0;
+  virtual cs::GeometryData* Clone() = 0;
 
   void SetAttached(bool attached);
   bool IsAttached() const;
 
 
 protected:
-  csGeometryData();
+  GeometryData();
 
 private:
   csID m_id;
@@ -53,40 +57,42 @@ private:
 };
 
 CS_CLASS()
-class CSE_API csGeometryDataWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API GeometryDataWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csGeometryData, csGeometryDataWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::GeometryData, GeometryDataWrapper, cs::ResourceWrapper);
 
 };
 
 
 
+}
 
-CS_FORCEINLINE void csGeometryData::SetAttached(bool attached)
+
+CS_FORCEINLINE void cs::GeometryData::SetAttached(bool attached)
 {
   m_attached = true;
 }
 
-CS_FORCEINLINE bool csGeometryData::IsAttached() const
+CS_FORCEINLINE bool cs::GeometryData::IsAttached() const
 {
   return m_attached;
 }
 
 
-CS_FORCEINLINE csID csGeometryData::GetID() const
+CS_FORCEINLINE csID cs::GeometryData::GetID() const
 {
   return m_id;
 }
 
 
 
-CS_FORCEINLINE void csGeometryData::SetName(const std::string &name)
+CS_FORCEINLINE void cs::GeometryData::SetName(const std::string &name)
 {
   m_name = name;
 }
 
-CS_FORCEINLINE const std::string &csGeometryData::GetName() const
+CS_FORCEINLINE const std::string &cs::GeometryData::GetName() const
 {
   return m_name;
 }

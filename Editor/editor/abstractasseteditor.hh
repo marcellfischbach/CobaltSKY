@@ -34,7 +34,7 @@ public:
   virtual bool IsDirty() const;
 
   virtual void CloseRequest() override;
-  void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
+  void ResourceRenamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to);
 
   void ReplacePreviewIcon(QImage image);
 

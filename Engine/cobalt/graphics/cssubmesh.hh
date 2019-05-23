@@ -9,55 +9,58 @@
 
 
 
+
+namespace cs
+{
 struct iGraphics;
 struct iIndexBuffer;
 struct iVertexBuffer;
 struct iVertexDeclaration;
 
-
-
 CS_CLASS()
-class CSE_API csSubMesh : public CS_SUPER(cs::Object)
+class CSE_API SubMesh : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  csSubMesh();
-  virtual ~csSubMesh();
+  SubMesh();
+  virtual ~SubMesh();
 
-  virtual void Render(iGraphics *renderer);
+  virtual void Render(cs::iGraphics * renderer);
 
-  void SetPrimitiveType(csPrimitiveType type);
-  void SetIndexType(csDataType indexType);
-  void SetVertexDeclaration(iVertexDeclaration *vertexDeclaration);
-  void AddVertexBuffer(iVertexBuffer *vertexBuffer);
-  void SetIndexBuffer(iIndexBuffer *indexBuffer, csSize count, csSize offset = 0);
+  void SetPrimitiveType(cs::ePrimitiveType type);
+  void SetIndexType(cs::eDataType indexType);
+  void SetVertexDeclaration(cs::iVertexDeclaration * vertexDeclaration);
+  void AddVertexBuffer(cs::iVertexBuffer * vertexBuffer);
+  void SetIndexBuffer(cs::iIndexBuffer * indexBuffer, csSize count, csSize offset = 0);
 
-  void SetBoundingBox(const csBoundingBox &bbox);
-  const csBoundingBox& GetBoundingBox() const;
+  void SetBoundingBox(const cs::BoundingBox & bbox);
+  const cs::BoundingBox & GetBoundingBox() const;
 
   unsigned GetNumberOfTrigons() const;
 
 private:
 
-  iIndexBuffer *m_indexBuffer;
+  cs::iIndexBuffer * m_indexBuffer;
   csSize        m_offset;
   csSize        m_count;
 
-  iVertexDeclaration *m_vertexDeclaration;
-  std::vector<iVertexBuffer*> m_vertexBuffer;
+  cs::iVertexDeclaration * m_vertexDeclaration;
+  std::vector<cs::iVertexBuffer*> m_vertexBuffer;
 
-  csDataType m_indexType;
-  csPrimitiveType m_primitiveType;
+  cs::eDataType m_indexType;
+  cs::ePrimitiveType m_primitiveType;
 
-  csBoundingBox m_boundingBox;
+  cs::BoundingBox m_boundingBox;
 };
 
 CS_CLASS()
-class CSE_API csSubMeshWrapper : public CS_SUPER(csResourceWrapper)
+class CSE_API SubMeshWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csSubMesh, csSubMeshWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::SubMesh, SubMeshWrapper, cs::ResourceWrapper);
 };
 
+
+}
 

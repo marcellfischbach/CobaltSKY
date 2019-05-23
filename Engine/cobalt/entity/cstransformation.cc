@@ -2,7 +2,7 @@
 
 #include <cobalt/entity/cstransformation.hh>
 
-csTransformation::csTransformation()
+cs::Transformation::Transformation()
   : m_matrix(0)
   , m_matrixGlobal(0)
   , m_parentMatrixGlobal(0)
@@ -11,10 +11,10 @@ csTransformation::csTransformation()
    
 }
 
-csTransformation::csTransformation(csMatrix4f *matrix,
-                                   csMatrix4f *matrixGlobal,
-                                   const csMatrix4f *parentMatrixGlobal,
-                                   const csMatrix4f *parentMatrixGlobalInv)
+cs::Transformation::Transformation(cs::Matrix4f *matrix,
+                                   cs::Matrix4f *matrixGlobal,
+                                   const cs::Matrix4f *parentMatrixGlobal,
+                                   const cs::Matrix4f *parentMatrixGlobalInv)
   : m_matrix(matrix)
   , m_matrixGlobal(matrixGlobal)
   , m_parentMatrixGlobal(parentMatrixGlobal)
@@ -23,7 +23,7 @@ csTransformation::csTransformation(csMatrix4f *matrix,
 
 }
 
-void csTransformation::Debug(const char *msg)
+void cs::Transformation::Debug(const char *msg)
 {
   if (IsValid())
   {
@@ -36,13 +36,13 @@ void csTransformation::Debug(const char *msg)
 }
 
 
-void csTransformation::SetGlobalTransformation(const csMatrix4f &transformation)
+void cs::Transformation::SetGlobalTransformation(const cs::Matrix4f &transformation)
 {
   if (m_matrix)
   {
     if (m_parentMatrixGlobalInv)
     {
-      csMatrix4f::Mult(*m_parentMatrixGlobalInv, transformation, *m_matrix);
+      cs::Matrix4f::Mult(*m_parentMatrixGlobalInv, transformation, *m_matrix);
     }
     else
     {
@@ -51,7 +51,7 @@ void csTransformation::SetGlobalTransformation(const csMatrix4f &transformation)
   }
 }
 
-void csTransformation::SetTransformation(const csMatrix4f &transformation)
+void cs::Transformation::SetTransformation(const cs::Matrix4f &transformation)
 {
   if (m_matrix)
   {
@@ -59,7 +59,7 @@ void csTransformation::SetTransformation(const csMatrix4f &transformation)
   }
 }
 
-void csTransformation::SetTranslation(const csVector3f &translation)
+void cs::Transformation::SetTranslation(const cs::Vector3f &translation)
 {
   if (m_matrix)
   {
@@ -67,7 +67,7 @@ void csTransformation::SetTranslation(const csVector3f &translation)
   }
 }
 
-void csTransformation::SetRotationX(float rads)
+void cs::Transformation::SetRotationX(float rads)
 {
   if (m_matrix)
   {
@@ -77,7 +77,7 @@ void csTransformation::SetRotationX(float rads)
 }
 
 
-void csTransformation::SetRotationY(float rads)
+void cs::Transformation::SetRotationY(float rads)
 {
   if (m_matrix)
   {
@@ -86,7 +86,7 @@ void csTransformation::SetRotationY(float rads)
   }
 }
 
-void csTransformation::SetRotationZ(float rads)
+void cs::Transformation::SetRotationZ(float rads)
 {
   if (m_matrix)
   {
@@ -96,7 +96,7 @@ void csTransformation::SetRotationZ(float rads)
 
 }
 
-void csTransformation::SetRotation(const csVector3f &axis, float rads)
+void cs::Transformation::SetRotation(const cs::Vector3f &axis, float rads)
 {
   if (m_matrix)
   {
@@ -104,7 +104,7 @@ void csTransformation::SetRotation(const csVector3f &axis, float rads)
   }
 }
 
-csMatrix4f &csTransformation::GetGlobalTransformation(csMatrix4f &transformation) const
+cs::Matrix4f &cs::Transformation::GetGlobalTransformation(cs::Matrix4f &transformation) const
 {
   if (m_matrixGlobal)
   {
@@ -117,7 +117,7 @@ csMatrix4f &csTransformation::GetGlobalTransformation(csMatrix4f &transformation
   return transformation;
 }
 
-csMatrix4f &csTransformation::GetTransformation(csMatrix4f &transformation) const
+cs::Matrix4f &cs::Transformation::GetTransformation(cs::Matrix4f &transformation) const
 {
   if (m_matrix)
   {
@@ -127,7 +127,7 @@ csMatrix4f &csTransformation::GetTransformation(csMatrix4f &transformation) cons
 }
 
 
-csVector3f &csTransformation::GetGlobalTranslation(csVector3f &globalTranslation) const
+cs::Vector3f &cs::Transformation::GetGlobalTranslation(cs::Vector3f &globalTranslation) const
 {
   if (m_matrixGlobal)
   {
@@ -141,7 +141,7 @@ csVector3f &csTransformation::GetGlobalTranslation(csVector3f &globalTranslation
   return globalTranslation;
 }
 
-csVector3f &csTransformation::GetTranslation(csVector3f &globalTranslation) const
+cs::Vector3f &cs::Transformation::GetTranslation(cs::Vector3f &globalTranslation) const
 {
   if (m_matrix)
   {
@@ -151,7 +151,7 @@ csVector3f &csTransformation::GetTranslation(csVector3f &globalTranslation) cons
   return globalTranslation;
 }
 
-csVector3f &csTransformation::GetGlobalXAxis(csVector3f &xAxis) const
+cs::Vector3f &cs::Transformation::GetGlobalXAxis(cs::Vector3f &xAxis) const
 {
   if (m_matrixGlobal)
   {
@@ -164,7 +164,7 @@ csVector3f &csTransformation::GetGlobalXAxis(csVector3f &xAxis) const
   return xAxis;
 }
 
-csVector3f &csTransformation::GetGlobalYAxis(csVector3f &yAxis) const
+cs::Vector3f &cs::Transformation::GetGlobalYAxis(cs::Vector3f &yAxis) const
 {
   if (m_matrixGlobal)
   {
@@ -177,7 +177,7 @@ csVector3f &csTransformation::GetGlobalYAxis(csVector3f &yAxis) const
   return yAxis;
 }
 
-csVector3f &csTransformation::GetGlobalZAxis(csVector3f &zAxis) const
+cs::Vector3f &cs::Transformation::GetGlobalZAxis(cs::Vector3f &zAxis) const
 {
   if (m_matrixGlobal)
   {
@@ -191,7 +191,7 @@ csVector3f &csTransformation::GetGlobalZAxis(csVector3f &zAxis) const
 }
 
 
-csVector3f &csTransformation::GetXAxis(csVector3f &xAxis) const
+cs::Vector3f &cs::Transformation::GetXAxis(cs::Vector3f &xAxis) const
 {
   if (m_matrix)
   {
@@ -200,7 +200,7 @@ csVector3f &csTransformation::GetXAxis(csVector3f &xAxis) const
   return xAxis;
 }
 
-csVector3f &csTransformation::GetYAxis(csVector3f &yAxis) const
+cs::Vector3f &cs::Transformation::GetYAxis(cs::Vector3f &yAxis) const
 {
   if (m_matrix)
   {
@@ -209,7 +209,7 @@ csVector3f &csTransformation::GetYAxis(csVector3f &yAxis) const
   return yAxis;
 }
 
-csVector3f &csTransformation::GetZAxis(csVector3f &zAxis) const
+cs::Vector3f &cs::Transformation::GetZAxis(cs::Vector3f &zAxis) const
 {
   if (m_matrix)
   {
@@ -218,7 +218,7 @@ csVector3f &csTransformation::GetZAxis(csVector3f &zAxis) const
   return zAxis;
 }
 
-bool csTransformation::IsValid() const
+bool cs::Transformation::IsValid() const
 {
   return m_matrix != 0;
 }

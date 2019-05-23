@@ -9,129 +9,134 @@
 
 #include <vector>
 
+
+namespace cs
+{
 struct iMesh;
 struct iPhysicsBaseCollider;
-class csMaterial;
+class Material;
+
 /**
 * \ingroup entity
 */
 
 CS_CLASS()
-class CSE_API csStaticMeshState : public CS_SUPER(csRenderState)
+class CSE_API StaticMeshState : public CS_SUPER(cs::RenderState)
 {
   CS_CLASS_GEN;
 public:
-  csStaticMeshState();
-  virtual ~csStaticMeshState();
+  StaticMeshState();
+  virtual ~StaticMeshState();
 
   CS_FUNCTION()
-  void SetMesh(iMesh *mesh);
+    void SetMesh(cs::iMesh * mesh);
   CS_FUNCTION()
-  iMesh *GetMesh();
+    cs::iMesh* GetMesh();
   CS_FUNCTION()
-  const iMesh *GetMesh() const;
+    const cs::iMesh* GetMesh() const;
 
   CS_FUNCTION()
-  csSize GetNumberOfMaterials() const;
+    csSize GetNumberOfMaterials() const;
   CS_FUNCTION()
-  void SetMaterial(csSize idx, csMaterial *material);
+    void SetMaterial(csSize idx, cs::Material * material);
   CS_FUNCTION()
-  csMaterial *GetMaterial(csSize idx = 0);
+    cs::Material* GetMaterial(csSize idx = 0);
   CS_FUNCTION()
-  const csMaterial *GetMaterial(csSize idx = 0) const;
+    const cs::Material * GetMaterial(csSize idx = 0) const;
 
   CS_FUNCTION()
-  csPhysicsShape *GetColliderShape ();
+    cs::PhysicsShape * GetColliderShape();
   CS_FUNCTION()
-  const csPhysicsShape *GetColliderShape () const;
+    const cs::PhysicsShape * GetColliderShape() const;
   CS_FUNCTION()
-  void SetColliderShape(csPhysicsShape *colliderShape);
+    void SetColliderShape(cs::PhysicsShape * colliderShape);
 
   CS_FUNCTION()
-  void SetFriction(float friction);
+    void SetFriction(float friction);
   CS_FUNCTION()
-  float GetFriction() const;
+    float GetFriction() const;
   CS_FUNCTION()
-  void SetRestitution(float restitution);
+    void SetRestitution(float restitution);
   CS_FUNCTION()
-  float GetRestitution() const;
+    float GetRestitution() const;
 
 
   CS_FUNCTION()
-  void SetCastShadow(bool castShadow);
+    void SetCastShadow(bool castShadow);
   CS_FUNCTION()
-  bool IsCastShadow() const;
+    bool IsCastShadow() const;
 
   virtual void UpdateTransformation();
 
 
 
-  virtual void Render(iGraphics *graphics, csRenderPass pass) const;
+  virtual void Render(cs::iGraphics * graphics, cs::eRenderPass pass) const;
 
   virtual unsigned GetNumberOfRenderCalls() const;
   virtual unsigned GetNumberOfTotalTrigons() const;
 
 protected:
-  virtual void OnAttachedToScene(csEntityScene *scene);
-  virtual void OnDetachedFromScene(csEntityScene *scene);
+  virtual void OnAttachedToScene(cs::EntityScene * scene);
+  virtual void OnDetachedFromScene(cs::EntityScene * scene);
 
-  virtual void FillBoundingBox(csBoundingBox &bbox);
-  virtual void PrivScan(csClipper *clipper, iGraphics *graphics, iEntityScan *entityScan, const csScanConfig &config);
+  virtual void FillBoundingBox(cs::BoundingBox & bbox);
+  virtual void PrivScan(cs::Clipper * clipper, cs::iGraphics * graphics, cs::iEntityScan * entityScan, const cs::ScanConfig & config);
 
 private:
 
-  iPhysicsBaseCollider *GetCollider();
+  cs::iPhysicsBaseCollider * GetCollider();
 
   void UpdateMaterialSlots();
 
   bool m_castShadow;
 
   CS_PROPERTY()
-  iMesh* m_mesh;
+    cs::iMesh * m_mesh;
 
   CS_PROPERTY()
-  std::vector<csMaterial*> m_materials;
+    std::vector<cs::Material*> m_materials;
 
   CS_PROPERTY()
-  csPhysicsShape *m_colliderShape;
+    cs::PhysicsShape * m_colliderShape;
 
   bool m_enableCollision;
-  csPhysicsColliderType m_colliderType;
+  cs::ePhysicsColliderType m_colliderType;
 
   CS_PROPERTY()
-  iPhysicsBaseCollider *m_collider;
+    cs::iPhysicsBaseCollider * m_collider;
 
   CS_PROPERTY()
-  float m_friction;
+    float m_friction;
   CS_PROPERTY()
-  float m_restitution;
+    float m_restitution;
 
   CS_PROPERTY()
-  bool m_autoInertia;
+    bool m_autoInertia;
   CS_PROPERTY()
-  csVector3f m_inertia;
+    cs::Vector3f m_inertia;
   CS_PROPERTY()
-  float m_mass;
+    float m_mass;
 };
 
+}
 
 
-CS_FORCEINLINE iMesh *csStaticMeshState::GetMesh()
+CS_FORCEINLINE cs::iMesh *cs::StaticMeshState::GetMesh()
 {
   return m_mesh;
 }
 
-CS_FORCEINLINE const iMesh *csStaticMeshState::GetMesh() const
+CS_FORCEINLINE const cs::iMesh *cs::StaticMeshState::GetMesh() const
 {
   return m_mesh;
 }
 
-CS_FORCEINLINE csSize csStaticMeshState::GetNumberOfMaterials() const
+CS_FORCEINLINE csSize cs::StaticMeshState::GetNumberOfMaterials() const
 {
   return m_materials.size();
 }
 
-CS_FORCEINLINE csMaterial *csStaticMeshState::GetMaterial(csSize idx)
+CS_FORCEINLINE cs::Material *cs::StaticMeshState::GetMaterial(csSize idx)
 {
   if (idx >= m_materials.size())
   {
@@ -140,7 +145,7 @@ CS_FORCEINLINE csMaterial *csStaticMeshState::GetMaterial(csSize idx)
   return m_materials[idx];
 }
 
-CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize idx) const
+CS_FORCEINLINE const cs::Material *cs::StaticMeshState::GetMaterial(csSize idx) const
 {
   if (idx >= m_materials.size())
   {
@@ -149,32 +154,32 @@ CS_FORCEINLINE const csMaterial *csStaticMeshState::GetMaterial(csSize idx) cons
   return m_materials[idx];
 }
 
-CS_FORCEINLINE csPhysicsShape *csStaticMeshState::GetColliderShape()
+CS_FORCEINLINE cs::PhysicsShape *cs::StaticMeshState::GetColliderShape()
 {
   return m_colliderShape;
 }
 
-CS_FORCEINLINE const csPhysicsShape *csStaticMeshState::GetColliderShape() const
+CS_FORCEINLINE const cs::PhysicsShape *cs::StaticMeshState::GetColliderShape() const
 {
   return m_colliderShape;
 }
 
-CS_FORCEINLINE void csStaticMeshState::SetCastShadow(bool castShadow)
+CS_FORCEINLINE void cs::StaticMeshState::SetCastShadow(bool castShadow)
 {
   m_castShadow = castShadow;
 }
 
-CS_FORCEINLINE bool csStaticMeshState::IsCastShadow() const
+CS_FORCEINLINE bool cs::StaticMeshState::IsCastShadow() const
 {
   return m_castShadow;
 }
 
-CS_FORCEINLINE float csStaticMeshState::GetFriction() const
+CS_FORCEINLINE float cs::StaticMeshState::GetFriction() const
 {
   return m_friction;
 }
 
-CS_FORCEINLINE float csStaticMeshState::GetRestitution() const
+CS_FORCEINLINE float cs::StaticMeshState::GetRestitution() const
 {
   return m_restitution;
 }

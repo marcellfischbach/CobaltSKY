@@ -5,21 +5,26 @@
 #include <cobalt/graphics/cslight.hh>
 #include <cobalt/graphics/cspointlight.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csPointLight : public CS_SUPER(csLight)
+class CSE_API PointLight : public CS_SUPER(cs::Light)
 {
   CS_CLASS_GEN;
 public:
-  csPointLight();
-  virtual ~csPointLight();
+  PointLight();
+  virtual ~PointLight();
 
-  void SetPosition(const csVector3f &position);
-  const csVector3f &GetPosition() const;
+  void SetPosition(const cs::Vector3f & position);
+  const cs::Vector3f& GetPosition() const;
 
   void SetRadius(float radius);
   float GetRadius() const;
 
 private:
-  csVector3f m_position;
+  cs::Vector3f m_position;
   float m_radius;
 };
+
+}

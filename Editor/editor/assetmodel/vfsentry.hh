@@ -11,12 +11,12 @@ namespace asset::model
   class EDITOR_API VFSEntry : public Folder
   {
   public:
-    VFSEntry(Model *model, const csVFS::Entry &entry);
+    VFSEntry(Model *model, const cs::VFS::Entry &entry);
     virtual ~VFSEntry();
 
-    const csVFS::Entry &GetEntry() const { return m_entry; }
+    const cs::VFS::Entry &GetEntry() const { return m_entry; }
 
-    virtual csResourceLocator GetResourceLocator() const;
+    virtual cs::ResourceLocator GetResourceLocator() const;
 
     virtual const VFSEntry *GetVFSEntry() const;
 
@@ -28,7 +28,7 @@ namespace asset::model
     virtual const VFSEntry *AsVFSEntry() const;
 
   private:
-    const csVFS::Entry &m_entry;
+    const cs::VFS::Entry &m_entry;
   };
 }
 

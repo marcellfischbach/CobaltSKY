@@ -8,21 +8,24 @@
 #include <graphicsgl4/gl4sampler.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS();
-class CSGRAPHICSGL4_API csSamplerGL4 : public CS_SUPER(iSampler)
+class CSGRAPHICSGL4_API SamplerGL4 : public CS_SUPER(cs::iSampler)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csSamplerGL4();
-  virtual ~csSamplerGL4();
+  SamplerGL4();
+  virtual ~SamplerGL4();
 
   bool Initialize();
 
   void Bind(GLuint unit);
 
-  virtual void SetFilter(csFilterMode filter);
-  virtual csFilterMode GetFilter() const;
+  virtual void SetFilter(cs::eFilterMode filter);
+  virtual cs::eFilterMode GetFilter() const;
 
   virtual void SetAnisotropy(csUInt8 anisotropy);
   virtual csUInt8 GetAnisotropy() const;
@@ -33,36 +36,38 @@ public:
   virtual void SetMaxLOD(csInt16 minLOD);
   virtual csInt16 GetMaxLOD() const;
 
-  virtual void SetAddressU(csTextureAddressMode addressMode);
-  virtual csTextureAddressMode GetAddressU() const;
+  virtual void SetAddressU(cs::eTextureAddressMode addressMode);
+  virtual cs::eTextureAddressMode GetAddressU() const;
 
-  virtual void SetAddressV(csTextureAddressMode addressMode);
-  virtual csTextureAddressMode GetAddressV() const;
+  virtual void SetAddressV(cs::eTextureAddressMode addressMode);
+  virtual cs::eTextureAddressMode GetAddressV() const;
 
-  virtual void SetAddressW(csTextureAddressMode addressMode);
-  virtual csTextureAddressMode GetAddressW() const;
+  virtual void SetAddressW(cs::eTextureAddressMode addressMode);
+  virtual cs::eTextureAddressMode GetAddressW() const;
 
-  virtual void SetBorderColor(const csVector4f &color);
-  virtual const csVector4f &GetBorderColor() const;
+  virtual void SetBorderColor(const cs::Vector4f & color);
+  virtual const cs::Vector4f& GetBorderColor() const;
 
-  virtual void SetTextureCompareMode(csTextureCompareMode mode);
-  virtual csTextureCompareMode GetTextureCompareMode() const;
+  virtual void SetTextureCompareMode(cs::eTextureCompareMode mode);
+  virtual cs::eTextureCompareMode GetTextureCompareMode() const;
 
-  virtual void SetTextureCompareFunc(csTextureCompareFunc func);
-  virtual csTextureCompareFunc GetTextureCompareFunc() const;
+  virtual void SetTextureCompareFunc(cs::eTextureCompareFunc func);
+  virtual cs::eTextureCompareFunc GetTextureCompareFunc() const;
 
   virtual bool NeedsMipMaps() const;
 private:
   GLuint m_name;
 
-  csFilterMode m_filterMode;
+  cs::eFilterMode m_filterMode;
   csUInt8 m_anisotropy;
   csInt16 m_minLOD;
   csInt16 m_maxLOD;
-  csTextureAddressMode m_addressU;
-  csTextureAddressMode m_addressV;
-  csTextureAddressMode m_addressW;
-  csVector4f m_borderColor;
-  csTextureCompareMode m_textureCompareMode;
-  csTextureCompareFunc m_textureCompareFunc;
+  cs::eTextureAddressMode m_addressU;
+  cs::eTextureAddressMode m_addressV;
+  cs::eTextureAddressMode m_addressW;
+  cs::Vector4f m_borderColor;
+  cs::eTextureCompareMode m_textureCompareMode;
+  cs::eTextureCompareFunc m_textureCompareFunc;
 };
+
+}

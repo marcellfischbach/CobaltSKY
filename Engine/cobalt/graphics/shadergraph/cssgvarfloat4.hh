@@ -8,12 +8,17 @@
 
 #define CS_VAR_FLOAT4_NAME "Var/Float4"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGVarFloat4 : public CS_SUPER(csSGResourceNode)
+class CSE_API SGVarFloat4 : public CS_SUPER(cs::SGResourceNode)
 {
   CS_CLASS_GEN;
 public:
 
-  csSGVarFloat4();
-  virtual ~csSGVarFloat4() { }
+  SGVarFloat4();
+  virtual ~SGVarFloat4() { }
 };
+
+}

@@ -27,7 +27,7 @@ SamplerEditor::~SamplerEditor()
 
 void SamplerEditor::UpdateAsset()
 {
-  csSamplerWrapper *sampler = cs::QueryClass<csSamplerWrapper>(GetEditObject());
+  cs::SamplerWrapper *sampler = cs::QueryClass<cs::SamplerWrapper>(GetEditObject());
   if (sampler)
   {
     m_widget->SetSampler(sampler);
@@ -49,10 +49,10 @@ void SamplerEditor::Save()
 
 void SamplerEditor::MergeSampler()
 {
-  csSamplerWrapper *editorSamplerWrapper = cs::QueryClass<csSamplerWrapper>(GetEditObject());
-  csSamplerWrapper *engineSamplerWrapper = csResourceManager::Get()->Get<csSamplerWrapper>(GetAsset()->GetResourceLocator());
-  iSampler *editorSampler = editorSamplerWrapper ? editorSamplerWrapper->Get() : 0;
-  iSampler *engineSampler = engineSamplerWrapper ? engineSamplerWrapper->Get() : 0;
+  cs::SamplerWrapper *editorSamplerWrapper = cs::QueryClass<cs::SamplerWrapper>(GetEditObject());
+  cs::SamplerWrapper *engineSamplerWrapper = cs::ResourceManager::Get()->Get<cs::SamplerWrapper>(GetAsset()->GetResourceLocator());
+  cs::iSampler *editorSampler = editorSamplerWrapper ? editorSamplerWrapper->Get() : 0;
+  cs::iSampler *engineSampler = engineSamplerWrapper ? engineSamplerWrapper->Get() : 0;
   if (editorSampler && engineSampler)
   {
     engineSampler->SetFilter(editorSampler->GetFilter());
@@ -63,7 +63,7 @@ void SamplerEditor::MergeSampler()
     engineSampler->SetAddressV(editorSampler->GetAddressV());
     engineSampler->SetAddressW(editorSampler->GetAddressW());
     engineSampler->SetBorderColor(editorSampler->GetBorderColor());
-    engineSampler->SetTextureCompareMode(editorSampler->GetTextureCompareMode());
+    engineSampler->Setcs::eTextureCompareMode(editorSampler->Getcs::eTextureCompareMode());
     engineSampler->SetTextureCompareFunc(editorSampler->GetTextureCompareFunc());
   }
 }
@@ -189,7 +189,7 @@ void SamplerEditor::MergeFile()
     compareModeEntry = file.CreateEntry("compareMode");
     samplerEntry->AddChild(compareModeEntry);
   }
-  SetTextureCompareMode(compareModeEntry);
+  Setcs::eTextureCompareMode(compareModeEntry);
 
   //
   // CompareFunc
@@ -230,7 +230,7 @@ void SamplerEditor::ReplaceFile()
   SetAddressV(addressVEntry);
   SetAddressW(addressWEntry);
   SetBorderColor(borderColorEntry);
-  SetTextureCompareMode(compareModeEntry);
+  Setcs::eTextureCompareMode(compareModeEntry);
   SetTextureCompareFunc(compareFuncEntry);
 
   file.GetRoot()->AddChild(assetEntry);
@@ -266,19 +266,19 @@ void SamplerEditor::SetFilter(csfEntry *entry)
   std::string text;
   switch (m_widget->GetFilter())
   {
-  case eFM_MinMagNearest: text = "MinMagNearest"; break;
-  case eFM_MinNearestMagLinear: text = "MinNearestMagLinear"; break;
-  case eFM_MinLinearMagNearest: text = "MinLinearMagNearest"; break;
-  case eFM_MinMagLinear: text = "MinMagLinear"; break;
-  case eFM_MinMagMipNearest: text = "MinMagMipNearest"; break;
-  case eFM_MinMagNearestMipLinear: text = "MinMagNearestMipLinear"; break;
-  case eFM_MinNearestMagLinearMipNearest: text = "MinNearestMagLinearMipNearest"; break;
-  case eFM_MinNearestMagMipLinear: text = "MinNearestMagMipLinear"; break;
-  case eFM_MinLinearMagMipNearest: text = "MinLinearMagMipNearest"; break;
-  case eFM_MinLinearMagNearestMipLinear: text = "MinLinearMagNearestMipLinear"; break;
-  case eFM_MinMagLinearMipNearest: text = "MinMagLinearMipNearest"; break;
-  case eFM_MinMagMipLinear: text = "MinMagMipLinear"; break;
-  case eFM_Anisotropic: text = "Anisotropic"; break;
+  case cs::eFM_MinMagNearest: text = "MinMagNearest"; break;
+  case cs::eFM_MinNearestMagLinear: text = "MinNearestMagLinear"; break;
+  case cs::eFM_MinLinearMagNearest: text = "MinLinearMagNearest"; break;
+  case cs::eFM_MinMagLinear: text = "MinMagLinear"; break;
+  case cs::eFM_MinMagMipNearest: text = "MinMagMipNearest"; break;
+  case cs::eFM_MinMagNearestMipLinear: text = "MinMagNearestMipLinear"; break;
+  case cs::eFM_MinNearestMagLinearMipNearest: text = "MinNearestMagLinearMipNearest"; break;
+  case cs::eFM_MinNearestMagMipLinear: text = "MinNearestMagMipLinear"; break;
+  case cs::eFM_MinLinearMagMipNearest: text = "MinLinearMagMipNearest"; break;
+  case cs::eFM_MinLinearMagNearestMipLinear: text = "MinLinearMagNearestMipLinear"; break;
+  case cs::eFM_MinMagLinearMipNearest: text = "MinMagLinearMipNearest"; break;
+  case cs::eFM_MinMagMipLinear: text = "MinMagMipLinear"; break;
+  case cs::eFM_Anisotropic: text = "Anisotropic"; break;
   }
   entry->RemoveAttributes();
   entry->AddAttribute(text);
@@ -317,16 +317,16 @@ void SamplerEditor::SetAddressW(csfEntry *entry)
   SetAddress(entry, m_widget->GetAddressW());
 }
 
-void SamplerEditor::SetAddress(csfEntry *entry, csTextureAddressMode address)
+void SamplerEditor::SetAddress(csfEntry *entry, cs::eTextureAddressMode address)
 {
   std::string text;
   switch (address)
   {
-  case eTAM_Repeat: text = "Repeat"; break;
-  case eTAM_RepeatMirror: text = "RepeatMirror"; break;
-  case eTAM_Clamp: text = "Clamp"; break;
-  case eTAM_ClampBorder: text = "ClampBorder"; break;
-  case eTAM_MirrowOnce: text = "MirrowOnce"; break;
+  case cs::eTAM_Repeat: text = "Repeat"; break;
+  case cs::eTAM_RepeatMirror: text = "RepeatMirror"; break;
+  case cs::eTAM_Clamp: text = "Clamp"; break;
+  case cs::eTAM_ClampBorder: text = "ClampBorder"; break;
+  case cs::eTAM_MirrowOnce: text = "MirrowOnce"; break;
   }
 
   entry->RemoveAttributes();
@@ -335,7 +335,7 @@ void SamplerEditor::SetAddress(csfEntry *entry, csTextureAddressMode address)
 
 void SamplerEditor::SetBorderColor(csfEntry *entry)
 {
-  csVector4f col = m_widget->GetBorderColor();
+  cs::Vector4f col = m_widget->GetBorderColor();
   entry->RemoveAttributes();
   entry->AddAttributeFloat(col.x);
   entry->AddAttributeFloat(col.y);
@@ -343,13 +343,13 @@ void SamplerEditor::SetBorderColor(csfEntry *entry)
   entry->AddAttributeFloat(col.w);
 }
 
-void SamplerEditor::SetTextureCompareMode(csfEntry *entry)
+void SamplerEditor::Setcs::eTextureCompareMode(csfEntry *entry)
 {
   std::string text;
-  switch (m_widget->GetTextureCompareMode())
+  switch (m_widget->Getcs::eTextureCompareMode())
   {
-  case eTCM_CompareToR: text = "CompareToR"; break;
-  case eTCM_None: text = "None"; break;
+  case cs::eTCM_CompareToR: text = "CompareToR"; break;
+  case cs::eTCM_None: text = "None"; break;
   }
   entry->RemoveAttributes();
   entry->AddAttribute(text);
@@ -360,14 +360,14 @@ void SamplerEditor::SetTextureCompareFunc(csfEntry *entry)
   std::string text;
   switch (m_widget->GetTextureCompareFunc())
   {
-  case eTCF_LessOrEqual: text = "LessOrEqual"; break;
-  case eTCF_GreaterOrEqual: text = "GreaterOrEqual"; break;
-  case eTCF_Less: text = "Less"; break;
-  case eTCF_Greater: text = "Greater"; break;
-  case eTCF_Equal: text = "Equal"; break;
-  case eTCF_NotEqual: text = "NotEqual"; break;
-  case eTCF_Always: text = "Always"; break;
-  case eTCF_Never: text = "Never"; break;
+  case cs::eTCF_LessOrEqual: text = "LessOrEqual"; break;
+  case cs::eTCF_GreaterOrEqual: text = "GreaterOrEqual"; break;
+  case cs::eTCF_Less: text = "Less"; break;
+  case cs::eTCF_Greater: text = "Greater"; break;
+  case cs::eTCF_Equal: text = "Equal"; break;
+  case cs::eTCF_NotEqual: text = "NotEqual"; break;
+  case cs::eTCF_Always: text = "Always"; break;
+  case cs::eTCF_Never: text = "Never"; break;
   }
   entry->RemoveAttributes();
   entry->AddAttribute(text);

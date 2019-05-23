@@ -98,7 +98,7 @@ bool SDLWindow::InitializeOpenGL(
 
 }
 
-void SDLWindow::SetIcon(const csImage *image)
+void SDLWindow::SetIcon(const cs::Image *image)
 {
   csUInt8 *buffer = new csUInt8[image->GetWidth() * image->GetHeight() * 4];
   memcpy(buffer, image->GetData(), image->GetWidth() * image->GetHeight() * 4);
@@ -117,13 +117,13 @@ void SDLWindow::SetIcon(const csImage *image)
 
 }
 
-const iKeyboard *SDLWindow::GetKeyboard() const
+const cs::iKeyboard *SDLWindow::GetKeyboard() const
 {
   return m_keyboard;
 }
 
 
-const iMouse *SDLWindow::GetMouse() const
+const cs::iMouse *SDLWindow::GetMouse() const
 {
   return m_mouse;
 }

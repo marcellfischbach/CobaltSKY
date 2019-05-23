@@ -21,22 +21,22 @@ public:
   virtual VFSEntryNode *AsVFSEntryNode() override;
   virtual const VFSEntryNode *AsVFSEntryNode() const override;
 
-  void SetEntry(const csVFS::Entry *entry);
-  const csVFS::Entry *GetEntry() const;
+  void SetEntry(const cs::VFS::Entry *entry);
+  const cs::VFS::Entry *GetEntry() const;
 
-  virtual const csResourceLocator WithNewName(const std::string &newName) const;
+  virtual const cs::ResourceLocator WithNewName(const std::string &newName) const;
 
   virtual int GetPriority() const override;
   
 protected:
-  csResourceLocator GetNewResourceLocator();
+  cs::ResourceLocator GetNewResourceLocator();
 
   virtual void DebugNode() const;
 
 private:
   VFSEntryNode(Model *model);
 
-  const csVFS::Entry *m_entry;
+  const cs::VFS::Entry *m_entry;
 };
 
 }

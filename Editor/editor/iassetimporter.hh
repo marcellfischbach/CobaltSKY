@@ -33,6 +33,6 @@ struct EDITOR_API iAssetImporter : public cs::iObject
 
   virtual void SetEnabled(bool enable) = 0;
 
-  virtual csResourceLocator Import(const asset::model::Folder *folder) = 0;
+  virtual cs::ResourceLocator Import(const asset::model::Folder *folder) = 0;
 
 };

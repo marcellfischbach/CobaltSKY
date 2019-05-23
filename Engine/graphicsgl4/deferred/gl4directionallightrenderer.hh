@@ -3,78 +3,82 @@
 #include <graphicsgl4/gl4export.hh>
 #include <graphicsgl4/deferred/gl4lightrenderer.hh>
 
-class csTexture2DWrapper;
-class csTexture2DArrayWrapper;
-class csDirectionalLight;
+
+namespace cs
+{
+class DirectionalLight;
+class Texture2DWrapper;
+class Texture2DArrayWrapper;
+}
 
 class csDirectionalLightRendererGL4 : public csLightRendererGL4
 {
 public:
-  csDirectionalLightRendererGL4(iGraphics *renderer);
+  csDirectionalLightRendererGL4(cs::iGraphics *renderer);
   virtual ~csDirectionalLightRendererGL4();
 
-  virtual void Render(csEntity *root, csCamera *camera, csLight *light, csGBufferGL4 *gbuffer, iRenderTarget *target);
+  virtual void Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target);
 
 private:
-  void RenderShadow(csEntity *root, csCamera *camera, const csDirectionalLight *light);
-  void RenderShadowMap(const csDirectionalLight *light, csGBufferGL4 *gbuffer);
+  void RenderShadow(cs::Entity *root, cs::Camera *camera, const cs::DirectionalLight *light);
+  void RenderShadowMap(const cs::DirectionalLight *light, csGBufferGL4 *gbuffer);
   void BlurShadowMap();
-  void CalcPSSMMatrices(const csDirectionalLight *light, const csCamera *camera);
-  void CalcMatrix(const csVector3f &dir, const csVector3f  &camPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
+  void CalcPSSMMatrices(const cs::DirectionalLight *light, const cs::Camera *camera);
+  void CalcMatrix(const cs::Vector3f &dir, const cs::Vector3f  &camPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const;
 
-  void CalcPSSMMatricesAlternative(const csDirectionalLight *light, const csCamera *camera);
-  void CalcMatrixAlternative(const csVector3f &dir, const csVector3f  &camPos, csSize numPoints, csVector3f *points, csMatrix4f &cam, csMatrix4f &camInv, csVector3f &min, csVector3f &max) const;
+  void CalcPSSMMatricesAlternative(const cs::DirectionalLight *light, const cs::Camera *camera);
+  void CalcMatrixAlternative(const cs::Vector3f &dir, const cs::Vector3f  &camPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const;
   void UpdateProjectionMatrices();
-  csClipper *CreateClipper();
+  cs::Clipper *CreateClipper();
 
-  csMatrix4f m_shadowCam[3];
-  csMatrix4f m_shadowCamInv[3];
-  csMatrix4f m_shadowProj[3];
-  csMatrix4f m_shadowProjView[3];
-  csVector2f m_shadowNearFar[3];
-  csVector3f m_min[3];
-  csVector3f m_max[3];
+  cs::Matrix4f m_shadowCam[3];
+  cs::Matrix4f m_shadowCamInv[3];
+  cs::Matrix4f m_shadowProj[3];
+  cs::Matrix4f m_shadowProjView[3];
+  cs::Vector2f m_shadowNearFar[3];
+  cs::Vector3f m_min[3];
+  cs::Vector3f m_max[3];
 
-  csMatrix4f m_shadowCamAll;
-  csMatrix4f m_shadowCamInvAll;
-  csVector3f m_minAll;
-  csVector3f m_maxAll;
+  cs::Matrix4f m_shadowCamAll;
+  cs::Matrix4f m_shadowCamInvAll;
+  cs::Vector3f m_minAll;
+  cs::Vector3f m_maxAll;
 
-  csVector3f m_distances;
+  cs::Vector3f m_distances;
 
   LightProgram m_programNoShadow;
-  iShaderAttribute *m_attrLightDirectionNoShadow;
-  void BindDirectionalLightNoShadow(csDirectionalLight *directionalLight);
+  cs::iShaderAttribute *m_attrLightDirectionNoShadow;
+  void BindDirectionalLightNoShadow(cs::DirectionalLight *directionalLight);
 
   LightProgram m_programPSSM;
-  iShaderAttribute *m_attrLightDirectionPSSM;
-  iShaderAttribute *m_attrShadowMap;
-  csTexture2DArrayWrapper *m_colorBuffer;
-  csTexture2DArrayWrapper *m_depthBuffer;
-  csTexture2DArrayWrapper *m_colorBufferBlur;
-  void BindDirectionalLightPSSM(csDirectionalLight *directionalLight);
+  cs::iShaderAttribute *m_attrLightDirectionPSSM;
+  cs::iShaderAttribute *m_attrShadowMap;
+  cs::Texture2DArrayWrapper *m_colorBuffer;
+  cs::Texture2DArrayWrapper *m_depthBuffer;
+  cs::Texture2DArrayWrapper *m_colorBufferBlur;
+  void BindDirectionalLightPSSM(cs::DirectionalLight *directionalLight);
 
   struct {
-    csShaderWrapper *shader;
-	  iShaderAttribute *attrDepth;
-	  iShaderAttribute *attrDistances;
-	  iShaderAttribute *attrShadowMatsProjView;
-	  iShaderAttribute *attrShadowColorMap;
-	  iShaderAttribute *attrShadowMap;
-   csTexture2DWrapper *shadowMap;
-    iRenderTarget *shadowRenderTarget;
-    csTexture2DWrapper *shadowMapPingPong;
-    iRenderTarget *shadowRenderTargetPingPong;
+    cs::ShaderWrapper *shader;
+	  cs::iShaderAttribute *attrDepth;
+	  cs::iShaderAttribute *attrDistances;
+	  cs::iShaderAttribute *attrShadowMatsProjView;
+	  cs::iShaderAttribute *attrShadowColorMap;
+	  cs::iShaderAttribute *attrShadowMap;
+   cs::Texture2DWrapper *shadowMap;
+    cs::iRenderTarget *shadowRenderTarget;
+    cs::Texture2DWrapper *shadowMapPingPong;
+    cs::iRenderTarget *shadowRenderTargetPingPong;
   } m_shadowMapRenderer;
 
   struct {
-    csShaderWrapper *shader;
-    iShaderAttribute *attrColor0;
+    cs::ShaderWrapper *shader;
+    cs::iShaderAttribute *attrColor0;
   } m_shadowMapBlurHori;
 
   struct {
-    csShaderWrapper *shader;
-    iShaderAttribute *attrColor0;
+    cs::ShaderWrapper *shader;
+    cs::iShaderAttribute *attrColor0;
   } m_shadowMapBlurVert;
 
 };

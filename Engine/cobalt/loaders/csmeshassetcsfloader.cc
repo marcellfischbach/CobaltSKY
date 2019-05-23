@@ -26,33 +26,33 @@ bool slot_sort(MaterialSlot &slot0, MaterialSlot &slot1)
 }
 }
 
-csMeshAssetCSFLoader::csMeshAssetCSFLoader()
-  : csBaseCSFLoader()
+cs::MeshAssetCSFLoader::MeshAssetCSFLoader()
+  : cs::BaseCSFLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csMeshAssetCSFLoader::~csMeshAssetCSFLoader()
+cs::MeshAssetCSFLoader::~MeshAssetCSFLoader()
 {
 
 }
 
 
 
-bool csMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::MeshAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("mesh");
 }
 
-const cs::Class *csMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MeshAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csMeshWrapper::GetStaticClass();
+  return cs::MeshWrapper::GetStaticClass();
 }
 
-csResourceWrapper *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  csMesh *mesh = new csMesh();
-  csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);
+  cs::Mesh *mesh = new cs::Mesh();
+  cs::MeshWrapper *meshWrapper = new cs::MeshWrapper(mesh);
 
   const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
   const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
@@ -113,12 +113,12 @@ csResourceWrapper *csMeshAssetCSFLoader::Load(const csfEntry *entry, const csRes
       lod = subMeshEntry->GetAttributeInt("lod");
     }
 
-    csSubMeshWrapper *subMesh = nullptr;
+    cs::SubMeshWrapper *subMesh = nullptr;
     std::string blobName = subMeshEntry->GetAttribute();
     const csfBlob *blob = subMeshEntry->GetFile()->GetBlob(blobName);
     if (blob)
     {
-      subMesh = csResourceManager::Get()->Load<csSubMeshWrapper>(blob, locator, userData);
+      subMesh = cs::ResourceManager::Get()->Load<cs::SubMeshWrapper>(blob, locator, userData);
     }
     if (subMesh)
     {

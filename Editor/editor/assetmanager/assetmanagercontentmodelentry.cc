@@ -10,10 +10,10 @@
 #include <iostream>
 
 
-AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLocator &locator)
+AssetManagerContentModelEntry::AssetManagerContentModelEntry(const cs::ResourceLocator &locator)
   : m_locator(locator)
 {
-  csFileInfo info(locator.GetResourceFile());
+  cs::FileInfo info(locator.GetResourceFile());
 
   m_entryName = QString(info.GetName().c_str());
 
@@ -23,8 +23,8 @@ AssetManagerContentModelEntry::AssetManagerContentModelEntry(const csResourceLoc
 
 void AssetManagerContentModelEntry::ReloadIcon()
 {
-  csResourceLocator previewLocator = m_locator.WithResourceName("preview");
-  EditorImage *editorImage = csResourceManager::Get()->Load<EditorImage>(previewLocator);
+  cs::ResourceLocator previewLocator = m_locator.WithResourceName("preview");
+  EditorImage *editorImage = cs::ResourceManager::Get()->Load<EditorImage>(previewLocator);
   if (editorImage)
   {
     printf("EditorImage: %s => %p\n", m_locator.GetDebugName().c_str(), editorImage);

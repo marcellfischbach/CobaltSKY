@@ -1,21 +1,23 @@
 #pragma once
 
+namespace cs
+{
 
-enum csBufferAccessMode
+enum eBufferAccessMode
 {
   eBAM_Read,
   eBAM_Write,
   eBAM_ReadWrite,
 };
 
-enum csBufferDataMode
+enum eBufferDataMode
 {
   eBDM_Dynamic,
   eBDM_Static,
   eBDM_Stream
 };
 
-enum csButton
+enum eButton
 {
   eB_Left,
   eB_Middle,
@@ -23,7 +25,7 @@ enum csButton
   eB_COUNT
 };
 
-enum csKey
+enum eKey
 {
   eK_Undef,
   eK_A,
@@ -75,14 +77,14 @@ enum csKey
   eK_COUNT,
 };
 
-enum csPrimitiveType
+enum ePrimitiveType
 {
   ePT_Points,
   ePT_Lines,
   ePT_Triangles,
 };
 
-enum csVertexStreamType
+enum eVertexStreamType
 {
   eVST_Position,
   eVST_Normal,
@@ -116,7 +118,7 @@ enum csVertexStreamType
   eVST_COUNT
 };
 
-enum csVertexAttributeType
+enum eVertexAttributeType
 {
   eVAT_MatProj,
   eVAT_MatProjInv,
@@ -156,7 +158,7 @@ enum csVertexAttributeType
   eVAT_COUNT
 };
 
-enum csMatrixType
+enum eMatrixType
 {
   eMT_MatProj,
   eMT_MatProjInv,
@@ -173,7 +175,7 @@ enum csMatrixType
   eMT_COUNT
 };
 
-enum csDataType
+enum eDataType
 {
   eDT_Byte,
   eDT_UnsignedByte,
@@ -185,7 +187,7 @@ enum csDataType
   eDT_Double
 };
 
-enum csFilterMode
+enum eFilterMode
 {
   eFM_MinMagNearest,
   eFM_MinNearestMagLinear,
@@ -202,7 +204,7 @@ enum csFilterMode
   eFM_Anisotropic,
 };
 
-enum csTextureAddressMode
+enum eTextureAddressMode
 {
   eTAM_Repeat,
   eTAM_RepeatMirror,
@@ -211,7 +213,7 @@ enum csTextureAddressMode
   eTAM_MirrowOnce,
 };
 
-enum csTextureUnit
+enum eTextureUnit
 {
   eTU_TextureUnit0,
   eTU_TextureUnit1,
@@ -227,7 +229,7 @@ enum csTextureUnit
   eTU_Invalid = eTU_COUNT,
 };
 
-enum csTextureType
+enum eTextureType
 {
   eTT_Texture1D,
   eTT_Texture2D,
@@ -237,7 +239,7 @@ enum csTextureType
   eTT_Texture2DArray,
 };
 
-enum csTextureCubeFace
+enum eTextureCubeFace
 {
   eTCF_PositiveX,
   eTCF_NegativeX,
@@ -247,7 +249,7 @@ enum csTextureCubeFace
   eTCF_NegativeZ,
 };
 
-enum csShaderParameterType
+enum eShaderParameterType
 {
   eSPT_Float,
   eSPT_Vector2,
@@ -263,7 +265,7 @@ enum csShaderParameterType
   eSPT_Texture,
 };
 
-enum csPixelFormat
+enum ePixelFormat
 {
   ePF_R32G32B32A32F,
   ePF_R32G32B32A32S,
@@ -305,13 +307,13 @@ enum csPixelFormat
   ePF_R10G10B10A2,
 };
 
-enum csTextureCompareMode
+enum eTextureCompareMode
 {
   eTCM_CompareToR,
   eTCM_None,
 };
 
-enum csTextureCompareFunc
+enum eTextureCompareFunc
 {
   eTCF_LessOrEqual,
   eTCF_GreaterOrEqual,
@@ -324,7 +326,7 @@ enum csTextureCompareFunc
 
 };
 
-enum csRenderPass
+enum eRenderPass
 {
   eRP_GBuffer,
   //eRP_ShadowGeneric,
@@ -338,7 +340,7 @@ enum csRenderPass
   eRP_COUNT,
 };
 
-enum csRenderQueue
+enum eRenderQueue
 {
   eRQ_Deferred,
   eRQ_Particles,
@@ -348,33 +350,33 @@ enum csRenderQueue
   eRQ_COUNT,
 };
 
-enum csShadingMode
+enum eShadingMode
 {
   eSM_Unlit,
   eSM_Shaded,
 };
 
 
-enum csParticleShadingMode
+enum eParticleShadingMode
 {
   ePSM_Shaded,
   ePSM_Emitting,
 };
 
-enum csFillMode
+enum eFillMode
 {
   eFM_Fill,
   eFM_Wireframe,
   eFM_Points
 };
 
-enum csFaceWinding
+enum eFaceWinding
 {
   eFW_CW,
   eFW_CCW
 };
 
-enum csFaceSide
+enum eFaceSide
 {
   eFS_Front,
   eFS_Back,
@@ -382,7 +384,7 @@ enum csFaceSide
 };
 
 
-enum csResourceLoadingMode
+enum eResourceLoadingMode
 {
   eRLM_Shared,
   eRLM_Instance,
@@ -390,20 +392,20 @@ enum csResourceLoadingMode
 };
 
 
-enum csLightType
+enum eLightType
 {
   eLT_PointLight,
   eLT_DirectionalLight,
   eLT_Count,
 };
 
-enum csProjectionMode
+enum eProjectionMode
 {
   ePM_Perspective,
   ePM_Orthographic,
 };
 
-enum csBlendMode
+enum eBlendMode
 {
   eBM_Zero,
   eBM_One,
@@ -418,7 +420,7 @@ enum csBlendMode
 };
 
 
-enum csPhysGeometryType
+enum ePhysGeometryType
 {
   ePGT_Sphere,
   ePGT_CylinderX,
@@ -433,7 +435,7 @@ enum csPhysGeometryType
   ePGT_TriMesh,
 };
 
-enum csPhysicsColliderType
+enum ePhysicsColliderType
 {
   ePCT_Static,
   ePCT_Kinematic,
@@ -442,14 +444,14 @@ enum csPhysicsColliderType
 };
 
 
-enum csPhysicsJointType
+enum ePhysicsJointType
 {
   ePJT_Hinge,
 };
 
 
 
-enum csCompareMode
+enum eCompareMode
 {
   eCM_LessOrEqual,
   eCM_GreaterOrEqual,
@@ -462,7 +464,7 @@ enum csCompareMode
 };
 
 
-enum csRenderDestination
+enum eRenderDestination
 {
   eRD_Color0,
   eRD_Color1,
@@ -476,14 +478,14 @@ enum csRenderDestination
   eRD_Stencil
 };
 
-enum csParticleSpawnMode
+enum eParticleSpawnMode
 {
   ePSM_Point,
   ePSM_Box,
   ePSM_Sphere,
 };
 
-enum csParticleSizeMode
+enum eParticleSizeMode
 {
   ePSM_Constant,
   ePSM_Linear,
@@ -492,10 +494,11 @@ enum csParticleSizeMode
   ePSM_Pulse,
 };
 
-enum csParticleRotationMode
+enum eParticleRotationMode
 {
   ePRM_Pos,
   ePRM_Neg,
   ePRM_Both,
 };
 
+}

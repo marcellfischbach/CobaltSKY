@@ -10,7 +10,7 @@
 #include <graphicsgl4/gl4shaderattribute.refl.hh>
 
 CS_CLASS()
-class csShaderAttributeGL4 : public CS_SUPER(iShaderAttribute)
+class csShaderAttributeGL4 : public CS_SUPER(cs::iShaderAttribute)
 {
   CS_CLASS_GEN_OBJECT;
 
@@ -33,21 +33,21 @@ public:
   virtual void Set(csInt32 x, csInt32 y, csInt32 z);
   virtual void Set(csInt32 x, csInt32 y, csInt32 z, csInt32 w);
 
-  virtual void Set(const csVector2f &v);
-  virtual void Set(const csVector3f &v);
-  virtual void Set(const csVector4f &v);
-  virtual void Set(const csColor4f &v);
-  virtual void Set(const csVector2f *vs, csSize num);
-  virtual void Set(const csVector3f *vs, csSize num);
-  virtual void Set(const csVector4f *vs, csSize num);
+  virtual void Set(const cs::Vector2f &v);
+  virtual void Set(const cs::Vector3f &v);
+  virtual void Set(const cs::Vector4f &v);
+  virtual void Set(const cs::Color4f &v);
+  virtual void Set(const cs::Vector2f *vs, csSize num);
+  virtual void Set(const cs::Vector3f *vs, csSize num);
+  virtual void Set(const cs::Vector4f *vs, csSize num);
   virtual void Set(const csInt32 *vs, csSize num);
   virtual void Set(const csUInt32 *vs, csSize num);
   virtual void Set(const float *vs, csSize num);
 
-  virtual void Set(const csMatrix3f &m);
-  virtual void Set(const csMatrix3f *ms, csSize num);
-  virtual void Set(const csMatrix4f &m);
-  virtual void Set(const csMatrix4f *ms, csSize num);
+  virtual void Set(const cs::Matrix3f &m);
+  virtual void Set(const cs::Matrix3f *ms, csSize num);
+  virtual void Set(const cs::Matrix4f &m);
+  virtual void Set(const cs::Matrix4f *ms, csSize num);
 
 
   void SetLocation(GLint location);

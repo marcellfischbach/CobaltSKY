@@ -5,34 +5,39 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/cstextureassetcsfloader.refl.hh>
 
-class csImageWrapper;
-class csSamplerWrapper;
 
+namespace cs
+{
+class ImageWrapper;
+class SamplerWrapper;
 
 
 /**
 * \ingroup loading
 */
 CS_CLASS()
-class CSE_API csTextureAssetCSFLoader : public CS_SUPER(csBaseCSFLoader)
+class CSE_API TextureAssetCSFLoader : public CS_SUPER(cs::BaseCSFLoader)
 {
   CS_CLASS_GEN;
 public:
-  csTextureAssetCSFLoader();
-  virtual ~csTextureAssetCSFLoader();
+  TextureAssetCSFLoader();
+  virtual ~TextureAssetCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual const cs::Class *EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual csResourceWrapper *Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual bool CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual const cs::Class *EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual cs::ResourceWrapper *Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
 private:
-  csTextureType GetTextureType(const std::string &typeName) const;
+  cs::eTextureType GetTextureType(const std::string &typeName) const;
 
 
-  csResourceWrapper *LoadTexture2D(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  csResourceWrapper *LoadTexture2DArray(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  csImageWrapper *LoadImage(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  csSamplerWrapper *LoadSampler(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ResourceWrapper *LoadTexture2D(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ResourceWrapper *LoadTexture2DArray(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ImageWrapper *LoadImage(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::SamplerWrapper *LoadSampler(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
 };
 
 
+
+
+}

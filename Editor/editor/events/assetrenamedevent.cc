@@ -1,8 +1,8 @@
 
 #include <editor/events/assetrenamedevent.hh>
 
-AssetRenamedEvent::AssetRenamedEvent(const csResourceLocator &from, const csResourceLocator &to, ResourceFetchMode mode, cs::iObject *object)
-  :csEvent()
+AssetRenamedEvent::AssetRenamedEvent(const cs::ResourceLocator &from, const cs::ResourceLocator &to, ResourceFetchMode mode, cs::iObject *object)
+  :cs::Event()
   , m_from(from)
   , m_to(to)
   , m_mode(mode)
@@ -11,12 +11,12 @@ AssetRenamedEvent::AssetRenamedEvent(const csResourceLocator &from, const csReso
 
 }
 
-const csResourceLocator &AssetRenamedEvent::GetFrom() const
+const cs::ResourceLocator &AssetRenamedEvent::GetFrom() const
 {
   return m_from;
 }
 
-const csResourceLocator &AssetRenamedEvent::GetTo() const
+const cs::ResourceLocator &AssetRenamedEvent::GetTo() const
 {
   return m_to;
 }

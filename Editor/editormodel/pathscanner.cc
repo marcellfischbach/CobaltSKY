@@ -26,7 +26,7 @@ void PathScanner::Scan(VFSEntryNode *entry, Transaction &tx)
     return;
   }
 
-  std::string path = csVFS::Get()->GetAbsolutePath(entry->GetResourceLocator(), csVFS::CheckExistence);
+  std::string path = cs::VFS::Get()->GetAbsolutePath(entry->GetResourceLocator(), cs::VFS::CheckExistence);
   if (path.empty())
   {
     return;

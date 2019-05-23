@@ -3,16 +3,19 @@
 #include <cobalt/csenums.hh>
 #include <map>
 
-class csShaderAttributeIDManager
+namespace cs
+{
+
+class ShaderAttributeIDManager
 {
 public:
-  static csShaderAttributeIDManager *Get()
+  static ShaderAttributeIDManager* Get()
   {
-    static csShaderAttributeIDManager static_manager;
+    static ShaderAttributeIDManager static_manager;
     return &static_manager;
   }
 
-  csUInt32 Get(const std::string &name)
+  csUInt32 Get(const std::string& name)
   {
     std::map<std::string, csUInt32>::iterator it = m_map.find(name);
     if (it != m_map.end())
@@ -25,7 +28,7 @@ public:
     return id;
   }
 
-  const std::string &Get(csUInt32 id)
+  const std::string& Get(csUInt32 id)
   {
     std::map<std::string, csUInt32>::iterator it;
     for (it = m_map.begin(); it != m_map.end(); ++it)
@@ -39,45 +42,45 @@ public:
   }
 
 private:
-  csShaderAttributeIDManager()
+  ShaderAttributeIDManager()
   {
     m_nullString = "";
 
-    m_map["MatProj"] = eVAT_MatProj;
-    m_map["MatProjInv"] = eVAT_MatProjInv;
-    m_map["MatView"] = eVAT_MatView;
-    m_map["MatViewInv"] = eVAT_MatViewInv;
-    m_map["MatModel"] = eVAT_MatModel;
-    m_map["MatModelInv"] = eVAT_MatModelInv;
-    m_map["MatProjView"] = eVAT_MatProjView;
-    m_map["MatProjViewInv"] = eVAT_MatProjViewInv;
-    m_map["MatViewModel"] = eVAT_MatViewModel;
-    m_map["MatViewModelInv"] = eVAT_MatViewModelInv;
-    m_map["MatProjViewModel"] = eVAT_MatProjViewModel;
-    m_map["MatProjViewModelInv"] = eVAT_MatProjViewModelInv;
+    m_map["MatProj"] = cs::eVAT_MatProj;
+    m_map["MatProjInv"] = cs::eVAT_MatProjInv;
+    m_map["MatView"] = cs::eVAT_MatView;
+    m_map["MatViewInv"] = cs::eVAT_MatViewInv;
+    m_map["MatModel"] = cs::eVAT_MatModel;
+    m_map["MatModelInv"] = cs::eVAT_MatModelInv;
+    m_map["MatProjView"] = cs::eVAT_MatProjView;
+    m_map["MatProjViewInv"] = cs::eVAT_MatProjViewInv;
+    m_map["MatViewModel"] = cs::eVAT_MatViewModel;
+    m_map["MatViewModelInv"] = cs::eVAT_MatViewModelInv;
+    m_map["MatProjViewModel"] = cs::eVAT_MatProjViewModel;
+    m_map["MatProjViewModelInv"] = cs::eVAT_MatProjViewModelInv;
 
-    m_map["MatsSkeleton"] = eVAT_MatsSkeleton;
+    m_map["MatsSkeleton"] = cs::eVAT_MatsSkeleton;
 
 
-    m_map["Texture0"] = eVAT_Texture0;
-    m_map["Texture1"] = eVAT_Texture1;
-    m_map["Texture2"] = eVAT_Texture2;
-    m_map["Texture3"] = eVAT_Texture3;
-    m_map["Texture4"] = eVAT_Texture4;
-    m_map["Texture5"] = eVAT_Texture5;
-    m_map["Texture6"] = eVAT_Texture6;
-    m_map["Texture7"] = eVAT_Texture7;
+    m_map["Texture0"] = cs::eVAT_Texture0;
+    m_map["Texture1"] = cs::eVAT_Texture1;
+    m_map["Texture2"] = cs::eVAT_Texture2;
+    m_map["Texture3"] = cs::eVAT_Texture3;
+    m_map["Texture4"] = cs::eVAT_Texture4;
+    m_map["Texture5"] = cs::eVAT_Texture5;
+    m_map["Texture6"] = cs::eVAT_Texture6;
+    m_map["Texture7"] = cs::eVAT_Texture7;
 
-    m_map["ViewportSize"] = eVAT_ViewportSize;
-    m_map["ViewportSizeInv"] = eVAT_ViewportSizeInv;
+    m_map["ViewportSize"] = cs::eVAT_ViewportSize;
+    m_map["ViewportSizeInv"] = cs::eVAT_ViewportSizeInv;
 
-    m_map["BinaryGradient"] = eVAT_BinaryGradient;
-    m_map["BinaryGradientToScreen"] = eVAT_BinaryGradientToScreen;
-    m_map["FadeInOutDist"] = eVAT_FadeInOutDist;
-    m_map["FadeInOutValue"] = eVAT_FadeInOutValue;
+    m_map["BinaryGradient"] = cs::eVAT_BinaryGradient;
+    m_map["BinaryGradientToScreen"] = cs::eVAT_BinaryGradientToScreen;
+    m_map["FadeInOutDist"] = cs::eVAT_FadeInOutDist;
+    m_map["FadeInOutValue"] = cs::eVAT_FadeInOutValue;
 
-    m_map["Blend"] = eVAT_Blend;
-    m_nextID = eVAT_COUNT;
+    m_map["Blend"] = cs::eVAT_Blend;
+    m_nextID = cs::eVAT_COUNT;
 
   }
 
@@ -87,37 +90,39 @@ private:
   std::string m_nullString;
 };
 
+}
 
-csShaderAttributeID::csShaderAttributeID(const std::string &name)
+
+cs::ShaderAttributeID::ShaderAttributeID(const std::string &name)
   : m_name(name)
-  , m_id(csShaderAttributeIDManager::Get()->Get(name))
+  , m_id(cs::ShaderAttributeIDManager::Get()->Get(name))
 {
 }
 
-csShaderAttributeID::csShaderAttributeID(csUInt32 id)
-  : m_name(csShaderAttributeIDManager::Get()->Get(id))
+cs::ShaderAttributeID::ShaderAttributeID(csUInt32 id)
+  : m_name(cs::ShaderAttributeIDManager::Get()->Get(id))
   , m_id(id)
 {
 
 }
 
-const std::string &csShaderAttributeID::GetName() const
+const std::string &cs::ShaderAttributeID::GetName() const
 {
   return m_name;
 }
 
-csUInt32 csShaderAttributeID::GetID() const
+csUInt32 cs::ShaderAttributeID::GetID() const
 {
   return m_id;
 }
 
 
 
-bool csShaderAttributeID::operator==(const csShaderAttributeID &other) const
+bool cs::ShaderAttributeID::operator==(const cs::ShaderAttributeID &other) const
 {
   return m_id == other.m_id;
 }
-bool csShaderAttributeID::operator<(const csShaderAttributeID &other) const
+bool cs::ShaderAttributeID::operator<(const cs::ShaderAttributeID &other) const
 {
   return m_id < other.m_id;
 }

@@ -44,7 +44,7 @@ void ImageImporter::SetEnabled(bool enable)
 {
 }
 
-csResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
+cs::ResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
 {
   csfFile file;
   csfEntry *assetEntry = file.CreateEntry("asset");
@@ -109,16 +109,16 @@ csResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
 
     file.AddBlob(editorIconBlob);
   }
-  csResourceLocator locator = folder->CreateResourceLocator(m_importName + ".asset");
+  cs::ResourceLocator locator = folder->CreateResourceLocator(m_importName + ".asset");
 
-  std::string fileName = csVFS::Get()->GetAbsolutePath(locator, csVFS::DontCheckExistence);
+  std::string fileName = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::DontCheckExistence);
 
   if (file.Output(fileName, false, 2))
   {
     return locator;
   }
 
-  return csResourceLocator();
+  return cs::ResourceLocator();
 }
 
 

@@ -20,7 +20,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 
-void abstract_asset_editor_asset_renamed(csEvent &event, void *userData)
+void abstract_asset_editor_asset_renamed(cs::Event &event, void *userData)
 {
 	AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
 	AbstractAssetEditor *editor = reinterpret_cast<AbstractAssetEditor*>(userData);
@@ -52,7 +52,7 @@ void AbstractAssetEditor::SetObject(cs::iObject *object, asset::model::Asset *as
 void AbstractAssetEditor::UpdateName()
 {
 
-	csFileInfo info(m_asset->GetResourceLocator().GetResourceFile());
+	cs::FileInfo info(m_asset->GetResourceLocator().GetResourceFile());
 	m_name = info.GetName();
 
 }
@@ -131,14 +131,14 @@ void AbstractAssetEditor::CloseRequest()
 
 QString AbstractAssetEditor::GetResourceFileName() const
 {
-	const csResourceLocator &loc = GetAsset()->GetResourceLocator();
-	std::string absFileName = csVFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
+	const cs::ResourceLocator &loc = GetAsset()->GetResourceLocator();
+	std::string absFileName = cs::VFS::Get()->GetAbsolutePath(loc.GetResourceFile(), loc.GetResourceEntry());
 	QString fileName(absFileName.c_str());
 	return fileName;
 }
 
 
-void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to)
+void AbstractAssetEditor::ResourceRenamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
 	UpdateName();
 	UpdateMainWindow();
@@ -148,10 +148,10 @@ void AbstractAssetEditor::ResourceRenamed(const csResourceLocator &from, const c
 void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
 {
 	/*
-	csResourceLocator dataLocator = m_assetDescriptor.GetLocator().AsData();
+	cs::ResourceLocator dataLocator = m_assetDescriptor.GetLocator().AsData();
 
 	printf("image: %s\n", dataLocator.GetDebugName().c_str());
-	iFile *file = csVFS::Get()->Open(dataLocator, eOM_ReadWrite);
+	cs::iFile *file = cs::VFS::Get()->Open(dataLocator, eOM_ReadWrite);
 
 	AssetManagerAssetWriter writer;
 	writer.Import(file);
@@ -170,14 +170,14 @@ void AbstractAssetEditor::ReplacePreviewIcon(QImage image)
 	);
 
 
-	iFile *dataFile = csVFS::Get()->Open(dataLocator, eOM_Write);
+	cs::iFile *dataFile = cs::VFS::Get()->Open(dataLocator, eOM_Write);
 	if (dataFile)
 	{
 		writer.Output(dataFile);
 		dataFile->Close();
 	}
 
-	std::string fileName = csVFS::Get()->GetAbsolutePath(m_assetDescriptor.GetLocator(), csVFS::CheckExistence);
+	std::string fileName = cs::VFS::Get()->GetAbsolutePath(m_assetDescriptor.GetLocator(), cs::VFS::CheckExistence);
 	QFile assetFile(QString(fileName.c_str()));
 	QDomDocument doc;
 	if (doc.setContent(&assetFile))

@@ -9,12 +9,16 @@
 
 #define CS_CONST_FLOAT4_NAME "Const/Float4"
 
+namespace cs
+{
 
 CS_CLASS()
-class CSE_API csSGConstFloat4 : public CS_SUPER(csSGNode)
+class CSE_API SGConstFloat4 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGConstFloat4();
-  virtual ~csSGConstFloat4() { };
+  SGConstFloat4();
+  virtual ~SGConstFloat4() { };
 };
+
+}

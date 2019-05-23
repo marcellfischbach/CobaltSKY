@@ -21,10 +21,10 @@ namespace asset::model
 		virtual const Folder *AsFolder() const;
 
 		const std::string GetNewAssetName(const std::string &baseName) const;
-		csResourceLocator GetNewResourceLocator(const std::string &baseName) const;
+		cs::ResourceLocator GetNewResourceLocator(const std::string &baseName) const;
 		Asset *CreateNewAsset(const std::string &baseName) const;
 
-    virtual csResourceLocator GetResourceLocator() const;
+    virtual cs::ResourceLocator GetResourceLocator() const;
   protected:
     Folder(Model *mode, Entry::Type type);
 

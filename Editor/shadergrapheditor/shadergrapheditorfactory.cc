@@ -6,7 +6,7 @@
 
 bool ShaderGraphEditorFactory::CanEdit(cs::iObject *object, asset::model::Asset *asset) const
 {
-  return object->GetClass()->IsInstanceOf<csSGShaderGraphWrapper>();
+  return object->GetClass()->IsInstanceOf<cs::SGShaderGraphWrapper>();
 }
 
 iAssetEditor *ShaderGraphEditorFactory::CreateEditor(cs::iObject *object, asset::model::Asset *asset) const

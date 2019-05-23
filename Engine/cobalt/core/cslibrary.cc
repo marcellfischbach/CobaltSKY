@@ -3,32 +3,36 @@
 
 #include <Windows.h>
 
+
 #ifdef CS_WIN32
-struct csLibraryPriv
+namespace cs
+{
+struct LibraryPriv
 {
   HMODULE m_libModule;
-  csLibraryPriv()
+  cs::LibraryPriv()
     : m_libModule(0)
   {
 
   }
 };
+}
 #endif
 
 
-csLibrary::csLibrary()
-  : m_priv(new csLibraryPriv ())
+cs::Library::Library()
+  : m_priv(new cs::LibraryPriv ())
 {
 
 }
 
-csLibrary::~csLibrary()
+cs::Library::~Library()
 {
   Close();
   delete m_priv;
 }
 
-bool csLibrary::Open(const std::string &libName)
+bool cs::Library::Open(const std::string &libName)
 {
 #ifdef CS_WIN32
   std::string name = libName + std::string(".dll");
@@ -38,14 +42,14 @@ bool csLibrary::Open(const std::string &libName)
 
 }
 
-bool csLibrary::IsOpen() const
+bool cs::Library::IsOpen() const
 {
 #ifdef CS_WIN32
   return m_priv->m_libModule != 0;
 #endif
 }
 
-void csLibrary::Close()
+void cs::Library::Close()
 {
 #ifdef CS_WIN32
   if (m_priv->m_libModule != 0)
@@ -58,7 +62,7 @@ void csLibrary::Close()
 #endif
 }
 
-void *csLibrary::GetProcAddress(const std::string &procName)
+void *cs::Library::GetProcAddress(const std::string &procName)
 {
 #ifdef CS_WIN32
   return reinterpret_cast<void*>(::GetProcAddress(m_priv->m_libModule, procName.c_str()));

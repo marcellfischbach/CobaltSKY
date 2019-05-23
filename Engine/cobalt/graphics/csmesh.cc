@@ -7,14 +7,14 @@
 
 
 
-csMesh::csMesh()
-  : iMesh()
+cs::Mesh::Mesh()
+  : cs::iMesh()
   , m_numberOfMaterials(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csMesh::~csMesh()
+cs::Mesh::~Mesh()
 {
   for (csSize i = 0, in = m_lods.size(); i < in; ++i)
   {
@@ -30,7 +30,7 @@ csMesh::~csMesh()
 
 
 
-void csMesh::AddMesh(csSubMeshWrapper *mesh, csSize materialIndex, csUInt8 lodIdx, const std::string &name)
+void cs::Mesh::AddMesh(cs::SubMeshWrapper *mesh, csSize materialIndex, csUInt8 lodIdx, const std::string &name)
 {
   if (mesh && mesh->IsValid())
   {
@@ -52,12 +52,12 @@ void csMesh::AddMesh(csSubMeshWrapper *mesh, csSize materialIndex, csUInt8 lodId
   }
 }
 
-void csMesh::AddMaterialName(const std::string &materialName)
+void cs::Mesh::AddMaterialName(const std::string &materialName)
 {
   m_materialNames.push_back(materialName);
 }
 
-const std::string &csMesh::GetMaterialName(csSize idx) const
+const std::string &cs::Mesh::GetMaterialName(csSize idx) const
 {
   if (idx >= m_materialNames.size())
   {
@@ -68,7 +68,7 @@ const std::string &csMesh::GetMaterialName(csSize idx) const
   return m_materialNames[idx];
 }
 
-csUInt32 csMesh::GetMaterialIndex(const std::string &materialName) const
+csUInt32 cs::Mesh::GetMaterialIndex(const std::string &materialName) const
 {
   for (csSize i = 0, in = m_materialNames.size(); i < in; ++i)
   {
@@ -81,7 +81,7 @@ csUInt32 csMesh::GetMaterialIndex(const std::string &materialName) const
 }
 
 
-void csMesh::OptimizeDataStruct()
+void cs::Mesh::OptimizeDataStruct()
 {
   for (csSize i = 0, in = m_lods.size(); i < in; ++i)
   {
@@ -93,38 +93,38 @@ void csMesh::OptimizeDataStruct()
   }
 }
 
-void csMesh::UpdateBoundingBox()
+void cs::Mesh::UpdateBoundingBox()
 {
   m_boundingBox.Finish();
 }
 
-csUInt8 csMesh::GetNumberOfLODs() const
+csUInt8 cs::Mesh::GetNumberOfLODs() const
 {
   return (csUInt8)m_lods.size();
 }
 
-csSize csMesh::GetNumberOfMeshes(csUInt8 lod) const
+csSize cs::Mesh::GetNumberOfMeshes(csUInt8 lod) const
 {
   return m_lods[lod].m_meshes.size();
 }
 
-csSubMeshWrapper *csMesh::GetMesh(csUInt8 lod, csSize idx)
+cs::SubMeshWrapper *cs::Mesh::GetMesh(csUInt8 lod, csSize idx)
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
 
-const csSubMeshWrapper *csMesh::GetMesh(csUInt8 lod, csSize idx) const
+const cs::SubMeshWrapper *cs::Mesh::GetMesh(csUInt8 lod, csSize idx) const
 {
   return m_lods[lod].m_meshes[idx].m_mesh;
 }
 
-csSize csMesh::GetMaterialIndex(csUInt8 lod, csSize idx) const
+csSize cs::Mesh::GetMaterialIndex(csUInt8 lod, csSize idx) const
 {
   return m_lods[lod].m_meshes[idx].m_materialIndex;
 }
 
 
-csMesh::LOD &csMesh::GetLOD(csUInt8 lod)
+cs::Mesh::LOD &cs::Mesh::GetLOD(csUInt8 lod)
 {
   if (m_lods.size() <= lod)
   {
@@ -139,19 +139,19 @@ csMesh::LOD &csMesh::GetLOD(csUInt8 lod)
   return m_lods[lod];
 }
 
-void csMesh::Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo)
+void cs::Mesh::Update(cs::iGraphics *renderer, const cs::Vector3f &cameraPos, csUInt64 frameNo)
 {
   // no update here
 }
 
-void csMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lodIdx)
+void cs::Mesh::Render(cs::iGraphics *renderer, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lodIdx)
 {
   if (lodIdx >= m_lods.size())
   {
     return;
   }
 
-  csMaterial *activeInstance = 0;
+  cs::Material *activeInstance = 0;
 
   LOD &lod = m_lods[lodIdx];
   for (csSize i = 0, in = lod.m_meshes.size(); i < in; ++i)
@@ -165,7 +165,7 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<cs
       {
         continue;
       }
-      csMaterial *nextMaterial = materials[data.m_materialIndex];
+      cs::Material *nextMaterial = materials[data.m_materialIndex];
       if (nextMaterial == 0)
       {
         continue;
@@ -186,20 +186,20 @@ void csMesh::Render(iGraphics *renderer, csRenderPass pass, const std::vector<cs
 }
 
 
-csSize csMesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
+csSize cs::Mesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
 {
   const LOD &lod = m_lods[lodIdx];
   return lod.m_meshes.size();
 
 }
 
-csSize csMesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
+csSize cs::Mesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
 {
   unsigned count = 0;
   const LOD &lod = m_lods[lodIdx];
   for (auto data : lod.m_meshes)
   {
-    const csSubMeshWrapper *subMesh = data.m_mesh;
+    const cs::SubMeshWrapper *subMesh = data.m_mesh;
     count += subMesh->Get()->GetNumberOfTrigons();
   }
   return count;

@@ -47,7 +47,7 @@ void on_treeView_customContextMenuRequested(const QPoint &pos);
 private:
   Ui::AssetManager m_gui;
 
-  csLogger m_logger;
+  cs::Logger m_logger;
 //  AssetManagerContentItemDelegate *m_itemDelegate;
 
   asset::model::ViewDataModel *m_dataModel;

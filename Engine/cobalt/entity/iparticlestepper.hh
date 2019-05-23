@@ -5,8 +5,11 @@
 
 #include <cobalt/entity/iparticlestepper.refl.hh>
 
-class csParticle;
 
+namespace cs
+{
+
+class Particle;
 CS_CLASS()
 struct CSE_API iParticleStepper : public cs::iObject
 {
@@ -14,6 +17,7 @@ struct CSE_API iParticleStepper : public cs::iObject
 
   virtual ~iParticleStepper() { }
 
-  virtual void Update(float tpf, csParticle *particle) = 0;
+  virtual void Update(float tpf, cs::Particle* particle) = 0;
 };
 
+}

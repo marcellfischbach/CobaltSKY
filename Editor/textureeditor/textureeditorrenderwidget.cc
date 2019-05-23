@@ -52,11 +52,11 @@ TextureEditorRenderWidget::TextureEditorRenderWidget(QWidget *parent)
   , m_vertexDeclaration(0)
   , m_vertexBuffer(0)
   , m_indexBuffer(0)
-  , m_idOffset(csShaderAttributeID("Offset"))
-  , m_idScale(csShaderAttributeID("Scale"))
-  , m_idDiffuse(csShaderAttributeID("Diffuse"))
-  , m_idLOD(csShaderAttributeID("LOD"))
-  , m_idColorTrans(csShaderAttributeID("ColorTrans"))
+  , m_idOffset(cs::ShaderAttributeID("Offset"))
+  , m_idScale(cs::ShaderAttributeID("Scale"))
+  , m_idDiffuse(cs::ShaderAttributeID("Diffuse"))
+  , m_idLOD(cs::ShaderAttributeID("LOD"))
+  , m_idColorTrans(cs::ShaderAttributeID("ColorTrans"))
   , m_lod(0.0f)
   , m_red(true)
   , m_green(true)
@@ -98,7 +98,7 @@ void TextureEditorRenderWidget::SetLOD(int lod)
   repaint();
 }
 
-void TextureEditorRenderWidget::SetTexture(csTexture2DWrapper *texture)
+void TextureEditorRenderWidget::SetTexture(cs::Texture2DWrapper *texture)
 {
   CS_SET(m_texture, texture);
 }
@@ -108,7 +108,7 @@ void TextureEditorRenderWidget::initializeGL()
 //  RenderWidget::initializeGL();
 
 
-  iGraphics *gr = csEng->GetRenderer();
+  cs::iGraphics *gr = csEng->GetRenderer();
   m_shader = gr->CreateShader(VertexShaderProgram, "", "", "", FragmentShaderProgram);
 
   m_shader->RegisterAttribute(m_idOffset);
@@ -127,15 +127,15 @@ void TextureEditorRenderWidget::initializeGL()
     0, 3, 2,
   };
 
-  csVertexElement elements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 2, 0, 4.0f * sizeof(float), 0),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 2.0f * sizeof(float), 4.0f * sizeof(float), 0),
-    csVertexElement()
+  cs::VertexElement elements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 2, 0, 4.0f * sizeof(float), 0),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, 2.0f * sizeof(float), 4.0f * sizeof(float), 0),
+    cs::VertexElement()
   };
 
   m_vertexDeclaration = gr->CreateVertexDeclaration(elements);
-  m_vertexBuffer = gr->CreateVertexBuffer(sizeof(vertices), vertices, eBDM_Static);
-  m_indexBuffer = gr->CreateIndexBuffer(sizeof(indices), indices, eBDM_Static);
+  m_vertexBuffer = gr->CreateVertexBuffer(sizeof(vertices), vertices, cs::eBDM_Static);
+  m_indexBuffer = gr->CreateIndexBuffer(sizeof(indices), indices, cs::eBDM_Static);
 
 }
 
@@ -145,15 +145,15 @@ void TextureEditorRenderWidget::paintGL()
 
 
 
-  iTexture2D *texture = m_texture->Get();
+  cs::iTexture2D *texture = m_texture->Get();
 
   float sx = (float)texture->GetWidth() / (float)width();
   float sy = (float)texture->GetHeight() / (float)height();
 
-  csVector2f o(-(1.0f - sx), (1.0f - sy));
-  csVector2f s(sx, sy);
+  cs::Vector2f o(-(1.0f - sx), (1.0f - sy));
+  cs::Vector2f s(sx, sy);
 
-  iGraphics *gr = csEng->GetRenderer();
+  cs::iGraphics *gr = csEng->GetRenderer();
   gr->ResetDefaults();
   gr->SetShader(m_shader);
 
@@ -167,7 +167,7 @@ void TextureEditorRenderWidget::paintGL()
   float b = m_blue ? 1.0f : 0.0f;
   float a = m_alpha ? 1.0f : 0.0f;
   float atoc = !m_red && !m_green && !m_blue && m_alpha;
-  csMatrix4f colorTrans(
+  cs::Matrix4f colorTrans(
     r, 0, 0, 0,
     0, g, 0, 0,
     0, 0, b, 0,
@@ -175,38 +175,38 @@ void TextureEditorRenderWidget::paintGL()
     );
 
 
-  iShaderAttribute *attrOffset = m_shader->GetAttribute(m_idOffset);
+  cs::iShaderAttribute *attrOffset = m_shader->GetAttribute(m_idOffset);
   if (attrOffset)
   {
     attrOffset->Set(o);
   }
-  iShaderAttribute *attrScale = m_shader->GetAttribute(m_idScale);
+  cs::iShaderAttribute *attrScale = m_shader->GetAttribute(m_idScale);
   if (attrScale)
   {
     attrScale->Set(s);
   }
-  iShaderAttribute *attrLOD = m_shader->GetAttribute(m_idLOD);
+  cs::iShaderAttribute *attrLOD = m_shader->GetAttribute(m_idLOD);
   if (attrLOD)
   {
     attrLOD->Set(m_lod);
   }
-  iShaderAttribute *attrDiffuse = m_shader->GetAttribute(m_idDiffuse);
+  cs::iShaderAttribute *attrDiffuse = m_shader->GetAttribute(m_idDiffuse);
   if (attrDiffuse)
   {
-    csTextureUnit unit = gr->BindTexture(texture);
+    cs::eTextureUnit unit = gr->BindTexture(texture);
     attrDiffuse->Set(unit);
   }
-  iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);
+  cs::iShaderAttribute *attrColorTrans = m_shader->GetAttribute(m_idColorTrans);
   if (attrColorTrans)
   {
     attrColorTrans->Set(colorTrans);
   }
 
   gr->SetBlendEnabled(true);
-  gr->SetBlendMode(eBM_SrcAlpha, eBM_One);
+  gr->SetBlendMode(cs::eBM_SrcAlpha, cs::eBM_One);
   gr->SetColorMask(true, true, true, true);
-  gr->Clear(true, csVector4f(0.0f, 0.0f, 0.0f, 1.0f));
+  gr->Clear(true, cs::Vector4f(0.0f, 0.0f, 0.0f, 1.0f));
 
-  gr->RenderIndexed(ePT_Triangles, 6, eDT_UnsignedShort);
+  gr->RenderIndexed(cs::ePT_Triangles, 6, cs::eDT_UnsignedShort);
 
 }

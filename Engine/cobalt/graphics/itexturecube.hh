@@ -6,11 +6,14 @@
 #include <cobalt/graphics/itexturecube.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS();
-struct CSE_API iTextureCube : public virtual CS_SUPER(iTexture)
+struct CSE_API iTextureCube : public virtual CS_SUPER(cs::iTexture)
 {
   CS_CLASS_GEN;
-  iTextureCube() : iTexture() { }
+  iTextureCube() : cs::iTexture() { }
 
   virtual ~iTextureCube() { }
 
@@ -18,13 +21,16 @@ struct CSE_API iTextureCube : public virtual CS_SUPER(iTexture)
   virtual csUInt16 GetHeight() const = 0;
   virtual csUInt16 GetDepth() const = 0;
 
-  virtual bool CopyData(csTextureCubeFace face, csUInt8 lod, csPixelFormat format, const void *data) = 0;
+  virtual bool CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void* data) = 0;
 
 };
 
 CS_CLASS()
-class CSE_API csTextureCubeWrapper : public CS_SUPER(csTextureWrapper)
+class CSE_API TextureCubeWrapper : public CS_SUPER(cs::TextureWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(iTextureCube, csTextureCubeWrapper, csTextureWrapper);
+  CS_RESOURCE_WRAPPER(cs::iTextureCube, TextureCubeWrapper, cs::TextureWrapper);
 };
+
+}
+

@@ -11,7 +11,7 @@ namespace asset::model
 {
 
 AlterFSException::AlterFSException(const std::string &message)
-    : csException (message)
+    : cs::Exception (message)
 {
 }
 
@@ -22,10 +22,10 @@ AlterFSException::AlterFSException(const std::string &message)
   }
 
 
-  void SecureFS::Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  void SecureFS::Move(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
   {
-    std::filesystem::path oldPath(csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::CheckExistence));
-    std::filesystem::path newPath(csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence));
+    std::filesystem::path oldPath(cs::VFS::Get()->GetAbsolutePath(oldLocator, cs::VFS::CheckExistence));
+    std::filesystem::path newPath(cs::VFS::Get()->GetAbsolutePath(newLocator, cs::VFS::DontCheckExistence));
     Move(oldPath, newPath);
   }
 
@@ -226,9 +226,9 @@ AlterFSException::AlterFSException(const std::string &message)
   }
 
 
-  void SecureFS::Delete(const csResourceLocator &locator)
+  void SecureFS::Delete(const cs::ResourceLocator &locator)
   {
-    std::filesystem::path path(csVFS::Get()->GetAbsolutePath(locator, csVFS::CheckExistence));
+    std::filesystem::path path(cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::CheckExistence));
 
     Delete(path);
   }

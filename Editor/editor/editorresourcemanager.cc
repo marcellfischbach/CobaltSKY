@@ -4,7 +4,7 @@
 #include <editor/eventbus.hh>
 #include <editor/events/assetrenamedevent.hh>
 
-void editor_resource_manager_asset_renamed(csEvent &event, void *userData)
+void editor_resource_manager_asset_renamed(cs::Event &event, void *userData)
 {
   AssetRenamedEvent &evt = static_cast<AssetRenamedEvent&>(event);
 
@@ -14,7 +14,7 @@ void editor_resource_manager_asset_renamed(csEvent &event, void *userData)
 }
 
 EditorResourceManager::EditorResourceManager()
-  : csResourceManager()
+  : cs::ResourceManager()
 {
   EventBus::Get().Register(AssetRenamedEvent::GetStaticClass(), editor_resource_manager_asset_renamed, this);
 }
@@ -24,57 +24,57 @@ EditorResourceManager::~EditorResourceManager()
   EventBus::Get().Deregister(editor_resource_manager_asset_renamed, this);
 }
 
-csResourceWrapper *EditorResourceManager::Load(const csResourceLocator &locator)
+cs::ResourceWrapper *EditorResourceManager::Load(const cs::ResourceLocator &locator)
 {
-  csResourceLocator fixedLocator = FixResourceLocator(locator);
+  cs::ResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("Load: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return csResourceManager::Load(fixedLocator);
+  return cs::ResourceManager::Load(fixedLocator);
 }
 
 
-const cs::Class *EditorResourceManager::EvalClass(const csResourceLocator &locator) const
+const cs::Class *EditorResourceManager::EvalClass(const cs::ResourceLocator &locator) const
 {
-  csResourceLocator fixedLocator = FixResourceLocator(locator);
+  cs::ResourceLocator fixedLocator = FixResourceLocator(locator);
   // printf("EvalClass: %s => %s\n", locator.GetDebugName().c_str(), fixedLocator.GetDebugName().c_str());
-  return csResourceManager::EvalClass(fixedLocator);
+  return cs::ResourceManager::EvalClass(fixedLocator);
 }
 
-void EditorResourceManager::RenameResource(const csResourceLocator &from, const csResourceLocator &to)
+void EditorResourceManager::RenameResource(const cs::ResourceLocator &from, const cs::ResourceLocator &to)
 {
   // the resource is already changed on drive ... so we must check the to value
   if (!to.GetResourceEntry().empty() && IsAnonymousLocator(to))
   {
-    csResourceLocator fixedFrom = csResourceLocator(
-		csResourceFile(from.GetResourceFile()),
-      csResourceName(from.GetResourceName())
+    cs::ResourceLocator fixedFrom = cs::ResourceLocator(
+		cs::ResourceFile(from.GetResourceFile()),
+      cs::ResourceName(from.GetResourceName())
     );
-    csResourceLocator fixedTo = csResourceLocator(
-      csResourceFile(to.GetResourceFile()),
-      csResourceName(to.GetResourceName())
+    cs::ResourceLocator fixedTo = cs::ResourceLocator(
+      cs::ResourceFile(to.GetResourceFile()),
+      cs::ResourceName(to.GetResourceName())
     );
-    csResourceManager::RenameResource(fixedFrom, fixedTo);
+    cs::ResourceManager::RenameResource(fixedFrom, fixedTo);
   }
   else
   {
-    csResourceManager::RenameResource(from, to);
+    cs::ResourceManager::RenameResource(from, to);
   }
 }
 
-csResourceLocator EditorResourceManager::FixResourceLocator(const csResourceLocator &locator) const
+cs::ResourceLocator EditorResourceManager::FixResourceLocator(const cs::ResourceLocator &locator) const
 {
   if (!locator.GetResourceEntry().empty() && IsAnonymousLocator(locator))
   {
-    return csResourceLocator(
-      csResourceFile(locator.GetResourceFile()),
-      csResourceName(locator.GetResourceName())
+    return cs::ResourceLocator(
+      cs::ResourceFile(locator.GetResourceFile()),
+      cs::ResourceName(locator.GetResourceName())
     );
   }
   return locator;
 }
 
-bool EditorResourceManager::IsAnonymousLocator(const csResourceLocator &locator) const
+bool EditorResourceManager::IsAnonymousLocator(const cs::ResourceLocator &locator) const
 {
-  const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
+  const cs::VFS::Entry *entry = cs::VFS::Get()->FindEntryForFilename(locator.GetResourceFile());
   if (!entry)
   {
     return false;
@@ -82,20 +82,20 @@ bool EditorResourceManager::IsAnonymousLocator(const csResourceLocator &locator)
   return entry->GetName() == locator.GetResourceEntry();
 }
 
-bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, csResourceWrapper *object)
+bool EditorResourceManager::RegisterObject(const cs::ResourceLocator &locator, cs::ResourceWrapper *object)
 {
-  bool res = csResourceManager::RegisterObject(locator, object);
+  bool res = cs::ResourceManager::RegisterObject(locator, object);
   if (locator.GetResourceEntry().empty())
   {
 
-    const csVFS::Entry *entry = csVFS::Get()->FindEntryForFilename(locator.GetResourceFile());
+    const cs::VFS::Entry *entry = cs::VFS::Get()->FindEntryForFilename(locator.GetResourceFile());
     if (entry)
     {
-      csResourceManager::RegisterObject(
-        csResourceLocator(
-			csResourceEntry(entry->GetName()),
-			csResourceFile(locator.GetResourceFile()),
-			csResourceName(locator.GetResourceName())
+      cs::ResourceManager::RegisterObject(
+        cs::ResourceLocator(
+			cs::ResourceEntry(entry->GetName()),
+			cs::ResourceFile(locator.GetResourceFile()),
+			cs::ResourceName(locator.GetResourceName())
 		),
         object
       );
@@ -103,8 +103,8 @@ bool EditorResourceManager::RegisterObject(const csResourceLocator &locator, csR
   }
   else if (IsAnonymousLocator(locator))
   {
-    csResourceManager::RegisterObject(
-      csResourceLocator(csResourceFile(locator.GetResourceFile()), csResourceName(locator.GetResourceName())),
+    cs::ResourceManager::RegisterObject(
+      cs::ResourceLocator(cs::ResourceFile(locator.GetResourceFile()), cs::ResourceName(locator.GetResourceName())),
       object
     );
   }

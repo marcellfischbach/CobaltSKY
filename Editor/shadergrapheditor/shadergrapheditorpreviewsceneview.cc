@@ -9,7 +9,7 @@
 
 ShaderGraphEditorPreviewSceneView::ShaderGraphEditorPreviewSceneView(QWidget *parent)
   : PreviewSceneView(parent)
-  , m_materialInstance(new csMaterialWrapper(new csMaterial()))
+  , m_materialInstance(new cs::MaterialWrapper(new cs::Material()))
 {
 }
 
@@ -17,13 +17,13 @@ void ShaderGraphEditorPreviewSceneView::initializeGL()
 {
   PreviewSceneView::initializeGL();
 
-  csEntity *entity = CreateSphere(10.0f, 64, 32, m_materialInstance);
+  cs::Entity *entity = CreateSphere(10.0f, 64, 32, m_materialInstance);
   GetScene()->AddEntity(entity);
 
-  csCamera *camera = GetCamera();
-  camera->SetEye(csVector3f(20, 20, 20));
-  camera->SetSpot(csVector3f(0, 0, 0));
-  camera->SetUp(csVector3f(0, 0, 1));
+  cs::Camera *camera = GetCamera();
+  camera->SetEye(cs::Vector3f(20, 20, 20));
+  camera->SetSpot(cs::Vector3f(0, 0, 0));
+  camera->SetUp(cs::Vector3f(0, 0, 1));
   camera->UpdateCameraMatrices();
 
   AddInputHandler(new PreviewCameraOrbitHandler(camera));
@@ -35,7 +35,7 @@ ShaderGraphEditorPreviewSceneView::~ShaderGraphEditorPreviewSceneView()
   CS_RELEASE(m_materialInstance);
 }
 
-void ShaderGraphEditorPreviewSceneView::SetMaterial(csMaterialDefWrapper *material)
+void ShaderGraphEditorPreviewSceneView::SetMaterial(cs::MaterialDefWrapper *material)
 {
   m_materialInstance->Get()->SetMaterialDef(material);
 }

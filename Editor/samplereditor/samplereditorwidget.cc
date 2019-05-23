@@ -75,7 +75,7 @@ SamplerEditorWidget::~SamplerEditorWidget()
 
 }
 
-void SamplerEditorWidget::SetSampler(csSamplerWrapper *sampler)
+void SamplerEditorWidget::SetSampler(cs::SamplerWrapper *sampler)
 {
   if (!sampler)
   {
@@ -90,7 +90,7 @@ void SamplerEditorWidget::SetSampler(csSamplerWrapper *sampler)
 
 void SamplerEditorWidget::Store()
 {
-  iSampler* sampler = m_sampler->Get();
+  cs::iSampler* sampler = m_sampler->Get();
   m_filter = sampler->GetFilter();
   m_anisotropy = sampler->GetAnisotropy();
   m_minLOD = sampler->GetMinLOD();
@@ -100,7 +100,7 @@ void SamplerEditorWidget::Store()
   m_addressW = sampler->GetAddressW();
   m_borderColor = sampler->GetBorderColor();
   m_compareFunc = sampler->GetTextureCompareFunc();
-  m_compareMode = sampler->GetTextureCompareMode();
+  m_compareMode = sampler->Getcs::eTextureCompareMode();
 
 }
 void SamplerEditorWidget::Reset()
@@ -121,16 +121,16 @@ void SamplerEditorWidget::Reset()
 
 void SamplerEditorWidget::Apply()
 {
-  iSampler* sampler = m_sampler->Get();
-  sampler->SetFilter((csFilterMode)m_gui.cbFilter->currentIndex());
+  cs::iSampler* sampler = m_sampler->Get();
+  sampler->SetFilter((cs::eFilterMode)m_gui.cbFilter->currentIndex());
   sampler->SetAnisotropy(m_gui.sbAnisotropy->value());
   sampler->SetMinLOD(m_gui.sbMinLOD->value());
   sampler->SetMaxLOD(m_gui.sbMaxLOD->value());
-  sampler->SetAddressU((csTextureAddressMode)m_gui.cbAddressU->currentIndex());
-  sampler->SetAddressV((csTextureAddressMode)m_gui.cbAddressV->currentIndex());
-  sampler->SetAddressW((csTextureAddressMode)m_gui.cbAddressW->currentIndex());
-  sampler->SetTextureCompareFunc((csTextureCompareFunc)m_gui.cbCompareFunc->currentIndex());
-  sampler->SetTextureCompareMode((csTextureCompareMode)m_gui.cbCompareMode->currentIndex());
+  sampler->SetAddressU((cs::eTextureAddressMode)m_gui.cbAddressU->currentIndex());
+  sampler->SetAddressV((cs::eTextureAddressMode)m_gui.cbAddressV->currentIndex());
+  sampler->SetAddressW((cs::eTextureAddressMode)m_gui.cbAddressW->currentIndex());
+  sampler->SetTextureCompareFunc((cs::eTextureCompareFunc)m_gui.cbCompareFunc->currentIndex());
+  sampler->Setcs::eTextureCompareMode((cs::eTextureCompareMode)m_gui.cbCompareMode->currentIndex());
 }
 
 bool SamplerEditorWidget::IsDirty()

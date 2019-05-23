@@ -34,10 +34,10 @@ namespace asset::model
     const cs::Class *GetClass() const;
 
 
-    virtual csResourceLocator GetResourceLocator() const;
+    virtual cs::ResourceLocator GetResourceLocator() const;
 
 		void ClearReferences();
-		void AddReference(const csResourceLocator &reference);
+		void AddReference(const cs::ResourceLocator &reference);
 
 
   private:

@@ -4,20 +4,23 @@
 #include <editor/editorexport.hh>
 #include <editor/components/preview/previewsceneview.hh>
 
-class csEntity;
-class csStaticMeshState;
+namespace cs
+{
+class Entity;
+class StaticMeshState;
+}
 class StaticMeshEditorPreviewSceneView : public PreviewSceneView
 {
 public:
   StaticMeshEditorPreviewSceneView(QWidget *parent);
   virtual ~StaticMeshEditorPreviewSceneView();
 
-  void SetStaticMeshState(csStaticMeshState *staticMeshState);
+  void SetStaticMeshState(cs::StaticMeshState *staticMeshState);
 
 protected:
   virtual void initializeGL();
 
 private:
-  csEntity *m_entity;
-  csStaticMeshState *m_staticMeshState;
+  cs::Entity *m_entity;
+  cs::StaticMeshState *m_staticMeshState;
 };

@@ -19,11 +19,15 @@ namespace asset::model
 
 class MainWindow;
 class AssetManagerWidget;
-class csEngine;
-class csGraphicsGL4;
-struct iPhysicsSystem;
+class cs::Engine;
+struct cs::iPhysicsSystem;
 struct iDockItem;
 class Project;
+
+namespace cs
+{
+class GraphicsGL4;
+}
 
 class EDITOR_API Editor : public QObject
 {
@@ -50,7 +54,7 @@ public:
   QRect GetScreenSize();
 
 
-  csGraphicsGL4 *GetGraphics();
+  cs::GraphicsGL4 *GetGraphics();
  
   void CurrentEditorChanged();
 
@@ -69,7 +73,7 @@ public:
 
 public: // private don't call'em yourself
 
-void ResourceRenamed(const csResourceLocator &from, const csResourceLocator &to);
+void ResourceRenamed(const cs::ResourceLocator &from, const cs::ResourceLocator &to);
 
 private:
   Editor();
@@ -82,9 +86,9 @@ private:
   std::vector<iAssetEditorFactory*> m_editorFactories;
   std::map<asset::model::Asset*, iAssetEditor*> m_openEditors;
 
-  csEngine *m_engine;
-  csGraphicsGL4 *m_graphics;
-  iPhysicsSystem *m_physicsSystem;
+  cs::Engine *m_engine;
+  cs::GraphicsGL4 *m_graphics;
+  cs::iPhysicsSystem *m_physicsSystem;
   std::vector<iDockItem*> m_dockItems;
 
   Project *m_project = 0;

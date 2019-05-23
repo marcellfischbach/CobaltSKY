@@ -6,7 +6,7 @@
 
 
 ShaderGraphEditorMetaAssetCSFLoader::ShaderGraphEditorMetaAssetCSFLoader()
-  : csBaseCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
@@ -17,17 +17,17 @@ ShaderGraphEditorMetaAssetCSFLoader::~ShaderGraphEditorMetaAssetCSFLoader()
 
 }
 
-bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("shaderGraphMeta");
 }
 
-const cs::Class *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return ShaderGraphEditorMeta::GetStaticClass();
 }
 
-csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   ShaderGraphEditorMeta *meta = new ShaderGraphEditorMeta();
   ShaderGraphEditorMetaWrapper *metaWrapper = new ShaderGraphEditorMetaWrapper(meta);
@@ -38,7 +38,7 @@ csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *ent
       nodeEntry;
       nodeEntry = nodeEntry->GetSiblingEntry("node"))
     {
-      csVector2f pos;
+      cs::Vector2f pos;
       const csfEntry *posEntry = nodeEntry->GetEntry("pos");
       if (posEntry)
       {
@@ -54,7 +54,7 @@ csResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *ent
     const csfEntry *shaderGraphEntry = entry->GetEntry("shaderGraph");
     if (shaderGraphEntry)
     {
-      csVector2f pos;
+      cs::Vector2f pos;
       const csfEntry *posEntry = shaderGraphEntry->GetEntry("pos");
       if (posEntry)
       {

@@ -2,8 +2,8 @@
 #include <materialeditor/materialeditorevents.hh>
 
 
-MaterialEditorAttributeAdded::MaterialEditorAttributeAdded(const csResourceLocator &materialLocator, const std::string &attributeID, const std::string &attributeName)
-  : csEvent ()
+MaterialEditorAttributeAdded::MaterialEditorAttributeAdded(const cs::ResourceLocator &materialLocator, const std::string &attributeID, const std::string &attributeName)
+  : cs::Event ()
   , m_materialLocator(materialLocator)
   , m_attributeID(attributeID)
   , m_attributeName(attributeName)
@@ -11,7 +11,7 @@ MaterialEditorAttributeAdded::MaterialEditorAttributeAdded(const csResourceLocat
 }
 
 
-const csResourceLocator &MaterialEditorAttributeAdded::GetMaterialLocator() const
+const cs::ResourceLocator &MaterialEditorAttributeAdded::GetMaterialLocator() const
 {
   return m_materialLocator;
 }
@@ -31,8 +31,8 @@ const std::string &MaterialEditorAttributeAdded::GetAttributeName() const
 
 
 
-MaterialEditorAttributeChanged::MaterialEditorAttributeChanged(const csResourceLocator &materialLocator, const std::string &attributeID, const std::string &attributeName)
-  : csEvent()
+MaterialEditorAttributeChanged::MaterialEditorAttributeChanged(const cs::ResourceLocator &materialLocator, const std::string &attributeID, const std::string &attributeName)
+  : cs::Event()
   , m_materialLocator(materialLocator)
   , m_attributeID(attributeID)
   , m_attributeName(attributeName)
@@ -40,7 +40,7 @@ MaterialEditorAttributeChanged::MaterialEditorAttributeChanged(const csResourceL
 }
 
 
-const csResourceLocator &MaterialEditorAttributeChanged::GetMaterialLocator() const
+const cs::ResourceLocator &MaterialEditorAttributeChanged::GetMaterialLocator() const
 {
   return m_materialLocator;
 }
@@ -59,15 +59,15 @@ const std::string &MaterialEditorAttributeChanged::GetAttributeName() const
 
 
 
-MaterialEditorAttributeRemoved::MaterialEditorAttributeRemoved(const csResourceLocator &materialLocator, const std::string &attributeID)
-  : csEvent()
+MaterialEditorAttributeRemoved::MaterialEditorAttributeRemoved(const cs::ResourceLocator &materialLocator, const std::string &attributeID)
+  : cs::Event()
   , m_materialLocator(materialLocator)
   , m_attributeID(attributeID)
 {
 }
 
 
-const csResourceLocator &MaterialEditorAttributeRemoved::GetMaterialLocator() const
+const cs::ResourceLocator &MaterialEditorAttributeRemoved::GetMaterialLocator() const
 {
   return m_materialLocator;
 }

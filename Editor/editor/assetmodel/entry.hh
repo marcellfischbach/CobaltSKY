@@ -67,8 +67,8 @@ namespace asset::model
 		virtual const Root *AsRoot() const;
 
 		virtual bool IsAttached() const;
-    virtual csResourceLocator GetResourceLocator() const = 0;
-		virtual csResourceLocator CreateResourceLocator(const std::string &fileName) const;
+    virtual cs::ResourceLocator GetResourceLocator() const = 0;
+		virtual cs::ResourceLocator CreateResourceLocator(const std::string &fileName) const;
 
 		bool ContainsChild(const std::string &name) const;
     const std::vector<Entry*> &GetChildren() const;
@@ -93,7 +93,7 @@ namespace asset::model
     Model * m_model;
     Type m_type;
     std::string m_name;
-		csResourceLocator m_locator;
+		cs::ResourceLocator m_locator;
 
     Entry *m_parent;
     std::vector<Entry*> m_children;

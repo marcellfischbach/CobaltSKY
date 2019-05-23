@@ -36,12 +36,12 @@ GLuint csShaderGL4::GetName() const
   return m_name;
 }
 
-void csShaderGL4::SetShaderType(csShaderType shaderType)
+void csShaderGL4::SetShaderType(cs::eShaderType shaderType)
 {
   m_shaderType = shaderType;
 }
 
-csShaderType csShaderGL4::GetShaderType() const
+cs::eShaderType csShaderGL4::GetShaderType() const
 {
   return m_shaderType;
 }

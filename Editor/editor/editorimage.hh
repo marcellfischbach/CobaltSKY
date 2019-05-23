@@ -7,7 +7,10 @@
 #include <QImage>
 #include <editor/editorimage.refl.hh>
 
-class csImage;
+namespace cs
+{
+class Image;
+}
 
 
 CS_CLASS()
@@ -15,10 +18,10 @@ class EDITOR_API EditorImage : public CS_SUPER(cs::iObject)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  EditorImage(csImage *image = 0);
+  EditorImage(cs::Image *image = 0);
   virtual ~EditorImage();
 
-  void SetImage(csImage *image);
+  void SetImage(cs::Image *image);
 
   QImage GetImage() const
   {
@@ -30,10 +33,10 @@ private:
 };
 
 CS_CLASS()
-class EDITOR_API EditorImageWrapper : public CS_SUPER(csResourceWrapper)
+class EDITOR_API EditorImageWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(EditorImage, EditorImageWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(EditorImage, EditorImageWrapper, cs::ResourceWrapper);
 };
 
 

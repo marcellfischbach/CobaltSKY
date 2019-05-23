@@ -4,7 +4,7 @@
 #include <cobalt/graphics/csimage.hh>
 
 LoadersEditorIconAssetCSFLoader::LoadersEditorIconAssetCSFLoader()
-  : csBaseCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
@@ -15,17 +15,17 @@ LoadersEditorIconAssetCSFLoader::~LoadersEditorIconAssetCSFLoader()
 }
 
 
-bool LoadersEditorIconAssetCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool LoadersEditorIconAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("editorIcon");
 }
 
-const cs::Class *LoadersEditorIconAssetCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *LoadersEditorIconAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return EditorImage::GetStaticClass();
 }
 
-csResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   std::string tagName = entry->GetTagName();
   if (tagName != std::string("editorIcon"))
@@ -45,7 +45,7 @@ csResourceWrapper *LoadersEditorIconAssetCSFLoader::Load(const csfEntry *entry, 
   {
     return nullptr;
   }
-  csImage *image = csResourceManager::Get()->Load<csImage>(blob, locator, userData);
+  cs::Image *image = cs::ResourceManager::Get()->Load<cs::Image>(blob, locator, userData);
   if (!image)
   {
     return nullptr;

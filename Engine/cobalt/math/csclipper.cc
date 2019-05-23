@@ -2,12 +2,12 @@
 #include <cobalt/math/csclipper.hh>
 
 
-csClipper::csClipper()
+cs::Clipper::Clipper()
 {
 
 }
 
-csClipper::~csClipper()
+cs::Clipper::~Clipper()
 {
 
 }

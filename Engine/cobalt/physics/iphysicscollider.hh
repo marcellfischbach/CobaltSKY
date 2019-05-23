@@ -10,10 +10,15 @@
 #include <cobalt/physics/iphysicscollider.refl.hh>
 
 
-class csDynamicColliderState;
-class csPhysicsShape;
+
+
+namespace cs
+{
 struct iPhysicsShape;
-class csEntity;
+class Entity;
+class DynamicColliderState;
+class PhysicsShape;
+
 
 
 CS_CLASS()
@@ -21,19 +26,21 @@ struct CSE_API iPhysicsCollider : public cs::iObject
 {
   CS_CLASS_GEN;
 
-  virtual ~iPhysicsCollider () { }
+  virtual ~iPhysicsCollider() { }
 
-  virtual csPhysicsColliderType GetType() const = 0;
+  virtual cs::ePhysicsColliderType GetType() const = 0;
 
-  virtual const csMatrix4f &GetMatrix() const = 0;
-  virtual csTransformation GetTransform() = 0;
+  virtual const cs::Matrix4f& GetMatrix() const = 0;
+  virtual cs::Transformation GetTransform() = 0;
   virtual void FinishTransformation() = 0;
 
 
-  virtual void AttachShape(iPhysicsShape *shape) = 0;
-  virtual void DetachShape(iPhysicsShape *shape) = 0;
+  virtual void AttachShape(cs::iPhysicsShape* shape) = 0;
+  virtual void DetachShape(cs::iPhysicsShape* shape) = 0;
 
-  virtual void AttachShape(csPhysicsShape *shapes) = 0;
-  virtual void DetachShape(csPhysicsShape *shapes) = 0;
+  virtual void AttachShape(cs::PhysicsShape* shapes) = 0;
+  virtual void DetachShape(cs::PhysicsShape* shapes) = 0;
 
 };
+
+}

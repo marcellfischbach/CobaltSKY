@@ -6,42 +6,45 @@
 #include <cobalt/physics/iphysicsscene.hh>
 #include <cobalt/csengine.hh>
 
-class csDynamicColliderStateTransformationCallback : public iTransformationCallback
+namespace cs
+{
+class DynamicColliderStateTransformationCallback : public cs::iTransformationCallback
 {
 public:
-  csDynamicColliderStateTransformationCallback(csDynamicColliderState *state)
+  DynamicColliderStateTransformationCallback(cs::DynamicColliderState* state)
     : m_state(state)
   {
 
   }
 
-  virtual void TransformationChanged(const csMatrix4f &transformation)
+  virtual void TransformationChanged(const cs::Matrix4f& transformation)
   {
     m_state->DynamicTransformationChanged(transformation);
   }
 
 
 private:
-  csDynamicColliderState *m_state;
+  cs::DynamicColliderState* m_state;
 };
+}
 
-csDynamicColliderState::csDynamicColliderState()
-  : csBaseColliderState()
+cs::DynamicColliderState::DynamicColliderState()
+  : cs::BaseColliderState()
   , m_dynamicCollider(0)
 {
-  m_callback = new csDynamicColliderStateTransformationCallback(this);
+  m_callback = new cs::DynamicColliderStateTransformationCallback(this);
   m_dynamicCollider = csEng->CreateDynamicCollider();
   m_dynamicCollider->SetTransformationCallback(m_callback);
   SetBaseCollider(m_dynamicCollider);
 }
 
-csDynamicColliderState::~csDynamicColliderState()
+cs::DynamicColliderState::~DynamicColliderState()
 {
   CS_RELEASE(m_dynamicCollider);
 }
 
 
-void csDynamicColliderState::SetKinematic(bool kinematic)
+void cs::DynamicColliderState::SetKinematic(bool kinematic)
 {
   if (m_dynamicCollider)
   {
@@ -49,12 +52,12 @@ void csDynamicColliderState::SetKinematic(bool kinematic)
   }
 }
 
-bool csDynamicColliderState::IsKinematic() const
+bool cs::DynamicColliderState::IsKinematic() const
 {
   return m_dynamicCollider ? m_dynamicCollider->IsKinematic() : false;
 }
 
-void csDynamicColliderState::SetMass(float mass)
+void cs::DynamicColliderState::SetMass(float mass)
 {
   m_mass = mass;
   if (m_dynamicCollider)
@@ -63,13 +66,13 @@ void csDynamicColliderState::SetMass(float mass)
   }
 }
 
-float csDynamicColliderState::GetMass() const
+float cs::DynamicColliderState::GetMass() const
 {
   return m_mass;
   //return m_dynamicCollider ? m_dynamicCollider->GetMass() : 0.0f;
 }
 
-void csDynamicColliderState::SetInertia(const csVector3f &inertia)
+void cs::DynamicColliderState::SetInertia(const cs::Vector3f &inertia)
 {
   if (m_dynamicCollider)
   {
@@ -77,18 +80,18 @@ void csDynamicColliderState::SetInertia(const csVector3f &inertia)
   }
 }
 
-const csVector3f &csDynamicColliderState::GetInertia() const
+const cs::Vector3f &cs::DynamicColliderState::GetInertia() const
 {
   if (m_dynamicCollider)
   {
     return m_dynamicCollider->GetInertia();
   }
 
-  static csVector3f inertia(0.0f, 0.0f, 0.0f);
+  static cs::Vector3f inertia(0.0f, 0.0f, 0.0f);
   return inertia;
 }
 
-void csDynamicColliderState::SetAutoInertia(bool autoInertia)
+void cs::DynamicColliderState::SetAutoInertia(bool autoInertia)
 {
   if (m_dynamicCollider)
   {
@@ -96,12 +99,12 @@ void csDynamicColliderState::SetAutoInertia(bool autoInertia)
   }
 }
 
-bool csDynamicColliderState::IsAutoInertia() const
+bool cs::DynamicColliderState::IsAutoInertia() const
 {
   return m_dynamicCollider ? m_dynamicCollider->IsAutoInertia() : false;
 }
 
-void csDynamicColliderState::DynamicTransformationChanged(const csMatrix4f &transformation)
+void cs::DynamicColliderState::DynamicTransformationChanged(const cs::Matrix4f &transformation)
 {
   m_updateTransformationGuard = true;
   GetTransformation().SetGlobalTransformation(transformation);
@@ -110,7 +113,7 @@ void csDynamicColliderState::DynamicTransformationChanged(const csMatrix4f &tran
 }
 
 
-void csDynamicColliderState::OnAttachedToScene(csEntityScene *scene)
+void cs::DynamicColliderState::OnAttachedToScene(cs::EntityScene *scene)
 {
   if (scene)
   {
@@ -118,7 +121,7 @@ void csDynamicColliderState::OnAttachedToScene(csEntityScene *scene)
   }
 }
 
-void csDynamicColliderState::OnDetachedFromScene(csEntityScene *scene)
+void cs::DynamicColliderState::OnDetachedFromScene(cs::EntityScene *scene)
 {
   if (scene)
   {

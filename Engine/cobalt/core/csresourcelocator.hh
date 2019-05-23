@@ -3,16 +3,19 @@
 #include <cobalt/csexport.hh>
 #include <string>
 
-class csResourceName
+namespace cs
+{
+
+class ResourceName
 {
 public:
-  explicit csResourceName(const std::string &name)
+  explicit ResourceName(const std::string& name)
     : m_name(name)
   {
 
   }
 
-  const std::string &GetName() const
+  const std::string& GetName() const
   {
     return m_name;
   }
@@ -20,16 +23,16 @@ private:
   std::string m_name;
 };
 
-class csResourceEntry
+class ResourceEntry
 {
 public:
-  explicit csResourceEntry(const std::string &name)
+  explicit ResourceEntry(const std::string& name)
     : m_name(name)
   {
 
   }
 
-  const std::string &GetName() const
+  const std::string& GetName() const
   {
     return m_name;
   }
@@ -37,16 +40,16 @@ private:
   std::string m_name;
 };
 
-class csResourceFile
+class ResourceFile
 {
 public:
-  explicit csResourceFile(const std::string &name)
+  explicit ResourceFile(const std::string& name)
     : m_name(name)
   {
 
   }
 
-  const std::string &GetName() const
+  const std::string& GetName() const
   {
     return m_name;
   }
@@ -56,45 +59,45 @@ private:
 
 
 
-class CSE_API csResourceLocator
+class CSE_API ResourceLocator
 {
 public:
-  csResourceLocator(const std::string &encodedResourceName = "");
-  csResourceLocator(const csResourceFile &file);
-  csResourceLocator(const csResourceEntry &entry);
-  csResourceLocator(const csResourceFile &file, const csResourceName &name);
-  csResourceLocator(const csResourceEntry &entry, const csResourceFile &file);
-  csResourceLocator(const csResourceEntry &entry, const csResourceFile &file, const csResourceName &name);
+  ResourceLocator(const std::string& encodedResourceName = "");
+  ResourceLocator(const cs::ResourceFile& file);
+  ResourceLocator(const cs::ResourceEntry& entry);
+  ResourceLocator(const cs::ResourceFile& file, const cs::ResourceName& name);
+  ResourceLocator(const cs::ResourceEntry& entry, const cs::ResourceFile& file);
+  ResourceLocator(const cs::ResourceEntry& entry, const cs::ResourceFile& file, const cs::ResourceName& name);
 
-  static csResourceLocator Invalid();
+  static cs::ResourceLocator Invalid();
 
-//  csResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
-//  explicit csResourceLocator(const csResourceLocator &resource, const std::string &resourceName);
-  csResourceLocator(const csResourceLocator &other);
+  //  cs::ResourceLocator(const std::string &resourceFile, const std::string &resourceName, const std::string &resourceEntry = "");
+  //  explicit cs::ResourceLocator(const cs::ResourceLocator &resource, const std::string &resourceName);
+  ResourceLocator(const cs::ResourceLocator& other);
 
-  csResourceLocator AsAnonymous() const;
-  csResourceLocator AsFileName() const;
-  csResourceLocator WithFileSuffix(const std::string &suffix) const;
-	csResourceLocator WithResourceName(const std::string &resourceName) const;
+  cs::ResourceLocator AsAnonymous() const;
+  cs::ResourceLocator AsFileName() const;
+  cs::ResourceLocator WithFileSuffix(const std::string& suffix) const;
+  cs::ResourceLocator WithResourceName(const std::string& resourceName) const;
 
   bool IsAnonymous() const;
 
-  const std::string &GetResourceFile() const;
-  const std::string &GetResourceName() const;
-  const std::string &GetResourceEntry() const;
+  const std::string& GetResourceFile() const;
+  const std::string& GetResourceName() const;
+  const std::string& GetResourceEntry() const;
 
   std::string Encode() const;
   std::string GetDebugName() const;
 
-  bool Equals(const csResourceLocator &other) const;
+  bool Equals(const cs::ResourceLocator& other) const;
   /**
    * \brief Is any locator is anonymous test the base locator
    */
-  bool EqualsAnonymous(const csResourceLocator &other) const;
+  bool EqualsAnonymous(const cs::ResourceLocator& other) const;
 
-  bool operator< (const csResourceLocator &o) const;
-  bool operator== (const csResourceLocator &o) const;
-  bool operator!= (const csResourceLocator &o) const
+  bool operator< (const cs::ResourceLocator& o) const;
+  bool operator== (const cs::ResourceLocator& o) const;
+  bool operator!= (const cs::ResourceLocator& o) const
   {
     return !(*this == o);
   }
@@ -109,3 +112,7 @@ private:
   std::string m_resourceFile;
   std::string m_resourceName;
 };
+
+
+}
+

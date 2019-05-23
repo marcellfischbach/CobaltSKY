@@ -162,7 +162,7 @@ Qt::ItemFlags	ListTreeModel::flags(const QModelIndex& index) const
 QStringList ListTreeModel::mimeTypes() const
 {
   QStringList types;
-  types << "text/csResourceLocator";
+  types << "text/cs::ResourceLocator";
   //types << "text/uri-list";
   return types;
 }
@@ -186,21 +186,21 @@ QMimeData* ListTreeModel::mimeData(const QModelIndexList& indexes) const
     }
   }
 
-  md->setData("text/csResourceLocator", encodedData);
+  md->setData("text/cs::ResourceLocator", encodedData);
   return md;
 }
 
 bool ListTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) const
 {
-  if (data->hasFormat("text/csResourceLocator"))
+  if (data->hasFormat("text/cs::ResourceLocator"))
   {
 
-    QByteArray encodedData = data->data("text/csResourceLocator");
+    QByteArray encodedData = data->data("text/cs::ResourceLocator");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QString encodedLocator;
     stream >> encodedLocator;
 
-    csResourceLocator locator(encodedLocator.toLatin1().data());
+    cs::ResourceLocator locator(encodedLocator.toLatin1().data());
     const ListTreeNode* dragNode = FindNode(locator);
     ListTreeNode* dropNode = ListTreeNodeFrom(parent);
     if (row != -1 || column != -1)
@@ -234,15 +234,15 @@ bool ListTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, i
     return true;
   }
 
-  if (data->hasFormat("text/csResourceLocator"))
+  if (data->hasFormat("text/cs::ResourceLocator"))
   {
 
-    QByteArray encodedData = data->data("text/csResourceLocator");
+    QByteArray encodedData = data->data("text/cs::ResourceLocator");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     QString encodedLocator;
     stream >> encodedLocator;
 
-    csResourceLocator locator(encodedLocator.toLatin1().data());
+    cs::ResourceLocator locator(encodedLocator.toLatin1().data());
     ListTreeNode* dragNode = FindNode(locator);
     ListTreeNode* dropNode = ListTreeNodeFrom(parent);
 
@@ -274,14 +274,14 @@ bool ListTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, i
   return true;
 }
 
-ListTreeNode* ListTreeModel::FindNode(const csResourceLocator& locator)
+ListTreeNode* ListTreeModel::FindNode(const cs::ResourceLocator& locator)
 {
   return const_cast<ListTreeNode*>(
     static_cast<const ListTreeModel*>(this)->FindNode(locator)
     );
 }
 
-const ListTreeNode* ListTreeModel::FindNode(const csResourceLocator& locator) const
+const ListTreeNode* ListTreeModel::FindNode(const cs::ResourceLocator& locator) const
 {
   for (auto e : m_nodes)
   {

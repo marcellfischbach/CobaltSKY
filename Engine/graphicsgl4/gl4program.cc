@@ -9,14 +9,14 @@
 
 
 
-csProgramGL4::csProgramGL4()
-  : iShader()
+cs::ProgramGL4::ProgramGL4()
+  : cs::iShader()
   , m_name(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csProgramGL4::~csProgramGL4()
+cs::ProgramGL4::~ProgramGL4()
 {
   for (auto shader : m_shaders)
   {
@@ -52,7 +52,7 @@ csProgramGL4::~csProgramGL4()
 }
 
 
-void csProgramGL4::Bind()
+void cs::ProgramGL4::Bind()
 {
   if (!glIsProgram(m_name))
   {
@@ -62,24 +62,24 @@ void csProgramGL4::Bind()
   CS_CHECK_GL_ERROR;
 }
 
-void csProgramGL4::InitializeSystemAttributes()
+void cs::ProgramGL4::InitializeSystemAttributes()
 {
-  for (csUInt32 i = 0; i < eVAT_COUNT; ++i)
+  for (csUInt32 i = 0; i < cs::eVAT_COUNT; ++i)
   {
-    RegisterAttribute(csShaderAttributeID(i));
+    RegisterAttribute(cs::ShaderAttributeID(i));
   }
 }
 
-void csProgramGL4::InitializeSystemStreams()
+void cs::ProgramGL4::InitializeSystemStreams()
 {
-  for (csUInt32 i = 0; i < eVST_COUNT; ++i)
+  for (csUInt32 i = 0; i < cs::eVST_COUNT; ++i)
   {
-    RegisterStream(csShaderStreamID(i));
+    RegisterStream(cs::ShaderStreamID(i));
   }
 
 }
 
-void csProgramGL4::RegisterAttribute(const csShaderAttributeID &id)
+void cs::ProgramGL4::RegisterAttribute(const cs::ShaderAttributeID &id)
 {
   ResizeAttributes(id.GetID());
 
@@ -93,7 +93,7 @@ void csProgramGL4::RegisterAttribute(const csShaderAttributeID &id)
 
 }
 
-void csProgramGL4::RegisterStream(const csShaderStreamID &id)
+void cs::ProgramGL4::RegisterStream(const cs::ShaderStreamID &id)
 {
   ResizeStreams(id.GetID());
 
@@ -107,12 +107,12 @@ void csProgramGL4::RegisterStream(const csShaderStreamID &id)
 }
 
 
-csUInt32 csProgramGL4::GetNumberOfAttributes() const
+csUInt32 cs::ProgramGL4::GetNumberOfAttributes() const
 {
   return (csUInt32)m_attributes.size();
 }
 
-iShaderAttribute *csProgramGL4::GetAttribute(csUInt32 idx)
+cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(csUInt32 idx)
 {
   if (idx >= m_attributes.size())
   {
@@ -127,7 +127,7 @@ iShaderAttribute *csProgramGL4::GetAttribute(csUInt32 idx)
   return attr;
 }
 
-iShaderAttribute *csProgramGL4::GetAttribute(const csShaderAttributeID &id)
+cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(const cs::ShaderAttributeID &id)
 {
   if (id.GetID() >= m_attributes.size())
   {
@@ -147,7 +147,7 @@ iShaderAttribute *csProgramGL4::GetAttribute(const csShaderAttributeID &id)
   return attr;
 }
 
-iShaderAttribute *csProgramGL4::GetAttribute(const std::string &name)
+cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(const std::string &name)
 {
   for (size_t i = 0, in = m_namedAttributes.size(); i < in; ++i)
   {
@@ -177,12 +177,12 @@ iShaderAttribute *csProgramGL4::GetAttribute(const std::string &name)
 
 
 
-csUInt16 csProgramGL4::GetNumberOfStreams() const
+csUInt16 cs::ProgramGL4::GetNumberOfStreams() const
 {
   return (csUInt16)m_streams.size();
 }
 
-iShaderStream *csProgramGL4::GetStream(const csShaderStreamID &id)
+cs::iShaderStream *cs::ProgramGL4::GetStream(const cs::ShaderStreamID &id)
 {
   if (id.GetID() >= m_streams.size())
   {
@@ -203,7 +203,7 @@ iShaderStream *csProgramGL4::GetStream(const csShaderStreamID &id)
 }
 
 
-iShaderStream *csProgramGL4::GetStream(const std::string &name)
+cs::iShaderStream *cs::ProgramGL4::GetStream(const std::string &name)
 {
   for (size_t i = 0, in = m_namedStreams.size(); i < in; ++i)
   {
@@ -232,7 +232,7 @@ iShaderStream *csProgramGL4::GetStream(const std::string &name)
 
 
 
-void csProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
+void cs::ProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -247,7 +247,7 @@ void csProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
 }
 
 
-void csProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
+void cs::ProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -268,7 +268,7 @@ void csProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
   }
 }
 
-bool csProgramGL4::Link()
+bool cs::ProgramGL4::Link()
 {
   if (m_name != 0)
   {
@@ -308,7 +308,7 @@ bool csProgramGL4::Link()
 
 }
 
-std::string csProgramGL4::GetLinkErrorLog() const
+std::string cs::ProgramGL4::GetLinkErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;
@@ -324,7 +324,7 @@ std::string csProgramGL4::GetLinkErrorLog() const
 
 
 
-void csProgramGL4::ResizeAttributes(csUInt32 id)
+void cs::ProgramGL4::ResizeAttributes(csUInt32 id)
 {
   csInt32 missing = (csInt32)(id - m_attributes.size() + 1);
   for (csInt16 i = 0; i < missing; ++i)
@@ -334,7 +334,7 @@ void csProgramGL4::ResizeAttributes(csUInt32 id)
 }
 
 
-void csProgramGL4::ResizeStreams(csUInt32 id)
+void cs::ProgramGL4::ResizeStreams(csUInt32 id)
 {
   csInt32 missing = (csInt32)(id - m_streams.size() + 1);
   for (csInt16 i = 0; i < missing; ++i)

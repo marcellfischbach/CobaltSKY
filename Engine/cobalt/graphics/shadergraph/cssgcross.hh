@@ -8,14 +8,19 @@
 
 #define CS_CROSS_NAME "Math/Cross"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGCross : public CS_SUPER(csSGNode)
+class CSE_API SGCross : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGCross();
-  virtual ~csSGCross() { }
+  SGCross();
+  virtual ~SGCross() { }
 
   virtual bool Validate();
 
 };
+
+}

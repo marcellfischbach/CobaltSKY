@@ -6,15 +6,17 @@
 #include <cobalt/math/csvector.hh>
 #include <cobalt/entity/csjointstate.refl.hh>
 
+namespace cs
+{
+class DynamicColliderState;
 
-class csDynamicColliderState;
 
 CS_CLASS()
-class CSE_API csJointState : public CS_SUPER(csSpatialState)
+class CSE_API JointState : public CS_SUPER(cs::SpatialState)
 {
   CS_CLASS_GEN;
 public:
-  virtual ~csJointState();
+  virtual ~JointState();
 
   enum TransformReference
   {
@@ -23,58 +25,59 @@ public:
     eTR_Global,
   };
 
-  void SetColliderA(csDynamicColliderState *state);
-  csDynamicColliderState *GetColliderA();
-  const csDynamicColliderState *GetColliderA() const;
+  void SetColliderA(cs::DynamicColliderState * state);
+  cs::DynamicColliderState* GetColliderA();
+  const cs::DynamicColliderState* GetColliderA() const;
 
-  void SetColliderB(csDynamicColliderState *state);
-  csDynamicColliderState *GetColliderB();
-  const csDynamicColliderState *GetColliderB() const;
+  void SetColliderB(cs::DynamicColliderState * state);
+  cs::DynamicColliderState* GetColliderB();
+  const cs::DynamicColliderState* GetColliderB() const;
 
   void SetTransformReference(TransformReference reference);
   TransformReference GetTransformReference() const;
 
 
 protected:
-  csJointState();
+  JointState();
 
   virtual void OnAssembled();
 
 private:
-  csDynamicColliderState *m_colliderA;
-  csDynamicColliderState *m_colliderB;
+  cs::DynamicColliderState* m_colliderA;
+  cs::DynamicColliderState* m_colliderB;
 
   TransformReference m_transformReference;
 };
 
+}
 
 
-CS_FORCEINLINE csDynamicColliderState *csJointState::GetColliderA()
+CS_FORCEINLINE cs::DynamicColliderState *cs::JointState::GetColliderA()
 {
   return m_colliderA;
 }
 
-CS_FORCEINLINE const csDynamicColliderState *csJointState::GetColliderA() const
+CS_FORCEINLINE const cs::DynamicColliderState *cs::JointState::GetColliderA() const
 {
   return m_colliderA;
 }
 
-CS_FORCEINLINE csDynamicColliderState *csJointState::GetColliderB()
+CS_FORCEINLINE cs::DynamicColliderState *cs::JointState::GetColliderB()
 {
   return m_colliderB;
 }
 
-CS_FORCEINLINE const csDynamicColliderState *csJointState::GetColliderB() const
+CS_FORCEINLINE const cs::DynamicColliderState *cs::JointState::GetColliderB() const
 {
   return m_colliderB;
 }
 
-CS_FORCEINLINE void csJointState::SetTransformReference(csJointState::TransformReference reference)
+CS_FORCEINLINE void cs::JointState::SetTransformReference(cs::JointState::TransformReference reference)
 {
   m_transformReference = reference;
 }
 
-CS_FORCEINLINE csJointState::TransformReference csJointState::GetTransformReference() const
+CS_FORCEINLINE cs::JointState::TransformReference cs::JointState::GetTransformReference() const
 {
   return m_transformReference;
 }

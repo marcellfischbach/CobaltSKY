@@ -16,7 +16,7 @@
 static const int IDX_TEXTURE_IMAGE = -1;
 
 
-ShaderGraphEditorNode::ShaderGraphEditorNode(csSGShaderGraph *shaderGraph)
+ShaderGraphEditorNode::ShaderGraphEditorNode(cs::SGShaderGraph *shaderGraph)
   : NodeGraphNode()
   , m_shaderGraph(0)
   , m_sgNode(0)
@@ -31,33 +31,33 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGShaderGraph *shaderGraph)
   propDiffuse->SetAnchorShow(true);
   propDiffuse->SetShowValue(false);
   propDiffuse->SetName("Diffuse");
-  propDiffuse->SetIdx(csSGShaderGraph::eIT_Diffuse);
+  propDiffuse->SetIdx(cs::SGShaderGraph::eIT_Diffuse);
   propDiffuse->Initialize();
-  m_inputAnchors[csSGShaderGraph::eIT_Diffuse] = propDiffuse->GetAnchor();
+  m_inputAnchors[cs::SGShaderGraph::eIT_Diffuse] = propDiffuse->GetAnchor();
 
   NodeGraphNodeValueProperty *propAlpha = new NodeGraphNodeValueProperty(this);
   propAlpha->SetAnchorShow(true);
   propAlpha->SetShowValue(false);
   propAlpha->SetName("Alpha");
-  propAlpha->SetIdx(csSGShaderGraph::eIT_Alpha);
+  propAlpha->SetIdx(cs::SGShaderGraph::eIT_Alpha);
   propAlpha->Initialize();
-  m_inputAnchors[csSGShaderGraph::eIT_Alpha] = propAlpha->GetAnchor();
+  m_inputAnchors[cs::SGShaderGraph::eIT_Alpha] = propAlpha->GetAnchor();
 
   NodeGraphNodeValueProperty *propRoughness = new NodeGraphNodeValueProperty(this);
   propRoughness->SetAnchorShow(true);
   propRoughness->SetShowValue(false);
   propRoughness->SetName("Roughness");
-  propRoughness->SetIdx(csSGShaderGraph::eIT_Roughness);
+  propRoughness->SetIdx(cs::SGShaderGraph::eIT_Roughness);
   propRoughness->Initialize();
-  m_inputAnchors[csSGShaderGraph::eIT_Roughness] = propRoughness->GetAnchor();
+  m_inputAnchors[cs::SGShaderGraph::eIT_Roughness] = propRoughness->GetAnchor();
 
   NodeGraphNodeValueProperty *propNormal = new NodeGraphNodeValueProperty(this);
   propNormal->SetAnchorShow(true);
   propNormal->SetShowValue(false);
   propNormal->SetName("Normal");
-  propNormal->SetIdx(csSGShaderGraph::eIT_Normal);
+  propNormal->SetIdx(cs::SGShaderGraph::eIT_Normal);
   propNormal->Initialize();
-  m_inputAnchors[csSGShaderGraph::eIT_Normal] = propNormal->GetAnchor();
+  m_inputAnchors[cs::SGShaderGraph::eIT_Normal] = propNormal->GetAnchor();
 
 
   AddInputProperty(propDiffuse);
@@ -67,7 +67,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGShaderGraph *shaderGraph)
   Layout();
 }
 
-ShaderGraphEditorNode::ShaderGraphEditorNode(csSGNode *node)
+ShaderGraphEditorNode::ShaderGraphEditorNode(cs::SGNode *node)
   : NodeGraphNode()
   , m_shaderGraph(0)
   , m_sgNode(0)
@@ -97,7 +97,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGNode *node)
   }
 
   GetHeader()->SetName(QString(node->GetName().c_str()));
-  csSGResourceNode *resource = cs::QueryClass<csSGResourceNode>(node);
+  cs::SGResourceNode *resource = cs::QueryClass<cs::SGResourceNode>(node);
   if (resource)
   {
     NodeGraphNodeImageProperty *prop = new NodeGraphNodeImageProperty(this);
@@ -107,7 +107,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGNode *node)
   }
   for (csSize i = 0, in = node->GetNumberOfInputs(); i < in; ++i)
   {
-    csSGInput *input = node->GetInput(i);
+    cs::SGInput *input = node->GetInput(i);
 
     NodeGraphNodeValueProperty *prop = new NodeGraphNodeValueProperty(this);
     prop->SetShowValue(input->CanInputConst());
@@ -122,7 +122,7 @@ ShaderGraphEditorNode::ShaderGraphEditorNode(csSGNode *node)
 
   for (csSize i = 0, in = node->GetNumberOfOutputs(); i < in; ++i)
   {
-    csSGOutput *output = node->GetOutput(i);
+    cs::SGOutput *output = node->GetOutput(i);
     NodeGraphNodeValueProperty *prop = new NodeGraphNodeValueProperty(this);
     prop->SetShowValue(false);
     prop->SetAnchorShow(true);
@@ -166,13 +166,13 @@ NodeGraphNodeAnchor* ShaderGraphEditorNode::GetOutputAnchor(csUInt32 idx) const
   return it->second;
 }
 
-csSGShaderGraph *ShaderGraphEditorNode::GetShaderGraph() const
+cs::SGShaderGraph *ShaderGraphEditorNode::GetShaderGraph() const
 {
   return m_shaderGraph;
 }
 
 
-csSGNode *ShaderGraphEditorNode::GetSGNode() const
+cs::SGNode *ShaderGraphEditorNode::GetSGNode() const
 {
   return m_sgNode;
 }
@@ -188,14 +188,14 @@ void ShaderGraphEditorNode::UpdateValues()
     it != m_valueProperties.end();
     ++it) 
   {
-    csSGInput *input = m_sgNode->GetInput(it->first);
+    cs::SGInput *input = m_sgNode->GetInput(it->first);
     if (input && it->second)
     {
       it->second->SetValue(input->GetConst());
     }
   }
 
-  csSGResourceNode *resourceNode = cs::QueryClass<csSGResourceNode>(m_sgNode);
+  cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(m_sgNode);
   if (resourceNode)
   {
     NodeGraphNodeProperty *prop = GetInputProperty(IDX_TEXTURE_IMAGE);
@@ -204,8 +204,8 @@ void ShaderGraphEditorNode::UpdateValues()
       if (resourceNode->GetDefaultTextureResource() != m_texturePreviewResourceLocator)
       {
         NodeGraphNodeImageProperty *imgProp = static_cast<NodeGraphNodeImageProperty*>(prop);
-        csResourceLocator locator = resourceNode->GetDefaultTextureResource().WithResourceName("preview");
-        EditorImage *editorImage = csResourceManager::Get()->Aquire<EditorImage>(locator);
+        cs::ResourceLocator locator = resourceNode->GetDefaultTextureResource().WithResourceName("preview");
+        EditorImage *editorImage = cs::ResourceManager::Get()->Aquire<EditorImage>(locator);
         if (editorImage)
         {
           imgProp->SetImage(editorImage->GetImage());

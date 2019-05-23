@@ -2,30 +2,30 @@
 #include <cobalt/graphics/shadergraph/cssglerp.hh>
 
 
-csSGLerp::csSGLerp()
-  : csSGNode()
+cs::SGLerp::SGLerp()
+  : cs::SGNode()
 {
   SetName(CS_LERP_NAME);
-  AddInput(new csSGInput("a", true, true));
-  AddInput(new csSGInput("b", true, true));
-  AddInput(new csSGInput("x", true, true));
-  AddOutput(new csSGOutput("v"));
+  AddInput(new cs::SGInput("a", true, true));
+  AddInput(new cs::SGInput("b", true, true));
+  AddInput(new cs::SGInput("x", true, true));
+  AddOutput(new cs::SGOutput("v"));
 }
 
 
-bool csSGLerp::Validate()
+bool cs::SGLerp::Validate()
 {
-  bool success = csSGNode::Validate();
+  bool success = cs::SGNode::Validate();
 
-  csSGDataType dtA = GetInputDataType(0);
-  csSGDataType dtB = GetInputDataType(1);
-  csSGDataType dtX = GetInputDataType(2);
+  cs::eSGDataType dtA = GetInputDataType(0);
+  cs::eSGDataType dtB = GetInputDataType(1);
+  cs::eSGDataType dtX = GetInputDataType(2);
   if (!ScalarType(dtA, dtB) || !ScalarType(dtX))
   {
     SetValidationMessage("Invalid input type");
     return false;
   }
-  if (!SameScalarType(dtA, dtB) || !(SameScalarType(dtA, dtX) || dtX == eSGDT_Float))
+  if (!SameScalarType(dtA, dtB) || !(SameScalarType(dtA, dtX) || dtX == cs::eSGDT_Float))
   {
     SetValidationMessage("Invalid mix of int/float");
     return false;

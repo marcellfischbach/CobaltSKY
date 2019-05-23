@@ -15,24 +15,24 @@ namespace asset::model
   }
 
 
-  void AssetModifier::ClearLocator(const csResourceLocator &locator)
+  void AssetModifier::ClearLocator(const cs::ResourceLocator &locator)
   {
-    ReplaceLocator(locator, csResourceLocator());
+    ReplaceLocator(locator, cs::ResourceLocator());
   }
 
-  void AssetModifier::ReplaceLocator(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  void AssetModifier::ReplaceLocator(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
   {
-    const csResourceLocator &locator = m_asset->GetResourceLocator();
-    std::string fullPath = csVFS::Get()->GetAbsolutePath(locator);
+    const cs::ResourceLocator &locator = m_asset->GetResourceLocator();
+    std::string fullPath = cs::VFS::Get()->GetAbsolutePath(locator);
     csfFile file;
     if (file.Parse(fullPath, false))
     {
       ReplaceLocator(file.GetRoot(), oldLocator, newLocator);
-      csfWriter::Write(file, locator);
+      cs::file::Writer::Write(file, locator);
     }
   }
 
-  void AssetModifier::ReplaceLocator(csfEntry *entry, const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+  void AssetModifier::ReplaceLocator(csfEntry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
   {
     if (entry->HasAttribute("locator"))
     {

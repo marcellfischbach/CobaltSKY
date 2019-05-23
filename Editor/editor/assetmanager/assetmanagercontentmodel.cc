@@ -21,7 +21,7 @@
 #define CONST_FROM_INDEX(e) reinterpret_cast<const AssetManagerContentModelEntry*>(e.internalPointer());
 
 
-void asset_manager_content_mode_preview_icon_changed(csEvent &event, void *user)
+void asset_manager_content_mode_preview_icon_changed(cs::Event &event, void *user)
 {
   AssetPreviewIconChangedEvent &evt = static_cast<AssetPreviewIconChangedEvent&>(event);
   AssetManagerContentModel *model = reinterpret_cast<AssetManagerContentModel*>(user);
@@ -44,7 +44,7 @@ AssetManagerContentModel::~AssetManagerContentModel()
 }
 
 
-void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locator)
+void AssetManagerContentModel::SetResourceLocator(const cs::ResourceLocator &locator)
 {
   if (m_locator == locator)
   {
@@ -57,7 +57,7 @@ void AssetManagerContentModel::SetResourceLocator(const csResourceLocator &locat
   Refresh();
 }
 
-const csResourceLocator &AssetManagerContentModel::GetResourceLocator() const
+const cs::ResourceLocator &AssetManagerContentModel::GetResourceLocator() const
 {
   return m_locator;
 }
@@ -67,11 +67,11 @@ void AssetManagerContentModel::Refresh()
   std::string absFileName = "";
   if (!m_locator.GetResourceEntry().empty())
   {
-    absFileName = csVFS::Get()->GetAbsolutePath(m_locator.GetResourceFile(), m_locator.GetResourceEntry());
+    absFileName = cs::VFS::Get()->GetAbsolutePath(m_locator.GetResourceFile(), m_locator.GetResourceEntry());
   }
   else
   {
-    absFileName = csVFS::Get()->GetAbsolutePath(m_locator.GetResourceFile());
+    absFileName = cs::VFS::Get()->GetAbsolutePath(m_locator.GetResourceFile());
   }
 
   printf("Reset: %s\n", m_locator.GetResourceFile().c_str());
@@ -86,7 +86,7 @@ void AssetManagerContentModel::Refresh()
   {
     std::string resourceFileName = m_locator.GetResourceFile() + "/" + std::string((const char*)fileName.toLatin1());
     printf("  %s\n", resourceFileName.c_str());
-    csResourceLocator fileLocator(csResourceEntry(m_locator.GetResourceEntry()), csResourceFile(resourceFileName));
+    cs::ResourceLocator fileLocator(cs::ResourceEntry(m_locator.GetResourceEntry()), cs::ResourceFile(resourceFileName));
     m_entries.push_back(new AssetManagerContentModelEntry(fileLocator));
   }
 
@@ -168,8 +168,8 @@ QMimeData *AssetManagerContentModel::mimeData(const QModelIndexList &indexes) co
   const QModelIndex &index = indexes[0];
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
 
-  const csResourceLocator &locator = entry->GetLocator();
-  const cs::Class *cls = csResourceManager::Get()->EvalClass(locator);
+  const cs::ResourceLocator &locator = entry->GetLocator();
+  const cs::Class *cls = cs::ResourceManager::Get()->EvalClass(locator);
 
   QMimeData *data = new QMimeData();
   MimeHelper::PutResourceLocatorMimeData(data, locator.GetResourceFile());
@@ -188,12 +188,12 @@ Qt::ItemFlags AssetManagerContentModel::flags(const QModelIndex &index) const
     return defaultFlags;
 }
 
-csResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index) const
+cs::ResourceLocator AssetManagerContentModel::GetLocator(const QModelIndex &index) const
 {
   const AssetManagerContentModelEntry *entry = CONST_FROM_INDEX(index);
   if (!entry)
   {
-    return csResourceLocator();
+    return cs::ResourceLocator();
   }
   return entry->GetLocator();
 }
@@ -203,9 +203,9 @@ const AssetManagerContentModelEntry *AssetManagerContentModel::GetEntry(const QM
   return CONST_FROM_INDEX(index);
 }
 
-std::string AssetManagerContentModel::ReadType(const csResourceLocator &locator) const
+std::string AssetManagerContentModel::ReadType(const cs::ResourceLocator &locator) const
 {
-  std::string path = csVFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
+  std::string path = cs::VFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
 
   csfFile oFile;
   if (!oFile.Parse(path, false))
@@ -237,7 +237,7 @@ std::string AssetManagerContentModel::ReadType(const csResourceLocator &locator)
 }
 
 
-void AssetManagerContentModel::PreviewIconChanged(const csResourceLocator &locator)
+void AssetManagerContentModel::PreviewIconChanged(const cs::ResourceLocator &locator)
 {
   for (AssetManagerContentModelEntry *entry : m_entries)
   {

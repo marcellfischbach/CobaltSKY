@@ -42,23 +42,25 @@
     resourceClass *m_resource
 
 
+namespace cs
+{
 
 CS_CLASS()
-class CSE_API csResourceWrapper : public CS_SUPER(cs::Object)
+class CSE_API ResourceWrapper : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csResourceWrapper(cs::iObject *resource = nullptr);
-  virtual ~csResourceWrapper();
+  ResourceWrapper(cs::iObject * resource = nullptr);
+  virtual ~ResourceWrapper();
 
-  virtual void Set(cs::iObject *resource);
+  virtual void Set(cs::iObject * resource);
 
-  CS_FORCEINLINE cs::iObject *Get()
+  CS_FORCEINLINE cs::iObject * Get()
   {
     return m_resource;
   }
 
-  CS_FORCEINLINE const cs::iObject *Get() const
+  CS_FORCEINLINE const cs::iObject* Get() const
   {
     return m_resource;
   }
@@ -73,23 +75,26 @@ public:
     return !m_resource;
   }
 
-  CS_FORCEINLINE csResourceLocator &GetLocator() 
+  CS_FORCEINLINE cs::ResourceLocator& GetLocator()
   {
     return m_locator;
   }
 
-  CS_FORCEINLINE const csResourceLocator &GetLocator() const
+  CS_FORCEINLINE const cs::ResourceLocator& GetLocator() const
   {
     return m_locator;
   }
 
-  CS_FORCEINLINE void SetLocator(const csResourceLocator &locator)
+  CS_FORCEINLINE void SetLocator(const cs::ResourceLocator & locator)
   {
     m_locator = locator;
   }
 
 private:
-  cs::iObject * m_resource;
+  cs::iObject* m_resource;
 
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
 };
+
+}
+

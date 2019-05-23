@@ -11,23 +11,23 @@ namespace asset::model
 {
 
 	class Entry;
-    class NoSuchLocatorException : public csException
+    class NoSuchLocatorException : public cs::Exception
 	{
 
 	public:
-		NoSuchLocatorException(const csResourceLocator &locator);
+		NoSuchLocatorException(const cs::ResourceLocator &locator);
 
-		inline const csResourceLocator &GetLocator() const
+		inline const cs::ResourceLocator &GetLocator() const
 		{
 			return m_locator;
 		}
 
 	private:
-		csResourceLocator m_locator;
+		cs::ResourceLocator m_locator;
 	};
 
 
-    class NoTransactionException : public csException
+    class NoTransactionException : public cs::Exception
 	{
 
 	public:
@@ -39,7 +39,7 @@ namespace asset::model
 
 
 
-    class NotAttachedException : public csException
+    class NotAttachedException : public cs::Exception
 	{
 
 	public:
@@ -54,7 +54,7 @@ namespace asset::model
 	};
 
 
-    class ModelStateException : public csException
+    class ModelStateException : public cs::Exception
 	{
 
 	public:

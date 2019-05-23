@@ -6,22 +6,26 @@
 #include <cobalt/entity/cscharacterentity.refl.hh>
 
 
+
+namespace cs
+{
 struct iPhysicsCapsuleCharacterController;
-class csCharacterEntityTransformationCallback;
+class CharacterEntityTransformationCallback;
+
 CS_CLASS()
-class CSE_API csCharacterEntity : public CS_SUPER(csEntity)
+class CSE_API CharacterEntity : public CS_SUPER(cs::Entity)
 {
   CS_CLASS_GEN;
 public:
-  csCharacterEntity();
-  virtual ~csCharacterEntity();
+  CharacterEntity();
+  virtual ~CharacterEntity();
 
   void Rotate(float angle);
   void SetRotation(float rotation);
   float GetRotation() const;
 
   virtual void FinishTransformation();
-  void TransformationChanged(const csMatrix4f &transformation);
+  void TransformationChanged(const cs::Matrix4f & transformation);
 
   void SetRadius(float radius);
   float GetRadius() const;
@@ -29,32 +33,33 @@ public:
   void SetHeight(float height);
   float GetHeight() const;
 
-  void SetWalkDirection(const csVector3f &walkDirection);
+  void SetWalkDirection(const cs::Vector3f & walkDirection);
 
   void Jump();
 
 protected:
-  virtual void OnAttachedToScene(csEntityScene *scene);
-  virtual void OnDetachedFromScene(csEntityScene *scene);
+  virtual void OnAttachedToScene(cs::EntityScene * scene);
+  virtual void OnDetachedFromScene(cs::EntityScene * scene);
 
 private:
-  csCharacterEntityTransformationCallback *m_callback;
-  iPhysicsCapsuleCharacterController *m_characterController;
+  cs::CharacterEntityTransformationCallback* m_callback;
+  cs::iPhysicsCapsuleCharacterController* m_characterController;
 
   float m_radius;
   float m_height;
   float m_rotation;
 };
 
-
-CS_FORCEINLINE float csCharacterEntity::GetRadius() const
+}
+CS_FORCEINLINE float cs::CharacterEntity::GetRadius() const
 {
   return m_radius;
 }
 
 
-CS_FORCEINLINE float csCharacterEntity::GetHeight() const
+CS_FORCEINLINE float cs::CharacterEntity::GetHeight() const
 {
   return m_height;
 }
+
 

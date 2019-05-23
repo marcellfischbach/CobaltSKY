@@ -5,27 +5,27 @@
 
 
 
-csGenericShaderPostProcess::csGenericShaderPostProcess()
-  : csPostProcess()
+cs::GenericShaderPostProcess::GenericShaderPostProcess()
+  : cs::PostProcess()
 {
 
 }
 
-csGenericShaderPostProcess::~csGenericShaderPostProcess()
+cs::GenericShaderPostProcess::~GenericShaderPostProcess()
 {
 
 }
 
 
-void csGenericShaderPostProcess::SetShader(iShader *shader)
+void cs::GenericShaderPostProcess::SetShader(cs::iShader *shader)
 {
-  csPostProcess::SetShader(shader);
+  cs::PostProcess::SetShader(shader);
 }
 
 
-bool csGenericShaderPostProcess::Render(iGraphics *graphics)
+bool cs::GenericShaderPostProcess::Render(cs::iGraphics *graphics)
 {
-  if (!csPostProcess::Render(graphics))
+  if (!cs::PostProcess::Render(graphics))
   {
     return false;
   }

@@ -3,16 +3,19 @@
 #include <cobalt/csexport.hh>
 #include <cobalt/csdefs.hh>
 
+namespace cs
+{
+
 template<typename T>
-class CSE_API csHysteresis
+class CSE_API Hysteresis
 {
 public:
-  CS_FORCEINLINE csHysteresis()
+  CS_FORCEINLINE Hysteresis()
   {
 
   }
 
-  CS_FORCEINLINE void Setup(const &T low, const &T high, const &T value)
+  CS_FORCEINLINE void Setup(const& T low, const& T high, const& T value)
   {
     m_low = low;
     m_high = high;
@@ -26,7 +29,7 @@ public:
     }
   }
 
-  CS_FORCEINLINE bool UpdateValue(const &T value)
+  CS_FORCEINLINE bool UpdateValue(const& T value)
   {
     m_value = value;
     switch (m_state)
@@ -70,3 +73,5 @@ private:
 
 
 
+
+}

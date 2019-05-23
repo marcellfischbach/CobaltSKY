@@ -1,13 +1,13 @@
 
 #include <cobalt/graphics/shadergraph/cssgfloat4.hh>
 
-csSGFloat4::csSGFloat4()
-  : csSGNode()
+cs::SGFloat4::SGFloat4()
+  : cs::SGNode()
 {
   SetName(CS_FLOAT4_NAME);
-  AddInput(new csSGInput("x", true, true));
-  AddInput(new csSGInput("y", true, true));
-  AddInput(new csSGInput("z", true, true));
-  AddInput(new csSGInput("w", true, true));
-  AddOutput(new csSGOutput(eSGDT_Float4, "v", ""));
+  AddInput(new cs::SGInput("x", true, true));
+  AddInput(new cs::SGInput("y", true, true));
+  AddInput(new cs::SGInput("z", true, true));
+  AddInput(new cs::SGInput("w", true, true));
+  AddOutput(new cs::SGOutput(cs::eSGDT_Float4, "v", ""));
 }

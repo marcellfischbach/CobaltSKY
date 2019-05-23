@@ -3,7 +3,7 @@
 #include <physicsbullet/bulletshape.hh>
 
 csBulletShape::csBulletShape()
-  : iPhysicsShape()
+  : cs::iPhysicsShape()
 {
   CS_CLASS_GEN_CONSTR;
 }
@@ -14,17 +14,17 @@ csBulletShape::~csBulletShape()
 }
 
 
-const csPhysGeometry &csBulletShape::GetGeometry() const
+const cs::PhysGeometry &csBulletShape::GetGeometry() const
 {
   return m_geometry;
 }
 
-void csBulletShape::SetLocalTransform(const csMatrix4f &localTransform)
+void csBulletShape::SetLocalTransform(const cs::Matrix4f &localTransform)
 {
   m_localTransform = localTransform;
 }
 
-const csMatrix4f &csBulletShape::GetLocalTransform() const
+const cs::Matrix4f &csBulletShape::GetLocalTransform() const
 {
   return m_localTransform;
 }
@@ -34,9 +34,9 @@ bool csBulletShape::IsTransformed() const
   return !m_localTransform.IsIdentity();
 }
 
-bool csBulletShape::Initialize(const csPhysGeometry &geometry)
+bool csBulletShape::Initialize(const cs::PhysGeometry &geometry)
 {
-  memcpy(&m_geometry, &geometry, sizeof(csPhysGeometry));
+  memcpy(&m_geometry, &geometry, sizeof(cs::PhysGeometry));
 
   /*
   printf("Initialize: \n");
@@ -47,28 +47,28 @@ bool csBulletShape::Initialize(const csPhysGeometry &geometry)
   */
   switch (geometry.Type)
   {
-  case ePGT_Sphere:
+  case cs::ePGT_Sphere:
     m_bulletShape = new btSphereShape(geometry.Radius);
     break;
-  case ePGT_CylinderX:
+  case cs::ePGT_CylinderX:
     m_bulletShape = new btCylinderShapeX(btVector3(geometry.Height * 0.5f, geometry.Radius, geometry.Radius));
     break;
-  case ePGT_CylinderY:
+  case cs::ePGT_CylinderY:
     m_bulletShape = new btCylinderShape(btVector3(geometry.Radius, geometry.Height * 0.5f, geometry.Radius));
     break;
-  case ePGT_CylinderZ:
+  case cs::ePGT_CylinderZ:
     m_bulletShape = new btCylinderShapeZ(btVector3(geometry.Radius, geometry.Radius, geometry.Height * 0.5f));
     break;
-  case ePGT_CapsuleX:
+  case cs::ePGT_CapsuleX:
     m_bulletShape = new btCapsuleShapeX(geometry.Radius, geometry.Height);
     break;
-  case ePGT_CapsuleY:
+  case cs::ePGT_CapsuleY:
     m_bulletShape = new btCapsuleShape(geometry.Radius, geometry.Height);
     break;
-  case ePGT_CapsuleZ:
+  case cs::ePGT_CapsuleZ:
     m_bulletShape = new btCapsuleShapeZ(geometry.Radius, geometry.Height);
     break;
-  case ePGT_Box:
+  case cs::ePGT_Box:
     m_bulletShape = new btBoxShape(btVector3(geometry.Dimensions.x * 0.5f, geometry.Dimensions.y * 0.5f, geometry.Dimensions.z * 0.5f));
     break;
 

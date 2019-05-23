@@ -17,7 +17,7 @@ public:
   csSGNodeGL4();
   virtual ~csSGNodeGL4();
 
-  void SetNode(csSGNode *node)
+  void SetNode(cs::SGNode *node)
   {
     m_node = node;
   }
@@ -25,7 +25,7 @@ public:
   virtual bool EvaluateInline(csShaderGraphCtx &ctx);
   virtual bool Evaluate(csShaderGraphCtx &ctx);
 
-  csSGNode* GetNode()
+  cs::SGNode* GetNode()
   {
     return m_node;
   }
@@ -44,10 +44,10 @@ public:
   }
 
 
-  std::string AssignOutput(csShaderGraphCtx &ctx, csSGOutput *output, const std::string &exp, const std::string &type);
+  std::string AssignOutput(csShaderGraphCtx &ctx, cs::SGOutput *output, const std::string &exp, const std::string &type);
 
-  static csSGDataType GetHigher(csSGDataType dtA, csSGDataType dtB);
-  static std::string GetDataTypeVar(csSGDataType dt);
+  static cs::eSGDataType GetHigher(cs::eSGDataType dtA, cs::eSGDataType dtB);
+  static std::string GetDataTypeVar(cs::eSGDataType dt);
 
 protected:
   virtual void PrivEvaluate(csShaderGraphCtx &ctx) = 0;
@@ -56,7 +56,7 @@ protected:
 private:
   bool m_forceInline;
   bool m_inline;
-  csSGNode *m_node;
+  cs::SGNode *m_node;
   bool m_inlineEvaluated;
   bool m_evaluated;
   bool m_doubleInlineEvaluateInput;

@@ -14,8 +14,14 @@
 class csfEntry;
 class csfFile;
 class QImage;
-class csMaterialWrapper;
+
 class MaterialEditorProperties;
+
+namespace cs
+{
+class MaterialWrapper;
+}
+
 class MaterialEditorWidget;
 CS_CLASS()
 class MATERIALEDITOR_API MaterialEditor : public AbstractAssetEditor
@@ -29,7 +35,7 @@ public:
   void UpdatePreview();
   QImage TakeScreenshot(unsigned width, unsigned height);
 
-  void MaterialAttributeChanged(const csResourceLocator &locator, const std::string &attributeID, const std::string &attributeName);
+  void MaterialAttributeChanged(const cs::ResourceLocator &locator, const std::string &attributeID, const std::string &attributeName);
 
 protected:
   void UpdateAsset();
@@ -40,7 +46,7 @@ private:
   void ReplaceFileContent();
   void Save(csfFile &file);
 
-  csMaterialWrapper *m_material;
+  cs::MaterialWrapper *m_material;
   MaterialEditorWidget *m_widget;
 
   MaterialEditorProperties *m_properties;

@@ -6,53 +6,57 @@
 #include <vector>
 #include <cobalt/entity/csentityscene.refl.hh>
 
+
+namespace cs
+{
 struct iPhysicsScene;
-class csEntity;
+class Entity;
 
 CS_CLASS()
-class CSE_API csEntityScene : public CS_SUPER(cs::Object)
+class CSE_API EntityScene : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csEntityScene();
-  virtual ~csEntityScene();
+  EntityScene();
+  virtual ~EntityScene();
 
-  void AddEntity(csEntity *entity, csEntity *parent = 0);
-  void RemoveEntity(csEntity *entity);
+  void AddEntity(cs::Entity * entity, cs::Entity * parent = 0);
+  void RemoveEntity(cs::Entity * entity);
 
-  csEntity *GetRoot();
-  const csEntity *GetRoot() const;
+  cs::Entity * GetRoot();
+  const cs::Entity * GetRoot() const;
 
-  iPhysicsScene *GetPhysicsScene();
-  const iPhysicsScene *GetPhysicsScene() const;
+  cs::iPhysicsScene * GetPhysicsScene();
+  const cs::iPhysicsScene * GetPhysicsScene() const;
 
   void Update(float tpf);
 
 private:
-  csEntity* m_rootEntity;
-  iPhysicsScene *m_physicsScene;
+  cs::Entity * m_rootEntity;
+  cs::iPhysicsScene * m_physicsScene;
 
 };
 
+}
 
-CS_FORCEINLINE iPhysicsScene *csEntityScene::GetPhysicsScene()
+CS_FORCEINLINE cs::iPhysicsScene *cs::EntityScene::GetPhysicsScene()
 {
   return m_physicsScene;
 }
 
 
-CS_FORCEINLINE const iPhysicsScene *csEntityScene::GetPhysicsScene() const
+CS_FORCEINLINE const cs::iPhysicsScene *cs::EntityScene::GetPhysicsScene() const
 {
   return m_physicsScene;
 }
 
 
-CS_FORCEINLINE csEntity *csEntityScene::GetRoot()
+CS_FORCEINLINE cs::Entity *cs::EntityScene::GetRoot()
 {
   return m_rootEntity;
 }
 
-CS_FORCEINLINE const csEntity *csEntityScene::GetRoot() const
+CS_FORCEINLINE const cs::Entity *cs::EntityScene::GetRoot() const
 {
   return m_rootEntity;
 }

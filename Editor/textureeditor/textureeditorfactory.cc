@@ -6,7 +6,7 @@
 
 bool TextureEditorFactory::CanEdit(cs::iObject *object, asset::model::Asset *asset) const
 {
-  return object->GetClass()->IsInstanceOf<csTexture2DWrapper>();
+  return object->GetClass()->IsInstanceOf<cs::Texture2DWrapper>();
 }
 
 iAssetEditor *TextureEditorFactory::CreateEditor(cs::iObject *object, asset::model::Asset *asset) const

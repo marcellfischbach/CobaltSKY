@@ -7,45 +7,47 @@
 
 #include <string>
 
-class csSGNode;
-class csSGOutput;
 
-
-class CSE_API csSGInput
+namespace cs
 {
-  friend class csSGNode;
+class SGNode;
+class SGOutput;
+
+class CSE_API SGInput
+{
+  friend class cs::SGNode;
 public:
-  csSGInput(const std::string &name, bool canConst, bool canInputNode);
-  virtual ~csSGInput();
+  SGInput(const std::string& name, bool canConst, bool canInputNode);
+  virtual ~SGInput();
 
   void SetIdx(csUInt32 idx);
   csUInt32 GetIdx() const;
 
-  const csSGNode *GetNode() const;
-  csSGNode *GetNode();
+  const cs::SGNode* GetNode() const;
+  cs::SGNode* GetNode();
 
-  const std::string &GetName() const;
+  const std::string& GetName() const;
 
-  void SetInput(csSGOutput* output);
-  csSGOutput* GetInput();
-  const csSGOutput* GetInput() const;
+  void SetInput(cs::SGOutput* output);
+  cs::SGOutput* GetInput();
+  const cs::SGOutput* GetInput() const;
 
   bool CanInputNode() const;
-  csSGNode *GetInputNode();
+  cs::SGNode* GetInputNode();
 
   bool CanInputConst() const;
   void SetConst(float fl);
   float GetConst() const;
 
-  csSGDataType GetDataType()const;
+  cs::eSGDataType GetDataType()const;
 
 private:
   std::string m_name;
 
-  csSGNode *m_node;
+  cs::SGNode* m_node;
 
   bool m_canInputNode;
-  csSGOutput *m_input;
+  cs::SGOutput* m_input;
 
   bool m_canInputConst;
   float m_constFloat;
@@ -54,58 +56,62 @@ private:
 
 };
 
-CS_FORCEINLINE void csSGInput::SetIdx(csUInt32 idx)
+}
+
+
+CS_FORCEINLINE void cs::SGInput::SetIdx(csUInt32 idx)
 {
   m_idx = idx;
 }
-CS_FORCEINLINE csUInt32 csSGInput::GetIdx() const
+CS_FORCEINLINE csUInt32 cs::SGInput::GetIdx() const
 {
   return m_idx;
 }
 
 
-CS_FORCEINLINE const std::string &csSGInput::GetName() const
+CS_FORCEINLINE const std::string &cs::SGInput::GetName() const
 {
   return m_name;
 }
 
-CS_FORCEINLINE csSGNode *csSGInput::GetNode()
+CS_FORCEINLINE cs::SGNode *cs::SGInput::GetNode()
 {
   return m_node;
 }
 
-CS_FORCEINLINE const csSGNode *csSGInput::GetNode() const
+CS_FORCEINLINE const cs::SGNode *cs::SGInput::GetNode() const
 {
   return m_node;
 }
 
 
-CS_FORCEINLINE csSGOutput *csSGInput::GetInput()
+CS_FORCEINLINE cs::SGOutput *cs::SGInput::GetInput()
 {
   return m_input;
 }
 
-CS_FORCEINLINE const csSGOutput *csSGInput::GetInput() const
+CS_FORCEINLINE const cs::SGOutput *cs::SGInput::GetInput() const
 {
   return m_input;
 }
 
-CS_FORCEINLINE bool csSGInput::CanInputNode() const
+CS_FORCEINLINE bool cs::SGInput::CanInputNode() const
 {
   return m_canInputNode;
 }
 
-CS_FORCEINLINE bool csSGInput::CanInputConst() const
+CS_FORCEINLINE bool cs::SGInput::CanInputConst() const
 {
   return m_canInputConst;
 }
 
-CS_FORCEINLINE void csSGInput::SetConst(float fl)
+CS_FORCEINLINE void cs::SGInput::SetConst(float fl)
 {
   m_constFloat = fl;
 }
 
-CS_FORCEINLINE float csSGInput::GetConst() const
+CS_FORCEINLINE float cs::SGInput::GetConst() const
 {
   return m_constFloat;
 }
+

@@ -13,19 +13,19 @@ public:
   AssetResourceWidget(QWidget *parent = 0);
   ~AssetResourceWidget();
 
-  void SetResourceLocator(const csResourceLocator &locator);
-  const csResourceLocator &GetResourceLocator() const;
+  void SetResourceLocator(const cs::ResourceLocator &locator);
+  const cs::ResourceLocator &GetResourceLocator() const;
   void AddValidClass(const cs::Class *cls);
 
-  void Renamed(const csResourceLocator &from, const csResourceLocator &resourceLocator);
+  void Renamed(const cs::ResourceLocator &from, const cs::ResourceLocator &resourceLocator);
 
 signals:
-  void ResourceChanged(const csResourceLocator &locator);
+  void ResourceChanged(const cs::ResourceLocator &locator);
 
   private slots:
-  void ResourceChangedSlot(const csResourceLocator &locator);
+  void ResourceChangedSlot(const cs::ResourceLocator &locator);
 private:
   Ui::AssetResourceUI m_gui;
 
-  csResourceLocator m_locator;
+  cs::ResourceLocator m_locator;
 };

@@ -9,23 +9,23 @@
 #include <materialeditor/materialeditorevents.refl.hh>
 
 CS_CLASS()
-class MATERIALEDITOR_API MaterialEditorAttributeAdded : public csEvent
+class MATERIALEDITOR_API MaterialEditorAttributeAdded : public cs::Event
 {
   CS_CLASS_GEN;
 public:
   MaterialEditorAttributeAdded(
-    const csResourceLocator &materialLocator,
+    const cs::ResourceLocator &materialLocator,
     const std::string &attributeID,
     const std::string &attributeName
   );
 
 
-  const csResourceLocator &GetMaterialLocator() const;
+  const cs::ResourceLocator &GetMaterialLocator() const;
   const std::string &GetAttributeID() const;
   const std::string &GetAttributeName() const;
   
 private:
-  csResourceLocator m_materialLocator;
+  cs::ResourceLocator m_materialLocator;
   std::string m_attributeID;
 
   std::string m_attributeName;
@@ -34,23 +34,23 @@ private:
 
 
 CS_CLASS()
-class MATERIALEDITOR_API MaterialEditorAttributeChanged : public csEvent
+class MATERIALEDITOR_API MaterialEditorAttributeChanged : public cs::Event
 {
   CS_CLASS_GEN;
 public:
   MaterialEditorAttributeChanged(
-    const csResourceLocator &materialLocator,
+    const cs::ResourceLocator &materialLocator,
     const std::string &attributeID,
     const std::string &attributeName
   );
 
 
-  const csResourceLocator &GetMaterialLocator() const;
+  const cs::ResourceLocator &GetMaterialLocator() const;
   const std::string &GetAttributeID() const;
   const std::string &GetAttributeName() const;
 
 private:
-  csResourceLocator m_materialLocator;
+  cs::ResourceLocator m_materialLocator;
   std::string m_attributeID;
 
   std::string m_attributeName;
@@ -60,22 +60,22 @@ private:
 
 
 CS_CLASS()
-class MATERIALEDITOR_API MaterialEditorAttributeRemoved : public csEvent
+class MATERIALEDITOR_API MaterialEditorAttributeRemoved : public cs::Event
 {
   CS_CLASS_GEN;
 public:
   MaterialEditorAttributeRemoved(
-    const csResourceLocator &materialLocator,
+    const cs::ResourceLocator &materialLocator,
     const std::string &attributeID
   );
 
 
-  const csResourceLocator &GetMaterialLocator() const;
+  const cs::ResourceLocator &GetMaterialLocator() const;
   const std::string &GetAttributeID() const;
 
 private:
   csUInt8 pad[7];
-  csResourceLocator m_materialLocator;
+  cs::ResourceLocator m_materialLocator;
   std::string m_attributeID;
 
 

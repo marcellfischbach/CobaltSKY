@@ -3,7 +3,7 @@
 #include <cobalt/core/csassetinputstream.hh>
 
 
-csAssetInputStream::csAssetInputStream(const csUInt8 *buffer, csSize bufferSize)
+cs::AssetInputStream::AssetInputStream(const csUInt8 *buffer, csSize bufferSize)
   : m_readPointer(buffer)
   , m_buffer(buffer)
   , m_bufferSize(bufferSize)
@@ -11,14 +11,14 @@ csAssetInputStream::csAssetInputStream(const csUInt8 *buffer, csSize bufferSize)
 
 }
 
-csAssetInputStream::~csAssetInputStream()
+cs::AssetInputStream::~AssetInputStream()
 {
   m_buffer = 0;
   m_readPointer = 0;
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csInt8 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csInt8 &o)
 {
   o = *reinterpret_cast<const csInt8*>(m_readPointer);
   m_readPointer++;
@@ -26,7 +26,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csInt8 &o)
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csUInt8 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csUInt8 &o)
 {
   o = *reinterpret_cast<const csUInt8*>(m_readPointer);
   m_readPointer++;
@@ -35,7 +35,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csUInt8 &o)
 
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csInt16 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csInt16 &o)
 {
   o = *reinterpret_cast<const csInt16*>(m_readPointer);
   m_readPointer += sizeof(csInt16);
@@ -43,7 +43,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csInt16 &o)
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csUInt16 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csUInt16 &o)
 {
   o = *reinterpret_cast<const csUInt16*>(m_readPointer);
   m_readPointer += sizeof(csUInt16);
@@ -51,7 +51,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csUInt16 &o)
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csInt32 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csInt32 &o)
 {
   o = *reinterpret_cast<const csInt32*>(m_readPointer);
   m_readPointer += sizeof(csInt32);
@@ -59,7 +59,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csInt32 &o)
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csUInt32 &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csUInt32 &o)
 {
   o = *reinterpret_cast<const csUInt32*>(m_readPointer);
   m_readPointer += sizeof(csUInt32);
@@ -67,7 +67,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csUInt32 &o)
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csSize &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(csSize &o)
 {
   o = *reinterpret_cast<const csSize*>(m_readPointer);
   m_readPointer += sizeof(csSize);
@@ -76,7 +76,7 @@ csAssetInputStream &csAssetInputStream::operator>>(csSize &o)
 
 
 
-csAssetInputStream &csAssetInputStream::operator>>(float &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(float &o)
 {
   o = *reinterpret_cast<const float*>(m_readPointer);
   m_readPointer += sizeof(float);
@@ -85,46 +85,46 @@ csAssetInputStream &csAssetInputStream::operator>>(float &o)
 
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csVector2f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Vector2f &o)
 {
   *this >> o.x >> o.y;
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(csVector3f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Vector3f &o)
 {
   *this >> o.x >> o.y >> o.z;
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(csVector4f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Vector4f &o)
 {
   *this >> o.x >> o.y >> o.z >> o.w;
   return *this;
 }
 
 
-csAssetInputStream &csAssetInputStream::operator>>(csColor4f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Color4f &o)
 {
   *this >> o.r >> o.g >> o.b >> o.a;
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(csMatrix3f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Matrix3f &o)
 {
   memcpy(&o.m00, m_readPointer, sizeof(float) * 9);
   m_readPointer += sizeof(float) * 9;
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(csMatrix4f &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(cs::Matrix4f &o)
 {
   memcpy(&o.m00, m_readPointer, sizeof(float) * 16);
   m_readPointer += sizeof(float) * 16;
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::operator>>(std::string &o)
+cs::AssetInputStream &cs::AssetInputStream::operator>>(std::string &o)
 {
   csUInt16 length;
   *this >> length;
@@ -138,7 +138,7 @@ csAssetInputStream &csAssetInputStream::operator>>(std::string &o)
   return *this;
 }
 
-csAssetInputStream &csAssetInputStream::Read(void *buffer, size_t size)
+cs::AssetInputStream &cs::AssetInputStream::Read(void *buffer, size_t size)
 {
   memcpy(buffer, m_readPointer, size);
   m_readPointer += size;
@@ -146,17 +146,17 @@ csAssetInputStream &csAssetInputStream::Read(void *buffer, size_t size)
 }
 
 
-const csUInt8 *csAssetInputStream::GetData() const
+const csUInt8 *cs::AssetInputStream::GetData() const
 {
   return m_buffer;
 }
 
-const csUInt8 *csAssetInputStream::GetReadData() const
+const csUInt8 *cs::AssetInputStream::GetReadData() const
 {
   return m_readPointer;
 }
 
-csSize csAssetInputStream::GetBufferSize() const
+csSize cs::AssetInputStream::GetBufferSize() const
 {
   return m_bufferSize;
 }

@@ -45,37 +45,37 @@ enum GeometryType
   eGT_GeometryLOD
 };
 
-csStaticMeshLoader::csStaticMeshLoader()
-  : iFileLoader()
+cs::StaticMeshLoader::StaticMeshLoader()
+  : cs::iFileLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csStaticMeshLoader::~csStaticMeshLoader()
+cs::StaticMeshLoader::~StaticMeshLoader()
 {
 
 }
 
 
-bool csStaticMeshLoader::CanLoad(iFile *file, const csResourceLocator &locator) const
+bool cs::StaticMeshLoader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   return file->GetExtension() == std::string("staticmesh");
 }
 
 
-const cs::Class *csStaticMeshLoader::EvalClass(iFile *file, const csResourceLocator &locator) const
+const cs::Class *cs::StaticMeshLoader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
-  return csMeshWrapper::GetStaticClass();
+  return cs::MeshWrapper::GetStaticClass();
 }
 
 
-csResourceWrapper *csStaticMeshLoader::Load(iFile *file, const csResourceLocator &locator) const
+cs::ResourceWrapper *cs::StaticMeshLoader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   // start at the beginning (should already be there)
-  file->Seek(eSP_Set, 0L);
+  file->Seek(cs::eSP_Set, 0L);
 
   csUInt32 magicNumber;
   file->Read(&magicNumber, sizeof(csUInt32));
@@ -127,7 +127,7 @@ csResourceWrapper *csStaticMeshLoader::Load(iFile *file, const csResourceLocator
 
 }
 
-csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+cs::ResourceWrapper *cs::StaticMeshLoader::ReadEntry(std::map<std::string, HeaderEntry> &entries, const std::string &entryName, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   std::map<std::string, HeaderEntry>::iterator it = entries.find(entryName);
   if (it == entries.end())
@@ -145,7 +145,7 @@ csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEnt
 
   csUInt32 pos = he.position;
 
-  file->Seek(eSP_Set, (long)pos);
+  file->Seek(cs::eSP_Set, (long)pos);
   switch (he.type)
   {
   case eET_Geometry:
@@ -169,7 +169,7 @@ csResourceWrapper *csStaticMeshLoader::ReadEntry(std::map<std::string, HeaderEnt
 }
 
 
-csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+cs::MeshWrapper *cs::StaticMeshLoader::ReadMesh(csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   std::map<std::string, csUInt32> materialIDs;
   std::map<csUInt32, std::string> materialNames;
@@ -177,8 +177,8 @@ csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, c
   csUInt32 numMaterials;
   file->Read(&numMaterials, sizeof(csUInt32));
 
-  csMesh *mesh = new csMesh();
-  csMeshWrapper *meshWrapper = new csMeshWrapper(mesh);
+  cs::Mesh *mesh = new cs::Mesh();
+  cs::MeshWrapper *meshWrapper = new cs::MeshWrapper(mesh);
   for (csUInt32 i = 0; i < numMaterials; ++i)
   {
     std::string materialName = ReadString(file);
@@ -206,16 +206,16 @@ csMeshWrapper *csStaticMeshLoader::ReadMesh(csUInt32 fileVersion, iFile *file, c
 }
 
 
-bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+bool cs::StaticMeshLoader::ReadSubMesh(cs::Mesh *mesh, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
-  csSubMesh *subMesh = new csSubMesh();
-  csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
+  cs::SubMesh *subMesh = new cs::SubMesh();
+  cs::SubMeshWrapper *subMeshWrapper = new cs::SubMeshWrapper(subMesh);
 
   csUInt32 materialIndex, LOD;
   file->Read(&materialIndex, sizeof(csUInt32));
   file->Read(&LOD, sizeof(csUInt32));
 
-  iVertexDeclaration *decl = ReadVertexDeclaration(file);
+  cs::iVertexDeclaration *decl = ReadVertexDeclaration(file);
 
   if (!decl)
   {
@@ -239,7 +239,7 @@ bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *
     unsigned char *buffer = new unsigned char[numVertices * stride];
     file->Read(buffer, numVertices * stride);
 
-    iVertexBuffer *vb = csEng->CreateVertexBuffer(numVertices * stride, buffer, eBDM_Static);
+    cs::iVertexBuffer *vb = csEng->CreateVertexBuffer(numVertices * stride, buffer, cs::eBDM_Static);
     delete[] buffer;
     if (!vb)
     {
@@ -259,10 +259,10 @@ bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *
   csUInt32 idxSize = 0;
   switch (indexType)
   {
-  case eDT_UnsignedShort:
+  case cs::eDT_UnsignedShort:
     idxSize = sizeof(csUInt16);
     break;
-  case eDT_UnsignedInt:
+  case cs::eDT_UnsignedInt:
     idxSize = sizeof(csUInt32);
     break;
   default:
@@ -272,7 +272,7 @@ bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *
   }
   unsigned char *buffer = new unsigned char[numIndices * idxSize];
   file->Read(buffer, numIndices * idxSize);
-  iIndexBuffer *ib = csEng->CreateIndexBuffer(numIndices * idxSize, buffer, eBDM_Static);
+  cs::iIndexBuffer *ib = csEng->CreateIndexBuffer(numIndices * idxSize, buffer, cs::eBDM_Static);
   delete[] buffer;
   if (!ib)
   {
@@ -282,11 +282,11 @@ bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *
 
   subMesh->SetIndexBuffer(ib, numIndices, 0);
 
-  csVector3f bboxMin;
-  csVector3f bboxMax;
+  cs::Vector3f bboxMin;
+  cs::Vector3f bboxMax;
   file->Read(&bboxMin, sizeof(float) * 3);
   file->Read(&bboxMax, sizeof(float) * 3);
-  csBoundingBox bbox;
+  cs::BoundingBox bbox;
   bbox.Add(bboxMin);
   bbox.Add(bboxMax);
   bbox.Finish();
@@ -298,56 +298,56 @@ bool csStaticMeshLoader::ReadSubMesh(csMesh *mesh, csUInt32 fileVersion, iFile *
 }
 
 
-iVertexDeclaration *csStaticMeshLoader::ReadVertexDeclaration(iFile *file) const
+cs::iVertexDeclaration *cs::StaticMeshLoader::ReadVertexDeclaration(cs::iFile *file) const
 {
   csUInt32 numVertexDeclarations;
   file->Read(&numVertexDeclarations, sizeof(csUInt32));
 
-  std::vector<csVertexElement> elements;
+  std::vector<cs::VertexElement> elements;
   for (csUInt32 i = 0; i < numVertexDeclarations; ++i)
   {
     csUInt32 data[6];
     file->Read(data, sizeof(csUInt32) * 6);
 
-    elements.push_back(csVertexElement(
-      (csVertexStreamType)data[0],
-      (csDataType)data[1],
+    elements.push_back(cs::VertexElement(
+      (cs::eVertexStreamType)data[0],
+      (cs::eDataType)data[1],
       data[2],
       data[3],
       data[4],
       data[5]
       ));
   }
-  elements.push_back(csVertexElement());
+  elements.push_back(cs::VertexElement());
 
-  iVertexDeclaration *decl = csEng->CreateVertexDeclaration(elements.data());
+  cs::iVertexDeclaration *decl = csEng->CreateVertexDeclaration(elements.data());
 
   return decl;
 }
 
 
-csPhysicsShapeWrapper *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+cs::PhysicsShapeWrapper *cs::StaticMeshLoader::ReadCollision(csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
-  csPhysicsShape *container = new csPhysicsShape();
-  csPhysicsShapeWrapper *containerWrapper = new csPhysicsShapeWrapper(container);
+  cs::PhysicsShape *container = new cs::PhysicsShape();
+  cs::PhysicsShapeWrapper *containerWrapper = new cs::PhysicsShapeWrapper(container);
   csUInt32 numShapes;
   file->Read(&numShapes, sizeof(csUInt32));
   for (csUInt32 i = 0; i < numShapes; ++i)
   {
     csUInt32 shapeTypeI;
     file->Read(&shapeTypeI, sizeof(csUInt32));
-    csMatrix4f trans;
-    file->Read(&trans, sizeof(csMatrix4f));
-    csPhysGeometryType type = static_cast<csPhysGeometryType>(shapeTypeI);
+    cs::Matrix4f trans;
+    file->Read(&trans, sizeof(cs::Matrix4f));
+    cs::ePhysGeometryType type = static_cast<cs::ePhysGeometryType>(shapeTypeI);
     switch (type)
     {
-    case ePGT_Box:
+    case cs::ePGT_Box:
       {
-        csPhysGeometry geom;
+        cs::PhysGeometry geom;
         memset(&geom, 0, sizeof(geom));
         geom.Type = type;
-        file->Read(&geom.Dimensions, sizeof(csVector3f));
-        iPhysicsShape *shape = csEng->CreateShape(geom);
+        file->Read(&geom.Dimensions, sizeof(cs::Vector3f));
+        cs::iPhysicsShape *shape = csEng->CreateShape(geom);
         shape->SetLocalTransform(trans);
         container->AddShape(shape);
       }
@@ -362,7 +362,7 @@ csPhysicsShapeWrapper *csStaticMeshLoader::ReadCollision(csUInt32 fileVersion, i
 }
 
 
-csGeometryDataWrapper* csStaticMeshLoader::ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+cs::GeometryDataWrapper* cs::StaticMeshLoader::ReadGeometry(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   csUInt32 type;
   file->Read(&type, sizeof(csUInt32));
@@ -386,20 +386,20 @@ csGeometryDataWrapper* csStaticMeshLoader::ReadGeometry(std::map<std::string, He
 }
 
 
-csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, iFile *file, const csResourceLocator &locator) const
+cs::GeometryMeshWrapper* cs::StaticMeshLoader::ReadGeometryMesh(std::map<std::string, HeaderEntry> &entries, csUInt32 fileVersion, cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   enum ReadMode
   {
     eRM_Internal,
     eRM_External
   };
-  csMatrix4f localTransformation;
+  cs::Matrix4f localTransformation;
   file->Read(&localTransformation, sizeof(float) * 16);
 
   csUInt32 readMode;
   file->Read(&readMode, sizeof(csUInt32));
 
-  csResourceWrapper *meshObj = nullptr;
+  cs::ResourceWrapper *meshObj = nullptr;
   switch (readMode)
   {
   case eRM_Internal:
@@ -407,14 +407,14 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
       std::string name = ReadString(file);
       csSize currentPosition = file->Tell();
       meshObj = ReadEntry(entries, name, fileVersion, file, locator);
-      file->Seek(eSP_Set, (long)currentPosition);
+      file->Seek(cs::eSP_Set, (long)currentPosition);
     }
     break;
   case eRM_External:
     {
       std::string resourceFile = ReadString(file);
       std::string resourceName = ReadString(file);
-      meshObj = csResourceManager::Get()->GetOrLoad(csResourceLocator(csResourceFile(resourceFile), csResourceName(resourceName)));
+      meshObj = cs::ResourceManager::Get()->GetOrLoad(cs::ResourceLocator(cs::ResourceFile(resourceFile), cs::ResourceName(resourceName)));
       if (meshObj)
       {
         // make me the owner, otherwise there is a difference between GetOrLoad and ReadEntry
@@ -429,34 +429,34 @@ csGeometryMeshWrapper* csStaticMeshLoader::ReadGeometryMesh(std::map<std::string
     return nullptr;
   }
 
-  csMeshWrapper *mesh = cs::QueryClass<csMeshWrapper>(meshObj);
+  cs::MeshWrapper *mesh = cs::QueryClass<cs::MeshWrapper>(meshObj);
   if (!mesh)
   {
     meshObj->Release();
     return nullptr;
   }
 
-  csMultiMaterial *material = ReadMultiMaterial(file);
+  cs::MultiMaterial *material = ReadMultiMaterial(file);
 
 
-  csGeometryMesh *geometryMesh = new csGeometryMesh();
+  cs::GeometryMesh *geometryMesh = new cs::GeometryMesh();
   geometryMesh->SetMesh(mesh);
   geometryMesh->SetMaterial(material);
 
-  return new csGeometryMeshWrapper(geometryMesh);
+  return new cs::GeometryMeshWrapper(geometryMesh);
 }
 
-csMultiMaterial *csStaticMeshLoader::ReadMultiMaterial(iFile *file) const
+cs::MultiMaterial *cs::StaticMeshLoader::ReadMultiMaterial(cs::iFile *file) const
 {
   csUInt32 numberOfMaterials;
   file->Read(&numberOfMaterials, sizeof(csUInt32));
 
-  csResourceManager *mgr = csResourceManager::Get();
-  csMultiMaterial *multiMaterial = new csMultiMaterial();
+  cs::ResourceManager *mgr = cs::ResourceManager::Get();
+  cs::MultiMaterial *multiMaterial = new cs::MultiMaterial();
   for (csUInt32 i = 0; i < numberOfMaterials; ++i)
   {
     std::string name = ReadString(file);
-    csMaterial *inst = mgr->GetOrLoad<csMaterial>(csResourceLocator(csResourceFile("${materials}/materials.xml"), csResourceName(name)));
+    cs::Material *inst = mgr->GetOrLoad<cs::Material>(cs::ResourceLocator(cs::ResourceFile("${materials}/materials.xml"), cs::ResourceName(name)));
     if (inst)
     {
       multiMaterial->AddMaterialInstance(inst);
@@ -465,7 +465,7 @@ csMultiMaterial *csStaticMeshLoader::ReadMultiMaterial(iFile *file) const
   return multiMaterial;
 }
 
-std::string csStaticMeshLoader::ReadString(iFile *file) const
+std::string cs::StaticMeshLoader::ReadString(cs::iFile *file) const
 {
   csUInt32 length;
   file->Read(&length, sizeof(csUInt32));

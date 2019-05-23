@@ -5,7 +5,10 @@
 #include <cobalt/math/csvector3f.hh>
 #include <vector>
 
-class CSE_API csClipper
+namespace cs
+{
+
+class CSE_API Clipper
 {
 public:
   enum ClipResult
@@ -15,15 +18,17 @@ public:
     eCR_Intermediate,
   };
 public:
-  virtual ~csClipper();
+  virtual ~Clipper();
 
-  virtual ClipResult Test(const csVector3f &pos) const = 0;
-  virtual ClipResult Test(const csBoundingBox &bbox, bool debug = false) const = 0;
+  virtual ClipResult Test(const cs::Vector3f& pos) const = 0;
+  virtual ClipResult Test(const cs::BoundingBox& bbox, bool debug = false) const = 0;
 
 
 protected:
-  csClipper();
+  Clipper();
 
 
 };
 
+
+}

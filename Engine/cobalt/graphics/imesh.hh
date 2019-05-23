@@ -7,11 +7,14 @@
 #include <cobalt/cstypes.hh>
 #include <vector>
 
-class csBoundingBox;
-enum csRenderPass;
+enum cs::eRenderPass;
+
+namespace cs
+{
 struct iGraphics;
-class csMaterial;
-struct csVector3f;
+struct Vector3f;
+class BoundingBox;
+class Material;
 
 CS_CLASS()
 struct CSE_API iMesh : public CS_SUPER(cs::iObject)
@@ -19,9 +22,9 @@ struct CSE_API iMesh : public CS_SUPER(cs::iObject)
   CS_CLASS_GEN;
   virtual ~iMesh () { }
 
-  virtual void Update(iGraphics *renderer, const csVector3f &cameraPos, csUInt64 frameNo) = 0;
+  virtual void Update(cs::iGraphics *renderer, const cs::Vector3f &cameraPos, csUInt64 frameNo) = 0;
 
-  virtual void Render(iGraphics *renderer, csRenderPass pass, const std::vector<csMaterial *> &materials, csUInt8 lod = 0) = 0;
+  virtual void Render(cs::iGraphics *renderer, cs::eRenderPass pass, const std::vector<cs::Material *> &materials, csUInt8 lod = 0) = 0;
 
   virtual csSize GetNumberOfMaterials() const = 0;
 
@@ -29,10 +32,13 @@ struct CSE_API iMesh : public CS_SUPER(cs::iObject)
 
   virtual csUInt32 GetMaterialIndex(const std::string &materialName) const = 0;
 
-  virtual const csBoundingBox &GetBoundingBox() const = 0;
+  virtual const cs::BoundingBox &GetBoundingBox() const = 0;
 
   virtual csSize GetNumberOfRenderCalls(csUInt8 lod = 0) const = 0;
 
   virtual csSize GetNumberOfTotalTrigons(csUInt8 lod = 0) const = 0;
 
 };
+
+
+}

@@ -23,7 +23,7 @@ TextureEditorWidget::~TextureEditorWidget()
 
 }
 
-void TextureEditorWidget::SetTexture(csTexture2DWrapper *texture)
+void TextureEditorWidget::SetTexture(cs::Texture2DWrapper *texture)
 {
   CS_SET(m_texture, texture);
 
@@ -31,9 +31,9 @@ void TextureEditorWidget::SetTexture(csTexture2DWrapper *texture)
   m_gui.spLOD->setMaximum(texture->Get()->GetNumberOfLODs() - 1);
 }
 
-void TextureEditorWidget::SamplerChanged(const csResourceLocator &locator)
+void TextureEditorWidget::SamplerChanged(const cs::ResourceLocator &locator)
 {
-  csSamplerWrapper *sampler = csResourceManager::Get()->Aquire<csSamplerWrapper>(locator);
+  cs::SamplerWrapper *sampler = cs::ResourceManager::Get()->Aquire<cs::SamplerWrapper>(locator);
   if (sampler)
   {
     m_texture->Get()->SetSampler(sampler);
@@ -71,7 +71,7 @@ void TextureEditorWidget::on_spLOD_valueChanged(int value)
 void TextureEditorWidget::on_pbSave_clicked()
 {
 
-  csTexture2DWrapper *managerTexture = csResourceManager::Get()->Get<csTexture2DWrapper>(m_editor->GetAsset()->GetResourceLocator());
+  cs::Texture2DWrapper *managerTexture = cs::ResourceManager::Get()->Get<cs::Texture2DWrapper>(m_editor->GetAsset()->GetResourceLocator());
   if (managerTexture)
   {
     managerTexture->Get()->SetSampler(m_texture->Get()->GetSampler());
@@ -125,7 +125,7 @@ void TextureEditorWidget::on_pbSave_clicked()
 
   samplerEntry->RemoveAttributes();
 
-  csResourceLocator samplerLocator = m_texture->Get()->GetSampler()->GetLocator();
+  cs::ResourceLocator samplerLocator = m_texture->Get()->GetSampler()->GetLocator();
   samplerEntry->AddAttribute(samplerLocator.GetResourceFile());
 
   outputFile.Output(std::string(absFileName.toLatin1()));

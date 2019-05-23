@@ -7,14 +7,18 @@
 
 #define CS_SPLIT_FLOAT4_NAME "Assemble/SplitFloat4"
 
+namespace cs
+{
 
 CS_CLASS()
-class CSE_API csSGSplitFloat4 : public CS_SUPER(csSGNode)
+class CSE_API SGSplitFloat4 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGSplitFloat4();
-  virtual ~csSGSplitFloat4() { }
+  SGSplitFloat4();
+  virtual ~SGSplitFloat4() { }
 
   virtual bool Validate();
 };
+
+}

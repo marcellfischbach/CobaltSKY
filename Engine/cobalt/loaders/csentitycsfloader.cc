@@ -6,43 +6,43 @@
 #include <cobalt/entity/csspatialstate.hh>
 #include <csrefl/classregistry.hh>
 
-csEntityCSFLoader::csEntityCSFLoader()
-  : csBaseCSFLoader()
+cs::EntityCSFLoader::EntityCSFLoader()
+  : cs::BaseCSFLoader()
 {
 
 }
 
-csEntityCSFLoader::~csEntityCSFLoader()
+cs::EntityCSFLoader::~EntityCSFLoader()
 {
 
 }
 
-bool csEntityCSFLoader::CanLoad(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+bool cs::EntityCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("entity");
 }
 
-const cs::Class *csEntityCSFLoader::EvalClass(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::EntityCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csEntity::GetStaticClass();
+  return cs::Entity::GetStaticClass();
 }
 
-csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::EntityCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
-  csEntity *entity = nullptr;
-  csEntityWrapper *wrapper= nullptr;
+  cs::Entity *entity = nullptr;
+  cs::EntityWrapper *wrapper= nullptr;
   if (entry->HasAttribute("locator"))
   { 
-    csResourceWrapper *obj = csEng->Get(csResourceLocator(entry->GetAttribute("locator")));
+    cs::ResourceWrapper *obj = csEng->Get(cs::ResourceLocator(entry->GetAttribute("locator")));
     if (!obj)
     {
       return nullptr;
     }
-    wrapper = cs::QueryClass<csEntityWrapper>(obj);
+    wrapper = cs::QueryClass<cs::EntityWrapper>(obj);
     if (!entity)
     {
-      csBlueprintWrapper *blueprint = cs::QueryClass<csBlueprintWrapper>(obj);
+      cs::BlueprintWrapper *blueprint = cs::QueryClass<cs::BlueprintWrapper>(obj);
       if (blueprint && blueprint->IsValid())
       {
         wrapper = blueprint->Get()->CreateEntity();
@@ -62,8 +62,8 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
       return nullptr;
     }
 
-    entity = entityClass->CreateInstance<csEntity>();
-    wrapper = new csEntityWrapper(entity);
+    entity = entityClass->CreateInstance<cs::Entity>();
+    wrapper = new cs::EntityWrapper(entity);
   }
   if (!entity && (!wrapper || wrapper->IsNull()))
   {
@@ -77,7 +77,7 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
 
 
 
-  std::map<csID, csEntityState*> states;
+  std::map<csID, cs::EntityState*> states;
   for (const csfEntry *entityStateEntry = entry->GetEntry("entityState");
     entityStateEntry;
     entityStateEntry = entityStateEntry->GetSiblingEntry("entityState")) 
@@ -88,7 +88,7 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
     }
     csID id = csID_Undefined;
     std::string idStr = entityStateEntry->GetAttribute("id");
-    csEntityState *state = nullptr;
+    cs::EntityState *state = nullptr;
     if (idStr == std::string("root"))
     {
       state = entity->GetRootState();
@@ -96,9 +96,9 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
     else
     {
       csID id = entityStateEntry->GetAttributeLong("id");
-      csEntityState *state = entity->GetState(id);
+      cs::EntityState *state = entity->GetState(id);
       bool alreadyPresent = state;
-      state = csResourceManager::Get()->Load<csEntityState>(entityStateEntry, locator, state);
+      state = cs::ResourceManager::Get()->Load<cs::EntityState>(entityStateEntry, locator, state);
     }
 
     if (!state)
@@ -120,9 +120,9 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
           continue;
         }
 
-        csEntityState *parentState = states[id];
-        csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
-        csSpatialState *parentSpatialState = cs::QueryClass<csSpatialState>(parentState);
+        cs::EntityState *parentState = states[id];
+        cs::SpatialState *spatialState = cs::QueryClass<cs::SpatialState>(state);
+        cs::SpatialState *parentSpatialState = cs::QueryClass<cs::SpatialState>(parentState);
         if (spatialState && parentSpatialState)
         {
           entity->AddState(spatialState, parentSpatialState);
@@ -142,7 +142,7 @@ csResourceWrapper *csEntityCSFLoader::Load(const csfEntry *entry, const csResour
           }
           else
           {
-            csSpatialState *spatialState = cs::QueryClass<csSpatialState>(state);
+            cs::SpatialState *spatialState = cs::QueryClass<cs::SpatialState>(state);
             if (spatialState)
             {
               entity->SetRootState(spatialState);

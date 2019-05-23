@@ -17,7 +17,7 @@ VertexBufferGL4::~VertexBufferGL4()
 }
 
 
-bool VertexBufferGL4::CreateBuffer(csSize size, const void *data, csBufferDataMode dataMode)
+bool VertexBufferGL4::CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode)
 {
   glGenBuffers(1, &m_name);
   if (m_name == 0)
@@ -67,7 +67,7 @@ bool VertexBufferGL4::Copy (unsigned offset, csSize size, const void* data)
   return true;
 }
 
-bool VertexBufferGL4::Lock(unsigned offset, void **data, csBufferAccessMode mode)
+bool VertexBufferGL4::Lock(unsigned offset, void **data, cs::eBufferAccessMode mode)
 {
   if (m_name == 0 || current_mapped_buffer != 0)
   {

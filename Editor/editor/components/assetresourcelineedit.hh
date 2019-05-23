@@ -5,8 +5,11 @@
 #include <QList>
 #include <vector>
 
-class cs::Class;
-class csResourceLocator;
+namespace cs
+{
+class Class;
+class ResourceLocator;
+}
 namespace asset::model
 {
   class Entry;
@@ -25,7 +28,7 @@ public:
   void AddValidClass(const cs::Class *cls);
 
 signals:
-  void ResourceChanged(const csResourceLocator &locator);
+  void ResourceChanged(const cs::ResourceLocator &locator);
 private:
   void get(QDataStream &stream, std::vector<asset::model::Entry*> &entries) const;
   QList<const cs::Class*> m_validClasses;

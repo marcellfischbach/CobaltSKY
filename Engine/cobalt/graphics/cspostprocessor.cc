@@ -4,20 +4,20 @@
 #include <cobalt/graphics/itexture.hh>
 #include <string.h>
 
-csPostProcessor::csPostProcessor()
+cs::PostProcessor::PostProcessor()
   : cs::Object()
   , m_finalProcess(0)
 {
   memset(m_originInputs, 0, sizeof(m_originInputs));
 }
 
-csPostProcessor::~csPostProcessor()
+cs::PostProcessor::~PostProcessor()
 {
 
 }
 
 
-void csPostProcessor::SetInput(csPostProcessOutput originOutput, csTextureWrapper *texture)
+void cs::PostProcessor::SetInput(cs::ePostProcessOutput originOutput, cs::TextureWrapper *texture)
 {
   if (!texture)
   {
@@ -27,29 +27,29 @@ void csPostProcessor::SetInput(csPostProcessOutput originOutput, csTextureWrappe
   m_originInputs[originOutput] = texture;
 }
 
-const csTextureWrapper *csPostProcessor::GetInput(csPostProcessOutput originOutput) const
+const cs::TextureWrapper *cs::PostProcessor::GetInput(cs::ePostProcessOutput originOutput) const
 {
   return m_originInputs[originOutput];
 }
 
-csTextureWrapper *csPostProcessor::GetInput(csPostProcessOutput originOutput)
+cs::TextureWrapper *cs::PostProcessor::GetInput(cs::ePostProcessOutput originOutput)
 {
   return m_originInputs[originOutput];
 }
 
 
-void csPostProcessor::SetFinalProcess(csPostProcess *postProcess)
+void cs::PostProcessor::SetFinalProcess(cs::PostProcess *postProcess)
 {
   CS_SET(m_finalProcess, postProcess);
 }
 
-void csPostProcessor::BuildSet(csPostProcess *process, std::set<csPostProcess*> &processes)
+void cs::PostProcessor::BuildSet(cs::PostProcess *process, std::set<cs::PostProcess*> &processes)
 {
   processes.insert(process);
   for (size_t j = 0, jn = process->m_inputs.size(); j < jn; ++j)
   {
-    csPostProcess::Input &input = process->m_inputs[j];
-    if (input.m_inputSource == csPostProcess::eIS_PostProcess)
+    cs::PostProcess::Input &input = process->m_inputs[j];
+    if (input.m_inputSource == cs::PostProcess::eIS_PostProcess)
     {
       BuildSet(input.m_postProcess, processes);
     }
@@ -57,23 +57,23 @@ void csPostProcessor::BuildSet(csPostProcess *process, std::set<csPostProcess*> 
 }
 
 
-bool csPostProcessor::BuildPostProcessing(iGraphics *graphics)
+bool cs::PostProcessor::BuildPostProcessing(cs::iGraphics *graphics)
 {
   // build a set containing all post processes that are used within the process tree
-  std::set<csPostProcess*> processes;
+  std::set<cs::PostProcess*> processes;
   BuildSet(m_finalProcess, processes);
 
   // build a map containing all needed direct references to other post processes per post process
   // map<pp -> set<pp>>
-  std::map<csPostProcess*, std::set<csPostProcess*>> references;
-  for (csPostProcess *process : processes)
+  std::map<cs::PostProcess*, std::set<cs::PostProcess*>> references;
+  for (cs::PostProcess *process : processes)
   {
     for (size_t j = 0, jn = process->m_inputs.size(); j < jn; ++j)
     {
-      std::set<csPostProcess*> &refs = references[process];
+      std::set<cs::PostProcess*> &refs = references[process];
 
-      csPostProcess::Input &input = process->m_inputs[j];
-      if (input.m_inputSource == csPostProcess::eIS_PostProcess)
+      cs::PostProcess::Input &input = process->m_inputs[j];
+      if (input.m_inputSource == cs::PostProcess::eIS_PostProcess)
       {
         refs.insert(input.m_postProcess);
       }
@@ -86,8 +86,8 @@ bool csPostProcessor::BuildPostProcessing(iGraphics *graphics)
   {
     // the first find all processes that have no reference to other processes
     // theses processes are put into the list (they can be rendered without further need)
-    std::set<csPostProcess*> toBeRemoved;
-    for (std::map<csPostProcess*, std::set<csPostProcess*>>::iterator it = references.begin();
+    std::set<cs::PostProcess*> toBeRemoved;
+    for (std::map<cs::PostProcess*, std::set<cs::PostProcess*>>::iterator it = references.begin();
          it != references.end();
          ++it)
     {
@@ -99,7 +99,7 @@ bool csPostProcessor::BuildPostProcessing(iGraphics *graphics)
     }
 
     // those PPs are not needed in any further iteration so remove them
-    for (std::set<csPostProcess*>::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
+    for (std::set<cs::PostProcess*>::iterator it = toBeRemoved.begin(); it != toBeRemoved.end(); ++it)
     {
       references.erase(*it);
     }
@@ -113,11 +113,11 @@ bool csPostProcessor::BuildPostProcessing(iGraphics *graphics)
 
     // a fallback hook for not crashing when loops are built
     bool onePPFreed = false;
-    for (std::map<csPostProcess*, std::set<csPostProcess*>>::iterator it = references.begin();
+    for (std::map<cs::PostProcess*, std::set<cs::PostProcess*>>::iterator it = references.begin();
          it != references.end();
          ++it)
     {
-      for (std::set<csPostProcess*>::iterator it2 = toBeRemoved.begin(); it2 != toBeRemoved.end(); ++it2)
+      for (std::set<cs::PostProcess*>::iterator it2 = toBeRemoved.begin(); it2 != toBeRemoved.end(); ++it2)
       {
         it->second.erase(*it2);
         if (it->second.empty())
@@ -150,7 +150,7 @@ bool csPostProcessor::BuildPostProcessing(iGraphics *graphics)
 }
 
 
-iRenderTarget *csPostProcessor::GetOutput()
+cs::iRenderTarget *cs::PostProcessor::GetOutput()
 {
   if (m_finalProcess)
   {
@@ -159,7 +159,7 @@ iRenderTarget *csPostProcessor::GetOutput()
   return 0;
 }
 
-void csPostProcessor::Render(iGraphics *graphics)
+void cs::PostProcessor::Render(cs::iGraphics *graphics)
 {
   for (size_t i = 0, in = m_processes.size(); i < in; ++i)
   {

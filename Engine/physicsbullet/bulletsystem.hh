@@ -8,7 +8,7 @@
 
 
 CS_CLASS()
-class CSBULLETPHYSICS_API csBulletSystem : public CS_SUPER(iPhysicsSystem)
+class CSBULLETPHYSICS_API csBulletSystem : public CS_SUPER(cs::iPhysicsSystem)
 {
   CS_CLASS_GEN_OBJECT;
 
@@ -18,16 +18,16 @@ public:
 
   virtual void Initialize();
 
-  virtual iPhysicsScene *CreateScene();
+  virtual cs::iPhysicsScene *CreateScene();
 
-  virtual iPhysicsDynamicCollider *CreateDynamicCollider();
-  virtual iPhysicsStaticCollider *CreateStaticCollider();
-  virtual iPhysicsTriggerCollider *CreateTriggerCollider();
-  virtual iPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
+  virtual cs::iPhysicsDynamicCollider *CreateDynamicCollider();
+  virtual cs::iPhysicsStaticCollider *CreateStaticCollider();
+  virtual cs::iPhysicsTriggerCollider *CreateTriggerCollider();
+  virtual cs::iPhysicsCapsuleCharacterController *CreateCapsulseCharacterController();
 
-  virtual iPhysicsShape *CreateShape(const csPhysGeometry &geometry);
+  virtual cs::iPhysicsShape *CreateShape(const cs::PhysGeometry &geometry);
 
-  virtual iPhysicsJoint *CreateJoint(csPhysicsJointType type, iPhysicsDynamicCollider *colliderA, iPhysicsDynamicCollider *colliderB);
+  virtual cs::iPhysicsJoint *CreateJoint(cs::ePhysicsJointType type, cs::iPhysicsDynamicCollider *colliderA, cs::iPhysicsDynamicCollider *colliderB);
 
 };
 

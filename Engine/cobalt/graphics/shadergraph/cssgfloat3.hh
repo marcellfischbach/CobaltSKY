@@ -6,11 +6,16 @@
 
 #define CS_FLOAT3_NAME "Assemble/Float3"
 
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSGFloat3 : public CS_SUPER(csSGNode)
+class CSE_API SGFloat3 : public CS_SUPER(cs::SGNode)
 {
   CS_CLASS_GEN;
 public:
-  csSGFloat3();
-  virtual ~csSGFloat3() { };
+  SGFloat3();
+  virtual ~SGFloat3() { };
 };
+
+}

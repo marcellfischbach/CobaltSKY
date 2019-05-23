@@ -7,21 +7,22 @@
 #include <cobalt/math/csvector.hh>
 #include <cobalt/graphics/cslight.refl.hh>
 
-
+namespace cs
+{
 
 CS_CLASS()
-class CSE_API csLight : public CS_SUPER(cs::Object)
+class CSE_API Light : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 
 public:
-  csLight(csLightType type);
-  virtual ~csLight();
+  Light(cs::eLightType type);
+  virtual ~Light();
 
-  csLightType GetLightType() const;
+  cs::eLightType GetLightType() const;
 
-  void SetColor(const csColor4f &color);
-  const csColor4f &GetColor() const;
+  void SetColor(const cs::Color4f & color);
+  const cs::Color4f& GetColor() const;
 
   void SetEnergy(float energy);
   float GetEnergy() const;
@@ -34,8 +35,8 @@ public:
 
 private:
 
-  csLightType m_lightType;
-  csColor4f m_color;
+  cs::eLightType m_lightType;
+  cs::Color4f m_color;
   float m_energy;
 
   bool m_castShadow;
@@ -44,6 +45,4 @@ private:
 };
 
 
-
-
-
+}

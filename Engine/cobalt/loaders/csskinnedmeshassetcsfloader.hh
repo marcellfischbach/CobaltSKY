@@ -3,17 +3,23 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/loaders/csskinnedmeshassetcsfloader.refl.hh>
 
+
+namespace cs
+{
+
 CS_CLASS()
-class CSE_API csSkinnedMeshAssetCSFLoader : public CS_SUPER(csBaseCSFLoader)
+class CSE_API SkinnedMeshAssetCSFLoader : public CS_SUPER(cs::BaseCSFLoader)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csSkinnedMeshAssetCSFLoader();
-  virtual ~csSkinnedMeshAssetCSFLoader();
+  SkinnedMeshAssetCSFLoader();
+  virtual ~SkinnedMeshAssetCSFLoader();
 
 
-  bool CanLoad(const csfEntry *element, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  const cs::Class *EvalClass(const csfEntry *element, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  csResourceWrapper *Load(const csfEntry *element, const csResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  bool CanLoad(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+  const cs::Class * EvalClass(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+  cs::ResourceWrapper * Load(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
 
 };
+
+}

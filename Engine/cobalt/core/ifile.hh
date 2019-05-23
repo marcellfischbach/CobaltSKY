@@ -7,28 +7,32 @@
 
 #include <cobalt/core/ifile.refl.hh>
 
+
+namespace cs
+{
+
 /**
  * \addtogroup engine
  * @{
  */
-enum csSeekPos
+enum eSeekPos
 {
-	eSP_Set,
-	eSP_Current,
-	eSP_End
+  eSP_Set,
+  eSP_Current,
+  eSP_End
 };
 
-enum csOpenMode
+enum eOpenMode
 {
-	eOM_Read,
-	eOM_Write,
-	eOM_ReadWrite
+  eOM_Read,
+  eOM_Write,
+  eOM_ReadWrite
 };
 
-enum csTextMode
+enum eTextMode
 {
-	eTM_Text,
-	eTM_Binary
+  eTM_Text,
+  eTM_Binary
 };
 
 /**
@@ -45,7 +49,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return \a True if the file is currently opened else \a false.
    */
-	virtual bool IsOpen () const = 0;
+  virtual bool IsOpen() const = 0;
 
   /**
    * @brief Closes the current file.
@@ -55,7 +59,7 @@ struct CSE_API iFile : public cs::iObject
    * @return \a True if the file could be closed else \a false. Returns \a false
    *         if the was was not opened.
    */
-	virtual bool Close () = 0;
+  virtual bool Close() = 0;
 
   /**
    * @brief Return whether or not the file has random access.
@@ -65,7 +69,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return \a True if the file has random access else \a false.
    */
-	virtual bool IsRandomAccess () const = 0;
+  virtual bool IsRandomAccess() const = 0;
 
   /**
    * @brief Returns whether or not the user can read from the file.
@@ -74,7 +78,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return \a True if the user can read from the file else \a false.
    */
-	virtual bool IsReadable () const = 0;
+  virtual bool IsReadable() const = 0;
 
   /**
    * @brief Returns whether or not the user can write to the file.
@@ -83,7 +87,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return \a True if the user can write to the file else \a false.
    */
-  virtual bool IsWritable () const = 0;
+  virtual bool IsWritable() const = 0;
 
   /**
    * @brief Returns whether or not the current read pointer points on
@@ -92,7 +96,7 @@ struct CSE_API iFile : public cs::iObject
    * @return \a True if the read pointer points on the end of the file
    *         else \a false.
    */
-  virtual bool IsEof () const = 0;
+  virtual bool IsEof() const = 0;
 
   /**
    * @brief Move the current position within the file.
@@ -103,7 +107,7 @@ struct CSE_API iFile : public cs::iObject
    *            bytes should be interpreted.
    * @param num The number of bytes the current location should be moved.
    */
-	virtual bool Seek (csSeekPos pos, long num) = 0;
+  virtual bool Seek(cs::eSeekPos pos, long num) = 0;
 
   /**
    * @brief Returns the current absolute position within the file.
@@ -112,21 +116,21 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return The current absolute position within the file.
    */
-	virtual csSize Tell () = 0;
+  virtual csSize Tell() = 0;
 
-	/**
-	 * @brief Returns the length of the opened file.
-	 *
-	 * If this file has no random access (a network stream or any other stream)
-	 * this methid will return -1;
-	 *
-	 * @return The length of the opened file or -1 if the file has no random access.
-	 */
-	virtual csSize GetLength () = 0;
+  /**
+   * @brief Returns the length of the opened file.
+   *
+   * If this file has no random access (a network stream or any other stream)
+   * this methid will return -1;
+   *
+   * @return The length of the opened file or -1 if the file has no random access.
+   */
+  virtual csSize GetLength() = 0;
 
   /**
    */
-	virtual csSize Read (void* buffer, csSize size) = 0;
+  virtual csSize Read(void* buffer, csSize size) = 0;
 
   /**
    * @brief Read a single line from the buffer
@@ -136,9 +140,9 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return The number of characters in the output buffer
    */
-  virtual csSize ReadLine (char *buffer, csSize maxSize) = 0;
+  virtual csSize ReadLine(char* buffer, csSize maxSize) = 0;
 
-	virtual csSize Write (const void* buffer, csSize size) = 0;
+  virtual csSize Write(const void* buffer, csSize size) = 0;
 
   /**
    * @brief Returns the location where the file was located.
@@ -148,7 +152,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return The location of the file
    */
-  virtual const std::string& GetLocation () const = 0;
+  virtual const std::string& GetLocation() const = 0;
 
   /**
    * @brief Returns the name of the file witout an optional extension
@@ -158,7 +162,7 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return The name of the file without an optional extension
    */
-  virtual const std::string& GetName () const = 0;
+  virtual const std::string& GetName() const = 0;
 
   /**
    * @brief Returns the optional extension of the file
@@ -168,8 +172,10 @@ struct CSE_API iFile : public cs::iObject
    *
    * @return The optional extension of the file
    */
-  virtual const std::string& GetExtension () const = 0;
+  virtual const std::string& GetExtension() const = 0;
 };
 
 /** @} */
 
+
+}

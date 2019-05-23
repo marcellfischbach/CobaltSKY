@@ -4,7 +4,7 @@
 #include <cobalt/math/csvector3f.hh>
 
 
-csImage::csImage()
+cs::Image::Image()
   : cs::Object()
   , m_width(0)
   , m_height(0)
@@ -14,12 +14,12 @@ csImage::csImage()
 
 }
 
-csImage::~csImage()
+cs::Image::~Image()
 {
   Delete();
 }
 
-void csImage::SetData(csSize size, const void *data)
+void cs::Image::SetData(csSize size, const void *data)
 {
   if (m_data.size() > 0)
   {
@@ -31,7 +31,7 @@ void csImage::SetData(csSize size, const void *data)
   m_data.push_back(lData);
 }
 
-void csImage::Delete()
+void cs::Image::Delete()
 {
   for (csUInt8 *data : m_data)
   {
@@ -71,7 +71,7 @@ namespace
     return value / 2 + 128;
   }
 
-  csUInt8 *generate_down_scale(const csUInt8 *data, csUInt16 width, csUInt16 height, csPixelFormat format, bool normal)
+  csUInt8 *generate_down_scale(const csUInt8 *data, csUInt16 width, csUInt16 height, cs::ePixelFormat format, bool normal)
   {
     if (width == 1 && height == 1)
     {
@@ -94,16 +94,16 @@ namespace
     int num = 0;
     switch (format)
     {
-    case ePF_R8G8B8A8U:
+    case cs::ePF_R8G8B8A8U:
       num = 4;
       break;
-    case ePF_R8G8B8U:
+    case cs::ePF_R8G8B8U:
       num = 3;
       break;
-    case ePF_R8G8U:
+    case cs::ePF_R8G8U:
       num = 2;
       break;
-    case ePF_R8U:
+    case cs::ePF_R8U:
       num = 1;
       break;
     }
@@ -175,7 +175,7 @@ namespace
           csUInt8 r = nptr[0];
           csUInt8 g = nptr[1];
           csUInt8 b = nptr[2];
-          csVector3f n((float)r / 255.0f * 2.0f - 1.0f, (float)g / 255.0f * 2.0f - 1.0f, (float)b / 255.0f * 2.0f - 1.0f);
+          cs::Vector3f n((float)r / 255.0f * 2.0f - 1.0f, (float)g / 255.0f * 2.0f - 1.0f, (float)b / 255.0f * 2.0f - 1.0f);
           n.Normalize();
 
           nptr[0] = (csUInt8)((n.x * 0.5f + 0.5f) * 255.0f);
@@ -190,11 +190,11 @@ namespace
   
 }
 
-bool csImage::GenerateMipMaps(bool normal)
+bool cs::Image::GenerateMipMaps(bool normal)
 {
   if (m_data.size() != 1
     || m_depth != 1
-    || !(m_pixelFormat == ePF_R8G8B8A8U || m_pixelFormat == ePF_R8G8B8U || m_pixelFormat == ePF_R8G8U || m_pixelFormat == ePF_R8U))
+    || !(m_pixelFormat == cs::ePF_R8G8B8A8U || m_pixelFormat == cs::ePF_R8G8B8U || m_pixelFormat == cs::ePF_R8G8U || m_pixelFormat == cs::ePF_R8U))
   {
     return false;
   }
@@ -239,24 +239,24 @@ bool csImage::GenerateMipMaps(bool normal)
 
 
 
-void csImage::SetWidth(csUInt16 width)
+void cs::Image::SetWidth(csUInt16 width)
 {
   m_width = width > 0 ? width : 1;
 }
 
-void csImage::SetHeight(csUInt16 height)
+void cs::Image::SetHeight(csUInt16 height)
 {
   m_height = height > 0 ? height : 1;
 }
 
-void csImage::SetDepth(csUInt16 depth)
+void cs::Image::SetDepth(csUInt16 depth)
 {
   m_depth = depth > 0 ? depth : 1;
 }
 
 
 
-csUInt16 csImage::GetWidth(csUInt16 level) const
+csUInt16 cs::Image::GetWidth(csUInt16 level) const
 {
   csUInt16 width = m_width >> level;
   if (width == 0)
@@ -266,7 +266,7 @@ csUInt16 csImage::GetWidth(csUInt16 level) const
   return width;
 }
 
-csUInt16 csImage::GetHeight(csUInt16 level) const
+csUInt16 cs::Image::GetHeight(csUInt16 level) const
 {
   csUInt16 height = m_height >> level;
   if (height == 0)
@@ -276,7 +276,7 @@ csUInt16 csImage::GetHeight(csUInt16 level) const
   return height;
 }
 
-csUInt16 csImage::GetDepth(csUInt16 level) const
+csUInt16 cs::Image::GetDepth(csUInt16 level) const
 {
   csUInt16 depth = m_depth >> level;
   if (depth == 0)
@@ -287,7 +287,7 @@ csUInt16 csImage::GetDepth(csUInt16 level) const
 }
 
 
-const void *csImage::GetData(csUInt16 level) const
+const void *cs::Image::GetData(csUInt16 level) const
 {
   if (level >= m_data.size())
   {
@@ -297,7 +297,7 @@ const void *csImage::GetData(csUInt16 level) const
 }
 
 
-csUInt32 csImage::GetSize(csUInt16 level) const
+csUInt32 cs::Image::GetSize(csUInt16 level) const
 {
   csUInt32 width = m_width >> level;
   if (width == 0)
@@ -315,17 +315,17 @@ csUInt32 csImage::GetSize(csUInt16 level) const
   return width * height * bpp;
 }
 
-csUInt32 csImage::GetBytesPerPixel(csPixelFormat pixelFormat) const
+csUInt32 cs::Image::GetBytesPerPixel(cs::ePixelFormat pixelFormat) const
 {
   switch (pixelFormat)
   {
-  case ePF_R8G8B8A8U:
+  case cs::ePF_R8G8B8A8U:
     return 4;
-  case ePF_R8G8B8U:
+  case cs::ePF_R8G8B8U:
     return 3;
-  case ePF_R8G8U:
+  case cs::ePF_R8G8U:
     return 2;
-  case ePF_R8U:
+  case cs::ePF_R8U:
     return 1;
   }
   return 0;

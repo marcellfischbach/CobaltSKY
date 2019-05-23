@@ -6,6 +6,8 @@
 #include <cobalt/physics/iphysicscollider.hh>
 #include <cobalt/physics/iphysicsjoint.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
 struct CSE_API iPhysicsJoint : public cs::iObject
@@ -13,10 +15,11 @@ struct CSE_API iPhysicsJoint : public cs::iObject
   CS_CLASS_GEN;
   virtual ~iPhysicsJoint() { }
 
-  virtual csPhysicsJointType GetType() const = 0;
+  virtual cs::ePhysicsJointType GetType() const = 0;
 
-  virtual iPhysicsDynamicCollider *GetColliderA() const = 0;
-  virtual iPhysicsDynamicCollider *GetColliderB() const = 0;
+  virtual cs::iPhysicsDynamicCollider* GetColliderA() const = 0;
+  virtual cs::iPhysicsDynamicCollider* GetColliderB() const = 0;
 
 };
 
+}

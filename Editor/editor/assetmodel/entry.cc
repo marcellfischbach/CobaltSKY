@@ -142,11 +142,11 @@ namespace asset::model
 		return m_parent->IsAttached();
 	}
 
-	csResourceLocator Entry::CreateResourceLocator(const std::string &fileName) const
+	cs::ResourceLocator Entry::CreateResourceLocator(const std::string &fileName) const
 	{
 		if (!IsAttached())
 		{
-			return csResourceLocator();
+			return cs::ResourceLocator();
 		}
 		return GetResourceLocator().WithFileSuffix(fileName);
 	}

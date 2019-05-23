@@ -4,7 +4,7 @@
 
 namespace
 {
-std::string eval(std::string *src, csSGDataType *dataTypes, csSGNode *node, csShaderGraphCtx &ctx, int start, int num)
+std::string eval(std::string *src, cs::eSGDataType *dataTypes, cs::SGNode *node, csShaderGraphCtx &ctx, int start, int num)
 {
   if (start >= num)
   {
@@ -17,7 +17,7 @@ std::string eval(std::string *src, csSGDataType *dataTypes, csSGNode *node, csSh
   {
 
     int numEquals = 1;
-    if (dataTypes[start] != eSGDT_Float && dataTypes[start] != eSGDT_Int)
+    if (dataTypes[start] != cs::eSGDT_Float && dataTypes[start] != cs::eSGDT_Int)
     {
       for (int i = start + 1; i < num; ++i)
       {

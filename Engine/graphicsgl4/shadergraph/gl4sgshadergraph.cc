@@ -67,7 +67,7 @@
 #include <iostream>
 #include <sstream>
 
-csShaderGraphGL4::csShaderGraphGL4(csGraphicsGL4 *graphics)
+csShaderGraphGL4::csShaderGraphGL4(cs::GraphicsGL4 *graphics)
   : m_graphics(graphics)
 {
 }
@@ -83,33 +83,33 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
   static bool initialized = false;
   if (!initialized)
   {
-    m_classMapping.push_back(Map(csSGVarFloat::GetStaticClass(), csSGVarFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGVarFloat2::GetStaticClass(), csSGVarFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGVarFloat3::GetStaticClass(), csSGVarFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGVarFloat4::GetStaticClass(), csSGVarFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGConstFloat::GetStaticClass(), csSGConstFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGConstFloat2::GetStaticClass(), csSGConstFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGConstFloat3::GetStaticClass(), csSGConstFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGConstFloat4::GetStaticClass(), csSGConstFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGFloat2::GetStaticClass(), csSGFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGFloat3::GetStaticClass(), csSGFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGFloat4::GetStaticClass(), csSGFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGSplitFloat2::GetStaticClass(), csSGSplitFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGSplitFloat3::GetStaticClass(), csSGSplitFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGSplitFloat4::GetStaticClass(), csSGSplitFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGAdd::GetStaticClass(), csSGAddGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGSub::GetStaticClass(), csSGSubGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGMul::GetStaticClass(), csSGMulGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGDiv::GetStaticClass(), csSGDivGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGNeg::GetStaticClass(), csSGNegGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGOneBy::GetStaticClass(), csSGOneByGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGOneMinus::GetStaticClass(), csSGOneMinusGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGDot::GetStaticClass(), csSGDotGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGCross::GetStaticClass(), csSGCrossGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGLerp::GetStaticClass(), csSGLerpGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGNormalize::GetStaticClass(), csSGNormalizeGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGDefaultTextureCoordinate::GetStaticClass(), csSGDefaultTextureCoordinateGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(csSGTexture2D::GetStaticClass(), csSGTexture2DGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat::GetStaticClass(), csSGVarFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat2::GetStaticClass(), csSGVarFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat3::GetStaticClass(), csSGVarFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat4::GetStaticClass(), csSGVarFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat::GetStaticClass(), csSGConstFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat2::GetStaticClass(), csSGConstFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat3::GetStaticClass(), csSGConstFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat4::GetStaticClass(), csSGConstFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat2::GetStaticClass(), csSGFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat3::GetStaticClass(), csSGFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat4::GetStaticClass(), csSGFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat2::GetStaticClass(), csSGSplitFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat3::GetStaticClass(), csSGSplitFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat4::GetStaticClass(), csSGSplitFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGAdd::GetStaticClass(), csSGAddGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSub::GetStaticClass(), csSGSubGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGMul::GetStaticClass(), csSGMulGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDiv::GetStaticClass(), csSGDivGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGNeg::GetStaticClass(), csSGNegGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGOneBy::GetStaticClass(), csSGOneByGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGOneMinus::GetStaticClass(), csSGOneMinusGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDot::GetStaticClass(), csSGDotGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGCross::GetStaticClass(), csSGCrossGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGLerp::GetStaticClass(), csSGLerpGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGNormalize::GetStaticClass(), csSGNormalizeGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDefaultTextureCoordinate::GetStaticClass(), csSGDefaultTextureCoordinateGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGTexture2D::GetStaticClass(), csSGTexture2DGL4::GetStaticClass()));
     initialized = true;
   }
   for (size_t i = 0, in = m_classMapping.size(); i < in; ++i)
@@ -125,7 +125,7 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
 }
 
 
-std::string csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
+std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, csSize output)
 {
   if (!node)
   {
@@ -135,7 +135,7 @@ std::string csShaderGraphGL4::CreateCode(csSGNode *node, csSize output)
   return CreateCode(node->GetOutput(output));
 }
 
-std::string csShaderGraphGL4::CreateCode(csSGNode *node, const std::string &outputName)
+std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, const std::string &outputName)
 {
   if (!node)
   {
@@ -146,7 +146,7 @@ std::string csShaderGraphGL4::CreateCode(csSGNode *node, const std::string &outp
 }
 
 
-std::string csShaderGraphGL4::CreateCode(csSGOutput *output)
+std::string csShaderGraphGL4::CreateCode(cs::SGOutput *output)
 {
   csShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
@@ -155,7 +155,7 @@ std::string csShaderGraphGL4::CreateCode(csSGOutput *output)
 
 
 
-bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGraphLogger *logger)
+bool csShaderGraphGL4::GenerateShaderGraph(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
 {
   if (!graph->Validate())
   {
@@ -164,19 +164,19 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
   graph->ClearParameters();
 
   GenerateGBuffer(graph, logger);
-  //GenerateShadow(graph, 1, eRP_ShadowGeneric);
-  GenerateShadow(graph, 3, eRP_ShadowPSSM, logger);
-  GenerateShadow(graph, 6, eRP_ShadowCube, logger);
+  //GenerateShadow(graph, 1, cs::eRP_ShadowGeneric);
+  GenerateShadow(graph, 3, cs::eRP_ShadowPSSM, logger);
+  GenerateShadow(graph, 6, cs::eRP_ShadowCube, logger);
 
   for (size_t i = 0, in = graph->GetNumberOfTotalNodes(); i < in; ++i)
   {
-    csSGNode *node = graph->GetNode(i);
+    cs::SGNode *node = graph->GetNode(i);
     if (!node)
     {
       continue;
     }
 
-    csSGResourceNode *resNode = cs::QueryClass<csSGResourceNode>(node);
+    cs::SGResourceNode *resNode = cs::QueryClass<cs::SGResourceNode>(node);
     if (!resNode)
     {
       continue;
@@ -184,7 +184,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
 
     const std::string &resId = resNode->GetResourceId();
     const std::string &resName = resNode->GetResourceName();
-    csShaderParameterType resType = resNode->GetResourceType();
+    cs::eShaderParameterType resType = resNode->GetResourceType();
 
     csSize idx = graph->RegisterParam(resId, resName, resType);
 
@@ -192,31 +192,31 @@ bool csShaderGraphGL4::GenerateShaderGraph(csSGShaderGraph *graph, iSGShaderGrap
     int *ints = resNode->GetDefaultInts();
     switch (resType)
     {
-    case eSPT_Float:
+    case cs::eSPT_Float:
       graph->SetDefault(idx, floats[0]);
       break;
-    case eSPT_Vector2:
-      graph->SetDefault(idx, csVector2f(floats[0], floats[1]));
+    case cs::eSPT_Vector2:
+      graph->SetDefault(idx, cs::Vector2f(floats[0], floats[1]));
       break;
-    case eSPT_Vector3:
-      graph->SetDefault(idx, csVector3f(floats[0], floats[1], floats[2]));
+    case cs::eSPT_Vector3:
+      graph->SetDefault(idx, cs::Vector3f(floats[0], floats[1], floats[2]));
       break;
-    case eSPT_Vector4:
-      graph->SetDefault(idx, csVector4f(floats[0], floats[1], floats[2], floats[3]));
+    case cs::eSPT_Vector4:
+      graph->SetDefault(idx, cs::Vector4f(floats[0], floats[1], floats[2], floats[3]));
       break;
-    case eSPT_Color4:
-      graph->SetDefault(idx, csColor4f(floats[0], floats[1], floats[2], floats[3]));
+    case cs::eSPT_Color4:
+      graph->SetDefault(idx, cs::Color4f(floats[0], floats[1], floats[2], floats[3]));
       break;
-    case eSPT_Texture:
+    case cs::eSPT_Texture:
     {
-      csTextureWrapper *texture = csResourceManager::Get()->GetOrLoad<csTextureWrapper>(resNode->GetDefaultTextureResource());
+      cs::TextureWrapper *texture = cs::ResourceManager::Get()->GetOrLoad<cs::TextureWrapper>(resNode->GetDefaultTextureResource());
       graph->SetDefault(idx, texture);
     }
     break;
-    case eSPT_Int:
-    case eSPT_IVector2:
-    case eSPT_IVector3:
-    case eSPT_IVector4:
+    case cs::eSPT_Int:
+    case cs::eSPT_IVector2:
+    case cs::eSPT_IVector3:
+    case cs::eSPT_IVector4:
       break;
     }
   }

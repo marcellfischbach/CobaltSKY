@@ -10,28 +10,28 @@
 #include <cobalt/csengine.hh>
 #include <algorithm>
 
-csSubMeshAssetLoader::csSubMeshAssetLoader()
-  : iAssetLoader()
+cs::SubMeshAssetLoader::SubMeshAssetLoader()
+  : cs::iAssetLoader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csSubMeshAssetLoader::~csSubMeshAssetLoader()
+cs::SubMeshAssetLoader::~SubMeshAssetLoader()
 {
 
 }
 
-bool csSubMeshAssetLoader::CanLoad(const std::string &typeID, const csResourceLocator &locator, cs::iObject *userData)const
+bool cs::SubMeshAssetLoader::CanLoad(const std::string &typeID, const cs::ResourceLocator &locator, cs::iObject *userData)const
 {
   return typeID == std::string("SUBMESH");
 }
 
-const cs::Class *csSubMeshAssetLoader::EvalClass(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::SubMeshAssetLoader::EvalClass(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
-  return csSubMesh::GetStaticClass();
+  return cs::SubMesh::GetStaticClass();
 }
 
-csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, const csResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::SubMeshAssetLoader::Load(cs::AssetInputStream &inputStream, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   csUInt32 version;
 
@@ -40,18 +40,18 @@ csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, c
   {
     return nullptr;
   }
-  csSubMesh *subMesh = new csSubMesh();
-  csSubMeshWrapper *subMeshWrapper = new csSubMeshWrapper(subMesh);
+  cs::SubMesh *subMesh = new cs::SubMesh();
+  cs::SubMeshWrapper *subMeshWrapper = new cs::SubMeshWrapper(subMesh);
 
   csUInt8 numVertexDeclaration;
   csUInt32 primType, indexType;
   inputStream >> primType >> indexType;
 
-  subMesh->SetPrimitiveType((csPrimitiveType)primType);
-  subMesh->SetIndexType((csDataType)indexType);
+  subMesh->SetPrimitiveType((cs::ePrimitiveType)primType);
+  subMesh->SetIndexType((cs::eDataType)indexType);
   //
   // read and create the vertex declaration
-  std::vector<csVertexElement> vertexElements;
+  std::vector<cs::VertexElement> vertexElements;
   inputStream >> numVertexDeclaration;
   for (csUInt32 i = 0; i < numVertexDeclaration; ++i)
   {
@@ -68,16 +68,16 @@ csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, c
       >> offset
       >> stride
       >> stream;
-    vertexElements.push_back(csVertexElement(
-      (csVertexStreamType)streamType,
-      (csDataType)dataType,
+    vertexElements.push_back(cs::VertexElement(
+      (cs::eVertexStreamType)streamType,
+      (cs::eDataType)dataType,
       size,
       offset,
       stride,
       stream));
   }
-  vertexElements.push_back(csVertexElement());
-  iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(vertexElements.data());
+  vertexElements.push_back(cs::VertexElement());
+  cs::iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(vertexElements.data());
   subMesh->SetVertexDeclaration(vertexDeclaration);
   CS_RELEASE(vertexDeclaration);
 
@@ -91,7 +91,7 @@ csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, c
     inputStream >> vertexBufferSize;
     unsigned char *buffer = new unsigned char[vertexBufferSize];
     inputStream.Read(buffer, vertexBufferSize);
-    iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(vertexBufferSize, buffer, eBDM_Static);
+    cs::iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(vertexBufferSize, buffer, cs::eBDM_Static);
     subMesh->AddVertexBuffer(vertexBuffer);
     CS_RELEASE(vertexBuffer);
     delete[] buffer;
@@ -121,16 +121,16 @@ csResourceWrapper *csSubMeshAssetLoader::Load(csAssetInputStream &inputStream, c
     inputStream >> indexBufferSize;
     unsigned char *buffer = new unsigned char[indexBufferSize];
     inputStream.Read(buffer, indexBufferSize);
-    iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, eBDM_Static);
+    cs::iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(indexBufferSize, buffer, cs::eBDM_Static);
     delete[] buffer;
     subMesh->SetIndexBuffer(indexBuffer, count, offset);
   }
 
   //
   // read the bounding box
-  csVector3f min, max;
+  cs::Vector3f min, max;
   inputStream >> min >> max;
-  csBoundingBox bbox;
+  cs::BoundingBox bbox;
   bbox.Add(min);
   bbox.Add(max);
   bbox.Finish();

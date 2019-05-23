@@ -6,34 +6,41 @@
 
 #include <cobalt/entity/blueprint/csblueprint.refl.hh>
 
-class csBPEntity;
-class csBPEntityState;
-class csEntityWrapper;
-class csEntityStateWrapper;
+
+
+namespace cs
+{
+class BPEntity;
+class BPEntityState;
+class EntityWrapper;
+class EntityStateWrapper;
+
 
 CS_CLASS()
-class CSE_API csBlueprint : public cs::iObject
+class CSE_API Blueprint : public cs::iObject
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csBlueprint();
-  virtual ~csBlueprint();
+  Blueprint();
+  virtual ~Blueprint();
 
-  csEntityWrapper *CreateEntity() const;
-  csEntityStateWrapper *CreateEntityState() const;
+  cs::EntityWrapper* CreateEntity() const;
+  cs::EntityStateWrapper* CreateEntityState() const;
 
-  void SetEntity(csBPEntity *entity);
-  void SetEntityState(csBPEntityState *entityState);
+  void SetEntity(cs::BPEntity* entity);
+  void SetEntityState(cs::BPEntityState* entityState);
 
 private:
 
-  csBPEntity *m_entity;
-  csBPEntityState *m_entityState;
+  cs::BPEntity* m_entity;
+  cs::BPEntityState* m_entityState;
 };
 
 CS_CLASS()
-class csBlueprintWrapper : public CS_SUPER(csResourceWrapper)
+class BlueprintWrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csBlueprint, csBlueprintWrapper, csResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::Blueprint, BlueprintWrapper, cs::ResourceWrapper);
 };
+
+}

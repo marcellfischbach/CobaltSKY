@@ -18,17 +18,17 @@ PreviewSceneView::PreviewSceneView(QWidget *parent)
   : SceneView(parent)
   , m_lightHandler(0)
 {
-  csEntityScene *scene = new csEntityScene();
+  cs::EntityScene *scene = new cs::EntityScene();
   SetScene(scene);
 
   //
   // create the light within the scene
-  m_light = new csDirectionalLight();
+  m_light = new cs::DirectionalLight();
   m_light->SetCastShadow(true);
-  m_light->SetArbDirection(csVector3f(-1, -1, -1));
-  m_lightState = new csLightState();
+  m_light->SetArbDirection(cs::Vector3f(-1, -1, -1));
+  m_lightState = new cs::LightState();
   m_lightState->SetLight(m_light);
-  m_lightEntity = new csEntity();
+  m_lightEntity = new cs::Entity();
   m_lightEntity->SetRootState(m_lightState);
   m_lightEntity->AddState(m_lightState);
   m_lightEntity->FinishTransformation();
@@ -49,18 +49,18 @@ PreviewSceneView::~PreviewSceneView()
 
 
 
-csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, csMaterialWrapper *materialInstance)
+cs::Entity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned numV, cs::MaterialWrapper *materialInstance)
 {
   unsigned numVertices = (numR + 1) * (numV + 1);
   unsigned numIndices = numR * numV * 3 * 2;
 
   struct Vertex
   {
-    csVector3f co;
-    csVector3f no;
-    csVector3f ta;
-    csVector3f bn;
-    csVector2f tx;
+    cs::Vector3f co;
+    cs::Vector3f no;
+    cs::Vector3f ta;
+    cs::Vector3f bn;
+    cs::Vector2f tx;
   };
 
   Vertex *vertices = new Vertex[numVertices];
@@ -74,19 +74,19 @@ csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
       float factR = (float)r / (float)numR;
       float angleR = factR * 2.0f * 3.141569f;
 
-      vertices[i].no = csVector3f(
+      vertices[i].no = cs::Vector3f(
         cos(angleR) * sin(angleV),
         sin(angleR) * sin(angleV),
         cos(angleV)
       );
       vertices[i].co = vertices[i].no * radius;
-      vertices[i].ta = csVector3f(
+      vertices[i].ta = cs::Vector3f(
         -sin(angleR),
         cos(angleR),
         0.0f
       );
-      csVector3f::Cross(vertices[i].ta, vertices[i].no, vertices[i].bn);
-      vertices[i].tx = csVector2f(factR, factV);
+      cs::Vector3f::Cross(vertices[i].ta, vertices[i].no, vertices[i].bn);
+      vertices[i].tx = cs::Vector2f(factR, factV);
     }
   }
 
@@ -113,40 +113,40 @@ csEntity *PreviewSceneView::CreateSphere(float radius, unsigned numR, unsigned n
     }
   }
 
-  csVertexElement elements[] = {
-    csVertexElement(eVST_Position, eDT_Float, 3, 0, sizeof(Vertex), 0),
-    csVertexElement(eVST_Normal,   eDT_Float, 3, sizeof(csVector3f), sizeof(Vertex), 0),
-    csVertexElement(eVST_Tangent,  eDT_Float, 3, 2 * sizeof(csVector3f), sizeof(Vertex), 0),
-    csVertexElement(eVST_BiNormal, eDT_Float, 3, 3 * sizeof(csVector3f), sizeof(Vertex), 0),
-    csVertexElement(eVST_TexCoord0, eDT_Float, 2, 4 * sizeof(csVector3f), sizeof(Vertex), 0),
-    csVertexElement()
+  cs::VertexElement elements[] = {
+    cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 3, 0, sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_Normal,   cs::eDT_Float, 3, sizeof(cs::Vector3f), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_Tangent,  cs::eDT_Float, 3, 2 * sizeof(cs::Vector3f), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_BiNormal, cs::eDT_Float, 3, 3 * sizeof(cs::Vector3f), sizeof(Vertex), 0),
+    cs::VertexElement(cs::eVST_TexCoord0, cs::eDT_Float, 2, 4 * sizeof(cs::Vector3f), sizeof(Vertex), 0),
+    cs::VertexElement()
   };
 
-  iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, eBDM_Static);
-  iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(sizeof(unsigned short) * numIndices, indices, eBDM_Static);
-  iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(elements);
+  cs::iVertexBuffer *vertexBuffer = csEng->CreateVertexBuffer(sizeof(Vertex) *numVertices, vertices, cs::eBDM_Static);
+  cs::iIndexBuffer *indexBuffer = csEng->CreateIndexBuffer(sizeof(unsigned short) * numIndices, indices, cs::eBDM_Static);
+  cs::iVertexDeclaration *vertexDeclaration = csEng->CreateVertexDeclaration(elements);
 
-  csBoundingBox bbox;
-  bbox.Add(csVector3f(radius, radius, radius));
-  bbox.Add(csVector3f(-radius, -radius, -radius));
+  cs::BoundingBox bbox;
+  bbox.Add(cs::Vector3f(radius, radius, radius));
+  bbox.Add(cs::Vector3f(-radius, -radius, -radius));
   bbox.Finish();
 
-  csSubMesh *subMesh = new csSubMesh();
-  subMesh->SetPrimitiveType(ePT_Triangles);
+  cs::SubMesh *subMesh = new cs::SubMesh();
+  subMesh->SetPrimitiveType(cs::ePT_Triangles);
   subMesh->SetBoundingBox(bbox);
-  subMesh->SetIndexType(eDT_UnsignedShort);
+  subMesh->SetIndexType(cs::eDT_UnsignedShort);
   subMesh->SetVertexDeclaration(vertexDeclaration);
   subMesh->AddVertexBuffer(vertexBuffer);
   subMesh->SetIndexBuffer(indexBuffer, numIndices);
 
-  csMesh *mesh = new csMesh();
-  mesh->AddMesh(new csSubMeshWrapper(subMesh));
+  cs::Mesh *mesh = new cs::Mesh();
+  mesh->AddMesh(new cs::SubMeshWrapper(subMesh));
 
-  csStaticMeshState *staticMeshState = new csStaticMeshState();
+  cs::StaticMeshState *staticMeshState = new cs::StaticMeshState();
   staticMeshState->SetMesh(mesh);
   staticMeshState->SetMaterial(0, materialInstance ? materialInstance->Get() : nullptr);
 
-  csEntity *entity = new csEntity();
+  cs::Entity *entity = new cs::Entity();
   entity->AddState(staticMeshState);
   entity->SetRootState(staticMeshState);
   entity->FinishTransformation();

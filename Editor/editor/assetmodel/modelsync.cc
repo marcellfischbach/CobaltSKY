@@ -13,11 +13,11 @@ namespace asset::model
 	}
 
 
-	bool ModelSync::Move(const csResourceLocator &oldLocator, const csResourceLocator &newLocator)
+	bool ModelSync::Move(const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
 	{
     std::cout << "Move: " << oldLocator.Encode() << " => " + newLocator.Encode() << std::endl;
-    std::string oldPathStr = csVFS::Get()->GetAbsolutePath(oldLocator, csVFS::CheckExistence);
-    std::string newPathStr = csVFS::Get()->GetAbsolutePath(newLocator, csVFS::DontCheckExistence);
+    std::string oldPathStr = cs::VFS::Get()->GetAbsolutePath(oldLocator, cs::VFS::CheckExistence);
+    std::string newPathStr = cs::VFS::Get()->GetAbsolutePath(newLocator, cs::VFS::DontCheckExistence);
     if (oldPathStr.empty() || newPathStr.empty())
     {
       return false;
@@ -32,10 +32,10 @@ namespace asset::model
     return true;
 	}
 
-	bool ModelSync::Delete(const csResourceLocator &locator)
+	bool ModelSync::Delete(const cs::ResourceLocator &locator)
 	{
     std::cout << "Delete: " << locator.Encode() << std::endl;
-    std::string pathStr = csVFS::Get()->GetAbsolutePath(locator, csVFS::CheckExistence);
+    std::string pathStr = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::CheckExistence);
     if (pathStr.empty())
     {
       return false;

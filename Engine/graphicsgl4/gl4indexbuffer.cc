@@ -5,19 +5,19 @@
 
 static GLuint current_mapped_buffer;
 
-IndexBufferGL4::IndexBufferGL4()
+cs::IndexBufferGL4::IndexBufferGL4()
   : m_name(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-IndexBufferGL4::~IndexBufferGL4()
+cs::IndexBufferGL4::~IndexBufferGL4()
 {
 
 }
 
 
-bool IndexBufferGL4::CreateBuffer(csSize size, const void *data, csBufferDataMode dataMode)
+bool cs::IndexBufferGL4::CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode)
 {
   glGenBuffers(1, &m_name);
   if (m_name == 0)
@@ -36,24 +36,24 @@ bool IndexBufferGL4::CreateBuffer(csSize size, const void *data, csBufferDataMod
   return true;
 }
 
-csSize IndexBufferGL4::GetSize() const
+csSize cs::IndexBufferGL4::GetSize() const
 {
   return m_size;
 }
 
-void IndexBufferGL4::Bind()
+void cs::IndexBufferGL4::Bind()
 {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_name);
   CS_CHECK_GL_ERROR;
 }
 
-void IndexBufferGL4::Unbind()
+void cs::IndexBufferGL4::Unbind()
 {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   CS_CHECK_GL_ERROR;
 }
 
-bool IndexBufferGL4::Copy(unsigned offset, csSize size, const void* data)
+bool cs::IndexBufferGL4::Copy(unsigned offset, csSize size, const void* data)
 {
   if (m_name == 0)
   {
@@ -67,7 +67,7 @@ bool IndexBufferGL4::Copy(unsigned offset, csSize size, const void* data)
   return true;
 }
 
-bool IndexBufferGL4::Lock(unsigned offset, void **data, csBufferAccessMode mode)
+bool cs::IndexBufferGL4::Lock(unsigned offset, void **data, cs::eBufferAccessMode mode)
 {
   if (m_name == 0 || current_mapped_buffer != 0)
   {
@@ -92,7 +92,7 @@ bool IndexBufferGL4::Lock(unsigned offset, void **data, csBufferAccessMode mode)
 }
 
 
-bool IndexBufferGL4::Unlock()
+bool cs::IndexBufferGL4::Unlock()
 {
   if (m_name == 0 || current_mapped_buffer != m_name)
   {
@@ -109,7 +109,7 @@ bool IndexBufferGL4::Unlock()
 }
 
 
-GLuint IndexBufferGL4::GetGLName() const
+GLuint cs::IndexBufferGL4::GetGLName() const
 {
   return m_name;
 }

@@ -6,7 +6,7 @@
 
 
 csShaderAttributeGL4::csShaderAttributeGL4()
-  : iShaderAttribute()
+  : cs::iShaderAttribute()
   , m_name("")
   , m_location(-1)
   , m_arrayIndex(0)
@@ -106,45 +106,45 @@ void csShaderAttributeGL4::Set(csInt32 x, csInt32 y, csInt32 z, csInt32 w)
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csVector2f &v)
+void csShaderAttributeGL4::Set(const cs::Vector2f &v)
 {
   glUniform2f(m_absLocation, v.x, v.y);
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csVector3f &v)
+void csShaderAttributeGL4::Set(const cs::Vector3f &v)
 {
   glUniform3f(m_absLocation, v.x, v.y, v.z);
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csVector4f &v)
+void csShaderAttributeGL4::Set(const cs::Vector4f &v)
 {
   glUniform4f(m_absLocation, v.x, v.y, v.z, v.w);
   CS_CHECK_GL_ERROR;
 }
 
 
-void csShaderAttributeGL4::Set(const csColor4f &v)
+void csShaderAttributeGL4::Set(const cs::Color4f &v)
 {
   glUniform4f(m_absLocation, v.r, v.g, v.b, v.a);
   CS_CHECK_GL_ERROR;
 }
 
 
-void csShaderAttributeGL4::Set(const csVector2f *vs, csSize num)
+void csShaderAttributeGL4::Set(const cs::Vector2f *vs, csSize num)
 {
   glUniform2fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csVector3f *vs, csSize num)
+void csShaderAttributeGL4::Set(const cs::Vector3f *vs, csSize num)
 {
   glUniform3fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csVector4f *vs, csSize num)
+void csShaderAttributeGL4::Set(const cs::Vector4f *vs, csSize num)
 {
   glUniform4fv(m_absLocation, num, reinterpret_cast<const GLfloat*>(vs));
   CS_CHECK_GL_ERROR;
@@ -168,25 +168,25 @@ void csShaderAttributeGL4::Set(const float *vs, csSize num)
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csMatrix3f &m)
+void csShaderAttributeGL4::Set(const cs::Matrix3f &m)
 {
   glUniformMatrix3fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csMatrix3f *ms, csSize num)
+void csShaderAttributeGL4::Set(const cs::Matrix3f *ms, csSize num)
 {
   glUniformMatrix3fv(m_absLocation, num, false, reinterpret_cast<const GLfloat*>(ms));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csMatrix4f &m)
+void csShaderAttributeGL4::Set(const cs::Matrix4f &m)
 {
   glUniformMatrix4fv(m_absLocation, 1, false, static_cast<const GLfloat*>(&m.m00));
   CS_CHECK_GL_ERROR;
 }
 
-void csShaderAttributeGL4::Set(const csMatrix4f *ms, csSize num)
+void csShaderAttributeGL4::Set(const cs::Matrix4f *ms, csSize num)
 {
   glUniformMatrix4fv(m_absLocation, num, false, reinterpret_cast<const GLfloat*>(ms));
   CS_CHECK_GL_ERROR;

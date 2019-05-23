@@ -6,47 +6,47 @@
 #include <cobalt/graphics/scene/iscancallback.hh>
 #include <float.h>
 
-csLightNode::csLightNode()
-  : csSpatialNode()
+cs::LightNode::LightNode()
+  : cs::SpatialNode()
   , m_light(0)
 {
 
 }
 
-csLightNode::~csLightNode()
+cs::LightNode::~LightNode()
 {
   CS_RELEASE(m_light);
 }
 
-void csLightNode::SetLight(csLight *light)
+void cs::LightNode::SetLight(cs::Light *light)
 {
   CS_SET(m_light, light);
 }
 
 
 
-void csLightNode::PrivScan(const csClipper *clipper, iGraphics *renderer, iScanCallback *callback)
+void cs::LightNode::PrivScan(const cs::Clipper *clipper, cs::iGraphics *renderer, cs::iScanCallback *callback)
 {
   callback->ScanLightNode(this);
 }
 
-void csLightNode::UpdateBoundingBox(csBoundingBox &bbox)
+void cs::LightNode::UpdateBoundingBox(cs::BoundingBox &bbox)
 {
   if (m_light)
   {
     switch (m_light->GetLightType())
     {
-    case eLT_PointLight:
+    case cs::eLT_PointLight:
       {
-        csVector3f pos = GetMatrix().GetTranslation(pos);
-        float radius = ((csPointLight*)m_light)->GetRadius();
-        bbox.Add(csVector3f(pos.x - radius, pos.y - radius, pos.z - radius));
-        bbox.Add(csVector3f(pos.x + radius, pos.y + radius, pos.z + radius));
+        cs::Vector3f pos = GetMatrix().GetTranslation(pos);
+        float radius = ((cs::PointLight*)m_light)->GetRadius();
+        bbox.Add(cs::Vector3f(pos.x - radius, pos.y - radius, pos.z - radius));
+        bbox.Add(cs::Vector3f(pos.x + radius, pos.y + radius, pos.z + radius));
       }
       break;
-    case eLT_DirectionalLight:
-      bbox.Add(csVector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX));
-      bbox.Add(csVector3f(FLT_MAX, FLT_MAX, FLT_MAX));
+    case cs::eLT_DirectionalLight:
+      bbox.Add(cs::Vector3f(-FLT_MAX, -FLT_MAX, -FLT_MAX));
+      bbox.Add(cs::Vector3f(FLT_MAX, FLT_MAX, FLT_MAX));
       break;
     }
     bbox.Finish();

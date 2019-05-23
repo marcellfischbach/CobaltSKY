@@ -8,50 +8,54 @@
 #include <cobalt/entity/cscolliderstate.refl.hh>
 
 
+
+namespace cs
+{
 struct iPhysicsShape;
 struct iPhysicsCollider;
-class csPhysicsShape;
-
+class PhysicsShape;
 
 CS_CLASS()
-class CSE_API csColliderState : public CS_SUPER(csSpatialState)
+class CSE_API ColliderState : public CS_SUPER(cs::SpatialState)
 {
   CS_CLASS_GEN;
 public:
-  virtual ~csColliderState();
+  virtual ~ColliderState();
 
 
-  void AttachShape(iPhysicsShape *shape);
-  void DetachShape(iPhysicsShape *shape);
+  void AttachShape(cs::iPhysicsShape * shape);
+  void DetachShape(cs::iPhysicsShape * shape);
 
-  void AttachShape(csPhysicsShape *shapes);
-  void DetachShape(csPhysicsShape *shapes);
+  void AttachShape(cs::PhysicsShape * shapes);
+  void DetachShape(cs::PhysicsShape * shapes);
 
-  iPhysicsCollider *GetCollider();
-  const iPhysicsCollider *GetCollider() const;
+  cs::iPhysicsCollider* GetCollider();
+  const cs::iPhysicsCollider* GetCollider() const;
 
 
 protected:
-  csColliderState();
+  ColliderState();
 
   virtual void UpdateTransformation();
 
-  void SetCollider(iPhysicsCollider *collider);
+  void SetCollider(cs::iPhysicsCollider * collider);
 
   bool m_updateTransformationGuard;
 
 private:
-  iPhysicsCollider *m_collider;
+  cs::iPhysicsCollider* m_collider;
 
 };
 
+}
 
-CS_FORCEINLINE iPhysicsCollider *csColliderState::GetCollider()
+
+CS_FORCEINLINE cs::iPhysicsCollider *cs::ColliderState::GetCollider()
 {
   return m_collider;
 }
 
-CS_FORCEINLINE const iPhysicsCollider *csColliderState::GetCollider() const
+CS_FORCEINLINE const cs::iPhysicsCollider *cs::ColliderState::GetCollider() const
 {
   return m_collider;
 }
