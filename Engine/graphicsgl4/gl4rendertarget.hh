@@ -6,10 +6,10 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4rendertarget.refl.hh>
 
-class csTextureGL4;
 
 namespace cs
 {
+class TextureGL4;
 
 CS_CLASS()
 class CSGRAPHICSGL4_API RenderTargetGL4 : public CS_SUPER(cs::iRenderTarget)

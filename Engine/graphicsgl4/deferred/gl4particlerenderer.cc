@@ -4,17 +4,17 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/entity/csrenderstate.hh>
 
-csParticleRendererGL4::csParticleRendererGL4()
+cs::ParticleRendererGL4::ParticleRendererGL4()
 {
 
 }
 
-csParticleRendererGL4::~csParticleRendererGL4()
+cs::ParticleRendererGL4::~ParticleRendererGL4()
 {
 
 }
 
-void csParticleRendererGL4::Render(cs::iGraphics *renderer, cs::Collection<cs::RenderState*> &particles)
+void cs::ParticleRendererGL4::Render(cs::iGraphics *renderer, cs::Collection<cs::RenderState*> &particles)
 {
   renderer->SetBlendEnabled(true);
   renderer->SetDepthMask(false);

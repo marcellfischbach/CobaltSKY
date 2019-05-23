@@ -7,13 +7,12 @@
 namespace cs
 {
 class RenderState;
-}
 
 
-class csDefaultCollectorGL4 : public cs::iEntityScan
+class DefaultCollectorGL4 : public cs::iEntityScan
 {
 public:
-  csDefaultCollectorGL4(cs::Collection<cs::RenderState*> *renderStates,
+  DefaultCollectorGL4(cs::Collection<cs::RenderState*> *renderStates,
                      cs::Collection<cs::LightState*> *lightStates);
 
   virtual void ScanRenderState(cs::RenderState *renderState);
@@ -25,3 +24,5 @@ private:
   cs::Collection<cs::RenderState*> *m_renderStates;
   cs::Collection<cs::LightState*> *m_lightStates;
 };
+
+}

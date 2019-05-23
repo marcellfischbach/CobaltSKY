@@ -280,7 +280,7 @@ int initialize()
 
   keyboard = window->GetKeyboard();
 
-  fp = new csDeferredFrameProcessorGL4(graphicsGL4);// ->CreateDeferredFrameProcessor();
+  fp = new cs::DeferredFrameProcessorGL4(graphicsGL4);// ->CreateDeferredFrameProcessor();
   if (!fp->Initialize() || !fp->Resize(g_screenResolutionWidth, g_screenResolutionHeight))
   {
     printf("Unable to initialize frame processor\n");

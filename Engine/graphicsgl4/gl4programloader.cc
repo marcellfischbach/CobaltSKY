@@ -60,7 +60,7 @@ cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const cs::file::Entry *entry, co
       return nullptr;
     }
     cs::ResourceLocator locator(shaderEntry->GetAttribute("locator"));
-    csShaderGL4Wrapper *shader = resourceManager->GetOrLoad<csShaderGL4Wrapper>(locator);
+    cs::ShaderGL4Wrapper *shader = resourceManager->GetOrLoad<cs::ShaderGL4Wrapper>(locator);
     if (!shader || shader->IsNull())
     {
       program->Release();

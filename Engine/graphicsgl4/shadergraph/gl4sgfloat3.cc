@@ -5,7 +5,7 @@
 
 
 
-void csSGFloat3GL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGFloat3GL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *n = GetNode();
   std::string src[] = {

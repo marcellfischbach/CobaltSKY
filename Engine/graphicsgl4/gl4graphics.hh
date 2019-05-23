@@ -5,9 +5,6 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <graphicsgl4/gl4graphics.refl.hh>
 
-class csTextureGL4;
-class VertexBufferGL4;
-class csVertexDeclarationGL4;
 
 namespace cs
 {
@@ -16,6 +13,9 @@ class IndexBufferGL4;
 class ProgramGL4;
 class RenderTargetGL4;
 class SamplerGL4;
+class TextureGL4;
+class VertexBufferGL4;
+class VertexDeclarationGL4;
 
 CS_CLASS()
 class CSGRAPHICSGL4_API GraphicsGL4 : public CS_SUPER(cs::iGraphics)
@@ -125,9 +125,9 @@ private:
 
   csUInt32 m_vao;
 
-  csVertexDeclarationGL4 * m_vertexDeclaration;
+  cs::VertexDeclarationGL4 * m_vertexDeclaration;
   cs::IndexBufferGL4 * m_indexBuffer;
-  VertexBufferGL4 * m_vertexBuffer[16];
+  cs::VertexBufferGL4 * m_vertexBuffer[16];
   cs::ProgramGL4 * m_program;
   cs::RenderTargetGL4 * m_renderTarget;
 
@@ -157,7 +157,7 @@ private:
   cs::SamplerGL4 * m_samplers[cs::eTU_COUNT];
   bool m_samplerChanged[cs::eTU_COUNT];
 
-  csTextureGL4 * m_textures[cs::eTU_COUNT];
+  cs::TextureGL4 * m_textures[cs::eTU_COUNT];
   bool m_textureChanged[cs::eTU_COUNT];
 
   cs::Matrix4f m_matrices[cs::eMT_COUNT];
@@ -182,9 +182,9 @@ private:
    * @{
    */
   void InitFullScreenData();
-  VertexBufferGL4 * m_fullScreenVertexBuffer;
-  VertexBufferGL4 * m_fullScreenParamVertexBuffer;
-  csVertexDeclarationGL4 * m_fullScreenVertexDeclaration;
+  cs::VertexBufferGL4 * m_fullScreenVertexBuffer;
+  cs::VertexBufferGL4 * m_fullScreenParamVertexBuffer;
+  cs::VertexDeclarationGL4 * m_fullScreenVertexDeclaration;
   cs::ProgramGL4 * m_fullScreenProgram;
   cs::ProgramGL4 * m_fullScreenArrayProgram;
   csUInt16 m_viewportWidth;

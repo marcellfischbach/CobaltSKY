@@ -2,17 +2,17 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 
 
-csSGSplitFloat3GL4::csSGSplitFloat3GL4()
-  : csSGNodeGL4()
+cs::SGSplitFloat3GL4::SGSplitFloat3GL4()
+  : cs::SGNodeGL4()
 {
   SetDoubleInlineEvaluateInput();
 }
 
 
-void csSGSplitFloat3GL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGSplitFloat3GL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *node = GetNode();
-  csSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  cs::SGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
   if (!inputNode)
   {
     return;

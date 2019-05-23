@@ -3,7 +3,7 @@
 #include <graphicsgl4/shadergraph/gl4sgfloateval.hh>
 #include <sstream>
 
-void csSGFloat2GL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGFloat2GL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *n = GetNode();
   std::string src[] = {

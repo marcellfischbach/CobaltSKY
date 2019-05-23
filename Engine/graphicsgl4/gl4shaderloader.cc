@@ -5,16 +5,16 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-csShaderGL4Loader::csShaderGL4Loader()
+cs::ShaderGL4Loader::ShaderGL4Loader()
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csShaderGL4Loader::~csShaderGL4Loader()
+cs::ShaderGL4Loader::~ShaderGL4Loader()
 {
 }
 
-bool csShaderGL4Loader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
+bool cs::ShaderGL4Loader::CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   std::string ext = file->GetExtension();
@@ -27,14 +27,14 @@ bool csShaderGL4Loader::CanLoad(cs::iFile *file, const cs::ResourceLocator &loca
     ext == std::string("comp");
 }
 
-const cs::Class *csShaderGL4Loader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
+const cs::Class *cs::ShaderGL4Loader::EvalClass(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(file);
   CS_UNUSED(locator);
-  return csShaderGL4::GetStaticClass();
+  return cs::ShaderGL4::GetStaticClass();
 }
 
-cs::ResourceWrapper *csShaderGL4Loader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
+cs::ResourceWrapper *cs::ShaderGL4Loader::Load(cs::iFile *file, const cs::ResourceLocator &locator) const
 {
   CS_UNUSED(locator);
   std::string ext = file->GetExtension();
@@ -82,7 +82,7 @@ cs::ResourceWrapper *csShaderGL4Loader::Load(cs::iFile *file, const cs::Resource
   std::string source(buffer);
   delete[] buffer;
 
-  csShaderGL4 *shader = new csShaderGL4();
+  cs::ShaderGL4 *shader = new cs::ShaderGL4();
   shader->SetSource(source);
   shader->SetShaderType(type);
 
@@ -115,7 +115,7 @@ cs::ResourceWrapper *csShaderGL4Loader::Load(cs::iFile *file, const cs::Resource
     return nullptr;
   }
 
-  return new csShaderGL4Wrapper(shader);
+  return new cs::ShaderGL4Wrapper(shader);
 }
 
 

@@ -2,7 +2,7 @@
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 #include <sstream>
 
-void csSGDivGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGDivGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *div = GetNode();

@@ -4,7 +4,7 @@
 
 
 
-void csSGNormalizeGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGNormalizeGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *normalize = GetNode();

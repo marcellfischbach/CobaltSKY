@@ -9,19 +9,18 @@ namespace cs
 class DirectionalLight;
 class Texture2DWrapper;
 class Texture2DArrayWrapper;
-}
 
-class csDirectionalLightRendererGL4 : public csLightRendererGL4
+class DirectionalLightRendererGL4 : public cs::LightRendererGL4
 {
 public:
-  csDirectionalLightRendererGL4(cs::iGraphics *renderer);
-  virtual ~csDirectionalLightRendererGL4();
+  DirectionalLightRendererGL4(cs::iGraphics *renderer);
+  virtual ~DirectionalLightRendererGL4();
 
-  virtual void Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target);
+  virtual void Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, cs::GBufferGL4 *gbuffer, cs::iRenderTarget *target);
 
 private:
   void RenderShadow(cs::Entity *root, cs::Camera *camera, const cs::DirectionalLight *light);
-  void RenderShadowMap(const cs::DirectionalLight *light, csGBufferGL4 *gbuffer);
+  void RenderShadowMap(const cs::DirectionalLight *light, cs::GBufferGL4 *gbuffer);
   void BlurShadowMap();
   void CalcPSSMMatrices(const cs::DirectionalLight *light, const cs::Camera *camera);
   void CalcMatrix(const cs::Vector3f &dir, const cs::Vector3f  &camPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const;
@@ -82,3 +81,5 @@ private:
   } m_shadowMapBlurVert;
 
 };
+
+}

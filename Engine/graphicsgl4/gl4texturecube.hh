@@ -8,14 +8,17 @@
 #include <graphicsgl4/gl4texturecube.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS();
-class CSGRAPHICSGL4_API csTextureCubeGL4 : public CS_SUPER(csTextureGL4), public CS_SUPER(cs::iTextureCube)
+class CSGRAPHICSGL4_API TextureCubeGL4 : public CS_SUPER(cs::TextureGL4), public CS_SUPER(cs::iTextureCube)
 {
   CS_CLASS_GEN;
 public:
 
-  csTextureCubeGL4();
-  virtual ~csTextureCubeGL4();
+  TextureCubeGL4();
+  virtual ~TextureCubeGL4();
 
   bool Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth);
 
@@ -25,7 +28,7 @@ public:
   virtual csUInt16 GetHeight() const;
   virtual csUInt16 GetDepth() const;
 
-  virtual bool CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void *data);
+  virtual bool CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void* data);
 
 private:
   cs::ePixelFormat m_format;
@@ -34,4 +37,7 @@ private:
   csUInt16 m_height;
   csUInt16 m_depth;
 };
+
+
+}
 

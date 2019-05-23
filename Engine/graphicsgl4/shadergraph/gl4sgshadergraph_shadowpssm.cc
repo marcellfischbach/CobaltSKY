@@ -17,7 +17,7 @@ static const char *compareMode[] = {
   "!="
 };
 
-void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLayers, cs::eRenderPass renderPass, cs::iSGShaderGraphLogger *logger)
+void cs::ShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLayers, cs::eRenderPass renderPass, cs::iSGShaderGraphLogger *logger)
 {
   std::string passName;
   switch (renderPass)
@@ -49,7 +49,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
     }
   }
 
-  csShaderGraphCtx ctx(this);
+  cs::ShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   ctx.EvaluateInlines(outputs);
 
@@ -57,7 +57,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
   std::string preAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(outputs);
-  std::set<csShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
+  std::set<cs::ShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   bool vsm = true;
 
@@ -174,7 +174,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
         : "layout(location = 0) out vec4 cs_FragColor;"
         ) << std::endl
     << std::endl;
-  for (const csShaderGraphCtx::ExternalBinding &binding : bindings)
+  for (const cs::ShaderGraphCtx::ExternalBinding &binding : bindings)
   {
     ss << "uniform " << binding.variableType << " " << binding.variableName << ";" << std::endl;
   }
@@ -226,7 +226,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
   //DebugCode("PSSM.Fragment", fragmentShaderSources.c_str());
 
 
-  csShaderGL4 *vertexShader = new csShaderGL4();
+  cs::ShaderGL4 *vertexShader = new cs::ShaderGL4();
   vertexShader->SetShaderType(cs::eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
@@ -240,7 +240,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
     return;
   }
 
-  csShaderGL4 *geometryShader = new csShaderGL4();
+  cs::ShaderGL4 *geometryShader = new cs::ShaderGL4();
   geometryShader->SetShaderType(cs::eST_Geometry);
   geometryShader->SetSource(geometryShaderSources);
   if (!geometryShader->Compile())
@@ -254,7 +254,7 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
     return;
   }
 
-  csShaderGL4 *fragmentShader = new csShaderGL4();
+  cs::ShaderGL4 *fragmentShader = new cs::ShaderGL4();
   fragmentShader->SetShaderType(cs::eST_Fragment);
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
@@ -271,9 +271,9 @@ void csShaderGraphGL4::GenerateShadow(cs::SGShaderGraph *graph, unsigned numLaye
   }
 
   cs::ProgramGL4 *shadowShader = new cs::ProgramGL4();
-  shadowShader->AttachShader(new csShaderGL4Wrapper(vertexShader));
-  shadowShader->AttachShader(new csShaderGL4Wrapper(geometryShader));
-  shadowShader->AttachShader(new csShaderGL4Wrapper(fragmentShader));
+  shadowShader->AttachShader(new cs::ShaderGL4Wrapper(vertexShader));
+  shadowShader->AttachShader(new cs::ShaderGL4Wrapper(geometryShader));
+  shadowShader->AttachShader(new cs::ShaderGL4Wrapper(fragmentShader));
   if (!shadowShader->Link())
   {
     if (logger)

@@ -85,7 +85,7 @@ void cs::ProgramGL4::RegisterAttribute(const cs::ShaderAttributeID &id)
 
   std::string uniformName = std::string("cs_") + id.GetName();
   GLint loc = glGetUniformLocation(m_name, uniformName.c_str());
-  csShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
+  cs::ShaderAttributeGL4 *attribute = m_attributes[id.GetID()];
   attribute->SetLocation(loc);
   attribute->SetName(id.GetName());
   attribute->SetValid(true);
@@ -99,7 +99,7 @@ void cs::ProgramGL4::RegisterStream(const cs::ShaderStreamID &id)
 
   std::string attribName = std::string("cs_") + id.GetName();
   GLint loc = glGetAttribLocation(m_name, attribName.c_str());
-  csShaderStreamGL4 *stream = m_streams[id.GetID()];
+  cs::ShaderStreamGL4 *stream = m_streams[id.GetID()];
   stream->SetLocation(loc);
   stream->SetName(id.GetName());
   stream->SetValid(true);
@@ -118,7 +118,7 @@ cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(csUInt32 idx)
   {
     return 0;
   }
-  csShaderAttributeGL4 *attr = m_attributes[idx];
+  cs::ShaderAttributeGL4 *attr = m_attributes[idx];
   if (attr->GetLocation() == -1)
   {
     return 0;
@@ -134,7 +134,7 @@ cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(const cs::ShaderAttributeID &
     ResizeAttributes(id.GetID());
   }
 
-  csShaderAttributeGL4 *attr = m_attributes[id.GetID()];
+  cs::ShaderAttributeGL4 *attr = m_attributes[id.GetID()];
   if (!attr->IsValid())
   {
     RegisterAttribute(id);
@@ -166,7 +166,7 @@ cs::iShaderAttribute *cs::ProgramGL4::GetAttribute(const std::string &name)
     return 0;
   }
 
-  csShaderAttributeGL4 *attribute = new csShaderAttributeGL4();
+  cs::ShaderAttributeGL4 *attribute = new cs::ShaderAttributeGL4();
   attribute->SetLocation(loc);
   attribute->SetName(name);
   attribute->SetValid(true);
@@ -189,7 +189,7 @@ cs::iShaderStream *cs::ProgramGL4::GetStream(const cs::ShaderStreamID &id)
     ResizeStreams(id.GetID());
   }
 
-  csShaderStreamGL4 *stream = m_streams[id.GetID()];
+  cs::ShaderStreamGL4 *stream = m_streams[id.GetID()];
   if (!stream->IsValid())
   {
     RegisterStream(id);
@@ -221,7 +221,7 @@ cs::iShaderStream *cs::ProgramGL4::GetStream(const std::string &name)
   {
     return 0;
   }
-  csShaderStreamGL4 *stream = new csShaderStreamGL4();
+  cs::ShaderStreamGL4 *stream = new cs::ShaderStreamGL4();
   stream->SetLocation(loc);
   stream->SetName(name);
   stream->SetValid(true);
@@ -232,7 +232,7 @@ cs::iShaderStream *cs::ProgramGL4::GetStream(const std::string &name)
 
 
 
-void cs::ProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
+void cs::ProgramGL4::AttachShader(cs::ShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -247,7 +247,7 @@ void cs::ProgramGL4::AttachShader(csShaderGL4Wrapper *shader)
 }
 
 
-void cs::ProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
+void cs::ProgramGL4::DetachShader(cs::ShaderGL4Wrapper *shader)
 {
   if (m_name != 0)
   {
@@ -256,7 +256,7 @@ void cs::ProgramGL4::DetachShader(csShaderGL4Wrapper *shader)
   }
   if (shader)
   {
-    for (std::vector<csShaderGL4Wrapper*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+    for (std::vector<cs::ShaderGL4Wrapper*>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
     {
       if (*it == shader)
       {
@@ -329,7 +329,7 @@ void cs::ProgramGL4::ResizeAttributes(csUInt32 id)
   csInt32 missing = (csInt32)(id - m_attributes.size() + 1);
   for (csInt16 i = 0; i < missing; ++i)
   {
-    m_attributes.push_back(new csShaderAttributeGL4());
+    m_attributes.push_back(new cs::ShaderAttributeGL4());
   }
 }
 
@@ -339,6 +339,6 @@ void cs::ProgramGL4::ResizeStreams(csUInt32 id)
   csInt32 missing = (csInt32)(id - m_streams.size() + 1);
   for (csInt16 i = 0; i < missing; ++i)
   {
-    m_streams.push_back(new csShaderStreamGL4());
+    m_streams.push_back(new cs::ShaderStreamGL4());
   }
 }

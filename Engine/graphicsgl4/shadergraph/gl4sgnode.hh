@@ -5,25 +5,26 @@
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnode.refl.hh>
 
-class csShaderGraphCtx;
-
+namespace cs
+{
+class ShaderGraphCtx;
 
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGNodeGL4 : public CS_SUPER(cs::Object)
+class CSGRAPHICSGL4_API SGNodeGL4 : public CS_SUPER(cs::Object)
 {
   CS_CLASS_GEN;
 public:
-  csSGNodeGL4();
-  virtual ~csSGNodeGL4();
+  SGNodeGL4();
+  virtual ~SGNodeGL4();
 
-  void SetNode(cs::SGNode *node)
+  void SetNode(cs::SGNode * node)
   {
     m_node = node;
   }
 
-  virtual bool EvaluateInline(csShaderGraphCtx &ctx);
-  virtual bool Evaluate(csShaderGraphCtx &ctx);
+  virtual bool EvaluateInline(cs::ShaderGraphCtx & ctx);
+  virtual bool Evaluate(cs::ShaderGraphCtx & ctx);
 
   cs::SGNode* GetNode()
   {
@@ -44,24 +45,26 @@ public:
   }
 
 
-  std::string AssignOutput(csShaderGraphCtx &ctx, cs::SGOutput *output, const std::string &exp, const std::string &type);
+  std::string AssignOutput(cs::ShaderGraphCtx & ctx, cs::SGOutput * output, const std::string & exp, const std::string & type);
 
   static cs::eSGDataType GetHigher(cs::eSGDataType dtA, cs::eSGDataType dtB);
   static std::string GetDataTypeVar(cs::eSGDataType dt);
 
 protected:
-  virtual void PrivEvaluate(csShaderGraphCtx &ctx) = 0;
+  virtual void PrivEvaluate(cs::ShaderGraphCtx & ctx) = 0;
   void SetDoubleInlineEvaluateInput();
 
 private:
   bool m_forceInline;
   bool m_inline;
-  cs::SGNode *m_node;
+  cs::SGNode* m_node;
   bool m_inlineEvaluated;
   bool m_evaluated;
   bool m_doubleInlineEvaluateInput;
 
-  std::string GetFloat(csShaderGraphCtx &ctx, int x);
-  std::string GetInt(csShaderGraphCtx &ctx, int x);
+  std::string GetFloat(cs::ShaderGraphCtx & ctx, int x);
+  std::string GetInt(cs::ShaderGraphCtx & ctx, int x);
 
 };
+
+}

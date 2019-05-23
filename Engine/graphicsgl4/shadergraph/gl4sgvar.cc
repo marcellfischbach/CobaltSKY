@@ -4,14 +4,14 @@
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 
 
-csSGVarGL4::csSGVarGL4(const std::string &typeName)
-  : csSGNodeGL4()
+cs::SGVarGL4::SGVarGL4(const std::string &typeName)
+  : cs::SGNodeGL4()
   , m_typeName(typeName)
 {
 
 }
 
-void csSGVarGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGVarGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *fl = GetNode();
   cs::SGResourceNode *res = cs::QueryClass<cs::SGResourceNode>(fl);

@@ -4,14 +4,19 @@
 #include <graphicsgl4/shadergraph/gl4sgfloat2.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGFloat2GL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGFloat2GL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGFloat2GL4() : csSGNodeGL4() { }
-  virtual ~csSGFloat2GL4() { }
+  SGFloat2GL4() : cs::SGNodeGL4() { }
+  virtual ~SGFloat2GL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

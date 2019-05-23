@@ -3,15 +3,19 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgdot.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGDotGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGDotGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGDotGL4() : csSGNodeGL4() { }
-  virtual ~csSGDotGL4() { }
+  SGDotGL4() : cs::SGNodeGL4() { }
+  virtual ~SGDotGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

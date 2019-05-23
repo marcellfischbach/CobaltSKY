@@ -5,12 +5,16 @@
 #include <graphicsgl4/shadergraph/gl4sgvar.hh>
 #include <graphicsgl4/shadergraph/gl4sgvarfloat3.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGVarFloat3GL4 : public CS_SUPER(csSGVarGL4)
+class CSGRAPHICSGL4_API SGVarFloat3GL4 : public CS_SUPER(cs::SGVarGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGVarFloat3GL4() : csSGVarGL4("vec3") { }
-  virtual ~csSGVarFloat3GL4() { }
+  SGVarFloat3GL4() : cs::SGVarGL4("vec3") { }
+  virtual ~SGVarFloat3GL4() { }
 };
+
+}

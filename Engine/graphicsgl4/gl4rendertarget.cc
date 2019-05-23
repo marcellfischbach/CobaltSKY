@@ -85,7 +85,7 @@ void cs::RenderTargetGL4::Initialize(csUInt16 width, csUInt16 height)
 
 void cs::RenderTargetGL4::AddColorTexture(cs::TextureWrapper *color)
 {
-  csTextureGL4 *coloGL4 = cs::QueryClass<csTextureGL4>(color->Get());
+  cs::TextureGL4 *coloGL4 = cs::QueryClass<cs::TextureGL4>(color->Get());
   if (coloGL4)
   {
     color->AddRef();
@@ -100,7 +100,7 @@ void cs::RenderTargetGL4::SetDepthTexture(cs::TextureWrapper *depth)
 {
   if (depth != m_depthTexture)
   {
-    csTextureGL4 *depthGL4 = cs::QueryClass<csTextureGL4>(depth->Get());
+    cs::TextureGL4 *depthGL4 = cs::QueryClass<cs::TextureGL4>(depth->Get());
     CS_SET(m_depthTexture, depth);
     if (depthGL4)
     {

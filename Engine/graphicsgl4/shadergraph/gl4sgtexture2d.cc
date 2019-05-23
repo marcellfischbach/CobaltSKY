@@ -3,7 +3,7 @@
 #include <cobalt/graphics/shadergraph/cssgresourcenode.hh>
 #include <sstream>
 
-void csSGTexture2DGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGTexture2DGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *txt = GetNode();
   cs::SGResourceNode *res = cs::QueryClass<cs::SGResourceNode>(txt);

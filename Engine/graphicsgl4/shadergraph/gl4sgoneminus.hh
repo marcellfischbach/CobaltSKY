@@ -4,14 +4,19 @@
 #include <graphicsgl4/shadergraph/gl4sgoneminus.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGOneMinusGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGOneMinusGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGOneMinusGL4() : csSGNodeGL4() { }
-  virtual ~csSGOneMinusGL4() { }
+  SGOneMinusGL4() : cs::SGNodeGL4() { }
+  virtual ~SGOneMinusGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

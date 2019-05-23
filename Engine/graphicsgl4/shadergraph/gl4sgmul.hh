@@ -3,15 +3,19 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgmul.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGMulGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGMulGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGMulGL4() : csSGNodeGL4() { }
-  virtual ~csSGMulGL4() { }
+  SGMulGL4() : cs::SGNodeGL4() { }
+  virtual ~SGMulGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

@@ -96,7 +96,7 @@ void SceneView::initializeGL()
 
     //
     // create the frameprocessor that will render the scene
-    m_frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
+    m_frameProcessor = new cs::DeferredFrameProcessorGL4(m_graphics);
     if (!m_frameProcessor->Initialize())
     {
       printf("Unable to initialize frame processor\n");
@@ -154,7 +154,7 @@ QImage SceneView::TakeScreenshot(unsigned width, unsigned height)
     return result;
   }
   */
-  csDeferredFrameProcessorGL4 *frameProcessor = new csDeferredFrameProcessorGL4(m_graphics);
+  cs::DeferredFrameProcessorGL4 *frameProcessor = new cs::DeferredFrameProcessorGL4(m_graphics);
   if (!frameProcessor->Initialize())
   {
     printf("Unable to initialize frame processor\n");

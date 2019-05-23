@@ -8,14 +8,15 @@ namespace cs
 {
 struct iGraphics;
 class RenderState;
-}
 
-class csParticleRendererGL4
+class ParticleRendererGL4
 {
 public:
-  csParticleRendererGL4();
-  virtual ~csParticleRendererGL4();
+  ParticleRendererGL4();
+  virtual ~ParticleRendererGL4();
 
   void Render(cs::iGraphics *renderer, cs::Collection<cs::RenderState*> &particles);
 };
 
+
+}

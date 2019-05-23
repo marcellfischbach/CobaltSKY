@@ -3,15 +3,20 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgnormalize.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGNormalizeGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGNormalizeGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGNormalizeGL4() : csSGNodeGL4() { }
-  virtual ~csSGNormalizeGL4() { }
+  SGNormalizeGL4() : cs::SGNodeGL4() { }
+  virtual ~SGNormalizeGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}
+

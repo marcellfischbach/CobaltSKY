@@ -4,7 +4,7 @@
 
 
 
-void csSGAddGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGAddGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *add = GetNode();

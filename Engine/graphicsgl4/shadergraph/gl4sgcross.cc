@@ -4,7 +4,7 @@
 
 
 
-void csSGCrossGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGCrossGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *dot = GetNode();

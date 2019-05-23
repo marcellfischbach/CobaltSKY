@@ -10,12 +10,12 @@
 #include <graphicsgl4/gl4program.refl.hh>
 
 
-class csShaderGL4Wrapper;
-class csShaderAttributeGL4;
-class csShaderStreamGL4;
 
 namespace cs
 {
+class ShaderAttributeGL4;
+class ShaderGL4Wrapper;
+class ShaderStreamGL4;
 
 CS_CLASS()
 class ProgramGL4 : public CS_SUPER(cs::iShader)
@@ -41,8 +41,8 @@ public:
   virtual cs::iShaderStream* GetStream(const std::string & streamName);
 
 
-  void AttachShader(csShaderGL4Wrapper * shader);
-  void DetachShader(csShaderGL4Wrapper * shader);
+  void AttachShader(cs::ShaderGL4Wrapper * shader);
+  void DetachShader(cs::ShaderGL4Wrapper * shader);
 
   bool Link();
   std::string GetLinkErrorLog() const;
@@ -50,18 +50,18 @@ public:
 private:
   GLuint m_name;
 
-  std::vector<csShaderGL4Wrapper*> m_shaders;
+  std::vector<cs::ShaderGL4Wrapper*> m_shaders;
 
   void InitializeSystemStreams();
   void InitializeSystemAttributes();
 
   void ResizeAttributes(csUInt32 id);
   void ResizeStreams(csUInt32 id);
-  std::vector<csShaderAttributeGL4*> m_attributes;
-  std::vector<csShaderStreamGL4*> m_streams;
+  std::vector<cs::ShaderAttributeGL4*> m_attributes;
+  std::vector<cs::ShaderStreamGL4*> m_streams;
 
-  std::vector<csShaderAttributeGL4*> m_namedAttributes;
-  std::vector<csShaderStreamGL4*> m_namedStreams;
+  std::vector<cs::ShaderAttributeGL4*> m_namedAttributes;
+  std::vector<cs::ShaderStreamGL4*> m_namedStreams;
 
 };
 

@@ -4,21 +4,21 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-csTextureCubeGL4::csTextureCubeGL4()
-  : csTextureGL4(cs::eTT_TextureCube)
+cs::TextureCubeGL4::TextureCubeGL4()
+  : cs::TextureGL4(cs::eTT_TextureCube)
   , cs::iTextureCube()
 {
 
 }
 
-csTextureCubeGL4::~csTextureCubeGL4()
+cs::TextureCubeGL4::~TextureCubeGL4()
 {
 
 }
 
-bool csTextureCubeGL4::Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
+bool cs::TextureCubeGL4::Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
 {
-  if (!csTextureGL4::Initialize())
+  if (!cs::TextureGL4::Initialize())
   {
     return false;
   }
@@ -45,7 +45,7 @@ bool csTextureCubeGL4::Initialize(cs::ePixelFormat format, csUInt16 width, csUIn
   return true;
 }
 
-bool csTextureCubeGL4::CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void *data)
+bool cs::TextureCubeGL4::CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePixelFormat format, const void *data)
 {
   csUInt16 width;
   csUInt16 height;
@@ -90,17 +90,17 @@ bool csTextureCubeGL4::CopyData(cs::eTextureCubeFace face, csUInt8 lod, cs::ePix
 }
 
 
-csUInt16 csTextureCubeGL4::GetWidth() const
+csUInt16 cs::TextureCubeGL4::GetWidth() const
 {
   return m_width;
 }
 
-csUInt16 csTextureCubeGL4::GetHeight() const
+csUInt16 cs::TextureCubeGL4::GetHeight() const
 {
   return m_height;
 }
 
-csUInt16 csTextureCubeGL4::GetDepth() const
+csUInt16 cs::TextureCubeGL4::GetDepth() const
 {
   return m_depth;
 }

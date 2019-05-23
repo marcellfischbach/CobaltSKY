@@ -18,8 +18,8 @@
 
 
 
-csPointLightRendererGL4::csPointLightRendererGL4(cs::iGraphics *renderer)
-  : csLightRendererGL4(renderer)
+cs::PointLightRendererGL4::PointLightRendererGL4(cs::iGraphics *renderer)
+  : cs::LightRendererGL4(renderer)
 {
   InitializeLightProgram(&m_programNoShadow, cs::ResourceLocator("${shaders}/deferred/PointLight.asset"));
   m_attrLightPositionNoShadow = m_programNoShadow.program->Get()->GetAttribute(cs::ShaderAttributeID("LightPosition"));
@@ -40,7 +40,7 @@ csPointLightRendererGL4::csPointLightRendererGL4(cs::iGraphics *renderer)
   cs::Texture2DArrayWrapper *colorBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(cs::ePF_RGBA, bufferSize, bufferSize, 6, false));
   m_depthBuffer = new cs::Texture2DArrayWrapper(renderer->CreateTexture2DArray(cs::ePF_D24S8, bufferSize, bufferSize, 6, false));
 
-  colorBuffer->Get()->SetSampler(csGBufferGL4::GetColorSampler(renderer));
+  colorBuffer->Get()->SetSampler(cs::GBufferGL4::GetColorSampler(renderer));
   m_depthBuffer->Get()->SetSampler(m_depthSampler);
 
   m_shadowBuffer = static_cast<cs::iRenderTarget*>(renderer->CreateRenderTarget());
@@ -54,7 +54,7 @@ csPointLightRendererGL4::csPointLightRendererGL4(cs::iGraphics *renderer)
 
 }
 
-csPointLightRendererGL4::~csPointLightRendererGL4()
+cs::PointLightRendererGL4::~PointLightRendererGL4()
 {
   CS_RELEASE(m_depthBuffer);
 }
@@ -62,7 +62,7 @@ csPointLightRendererGL4::~csPointLightRendererGL4()
 
 
 
-void csPointLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target)
+void cs::PointLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, cs::GBufferGL4 *gbuffer, cs::iRenderTarget *target)
 {
   cs::eBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
   m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -108,7 +108,7 @@ void csPointLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::L
 
 
 
-void csPointLightRendererGL4::BindPointLightNo(cs::PointLight *pointLight)
+void cs::PointLightRendererGL4::BindPointLightNo(cs::PointLight *pointLight)
 {
   if (m_attrLightPositionNoShadow)
   {
@@ -121,7 +121,7 @@ void csPointLightRendererGL4::BindPointLightNo(cs::PointLight *pointLight)
 }
 
 
-void csPointLightRendererGL4::BindPointLightCubeShadow(cs::PointLight *pointLight)
+void cs::PointLightRendererGL4::BindPointLightCubeShadow(cs::PointLight *pointLight)
 {
   if (m_attrLightPositionCubeShadow)
   {
@@ -150,7 +150,7 @@ void csPointLightRendererGL4::BindPointLightCubeShadow(cs::PointLight *pointLigh
   }
 
 }
-void csPointLightRendererGL4::RenderShadow(cs::Entity *root, const cs::PointLight *light)
+void cs::PointLightRendererGL4::RenderShadow(cs::Entity *root, const cs::PointLight *light)
 {
   m_renderer->PushRenderStates();
 
@@ -162,7 +162,7 @@ void csPointLightRendererGL4::RenderShadow(cs::Entity *root, const cs::PointLigh
   config.ScanShadowCasters = true;
   config.ScanNonShadowCasters = false;
   // collect the shadow casting objects
-  csDefaultCollectorGL4 collector(m_renderStates, 0);
+  cs::DefaultCollectorGL4 collector(m_renderStates, 0);
   for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
   {
     m_renderStates[i].Clear();
@@ -203,7 +203,7 @@ void csPointLightRendererGL4::RenderShadow(cs::Entity *root, const cs::PointLigh
   m_renderer->PopRenderStates();
 }
 
-void csPointLightRendererGL4::CalcCubeMatrices(const cs::PointLight *light)
+void cs::PointLightRendererGL4::CalcCubeMatrices(const cs::PointLight *light)
 {
   float radius = light->GetRadius();
 

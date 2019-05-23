@@ -48,7 +48,7 @@ void copy_element(cs::VertexElement* dst, const cs::VertexElement* src)
 }
 }
 
-csVertexDeclarationGL4::csVertexDeclarationGL4()
+cs::VertexDeclarationGL4::VertexDeclarationGL4()
   : m_streams(0)
   , m_elements(0)
   , m_totalSize(0)
@@ -56,7 +56,7 @@ csVertexDeclarationGL4::csVertexDeclarationGL4()
   CS_CLASS_GEN_CONSTR;
 }
 
-bool csVertexDeclarationGL4::Create(const cs::VertexElement* elements)
+bool cs::VertexDeclarationGL4::Create(const cs::VertexElement* elements)
 {
 
   // evaluate the number of streams and the number of elements per stream
@@ -90,7 +90,7 @@ bool csVertexDeclarationGL4::Create(const cs::VertexElement* elements)
   return true;
 }
 
-csVertexDeclarationGL4::~csVertexDeclarationGL4()
+cs::VertexDeclarationGL4::~VertexDeclarationGL4()
 {
   for (unsigned i = 0; i<m_streams; i++)
   {
@@ -100,19 +100,19 @@ csVertexDeclarationGL4::~csVertexDeclarationGL4()
 }
 
 
-unsigned csVertexDeclarationGL4::GetNumberOfStreams() const
+unsigned cs::VertexDeclarationGL4::GetNumberOfStreams() const
 {
   return m_streams;
 }
 
-const cs::VertexElement* csVertexDeclarationGL4::GetElements(csUInt8 stream) const
+const cs::VertexElement* cs::VertexDeclarationGL4::GetElements(csUInt8 stream) const
 {
   assert(stream < m_streams);
 
   return m_elements[stream];
 }
 
-const cs::VertexElement* csVertexDeclarationGL4::GetElement(cs::eVertexStreamType streamDefinition, csUInt8 stream) const
+const cs::VertexElement* cs::VertexDeclarationGL4::GetElement(cs::eVertexStreamType streamDefinition, csUInt8 stream) const
 {
   const cs::VertexElement* elements = GetElements(stream);
   if (!elements)
@@ -130,7 +130,7 @@ const cs::VertexElement* csVertexDeclarationGL4::GetElement(cs::eVertexStreamTyp
   return 0;
 }
 
-void csVertexDeclarationGL4::BindStream(cs::ProgramGL4* shader, csUInt8 stream, void* ptr)
+void cs::VertexDeclarationGL4::BindStream(cs::ProgramGL4* shader, csUInt8 stream, void* ptr)
 {
   assert(stream < m_streams);
 
@@ -164,7 +164,7 @@ void csVertexDeclarationGL4::BindStream(cs::ProgramGL4* shader, csUInt8 stream, 
   }
 }
 
-void csVertexDeclarationGL4::UnbindStream(cs::ProgramGL4* shader, csUInt8 stream)
+void cs::VertexDeclarationGL4::UnbindStream(cs::ProgramGL4* shader, csUInt8 stream)
 {
   assert(stream < m_streams);
 
@@ -184,13 +184,13 @@ void csVertexDeclarationGL4::UnbindStream(cs::ProgramGL4* shader, csUInt8 stream
   }
 }
 
-csSize csVertexDeclarationGL4::GetTotalSize() const
+csSize cs::VertexDeclarationGL4::GetTotalSize() const
 {
   return m_totalSize;
 }
 
 
-csSize csVertexDeclarationGL4::GetStride(csUInt8 stream) const
+csSize cs::VertexDeclarationGL4::GetStride(csUInt8 stream) const
 {
   const cs::VertexElement* elements = GetElements(stream);
   if (!elements)

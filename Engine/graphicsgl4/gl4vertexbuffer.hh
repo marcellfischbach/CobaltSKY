@@ -5,6 +5,9 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4vertexbuffer.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS();
 class VertexBufferGL4 : public CS_SUPER(cs::iVertexBuffer)
 {
@@ -13,7 +16,7 @@ public:
   VertexBufferGL4();
   virtual ~VertexBufferGL4();
 
-  bool CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode);
+  bool CreateBuffer(csSize size, const void* data, cs::eBufferDataMode dataMode);
 
   virtual csSize GetSize() const;
 
@@ -32,4 +35,6 @@ private:
   GLuint m_name;
   csSize m_size;
 };
+
+}
 

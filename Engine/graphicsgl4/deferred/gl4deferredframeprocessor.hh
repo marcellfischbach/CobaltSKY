@@ -10,25 +10,24 @@
 #include <graphicsgl4/deferred/gl4deferredframeprocessor.refl.hh>
 
 
-class csGBufferGL4;
-class csLightRendererGL4;
-class csParticleRendererGL4;
 
 namespace cs
 {
 struct iGraphics;
 struct iShader;
-class Light;
 class GeometryMesh;
-}
+class GBufferGL4;
+class Light;
+class LightRendererGL4;
+class ParticleRendererGL4;
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csDeferredFrameProcessorGL4 : public  CS_SUPER(cs::iFrameProcessor)
+class CSGRAPHICSGL4_API DeferredFrameProcessorGL4 : public  CS_SUPER(cs::iFrameProcessor)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csDeferredFrameProcessorGL4(cs::iGraphics *renderer);
-  virtual ~csDeferredFrameProcessorGL4();
+  DeferredFrameProcessorGL4(cs::iGraphics *renderer);
+  virtual ~DeferredFrameProcessorGL4();
 
   bool Resize(csUInt16 width, csUInt16 height);
   bool Initialize();
@@ -51,13 +50,15 @@ private:
 
   cs::PostProcessor *m_postProcessor;
 
-  csGBufferGL4 *m_gbuffer;
+  cs::GBufferGL4 *m_gbuffer;
 
   cs::Color4f m_clearColor;
 
   cs::iShader *m_simplePresentShader;
   cs::iShader *m_directionLightShader;
 
-  csLightRendererGL4 *m_lightRenderers[cs::eLT_Count];
-  csParticleRendererGL4 *m_particleRenderer;
+  cs::LightRendererGL4 *m_lightRenderers[cs::eLT_Count];
+  cs::ParticleRendererGL4 *m_particleRenderer;
 };
+
+}

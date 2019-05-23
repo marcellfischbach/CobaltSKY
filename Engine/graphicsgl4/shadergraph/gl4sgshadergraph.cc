@@ -67,49 +67,49 @@
 #include <iostream>
 #include <sstream>
 
-csShaderGraphGL4::csShaderGraphGL4(cs::GraphicsGL4 *graphics)
+cs::ShaderGraphGL4::ShaderGraphGL4(cs::GraphicsGL4 *graphics)
   : m_graphics(graphics)
 {
 }
 
 
-csShaderGraphGL4::~csShaderGraphGL4()
+cs::ShaderGraphGL4::~ShaderGraphGL4()
 {
 
 }
 
-csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
+cs::SGNodeGL4 *cs::ShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
 {
   static bool initialized = false;
   if (!initialized)
   {
-    m_classMapping.push_back(Map(cs::SGVarFloat::GetStaticClass(), csSGVarFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGVarFloat2::GetStaticClass(), csSGVarFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGVarFloat3::GetStaticClass(), csSGVarFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGVarFloat4::GetStaticClass(), csSGVarFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGConstFloat::GetStaticClass(), csSGConstFloatGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGConstFloat2::GetStaticClass(), csSGConstFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGConstFloat3::GetStaticClass(), csSGConstFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGConstFloat4::GetStaticClass(), csSGConstFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGFloat2::GetStaticClass(), csSGFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGFloat3::GetStaticClass(), csSGFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGFloat4::GetStaticClass(), csSGFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGSplitFloat2::GetStaticClass(), csSGSplitFloat2GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGSplitFloat3::GetStaticClass(), csSGSplitFloat3GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGSplitFloat4::GetStaticClass(), csSGSplitFloat4GL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGAdd::GetStaticClass(), csSGAddGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGSub::GetStaticClass(), csSGSubGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGMul::GetStaticClass(), csSGMulGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGDiv::GetStaticClass(), csSGDivGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGNeg::GetStaticClass(), csSGNegGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGOneBy::GetStaticClass(), csSGOneByGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGOneMinus::GetStaticClass(), csSGOneMinusGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGDot::GetStaticClass(), csSGDotGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGCross::GetStaticClass(), csSGCrossGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGLerp::GetStaticClass(), csSGLerpGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGNormalize::GetStaticClass(), csSGNormalizeGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGDefaultTextureCoordinate::GetStaticClass(), csSGDefaultTextureCoordinateGL4::GetStaticClass()));
-    m_classMapping.push_back(Map(cs::SGTexture2D::GetStaticClass(), csSGTexture2DGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat::GetStaticClass(), cs::SGVarFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat2::GetStaticClass(), cs::SGVarFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat3::GetStaticClass(), cs::SGVarFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGVarFloat4::GetStaticClass(), cs::SGVarFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat::GetStaticClass(), cs::SGConstFloatGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat2::GetStaticClass(), cs::SGConstFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat3::GetStaticClass(), cs::SGConstFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGConstFloat4::GetStaticClass(), cs::SGConstFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat2::GetStaticClass(), cs::SGFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat3::GetStaticClass(), cs::SGFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGFloat4::GetStaticClass(), cs::SGFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat2::GetStaticClass(), cs::SGSplitFloat2GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat3::GetStaticClass(), cs::SGSplitFloat3GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSplitFloat4::GetStaticClass(), cs::SGSplitFloat4GL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGAdd::GetStaticClass(), cs::SGAddGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGSub::GetStaticClass(), cs::SGSubGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGMul::GetStaticClass(), cs::SGMulGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDiv::GetStaticClass(), cs::SGDivGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGNeg::GetStaticClass(), cs::SGNegGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGOneBy::GetStaticClass(), cs::SGOneByGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGOneMinus::GetStaticClass(), cs::SGOneMinusGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDot::GetStaticClass(), cs::SGDotGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGCross::GetStaticClass(), cs::SGCrossGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGLerp::GetStaticClass(), cs::SGLerpGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGNormalize::GetStaticClass(), cs::SGNormalizeGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGDefaultTextureCoordinate::GetStaticClass(), cs::SGDefaultTextureCoordinateGL4::GetStaticClass()));
+    m_classMapping.push_back(Map(cs::SGTexture2D::GetStaticClass(), cs::SGTexture2DGL4::GetStaticClass()));
     initialized = true;
   }
   for (size_t i = 0, in = m_classMapping.size(); i < in; ++i)
@@ -117,7 +117,7 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
     Map &m = m_classMapping[i];
     if (m.nodeClass == nodeClass)
     {
-      return m.nodeClassGL4->CreateInstance<csSGNodeGL4>();
+      return m.nodeClassGL4->CreateInstance<cs::SGNodeGL4>();
     }
   }
   return 0;
@@ -125,7 +125,7 @@ csSGNodeGL4 *csShaderGraphGL4::CreateNode(const cs::Class *nodeClass)
 }
 
 
-std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, csSize output)
+std::string cs::ShaderGraphGL4::CreateCode(cs::SGNode *node, csSize output)
 {
   if (!node)
   {
@@ -135,7 +135,7 @@ std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, csSize output)
   return CreateCode(node->GetOutput(output));
 }
 
-std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, const std::string &outputName)
+std::string cs::ShaderGraphGL4::CreateCode(cs::SGNode *node, const std::string &outputName)
 {
   if (!node)
   {
@@ -146,16 +146,16 @@ std::string csShaderGraphGL4::CreateCode(cs::SGNode *node, const std::string &ou
 }
 
 
-std::string csShaderGraphGL4::CreateCode(cs::SGOutput *output)
+std::string cs::ShaderGraphGL4::CreateCode(cs::SGOutput *output)
 {
-  csShaderGraphCtx ctx(this);
+  cs::ShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   return ctx.CreateCode(output);
 }
 
 
 
-bool csShaderGraphGL4::GenerateShaderGraph(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
+bool cs::ShaderGraphGL4::GenerateShaderGraph(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
 {
   if (!graph->Validate())
   {
@@ -226,7 +226,7 @@ bool csShaderGraphGL4::GenerateShaderGraph(cs::SGShaderGraph *graph, cs::iSGShad
 
 
 
-void csShaderGraphGL4::DebugCode(const std::string &title, const std::string &code)
+void cs::ShaderGraphGL4::DebugCode(const std::string &title, const std::string &code)
 {
   printf("%s\n", title.c_str());
 

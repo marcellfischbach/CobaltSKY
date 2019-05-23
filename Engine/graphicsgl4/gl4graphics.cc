@@ -74,7 +74,7 @@ cs::GraphicsGL4::GraphicsGL4()
     m_matrixNeedsRecalculation[i] = false;
   }
 
-  cs::ResourceManager::Get()->RegisterLoader(new csShaderGL4Loader());
+  cs::ResourceManager::Get()->RegisterLoader(new cs::ShaderGL4Loader());
   cs::ResourceManager::Get()->RegisterLoader(new cs::ProgramGL4Loader());
 
   InitFullScreenData();
@@ -82,7 +82,7 @@ cs::GraphicsGL4::GraphicsGL4()
 
   ResetDefaults();
 
-  m_shaderGraphFactory = new csShaderGraphGL4(this);
+  m_shaderGraphFactory = new cs::ShaderGraphGL4(this);
 
 
 }
@@ -177,7 +177,7 @@ cs::iIndexBuffer *cs::GraphicsGL4::CreateIndexBuffer(csSize size, const void *da
 
 cs::iVertexBuffer *cs::GraphicsGL4::CreateVertexBuffer(csSize size, const void *data, cs::eBufferDataMode mode)
 {
-  VertexBufferGL4 *vertexBuffer = new VertexBufferGL4();
+  cs::VertexBufferGL4 *vertexBuffer = new cs::VertexBufferGL4();
   if (!vertexBuffer->CreateBuffer(size, data, mode))
   {
     vertexBuffer->Release();
@@ -189,7 +189,7 @@ cs::iVertexBuffer *cs::GraphicsGL4::CreateVertexBuffer(csSize size, const void *
 
 cs::iVertexDeclaration *cs::GraphicsGL4::CreateVertexDeclaration(const cs::VertexElement *elements)
 {
-  csVertexDeclarationGL4 *decl = new csVertexDeclarationGL4();
+  cs::VertexDeclarationGL4 *decl = new cs::VertexDeclarationGL4();
   if (!decl->Create(elements))
   {
     decl->Release();
@@ -218,7 +218,7 @@ cs::iSampler *cs::GraphicsGL4::CreateSampler()
 
 cs::iTexture2D *cs::GraphicsGL4::CreateTexture2D(cs::ePixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps)
 {
-  csTexture2DGL4 *texture = new csTexture2DGL4();
+  cs::Texture2DGL4 *texture = new cs::Texture2DGL4();
   if (!texture->Initialize(format, width, height, mipmaps))
   {
     texture->Release();
@@ -230,7 +230,7 @@ cs::iTexture2D *cs::GraphicsGL4::CreateTexture2D(cs::ePixelFormat format, csUInt
 
 cs::iTexture2DArray *cs::GraphicsGL4::CreateTexture2DArray(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 layers, bool mipmaps)
 {
-  csTexture2DArrayGL4 *texture = new csTexture2DArrayGL4();
+  cs::Texture2DArrayGL4 *texture = new cs::Texture2DArrayGL4();
   if (!texture->Initialize(format, width, height, layers, mipmaps))
   {
     texture->Release();
@@ -241,7 +241,7 @@ cs::iTexture2DArray *cs::GraphicsGL4::CreateTexture2DArray(cs::ePixelFormat form
 
 cs::iTextureCube *cs::GraphicsGL4::CreateTextureCube(cs::ePixelFormat format, csUInt16 width, csUInt16 height, csUInt16 depth)
 {
-  csTextureCubeGL4 *texture = new csTextureCubeGL4();
+  cs::TextureCubeGL4 *texture = new cs::TextureCubeGL4();
   if (!texture->Initialize(format, width, height, depth))
   {
     texture->Release();
@@ -256,7 +256,7 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
 {
   cs::ProgramGL4 *program = new cs::ProgramGL4();
 
-  csShaderGL4 *vertexShader = new csShaderGL4();
+  cs::ShaderGL4 *vertexShader = new cs::ShaderGL4();
   vertexShader->SetShaderType(cs::eST_Vertex);
   vertexShader->SetSource(vertexCode);
   if (!vertexShader->Compile())
@@ -266,12 +266,12 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
     CS_RELEASE(program);
     return 0;
   }
-  program->AttachShader(new csShaderGL4Wrapper(vertexShader));
+  program->AttachShader(new cs::ShaderGL4Wrapper(vertexShader));
   CS_RELEASE(vertexShader);
 
   if (tessCtrlCode.length() != 0)
   {
-    csShaderGL4 *tessCtrlShader = new csShaderGL4();
+    cs::ShaderGL4 *tessCtrlShader = new cs::ShaderGL4();
     tessCtrlShader->SetShaderType(cs::eST_TessCtrl);
     tessCtrlShader->SetSource(tessCtrlCode);
     if (!tessCtrlShader->Compile())
@@ -281,12 +281,12 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(new csShaderGL4Wrapper(tessCtrlShader));
+    program->AttachShader(new cs::ShaderGL4Wrapper(tessCtrlShader));
     CS_RELEASE(tessCtrlShader);
   }
   if (tessEvalCode.length() != 0)
   {
-    csShaderGL4 *tessEvalShader = new csShaderGL4();
+    cs::ShaderGL4 *tessEvalShader = new cs::ShaderGL4();
     tessEvalShader->SetShaderType(cs::eST_TessEval);
     tessEvalShader->SetSource(tessEvalCode);
     if (!tessEvalShader->Compile())
@@ -296,12 +296,12 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(new csShaderGL4Wrapper(tessEvalShader));
+    program->AttachShader(new cs::ShaderGL4Wrapper(tessEvalShader));
     CS_RELEASE(tessEvalShader);
   }
   if (geometryCode.length() != 0)
   {
-    csShaderGL4 *geometryShader = new csShaderGL4();
+    cs::ShaderGL4 *geometryShader = new cs::ShaderGL4();
     geometryShader->SetShaderType(cs::eST_Geometry);
     geometryShader->SetSource(geometryCode);
     if (!geometryShader->Compile())
@@ -311,10 +311,10 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
       CS_RELEASE(program);
       return 0;
     }
-    program->AttachShader(new csShaderGL4Wrapper(geometryShader));
+    program->AttachShader(new cs::ShaderGL4Wrapper(geometryShader));
     CS_RELEASE(geometryShader);
   }
-  csShaderGL4 *fragmentShader = new csShaderGL4();
+  cs::ShaderGL4 *fragmentShader = new cs::ShaderGL4();
   fragmentShader->SetShaderType(cs::eST_Fragment);
   fragmentShader->SetSource(fragmentCode);
   if (!fragmentShader->Compile())
@@ -324,7 +324,7 @@ cs::iShader *cs::GraphicsGL4::CreateShader(const std::string &vertexCode, const 
     CS_RELEASE(program);
     return 0;
   }
-  program->AttachShader(new csShaderGL4Wrapper(fragmentShader));
+  program->AttachShader(new cs::ShaderGL4Wrapper(fragmentShader));
   CS_RELEASE(fragmentShader);
 
   if (!program->Link())
@@ -643,7 +643,7 @@ void cs::GraphicsGL4::BindMatrices()
 
 void cs::GraphicsGL4::SetVertexDeclaration(cs::iVertexDeclaration *vertexDeclaration)
 {
-  csVertexDeclarationGL4 *decl = static_cast<csVertexDeclarationGL4*>(vertexDeclaration);
+  cs::VertexDeclarationGL4 *decl = static_cast<cs::VertexDeclarationGL4*>(vertexDeclaration);
   CS_SET(m_vertexDeclaration, decl);
 }
 
@@ -651,7 +651,7 @@ void cs::GraphicsGL4::SetVertexBuffer(csUInt16 streamIdx, cs::iVertexBuffer *ver
 {
   assert(streamIdx < 16);
 
-  VertexBufferGL4 *vb = static_cast<VertexBufferGL4*>(vertexBuffer);
+  cs::VertexBufferGL4 *vb = static_cast<cs::VertexBufferGL4*>(vertexBuffer);
   CS_SET(m_vertexBuffer[streamIdx], vb);
 }
 
@@ -710,7 +710,7 @@ cs::eTextureUnit cs::GraphicsGL4::BindTexture(cs::iTexture *texture)
 
 void cs::GraphicsGL4::SetTexture(cs::eTextureUnit unit, cs::iTexture *texture)
 {
-  csTextureGL4 *textureGL = texture ? cs::QueryClass<csTextureGL4>(texture) : 0;
+  cs::TextureGL4 *textureGL = texture ? cs::QueryClass<cs::TextureGL4>(texture) : 0;
   if (m_textures[unit] != textureGL || RENDER_STATE_CHECK)
   {
     CS_SET(m_textures[unit], textureGL);
@@ -1290,7 +1290,7 @@ bool cs::GraphicsGL4::BindVertexDeclaration()
 
 void cs::GraphicsGL4::UnbindVertexDeclaration()
 {
-  VertexBufferGL4::Unbind();
+  cs::VertexBufferGL4::Unbind();
   for (unsigned i = 0, in = m_vertexDeclaration->GetNumberOfStreams(); i < in; ++i)
   {
     m_vertexDeclaration->UnbindStream(m_program, i);
@@ -1337,7 +1337,7 @@ void cs::GraphicsGL4::InitFullScreenData()
     1, 1, 0, 1,     1, 1,
     1, 0, 0, 1,     1, 0,
   };
-  m_fullScreenParamVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexDataParam), vertexDataParam, cs::eBDM_Static));
+  m_fullScreenParamVertexBuffer = static_cast<cs::VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexDataParam), vertexDataParam, cs::eBDM_Static));
 
   float vertexData[] = {
     -1, -1, 0, 1,     0, 0,
@@ -1348,7 +1348,7 @@ void cs::GraphicsGL4::InitFullScreenData()
      1, 1, 0, 1,     1, 1,
      1, -1, 0, 1,     1, 0,
   };
-  m_fullScreenVertexBuffer = static_cast<VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexData), vertexData, cs::eBDM_Static));
+  m_fullScreenVertexBuffer = static_cast<cs::VertexBufferGL4*>(CreateVertexBuffer(sizeof(vertexData), vertexData, cs::eBDM_Static));
 
   cs::VertexElement elements[] = {
     cs::VertexElement(cs::eVST_Position, cs::eDT_Float, 4, 0, 6 * sizeof(float), 0),
@@ -1356,7 +1356,7 @@ void cs::GraphicsGL4::InitFullScreenData()
     cs::VertexElement(),
   };
 
-  m_fullScreenVertexDeclaration = static_cast<csVertexDeclarationGL4*>(CreateVertexDeclaration(elements));
+  m_fullScreenVertexDeclaration = static_cast<cs::VertexDeclarationGL4*>(CreateVertexDeclaration(elements));
 
   m_fullScreenProgram = cs::ResourceManager::Get()->GetOrLoad<cs::ProgramGL4>(cs::ResourceLocator("${shaders}/renderer/SimplePresent.asset"));
   m_fullScreenArrayProgram = cs::ResourceManager::Get()->GetOrLoad<cs::ProgramGL4>(cs::ResourceLocator("${shaders}/renderer/ArrayPresent.asset "));

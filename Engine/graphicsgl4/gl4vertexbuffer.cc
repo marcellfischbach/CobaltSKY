@@ -5,19 +5,19 @@
 
 static GLuint current_mapped_buffer;
 
-VertexBufferGL4::VertexBufferGL4()
+cs::VertexBufferGL4::VertexBufferGL4()
   : m_name(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-VertexBufferGL4::~VertexBufferGL4()
+cs::VertexBufferGL4::~VertexBufferGL4()
 {
 
 }
 
 
-bool VertexBufferGL4::CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode)
+bool cs::VertexBufferGL4::CreateBuffer(csSize size, const void *data, cs::eBufferDataMode dataMode)
 {
   glGenBuffers(1, &m_name);
   if (m_name == 0)
@@ -36,24 +36,24 @@ bool VertexBufferGL4::CreateBuffer(csSize size, const void *data, cs::eBufferDat
   return true;
 }
 
-csSize VertexBufferGL4::GetSize() const
+csSize cs::VertexBufferGL4::GetSize() const
 {
   return m_size;
 }
 
-void VertexBufferGL4::Bind()
+void cs::VertexBufferGL4::Bind()
 {
   glBindBuffer(GL_ARRAY_BUFFER, m_name);
   CS_CHECK_GL_ERROR;
 }
 
-void VertexBufferGL4::Unbind()
+void cs::VertexBufferGL4::Unbind()
 {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   CS_CHECK_GL_ERROR;
 }
 
-bool VertexBufferGL4::Copy (unsigned offset, csSize size, const void* data)
+bool cs::VertexBufferGL4::Copy (unsigned offset, csSize size, const void* data)
 {
 	if (m_name == 0)
 	{
@@ -67,7 +67,7 @@ bool VertexBufferGL4::Copy (unsigned offset, csSize size, const void* data)
   return true;
 }
 
-bool VertexBufferGL4::Lock(unsigned offset, void **data, cs::eBufferAccessMode mode)
+bool cs::VertexBufferGL4::Lock(unsigned offset, void **data, cs::eBufferAccessMode mode)
 {
   if (m_name == 0 || current_mapped_buffer != 0)
   {
@@ -92,7 +92,7 @@ bool VertexBufferGL4::Lock(unsigned offset, void **data, cs::eBufferAccessMode m
 }
 
 
-bool VertexBufferGL4::Unlock()
+bool cs::VertexBufferGL4::Unlock()
 {
   if (m_name == 0 || current_mapped_buffer != m_name)
   {
@@ -109,7 +109,7 @@ bool VertexBufferGL4::Unlock()
 }
 
 
-GLuint VertexBufferGL4::GetGLName() const
+GLuint cs::VertexBufferGL4::GetGLName() const
 {
   return m_name;
 }

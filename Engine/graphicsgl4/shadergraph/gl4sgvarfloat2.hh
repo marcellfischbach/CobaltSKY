@@ -6,11 +6,16 @@
 #include <graphicsgl4/shadergraph/gl4sgvarfloat2.refl.hh>
 
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGVarFloat2GL4 : public CS_SUPER(csSGVarGL4)
+class CSGRAPHICSGL4_API SGVarFloat2GL4 : public CS_SUPER(cs::SGVarGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGVarFloat2GL4() : csSGVarGL4("vec2") { }
-  virtual ~csSGVarFloat2GL4() { }
+  SGVarFloat2GL4() : cs::SGVarGL4("vec2") { }
+  virtual ~SGVarFloat2GL4() { }
 };
+
+}

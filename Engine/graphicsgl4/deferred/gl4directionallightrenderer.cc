@@ -20,8 +20,8 @@
 
 
 
-csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(cs::iGraphics *renderer)
-	: csLightRendererGL4(renderer)
+cs::DirectionalLightRendererGL4::DirectionalLightRendererGL4(cs::iGraphics *renderer)
+	: cs::LightRendererGL4(renderer)
 	, m_colorBuffer(0)
 	, m_colorBufferBlur(0)
 	, m_depthBuffer(0)
@@ -125,7 +125,7 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(cs::iGraphics *rend
   colorSampler->Release();
 }
 
-  csDirectionalLightRendererGL4::~csDirectionalLightRendererGL4()
+  cs::DirectionalLightRendererGL4::~DirectionalLightRendererGL4()
 {
 	CS_RELEASE(m_colorBuffer);
 	CS_RELEASE(m_depthBuffer);
@@ -135,7 +135,7 @@ csDirectionalLightRendererGL4::csDirectionalLightRendererGL4(cs::iGraphics *rend
 
 
 
-void csDirectionalLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target)
+void cs::DirectionalLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera, cs::Light *light, cs::GBufferGL4 *gbuffer, cs::iRenderTarget *target)
 {
 	cs::eBlendMode blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha;
 	m_renderer->GetBlendMode(blendModeSrcColor, blendModeSrcAlpha, blendModeDstColor, blendModeDstAlpha);
@@ -182,7 +182,7 @@ void csDirectionalLightRendererGL4::Render(cs::Entity *root, cs::Camera *camera,
 }
 
 
-void csDirectionalLightRendererGL4::BindDirectionalLightNoShadow(cs::DirectionalLight *directionalLight)
+void cs::DirectionalLightRendererGL4::BindDirectionalLightNoShadow(cs::DirectionalLight *directionalLight)
 {
 	if (m_attrLightDirectionNoShadow)
 	{
@@ -193,7 +193,7 @@ void csDirectionalLightRendererGL4::BindDirectionalLightNoShadow(cs::Directional
 
 
 
-void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(cs::DirectionalLight *directionalLight)
+void cs::DirectionalLightRendererGL4::BindDirectionalLightPSSM(cs::DirectionalLight *directionalLight)
 {
 	if (m_attrLightDirectionPSSM)
 	{
@@ -208,7 +208,7 @@ void csDirectionalLightRendererGL4::BindDirectionalLightPSSM(cs::DirectionalLigh
 
 
 
-void csDirectionalLightRendererGL4::UpdateProjectionMatrices()
+void cs::DirectionalLightRendererGL4::UpdateProjectionMatrices()
 {
 	float min = FLT_MAX;
 	float max = -FLT_MAX;
@@ -248,7 +248,7 @@ void csDirectionalLightRendererGL4::UpdateProjectionMatrices()
 	}
 }
 
-cs::Clipper *csDirectionalLightRendererGL4::CreateClipper()
+cs::Clipper *cs::DirectionalLightRendererGL4::CreateClipper()
 {
 	cs::Vector3f topLeft(m_min[2].x, 0.0, m_max[2].z);
 	cs::Vector3f topRight(m_max[2].x, 0.0, m_max[2].z);
@@ -281,7 +281,7 @@ cs::Clipper *csDirectionalLightRendererGL4::CreateClipper()
 	return clipper;
 }
 
-void csDirectionalLightRendererGL4::RenderShadow(cs::Entity *root, cs::Camera *camera, const cs::DirectionalLight *light)
+void cs::DirectionalLightRendererGL4::RenderShadow(cs::Entity *root, cs::Camera *camera, const cs::DirectionalLight *light)
 {
   m_renderer->PushRenderStates();
 
@@ -296,7 +296,7 @@ void csDirectionalLightRendererGL4::RenderShadow(cs::Entity *root, cs::Camera *c
 	config.ScanNonShadowCasters = false;
 	config.MainCameraPosition = camera->GetEye();
 	// collect the shadow casting objects
-	csDefaultCollectorGL4 collector(m_renderStates, 0);
+	cs::DefaultCollectorGL4 collector(m_renderStates, 0);
 	for (csSize i = 0; i < cs::eRQ_COUNT; ++i)
 	{
 		m_renderStates[i].Clear();
@@ -345,7 +345,7 @@ void csDirectionalLightRendererGL4::RenderShadow(cs::Entity *root, cs::Camera *c
   m_renderer->PopRenderStates();
 }
 
-void csDirectionalLightRendererGL4::RenderShadowMap(const cs::DirectionalLight *light, csGBufferGL4 *gBuffer)
+void cs::DirectionalLightRendererGL4::RenderShadowMap(const cs::DirectionalLight *light, cs::GBufferGL4 *gBuffer)
 {
   // now the final image will be assembled
   m_renderer->SetRenderTarget(m_shadowMapRenderer.shadowRenderTarget);
@@ -389,7 +389,7 @@ void csDirectionalLightRendererGL4::RenderShadowMap(const cs::DirectionalLight *
   m_renderer->RenderFullScreenFrame();
 }
 
-void csDirectionalLightRendererGL4::BlurShadowMap()
+void cs::DirectionalLightRendererGL4::BlurShadowMap()
 {
   //
   // Blur the shadow map first in horizontal direction
@@ -429,7 +429,7 @@ void csDirectionalLightRendererGL4::BlurShadowMap()
 
 }
 
-void csDirectionalLightRendererGL4::CalcPSSMMatrices(const cs::DirectionalLight *light, const cs::Camera *camera)
+void cs::DirectionalLightRendererGL4::CalcPSSMMatrices(const cs::DirectionalLight *light, const cs::Camera *camera)
 {
 	float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
 	cs::Vector3f points[8];
@@ -446,7 +446,7 @@ void csDirectionalLightRendererGL4::CalcPSSMMatrices(const cs::DirectionalLight 
 	CalcMatrix(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
 }
 
-void csDirectionalLightRendererGL4::CalcMatrix(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
+void cs::DirectionalLightRendererGL4::CalcMatrix(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
 {
   /*
 	cs::Vector3f spot;
@@ -512,7 +512,7 @@ void csDirectionalLightRendererGL4::CalcMatrix(const cs::Vector3f &dir, const cs
 
 
 
-void csDirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const cs::DirectionalLight *light, const cs::Camera *camera)
+void cs::DirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const cs::DirectionalLight *light, const cs::Camera *camera)
 {
   float dists[] = { 0.0f, m_distances.x, m_distances.y, m_distances.z };
   cs::Vector3f points[8];
@@ -529,7 +529,7 @@ void csDirectionalLightRendererGL4::CalcPSSMMatricesAlternative(const cs::Direct
   CalcMatrixAlternative(light->GetDirection(), camera->GetEye(), 8, points, m_shadowCamAll, m_shadowCamInvAll, m_minAll, m_maxAll);
 }
 
-void csDirectionalLightRendererGL4::CalcMatrixAlternative(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
+void cs::DirectionalLightRendererGL4::CalcMatrixAlternative(const cs::Vector3f &dir, const cs::Vector3f &cameraPos, csSize numPoints, cs::Vector3f *points, cs::Matrix4f &cam, cs::Matrix4f &camInv, cs::Vector3f &min, cs::Vector3f &max) const
 {
   cs::Vector3f up(0.0f, 0.0f, 1.0f);
   if (dir.z >= 0.9999999)

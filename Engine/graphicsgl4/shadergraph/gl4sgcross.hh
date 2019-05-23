@@ -3,14 +3,21 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgcross.refl.hh>
 
+
+namespace cs
+{
+
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGCrossGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGCrossGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGCrossGL4() : csSGNodeGL4() { }
-  virtual ~csSGCrossGL4() { }
+  SGCrossGL4() : cs::SGNodeGL4() { }
+  virtual ~SGCrossGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

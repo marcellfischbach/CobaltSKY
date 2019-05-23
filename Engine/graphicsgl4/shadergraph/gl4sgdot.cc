@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-void csSGDotGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGDotGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *dot = GetNode();

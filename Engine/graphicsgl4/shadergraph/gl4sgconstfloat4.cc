@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-void csSGConstFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGConstFloat4GL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *n = GetNode();
 

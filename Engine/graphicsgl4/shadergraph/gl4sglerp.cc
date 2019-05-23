@@ -3,7 +3,7 @@
 #include <sstream>
 
 
-void csSGLerpGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGLerpGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *lerp = GetNode();

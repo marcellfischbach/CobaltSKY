@@ -17,7 +17,7 @@
 #include <cobalt/math/csclipper.hh>
 
 
-csLightRendererGL4::csLightRendererGL4(cs::iGraphics *renderer)
+cs::LightRendererGL4::LightRendererGL4(cs::iGraphics *renderer)
   : m_renderer(renderer)
 {
   cs::iSampler *depthSampler = m_renderer->CreateSampler();
@@ -31,14 +31,14 @@ csLightRendererGL4::csLightRendererGL4(cs::iGraphics *renderer)
 }
 
 
-csLightRendererGL4::~csLightRendererGL4()
+cs::LightRendererGL4::~LightRendererGL4()
 {
   CS_RELEASE(m_depthSampler);
   CS_RELEASE(m_shadowBuffer);
 }
 
 
-void csLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const cs::ResourceLocator &locator)
+void cs::LightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, const cs::ResourceLocator &locator)
 {
   lightProgram->program = cs::ResourceManager::Get()->GetOrLoad<cs::ShaderWrapper>(locator);
   if (lightProgram->program && lightProgram->program->IsValid())
@@ -56,7 +56,7 @@ void csLightRendererGL4::InitializeLightProgram(LightProgram *lightProgram, cons
 }
 
 
-void csLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, csGBufferGL4 *gbuffer)
+void cs::LightRendererGL4::BindGBuffer(GBufferAttribs &attribs, cs::GBufferGL4 *gbuffer)
 {
   if (attribs.attrDiffuseRoughness)
   {
@@ -85,7 +85,7 @@ void csLightRendererGL4::BindGBuffer(GBufferAttribs &attribs, csGBufferGL4 *gbuf
   }
 }
 
-void csLightRendererGL4::BindLight(LightProgram &lightProgram, cs::Light *light)
+void cs::LightRendererGL4::BindLight(LightProgram &lightProgram, cs::Light *light)
 {
   if (lightProgram.attrColor)
   {
@@ -101,7 +101,7 @@ void csLightRendererGL4::BindLight(LightProgram &lightProgram, cs::Light *light)
 
 
 
-void csLightRendererGL4::CalcShadowIntensity(const cs::Light *light)
+void cs::LightRendererGL4::CalcShadowIntensity(const cs::Light *light)
 {
   float shadowIntensity = light->GetShadowIntensity();
   m_shadowIntensity.Set(1.0f - shadowIntensity, shadowIntensity);

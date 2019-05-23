@@ -4,13 +4,13 @@
 #include <graphicsgl4/gl4defines.hh>
 
 
-csShaderGL4::csShaderGL4()
+cs::ShaderGL4::ShaderGL4()
   : m_name(0)
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-csShaderGL4::~csShaderGL4()
+cs::ShaderGL4::~ShaderGL4()
 {
   if (m_name)
   {
@@ -19,35 +19,35 @@ csShaderGL4::~csShaderGL4()
   }
 }
 
-void csShaderGL4::SetSource(const std::string &source)
+void cs::ShaderGL4::SetSource(const std::string &source)
 {
   m_shader = source;
 }
 
 
-const std::string &csShaderGL4::GetSource() const
+const std::string &cs::ShaderGL4::GetSource() const
 {
   return m_shader;
 }
 
 
-GLuint csShaderGL4::GetName() const
+GLuint cs::ShaderGL4::GetName() const
 {
   return m_name;
 }
 
-void csShaderGL4::SetShaderType(cs::eShaderType shaderType)
+void cs::ShaderGL4::SetShaderType(cs::eShaderType shaderType)
 {
   m_shaderType = shaderType;
 }
 
-cs::eShaderType csShaderGL4::GetShaderType() const
+cs::eShaderType cs::ShaderGL4::GetShaderType() const
 {
   return m_shaderType;
 }
 
 
-bool csShaderGL4::Compile()
+bool cs::ShaderGL4::Compile()
 {
   m_name = glCreateShader(shaderTypeMap[m_shaderType]);
   CS_CHECK_GL_ERROR;
@@ -74,7 +74,7 @@ bool csShaderGL4::Compile()
   return true;
 }
 
-std::string csShaderGL4::GetCompileErrorLog() const
+std::string cs::ShaderGL4::GetCompileErrorLog() const
 {
   GLchar buffer[1024];
   GLsizei length;

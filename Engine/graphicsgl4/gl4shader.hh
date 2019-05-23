@@ -12,16 +12,20 @@
 #include <vector>
 #include <graphicsgl4/gl4shader.refl.hh>
 
+
+namespace cs
+{
+
 CS_CLASS()
-class csShaderGL4 : public cs::iObject
+class ShaderGL4 : public cs::iObject
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csShaderGL4();
-  virtual ~csShaderGL4();
+  ShaderGL4();
+  virtual ~ShaderGL4();
 
-  void SetSource(const std::string &source);
-  const std::string &GetSource() const;
+  void SetSource(const std::string& source);
+  const std::string& GetSource() const;
 
   GLuint GetName() const;
 
@@ -39,11 +43,13 @@ private:
 };
 
 CS_CLASS()
-class csShaderGL4Wrapper : public CS_SUPER(cs::ResourceWrapper)
+class ShaderGL4Wrapper : public CS_SUPER(cs::ResourceWrapper)
 {
   CS_CLASS_GEN;
-  CS_RESOURCE_WRAPPER(csShaderGL4, csShaderGL4Wrapper, cs::ResourceWrapper);
+  CS_RESOURCE_WRAPPER(cs::ShaderGL4, ShaderGL4Wrapper, cs::ResourceWrapper);
 };
 
 
 
+
+}

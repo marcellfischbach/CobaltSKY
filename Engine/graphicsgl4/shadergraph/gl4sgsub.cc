@@ -4,7 +4,7 @@
 
 
 
-void csSGSubGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGSubGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *sub = GetNode();

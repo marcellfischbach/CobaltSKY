@@ -6,20 +6,23 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texture.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csTextureGL4 : public virtual CS_SUPER(cs::iTexture)
+class CSGRAPHICSGL4_API TextureGL4 : public virtual CS_SUPER(cs::iTexture)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  virtual ~csTextureGL4();
+  virtual ~TextureGL4();
 
   virtual bool Initialize();
 
-  virtual cs::eTextureType GetType() const ;
+  virtual cs::eTextureType GetType() const;
 
-  virtual void SetSampler(cs::SamplerWrapper *sampler);
-  virtual cs::SamplerWrapper *GetSampler();
-  virtual const cs::SamplerWrapper *GetSampler() const;
+  virtual void SetSampler(cs::SamplerWrapper * sampler);
+  virtual cs::SamplerWrapper* GetSampler();
+  virtual const cs::SamplerWrapper* GetSampler() const;
 
   virtual void GenerateMipMaps();
 
@@ -27,7 +30,7 @@ public:
   GLuint GetName() const;
 
 protected:
-  csTextureGL4(cs::eTextureType type);
+  TextureGL4(cs::eTextureType type);
 
   GLuint m_name;
   GLenum m_target;
@@ -35,14 +38,15 @@ protected:
 private:
   cs::eTextureType m_type;
 
-  cs::SamplerWrapper *m_sampler;
+  cs::SamplerWrapper* m_sampler;
 
 };
 
+}
 
-
-CS_FORCEINLINE GLuint csTextureGL4::GetName() const
+CS_FORCEINLINE GLuint cs::TextureGL4::GetName() const
 {
   return m_name;
 }
+
 

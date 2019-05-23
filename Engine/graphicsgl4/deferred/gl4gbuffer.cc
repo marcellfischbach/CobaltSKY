@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 
-csGBufferGL4::csGBufferGL4(cs::iGraphics *renderer)
+cs::GBufferGL4::GBufferGL4(cs::iGraphics *renderer)
   : cs::Object()
   , m_renderer(renderer)
   , m_diffuseRoughness(0)
@@ -19,7 +19,7 @@ csGBufferGL4::csGBufferGL4(cs::iGraphics *renderer)
 {
 }
 
-csGBufferGL4::~csGBufferGL4()
+cs::GBufferGL4::~GBufferGL4()
 {
   CS_RELEASE(m_diffuseRoughness);
   CS_RELEASE(m_normalLightMode);
@@ -29,7 +29,7 @@ csGBufferGL4::~csGBufferGL4()
   CS_RELEASE(m_renderTarget);
 }
 
-bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
+bool cs::GBufferGL4::Resize(csUInt16 width, csUInt16 height)
 {
   CS_RELEASE(m_diffuseRoughness);
   CS_RELEASE(m_normalLightMode);
@@ -44,8 +44,8 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   m_sssSpec = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_RGBA, width, height, false)));
   m_depth = new cs::Texture2DWrapper(cs::QueryClass<cs::iTexture2D>(m_renderer->CreateTexture2D(cs::ePF_D24S8, width, height, false)));
 
-  cs::SamplerWrapper *colorSampler = csGBufferGL4::GetColorSampler(m_renderer);
-  cs::SamplerWrapper *depthSampler = csGBufferGL4::GetDepthSampler(m_renderer);
+  cs::SamplerWrapper *colorSampler = cs::GBufferGL4::GetColorSampler(m_renderer);
+  cs::SamplerWrapper *depthSampler = cs::GBufferGL4::GetDepthSampler(m_renderer);
 
   m_diffuseRoughness->Get()->SetSampler(colorSampler);
   m_normalLightMode->Get()->SetSampler(colorSampler);
@@ -77,12 +77,12 @@ bool csGBufferGL4::Resize(csUInt16 width, csUInt16 height)
   }
 }
 
-bool csGBufferGL4::IsValid() const
+bool cs::GBufferGL4::IsValid() const
 {
   return m_renderTarget != 0;
 }
 
-bool csGBufferGL4::Bind(cs::iGraphics *renderer)
+bool cs::GBufferGL4::Bind(cs::iGraphics *renderer)
 {
   if (!m_renderTarget)
   {
@@ -97,7 +97,7 @@ bool csGBufferGL4::Bind(cs::iGraphics *renderer)
 
 
 
-cs::SamplerWrapper *csGBufferGL4::GetColorSampler(cs::iGraphics *renderer)
+cs::SamplerWrapper *cs::GBufferGL4::GetColorSampler(cs::iGraphics *renderer)
 {
   static cs::SamplerWrapper *sampler = 0;
   if (!sampler)
@@ -114,7 +114,7 @@ cs::SamplerWrapper *csGBufferGL4::GetColorSampler(cs::iGraphics *renderer)
 }
 
 
-cs::SamplerWrapper *csGBufferGL4::GetDepthSampler(cs::iGraphics *renderer)
+cs::SamplerWrapper *cs::GBufferGL4::GetDepthSampler(cs::iGraphics *renderer)
 {
   static cs::SamplerWrapper *sampler = 0;
   if (!sampler)

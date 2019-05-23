@@ -7,14 +7,17 @@
 #include <GL/glew.h>
 #include <graphicsgl4/gl4texture2d.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csTexture2DGL4 : public CS_SUPER(csTextureGL4), public CS_SUPER(cs::iTexture2D)
+class CSGRAPHICSGL4_API Texture2DGL4 : public CS_SUPER(cs::TextureGL4), public CS_SUPER(cs::iTexture2D)
 {
   CS_CLASS_GEN;
 public:
 
-  csTexture2DGL4();
-  virtual ~csTexture2DGL4();
+  Texture2DGL4();
+  virtual ~Texture2DGL4();
 
   bool Initialize(cs::ePixelFormat format, csUInt16 width, csUInt16 height, bool mipmaps);
 
@@ -24,8 +27,8 @@ public:
   virtual csUInt16 GetHeight() const;
   virtual csUInt16 GetNumberOfLODs() const;
 
-  virtual bool CopyData(csUInt8 layer, cs::ePixelFormat format, const void *data);
-  virtual bool ReadData(csUInt8 lod, cs::ePixelFormat format, unsigned bufferSize, void *data, unsigned &dataSize);
+  virtual bool CopyData(csUInt8 layer, cs::ePixelFormat format, const void* data);
+  virtual bool ReadData(csUInt8 lod, cs::ePixelFormat format, unsigned bufferSize, void* data, unsigned& dataSize);
 
 private:
   cs::ePixelFormat m_format;
@@ -34,3 +37,6 @@ private:
   csUInt16 m_height;
   csUInt16 m_lods;
 };
+
+}
+

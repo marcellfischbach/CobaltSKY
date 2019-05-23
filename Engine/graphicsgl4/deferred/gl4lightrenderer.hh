@@ -5,7 +5,6 @@
 #include <cobalt/core/cscollection.hh>
 #include <cobalt/csenums.hh>
 
-class csGBufferGL4;
 
 namespace cs
 {
@@ -15,67 +14,67 @@ struct iShaderAttribute;
 class Camera;
 class Clipper;
 class Entity;
+class GBufferGL4;
 class Light;
 class RenderState;
 class ResourceLocator;
 class SamplerWrapper;
 class ShaderWrapper;
-}
 
 
-class csLightRendererGL4
+class LightRendererGL4
 {
 public:
-  csLightRendererGL4(cs::iGraphics *renderer);
-  virtual ~csLightRendererGL4();
+  LightRendererGL4(cs::iGraphics* renderer);
+  virtual ~LightRendererGL4();
 
-  virtual void Render(cs::Entity *node, cs::Camera *camera, cs::Light *light, csGBufferGL4 *gbuffer, cs::iRenderTarget *target) = 0;
+  virtual void Render(cs::Entity* node, cs::Camera* camera, cs::Light* light, cs::GBufferGL4* gbuffer, cs::iRenderTarget* target) = 0;
 
-  cs::iRenderTarget *GetShadowBuffer();
+  cs::iRenderTarget* GetShadowBuffer();
 
 protected:
 
   struct GBufferAttribs
   {
-    cs::iShaderAttribute *attrDiffuseRoughness;
-    cs::iShaderAttribute *attrNormalLightMode;
-    cs::iShaderAttribute *attrEmissiveMetallic;
-    cs::iShaderAttribute *attrSSSSpecular;
-    cs::iShaderAttribute *attrDepth;
+    cs::iShaderAttribute* attrDiffuseRoughness;
+    cs::iShaderAttribute* attrNormalLightMode;
+    cs::iShaderAttribute* attrEmissiveMetallic;
+    cs::iShaderAttribute* attrSSSSpecular;
+    cs::iShaderAttribute* attrDepth;
   };
 
   struct LightProgram
   {
-    cs::ShaderWrapper *program;
+    cs::ShaderWrapper* program;
     GBufferAttribs gbuffer;
-    cs::iShaderAttribute *attrColor;
-    cs::iShaderAttribute *attrEnergy;
+    cs::iShaderAttribute* attrColor;
+    cs::iShaderAttribute* attrEnergy;
   };
 
-  void InitializeLightProgram(LightProgram *lightProgram, const cs::ResourceLocator &locator);
+  void InitializeLightProgram(LightProgram* lightProgram, const cs::ResourceLocator& locator);
 
 
-  void BindGBuffer(GBufferAttribs &attribs, csGBufferGL4 *gbuffer);
-  void BindLight(LightProgram &lightProgram, cs::Light *light);
+  void BindGBuffer(GBufferAttribs& attribs, cs::GBufferGL4* gbuffer);
+  void BindLight(LightProgram& lightProgram, cs::Light* light);
 
 protected:
-  void CalcShadowIntensity(const cs::Light *light);
+  void CalcShadowIntensity(const cs::Light* light);
   cs::Collection<cs::RenderState*> m_renderStates[cs::eRQ_COUNT];
-  cs::iGraphics *m_renderer;
+  cs::iGraphics* m_renderer;
   float m_mapBias;
 
   // shadow buffer
   csUInt16 m_shadowBufferSize;
-  cs::iRenderTarget *m_shadowBuffer;
+  cs::iRenderTarget* m_shadowBuffer;
   cs::Vector2f m_shadowIntensity;
 
-  cs::SamplerWrapper *m_depthSampler;
+  cs::SamplerWrapper* m_depthSampler;
 };
 
 
+}
 
-
-CS_FORCEINLINE cs::iRenderTarget *csLightRendererGL4::GetShadowBuffer()
+CS_FORCEINLINE cs::iRenderTarget *cs::LightRendererGL4::GetShadowBuffer()
 {
   return m_shadowBuffer;
 }

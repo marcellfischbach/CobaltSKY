@@ -3,15 +3,19 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgoneby.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGOneByGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGOneByGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGOneByGL4() : csSGNodeGL4() { }
-  virtual ~csSGOneByGL4() { }
+  SGOneByGL4() : cs::SGNodeGL4() { }
+  virtual ~SGOneByGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}

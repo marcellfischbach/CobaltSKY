@@ -4,7 +4,7 @@
 
 
 
-void csSGOneMinusGL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGOneMinusGL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   std::ostringstream ss;
   cs::SGNode *mul = GetNode();

@@ -26,7 +26,7 @@
 #include <cobalt/math/cscolor4f.hh>
 #include <algorithm>
 
-csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(cs::iGraphics *renderer)
+cs::DeferredFrameProcessorGL4::DeferredFrameProcessorGL4(cs::iGraphics *renderer)
   : cs::iFrameProcessor()
   , m_frameNo(1)
   , m_renderer(renderer)
@@ -40,16 +40,16 @@ csDeferredFrameProcessorGL4::csDeferredFrameProcessorGL4(cs::iGraphics *renderer
   {
     m_renderStates[i].Initialize(64, 16);
   }
-  m_lightRenderers[cs::eLT_DirectionalLight] = new csDirectionalLightRendererGL4(renderer);
-  m_lightRenderers[cs::eLT_PointLight] = new csPointLightRendererGL4(renderer);
+  m_lightRenderers[cs::eLT_DirectionalLight] = new cs::DirectionalLightRendererGL4(renderer);
+  m_lightRenderers[cs::eLT_PointLight] = new cs::PointLightRendererGL4(renderer);
 
-  m_particleRenderer = new csParticleRendererGL4();
+  m_particleRenderer = new cs::ParticleRendererGL4();
 
 
   // glGenQueries(10, queries);
 }
 
-csDeferredFrameProcessorGL4::~csDeferredFrameProcessorGL4()
+cs::DeferredFrameProcessorGL4::~DeferredFrameProcessorGL4()
 {
   delete m_lightRenderers[cs::eLT_DirectionalLight];
   delete m_lightRenderers[cs::eLT_PointLight];
@@ -61,7 +61,7 @@ csDeferredFrameProcessorGL4::~csDeferredFrameProcessorGL4()
   //glDeleteQueries(10, queries);
 }
 
-bool csDeferredFrameProcessorGL4::Initialize()
+bool cs::DeferredFrameProcessorGL4::Initialize()
 {
 
   cs::ResourceManager *mgr = cs::ResourceManager::Get();
@@ -85,11 +85,11 @@ bool csDeferredFrameProcessorGL4::Initialize()
   return true;
 }
 
-bool csDeferredFrameProcessorGL4::Resize(csUInt16 width, csUInt16 height)
+bool cs::DeferredFrameProcessorGL4::Resize(csUInt16 width, csUInt16 height)
 {
   if (!m_gbuffer)
   {
-    m_gbuffer = new csGBufferGL4(m_renderer);
+    m_gbuffer = new cs::GBufferGL4(m_renderer);
   }
   if (!m_gbuffer->Resize(width, height))
   {
@@ -101,17 +101,17 @@ bool csDeferredFrameProcessorGL4::Resize(csUInt16 width, csUInt16 height)
   return true;
 }
 
-void csDeferredFrameProcessorGL4::SetPostProcessor(cs::PostProcessor *postProcessor)
+void cs::DeferredFrameProcessorGL4::SetPostProcessor(cs::PostProcessor *postProcessor)
 {
   CS_SET(m_postProcessor, postProcessor);
 }
 
-void csDeferredFrameProcessorGL4::SetClearColor(const cs::Color4f &color)
+void cs::DeferredFrameProcessorGL4::SetClearColor(const cs::Color4f &color)
 {
   m_clearColor = color;
 }
 
-const cs::Color4f &csDeferredFrameProcessorGL4::GetClearColor() const
+const cs::Color4f &cs::DeferredFrameProcessorGL4::GetClearColor() const
 {
   return m_clearColor;
 }
@@ -137,7 +137,7 @@ struct Data
 
 
 
-void csDeferredFrameProcessorGL4::RenderGBuffer(cs::Entity *root)
+void cs::DeferredFrameProcessorGL4::RenderGBuffer(cs::Entity *root)
 {
 
   // render the scene to the GBuffer
@@ -185,7 +185,7 @@ void csDeferredFrameProcessorGL4::RenderGBuffer(cs::Entity *root)
   //printf("Count: States: %u   Calls: %u    Trigons: %u\n", cnt, calls, trigons);
 }
 
-cs::iRenderTarget *csDeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Camera *camera, cs::iRenderTarget *target)
+cs::iRenderTarget *cs::DeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Camera *camera, cs::iRenderTarget *target)
 {
   for (unsigned i = 0; i < cs::eRQ_COUNT; i++)
   {
@@ -199,7 +199,7 @@ cs::iRenderTarget *csDeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Cam
   config.ScanNonShadowCasters = true;
   config.ScanShadowCasters = true;
   config.MainCameraPosition = camera->GetEye();
-  csDefaultCollectorGL4 collector(m_renderStates,
+  cs::DefaultCollectorGL4 collector(m_renderStates,
                                &m_lightStates);
   cs::Clipper *clipper = camera->GetClipper();
   if (root)
@@ -236,7 +236,7 @@ cs::iRenderTarget *csDeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Cam
     }
     cs::Light* light = lightState->GetLight();
 
-    csLightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
+    cs::LightRendererGL4 *lightRenderer = m_lightRenderers[light->GetLightType()];
     if (lightRenderer)
     {
       lightRenderer->Render(root, camera, light, m_gbuffer, target);
@@ -306,7 +306,7 @@ cs::iRenderTarget *csDeferredFrameProcessorGL4::Render(cs::Entity *root, cs::Cam
   return target;
 }
 
-void csDeferredFrameProcessorGL4::RenderForward(cs::RenderState *renderState)
+void cs::DeferredFrameProcessorGL4::RenderForward(cs::RenderState *renderState)
 {
   renderState->Render(m_renderer, cs::eRP_ForwardUnlit);
 }

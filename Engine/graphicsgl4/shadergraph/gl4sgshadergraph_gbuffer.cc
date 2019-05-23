@@ -17,7 +17,7 @@ static const char *compareMode[] = {
   "!="
 };
 
-void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
+void cs::ShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGraphLogger *logger)
 {
   graph->SetShader(cs::eRP_GBuffer, 0);
 
@@ -125,7 +125,7 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
   outputs.insert(diffuseOutput);
   postAlphaOutputs.insert(diffuseOutput);
 
-  csShaderGraphCtx ctx(this);
+  cs::ShaderGraphCtx ctx(this);
   ctx.SetDefaultTextureCoordinate("inFragTexCoord");
   ctx.EvaluateInlines(outputs);
 
@@ -137,7 +137,7 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
   std::string postAlphaCode = ctx.GetCode();
 
   ctx.GenerateCode(outputs);
-  std::set<csShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
+  std::set<cs::ShaderGraphCtx::ExternalBinding> bindings = ctx.GetBindingsFor(outputs);
 
   std::ostringstream ss;
 
@@ -236,7 +236,7 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
     << "layout(location = 2) out vec4 cs_EmissivMetallic;" << std::endl
     << "layout(location = 3) out vec4 cs_SSSSpecular;" << std::endl
     << std::endl;
-  for (const csShaderGraphCtx::ExternalBinding &binding : bindings)
+  for (const cs::ShaderGraphCtx::ExternalBinding &binding : bindings)
   {
     ss << "uniform " << binding.variableType << " " << binding.variableName << ";" << std::endl;
   }
@@ -289,7 +289,7 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
   ss.clear();
 
 
-  csShaderGL4 *vertexShader = new csShaderGL4();
+  cs::ShaderGL4 *vertexShader = new cs::ShaderGL4();
   vertexShader->SetShaderType(cs::eST_Vertex);
   vertexShader->SetSource(vertexShaderSources);
   if (!vertexShader->Compile())
@@ -302,7 +302,7 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
     return;
   }
 
-  csShaderGL4 *fragmentShader = new csShaderGL4();
+  cs::ShaderGL4 *fragmentShader = new cs::ShaderGL4();
   fragmentShader->SetShaderType(cs::eST_Fragment);
   fragmentShader->SetSource(fragmentShaderSources);
   if (!fragmentShader->Compile())
@@ -318,8 +318,8 @@ void csShaderGraphGL4::GenerateGBuffer(cs::SGShaderGraph *graph, cs::iSGShaderGr
   }
 
   cs::ProgramGL4 *gBufferShader = new cs::ProgramGL4();
-  gBufferShader->AttachShader(new csShaderGL4Wrapper(vertexShader));
-  gBufferShader->AttachShader(new csShaderGL4Wrapper(fragmentShader));
+  gBufferShader->AttachShader(new cs::ShaderGL4Wrapper(vertexShader));
+  gBufferShader->AttachShader(new cs::ShaderGL4Wrapper(fragmentShader));
   if (!gBufferShader->Link())
   {
     if (logger)

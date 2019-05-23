@@ -3,16 +3,16 @@
 
 
 
-csSGSplitFloat4GL4::csSGSplitFloat4GL4()
-  : csSGNodeGL4()
+cs::SGSplitFloat4GL4::SGSplitFloat4GL4()
+  : cs::SGNodeGL4()
 {
   SetDoubleInlineEvaluateInput();
 }
 
-void csSGSplitFloat4GL4::PrivEvaluate(csShaderGraphCtx &ctx)
+void cs::SGSplitFloat4GL4::PrivEvaluate(cs::ShaderGraphCtx &ctx)
 {
   cs::SGNode *node = GetNode();
-  csSGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
+  cs::SGNodeGL4 *inputNode = ctx.GetNode(node->GetInput(0));
   if (!inputNode)
   {
     return;

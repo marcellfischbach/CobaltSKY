@@ -4,14 +4,21 @@
 #include <graphicsgl4/shadergraph/gl4sgsplitfloat4.refl.hh>
 
 
+namespace cs
+{
+
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGSplitFloat4GL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGSplitFloat4GL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGSplitFloat4GL4();
-  virtual ~csSGSplitFloat4GL4() { }
+  SGSplitFloat4GL4();
+  virtual ~SGSplitFloat4GL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}
+

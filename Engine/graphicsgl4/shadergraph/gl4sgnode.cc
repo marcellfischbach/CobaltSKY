@@ -2,7 +2,7 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgshadergraphctx.hh>
 
-csSGNodeGL4::csSGNodeGL4()
+cs::SGNodeGL4::SGNodeGL4()
   : cs::Object()
   , m_inline(true)
   , m_forceInline(false)
@@ -13,7 +13,7 @@ csSGNodeGL4::csSGNodeGL4()
 
 }
 
-csSGNodeGL4::~csSGNodeGL4()
+cs::SGNodeGL4::~SGNodeGL4()
 {
 
 }
@@ -21,7 +21,7 @@ csSGNodeGL4::~csSGNodeGL4()
 
 
 
-std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, cs::SGOutput *output, const std::string &exp, const std::string &type)
+std::string cs::SGNodeGL4::AssignOutput(cs::ShaderGraphCtx &ctx, cs::SGOutput *output, const std::string &exp, const std::string &type)
 {
   if (IsInline())
   {
@@ -36,12 +36,12 @@ std::string csSGNodeGL4::AssignOutput(csShaderGraphCtx &ctx, cs::SGOutput *outpu
   }
 }
 
-cs::eSGDataType csSGNodeGL4::GetHigher(cs::eSGDataType dtA, cs::eSGDataType dtB)
+cs::eSGDataType cs::SGNodeGL4::GetHigher(cs::eSGDataType dtA, cs::eSGDataType dtB)
 {
   return dtA > dtB ? dtA : dtB;
 }
 
-std::string csSGNodeGL4::GetDataTypeVar(cs::eSGDataType dt)
+std::string cs::SGNodeGL4::GetDataTypeVar(cs::eSGDataType dt)
 {
   switch (dt)
   {
@@ -82,12 +82,12 @@ std::string csSGNodeGL4::GetDataTypeVar(cs::eSGDataType dt)
   return "inval";
 }
 
-void csSGNodeGL4::SetDoubleInlineEvaluateInput()
+void cs::SGNodeGL4::SetDoubleInlineEvaluateInput()
 {
   m_doubleInlineEvaluateInput = true;
 }
 
-bool csSGNodeGL4::EvaluateInline(csShaderGraphCtx &ctx)
+bool cs::SGNodeGL4::EvaluateInline(cs::ShaderGraphCtx &ctx)
 {
   if (!m_inlineEvaluated)
   {
@@ -112,7 +112,7 @@ bool csSGNodeGL4::EvaluateInline(csShaderGraphCtx &ctx)
   }
 }
 
-bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
+bool cs::SGNodeGL4::Evaluate(cs::ShaderGraphCtx &ctx)
 {
   if (m_evaluated)
   {
@@ -133,7 +133,7 @@ bool csSGNodeGL4::Evaluate(csShaderGraphCtx &ctx)
 
 
 
-std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
+std::string cs::SGNodeGL4::GetFloat(cs::ShaderGraphCtx &ctx, int x)
 {
   cs::SGInput *input = m_node->GetInput(x);
   if (!input)
@@ -157,7 +157,7 @@ std::string csSGNodeGL4::GetFloat(csShaderGraphCtx &ctx, int x)
 }
 
 
-std::string csSGNodeGL4::GetInt(csShaderGraphCtx &ctx, int x)
+std::string cs::SGNodeGL4::GetInt(cs::ShaderGraphCtx &ctx, int x)
 {
   cs::SGInput *input = m_node->GetInput(x);
   if (!input)

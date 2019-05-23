@@ -5,19 +5,24 @@
 #include <cobalt/core/csresourcemanager.hh>
 #include <graphicsgl4/gl4shaderloader.refl.hh>
 
+namespace cs
+{
 
 CS_CLASS()
-class CSGRAPHICSGL4_API csShaderGL4Loader : public CS_SUPER(cs::iFileLoader)
+class CSGRAPHICSGL4_API ShaderGL4Loader : public CS_SUPER(cs::iFileLoader)
 {
   CS_CLASS_GEN_OBJECT;
 
 public:
-  csShaderGL4Loader();
-  virtual ~csShaderGL4Loader();
+  ShaderGL4Loader();
+  virtual ~ShaderGL4Loader();
 
-  virtual bool CanLoad(cs::iFile *file, const cs::ResourceLocator &locator) const;
-  virtual const cs::Class *EvalClass(cs::iFile *file, const cs::ResourceLocator &locator0) const;
-  virtual cs::ResourceWrapper *Load(cs::iFile *file, const cs::ResourceLocator &locator0) const;
+  virtual bool CanLoad(cs::iFile * file, const cs::ResourceLocator & locator) const;
+  virtual const cs::Class* EvalClass(cs::iFile * file, const cs::ResourceLocator & locator0) const;
+  virtual cs::ResourceWrapper* Load(cs::iFile * file, const cs::ResourceLocator & locator0) const;
 
 
 };
+
+
+}

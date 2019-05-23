@@ -9,16 +9,19 @@
 #include <vector>
 #include <graphicsgl4/gl4shaderstream.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class csShaderStreamGL4 : public CS_SUPER(cs::iShaderStream)
+class ShaderStreamGL4 : public CS_SUPER(cs::iShaderStream)
 {
   CS_CLASS_GEN_OBJECT;
 public:
-  csShaderStreamGL4();
-  virtual ~csShaderStreamGL4();
+  ShaderStreamGL4();
+  virtual ~ShaderStreamGL4();
 
-  void SetName(const std::string &name);
-  virtual const std::string &GetName() const;
+  void SetName(const std::string & name);
+  virtual const std::string& GetName() const;
 
   void SetLocation(GLint location);
   GLint GetLocation() const;
@@ -26,7 +29,7 @@ public:
   virtual void SetArrayIndex(csUInt32 idx);
 
   virtual void Set(csSize size, csSize stride, csSize offset, cs::eDataType type);
-  virtual void Set(csSize size, csSize stride, const void *data, cs::eDataType type);
+  virtual void Set(csSize size, csSize stride, const void* data, cs::eDataType type);
 
   virtual void SetFrequency(csUInt8 frequency);
 
@@ -42,4 +45,7 @@ private:
   GLint m_absLocation;
   bool m_valid;
 };
+
+
+}
 

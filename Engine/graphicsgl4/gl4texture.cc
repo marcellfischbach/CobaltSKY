@@ -5,7 +5,7 @@
 #include <graphicsgl4/gl4sampler.hh>
 #include <graphicsgl4/gl4defines.hh>
 
-csTextureGL4::csTextureGL4(cs::eTextureType type)
+cs::TextureGL4::TextureGL4(cs::eTextureType type)
   : cs::iTexture()
   , m_name(0)
   , m_type(type)
@@ -15,7 +15,7 @@ csTextureGL4::csTextureGL4(cs::eTextureType type)
   CS_CLASS_GEN_CONSTR;
 }
 
-csTextureGL4::~csTextureGL4()
+cs::TextureGL4::~TextureGL4()
 {
   if (m_name)
   {
@@ -27,40 +27,40 @@ csTextureGL4::~csTextureGL4()
   m_sampler = 0;
 }
 
-bool csTextureGL4::Initialize()
+bool cs::TextureGL4::Initialize()
 {
   glGenTextures(1, &m_name);
   CS_CHECK_GL_ERROR;
   return m_name != 0;
 }
 
-void csTextureGL4::SetSampler(cs::SamplerWrapper *sampler)
+void cs::TextureGL4::SetSampler(cs::SamplerWrapper *sampler)
 {
   CS_SET(m_sampler, sampler);
 }
 
-cs::SamplerWrapper *csTextureGL4::GetSampler()
+cs::SamplerWrapper *cs::TextureGL4::GetSampler()
 {
   return m_sampler;
 }
 
-const cs::SamplerWrapper *csTextureGL4::GetSampler() const
+const cs::SamplerWrapper *cs::TextureGL4::GetSampler() const
 {
   return m_sampler;
 }
 
-void csTextureGL4::Bind()
+void cs::TextureGL4::Bind()
 {
   glBindTexture(m_target, m_name);
   CS_CHECK_GL_ERROR;
 }
 
-cs::eTextureType csTextureGL4::GetType() const
+cs::eTextureType cs::TextureGL4::GetType() const
 {
   return m_type;
 }
 
-void csTextureGL4::GenerateMipMaps()
+void cs::TextureGL4::GenerateMipMaps()
 {
   Bind();
   glGenerateMipmap(m_target);

@@ -3,14 +3,20 @@
 #include <graphicsgl4/shadergraph/gl4sgnode.hh>
 #include <graphicsgl4/shadergraph/gl4sgdiv.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
-class CSGRAPHICSGL4_API csSGDivGL4 : public CS_SUPER(csSGNodeGL4)
+class CSGRAPHICSGL4_API SGDivGL4 : public CS_SUPER(cs::SGNodeGL4)
 {
   CS_CLASS_GEN;
 public:
-  csSGDivGL4() : csSGNodeGL4() { }
-  virtual ~csSGDivGL4() { }
+  SGDivGL4() : cs::SGNodeGL4() { }
+  virtual ~SGDivGL4() { }
 
 protected:
-  void PrivEvaluate(csShaderGraphCtx &ctx);
+  void PrivEvaluate(cs::ShaderGraphCtx & ctx);
 };
+
+}
+
