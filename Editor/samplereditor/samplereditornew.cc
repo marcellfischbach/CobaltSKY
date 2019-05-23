@@ -28,21 +28,21 @@ SamplerCreator::SamplerCreator(const std::string &name, const std::string &defau
 
 }
 
-bool SamplerCreator::Create(csfFile &file)
+bool SamplerCreator::Create(cs::file::File &file)
 {
-	csfEntry *assetEntry = file.CreateEntry("asset");
-	csfEntry *dataEntry = file.CreateEntry("data");
-	csfEntry *samplerEntry = file.CreateEntry("sampler");
-	csfEntry *filterEntry = file.CreateEntry("filter");
-	csfEntry *anisotropyEntry = file.CreateEntry("anisotropy");
-	csfEntry *minLODEntry = file.CreateEntry("minlod");
-	csfEntry *maxLODEntry = file.CreateEntry("maxlod");
-	csfEntry *addressUEntry = file.CreateEntry("addressu");
-	csfEntry *addressVEntry = file.CreateEntry("addressv");
-	csfEntry *addressWEntry = file.CreateEntry("addressw");
-	csfEntry *borderColorEntry = file.CreateEntry("bordercolor");
-	csfEntry *compareModeEntry = file.CreateEntry("comparemode");
-	csfEntry *compareFuncEntry = file.CreateEntry("comparefunc");
+	cs::file::Entry *assetEntry = file.CreateEntry("asset");
+	cs::file::Entry *dataEntry = file.CreateEntry("data");
+	cs::file::Entry *samplerEntry = file.CreateEntry("sampler");
+	cs::file::Entry *filterEntry = file.CreateEntry("filter");
+	cs::file::Entry *anisotropyEntry = file.CreateEntry("anisotropy");
+	cs::file::Entry *minLODEntry = file.CreateEntry("minlod");
+	cs::file::Entry *maxLODEntry = file.CreateEntry("maxlod");
+	cs::file::Entry *addressUEntry = file.CreateEntry("addressu");
+	cs::file::Entry *addressVEntry = file.CreateEntry("addressv");
+	cs::file::Entry *addressWEntry = file.CreateEntry("addressw");
+	cs::file::Entry *borderColorEntry = file.CreateEntry("bordercolor");
+	cs::file::Entry *compareModeEntry = file.CreateEntry("comparemode");
+	cs::file::Entry *compareFuncEntry = file.CreateEntry("comparefunc");
 
 
 	file.GetRoot()->AddChild(assetEntry);

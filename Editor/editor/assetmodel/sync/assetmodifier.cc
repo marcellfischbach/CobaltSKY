@@ -24,7 +24,7 @@ namespace asset::model
   {
     const cs::ResourceLocator &locator = m_asset->GetResourceLocator();
     std::string fullPath = cs::VFS::Get()->GetAbsolutePath(locator);
-    csfFile file;
+    cs::file::File file;
     if (file.Parse(fullPath, false))
     {
       ReplaceLocator(file.GetRoot(), oldLocator, newLocator);
@@ -32,7 +32,7 @@ namespace asset::model
     }
   }
 
-  void AssetModifier::ReplaceLocator(csfEntry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
+  void AssetModifier::ReplaceLocator(cs::file::Entry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator)
   {
     if (entry->HasAttribute("locator"))
     {

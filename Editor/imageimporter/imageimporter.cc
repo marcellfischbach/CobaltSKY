@@ -46,15 +46,15 @@ void ImageImporter::SetEnabled(bool enable)
 
 cs::ResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
 {
-  csfFile file;
-  csfEntry *assetEntry = file.CreateEntry("asset");
-  csfEntry *dataEntry = file.CreateEntry("data");
-  csfEntry *texture2dEntry = file.CreateEntry("texture2d");
-  csfEntry *samplerEntry = file.CreateEntry("sampler");
-  csfEntry *imageEntry = file.CreateEntry("image");
-  csfEntry *previewEntry = file.CreateEntry("preview");
-  csfEntry *editorIconEntry = file.CreateEntry("editorIcon");
-  csfEntry *editorIconImageEntry = file.CreateEntry("image");
+  cs::file::File file;
+  cs::file::Entry *assetEntry = file.CreateEntry("asset");
+  cs::file::Entry *dataEntry = file.CreateEntry("data");
+  cs::file::Entry *texture2dEntry = file.CreateEntry("texture2d");
+  cs::file::Entry *samplerEntry = file.CreateEntry("sampler");
+  cs::file::Entry *imageEntry = file.CreateEntry("image");
+  cs::file::Entry *previewEntry = file.CreateEntry("preview");
+  cs::file::Entry *editorIconEntry = file.CreateEntry("editorIcon");
+  cs::file::Entry *editorIconImageEntry = file.CreateEntry("image");
 
 
   file.GetRoot()->AddChild(assetEntry);
@@ -86,7 +86,7 @@ cs::ResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
     buffer.open(QIODevice::WriteOnly);
     qImage.save(&buffer, "PNG"); // writes image into ba in PNG format
 
-    csfBlob *dataBlob = file.CreateBlob();
+    cs::file::Blob *dataBlob = file.CreateBlob();
     dataBlob->SetName("DATA");
     dataBlob->SetType("PNG");
     dataBlob->SetBuffer(ba.data(), ba.size());
@@ -102,7 +102,7 @@ cs::ResourceLocator ImageImporter::Import(const asset::model::Folder *folder)
     buffer.open(QIODevice::WriteOnly);
     prevImage.save(&buffer, "PNG"); // writes image into ba in PNG format
 
-    csfBlob *editorIconBlob = file.CreateBlob();
+    cs::file::Blob *editorIconBlob = file.CreateBlob();
     editorIconBlob->SetName("EDITOR_ICON");
     editorIconBlob->SetType("PNG");
     editorIconBlob->SetBuffer(ba.data(), ba.size());

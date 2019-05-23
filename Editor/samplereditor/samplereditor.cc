@@ -74,27 +74,27 @@ void SamplerEditor::MergeFile()
 {
   QString fileName(GetResourceFileName());
 
-  csfFile file;
+  cs::file::File file;
   if (!file.Parse((const char*)fileName.toLatin1()))
   {
     ReplaceFile();
     return;
   }
-  csfEntry *assetEntry = file.GetRoot()->GetEntry("asset");
+  cs::file::Entry *assetEntry = file.GetRoot()->GetEntry("asset");
   if (!assetEntry)
   {
     ReplaceFile();
     return;
   }
 
-  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  cs::file::Entry *dataEntry = assetEntry->GetEntry("data");
   if (!dataEntry)
   {
     ReplaceFile();
     return;
   }
 
-  csfEntry *samplerEntry = dataEntry->GetEntry("sampler");
+  cs::file::Entry *samplerEntry = dataEntry->GetEntry("sampler");
   if (!samplerEntry)
   {
     ReplaceFile();
@@ -103,7 +103,7 @@ void SamplerEditor::MergeFile()
 
   //
   // Filter
-  csfEntry *filterEntry = samplerEntry->GetEntry("filter");
+  cs::file::Entry *filterEntry = samplerEntry->GetEntry("filter");
   if (!filterEntry)
   {
     filterEntry = file.CreateEntry("filter");
@@ -113,7 +113,7 @@ void SamplerEditor::MergeFile()
 
   //
   // Anisotropy
-  csfEntry *anisotropyEntry = samplerEntry->GetEntry("anisotropy");
+  cs::file::Entry *anisotropyEntry = samplerEntry->GetEntry("anisotropy");
   if (!anisotropyEntry)
   {
     anisotropyEntry = file.CreateEntry("anisotropy");
@@ -123,7 +123,7 @@ void SamplerEditor::MergeFile()
 
   //
   // MinLOD
-  csfEntry *minLODEntry = samplerEntry->GetEntry("minLOD");
+  cs::file::Entry *minLODEntry = samplerEntry->GetEntry("minLOD");
   if (!minLODEntry)
   {
     minLODEntry = file.CreateEntry("minLOD");
@@ -133,7 +133,7 @@ void SamplerEditor::MergeFile()
 
   //
   // MaxLOD
-  csfEntry *maxLODEntry = samplerEntry->GetEntry("maxLOD");
+  cs::file::Entry *maxLODEntry = samplerEntry->GetEntry("maxLOD");
   if (!maxLODEntry)
   {
     maxLODEntry = file.CreateEntry("maxLOD");
@@ -143,7 +143,7 @@ void SamplerEditor::MergeFile()
 
   //
   // AddressU
-  csfEntry *addressUEntry = samplerEntry->GetEntry("addressU");
+  cs::file::Entry *addressUEntry = samplerEntry->GetEntry("addressU");
   if (!addressUEntry)
   {
     addressUEntry = file.CreateEntry("addressU");
@@ -153,7 +153,7 @@ void SamplerEditor::MergeFile()
 
   //
   // AddressV
-  csfEntry *addressVEntry = samplerEntry->GetEntry("addressV");
+  cs::file::Entry *addressVEntry = samplerEntry->GetEntry("addressV");
   if (!addressVEntry)
   {
     addressVEntry = file.CreateEntry("addressV");
@@ -163,7 +163,7 @@ void SamplerEditor::MergeFile()
 
   //
   // AddressU
-  csfEntry *addressWEntry = samplerEntry->GetEntry("addressW");
+  cs::file::Entry *addressWEntry = samplerEntry->GetEntry("addressW");
   if (!addressWEntry)
   {
     addressWEntry = file.CreateEntry("addressW");
@@ -173,7 +173,7 @@ void SamplerEditor::MergeFile()
 
   //
   // BorderColor
-  csfEntry *borderColorEntry = samplerEntry->GetEntry("borderColor");
+  cs::file::Entry *borderColorEntry = samplerEntry->GetEntry("borderColor");
   if (!borderColorEntry)
   {
     borderColorEntry = file.CreateEntry("borderColor");
@@ -183,7 +183,7 @@ void SamplerEditor::MergeFile()
 
   //
   // CompareMode
-  csfEntry *compareModeEntry = samplerEntry->GetEntry("compareMode");
+  cs::file::Entry *compareModeEntry = samplerEntry->GetEntry("compareMode");
   if (!compareModeEntry)
   {
     compareModeEntry = file.CreateEntry("compareMode");
@@ -193,7 +193,7 @@ void SamplerEditor::MergeFile()
 
   //
   // CompareFunc
-  csfEntry *compareFuncEntry = samplerEntry->GetEntry("compareFunc");
+  cs::file::Entry *compareFuncEntry = samplerEntry->GetEntry("compareFunc");
   if (!compareFuncEntry)
   {
     compareFuncEntry = file.CreateEntry("compareFunc");
@@ -207,20 +207,20 @@ void SamplerEditor::MergeFile()
 
 void SamplerEditor::ReplaceFile()
 {
-  csfFile file;
-  csfEntry *assetEntry = file.CreateEntry("asset");
-  csfEntry *dataEntry = file.CreateEntry("data");
-  csfEntry *samplerEntry = file.CreateEntry("sampler");
-  csfEntry *filterEntry = file.CreateEntry("filter");
-  csfEntry *anisotropyEntry = file.CreateEntry("anisotropy");
-  csfEntry *minLODEntry = file.CreateEntry("minLOD");
-  csfEntry *maxLODEntry = file.CreateEntry("maxLOD");
-  csfEntry *addressUEntry = file.CreateEntry("addressU");
-  csfEntry *addressVEntry = file.CreateEntry("addressV");
-  csfEntry *addressWEntry = file.CreateEntry("addressW");
-  csfEntry *borderColorEntry = file.CreateEntry("borderColor");
-  csfEntry *compareModeEntry = file.CreateEntry("compareMode");
-  csfEntry *compareFuncEntry = file.CreateEntry("compareFunc");
+  cs::file::File file;
+  cs::file::Entry *assetEntry = file.CreateEntry("asset");
+  cs::file::Entry *dataEntry = file.CreateEntry("data");
+  cs::file::Entry *samplerEntry = file.CreateEntry("sampler");
+  cs::file::Entry *filterEntry = file.CreateEntry("filter");
+  cs::file::Entry *anisotropyEntry = file.CreateEntry("anisotropy");
+  cs::file::Entry *minLODEntry = file.CreateEntry("minLOD");
+  cs::file::Entry *maxLODEntry = file.CreateEntry("maxLOD");
+  cs::file::Entry *addressUEntry = file.CreateEntry("addressU");
+  cs::file::Entry *addressVEntry = file.CreateEntry("addressV");
+  cs::file::Entry *addressWEntry = file.CreateEntry("addressW");
+  cs::file::Entry *borderColorEntry = file.CreateEntry("borderColor");
+  cs::file::Entry *compareModeEntry = file.CreateEntry("compareMode");
+  cs::file::Entry *compareFuncEntry = file.CreateEntry("compareFunc");
 
   SetFilter(filterEntry);
   SetAnisotropy(anisotropyEntry);
@@ -261,7 +261,7 @@ void SamplerEditor::Reset()
 
 
 
-void SamplerEditor::SetFilter(csfEntry *entry)
+void SamplerEditor::SetFilter(cs::file::Entry *entry)
 {
   std::string text;
   switch (m_widget->GetFilter())
@@ -284,40 +284,40 @@ void SamplerEditor::SetFilter(csfEntry *entry)
   entry->AddAttribute(text);
 }
 
-void SamplerEditor::SetAnisotropy(csfEntry *entry)
+void SamplerEditor::SetAnisotropy(cs::file::Entry *entry)
 {
   entry->RemoveAttributes();
   entry->AddAttributeInt(m_widget->GetAnisotropy());
 }
 
-void SamplerEditor::SetMinLOD(csfEntry *entry)
+void SamplerEditor::SetMinLOD(cs::file::Entry *entry)
 {
   entry->RemoveAttributes();
   entry->AddAttributeInt(m_widget->GetMinLOD());
 }
 
-void SamplerEditor::SetMaxLOD(csfEntry *entry)
+void SamplerEditor::SetMaxLOD(cs::file::Entry *entry)
 {
   entry->RemoveAttributes();
   entry->AddAttributeInt(m_widget->GetMaxLOD());
 }
 
-void SamplerEditor::SetAddressU(csfEntry *entry)
+void SamplerEditor::SetAddressU(cs::file::Entry *entry)
 {
   SetAddress(entry, m_widget->GetAddressU());
 }
 
-void SamplerEditor::SetAddressV(csfEntry *entry)
+void SamplerEditor::SetAddressV(cs::file::Entry *entry)
 {
   SetAddress(entry, m_widget->GetAddressV());
 }
 
-void SamplerEditor::SetAddressW(csfEntry *entry)
+void SamplerEditor::SetAddressW(cs::file::Entry *entry)
 {
   SetAddress(entry, m_widget->GetAddressW());
 }
 
-void SamplerEditor::SetAddress(csfEntry *entry, cs::eTextureAddressMode address)
+void SamplerEditor::SetAddress(cs::file::Entry *entry, cs::eTextureAddressMode address)
 {
   std::string text;
   switch (address)
@@ -333,7 +333,7 @@ void SamplerEditor::SetAddress(csfEntry *entry, cs::eTextureAddressMode address)
   entry->AddAttribute(text);
 }
 
-void SamplerEditor::SetBorderColor(csfEntry *entry)
+void SamplerEditor::SetBorderColor(cs::file::Entry *entry)
 {
   cs::Vector4f col = m_widget->GetBorderColor();
   entry->RemoveAttributes();
@@ -343,7 +343,7 @@ void SamplerEditor::SetBorderColor(csfEntry *entry)
   entry->AddAttributeFloat(col.w);
 }
 
-void SamplerEditor::Setcs::eTextureCompareMode(csfEntry *entry)
+void SamplerEditor::Setcs::eTextureCompareMode(cs::file::Entry *entry)
 {
   std::string text;
   switch (m_widget->Getcs::eTextureCompareMode())
@@ -355,7 +355,7 @@ void SamplerEditor::Setcs::eTextureCompareMode(csfEntry *entry)
   entry->AddAttribute(text);
 }
 
-void SamplerEditor::SetTextureCompareFunc(csfEntry *entry)
+void SamplerEditor::SetTextureCompareFunc(cs::file::Entry *entry)
 {
   std::string text;
   switch (m_widget->GetTextureCompareFunc())

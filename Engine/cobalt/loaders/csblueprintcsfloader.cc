@@ -19,14 +19,14 @@ cs::BlueprintCSFLoader::~BlueprintCSFLoader()
 
 }
 
-bool cs::BlueprintCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::BlueprintCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return std::string("blueprint") == entry->GetTagName();
 }
 
-const cs::Class *cs::BlueprintCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::BlueprintCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -34,11 +34,11 @@ const cs::Class *cs::BlueprintCSFLoader::EvalClass(const csfEntry *entry, const 
   return cs::Blueprint::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::BlueprintCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::BlueprintCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::Blueprint *bp = new cs::Blueprint();
 
-  const csfEntry *entityEntry = entry->GetEntry("entity");
+  const cs::file::Entry *entityEntry = entry->GetEntry("entity");
   if (entityEntry)
   {
     LoadEntity(bp, entityEntry, locator, userData);
@@ -48,7 +48,7 @@ cs::ResourceWrapper *cs::BlueprintCSFLoader::Load(const csfEntry *entry, const c
 }
 
 
-void cs::BlueprintCSFLoader::LoadEntity(cs::Blueprint *blueprint, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadEntity(cs::Blueprint *blueprint, const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class"))
   {
@@ -64,7 +64,7 @@ void cs::BlueprintCSFLoader::LoadEntity(cs::Blueprint *blueprint, const csfEntry
   blueprint->SetEntity(bpEntity);
 
   std::map<unsigned, cs::BPEntityState*> states;
-  for (const csfEntry *entityStateEntry = entry->GetEntry("entityState");
+  for (const cs::file::Entry *entityStateEntry = entry->GetEntry("entityState");
     entityStateEntry; entityStateEntry = entityStateEntry->GetSiblingEntry("entityState"))
   {
     LoadEntityState(bpEntity, entityStateEntry, locator, userData);
@@ -72,7 +72,7 @@ void cs::BlueprintCSFLoader::LoadEntity(cs::Blueprint *blueprint, const csfEntry
 }
 
 
-void cs::BlueprintCSFLoader::LoadEntityState(cs::BPEntity *entity, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadEntityState(cs::BPEntity *entity, const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("class") || !entry->HasAttribute("id"))
   {
@@ -94,7 +94,7 @@ void cs::BlueprintCSFLoader::LoadEntityState(cs::BPEntity *entity, const csfEntr
   }
   entity->AddEntityState(bpEntityState);
 
-  for (const csfEntry *propEntry = entry->GetEntry("property"); 
+  for (const cs::file::Entry *propEntry = entry->GetEntry("property"); 
     propEntry; propEntry = propEntry->GetSiblingEntry("property"))
   {
     LoadProperty(bpEntityState, propEntry, locator, userData);
@@ -103,7 +103,7 @@ void cs::BlueprintCSFLoader::LoadEntityState(cs::BPEntity *entity, const csfEntr
 }
 
 
-void cs::BlueprintCSFLoader::LoadProperty(cs::BPEntityState *bpEntityState, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+void cs::BlueprintCSFLoader::LoadProperty(cs::BPEntityState *bpEntityState, const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("name"))
   {
@@ -129,7 +129,7 @@ void cs::BlueprintCSFLoader::LoadProperty(cs::BPEntityState *bpEntityState, cons
 
 }
 
-cs::PropertySetter *cs::BlueprintCSFLoader::CreateProperty(const csfEntry *entry) const
+cs::PropertySetter *cs::BlueprintCSFLoader::CreateProperty(const cs::file::Entry *entry) const
 {
   cs::PropertySetter *result = 0;
   std::string tag = entry->GetTagName();

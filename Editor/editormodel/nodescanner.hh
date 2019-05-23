@@ -5,10 +5,15 @@
 #include <set>
 #include <string>
 
-class csfEntry;
 namespace cs
 {
 class ResourceLocator;
+}
+
+namespace cs::file
+{
+class Entry;
+
 }
 
 namespace cs::editor::model
@@ -27,8 +32,8 @@ public:
   std::set<cs::ResourceLocator> GetReferenceLocators() const;
 
 private:
-  void ScanTypeName(const csfEntry *rootEntry);
-  void Scan(const csfEntry *entry);
+  void ScanTypeName(const cs::file::Entry *rootEntry);
+  void Scan(const cs::file::Entry *entry);
 
   std::string m_typeName;
   std::set<std::string> m_references;

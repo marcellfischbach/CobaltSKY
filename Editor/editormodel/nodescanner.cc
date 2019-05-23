@@ -37,7 +37,7 @@ void NodeScanner::Scan(AssetNode *node)
   file->Release();
 
 
-  csfFile f;
+  cs::file::File f;
   bool res = f.Parse(buffer, length, false);
   delete[] buffer;
 
@@ -53,7 +53,7 @@ void NodeScanner::Scan(AssetNode *node)
   Scan(f.GetRoot());
 }
 
-void NodeScanner::Scan(const csfEntry *entry)
+void NodeScanner::Scan(const cs::file::Entry *entry)
 {
   if (entry->HasAttribute("locator"))
   {
@@ -67,20 +67,20 @@ void NodeScanner::Scan(const csfEntry *entry)
 
 }
 
-void NodeScanner::ScanTypeName(const csfEntry *rootEntry)
+void NodeScanner::ScanTypeName(const cs::file::Entry *rootEntry)
 {
   if (!rootEntry)
   {
     return;
   }
 
-  const csfEntry *dataEntry = rootEntry->GetEntry("asset.data");
+  const cs::file::Entry *dataEntry = rootEntry->GetEntry("asset.data");
   if (!dataEntry)
   {
     return;
   }
   
-  const csfEntry *typeEntry = dataEntry->GetEntry(0);
+  const cs::file::Entry *typeEntry = dataEntry->GetEntry(0);
   if (!typeEntry)
   {
     return;

@@ -7,30 +7,33 @@
 #include <string>
 #include <vector>
 
-class CSF_API csfFile
+namespace cs::file
+{
+
+class CSF_API File
 {
 public:
-  csfFile();
-  ~csfFile();
+  File();
+  ~File();
 
   bool Parse(const csUInt8* buffer, size_t size, bool parseBinarySection = true);
-  bool Parse (const std::string &fileName, bool parseBinarySection = true);
-  bool Output (const std::string &fileName, bool tight = false, unsigned indent = 2) const;
+  bool Parse(const std::string& fileName, bool parseBinarySection = true);
+  bool Output(const std::string& fileName, bool tight = false, unsigned indent = 2) const;
 
-  csfEntry *GetRoot();
-  const csfEntry *GetRoot() const;
-  csfEntry *GetEntry(const std::string &entry);
-  const csfEntry *GetEntry(const std::string &entry) const;
-  csfBlob *GetBlob(const std::string &blob);
-  const csfBlob *GetBlob(const std::string &blob) const;
+  cs::file::Entry* GetRoot();
+  const cs::file::Entry* GetRoot() const;
+  cs::file::Entry* GetEntry(const std::string& entry);
+  const cs::file::Entry* GetEntry(const std::string& entry) const;
+  cs::file::Blob* GetBlob(const std::string& blob);
+  const cs::file::Blob* GetBlob(const std::string& blob) const;
 
-  void AddBlob(csfBlob *blob);
+  void AddBlob(cs::file::Blob* blob);
 
-  csfEntry *CreateEntry(const std::string &tagName = std::string(""));
-  csfBlob *CreateBlob();
+  cs::file::Entry* CreateEntry(const std::string& tagName = std::string(""));
+  cs::file::Blob* CreateBlob();
 
   bool IsError() const;
-  const std::string &GetErrorMessage() const;
+  const std::string& GetErrorMessage() const;
 
 private:
   struct IInputBuffer
@@ -46,7 +49,7 @@ private:
   class InputStreamBuffer : public IInputBuffer
   {
   public:
-    InputStreamBuffer(std::ifstream &stream, size_t bufferSize = 1024);
+    InputStreamBuffer(std::ifstream& stream, size_t bufferSize = 1024);
     virtual ~InputStreamBuffer();
     bool HasMore();
     csUInt8 GetByte();
@@ -54,9 +57,9 @@ private:
     csUInt32 GetColumn() const;
   private:
     void fetchData();
-    std::ifstream &m_stream;
+    std::ifstream& m_stream;
 
-    csUInt8 *m_buffer;
+    csUInt8* m_buffer;
     csUInt32 m_idx;
     size_t m_bufferSize;
     size_t m_bufferCapacity;
@@ -67,21 +70,21 @@ private:
   class InputDataBuffer : public IInputBuffer
   {
   public:
-    InputDataBuffer(const csUInt8 *buffer, size_t size);
+    InputDataBuffer(const csUInt8* buffer, size_t size);
     virtual ~InputDataBuffer();
     bool HasMore();
     csUInt8 GetByte();
     csUInt32 GetRow() const;
     csUInt32 GetColumn() const;
   private:
-    const csUInt8 *m_buffer;
+    const csUInt8* m_buffer;
     size_t m_bufferSize;
     csUInt32 m_idx;
     csUInt32 m_row;
     csUInt32 m_column;
   };
 
-  bool Parse(IInputBuffer *buffer, bool parseBinarySection);
+  bool Parse(IInputBuffer* buffer, bool parseBinarySection);
 
   enum TokenType
   {
@@ -106,28 +109,31 @@ private:
     csUInt32 column;
   };
 
-  Token GetToken(IInputBuffer *buffer);
-  Token CheckToken(const std::string &token, const std::string &fullToken, csUInt32 row, csUInt32 column) const;
-  bool IsNumber(const std::string &token) const;
-  bool IsString(const std::string &token) const;
-  std::string FixString(const std::string &token) const;
-  csfBlob *GetBlob(IInputBuffer *buffer);
+  Token GetToken(IInputBuffer* buffer);
+  Token CheckToken(const std::string& token, const std::string& fullToken, csUInt32 row, csUInt32 column) const;
+  bool IsNumber(const std::string& token) const;
+  bool IsString(const std::string& token) const;
+  std::string FixString(const std::string& token) const;
+  cs::file::Blob* GetBlob(IInputBuffer* buffer);
 
-  void Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsigned indent, unsigned currentIndent) const;
-  void Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const;
+  void Output(cs::file::Entry* entry, std::ofstream& ofstream, bool tight, unsigned indent, unsigned currentIndent) const;
+  void Output(cs::file::Blob* blob, std::ofstream& ofstream, bool tight) const;
   std::string Indent(unsigned indent) const;
-  bool NeedQuotation(const std::string &value) const;
+  bool NeedQuotation(const std::string& value) const;
   bool IsUnquotedChar(char ch) const;
 
-  bool MapError(const std::string &errorMessage) const;
+  bool MapError(const std::string& errorMessage) const;
 
   char m_danglingChar;
 
-  csfEntry *m_root;
-  std::vector<csfBlob*> m_blobs;
-  std::vector<csfEntry*> m_entries;
+  cs::file::Entry* m_root;
+  std::vector<cs::file::Blob*> m_blobs;
+  std::vector<cs::file::Entry*> m_entries;
 
   mutable bool m_error;
   mutable std::string m_errorMessage;
 };
+
+
+}
 

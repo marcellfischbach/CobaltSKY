@@ -23,29 +23,29 @@ cs::ShaderGraphAssetCSFLoader::~ShaderGraphAssetCSFLoader()
 
 }
 
-bool cs::ShaderGraphAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::ShaderGraphAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("shaderGraph");
 }
 
-const cs::Class *cs::ShaderGraphAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ShaderGraphAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::SGShaderGraphWrapper::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::SGShaderGraph *shaderGraph = new cs::SGShaderGraph();
   cs::SGShaderGraphWrapper *shaderGraphWrapper = new cs::SGShaderGraphWrapper(shaderGraph);
 
-  const csfEntry *nodesEntry = entry->GetEntry("nodes");
-  const csfEntry *inputsEntry = entry->GetEntry("inputs");
-  const csfEntry *attributesEntry = entry->GetEntry("attributes");
+  const cs::file::Entry *nodesEntry = entry->GetEntry("nodes");
+  const cs::file::Entry *inputsEntry = entry->GetEntry("inputs");
+  const cs::file::Entry *attributesEntry = entry->GetEntry("attributes");
 
   std::map<csUInt32, cs::SGNode*> nodes;
   if (nodesEntry)
   {
-    for (const csfEntry *nodeElement = nodesEntry->GetEntry("node"); nodeElement; nodeElement = nodeElement->GetSiblingEntry("node"))
+    for (const cs::file::Entry *nodeElement = nodesEntry->GetEntry("node"); nodeElement; nodeElement = nodeElement->GetSiblingEntry("node"))
     {
       if (!nodeElement->HasAttribute("id") || !nodeElement->HasAttribute("class"))
       {
@@ -75,7 +75,7 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
 
 
       cs::SGResourceNode *resource = cs::QueryClass<cs::SGResourceNode>(node);
-      const csfEntry *resourceElement = nodeElement->GetEntry("resource");
+      const cs::file::Entry *resourceElement = nodeElement->GetEntry("resource");
       if (resource && resourceElement)
       {
 
@@ -89,7 +89,7 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
         }
 
 
-        const csfEntry *valueElement = resourceElement->GetEntry();
+        const cs::file::Entry *valueElement = resourceElement->GetEntry();
         if (valueElement)
         {
           std::string tagName = valueElement->GetTagName();
@@ -129,12 +129,12 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
   // now read the inputs for the nodes
   if (inputsEntry)
   {
-    for (const csfEntry *inputElement = inputsEntry->GetEntry(); inputElement; inputElement = inputElement->GetSiblingEntry())
+    for (const cs::file::Entry *inputElement = inputsEntry->GetEntry(); inputElement; inputElement = inputElement->GetSiblingEntry())
     {
       cs::SGOutput *output = nullptr;
       float fl = 0.0f;
       bool validInput = false;
-      const csfEntry *nodeElement = inputElement->GetEntry("node");
+      const cs::file::Entry *nodeElement = inputElement->GetEntry("node");
       if (nodeElement && nodeElement->HasAttribute("id") && nodeElement->HasAttribute("output"))
       {
         csUInt32 id = nodeElement->GetAttributeInt("id");
@@ -156,7 +156,7 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
         }
         validInput = true;
       }
-      const csfEntry *floatElement = inputElement->GetEntry("float");
+      const cs::file::Entry *floatElement = inputElement->GetEntry("float");
       if (floatElement && floatElement->HasAttribute())
       {
         fl = floatElement->GetAttributeFloat();
@@ -242,7 +242,7 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
   {
     //
     // load the attributes
-    const csfEntry *blendOutWithBinaryGradientElement = attributesEntry->GetEntry("blendOutWithBinaryGradient");
+    const cs::file::Entry *blendOutWithBinaryGradientElement = attributesEntry->GetEntry("blendOutWithBinaryGradient");
     if (blendOutWithBinaryGradientElement)
     {
       if (LoadBool(blendOutWithBinaryGradientElement, "enabled"))
@@ -254,14 +254,14 @@ cs::ResourceWrapper *cs::ShaderGraphAssetCSFLoader::Load(const csfEntry *entry, 
         shaderGraph->SetBlendOutWithBinaryGradient(false);
       }
     }
-    const csfEntry *discardAlphaElement = attributesEntry->GetEntry("discardAlpha");
+    const cs::file::Entry *discardAlphaElement = attributesEntry->GetEntry("discardAlpha");
     if (discardAlphaElement)
     {
       if (LoadBool(discardAlphaElement, "enabled"))
       {
         shaderGraph->SetDiscardAlpha(LoadBool(discardAlphaElement, "enabled"));
-        const csfEntry *thresholdElement = discardAlphaElement->GetEntry("threshold");
-        const csfEntry *modeElement = discardAlphaElement->GetEntry("mode");
+        const cs::file::Entry *thresholdElement = discardAlphaElement->GetEntry("threshold");
+        const cs::file::Entry *modeElement = discardAlphaElement->GetEntry("mode");
         float threshold = 0.0f;
         cs::eCompareMode compareMode = cs::eCM_Less;
         if (thresholdElement)

@@ -9,7 +9,7 @@
 #include <set>
 #include <string>
 
-class csfEntry;
+class cs::file::Entry;
 class AssetManagerResourceScanner
 {
 public:
@@ -35,8 +35,8 @@ public:
 private:
 
   void ScanPath(const cs::VFS::Entry &entry, const std::string &relPath);
-  void ScanReference(Entry &assetEntry, const csfEntry *entry);
-  void EvalTypeName(Entry &assetEntry, const csfEntry *rootEntry);
+  void ScanReference(Entry &assetEntry, const cs::file::Entry *entry);
+  void EvalTypeName(Entry &assetEntry, const cs::file::Entry *rootEntry);
 
   
   std::vector<Entry> m_entries;

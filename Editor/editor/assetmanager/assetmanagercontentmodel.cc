@@ -207,7 +207,7 @@ std::string AssetManagerContentModel::ReadType(const cs::ResourceLocator &locato
 {
   std::string path = cs::VFS::Get()->GetAbsolutePath(locator.GetResourceFile(), locator.GetResourceEntry());
 
-  csfFile oFile;
+  cs::file::File oFile;
   if (!oFile.Parse(path, false))
   {
 
@@ -215,19 +215,19 @@ std::string AssetManagerContentModel::ReadType(const cs::ResourceLocator &locato
     return "";
   }
 
-  const csfEntry *assetEntry = oFile.GetEntry("asset");
+  const cs::file::Entry *assetEntry = oFile.GetEntry("asset");
   if (!assetEntry)
   {
     return "";
   }
 
-  const csfEntry *dataEntry = assetEntry->GetEntry("data");
+  const cs::file::Entry *dataEntry = assetEntry->GetEntry("data");
   if (!dataEntry)
   {
     return "";
   }
 
-  const csfEntry *typeEntry = dataEntry->GetEntry();
+  const cs::file::Entry *typeEntry = dataEntry->GetEntry();
   if (!typeEntry)
   {
     return "";

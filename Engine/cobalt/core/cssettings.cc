@@ -77,14 +77,14 @@ bool cs::Settings::HasEntry(const std::string &entryName) const
   return m_configEntry && m_configEntry->GetEntry(entryName);
 }
 
-const csfEntry *cs::Settings::GetEntry(const std::string &entryName) const
+const cs::file::Entry *cs::Settings::GetEntry(const std::string &entryName) const
 {
   return m_configEntry ? m_configEntry->GetEntry(entryName) : 0;
 }
 
 bool cs::Settings::HasValue(const std::string &entryName, size_t attribute) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
 
   return entry && entry->GetNumberOfAttributes() > attribute;
 }
@@ -92,51 +92,51 @@ bool cs::Settings::HasValue(const std::string &entryName, size_t attribute) cons
 
 bool cs::Settings::HasValue(const std::string &entryName, const std::string &attributeName) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->HasAttribute(attributeName);
 }
 
 std::string cs::Settings::GetStringValue(const std::string &entryName, size_t attribute, const std::string &defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttribute(attribute) : defaultValue;
 }
 
 std::string cs::Settings::GetStringValue(const std::string &entryName, const std::string &attributeName, const std::string &defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->HasAttribute(attributeName) ? entry->GetAttribute(attributeName) : defaultValue;
 }
 
 int cs::Settings::GetIntValue(const std::string &entryName, size_t attribute, int defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttributeInt(attribute) : defaultValue;
 }
 
 int cs::Settings::GetIntValue(const std::string &entryName, const std::string &attributeName, int defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->HasAttribute(attributeName) ? entry->GetAttributeInt(attributeName) : defaultValue;
 }
 
 
 float cs::Settings::GetFloatValue(const std::string &entryName, size_t attribute, float defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->GetNumberOfAttributes() > attribute ? entry->GetAttributeFloat(attribute) : defaultValue;
 }
 
 float cs::Settings::GetFloatValue(const std::string &entryName, const std::string &attributeName, float defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   return entry && entry->HasAttribute(attributeName) ? entry->GetAttributeFloat(attributeName) : defaultValue;
 }
 
 
 bool cs::Settings::GetBoolValue(const std::string &entryName, size_t attribute, bool defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   if (entry && entry->GetNumberOfAttributes() > attribute)
   {
     std::string value = entry->GetAttribute(attribute);
@@ -147,7 +147,7 @@ bool cs::Settings::GetBoolValue(const std::string &entryName, size_t attribute, 
 
 bool cs::Settings::GetBoolValue(const std::string &entryName, const std::string &attributeName, bool defaultValue) const
 {
-  const csfEntry *entry = GetEntry(entryName);
+  const cs::file::Entry *entry = GetEntry(entryName);
   if (entry && entry->HasAttribute(attributeName))
   {
     std::string value = entry->GetAttribute(attributeName);

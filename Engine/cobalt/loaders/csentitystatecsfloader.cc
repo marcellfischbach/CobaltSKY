@@ -17,14 +17,14 @@ cs::EntityStateCSFLoader::~EntityStateCSFLoader()
 
 }
 
-bool cs::EntityStateCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::EntityStateCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
   return entry->GetTagName() == std::string("entityState");
 }
 
-const cs::Class *cs::EntityStateCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::EntityStateCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -32,7 +32,7 @@ const cs::Class *cs::EntityStateCSFLoader::EvalClass(const csfEntry *entry, cons
   return cs::EntityStateWrapper::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::EntityStateCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::EntityStateCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   cs::EntityStateWrapper *wrapper = userData ? cs::QueryClass<cs::EntityStateWrapper>(userData) : nullptr;
@@ -82,7 +82,7 @@ cs::ResourceWrapper *cs::EntityStateCSFLoader::Load(const csfEntry *entry, const
     }
   }
 
-  for (const csfEntry *propEntry = entry->GetEntry("property");
+  for (const cs::file::Entry *propEntry = entry->GetEntry("property");
     propEntry; propEntry = propEntry->GetSiblingEntry("property"))
   {
     LoadProperty(state, propEntry, locator, userData);
@@ -92,7 +92,7 @@ cs::ResourceWrapper *cs::EntityStateCSFLoader::Load(const csfEntry *entry, const
 }
 
 
-void cs::EntityStateCSFLoader::LoadProperty(cs::EntityState *entityState, const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+void cs::EntityStateCSFLoader::LoadProperty(cs::EntityState *entityState, const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry->HasAttribute("name"))
   {

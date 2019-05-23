@@ -6,7 +6,7 @@
 
 
 
-bool cs::file::Writer::Write(const csfFile &file, const cs::ResourceLocator &locator, bool tight, unsigned indent)
+bool cs::file::Writer::Write(const cs::file::File &file, const cs::ResourceLocator &locator, bool tight, unsigned indent)
 {
   std::string fullPath = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::DontCheckExistence);
 	printf("cs::file::Writer::Write: %s\n", fullPath.c_str());

@@ -11,7 +11,7 @@
 #include <QDomElement>
 
 class SamplerEditorWidget;
-class csfEntry;
+class cs::file::Entry;
 CS_CLASS()
 class SamplerEditor : public AbstractAssetEditor
 {
@@ -35,17 +35,17 @@ private:
   void ReplaceFile();
 
 
-  void SetFilter(csfEntry *entry);
-  void SetAnisotropy(csfEntry *entry);
-  void SetMinLOD(csfEntry *entry);
-  void SetMaxLOD(csfEntry *entry);
-  void SetAddressU(csfEntry *entry);
-  void SetAddressV(csfEntry *entry);
-  void SetAddressW(csfEntry *entry);
-  void SetAddress(csfEntry *entry, cs::eTextureAddressMode mode);
-  void SetBorderColor(csfEntry *entry);
-  void Setcs::eTextureCompareMode(csfEntry *entry);
-  void SetTextureCompareFunc(csfEntry *entry);
+  void SetFilter(cs::file::Entry *entry);
+  void SetAnisotropy(cs::file::Entry *entry);
+  void SetMinLOD(cs::file::Entry *entry);
+  void SetMaxLOD(cs::file::Entry *entry);
+  void SetAddressU(cs::file::Entry *entry);
+  void SetAddressV(cs::file::Entry *entry);
+  void SetAddressW(cs::file::Entry *entry);
+  void SetAddress(cs::file::Entry *entry, cs::eTextureAddressMode mode);
+  void SetBorderColor(cs::file::Entry *entry);
+  void Setcs::eTextureCompareMode(cs::file::Entry *entry);
+  void SetTextureCompareFunc(cs::file::Entry *entry);
 
 private:
   SamplerEditorWidget *m_widget;

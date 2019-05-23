@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-csfFile::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, size_t bufferSize)
+cs::file::File::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, size_t bufferSize)
   : IInputBuffer()
   , m_stream(stream)
   , m_row(1)
@@ -18,12 +18,12 @@ csfFile::InputStreamBuffer::InputStreamBuffer(std::ifstream &stream, size_t buff
   m_idx = 0;
 }
 
-csfFile::InputStreamBuffer::~InputStreamBuffer()
+cs::file::File::InputStreamBuffer::~InputStreamBuffer()
 {
   delete[] m_buffer;
 }
 
-bool csfFile::InputStreamBuffer::HasMore()
+bool cs::file::File::InputStreamBuffer::HasMore()
 {
   if (m_idx >= m_bufferSize || m_idx >= m_bufferCapacity)
   {
@@ -32,7 +32,7 @@ bool csfFile::InputStreamBuffer::HasMore()
   return m_idx < m_bufferCapacity;
 }
 
-csUInt8 csfFile::InputStreamBuffer::GetByte()
+csUInt8 cs::file::File::InputStreamBuffer::GetByte()
 {
   csUInt8 ch = m_buffer[m_idx++];
   if (ch == '\n')
@@ -47,17 +47,17 @@ csUInt8 csfFile::InputStreamBuffer::GetByte()
   return ch;
 }
 
-csUInt32 csfFile::InputStreamBuffer::GetRow() const
+csUInt32 cs::file::File::InputStreamBuffer::GetRow() const
 {
   return m_row;
 }
 
-csUInt32 csfFile::InputStreamBuffer::GetColumn() const
+csUInt32 cs::file::File::InputStreamBuffer::GetColumn() const
 {
   return m_column;
 }
 
-void csfFile::InputStreamBuffer::fetchData()
+void cs::file::File::InputStreamBuffer::fetchData()
 {
   m_stream.read((char*)m_buffer, m_bufferSize);
   if (m_stream)
@@ -75,7 +75,7 @@ void csfFile::InputStreamBuffer::fetchData()
 
 
 
-csfFile::InputDataBuffer::InputDataBuffer(const csUInt8 *buffer, size_t size)
+cs::file::File::InputDataBuffer::InputDataBuffer(const csUInt8 *buffer, size_t size)
   : IInputBuffer()
   , m_buffer(buffer)
   , m_bufferSize(size)
@@ -85,16 +85,16 @@ csfFile::InputDataBuffer::InputDataBuffer(const csUInt8 *buffer, size_t size)
 {
 }
 
-csfFile::InputDataBuffer::~InputDataBuffer()
+cs::file::File::InputDataBuffer::~InputDataBuffer()
 {
 }
 
-bool csfFile::InputDataBuffer::HasMore()
+bool cs::file::File::InputDataBuffer::HasMore()
 {
   return m_idx < m_bufferSize;
 }
 
-csUInt8 csfFile::InputDataBuffer::GetByte()
+csUInt8 cs::file::File::InputDataBuffer::GetByte()
 {
   csUInt8 ch = m_buffer[m_idx++];
   if (ch == '\n')
@@ -109,12 +109,12 @@ csUInt8 csfFile::InputDataBuffer::GetByte()
   return ch;
 }
 
-csUInt32 csfFile::InputDataBuffer::GetRow() const
+csUInt32 cs::file::File::InputDataBuffer::GetRow() const
 {
   return m_row;
 }
 
-csUInt32 csfFile::InputDataBuffer::GetColumn() const
+csUInt32 cs::file::File::InputDataBuffer::GetColumn() const
 {
   return m_column;
 }
@@ -122,18 +122,18 @@ csUInt32 csfFile::InputDataBuffer::GetColumn() const
 
 
 
-csfFile::csfFile()
+cs::file::File::File()
   : m_danglingChar(0)
-  , m_root(new csfEntry(this, "<root>"))
+  , m_root(new cs::file::Entry(this, "<root>"))
   , m_error(false)
   , m_errorMessage("")
 {
 
 }
 
-csfFile::~csfFile()
+cs::file::File::~File()
 {
-  for (csfEntry *entry : m_entries)
+  for (cs::file::Entry *entry : m_entries)
   {
     delete entry;
   }
@@ -155,7 +155,7 @@ static std::string tokenMap[] = {
 };
 
 
-bool csfFile::Parse(const std::string &fileName, bool parseBinarySection)
+bool cs::file::File::Parse(const std::string &fileName, bool parseBinarySection)
 {
   m_error = false;
   m_errorMessage = "";
@@ -174,7 +174,7 @@ bool csfFile::Parse(const std::string &fileName, bool parseBinarySection)
 }
 
 
-bool csfFile::Parse(const csUInt8 *data, size_t size, bool parseBinarySection)
+bool cs::file::File::Parse(const csUInt8 *data, size_t size, bool parseBinarySection)
 {
   m_error = false;
   m_errorMessage = "";
@@ -185,10 +185,10 @@ bool csfFile::Parse(const csUInt8 *data, size_t size, bool parseBinarySection)
   return res;
 }
 
-bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
+bool cs::file::File::Parse(cs::file::File::IInputBuffer *buffer,  bool parseBinarySection)
 {
-  csfEntry *parent = m_root;
-  csfEntry *currentEntry = 0;
+  cs::file::Entry *parent = m_root;
+  cs::file::Entry *currentEntry = 0;
   enum State
   {
     eS_ExpectEntry,
@@ -207,7 +207,7 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
       {
         break;
       }
-      csfBlob *blob = GetBlob(buffer);
+      cs::file::Blob *blob = GetBlob(buffer);
       if (!blob)
       {
         return false;
@@ -247,7 +247,7 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
       }
       else 
       {
-        csfEntry *newEntry = CreateEntry(token.value);
+        cs::file::Entry *newEntry = CreateEntry(token.value);
         parent->AddChild(newEntry);
         currentEntry = newEntry;
         state = eS_ExpectAttribsOrChildrenOrClose;
@@ -358,7 +358,7 @@ bool csfFile::Parse(csfFile::IInputBuffer *buffer,  bool parseBinarySection)
   return true;
 }
 
-csfFile::Token csfFile::GetToken(csfFile::IInputBuffer* buffer)
+cs::file::File::Token cs::file::File::GetToken(cs::file::File::IInputBuffer* buffer)
 {
   std::string token = "";
   std::string fullToken = "";
@@ -401,7 +401,7 @@ csfFile::Token csfFile::GetToken(csfFile::IInputBuffer* buffer)
   return CheckToken(token, fullToken, row, column);
 }
 
-csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
+cs::file::Blob *cs::file::File::GetBlob(cs::file::File::IInputBuffer *buffer)
 {
   Token token = GetToken(buffer);
   if (token.type != eTT_String)
@@ -460,7 +460,7 @@ csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
     blobBuffer[i] = buffer->GetByte();
   }
 
-  csfBlob *blob = CreateBlob();
+  cs::file::Blob *blob = CreateBlob();
   blob->SetName(blobName);
   blob->SetType(blobType);
   blob->SetBuffer(blobBuffer, size);
@@ -469,7 +469,7 @@ csfBlob *csfFile::GetBlob(csfFile::IInputBuffer *buffer)
   return blob;
 }
 
-csfFile::Token csfFile::CheckToken(const std::string &token, const std::string &fullToken, csUInt32 row, csUInt32 column) const
+cs::file::File::Token cs::file::File::CheckToken(const std::string &token, const std::string &fullToken, csUInt32 row, csUInt32 column) const
 {
   Token result;
   result.value = token;
@@ -532,7 +532,7 @@ csfFile::Token csfFile::CheckToken(const std::string &token, const std::string &
 }
 
 
-bool csfFile::IsNumber(const std::string &token) const
+bool cs::file::File::IsNumber(const std::string &token) const
 {
   bool haveDot = false;
   bool haveE = false;
@@ -574,7 +574,7 @@ bool csfFile::IsNumber(const std::string &token) const
   return true;
 }
 
-bool csfFile::IsString(const std::string &token) const
+bool cs::file::File::IsString(const std::string &token) const
 {
   if (token.empty())
   {
@@ -629,7 +629,7 @@ bool csfFile::IsString(const std::string &token) const
 }
 
 
-std::string csfFile::FixString(const std::string &str) const
+std::string cs::file::File::FixString(const std::string &str) const
 {
   std::string result = "";
   bool stripWhiteSpace = true;
@@ -666,30 +666,30 @@ std::string csfFile::FixString(const std::string &str) const
   return result;
 }
 
-csfEntry *csfFile::GetRoot()
+cs::file::Entry *cs::file::File::GetRoot()
 {
   return m_root;
 }
 
-const csfEntry *csfFile::GetRoot() const
+const cs::file::Entry *cs::file::File::GetRoot() const
 {
   return m_root;
 }
 
 
-csfEntry *csfFile::GetEntry(const std::string &entry)
+cs::file::Entry *cs::file::File::GetEntry(const std::string &entry)
 {
   return m_root->GetEntry(entry);
 }
 
-const csfEntry *csfFile::GetEntry(const std::string &entry) const
+const cs::file::Entry *cs::file::File::GetEntry(const std::string &entry) const
 {
   return m_root->GetEntry(entry);
 }
 
-csfBlob *csfFile::GetBlob(const std::string &blob)
+cs::file::Blob *cs::file::File::GetBlob(const std::string &blob)
 {
-  for (csfBlob *b : m_blobs)
+  for (cs::file::Blob *b : m_blobs)
   {
     if (b->GetName() == blob)
     {
@@ -699,40 +699,40 @@ csfBlob *csfFile::GetBlob(const std::string &blob)
   return 0;
 }
 
-const csfBlob *csfFile::GetBlob(const std::string &blob) const
+const cs::file::Blob *cs::file::File::GetBlob(const std::string &blob) const
 {
-  return const_cast<csfFile*>(this)->GetBlob(blob);
+  return const_cast<cs::file::File*>(this)->GetBlob(blob);
 }
 
-csfEntry *csfFile::CreateEntry(const std::string &tagName)
+cs::file::Entry *cs::file::File::CreateEntry(const std::string &tagName)
 {
-  csfEntry *entry = new csfEntry(this, tagName);
+  cs::file::Entry *entry = new cs::file::Entry(this, tagName);
   m_entries.push_back(entry);
   return entry;
 }
 
-csfBlob *csfFile::CreateBlob()
+cs::file::Blob *cs::file::File::CreateBlob()
 {
-  return new csfBlob(this);
+  return new cs::file::Blob(this);
 }
 
-bool csfFile::IsError()const
+bool cs::file::File::IsError()const
 {
   return m_error;
 }
 
-const std::string &csfFile::GetErrorMessage() const
+const std::string &cs::file::File::GetErrorMessage() const
 {
   return m_errorMessage;
 }
 
-void csfFile::AddBlob(csfBlob *blob)
+void cs::file::File::AddBlob(cs::file::Blob *blob)
 {
   if (!blob)
   {
     return;
   }
-  for (csfBlob *b : m_blobs)
+  for (cs::file::Blob *b : m_blobs)
   {
     if (b == blob || b->GetName() == blob->GetName())
     {
@@ -744,7 +744,7 @@ void csfFile::AddBlob(csfBlob *blob)
 }
 
 
-bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) const
+bool cs::file::File::Output(const std::string &fileName, bool tight, unsigned indent) const
 {
   std::ofstream ofstream;
   ofstream.open(fileName, std::ofstream::out | std::ofstream::trunc);
@@ -756,7 +756,7 @@ bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) c
 
   for (size_t i = 0, in = m_root->GetNumberOfChildren(); i < in; ++i)
   {
-    csfEntry *child = m_root->GetChild(i);
+    cs::file::Entry *child = m_root->GetChild(i);
     if (child)
     {
       Output(child, ofstream, tight, indent, 0);
@@ -770,7 +770,7 @@ bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) c
   {
     return MapError("Unable to open file '" + fileName + "' for writing binary blobs");
   }
-  for (csfBlob *blob : m_blobs)
+  for (cs::file::Blob *blob : m_blobs)
   {
     Output(blob, ofstream, tight);
   }
@@ -778,7 +778,7 @@ bool csfFile::Output(const std::string &fileName, bool tight, unsigned indent) c
   return true;
 }
 
-void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsigned indent, unsigned currentIndent) const
+void cs::file::File::Output(cs::file::Entry *entry, std::ofstream &ofstream, bool tight, unsigned indent, unsigned currentIndent) const
 {
   if (!tight)
   {
@@ -830,7 +830,7 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
     }
     for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
     {
-      csfEntry *child = entry->GetChild(i);
+      cs::file::Entry *child = entry->GetChild(i);
       if (child)
       {
         Output(child, ofstream, tight, indent, currentIndent + indent);
@@ -849,7 +849,7 @@ void csfFile::Output(csfEntry *entry, std::ofstream &ofstream, bool tight, unsig
 
 }
 
-void csfFile::Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const
+void cs::file::File::Output(cs::file::Blob *blob, std::ofstream &ofstream, bool tight) const
 {
   ofstream << "#" << blob->GetName() << "(" << blob->GetType() << ")";
   csUInt32 size = (csUInt32)blob->GetSize();
@@ -861,7 +861,7 @@ void csfFile::Output(csfBlob *blob, std::ofstream &ofstream, bool tight) const
   }
 }
 
-std::string csfFile::Indent(unsigned indent) const
+std::string cs::file::File::Indent(unsigned indent) const
 {
   std::string result;
   for (unsigned i = 0; i < indent; ++i)
@@ -871,7 +871,7 @@ std::string csfFile::Indent(unsigned indent) const
   return result;
 }
 
-bool csfFile::NeedQuotation(const std::string &value) const
+bool cs::file::File::NeedQuotation(const std::string &value) const
 {
   if (value.empty())
   {
@@ -893,7 +893,7 @@ bool csfFile::NeedQuotation(const std::string &value) const
   return false;
 }
 
-bool csfFile::IsUnquotedChar(char ch) const
+bool cs::file::File::IsUnquotedChar(char ch) const
 {
   if (isalnum(ch))
   {
@@ -902,7 +902,7 @@ bool csfFile::IsUnquotedChar(char ch) const
   return ch == '.' || ch == '_' || ch == '-';
 }
 
-bool csfFile::MapError(const std::string &errorMessage) const
+bool cs::file::File::MapError(const std::string &errorMessage) const
 {
   m_error = true;
   m_errorMessage = errorMessage;

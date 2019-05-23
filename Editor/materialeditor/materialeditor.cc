@@ -62,7 +62,7 @@ void MaterialEditor::Save()
 {
   QString absFileName = GetResourceFileName();
 
-  csfFile outputFile;
+  cs::file::File outputFile;
   if (!outputFile.Parse(std::string(absFileName.toLatin1())))
   {
     printf("Unable to open asset: %s\n", (const char*)absFileName.toLatin1());
@@ -70,21 +70,21 @@ void MaterialEditor::Save()
     return;
   }
 
-  csfEntry *assetEntry = outputFile.GetRoot()->GetEntry("asset");
+  cs::file::Entry *assetEntry = outputFile.GetRoot()->GetEntry("asset");
   if (!assetEntry)
   {
     ReplaceFileContent();
     return;
   }
 
-  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  cs::file::Entry *dataEntry = assetEntry->GetEntry("data");
   if (!dataEntry)
   {
     ReplaceFileContent();
     return;
   }
 
-  csfEntry *materialEntry = dataEntry->GetEntry("material");
+  cs::file::Entry *materialEntry = dataEntry->GetEntry("material");
   if (!materialEntry)
   {
     materialEntry = outputFile.CreateEntry("material");
@@ -131,10 +131,10 @@ void material_attribute_changed(cs::Event &event, void *ptr)
 
 void MaterialEditor::ReplaceFileContent()
 {
-  csfFile outputFile;
-  csfEntry *assetEntry = outputFile.CreateEntry("asset");
-  csfEntry *dataEntry = outputFile.CreateEntry("data");
-  csfEntry *materialEntry = outputFile.CreateEntry("material");
+  cs::file::File outputFile;
+  cs::file::Entry *assetEntry = outputFile.CreateEntry("asset");
+  cs::file::Entry *dataEntry = outputFile.CreateEntry("data");
+  cs::file::Entry *materialEntry = outputFile.CreateEntry("material");
 
   outputFile.GetRoot()->AddChild(assetEntry);
   assetEntry->AddChild(dataEntry);
@@ -145,17 +145,17 @@ void MaterialEditor::ReplaceFileContent()
 }
 
 
-void MaterialEditor::Save(csfFile &file)
+void MaterialEditor::Save(cs::file::File &file)
 {
   QString absFileName = GetResourceFileName();
 
   file.Output(std::string(absFileName.toLatin1()));
 }
 
-void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
+void MaterialEditor::FillEntry(cs::file::Entry *materialEntry, cs::file::File &file)
 {
-  csfEntry *materialDefEntry = file.CreateEntry("materialDef");
-  csfEntry *parametersEntry = file.CreateEntry("parameters");
+  cs::file::Entry *materialDefEntry = file.CreateEntry("materialDef");
+  cs::file::Entry *parametersEntry = file.CreateEntry("parameters");
   materialEntry->AddChild(materialDefEntry);
   materialEntry->AddChild(parametersEntry);
 
@@ -181,7 +181,7 @@ void MaterialEditor::FillEntry(csfEntry *materialEntry, csfFile &file)
     }
     std::string parameterId = materialDef->GetParameterId(i);
     std::string parameterName = materialDef->GetParameterName(i);
-    csfEntry *parameterEntry = file.CreateEntry("parameter");
+    cs::file::Entry *parameterEntry = file.CreateEntry("parameter");
     parametersEntry->AddChild(parameterEntry);
     parameterEntry->AddAttribute("id", parameterId);
     parameterEntry->AddAttribute("name", parameterName);

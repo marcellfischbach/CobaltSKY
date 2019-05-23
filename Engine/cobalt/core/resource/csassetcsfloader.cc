@@ -14,7 +14,7 @@ cs::AssetCSFLoader::~AssetCSFLoader()
 
 }
 
-bool cs::AssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::AssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -27,10 +27,10 @@ bool cs::AssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocato
 }
 
 
-const cs::Class *cs::AssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::AssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
-  const csfEntry *assetEntry = entry;
+  const cs::file::Entry *assetEntry = entry;
   if (assetEntry && assetEntry->IsRoot())
   {
     assetEntry = assetEntry->GetEntry("asset");
@@ -40,13 +40,13 @@ const cs::Class *cs::AssetCSFLoader::EvalClass(const csfEntry *entry, const cs::
     return nullptr;
   }
 
-  const csfEntry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
+  const cs::file::Entry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
   if (!dataEntry)
   {
     return nullptr;
   }
 
-  const csfEntry *firstChild = dataEntry->GetChild(0);
+  const cs::file::Entry *firstChild = dataEntry->GetChild(0);
   if (!firstChild)
   {
     return nullptr;
@@ -55,10 +55,10 @@ const cs::Class *cs::AssetCSFLoader::EvalClass(const csfEntry *entry, const cs::
   return cs::ResourceManager::Get()->EvalClass(firstChild, locator);
 }
 
-cs::ResourceWrapper *cs::AssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::AssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
-  const csfEntry *assetEntry = entry;
+  const cs::file::Entry *assetEntry = entry;
   if (assetEntry && assetEntry->IsRoot())
   {
     assetEntry = assetEntry->GetEntry("asset");
@@ -68,13 +68,13 @@ cs::ResourceWrapper *cs::AssetCSFLoader::Load(const csfEntry *entry, const cs::R
     return nullptr;
   }
 
-  const csfEntry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
+  const cs::file::Entry *dataEntry = FindEntryByTagName(assetEntry, locator.GetResourceName());
   if (!dataEntry)
   {
     return nullptr;
   }
 
-  const csfEntry *firstChild = dataEntry->GetChild(0);
+  const cs::file::Entry *firstChild = dataEntry->GetChild(0);
   if (!firstChild)
   {
     return nullptr;

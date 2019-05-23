@@ -20,15 +20,15 @@ public:
   virtual ~CollisionAssetCSFLoader();
 
 
-  virtual bool CanLoad(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData) const;
-  virtual const cs::Class* EvalClass(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
-  virtual cs::ResourceWrapper * Load(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
+  virtual bool CanLoad(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData) const;
+  virtual const cs::Class* EvalClass(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
+  virtual cs::ResourceWrapper * Load(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
 
 private:
-  void LoadTransform(const csfEntry * entry, cs::Matrix4f & localTransform) const;
-  void LoadBox(const csfEntry * entry, cs::PhysGeometry & geom) const;
-  void LoadCylinder(const csfEntry * entry, cs::PhysGeometry & geom) const;
-  void LoadSphere(const csfEntry * entry, cs::PhysGeometry & geom) const;
+  void LoadTransform(const cs::file::Entry * entry, cs::Matrix4f & localTransform) const;
+  void LoadBox(const cs::file::Entry * entry, cs::PhysGeometry & geom) const;
+  void LoadCylinder(const cs::file::Entry * entry, cs::PhysGeometry & geom) const;
+  void LoadSphere(const cs::file::Entry * entry, cs::PhysGeometry & geom) const;
 
 };
 

@@ -17,12 +17,12 @@ public:
   ProgramGL4Loader();
   virtual ~ProgramGL4Loader();
 
-  virtual bool CanLoad(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
-  virtual const cs::Class * EvalClass(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
-  virtual cs::ResourceWrapper * Load(const csfEntry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
+  virtual bool CanLoad(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
+  virtual const cs::Class * EvalClass(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
+  virtual cs::ResourceWrapper * Load(const cs::file::Entry * entry, const cs::ResourceLocator & locator, cs::iObject * userData = 0) const;
 
 private:
-  const csfEntry * FindTechnique(const csfEntry * entry) const;
+  const cs::file::Entry * FindTechnique(const cs::file::Entry * entry) const;
 };
 
 }

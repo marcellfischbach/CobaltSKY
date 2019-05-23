@@ -27,13 +27,13 @@ MaterialCreator::MaterialCreator(const std::string &name, const std::string &def
 
 }
 
-bool MaterialCreator::Create(csfFile &file)
+bool MaterialCreator::Create(cs::file::File &file)
 {
-  csfEntry *assetEntry = file.CreateEntry("asset");
-  csfEntry *dataEntry = file.CreateEntry("data");
-  csfEntry *materialEntry = file.CreateEntry("material");
-  csfEntry *materialDefEntry = file.CreateEntry("materialDef");
-  csfEntry *parametersEntry = file.CreateEntry("parameters");
+  cs::file::Entry *assetEntry = file.CreateEntry("asset");
+  cs::file::Entry *dataEntry = file.CreateEntry("data");
+  cs::file::Entry *materialEntry = file.CreateEntry("material");
+  cs::file::Entry *materialDefEntry = file.CreateEntry("materialDef");
+  cs::file::Entry *parametersEntry = file.CreateEntry("parameters");
 
   file.GetRoot()->AddChild(assetEntry);
   assetEntry->AddChild(dataEntry);

@@ -17,22 +17,22 @@ cs::CollisionAssetCSFLoader::~CollisionAssetCSFLoader()
 }
 
 
-bool cs::CollisionAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::CollisionAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("collider") ||
     entry->GetTagName() == std::string("shapes");
 }
 
-const cs::Class *cs::CollisionAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::CollisionAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::PhysicsShape::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::PhysicsShape *container = new cs::PhysicsShape();
 
-  const csfEntry *shapesEntry = nullptr;
+  const cs::file::Entry *shapesEntry = nullptr;
   if (entry->GetTagName() == std::string("shapes"))
   {
     shapesEntry = entry;
@@ -48,7 +48,7 @@ cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const csfEntry *entry, co
 
 
 
-  for (const csfEntry *shapeEntry = shapesEntry->GetEntry("shape");
+  for (const cs::file::Entry *shapeEntry = shapesEntry->GetEntry("shape");
        shapeEntry;
        shapeEntry = shapeEntry->GetSiblingEntry("shape"))
   {
@@ -59,7 +59,7 @@ cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const csfEntry *entry, co
     memset(&geometryDesc, 0, sizeof(geometryDesc));
     geometryDesc.Type = (cs::ePhysGeometryType)-1;
 
-    for (const csfEntry *child = shapeEntry->GetEntry();
+    for (const cs::file::Entry *child = shapeEntry->GetEntry();
          child;
          child = child->GetSiblingEntry())
     {
@@ -94,9 +94,9 @@ cs::ResourceWrapper *cs::CollisionAssetCSFLoader::Load(const csfEntry *entry, co
 }
 
 
-void cs::CollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, cs::Matrix4f &localTransform) const
+void cs::CollisionAssetCSFLoader::LoadTransform(const cs::file::Entry *transformEntry, cs::Matrix4f &localTransform) const
 {
-  const csfEntry *matrixEntry = transformEntry->GetEntry("matrix");
+  const cs::file::Entry *matrixEntry = transformEntry->GetEntry("matrix");
   if (!matrixEntry)
   {
     return;
@@ -104,10 +104,10 @@ void cs::CollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, 
 
 
   cs::Vector4f r0, r1, r2, r3;
-  const csfEntry *row0 = matrixEntry->GetEntry("row0");
-  const csfEntry *row1 = matrixEntry->GetEntry("row1");
-  const csfEntry *row2 = matrixEntry->GetEntry("row2");
-  const csfEntry *row3 = matrixEntry->GetEntry("row3");
+  const cs::file::Entry *row0 = matrixEntry->GetEntry("row0");
+  const cs::file::Entry *row1 = matrixEntry->GetEntry("row1");
+  const cs::file::Entry *row2 = matrixEntry->GetEntry("row2");
+  const cs::file::Entry *row3 = matrixEntry->GetEntry("row3");
   if (!row0 || !row1 || !row2 || !row3)
   {
     return;
@@ -124,7 +124,7 @@ void cs::CollisionAssetCSFLoader::LoadTransform(const csfEntry *transformEntry, 
   );
 }
 
-void cs::CollisionAssetCSFLoader::LoadBox(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadBox(const cs::file::Entry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("halfX") &&
       transformEntry->HasAttribute("halfY") &&
@@ -138,7 +138,7 @@ void cs::CollisionAssetCSFLoader::LoadBox(const csfEntry *transformEntry, cs::Ph
 }
 
 
-void cs::CollisionAssetCSFLoader::LoadCylinder(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadCylinder(const cs::file::Entry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("radius") &&
       transformEntry->HasAttribute("halfHeight"))
@@ -149,7 +149,7 @@ void cs::CollisionAssetCSFLoader::LoadCylinder(const csfEntry *transformEntry, c
   }
 }
 
-void cs::CollisionAssetCSFLoader::LoadSphere(const csfEntry *transformEntry, cs::PhysGeometry &geometry) const
+void cs::CollisionAssetCSFLoader::LoadSphere(const cs::file::Entry *transformEntry, cs::PhysGeometry &geometry) const
 {
   if (transformEntry->HasAttribute("radius"))
   {

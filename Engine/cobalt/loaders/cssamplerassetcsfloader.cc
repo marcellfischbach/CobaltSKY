@@ -15,7 +15,7 @@ cs::SamplerAssetCSFLoader::~SamplerAssetCSFLoader()
 
 }
 
-bool cs::SamplerAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::SamplerAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -94,12 +94,12 @@ namespace
 
 }
 
-const cs::Class *cs::SamplerAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::SamplerAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::SamplerWrapper::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::SamplerAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::SamplerAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::iSampler *sampler = csEng->CreateSampler();
   if (!sampler)
@@ -109,58 +109,58 @@ cs::ResourceWrapper *cs::SamplerAssetCSFLoader::Load(const csfEntry *entry, cons
   cs::SamplerWrapper *samplerWrapper = new cs::SamplerWrapper(sampler);
 
 
-  const csfEntry *filterElement = entry->GetEntry("filter");
+  const cs::file::Entry *filterElement = entry->GetEntry("filter");
   if (filterElement)
   {
     sampler->SetFilter(::evalFilterMode(filterElement->GetAttribute()));
   }
 
-  const csfEntry *anisotropyElement = entry->GetEntry("anisotropy");
+  const cs::file::Entry *anisotropyElement = entry->GetEntry("anisotropy");
   if (anisotropyElement)
   {
     sampler->SetAnisotropy(anisotropyElement->GetAttributeInt());
   }
 
-  const csfEntry *minLodElement = entry->GetEntry("minLOD");
+  const cs::file::Entry *minLodElement = entry->GetEntry("minLOD");
   if (minLodElement)
   {
     sampler->SetMinLOD(minLodElement->GetAttributeInt());
   }
 
-  const csfEntry *maxLodElement = entry->GetEntry("maxLOD");
+  const cs::file::Entry *maxLodElement = entry->GetEntry("maxLOD");
   if (maxLodElement)
   {
     sampler->SetMaxLOD(maxLodElement->GetAttributeInt());
   }
 
-  const csfEntry *addressUElement = entry->GetEntry("addressU");
+  const cs::file::Entry *addressUElement = entry->GetEntry("addressU");
   if (addressUElement)
   {
     sampler->SetAddressU(::evalAddressMode(addressUElement->GetAttribute()));
   }
-  const csfEntry *addressVElement = entry->GetEntry("addressV");
+  const cs::file::Entry *addressVElement = entry->GetEntry("addressV");
   if (addressVElement)
   {
     sampler->SetAddressV(::evalAddressMode(addressVElement->GetAttribute()));
   }
 
-  const csfEntry *addressWElement = entry->GetEntry("addressW");
+  const cs::file::Entry *addressWElement = entry->GetEntry("addressW");
   if (addressWElement)
   {
     sampler->SetAddressW(::evalAddressMode(addressWElement->GetAttribute()));
   }
 
-  const csfEntry *borderColorElement = entry->GetEntry("borderColor");
+  const cs::file::Entry *borderColorElement = entry->GetEntry("borderColor");
   if (borderColorElement)
   {
     sampler->SetBorderColor(LoadVector4f(borderColorElement));
   }
-  const csfEntry *compareModeElement = entry->GetEntry("compareMode");
+  const cs::file::Entry *compareModeElement = entry->GetEntry("compareMode");
   if (compareModeElement)
   {
     sampler->SetTextureCompareMode(::evalCompareMode(compareModeElement->GetAttribute()));
   }
-  const csfEntry *compareFuncElement = entry->GetEntry("compareFunc");
+  const cs::file::Entry *compareFuncElement = entry->GetEntry("compareFunc");
   if (compareFuncElement)
   {
     sampler->SetTextureCompareFunc(::evalCompareFunc(compareFuncElement->GetAttribute()));

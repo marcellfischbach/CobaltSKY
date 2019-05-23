@@ -473,13 +473,13 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   {
     return;
   }
-  csfFile file;
+  cs::file::File file;
 
-  csfEntry *assetEntry = file.CreateEntry("asset");
-  csfEntry *dataEntry = file.CreateEntry("data");
-  csfEntry *shaderGraphEntry = file.CreateEntry("shaderGraph");
-  csfEntry *metaEntry = file.CreateEntry("meta");
-  csfEntry *shaderGraphMetaEntry = file.CreateEntry("shaderGraphMeta");
+  cs::file::Entry *assetEntry = file.CreateEntry("asset");
+  cs::file::Entry *dataEntry = file.CreateEntry("data");
+  cs::file::Entry *shaderGraphEntry = file.CreateEntry("shaderGraph");
+  cs::file::Entry *metaEntry = file.CreateEntry("meta");
+  cs::file::Entry *shaderGraphMetaEntry = file.CreateEntry("shaderGraphMeta");
 
   file.GetRoot()->AddChild(assetEntry);
   assetEntry->AddChild(dataEntry);
@@ -488,13 +488,13 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
   metaEntry->AddChild(shaderGraphMetaEntry);
 
 
-  csfEntry *nodesEntry = file.CreateEntry("nodes");
+  cs::file::Entry *nodesEntry = file.CreateEntry("nodes");
   shaderGraphEntry->AddChild(nodesEntry);
 
-  csfEntry *inputsEntry = file.CreateEntry("inputs");
+  cs::file::Entry *inputsEntry = file.CreateEntry("inputs");
   shaderGraphEntry->AddChild(inputsEntry);
 
-  csfEntry *metaNodesEntry = file.CreateEntry("nodes");
+  cs::file::Entry *metaNodesEntry = file.CreateEntry("nodes");
   shaderGraphMetaEntry->AddChild(metaNodesEntry);
 
   size_t nodeId = 0;
@@ -508,7 +508,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
 
       nodeMap[node] = nodeId;
 
-      csfEntry *nodeEntry = file.CreateEntry("node");
+      cs::file::Entry *nodeEntry = file.CreateEntry("node");
       nodeEntry->AddAttribute("id", std::to_string(nodeId));
       nodeEntry->AddAttribute("class", node->GetClass()->GetName());
       nodesEntry->AddChild(nodeEntry);
@@ -516,12 +516,12 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       cs::SGResourceNode *resourceNode = cs::QueryClass<cs::SGResourceNode>(node);
       if (resourceNode)
       {
-        csfEntry *resourceEntry = file.CreateEntry("resource");
+        cs::file::Entry *resourceEntry = file.CreateEntry("resource");
         resourceEntry->AddAttribute("id", resourceNode->GetResourceId());
         resourceEntry->AddAttribute("name", resourceNode->GetResourceName());
         nodeEntry->AddChild(resourceEntry);
 
-        csfEntry *valueEntry = 0;
+        cs::file::Entry *valueEntry = 0;
         switch (resourceNode->GetResourceType())
         {
         case cs::eSPT_Float:
@@ -589,11 +589,11 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
           resourceEntry->AddChild(valueEntry);
         }
       }
-      csfEntry *nodeEntry1 = file.CreateEntry("node");
+      cs::file::Entry *nodeEntry1 = file.CreateEntry("node");
       nodeEntry1->AddAttribute("id", std::to_string(nodeId));
       metaNodesEntry->AddChild(nodeEntry1);
 
-      csfEntry *posEntry = file.CreateEntry("pos");
+      cs::file::Entry *posEntry = file.CreateEntry("pos");
       posEntry->AddAttribute(std::to_string(editorNode->GetLocation().x()));
       posEntry->AddAttribute(std::to_string(editorNode->GetLocation().y()));
       nodeEntry1->AddChild(posEntry);
@@ -603,17 +603,17 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     cs::SGShaderGraph *shaderGraph = editorNode->GetShaderGraph();
     if (shaderGraph)
     {
-      csfEntry *attributesEntry = file.CreateEntry("attributes");
+      cs::file::Entry *attributesEntry = file.CreateEntry("attributes");
       shaderGraphEntry->AddChild(attributesEntry);
 
-      csfEntry *blendOutWithBinaryGradientEntry = file.CreateEntry("blendOutWithBinaryGradient");
+      cs::file::Entry *blendOutWithBinaryGradientEntry = file.CreateEntry("blendOutWithBinaryGradient");
       if (shaderGraph->IsBlendOutWithBinaryGradient())
       {
         blendOutWithBinaryGradientEntry->AddAttribute("enable", "true");
       }
       attributesEntry->AddChild(blendOutWithBinaryGradientEntry);
 
-      csfEntry *discardAlphaEntry = file.CreateEntry("discardAlpha");
+      cs::file::Entry *discardAlphaEntry = file.CreateEntry("discardAlpha");
       if (shaderGraph->IsDiscardAlpha())
       {
         discardAlphaEntry->AddAttribute("enabled", "true");
@@ -621,7 +621,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       attributesEntry->AddChild(discardAlphaEntry);
 
 
-      csfEntry *thresholdEntry = file.CreateEntry("threshold");
+      cs::file::Entry *thresholdEntry = file.CreateEntry("threshold");
       thresholdEntry->AddAttribute(std::to_string(shaderGraph->GetDiscardAlphaThreshold()));
       discardAlphaEntry->AddChild(thresholdEntry);
 
@@ -637,16 +637,16 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       case cs::eCM_Never: modeString = "Never"; break;
       case cs::eCM_Always: modeString = "Always"; break;
       }
-      csfEntry *modeEntry = file.CreateEntry("mode");
+      cs::file::Entry *modeEntry = file.CreateEntry("mode");
       modeEntry->AddAttribute(modeString);
       discardAlphaEntry->AddChild(modeEntry);
 
 
 
-      csfEntry *metaShaderGraphEntry = file.CreateEntry("shaderGraph");
+      cs::file::Entry *metaShaderGraphEntry = file.CreateEntry("shaderGraph");
       shaderGraphMetaEntry->AddChild(metaShaderGraphEntry);
 
-      csfEntry *posEntry = file.CreateEntry("pos");
+      cs::file::Entry *posEntry = file.CreateEntry("pos");
       posEntry->AddAttribute(std::to_string(editorNode->GetLocation().x()));
       posEntry->AddAttribute(std::to_string(editorNode->GetLocation().y()));
       metaShaderGraphEntry->AddChild(posEntry);
@@ -660,7 +660,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     cs::SGNode *node = m_shaderGraphCopy->GetNode(i);
     for (size_t j = 0, jn = node->GetNumberOfInputs(); j < jn; ++j)
     {
-      csfEntry *inputEntry = file.CreateEntry("node");
+      cs::file::Entry *inputEntry = file.CreateEntry("node");
       inputEntry->AddAttribute("id", std::to_string(nodeMap[node]));
       inputEntry->AddAttribute("input", std::to_string(j));
       inputsEntry->AddChild(inputEntry);
@@ -672,14 +672,14 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       {
         cs::SGNode *outputNode = output->GetNode();
 
-        csfEntry *outputEntry = file.CreateEntry("node");
+        cs::file::Entry *outputEntry = file.CreateEntry("node");
         outputEntry->AddAttribute("id", std::to_string(nodeMap[outputNode]));
         outputEntry->AddAttribute("output", std::to_string(output->GetIdx()));
         inputEntry->AddChild(outputEntry);
       }
       else
       {
-        csfEntry *floatEntry = file.CreateEntry("float");
+        cs::file::Entry *floatEntry = file.CreateEntry("float");
         floatEntry->AddAttribute(std::to_string(input->GetConst()));
         inputEntry->AddChild(floatEntry);
       }
@@ -691,7 +691,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
     cs::SGOutput *output = m_shaderGraphCopy->GetInput((cs::SGShaderGraph::InputType)i);
     if (output)
     {
-      csfEntry *sgEntry = file.CreateEntry("shaderGraph");
+      cs::file::Entry *sgEntry = file.CreateEntry("shaderGraph");
       switch (i)
       {
       case cs::SGShaderGraph::eIT_Diffuse:
@@ -712,7 +712,7 @@ void ShaderGraphEditorWidget::on_pbSave_clicked()
       cs::SGNode *outputNode = output->GetNode();
       nodeId = nodeMap[outputNode];
 
-      csfEntry *outputEntry = file.CreateEntry("node");
+      cs::file::Entry *outputEntry = file.CreateEntry("node");
       outputEntry->AddAttribute("id", std::to_string(nodeId));
       outputEntry->AddAttribute("output", std::to_string(output->GetIdx()));
       sgEntry->AddChild(outputEntry);

@@ -17,17 +17,17 @@ cs::EntityCSFLoader::~EntityCSFLoader()
 
 }
 
-bool cs::EntityCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::EntityCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("entity");
 }
 
-const cs::Class *cs::EntityCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::EntityCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::Entity::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::EntityCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::EntityCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(userData);
   cs::Entity *entity = nullptr;
@@ -78,7 +78,7 @@ cs::ResourceWrapper *cs::EntityCSFLoader::Load(const csfEntry *entry, const cs::
 
 
   std::map<csID, cs::EntityState*> states;
-  for (const csfEntry *entityStateEntry = entry->GetEntry("entityState");
+  for (const cs::file::Entry *entityStateEntry = entry->GetEntry("entityState");
     entityStateEntry;
     entityStateEntry = entityStateEntry->GetSiblingEntry("entityState")) 
   {

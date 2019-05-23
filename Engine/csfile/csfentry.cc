@@ -3,7 +3,7 @@
 #include <csfile/csfentry.hh>
 #include <iostream>
 
-csfEntry::csfEntry(csfFile *file)
+cs::file::Entry::Entry(cs::file::File *file)
   : m_tagName("<invalid>")
   , m_file(file)
   , m_parent(0)
@@ -11,7 +11,7 @@ csfEntry::csfEntry(csfFile *file)
 
 }
 
-csfEntry::csfEntry(csfFile *file, const std::string &tagName)
+cs::file::Entry::Entry(cs::file::File *file, const std::string &tagName)
   : m_tagName(tagName)
   , m_file(file)
   , m_parent(0)
@@ -20,22 +20,22 @@ csfEntry::csfEntry(csfFile *file, const std::string &tagName)
 }
 
 
-void csfEntry::SetTagName(const std::string &tagName)
+void cs::file::Entry::SetTagName(const std::string &tagName)
 {
   m_tagName = tagName;
 }
 
-const std::string &csfEntry::GetTagName() const
+const std::string &cs::file::Entry::GetTagName() const
 {
   return m_tagName;
 }
 
-void csfEntry::RemoveAttributes()
+void cs::file::Entry::RemoveAttributes()
 {
   m_attributes.clear();
 }
 
-void csfEntry::RemoveAttribute(size_t idx)
+void cs::file::Entry::RemoveAttribute(size_t idx)
 {
 	if (idx >= m_attributes.size())
 	{
@@ -46,12 +46,12 @@ void csfEntry::RemoveAttribute(size_t idx)
 	m_attributes.erase(it);
 }
 
-size_t csfEntry::GetNumberOfAttributes() const
+size_t cs::file::Entry::GetNumberOfAttributes() const
 {
   return m_attributes.size();
 }
 
-std::string csfEntry::GetAttributeKey(size_t idx) const
+std::string cs::file::Entry::GetAttributeKey(size_t idx) const
 {
   if (idx >= m_attributes.size())
   {
@@ -60,7 +60,7 @@ std::string csfEntry::GetAttributeKey(size_t idx) const
   return m_attributes[idx].key;
 }
 
-std::string csfEntry::GetAttributeValue(size_t idx) const
+std::string cs::file::Entry::GetAttributeValue(size_t idx) const
 {
   if (idx >= m_attributes.size())
   {
@@ -69,7 +69,7 @@ std::string csfEntry::GetAttributeValue(size_t idx) const
   return m_attributes[idx].value;
 }
 
-size_t csfEntry::GetAttributeIndex(const std::string &attributeName) const
+size_t cs::file::Entry::GetAttributeIndex(const std::string &attributeName) const
 {
   for (size_t i = 0, in = m_attributes.size(); i < in; ++i)
   {
@@ -82,7 +82,7 @@ size_t csfEntry::GetAttributeIndex(const std::string &attributeName) const
   return InvalidIndex;
 }
 
-csfEntry *csfEntry::AddAttribute(const std::string &attribute)
+cs::file::Entry *cs::file::Entry::AddAttribute(const std::string &attribute)
 {
   Attribute attr;
   attr.key = "";
@@ -91,7 +91,7 @@ csfEntry *csfEntry::AddAttribute(const std::string &attribute)
   return this;
 }
 
-csfEntry *csfEntry::AddAttribute(const std::string &key, const std::string &value)
+cs::file::Entry *cs::file::Entry::AddAttribute(const std::string &key, const std::string &value)
 {
   Attribute attr;
   attr.key = key;
@@ -100,52 +100,52 @@ csfEntry *csfEntry::AddAttribute(const std::string &key, const std::string &valu
   return this;
 }
 
-csfEntry *csfEntry::AddAttributeInt(int attribute)
+cs::file::Entry *cs::file::Entry::AddAttributeInt(int attribute)
 {
   return AddAttribute(std::to_string(attribute));
 }
 
-csfEntry *csfEntry::AddAttributeInt(const std::string &key, int attribute)
+cs::file::Entry *cs::file::Entry::AddAttributeInt(const std::string &key, int attribute)
 {
   return AddAttribute(key, std::to_string(attribute));
 }
 
-csfEntry *csfEntry::AddAttributeLong(long attribute)
+cs::file::Entry *cs::file::Entry::AddAttributeLong(long attribute)
 {
   return AddAttribute(std::to_string(attribute));
 }
 
-csfEntry * csfEntry::AddAttributeLong(const std::string &key, long attribute)
+cs::file::Entry * cs::file::Entry::AddAttributeLong(const std::string &key, long attribute)
 {
   return AddAttribute(key, std::to_string(attribute));
 }
 
-csfEntry * csfEntry::AddAttributeFloat(float attribute)
+cs::file::Entry * cs::file::Entry::AddAttributeFloat(float attribute)
 {
   return AddAttribute(std::to_string(attribute));
 }
 
-csfEntry * csfEntry::AddAttributeFloat(const std::string &key, float attribute)
+cs::file::Entry * cs::file::Entry::AddAttributeFloat(const std::string &key, float attribute)
 {
   return AddAttribute(key, std::to_string(attribute));
 }
 
-csfEntry *csfEntry::AddAttributeDouble(double attribute)
+cs::file::Entry *cs::file::Entry::AddAttributeDouble(double attribute)
 {
   return AddAttribute(std::to_string(attribute));
 }
 
-csfEntry * csfEntry::AddAttributeDouble(const std::string &key, double attribute)
+cs::file::Entry * cs::file::Entry::AddAttributeDouble(const std::string &key, double attribute)
 {
   return AddAttribute(key, std::to_string(attribute));
 }
 
-bool csfEntry::HasAttribute(size_t idx) const
+bool cs::file::Entry::HasAttribute(size_t idx) const
 {
   return idx < m_attributes.size();
 }
 
-bool csfEntry::HasAttribute(const std::string& key) const
+bool cs::file::Entry::HasAttribute(const std::string& key) const
 {
   for (const Attribute &attribute : m_attributes)
   {
@@ -157,7 +157,7 @@ bool csfEntry::HasAttribute(const std::string& key) const
   return false;
 }
 
-std::string csfEntry::GetAttribute(size_t idx, const std::string &defaultValue) const
+std::string cs::file::Entry::GetAttribute(size_t idx, const std::string &defaultValue) const
 {
   if (idx >= m_attributes.size())
   {
@@ -168,7 +168,7 @@ std::string csfEntry::GetAttribute(size_t idx, const std::string &defaultValue) 
 
 
 
-std::string csfEntry::GetAttribute(const std::string& key, const std::string &defaultValue) const
+std::string cs::file::Entry::GetAttribute(const std::string& key, const std::string &defaultValue) const
 {
   for (const Attribute &attribute : m_attributes)
   {
@@ -181,7 +181,7 @@ std::string csfEntry::GetAttribute(const std::string& key, const std::string &de
 }
 
 
-int csfEntry::GetAttributeInt(size_t idx, int defaultValue) const
+int cs::file::Entry::GetAttributeInt(size_t idx, int defaultValue) const
 {
   if (HasAttribute(idx))
   {
@@ -190,7 +190,7 @@ int csfEntry::GetAttributeInt(size_t idx, int defaultValue) const
   return defaultValue;
 }
 
-int csfEntry::GetAttributeInt(const std::string &key, int defaultValue) const
+int cs::file::Entry::GetAttributeInt(const std::string &key, int defaultValue) const
 {
   if (HasAttribute(key))
   {
@@ -199,7 +199,7 @@ int csfEntry::GetAttributeInt(const std::string &key, int defaultValue) const
   return defaultValue;
 }
 
-long csfEntry::GetAttributeLong(size_t idx, long defaultValue) const
+long cs::file::Entry::GetAttributeLong(size_t idx, long defaultValue) const
 {
   if (HasAttribute(idx))
   {
@@ -208,7 +208,7 @@ long csfEntry::GetAttributeLong(size_t idx, long defaultValue) const
   return defaultValue;
 }
 
-long csfEntry::GetAttributeLong(const std::string &key, long defaultValue) const
+long cs::file::Entry::GetAttributeLong(const std::string &key, long defaultValue) const
 {
   if (HasAttribute(key))
   {
@@ -217,7 +217,7 @@ long csfEntry::GetAttributeLong(const std::string &key, long defaultValue) const
   return defaultValue;
 }
 
-float csfEntry::GetAttributeFloat(size_t idx, float defaultValue) const
+float cs::file::Entry::GetAttributeFloat(size_t idx, float defaultValue) const
 {
   if (HasAttribute(idx))
   {
@@ -226,7 +226,7 @@ float csfEntry::GetAttributeFloat(size_t idx, float defaultValue) const
   return defaultValue;
 }
 
-float csfEntry::GetAttributeFloat(const std::string &key, float defaultValue) const
+float cs::file::Entry::GetAttributeFloat(const std::string &key, float defaultValue) const
 {
   if (HasAttribute(key))
   {
@@ -235,7 +235,7 @@ float csfEntry::GetAttributeFloat(const std::string &key, float defaultValue) co
   return defaultValue;
 }
 
-double csfEntry::GetAttributeDouble(size_t idx, double defaultValue) const
+double cs::file::Entry::GetAttributeDouble(size_t idx, double defaultValue) const
 {
   if (HasAttribute(idx))
   {
@@ -244,7 +244,7 @@ double csfEntry::GetAttributeDouble(size_t idx, double defaultValue) const
   return defaultValue;
 }
 
-double csfEntry::GetAttributeDouble(const std::string &key, double defaultValue) const
+double cs::file::Entry::GetAttributeDouble(const std::string &key, double defaultValue) const
 {
   if (HasAttribute(key))
   {
@@ -253,29 +253,29 @@ double csfEntry::GetAttributeDouble(const std::string &key, double defaultValue)
   return defaultValue;
 }
 
-bool csfEntry::IsRoot() const
+bool cs::file::Entry::IsRoot() const
 {
   return !m_parent;
 }
 
-csfEntry *csfEntry::GetParent()
+cs::file::Entry *cs::file::Entry::GetParent()
 {
   return m_parent;
 }
 
-const csfEntry *csfEntry::GetParent() const
+const cs::file::Entry *cs::file::Entry::GetParent() const
 {
   return m_parent;
 }
 
-csfEntry *csfEntry::AddChild(csfEntry *child)
+cs::file::Entry *cs::file::Entry::AddChild(cs::file::Entry *child)
 {
   child->m_parent = this;
   m_children.push_back(child);
   return child;
 }
 
-csfEntry *csfEntry::RemoveChild(csfEntry *child)
+cs::file::Entry *cs::file::Entry::RemoveChild(cs::file::Entry *child)
 {
   for (auto it = m_children.begin(); it != m_children.end(); ++it)
   {
@@ -288,17 +288,17 @@ csfEntry *csfEntry::RemoveChild(csfEntry *child)
   return this;
 }
 
-void csfEntry::RemoveAllChildren()
+void cs::file::Entry::RemoveAllChildren()
 {
   m_children.clear();
 }
 
-size_t csfEntry::GetNumberOfChildren() const
+size_t cs::file::Entry::GetNumberOfChildren() const
 {
   return m_children.size();
 }
 
-csfEntry *csfEntry::GetChild(size_t idx)
+cs::file::Entry *cs::file::Entry::GetChild(size_t idx)
 {
   if (idx >= m_children.size())
   {
@@ -307,7 +307,7 @@ csfEntry *csfEntry::GetChild(size_t idx)
   return m_children[idx];
 }
 
-const csfEntry *csfEntry::GetChild(size_t idx) const
+const cs::file::Entry *cs::file::Entry::GetChild(size_t idx) const
 {
   if (idx >= m_children.size())
   {
@@ -316,7 +316,7 @@ const csfEntry *csfEntry::GetChild(size_t idx) const
   return m_children[idx];
 }
 
-size_t csfEntry::GetChildIndex(const csfEntry *entry) const
+size_t cs::file::Entry::GetChildIndex(const cs::file::Entry *entry) const
 {
   for (size_t i = 0, in = m_children.size(); i < in; ++i)
   {
@@ -328,13 +328,13 @@ size_t csfEntry::GetChildIndex(const csfEntry *entry) const
   return InvalidIndex;
 }
 
-csfEntry *csfEntry::GetEntry(const std::string &entry, const csfEntry *offset)
+cs::file::Entry *cs::file::Entry::GetEntry(const std::string &entry, const cs::file::Entry *offset)
 {
-  const csfEntry *thisEntry = this;
-  return const_cast<csfEntry*>(thisEntry->GetEntry(entry, offset));
+  const cs::file::Entry *thisEntry = this;
+  return const_cast<cs::file::Entry*>(thisEntry->GetEntry(entry, offset));
 }
 
-const csfEntry *csfEntry::GetEntry(const std::string &entry, const csfEntry *offset) const
+const cs::file::Entry *cs::file::Entry::GetEntry(const std::string &entry, const cs::file::Entry *offset) const
 {
   std::string entryName = entry;
   while (true)
@@ -374,7 +374,7 @@ const csfEntry *csfEntry::GetEntry(const std::string &entry, const csfEntry *off
   return 0;
 }
 
-const csfEntry *csfEntry::GetSiblingEntry(size_t offset) const
+const cs::file::Entry *cs::file::Entry::GetSiblingEntry(size_t offset) const
 {
   if (!m_parent)
   {
@@ -388,7 +388,7 @@ const csfEntry *csfEntry::GetSiblingEntry(size_t offset) const
   return m_parent->GetEntry(idx + offset + 1);
 }
 
-const csfEntry *csfEntry::GetSiblingEntry(const std::string &entry) const
+const cs::file::Entry *cs::file::Entry::GetSiblingEntry(const std::string &entry) const
 {
   if (m_parent)
   {
@@ -397,22 +397,22 @@ const csfEntry *csfEntry::GetSiblingEntry(const std::string &entry) const
   return 0;
 }
 
-void csfEntry::Debug() const
+void cs::file::Entry::Debug() const
 {
   Debug(0);
 }
 
-csfFile *csfEntry::GetFile()
+cs::file::File *cs::file::Entry::GetFile()
 {
   return m_file;
 }
 
-const csfFile *csfEntry::GetFile() const
+const cs::file::File *cs::file::Entry::GetFile() const
 {
   return m_file;
 }
 
-void csfEntry::Debug(int indent) const
+void cs::file::Entry::Debug(int indent) const
 {
   for (int i = 0; i < indent; ++i)
   {
@@ -431,7 +431,7 @@ void csfEntry::Debug(int indent) const
   }
 
   std::cout << ")" << std::endl;
-  for (csfEntry *child : m_children)
+  for (cs::file::Entry *child : m_children)
   {
     child->Debug(indent + 1);
   }

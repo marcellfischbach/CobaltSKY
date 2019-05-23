@@ -5,7 +5,7 @@
 #include <editor/assetmanager/actions/assetmanageractioncallback.hh>
 #include <string>
 
-class csfFile;
+class cs::file::File;
 
 namespace asset::model
 {
@@ -23,7 +23,7 @@ namespace asset::actions
 		virtual const std::string &GetName() const;
 		virtual const std::string &GetDefaultName() const;
 		virtual const std::string &GetAssetType() const;
-		virtual bool Create(csfFile &file) = 0;
+		virtual bool Create(cs::file::File &file) = 0;
 
 	protected:
 		NewAssetCreator(const std::string &name, const std::string &defaultName, const std::string &assetType);

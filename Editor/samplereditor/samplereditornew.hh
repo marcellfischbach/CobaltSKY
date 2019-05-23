@@ -14,11 +14,11 @@ public:
 };
 
 
-class csfFile;
+class cs::file::File;
 class SamplerCreator : public asset::actions::NewAssetCreator
 {
 public:
 	SamplerCreator(const std::string &name, const std::string &defaultName);
 
-	bool Create(csfFile &file);
+	bool Create(cs::file::File &file);
 };

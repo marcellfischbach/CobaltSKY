@@ -157,7 +157,7 @@ const cs::Class *cs::ResourceManager::EvalClass(cs::iFile *file, const cs::Resou
 }
 
 
-cs::ResourceWrapper *cs::ResourceManager::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData)
+cs::ResourceWrapper *cs::ResourceManager::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData)
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
@@ -171,7 +171,7 @@ cs::ResourceWrapper *cs::ResourceManager::Load(const csfEntry *entry, const cs::
   return nullptr;
 }
 
-const cs::Class *cs::ResourceManager::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ResourceManager::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   for (int i = static_cast<int>(m_csfLoaders.size()) - 1; i >= 0; --i)
   {
@@ -185,12 +185,12 @@ const cs::Class *cs::ResourceManager::EvalClass(const csfEntry *entry, const cs:
 }
 
 
-cs::ResourceWrapper *cs::ResourceManager::Load(const csfBlob *blob, const cs::ResourceLocator &locator, cs::iObject *userData)
+cs::ResourceWrapper *cs::ResourceManager::Load(const cs::file::Blob *blob, const cs::ResourceLocator &locator, cs::iObject *userData)
 {
   cs::AssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return Load(blob->GetType(), stream, locator, userData);
 }
-const cs::Class *cs::ResourceManager::EvalClass(const csfBlob *blob, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ResourceManager::EvalClass(const cs::file::Blob *blob, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::AssetInputStream stream (static_cast<const csUInt8*>(blob->GetBuffer()), blob->GetSize());
   return EvalClass(blob->GetType(), stream, locator, userData);

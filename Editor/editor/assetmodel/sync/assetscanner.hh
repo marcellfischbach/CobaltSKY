@@ -3,7 +3,7 @@
 
 #include <editor/editorexport.hh>
 
-class csfEntry;
+class cs::file::Entry;
 
 namespace asset::model
 {
@@ -15,7 +15,7 @@ namespace asset::model
     void Scan();
 
   private:
-    void Scan(const csfEntry *entry);
+    void Scan(const cs::file::Entry *entry);
     asset::model::Asset * m_asset;
   };
 

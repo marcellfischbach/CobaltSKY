@@ -46,7 +46,7 @@ const cs::Class *cs::CSFFileLoader::EvalClass(cs::iFile *file, const cs::Resourc
 
   file->Seek(eSP_Set, (long)currentPos);
 
-  csfFile f;
+  cs::file::File f;
   bool res = f.Parse(buffer, length);
   delete[] buffer;
 
@@ -82,7 +82,7 @@ cs::ResourceWrapper *cs::CSFFileLoader::Load(cs::iFile *file, const cs::Resource
 
   file->Seek(eSP_Set, (long)currentPos);
 
-  csfFile f;
+  cs::file::File f;
   bool res = f.Parse(buffer, length);
   delete[] buffer;
 

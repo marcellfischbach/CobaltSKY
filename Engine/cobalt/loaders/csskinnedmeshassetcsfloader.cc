@@ -39,25 +39,25 @@ cs::SkinnedMeshAssetCSFLoader::~SkinnedMeshAssetCSFLoader()
 
 
 
-bool cs::SkinnedMeshAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::SkinnedMeshAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("skinnedMesh");
 }
 
-const cs::Class *cs::SkinnedMeshAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::SkinnedMeshAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::SkinnedMesh::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::SkinnedMesh *mesh = new cs::SkinnedMesh();
   cs::SkinnedMeshWrapper *meshWrapper = new cs::SkinnedMeshWrapper(mesh);
 
-  const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
-  const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
-  const csfEntry *subMeshesEntry = entry->GetEntry("subMeshes");
-  const csfEntry *bonesEntry = entry->GetEntry("bones");
+  const cs::file::Entry *materialSlotsEntry = entry->GetEntry("materialSlots");
+  const cs::file::Entry *globalIndicesEntry = entry->GetEntry("globalIndices");
+  const cs::file::Entry *subMeshesEntry = entry->GetEntry("subMeshes");
+  const cs::file::Entry *bonesEntry = entry->GetEntry("bones");
 
   if (!materialSlotsEntry || !globalIndicesEntry || !subMeshesEntry || !bonesEntry)
   {
@@ -68,7 +68,7 @@ cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, 
   //
   // load the material slots
   std::vector<MaterialSlot> materialSlots;
-  for (const csfEntry *materialSlotEntry = materialSlotsEntry->GetEntry("materialSlot");
+  for (const cs::file::Entry *materialSlotEntry = materialSlotsEntry->GetEntry("materialSlot");
        materialSlotEntry;
        materialSlotEntry = materialSlotEntry->GetSiblingEntry("materialSlot"))
   {
@@ -88,7 +88,7 @@ cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, 
   }
 
 
-  for (const csfEntry *boneEntry = bonesEntry->GetEntry("bone");
+  for (const cs::file::Entry *boneEntry = bonesEntry->GetEntry("bone");
        boneEntry;
        boneEntry = boneEntry->GetSiblingEntry("bone"))
   {
@@ -106,7 +106,7 @@ cs::ResourceWrapper *cs::SkinnedMeshAssetCSFLoader::Load(const csfEntry *entry, 
 
   //
   // lod the submeshes
-  for (const csfEntry *subMeshEntry = subMeshesEntry->GetEntry("subMesh");
+  for (const cs::file::Entry *subMeshEntry = subMeshesEntry->GetEntry("subMesh");
        subMeshEntry;
        subMeshEntry = subMeshEntry->GetSiblingEntry("subMesh"))
   {

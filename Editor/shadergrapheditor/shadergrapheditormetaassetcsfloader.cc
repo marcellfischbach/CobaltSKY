@@ -17,29 +17,29 @@ ShaderGraphEditorMetaAssetCSFLoader::~ShaderGraphEditorMetaAssetCSFLoader()
 
 }
 
-bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool ShaderGraphEditorMetaAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("shaderGraphMeta");
 }
 
-const cs::Class *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *ShaderGraphEditorMetaAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return ShaderGraphEditorMeta::GetStaticClass();
 }
 
-cs::ResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   ShaderGraphEditorMeta *meta = new ShaderGraphEditorMeta();
   ShaderGraphEditorMetaWrapper *metaWrapper = new ShaderGraphEditorMetaWrapper(meta);
-  const csfEntry *nodesEntry = entry->GetEntry("nodes");
+  const cs::file::Entry *nodesEntry = entry->GetEntry("nodes");
   if (nodesEntry)
   {
-    for (const csfEntry *nodeEntry = nodesEntry->GetEntry("node");
+    for (const cs::file::Entry *nodeEntry = nodesEntry->GetEntry("node");
       nodeEntry;
       nodeEntry = nodeEntry->GetSiblingEntry("node"))
     {
       cs::Vector2f pos;
-      const csfEntry *posEntry = nodeEntry->GetEntry("pos");
+      const cs::file::Entry *posEntry = nodeEntry->GetEntry("pos");
       if (posEntry)
       {
         pos = LoadVector2f(posEntry);
@@ -51,11 +51,11 @@ cs::ResourceWrapper *ShaderGraphEditorMetaAssetCSFLoader::Load(const csfEntry *e
       }
     }
 
-    const csfEntry *shaderGraphEntry = entry->GetEntry("shaderGraph");
+    const cs::file::Entry *shaderGraphEntry = entry->GetEntry("shaderGraph");
     if (shaderGraphEntry)
     {
       cs::Vector2f pos;
-      const csfEntry *posEntry = shaderGraphEntry->GetEntry("pos");
+      const cs::file::Entry *posEntry = shaderGraphEntry->GetEntry("pos");
       if (posEntry)
       {
         pos = LoadVector2f(posEntry);

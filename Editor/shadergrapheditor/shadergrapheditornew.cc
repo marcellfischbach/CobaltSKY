@@ -28,14 +28,14 @@ ShaderGraphCreator::ShaderGraphCreator(const std::string &name, const std::strin
 
 }
 
-bool ShaderGraphCreator::Create(csfFile &file)
+bool ShaderGraphCreator::Create(cs::file::File &file)
 {
-  csfEntry *assetEntry = file.CreateEntry("asset");
-  csfEntry *dataEntry = file.CreateEntry("data");
-  csfEntry *shaderGraphEntry = file.CreateEntry("shaderGraph");
-  csfEntry *nodesEntry = file.CreateEntry("nodes");
-  csfEntry *inputsEntry = file.CreateEntry("inputs");
-  csfEntry *attributesEntry = file.CreateEntry("attributes");
+  cs::file::Entry *assetEntry = file.CreateEntry("asset");
+  cs::file::Entry *dataEntry = file.CreateEntry("data");
+  cs::file::Entry *shaderGraphEntry = file.CreateEntry("shaderGraph");
+  cs::file::Entry *nodesEntry = file.CreateEntry("nodes");
+  cs::file::Entry *inputsEntry = file.CreateEntry("inputs");
+  cs::file::Entry *attributesEntry = file.CreateEntry("attributes");
 
   file.GetRoot()->AddChild(assetEntry);
   assetEntry->AddChild(dataEntry);

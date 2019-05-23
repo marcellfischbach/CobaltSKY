@@ -81,14 +81,14 @@ void TextureEditorWidget::on_pbSave_clicked()
   QString absFileName = m_editor->GetResourceFileName();
 
 
-  csfFile outputFile;
+  cs::file::File outputFile;
   if (!outputFile.Parse(std::string(absFileName.toLatin1())))
   {
     printf("Unable to save\n");
     //SaveNew();
     return;
   }
-  csfEntry *assetEntry = outputFile.GetEntry("asset");
+  cs::file::Entry *assetEntry = outputFile.GetEntry("asset");
   if (!assetEntry)
   {
     printf("Malformed asset\n");
@@ -97,7 +97,7 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  csfEntry *dataEntry = assetEntry->GetEntry("data");
+  cs::file::Entry *dataEntry = assetEntry->GetEntry("data");
   if (!dataEntry)
   {
     printf("Malformed asset\n");
@@ -106,7 +106,7 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  csfEntry *texture2dEntry = dataEntry->GetEntry("texture2d");
+  cs::file::Entry *texture2dEntry = dataEntry->GetEntry("texture2d");
   if (!texture2dEntry)
   {
     printf("Malformed asset\n");
@@ -115,7 +115,7 @@ void TextureEditorWidget::on_pbSave_clicked()
   }
 
 
-  csfEntry *samplerEntry = texture2dEntry->GetEntry("sampler");
+  cs::file::Entry *samplerEntry = texture2dEntry->GetEntry("sampler");
   if (!samplerEntry)
   {
     printf("Malformed asset\n");

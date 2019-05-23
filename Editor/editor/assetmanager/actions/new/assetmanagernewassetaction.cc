@@ -89,7 +89,7 @@ namespace asset::actions
 		std::string pathStr = cs::VFS::Get()->GetAbsolutePath(locator, cs::VFS::DontCheckExistence);
 		
 
-		csfFile file;
+		cs::file::File file;
 		try
 		{
 			m_creator->Create(file);

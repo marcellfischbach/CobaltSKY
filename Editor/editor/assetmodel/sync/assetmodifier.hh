@@ -8,7 +8,7 @@ namespace cs
 class ResourceLocator;
 }
 
-class csfEntry;
+class cs::file::Entry;
 
 namespace asset::model
 {
@@ -22,7 +22,7 @@ namespace asset::model
     void ClearLocator(const cs::ResourceLocator &locator);
 
   private:
-    void ReplaceLocator(csfEntry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
+    void ReplaceLocator(cs::file::Entry *entry, const cs::ResourceLocator &oldLocator, const cs::ResourceLocator &newLocator);
     asset::model::Asset *m_asset;
   };
 }

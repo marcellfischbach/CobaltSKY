@@ -16,9 +16,9 @@ public:
   virtual ~SkinnedMeshAssetCSFLoader();
 
 
-  bool CanLoad(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
-  const cs::Class * EvalClass(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
-  cs::ResourceWrapper * Load(const csfEntry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+  bool CanLoad(const cs::file::Entry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+  const cs::Class * EvalClass(const cs::file::Entry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
+  cs::ResourceWrapper * Load(const cs::file::Entry * element, const cs::ResourceLocator & locator, cs::iObject * userData = nullptr) const;
 
 };
 

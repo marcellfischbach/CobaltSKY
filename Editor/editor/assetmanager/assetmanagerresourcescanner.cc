@@ -98,7 +98,7 @@ void AssetManagerResourceScanner::ScanReference(Entry &entry)
   buffer[length] = '\0';
   file->Close();
 
-  csfFile csffile;
+  cs::file::File csffile;
   bool success = csffile.Parse((const csUInt8*)buffer, (size_t)length, false);
   delete buffer;
   if (!success)
@@ -113,7 +113,7 @@ void AssetManagerResourceScanner::ScanReference(Entry &entry)
 
 }
 
-void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const csfEntry *entry)
+void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const cs::file::Entry *entry)
 {
   if (!entry)
   {
@@ -135,7 +135,7 @@ void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const csfEntr
 
   }
 
-  for (const csfEntry *child = entry->GetEntry(); child; child = child->GetSiblingEntry())
+  for (const cs::file::Entry *child = entry->GetEntry(); child; child = child->GetSiblingEntry())
   {
     ScanReference(assetEntry, child);
   }
@@ -143,15 +143,15 @@ void AssetManagerResourceScanner::ScanReference(Entry &assetEntry, const csfEntr
 }
 
 
-void AssetManagerResourceScanner::EvalTypeName(Entry &assetEntry, const csfEntry *rootElement)
+void AssetManagerResourceScanner::EvalTypeName(Entry &assetEntry, const cs::file::Entry *rootElement)
 {
-  const csfEntry *dataEntry = rootElement->GetEntry("asset.data");
+  const cs::file::Entry *dataEntry = rootElement->GetEntry("asset.data");
   if (!dataEntry)
   {
     return;
   }
 
-  const csfEntry *resourceEntry = dataEntry->GetEntry();
+  const cs::file::Entry *resourceEntry = dataEntry->GetEntry();
   if (!resourceEntry)
   {
     return;

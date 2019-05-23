@@ -23,7 +23,7 @@ public:
 
 
   bool HasEntry(const std::string& entry) const;
-  const csfEntry* GetEntry(const std::string& entry) const;
+  const cs::file::Entry* GetEntry(const std::string& entry) const;
 
   bool HasValue(const std::string& entry, size_t attribute) const;
   bool HasValue(const std::string& entry, const std::string& attributeName) const;
@@ -44,8 +44,8 @@ protected:
   Settings();
 
 private:
-  csfFile m_file;
-  csfEntry* m_configEntry;
+  cs::file::File m_file;
+  cs::file::Entry* m_configEntry;
   static cs::Settings* static_instances;
   std::string         _rootPath;
 

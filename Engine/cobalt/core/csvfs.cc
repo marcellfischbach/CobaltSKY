@@ -87,14 +87,14 @@ bool cs::VFS::LoadConfig(const std::string &configFileName)
 {
   cs::FileInfo fileInfo(configFileName.c_str());
 
-  csfFile file;
+  cs::file::File file;
   if (!file.Parse(configFileName))
   {
     return false;
   }
 
 
-  const csfEntry *rootEntry = file.GetRoot();
+  const cs::file::Entry *rootEntry = file.GetRoot();
   if (!rootEntry)
   {
     return false;
@@ -110,14 +110,14 @@ bool cs::VFS::Initialize(cs::Settings *settings)
     return false;
   }
 
-  const csfEntry *rootPathsEntry = settings->GetEntry("vfs.rootPaths");
+  const cs::file::Entry *rootPathsEntry = settings->GetEntry("vfs.rootPaths");
   if (!rootPathsEntry)
   {
     return false;
   }
   for (size_t i = 0, in = rootPathsEntry->GetNumberOfChildren(); i < in; ++i)
   {
-    const csfEntry *entry = rootPathsEntry->GetChild(i);
+    const cs::file::Entry *entry = rootPathsEntry->GetChild(i);
     if (entry && entry->GetTagName() == "root")
     {
 
@@ -126,14 +126,14 @@ bool cs::VFS::Initialize(cs::Settings *settings)
   }
 
 
-  const csfEntry *resolutionsEntry = settings->GetEntry("vfs.resolutions");
+  const cs::file::Entry *resolutionsEntry = settings->GetEntry("vfs.resolutions");
   if (!rootPathsEntry)
   {
     return false;
   }
   for (size_t i = 0, in = resolutionsEntry->GetNumberOfChildren(); i < in; ++i)
   {
-    const csfEntry *entry = resolutionsEntry->GetChild(i);
+    const cs::file::Entry *entry = resolutionsEntry->GetChild(i);
     if (entry && entry->GetTagName() == "resolution")
     {
       ImportResolution(settings, entry);
@@ -145,7 +145,7 @@ bool cs::VFS::Initialize(cs::Settings *settings)
   return true;
 }
 
-bool cs::VFS::ImportRootPath(cs::Settings *settings, const csfEntry *rootPathEntry)
+bool cs::VFS::ImportRootPath(cs::Settings *settings, const cs::file::Entry *rootPathEntry)
 {
   if (!rootPathEntry || !rootPathEntry->HasAttribute("name") || !rootPathEntry->HasAttribute("path"))
   {
@@ -162,7 +162,7 @@ bool cs::VFS::ImportRootPath(cs::Settings *settings, const csfEntry *rootPathEnt
   return true;
 }
 
-bool cs::VFS::ImportResolution(cs::Settings *settings, const csfEntry *resolutionEntry)
+bool cs::VFS::ImportResolution(cs::Settings *settings, const cs::file::Entry *resolutionEntry)
 {
   CS_UNUSED(settings);
   if (!resolutionEntry->HasAttribute("name") || !resolutionEntry->HasAttribute("path"))
@@ -173,12 +173,12 @@ bool cs::VFS::ImportResolution(cs::Settings *settings, const csfEntry *resolutio
   return true;
 }
 
-bool cs::VFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
+bool cs::VFS::LoadConfig(const cs::file::Entry *vfsEntry, const std::string &basePath)
 {
-    const csfEntry *rootPathsEntry = vfsEntry->GetEntry("rootPaths");
+    const cs::file::Entry *rootPathsEntry = vfsEntry->GetEntry("rootPaths");
     if (rootPathsEntry)
     {
-      for (const csfEntry *rootPathEntry = rootPathsEntry->GetEntry("rootPath");
+      for (const cs::file::Entry *rootPathEntry = rootPathsEntry->GetEntry("rootPath");
            rootPathEntry;
            rootPathEntry = rootPathEntry->GetSiblingEntry("rootPath"))
       {
@@ -202,10 +202,10 @@ bool cs::VFS::LoadConfig(const csfEntry *vfsEntry, const std::string &basePath)
       }
     }
 
-    const csfEntry *resolutionsEntry = vfsEntry->GetEntry("resolutions");
+    const cs::file::Entry *resolutionsEntry = vfsEntry->GetEntry("resolutions");
     if (resolutionsEntry)
     {
-      for (const csfEntry *resolutionEntry = resolutionsEntry->GetEntry();
+      for (const cs::file::Entry *resolutionEntry = resolutionsEntry->GetEntry();
            resolutionEntry;
            resolutionEntry = resolutionEntry->GetEntry())
       {

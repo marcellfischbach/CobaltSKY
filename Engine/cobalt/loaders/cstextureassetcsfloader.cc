@@ -28,7 +28,7 @@ cs::TextureAssetCSFLoader::~TextureAssetCSFLoader()
 }
 
 
-bool cs::TextureAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::TextureAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -41,7 +41,7 @@ bool cs::TextureAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::Resourc
     || tagName == std::string("texturecube");
 }
 
-const cs::Class *cs::TextureAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::TextureAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::eTextureType type = GetTextureType(entry->GetTagName());
   switch (type)
@@ -55,7 +55,7 @@ const cs::Class *cs::TextureAssetCSFLoader::EvalClass(const csfEntry *entry, con
 }
 
 
-cs::ResourceWrapper  *cs::TextureAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper  *cs::TextureAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
 
   cs::eTextureType type = GetTextureType(entry->GetTagName());
@@ -70,7 +70,7 @@ cs::ResourceWrapper  *cs::TextureAssetCSFLoader::Load(const csfEntry *entry, con
   return 0;
 }
 
-cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2D(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2D(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::SamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
   cs::ImageWrapper *imageWrapper = LoadImage(entry->GetEntry("image"), locator, userData);
@@ -97,7 +97,7 @@ cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2D(const csfEntry *en
   return new cs::Texture2DWrapper(texture);
 }
 
-cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::SamplerWrapper *sampler = LoadSampler(entry->GetEntry("sampler"), locator, userData);
 
@@ -105,7 +105,7 @@ cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const csfEntr
   unsigned numImages = 0;
   for (size_t i = 0, in= entry->GetNumberOfChildren(); i < in; ++i)
   {
-    const csfEntry *imageEntry = entry->GetChild(i);
+    const cs::file::Entry *imageEntry = entry->GetChild(i);
     if (std::string("image") != imageEntry->GetTagName())
     {
       continue;
@@ -118,7 +118,7 @@ cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const csfEntr
   cs::ePixelFormat pixelFormat;
   for (size_t i = 0, in = entry->GetNumberOfChildren(); i < in; ++i)
   {
-    const csfEntry *imageEntry = entry->GetChild(i);
+    const cs::file::Entry *imageEntry = entry->GetChild(i);
     if (std::string("image") != imageEntry->GetTagName())
     {
       continue;
@@ -174,7 +174,7 @@ cs::ResourceWrapper *cs::TextureAssetCSFLoader::LoadTexture2DArray(const csfEntr
 }
 
 
-cs::SamplerWrapper *cs::TextureAssetCSFLoader::LoadSampler(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::SamplerWrapper *cs::TextureAssetCSFLoader::LoadSampler(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {
@@ -209,7 +209,7 @@ cs::SamplerWrapper *cs::TextureAssetCSFLoader::LoadSampler(const csfEntry *entry
   return sampler;
 }
 
-cs::ImageWrapper *cs::TextureAssetCSFLoader::LoadImage(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ImageWrapper *cs::TextureAssetCSFLoader::LoadImage(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (!entry)
   {
@@ -217,7 +217,7 @@ cs::ImageWrapper *cs::TextureAssetCSFLoader::LoadImage(const csfEntry *entry, co
   }
 
   std::string imageName(entry->GetAttribute());
-  const csfBlob *blob = entry->GetFile()->GetBlob(imageName);
+  const cs::file::Blob *blob = entry->GetFile()->GetBlob(imageName);
   if (!blob)
   {
     return nullptr;

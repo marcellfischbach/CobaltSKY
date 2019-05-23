@@ -24,16 +24,16 @@ namespace asset::model
       return;
     }
 
-    csfFile file;
+    cs::file::File file;
     if (!file.Parse(path, false))
     {
       return;
     }
 
-    const csfEntry *dataEntry = file.GetEntry("asset.data");
+    const cs::file::Entry *dataEntry = file.GetEntry("asset.data");
     if (dataEntry)
     {
-      const csfEntry *typeEntry = dataEntry->GetEntry(0);
+      const cs::file::Entry *typeEntry = dataEntry->GetEntry(0);
       if (typeEntry)
       {
         m_asset->SetAssetType(typeEntry->GetTagName());
@@ -45,7 +45,7 @@ namespace asset::model
   }
 
 
-  void AssetScanner::Scan(const csfEntry *entry)
+  void AssetScanner::Scan(const cs::file::Entry *entry)
   {
     if (entry->HasAttribute("locator"))
     {

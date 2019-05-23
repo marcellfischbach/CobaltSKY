@@ -39,24 +39,24 @@ cs::MeshAssetCSFLoader::~MeshAssetCSFLoader()
 
 
 
-bool cs::MeshAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::MeshAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return entry->GetTagName() == std::string("mesh");
 }
 
-const cs::Class *cs::MeshAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MeshAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::MeshWrapper::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::Mesh *mesh = new cs::Mesh();
   cs::MeshWrapper *meshWrapper = new cs::MeshWrapper(mesh);
 
-  const csfEntry *materialSlotsEntry = entry->GetEntry("materialSlots");
-  const csfEntry *globalIndicesEntry = entry->GetEntry("globalIndices");
-  const csfEntry *subMeshesEntry = entry->GetEntry("subMeshes");
+  const cs::file::Entry *materialSlotsEntry = entry->GetEntry("materialSlots");
+  const cs::file::Entry *globalIndicesEntry = entry->GetEntry("globalIndices");
+  const cs::file::Entry *subMeshesEntry = entry->GetEntry("subMeshes");
 
   if (!materialSlotsEntry || !globalIndicesEntry || !subMeshesEntry)
   {
@@ -67,7 +67,7 @@ cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const csfEntry *entry, const c
   //
   // load the material slots
   std::vector<MaterialSlot> materialSlots;
-  for (const csfEntry *materialSlotEntry = materialSlotsEntry->GetEntry("materialSlot");
+  for (const cs::file::Entry *materialSlotEntry = materialSlotsEntry->GetEntry("materialSlot");
        materialSlotEntry;
        materialSlotEntry = materialSlotEntry->GetSiblingEntry("materialSlot"))
   {
@@ -93,7 +93,7 @@ cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const csfEntry *entry, const c
 
   //
   // lod the submeshes
-  for (const csfEntry *subMeshEntry = subMeshesEntry->GetEntry("subMesh");
+  for (const cs::file::Entry *subMeshEntry = subMeshesEntry->GetEntry("subMesh");
        subMeshEntry;
        subMeshEntry = subMeshEntry->GetSiblingEntry("subMesh"))
   {
@@ -115,7 +115,7 @@ cs::ResourceWrapper *cs::MeshAssetCSFLoader::Load(const csfEntry *entry, const c
 
     cs::SubMeshWrapper *subMesh = nullptr;
     std::string blobName = subMeshEntry->GetAttribute();
-    const csfBlob *blob = subMeshEntry->GetFile()->GetBlob(blobName);
+    const cs::file::Blob *blob = subMeshEntry->GetFile()->GetBlob(blobName);
     if (blob)
     {
       subMesh = cs::ResourceManager::Get()->Load<cs::SubMeshWrapper>(blob, locator, userData);

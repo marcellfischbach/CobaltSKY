@@ -23,18 +23,18 @@ public:
   TextureAssetCSFLoader();
   virtual ~TextureAssetCSFLoader();
 
-  virtual bool CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual const cs::Class *EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  virtual cs::ResourceWrapper *Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual bool CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual const cs::Class *EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  virtual cs::ResourceWrapper *Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
 
 private:
   cs::eTextureType GetTextureType(const std::string &typeName) const;
 
 
-  cs::ResourceWrapper *LoadTexture2D(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  cs::ResourceWrapper *LoadTexture2DArray(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  cs::ImageWrapper *LoadImage(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
-  cs::SamplerWrapper *LoadSampler(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ResourceWrapper *LoadTexture2D(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ResourceWrapper *LoadTexture2DArray(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::ImageWrapper *LoadImage(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
+  cs::SamplerWrapper *LoadSampler(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData = nullptr) const;
 };
 
 

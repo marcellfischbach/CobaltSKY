@@ -4,33 +4,40 @@
 #include <cobalt/cstypes.hh>
 #include <string>
 
-class csfFile;
 
-class CSF_API csfBlob
+namespace cs::file
 {
-  friend class csfFile;
+
+class File;
+
+class CSF_API Blob
+{
+  friend class File;
 public:
-  ~csfBlob();
+  ~Blob();
 
-  csfFile *GetFile();
-  const csfFile *GetFile() const;
+  cs::file::File* GetFile();
+  const cs::file::File* GetFile() const;
 
-  void SetName(const std::string &name);
-  const std::string &GetName() const;
+  void SetName(const std::string& name);
+  const std::string& GetName() const;
 
-  void SetType(const std::string &type);
-  const std::string &GetType() const;
+  void SetType(const std::string& type);
+  const std::string& GetType() const;
 
-  void SetBuffer(const void *buffer, size_t size);
-  const void *GetBuffer() const;
+  void SetBuffer(const void* buffer, size_t size);
+  const void* GetBuffer() const;
   size_t GetSize() const;
 
 private:
-  csfBlob(csfFile *file);
+  Blob(cs::file::File* file);
 
-  csfFile *m_file;
+  cs::file::File* m_file;
   std::string m_name;
   std::string m_type;
-   csUInt8 *m_buffer;
+  csUInt8* m_buffer;
   size_t m_size;
 };
+
+}
+

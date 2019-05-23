@@ -19,7 +19,7 @@ cs::ProgramGL4Loader::~ProgramGL4Loader()
 }
 
 
-bool cs::ProgramGL4Loader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::ProgramGL4Loader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   std::string tagName(entry->GetTagName());
 
@@ -28,12 +28,12 @@ bool cs::ProgramGL4Loader::CanLoad(const csfEntry *entry, const cs::ResourceLoca
 
 
 
-const cs::Class *cs::ProgramGL4Loader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::ProgramGL4Loader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::ProgramGL4::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (std::string(entry->GetTagName()) != std::string("program"))
   {
@@ -41,7 +41,7 @@ cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const csfEntry *entry, const cs:
   }
   CS_CHECK_GL_ERROR;
 
-  const csfEntry *techniqueEntry = FindTechnique(entry);
+  const cs::file::Entry *techniqueEntry = FindTechnique(entry);
   if (!techniqueEntry)
   {
     return nullptr;
@@ -51,7 +51,7 @@ cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const csfEntry *entry, const cs:
 
   cs::ProgramGL4 *program = new cs::ProgramGL4();
   cs::ProgramGL4Wrapper *programWrapper = new cs::ProgramGL4Wrapper(program);
-  for (const csfEntry *shaderEntry = techniqueEntry->GetEntry("shader");
+  for (const cs::file::Entry *shaderEntry = techniqueEntry->GetEntry("shader");
        shaderEntry;
        shaderEntry = shaderEntry->GetSiblingEntry("shader"))
   {
@@ -81,7 +81,7 @@ cs::ResourceWrapper *cs::ProgramGL4Loader::Load(const csfEntry *entry, const cs:
   return programWrapper;
 }
 
-const csfEntry *cs::ProgramGL4Loader::FindTechnique(const csfEntry *entry) const
+const cs::file::Entry *cs::ProgramGL4Loader::FindTechnique(const cs::file::Entry *entry) const
 {
   if (!entry)
   {
@@ -94,11 +94,11 @@ const csfEntry *cs::ProgramGL4Loader::FindTechnique(const csfEntry *entry) const
   }
   else if (entryName == std::string("techniques"))
   {
-    for (const csfEntry *techniqueEntry = entry->GetEntry("technique");
+    for (const cs::file::Entry *techniqueEntry = entry->GetEntry("technique");
          techniqueEntry;
          techniqueEntry = techniqueEntry->GetSiblingEntry("technique"))
     {
-      const csfEntry *technique = FindTechnique(techniqueEntry);
+      const cs::file::Entry *technique = FindTechnique(techniqueEntry);
       if (technique)
       {
         return technique;

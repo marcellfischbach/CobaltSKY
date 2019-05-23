@@ -81,11 +81,11 @@ public:
   *
   * \return The object
   */
-  virtual cs::ResourceWrapper* Load(const csfEntry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr);
-  virtual const cs::Class* EvalClass(const csfEntry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr) const;
+  virtual cs::ResourceWrapper* Load(const cs::file::Entry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr);
+  virtual const cs::Class* EvalClass(const cs::file::Entry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr) const;
 
-  virtual cs::ResourceWrapper* Load(const csfBlob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr);
-  virtual const cs::Class* EvalClass(const csfBlob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr) const;
+  virtual cs::ResourceWrapper* Load(const cs::file::Blob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr);
+  virtual const cs::Class* EvalClass(const cs::file::Blob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr) const;
 
   /**
   * \brief Load an object from the \a asset \a file.
@@ -136,7 +136,7 @@ public:
 
 
   template<typename T>
-  T* Load(const csfEntry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr)
+  T* Load(const cs::file::Entry* entry, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr)
   {
     cs::ResourceWrapper* object = Load(entry, locator, userData);
     if (object)
@@ -152,7 +152,7 @@ public:
   }
 
   template<typename T>
-  T* Load(const csfBlob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr)
+  T* Load(const cs::file::Blob* blob, const cs::ResourceLocator& locator, cs::iObject* userData = nullptr)
   {
     cs::ResourceWrapper* object = Load(blob, locator, userData);
     if (object)

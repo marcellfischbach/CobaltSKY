@@ -22,7 +22,7 @@ cs::MaterialAssetCSFLoader::~MaterialAssetCSFLoader()
 
 }
 
-bool cs::MaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::MaterialAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -30,7 +30,7 @@ bool cs::MaterialAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::Resour
   return entry->GetTagName() == std::string("material");
 }
 
-const cs::Class *cs::MaterialAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MaterialAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(entry);
   CS_UNUSED(locator);
@@ -38,11 +38,11 @@ const cs::Class *cs::MaterialAssetCSFLoader::EvalClass(const csfEntry *entry, co
   return cs::MaterialWrapper::GetStaticClass();
 }
 
-cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   cs::Material *material = new cs::Material();
 
-  const csfEntry *materialDefEntry = entry->GetEntry("materialDef");
+  const cs::file::Entry *materialDefEntry = entry->GetEntry("materialDef");
   if (!materialDefEntry)
   {
     return new cs::MaterialWrapper(material);
@@ -62,10 +62,10 @@ cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const csfEntry *entry, con
   material->SetMaterialDef(materialDefWrapper);
   materialDefWrapper->Release();
 
-  const csfEntry *parametersEntry = entry->GetEntry("parameters");
+  const cs::file::Entry *parametersEntry = entry->GetEntry("parameters");
   if (parametersEntry)
   {
-    for (const csfEntry *parameterEntry = parametersEntry->GetEntry("parameter");
+    for (const cs::file::Entry *parameterEntry = parametersEntry->GetEntry("parameter");
          parameterEntry;
          parameterEntry = parameterEntry->GetSiblingEntry("parameter"))
     {
@@ -100,7 +100,7 @@ cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const csfEntry *entry, con
 
 
       cs::eShaderParameterType type = materialDef->GetParamType(index);
-      const csfEntry *valueEntry = parameterEntry->GetEntry();
+      const cs::file::Entry *valueEntry = parameterEntry->GetEntry();
       if (!valueEntry)
       {
         continue;

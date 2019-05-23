@@ -18,7 +18,7 @@ cs::MaterialDefAssetCSFLoader::~MaterialDefAssetCSFLoader()
 }
 
 
-bool cs::MaterialDefAssetCSFLoader::CanLoad(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+bool cs::MaterialDefAssetCSFLoader::CanLoad(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   CS_UNUSED(locator);
   CS_UNUSED(userData);
@@ -49,13 +49,13 @@ cs::eShaderParameterType get_shader_parameter_type(const std::string &name)
 }
 }
 
-const cs::Class *cs::MaterialDefAssetCSFLoader::EvalClass(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+const cs::Class *cs::MaterialDefAssetCSFLoader::EvalClass(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   return cs::MaterialDefWrapper::GetStaticClass();
 }
 
 
-cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const csfEntry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
+cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const cs::file::Entry *entry, const cs::ResourceLocator &locator, cs::iObject *userData) const
 {
   if (entry->GetTagName() != std::string("materialDef"))
   {
@@ -64,7 +64,7 @@ cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const csfEntry *entry, 
 
   cs::MaterialDef *material = new cs::MaterialDef();
 
-  const csfEntry *passesEntry = entry->GetEntry("passes");
+  const cs::file::Entry *passesEntry = entry->GetEntry("passes");
   if (!passesEntry)
   {
     material->Release();
@@ -72,7 +72,7 @@ cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const csfEntry *entry, 
     return nullptr;
   }
 
-  for (const csfEntry *passEntry = passesEntry->GetEntry("pass");
+  for (const cs::file::Entry *passEntry = passesEntry->GetEntry("pass");
        passEntry;
        passEntry = passEntry->GetSiblingEntry("pass"))
   {
@@ -140,10 +140,10 @@ cs::ResourceWrapper *cs::MaterialDefAssetCSFLoader::Load(const csfEntry *entry, 
 
 
 
-  const csfEntry *parametersEntry = entry->GetEntry("parameters");
+  const cs::file::Entry *parametersEntry = entry->GetEntry("parameters");
   if (parametersEntry)
   {
-    for (const csfEntry *parameterEntry = parametersEntry->GetEntry("parameter");
+    for (const cs::file::Entry *parameterEntry = parametersEntry->GetEntry("parameter");
          parameterEntry;
          parameterEntry = parameterEntry->GetSiblingEntry("parameter"))
     {

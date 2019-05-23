@@ -13,10 +13,14 @@ using std::map;
 using std::vector;
 
 
-class csfEntry;
 namespace cs
 {
 class Settings;
+
+namespace file
+{
+class Entry;
+}
 
 /**
 * \addtogroup engine
@@ -92,9 +96,9 @@ public:
 
 private:
   VFS();
-  bool LoadConfig(const csfEntry *vfsEntry, const std::string &basePath);
-  bool ImportRootPath(cs::Settings *settings, const csfEntry *rootPathEntry);
-  bool ImportResolution(cs::Settings *settings, const csfEntry *resolutionEntry);
+  bool LoadConfig(const cs::file::Entry *vfsEntry, const std::string &basePath);
+  bool ImportRootPath(cs::Settings *settings, const cs::file::Entry *rootPathEntry);
+  bool ImportResolution(cs::Settings *settings, const cs::file::Entry *resolutionEntry);
 
   static std::string ExtractSymbol (const std::string &path, unsigned idx, unsigned &length);
 
