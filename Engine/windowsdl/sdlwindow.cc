@@ -6,15 +6,15 @@
 #include <Windows.h>
 #include <GL/GL.h>
 
-SDLWindow::SDLWindow()
+cs::SDLWindow::SDLWindow()
   : m_window(0)
-  , m_keyboard(new SDLKeyboard())
-  , m_mouse(new SDLMouse())
+  , m_keyboard(new cs::SDLKeyboard())
+  , m_mouse(new cs::SDLMouse())
 {
   CS_CLASS_GEN_CONSTR;
 }
 
-SDLWindow::~SDLWindow()
+cs::SDLWindow::~SDLWindow()
 {
   if (m_window)
   {
@@ -22,7 +22,7 @@ SDLWindow::~SDLWindow()
   }
 }
 
-bool SDLWindow::InitializeOpenGL(
+bool cs::SDLWindow::InitializeOpenGL(
   const std::string &title,
   csUInt16 width,
   csUInt16 height,
@@ -98,7 +98,7 @@ bool SDLWindow::InitializeOpenGL(
 
 }
 
-void SDLWindow::SetIcon(const cs::Image *image)
+void cs::SDLWindow::SetIcon(const cs::Image *image)
 {
   csUInt8 *buffer = new csUInt8[image->GetWidth() * image->GetHeight() * 4];
   memcpy(buffer, image->GetData(), image->GetWidth() * image->GetHeight() * 4);
@@ -117,18 +117,18 @@ void SDLWindow::SetIcon(const cs::Image *image)
 
 }
 
-const cs::iKeyboard *SDLWindow::GetKeyboard() const
+const cs::iKeyboard *cs::SDLWindow::GetKeyboard() const
 {
   return m_keyboard;
 }
 
 
-const cs::iMouse *SDLWindow::GetMouse() const
+const cs::iMouse *cs::SDLWindow::GetMouse() const
 {
   return m_mouse;
 }
 
-bool SDLWindow::UpdateEvents()
+bool cs::SDLWindow::UpdateEvents()
 {
   if (!m_window)
   {
@@ -170,7 +170,7 @@ bool SDLWindow::UpdateEvents()
   return true;
 }
 
-bool SDLWindow::Present()
+bool cs::SDLWindow::Present()
 {
 
   SDL_GL_MakeCurrent(m_window, m_context);
@@ -178,27 +178,27 @@ bool SDLWindow::Present()
   return true;
 }
 
-csUInt16 SDLWindow::GetWidth() const
+csUInt16 cs::SDLWindow::GetWidth() const
 {
   return m_width;
 }
 
-csUInt16 SDLWindow::GetHeight() const
+csUInt16 cs::SDLWindow::GetHeight() const
 {
   return m_height;
 }
 
-csInt16 SDLWindow::GetPosX() const
+csInt16 cs::SDLWindow::GetPosX() const
 {
   return m_posX;
 }
 
-csInt16 SDLWindow::GetPosY() const
+csInt16 cs::SDLWindow::GetPosY() const
 {
   return m_posY;
 }
 
-csUInt32 SDLWindow::GetTicks() const
+csUInt32 cs::SDLWindow::GetTicks() const
 {
   return SDL_GetTicks();
 }

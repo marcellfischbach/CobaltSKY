@@ -7,6 +7,8 @@
 #include <string>
 #include <windowsdl/sdlwindow.refl.hh>
 
+namespace cs
+{
 class SDLKeyboard;
 class SDLMouse;
 
@@ -20,7 +22,7 @@ public:
   virtual ~SDLWindow();
 
   bool InitializeOpenGL(
-    const std::string &title,
+    const std::string & title,
     csUInt16 width,
     csUInt16 height,
     csInt16 posX,
@@ -29,10 +31,10 @@ public:
     csUInt8 openGLMajor,
     csUInt8 openGLMinor);
 
-  virtual void SetIcon(const cs::Image *image);
+  virtual void SetIcon(const cs::Image * image);
 
-  virtual const cs::iKeyboard *GetKeyboard() const;
-  virtual const cs::iMouse *GetMouse() const;
+  virtual const cs::iKeyboard* GetKeyboard() const;
+  virtual const cs::iMouse* GetMouse() const;
 
   virtual csUInt16 GetWidth() const;
   virtual csUInt16 GetHeight() const;
@@ -51,10 +53,12 @@ private:
   csInt16 m_posX;
   csInt16 m_posY;
 
-  SDL_Window *m_window;
+  SDL_Window* m_window;
   SDL_GLContext m_context;
 
-  SDLKeyboard *m_keyboard;
-  SDLMouse *m_mouse;
+  cs::SDLKeyboard* m_keyboard;
+  cs::SDLMouse* m_mouse;
 };
 
+
+}

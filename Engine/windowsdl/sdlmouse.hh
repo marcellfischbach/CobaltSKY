@@ -4,6 +4,9 @@
 #include <cobalt/window/imouse.hh>
 #include <windowsdl/sdlmouse.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
 class CSWINDOWSDL_API SDLMouse : public CS_SUPER(cs::iMouse)
 {
@@ -42,3 +45,5 @@ private:
   csInt32 m_relX;
   csInt32 m_relY;
 };
+
+}

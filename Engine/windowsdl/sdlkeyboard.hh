@@ -5,6 +5,9 @@
 #include <cobalt/cstypes.hh>
 #include <windowsdl/sdlkeyboard.refl.hh>
 
+namespace cs
+{
+
 CS_CLASS()
 class CSWINDOWSDL_API SDLKeyboard : public CS_SUPER(cs::iKeyboard)
 {
@@ -28,3 +31,5 @@ private:
   bool m_current[cs::eK_COUNT];
   bool m_prev[cs::eK_COUNT];
 };
+
+}

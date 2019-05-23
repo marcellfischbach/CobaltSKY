@@ -4,7 +4,7 @@
 
 static cs::eButton buttonMap[32];
 
-SDLMouse::SDLMouse()
+cs::SDLMouse::SDLMouse()
 {
   CS_CLASS_GEN_CONSTR;
 
@@ -15,16 +15,16 @@ SDLMouse::SDLMouse()
 #include <windowsdl/sdlbuttonmap.hh>
 }
 
-SDLMouse::~SDLMouse()
+cs::SDLMouse::~SDLMouse()
 {
 }
 
-void SDLMouse::UpdateButtons()
+void cs::SDLMouse::UpdateButtons()
 {
   memcpy(m_prev, m_current, sizeof(m_current));
 }
 
-void SDLMouse::SetButtonDown(csUInt8 key)
+void cs::SDLMouse::SetButtonDown(csUInt8 key)
 {
   if (key < 32)
   {
@@ -34,7 +34,7 @@ void SDLMouse::SetButtonDown(csUInt8 key)
 
 }
 
-void SDLMouse::SetButtonUp(csUInt8 key)
+void cs::SDLMouse::SetButtonUp(csUInt8 key)
 {
   if (key < 32)
   {
@@ -43,32 +43,32 @@ void SDLMouse::SetButtonUp(csUInt8 key)
   }
 }
 
-bool SDLMouse::IsButtonDown(cs::eButton button) const
+bool cs::SDLMouse::IsButtonDown(cs::eButton button) const
 {
   return m_current[button];
 }
 
-bool SDLMouse::IsButtonUp(cs::eButton button) const
+bool cs::SDLMouse::IsButtonUp(cs::eButton button) const
 {
   return !m_current[button];
 }
 
-bool SDLMouse::IsButtonPressed(cs::eButton button) const
+bool cs::SDLMouse::IsButtonPressed(cs::eButton button) const
 {
   return m_current[button] && !m_prev[button];
 }
 
-bool SDLMouse::IsButtonReleased(cs::eButton button) const
+bool cs::SDLMouse::IsButtonReleased(cs::eButton button) const
 {
   return !m_current[button] && m_prev[button];
 }
 
-void SDLMouse::UpdateMotion()
+void cs::SDLMouse::UpdateMotion()
 {
   m_relX = m_relY = 0;
 }
 
-void SDLMouse::SetMotion(csInt32 x, csInt32 y, csInt32 relX, csInt32 relY)
+void cs::SDLMouse::SetMotion(csInt32 x, csInt32 y, csInt32 relX, csInt32 relY)
 {
   m_posX = x;
   m_posY = y;
@@ -76,22 +76,22 @@ void SDLMouse::SetMotion(csInt32 x, csInt32 y, csInt32 relX, csInt32 relY)
   m_relY = relY;
 }
 
-csInt32 SDLMouse::GetPosX() const
+csInt32 cs::SDLMouse::GetPosX() const
 {
   return m_posX;
 }
 
-csInt32 SDLMouse::GetPosY() const
+csInt32 cs::SDLMouse::GetPosY() const
 {
   return m_posY;
 }
 
-csInt32 SDLMouse::GetRelX() const
+csInt32 cs::SDLMouse::GetRelX() const
 {
   return m_relX;
 }
 
-csInt32 SDLMouse::GetRelY() const
+csInt32 cs::SDLMouse::GetRelY() const
 {
   return m_relY;
 }

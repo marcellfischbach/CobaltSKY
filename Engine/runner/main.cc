@@ -93,7 +93,7 @@ void UpdateCamera(cs::Camera *cameraNode, cs::CharacterEntity *character, const 
 void UpdateCharacter(cs::CharacterEntity *character, const cs::iMouse *mouse, const cs::iKeyboard *keyboard, float tpf);
 void handle_material(const cs::iKeyboard *keyboard);
 
-static SDLWindow *window = nullptr;
+static cs::SDLWindow *window = nullptr;
 static cs::GraphicsGL4 *graphicsGL4 = nullptr;
 static cs::BulletSystem *bulletSystem = nullptr;
 static const cs::iKeyboard *keyboard = nullptr;
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 
 
   // initialize the window
-  window = new SDLWindow();
+  window = new cs::SDLWindow();
   csInt16 posX = 100;
   csInt16 posY = 100;
 

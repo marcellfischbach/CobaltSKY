@@ -2,7 +2,7 @@
 #include <windowsdl/sdlwindowmodule.hh>
 #include <windowsdl/master.refl.cc>
 
-void SDLWindowModule::Initialize()
+void cs::SDLWindowModule::Initialize()
 {
   register_classes();
 }
