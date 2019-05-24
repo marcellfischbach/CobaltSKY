@@ -7,6 +7,7 @@ cs::Skeleton::Skeleton()
   : cs::Object()
   , m_numberOfBones(0)
   , m_matrices(0)
+  , m_boneNames(nullptr)
 {
 
 }

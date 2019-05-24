@@ -6,29 +6,8 @@
 #include <cobalt/graphics/igraphics.hh>
 #include <cobalt/graphics/ivertexbuffer.hh>
 #include <cobalt/graphics/ivertexdeclaration.hh>
+#include <cobalt/math/csmath.hh>
 
-namespace
-{
-  inline int imax(int a, int b)
-  {
-    return a > b ? a : b;
-  }
-
-  inline int imin(int a, int b)
-  {
-    return a < b ? a : b;
-  }
-
-  inline float fmax(float a, float b)
-  {
-    return a > b ? a : b;
-  }
-
-  inline float fmin(float a, float b)
-  {
-    return a < b ? a : b;
-  }
-}
 
 cs::TerrainMesh::TerrainMesh()
   : cs::iMesh()
@@ -341,8 +320,8 @@ bool cs::TerrainMesh::Initialize(cs::iGraphics *gfx, unsigned numVertices, unsig
       unsigned v1 = v0 + m_quadSize * m_scanline;
       lptr->pos0 = vertices[v0].pos;
       lptr->pos1 = vertices[v1].pos;
-      lptr->min = cs::Vector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
-      lptr->max = cs::Vector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
+      lptr->min = cs::Vector3f(cs::min(lptr->pos0.x, lptr->pos1.x), cs::min(lptr->pos0.y, lptr->pos1.y), cs::min(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = cs::Vector3f(cs::max(lptr->pos0.x, lptr->pos1.x), cs::max(lptr->pos0.y, lptr->pos1.y), cs::max(lptr->pos0.z, lptr->pos1.z));
       lptr->quad0 = 0;
       lptr->quad1 = 0;
       if (j > 0)
@@ -363,8 +342,8 @@ bool cs::TerrainMesh::Initialize(cs::iGraphics *gfx, unsigned numVertices, unsig
       unsigned h1 = h0 + m_quadSize;
       lptr->pos0 = vertices[h0].pos;
       lptr->pos1 = vertices[h1].pos;
-      lptr->min = cs::Vector3f(::fmin(lptr->pos0.x, lptr->pos1.x), ::fmin(lptr->pos0.y, lptr->pos1.y), ::fmin(lptr->pos0.z, lptr->pos1.z));
-      lptr->max = cs::Vector3f(::fmax(lptr->pos0.x, lptr->pos1.x), ::fmax(lptr->pos0.y, lptr->pos1.y), ::fmax(lptr->pos0.z, lptr->pos1.z));
+      lptr->min = cs::Vector3f(cs::min(lptr->pos0.x, lptr->pos1.x), cs::min(lptr->pos0.y, lptr->pos1.y), cs::min(lptr->pos0.z, lptr->pos1.z));
+      lptr->max = cs::Vector3f(cs::max(lptr->pos0.x, lptr->pos1.x), cs::max(lptr->pos0.y, lptr->pos1.y), cs::max(lptr->pos0.z, lptr->pos1.z));
       if (j > 0)
       {
         lptr->quad0 = &m_quads[(j - 1) * numQuads + i];
@@ -436,9 +415,9 @@ bool cs::TerrainMesh::UpdateLine(Line &line, const cs::Vector3f &referencePoint)
   cs::Vector3f r = cs::Vector3f::Sub(referencePoint, refOnLine, r);
   float distance = r.Length();
 
-  float f = distance / 25.0;
+  float f = distance / 25.0f;
 
-  int scale = f;
+  unsigned scale = static_cast<unsigned>(f);
   if (scale > m_maxScale)
   {
     scale = m_maxScale;
@@ -486,9 +465,9 @@ unsigned cs::TerrainMesh::UpdateDirtyQuad(cs::TerrainMesh::Quad *quad)
 {
   // get the min scale
   int min = quad->lineT->scale;
-  min = ::imin(min, quad->lineL->scale);
-  min = ::imin(min, quad->lineB->scale);
-  min = ::imin(min, quad->lineR->scale);
+  min = cs::min(min, quad->lineL->scale);
+  min = cs::min(min, quad->lineB->scale);
+  min = cs::min(min, quad->lineR->scale);
 
   quad->numberOfIndices = 0;
   quad->numberOfIndices += MakeIndicesT(min, quad->lineT->scale, &quad->indices[quad->numberOfIndices], quad->ic);
@@ -535,22 +514,22 @@ unsigned cs::TerrainMesh::UpdateDirtyQuad(cs::TerrainMesh::Quad *quad)
 
 unsigned cs::TerrainMesh::MakeIndicesT(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
-  return MakeIndices(innerScale, outerScale, m_scanline, 1, false, iptr, ic);
+  return MakeIndices(innerScale, outerScale, static_cast<int>(m_scanline), 1, false, iptr, ic);
 }
 
 unsigned cs::TerrainMesh::MakeIndicesL(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
-  return MakeIndices(innerScale, outerScale, -1, m_scanline, false, iptr, ic);
+  return MakeIndices(innerScale, outerScale, -1, static_cast<int>(m_scanline), false, iptr, ic);
 }
 
 unsigned cs::TerrainMesh::MakeIndicesB(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
-  return MakeIndices(innerScale, outerScale, -m_scanline, -1, false, iptr, ic);
+  return MakeIndices(innerScale, outerScale, -static_cast<int>(m_scanline), -1, false, iptr, ic);
 }
 
 unsigned cs::TerrainMesh::MakeIndicesR(unsigned innerScale, unsigned outerScale, unsigned *iptr, unsigned ic) const
 {
-  return MakeIndices(innerScale, outerScale, 1, -m_scanline, false, iptr, ic);
+  return MakeIndices(innerScale, outerScale, 1, -static_cast<int>(m_scanline), false, iptr, ic);
 }
 
 

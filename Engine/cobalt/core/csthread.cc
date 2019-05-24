@@ -27,7 +27,7 @@ cs::Thread::~Thread()
   delete m_priv;
 }
 
-#if CS_WIN32
+#ifdef CS_WIN32
 static DWORD WINAPI cs_run_thread(LPVOID voidthread)
 {
   cs::Thread *thread = reinterpret_cast<cs::Thread*>(voidthread);

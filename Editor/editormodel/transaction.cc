@@ -6,22 +6,6 @@
 namespace cs::editor::model
 {
 
-  IllegalTransactionStateException::IllegalTransactionStateException(const std::string &message)
-    : std::exception()
-    , m_message(message)
-  {
-
-  }
-
-  IllegalTransactionStateException::~IllegalTransactionStateException()
-  {
-
-  }
-
-  const std::string &IllegalTransactionStateException::GetMessage() const
-  {
-    return m_message;
-  }
 
   static unsigned long TX_ID = 0L;
 

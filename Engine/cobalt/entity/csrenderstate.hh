@@ -31,8 +31,8 @@ public:
   void SetShadingMode(cs::eShadingMode shadingMode);
   cs::eShadingMode GetShadingMode() const;
 
-  virtual unsigned GetNumberOfRenderCalls() const { return 0; }
-  virtual unsigned GetNumberOfTotalTrigons() const { return 0; }
+  virtual size_t GetNumberOfRenderCalls() const { return 0; }
+  virtual size_t GetNumberOfTotalTrigons() const { return 0; }
 
   virtual void Render(cs::iGraphics * graphics, cs::eRenderPass pass) const;
 

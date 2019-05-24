@@ -1,13 +1,15 @@
 
 #include <cobalt/entity/csdefaultparticlestepper.hh>
 #include <cobalt/graphics/ivertexbuffer.hh>
+#include <cobalt/math/csmath.hh>
 
 cs::DefaultParticleStepper::DefaultParticleStepper()
   : cs::iParticleStepper()
   , m_sizeMode(cs::ePSM_Linear)
-  , m_gravity(0.0f, 0.0f, 0.0f)
+  , m_sizeCicleTime(0.0f)
   , m_numTextPages(1)
   , m_textPageTime(1.0f)
+  , m_gravity(0.0f, 0.0f, 0.0f)
 {
   CS_CLASS_GEN_CONSTR;
 }
@@ -114,11 +116,11 @@ void cs::DefaultParticleStepper::UpdateParticle(float tpf, cs::Particle::Particl
     break;
 
   case cs::ePSM_Saw:
-    tf = fmod(tf, 1.0f);
+    tf = cs::mod(tf, 1.0f);
     break;
 
   case cs::ePSM_Triangle:
-    tf = fmod(tf, 1.0f);
+    tf = cs::mod(tf, 1.0f);
     if (tf >= 0.5f)
     {
       tf = (1.0f - tf);
@@ -128,7 +130,7 @@ void cs::DefaultParticleStepper::UpdateParticle(float tpf, cs::Particle::Particl
 
   case cs::ePSM_Pulse:
     tf *= 3.141569f;
-    tf = sin(tf) + 0.5f;
+    tf = cs::sin(tf) + 0.5f;
     break;
   }
   if (updateSize)
@@ -140,7 +142,7 @@ void cs::DefaultParticleStepper::UpdateParticle(float tpf, cs::Particle::Particl
   unsigned page = (unsigned)(particle->time / m_textPageTime);
   page %= m_numTextPages;
   unsigned nextPage = (page + 1) % m_numTextPages;
-  float fact = 1.0f - fmod(particle->time, m_textPageTime);
+  float fact = 1.0f - cs::mod(particle->time, m_textPageTime);
 
   particle->textPage = cs::Vector3f((float)page, (float)nextPage, fact);
 

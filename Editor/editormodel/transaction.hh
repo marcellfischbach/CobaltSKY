@@ -10,19 +10,28 @@
 namespace cs::editor::model
 {
 
-  class EDITOR_MODEL_API IllegalTransactionStateException : public std::exception
+  class IllegalTransactionStateException : public std::exception
   {
   public:
-    IllegalTransactionStateException(const std::string &message);
-    virtual ~IllegalTransactionStateException();
+    IllegalTransactionStateException(const std::string &message)
+      : std::exception()
+      , m_message(message)
+    {
 
-    const std::string &GetMessage() const;
+    }
+    virtual ~IllegalTransactionStateException()
+    {
+
+    }
+
+    inline const std::string& GetMessage() const
+    {
+      return m_message;
+    }
 
   private:
     std::string m_message;
   };
-
-
 
 
   class EDITOR_MODEL_API Transaction

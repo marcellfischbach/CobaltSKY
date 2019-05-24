@@ -1,10 +1,12 @@
 
 #include <cobalt/entity/csdefaultparticleemitter.hh>
 #include <cobalt/graphics/csparticle.hh>
+#include <cobalt/math/csmath.hh>
 
 cs::DefaultParticleEmitter::DefaultParticleEmitter()
   : cs::iParticleEmitter()
-  , m_particlesPerSecond(0)
+  , m_particlesPerSecond(0.0f)
+  , m_timeToNextParticle(0.0f)
   , m_initialTime(cs::RandomRange::Value(0.0f))
   , m_timeToLive(cs::RandomRange::Value(10.0f))
   , m_spawnMode(cs::ePSM_Point)
@@ -175,7 +177,7 @@ bool cs::DefaultParticleEmitter::IsSyncSize() const
 
 void cs::DefaultParticleEmitter::Update(float tpf, cs::Particle *particle)
 {
-  cs::Particle::ParticleData *data = 0;
+  cs::Particle::ParticleData *data = nullptr;
   m_timeToNextParticle -= tpf;
   csSize particleID = 0;
   while (true)
@@ -217,9 +219,9 @@ void cs::DefaultParticleEmitter::Update(float tpf, cs::Particle *particle)
             float angleY = (float)M_PI_2 - (float)rand() / (float)RAND_MAX * (float)M_PI;
             float angleZ = (float)rand() / (float)RAND_MAX * (float)M_PI * 2.0f;
             cs::Vector3f dir(
-              cos(angleY) * cos(angleZ),
-              cos(angleY) * sin(angleZ),
-              sin(angleY)
+              cs::cos(angleY) * cs::cos(angleZ),
+              cs::cos(angleY) * cs::sin(angleZ),
+              cs::sin(angleY)
             );
             cs::Vector3f::MulAdd(m_spawnPos, dir, m_spawnRadius.Get(), data[particleID].position);
           }
@@ -229,9 +231,9 @@ void cs::DefaultParticleEmitter::Update(float tpf, cs::Particle *particle)
         float angleY = (float)M_PI_2 - m_initialDirectionAngle.Get();
         float angleZ = (float)rand() / (float)(RAND_MAX * M_PI * 2.0);
         cs::Vector3f dir(
-          cos(angleY) * cos(angleZ),
-          cos(angleY) * sin(angleZ),
-          sin(angleY)
+          cs::cos(angleY) * cs::cos(angleZ),
+          cs::cos(angleY) * cs::sin(angleZ),
+          cs::sin(angleY)
         );
         cs::Matrix3f::Mult(m_initialDirectionMatrix, dir, dir);
         cs::Vector3f::Mul(dir, m_initialDirectionSpeed.Get(), data[particleID].direction);

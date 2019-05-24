@@ -28,6 +28,8 @@ struct ScanConfig
 {
   ScanConfig()
     : FrameNo(0)
+    , ScanShadowCasters(false)
+    , ScanNonShadowCasters(false)
   {
   }
 

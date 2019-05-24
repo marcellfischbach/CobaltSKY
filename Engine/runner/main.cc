@@ -74,6 +74,7 @@
 #include <cobalt/physics/iphysicssystem.hh>
 #include <cobalt/window/ikeyboard.hh>
 #include <cobalt/window/imouse.hh>
+#include <cobalt/math/csmath.hh>
 #include <math.h>
 #include <cobalt/graphics/shadergraph/cssgnode.hh>
 #include <runner/event.hh>
@@ -118,7 +119,7 @@ static unsigned g_screenResolutionHeight;
 
 int main(int argc, char **argv)
 {
-  for (unsigned i = 0; i < argc; ++i)
+  for (int i = 0; i < argc; ++i)
   {
     printf("%s ", argv[i]);
   }
@@ -202,17 +203,17 @@ int main(int argc, char **argv)
 
 void handle_master_event(cs::Event &event, void *ptr)
 {
-  printf("HandleMasterEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+  printf("HandleMasterEvent: [%s:%lu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
 
 void handle_an_event(cs::Event &event, void *ptr)
 {
-  printf("HandleAnEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+  printf("HandleAnEvent: [%s:%lu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
 
 void handle_an_other_event(cs::Event &event, void *ptr)
 {
-  printf("HandleAnOtherEvent: [%s:%llu]\n", event.GetClass()->GetName().c_str(), event.GetId());
+  printf("HandleAnOtherEvent: [%s:%lu]\n", event.GetClass()->GetName().c_str(), event.GetId());
 }
 
 
@@ -321,7 +322,7 @@ int main_loop()
     csUInt64 time = cs::Time::Get().GetCurrentTimeMilli();
     if (time >= nextFPS)
     {
-      csUInt16 idx = material->GetIndex("Roughness");
+      csSize idx = material->GetIndex("Roughness");
       float currentRoughness = material->IsInherited(idx) ? material->GetMaterialDef()->Get()->GetDefaultFloat(idx) : material->GetFloat(idx);
       printf("FPS: %d Roughness: %f\n", fps, currentRoughness);
       fflush(stdout);
@@ -941,7 +942,7 @@ cs::EntityScene *create_scene(cs::iGraphics *graphics)
     for (unsigned j = 0; j < numVerticesPerSide; ++j)
     {
       float angleY = (float)j  / 12.0f;
-      *hptr++ = cos(angleX) * cos(angleY) * 4.0;
+      *hptr++ = cs::cos(angleX) * cs::cos(angleY) * 4.0f;
       
     }
   }
@@ -982,8 +983,8 @@ cs::EntityScene *create_scene(cs::iGraphics *graphics)
     templeEntity->UpdateBoundingBox();
     if (i != 0)
     {
-      float x = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
-      float y = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0;
+      float x = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0f;
+      float y = ((float)rand() / (float)RAND_MAX) * 200.0f - 100.0f;
       templeEntity->GetTransformation().SetTranslation(cs::Vector3f(x, y, 2.0f));
     }
     else
@@ -1176,7 +1177,7 @@ cs::PostProcessor *createPostProcessor(cs::iGraphics *graphics)
 
 void handle_material(const cs::iKeyboard *keyboard)
 {
-  static csInt16 idx = material->GetIndex("Roughness");
+  static csSize idx = material->GetIndex("Roughness");
   if (idx == -1)
   {
     return;
@@ -1194,9 +1195,9 @@ void handle_material(const cs::iKeyboard *keyboard)
   else if (keyboard->IsKeyDown(cs::eK_L))
   {
     currentRoughness -= 0.01f;
-    if (currentRoughness < 0.01)
+    if (currentRoughness < 0.01f)
     {
-      currentRoughness = 0.01;
+      currentRoughness = 0.01f;
     }
   }
   else

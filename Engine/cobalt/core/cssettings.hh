@@ -28,8 +28,17 @@ public:
   bool HasValue(const std::string& entry, size_t attribute) const;
   bool HasValue(const std::string& entry, const std::string& attributeName) const;
 
-  std::string GetStringValue(const std::string& entry, size_t attribute, const std::string& defaultValue = std::string("")) const;
-  std::string GetStringValue(const std::string& entry, const std::string& attributeName, const std::string& defaultValue = std::string("")) const;
+  inline std::string GetStringValue(const std::string& entry, size_t attribute) const
+  {
+    return GetStringValue(entry, attribute, std::string(""));
+  }
+  std::string GetStringValue(const std::string& entry, size_t attribute, const std::string& defaultValue) const;
+
+  inline std::string GetStringValue(const std::string& entry, const std::string& attributeName) const
+  {
+    return GetStringValue(entry, attributeName, std::string(""));
+  }
+  std::string GetStringValue(const std::string& entry, const std::string& attributeName, const std::string& defaultValue) const;
 
   int GetIntValue(const std::string& entry, size_t attribute, int defaultValue = 0) const;
   int GetIntValue(const std::string& entry, const std::string& attributeName, int defaultValue = 0) const;
@@ -45,7 +54,7 @@ protected:
 
 private:
   cs::file::File m_file;
-  cs::file::Entry* m_configEntry;
+  cs::file::Entry* m_configEntry = nullptr;
   static cs::Settings* static_instances;
   std::string         _rootPath;
 

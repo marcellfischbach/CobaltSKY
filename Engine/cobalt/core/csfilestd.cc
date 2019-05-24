@@ -29,7 +29,7 @@ bool cs::FileStd::Open (const char *filename, cs::eOpenMode mode, cs::eTextMode 
   switch (mode)
   {
   case eOM_Read:
-#if CS_WIN32
+#ifdef CS_WIN32
     fopen_s(&m_file, filename, textMode == eTM_Text ? "rt" : "rb");
 #else
     m_file = fopen (filename, textMode == eTM_Text ? "rt" : "rb");
@@ -37,7 +37,7 @@ bool cs::FileStd::Open (const char *filename, cs::eOpenMode mode, cs::eTextMode 
     m_read = true;
     break;
   case eOM_Write:
-#if CS_WIN32
+#ifdef CS_WIN32
     fopen_s(&m_file, filename, textMode == eTM_Text ? "wt" : "wb");
 #else
     m_file = fopen(filename, textMode == eTM_Text ? "wt" : "wb");
@@ -45,7 +45,7 @@ bool cs::FileStd::Open (const char *filename, cs::eOpenMode mode, cs::eTextMode 
     m_write = true;
     break;
   case eOM_ReadWrite:
-#if CS_WIN32
+#ifdef CS_WIN32
     fopen_s(&m_file, filename, textMode == eTM_Text ? "a+t" : "a+b");
 #else
     m_file = fopen(filename, textMode == eTM_Text ? "a+t" : "a+b");

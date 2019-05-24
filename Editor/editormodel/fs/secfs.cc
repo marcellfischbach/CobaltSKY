@@ -5,6 +5,7 @@
 #include <editormodel/transaction.hh>
 #include <chrono>
 #include <ctime>
+#include <iostream>
 
 namespace cs::editor::model
 {
@@ -45,7 +46,7 @@ void SecureFS::Rename(const std::filesystem::path &sourcePath, const std::filesy
 {
   if (!std::filesystem::exists(sourcePath))
   {
-    printf("Unable to rename %s. The file or directory does not exist.", sourcePath.c_str());
+    std::cerr << "Unable to rename " << sourcePath.c_str() << ".The file or directory does not exist.\n";
     return;
   }
   if (std::filesystem::exists(destinationPath))
@@ -93,7 +94,7 @@ void SecureFS::Delete(const std::filesystem::path &path, Transaction &tx)
 {
   if (!std::filesystem::exists(path))
   {
-    printf("Unable to delete %s. The file or directory does not exist.", path.c_str());
+    std::cerr << "Unable to delete " << path.c_str() << ". The file or directory does not exist.\n";
     return;
   }
 

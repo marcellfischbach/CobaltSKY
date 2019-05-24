@@ -97,7 +97,7 @@ void RenameMenuItemHandler::OnActionTriggered(bool checked)
     }
     catch (std::exception &ee)
     {
-      std::cerr << "Unable to rollback renaming transaction: " << e.what() << "\n";
+      std::cerr << "Unable to rollback renaming transaction: " << ee.what() << "\n";
     }
   }
 

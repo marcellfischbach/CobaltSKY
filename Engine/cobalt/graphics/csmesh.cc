@@ -195,7 +195,7 @@ csSize cs::Mesh::GetNumberOfRenderCalls(csUInt8 lodIdx) const
 
 csSize cs::Mesh::GetNumberOfTotalTrigons(csUInt8 lodIdx) const
 {
-  unsigned count = 0;
+  csSize count = 0;
   const LOD &lod = m_lods[lodIdx];
   for (auto data : lod.m_meshes)
   {

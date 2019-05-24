@@ -37,7 +37,7 @@ public:
   void SetBoundingBox(const cs::BoundingBox & bbox);
   const cs::BoundingBox & GetBoundingBox() const;
 
-  unsigned GetNumberOfTrigons() const;
+  size_t GetNumberOfTrigons() const;
 
 private:
 

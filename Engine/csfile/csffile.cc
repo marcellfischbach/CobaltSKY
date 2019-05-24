@@ -225,7 +225,7 @@ bool cs::file::File::Parse(cs::file::File::IInputBuffer *buffer,  bool parseBina
 
   
   State state = eS_ExpectEntry;
-  for (int tokenCounter=0; tokenCounter<tokens.size(); ++tokenCounter)
+  for (size_t tokenCounter=0; tokenCounter<tokens.size(); ++tokenCounter)
   {
     Token token = tokens[tokenCounter];
 

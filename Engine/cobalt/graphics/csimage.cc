@@ -9,7 +9,7 @@ cs::Image::Image()
   , m_width(0)
   , m_height(0)
   , m_depth(1)
-  , m_data(0)
+  , m_pixelFormat(cs::ePF_R32G32B32A32F)
 {
 
 }

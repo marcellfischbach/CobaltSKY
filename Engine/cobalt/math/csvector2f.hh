@@ -2,7 +2,7 @@
 
 #include <cobalt/csexport.hh>
 #include <cobalt/csdefs.hh>
-#include <math.h>
+#include <cobalt/math/csmath.hh>
 #include <stdio.h>
 
 
@@ -168,7 +168,7 @@ public:
 
   CS_FORCEINLINE float Length() const
   {
-    return (float)sqrt(x * x + y * y);
+    return cs::sqrt(x * x + y * y);
   }
 
   CS_FORCEINLINE cs::Vector2f& Normalize()

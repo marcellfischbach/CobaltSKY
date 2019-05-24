@@ -11,6 +11,12 @@ LARGE_INTEGER FrequencyCounter;
 
 
 cs::Time::Time()
+  : m_startTimeMicro(0)
+  , m_currentTimeMicro(0)
+  , m_runTimeMicro(0)
+  , m_startTimeMilli(0)
+  , m_currentTimeMilli(0)
+  , m_runTimeMilli(0)
 {
 #ifdef CS_WIN32
   LARGE_INTEGER StartTime;

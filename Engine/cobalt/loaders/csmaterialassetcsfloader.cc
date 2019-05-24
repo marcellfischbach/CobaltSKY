@@ -76,7 +76,7 @@ cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const cs::file::Entry *ent
         {
           index = material->GetIndex(parameterEntry->GetAttribute("id"));
         }
-        catch (const std::exception &e)
+        catch (const std::exception &)
         {
           continue;
         }
@@ -87,7 +87,7 @@ cs::ResourceWrapper *cs::MaterialAssetCSFLoader::Load(const cs::file::Entry *ent
         {
           index = material->GetIndexByName(parametersEntry->GetAttribute("name"));
         }
-        catch (const std::exception &e)
+        catch (const std::exception &)
         {
           continue;
         }

@@ -1006,7 +1006,7 @@ void cs::GraphicsGL4::SetRenderDestinations(cs::eRenderDestination *renderDestin
   {
     destinations[i] = renderDestinationMap[renderDestination[i]];
   }
-  glDrawBuffers(numRenderDestinations, destinations);
+  glDrawBuffers(static_cast<GLsizei>(numRenderDestinations), destinations);
   CS_CHECK_GL_ERROR;
 }
 

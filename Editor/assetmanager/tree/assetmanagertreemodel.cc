@@ -127,7 +127,7 @@ int	TreeModel::rowCount(const QModelIndex& parent) const
   TreeNode* parentTreeNode = TreeNodeFrom(parent);
   if (parentTreeNode)
   {
-    return parentTreeNode->m_children.size();
+    return static_cast<int>(parentTreeNode->m_children.size());
   }
   else if (m_rootNode)
   {
@@ -254,6 +254,7 @@ bool TreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
     }
     catch (std::exception & e)
     {
+      std::cerr << "Unable to begin transaction. Cause '" << e.what() << "'\n";
       // cannot even begin a transaction... there something real foul
       return true;
     }
@@ -267,6 +268,7 @@ bool TreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int r
     }
     catch (std::exception & e)
     {
+      std::cerr << "Unexpected error. Cause '" << e.what() << "'\n";
       tx.Rollback();
     }
   }

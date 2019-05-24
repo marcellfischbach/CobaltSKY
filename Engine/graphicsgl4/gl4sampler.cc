@@ -38,7 +38,7 @@ bool cs::SamplerGL4::Initialize()
   m_addressW = cs::eTAM_Repeat;
   m_minLOD = -1000;
   m_maxLOD = 1000;
-  m_anisotropy = 1.0f;
+  m_anisotropy = 1;
   m_borderColor = cs::Vector4f(0.0f, 0.0f, 0.0f, 0.0f);
   m_textureCompareMode = cs::eTCM_CompareToR;
   m_textureCompareFunc = cs::eTCF_Always;

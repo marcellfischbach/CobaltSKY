@@ -8,6 +8,8 @@
 
 cs::GeometryData::GeometryData()
   : cs::Object()
+  , m_id(0)
+  , m_name(std::string(""))
   , m_attached(false)
 {
 

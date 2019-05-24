@@ -72,8 +72,8 @@ public:
 
   virtual void Render(cs::iGraphics * graphics, cs::eRenderPass pass) const;
 
-  virtual unsigned GetNumberOfRenderCalls() const;
-  virtual unsigned GetNumberOfTotalTrigons() const;
+  virtual size_t GetNumberOfRenderCalls() const;
+  virtual size_t GetNumberOfTotalTrigons() const;
 
 protected:
   virtual void OnAttachedToScene(cs::EntityScene * scene);

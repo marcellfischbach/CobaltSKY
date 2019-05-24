@@ -41,8 +41,23 @@ public:
   bool HasAttribute(size_t idx = 0) const;
   bool HasAttribute(const std::string& key) const;
 
-  std::string GetAttribute(size_t idx = 0, const std::string& defaultValue = "") const;
-  std::string GetAttribute(const std::string& key, const std::string& defaultValue = "") const;
+
+  inline std::string GetAttribute() const
+  {
+    return GetAttribute(0, std::string(""));
+  }
+  inline std::string GetAttribute(size_t idx) const
+  {
+    return GetAttribute(idx, std::string(""));
+  }
+  std::string GetAttribute(size_t idx, const std::string& defaultValue) const;
+
+  inline std::string GetAttribute(const std::string& key) const
+  {
+    return GetAttribute(key, std::string(""));
+  }
+  std::string GetAttribute(const std::string& key, const std::string& defaultValue) const;
+
   int GetAttributeInt(size_t idx = 0, int defaultValue = 0) const;
   int GetAttributeInt(const std::string& key, int defaultValue = 0) const;
   long GetAttributeLong(size_t idx = 0, long defaultValue = 0) const;

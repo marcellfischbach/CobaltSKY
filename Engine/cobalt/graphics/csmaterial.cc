@@ -395,6 +395,8 @@ bool cs::Material::Bind(cs::iGraphics *renderer, cs::eRenderPass pass)
 }
 
 cs::Material::ShaderParameter::ShaderParameter()
+  : m_inherit(false)
+  , m_paramType(cs::eSPT_Float)
 {
 
 }

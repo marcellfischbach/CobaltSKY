@@ -8,7 +8,7 @@ namespace cs
 {
 
 
-class CSE_API Exception : public std::exception
+class Exception : public std::exception
 {
 public:
   Exception();
@@ -23,5 +23,30 @@ private:
   std::string m_what;
 };
 
+
+
+
+
+}
+
+
+
+inline cs::Exception::Exception()
+  : std::exception()
+  , m_what("")
+{
+
+}
+
+inline cs::Exception::Exception(const std::string& what)
+  : std::exception()
+  , m_what(what)
+{
+
+}
+
+
+inline cs::Exception::~Exception()
+{
 
 }

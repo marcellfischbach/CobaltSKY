@@ -80,7 +80,7 @@ void cs::StaticMeshState::UpdateMaterialSlots()
   cs::Material **materials = new cs::Material*[numMaterials];
   memset(materials, 0, sizeof(cs::Material*) * numMaterials);
 
-  for (csUInt32 i= m_materials.size(); i<numMaterials; ++i)
+  for (size_t i= m_materials.size(); i<numMaterials; ++i)
   {
     m_materials.push_back(0);
   }
@@ -218,7 +218,7 @@ void cs::StaticMeshState::Render(cs::iGraphics *graphics, cs::eRenderPass pass) 
   }
 }
 
-unsigned cs::StaticMeshState::GetNumberOfRenderCalls() const
+size_t cs::StaticMeshState::GetNumberOfRenderCalls() const
 {
   if (m_mesh)
   {
@@ -228,7 +228,7 @@ unsigned cs::StaticMeshState::GetNumberOfRenderCalls() const
 }
 
 
-unsigned cs::StaticMeshState::GetNumberOfTotalTrigons() const
+size_t cs::StaticMeshState::GetNumberOfTotalTrigons() const
 {
   if (m_mesh)
   {

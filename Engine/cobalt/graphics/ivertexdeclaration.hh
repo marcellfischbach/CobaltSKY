@@ -25,7 +25,13 @@ struct VertexElement
   bool                        Valid;
 
   VertexElement()
-    : Valid(false)
+    : StreamDefinition(cs::eVST_Position)
+    , Type(cs::eDT_Byte)
+    , Size(0)
+    , Offset(0)
+    , Stride(0)
+    , Stream(0)
+    , Valid(false)
   {
 
   }

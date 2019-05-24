@@ -30,6 +30,8 @@ private:
 
 cs::DynamicColliderState::DynamicColliderState()
   : cs::BaseColliderState()
+  , m_mass(0.0f)
+  , m_autoInertia(false)
   , m_dynamicCollider(0)
 {
   m_callback = new cs::DynamicColliderStateTransformationCallback(this);

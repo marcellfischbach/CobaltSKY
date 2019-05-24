@@ -8,7 +8,7 @@
 namespace cs::editor::assetmanager
 {
 
-class IMenuItemFactory;
+struct IMenuItemFactory;
 class ASSET_MANAGER_API MenuItemFactories
 {
 public:

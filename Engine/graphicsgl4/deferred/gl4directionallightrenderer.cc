@@ -17,6 +17,7 @@
 #include <cobalt/entity/csgeometrydata.hh>
 #include <cobalt/entity/csrenderstate.hh>
 #include <cobalt/math/csclipper.hh>
+#include <cobalt/math/csmath.hh>
 
 
 
@@ -94,8 +95,8 @@ cs::DirectionalLightRendererGL4::DirectionalLightRendererGL4(cs::iGraphics *rend
   unsigned screenResolutionWidth = cs::Settings::Get()->GetIntValue("video.resolution", 0, 1366);
   unsigned screenResolutionHeight = cs::Settings::Get()->GetIntValue("video.resolution", 1, 768);
 
-  unsigned shadowMapWidth = screenResolutionWidth / 2.0f;
-  unsigned shadowMapHeight = screenResolutionHeight /2.0f;
+  unsigned shadowMapWidth = static_cast<unsigned>(screenResolutionWidth / 2.0f);
+  unsigned shadowMapHeight = static_cast<unsigned>(screenResolutionHeight / 2.0f);
 
   m_shadowMapRenderer.shadowMap = new cs::Texture2DWrapper(m_renderer->CreateTexture2D(cs::ePF_R8G8B8A8U, shadowMapWidth, shadowMapHeight, false));
   m_shadowMapRenderer.shadowMap->Get()->SetSampler(colorSampler);
@@ -563,7 +564,7 @@ void cs::DirectionalLightRendererGL4::CalcMatrixAlternative(const cs::Vector3f &
   cam.SetLookAt(center, at, up);
   camInv.SetLookAtInv(center, at, up);
 
-  float radius = sqrt(maxDistSqr);
+  float radius = cs::sqrt(maxDistSqr);
   float sizePerPixel = 2.0f * radius / (float)m_shadowBufferSize;
 
   cs::Vector3f c = cs::Matrix4f::Mult(cam, center, c);

@@ -129,7 +129,7 @@ cs::AssetInputStream &cs::AssetInputStream::operator>>(std::string &o)
   csUInt16 length;
   *this >> length;
 
-  char *buffer = new char[length + 1];
+  char *buffer = new char[static_cast<size_t>(length) + 1];
   memcpy(buffer, m_readPointer, length);
   buffer[length] = '\0';
   o = std::string(buffer);

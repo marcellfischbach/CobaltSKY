@@ -1,7 +1,7 @@
 
 #include <cobalt/graphics/cscamera.hh>
 #include <cobalt/graphics/igraphics.hh>
-
+#include <cobalt/math/csmath.hh>
 
 cs::Camera::Camera()
   : cs::Object()
@@ -64,7 +64,7 @@ void cs::Camera::UpdateProjectionValues()
   {
   case cs::ePM_Perspective:
     {
-      m_right  = sin(m_perspectiveAngle) * m_near;
+      m_right  = cs::sin(m_perspectiveAngle) * m_near;
       m_left = -m_right;
       m_top = m_perspectiveAspect * m_right;
       m_bottom = -m_top;

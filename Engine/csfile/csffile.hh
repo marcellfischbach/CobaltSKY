@@ -103,10 +103,10 @@ private:
 
   struct Token
   {
-    TokenType type;
+    TokenType type = eTT_Invalid;
     std::string value;
-    csUInt32 row;
-    csUInt32 column;
+    csUInt32 row = 0;
+    csUInt32 column = 0;
   };
 
   Token GetToken(IInputBuffer* buffer);
