@@ -1,0 +1,15 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+  <qresource prefix="/icons">
+    <file alias="cs_16">../../Images/cs_16.png</file>
+    <file alias="cs_24">../../Images/cs_24.png</file>
+    <file alias="cs_28">../../Images/cs_28.png</file>
+    <file alias="cs_32">../../Images/cs_32.png</file>
+    <file alias="cs_48">../../Images/cs_48.png</file>
+    <file alias="cs_64">../../Images/cs_64.png</file>
+    <file alias="cs_128">../../Images/cs_128.png</file>
+
+  </qresource>
+
+</RCC>

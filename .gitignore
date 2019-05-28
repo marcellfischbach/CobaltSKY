@@ -15,6 +15,7 @@ build-ClassGenerator*
 /data/materials/AnotherMaterial.asset
 .vs/
 bin/*
+build/
 docs/api/Editor
 docs/api/Engine
 /docs/ValkyrieEngine.vpp.vbak

@@ -11,6 +11,10 @@ set(ALL_SOURCES
 	assetmanager.cc
 	assetmanager.hh
 	assetmanagerexport.hh
+	assetmanagermodule.cc
+	assetmanagermodule.hh
+	assetmanagertoolview.cc
+	assetmanagertoolview.hh
 	resources.qrc
 
 	list/assetmanagerlistlistmodel.cc
@@ -80,7 +84,9 @@ target_link_libraries(
 	EditorAssetManager
     Qt5::Core
     Qt5::Widgets
+	EditorCore
 	EditorModel
+
 	)
 
 CS_MOC(EditorAssetManager assetmanager)

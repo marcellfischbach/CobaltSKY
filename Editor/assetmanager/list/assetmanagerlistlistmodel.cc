@@ -93,7 +93,7 @@ int	ListListModel::rowCount(const QModelIndex& parent) const
   int count = 0;
   if (!parent.isValid() && m_rootNode)
   {
-    count = m_rootNode->GetNumberOfChildren();
+    count = static_cast<int>(m_rootNode->GetNumberOfChildren());
   }
   return count;
 }
