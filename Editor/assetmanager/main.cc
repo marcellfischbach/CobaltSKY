@@ -179,14 +179,15 @@ int main(int argc, char **argv)
   qApp->setStyle(QStyleFactory::create("Adwaita"));
   //qApp->setStyle(QStyleFactory::create("Fusion"));
 
-  TestWindow windowTree(&model, cs::editor::assetmanager::AssetManager::eS_Tree);
+  /*
+  TestWindow windowTree(&model, cs::editor::assetmanager::AssetManager::eS_Automatic);
   windowTree.resize(256, 768);
   windowTree.move(100, 50);
   windowTree.setVisible(true);
+  */
 
 
-
-  TestWindow windowList(&model, cs::editor::assetmanager::AssetManager::eS_List);
+  TestWindow windowList(&model, cs::editor::assetmanager::AssetManager::eS_Automatic);
   windowList.resize(1024, 256);
   windowList.move(100, 50 + 768 + 32);
   windowList.setVisible(true);

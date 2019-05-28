@@ -13,6 +13,10 @@ set(ALL_SOURCES
 	assetmanagerexport.hh
 	resources.qrc
 
+	list/assetmanagerlistlistmodel.cc
+	list/assetmanagerlistlistmodel.hh
+	list/assetmanagerlistlistnode.cc
+	list/assetmanagerlistlistnode.hh
 	list/assetmanagerlistview.cc
 	list/assetmanagerlistview.hh
 	list/assetmanagerlisttreemodel.cc

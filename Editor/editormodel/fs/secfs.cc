@@ -144,6 +144,15 @@ void SecureFS::DeleteDirectory(const std::filesystem::path &path, Transaction &t
 }
 
 
+
+
+/* ************************************************************************
+ * ************************************************************************
+ *         Move
+ * ************************************************************************
+ * ************************************************************************/
+
+
 void SecureFS::Move(const std::filesystem::path &sourcePath, const std::filesystem::path &destinationPath, Transaction &tx)
 {
   if (!std::filesystem::is_directory(destinationPath))

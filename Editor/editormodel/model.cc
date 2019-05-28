@@ -302,7 +302,7 @@ void Model::MoveFolder(FolderNode *folderNode, FolderNode *toNewParent, Transact
   }
 
   //
-  // check if the is already a folder with the same name within the new parent
+  // check if there is already a folder with the same name within the new parent
   for (auto child : toNewParent->GetChildren())
   {
     if (child->IsFolderNode() && folderNode->GetName() == child->GetName())

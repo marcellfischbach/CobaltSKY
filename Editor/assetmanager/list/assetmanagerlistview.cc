@@ -1,6 +1,7 @@
 
 
 #include <assetmanager/list/assetmanagerlistview.hh>
+#include <assetmanager/list/assetmanagerlistlistmodel.hh>
 #include <assetmanager/list/assetmanagerlisttreemodel.hh>
 #include <assetmanager/menu/menubuilder.hh>
 
@@ -30,6 +31,13 @@ ListView::ListView(model::Model* editorModel, QWidget* parent)
   m_treeModel = new ListTreeModel(m_treeView);
   m_treeModel->SetEditorModel(editorModel);
   m_treeView->setModel(m_treeModel);
+
+  m_listModel = new ListListModel(m_listView);
+  m_listModel->SetEditorModel(editorModel);
+  m_listView->setModel(m_listModel);
+
+  connect(m_treeView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(on_treeView_SelectionChanged(const QModelIndex&, const QModelIndex&)));
+
 }
 
 
@@ -52,6 +60,12 @@ void ListView::InitGUI()
   m_treeView->setAllColumnsShowFocus(true);
 
   m_listView = new QListView();
+  m_listView->setFlow(QListView::LeftToRight);
+  m_listView->setResizeMode(QListView::Adjust);
+  m_listView->setTextElideMode(Qt::ElideMiddle);
+  m_listView->setViewMode(QListView::IconMode);
+  m_listView->setUniformItemSizes(false);
+  m_listView->setGridSize(QSize(128, 64));
 
   m_splitter->addWidget(m_treeView);
   m_splitter->addWidget(m_listView);
@@ -65,6 +79,14 @@ void ListView::InitGUI()
 
   layout->addWidget(m_splitter, 0, 0);
 
+}
+
+
+void ListView::on_treeView_SelectionChanged(const QModelIndex& index, const QModelIndex&)
+{
+  printf("treeViewSelectionChanged\n");
+  model::Node* node = m_treeModel->ModelNodeAt(index);
+  m_listModel->SetEditorNode(node);
 }
 
 }

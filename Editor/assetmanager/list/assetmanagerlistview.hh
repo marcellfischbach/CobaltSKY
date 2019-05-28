@@ -19,6 +19,7 @@ namespace cs::editor::assetmanager
 {
 
 class ListTreeModel;
+class ListListModel;
 class ListView : public QWidget
 {
   Q_OBJECT;
@@ -33,6 +34,10 @@ private:
   QSplitter* m_splitter;
 
   ListTreeModel* m_treeModel;
+  ListListModel* m_listModel;
+
+private slots:
+  void on_treeView_SelectionChanged(const QModelIndex& idx, const QModelIndex &);
 };
 
 }

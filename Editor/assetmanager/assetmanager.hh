@@ -23,15 +23,22 @@ public:
   {
     eS_Tree,
     eS_List,
-    eS_Automatik
+    eS_Automatic
   };
 public:
   AssetManager(model::Model *model, Style style, QWidget *parent = nullptr);
   virtual ~AssetManager() { }
 
+protected:
+  void resizeEvent(QResizeEvent* event);
+
 private:
   ListView* m_list;
   TreeView* m_tree;
+  Style m_style;
+  QWidget* m_currentWidget;
+
+  int m_minListSize;
 };
 
 }
