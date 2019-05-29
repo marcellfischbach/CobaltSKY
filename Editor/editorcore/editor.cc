@@ -2,12 +2,16 @@
 
 #include <editorcore/editor.hh>
 #include <editorcore/editorwindow.hh>
+#include <editorcore/abstracteditor.hh>
+#include <editorcore/ieditorfactory.hh>
 
 #include <editormodel/model.hh>
 #include <editormodel/pathscanner.hh>
 
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/core/csvfs.hh>
+
+#include <iostream>
 
 namespace cs::editor::core
 {
@@ -17,7 +21,7 @@ Editor::Editor()
   : m_editorWindow(nullptr)
   , m_model(nullptr)
 {
-
+  m_editorFactories.clear();
 }
 
 Editor* Editor::Get()
@@ -79,15 +83,56 @@ bool Editor::OpenProject(const std::string& projectPath)
   return true;
 }
 
+void Editor::OpenEditor(cs::editor::model::AssetNode* assetNode)
+{
+  if (m_editorWindow->ShowOpenEditor(assetNode))
+  {
+    return;
+  }
+  AbstractEditor* editor = nullptr;
+  for (auto editorFactory : m_editorFactories)
+  {
+    if (editorFactory->CanEdit(assetNode))
+    {
+      editor = editorFactory->CreateEditor(assetNode);
+      if (editor)
+      {
+        break;
+      }
+    }
+  }
+  if (!editor)
+  {
+    // TODO: Show error message box
+    std::cout << "Unable to open editor for [" << assetNode->GetResourceLocator().Encode() << "]\n";
+    return;
+  }
+
+  if (!m_editorWindow->ShowEditor(editor))
+  {
+    delete editor;
+  }
+}
+
+void Editor::Register(iEditorFactory* editorFactory)
+{
+  m_editorFactories.push_back(editorFactory);
+}
+
 EditorWindow* Editor::GetEditorWindow()
 {
   return m_editorWindow;
 }
 
 
-cs::editor::model::Model* cs::editor::core::Editor::GetModel()
+cs::editor::model::Model* Editor::GetModel()
 {
   return m_model;
+}
+
+std::string Editor::GetWindowTitle() const
+{
+  return "CobaltSKY Editor";
 }
 
 }

@@ -25,6 +25,7 @@ public:
 
 private slots:
   void OnTreeViewCustomContextMenuRequested(const QPoint &pos);
+  void OnTreeViewDoubleClicked(const QModelIndex& index);
 
 private:
   void InitGUI();

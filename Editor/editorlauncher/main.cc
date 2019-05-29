@@ -2,7 +2,9 @@
 #include <qapplication.h>
 #include <editorcore/editor.hh>
 #include <assetmanager/assetmanagermodule.hh>
+#include <pluginsamplereditor/samplereditormodule.hh>
 #include <QIcon>
+#include <QPalette>
 #include <QStyleFactory>
 #include <filesystem>
 
@@ -48,8 +50,33 @@ int main (int argc, char **argv)
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 
   QApplication app(argc, argv);
-  qApp->setStyle(QStyleFactory::create("Adwaita"));
+  qApp->setStyle(QStyleFactory::create("Fusion"));
+  if (true)
+  {
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(53, 53, 63));
+    darkPalette.setColor(QPalette::WindowText, Qt::white);
+    darkPalette.setColor(QPalette::Base, QColor(25, 25, 35));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(53, 53, 63));
+    darkPalette.setColor(QPalette::AlternateBase, QColor(40, 40, 50));
+    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
+    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
+    darkPalette.setColor(QPalette::Text, Qt::white);
+    darkPalette.setColor(QPalette::Button, QColor(53, 53, 63));
+    darkPalette.setColor(QPalette::ButtonText, Qt::white);
+    darkPalette.setColor(QPalette::BrightText, Qt::red);
+    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
 
+    darkPalette.setColor(QPalette::Disabled, QPalette::Text, Qt::gray);
+    darkPalette.setColor(QPalette::Disabled, QPalette::Button, QColor(25, 25, 35));
+    darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::gray);
+
+    qApp->setPalette(darkPalette);
+    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
+
+  }
 
   QIcon icon;
   icon.addFile(":/icons/cs_16");
@@ -74,6 +101,7 @@ int main (int argc, char **argv)
   }
 
   cs::editor::assetmanager::Module::Initialize(argc, argv);
+  cs::editor::plugin::samplereditor::Module::Initialize(argc, argv);
   /*
   ImageImporterModule::Initialize(argc, argv);
   MaterialEditorModule::Initialize(argc, argv);

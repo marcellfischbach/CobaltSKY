@@ -9,6 +9,8 @@ set(CMAKE_AUTORCC ON)
 
 
 set(ALL_SOURCES
+	abstracteditor.cc
+	abstracteditor.hh
 	editor.cc
 	editor.hh
 	editorwindow.cc

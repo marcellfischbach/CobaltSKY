@@ -5,6 +5,8 @@
 
 #include <editormodel/model.hh>
 
+#include <editorcore/editor.hh>
+
 #include <QLineEdit>
 #include <QMenu>
 #include <QTreeView>
@@ -50,6 +52,7 @@ void TreeView::InitGUI()
   m_treeView->setAllColumnsShowFocus(true);
 
   connect(m_treeView, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(OnTreeViewCustomContextMenuRequested(const QPoint&)));
+  connect(m_treeView, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(OnTreeViewDoubleClicked(const QModelIndex&)));
 
   m_filter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   m_treeView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -76,4 +79,16 @@ void TreeView::OnTreeViewCustomContextMenuRequested(const QPoint &pos)
   std::cout << "menuPoppedUp\n";
 }
 
+void TreeView::OnTreeViewDoubleClicked(const QModelIndex& index)
+{
+  model::Node* node = m_treeModel->ModelNodeAt(index);
+  if (!node || !node->IsAssetNode())
+  {
+    return;
+  }
+
+  model::AssetNode* assetNode = node->AsAssetNode();
+  cs::editor::core::Editor::Get()->OpenEditor(assetNode);
+
+}
 }
