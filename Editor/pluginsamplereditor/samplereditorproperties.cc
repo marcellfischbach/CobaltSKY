@@ -12,4 +12,14 @@ SamplerEditorProperties::SamplerEditorProperties()
 
 }
 
+void SamplerEditorProperties::Set(const iSampler* sampler)
+{
+
+}
+
+bool SamplerEditorProperties::Get(iSampler* sampler)
+{
+  return true;
+}
+
 }

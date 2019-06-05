@@ -4,9 +4,11 @@
 #include <assetmanager/assetmanagermodule.hh>
 #include <pluginsamplereditor/samplereditormodule.hh>
 #include <QIcon>
+#include <QOpenGLContext>
 #include <QPalette>
 #include <QStyleFactory>
 #include <filesystem>
+#include <iostream>
 
 // #define GUI_TEST
 
@@ -16,7 +18,7 @@ void cleanup()
 {
   try
   {
-    std::filesystem::path path("d:/DEV/temp/CobaltSKYModelTest-Ref");
+    std::filesystem::path path("d:/DEV/temp/CobaltSKYModelTest");
     std::filesystem::remove_all(path);
   }
   catch (const std::exception & e)
@@ -30,8 +32,8 @@ void copy_test_folder()
 {
   try
   {
-    std::filesystem::path src("d:/DEV/temp/CobaltSKYModelTest");
-    std::filesystem::path dst("d:/DEV/temp/CobaltSKYModelTest-Ref");
+    std::filesystem::path src("d:/DEV/temp/CobaltSKYModelTest-Ref");
+    std::filesystem::path dst("d:/DEV/temp/CobaltSKYModelTest");
     std::filesystem::copy(src, dst, std::filesystem::copy_options::recursive);
   }
   catch (const std::exception & e)
@@ -48,8 +50,13 @@ int main (int argc, char **argv)
 
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+  
 
   QApplication app(argc, argv);
+
+
+
+
   qApp->setStyle(QStyleFactory::create("Fusion"));
   if (true)
   {

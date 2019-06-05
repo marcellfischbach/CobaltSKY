@@ -6,6 +6,12 @@
 #include <string>
 #include <vector>
 
+namespace cs
+{
+class Engine;
+class GraphicsGL4;
+}
+
 namespace cs::editor::model
 {
 class Model;
@@ -44,6 +50,9 @@ private:
 
 private:
   EditorWindow* m_editorWindow;
+
+  Engine* m_engine;
+  GraphicsGL4* m_graphics;
 
   model::Model* m_model;
 

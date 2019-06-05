@@ -3,14 +3,17 @@
 #include <editorcore/editor.hh>
 #include <editorcore/editorwindow.hh>
 #include <editorcore/abstracteditor.hh>
-#include <editorcore/ieditorfactory.hh>
 #include <editorcore/glcontext.hh>
+#include <editorcore/ieditorfactory.hh>
 
 #include <editormodel/model.hh>
 #include <editormodel/pathscanner.hh>
 
+#include <cobalt/csengine.hh>
 #include <cobalt/core/cssettings.hh>
 #include <cobalt/core/csvfs.hh>
+
+#include <graphicsgl4/gl4graphics.hh>
 
 #include <iostream>
 
@@ -33,7 +36,7 @@ Editor* Editor::Get()
 }
 
 
-bool Editor::Initialize(int argc, char ** argv)
+bool Editor::Initialize(int argc, char** argv)
 {
   for (int i = 1; i < argc; ++i)
   {
@@ -44,20 +47,23 @@ bool Editor::Initialize(int argc, char ** argv)
     }
   }
 
-  if (!GLContext::Get().IsValid())
-  {
-    return false;
-  }
+  GLContext::Get().MakeCurrent();
+  m_engine = new cs::Engine();
+  m_graphics = new GraphicsGL4();
+  m_engine->SetRenderer(m_graphics);
+
+
 
   if (!m_model)
   {
-    OpenProject("D:/DEV/temp/CobaltSKYModelTest-Ref");
+    OpenProject("D:/DEV/temp/CobaltSKYModelTest");
   }
-
+  
 
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->setVisible(true);
+
   return true;
 }
 
@@ -86,7 +92,7 @@ bool Editor::OpenProject(const std::string& projectPath)
 
   }
 
-  m_model->Debug();
+  //m_model->Debug();
 
   return true;
 }

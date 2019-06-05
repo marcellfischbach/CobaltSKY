@@ -4,8 +4,9 @@ namespace cs::editor::model
 {
 
 
-AssetNode::AssetNode(Model *model)
-  : Node (model, eT_Asset)
+AssetNode::AssetNode(Model* model)
+  : Node(model, eT_Asset)
+  , m_assetClass(nullptr)
 {
 
 }
@@ -52,6 +53,15 @@ const std::string &AssetNode::GetAssetTypeName() const
   return m_assetTypeName;
 }
 
+void AssetNode::SetAssetClass(const cs::Class* assetClass)
+{
+  m_assetClass = assetClass;
+}
+
+const cs::Class* AssetNode::GetAssetClass() const
+{
+  return m_assetClass;
+}
 
 std::set<cs::ResourceLocator> &AssetNode::GetReferences()
 {

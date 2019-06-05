@@ -4,26 +4,23 @@
 
 #include <editorcore/export.hh>
 
+class QOffscreenSurface;
 class QOpenGLContext;
-
 namespace cs::editor::core
 {
 
 
-class GLContext
+class EDITOR_CORE_API GLContext
 {
 public:
   static GLContext& Get();
-
-  bool IsValid() const;
-
-  QOpenGLContext* GetContext() const;
+  bool MakeCurrent();
 
 private:
   GLContext();
-
+  
+  QOffscreenSurface* m_surface;
   QOpenGLContext* m_context;
 };
-
 
 }

@@ -14,13 +14,15 @@
 namespace cs::editor::plugin::samplereditor
 {
 
-SamplerEditorWidget::SamplerEditorWidget(SamplerEditor *editor)
+SamplerEditorWidget::SamplerEditorWidget(SamplerEditor* editor, iSampler* sampler)
   : QWidget()
   , m_editor(editor)
+  , m_sampler(sampler)
 {
 
 
   m_properties = new SamplerEditorProperties();
+  m_properties->Set(sampler);
 
   core::RenderWidget* renderWidget = new core::RenderWidget(this);
 

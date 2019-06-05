@@ -3,7 +3,9 @@
 #include <editormodel/model.hh>
 #include <editormodel/nodescanner.hh>
 #include <cobalt/core/csvfs.hh>
+#include <cobalt/core/csresourcemanager.hh>
 #include <filesystem>
+#include <iostream>
 
 namespace std
 {
@@ -52,13 +54,20 @@ void PathScanner::Scan(FolderNode *parentNode, const std::fs::path &path, Transa
   //printf("   %s\n", path.generic_string().c_str());
   if (std::fs::is_regular_file(path))
   {
-    if (path.extension() == ".csf" || path.extension() == ".asset")
+    cs::ResourceLocator loc = parentNode->GetResourceLocator().WithFileSuffix(path.filename().generic_string());
+    std::string locEnc = loc.Encode();
+    const cs::Class * cls = cs::ResourceManager::Get()->EvalClass(loc);
+    if (cls)
     {
       AssetNode *assetNode = model->CreateAssetNode();
       assetNode->SetName(path.filename().generic_string());
+      assetNode->SetAssetClass(cls);
       model->Add(assetNode, parentNode, tx);
-      NodeScanner nodeScanner;
-      nodeScanner.Scan(assetNode);
+      if (path.extension() == ".csf" || path.extension() == ".asset")
+      {
+        NodeScanner nodeScanner;
+        nodeScanner.Scan(assetNode);
+      }
     }
   }
   else if (std::fs::is_directory(path))

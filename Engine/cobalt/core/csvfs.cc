@@ -416,7 +416,7 @@ cs::iFile *cs::VFS::Open(const std::string &filename, cs::eOpenMode mode, cs::eT
   }
 
   delete file;
-  printf("%s@%d Unable to open: %s %s\n", __FILE__, __LINE__, filename.c_str(), finalFilename.c_str());
+  //printf("%s@%d Unable to open: %s %s\n", __FILE__, __LINE__, filename.c_str(), finalFilename.c_str());
   return nullptr;
 }
 

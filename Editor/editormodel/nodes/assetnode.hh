@@ -3,6 +3,9 @@
 
 #include <editormodel/editormodelexport.hh>
 #include <editormodel/nodes/node.hh>
+
+#include <csrefl/class.hh>
+
 #include <set>
 
 namespace cs::editor::model
@@ -24,6 +27,9 @@ public:
   void SetAssetTypeName(const std::string &assetTypeName);
   const std::string &GetAssetTypeName() const;
 
+  void SetAssetClass(const cs::Class* assetClass);
+  const cs::Class* GetAssetClass() const;
+
   virtual const cs::ResourceLocator WithNewName(const std::string &newName) const;
 
   std::set<cs::ResourceLocator> &GetReferences();
@@ -40,6 +46,8 @@ private:
   std::string m_name;
 
   std::string m_assetTypeName;
+
+  const cs::Class* m_assetClass;
 
   std::set<cs::ResourceLocator> m_references;
 };

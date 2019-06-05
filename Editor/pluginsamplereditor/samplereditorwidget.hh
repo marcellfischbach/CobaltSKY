@@ -4,6 +4,11 @@
 
 #include <QWidget>
 
+namespace cs
+{
+struct iSampler;
+}
+
 namespace cs::editor::plugin::samplereditor
 {
 
@@ -13,10 +18,12 @@ class SamplerEditorProperties;
 class SamplerEditorWidget : public QWidget
 {
 public:
-  SamplerEditorWidget(SamplerEditor* editor);
+  SamplerEditorWidget(SamplerEditor* editor, iSampler *sampler);
 
 
 private:
+  iSampler* m_sampler;
+
   SamplerEditor* m_editor;
 
   SamplerEditorProperties* m_properties;
