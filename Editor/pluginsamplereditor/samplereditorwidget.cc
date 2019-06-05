@@ -4,6 +4,8 @@
 #include <pluginsamplereditor/samplereditor.hh>
 #include <pluginsamplereditor/samplereditorproperties.hh>
 
+#include <editorcore/renderwidget.hh>
+
 #include <QFrame>
 #include <QGridLayout>
 #include <QSplitter>
@@ -18,12 +20,12 @@ SamplerEditorWidget::SamplerEditorWidget(SamplerEditor *editor)
 {
 
 
-  QFrame* preview = new QFrame();
   m_properties = new SamplerEditorProperties();
 
+  core::RenderWidget* renderWidget = new core::RenderWidget(this);
 
   QSplitter* splitter = new QSplitter();
-  splitter->addWidget(preview);
+  splitter->addWidget(renderWidget);
   splitter->addWidget(m_properties);
 
   splitter->setStretchFactor(0, 1);

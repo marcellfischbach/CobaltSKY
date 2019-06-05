@@ -16,6 +16,10 @@ set(ALL_SOURCES
 	editorwindow.cc
 	editorwindow.hh
 	export.hh
+	glcontext.cc
+	glcontext.hh
+	renderwidget.cc
+	renderwidget.hh
 	)
 
 
@@ -36,6 +40,8 @@ target_link_libraries(
     Qt5::Core
     Qt5::Widgets
 	EditorModel
+	CobaltSKY
+	CobaltSKY-GraphicsGL4
 	)
 
 CS_MOC(EditorCore editorcore)

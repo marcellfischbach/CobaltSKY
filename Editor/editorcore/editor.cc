@@ -4,6 +4,7 @@
 #include <editorcore/editorwindow.hh>
 #include <editorcore/abstracteditor.hh>
 #include <editorcore/ieditorfactory.hh>
+#include <editorcore/glcontext.hh>
 
 #include <editormodel/model.hh>
 #include <editormodel/pathscanner.hh>
@@ -43,10 +44,17 @@ bool Editor::Initialize(int argc, char ** argv)
     }
   }
 
+  if (!GLContext::Get().IsValid())
+  {
+    return false;
+  }
+
   if (!m_model)
   {
     OpenProject("D:/DEV/temp/CobaltSKYModelTest-Ref");
   }
+
+
 
   m_editorWindow = new EditorWindow();
   m_editorWindow->setVisible(true);
