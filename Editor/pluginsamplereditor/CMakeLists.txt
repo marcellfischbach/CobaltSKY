@@ -14,10 +14,13 @@ set(ALL_SOURCES
 	samplereditorexport.hh
 	samplereditorfactory.cc
 	samplereditorfactory.hh
+	samplereditorfile.cc
+	samplereditorfile.hh
 	samplereditormodule.cc
 	samplereditormodule.hh
 	samplereditorproperties.cc
 	samplereditorproperties.hh
+	samplereditorproperties.ui
 	samplereditorwidget.cc
 	samplereditorwidget.hh
 	)

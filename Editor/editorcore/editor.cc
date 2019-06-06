@@ -138,6 +138,16 @@ EditorWindow* Editor::GetEditorWindow()
   return m_editorWindow;
 }
 
+Engine* Editor::GetEngine()
+{
+  return m_engine;
+}
+
+
+iGraphics* Editor::GetGraphics()
+{
+  return m_graphics;
+}
 
 cs::editor::model::Model* Editor::GetModel()
 {

@@ -2,7 +2,7 @@
 #include <graphicsgl4/gl4sampler.hh>
 #include <graphicsgl4/gl4mapping.hh>
 #include <graphicsgl4/gl4defines.hh>
-
+#include <iostream>
 
 cs::SamplerGL4::SamplerGL4()
   : cs::iSampler()
@@ -12,7 +12,6 @@ cs::SamplerGL4::SamplerGL4()
 
 cs::SamplerGL4::~SamplerGL4()
 {
-
 }
 
 bool cs::SamplerGL4::Initialize()

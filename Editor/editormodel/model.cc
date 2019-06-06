@@ -742,6 +742,34 @@ const std::set<const Node*> Model::GetNodes(const cs::ResourceLocator &locator) 
   return result;
 }
 
+bool Model::IsEngineFinalNode(const Node* node) const
+{
+  if (!node)
+  {
+    return false;
+  }
+
+  cs::ResourceLocator anonLocator = node->GetResourceLocator().AsAnonymous();
+  auto it = m_cache.AnonNodes.find(anonLocator);
+  if (it == m_cache.AnonNodes.end())
+  {
+    return false;
+  }
+  int maxPrio = INT_MIN;
+  const Node* maxNode = nullptr;
+  for (auto anon : it->second)
+  {
+    int nodePrio = anon->GetPriority();
+    if (nodePrio > maxPrio)
+    {
+      maxPrio = nodePrio;
+      maxNode = anon;
+    }
+  }
+
+  return node == maxNode;
+}
+
 void Model::Debug() const
 {
   m_root->Debug(0);

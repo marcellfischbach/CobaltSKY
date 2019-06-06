@@ -101,6 +101,8 @@ public:
 
   const std::set<Node*> GetNodes(const cs::ResourceLocator &locator);
   const std::set<const Node*> GetNodes(const cs::ResourceLocator &locator) const;
+
+  bool IsEngineFinalNode(const Node* node) const;
   /**
    *@}
    */

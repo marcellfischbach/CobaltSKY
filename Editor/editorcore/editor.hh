@@ -9,6 +9,7 @@
 namespace cs
 {
 class Engine;
+struct iGraphics;
 class GraphicsGL4;
 }
 
@@ -39,6 +40,10 @@ public:
   void Register(iEditorFactory* editorFactory);
 
   EditorWindow* GetEditorWindow();
+
+  Engine* GetEngine();
+
+  iGraphics* GetGraphics();
 
   model::Model* GetModel();
 

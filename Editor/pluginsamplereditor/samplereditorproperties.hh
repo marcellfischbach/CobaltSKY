@@ -3,6 +3,7 @@
 #pragma once
 
 #include <QWidget>
+#include <ui_samplereditorproperties.h>
 
 namespace cs
 {
@@ -19,6 +20,11 @@ public:
 
   void Set(const iSampler* sampler);
   bool Get(iSampler* sampler);
+
+private:
+  
+
+  Ui::SamplerEditorProperties m_gui;
 };
 
 }

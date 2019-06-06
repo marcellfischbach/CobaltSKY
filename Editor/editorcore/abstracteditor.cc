@@ -1,6 +1,7 @@
 
 
 #include <editorcore/abstracteditor.hh>
+#include <QWidget>
 
 
 namespace cs::editor::core
@@ -18,7 +19,10 @@ AbstractEditor::AbstractEditor(QWidget *parent)
 
 AbstractEditor::~AbstractEditor()
 {
-
+  if (m_widget)
+  {
+    m_widget->deleteLater();
+  }
 }
 
 void AbstractEditor::SetPendingChanges(bool pendingChanges)
