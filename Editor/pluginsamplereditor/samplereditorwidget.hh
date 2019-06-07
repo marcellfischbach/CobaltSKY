@@ -25,7 +25,7 @@ public:
 
 
 private slots:
-  void Save();
+  void Save(bool);
 
 private:
   iSampler* Copy(const iSampler* sampler);

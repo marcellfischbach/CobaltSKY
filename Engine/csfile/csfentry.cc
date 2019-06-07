@@ -20,9 +20,10 @@ cs::file::Entry::Entry(cs::file::File *file, const std::string &tagName)
 }
 
 
-void cs::file::Entry::SetTagName(const std::string &tagName)
+cs::file::Entry* cs::file::Entry::SetTagName(const std::string &tagName)
 {
   m_tagName = tagName;
+  return this;
 }
 
 const std::string &cs::file::Entry::GetTagName() const
@@ -30,20 +31,22 @@ const std::string &cs::file::Entry::GetTagName() const
   return m_tagName;
 }
 
-void cs::file::Entry::RemoveAttributes()
+cs::file::Entry* cs::file::Entry::RemoveAttributes()
 {
   m_attributes.clear();
+  return this;
 }
 
-void cs::file::Entry::RemoveAttribute(size_t idx)
+cs::file::Entry* cs::file::Entry::RemoveAttribute(size_t idx)
 {
 	if (idx >= m_attributes.size())
 	{
-		return;
+		return this;
 	}
 
 	auto it = m_attributes.begin() + idx;
 	m_attributes.erase(it);
+  return this;
 }
 
 size_t cs::file::Entry::GetNumberOfAttributes() const

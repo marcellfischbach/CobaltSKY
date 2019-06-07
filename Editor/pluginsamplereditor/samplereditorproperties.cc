@@ -61,6 +61,7 @@ SamplerEditorProperties::SamplerEditorProperties()
   m_gui.compareMode->addItem("CompareToR");
   m_gui.compareMode->addItem("None");
 
+  m_gui.compareFunc->addItem("LessOrEqual");
   m_gui.compareFunc->addItem("GreaterOrEqual");
   m_gui.compareFunc->addItem("Less");
   m_gui.compareFunc->addItem("Greater");
@@ -68,6 +69,7 @@ SamplerEditorProperties::SamplerEditorProperties()
   m_gui.compareFunc->addItem("NotEqual");
   m_gui.compareFunc->addItem("Always");
   m_gui.compareFunc->addItem("Never");
+
 }
 
 
@@ -118,6 +120,8 @@ bool SamplerEditorProperties::Get(iSampler * sampler)
   sampler->SetAddressU((cs::eTextureAddressMode)m_gui.addressU->currentIndex());
   sampler->SetAddressV((cs::eTextureAddressMode)m_gui.addressV->currentIndex());
   sampler->SetAddressW((cs::eTextureAddressMode)m_gui.addressW->currentIndex());
+
+  int compareFunc = m_gui.compareFunc->currentIndex();
   sampler->SetTextureCompareMode((cs::eTextureCompareMode)m_gui.compareMode->currentIndex());
   sampler->SetTextureCompareFunc((cs::eTextureCompareFunc)m_gui.compareFunc->currentIndex());
 

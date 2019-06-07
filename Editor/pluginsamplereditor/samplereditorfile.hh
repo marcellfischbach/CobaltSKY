@@ -2,10 +2,15 @@
 
 #pragma once
 
+
 #include <string>
 
 namespace cs
 {
+enum eFilterMode;
+enum eTextureAddressMode;
+enum eTextureCompareMode;
+enum eTextureCompareFunc;
 class ResourceLocator;
 struct iSampler;
 }
@@ -27,9 +32,16 @@ public:
 
 private:
   static void Save(const iSampler* sampler, file::Entry* samplerEntry);
+
   static cs::file::Entry* GetEntry(cs::file::Entry* parent, const std::string& tagName);
+  static std::string Filter(cs::eFilterMode filterMode);
+  static std::string TextureAddressMode(eTextureAddressMode textureAddressMode);
+  static std::string TextureCompareMode(eTextureCompareMode textureCompareMode);
+  static std::string TextureCompareFunc(eTextureCompareFunc textureCompareFunc);
 
   SamplerEditorFile();
+
+
 };
 
 }

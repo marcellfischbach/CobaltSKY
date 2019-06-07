@@ -2,9 +2,11 @@
 
 #include <pluginsamplereditor/samplereditorwidget.hh>
 #include <pluginsamplereditor/samplereditor.hh>
+#include <pluginsamplereditor/samplereditorfile.hh>
 #include <pluginsamplereditor/samplereditorproperties.hh>
 
 #include <editorcore/editor.hh>
+#include <editorcore/glcontext.hh>
 #include <editorcore/renderwidget.hh>
 
 #include <editormodel/model.hh>
@@ -17,6 +19,7 @@
 #include <QGridLayout>
 #include <QSplitter>
 #include <QTimer>
+#include <QToolBar>
 
 namespace cs::editor::plugin::samplereditor
 {
@@ -43,9 +46,15 @@ SamplerEditorWidget::SamplerEditorWidget(SamplerEditor* editor, iSampler* sample
   splitter->setStretchFactor(0, 1);
   splitter->setStretchFactor(1, 0);
 
+  QToolBar* toolbar = new QToolBar(this);
+  QAction *action = toolbar->addAction(QString("Save"));
+  connect(action, SIGNAL(triggered(bool)), this, SLOT(Save(bool)));
+
+
   QGridLayout* layout = new QGridLayout(this);
   setLayout(layout);
-  layout->addWidget(splitter, 0, 0);
+  layout->addWidget(toolbar, 0, 0);
+  layout->addWidget(splitter, 1, 0);
 
   QTimer::singleShot(1, [this, splitter]() {
     ;
@@ -61,8 +70,14 @@ SamplerEditorWidget::~SamplerEditorWidget()
 }
 
 
-void SamplerEditorWidget::Save()
+void SamplerEditorWidget::Save(bool)
 {
+
+  if (!core::GLContext::Get().MakeCurrent())
+  {
+    return;
+  }
+
   m_properties->Get(m_editorSampler);
   Copy(m_editorSampler, m_sampler);
 
@@ -81,6 +96,7 @@ void SamplerEditorWidget::Save()
     }
   }
 
+  SamplerEditorFile::Save(m_editorSampler, assetNode->GetResourceLocator());
 
 
 }

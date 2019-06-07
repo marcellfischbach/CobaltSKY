@@ -18,11 +18,11 @@ public:
   static const size_t InvalidIndex = ~0x00;
 
 
-  void SetTagName(const std::string& tagName);
+  cs::file::Entry* SetTagName(const std::string& tagName);
   const std::string& GetTagName() const;
 
-  void RemoveAttributes();
-  void RemoveAttribute(size_t idx);
+  cs::file::Entry* RemoveAttributes();
+  cs::file::Entry* RemoveAttribute(size_t idx);
   size_t GetNumberOfAttributes() const;
   std::string GetAttributeKey(size_t idx) const;
   std::string GetAttributeValue(size_t idx) const;
