@@ -26,6 +26,7 @@ target_link_libraries(EditorLauncher
 	EditorAssetManager
 	EditorModel
 	PluginSamplerEditor
+	PluginTextureEditor
     )
 
 CS_MOC(EditorLauncher editorlauncher)

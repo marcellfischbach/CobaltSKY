@@ -1,6 +1,6 @@
 
 
-#include <pluginsamplereditor/samplereditorproperties.hh>
+#include <plugins/samplereditor/samplereditorproperties.hh>
 #include <cobalt/graphics/isampler.hh>
 #include <cobalt/math/csmath.hh>
 

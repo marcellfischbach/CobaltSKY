@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <pluginsamplereditor/samplereditorexport.hh>
+#include <plugins/samplereditor/samplereditorexport.hh>
 
 namespace cs::editor::plugin::samplereditor
 {

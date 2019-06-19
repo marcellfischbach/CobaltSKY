@@ -1,9 +1,9 @@
 
 
-#include <pluginsamplereditor/samplereditorwidget.hh>
-#include <pluginsamplereditor/samplereditor.hh>
-#include <pluginsamplereditor/samplereditorfile.hh>
-#include <pluginsamplereditor/samplereditorproperties.hh>
+#include <plugins/samplereditor/samplereditorwidget.hh>
+#include <plugins/samplereditor/samplereditor.hh>
+#include <plugins/samplereditor/samplereditorfile.hh>
+#include <plugins/samplereditor/samplereditorproperties.hh>
 
 #include <editorcore/editor.hh>
 #include <editorcore/glcontext.hh>

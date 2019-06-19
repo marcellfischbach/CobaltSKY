@@ -1,6 +1,6 @@
 
-#include <pluginsamplereditor/samplereditorfactory.hh>
-#include <pluginsamplereditor/samplereditor.hh>
+#include <plugins/samplereditor/samplereditorfactory.hh>
+#include <plugins/samplereditor/samplereditor.hh>
 #include <editormodel/nodes/assetnode.hh>
 #include <cobalt/core/csresourcemanager.hh>
 #include <cobalt/graphics/isampler.hh>

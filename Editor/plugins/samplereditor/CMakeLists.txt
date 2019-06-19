@@ -48,5 +48,5 @@ target_link_libraries(
 
 	)
 
-CS_MOC(PluginSamplerEditor pluginsamplereditor)
+CS_MOC(PluginSamplerEditor plugins/samplereditor)
 

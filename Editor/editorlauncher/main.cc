@@ -2,7 +2,8 @@
 #include <qapplication.h>
 #include <editorcore/editor.hh>
 #include <assetmanager/assetmanagermodule.hh>
-#include <pluginsamplereditor/samplereditormodule.hh>
+#include <plugins/samplereditor/samplereditormodule.hh>
+#include <plugins/textureeditor/textureeditormodule.hh>
 #include <QIcon>
 #include <QOpenGLContext>
 #include <QPalette>
@@ -109,6 +110,7 @@ int main (int argc, char **argv)
 
   cs::editor::assetmanager::Module::Initialize(argc, argv);
   cs::editor::plugin::samplereditor::Module::Initialize(argc, argv);
+  cs::editor::plugin::textureeditor::Module::Initialize(argc, argv);
   /*
   ImageImporterModule::Initialize(argc, argv);
   MaterialEditorModule::Initialize(argc, argv);

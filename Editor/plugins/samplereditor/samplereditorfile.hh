@@ -4,6 +4,8 @@
 
 
 #include <string>
+#include <csrefl/class.hh>
+
 
 namespace cs
 {
@@ -23,6 +25,7 @@ class Entry;
 
 namespace cs::editor::plugin::samplereditor
 {
+
 
 class SamplerEditorFile
 {

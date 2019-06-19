@@ -1,6 +1,6 @@
 
 
-#include <pluginsamplereditor/samplereditorfile.hh>
+#include <plugins/samplereditor/samplereditorfile.hh>
 
 #include <cobalt/core/csresourcelocator.hh>
 #include <cobalt/core/csvfs.hh>
@@ -11,6 +11,7 @@
 
 namespace cs::editor::plugin::samplereditor
 {
+
 
 SamplerEditorFile::SamplerEditorFile()
 {

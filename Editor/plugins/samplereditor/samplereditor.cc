@@ -1,7 +1,7 @@
 
 
-#include <pluginsamplereditor/samplereditor.hh>
-#include <pluginsamplereditor/samplereditorwidget.hh>
+#include <plugins/samplereditor/samplereditor.hh>
+#include <plugins/samplereditor/samplereditorwidget.hh>
 #include <editormodel/nodes/assetnode.hh>
 #include <cobalt/graphics/isampler.hh>
 
