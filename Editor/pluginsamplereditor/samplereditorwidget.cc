@@ -47,11 +47,12 @@ SamplerEditorWidget::SamplerEditorWidget(SamplerEditor* editor, iSampler* sample
   splitter->setStretchFactor(1, 0);
 
   QToolBar* toolbar = new QToolBar(this);
-  QAction *action = toolbar->addAction(QString("Save"));
+  QAction *action = toolbar->addAction(QIcon(":/icons32/save"), QString("Save"));
   connect(action, SIGNAL(triggered(bool)), this, SLOT(Save(bool)));
 
 
   QGridLayout* layout = new QGridLayout(this);
+  layout->setContentsMargins(QMargins(0, 0, 0, 0));
   setLayout(layout);
   layout->addWidget(toolbar, 0, 0);
   layout->addWidget(splitter, 1, 0);

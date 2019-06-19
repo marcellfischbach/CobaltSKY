@@ -20,6 +20,7 @@ set(ALL_SOURCES
 	glcontext.hh
 	renderwidget.cc
 	renderwidget.hh
+	resources.qrc
 	)
 
 

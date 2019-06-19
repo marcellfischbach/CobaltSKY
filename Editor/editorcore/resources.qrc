@@ -1,0 +1,10 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/icons32">
+    <file alias="save">resources/save_32.png</file>
+  </qresource>
+  <qresource prefix="/icons16">
+    <file alias="save">resources/save_16.png</file>
+  </qresource>
+
+</RCC>
