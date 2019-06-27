@@ -21,7 +21,10 @@ set(ALL_SOURCES
 	renderwidget.cc
 	renderwidget.hh
 	resources.qrc
-	)
+
+        widgets/referencelineedit.cc
+        widgets/referencelineedit.hh
+        )
 
 
 add_definitions(-DEDITOR_CORE_EXPORT)
