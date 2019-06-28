@@ -22,7 +22,11 @@ TextureEditor::TextureEditor(cs::editor::model::AssetNode *assetNode, iTexture *
   // SetWidget(new SamplerEditorWidget(this, sampler));
   QFrame* frame = new QFrame();
   QGridLayout *gridLayout = new QGridLayout(frame);
-  gridLayout->addWidget(new cs::editor::core::ReferenceLineEdit(), 0, 0, 1, 1);
+  cs::editor::core::ReferenceLineEdit *refLineEdit = new cs::editor::core::ReferenceLineEdit();
+  refLineEdit->setPlaceholderText("Sampler");
+  refLineEdit->SetValidClass(cs::iSampler::GetStaticClass());
+  refLineEdit->AddValidClass(cs::SamplerWrapper::GetStaticClass());
+  gridLayout->addWidget(refLineEdit, 0, 0, 1, 1);
   SetWidget(frame);
 }
 

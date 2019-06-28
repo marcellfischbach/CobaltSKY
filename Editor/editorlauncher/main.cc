@@ -44,10 +44,13 @@ void copy_test_folder()
 }
 
 
+
+
 int main (int argc, char **argv)
 {
   cleanup();
   copy_test_folder();
+
 
 
   QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
@@ -59,7 +62,7 @@ int main (int argc, char **argv)
 
 
   qApp->setStyle(QStyleFactory::create("Fusion"));
-  if (false)
+  if (true)
   {
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(53, 53, 63));

@@ -97,6 +97,15 @@ bool Editor::OpenProject(const std::string& projectPath)
   return true;
 }
 
+void Editor::OpenEditor(const cs::ResourceLocator &locator)
+{
+  cs::editor::model::Node *node = m_model->FindNode(locator);
+  if (node && node->IsAssetNode())
+  {
+    OpenEditor(node->AsAssetNode());
+  }
+}
+
 void Editor::OpenEditor(cs::editor::model::AssetNode* assetNode)
 {
   if (m_editorWindow->ShowOpenEditor(assetNode))

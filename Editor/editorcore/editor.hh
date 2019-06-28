@@ -11,6 +11,7 @@ namespace cs
 class Engine;
 struct iGraphics;
 class GraphicsGL4;
+class ResourceLocator;
 }
 
 namespace cs::editor::model
@@ -35,6 +36,7 @@ public:
 
   bool OpenProject(const std::string& projectPath);
 
+  void OpenEditor(const cs::ResourceLocator &locator);
   void OpenEditor(cs::editor::model::AssetNode* assetNode);
 
   void Register(iEditorFactory* editorFactory);

@@ -10,6 +10,8 @@ namespace cs::editor::core {
 ReferenceLineEdit::ReferenceLineEdit(QWidget *parent)
   : QLineEdit(parent)
 {
+  setReadOnly(true);
+  setFocusPolicy(Qt::StrongFocus);
   m_validClasses.clear();
 }
 
@@ -30,6 +32,17 @@ void ReferenceLineEdit::AddValidClass(const cs::Class *cls)
   }
 }
 
+void ReferenceLineEdit::SetResourceLocator(const cs::ResourceLocator &locator)
+{
+  setText(QString(locator.Encode().c_str()));
+  m_locator = locator;
+}
+
+const cs::ResourceLocator &ReferenceLineEdit::GetResourceLocator() const
+{
+  return m_locator;
+}
+
 
 bool ReferenceLineEdit::IsValidClass(const cs::Class *cls) const
 {
@@ -46,7 +59,7 @@ bool ReferenceLineEdit::IsValidClass(const cs::Class *cls) const
   return false;
 }
 
-void ReferenceLineEdit::dragEnterEvent(QDragEnterEvent *event)
+cs::editor::model::AssetNode* ReferenceLineEdit::GetAssetNode(QDropEvent *event) const
 {
   const QMimeData *data = event->mimeData();
   if (data->hasFormat("text/cs::ResourceLocator"))
@@ -63,21 +76,66 @@ void ReferenceLineEdit::dragEnterEvent(QDragEnterEvent *event)
       if (model)
       {
         cs::editor::model::Node* node = model->FindNode(locator);
-        if (node && node->IsAssetNode())
+        if (node)
         {
-           const cs::Class* cls = node->AsAssetNode()->GetAssetClass();
-           if (IsValidClass(cls))
-           {
-             event->accept();
-             return;
-           }
+          return node->AsAssetNode();
         }
       }
     }
   }
-  event->ignore ();
-  std::cout << "DragEnter: " << event->mimeData()->hasFormat("text/cs::ResourceLocator") << "\n";
-  std::fflush(stdout);
+  return nullptr;
 }
+
+void ReferenceLineEdit::dragEnterEvent(QDragEnterEvent *event)
+{
+  cs::editor::model::AssetNode* assetNode = GetAssetNode(event);
+  if (assetNode)
+  {
+    const cs::Class* cls = assetNode->GetAssetClass();
+    if (IsValidClass(cls))
+    {
+      event->accept();
+      return;
+    }
+  }
+  event->ignore ();
+}
+
+void ReferenceLineEdit::dropEvent(QDropEvent *event)
+{
+  cs::editor::model::AssetNode* assetNode = GetAssetNode(event);
+  if (assetNode)
+  {
+    const cs::Class* cls = assetNode->GetAssetClass();
+    if (IsValidClass(cls))
+    {
+      SetResourceLocator(assetNode->GetResourceLocator());
+      event->accept();
+      return;
+    }
+  }
+  event->ignore ();
+}
+
+void ReferenceLineEdit::mousePressEvent(QMouseEvent *event)
+{
+  if (event->button() == Qt::LeftButton && event->modifiers() == Qt::CTRL && m_locator.IsValid())
+  {
+    cs::editor::core::Editor::Get()->OpenEditor(m_locator);
+  }
+}
+
+void ReferenceLineEdit::mouseMoveEvent(QMouseEvent *event)
+{
+  if (event->modifiers() == Qt::CTRL && m_locator.IsValid())
+  {
+    setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+  }
+  else
+  {
+    setCursor(QCursor(Qt::CursorShape::ArrowCursor));
+  }
+}
+
 
 } 
