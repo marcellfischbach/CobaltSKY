@@ -47,6 +47,13 @@ bool Editor::Initialize(int argc, char** argv)
     }
   }
 
+
+
+  m_editorWindow = new EditorWindow();
+  m_editorWindow->setWindowTitle(QString(GetWindowTitle().c_str()));
+  m_editorWindow->setVisible(true);
+
+
   GLContext::Get().MakeCurrent();
   m_engine = new cs::Engine();
   m_graphics = new GraphicsGL4();
@@ -58,11 +65,7 @@ bool Editor::Initialize(int argc, char** argv)
   {
     OpenProject("D:/DEV/temp/CobaltSKYModelTest");
   }
-  
 
-
-  m_editorWindow = new EditorWindow();
-  m_editorWindow->setVisible(true);
 
   return true;
 }

@@ -3,7 +3,9 @@
 #include <editorcore/glcontext.hh>
 #include <QOffscreenSurface>
 #include <QOpenGLContext>
+#include <QWidget>
 #include <iostream>
+#include <Windows.h>
 
 namespace cs::editor::core
 {
@@ -13,10 +15,7 @@ GLContext::GLContext()
   : m_context(nullptr)
   , m_surface(nullptr)
 {
-  m_surface = new QOffscreenSurface();
-  m_surface->create();
 
-  m_context = new QOpenGLContext();
   QSurfaceFormat format;
   format.setRedBufferSize(8);
   format.setGreenBufferSize(8);
@@ -30,7 +29,16 @@ GLContext::GLContext()
   format.setVersion(4, 6);
   format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
   format.setRenderableType(QSurfaceFormat::OpenGL);
+
+
+
+  m_surface = new QOffscreenSurface();
+  m_surface->setFormat(format);
+  m_surface->create();
+
+  m_context = new QOpenGLContext();
   m_context->setFormat(format);
+  m_context->setShareContext(QOpenGLContext::globalShareContext());
   m_context->create();
 }
 
@@ -42,6 +50,11 @@ bool GLContext::MakeCurrent()
     return false;
   }
   return true;
+}
+
+QOpenGLContext* GLContext::GetQOpenGLContext()
+{
+  return m_context;
 }
 
 

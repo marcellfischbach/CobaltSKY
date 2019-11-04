@@ -1,0 +1,60 @@
+asset () {
+  data () {
+    shaderGraph () {
+      nodes () {
+        node (id:0 class:csSGFloat3)
+        node (id:1 class:csSGVarFloat4) {
+          resource (id:"{3980e77f-54ea-4320-b5b8-9bef30e31ec3}" name:Diffuse) {
+            float4 (1.000000 1.000000 1.000000 1.000000)
+          }
+        }
+        node (id:2 class:csSGSplitFloat4)
+      }
+      inputs () {
+        node (id:0 input:0) {
+          node (id:2 output:0)
+        }
+        node (id:0 input:1) {
+          node (id:2 output:1)
+        }
+        node (id:0 input:2) {
+          node (id:2 output:2)
+        }
+        node (id:2 input:0) {
+          node (id:1 output:0)
+        }
+        shaderGraph (input:Diffuse) {
+          node (id:0 output:0)
+        }
+        shaderGraph (input:Alpha) {
+          node (id:2 output:3)
+        }
+      }
+      attributes () {
+        blendOutWithBinaryGradient (enable:true)
+        discardAlpha () {
+          threshold (0.000000)
+          mode (Less)
+        }
+      }
+    }
+  }
+  meta () {
+    shaderGraphMeta () {
+      nodes () {
+        node (id:0) {
+          pos (0.000000 -20.000000)
+        }
+        node (id:1) {
+          pos (-260.000000 0.000000)
+        }
+        node (id:2) {
+          pos (-160.000000 0.000000)
+        }
+      }
+      shaderGraph () {
+        pos (140.000000 40.000000)
+      }
+    }
+  }
+}

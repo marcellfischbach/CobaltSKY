@@ -1,0 +1,24 @@
+asset () {
+  data () {
+    sampler () {
+      filter (Anisotropic)
+      anisotropy (1)
+      minlod (-1000)
+      maxlod (1000)
+      addressu (Repeat)
+      addressv (Repeat)
+      addressw (Repeat)
+      bordercolor (0 0 0 0)
+      comparemode (CompareToR)
+      comparefunc (Always)
+      minLOD (-1000)
+      maxLOD (1000)
+      addressU (Repeat)
+      addressV (Repeat)
+      addressW (Repeat)
+      borderColor (0.000000 0.000000 0.000000 0.000000)
+      compareMode (CompareToR)
+      compareFunc (Always)
+    }
+  }
+}

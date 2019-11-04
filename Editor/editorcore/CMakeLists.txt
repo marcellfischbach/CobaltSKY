@@ -21,6 +21,7 @@ set(ALL_SOURCES
 	renderwidget.cc
 	renderwidget.hh
 	resources.qrc
+        test.qml
 
         widgets/referencelineedit.cc
         widgets/referencelineedit.hh

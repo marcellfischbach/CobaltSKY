@@ -1,0 +1,8 @@
+asset () {
+  data () {
+    material () {
+      materialDef (locator:TestSG2.asset)
+      parameters ()
+    }
+  }
+}

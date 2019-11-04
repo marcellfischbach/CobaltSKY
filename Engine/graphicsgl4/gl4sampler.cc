@@ -3,6 +3,7 @@
 #include <graphicsgl4/gl4mapping.hh>
 #include <graphicsgl4/gl4defines.hh>
 #include <iostream>
+#include <Windows.h>
 
 cs::SamplerGL4::SamplerGL4()
   : cs::iSampler()
@@ -17,6 +18,7 @@ cs::SamplerGL4::~SamplerGL4()
 bool cs::SamplerGL4::Initialize()
 {
   glGenSamplers(1, &m_name);
+  std::cout << "[" << std::hex << wglGetCurrentContext()  << "] Sampler: " << m_name << std::endl;
   glSamplerParameteri(m_name, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glSamplerParameteri(m_name, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glSamplerParameterf(m_name, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
@@ -54,6 +56,7 @@ void cs::SamplerGL4::Bind(GLuint unit)
 
 void cs::SamplerGL4::SetFilter(cs::eFilterMode filterMode)
 {
+  CS_CHECK_GL_ERROR;
   if (m_filterMode != filterMode)
   {
     m_filterMode = filterMode;
@@ -116,6 +119,7 @@ void cs::SamplerGL4::SetFilter(cs::eFilterMode filterMode)
       break;
 
     }
+    std::cout << "[" << std::hex << wglGetCurrentContext() << "] SamplerParameter: " << m_name << std::endl;
     CS_CHECK_GL_ERROR;
   }
 }

@@ -1,6 +1,7 @@
 
 
 #include <editorcore/renderwidget.hh>
+#include <editorcore/glcontext.hh>
 #include <math.h>
 #include <iostream>
 #include <QOpenGLContext>
@@ -11,6 +12,7 @@ namespace cs::editor::core
 RenderWidget::RenderWidget(QWidget* parent)
   : QOpenGLWidget(parent)
 {
+  /*
   QSurfaceFormat format;
   format.setRedBufferSize(8);
   format.setGreenBufferSize(8);
@@ -25,6 +27,7 @@ RenderWidget::RenderWidget(QWidget* parent)
   format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
   format.setRenderableType(QSurfaceFormat::OpenGL);
   setFormat(format);
+  */
 
   m_red = (float)rand() / (float)RAND_MAX;
   m_green = (float)rand() / (float)RAND_MAX;

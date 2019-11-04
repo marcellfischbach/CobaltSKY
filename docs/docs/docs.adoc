@@ -1,0 +1,6 @@
+= CobltSKY documentation
+Marcell Fischbach <marcellfischbach@googlemail.com>
+:toc: left
+
+include::installing.adoc[]
+include::rendering.adoc[]

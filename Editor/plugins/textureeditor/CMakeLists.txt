@@ -16,7 +16,11 @@ set(ALL_SOURCES
 	textureeditorfactory.hh
 	textureeditormodule.cc
 	textureeditormodule.hh
-	)
+        textureeditorpreview.cc
+        textureeditorpreview.hh
+        textureeditorwidget.cc
+        textureeditorwidget.hh
+        )
 
 
 

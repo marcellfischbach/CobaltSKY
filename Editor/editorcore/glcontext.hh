@@ -6,6 +6,7 @@
 
 class QOffscreenSurface;
 class QOpenGLContext;
+class QWidget;
 namespace cs::editor::core
 {
 
@@ -15,6 +16,8 @@ class EDITOR_CORE_API GLContext
 public:
   static GLContext& Get();
   bool MakeCurrent();
+
+  QOpenGLContext* GetQOpenGLContext();
 
 private:
   GLContext();
