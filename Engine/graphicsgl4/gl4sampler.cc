@@ -13,6 +13,10 @@ cs::SamplerGL4::SamplerGL4()
 
 cs::SamplerGL4::~SamplerGL4()
 {
+  if (m_name != 0)
+  {
+    glDeleteSamplers(1, &m_name);
+  }
 }
 
 bool cs::SamplerGL4::Initialize()
