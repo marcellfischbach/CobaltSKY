@@ -74,7 +74,7 @@ public:
 
   Slot<T...> Connect(std::function<void(T...)> function)
   {
-    Slot connection(this, ++m_conID, function);
+    Slot<T...> connection(this, ++m_conID, function);
     m_functions.push_back(connection);
     return connection;
   }
