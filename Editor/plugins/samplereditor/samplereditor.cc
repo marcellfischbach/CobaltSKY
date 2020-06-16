@@ -13,8 +13,7 @@ SamplerEditor::SamplerEditor(cs::editor::model::AssetNode *assetNode, iSampler *
   : cs::editor::core::AbstractEditor()
 {
   SetAsset(assetNode);
-  SetName(assetNode->GetName());
-  SetPendingChanges(true);
+  SetPendingChanges(false);
   SetWidget(new SamplerEditorWidget(this, sampler));
 }
 

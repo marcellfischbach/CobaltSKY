@@ -4,6 +4,7 @@
 
 #include <editorcore/export.hh>
 #include <cobalt/core/cssignalslot.hh>
+#include <cobalt/core/csresourcelocator.hh>
 #include <string>
 
 class QWidget;
@@ -11,6 +12,7 @@ class QWidget;
 namespace cs::editor::model
 {
 class AssetNode;
+class Node;
 }
 
 namespace cs::editor::core
@@ -40,12 +42,14 @@ protected:
 
 
 private:
+  void NodeRenamed(model::Node* node);
   bool m_pendingChanges;
   std::string m_name;
   QWidget* m_widget;
   cs::editor::model::AssetNode* m_asset;
 
-  cs::Signal<AbstractEditor*> m_titleChangedSignel;
+  cs::Slot<model::Node*, cs::ResourceLocator, cs::ResourceLocator> m_slotModelNodeRenamed;
+  cs::Signal<AbstractEditor*> m_titleChangedSignal;
 };
 
 }

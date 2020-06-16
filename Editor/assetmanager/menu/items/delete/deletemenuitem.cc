@@ -120,7 +120,7 @@ std::vector<MenuItemDeclaration> DeleteMenuItemFactory::GetMenuItemDeclaration()
 QAction *DeleteMenuItemFactory::CreateAction(QMenu *menu, model::Node *selectedNode, QWidget * parent) const
 {
   QAction *action = menu->addAction(QObject::tr("Delete"));
-  if (selectedNode->IsRootNode() || selectedNode->IsVFSEntryNode())
+  if (!selectedNode || selectedNode->IsRootNode() || selectedNode->IsVFSEntryNode())
   {
     action->setEnabled(false);
   }

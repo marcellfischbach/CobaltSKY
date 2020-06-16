@@ -7,7 +7,6 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 
-
 set(ALL_SOURCES
 	abstracteditor.cc
 	abstracteditor.hh

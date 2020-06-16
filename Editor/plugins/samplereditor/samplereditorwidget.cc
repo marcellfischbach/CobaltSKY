@@ -36,6 +36,7 @@ SamplerEditorWidget::SamplerEditorWidget(SamplerEditor* editor, iSampler* sample
 
   m_properties = new SamplerEditorProperties();
   m_properties->Set(m_editorSampler);
+  connect(m_properties, SIGNAL(changed()), this, SLOT(Changed()));
 
   core::RenderWidget* renderWidget = new core::RenderWidget(this);
 
@@ -70,6 +71,10 @@ SamplerEditorWidget::~SamplerEditorWidget()
   CS_RELEASE(m_editorSampler);
 }
 
+void SamplerEditorWidget::Changed()
+{
+  m_editor->SetPendingChanges(!m_properties->Equal(m_sampler));
+}
 
 void SamplerEditorWidget::Save(bool)
 {

@@ -100,8 +100,8 @@ bool cs::SDLWindow::InitializeOpenGL(
 
 void cs::SDLWindow::SetIcon(const cs::Image *image)
 {
-  csUInt8 *buffer = new csUInt8[image->GetWidth() * image->GetHeight() * 4];
-  memcpy(buffer, image->GetData(), image->GetWidth() * image->GetHeight() * 4);
+  csUInt8 *buffer = new csUInt8[(csSize)image->GetWidth() * (csSize)image->GetHeight() * 4];
+  memcpy(buffer, image->GetData(), (csSize)image->GetWidth() * (csSize)image->GetHeight() * 4);
   SDL_Surface *iconSurface = SDL_CreateRGBSurfaceFrom(buffer, 
                                                       image->GetWidth(), 
                                                       image->GetHeight(), 

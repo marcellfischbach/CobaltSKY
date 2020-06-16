@@ -3,6 +3,7 @@
 #include <editorcore/editor.hh>
 #include <editorcore/abstracteditor.hh>
 #include <editorcore/itoolview.hh>
+#include <editormodel/model.hh>
 
 #include <QMessageBox>
 
@@ -87,8 +88,39 @@ bool EditorWindow::ShowEditor(AbstractEditor* editor)
   m_editorTabs->setCurrentIndex(idx);
 
   m_openEditors[editor->GetAsset()] = editor;
+  editor->OnTitleChanged().Connect([this](AbstractEditor* editor) { EditorTitleChanged(editor);});
 
   return true;
+}
+
+void EditorWindow::NodeChanged(cs::editor::model::Node* node)
+{
+  for (auto openEditor : m_openEditors)
+  {
+    AbstractEditor* editor = openEditor.second;
+    if (editor->GetAsset() == node)
+    {
+      int idx = m_editorTabs->indexOf(editor->GetWidget());
+      if (idx != -1)
+      {
+        m_editorTabs->setTabText(idx, GetEditorTitle(editor));
+        return;
+      }
+    }
+  }
+}
+
+void EditorWindow::EditorTitleChanged(AbstractEditor* editor)
+{
+  if (editor)
+  {
+    int idx = m_editorTabs->indexOf(editor->GetWidget());
+    if (idx != -1)
+    {
+      m_editorTabs->setTabText(idx, GetEditorTitle(editor));
+      return;
+    }
+  }
 }
 
 void EditorWindow::OnTabCloseRequest(int idx)
@@ -136,7 +168,7 @@ void EditorWindow::OnTabCloseRequest(int idx)
     m_openEditors.erase(it);
   }
   delete editor;
-  
+
 }
 
 QString EditorWindow::GetEditorTitle(AbstractEditor* editor)

@@ -17,7 +17,6 @@ TextureEditor::TextureEditor(cs::editor::model::AssetNode *assetNode, iTexture *
   : cs::editor::core::AbstractEditor()
 {
   SetAsset(assetNode);
-  SetName(assetNode->GetName());
   SetPendingChanges(true);
   SetWidget(new TextureEditorWidget(this, texture));
 }

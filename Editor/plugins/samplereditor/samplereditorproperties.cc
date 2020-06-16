@@ -3,6 +3,7 @@
 #include <plugins/samplereditor/samplereditorproperties.hh>
 #include <cobalt/graphics/isampler.hh>
 #include <cobalt/math/csmath.hh>
+#include <stdio.h>
 
 
 namespace cs::editor::plugin::samplereditor
@@ -120,13 +121,79 @@ bool SamplerEditorProperties::Get(iSampler * sampler)
   sampler->SetAddressU((cs::eTextureAddressMode)m_gui.addressU->currentIndex());
   sampler->SetAddressV((cs::eTextureAddressMode)m_gui.addressV->currentIndex());
   sampler->SetAddressW((cs::eTextureAddressMode)m_gui.addressW->currentIndex());
-
-  int compareFunc = m_gui.compareFunc->currentIndex();
   sampler->SetTextureCompareMode((cs::eTextureCompareMode)m_gui.compareMode->currentIndex());
   sampler->SetTextureCompareFunc((cs::eTextureCompareFunc)m_gui.compareFunc->currentIndex());
 
 
   return true;
+}
+
+bool SamplerEditorProperties::Equal(const iSampler* sampler)
+{
+  if (!sampler)
+  {
+    return false;
+  }
+
+  return sampler->GetFilter() == (cs::eFilterMode)m_gui.filter->currentIndex()
+    && sampler->GetAnisotropy() == 1 << m_gui.anisotropy->currentIndex()
+    && sampler->GetMinLOD() == m_gui.minLOD->value()
+    && sampler->GetMaxLOD() == m_gui.maxLOD->value()
+    && sampler->GetAddressU() == (cs::eTextureAddressMode)m_gui.addressU->currentIndex()
+    && sampler->GetAddressV() == (cs::eTextureAddressMode)m_gui.addressV->currentIndex()
+    && sampler->GetAddressW() == (cs::eTextureAddressMode)m_gui.addressW->currentIndex()
+    && sampler->GetTextureCompareMode() == (cs::eTextureCompareMode)m_gui.compareMode->currentIndex()
+    && sampler->GetTextureCompareFunc() == (cs::eTextureCompareFunc)m_gui.compareFunc->currentIndex()
+    ;
+}
+
+void SamplerEditorProperties::on_filter_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+void SamplerEditorProperties::on_anisotropy_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+void SamplerEditorProperties::on_minLOD_valueChanged(int idx)
+{
+  emit changed();
+}
+
+void SamplerEditorProperties::on_maxLOD_valueChanged(int idx)
+{
+  emit changed();
+}
+
+
+void SamplerEditorProperties::on_addressU_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+
+void SamplerEditorProperties::on_addressV_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+
+void SamplerEditorProperties::on_addressW_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+
+void SamplerEditorProperties::on_compareMode_currentIndexChanged(int idx)
+{
+  emit changed();
+}
+
+void SamplerEditorProperties::on_compareFunc_currentIndexChanged(int idx)
+{
+  emit changed();
 }
 
 }

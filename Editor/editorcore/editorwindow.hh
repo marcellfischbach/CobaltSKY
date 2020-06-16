@@ -12,6 +12,7 @@ class QTabWidget;
 namespace cs::editor::model
 {
 class AssetNode;
+class Node;
 }
 
 namespace cs::editor::core
@@ -42,6 +43,9 @@ private slots:
   void OnTabCloseRequest(int idx);
 
 private:
+  void EditorTitleChanged(AbstractEditor* editor);
+  void NodeChanged(cs::editor::model::Node* node);
+
   std::map<cs::editor::model::AssetNode*, AbstractEditor*> m_openEditors;
 
   QTabWidget* m_editorTabs;

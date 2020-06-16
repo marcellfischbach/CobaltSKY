@@ -25,6 +25,7 @@ public:
 
 
 private slots:
+  void Changed();
   void Save(bool);
 
 private:

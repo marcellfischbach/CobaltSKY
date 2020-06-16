@@ -123,7 +123,7 @@ std::vector<MenuItemDeclaration> RenameMenuItemFactory::GetMenuItemDeclaration()
 QAction *RenameMenuItemFactory::CreateAction(QMenu *menu, model::Node *selectedNode, QWidget * parent) const
 {
   QAction *action = menu->addAction(QObject::tr("Rename"));
-  if (selectedNode->IsRootNode() || selectedNode->IsVFSEntryNode())
+  if (!selectedNode || selectedNode->IsRootNode() || selectedNode->IsVFSEntryNode())
   {
     action->setEnabled(false);
   }

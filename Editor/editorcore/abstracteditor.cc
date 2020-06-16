@@ -1,6 +1,8 @@
 
 
 #include <editorcore/abstracteditor.hh>
+#include <editormodel/nodes/assetnode.hh>
+#include <editormodel/model.hh>
 #include <QWidget>
 
 
@@ -30,7 +32,7 @@ void AbstractEditor::SetPendingChanges(bool pendingChanges)
   if (m_pendingChanges != pendingChanges)
   {
     m_pendingChanges = pendingChanges;
-    m_titleChangedSignel.Call(this);
+    m_titleChangedSignal.Call(this);
   }
 }
 
@@ -44,7 +46,7 @@ void AbstractEditor::SetName(const std::string& name)
   if (m_name != name)
   {
     m_name = name;
-    m_titleChangedSignel.Call(this);
+    m_titleChangedSignal.Call(this);
   }
 }
 
@@ -65,7 +67,28 @@ QWidget* AbstractEditor::GetWidget()
 
 void AbstractEditor::SetAsset( cs::editor::model::AssetNode* asset)
 {
+  if (m_asset == asset)
+  {
+    return;
+  }
+  if (m_asset)
+  {
+    m_asset->GetModel()->OnNamedNodeRenamed().Disconnect(m_slotModelNodeRenamed);
+  }
   m_asset = asset;
+  if (m_asset)
+  {
+    SetName(m_asset->GetName());
+    m_slotModelNodeRenamed = m_asset->GetModel()->OnNamedNodeRenamed().Connect([this](model::Node* node, cs::ResourceLocator, cs::ResourceLocator) { NodeRenamed(node); });
+  }
+}
+
+void AbstractEditor::NodeRenamed(model::Node* node)
+{
+  if (m_asset == node)
+  {
+    SetName(m_asset->GetName());
+  }
 }
 
 cs::editor::model::AssetNode* AbstractEditor::GetAsset() 
@@ -80,7 +103,7 @@ const cs::editor::model::AssetNode* AbstractEditor::GetAsset() const
 
 cs::Signal<AbstractEditor*>& AbstractEditor::OnTitleChanged()
 {
-  return m_titleChangedSignel;
+  return m_titleChangedSignal;
 }
 
 }

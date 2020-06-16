@@ -25,6 +25,8 @@ unset(CMAKE_CXX_CL_SHOWINCLUDE)
 
 include(${CobaltSKY_SOURCE_DIR}/Scripts/CobaltSKY.cmake) 
 
+# SET CMakePolicy 0100 to new to include .hh files in automoc und autouic of QT5
+cmake_policy(SET CMP0100 NEW)
 
 if (WIN32)
 message("Use Win32")

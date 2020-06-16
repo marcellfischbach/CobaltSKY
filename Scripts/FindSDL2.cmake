@@ -91,9 +91,9 @@ find_path(SDL_INCLUDE_DIR SDL.h
 )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(VC_LIB_PATH_SUFFIX lib/x64)
+  set(VC_LIB_PATH_SUFFIX x64)
 else()
-  set(VC_LIB_PATH_SUFFIX lib/x86)
+  set(VC_LIB_PATH_SUFFIX x86)
 endif()
 
 # SDL-1.1 is the name used by FreeBSD ports...
